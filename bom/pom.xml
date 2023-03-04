@@ -2233,22 +2233,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 						<showDeprecation>true</showDeprecation>
 						<showWarnings>true</showWarnings>
 						<parameters>true</parameters>
-						<annotationProcessorPaths>
-								<!-- this is a workaround 
-					
-								Details: The maven compiler plugin ought to pick up all available processors on the classpath.
-								In effect Lombok's annotation processor should be picked up implicitly, but yet is not 
-								
-								Also Note: Presence of file 'logging-dn-enhance.properties' activates a profile (defined blow),
-								that configures maven-compiler-plugin to run all annotation processors required 
-								for DataNucleus AND lombok.
-								--> 
-								<annotationProcessorPath>
-									<groupId>org.projectlombok</groupId>
-									<artifactId>lombok</artifactId>
-									<version>${lombok.version}</version>
-								</annotationProcessorPath>
-						</annotationProcessorPaths>
 					</configuration>
 					<!-- goal:compile binds to phase:compile -->
 					<!-- goal:testCompile binds to phase:test-compile -->
@@ -3051,6 +3035,18 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 						<artifactId>datanucleus-maven-plugin</artifactId>
 						<inherited>true</inherited>
 					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>causeway-lombok-workaround</id>
+			<activation>
+				<file>
+					<missing>${basedir}/logging-dn-enhance.properties</missing>
+				</file>
+			</activation>
+			<build>
+				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-compiler-plugin</artifactId>
@@ -3059,22 +3055,18 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 							<showWarnings>true</showWarnings>
 							<parameters>true</parameters>
 							<annotationProcessorPaths>
+								<!-- this is a workaround 
+					
+								Details: The maven compiler plugin ought to pick up all available processors on the classpath.
+								In effect Lombok's annotation processor should be picked up implicitly, but yet is not 
+								
+								Presence of file 'logging-dn-enhance.properties' decativates this profile and
+								the maven-compiler-plugin runs all annotation processors as picked up from the class-path.
+								-->
 									<annotationProcessorPath>
 										<groupId>org.projectlombok</groupId>
 										<artifactId>lombok</artifactId>
 										<version>${lombok.version}</version>	
-									</annotationProcessorPath>
-									<annotationProcessorPath>
-										<!-- not a processor, but provides all dependencies for 
-											'datanucleus-jdo-query' below --> 
-								        <groupId>org.datanucleus</groupId>
-								        <artifactId>javax.jdo</artifactId>
-								        <version>${datanucleus-jdo-api.version}</version>
-									</annotationProcessorPath>
-									<annotationProcessorPath>
-								        <groupId>org.datanucleus</groupId>
-								        <artifactId>datanucleus-jdo-query</artifactId>
-								        <version>${datanucleus-jdo-query.version}</version>
 									</annotationProcessorPath>
 							</annotationProcessorPaths>
 						</configuration>
