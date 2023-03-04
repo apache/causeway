@@ -60,8 +60,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <minimalMavenBuildVersion>3.8.0</minimalMavenBuildVersion> <!-- enforces https repos -->
         <minimalJavaBuildVersion>11</minimalJavaBuildVersion>
         <maven.compiler.release>11</maven.compiler.release>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
 
         <!--  for m-plugin-p and maven-plugin-annotations  -->
         <assembly.tarLongFileMode>posix</assembly.tarLongFileMode>
@@ -2235,6 +2233,22 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 						<showDeprecation>true</showDeprecation>
 						<showWarnings>true</showWarnings>
 						<parameters>true</parameters>
+						<annotationProcessorPaths>
+								<!-- this is a workaround, lombok's annotation processor should be picked up implicitly, but yet is not. 
+					
+								Details:
+								This is a workaround; the compiler ought to pick up all available processors on the classpath. 
+								
+								Also Note: Presence of file 'logging-dn-enhance.properties' activates a profile (defined blow),
+								that configures maven-compiler-plugin to run all annotation processors required 
+								for DataNucleus AND lombok.
+								--> 
+								<annotationProcessorPath>
+									<groupId>org.projectlombok</groupId>
+									<artifactId>lombok</artifactId>
+									<version>${lombok.version}</version>
+								</annotationProcessorPath>
+						</annotationProcessorPaths>
 					</configuration>
 					<!-- goal:compile binds to phase:compile -->
 					<!-- goal:testCompile binds to phase:test-compile -->
@@ -3037,33 +3051,31 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 						<artifactId>datanucleus-maven-plugin</artifactId>
 						<inherited>true</inherited>
 					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-			<id>causeway-app-lombok</id>
-			<activation>
-				<file>
-					<exists>${basedir}/lombok.processor</exists>
-				</file>
-			</activation>
-			<build>
-				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-compiler-plugin</artifactId>
-						<version>${maven-compiler-plugin.version}</version>
 						<configuration>
 							<showDeprecation>true</showDeprecation>
 							<showWarnings>true</showWarnings>
 							<parameters>true</parameters>
 							<annotationProcessorPaths>
-								<!-- this is a workaround, should be picked up implicitly but yet not, for some reason -->
-								<annotationProcessorPath>
-									<groupId>org.projectlombok</groupId>
-									<artifactId>lombok</artifactId>
-									<version>${lombok.version}</version>
-								</annotationProcessorPath>
+									<annotationProcessorPath>
+										<groupId>org.projectlombok</groupId>
+										<artifactId>lombok</artifactId>
+										<version>${lombok.version}</version>	
+									</annotationProcessorPath>
+									<annotationProcessorPath>
+										<!-- not a processor, but provides all dependencies for 
+											'datanucleus-jdo-query' below --> 
+								        <groupId>org.datanucleus</groupId>
+								        <artifactId>javax.jdo</artifactId>
+								        <version>${datanucleus-jdo-api.version}</version>
+									</annotationProcessorPath>
+									<annotationProcessorPath>
+								        <groupId>org.datanucleus</groupId>
+								        <artifactId>datanucleus-jdo-query</artifactId>
+								        <version>${datanucleus-jdo-query.version}</version>
+									</annotationProcessorPath>
 							</annotationProcessorPaths>
 						</configuration>
 					</plugin>

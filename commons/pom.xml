@@ -51,32 +51,9 @@
 				</excludes>
 			</resource>
 		</resources>
-<!--
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${maven-compiler-plugin.version}</version>
-				<configuration>
-					<showDeprecation>true</showDeprecation>
-					<showWarnings>true</showWarnings>
-					<parameters>true</parameters>
-					<annotationProcessorPaths>
-						&lt;!&ndash; this is a workaround, should be picked up implicitly but yet not, for some reason &ndash;&gt;
-						<annotationProcessorPath>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-							<version>${lombok.version}</version>
-						</annotationProcessorPath>
-					</annotationProcessorPaths>
-				</configuration>
-			</plugin>
-		</plugins>
--->
 	</build>
 
 	<dependencies>
-
 		<dependency>
 			<groupId>com.fasterxml.woodstox</groupId>
 			<artifactId>woodstox-core</artifactId>
