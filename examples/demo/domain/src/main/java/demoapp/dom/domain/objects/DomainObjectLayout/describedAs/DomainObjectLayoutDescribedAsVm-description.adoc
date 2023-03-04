@@ -2,5 +2,5 @@
 
 The `describedAs` attribute ...
 
-TODO[CAUSEWAY-3309]
+WARNING: TODO[CAUSEWAY-3309]
 Description of the property, shown as a tooltip
