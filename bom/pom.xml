@@ -34,7 +34,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.3</version>
+        <version>3.0.4</version>
         <relativePath/>
     </parent>
     <groupId>org.apache.causeway</groupId>
@@ -179,7 +179,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <shiro.version>2.0.0-SNAPSHOT</shiro.version> <!-- latest release was 1.10.0, however we need jakarta namespace support -->
         <simpleslackapi.version>1.4.0</simpleslackapi.version>
         <slf4j-api.version>2.0.6</slf4j-api.version> <!-- also provided by spring-boot-starter-logging, needed to solve convergence issues -->
-        <spring-boot.version>3.0.3</spring-boot.version>
+        <spring-boot.version>3.0.4</spring-boot.version>
         <summernote.version>0.8.20</summernote.version>
         <surefire-plugin.argLine>
 			-Xmx384m 
