@@ -27,5 +27,5 @@ import org.apache.causeway.extensions.pdfjs.applib.spi.PdfJsViewerAdvisor;
 @Import({
         PdfJsViewerAdvisor.Default.class
 })
-public class CausewayModuleExtPdfjsApplibModel {
+public class CausewayModuleExtPdfjsApplib {
 }

@@ -19,23 +19,31 @@
 package org.apache.causeway.extensions.pdfjs.metamodel.facet;
 
 import java.util.List;
+import java.util.function.BiConsumer;
 
 import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.FacetWithAttributes;
 import org.apache.causeway.extensions.pdfjs.applib.annotations.PdfJsViewer;
 import org.apache.causeway.extensions.pdfjs.applib.config.PdfJsConfig;
 import org.apache.causeway.extensions.pdfjs.applib.config.Scale;
 import org.apache.causeway.extensions.pdfjs.applib.spi.PdfJsViewerAdvisor;
 
-public class PdfJsViewerFacetFromAnnotation extends PdfJsViewerFacetAbstract {
+public class PdfJsViewerFacetFromAnnotation extends PdfJsViewerFacetAbstract implements FacetWithAttributes {
+
+    private final int initialHeight;
+    private final int initialPage;
+    private final Scale initialScale;
 
     @Inject List<PdfJsViewerAdvisor> advisors;
-    @Inject UserService userService;
 
     public PdfJsViewerFacetFromAnnotation(final PdfJsConfig config, final FacetHolder holder) {
         super(config, holder);
+        initialHeight = config.getInitialHeight();
+        initialPage = config.getInitialPage();
+        initialScale = config.getInitialScale();
     }
 
     public static PdfJsViewerFacetFromAnnotation create(
@@ -88,6 +96,14 @@ public class PdfJsViewerFacetFromAnnotation extends PdfJsViewerFacetAbstract {
         }
 
         return config;
+    }
+
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("initialScale", initialScale);
+        visitor.accept("initialHeight", initialHeight);
+        visitor.accept("initialPage", initialPage);
     }
 
 }

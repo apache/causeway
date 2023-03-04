@@ -20,12 +20,11 @@ package org.apache.causeway.testdomain.domainmodel;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import jakarta.inject.Inject;
 
+import org.apache.causeway.testing.integtestsupport.applib.ApprovalsOptions;
 import org.approvaltests.Approvals;
-import org.approvaltests.core.Options;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,17 +38,11 @@ import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.metamodel.MetaModelServiceMenu;
 import org.apache.causeway.applib.services.metamodel.MetaModelServiceMenu.ExportFormat;
 import org.apache.causeway.applib.value.Clob;
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.base._Strings.KeyValuePair;
-import org.apache.causeway.commons.internal.base._Text;
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.model.good.Configuration_usingValidDomain;
 
 import lombok.SneakyThrows;
-import lombok.val;
 
 @SpringBootTest(
         classes = {
@@ -90,72 +83,13 @@ class MetaModelRegressionTest {
         final String xml = metaModelClob
                 .asString();
 
-        Approvals.verify(xml, options());
+        Approvals.verify(xml, ApprovalsOptions.xmlOptions());
     }
 
     // -- HELPER
 
-    private Options options() {
-        return new Options()
-                .withScrubber(this::scrub)
-                .forFile()
-                .withExtension(".xml");
-    }
-
     private List<String> namespaces() {
         return List.of("org.apache.causeway.testdomain.model.good");
-    }
-
-    private String scrub(final String input) {
-        return _Text.streamLines(input)
-                .map(this::scrubLine)
-                .filter(line->!_Strings.nullToEmpty(line).isBlank()) // ignore blank lines, just in case
-                .collect(Collectors.joining("\n")); // UNIX line ending convention
-    }
-
-    /**
-     * As the XML spec states, order of attributes has no semantic significance and hence is not
-     * guaranteed to be always the same, like in
-     * <pre>
-     * {@code <mml:param xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="mml:scalarParam" id="style">}
-     * </pre>
-     * So we have to scrub those for consistent comparison.
-     * @param line
-     * @return canonical form of the line
-     */
-    private String scrubLine(final String line) {
-
-        val magicPrefix = "<mml:param ";
-        val magicSuffix = ">";
-        int p = line.indexOf(magicPrefix);
-        if(p<0) {
-            return line;
-        }
-        p += magicPrefix.length(); // pointer at end of "...<mml:param "
-        int q = line.lastIndexOf(magicSuffix); // pointer at start of "... >"
-
-        val chunks = _Lists.<String>newArrayList();
-        chunks.add(line.substring(0, p-1)); // first chunk "...<mml:param"
-
-        // ordered attributes
-        val attrs = _Maps.<String, KeyValuePair>newTreeMap();
-        _Strings.splitThenStream(line.substring(p, q), " ")
-        .map(attrLiteral->
-            _Strings.parseKeyValuePair(attrLiteral, '=')
-                    .orElseGet(()->_Strings.pair(attrLiteral, null))
-        )
-        .forEach(attr->attrs.put(attr.getKey(), attr));
-
-        // collect all chunks
-        attrs.values()
-        .forEach(attr->chunks.add(
-            attr.getValue()!=null
-                ? " " + attr.getKey() + "=" + attr.getValue()
-                : " " + attr.getKey()));
-        chunks.add(magicSuffix);
-
-        // reassemble line
-        return chunks.stream().collect(Collectors.joining());
     }
 
 }

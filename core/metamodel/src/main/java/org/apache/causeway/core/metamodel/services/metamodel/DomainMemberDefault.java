@@ -30,6 +30,7 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
 import org.apache.causeway.applib.services.metamodel.DomainMember;
+import org.apache.causeway.applib.util.ObjectContracts;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -246,7 +247,7 @@ public class DomainMemberDefault implements DomainMember {
 
     @Override
     public int compareTo(final DomainMember o) {
-        return comparator.compare(this, o);
+        return contract.compare(this, o);
     }
 
     // -- HELPER
@@ -291,11 +292,15 @@ public class DomainMemberDefault implements DomainMember {
                 .contains(name);
     }
 
-    private static final Comparator<DomainMember> comparator =
-            Comparator.comparing(DomainMember::getClassType)
-            .thenComparing(DomainMember::getClassName)
-            .thenComparing(DomainMember::getType, Comparator.reverseOrder()) // desc
-            .thenComparing(DomainMember::getMemberName);
+    private static final ObjectContracts.ObjectContract<DomainMember> contract	=
+            ObjectContracts.contract(DomainMember.class)
+                    .thenUse("classType", DomainMember::getClassType)
+                    .thenUse("type", DomainMember::getClassName, Comparator.reverseOrder())
+                    .thenUse("memberName", DomainMember::getMemberName)
+            ;
 
+    public String toString() {
+        return contract.toString(this);
+    }
 
 }

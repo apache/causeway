@@ -42,4 +42,15 @@ extends org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepo
     public CommandLogEntryRepository() {
         super(CommandLogEntry.class);
     }
+
+    /**
+     * The DN annotation processor (from artifact {@literal org.datanucleus:datanucleus-jdo-query})
+     * should  generate Q classes under 'target/generated-sources/annotations'.
+     * @see "https://www.datanucleus.org/products/accessplatform_6_0/jdo/query.html#jdoql"
+     */
+    private void ensureWeHaveQClasses() {
+        // ensures at compile time, that Q classes are generated
+        org.apache.causeway.extensions.commandlog.jdo.dom.QCommandLogEntry q;
+    }
+
 }

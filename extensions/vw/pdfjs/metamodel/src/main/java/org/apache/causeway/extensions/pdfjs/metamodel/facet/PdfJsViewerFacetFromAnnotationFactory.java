@@ -20,6 +20,8 @@ package org.apache.causeway.extensions.pdfjs.metamodel.facet;
 
 import jakarta.inject.Inject;
 
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorForAmbiguousMixinAnnotations;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -56,9 +58,13 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        val facetHoder = processMethodContext.getFacetHolder();
+        val facetHolder = processMethodContext.getFacetHolder();
 
-        val pdfjsViewerIfAny = processMethodContext.synthesizeOnMethod(PdfJsViewer.class);
+        val pdfjsViewerIfAny = processMethodContext
+                .synthesizeOnMethodOrMixinType(
+                    PdfJsViewer.class,
+                    () -> MetaModelValidatorForAmbiguousMixinAnnotations
+                            .addValidationFailure(processMethodContext.getFacetHolder(), PdfJsViewer.class));
 
         pdfjsViewerIfAny.ifPresent(
             pdfjsViewer -> {
@@ -67,7 +73,7 @@ extends FacetFactoryAbstract {
 
                     FacetUtil.addFacet(
                             PdfJsViewerFacetFromAnnotation
-                            .create(pdfjsViewer, facetHoder))
+                            .create(pdfjsViewer, facetHolder))
 
                 );
 
