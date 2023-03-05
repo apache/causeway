@@ -37,6 +37,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
+import org.apache.causeway.core.runtimeservices.session.InteractionIdGenerator;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -131,6 +132,7 @@ implements WrapperFactory, HasMetaModelContext {
     @Inject private Provider<InteractionProvider> interactionProviderProvider;
     @Inject private Provider<BookmarkService> bookmarkServiceProvider;
     @Inject private Provider<RepositoryService> repositoryServiceProvider;
+    @Inject private InteractionIdGenerator interactionIdGenerator;
 
     private final List<InteractionListener> listeners = new ArrayList<>();
     private final Map<Class<? extends InteractionEvent>, InteractionEventDispatcher>
@@ -365,8 +367,8 @@ implements WrapperFactory, HasMetaModelContext {
         val interactionContext = interactionLayer.getInteractionContext();
         val asyncInteractionContext = interactionContextFrom(asyncControl, interactionContext);
 
-        val command = getInteractionService().currentInteractionElseFail().getCommand();
-        val commandInteractionId = command.getInteractionId();
+        val parentCommand = getInteractionService().currentInteractionElseFail().getCommand();
+        val parentInteractionId = parentCommand.getInteractionId();
 
         val targetAdapter = memberAndTarget.getTarget();
         val method = memberAndTarget.getMethod();
@@ -374,23 +376,24 @@ implements WrapperFactory, HasMetaModelContext {
         val argAdapters = Can.ofArray(WrapperFactoryDefault.this.adaptersFor(args));
         val head = InteractionHead.regular(targetAdapter);
 
-        CommandDto commandDto;
+        val childInteractionId = interactionIdGenerator.interactionId();
+        CommandDto childCommandDto;
         switch (memberAndTarget.getType()) {
             case ACTION:
                 val action = memberAndTarget.getAction();
-                commandDto = commandDtoFactory
-                        .asCommandDto(commandInteractionId, head, action, argAdapters);
+                childCommandDto = commandDtoFactory
+                        .asCommandDto(childInteractionId, head, action, argAdapters);
                 break;
             case PROPERTY:
                 val property = memberAndTarget.getProperty();
-                commandDto = commandDtoFactory
-                        .asCommandDto(commandInteractionId, head, property, argAdapters.getElseFail(0));
+                childCommandDto = commandDtoFactory
+                        .asCommandDto(childInteractionId, head, property, argAdapters.getElseFail(0));
                 break;
             default:
                 // shouldn't happen, already catered for this case previously
                 return null;
         }
-        val oidDto = commandDto.getTargets().getOid().get(0);
+        val oidDto = childCommandDto.getTargets().getOid().get(0);
 
         asyncControl.setMethod(method);
         asyncControl.setBookmark(Bookmark.forOidDto(oidDto));
@@ -399,12 +402,13 @@ implements WrapperFactory, HasMetaModelContext {
         val asyncTask = getServiceInjector().injectServicesInto(new AsyncTask<R>(
             asyncInteractionContext,
             Propagation.REQUIRES_NEW,
-            commandDto,
+            childCommandDto,
             asyncControl.getReturnType(),
-            command.getInteractionId())); // this command becomes the parent of child command
+            parentInteractionId)); // this command becomes the parent of child command
 
         val future = executorService.submit(asyncTask);
         asyncControl.setFuture(future);
+
         return null;
     }
 
