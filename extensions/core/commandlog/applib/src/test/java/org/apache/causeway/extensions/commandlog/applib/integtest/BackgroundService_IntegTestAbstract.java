@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -104,9 +105,11 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
         transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
             val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
 
-            wrapperFactory.asyncWrap(counter, AsyncControl.returning(Counter.class)).bumpUsingDeclaredAction();
+            val control = AsyncControl.returning(Counter.class);
+            wrapperFactory.asyncWrap(counter, control).bumpUsingDeclaredAction();
 
-            Thread.sleep(1_000);// horrid, but let's just wait 1 sec to allow executor to complete before continuing
+            // wait til done
+            control.getFuture().get();
         }).ifFailureFail();
 
         // then
@@ -121,9 +124,11 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
             assertThat(counter.getNum()).isEqualTo(1L);
 
             // when
-            wrapperFactory.asyncWrapMixin(Counter_bumpUsingMixin.class, counter, AsyncControl.returning(Counter.class)).act();
+            val control = AsyncControl.returning(Counter.class);
+            wrapperFactory.asyncWrapMixin(Counter_bumpUsingMixin.class, counter, control).act();
 
-            Thread.sleep(1_000);// horrid, but let's just wait 1 sec to allow executor to complete before continuing
+            // wait til done
+            control.getFuture().get();
         }).ifFailureFail();
 
         // then
@@ -184,7 +189,13 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
 
 
         // when (simulate quartz running in the background)
+//        Thread thread = new Thread(() -> runBackgroundCommandsJob.execute(mockQuartzJobExecutionContext));
+//        thread.start();
+//        thread.join();
+
         runBackgroundCommandsJob.execute(mockQuartzJobExecutionContext);
+        interactionService.nextInteraction();
+
 
         // then bumped
         transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
@@ -216,6 +227,7 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
         }).ifFailureFail();
     }
 
+    @Inject InteractionService interactionService;
     @Inject BackgroundService backgroundService;
     @Inject BackgroundService.PersistCommandExecutorService persistCommandExecutorService;
     @Inject WrapperFactory wrapperFactory;

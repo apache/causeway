@@ -19,6 +19,7 @@
 package org.apache.causeway.core.runtimeservices.command;
 
 import java.util.Optional;
+import java.util.UUID;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -119,14 +120,18 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
         val interaction = interactionLayerTracker.currentInteractionElseFail();
         val command = interaction.getCommand();
-        if(command.getCommandDto() != dto) {
-            command.updater().setCommandDto(dto);
-        }
+
+        // replace the command with that of the DTO to be executed.
+        command.updater().setInteractionId(UUID.fromString(dto.getInteractionId()));
+        command.updater().setCommandDto(dto);
+
+
+        // notify subscribers that the command is now ready for execution
         commandPublisherProvider.get().ready(command);
 
 
+        // start executing
         val startedAt = clockService.getClock().nowAsJavaSqlTimestamp();
-
         command.updater().setStartedAt(startedAt);
         commandPublisherProvider.get().start(command);
 

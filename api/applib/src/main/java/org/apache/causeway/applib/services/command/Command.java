@@ -76,21 +76,32 @@ import lombok.extern.log4j.Log4j2;
  *
  * @since 1.x {@index}
  */
-@RequiredArgsConstructor
 @ToString
 @Log4j2
 public class Command implements HasInteractionId, HasUsername, HasCommandDto {
 
-    private final UUID interactionId;
+    private UUID interactionId;
+
+    public Command(UUID interactionId) {
+        this.interactionId = interactionId;
+    }
 
     /**
      * The unique identifier of this command (inherited from
      * {@link HasInteractionId})
      *
      * <p>
-     *     This will be the same as the {@link Interaction} that wraps the command, and can be used to correlate also
-     *     to any audit records ({@link org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange}s
-     *     resulting from state changes occurring as a consequence of the command.
+     *     In all cases this be the same as the {@link Interaction} that wraps the command, and can be used
+     *     to correlate also to any audit records
+     *     ({@link org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange}s resulting from state
+     *     changes occurring as a consequence of the command.
+     * </p>
+     *
+     * <p>
+     *     Note that this is immutable in almost all cases.  The one exception is if the Command is being executed
+     *     through the {@link CommandExecutorService}, for example when executing a async action that has been reified
+     *     into a {@link CommandDto}.  In such cases, the {@link CommandExecutorService#executeCommand(CommandDto)}
+     *     will <i>replace</i> the original Id with that of the DTO being executed.
      * </p>
      */
     @Override
@@ -349,6 +360,12 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
             Command.this.publishingPhase = publishingPhase;
         }
 
+        /**
+         * <b>NOT API</b>: intended to be called only by the framework.
+         */
+        public void setInteractionId(UUID interactionId) {
+            Command.this.interactionId = interactionId;
+        }
     };
 
     /**
