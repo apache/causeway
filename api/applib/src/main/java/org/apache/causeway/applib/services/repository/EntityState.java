@@ -96,7 +96,7 @@ public enum EntityState {
     public boolean isDetachedCannotReattach() {
         return (isDetached()
                 || isRemoved())
-                && !isSpecicalJpaDetachedWithOid();
+                && !isJpaSpecificDetachedWithOid();
     }
 
     /**
@@ -114,15 +114,14 @@ public enum EntityState {
     /**
      * @apiNote JPA specific. Is detached, but has an OID.
      */
-    public boolean isSpecicalJpaDetachedWithOid() {
+    public boolean isJpaSpecificDetachedWithOid() {
         return this == PERSISTABLE_DETACHED_WITH_OID;
     }
 
     // -- BOOKMARKABLE
 
     public boolean hasOid() {
-        return isAttached()
-                || isSpecicalJpaDetachedWithOid();
+        return isAttached() || isJpaSpecificDetachedWithOid();
     }
 
 }

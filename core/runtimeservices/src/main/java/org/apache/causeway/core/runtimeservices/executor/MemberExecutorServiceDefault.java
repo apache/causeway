@@ -286,7 +286,7 @@ implements MemberExecutorService {
             return;
         }
         if(entityState.isDetached()
-                || entityState.isSpecicalJpaDetachedWithOid()) {
+                || entityState.isJpaSpecificDetachedWithOid()) {
             // ensure that any still-to-be-persisted adapters get persisted to DB.
             getTransactionService().flushTransaction();
         }

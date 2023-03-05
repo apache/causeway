@@ -169,7 +169,7 @@ public final class MmEntityUtil {
         val state = MmEntityUtil.getEntityState(entity);
         return state.isDetached()
                 || state.isRemoved()
-                || state.isSpecicalJpaDetachedWithOid();
+                || state.isJpaSpecificDetachedWithOid();
     }
 
 }
