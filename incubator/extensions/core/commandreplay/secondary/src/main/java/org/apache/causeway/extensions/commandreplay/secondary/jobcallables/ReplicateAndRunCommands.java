@@ -171,7 +171,7 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
         transactionService.runWithinCurrentTransactionElseCreateNew(
                 () -> {
                     commandExecutorService.executeCommand(
-                        CommandExecutorService.InteractionContextPolicy.SWITCH_USER_AND_TIME, commandLogEntry.getCommandDto(), commandLogEntry.outcomeHandler());
+                        CommandExecutorService.InteractionContextPolicy.SWITCH_USER_AND_TIME, commandLogEntry.getCommandDto());
                 });
 
         transactionService.runWithinCurrentTransactionElseCreateNew(() -> {

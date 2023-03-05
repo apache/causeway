@@ -682,33 +682,6 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
         return stringifier.toString(this);
     }
 
-    @Programmatic
-    public CommandOutcomeHandler outcomeHandler() {
-        return new CommandOutcomeHandler() {
-
-            @Override
-            public java.sql.Timestamp getStartedAt() {
-                return CommandLogEntry.this.getStartedAt();
-            }
-
-            @Override
-            public void setStartedAt(final java.sql.Timestamp startedAt) {
-                CommandLogEntry.this.setStartedAt(startedAt);
-            }
-
-            @Override
-            public void setCompletedAt(final java.sql.Timestamp completedAt) {
-                CommandLogEntry.this.setCompletedAt(completedAt);
-            }
-
-            @Override
-            public void setResult(Try<Bookmark> result) {
-                result.ifSuccess(bookmarkIfAny -> bookmarkIfAny.ifPresent(CommandLogEntry.this::setResult));
-                result.ifFailure(CommandLogEntry.this::setException);
-            }
-        };
-    }
-
 
     @Service
     @Priority(PriorityPrecedence.LATE - 10) // before the framework's own default.

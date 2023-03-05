@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.function.BiConsumer;
 
@@ -642,11 +641,14 @@ implements WrapperFactory, HasMetaModelContext {
 
     private <R> R updateDomainObject(final AsyncCallable<R> asyncCallable) {
 
+        // obtain the Command that is implicitly created (initially mainly empty) whenever an Interaction is started.
         val childCommand = interactionProviderProvider.get().currentInteractionElseFail().getCommand();
+
+        // we will "take over" this Command, updating it with the parentInteractionId of the command for the action
+        // that called WrapperFactory#asyncMixin in the first place.
         childCommand.updater().setParentInteractionId(asyncCallable.getParentInteractionId());
 
-        val tryBookmark = commandExecutorServiceProvider.get()
-                .executeCommand(asyncCallable.getCommandDto(), childCommand.updater());
+        val tryBookmark = commandExecutorServiceProvider.get().executeCommand(asyncCallable.getCommandDto());
 
         return tryBookmark.fold(
                 throwable -> null,                  // failure
