@@ -573,7 +573,7 @@ implements WrapperFactory, HasMetaModelContext {
     }
 
     @RequiredArgsConstructor
-    private static class AsyncTask<R> implements Callable<R>, AsyncCallable<R> {
+    private static class AsyncTask<R> implements AsyncCallable<R> {
 
         @Getter private final InteractionContext interactionContext;
         @Getter private final Propagation propagation;
