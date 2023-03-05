@@ -16,70 +16,51 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObjectLayout.tabledec;
+package demoapp.dom.domain.collections.CollectionLayout.tableDecorator;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.annotation.Optionality;
-import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.TableDecorator;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.domain._entities.DemoEntity;
 import lombok.Getter;
 import lombok.Setter;
 
 //tag::class[]
+@DomainObject(
+        nature=Nature.VIEW_MODEL)
+@Named("demo.CollectionLayoutTableDecoratorVm")
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.DomainObjectLayoutTableDecoratorVm")
-@DomainObject(
-        nature=Nature.VIEW_MODEL)
-@DomainObjectLayout(
-        tableDecorator = TableDecorator.DatatablesNet.class)
-public class DomainObjectLayoutTableDecoratorVm implements HasAsciiDocDescription {
+public class CollectionLayoutTableDecoratorVm implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "DomainObjectLayout#tableDecorator";
+        return "CollectionLayout#tableDecorator";
     }
 
-    @Action
-    public List<DomainObjectLayoutTableDecoratorVm> standaloneTable() {
-        return getSamples();
-    }
-
+//tag::collection[]
     @Collection
-    //@CollectionLayout(tableDecorator = TableDecorator.DatatablesNet.class) -> //TODO[CAUSEWAY-3311] see collection layout demo instead
-    private List<DomainObjectLayoutTableDecoratorVm> samples;
-    public List<DomainObjectLayoutTableDecoratorVm> getSamples() {
-        if(samples==null) {
-            samples = List.of(
-                    new DomainObjectLayoutTableDecoratorVm(),
-                    new DomainObjectLayoutTableDecoratorVm(),
-                    new DomainObjectLayoutTableDecoratorVm(),
-                    new DomainObjectLayoutTableDecoratorVm());
-        }
-        return samples;
-    }
-
-    @Property(optionality = Optionality.OPTIONAL)
-    @XmlElement(required = false)
+    @CollectionLayout(
+            tableDecorator = TableDecorator.DatatablesNet.class)
+    @XmlTransient
     @Getter @Setter
-    private String uuid = UUID.randomUUID().toString();
+    private List<DemoEntity> collection = new ArrayList<>();
+//end::collection[]
 
 }
 //end::class[]
