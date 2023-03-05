@@ -97,8 +97,9 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
                     }
                     break;
                 case BACKGROUND:
-                    // this is expected behaviour; the command was already persisted when initially scheduled; we don't
-                    // need to do anything else.
+                    // this is expected behaviour; the command was already persisted by
+                    // BackgroundService.PersistCommandExecutorService when BackgroundService#submit(...) was called;
+                    // so there's no need to do anything else.
                     break;
             }
 
