@@ -49,21 +49,4 @@ public interface CommandPublishingFacet extends Facet {
     public static boolean isPublishingEnabled(final @NonNull FacetHolder facetHolder) {
         return facetHolder.containsFacet(CommandPublishingFacet.class);
     }
-
-    /**
-     * Will set the command's CommandPublishingPhase to READY,
-     * if command and objectMember have a matching member-id
-     * and if the facetHoler has a CommandPublishingFacet (has commandPublishing=ENABLED).
-     */
-    public static void prepareCommandForPublishing(
-            final @NonNull Command command,
-            final @NonNull InteractionHead interactionHead,
-            final @NonNull ObjectMember objectMember,
-            final @NonNull FacetHolder facetHolder) {
-
-        if(IdentifierUtil.isCommandForMember(command, interactionHead, objectMember)
-                && isPublishingEnabled(facetHolder)) {
-            command.updater().setPublishingPhase(CommandPublishingPhase.READY);
-        }
-    }
 }

@@ -19,7 +19,6 @@
 package org.apache.causeway.core.runtimeservices.session;
 
 import java.io.File;
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -32,6 +31,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
+import org.apache.causeway.applib.services.command.Command;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Lazy;
@@ -374,6 +374,7 @@ implements
     }
 
     private void preInteractionClosed(final CausewayInteraction interaction) {
+
         completeAndPublishCurrentCommand();
 
         RuntimeException flushException = null;
@@ -441,7 +442,7 @@ implements
             // the guard is in case we're here as the result of a redirect following a previous exception;just ignore.
 
             val priorInteractionExecution = interaction.getPriorExecution();
-            final Timestamp completedAt =
+            val completedAt =
                     priorInteractionExecution != null
                     ?
                         // copy over from the most recent (which will be the top-level) interaction
@@ -454,6 +455,7 @@ implements
                          clockService.getClock().nowAsJavaSqlTimestamp();
 
             command.updater().setCompletedAt(completedAt);
+            command.updater().setPublishingPhase(Command.CommandPublishingPhase.COMPLETED);
         }
 
         commandPublisherProvider.get().complete(command);

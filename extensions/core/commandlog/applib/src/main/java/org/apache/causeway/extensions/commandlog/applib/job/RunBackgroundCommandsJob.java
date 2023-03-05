@@ -78,7 +78,7 @@ public class RunBackgroundCommandsJob implements Job {
                         // finally, we execute
                         commandLogEntryIfAny.ifPresent(commandLogEntry ->
                                 commandExecutorService.executeCommand(
-                                        CommandExecutorService.InteractionContextPolicy.NO_SWITCH, commandDto, commandLogEntry.outcomeHandler()));
+                                        CommandExecutorService.InteractionContextPolicy.NO_SWITCH, commandDto));
                     }).ifFailure(throwable -> log.error("Failed to execute command: " +
                             CommandDtoUtils.dtoMapper().toString(commandDto), throwable));
                 }

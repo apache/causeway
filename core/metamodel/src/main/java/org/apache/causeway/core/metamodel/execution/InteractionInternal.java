@@ -29,6 +29,7 @@ import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.iactn.PropertyEdit;
 import org.apache.causeway.applib.services.metrics.MetricsService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
+import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
 
 import lombok.NonNull;
 import lombok.val;
@@ -61,6 +62,7 @@ extends Interaction {
             final ActionInvocation actionInvocation,
             final ClockService clockService,
             final MetricsService metricsService,
+            final CommandPublisher commandPublisher,
             final Command command);
 
     /**
@@ -77,6 +79,7 @@ extends Interaction {
             final PropertyEdit propertyEdit,
             final ClockService clockService,
             final MetricsService metricsService,
+            final CommandPublisher commandPublisher,
             final Command command);
 
 

@@ -112,7 +112,6 @@ public class BackgroundService {
     public static class PersistCommandExecutorService implements ExecutorService {
 
         @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
-        @Inject InteractionService interactionService;
 
         private final static JavaSqlJaxbAdapters.TimestampToXMLGregorianCalendarAdapter gregorianCalendarAdapter  = new JavaSqlJaxbAdapters.TimestampToXMLGregorianCalendarAdapter();;
 

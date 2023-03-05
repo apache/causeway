@@ -62,8 +62,9 @@ extends
      * {@link HasInteractionId})
      *
      * <p>
-     *     This can be used to correlate audit records and transactions
-     *     happening as a consequence or within the interaction.
+     *     This can be used to correlate to the {@link Command} that triggers the interaction, and to audit records
+     *     ({@link org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange}s that are created as a
+     *     consequence of the interaction.
      * </p>
      */
     @Override

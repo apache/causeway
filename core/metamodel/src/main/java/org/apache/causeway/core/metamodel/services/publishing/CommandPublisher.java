@@ -30,8 +30,20 @@ import lombok.NonNull;
 public interface CommandPublisher {
 
     /**
-     * &quot;Completes&quot; the command, meaning that all {@link CommandSubscriber}s
-     * are notified throuhg {@link CommandSubscriber#onCompleted(Command)}.
+     * Notifies all {@link CommandSubscriber}s (through {@link CommandSubscriber#onReady(Command)}) that the
+     * {@link Command} has been created/is ready for execution
+     */
+    void ready(@NonNull Command command);
+
+    /**
+     * Notifies all {@link CommandSubscriber}s (through {@link CommandSubscriber#onStarted(Command)}) that the
+     * {@link Command} has started.
+     */
+    void start(@NonNull Command command);
+
+    /**
+     * Notifies all {@link CommandSubscriber}s (through {@link CommandSubscriber#onCompleted(Command)}) that the
+     * {@link Command} has completed.
      */
     void complete(@NonNull Command command);
 

@@ -26,6 +26,7 @@ import org.apache.causeway.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
@@ -118,20 +119,13 @@ public interface CommandExecutorService {
      * UPDATED to hold the {@link CommandDto} passed in.
      * </p>
      *
-     * <p>
-     * Optionally an {@link CommandOutcomeHandler outcome handler} can be provided to process the result.  This is
-     * used by the persistent implementations to update their respective persistent equivalents of {@link Command}.
-     * </p>
-     *
      * @param interactionContextPolicy - policy to use
      * @param commandDto               - the {@link CommandDto} to be executed
-     * @param outcomeHandler           - callback to handle the result
      * @return - a bookmark representing the result of executing the command (could be null)
      */
     Try<Bookmark> executeCommand(
             InteractionContextPolicy interactionContextPolicy,
-            CommandDto commandDto,
-            CommandOutcomeHandler outcomeHandler);
+            CommandDto commandDto);
 
     /**
      * As per {@link #executeCommand(InteractionContextPolicy, Command)}, with a policy of {@link InteractionContextPolicy#NO_SWITCH no switch}.
@@ -142,23 +136,22 @@ public interface CommandExecutorService {
      *
      * @see #executeCommand(InteractionContextPolicy, Command)
      */
-    Try<Bookmark> executeCommand(
-            Command command
-    );
+    Try<Bookmark> executeCommand(Command command);
+
 
     /**
-     * As per {@link #executeCommand(InteractionContextPolicy, CommandDto, CommandOutcomeHandler)}, with a policy of {@link InteractionContextPolicy#NO_SWITCH no switch}.
+     * As per {@link #executeCommand(InteractionContextPolicy, CommandDto)}, with a policy of {@link InteractionContextPolicy#NO_SWITCH no switch}.
      *
      * <p>
-     * Note that this method has significant side-effects.
+     * IMPORTANT: THIS METHOD HAS SIGNIFICANT SIDE-EFFECTS.  Specifically, the {@link Command} of the executing
+     * thread (obtained using {@link org.apache.causeway.applib.services.iactn.InteractionProvider} to obtain the
+     * {@link Interaction}, and then {@link Interaction#getCommand()} to obtain the {@link Command}) will be
+     * UPDATED to hold the {@link CommandDto} passed in.
      * </p>
      *
      * @param commandDto
-     * @param outcomeHandler
-     * @see #executeCommand(InteractionContextPolicy, CommandDto, CommandOutcomeHandler)
+     * @see #executeCommand(InteractionContextPolicy, CommandDto)
      */
-    Try<Bookmark> executeCommand(
-            CommandDto commandDto,
-            CommandOutcomeHandler outcomeHandler);
+    Try<Bookmark> executeCommand(CommandDto commandDto);
 
 }

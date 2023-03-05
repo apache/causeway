@@ -36,7 +36,7 @@ class _Helper {
         return extensionContext.getTestInstance()
         .filter(CausewayIntegrationTestAbstract.class::isInstance)
         .map(CausewayIntegrationTestAbstract.class::cast)
-        .map(CausewayIntegrationTestAbstract::getServiceRegistry);
+        .map(causewayIntegrationTestAbstract -> causewayIntegrationTestAbstract.serviceRegistry);
     }
 
     /**

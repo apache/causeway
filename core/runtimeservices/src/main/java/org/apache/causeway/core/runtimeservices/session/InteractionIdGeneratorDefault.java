@@ -30,11 +30,17 @@ import javax.inject.Named;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-public interface InteractionIdGenerator {
+@Service
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".InteractionIdGenerator")
+@Priority(PriorityPrecedence.MIDPOINT)
+@Qualifier("Default")
+@Log4j2
+public class InteractionIdGeneratorDefault implements InteractionIdGenerator {
 
-    UUID interactionId();
+    public UUID interactionId() {
+        return UUID.randomUUID();
+    }
 
 }
