@@ -81,16 +81,23 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class Command implements HasInteractionId, HasUsername, HasCommandDto {
 
+    private final UUID interactionId;
+
     /**
-     * Unique identifier for the command.
+     * The unique identifier of this command (inherited from
+     * {@link HasInteractionId})
      *
      * <p>
-     *     Derived from {@link #getCommandDto()}'s {@link CommandDto#getInteractionId()}
+     *     This will be the same as the {@link Interaction} that wraps the command, and can be used to correlate also
+     *     to any audit records ({@link org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange}s
+     *     resulting from state changes occurring as a consequence of the command.
      * </p>
      */
-    @Getter
-        (onMethod_ = {@Override})
-    private final UUID interactionId;
+    @Override
+    public UUID getInteractionId() {
+        return interactionId;
+    }
+
 
     /**
      * The user that created the command.
@@ -121,22 +128,26 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
                 : null;
     }
 
+    @ToString.Exclude
+    private org.apache.causeway.schema.cmd.v2.CommandDto commandDto;
+
     /**
      * Serializable representation of the action invocation/property edit.
      *
      * <p>
      *     When the framework sets this (through an internal API), it is
-     *     expected to have {@link CommandDto#getInteractionId()},
-     *     {@link CommandDto#getUsername()}, {@link CommandDto#getTimestamp()},
-     *     {@link CommandDto#getTargets()} and {@link CommandDto#getMember()}
-     *     to be populated.  The {@link #getInteractionId()}, {@link #getUsername()},
+     *     expected that the {@link CommandDto#getUsername() username},
+     *     {@link CommandDto#getTimestamp() timestamp}, {@link CommandDto#getTargets() target(s)} and
+     *     {@link CommandDto#getMember() member} will be populated.
+     *     The {@link #getInteractionId()}, {@link #getUsername()},
      *     {@link #getTimestamp()} and {@link #getTarget()} are all derived
      *     from the provided {@link CommandDto}.
      * </p>
      */
-    @ToString.Exclude
-    @Getter
-    private org.apache.causeway.schema.cmd.v2.CommandDto commandDto;
+    @Override
+    public CommandDto getCommandDto() {
+        return commandDto;
+    }
 
     /**
      * Derived from {@link #getCommandDto()}, is the {@link Bookmark} of
