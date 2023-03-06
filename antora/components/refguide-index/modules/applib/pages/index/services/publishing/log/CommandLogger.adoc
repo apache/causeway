@@ -10,6 +10,8 @@ Simple implementation of xref:refguide:applib:index/services/publishing/spi/Comm
 ----
 class CommandLogger {
   boolean isEnabled()
+  void onReady(Command command)
+  void onStarted(Command command)
   void onCompleted(Command command)
 }
 ----

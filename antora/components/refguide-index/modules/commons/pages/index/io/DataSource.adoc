@@ -19,11 +19,16 @@ interface DataSource {
   Try<Can<String>> tryReadAsLines(Charset charset)     // <.>
   Try<Can<String>> tryReadAsLinesUtf8()     // <.>
   Try<BufferedImage> tryReadAsImage()
+  Try<HashUtils.Hash> tryHash(HashAlgorithm hashAlgorithm)
+  Try<HashUtils.Hash> tryMd5()
+  String md5Hex()
   Try<Void> tryReadAndWrite(DataSink dataSink, int bufferSize)     // <.>
   void pipe(DataSink dataSink, int bufferSize)     // <.>
   DataSource empty()     // <.>
   DataSource ofInputStreamSupplier(ThrowingSupplier<InputStream> inputStreamSupplier)     // <.>
+  DataSource ofInputStreamEagerly(InputStream inputStream)     // <.>
   DataSource ofResource(Class<?> cls, String resourcePath)     // <.>
+  DataSource ofSpringResource(Resource springResource)     // <.>
   DataSource ofFile(File file)     // <.>
   DataSource ofString(String string, Charset charset)     // <.>
   DataSource ofStringUtf8(String string)     // <.>
@@ -91,10 +96,20 @@ Acts as a no-op.
 --
 Creates a xref:refguide:commons:index/io/DataSource.adoc[DataSource] for given InputStream Supplier.
 --
+<.> xref:#ofInputStreamEagerly_InputStream[ofInputStreamEagerly(InputStream)]
++
+--
+Creates a xref:refguide:commons:index/io/DataSource.adoc[DataSource] for given _InputStream_ eagerly. That is, it reads the InputStream into a byte array, which can be later read from repeatedly.
+--
 <.> xref:#ofResource_Class_String[ofResource(Class, String)]
 +
 --
 Creates a xref:refguide:commons:index/io/DataSource.adoc[DataSource] for given resource path relative to _Class_ .
+--
+<.> xref:#ofSpringResource_Resource[ofSpringResource(Resource)]
++
+--
+Creates a xref:refguide:commons:index/io/DataSource.adoc[DataSource] for given Spring _Resource_ .
 --
 <.> xref:#ofFile_File[ofFile(File)]
 +
@@ -191,10 +206,26 @@ Acts as a no-op.
 
 Creates a xref:refguide:commons:index/io/DataSource.adoc[DataSource] for given InputStream Supplier.
 
+[#ofInputStreamEagerly_InputStream]
+=== ofInputStreamEagerly(InputStream)
+
+Creates a xref:refguide:commons:index/io/DataSource.adoc[DataSource] for given _InputStream_ eagerly. That is, it reads the InputStream into a byte array, which can be later read from repeatedly.
+
+If reading from given _InputStream_ throws any exception, it is propagated without catching.
+
 [#ofResource_Class_String]
 === ofResource(Class, String)
 
 Creates a xref:refguide:commons:index/io/DataSource.adoc[DataSource] for given resource path relative to _Class_ .
+
+If any of the args is null (or empty), returns an 'empty' xref:refguide:commons:index/io/DataSource.adoc[DataSource] .
+
+[#ofSpringResource_Resource]
+=== ofSpringResource(Resource)
+
+Creates a xref:refguide:commons:index/io/DataSource.adoc[DataSource] for given Spring _Resource_ .
+
+If the single argument is null, returns an 'empty' xref:refguide:commons:index/io/DataSource.adoc[DataSource] .
 
 [#ofFile_File]
 === ofFile(File)
