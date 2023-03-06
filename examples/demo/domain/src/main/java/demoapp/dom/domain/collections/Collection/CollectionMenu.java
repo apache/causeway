@@ -24,7 +24,6 @@ import javax.inject.Named;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainService;
-import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
@@ -32,6 +31,8 @@ import org.apache.causeway.applib.services.factory.FactoryService;
 
 import demoapp.dom.domain.collections.Collection.domainEvent.CollectionDomainEventVm;
 import demoapp.dom.domain.collections.Collection.domainEvent.CollectionDomainEventVm_addChild;
+import demoapp.dom.domain.collections.Collection.hidden.CollectionHiddenVm;
+import demoapp.dom.domain.collections.Collection.typeOf.CollectionTypeOfVm;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -58,27 +59,19 @@ public class CollectionMenu {
         return collectionDomainEventVm;
     }
 
-
-
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of collections")
-    public void hidden(){
+    public CollectionHiddenVm hidden(){
+        return new CollectionHiddenVm();
     }
-    @MemberSupport public String disableHidden(){
-        return "Visibility of collections" +
-                 " (not yet implemented in demo)";
-    }
-
-
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-shapes", describedAs = "Element type of collections")
-    public void typeOf(){
+    public CollectionTypeOfVm typeOf(){
+        return new CollectionTypeOfVm();
     }
-    @MemberSupport public String disableTypeOf(){
-        return "Element type of collections" +
-                 " (not yet implemented in demo)";
-    }
+
+    // -- HELPER
 
     private CollectionDomainEventVm_addChild addChild(final CollectionDomainEventVm collectionDomainEventVm) {
         return factoryService.mixin(CollectionDomainEventVm_addChild.class, collectionDomainEventVm);
