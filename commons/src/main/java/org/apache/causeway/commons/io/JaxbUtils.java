@@ -36,8 +36,11 @@ import javax.xml.bind.JAXBContextFactory;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.SchemaOutputResolver;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
+import javax.xml.transform.Result;
+import javax.xml.transform.stream.StreamResult;
 
 import org.springframework.lang.Nullable;
 
@@ -267,8 +270,6 @@ public class JaxbUtils {
         return sb.toString();
     }
 
-    // -- CUSTOMIZERS
-
     // -- MAPPER FACTORY
 
     private JaxbOptions createOptions(
@@ -279,6 +280,24 @@ public class JaxbUtils {
                     .orElse(opts);
         }
         return opts.build();
+    }
+
+    // -- GENERATE XSD
+
+    /**
+     * Generates the schema documents for given {@link JAXBContext} and writes them to given
+     * {@link DataSink}.
+     */
+    public void generateSchema(final @NonNull JAXBContext jaxbContext, final DataSink dataSink) {
+        dataSink.writeAll(os->{
+            val schemaOutputResolver = new SchemaOutputResolver() {
+                @Override
+                public Result createOutput(final String namespaceURI, final String suggestedFileName) {
+                    return new StreamResult(os);
+                }
+            };
+            jaxbContext.generateSchema(schemaOutputResolver);
+        });
     }
 
     // -- JAXB CONTEXT FACTORIES AND CACHING
