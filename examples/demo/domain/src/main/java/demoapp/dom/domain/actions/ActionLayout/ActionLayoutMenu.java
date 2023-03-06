@@ -23,10 +23,22 @@ import javax.inject.Named;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainService;
-import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+
+import demoapp.dom.domain.actions.ActionLayout.associateWith.ActionLayoutAssociateWithVm;
+import demoapp.dom.domain.actions.ActionLayout.bookmarking.ActionLayoutBookmarkingVm;
+import demoapp.dom.domain.actions.ActionLayout.cssClass.ActionLayoutCssClassVm;
+import demoapp.dom.domain.actions.ActionLayout.cssClassFa.ActionLayoutCssClassFaVm;
+import demoapp.dom.domain.actions.ActionLayout.describedAs.ActionLayoutDescribedAsVm;
+import demoapp.dom.domain.actions.ActionLayout.fieldSet.ActionLayoutFieldSetVm;
+import demoapp.dom.domain.actions.ActionLayout.hidden.ActionLayoutHiddenVm;
+import demoapp.dom.domain.actions.ActionLayout.named.ActionLayoutNamedVm;
+import demoapp.dom.domain.actions.ActionLayout.position.ActionLayoutPositionVm;
+import demoapp.dom.domain.actions.ActionLayout.promptStyle.ActionLayoutPromptStyleVm;
+import demoapp.dom.domain.actions.ActionLayout.redirectPolicy.ActionLayoutRedirectPolicyVm;
+import demoapp.dom.domain.actions.ActionLayout.sequence.ActionLayoutSequenceVm;
 
 @DomainService(nature=NatureOfService.VIEW)
 @Named("demo.ActionLayoutMenu")
@@ -35,97 +47,88 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 public class ActionLayoutMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-bookmark", describedAs = "Add link to action prompt as a bookmark"
-    )
-    public void bookmarking(){
+    @ActionLayout(cssClassFa="fa-solid fa-arrows-left-right",
+        describedAs = "Associate an action with a property or collection, specifying its id")
+    public ActionLayoutAssociateWithVm associateWith(){
+        return new ActionLayoutAssociateWithVm();
     }
-    @MemberSupport public String disableBookmarking(){
-        return "Add link to action prompt as a bookmark" +
-                " (not supported by Wicket viewer)";
-    }
-
-
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-pen-nib", describedAs = "CSS class to wrap the UI component representing this action")
-    public void cssClass(){
+    @ActionLayout(cssClassFa="fa-bookmark",
+        describedAs = "Add link to action prompt as a bookmark")
+    public ActionLayoutBookmarkingVm bookmarking(){
+        return new ActionLayoutBookmarkingVm();
     }
-    @MemberSupport public String disableCssClass(){
-        return "CSS class to wrap the UI component representing this action" +
-                " (not yet implemented in demo)";
-    }
-
-
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-font-awesome-flag", describedAs = "Font awesome icon to represent action")
-    public void cssClassFa(){
+    @ActionLayout(cssClassFa="fa-pen-nib",
+        describedAs = "CSS class to wrap the UI component representing this action")
+    public ActionLayoutCssClassVm cssClass(){
+        return new ActionLayoutCssClassVm();
     }
-    @MemberSupport public String disableCssClassFa(){
-        return "Font awesome icon to represent action" +
-                " (not yet implemented in demo)";
-    }
-
-
-
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-comment", describedAs = "Description of the action, shown as a tooltip")
-    public void describedAs(){
+    @ActionLayout(cssClassFa="fa-font-awesome-flag",
+        describedAs = "Font awesome icon to represent action")
+    public ActionLayoutCssClassFaVm cssClassFa(){
+        return new ActionLayoutCssClassFaVm();
     }
-    @MemberSupport public String disableDescribedAs(){
-        return "Description of the action, shown as a tooltip" +
-                " (not yet implemented in demo)";
-    }
-
-
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of the action in different contexts")
-    public void hidden(){
+    @ActionLayout(cssClassFa="fa-comment",
+        describedAs = "Description of the action, shown as a tooltip")
+    public ActionLayoutDescribedAsVm describedAs(){
+        return new ActionLayoutDescribedAsVm();
     }
-    @MemberSupport public String disableHidden(){
-        return "Visibility of the action in different contexts" +
-                " (not yet implemented in demo)";
-    }
-
-
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-signature", describedAs = "Custom text for the action's label")
-    public void named(){
+    @ActionLayout(cssClassFa="fa-solid fa-vector-square",
+        //TODO[CAUSEWAY-3310] missing description - need to double check how this behaves or should behave
+        describedAs = "todo - how does this behave?")
+    public ActionLayoutFieldSetVm fieldSet(){
+        return new ActionLayoutFieldSetVm();
     }
-    @MemberSupport public String disableNamed(){
-        return "Custom text for the action's label" +
-                " (not yet implemented in demo)";
-    }
-
-
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-map-pin", describedAs = "Position of action buttons")
-    public demoapp.dom.domain.actions.ActionLayout.position.ActionLayoutPositionVm position(){
-        return new demoapp.dom.domain.actions.ActionLayout.position.ActionLayoutPositionVm();
+    @ActionLayout(cssClassFa="fa-glasses",
+        describedAs = "Visibility of the action in different contexts")
+    public ActionLayoutHiddenVm hidden(){
+        return new ActionLayoutHiddenVm();
     }
-
-
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-question-circle", describedAs = "Location and style of action's prompt dialog")
-    public demoapp.dom.domain.actions.ActionLayout.promptStyle.ActionLayoutPromptStyleVm promptStyle(){
-        return new demoapp.dom.domain.actions.ActionLayout.promptStyle.ActionLayoutPromptStyleVm();
+    @ActionLayout(cssClassFa="fa-signature",
+        describedAs = "Custom text for the action's label")
+    public ActionLayoutNamedVm named(){
+        return new ActionLayoutNamedVm();
     }
-
-
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-random", describedAs = "Whether to redraw page if action returns same object")
-    public void redirectPolicy(){
-    }
-    @MemberSupport public String disableRedirectPolicy(){
-        return "Whether to redraw page if action returns same object" +
-                " (not yet implemented in demo)";
+    @ActionLayout(cssClassFa="fa-map-pin",
+        describedAs = "Position of action buttons")
+    public ActionLayoutPositionVm position(){
+        return new ActionLayoutPositionVm();
     }
 
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-question-circle",
+        describedAs = "Location and style of action's prompt dialog")
+    public ActionLayoutPromptStyleVm promptStyle(){
+        return new ActionLayoutPromptStyleVm();
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-random",
+        describedAs = "Whether to redraw page if action returns same object")
+    public ActionLayoutRedirectPolicyVm redirectPolicy(){
+        return new ActionLayoutRedirectPolicyVm();
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-sharp fa-solid fa-sort",
+        describedAs = "Order an action relative to other members in the same (layout) group.")
+    public ActionLayoutSequenceVm sequence(){
+        return new ActionLayoutSequenceVm();
+    }
 
 }
