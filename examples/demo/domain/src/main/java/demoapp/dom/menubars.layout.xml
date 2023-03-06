@@ -71,15 +71,18 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
             </mb3:section>
             <mb3:section>
                 <mb3:named>@ActionLayout</mb3:named>
+                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="associateWith"/>
                 <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="bookmarking"/>
                 <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="cssClass"/>
                 <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="cssClassFa"/>
                 <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="describedAs"/>
+                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="fieldSet"/>
                 <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="hidden"/>
                 <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="named"/>
                 <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="position"/>
                 <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="promptStyle"/>
                 <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="redirectPolicy"/>
+                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="sequence"/>
             </mb3:section>
             <mb3:section>
                 <mb3:named>Programming Model</mb3:named>
