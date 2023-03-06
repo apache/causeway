@@ -65,18 +65,51 @@ public class CommandPublisherDefault implements CommandPublisher {
     }
 
     @Override
-    public void complete(final @NonNull Command command) {
+    public void ready(@NonNull Command command) {
 
-        val handle = _Xray.enterCommandPublishing(
+        val handle = _Xray.enterCommandReadyPublishing(
                 interactionServiceProvider.get(),
                 command,
                 enabledSubscribers,
                 ()->getCannotPublishReason(command));
 
-        if(canPublish(command)) {
-            log.debug("about to PUBLISH command: {} to {}", command, enabledSubscribers);
+        if(canPublish(command) && command.getPublishingPhase().isReady()) {
+            log.debug("about to PUBLISH command {}: {} to {}", "ready", command, enabledSubscribers);
+            enabledSubscribers.forEach(subscriber -> subscriber.onReady(command));
+        }
+
+        _Xray.exitPublishing(handle);
+    }
+
+    @Override
+    public void start(@NonNull Command command) {
+
+        val handle = _Xray.enterCommandStartedPublishing(
+                interactionServiceProvider.get(),
+                command,
+                enabledSubscribers,
+                ()->getCannotPublishReason(command));
+
+        if(canPublish(command) && command.getPublishingPhase().isStarted()) {
+            log.debug("about to PUBLISH command {}: {} to {}", "started", command, enabledSubscribers);
+            enabledSubscribers.forEach(subscriber -> subscriber.onStarted(command));
+        }
+
+        _Xray.exitPublishing(handle);
+    }
+
+    @Override
+    public void complete(final @NonNull Command command) {
+
+        val handle = _Xray.enterCommandCompletedPublishing(
+                interactionServiceProvider.get(),
+                command,
+                enabledSubscribers,
+                ()->getCannotPublishReason(command));
+
+        if(canPublish(command) && command.getPublishingPhase().isCompleted()) {
+            log.debug("about to PUBLISH command {}: {} to {}", "completed", command, enabledSubscribers);
             enabledSubscribers.forEach(subscriber -> subscriber.onCompleted(command));
-            command.updater().setPublishingPhase(CommandPublishingPhase.COMPLETED); // one shot
         }
 
         _Xray.exitPublishing(handle);
@@ -86,7 +119,6 @@ public class CommandPublisherDefault implements CommandPublisher {
 
     private boolean canPublish(final Command command) {
         return enabledSubscribers.isNotEmpty()
-                && command.getPublishingPhase().isReady()
                 && command.getLogicalMemberIdentifier() != null; // eg null when seed fixtures
     }
 

@@ -30,7 +30,6 @@ import jakarta.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Collection;
-import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
@@ -64,7 +63,7 @@ public class DomainObjectLayoutTableDecoratorVm implements HasAsciiDocDescriptio
     }
 
     @Collection
-    @CollectionLayout(tableDecorator = TableDecorator.DatatablesNet.class)
+    //@CollectionLayout(tableDecorator = TableDecorator.DatatablesNet.class) -> //TODO[CAUSEWAY-3311] see collection layout demo instead
     private List<DomainObjectLayoutTableDecoratorVm> samples;
     public List<DomainObjectLayoutTableDecoratorVm> getSamples() {
         if(samples==null) {

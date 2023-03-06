@@ -22,7 +22,7 @@
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
            xmlns="https://causeway.apache.org/schema/cmd"
            xmlns:com="https://causeway.apache.org/schema/common"
-           
+
            xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="2.1"
            xmlns:annox="http://annox.dev.java.net"
            jaxb:extensionBindingPrefixes="annox">
@@ -102,7 +102,10 @@
                 </xs:element>
                 <xs:element name="targets" type="com:oidsDto">
                     <xs:annotation>
-                        <xs:documentation>For regular actions, represents the entity/entities or view model(s) upon which the action is to be invoked.  For mixin actions, is the object(s) being mixed-into (the constructor arg to the mixin).  For contributed actions, is the domain service (the contributee object will be one of the action arguments within the payload).  Note that this means that bulk contributed actions cannot be reified as a memento (for this use case, implement as a mixin action instead).
+                        <xs:documentation>For regular actions, represents the entity or view model upon which the action is to be invoked / property is to be edited.
+                            For mixin actions, is the contributee object (also called the mixee, or the subject of the action); in other words the constructor arg to the mixin).
+
+                            Note that although this schema allows multiple targets to be specified, this feature is unused by the framework; only a single target is ever specified.
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>

@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.function.BiConsumer;
 
@@ -37,6 +36,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.inject.Provider;
 
+import org.apache.causeway.core.runtimeservices.session.InteractionIdGenerator;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -131,6 +131,7 @@ implements WrapperFactory, HasMetaModelContext {
     @Inject private Provider<InteractionProvider> interactionProviderProvider;
     @Inject private Provider<BookmarkService> bookmarkServiceProvider;
     @Inject private Provider<RepositoryService> repositoryServiceProvider;
+    @Inject private InteractionIdGenerator interactionIdGenerator;
 
     private final List<InteractionListener> listeners = new ArrayList<>();
     private final Map<Class<? extends InteractionEvent>, InteractionEventDispatcher>
@@ -365,8 +366,8 @@ implements WrapperFactory, HasMetaModelContext {
         val interactionContext = interactionLayer.getInteractionContext();
         val asyncInteractionContext = interactionContextFrom(asyncControl, interactionContext);
 
-        val command = getInteractionService().currentInteractionElseFail().getCommand();
-        val commandInteractionId = command.getInteractionId();
+        val parentCommand = getInteractionService().currentInteractionElseFail().getCommand();
+        val parentInteractionId = parentCommand.getInteractionId();
 
         val targetAdapter = memberAndTarget.getTarget();
         val method = memberAndTarget.getMethod();
@@ -374,23 +375,24 @@ implements WrapperFactory, HasMetaModelContext {
         val argAdapters = Can.ofArray(WrapperFactoryDefault.this.adaptersFor(args));
         val head = InteractionHead.regular(targetAdapter);
 
-        CommandDto commandDto;
+        val childInteractionId = interactionIdGenerator.interactionId();
+        CommandDto childCommandDto;
         switch (memberAndTarget.getType()) {
             case ACTION:
                 val action = memberAndTarget.getAction();
-                commandDto = commandDtoFactory
-                        .asCommandDto(commandInteractionId, head, action, argAdapters);
+                childCommandDto = commandDtoFactory
+                        .asCommandDto(childInteractionId, head, action, argAdapters);
                 break;
             case PROPERTY:
                 val property = memberAndTarget.getProperty();
-                commandDto = commandDtoFactory
-                        .asCommandDto(commandInteractionId, head, property, argAdapters.getElseFail(0));
+                childCommandDto = commandDtoFactory
+                        .asCommandDto(childInteractionId, head, property, argAdapters.getElseFail(0));
                 break;
             default:
                 // shouldn't happen, already catered for this case previously
                 return null;
         }
-        val oidDto = commandDto.getTargets().getOid().get(0);
+        val oidDto = childCommandDto.getTargets().getOid().get(0);
 
         asyncControl.setMethod(method);
         asyncControl.setBookmark(Bookmark.forOidDto(oidDto));
@@ -399,12 +401,13 @@ implements WrapperFactory, HasMetaModelContext {
         val asyncTask = getServiceInjector().injectServicesInto(new AsyncTask<R>(
             asyncInteractionContext,
             Propagation.REQUIRES_NEW,
-            commandDto,
+            childCommandDto,
             asyncControl.getReturnType(),
-            command.getInteractionId())); // this command becomes the parent of child command
+            parentInteractionId)); // this command becomes the parent of child command
 
         val future = executorService.submit(asyncTask);
         asyncControl.setFuture(future);
+
         return null;
     }
 
@@ -573,7 +576,7 @@ implements WrapperFactory, HasMetaModelContext {
     }
 
     @RequiredArgsConstructor
-    private static class AsyncTask<R> implements Callable<R>, AsyncCallable<R> {
+    private static class AsyncTask<R> implements AsyncCallable<R> {
 
         @Getter private final InteractionContext interactionContext;
         @Getter private final Propagation propagation;
@@ -638,11 +641,14 @@ implements WrapperFactory, HasMetaModelContext {
 
     private <R> R updateDomainObject(final AsyncCallable<R> asyncCallable) {
 
+        // obtain the Command that is implicitly created (initially mainly empty) whenever an Interaction is started.
         val childCommand = interactionProviderProvider.get().currentInteractionElseFail().getCommand();
+
+        // we will "take over" this Command, updating it with the parentInteractionId of the command for the action
+        // that called WrapperFactory#asyncMixin in the first place.
         childCommand.updater().setParentInteractionId(asyncCallable.getParentInteractionId());
 
-        val tryBookmark = commandExecutorServiceProvider.get()
-                .executeCommand(asyncCallable.getCommandDto(), childCommand.updater());
+        val tryBookmark = commandExecutorServiceProvider.get().executeCommand(asyncCallable.getCommandDto());
 
         return tryBookmark.fold(
                 throwable -> null,                  // failure

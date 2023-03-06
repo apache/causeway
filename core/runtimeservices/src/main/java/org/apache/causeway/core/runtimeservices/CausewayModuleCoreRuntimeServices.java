@@ -20,6 +20,7 @@ package org.apache.causeway.core.runtimeservices;
 
 import jakarta.inject.Singleton;
 
+import org.apache.causeway.core.runtimeservices.session.InteractionIdGeneratorDefault;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -98,7 +99,7 @@ import org.apache.causeway.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDe
         ImpersonateMenuAdvisorDefault.class,
         ImpersonatedUserHolderDefault.class,
         InteractionDtoFactoryDefault.class,
-        InteractionIdGenerator.class,
+        InteractionIdGeneratorDefault.class,
         InteractionServiceDefault.class,
         JaxbServiceDefault.class,
         LanguageProviderDefault.class,

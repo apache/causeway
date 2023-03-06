@@ -76,21 +76,39 @@ import lombok.extern.log4j.Log4j2;
  *
  * @since 1.x {@index}
  */
-@RequiredArgsConstructor
 @ToString
 @Log4j2
 public class Command implements HasInteractionId, HasUsername, HasCommandDto {
 
+    private UUID interactionId;
+
+    public Command(UUID interactionId) {
+        this.interactionId = interactionId;
+    }
+
     /**
-     * Unique identifier for the command.
+     * The unique identifier of this command (inherited from
+     * {@link HasInteractionId})
      *
      * <p>
-     *     Derived from {@link #getCommandDto()}'s {@link CommandDto#getInteractionId()}
+     *     In all cases this be the same as the {@link Interaction} that wraps the command, and can be used
+     *     to correlate also to any audit records
+     *     ({@link org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange}s resulting from state
+     *     changes occurring as a consequence of the command.
+     * </p>
+     *
+     * <p>
+     *     Note that this is immutable in almost all cases.  The one exception is if the Command is being executed
+     *     through the {@link CommandExecutorService}, for example when executing a async action that has been reified
+     *     into a {@link CommandDto}.  In such cases, the {@link CommandExecutorService#executeCommand(CommandDto)}
+     *     will <i>replace</i> the original Id with that of the DTO being executed.
      * </p>
      */
-    @Getter
-        (onMethod_ = {@Override})
-    private final UUID interactionId;
+    @Override
+    public UUID getInteractionId() {
+        return interactionId;
+    }
+
 
     /**
      * The user that created the command.
@@ -121,22 +139,26 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
                 : null;
     }
 
+    @ToString.Exclude
+    private org.apache.causeway.schema.cmd.v2.CommandDto commandDto;
+
     /**
      * Serializable representation of the action invocation/property edit.
      *
      * <p>
      *     When the framework sets this (through an internal API), it is
-     *     expected to have {@link CommandDto#getInteractionId()},
-     *     {@link CommandDto#getUsername()}, {@link CommandDto#getTimestamp()},
-     *     {@link CommandDto#getTargets()} and {@link CommandDto#getMember()}
-     *     to be populated.  The {@link #getInteractionId()}, {@link #getUsername()},
+     *     expected that the {@link CommandDto#getUsername() username},
+     *     {@link CommandDto#getTimestamp() timestamp}, {@link CommandDto#getTargets() target(s)} and
+     *     {@link CommandDto#getMember() member} will be populated.
+     *     The {@link #getInteractionId()}, {@link #getUsername()},
      *     {@link #getTimestamp()} and {@link #getTarget()} are all derived
      *     from the provided {@link CommandDto}.
      * </p>
      */
-    @ToString.Exclude
-    @Getter
-    private org.apache.causeway.schema.cmd.v2.CommandDto commandDto;
+    @Override
+    public CommandDto getCommandDto() {
+        return commandDto;
+    }
 
     /**
      * Derived from {@link #getCommandDto()}, is the {@link Bookmark} of
@@ -236,18 +258,28 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
     public static enum CommandPublishingPhase {
         /** initial state: do not publish (yet) */
         ONHOLD,
-        /** publishing is enabled */
+        /**
+         * publishing is enabled, and the command will be executed.
+         */
         READY,
-        /** publishing has completed */
+        /**
+         * The command has started to be executed.
+         */
+        STARTED,
+        /**
+         * The command has completed its execution.
+         */
         COMPLETED;
-        public boolean isOnhold() {return this==ONHOLD;}
+        public boolean isOnHold() {return this==ONHOLD;}
         public boolean isReady() {return this==READY;}
+        public boolean isStarted() {return this==STARTED;}
         public boolean isCompleted() {return this==COMPLETED;}
     }
 
     /**
      * Whether this command has been enabled for publishing,
-     * that is {@link CommandSubscriber}s will be notified when this Command completes.
+     * that is {@link CommandSubscriber}s will be notified when this Command becomes {@link CommandPublishingPhase#READY ready},
+     * has {@link CommandPublishingPhase#STARTED started}, and when it {@link CommandPublishingPhase#COMPLETED completes}.
      */
     @Getter private CommandPublishingPhase publishingPhase = CommandPublishingPhase.ONHOLD;
 
@@ -328,6 +360,12 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
             Command.this.publishingPhase = publishingPhase;
         }
 
+        /**
+         * <b>NOT API</b>: intended to be called only by the framework.
+         */
+        public void setInteractionId(UUID interactionId) {
+            Command.this.interactionId = interactionId;
+        }
     };
 
     /**

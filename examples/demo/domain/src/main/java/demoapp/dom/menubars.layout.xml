@@ -26,16 +26,16 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
             <mb3:named>Domain Objects</mb3:named>
             <mb3:section>
                 <mb3:named>@DomainObject</mb3:named>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="aliased"/>
                 <mb3:serviceAction objectType="demo.DomainObjectMenu" id="autoComplete"/>
-                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="bounded"/>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="bounding"/>
                 <mb3:serviceAction objectType="demo.DomainObjectMenu" id="editing"/>
                 <mb3:serviceAction objectType="demo.DomainObjectMenu" id="entityChangePublishing"/>
                 <mb3:serviceAction objectType="demo.DomainObjectMenu" id="mixinMethod"/>
                 <mb3:serviceAction objectType="demo.DomainObjectMenu" id="natureStateful"/>
                 <mb3:serviceAction objectType="demo.DomainObjectMenu" id="natureStatefulRefsEntity"/>
-                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="logicalTypeName"/>
-                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="xxxDomainEvent"/>
-                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="xxxLifecycleEvent"/>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="domainEvents"/>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="lifecycleEvents"/>
             </mb3:section>
             <mb3:section>
                 <mb3:named>@DomainObjectLayout</mb3:named>
@@ -138,7 +138,9 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
                 <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="hidden"/>
                 <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="named"/>
                 <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="paged"/>
+                <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="sequence"/>
                 <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="sortedBy"/>
+                <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="tableDecorator"/>
             </mb3:section>
         </mb3:menu>
 

@@ -54,16 +54,31 @@ implements CommandSubscriber {
     }
 
     @Override
+    public void onReady(final Command command) {
+        on("readyCommands", command);
+        log.debug("publish ready command {}", ()->command.getCommandDto());
+    }
+
+    @Override
+    public void onStarted(final Command command) {
+        on("startedCommands", command);
+        log.debug("publish started command {}", ()->command.getCommandDto());
+    }
+
+    @Override
     public void onCompleted(final Command command) {
+        on("completedCommands", command);
+        log.debug("publish completed command {}", ()->command.getCommandDto());
+    }
 
+
+    private void on(final String verb, final Command command) {
         @SuppressWarnings("unchecked")
-        val publishedCommands =
-        (List<Command>) kvStore.get(this, "publishedCommands").orElseGet(ArrayList::new);
+        val commands = (List<Command>) kvStore.get(this, verb).orElseGet(ArrayList::new);
 
-        publishedCommands.add(command);
+        commands.add(command);
 
-        kvStore.put(this, "publishedCommands", publishedCommands);
-        log.debug("publish command {}", ()->command.getCommandDto());
+        kvStore.put(this, verb, commands);
     }
 
     // -- UTILITIES
@@ -71,7 +86,7 @@ implements CommandSubscriber {
     @SuppressWarnings("unchecked")
     public static Can<Command> getPublishedCommands(final KVStoreForTesting kvStore) {
         return Can.ofCollection(
-                (List<Command>) kvStore.get(CommandSubscriberForTesting.class, "publishedCommands")
+                (List<Command>) kvStore.get(CommandSubscriberForTesting.class, "completedCommands")
                 .orElse(null));
     }
 

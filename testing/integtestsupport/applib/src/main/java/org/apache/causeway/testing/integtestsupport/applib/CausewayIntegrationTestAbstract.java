@@ -123,9 +123,7 @@ public abstract class CausewayIntegrationTestAbstract {
 
     // -- DEPENDENCIES
 
-    @Getter(AccessLevel.PACKAGE) // share with _Helper
     @Inject protected ServiceRegistry serviceRegistry;
-
     @Inject protected MetaModelService metaModelService;
     @Inject protected FactoryService factoryService;
     @Inject protected RepositoryService repositoryService;
@@ -133,6 +131,7 @@ public abstract class CausewayIntegrationTestAbstract {
     @Inject protected UserService userService;
     @Inject protected WrapperFactory wrapperFactory;
     @Inject protected TransactionService transactionService;
-    // internal framework debugging
+
+    // for internal framework debugging
     @Inject private ObjectManager objectManager;
 }

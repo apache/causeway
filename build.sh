@@ -28,12 +28,6 @@
 #
 
 #
-# prereq for '-t' flag
-#
-# git clone https://github.com/danhaywood/maven-timeline.git
-# mvn clean install
-#
-#
 # see serve-timeline.sh to serve up the generated website (requires JDK18)
 #
 
@@ -46,7 +40,7 @@ usage() {
  echo "  -p run 'git pull --ff-only' first"                                                            >&2
  echo "  -c include 'clean' goal"                                                                      >&2
  echo "  -t skip tests"                                                                                >&2
- echo "  -n add '-Dmaven-timeline.version=1.8-SNAPSHOT' for improved timeline output"                  >&2
+ echo "  -n serve timeline (prereq: npm i -g serve)"                                                   >&2
  echo "  -l single threaded, do NOT add '-T1C' flag"                                                   >&2
  echo "  -k use 'package' rather than 'install'.  Does not run integ tests.  Cannot combine with '-y'" >&2
  echo "  -y use 'verify' rather than 'install'.  Cannot combine with '-k'"                             >&2
@@ -81,7 +75,6 @@ SINGLE_THREADED=false
 ALL=false
 ALL_EXCEPT_KROVIZ=false
 ALL_EXCEPT_INCUBATOR=false
-TIMELINE=false
 USE_MVND=false
 SKIP_SEARCH_FOR_FAILURES=false
 SKIP_SUMMARY=false
@@ -185,10 +178,6 @@ if [ "$SKIP_TESTS" = "true" ]; then
   OPTS="$OPTS -DskipTests=true"
 fi
 
-if [ "$TIMELINE" = "true" ]; then
-  OPTS="$OPTS -Dmaven-timeline.version=1.8-SNAPSHOT"
-fi
-
 if [ "$ALL" = "true" ]; then
   OPTS="$OPTS -Dmodule-all"
 fi
@@ -245,6 +234,10 @@ if [ "$WHATIF" = "true" ]; then
 
   if [ "$SKIP_SUMMARY" = "false" ]; then
     echo "... print summary"
+  fi
+
+  if [ "$TIMELINE" = "true" ]; then
+    echo "serve -d target/timeline"
   fi
 
 
@@ -304,7 +297,15 @@ else
   if [ "$EDIT" = "true" ]; then
     vi $MVN_LOG
   fi
-fi
 
+  if [ "$TIMELINE" = "true" ]; then
+
+    ## when we eventually target only jdk18 and above, then can replace with:
+    ## jwebserver -d $(pwd)/target/timeline -b ::
+
+    serve -d target/timeline
+  fi
+
+fi
 
 

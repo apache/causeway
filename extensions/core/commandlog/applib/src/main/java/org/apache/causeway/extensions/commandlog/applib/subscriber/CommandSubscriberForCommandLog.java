@@ -22,6 +22,9 @@ import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import org.apache.causeway.applib.services.clock.ClockService;
+import org.apache.causeway.applib.services.repository.RepositoryService;
+import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -57,7 +60,9 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
     static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandSubscriberForCommandLog";
 
     final CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
+    final RepositoryService repositoryService;
     final CausewayConfiguration causewayConfiguration;
+    final ClockService clockService;
 
     @Override
     public boolean isEnabled() {
@@ -65,7 +70,7 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
     }
 
     @Override
-    public void onCompleted(final Command command) {
+    public void onReady(Command command) {
 
         if (!isEnabled()) {
             return;
@@ -74,10 +79,11 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
         val existingCommandLogEntryIfAny =
                 commandLogEntryRepository.findByInteractionId(command.getInteractionId());
         if(existingCommandLogEntryIfAny.isPresent()) {
+
             val commandLogEntry = existingCommandLogEntryIfAny.get();
             switch (commandLogEntry.getExecuteIn()) {
                 case FOREGROUND:
-                    // this isn't expected to happen ... we just log the fact if it does
+                    // this isn't really expected to happen ... we just log the fact if it does
                     if(log.isWarnEnabled()) {
                         val existingCommandDto = existingCommandLogEntryIfAny.get().getCommandDto();
 
@@ -91,14 +97,43 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
                     }
                     break;
                 case BACKGROUND:
-                    // this is expected behaviour; the command was already persisted when initially scheduled; we don't
-                    // need to do anything else.
+                    // this is expected behaviour; the command was already persisted by
+                    // BackgroundService.PersistCommandExecutorService when BackgroundService#submit(...) was called;
+                    // so there's no need to do anything else.
                     break;
             }
+
         } else {
-            val parentInteractionId = command.getParentInteractionId();
+            val parentInteractionId = command.getParentInteractionId(); // will be null in most (all?) cases
             commandLogEntryRepository.createEntryAndPersist(command, parentInteractionId, ExecuteIn.FOREGROUND);
         }
+
+    }
+
+    @Override
+    public void onStarted(Command command) {
+
+        if (!isEnabled()) {
+            return;
+        }
+
+        commandLogEntryRepository.findByInteractionId(command.getInteractionId())
+            .ifPresent(commandLogEntry -> {
+                commandLogEntry.sync(command);
+            });
+    }
+
+    @Override
+    public void onCompleted(final Command command) {
+
+        if (!isEnabled()) {
+            return;
+        }
+
+        commandLogEntryRepository.findByInteractionId(command.getInteractionId())
+            .ifPresent(commandLogEntry -> {
+                commandLogEntry.sync(command);
+            });
     }
 
 }

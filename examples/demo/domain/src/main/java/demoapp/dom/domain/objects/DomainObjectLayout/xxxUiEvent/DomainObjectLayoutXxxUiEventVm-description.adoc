@@ -2,5 +2,5 @@
 
 The `xxxUiEvent` attribute ...
 
-TODO[CAUSEWAY-3309]
+WARNING: TODO[CAUSEWAY-3309]
 Class of the UI events emitted to allow subscribers to specify title, icon etc

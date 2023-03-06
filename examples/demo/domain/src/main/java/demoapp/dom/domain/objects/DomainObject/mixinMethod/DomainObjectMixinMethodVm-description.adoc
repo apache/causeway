@@ -1,0 +1,11 @@
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+The `mixinMethod` attribute ...
+
+WARNING: TODO[CAUSEWAY-3312]
+Applicable only if #nature() is Nature#MIXIN , indicates the name of the method within the mixin class to be inferred as the action of that mixin.
+Supporting methods are then derived from that method name. For example, if the mixin method name is "act", then the disable supporting method will be "disableAct".
+Typical examples are "act", "prop", "coll", "exec", "execute", "invoke", "apply" and so on. The default name is $$.
+NOTE: it's more typical to instead use xref:refguide:applib:index/annotation/Action.adoc[Action] , xref:refguide:applib:index/annotation/Property.adoc[Property] or xref:refguide:applib:index/annotation/Collection.adoc[Collection] as the class-level annotation, indicating that the domain object is a mixin. The mixin method name for these is, respectively, "act", "prop" and "coll".
+
+

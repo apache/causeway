@@ -1,0 +1,62 @@
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+[#actionDomainEvent]
+== actionDomainEvent
+
+Indicates that an invocation of _any_ action of the domain object (that do not themselves specify their own `@Action(domainEvent=...)` should be posted to the _org.apache.causeway.applib.services.eventbus.EventBusService event bus_ using the specified custom (subclass of) xref:refguide:applib:index/events/domain/ActionDomainEvent.adoc[ActionDomainEvent] .
+
+For example:
+
+----
+
+@DomainObject(actionDomainEvent=SomeObject.GenericActionDomainEvent.class)
+public class SomeObject{
+    public static class GenericActionDomainEvent extends ActionDomainEvent<Object> { ... }
+
+    public void changeStartDate(final Date startDate) { ...}
+    ...
+}
+----
+
+This will result in all actions as a more specific type to use) to emit this event.
+
+This subclass must provide a no-arg constructor; the fields are set reflectively. It must also use `Object` as its generic type. This is to allow mixins to also emit the same event.
+
+[#propertyDomainEvent]
+== propertyDomainEvent
+
+Indicates that changes to _any_ property of the domain object (that do not themselves specify their own `@Property(domainEvent=...)` should be posted to the _org.apache.causeway.applib.services.eventbus.EventBusService event bus_ using the specified custom (subclass of) xref:refguide:applib:index/events/domain/PropertyDomainEvent.adoc[PropertyDomainEvent] .
+
+For example:
+
+----
+
+@DomainObject(propertyDomainEvent=SomeObject.GenericPropertyDomainEvent.class)
+public class SomeObject{
+
+   public LocalDate getStartDate() { ...}
+}
+----
+
+This subclass must provide a no-arg constructor; the fields are set reflectively. It must also use `Object` as its generic type. This is to allow mixins to also emit the same event.
+
+[#collectionDomainEvent]
+== collectionDomainEvent
+
+Indicates that changes to _any_ collection of the domain object (that do not themselves specify their own `@Collection(domainEvent=...)` should be posted to the _org.apache.causeway.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/domain/CollectionDomainEvent.adoc[CollectionDomainEvent] .
+
+For example:
+
+----
+
+@DomainObject(collectionDomainEvent=Order.GenericCollectionDomainEvent.class)
+public class Order {
+
+  public SortedSet<OrderLine> getLineItems() { ...}
+}
+----
+
+This subclass must provide a no-arg constructor; the fields are set reflectively. It must also use `Object` as its generic type. This is to allow mixins to also emit the same event.
+
+
+
