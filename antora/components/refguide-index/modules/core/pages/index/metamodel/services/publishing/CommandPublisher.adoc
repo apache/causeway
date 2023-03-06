@@ -9,19 +9,41 @@ Notifies xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.ad
 .CommandPublisher.java
 ----
 interface CommandPublisher {
+  void ready(Command command)     // <.>
+  void start(Command command)     // <.>
   void complete(Command command)     // <.>
 }
 ----
 
+<.> xref:#ready_Command[ready(Command)]
++
+--
+Notifies all xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] s (through _CommandSubscriber#onReady(Command)_ ) that the xref:refguide:applib:index/services/command/Command.adoc[Command] has been created/is ready for execution
+--
+<.> xref:#start_Command[start(Command)]
++
+--
+Notifies all xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] s (through _CommandSubscriber#onStarted(Command)_ ) that the xref:refguide:applib:index/services/command/Command.adoc[Command] has started.
+--
 <.> xref:#complete_Command[complete(Command)]
 +
 --
-"Completes" the command, meaning that all xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] s are notified throuhg _CommandSubscriber#onCompleted(Command)_ .
+Notifies all xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] s (through _CommandSubscriber#onCompleted(Command)_ ) that the xref:refguide:applib:index/services/command/Command.adoc[Command] has completed.
 --
 
 == Members
 
+[#ready_Command]
+=== ready(Command)
+
+Notifies all xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] s (through _CommandSubscriber#onReady(Command)_ ) that the xref:refguide:applib:index/services/command/Command.adoc[Command] has been created/is ready for execution
+
+[#start_Command]
+=== start(Command)
+
+Notifies all xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] s (through _CommandSubscriber#onStarted(Command)_ ) that the xref:refguide:applib:index/services/command/Command.adoc[Command] has started.
+
 [#complete_Command]
 === complete(Command)
 
-"Completes" the command, meaning that all xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] s are notified throuhg _CommandSubscriber#onCompleted(Command)_ .
+Notifies all xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] s (through _CommandSubscriber#onCompleted(Command)_ ) that the xref:refguide:applib:index/services/command/Command.adoc[Command] has completed.

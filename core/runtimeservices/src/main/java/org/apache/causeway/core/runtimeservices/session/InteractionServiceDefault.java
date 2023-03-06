@@ -439,7 +439,7 @@ implements
         val command = interaction.getCommand();
 
         if(command.getStartedAt() != null && command.getCompletedAt() == null) {
-            // the guard is in case we're here as the result of a redirect following a previous exception;just ignore.
+            // the guard is in case we're here as the result of a redirect following a previous exception; patch up as best we can.
 
             val priorInteractionExecution = interaction.getPriorExecution();
             val completedAt =
@@ -448,16 +448,14 @@ implements
                         // copy over from the most recent (which will be the top-level) interaction
                         priorInteractionExecution.getCompletedAt()
                     :
-                        // this could arise as the result of calling SessionManagementService#nextSession within an action
+                        // this could arise as the result of calling InteractionService#nextInteraction within an action
                         // the best we can do is to use the current time
-
-                        // REVIEW: as for the interaction object, it is left somewhat high-n-dry.
-                         clockService.getClock().nowAsJavaSqlTimestamp();
+                        clockService.getClock().nowAsJavaSqlTimestamp();
 
             command.updater().setCompletedAt(completedAt);
-            command.updater().setPublishingPhase(Command.CommandPublishingPhase.COMPLETED);
         }
 
+        command.updater().setPublishingPhase(Command.CommandPublishingPhase.COMPLETED);
         commandPublisherProvider.get().complete(command);
 
         interaction.clear();

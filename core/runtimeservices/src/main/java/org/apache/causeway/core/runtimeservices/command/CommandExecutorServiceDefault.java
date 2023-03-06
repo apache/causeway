@@ -128,12 +128,14 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
 
         // notify subscribers that the command is now ready for execution
+        command.updater().setPublishingPhase(Command.CommandPublishingPhase.READY);
         commandPublisherProvider.get().ready(command);
 
 
         // start executing
         val startedAt = clockService.getClock().nowAsJavaSqlTimestamp();
         command.updater().setStartedAt(startedAt);
+        command.updater().setPublishingPhase(Command.CommandPublishingPhase.STARTED);
         commandPublisherProvider.get().start(command);
 
 

@@ -50,7 +50,7 @@ The execution that preceded the current one.
 
 The unique identifier of this interaction (inherited from xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId] )
 
-This can be used to correlate audit records and transactions happening as a consequence or within the interaction.
+This can be used to correlate to the xref:refguide:applib:index/services/command/Command.adoc[Command] that triggers the interaction, and to audit records ( _org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange_ s that are created as a consequence of the interaction.
 
 [#getCommand_]
 === getCommand()

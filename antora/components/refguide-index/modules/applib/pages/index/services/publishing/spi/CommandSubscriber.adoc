@@ -9,24 +9,50 @@ Part of the _Publishing SPI_ . A component to receive xref:refguide:applib:index
 .CommandSubscriber.java
 ----
 interface CommandSubscriber {
+  void onReady(Command command)     // <.>
+  void onStarted(Command command)     // <.>
   void onCompleted(Command command)     // <.>
 }
 ----
 
+<.> xref:#onReady_Command[onReady(Command)]
++
+--
+Notifies that the command will be published, and has transitioned to _org.apache.causeway.applib.services.command.Command.CommandPublishingPhase#READY_ .
+--
+<.> xref:#onStarted_Command[onStarted(Command)]
++
+--
+Notifies that the command has started to execute, and has transitioned to _org.apache.causeway.applib.services.command.Command.CommandPublishingPhase#STARTED_ .
+--
 <.> xref:#onCompleted_Command[onCompleted(Command)]
 +
 --
-Notifies that the command has completed.
+Notifies that the command has completed and has transitioned to _org.apache.causeway.applib.services.command.Command.CommandPublishingPhase#COMPLETED_
 --
 
 == Members
 
+[#onReady_Command]
+=== onReady(Command)
+
+Notifies that the command will be published, and has transitioned to _org.apache.causeway.applib.services.command.Command.CommandPublishingPhase#READY_ .
+
+This is an opportunity for implementations to process the command, for example to persist an initial representation of it.
+
+[#onStarted_Command]
+=== onStarted(Command)
+
+Notifies that the command has started to execute, and has transitioned to _org.apache.causeway.applib.services.command.Command.CommandPublishingPhase#STARTED_ .
+
+This is an opportunity for implementations to process the command, for example to update any persisted representation of it.
+
 [#onCompleted_Command]
 === onCompleted(Command)
 
-Notifies that the command has completed.
+Notifies that the command has completed and has transitioned to _org.apache.causeway.applib.services.command.Command.CommandPublishingPhase#COMPLETED_
 
-This is an opportunity for implementations to process the command, for example to persist a representation of it.
+This is an opportunity for implementations to process the command, for example to update any persisted representations of it.
 
 include::hooks/CommandSubscriber_010-implementation.adoc[]
 

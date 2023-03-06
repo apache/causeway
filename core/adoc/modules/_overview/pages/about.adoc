@@ -1355,6 +1355,7 @@ org.jsoup:jsoup:jar:<managed> +
 org.junit.jupiter:junit-jupiter-api:jar:<managed> +
 org.junit.jupiter:junit-jupiter-engine:jar:<managed> +
 org.junit.jupiter:junit-jupiter-params:jar:<managed> +
+org.projectlombok:lombok:jar:${lombok.version} +
 org.slf4j:slf4j-api:jar:<managed> +
 org.springframework:spring-context:jar:<managed> +
 org.springframework:spring-tx:jar:<managed> +
@@ -1365,7 +1366,7 @@ org.yaml:snakeyaml:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:commons:index/collections/Can.adoc[Can], xref:refguide:commons:index/collections/Cardinality.adoc[Cardinality], xref:refguide:commons:index/functional/Either.adoc[Either], xref:refguide:commons:index/functional/Railway.adoc[Railway], xref:refguide:commons:index/functional/ThrowingConsumer.adoc[ThrowingConsumer], xref:refguide:commons:index/functional/ThrowingRunnable.adoc[ThrowingRunnable], xref:refguide:commons:index/functional/ThrowingSupplier.adoc[ThrowingSupplier], xref:refguide:commons:index/functional/Try.adoc[Try], xref:refguide:commons:index/io/DataPeer.adoc[DataPeer], xref:refguide:commons:index/io/DataSink.adoc[DataSink], xref:refguide:commons:index/io/DataSource.adoc[DataSource], xref:refguide:commons:index/io/FileUtils.adoc[FileUtils], xref:refguide:commons:index/io/JaxbUtils.adoc[JaxbUtils], xref:refguide:commons:index/io/JsonUtils.adoc[JsonUtils], xref:refguide:commons:index/io/YamlUtils.adoc[YamlUtils], xref:refguide:commons:index/io/ZipUtils.adoc[ZipUtils]
+xref:refguide:commons:index/collections/Can.adoc[Can], xref:refguide:commons:index/collections/Cardinality.adoc[Cardinality], xref:refguide:commons:index/functional/Either.adoc[Either], xref:refguide:commons:index/functional/Railway.adoc[Railway], xref:refguide:commons:index/functional/ThrowingConsumer.adoc[ThrowingConsumer], xref:refguide:commons:index/functional/ThrowingRunnable.adoc[ThrowingRunnable], xref:refguide:commons:index/functional/ThrowingSupplier.adoc[ThrowingSupplier], xref:refguide:commons:index/functional/Try.adoc[Try], xref:refguide:commons:index/io/DataPeer.adoc[DataPeer], xref:refguide:commons:index/io/DataSink.adoc[DataSink], xref:refguide:commons:index/io/DataSource.adoc[DataSource], xref:refguide:commons:index/io/FileUtils.adoc[FileUtils], xref:refguide:commons:index/io/HashUtils.adoc[HashUtils], xref:refguide:commons:index/io/JaxbUtils.adoc[JaxbUtils], xref:refguide:commons:index/io/JsonUtils.adoc[JsonUtils], xref:refguide:commons:index/io/YamlUtils.adoc[YamlUtils], xref:refguide:commons:index/io/ZipUtils.adoc[ZipUtils]
 ****
 |===
 
@@ -1819,7 +1820,7 @@ o.a.i.core.runtimeservices.repository.RepositoryServiceDefault +
 o.a.i.core.runtimeservices.routing.RoutingServiceDefault +
 o.a.i.core.runtimeservices.scratchpad.ScratchpadDefault +
 o.a.i.core.runtimeservices.serializing.SerializingAdapterDefault +
-o.a.i.core.runtimeservices.session.InteractionIdGenerator +
+o.a.i.core.runtimeservices.session.InteractionIdGeneratorDefault +
 o.a.i.core.runtimeservices.session.InteractionServiceDefault +
 o.a.i.core.runtimeservices.sitemap.SitemapServiceDefault +
 o.a.i.core.runtimeservices.spring.SpringBeansService +
@@ -4650,6 +4651,7 @@ org.apache.causeway.extensions:causeway-extensions-audittrail-applib:test-jar:<m
 org.apache.causeway.persistence:causeway-persistence-jdo-datanucleus:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
+org.datanucleus:javax.jdo:jar:${datanucleus-jdo-api.version} +
 ****
 
 |Apache Causeway Ext - Audit Trail Persistence (using JPA)
@@ -5156,6 +5158,7 @@ o.a.i.extensions.pdfjs.metamodel.facet.PdfJsViewerFacetFromAnnotationFactory$Reg
 ****
 org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-pdfjs-applib:jar:<managed> +
+org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
 ****
 
 |Apache Causeway Ext - pdf.js Wicket
@@ -6158,7 +6161,7 @@ eg. code mining, automated documentation.
 .Dependencies
 ****
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:${project.version} +
-org.checkerframework:checker-qual:jar:3.31.0 +
+org.checkerframework:checker-qual:jar:3.32.0 +
 org.mapstruct:mapstruct-processor:jar:1.5.3.Final +
 org.projectlombok:lombok:jar:<managed> +
 org.slf4j:slf4j-api:jar:<managed> +
