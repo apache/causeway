@@ -95,7 +95,7 @@ public class CollectionLayoutMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-sort",
+    @ActionLayout(cssClassFa="fa-solid fa-arrow-down-a-z",
         describedAs = "Sort domain objects in this collection, overriding their default comparator")
     public CollectionLayoutSortedByVm sortedBy(){
         return new CollectionLayoutSortedByVm();
