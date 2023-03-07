@@ -18,9 +18,22 @@
  */
 package demoapp.webapp.wicket.jdo;
 
+import java.util.Map;
+
+import jakarta.persistence.Cache;
+import jakarta.persistence.EntityGraph;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.PersistenceUnitUtil;
+import jakarta.persistence.Query;
+import jakarta.persistence.SynchronizationType;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.metamodel.Metamodel;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
 import org.apache.causeway.commons.internal.os._OsUtil;
@@ -74,6 +87,8 @@ import demoapp.webapp.wicket.common.ui.DemoAppWicketCommon;
 
     //XrayEnable.class // for debugging only
     //WicketViewerXrayEnable.class // for debugging only
+
+    DemoAppWicketJdo.WorkaroundJpaEntityManagerFactoryRequired.class
 })
 //@Log4j2
 public class DemoAppWicketJdo extends SpringBootServletInitializer {
@@ -97,8 +112,39 @@ public class DemoAppWicketJdo extends SpringBootServletInitializer {
 
         CausewayModuleExtCommandLogApplib.honorSystemEnvironment();
 
+
         SpringApplication.run(new Class[] { DemoAppWicketJdo.class }, args);
 
+    }
+
+    /**
+     * maybe this workaround is not need, if we remove the right JPA artifacts from the class-path;
+     * however, don't know which one that would be
+     */
+    static class WorkaroundJpaEntityManagerFactoryRequired {
+
+        @Bean
+        public EntityManagerFactory entityManagerFactory() {
+            return new EntityManagerFactory() {
+                @Override public <T> T unwrap(final Class<T> cls) { return null; }
+                @Override public boolean isOpen() { return false; }
+                @Override public Map<String, Object> getProperties() { return null; }
+                @Override public PersistenceUnitUtil getPersistenceUnitUtil() { return null; }
+                @Override public Metamodel getMetamodel() { return null; }
+                @Override public CriteriaBuilder getCriteriaBuilder() { return null; }
+                @Override public Cache getCache() { return null; }
+                @Override public EntityManager createEntityManager(
+                        final SynchronizationType synchronizationType, final Map map) { return null; }
+                @Override public EntityManager createEntityManager(
+                        final SynchronizationType synchronizationType) { return null; }
+                @Override public EntityManager createEntityManager(final Map map) { return null; }
+                @Override public EntityManager createEntityManager() { return null; }
+                @Override public void close() {}
+                @Override public void addNamedQuery(final String name, final Query query) {}
+                @Override public <T> void addNamedEntityGraph(
+                        final String graphName, final EntityGraph<T> entityGraph) {}
+            };
+        }
     }
 
 }
