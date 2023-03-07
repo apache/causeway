@@ -30,6 +30,7 @@ import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
@@ -46,7 +47,8 @@ public class ActionLayoutBookmarkingVm implements HasAsciiDocDescription {
         return "ActionLayout#bookmarking";
     }
 
-    @Action
+    @Action(
+            semantics = SemanticsOf.SAFE)
     @ActionLayout(
             bookmarking = BookmarkPolicy.AS_CHILD)
     public Object act(final String arg) {
