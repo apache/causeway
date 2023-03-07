@@ -112,14 +112,13 @@ public class DemoAppWicketJdo extends SpringBootServletInitializer {
 
         CausewayModuleExtCommandLogApplib.honorSystemEnvironment();
 
-
         SpringApplication.run(new Class[] { DemoAppWicketJdo.class }, args);
 
     }
 
     /**
-     * maybe this workaround is not need, if we remove the right JPA artifacts from the class-path;
-     * however, don't know which one that would be
+     * maybe this workaround is not needed, if we remove the right JPA artifacts from the class-path;
+     * however, don't know which ones that would be
      */
     static class WorkaroundJpaEntityManagerFactoryRequired {
 
