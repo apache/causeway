@@ -20,7 +20,6 @@ package org.apache.causeway.commons.io;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -36,6 +35,7 @@ import java.util.zip.ZipOutputStream;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
@@ -131,7 +131,7 @@ public class ZipUtils {
 
         val zipEntryDataSources = _Lists.<ZipEntryDataSource>newArrayList();
 
-        zippedSource.tryReadAndApply(is->{
+        zippedSource.tryReadAndAccept(is->{
             try(final ZipInputStream in = new ZipInputStream(
                     new BufferedInputStream(is, zipOptions.bufferSize()),
                     zipOptions.zipEntryCharset())) {
@@ -141,13 +141,11 @@ public class ZipUtils {
                     if(zipEntry.isDirectory()) continue;
                     if(zipOptions.zipEntryFilter().test(zipEntry)) {
                         zipEntryDataSources.add(
-                                new ZipEntryDataSource(zipEntry, DataSource.ofInputStreamSupplier(()->in).bytes()));
+                                new ZipEntryDataSource(zipEntry, _Bytes.ofKeepOpen(in)));
                     }
                 }
             }
-            return null;
         })
-        .mapFailure(IOException::new)
         .ifFailureFail();
 
         return zipEntryDataSources.stream();
