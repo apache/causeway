@@ -313,7 +313,7 @@ final class Can_Multiple<T> implements Can<T> {
     @Override
     public Can<Can<T>> partitionInnerBound(final int maxInnerSize) {
         if(maxInnerSize<1) {
-            throw _Exceptions.illegalArgument("maxInnerSize %d must be grater or equal to 1", maxInnerSize);
+            throw _Exceptions.illegalArgument("maxInnerSize %d must be greater or equal to 1", maxInnerSize);
         }
         final int n = size();
         final int subCanCount = (n - 1)/maxInnerSize + 1;
@@ -327,7 +327,7 @@ final class Can_Multiple<T> implements Can<T> {
     @Override
     public Can<Can<T>> partitionOuterBound(final int outerSizeYield) {
         if(outerSizeYield<1) {
-            throw _Exceptions.illegalArgument("outerSizeYield %d must be grater or equal to 1", outerSizeYield);
+            throw _Exceptions.illegalArgument("outerSizeYield %d must be greater or equal to 1", outerSizeYield);
         }
         final int n = size();
         final int maxInnerSize = (n - 1)/outerSizeYield + 1;
