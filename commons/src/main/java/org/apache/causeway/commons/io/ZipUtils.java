@@ -113,7 +113,9 @@ public class ZipUtils {
         void writeTo(
                 final ZipOutputStream zipOutputStream) {
             zipOutputStream.putNextEntry(zipEntry());
-            zipOutputStream.write(bytes);
+            if(!_NullSafe.isEmpty(bytes)) {
+                zipOutputStream.write(bytes);
+            }
             zipOutputStream.closeEntry();
         }
     }
