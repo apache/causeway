@@ -34,6 +34,7 @@ import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
@@ -250,6 +251,58 @@ final class Can_Singleton<T> implements Can<T> {
             newElements.add(element);
         }
         return _CanFactory.ofNonNullElements(newElements);
+    }
+
+    @Override
+    public Can<T> pickByIndex(final @Nullable IntStream intStream) {
+        if(intStream==null) {
+            return Can.empty();
+        }
+        final long pickCountL = intStream.filter(index->index==0).count();
+        if(pickCountL==0L) {
+            return Can.empty();
+        }
+        if(pickCountL==1L) {
+            return this;
+        }
+        if(pickCountL>Integer.MAX_VALUE) {
+            throw _Exceptions.illegalArgument("pickCount %d is too large to fit into an int", pickCountL);
+        }
+        final int pickCount = (int) pickCountL;
+        val newElements = new ArrayList<T>(pickCount);
+        for(int i=0; i<pickCount; i++) {
+            newElements.add(element);
+        }
+        return _CanFactory.ofNonNullElements(newElements);
+    }
+
+    @Override
+    public Can<T> subCan(final int startInclusive, final int endExclusive) {
+        if (startInclusive >= endExclusive) {
+            return Can.empty();
+        }
+        return (startInclusive<=0
+                    && endExclusive>0)
+                ? this
+                : Can.empty();
+    }
+
+    @Override
+    public Can<Can<T>> partitionInnerBound(final int maxInnerSize) {
+        if(maxInnerSize<1) {
+            throw _Exceptions.illegalArgument("maxInnerSize %d must be grater or equal to 1", maxInnerSize);
+        }
+        // a singular always fits into a single slot
+        return Can.of(this);
+    }
+
+    @Override
+    public Can<Can<T>> partitionOuterBound(final int outerSizeYield) {
+        if(outerSizeYield<1) {
+            throw _Exceptions.illegalArgument("outerSizeYield %d must be grater or equal to 1", outerSizeYield);
+        }
+        // a singular always fits into a single slot
+        return Can.of(this);
     }
 
     @Override

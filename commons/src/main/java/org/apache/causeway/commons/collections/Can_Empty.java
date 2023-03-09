@@ -32,6 +32,7 @@ import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
@@ -197,6 +198,26 @@ final class Can_Empty<T> implements Can<T> {
 
     @Override
     public Can<T> pickByIndex(final @Nullable int... indices) {
+        return Can.empty();
+    }
+
+    @Override
+    public Can<T> pickByIndex(final @Nullable IntStream intStream) {
+        return Can.empty();
+    }
+
+    @Override
+    public Can<T> subCan(final int startInclusive, final int endExclusive) {
+        return Can.empty();
+    }
+
+    @Override
+    public Can<Can<T>> partitionInnerBound(final int maxInnerSize) {
+        return Can.empty();
+    }
+
+    @Override
+    public Can<Can<T>> partitionOuterBound(final int outerSizeYield) {
         return Can.empty();
     }
 
