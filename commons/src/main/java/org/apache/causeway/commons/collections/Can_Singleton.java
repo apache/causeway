@@ -290,7 +290,7 @@ final class Can_Singleton<T> implements Can<T> {
     @Override
     public Can<Can<T>> partitionInnerBound(final int maxInnerSize) {
         if(maxInnerSize<1) {
-            throw _Exceptions.illegalArgument("maxInnerSize %d must be grater or equal to 1", maxInnerSize);
+            throw _Exceptions.illegalArgument("maxInnerSize %d must be greater or equal to 1", maxInnerSize);
         }
         // a singular always fits into a single slot
         return Can.of(this);
@@ -299,7 +299,7 @@ final class Can_Singleton<T> implements Can<T> {
     @Override
     public Can<Can<T>> partitionOuterBound(final int outerSizeYield) {
         if(outerSizeYield<1) {
-            throw _Exceptions.illegalArgument("outerSizeYield %d must be grater or equal to 1", outerSizeYield);
+            throw _Exceptions.illegalArgument("outerSizeYield %d must be greater or equal to 1", outerSizeYield);
         }
         // a singular always fits into a single slot
         return Can.of(this);

@@ -548,7 +548,7 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
 
     /**
      * Returns consecutive {@link #subCan(int, int) subCan},
-     * each of the same maxInnerSize, while the final {@link Can} may be smaller.
+     * each of the same maxInnerSize, while the final sub-{@link Can} may be smaller.
      * <p>
      * For example,
      * partitioning a {@link Can} containing {@code [a, b, c, d, e]} with a partition
@@ -565,7 +565,7 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
 
     /**
      * Tries to split this {@link Can} into outerSizeYield consecutive {@link #subCan(int, int) subCan},
-     * each of the same calculated max-inner-size, while the final {@link Can} may be smaller.
+     * each of the same calculated max-inner-size, while the final sub-{@link Can} may be smaller.
      * <p>
      * An outer cardinality of outerSizeYield is either exactly met or under-represented,
      * based on how many elements are actually available.
