@@ -113,6 +113,7 @@ public class ZipUtils {
         void writeTo(
                 final ZipOutputStream zipOutputStream) {
             zipOutputStream.putNextEntry(zipEntry());
+            zipOutputStream.write(bytes);
             zipOutputStream.closeEntry();
         }
     }
