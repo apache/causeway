@@ -154,7 +154,7 @@ public class ObjectViewVaa extends VerticalLayout {
             }
 
             @Override
-            protected HasComponents newTab(final Tabs container, final BSTab tabData) {
+            protected Tab newTab(final Tabs container, final BSTab tabData) {
                 val uiTab = Vaa.add(container, new Tab(tabData.getName()));
                 return uiTab;
             }
