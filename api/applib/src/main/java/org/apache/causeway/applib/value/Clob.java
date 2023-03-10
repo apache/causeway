@@ -21,7 +21,10 @@ package org.apache.causeway.applib.value;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
 import java.io.OutputStreamWriter;
+import java.io.Serializable;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
@@ -75,18 +78,7 @@ import lombok.val;
 //@Log4j2
 public final class Clob implements NamedWithMimeType {
 
-    /**
-     * Computed for state:
-     *
-     * <p>
-     * <pre>
-     * private final MimeType mimeType;
-     * private final CharSequence chars;
-     * private final String name;
-     * </pre>
-     * </p>
-     */
-    private static final long serialVersionUID = 8694189924062378527L;
+    private static final long serialVersionUID = SerializationProxy.serialVersionUID;
 
     private final String name;
     private final MimeType mimeType;
@@ -331,5 +323,35 @@ public final class Clob implements NamedWithMimeType {
 
     }
 
+    // -- SERIALIZATION PROXY
+
+    private Object writeReplace() {
+        return new SerializationProxy(this);
+    }
+
+    private void readObject(final ObjectInputStream stream) throws InvalidObjectException {
+        throw new InvalidObjectException("Proxy required");
+    }
+
+    private static class SerializationProxy implements Serializable {
+        /**
+         * Generated, based on String, String, CharSequence
+         */
+        private static final long serialVersionUID = -3598440606899920566L;
+        private final String name;
+        private final String mimeTypeBase;
+        private final CharSequence chars;
+
+        private SerializationProxy(final Clob clob) {
+            this.name = clob.getName();
+            this.mimeTypeBase = clob.getMimeType().getBaseType();
+            this.chars = clob.getChars();
+        }
+
+        private Object readResolve() {
+            return new Clob(name, mimeTypeBase, chars);
+        }
+
+    }
 
 }
