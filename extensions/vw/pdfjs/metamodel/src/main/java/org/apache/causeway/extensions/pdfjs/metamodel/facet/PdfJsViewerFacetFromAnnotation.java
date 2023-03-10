@@ -50,22 +50,10 @@ public class PdfJsViewerFacetFromAnnotation extends PdfJsViewerFacetAbstract imp
             final PdfJsViewer annotation,
             final FacetHolder holder) {
 
-        var config = new PdfJsConfig();
-
-        int initialPage = annotation.initialPageNum();
-        if (initialPage > 0) {
-            config = config.withInitialPage(initialPage);
-        }
-
-        final Scale initialScale = annotation.initialScale();
-        if (initialScale != Scale._1_00) {
-            config = config.withInitialScale(initialScale);
-        }
-
-        int initialHeight = annotation.initialHeight();
-        if (initialHeight > 0) {
-            config = config.withInitialHeight(initialHeight);
-        }
+        var config = new PdfJsConfig()
+                .withInitialPage(annotation.initialPageNum())
+                .withInitialScale(annotation.initialScale())
+                .withInitialHeight(annotation.initialHeight());
 
         return new PdfJsViewerFacetFromAnnotation(config, holder);
     }

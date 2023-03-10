@@ -21,7 +21,10 @@ package org.apache.causeway.applib.value;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Objects;
@@ -81,18 +84,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public final class Blob implements NamedWithMimeType {
 
-    /**
-     * Computed for state:
-     *
-     * <p>
-     * <pre>
-     * private final MimeType mimeType;
-     * private final byte[] bytes;
-     * private final String name;
-     * </pre>
-     * </p>
-     */
-    private static final long serialVersionUID = 5659679806709601263L;
+    private static final long serialVersionUID = SerializationProxy.serialVersionUID;
 
     // -- FACTORIES
 
@@ -377,6 +369,37 @@ public final class Blob implements NamedWithMimeType {
         } catch (Exception e) {
             log.error("failed to read image data", e);
             return Optional.empty();
+        }
+
+    }
+
+    // -- SERIALIZATION PROXY
+
+    private Object writeReplace() {
+        return new SerializationProxy(this);
+    }
+
+    private void readObject(final ObjectInputStream stream) throws InvalidObjectException {
+        throw new InvalidObjectException("Proxy required");
+    }
+
+    private static class SerializationProxy implements Serializable {
+        /**
+         * Generated, based on String, String, bytes[]
+         */
+        private static final long serialVersionUID = -950845631214162726L;
+        private final String name;
+        private final String mimeTypeBase;
+        private final byte[] bytes;
+
+        private SerializationProxy(final Blob blob) {
+            this.name = blob.getName();
+            this.mimeTypeBase = blob.getMimeType().getBaseType();
+            this.bytes = blob.getBytes();
+        }
+
+        private Object readResolve() {
+            return new Blob(name, mimeTypeBase, bytes);
         }
 
     }

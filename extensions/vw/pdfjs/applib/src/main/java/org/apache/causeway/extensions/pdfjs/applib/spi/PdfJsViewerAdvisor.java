@@ -148,7 +148,7 @@ public interface PdfJsViewerAdvisor {
 
         @Override
         public Advice advise(InstanceKey instanceKey) {
-            return new Advice(1, Scale._0_75, 800);
+            return null;
         }
 
         @Override
