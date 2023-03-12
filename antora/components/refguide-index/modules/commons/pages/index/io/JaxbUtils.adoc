@@ -14,6 +14,7 @@ class JaxbUtils {
   Try<T> tryRead(Class<T> mappedType, DataSource source, JaxbUtils.JaxbCustomizer... customizers)     // <.>
   void write(T pojo, DataSink sink, JaxbUtils.JaxbCustomizer... customizers)     // <.>
   String toStringUtf8(T pojo, JaxbUtils.JaxbCustomizer... customizers)     // <.>
+  void generateSchema(JAXBContext jaxbContext, DataSink dataSink)     // <.>
   JAXBContext jaxbContextFor(Class<?> primaryClass, Class<?>... additionalClassesToBeBound)     // <.>
   JAXBContext jaxbContextFor(Class<?> dtoClass, boolean useCache)
 }
@@ -38,6 +39,11 @@ Writes given _pojo_ to given xref:refguide:commons:index/io/DataSink.adoc[DataSi
 +
 --
 Converts given _pojo_ to an UTF8 encoded _String_ .
+--
+<.> xref:#generateSchema_JAXBContext_DataSink[generateSchema(JAXBContext, DataSink)]
++
+--
+Generates the schema documents for given _JAXBContext_ and writes them to given xref:refguide:commons:index/io/DataSink.adoc[DataSink] .
 --
 <.> xref:#jaxbContextFor_Class_Class[jaxbContextFor(Class, Class)]
 +
@@ -66,6 +72,11 @@ Writes given _pojo_ to given xref:refguide:commons:index/io/DataSink.adoc[DataSi
 === toStringUtf8(T, JaxbUtils_JaxbCustomizer)
 
 Converts given _pojo_ to an UTF8 encoded _String_ .
+
+[#generateSchema_JAXBContext_DataSink]
+=== generateSchema(JAXBContext, DataSink)
+
+Generates the schema documents for given _JAXBContext_ and writes them to given xref:refguide:commons:index/io/DataSink.adoc[DataSink] .
 
 [#jaxbContextFor_Class_Class]
 === jaxbContextFor(Class, Class)

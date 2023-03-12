@@ -52,6 +52,10 @@ interface Can<T> {
   Can<T> remove(int index)     // <.>
   Can<T> remove(T element)
   Can<T> pickByIndex(int... indices)     // <.>
+  Can<T> pickByIndex(IntStream intStream)     // <.>
+  Can<T> subCan(int startInclusive, int endExclusive)     // <.>
+  Can<Can<T>> partitionInnerBound(int maxInnerSize)     // <.>
+  Can<Can<T>> partitionOuterBound(int outerSizeYield)     // <.>
   int indexOf(T element)     // <.>
   boolean isEqualTo(Can<?> other)     // <.>
   boolean startsWith(Can<?> other)     // <.>
@@ -212,6 +216,26 @@ Removes the element at the specified position in this list (optional operation).
 +
 --
 Given _n_ indices, returns an equivalent of(where nulls are being ignored)
+--
+<.> xref:#pickByIndex_IntStream[pickByIndex(IntStream)]
++
+--
+Returns a xref:refguide:commons:index/collections/Can.adoc[Can] that is made of the elements from this xref:refguide:commons:index/collections/Can.adoc[Can] , picked by index using the given _IntStream_ (in the order of picking).
+--
+<.> xref:#subCan_int_int[subCan(int, int)]
++
+--
+Returns a sub- xref:refguide:commons:index/collections/Can.adoc[Can] that is made of elements from this xref:refguide:commons:index/collections/Can.adoc[Can] , when selected by those indices, that result from given range _endExclusive)_ .
+--
+<.> xref:#partitionInnerBound_int[partitionInnerBound(int)]
++
+--
+Returns consecutive _#subCan(int, int) subCan_ , each of the same maxInnerSize, while the final sub- xref:refguide:commons:index/collections/Can.adoc[Can] may be smaller.
+--
+<.> xref:#partitionOuterBound_int[partitionOuterBound(int)]
++
+--
+Tries to split this xref:refguide:commons:index/collections/Can.adoc[Can] into outerSizeYield consecutive _#subCan(int, int) subCan_ , each of the same calculated max-inner-size, while the final sub- xref:refguide:commons:index/collections/Can.adoc[Can] may be smaller.
 --
 <.> xref:#indexOf_T[indexOf(T)]
 +
@@ -400,6 +424,36 @@ Can.of(
     this.get(indices[n-1]).orElse(null)
 )
 ----
+
+In other words: Out of bounds picking is simply ignored.
+
+[#pickByIndex_IntStream]
+=== pickByIndex(IntStream)
+
+Returns a xref:refguide:commons:index/collections/Can.adoc[Can] that is made of the elements from this xref:refguide:commons:index/collections/Can.adoc[Can] , picked by index using the given _IntStream_ (in the order of picking).
+
+Out of bounds picking is simply ignored.
+
+[#subCan_int_int]
+=== subCan(int, int)
+
+Returns a sub- xref:refguide:commons:index/collections/Can.adoc[Can] that is made of elements from this xref:refguide:commons:index/collections/Can.adoc[Can] , when selected by those indices, that result from given range _endExclusive)_ .
+
+Out of bounds picking is simply ignored.
+
+[#partitionInnerBound_int]
+=== partitionInnerBound(int)
+
+Returns consecutive _#subCan(int, int) subCan_ , each of the same maxInnerSize, while the final sub- xref:refguide:commons:index/collections/Can.adoc[Can] may be smaller.
+
+For example, partitioning a xref:refguide:commons:index/collections/Can.adoc[Can] containing _[a, b, c, d, e]_ with a partition size of 3 yields _[[a, b, c], [d, e]]_ -- an outer xref:refguide:commons:index/collections/Can.adoc[Can] containing two inner xref:refguide:commons:index/collections/Can.adoc[Can] s of three and two elements, all in the original order.
+
+[#partitionOuterBound_int]
+=== partitionOuterBound(int)
+
+Tries to split this xref:refguide:commons:index/collections/Can.adoc[Can] into outerSizeYield consecutive _#subCan(int, int) subCan_ , each of the same calculated max-inner-size, while the final sub- xref:refguide:commons:index/collections/Can.adoc[Can] may be smaller.
+
+An outer cardinality of outerSizeYield is either exactly met or under-represented, based on how many elements are actually available.
 
 [#indexOf_T]
 === indexOf(T)
