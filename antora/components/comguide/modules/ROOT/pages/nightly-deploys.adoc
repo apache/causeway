@@ -155,14 +155,14 @@ Container Apps environment created. To deploy a container app, use: az container
 We will create a container app manually.
 Later, in the <<#automation,automation>> section, we will simply update the container (replacing the image with a new one).
 
-We'll start with the link:https://hub.docker.com/repository/docker/apacheisis/demo-wicket-jpa[apacheisis/demo-wicket-jpa] Docker image:
+We'll start with the link:https://hub.docker.com/repository/docker/apache/causeway-app-demo-jpa[apache/causeway-app-demo-jpa] Docker image:
 
 * set further environment variables:
 +
 [source,bash]
 ----
 APP_NAME="demo-wicket-jpa"
-IMAGE_NAME="apacheisis/demo-wicket-jpa"
+IMAGE_NAME="apache/causeway-demo-jpa"
 IMAGE_VERSION="2.0.0-M9.20221018-1911-d3980668"
 ----
 
@@ -291,7 +291,7 @@ Steps:
 [source,bash]
 ----
 APP_NAME="demo-wicket-jpa-snapshot"
-IMAGE_NAME="apacheisis/demo-wicket-jpa"
+IMAGE_NAME="apache/causeway-demo-jpa"
 IMAGE_VERSION="latest"
 ----
 
@@ -319,7 +319,7 @@ Steps:
 [source,bash]
 ----
 APP_NAME="demo-wicket-jdo"
-IMAGE_NAME="apacheisis/demo-wicket-jdo"
+IMAGE_NAME="apache/causeway-demo-jdo"
 IMAGE_VERSION="2.0.0-M9.20221018-1911-d3980668"
 ----
 
@@ -345,7 +345,7 @@ Steps:
 [source,bash]
 ----
 APP_NAME="demo-wicket-jdo-snapshot"
-IMAGE_NAME="apacheisis/demo-wicket-jdo"
+IMAGE_NAME="apache//causeway-demo-jdo"
 IMAGE_VERSION="latest"
 ----
 
@@ -371,7 +371,7 @@ Steps:
 [source,bash]
 ----
 APP_NAME="simpleapp-jpa"
-IMAGE_NAME="apacheisis/simpleapp"
+IMAGE_NAME="apache/causeway-app-simpleapp"
 IMAGE_VERSION="jpa"
 ----
 
@@ -396,7 +396,7 @@ Steps:
 [source,bash]
 ----
 APP_NAME="simpleapp-jpa-snapshot"
-IMAGE_NAME="apacheisis/simpleapp"
+IMAGE_NAME="apache/causeway-app-simpleapp"
 IMAGE_VERSION="jpa-SNAPSHOT"
 ----
 
@@ -422,7 +422,7 @@ Steps:
 [source,bash]
 ----
 APP_NAME="simpleapp-jdo"
-IMAGE_NAME="apacheisis/simpleapp"
+IMAGE_NAME="apache/causeway-app-simpleapp"
 IMAGE_VERSION="jdo"
 ----
 
@@ -447,7 +447,7 @@ Steps:
 [source,bash]
 ----
 APP_NAME="simpleapp-jdo-snapshot"
-IMAGE_NAME="apacheisis/simpleapp"
+IMAGE_NAME="apache/causeway-app-simpleapp"
 IMAGE_VERSION="jdo-SNAPSHOT"
 ----
 
@@ -472,7 +472,7 @@ Steps:
 [source,bash]
 ----
 APP_NAME="helloworld-jpa"
-IMAGE_NAME="apacheisis/helloworld"
+IMAGE_NAME="apache/causeway-app-helloworld"
 IMAGE_VERSION="jpa"
 ----
 
@@ -497,7 +497,7 @@ Steps:
 [source,bash]
 ----
 APP_NAME="helloworld-jpa-snapshot"
-IMAGE_NAME="apacheisis/helloworld"
+IMAGE_NAME="apache/causeway-app-helloworld"
 IMAGE_VERSION="jpa-SNAPSHOT"
 ----
 
@@ -523,7 +523,7 @@ Steps:
 [source,bash]
 ----
 APP_NAME="helloworld-jdo"
-IMAGE_NAME="apacheisis/helloworld"
+IMAGE_NAME="apache/causeway-app-helloworld"
 IMAGE_VERSION="jdo"
 ----
 
@@ -548,7 +548,7 @@ Steps:
 [source,bash]
 ----
 APP_NAME="helloworld-jdo-snapshot"
-IMAGE_NAME="apacheisis/helloworld"
+IMAGE_NAME="apache/causeway-app-helloworld"
 IMAGE_VERSION="jdo-SNAPSHOT"
 ----
 
