@@ -6,28 +6,3 @@
 This committers' guide is for committers of Apache Causeway itself who want guidance on release process, publishing documents and other related procedures.
 
 
-//include::applying-patches.adoc[leveloffset=+1]
-//
-//include::merging-a-pull-request.adoc[leveloffset=+1]
-//
-//include::cutting-a-release.adoc[leveloffset=+1]
-//
-//include::verifying-releases.adoc[leveloffset=+1]
-//
-//include::post-release-successful.adoc[leveloffset=+1]
-//
-//include::post-release-unsuccessful.adoc[leveloffset=+1]
-//
-//include::antora-publish-procedure.adoc[leveloffset=+1]
-//
-//include::key-generation.adoc[leveloffset=+1]
-//
-//include::release-process-prereqs.adoc[leveloffset=+1]
-//
-//include::policies.adoc[leveloffset=+1]
-//include::policies/versioning-policy.adoc[leveloffset=+2]
-//include::policies/git-policy.adoc[leveloffset=+2]
-//
-//include::pmc-notes.adoc[leveloffset=+1]
-
-//include::starter-apps.adoc[leveloffset=+1]
