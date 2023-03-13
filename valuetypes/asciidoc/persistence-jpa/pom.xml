@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>causeway-valuetypes-asciidoc-persistence-jpa</artifactId>
-	<name>Apache Causeway Val - Asciidoctor (persistence jpa)</name>
+	<name>Apache Causeway Val - Asciidoctor (persistence JPA)</name>
 
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.causeway.valuetypes.asciidoc.persistence.jpa</jar-plugin.automaticModuleName>

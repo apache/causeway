@@ -34,5 +34,7 @@ public interface PageClassRegistry extends Serializable {
      * registry.
      */
     public Class<? extends Page> getPageClass(PageType pageType);
+    public PageType getPageType(Class<? extends Page> pageClass);
+    public PageType getPageType(PageAbstract page);
 
 }

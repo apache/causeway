@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>causeway-valuetypes-markdown-persistence-jpa</artifactId>
-	<name>Apache Causeway Val - Markdown (persistence jpa)</name>
+	<name>Apache Causeway Val - Markdown (persistence JPA)</name>
 
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.causeway.valuetypes.markdown.persistence.jpa</jar-plugin.automaticModuleName>

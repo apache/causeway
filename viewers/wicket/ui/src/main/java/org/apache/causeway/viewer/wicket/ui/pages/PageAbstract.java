@@ -46,6 +46,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
+import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Timing;
 import org.apache.causeway.commons.internal.debug._Debug;
@@ -472,11 +474,17 @@ implements ActionPromptProvider {
         return cfra.getComponentFactoryRegistry();
     }
 
-
     // -- RE-ATTACH ENTITIES
 
     @Override
     public void renderPage() {
+
+        val pageType = getPageClassRegistry().getPageType(this).asApplibPageType();
+        val enabledPageRenderSubscribers = enabledPageRenderSubscriber();
+
+        enabledPageRenderSubscribers
+                .forEach(subscriber -> subscriber.onRendering(pageType));
+
         if(XrayUi.isXrayEnabled()){
             _Debug.log("about to render %s ..", this.getClass().getSimpleName());
             val stopWatch = _Timing.now();
@@ -488,6 +496,8 @@ implements ActionPromptProvider {
             onNewRequestCycle();
             super.renderPage();
         }
+
+        onRendered(enabledPageRenderSubscribers);
     }
 
     /**
@@ -497,6 +507,21 @@ implements ActionPromptProvider {
      */
     public void onNewRequestCycle() {
         // implemented only by EntityPage
+    }
+
+    /**
+     * Hook to call {@link PageRenderSubscriber} implementations
+     *
+     * @param enabledObjectRenderSubscribers  - those {@link PageRenderSubscriber}s that are {@link PageRenderSubscriber#isEnabled() enabled}
+     */
+    protected void onRendered(final Can<PageRenderSubscriber> enabledObjectRenderSubscribers) {
+    }
+
+    // -- HELPER
+
+    private Can<PageRenderSubscriber> enabledPageRenderSubscriber() {
+        return getServiceRegistry().select(PageRenderSubscriber.class)
+                .filter(PageRenderSubscriber::isEnabled);
     }
 
 }

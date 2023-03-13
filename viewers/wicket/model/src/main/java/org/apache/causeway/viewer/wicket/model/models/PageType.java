@@ -18,24 +18,35 @@
  */
 package org.apache.causeway.viewer.wicket.model.models;
 
+import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
+
 /**
  * Enumerates the different types of pages that can be rendered.
  *
  * <p>
- * Is used by {@link PageClassRegistry} to lookup the concrete page to render
+ * Is used by <code>PagePageClassRegistry</code> to lookup the concrete page to render
  * different types of pages. This allows the large-scale structure of page
  * layout (eg headers, footers) to be altered.
  */
+@RequiredArgsConstructor
 public enum PageType {
-    SIGN_IN,
-    SIGN_UP,
-    SIGN_UP_VERIFY,
-    PASSWORD_RESET,
-    HOME,
-    HOME_AFTER_PAGETIMEOUT,
-    ABOUT,
-    ENTITY,
-    STANDALONE_COLLECTION,
-    VALUE,
-    VOID_RETURN;
+    SIGN_IN(PageRenderSubscriber.PageType.OTHER),
+    SIGN_UP(PageRenderSubscriber.PageType.OTHER),
+    SIGN_UP_VERIFY(PageRenderSubscriber.PageType.OTHER),
+    PASSWORD_RESET(PageRenderSubscriber.PageType.OTHER),
+    HOME(PageRenderSubscriber.PageType.OTHER),
+    HOME_AFTER_PAGETIMEOUT(PageRenderSubscriber.PageType.OTHER),
+    ABOUT(PageRenderSubscriber.PageType.OTHER),
+    ENTITY(PageRenderSubscriber.PageType.DOMAIN_OBJECT),
+    STANDALONE_COLLECTION(PageRenderSubscriber.PageType.COLLECTION),
+    VALUE(PageRenderSubscriber.PageType.VALUE),
+    VOID_RETURN(PageRenderSubscriber.PageType.OTHER);
+
+    @Getter @Accessors(fluent=true)
+    private final PageRenderSubscriber.PageType asApplibPageType;
+
 }

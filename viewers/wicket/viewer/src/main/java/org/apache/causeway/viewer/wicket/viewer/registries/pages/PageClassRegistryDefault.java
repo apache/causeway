@@ -25,6 +25,7 @@ import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.wicket.Page;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -49,7 +50,8 @@ public class PageClassRegistryDefault implements PageClassRegistry, PageClassReg
     private static final long serialVersionUID = 1L;
 
     private final PageClassList pageClassList; // serializable
-    private final Map<PageType, Class<? extends Page>> pagesByType = _Maps.newHashMap();
+    private final Map<PageType, Class<? extends Page>> pageClassByType = _Maps.newHashMap();
+    private final Map<Class<? extends Page>, PageType> typeByPageClass = _Maps.newHashMap();
 
     @Inject
     public PageClassRegistryDefault(PageClassList pageClassList) {
@@ -70,21 +72,26 @@ public class PageClassRegistryDefault implements PageClassRegistry, PageClassReg
         }
     }
 
-    // /////////////////////////////////////////////////////////
-    // API
-    // /////////////////////////////////////////////////////////
 
     @Override
     public final Class<? extends Page> getPageClass(final PageType pageType) {
-        return pagesByType.get(pageType);
+        return pageClassByType.get(pageType);
     }
 
-    // /////////////////////////////////////////////////////////
-    // API
-    // /////////////////////////////////////////////////////////
+    @Override
+    public PageType getPageType(Class<? extends Page> pageClass) {
+        return typeByPageClass.get(pageClass);
+    }
+
+    @Override
+    public PageType getPageType(PageAbstract page) {
+        return getPageType(page.getClass());
+    }
+
 
     @Override
     public final void registerPage(final PageType pageType, final Class<? extends Page> pageClass) {
-        pagesByType.put(pageType, pageClass);
+        pageClassByType.put(pageType, pageClass);
+        typeByPageClass.put(pageClass, pageType);
     }
 }
