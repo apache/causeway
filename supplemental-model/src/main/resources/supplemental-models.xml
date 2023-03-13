@@ -76,7 +76,7 @@
         <project>
             <groupId>org.webjars.bowergithub.prismjs</groupId>
             <artifactId>prism</artifactId>
-            <version>1.28.0</version>
+            <version>1.29.0</version>
             <name>Prism</name>
             <licenses>
                 <license>
@@ -90,17 +90,31 @@
     <supplement>
         <project>
             <groupId>org.webjars.npm</groupId>
-            <artifactId>dommatrix</artifactId>
-            <version>1.0.3</version>
-            <name>DOMMatrix</name>
+            <artifactId>inputmask</artifactId>
+            <version>5.0.6</version>
+            <name>Inputmask</name>
             <licenses>
                 <license>
                     <name>MIT License</name>
-                    <url>https://spdx.org/licenses/MIT</url>
+                    <url>https://github.com/RobinHerbots/Inputmask/blob/5.x/LICENSE.txt</url>
                 </license>
             </licenses>
         </project>
     </supplement>
 
+    <supplement>
+        <project>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>path2d-polyfill</artifactId>
+            <version>2.0.1</version>
+            <name>path2d-polyfill</name>
+            <licenses>
+                <license>
+                    <name>MIT License</name>
+                    <url>https://github.com/nilzona/path2d-polyfill/blob/main/LICENSE</url>
+                </license>
+            </licenses>
+        </project>
+    </supplement>
 
 </supplementalDataModels>
