@@ -22,6 +22,7 @@ import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 
 import javax.annotation.Priority;
@@ -57,19 +58,27 @@ public class PageRenderLogger implements PageRenderSubscriber {
 
     @Override
     public void onRenderedDomainObject(Bookmark bookmark) {
-        log.debug("rendered object: {}", bookmark.stringify());
+        log.debug("rendered object: [ \"{}\" ]", bookmark.stringify());
     }
 
     @Override
     public void onRenderedCollection(Supplier<List<Bookmark>> bookmarkSupplier) {
         val buf = new StringBuffer();
-        bookmarkSupplier.get().forEach(x -> buf.append(x.stringify()).append("\n"));
-        log.debug("rendered list: \n{}", buf.toString());
+        val first = new boolean[] {true};
+        bookmarkSupplier.get().forEach(x -> {
+            if(first[0]) {
+                first[0] = false;
+            } else {
+                buf.append(", ");
+            }
+            buf.append("\"").append(x.stringify()).append("\"");
+        });
+        log.debug("rendered collection: [ {} ]", buf.toString());
     }
 
 
     @Override
     public void onRenderedValue(Object value) {
-        log.debug("rendered value: \n{}", value.toString());
+        log.debug("rendered value: [ \"{}\" ]", value.toString());
     }
 }
