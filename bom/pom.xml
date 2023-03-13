@@ -2474,6 +2474,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                             <exclude>**/.settings/**</exclude>
                             <exclude>**/*.launch</exclude>
                             <exclude>**/*.columnOrder.txt</exclude>
+                            <exclude>**/*.approved.xml</exclude>
                             <exclude>**/*.drawio.svg</exclude>
                             <exclude>**/META-INF/spring.factories</exclude>
 
@@ -2508,11 +2509,10 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                             <exclude>**/xml/objects/**</exclude>
                             <exclude>**/test.data</exclude>
                             <exclude>**/fixture-data/**</exclude>
-                            <exclude>**/partials/module-nav.adoc</exclude>
+                            <exclude>**/module-nav.adoc</exclude>
                             <exclude>**/partials/extensions.adoc</exclude>
-                            <exclude>**/partials/component-nav.adoc</exclude>
+                            <exclude>**/component-nav.adoc</exclude>
                             <exclude>**/_nav.adoc</exclude>
-                            <exclude>**/_overview/nav.adoc</exclude>
 
                             <exclude>**/application.js</exclude>
 
@@ -2522,6 +2522,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                             <exclude>**/moment.js</exclude>
                             <exclude>**/prism*.js</exclude>
                             <exclude>**/prism*.css</exclude>
+                            <exclude>**/vega*.js</exclude>
                             <exclude>**/kroviz/webpack.config.d/**</exclude>
 
                             <exclude>**/viewer/wicket/ui/components/**/*.css</exclude>
@@ -3055,18 +3056,18 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 							<showWarnings>true</showWarnings>
 							<parameters>true</parameters>
 							<annotationProcessorPaths>
-								<!-- this is a workaround 
-					
+								<!-- this is a workaround
+
 								Details: The maven compiler plugin ought to pick up all available processors on the classpath.
-								In effect Lombok's annotation processor should be picked up implicitly, but yet is not 
-								
+								In effect Lombok's annotation processor should be picked up implicitly, but yet is not
+
 								Presence of file 'logging-dn-enhance.properties' decativates this profile and
 								the maven-compiler-plugin runs all annotation processors as picked up from the class-path.
 								-->
 									<annotationProcessorPath>
 										<groupId>org.projectlombok</groupId>
 										<artifactId>lombok</artifactId>
-										<version>${lombok.version}</version>	
+										<version>${lombok.version}</version>
 									</annotationProcessorPath>
 							</annotationProcessorPaths>
 						</configuration>
