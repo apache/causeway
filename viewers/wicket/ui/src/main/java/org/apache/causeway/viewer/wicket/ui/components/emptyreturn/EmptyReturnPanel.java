@@ -16,18 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.voidreturn;
+package org.apache.causeway.viewer.wicket.ui.components.emptyreturn;
 
 import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 
-public class VoidReturnPanel
+public class EmptyReturnPanel
 extends PanelAbstract<Void, IModel<Void>> {
 
     private static final long serialVersionUID = 1L;
 
-    public VoidReturnPanel(final String id) {
+    public EmptyReturnPanel(final String id) {
         super(id);
     }
 

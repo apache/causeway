@@ -52,6 +52,7 @@ import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.multip
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.summary.CollectionContentsAsSummaryFactory;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsHiddenPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.empty.EmptyCollectionPanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.emptyreturn.EmptyReturnPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.entity.collection.EntityCollectionPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.entity.header.EntityHeaderPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanelFactory;
@@ -79,7 +80,6 @@ import org.apache.causeway.viewer.wicket.ui.components.standalonecollection.Stan
 import org.apache.causeway.viewer.wicket.ui.components.tree.TreePanelFactories;
 import org.apache.causeway.viewer.wicket.ui.components.unknown.UnknownModelPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.value.StandaloneValuePanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.voidreturn.VoidReturnPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.welcome.WelcomePanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanelFactory;
 
@@ -151,7 +151,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         addComponentFactoriesForEmptyCollection(componentFactories);
         addComponentFactoriesForScalar(componentFactories);
         addComponentFactoriesForEntityLink(componentFactories);
-        addComponentFactoriesForVoidReturn(componentFactories);
+        addComponentFactoriesForEmptyReturn(componentFactories);
         addComponentFactoriesForValue(componentFactories);
         addComponentFactoriesForParameters(componentFactories);
         addComponentFactoriesForBreadcrumbs(componentFactories);
@@ -236,8 +236,8 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         componentFactories.add(new EntityLinkSimplePanelFactory());
     }
 
-    protected void addComponentFactoriesForVoidReturn(final ComponentFactoryList componentFactories) {
-        componentFactories.add(new VoidReturnPanelFactory());
+    protected void addComponentFactoriesForEmptyReturn(final ComponentFactoryList componentFactories) {
+        componentFactories.add(new EmptyReturnPanelFactory());
     }
 
     protected void addComponentFactoriesForActionInfo(final ComponentFactoryList componentFactories) {
