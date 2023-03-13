@@ -33,12 +33,12 @@ import org.apache.causeway.viewer.wicket.ui.pages.about.AboutPage;
 import org.apache.causeway.viewer.wicket.ui.pages.accmngt.password_reset.PasswordResetPage;
 import org.apache.causeway.viewer.wicket.ui.pages.accmngt.register.RegisterPage;
 import org.apache.causeway.viewer.wicket.ui.pages.accmngt.signup.RegistrationFormPage;
+import org.apache.causeway.viewer.wicket.ui.pages.emptyreturn.EmptyReturnPage;
 import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.causeway.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.causeway.viewer.wicket.ui.pages.login.WicketSignInPage;
 import org.apache.causeway.viewer.wicket.ui.pages.standalonecollection.StandaloneCollectionPage;
 import org.apache.causeway.viewer.wicket.ui.pages.value.ValuePage;
-import org.apache.causeway.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
 
 /**
  * Default implementation of {@link PageClassList}, specifying the default pages
@@ -64,7 +64,7 @@ public class PageClassListDefault implements PageClassList {
         pageRegistry.registerPage(PageType.HOME_AFTER_PAGETIMEOUT, getHomePageClass());
         pageRegistry.registerPage(PageType.STANDALONE_COLLECTION, getStandaloneCollectionPageClass());
         pageRegistry.registerPage(PageType.VALUE, getValuePageClass());
-        pageRegistry.registerPage(PageType.VOID_RETURN, getVoidReturnPageClass());
+        pageRegistry.registerPage(PageType.VOID_RETURN, getEmptyReturnPageClass());
     }
 
 
@@ -92,8 +92,8 @@ public class PageClassListDefault implements PageClassList {
     /**
      * For subclassing if required.
      */
-    protected Class<? extends Page> getVoidReturnPageClass() {
-        return VoidReturnPage.class;
+    protected Class<? extends Page> getEmptyReturnPageClass() {
+        return EmptyReturnPage.class;
     }
 
     /**

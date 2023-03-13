@@ -21,16 +21,17 @@ package org.apache.causeway.viewer.wicket.model.models;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
-
+import lombok.Getter;
+import lombok.Setter;
 
 /**
- * Represents the result of invoking a <tt>void</tt> action.
+ * Represents the result of invoking an action that returns <code>null</code>.
  */
-public class VoidModel extends ModelAbstract<Void> {
+public class EmptyModel extends ModelAbstract<Void> {
 
     private static final long serialVersionUID = 1L;
 
-    public VoidModel(final MetaModelContext commonContext) {
+    public EmptyModel(final MetaModelContext commonContext) {
         super(commonContext);
     }
 
@@ -39,25 +40,11 @@ public class VoidModel extends ModelAbstract<Void> {
         return null;
     }
 
-
-    // //////////////////////////////////////
-
-    private ActionModel actionModelHint;
     /**
-     * The {@link ActionModelImpl model} of the {@link ObjectAction action}
-     * that generated this {@link VoidModel}.
-     *
-     * @see #setActionHint(ActionModelImpl)
+     * The {@link ActionModel model} of the {@link ObjectAction action}
+     * that generated this {@link EmptyModel}.
      */
-    public ActionModel getActionModelHint() {
-        return actionModelHint;
-    }
-    /**
-     * Called by action.
-     *
-     * @see #getActionModelHint()
-     */
-    public void setActionHint(final ActionModel actionModelHint) {
-        this.actionModelHint = actionModelHint;
-    }
+    @Getter @Setter
+    private ActionModel actionHint;
+
 }
