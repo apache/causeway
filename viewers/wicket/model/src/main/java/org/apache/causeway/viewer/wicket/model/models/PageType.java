@@ -22,7 +22,7 @@ package org.apache.causeway.viewer.wicket.model.models;
  * Enumerates the different types of pages that can be rendered.
  *
  * <p>
- * Is used by {@link PageClassRegistry} to lookup the concrete page to render
+ * Is used by <code>PagePageClassRegistry</code> to lookup the concrete page to render
  * different types of pages. This allows the large-scale structure of page
  * layout (eg headers, footers) to be altered.
  */
@@ -38,4 +38,17 @@ public enum PageType {
     STANDALONE_COLLECTION,
     VALUE,
     VOID_RETURN;
+
+    public org.apache.causeway.applib.services.publishing.spi.PageType asApplibPageType() {
+        switch (this) {
+            case ENTITY:
+                return org.apache.causeway.applib.services.publishing.spi.PageType.DOMAIN_OBJECT;
+            case STANDALONE_COLLECTION:
+                return org.apache.causeway.applib.services.publishing.spi.PageType.COLLECTION;
+            case VALUE:
+                return org.apache.causeway.applib.services.publishing.spi.PageType.VALUE;
+            default:
+                return org.apache.causeway.applib.services.publishing.spi.PageType.OTHER;
+        }
+    }
 }

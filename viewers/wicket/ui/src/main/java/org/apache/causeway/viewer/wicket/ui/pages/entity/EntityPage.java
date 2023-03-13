@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.viewer.wicket.ui.pages.entity;
 
+import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.wicket.Application;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -212,6 +214,16 @@ public class EntityPage extends PageAbstract {
                 ()->PageParameterUtils
                         .toBookmark(getPageParameters())
                         .orElseThrow());
+    }
+
+    @Override
+    public void onRendered(Can<PageRenderSubscriber> objectRenderSubscribers) {
+        final ManagedObject objectAdapter;
+        objectAdapter = model.getObject();
+        val bookmarkIfAny = objectAdapter.getBookmark();
+
+        objectRenderSubscribers
+                .forEach(objectRenderSubscriber -> objectRenderSubscriber.onRenderedDomainObject(bookmarkIfAny.get()));
     }
 
     // -- HELPER

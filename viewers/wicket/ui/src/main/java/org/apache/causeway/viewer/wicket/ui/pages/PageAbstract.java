@@ -22,6 +22,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
@@ -477,16 +479,24 @@ implements ActionPromptProvider {
 
     @Override
     public void renderPage() {
+        val enabledObjectRenderSubscribers = getServiceRegistry().select(PageRenderSubscriber.class)
+                .filter(PageRenderSubscriber::isEnabled);
+        enabledObjectRenderSubscribers
+                .forEach(subscriber -> {
+            subscriber.onRendering(getPageClassRegistry().getPageType(this).asApplibPageType());
+        });
         if(XrayUi.isXrayEnabled()){
             _Debug.log("about to render %s ..", this.getClass().getSimpleName());
             val stopWatch = _Timing.now();
             onNewRequestCycle();
             super.renderPage();
+            onRendered(enabledObjectRenderSubscribers);
             stopWatch.stop();
             _Debug.log(".. rendering took %s", stopWatch.toString());
         } else {
             onNewRequestCycle();
             super.renderPage();
+            onRendered(enabledObjectRenderSubscribers);
         }
     }
 
@@ -497,6 +507,14 @@ implements ActionPromptProvider {
      */
     public void onNewRequestCycle() {
         // implemented only by EntityPage
+    }
+
+    /**
+     * Hook to call {@link PageRenderSubscriber} implementations
+     *
+     * @param enabledObjectRenderSubscribers  - those {@link PageRenderSubscriber}s that are {@link PageRenderSubscriber#isEnabled() enabled}
+     */
+    public void onRendered(Can<PageRenderSubscriber> enabledObjectRenderSubscribers) {
     }
 
 }

@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.viewer.wicket.ui.pages.value;
 
+import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.wicket.Component;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 
@@ -38,6 +40,7 @@ public class ValuePage extends PageAbstract {
     private static final long serialVersionUID = 1L;
 
     private static final String ID_ACTION_NAME = "actionName";
+    private final ValueModel valueModel;
 
     /**
      * For use with {@link Component#setResponsePage(org.apache.wicket.request.component.IRequestablePage)}
@@ -49,6 +52,7 @@ public class ValuePage extends PageAbstract {
 
     private ValuePage(final ValueModel valueModel, final String actionName) {
         super(PageParameterUtils.newPageParameters(), actionName, UiComponentType.VALUE);
+        this.valueModel = valueModel;
 
         Wkt.labelAdd(themeDiv, ID_ACTION_NAME, actionName);
 
@@ -64,4 +68,10 @@ public class ValuePage extends PageAbstract {
         return "Results"; // fallback, probably not required because hint should always exist on the model.
     }
 
+    @Override
+    public void onRendered(Can<PageRenderSubscriber> enabledObjectRenderSubscribers) {
+        enabledObjectRenderSubscribers.forEach(objectRenderSubscriber -> {
+            objectRenderSubscriber.onRenderedValue(valueModel.getObject().getPojo());
+        });
+    }
 }

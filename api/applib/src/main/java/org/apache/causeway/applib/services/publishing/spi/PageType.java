@@ -16,29 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.applib;
-
-import org.apache.causeway.applib.services.publishing.log.*;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+package org.apache.causeway.applib.services.publishing.spi;
 
 /**
- * Registers logging subscribers for the command/execution/change publishing subsystem.
- *
- * @since 2.0 {@index}
+ * Enumerates the different types of pages that can be rendered.
  */
-@Configuration
-@Import({
-    // Modules
-    CausewayModuleApplib.class,
-
-    // Execution/Change/Page Loggers
-    CommandLogger.class,
-    EntityChangesLogger.class,
-    EntityPropertyChangeLogger.class,
-    ExecutionLogger.class,
-    PageRenderLogger.class,
-})
-public class CausewayModuleApplibChangeAndExecutionLoggers {
-
+public enum PageType {
+    /**
+     * Either a view model or an entity.
+     */
+    DOMAIN_OBJECT,
+    /**
+     * A collection of view models or entities.
+     */
+    COLLECTION,
+    /**
+     * A single value
+     */
+    VALUE,
+    /**
+     * Anything else; might include void, or sign in pages.
+     */
+    OTHER;
 }
