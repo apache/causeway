@@ -176,7 +176,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         
 
         <select2.version>4.0.13</select2.version>
-        <shiro.version>2.0.0-SNAPSHOT</shiro.version> <!-- latest release was 1.10.0, however we need jakarta namespace support -->
+        <shiro.version>2.0.0-alpha-1</shiro.version> <!-- latest release was 1.10.0, however we need jakarta namespace support -->
         <simpleslackapi.version>1.4.0</simpleslackapi.version>
         <slf4j-api.version>2.0.6</slf4j-api.version> <!-- also provided by spring-boot-starter-logging, needed to solve convergence issues -->
         <spring-boot.version>3.0.4</spring-boot.version>
