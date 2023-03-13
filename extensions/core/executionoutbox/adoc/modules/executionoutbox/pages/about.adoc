@@ -183,8 +183,8 @@ To get you started, the following fragment adds all of the actions to an "Activi
         ...
         <mb3:section>
             <mb3:named>Execution Outbox</mb3:named>
-            <mb3:serviceAction id="findOldest" objectType="isis.ext.executionOutbox.ExecutionOutboxMenu"/>
-            <mb3:serviceAction id="findAll" objectType="isis.ext.executionOutbox.ExecutionOutboxMenu"/>
+            <mb3:serviceAction id="findOldest" objectType="causeway.ext.executionOutbox.ExecutionOutboxMenu"/>
+            <mb3:serviceAction id="findAll" objectType="causeway.ext.executionOutbox.ExecutionOutboxMenu"/>
         </mb3:section>
         ...
     </mb3:menu>

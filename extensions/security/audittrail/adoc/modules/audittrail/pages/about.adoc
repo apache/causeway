@@ -31,9 +31,9 @@ To get you started, the following fragment adds all of the actions to an "Activi
         ...
         <mb3:section>
             <mb3:named>Audit Trail</mb3:named>
-            <mb3:serviceAction id="findMostRecent" objectType="isis.ext.auditTrail.AuditTrailMenu"/>
-            <mb3:serviceAction id="findAuditEntries" objectType="isis.ext.auditTrail.AuditTrailMenu"/>
-            <mb3:serviceAction id="findAll" objectType="isis.ext.auditTrail.AuditTrailMenu"/>
+            <mb3:serviceAction id="findMostRecent" objectType="causeway.ext.auditTrail.AuditTrailMenu"/>
+            <mb3:serviceAction id="findAuditEntries" objectType="causeway.ext.auditTrail.AuditTrailMenu"/>
+            <mb3:serviceAction id="findAll" objectType="causeway.ext.auditTrail.AuditTrailMenu"/>
         </mb3:section>
         ...
     </mb3:menu>
