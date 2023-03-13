@@ -18,22 +18,26 @@
  */
 package org.apache.causeway.applib.services.publishing.log;
 
-import lombok.extern.log4j.Log4j2;
-import lombok.val;
-
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.Objects;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import javax.annotation.Priority;
 import javax.inject.Named;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
+import org.apache.causeway.commons.internal.base._NullSafe;
+
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Simple implementation of {@link PageRenderSubscriber} that just
@@ -48,37 +52,42 @@ import org.springframework.stereotype.Service;
 @Log4j2
 public class PageRenderLogger implements PageRenderSubscriber {
 
-    static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".ObjectRenderedLogger";
+    static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".PageRenderLogger";
 
     @Override
     public boolean isEnabled() {
         return log.isDebugEnabled();
     }
 
-
     @Override
-    public void onRenderedDomainObject(Bookmark bookmark) {
-        log.debug("rendered object: [ \"{}\" ]", bookmark.stringify());
+    public void onRenderedDomainObject(final Bookmark bookmark) {
+        log.debug("rendered object: [ {} ]", doubleQuoted(bookmark.stringify()));
     }
 
     @Override
-    public void onRenderedCollection(Supplier<List<Bookmark>> bookmarkSupplier) {
-        val buf = new StringBuffer();
-        val first = new boolean[] {true};
-        bookmarkSupplier.get().forEach(x -> {
-            if(first[0]) {
-                first[0] = false;
-            } else {
-                buf.append(", ");
-            }
-            buf.append("\"").append(x.stringify()).append("\"");
-        });
-        log.debug("rendered collection: [ {} ]", buf.toString());
+    public void onRenderedCollection(final Supplier<List<Bookmark>> bookmarkSupplier) {
+
+        val bookmarksStringified =
+            _NullSafe.stream(bookmarkSupplier.get())
+            .filter(Objects::nonNull)
+            .map(Bookmark::stringify)
+            .map(this::doubleQuoted)
+            .collect(Collectors.joining(", "));
+
+        log.debug("rendered collection: [ {} ]", bookmarksStringified);
     }
 
 
     @Override
-    public void onRenderedValue(Object value) {
-        log.debug("rendered value: [ \"{}\" ]", value.toString());
+    public void onRenderedValue(final Object value) {
+        log.debug("rendered value: [ {} ]", doubleQuoted(value));
     }
+
+    // -- HELPER
+
+    private String doubleQuoted(final @Nullable Object obj) {
+        return "\"" + obj + "\"";
+    }
+
+
 }

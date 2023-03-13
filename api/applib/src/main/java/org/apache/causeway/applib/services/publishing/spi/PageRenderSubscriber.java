@@ -21,6 +21,8 @@ package org.apache.causeway.applib.services.publishing.spi;
 import java.util.List;
 import java.util.function.Supplier;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.having.HasEnabling;
 
@@ -31,6 +33,28 @@ import org.apache.causeway.commons.having.HasEnabling;
  * @since 2.0 {@index}
  */
 public interface PageRenderSubscriber extends HasEnabling {
+
+    /**
+     * Enumerates the different types of pages that can be rendered.
+     */
+    public enum PageType {
+        /**
+         * Either a view model or an entity.
+         */
+        DOMAIN_OBJECT,
+        /**
+         * A collection of view models or entities.
+         */
+        COLLECTION,
+        /**
+         * A single value
+         */
+        VALUE,
+        /**
+         * Anything else; might include void, or sign in pages.
+         */
+        OTHER;
+    }
 
     /**
      * Called just before the rendering process starts.
@@ -56,7 +80,7 @@ public interface PageRenderSubscriber extends HasEnabling {
      *
      * @param pageType - determines which of the subsequent <code>onRenderedXxx</code> callbacks (if any) will next be called.
      */
-    default void onRendering(PageType pageType) {}
+    default void onRendering(final PageType pageType) {}
 
 
     /**
@@ -64,20 +88,20 @@ public interface PageRenderSubscriber extends HasEnabling {
      *
      * @param bookmark - representation of the domain object that has been rendered.
      */
-    default void onRenderedDomainObject(Bookmark bookmark) {}
+    default void onRenderedDomainObject(final Bookmark bookmark) {}
 
     /**
      * Indicates that a standalone list of domain objects (each represented by a {@link Bookmark} has been rendered.
      *
      * @param bookmarkSupplier - a supplier representations of the collection of domain objects that have been rendered.  The level of indirection is for performance (in case no implementation is interested)
      */
-    default void onRenderedCollection(Supplier<List<Bookmark>> bookmarkSupplier) {}
+    default void onRenderedCollection(final Supplier<List<Bookmark>> bookmarkSupplier) {}
 
     /**
      * Indicates that a value has been rendered.
      *
      * @param value - the actual value that has been rendered.
      */
-    default void onRenderedValue(Object value) {}
+    default void onRenderedValue(final @Nullable Object value) {}
 
 }

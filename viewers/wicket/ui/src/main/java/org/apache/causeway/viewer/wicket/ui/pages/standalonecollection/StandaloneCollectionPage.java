@@ -18,24 +18,22 @@
  */
 package org.apache.causeway.viewer.wicket.ui.pages.standalonecollection;
 
-import lombok.val;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Supplier;
-
-import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.wicket.Component;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 
+import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
 import org.apache.causeway.applib.services.user.UserMemento;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelStandalone;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
+
+import lombok.val;
 
 /**
  * Web page representing an action invocation.
@@ -61,19 +59,21 @@ public class StandaloneCollectionPage extends PageAbstract {
     }
 
     @Override
-    public void onRendered(Can<PageRenderSubscriber> objectRenderSubscribers) {
+    public void onRendered(final Can<PageRenderSubscriber> objectRenderSubscribers) {
 
-        Supplier<List<Bookmark>> bookmarkSupplier = _Lazy.threadSafe(
-                () -> {
-                    val bookmarks = new ArrayList<Bookmark>();
-                    collectionModel.getObject().getDataElements().getValue().forEach(x -> {
-                        x.getBookmark().ifPresent(bookmarks::add);
-                    });
-                    return bookmarks;
-                });
+        if(objectRenderSubscribers.isEmpty()) {
+            return;
+        }
+
+        val bookmarks =
+            collectionModel.getObject().getDataElements().getValue().stream()
+            .map(ManagedObject::getBookmark)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .collect(Collectors.toUnmodifiableList());
 
         objectRenderSubscribers
-                .forEach(subscriber -> subscriber.onRenderedCollection(bookmarkSupplier));
+            .forEach(subscriber -> subscriber.onRenderedCollection(()->bookmarks));
     }
 
 }

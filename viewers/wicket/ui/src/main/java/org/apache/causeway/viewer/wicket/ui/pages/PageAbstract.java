@@ -22,8 +22,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
-import org.apache.causeway.commons.collections.Can;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
@@ -48,6 +46,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
+import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Timing;
 import org.apache.causeway.commons.internal.debug._Debug;
@@ -474,30 +474,30 @@ implements ActionPromptProvider {
         return cfra.getComponentFactoryRegistry();
     }
 
-
     // -- RE-ATTACH ENTITIES
 
     @Override
     public void renderPage() {
-        val enabledObjectRenderSubscribers = getServiceRegistry().select(PageRenderSubscriber.class)
-                .filter(PageRenderSubscriber::isEnabled);
-        enabledObjectRenderSubscribers
-                .forEach(subscriber -> {
-            subscriber.onRendering(getPageClassRegistry().getPageType(this).asApplibPageType());
-        });
+
+        val pageType = getPageClassRegistry().getPageType(this).asApplibPageType();
+        val enabledPageRenderSubscribers = enabledPageRenderSubscriber();
+
+        enabledPageRenderSubscribers
+                .forEach(subscriber -> subscriber.onRendering(pageType));
+
         if(XrayUi.isXrayEnabled()){
             _Debug.log("about to render %s ..", this.getClass().getSimpleName());
             val stopWatch = _Timing.now();
             onNewRequestCycle();
             super.renderPage();
-            onRendered(enabledObjectRenderSubscribers);
             stopWatch.stop();
             _Debug.log(".. rendering took %s", stopWatch.toString());
         } else {
             onNewRequestCycle();
             super.renderPage();
-            onRendered(enabledObjectRenderSubscribers);
         }
+
+        onRendered(enabledPageRenderSubscribers);
     }
 
     /**
@@ -514,7 +514,14 @@ implements ActionPromptProvider {
      *
      * @param enabledObjectRenderSubscribers  - those {@link PageRenderSubscriber}s that are {@link PageRenderSubscriber#isEnabled() enabled}
      */
-    public void onRendered(Can<PageRenderSubscriber> enabledObjectRenderSubscribers) {
+    protected void onRendered(final Can<PageRenderSubscriber> enabledObjectRenderSubscribers) {
+    }
+
+    // -- HELPER
+
+    private Can<PageRenderSubscriber> enabledPageRenderSubscriber() {
+        return getServiceRegistry().select(PageRenderSubscriber.class)
+                .filter(PageRenderSubscriber::isEnabled);
     }
 
 }

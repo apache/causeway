@@ -21,6 +21,7 @@ package org.apache.causeway.viewer.commons.model.components;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Optionality;
+import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
 import org.apache.causeway.core.metamodel.commons.StringExtensions;
 
 import lombok.Getter;
@@ -160,6 +161,17 @@ public enum UiComponentType {
 
     private UiComponentType() {
         this.optionality = Optionality.MANDATORY;
+        this.subscriberPageType = PageRenderSubscriber.PageType.OTHER;
+    }
+
+    private UiComponentType(final Optionality optionality) {
+        this.optionality = optionality;
+        this.subscriberPageType = PageRenderSubscriber.PageType.OTHER;
+    }
+
+    private UiComponentType(final PageRenderSubscriber.PageType pageType) {
+        this.optionality = Optionality.MANDATORY;
+        this.subscriberPageType = pageType;
     }
 
     @Override
@@ -183,6 +195,9 @@ public enum UiComponentType {
      */
     @Getter
     private final Optionality optionality;
+
+    @Getter
+    private final PageRenderSubscriber.PageType subscriberPageType;
 
     @Nullable
     public static UiComponentType lookup(final String id) {

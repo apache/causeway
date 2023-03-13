@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.viewer.wicket.ui.pages.entity;
 
-import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
-import org.apache.causeway.commons.collections.Can;
+import java.util.Optional;
+
 import org.apache.wicket.Application;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -31,7 +31,9 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 
+import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
 import org.apache.causeway.applib.services.user.UserMemento;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.debug._Debug;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -217,13 +219,19 @@ public class EntityPage extends PageAbstract {
     }
 
     @Override
-    public void onRendered(Can<PageRenderSubscriber> objectRenderSubscribers) {
-        final ManagedObject objectAdapter;
-        objectAdapter = model.getObject();
-        val bookmarkIfAny = objectAdapter.getBookmark();
+    public void onRendered(final Can<PageRenderSubscriber> pageRenderSubscribers) {
 
-        objectRenderSubscribers
-                .forEach(objectRenderSubscriber -> objectRenderSubscriber.onRenderedDomainObject(bookmarkIfAny.get()));
+        // guard against unspecified
+        ManagedObjects.asSpecified(model.getObject())
+        .map(ManagedObject::getBookmark)
+        // guard against no bookmark available
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .ifPresent(bookmark->{
+            pageRenderSubscribers
+                .forEach(objectRenderSubscriber -> objectRenderSubscriber.onRenderedDomainObject(bookmark));
+        });
+
     }
 
     // -- HELPER
