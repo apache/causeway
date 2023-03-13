@@ -18,6 +18,16 @@
  */
 package org.apache.causeway.viewer.wicket.ui.pages.standalonecollection;
 
+import lombok.val;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Supplier;
+
+import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.wicket.Component;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 
@@ -35,6 +45,8 @@ public class StandaloneCollectionPage extends PageAbstract {
 
     private static final long serialVersionUID = 1L;
 
+    private final EntityCollectionModelStandalone collectionModel;
+
     /**
      * For use with {@link Component#setResponsePage(org.apache.wicket.request.component.IRequestablePage)}
      */
@@ -42,9 +54,26 @@ public class StandaloneCollectionPage extends PageAbstract {
         super(PageParameterUtils.newPageParameters(),
                 collectionModel.getName(),
                 UiComponentType.STANDALONE_COLLECTION);
+        this.collectionModel = collectionModel;
 
         addChildComponents(themeDiv, collectionModel);
         addBookmarkedPages(themeDiv);
+    }
+
+    @Override
+    public void onRendered(Can<PageRenderSubscriber> objectRenderSubscribers) {
+
+        Supplier<List<Bookmark>> bookmarkSupplier = _Lazy.threadSafe(
+                () -> {
+                    val bookmarks = new ArrayList<Bookmark>();
+                    collectionModel.getObject().getDataElements().getValue().forEach(x -> {
+                        x.getBookmark().ifPresent(bookmarks::add);
+                    });
+                    return bookmarks;
+                });
+
+        objectRenderSubscribers
+                .forEach(subscriber -> subscriber.onRenderedCollection(bookmarkSupplier));
     }
 
 }

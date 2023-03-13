@@ -30,7 +30,7 @@
 	</parent>
 
 	<artifactId>causeway-valuetypes-vega-persistence-jpa</artifactId>
-	<name>Apache Causeway Val - Vega (persistence jpa)</name>
+	<name>Apache Causeway Val - Vega (persistence JPA)</name>
 
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.causeway.valuetypes.vega.persistence.jpa</jar-plugin.automaticModuleName>
