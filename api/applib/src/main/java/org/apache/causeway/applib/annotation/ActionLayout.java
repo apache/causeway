@@ -75,13 +75,10 @@ public @interface ActionLayout {
             default "";
 
     /**
-     * Whether (and how) this action can be bookmarked in the UI.
+     * Whether (and how) this action's result can be bookmarked in the UI,
+     * overriding any {@link DomainObjectLayout#bookmarking()} on the return type if present.
      *
-     * <p>
-     *     For bookmarkable actions, either {@link org.apache.causeway.applib.annotation.BookmarkPolicy#AS_ROOT}
-     *     and {@link org.apache.causeway.applib.annotation.BookmarkPolicy#AS_CHILD} can be used (they are treated
-     *     identically).
-     * </p>
+     * @see DomainObjectLayout#bookmarking()
      */
     BookmarkPolicy bookmarking()
             default BookmarkPolicy.NOT_SPECIFIED;
@@ -240,11 +237,10 @@ public @interface ActionLayout {
      * <p>
      *     Not re-rendering can provide a smoother UI experience.
      * </p>
-     *
-     * <p>
-     *     Supported by the Wicket viewer.
-     * </p>
+     * @deprecated currently NOT supported by the Wicket viewer, but could be re-implemented with
+     *      a future release
      */
+    @Deprecated(forRemoval = false, since = "2.0.0-RC1")
     Redirect redirectPolicy()
             default Redirect.AS_CONFIGURED;
 
