@@ -46,13 +46,31 @@ public class ActionLayoutCssClassFaVm implements HasAsciiDocDescription {
         return "ActionLayout#cssClassFa";
     }
 
+//tag::actLeftAndRight[]
+    @Action
+    @ActionLayout(
+            cssClassFa = "fa-bus"                         // <.>
+//end::actLeftAndRight[]
+            ,describedAs = "@ActionLayout(cssClassFa = \"fa-bus\")"
+//tag::actLeftAndRight[]
+            )
+    public Object actLeft(final String arg) {
+        return this;
+    }
+
     @Action
     @ActionLayout(
             cssClassFa = "fa-bus",
-            cssClassFaPosition = CssClassFaPosition.RIGHT) //TODO[CAUSEWAY-3310] showcase LEFT and RIGTH
-    public Object act(final String arg) {
+            cssClassFaPosition = CssClassFaPosition.RIGHT // <.>
+//end::actLeftAndRight[]
+            ,describedAs = "@ActionLayout(cssClassFa = \"fa-bus\", \n"
+                    + "cssClassFaPosition = CssClassFaPosition.RIGHT)"
+//tag::actLeftAndRight[]
+            )
+    public Object actRight(final String arg) {
         return this;
     }
+//end::actLeftAndRight[]
 
 }
 //end::class[]
