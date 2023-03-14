@@ -216,7 +216,7 @@ class RenameProject {
                         // (that is, reverting replacements above) 
                         .replace(
                                 "https://" + toLower + ".apache.org/applib/layout",
-                                "https://" + fromLower + ".apache.org/applib/layout");
+                                "https://" + fromLower + ".apache.org/applib/layout-v1");
                 newLines.add(newLine);
                 return line.equals(newLine)
                         ? 0
