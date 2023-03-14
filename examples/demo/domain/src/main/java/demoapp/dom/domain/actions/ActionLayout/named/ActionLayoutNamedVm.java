@@ -45,12 +45,18 @@ public class ActionLayoutNamedVm implements HasAsciiDocDescription {
         return "ActionLayout#named";
     }
 
+//tag::act[]
     @Action
     @ActionLayout(
-            named = "xxx")
+            named = "xxx" // <.>
+//end::act[]
+            ,describedAs = "@ActionLayout(named = \"xxx\")"
+//tag::act[]
+            )
     public Object act(final String arg) {
         return this;
     }
+//end::act[]
 
 }
 //end::class[]
