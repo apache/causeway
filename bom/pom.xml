@@ -49,7 +49,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         Also the parent POM for the core framework and extensions.
     </description>
 
-    <properties>
+	<properties>
 
 		<!-- BUILD SPECIFICA -->
 
@@ -3000,12 +3000,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                                 <goals>
                                     <goal>sign</goal>
                                 </goals>
-                                <configuration>
-                                    <gpgArguments>
-                                        <arg>--pinentry-mode</arg>
-                                        <arg>loopback</arg>
-                                    </gpgArguments>
-                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
