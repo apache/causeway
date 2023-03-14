@@ -46,12 +46,14 @@ public class ActionLayoutHiddenVm implements HasAsciiDocDescription {
         return "ActionLayout#hidden";
     }
 
+//tag::act[]
     @Action
     @ActionLayout(
-            hidden = Where.STANDALONE_TABLES)
+            hidden = Where.EVERYWHERE) // <.>
     public Object act(final String arg) {
         return this;
     }
+//end::act[]
 
 }
 //end::class[]
