@@ -45,12 +45,29 @@ public class ActionLayoutSequenceVm implements HasAsciiDocDescription {
         return "ActionLayout#sequence";
     }
 
+//tag::act1and2[]
     @Action
     @ActionLayout(
-            sequence = "0")
-    public Object act(final String arg) {
+            sequence = "1.0" // <.>
+//end::act1and2[]
+            ,describedAs = "@ActionLayout(sequence = \"1.0\")"
+//tag::act1and2[]
+            )
+    public Object actFirst(final String arg) {
         return this;
     }
+
+    @Action
+    @ActionLayout(
+            sequence = "2.0" // <.>
+//end::act1and2[]
+            ,describedAs = "@ActionLayout(sequence = \"2.0\")"
+//tag::act1and2[]
+            )
+    public Object actSecond(final String arg) {
+        return this;
+    }
+//end::act1and2[]
 
 }
 //end::class[]
