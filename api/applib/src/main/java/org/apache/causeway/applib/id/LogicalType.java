@@ -31,7 +31,6 @@ import javax.persistence.Table;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._Annotations;
@@ -114,7 +113,6 @@ implements
      * @apiNote Does only simple inference, not involving classifier plugins.
      * Use with caution!
      */
-    @SuppressWarnings("removal")
     public static LogicalType infer(
             final @NonNull Class<?> correspondingClass) {
 
@@ -182,7 +180,7 @@ implements
      * {@link LogicalTypeFacet}.
      *
      * <p>
-     * This will typically be the value of the {@link DomainObject#logicalTypeName()} annotation attribute.
+     * This will typically be the value of the {@link Named#value()} annotation attribute.
      * If none has been specified then will default to the fully qualified class name (with
      * {@link ClassSubstitutorRegistry class name substituted} if necessary to allow for runtime
      * bytecode enhancement.
