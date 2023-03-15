@@ -25,7 +25,6 @@ import javax.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.annotation.NatureOfService;
@@ -47,7 +46,7 @@ public class FakeDataDemoObjectWithAllMenu {
 
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, sequence = "1")
+    @ActionLayout(sequence = "1")
     public List<FakeDataDemoObjectWithAll> listAllDemoObjectsWithAll() {
         return repositoryService.allInstances(FakeDataDemoObjectWithAll.class);
     }

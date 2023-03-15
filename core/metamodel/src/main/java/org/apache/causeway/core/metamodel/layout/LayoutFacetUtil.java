@@ -338,7 +338,6 @@ public class LayoutFacetUtil {
         public void visit(final ActionLayoutData actionLayoutData) {
             objectSpec.getAction(actionLayoutData.getId())
             .ifPresent(objectAction->{
-                setBookmarkingIfAny(actionLayoutData, objectAction);
                 setCssClassIfAny(actionLayoutData, objectAction);
                 setCssClassFaIfAny(actionLayoutData, objectAction);
                 setMemberDescribedIfAny(actionLayoutData, objectAction);

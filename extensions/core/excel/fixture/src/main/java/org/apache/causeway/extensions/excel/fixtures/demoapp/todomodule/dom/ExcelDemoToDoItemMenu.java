@@ -31,7 +31,6 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.MinLength;
 import org.apache.causeway.applib.annotation.NatureOfService;
@@ -61,7 +60,7 @@ public class ExcelDemoToDoItemMenu {
     final ClockService clockService;
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, sequence = "1")
+    @ActionLayout(sequence = "1")
     public List<ExcelDemoToDoItem> toDoItemsNotYetComplete() {
         final List<ExcelDemoToDoItem> items = notYetCompleteNoUi();
         if(items.isEmpty()) {

@@ -41,7 +41,6 @@ import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.actions.layout.ActionPositionFacetForActionLayoutXml;
-import org.apache.causeway.core.metamodel.facets.actions.layout.BookmarkPolicyFacetForActionLayoutXml;
 import org.apache.causeway.core.metamodel.facets.actions.layout.CssClassFaFacetForActionLayoutXml;
 import org.apache.causeway.core.metamodel.facets.actions.layout.CssClassFacetForActionLayoutXml;
 import org.apache.causeway.core.metamodel.facets.actions.layout.HiddenFacetForActionLayoutXml;
@@ -259,9 +258,6 @@ implements GridSystemService<G> {
 
                 updateFacetIfPresent(
                         ActionPositionFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));
-
-                updateFacetIfPresent(
-                        BookmarkPolicyFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));
 
                 updateFacetIfPresent(
                         CssClassFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));

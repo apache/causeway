@@ -75,11 +75,12 @@ public @interface ActionLayout {
             default "";
 
     /**
-     * Whether (and how) this action's result can be bookmarked in the UI,
-     * overriding any {@link DomainObjectLayout#bookmarking()} on the return type if present.
+     * @deprecated Conflicting semantics with {@link DomainObjectLayout#bookmarking()},
+     * that is, if present on this action's return type, hence deprecated for removal.
      *
      * @see DomainObjectLayout#bookmarking()
      */
+    @Deprecated(forRemoval = true, since = "2.0.0-RC1")
     BookmarkPolicy bookmarking()
             default BookmarkPolicy.NOT_SPECIFIED;
 
