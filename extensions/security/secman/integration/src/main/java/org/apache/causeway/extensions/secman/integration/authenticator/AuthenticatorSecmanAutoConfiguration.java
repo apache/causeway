@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.extensions.secman.integration.authenticator;
 
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -36,12 +37,12 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepo
 @Configuration
 public class AuthenticatorSecmanAutoConfiguration  {
 
-    @Bean("causeway.ext.secman.AuthenticatorSecman")
+    @Bean(CausewayModuleExtSecmanApplib.NAMESPACE + ".AuthenticatorSecman")
     @ConditionalOnMissingBean(Authenticator.class)
     @Qualifier("Secman")
     public Authenticator authenticatorSecman(
             final ApplicationUserRepository applicationUserRepository,
-            final @Qualifier("secman") PasswordEncoder passwordEncoder) {
+            final @Qualifier("Secman") PasswordEncoder passwordEncoder) {
         return new AuthenticatorSecman(
                 applicationUserRepository, passwordEncoder);
     }

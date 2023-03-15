@@ -37,7 +37,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.schema.common.v2.ValueType;
 
 @Component
-@Named("causeway.val.BlobValueSemantics")
+@Named("causeway.metamodel.value.BlobValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class BlobValueSemantics
 extends ValueSemanticsAbstract<Blob>

@@ -24,6 +24,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
+import org.apache.causeway.extensions.sse.wicket.CausewayModuleExtSseWicket;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -40,10 +41,12 @@ import lombok.Getter;
  * @since 2.0 {@index}
  */
 @Service
-@Named("causeway.val.WebModuleServerSentEvents")
+@Named(WebModuleServerSentEvents.LOGICAL_TYPE_NAME)
 @Qualifier("ServerSentEvents")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 public final class WebModuleServerSentEvents extends WebModuleAbstract {
+
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSseWicket.NAMESPACE + ".WebModuleServerSentEvents";
 
     private static final String SERVLET_NAME = "ServerSentEventsServlet";
 

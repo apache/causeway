@@ -29,7 +29,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 @Component
-@Named("causeway.val.CommandDtoValueSemantics")
+@Named("causeway.metamodel.value.CommandDtoValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class CommandDtoValueSemantics
 extends XmlValueSemanticsAbstract<CommandDto> {

@@ -24,6 +24,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
+import org.apache.causeway.security.spring.CausewayModuleSecuritySpring;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -40,10 +41,12 @@ import lombok.Getter;
  * @since 2.0 {@index}
  */
 @Service
-@Named("causeway.security.WebModuleSpringSecurity")
+@Named(WebModuleSpringSecurity.LOGICAL_TYPE_NAME)
 @javax.annotation.Priority(PriorityPrecedence.FIRST + 100)
 @Qualifier("Spring")
 public final class WebModuleSpringSecurity extends WebModuleAbstract {
+
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleSecuritySpring.NAMESPACE + ".WebModuleSpringSecurity";
 
     @Getter
     private final String name = "Spring Security Integration";

@@ -49,7 +49,7 @@ import lombok.ToString;
 @ToString
 public class FacetAttrNode extends MMNode {
 
-    public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".FacetAttrNode";
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".node.FacetAttrNode";
 
     @Property(hidden = Where.EVERYWHERE)
     @Getter @Setter private FacetAttr facetAttr;

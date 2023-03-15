@@ -20,6 +20,7 @@ package org.apache.causeway.security.bypass.authentication;
 
 import javax.inject.Named;
 
+import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -33,10 +34,12 @@ import org.apache.causeway.core.security.authentication.standard.AuthenticatorAb
  * @since 1.x {@index}
  */
 @Service
-@Named("causeway.security.AuthenticatorBypass")
+@Named(AuthenticatorBypass.LOGICAL_TYPE_NAME)
 @javax.annotation.Priority(PriorityPrecedence.LATE)
 @Qualifier("Bypass")
 public class AuthenticatorBypass extends AuthenticatorAbstract {
+
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleSecurityBypass.NAMESPACE + ".AuthenticatorBypass";
 
     @Override
     public boolean isValid(final AuthenticationRequest request) {

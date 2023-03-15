@@ -120,6 +120,7 @@ public class CausewayModuleApplib {
     public static final String NAMESPACE_CONF = "causeway.conf";    // for configuration; to minimize the risk of granting perms accidentally
     public static final String NAMESPACE_SUDO = "causeway.sudo";    // for impersonation
     public static final String NAMESPACE_FEAT = "causeway.feat";    // for app features
+    public static final String NAMESPACE_VALUE = "causeway.value";
 
     // -- UI EVENT CLASSES
 

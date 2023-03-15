@@ -66,7 +66,7 @@ implements ApplicationUserRepository {
     @Inject private Provider<QueryResultsCache> queryResultsCacheProvider;
 
     // empty if no candidate is available
-    @Autowired(required = false) @Qualifier("secman") PasswordEncoder passwordEncoder;
+    @Autowired(required = false) @Qualifier("Secman") PasswordEncoder passwordEncoder;
 
 
     private final Class<U> applicationUserClass;

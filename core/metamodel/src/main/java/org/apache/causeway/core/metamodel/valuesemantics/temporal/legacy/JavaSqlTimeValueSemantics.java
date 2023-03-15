@@ -36,7 +36,7 @@ import org.apache.causeway.core.metamodel.valuetypes.TemporalSemanticsAdapter;
  *
  */
 @Component
-@Named("causeway.val.JavaSqlTimeValueSemantics")
+@Named("causeway.metamodel.value.JavaSqlTimeValueSemantics")
 public class JavaSqlTimeValueSemantics
 extends TemporalSemanticsAdapter<Time, LocalTime>  {
 

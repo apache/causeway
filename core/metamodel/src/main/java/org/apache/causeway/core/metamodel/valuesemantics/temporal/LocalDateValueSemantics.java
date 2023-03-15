@@ -31,7 +31,7 @@ import org.apache.causeway.commons.internal.base._Temporals;
 import org.apache.causeway.schema.common.v2.ValueType;
 
 @Component
-@Named("causeway.val.LocalDateValueSemantics")
+@Named("causeway.metamodel.value.LocalDateValueSemantics")
 //@Log4j2
 public class LocalDateValueSemantics
 extends TemporalValueSemanticsProvider<LocalDate>

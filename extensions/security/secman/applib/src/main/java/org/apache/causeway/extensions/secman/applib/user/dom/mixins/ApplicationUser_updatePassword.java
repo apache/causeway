@@ -58,7 +58,7 @@ public class ApplicationUser_updatePassword {
             extends CausewayModuleExtSecmanApplib.ActionDomainEvent<ApplicationUser_updatePassword> {}
 
     @Inject private ApplicationUserRepository applicationUserRepository;
-    @Autowired(required = false) private @Qualifier("secman") PasswordEncoder passwordEncoder;
+    @Autowired(required = false) private @Qualifier("Secman") PasswordEncoder passwordEncoder;
 
     private final ApplicationUser target;
 

@@ -37,4 +37,7 @@ import org.apache.causeway.valuetypes.jodatime.integration.valuesemantics.JodaLo
     JodaDateTimeValueSemantics.class,
 })
 public class CausewayModuleValJodatimeIntegration {
+
+    public static final String NAMESPACE = "causeway.value.joda";
+
 }

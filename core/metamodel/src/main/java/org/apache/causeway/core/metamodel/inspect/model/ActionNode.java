@@ -50,7 +50,7 @@ import lombok.val;
 @ToString
 public class ActionNode extends MemberNode {
 
-    public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".ActionNode";
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".node.ActionNode";
 
     @Property(hidden = Where.EVERYWHERE)
     @Getter @Setter private Action action;

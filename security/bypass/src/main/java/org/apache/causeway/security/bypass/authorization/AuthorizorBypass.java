@@ -20,6 +20,7 @@ package org.apache.causeway.security.bypass.authorization;
 
 import javax.inject.Named;
 
+import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -32,10 +33,12 @@ import org.apache.causeway.core.security.authorization.Authorizor;
  * @since 1.x {@index}
  */
 @Service
-@Named("causeway.security.AuthorizorBypass")
+@Named(AuthorizorBypass.LOGICAL_TYPE_NAME)
 @javax.annotation.Priority(PriorityPrecedence.LATE)
 @Qualifier("Bypass")
 public class AuthorizorBypass implements Authorizor {
+
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleSecurityBypass.NAMESPACE + ".AuthorizorBypass";
 
     @Override
     public boolean isVisible(final InteractionContext authentication, final Identifier identifier) {

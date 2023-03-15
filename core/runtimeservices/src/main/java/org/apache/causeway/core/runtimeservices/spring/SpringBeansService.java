@@ -24,6 +24,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -39,7 +40,7 @@ import lombok.experimental.UtilityClass;
  * @since 2.0 {@index}
  */
 @Service
-@Named("causeway.sub.spring.SpringBeansService")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".SpringBeansService")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class SpringBeansService {

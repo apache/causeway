@@ -22,6 +22,7 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.causeway.core.transaction.CausewayModuleCoreTransaction;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
@@ -35,10 +36,12 @@ import org.apache.causeway.applib.services.user.UserService;
 import lombok.val;
 
 @Service
-@Named("causeway.transaction.TimestampService")
+@Named(TimestampService.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class TimestampService {
+
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleCoreTransaction.NAMESPACE + ".TimestampService";
 
     @Inject private UserService userService;
     @Inject private ClockService clockService;
