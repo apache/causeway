@@ -32,7 +32,6 @@ import javax.persistence.Table;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -135,16 +134,6 @@ implements
             val logicalTypeName = _Strings.emptyToNull(
                     _Annotations.synthesize(correspondingClass, DomainObject.class)
                     .map(DomainObject::logicalTypeName)
-                    .orElse(null));
-            if(logicalTypeName!=null) {
-                return eager(correspondingClass, logicalTypeName);
-            }
-        }
-
-        {
-            val logicalTypeName = _Strings.emptyToNull(
-                    _Annotations.synthesize(correspondingClass, DomainService.class)
-                    .map(DomainService::logicalTypeName)
                     .orElse(null));
             if(logicalTypeName!=null) {
                 return eager(correspondingClass, logicalTypeName);

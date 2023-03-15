@@ -32,7 +32,6 @@ import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
@@ -109,19 +108,7 @@ implements CausewayBeanTypeClassifier {
         val aDomainService = _Annotations.synthesize(type, DomainService.class);
         if(aDomainService.isPresent()) {
             val logicalType = LogicalType.infer(type);
-
-            // whether overrides Spring naming strategy
-            @SuppressWarnings("removal")
-            val namedByCauseway = aDomainService
-                    .map(DomainService::logicalTypeName)
-                    .map(_Strings::emptyToNull)
-                    .map(logicalType.getLogicalTypeName()::equals)
-                    .orElse(false);
-
-            return namedByCauseway
-                    ? CausewayBeanMetaData
-                        .injectableNamedByCauseway(BeanSort.MANAGED_BEAN_CONTRIBUTING, logicalType)
-                    : CausewayBeanMetaData
+            return CausewayBeanMetaData
                         .injectable(BeanSort.MANAGED_BEAN_CONTRIBUTING, logicalType);
         }
 
