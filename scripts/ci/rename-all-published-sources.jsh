@@ -216,7 +216,21 @@ class RenameProject {
                         // (that is, reverting replacements above) 
                         .replace(
                                 "https://" + toLower + ".apache.org/applib/layout",
-                                "https://" + fromLower + ".apache.org/applib/layout");
+                                "https://" + fromLower + ".apache.org/applib/layout")
+                        // redirect all concrete xsd urls to their layout-v1 variants
+                        .replace(
+                                "/applib/layout/component/component.xsd",
+                                "/applib/layout-v1/component/component.xsd")
+                        .replace(
+                                "/applib/layout/grid/bootstrap3/bootstrap3.xsd",
+                                "/applib/layout-v1/grid/bootstrap3/bootstrap3.xsd")
+                        .replace(
+                                "/applib/layout/links/links.xsd",
+                                "/applib/layout-v1/links/links.xsd")
+                        .replace(
+                                "/applib/layout/menubars/bootstrap3/menubars.xsd",
+                                "/applib/layout-v1/menubars/bootstrap3/menubars.xsd")
+                        ;
                 newLines.add(newLine);
                 return line.equals(newLine)
                         ? 0

@@ -45,12 +45,18 @@ public class ActionLayoutCssClassVm implements HasAsciiDocDescription {
         return "ActionLayout#cssClass";
     }
 
+//tag::act[]
     @Action
     @ActionLayout(
-            cssClass = "bg-dark")
+            cssClass = "btn-info" // <.>
+//end::act[]
+            ,describedAs = "@ActionLayout(cssClass = \"btn-info\")"
+//tag::act[]
+            )
     public Object act(final String arg) {
         return this;
     }
+//end::act[]
 
 }
 //end::class[]

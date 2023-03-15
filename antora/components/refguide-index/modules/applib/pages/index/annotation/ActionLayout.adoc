@@ -21,7 +21,8 @@ Layout hints for actions.
   String named() default "";     // <.>
   Position position() default Position.NOT_SPECIFIED;     // <.>
   PromptStyle promptStyle() default PromptStyle.AS_CONFIGURED;     // <.>
-  Redirect redirectPolicy() default Redirect.AS_CONFIGURED;     // <.>
+  @Deprecated(forRemoval = false, since = "2.0.0-RC1")
+Redirect redirectPolicy() default Redirect.AS_CONFIGURED;     // <.>
   String sequence() default "";     // <.>
 }
 ----
@@ -34,7 +35,7 @@ Associates this action with a property or collection, specifying its id.
 <.> xref:#bookmarking[bookmarking]
 +
 --
-Whether (and how) this action can be bookmarked in the UI.
+Whether (and how) this action's result can be bookmarked in the UI, overriding any _DomainObjectLayout#bookmarking()_ on the return type if present.
 --
 <.> xref:#cssClass[cssClass]
 +
@@ -89,6 +90,13 @@ How the parameters for this action are prompted, either _PromptStyle#DIALOG dial
 <.> xref:#redirectPolicy[redirectPolicy]
 +
 --
+[WARNING]
+====
+[red]#_deprecated:_#
+
+currently NOT supported by the Wicket viewer, but could be re-implemented with a future release
+====
+
 If the action returns its target, then determines whether to update the page or instead to redirect (forcing a re-rendering of a new page).
 --
 <.> xref:#sequence[sequence]
@@ -113,9 +121,7 @@ Note that it is also possible to associate an action with a collection using _Ac
 [#bookmarking]
 === bookmarking
 
-Whether (and how) this action can be bookmarked in the UI.
-
-For bookmarkable actions, either _org.apache.causeway.applib.annotation.BookmarkPolicy#AS_ROOT_ and _org.apache.causeway.applib.annotation.BookmarkPolicy#AS_CHILD_ can be used (they are treated identically).
+Whether (and how) this action's result can be bookmarked in the UI, overriding any _DomainObjectLayout#bookmarking()_ on the return type if present.
 
 [#cssClass]
 === cssClass
@@ -182,11 +188,16 @@ How the parameters for this action are prompted, either _PromptStyle#DIALOG dial
 [#redirectPolicy]
 === redirectPolicy
 
+[WARNING]
+====
+[red]#_deprecated:_#
+
+currently NOT supported by the Wicket viewer, but could be re-implemented with a future release
+====
+
 If the action returns its target, then determines whether to update the page or instead to redirect (forcing a re-rendering of a new page).
 
 Not re-rendering can provide a smoother UI experience.
-
-Supported by the Wicket viewer.
 
 [#sequence]
 === sequence

@@ -35,7 +35,7 @@ public class JQueryInitWkt implements WicketApplicationInitializer {
     @Inject CausewayConfiguration configuration;
 
     /**
-     * Upgrading jquery 3.6.0 -> 3.6.1+ because of:
+     * We are upgrading Wicket's jquery 3.6.0 -> 3.6.1+ because of:
      *
      * https://github.com/select2/select2/issues/5993
      */
@@ -43,7 +43,7 @@ public class JQueryInitWkt implements WicketApplicationInitializer {
     public void init(final WebApplication webApplication) {
         val settings = webApplication.getJavaScriptLibrarySettings();
         // settings.setJQueryReference(JQueryResourceReference.getV3());
-        settings.setJQueryReference(new WebjarsJavaScriptResourceReference("/webjars/jquery/3.6.3/jquery.js"));
+        settings.setJQueryReference(new WebjarsJavaScriptResourceReference("/webjars/jquery/3.6.4/jquery.js"));
     }
 
 }
