@@ -128,9 +128,6 @@ public class MetaModelServiceMenu {
                 @ParameterLayout(named = "file name (does not require an extension)")
                 final String fileName,
 
-                @Parameter
-                final boolean includeFrameworkNamespaces,
-
                 @ParameterLayout(named = "Namespaces",
                         describedAs="Subset of the complete meta model, only including namespaces starting with given prefix")
                 final List<String> namespaces,
