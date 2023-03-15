@@ -32,7 +32,6 @@ import javax.persistence.Table;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._Annotations;
@@ -126,18 +125,6 @@ implements
                 .orElse(null));
         if(named!=null) {
             return eager(correspondingClass, named);
-        }
-
-        // deprecated naming strategies ...
-
-        {
-            val logicalTypeName = _Strings.emptyToNull(
-                    _Annotations.synthesize(correspondingClass, Value.class)
-                    .map(Value::logicalTypeName)
-                    .orElse(null));
-            if(logicalTypeName!=null) {
-                return eager(correspondingClass, logicalTypeName);
-            }
         }
 
         // fallback to @Table annotations
