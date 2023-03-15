@@ -185,7 +185,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <wicket.version>9.12.0</wicket.version> <!--  9.4.0 is last known good, before wicket put jupiter-api on the module graph -->
         <wicket-bootstrap.version>6.0.0</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
         <wicket-webjars.version>3.0.6</wicket-webjars.version>
-        <wicket-viewer-jquery.version>3.6.3</wicket-viewer-jquery.version> <!--  as served by wicket via webjars -->
+        <wicket-viewer-jquery.version>3.6.4</wicket-viewer-jquery.version> <!--  as served by wicket via webjars -->
 
         <wicketstuff.version>${wicket.version}</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
         <wicketstuff-gmap3.version>${wicket.version}</wicketstuff-gmap3.version>
