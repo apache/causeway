@@ -203,24 +203,6 @@ public @interface DomainObject {
             default Nature.NOT_SPECIFIED;
 
     /**
-     * The logical name of this object's type, that uniquely and fully qualifies it.
-     * The logical name is analogous to - but independent of - the actual fully qualified class name.
-     * eg. {@code sales.Customer} for a class 'org.mycompany.dom.Customer'
-     * <p>
-     * This value, if specified, is used in the serialized form of the object's {@link Bookmark}.
-     * A {@link Bookmark} is used by the framework to uniquely identify an object over time
-     * (same concept as a URN).
-     * Otherwise, if not specified, the fully qualified class name is used instead.
-     * </p>
-     * @deprecated use {@link Named} instead
-     * @see Named
-     */
-    @Deprecated(forRemoval = true, since = "2.0.0-M8")
-    String logicalTypeName()
-            default "";
-
-
-    /**
      * Indicates that the loading of the domain object should be posted to the
      * {@link org.apache.causeway.applib.services.eventbus.EventBusService event bus} using a custom (subclass of)
      * {@link org.apache.causeway.applib.events.lifecycle.ObjectCreatedEvent}.

@@ -128,17 +128,7 @@ implements
             return eager(correspondingClass, named);
         }
 
-        // 3x deprecated naming strategies ...
-
-        {
-            val logicalTypeName = _Strings.emptyToNull(
-                    _Annotations.synthesize(correspondingClass, DomainObject.class)
-                    .map(DomainObject::logicalTypeName)
-                    .orElse(null));
-            if(logicalTypeName!=null) {
-                return eager(correspondingClass, logicalTypeName);
-            }
-        }
+        // deprecated naming strategies ...
 
         {
             val logicalTypeName = _Strings.emptyToNull(
