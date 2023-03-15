@@ -40,18 +40,30 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ActionLayoutRedirectPolicyVm implements HasAsciiDocDescription {
+//tag::act[]
+public class ActionLayoutRedirectPolicyVm
+//end::act[]
+implements HasAsciiDocDescription
+//tag::act[]
+{
+//end::act[]
 
     @ObjectSupport public String title() {
         return "ActionLayout#redirectPolicy";
     }
 
+//tag::act[]
     @Action
     @ActionLayout(
-            redirectPolicy = Redirect.ONLY_IF_DIFFERS)
-    public Object act(final String arg) {
+            redirectPolicy = Redirect.ONLY_IF_DIFFERS // <.>
+//end::act[]
+            ,describedAs = "@ActionLayout(redirectPolicy = Redirect.ONLY_IF_DIFFERS)"
+//tag::act[]
+            )
+    public ActionLayoutRedirectPolicyVm act(final String arg) {
         return this;
     }
 
 }
+//end::act[]
 //end::class[]

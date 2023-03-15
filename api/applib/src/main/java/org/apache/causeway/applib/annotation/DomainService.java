@@ -72,24 +72,4 @@ public @interface DomainService {
     NatureOfService nature()
             default NatureOfService.VIEW;
 
-    /**
-     * The logical name of this object's type, that uniquely and fully qualifies it.
-     * The logical name is analogous to - but independent of - the actual fully qualified class name.
-     * eg. {@code sales.CustomerService} for a class 'org.mycompany.services.CustomerService'
-     * <p>
-     * This value, if specified, is used in the serialized form of the object's {@link Bookmark}.
-     * A {@link Bookmark} is used by the framework to uniquely identify an object over time
-     * (same concept as a URN).
-     * Otherwise, if not specified, the default Spring Bean name is used instead.
-     * </p>
-     * @deprecated use Spring semantics instead, eg. {@link Named} or equivalent
-     * @see Named
-     */
-    @Deprecated(forRemoval = true, since = "2.0.0-M8")
-    // commented out: let the CausewayBeanFactoryPostProcessorForSpring take care of that!
-    //@AliasFor(annotation = Named.class, attribute = "value")
-    String logicalTypeName()
-            default "";
-
-
 }

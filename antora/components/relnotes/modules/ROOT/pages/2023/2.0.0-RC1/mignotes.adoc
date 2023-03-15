@@ -168,4 +168,13 @@ where arguments are auto-resolved by the `ServiceRegistry`.
 If the `ViewModel` has multiple _public_ constructors, it picks (the) one,
 that has an `@Inject` or `@Autowired` annotation.
 
+| `@DomainObject(logicalTypeName=..)`
+| removed as deprecated since 2.0.0-M8; use `@Named` instead
+
+| `@DomainService(logicalTypeName=..)`
+| removed as deprecated since 2.0.0-M8; use `@Named` instead
+
+| `@Value(logicalTypeName=..)`
+| removed as deprecated since 2.0.0-M8; use `@Named` instead
+
 |===

@@ -50,11 +50,6 @@ extends FacetFactoryAbstract {
                         () -> MetaModelValidatorForAmbiguousMixinAnnotations
                         .addValidationFailure(processMethodContext.getFacetHolder(), ActionLayout.class));
 
-        // bookmarkable
-        addFacetIfPresent(
-                BookmarkPolicyFacetForActionLayoutAnnotation
-                .create(actionLayoutIfAny, facetHolder));
-
         // cssClass
         addFacetIfPresent(
                 CssClassFacetForActionLayoutAnnotation

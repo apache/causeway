@@ -20,17 +20,16 @@ package org.apache.causeway.applib.layout.component;
 
 import java.io.Serializable;
 
-import org.apache.causeway.applib.annotation.BookmarkPolicy;
-import org.apache.causeway.applib.annotation.PromptStyle;
-import org.apache.causeway.applib.annotation.Redirect;
-import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.applib.layout.links.Link;
-
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
+
+import org.apache.causeway.applib.annotation.PromptStyle;
+import org.apache.causeway.applib.annotation.Redirect;
+import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.layout.links.Link;
 
 /**
  * Describes the layout of a single action, broadly corresponding to
@@ -51,7 +50,7 @@ import jakarta.xml.bind.annotation.XmlType;
         }
         )
 public class ActionLayoutData implements Serializable, Owned<ActionLayoutDataOwner>, HasCssClass, HasCssClassFa,
-HasDescribedAs, HasHidden, HasNamed, HasBookmarking {
+HasDescribedAs, HasHidden, HasNamed {
 
     private static final long serialVersionUID = 1L;
 
@@ -78,22 +77,6 @@ HasDescribedAs, HasHidden, HasNamed, HasBookmarking {
     public void setId(final String id) {
         this.id = id;
     }
-
-
-
-    private BookmarkPolicy bookmarking;
-
-    @Override
-    @XmlAttribute(required = false)
-    public BookmarkPolicy getBookmarking() {
-        return bookmarking;
-    }
-
-    @Override
-    public void setBookmarking(final BookmarkPolicy bookmarking) {
-        this.bookmarking = bookmarking;
-    }
-
 
     private String cssClass;
 

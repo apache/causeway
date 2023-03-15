@@ -13,8 +13,6 @@ class ActionLayoutData {
   ActionLayoutData(String id)
   String getId()     // <.>
   void setId(String id)
-  BookmarkPolicy getBookmarking()
-  void setBookmarking(BookmarkPolicy bookmarking)
   String getCssClass()
   void setCssClass(String cssClass)
   String getCssClassFa()

@@ -9,36 +9,6 @@ Indicates that the class has value semantics.
 .Value.java
 ----
 @interface Value {
-  @Deprecated(forRemoval = true, since = "2.0.0-M8")
-String logicalTypeName() default "";     // <.>
 }
 ----
 
-<.> xref:#logicalTypeName[logicalTypeName]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _Named_ instead
-====
-
-The logical name of this value's type, that uniquely and fully qualifies it. The logical name is analogous to - but independent of - the actual fully qualified class name. eg. _sales.Customer_ for a class 'org.mycompany.dom.Customer'
---
-
-== Members
-
-[#logicalTypeName]
-=== logicalTypeName
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _Named_ instead
-====
-
-The logical name of this value's type, that uniquely and fully qualifies it. The logical name is analogous to - but independent of - the actual fully qualified class name. eg. _sales.Customer_ for a class 'org.mycompany.dom.Customer'
-
-If not specified, the fully qualified class name is used instead.

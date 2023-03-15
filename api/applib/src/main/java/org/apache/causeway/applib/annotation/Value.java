@@ -39,18 +39,4 @@ import org.springframework.stereotype.Component;
 @Component @Scope("prototype")
 public @interface Value {
 
-    /**
-     * The logical name of this value's type, that uniquely and fully qualifies it.
-     * The logical name is analogous to - but independent of - the actual fully qualified class name.
-     * eg. {@code sales.Customer} for a class 'org.mycompany.dom.Customer'
-     * <p>
-     * If not specified, the fully qualified class name is used instead.
-     * </p>
-      * @deprecated use {@link Named} instead
-     * @see Named
-     */
-    @Deprecated(forRemoval = true, since = "2.0.0-M8")
-    String logicalTypeName()
-            default "";
-
 }

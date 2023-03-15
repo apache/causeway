@@ -28,7 +28,6 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import demoapp.dom.domain.actions.ActionLayout.associateWith.ActionLayoutAssociateWithVm;
-import demoapp.dom.domain.actions.ActionLayout.bookmarking.ActionLayoutBookmarkingVm;
 import demoapp.dom.domain.actions.ActionLayout.cssClass.ActionLayoutCssClassVm;
 import demoapp.dom.domain.actions.ActionLayout.cssClassFa.ActionLayoutCssClassFaVm;
 import demoapp.dom.domain.actions.ActionLayout.describedAs.ActionLayoutDescribedAsVm;
@@ -51,13 +50,6 @@ public class ActionLayoutMenu {
         describedAs = "Associate an action with a property or collection, specifying its id")
     public ActionLayoutAssociateWithVm associateWith(){
         return new ActionLayoutAssociateWithVm();
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-bookmark",
-        describedAs = "Add link to action prompt as a bookmark")
-    public ActionLayoutBookmarkingVm bookmarking(){
-        return new ActionLayoutBookmarkingVm();
     }
 
     @Action(semantics = SemanticsOf.SAFE)

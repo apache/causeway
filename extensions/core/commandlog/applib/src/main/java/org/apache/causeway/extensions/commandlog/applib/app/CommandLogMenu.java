@@ -29,7 +29,6 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
@@ -76,7 +75,7 @@ public class CommandLogMenu {
             semantics = SemanticsOf.SAFE,
             typeOf = CommandLogEntry.class
     )
-    @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, cssClassFa = "fa-bolt", sequence="10")
+    @ActionLayout(cssClassFa = "fa-bolt", sequence="10")
     public class activeCommands {
         public class DomainEvent extends ActionDomainEvent<activeCommands> { }
 
