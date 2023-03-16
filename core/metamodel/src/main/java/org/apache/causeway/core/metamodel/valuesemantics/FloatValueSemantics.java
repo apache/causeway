@@ -40,7 +40,7 @@ import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
  * due to auto-boxing also handles the primitive variant
  */
 @Component
-@Named("causeway.val.FloatValueSemantics")
+@Named("causeway.metamodel.value.FloatValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class FloatValueSemantics
 extends ValueSemanticsAbstract<Float>

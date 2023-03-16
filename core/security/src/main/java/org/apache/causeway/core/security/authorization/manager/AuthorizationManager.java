@@ -25,6 +25,7 @@ import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import org.apache.causeway.core.security.CausewayModuleCoreSecurity;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -45,10 +46,12 @@ import org.apache.causeway.core.security.authorization.Authorizor;
  * @since 1.x {@index}
  */
 @Service
-@Named("causeway.security.AuthorizationManager")
+@Named(AuthorizationManager.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class AuthorizationManager {
+
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleCoreSecurity.NAMESPACE + ".AuthorizationManager";
 
     private final Authorizor authorizor;
     private final ActionSemanticsResolver actionSemanticsResolver;

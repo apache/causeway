@@ -51,10 +51,12 @@ import lombok.NonNull;
  * @since 2.0 {@index}
  * @see OpenUrlStrategy
  */
-@Named(CausewayModuleApplib.NAMESPACE + ".value.LocalResourcePath")
+@Named(LocalResourcePath.LOGICAL_TYPE_NAME)
 @Value
 @XmlJavaTypeAdapter(LocalResourcePath.JaxbToStringAdapter.class)   // for JAXB view model support
 public final class LocalResourcePath implements Serializable {
+
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".value.LocalResourcePath";
 
     private static final long serialVersionUID = 1L;
     @NonNull private final String path;

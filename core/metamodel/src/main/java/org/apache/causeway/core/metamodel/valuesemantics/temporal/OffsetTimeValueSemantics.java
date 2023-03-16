@@ -30,7 +30,7 @@ import org.apache.causeway.commons.internal.base._Temporals;
 import org.apache.causeway.schema.common.v2.ValueType;
 
 @Component
-@Named("causeway.val.OffsetTimeValueSemantics")
+@Named("causeway.metamodel.value.OffsetTimeValueSemantics")
 //@Log4j2
 public class OffsetTimeValueSemantics
 extends TemporalValueSemanticsProvider<OffsetTime> {

@@ -21,6 +21,7 @@ package org.apache.causeway.valuetypes.jodatime.integration.valuesemantics;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import org.apache.causeway.valuetypes.jodatime.integration.CausewayModuleValJodatimeIntegration;
 import org.joda.time.LocalDate;
 import org.springframework.stereotype.Component;
 
@@ -31,9 +32,11 @@ import org.apache.causeway.core.metamodel.valuetypes.TemporalSemanticsAdapter;
 import org.apache.causeway.valuetypes.jodatime.applib.value.JodaTimeConverters;
 
 @Component
-@Named("causeway.val.JodaLocalDateValueSemantics")
+@Named(JodaLocalDateValueSemantics.LOGICAL_TYPE_NAME)
 public class JodaLocalDateValueSemantics
 extends TemporalSemanticsAdapter<org.joda.time.LocalDate, java.time.LocalDate>  {
+
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleValJodatimeIntegration.NAMESPACE + ".JodaLocalDateValueSemantics";
 
     @Inject LocalDateValueSemantics localDateValueSemantics;
 

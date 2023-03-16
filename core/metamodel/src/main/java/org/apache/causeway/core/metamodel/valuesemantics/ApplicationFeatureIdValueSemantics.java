@@ -37,7 +37,7 @@ import org.apache.causeway.schema.common.v2.ValueType;
 import lombok.val;
 
 @Component
-@Named("causeway.val.ApplicationFeatureIdValueSemantics")
+@Named("causeway.metamodel.value.ApplicationFeatureIdValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class ApplicationFeatureIdValueSemantics
 extends ValueSemanticsAbstract<ApplicationFeatureId>

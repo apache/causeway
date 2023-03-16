@@ -60,7 +60,7 @@ public class AuthenticatorSecman implements Authenticator {
     @Inject
     public AuthenticatorSecman(
             final ApplicationUserRepository applicationUserRepository,
-            final @Qualifier("secman") PasswordEncoder passwordEncoder) {
+            final @Qualifier("Secman") PasswordEncoder passwordEncoder) {
         this.applicationUserRepository = applicationUserRepository;
         this.passwordEncoder = passwordEncoder;
     }

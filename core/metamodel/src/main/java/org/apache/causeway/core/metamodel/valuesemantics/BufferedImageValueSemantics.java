@@ -42,7 +42,7 @@ import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 
 @Component
-@Named("causeway.val.BufferedImageValueSemantics")
+@Named("causeway.metamodel.value.BufferedImageValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class BufferedImageValueSemantics
 extends ValueSemanticsAbstract<BufferedImage>

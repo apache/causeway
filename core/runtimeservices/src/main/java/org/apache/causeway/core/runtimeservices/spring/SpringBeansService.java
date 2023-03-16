@@ -30,6 +30,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 import lombok.experimental.UtilityClass;
 
@@ -39,7 +40,7 @@ import lombok.experimental.UtilityClass;
  * @since 2.0 {@index}
  */
 @Service
-@Named("causeway.sub.spring.SpringBeansService")
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".SpringBeansService")
 @jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class SpringBeansService {

@@ -48,7 +48,7 @@ import lombok.val;
 @ToString
 public class CollectionNode extends MemberNode {
 
-    public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".CollectionNode";
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".node.CollectionNode";
 
     @Property(hidden = Where.EVERYWHERE)
     @Getter @Setter private Collection collection;

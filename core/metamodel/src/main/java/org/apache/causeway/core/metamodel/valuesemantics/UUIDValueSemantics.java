@@ -40,7 +40,7 @@ import lombok.NonNull;
 import lombok.val;
 
 @Component
-@Named("causeway.val.UUIDValueSemantics")
+@Named("causeway.metamodel.value.UUIDValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class UUIDValueSemantics
 extends ValueSemanticsAbstract<UUID>

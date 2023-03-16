@@ -44,4 +44,6 @@ import org.apache.causeway.extensions.sse.wicket.webmodule.WebModuleServerSentEv
 })
 public class CausewayModuleExtSseWicket {
 
+    public static final String NAMESPACE = "causeway.ext.sse";
+
 }

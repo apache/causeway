@@ -43,7 +43,7 @@ import org.apache.causeway.commons.internal.memento._Mementos.SerializingAdapter
 import org.apache.causeway.schema.common.v2.ValueType;
 
 @Component
-@Named("causeway.val.TreeNodeValueSemantics")
+@Named("causeway.metamodel.value.TreeNodeValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class TreeNodeValueSemantics
 extends ValueSemanticsAbstract<TreeNode<?>>

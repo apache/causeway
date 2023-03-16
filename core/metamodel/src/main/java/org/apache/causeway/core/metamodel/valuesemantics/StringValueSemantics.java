@@ -40,7 +40,7 @@ import org.apache.causeway.schema.common.v2.ValueType;
 import lombok.NonNull;
 
 @Component
-@Named("causeway.val.StringValueSemantics")
+@Named("causeway.metamodel.value.StringValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class StringValueSemantics
 extends ValueSemanticsAbstract<String>

@@ -40,7 +40,7 @@ import lombok.NonNull;
  * is available to handle the corresponding value type.
  */
 @Component
-@Named("causeway.val.IdStringifierForSerializable")
+@Named("causeway.metamodel.value.IdStringifierForSerializable")
 @Priority(PriorityPrecedence.LAST)
 public class IdStringifierForSerializable
 implements

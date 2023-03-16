@@ -26,6 +26,7 @@ import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import org.apache.causeway.core.security.CausewayModuleCoreSecurity;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -50,10 +51,12 @@ import lombok.NonNull;
 import lombok.val;
 
 @Service
-@Named("causeway.security.AuthenticationManager")
+@Named(AuthenticationManager.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class AuthenticationManager {
+
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleCoreSecurity.NAMESPACE + ".AuthenticationManager";
 
     @Getter private final @NonNull Can<Authenticator> authenticators;
 

@@ -23,16 +23,19 @@ import java.security.SecureRandom;
 import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
+import org.apache.causeway.core.security.CausewayModuleCoreSecurity;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 
 @Component
-@Named("causeway.security.RandomCodeGenerator10Chars")
+@Named(RandomCodeGeneratorDefault.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.LATE)
 @Qualifier("Default")
 public class RandomCodeGeneratorDefault implements RandomCodeGenerator {
+
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleCoreSecurity.NAMESPACE + ".RandomCodeGenerator10Chars";
 
     private static final int NUMBER_CHARACTERS = 10;
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";

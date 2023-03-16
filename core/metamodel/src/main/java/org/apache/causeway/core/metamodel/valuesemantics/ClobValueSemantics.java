@@ -37,7 +37,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.schema.common.v2.ValueType;
 
 @Component
-@Named("causeway.val.ClobValueSemantics")
+@Named("causeway.metamodel.value.ClobValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class ClobValueSemantics
 extends ValueSemanticsAbstract<Clob>

@@ -50,7 +50,8 @@ import lombok.val;
 @Service
 @Named(CausewayModuleExtSecmanApplib.NAMESPACE + ".ImpersonateMenuAdvisorForSecman")
 @jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
-@Qualifier("SecMan")
+@Qualifier("Secman")
+
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ImpersonateMenuAdvisorForSecman implements ImpersonateMenuAdvisor {
 

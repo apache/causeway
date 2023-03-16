@@ -29,7 +29,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.schema.chg.v2.ChangesDto;
 
 @Component
-@Named("causeway.val.ChangesDtoValueSemantics")
+@Named("causeway.metamodel.value.ChangesDtoValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class ChangesDtoValueSemantics
 extends XmlValueSemanticsAbstract<ChangesDto> {

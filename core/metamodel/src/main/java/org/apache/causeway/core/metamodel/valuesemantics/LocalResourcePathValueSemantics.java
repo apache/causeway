@@ -38,7 +38,7 @@ import org.apache.causeway.schema.common.v2.ValueType;
 import lombok.val;
 
 @Component
-@Named("causeway.val.LocalResourcePathValueSemantics")
+@Named("causeway.metamodel.value.LocalResourcePathValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class LocalResourcePathValueSemantics
 extends ValueSemanticsAbstract<LocalResourcePath>

@@ -267,7 +267,7 @@ public class CausewayModuleExtSecmanShiroRealm extends AuthorizingRealm {
     private CheckPasswordResult checkPassword(final char[] candidate, final String actualEncryptedPassword) {
         return execute(new Supplier<CheckPasswordResult>() {
 
-            @Autowired(required = false) private @Qualifier("secman") PasswordEncoder passwordEncoder;
+            @Autowired(required = false) private @Qualifier("Secman") PasswordEncoder passwordEncoder;
 
             @Override
             public CheckPasswordResult get() {

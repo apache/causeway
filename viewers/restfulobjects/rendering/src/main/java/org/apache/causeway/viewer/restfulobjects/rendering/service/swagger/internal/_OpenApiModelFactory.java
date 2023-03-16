@@ -231,7 +231,7 @@ class _OpenApiModelFactory {
 
     void appendRestfulObjectsSupportingPathsAndDefinitions() {
 
-        final String tag = ". restful objects supporting resources";
+        final String tag = "… asf restful objects supporting resources";
 
         oa3.path("/",
                 new PathItem()
