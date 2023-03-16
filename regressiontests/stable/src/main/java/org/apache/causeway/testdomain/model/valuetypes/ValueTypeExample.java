@@ -72,6 +72,7 @@ import org.apache.causeway.schema.common.v2.OidDto;
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
 import org.apache.causeway.valuetypes.vega.applib.value.Vega;
 import org.apache.causeway.valuetypes.vega.metamodel.semantics.VegaValueSemantics;
+import org.springframework.context.annotation.Scope;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -171,7 +172,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleBoolean")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleBoolean
     extends ValueTypeExample<Boolean> {
         @Property @Getter @Setter
@@ -182,7 +183,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleCharacter")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleCharacter
     extends ValueTypeExample<Character> {
         @Property @Getter @Setter
@@ -193,7 +194,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleString")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleString
     extends ValueTypeExample<String> {
         @Property @Getter @Setter
@@ -204,7 +205,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExamplePassword")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExamplePassword
     extends ValueTypeExample<Password> {
         @Property @Getter @Setter
@@ -215,7 +216,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleBufferedImage")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleBufferedImage
     extends ValueTypeExample<BufferedImage> {
         @Property @Getter @Setter
@@ -227,7 +228,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleBlob")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleBlob
     extends ValueTypeExample<Blob> {
         @Property @Getter @Setter
@@ -238,7 +239,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleClob")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleClob
     extends ValueTypeExample<Clob> {
         @Property @Getter @Setter
@@ -249,7 +250,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleLocalResourcePath")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleLocalResourcePath
     extends ValueTypeExample<LocalResourcePath> {
         @Property @Getter @Setter
@@ -260,7 +261,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleUrl")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleUrl
     extends ValueTypeExample<URL> {
         @Property @Getter @Setter
@@ -275,7 +276,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleMarkup")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleMarkup
     extends ValueTypeExample<Markup> {
         private MarkupValueSemantics markupSemantics = new MarkupValueSemantics();
@@ -298,7 +299,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleVega")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleVega
     extends ValueTypeExample<Vega> {
         private VegaValueSemantics vegaSemantics = new VegaValueSemantics();
@@ -310,7 +311,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleUuid")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleUuid
     extends ValueTypeExample<UUID> {
         @Property @Getter @Setter
@@ -321,7 +322,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleLocale")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleLocale
     extends ValueTypeExample<Locale> {
         @Property @Getter @Setter
@@ -334,7 +335,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleByte")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleByte
     extends ValueTypeExample<Byte> {
         @Property @Getter @Setter
@@ -345,7 +346,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleShort")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleShort
     extends ValueTypeExample<Short> {
         @Property @Getter @Setter
@@ -356,7 +357,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleInteger")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleInteger
     extends ValueTypeExample<Integer> {
         @Property @Getter @Setter
@@ -367,7 +368,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleLong")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleLong
     extends ValueTypeExample<Long> {
         @Property @Getter @Setter
@@ -378,7 +379,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleFloat")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleFloat
     extends ValueTypeExample<Float> {
         @Property @Getter @Setter
@@ -395,7 +396,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleDouble")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleDouble
     extends ValueTypeExample<Double> {
         @Property @Getter @Setter
@@ -414,7 +415,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleBigInteger")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleBigInteger
     extends ValueTypeExample<BigInteger> {
         @Property @Getter @Setter
@@ -427,7 +428,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleBigDecimal_default")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleBigDecimal_default
     extends ValueTypeExample<BigDecimal> {
         @Property @Getter @Setter
@@ -438,7 +439,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleBigDecimal_fixedFractionalDigits")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleBigDecimal_fixedFractionalDigits
     extends ValueTypeExample<BigDecimal> {
         @Property @ValueSemantics(minFractionalDigits = 2, maxFractionalDigits = 2)
@@ -495,7 +496,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleJavaUtilDate")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleJavaUtilDate
     extends ValueTypeExample<java.util.Date> {
         @Property @Getter @Setter
@@ -506,7 +507,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleJavaSqlDate")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleJavaSqlDate
     extends ValueTypeExample<java.sql.Date> {
         @Property @Getter @Setter
@@ -517,7 +518,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleJavaSqlTime")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleJavaSqlTime
     extends ValueTypeExample<java.sql.Time> {
         @Property @Getter @Setter
@@ -528,7 +529,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleTimestamp")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleTimestamp
     extends ValueTypeExample<Timestamp> {
         @Property @Getter @Setter
@@ -541,7 +542,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleLocalDate")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleLocalDate
     extends ValueTypeExample<LocalDate> {
         @Property @Getter @Setter
@@ -552,7 +553,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleLocalDateTime")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleLocalDateTime
     extends ValueTypeExample<LocalDateTime> {
         @Property @Getter @Setter
@@ -564,7 +565,7 @@ public abstract class ValueTypeExample<T> {
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleLocalTime")
     @DomainObject(
 
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleLocalTime
     extends ValueTypeExample<LocalTime> {
         @Property @Getter @Setter
@@ -575,7 +576,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleOffsetDateTime")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleOffsetDateTime
     extends ValueTypeExample<OffsetDateTime> {
         @Property @Getter @Setter
@@ -586,7 +587,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleOffsetTime")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleOffsetTime
     extends ValueTypeExample<OffsetTime> {
         @Property @Getter @Setter
@@ -597,7 +598,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleZonedDateTime")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleZonedDateTime
     extends ValueTypeExample<ZonedDateTime> {
         @Property @Getter @Setter
@@ -610,7 +611,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleJodaDateTime")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleJodaDateTime
     extends ValueTypeExample<org.joda.time.DateTime> {
         @Property @Getter @Setter
@@ -621,7 +622,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleJodaLocalDateTime")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleJodaLocalDateTime
     extends ValueTypeExample<org.joda.time.LocalDateTime> {
         @Property @Getter @Setter
@@ -632,7 +633,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleJodaLocalDate")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleJodaLocalDate
     extends ValueTypeExample<org.joda.time.LocalDate> {
         @Property @Getter @Setter
@@ -643,7 +644,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleJodaLocalTime")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleJodaLocalTime
     extends ValueTypeExample<org.joda.time.LocalTime> {
         @Property @Getter @Setter
@@ -656,7 +657,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleApplicationFeatureId")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleApplicationFeatureId
     extends ValueTypeExample<ApplicationFeatureId> {
         @Property @Getter @Setter
@@ -670,7 +671,7 @@ public abstract class ValueTypeExample<T> {
     //TODO    TreeNode
 //    @DomainObject(
 //            @Named("causeway.testdomain.valuetypes.ValueTypeExampleTreeNode",
-//            nature = Nature.BEAN)
+//            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleTreeNode
     extends ValueTypeExample<TreeNode<String>> {
         @Property @Getter @Setter
@@ -697,7 +698,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleEnum")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleEnum
     extends ValueTypeExample<ExampleEnum> {
         @Property @Getter @Setter
@@ -710,7 +711,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleCalendarEvent")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleCalendarEvent
     extends ValueTypeExample<CalendarEvent> {
         @Property @Getter @Setter
@@ -725,7 +726,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleBookmark")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleBookmark
     extends ValueTypeExample<Bookmark> {
         @Property @Getter @Setter
@@ -736,7 +737,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleOidDto")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleOidDto
     extends ValueTypeExample<OidDto> {
         @Property @Getter @Setter
@@ -747,7 +748,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleChangesDto")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleChangesDto
     extends ValueTypeExample<ChangesDto> {
         @Property @Getter @Setter
@@ -758,7 +759,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleCommandDto")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleCommandDto
     extends ValueTypeExample<CommandDto> {
         @Property @Getter @Setter
@@ -769,7 +770,7 @@ public abstract class ValueTypeExample<T> {
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleInteractionDto")
     @DomainObject(
-            nature = Nature.BEAN)
+            nature = Nature.BEAN) @Scope("prototype")
     public static class ValueTypeExampleInteractionDto
     extends ValueTypeExample<InteractionDto> {
         @Property @Getter @Setter

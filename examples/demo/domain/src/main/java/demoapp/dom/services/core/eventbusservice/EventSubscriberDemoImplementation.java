@@ -62,7 +62,7 @@ public class EventSubscriberDemoImplementation {
 
     @Named("demo.eventLogWriter")
     @DomainObject(
-            nature = Nature.BEAN) // <-- have this Object's lifecycle managed by Spring
+            nature = Nature.BEAN) @Scope("prototype") // <-- have this Object's lifecycle managed by Spring
     public static class EventLogWriter {
 
         @Inject private EventLogEntryRepository<? extends EventLogEntry> eventLogEntryRepository;

@@ -23,6 +23,7 @@ import lombok.extern.log4j.Log4j2;
 
 import java.util.UUID;
 
+import javax.inject.Inject;
 import javax.inject.Provider;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;

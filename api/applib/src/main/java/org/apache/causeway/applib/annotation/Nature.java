@@ -76,6 +76,12 @@ public enum Nature {
 
     /**
      * An object that is entirely managed by the underlying IoC container.
+     *
+     * <p>
+     *     <b>IMPORTANT</b> the class must <i>also</i> be annotated with an appropriate
+     *     {@link org.springframework.context.annotation.Scope}, eg <code>@Scope(&quot;prototype&quot;)</code> or <code>@Scope(&quot;singleton&quot;)</code>
+     * </p>
+     *
      * @apiNote EXPERIMENTAL
      */
     BEAN,
