@@ -32,6 +32,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
@@ -51,10 +52,12 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
  * @since 2.0 {@index}
  */
 @Service
-@Named("causeway.runtimeservice.XmlService")
+@Named(XmlServiceDefault.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 public class XmlServiceDefault implements XmlService {
+
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleCoreRuntimeServices.NAMESPACE + ".XmlServiceDefault";
 
     @Override
     public Document asDocument(String xmlStr) {

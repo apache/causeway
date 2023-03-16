@@ -35,7 +35,7 @@ import org.apache.causeway.commons.internal.hardening._Hardening;
 import org.apache.causeway.schema.common.v2.ValueType;
 
 @Component
-@Named("causeway.val.MarkupValueSemantics")
+@Named("causeway.metamodel.value.MarkupValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class MarkupValueSemantics
 extends ValueSemanticsAbstract<Markup>

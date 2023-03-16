@@ -44,7 +44,7 @@ import lombok.val;
  * due to auto-boxing also handles the primitive variant
  */
 @Component
-@Named("causeway.val.BooleanValueSemantics")
+@Named("causeway.metamodel.value.BooleanValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class BooleanValueSemantics
 extends ValueSemanticsAbstract<Boolean>

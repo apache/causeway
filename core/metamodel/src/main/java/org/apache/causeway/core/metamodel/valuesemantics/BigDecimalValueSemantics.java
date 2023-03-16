@@ -47,7 +47,7 @@ import lombok.Setter;
 import lombok.val;
 
 @Component
-@Named("causeway.val.BigDecimalValueSemantics")
+@Named("causeway.metamodel.value.BigDecimalValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class BigDecimalValueSemantics
 extends ValueSemanticsAbstract<BigDecimal>

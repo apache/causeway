@@ -46,7 +46,7 @@ import lombok.val;
  * due to auto-boxing also handles the primitive variant
  */
 @Component
-@Named("causeway.val.ByteValueSemantics")
+@Named("causeway.metamodel.value.ByteValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class ByteValueSemantics
 extends ValueSemanticsAbstract<Byte>

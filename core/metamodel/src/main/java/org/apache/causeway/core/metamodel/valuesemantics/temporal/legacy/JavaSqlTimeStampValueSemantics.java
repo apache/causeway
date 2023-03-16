@@ -32,7 +32,7 @@ import org.apache.causeway.core.metamodel.valuesemantics.temporal.LocalDateTimeV
 import org.apache.causeway.core.metamodel.valuetypes.TemporalSemanticsAdapter;
 
 @Component
-@Named("causeway.val.JavaSqlTimeStampValueSemantics")
+@Named("causeway.metamodel.value.JavaSqlTimeStampValueSemantics")
 public class JavaSqlTimeStampValueSemantics
 extends TemporalSemanticsAdapter<Timestamp, LocalDateTime> {
 

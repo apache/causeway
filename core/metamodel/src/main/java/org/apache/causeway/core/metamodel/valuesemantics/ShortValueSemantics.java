@@ -46,7 +46,7 @@ import lombok.val;
  * due to auto-boxing also handles the primitive variant
  */
 @Component
-@Named("causeway.val.ShortValueSemantics")
+@Named("causeway.metamodel.value.ShortValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class ShortValueSemantics
 extends ValueSemanticsAbstract<Short>

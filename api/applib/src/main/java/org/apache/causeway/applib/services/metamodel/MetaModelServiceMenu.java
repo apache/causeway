@@ -231,8 +231,8 @@ public class MetaModelServiceMenu {
 
                 @ParameterLayout(named="Metamodel (Zipped XML)",
                         describedAs="Metamodel from a previous export, to compare the current with.")
-                @Parameter(fileAccept=".zip", optionality = Optionality.MANDATORY) final
-                        Blob zippedMetamodelBlob
+                @Parameter(fileAccept=".zip", optionality = Optionality.MANDATORY)
+                final Blob zippedMetamodelBlob
 
         ) throws IOException {
 
@@ -293,14 +293,14 @@ public class MetaModelServiceMenu {
     }
 
     private List<String> namespaceChoices() {
-        final DomainModel domainModel = metaModelService.getDomainModel();
-        final List<DomainMember> export = domainModel.getDomainMembers();
-        final SortedSet<String> namespaces = _Sets.newTreeSet();
-        for (final DomainMember domainMember : export) {
-            final String namespace = domainMember.getNamespace();
-            final String[] split = namespace.split("[.]");
-            final StringBuilder buf = new StringBuilder();
-            for (final String part : split) {
+        val domainModel = metaModelService.getDomainModel();
+        val domainMembers = domainModel.getDomainMembers();
+        val namespaces = _Sets.<String>newTreeSet();
+        for (val domainMember : domainMembers) {
+            val namespace = domainMember.getNamespace();
+            val namespaceParts = namespace.split("[.]");
+            val buf = new StringBuilder();
+            for (val part : namespaceParts) {
                 if(buf.length() > 0) {
                     buf.append(".");
                 }

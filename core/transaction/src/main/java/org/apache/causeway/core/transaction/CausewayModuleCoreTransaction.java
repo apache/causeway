@@ -31,4 +31,5 @@ import org.apache.causeway.core.transaction.changetracking.events.TimestampServi
 })
 public class CausewayModuleCoreTransaction {
 
+    public static final String NAMESPACE = "causeway.transaction";
 }

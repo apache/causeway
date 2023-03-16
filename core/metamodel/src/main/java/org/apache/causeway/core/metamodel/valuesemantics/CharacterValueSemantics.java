@@ -48,7 +48,7 @@ import lombok.val;
  * due to auto-boxing also handles the primitive variant
  */
 @Component
-@Named("causeway.val.CharacterValueSemantics")
+@Named("causeway.metamodel.value.CharacterValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class CharacterValueSemantics
 extends ValueSemanticsAbstract<Character>

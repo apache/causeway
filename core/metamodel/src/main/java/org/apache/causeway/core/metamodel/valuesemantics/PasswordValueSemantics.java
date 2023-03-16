@@ -36,7 +36,7 @@ import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 
 @Component
-@Named("causeway.val.PasswordValueSemantics")
+@Named("causeway.metamodel.value.PasswordValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class PasswordValueSemantics
 extends ValueSemanticsAbstract<Password>

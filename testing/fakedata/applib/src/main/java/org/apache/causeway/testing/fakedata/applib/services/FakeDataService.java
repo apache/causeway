@@ -50,7 +50,7 @@ import org.apache.causeway.applib.services.repository.RepositoryService;
  * @since 2.0 {@index}
  */
 @Service
-@Named("causeway.test.FakeDataService")
+@Named("causeway.testing.FakeDataService")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class FakeDataService {

@@ -42,11 +42,13 @@ import lombok.val;
  *
  */
 @Service
-@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ServiceInjectorDefault")
+@Named(ServiceInjectorDefault.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ServiceInjectorDefault implements ServiceInjector {
+
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleCoreMetamodel.NAMESPACE + ".ServiceInjectorDefault";
 
     private final AutowireCapableBeanFactory autowireCapableBeanFactory;
 

@@ -42,4 +42,6 @@ import org.apache.causeway.security.bypass.authorization.AuthorizorBypass;
 })
 public class CausewayModuleSecurityBypass {
 
+    public static final String NAMESPACE = "causeway.security.bypass";
+
 }
