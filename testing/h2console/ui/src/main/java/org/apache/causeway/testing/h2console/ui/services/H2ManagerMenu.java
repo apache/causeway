@@ -18,8 +18,11 @@
  */
 package org.apache.causeway.testing.h2console.ui.services;
 
+import lombok.RequiredArgsConstructor;
+
 import java.util.Optional;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -34,6 +37,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.value.LocalResourcePath;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.testing.h2console.ui.CausewayModuleTestingH2ConsoleUi;
 import org.apache.causeway.testing.h2console.ui.webmodule.WebModuleH2Console;
 
@@ -48,15 +52,12 @@ import org.apache.causeway.testing.h2console.ui.webmodule.WebModuleH2Console;
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@Priority(PriorityPrecedence.EARLY)
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class H2ManagerMenu {
 
     private final WebModuleH2Console webModule;
-
-    @Inject
-    public H2ManagerMenu(final WebModuleH2Console webModule) {
-        this.webModule = webModule;
-    }
+    private final CausewayConfiguration causewayConfiguration;
 
     public static class ActionDomainEvent extends CausewayModuleApplib.ActionDomainEvent<H2ManagerMenu>{}
 
@@ -73,7 +74,7 @@ public class H2ManagerMenu {
         return getPathToH2Console().orElse(null);
     }
     @MemberSupport public boolean hideOpenH2Console() {
-        return getPathToH2Console().isEmpty();
+        return getPathToH2Console().isEmpty() || ! causewayConfiguration.getPrototyping().getH2Console().isWebAllowRemoteAccess();
     }
 
     // -- HELPER
