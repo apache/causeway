@@ -68,7 +68,7 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
         ElementType.ANNOTATION_TYPE
 })
 @Retention(RetentionPolicy.RUNTIME)
-@Component @Scope("prototype")
+@Component @Scope("causeway-domain-object")
 public @interface DomainObject {
 
     /**
