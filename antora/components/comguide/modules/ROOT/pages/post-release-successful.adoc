@@ -424,6 +424,53 @@ git branch -d release-{page-causewayrel}-$RC
 
 In `site.yml` file, bump the version of `\{page-causewayrel}` and also `\{page-causewayprev}`, and commit.
 
+== Bump baselines for nightly/weekly builds
+
+=== Nightly build repo
+
+And, in the `apache-causeway-committers/causeway-nightly` repo, similarly update:
+
+[source,yml,subs="attributes+"]
+.apache-causeway-ci-nightly.yml
+----
+jobs:
+  build:
+    name: build, site, build/push demo app
+    runs-on: ubuntu-latest
+    env:
+      # to be shared among all steps of this job
+      BASELINE_MAIN: {page-causewayrel}
+      BASELINE_EDGE: 3.0.0-M1
+----
+
+
+=== Main repo (weekly builds)
+
+In the main repo, in `.github/workflows`, update the `BASELINE` variable:
+
+[source,yml,subs="attributes+"]
+.ci-build-artifacts-no-push-maven.yml
+----
+jobs:
+  build:
+
+    env:
+      BASELINE: {page-causewayrel}
+----
+
+and
+
+[source,yml,subs="attributes+"]
+.ci-build-site-no-push.yml
+----
+jobs:
+  build:
+
+    env:
+      BASELINE: {page-causewayrel}
+----
+
+
 == Update starter projects
 
 As explained in xref:cutting-a-release.adoc#update-starter-apps[cutting a release],for each of the two starter apps, we maintain four branches:

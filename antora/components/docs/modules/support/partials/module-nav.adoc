@@ -15,9 +15,4 @@
 *** xref:relnotes:ROOT:about.adoc[Release Notes]
 
 
-** Nightly Builds
-
-*** link:https://github.com/apache/causeway[Packages] (ASF hosted)
-*** link:https://github.com/apache-causeway-committers/causeway-nightly[Packages] (not ASF hosted)
-*** link:https://apache-causeway-committers.github.io/causeway-nightly[Website preview] (not ASF hosted)
 
