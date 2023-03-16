@@ -51,7 +51,8 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
  * </p>
  *
  * @apiNote Meta annotation {@link Component} allows for the Spring framework to pick up (discover) the
- * annotated type.
+ * annotated type.  However, the custom {@link Scope} of &quot;causeway-domain-object&quot; is a clue that these
+ * objects (either entities or view models) <i>cannot</i> be obtained from the Spring application context.
  * For more details see <code>org.apache.causeway.core.config.beans.CausewayBeanFactoryPostProcessorForSpring</code>
  *
  * @see Action
@@ -68,7 +69,7 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
         ElementType.ANNOTATION_TYPE
 })
 @Retention(RetentionPolicy.RUNTIME)
-@Component @Scope("prototype")
+@Component @Scope("causeway-domain-object")
 public @interface DomainObject {
 
     /**

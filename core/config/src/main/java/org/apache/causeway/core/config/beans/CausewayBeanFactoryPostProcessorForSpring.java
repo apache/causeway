@@ -20,8 +20,12 @@ package org.apache.causeway.core.config.beans;
 
 import java.util.Objects;
 
+import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 
+import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -111,8 +115,9 @@ implements
                     log.debug("renaming bean {} -> {}", beanDefinitionName, beanNameOverride);
                 }
             }
-
         }
+
+        beanFactory.registerScope("causeway-domain-object", new CausewayDomainObjectScope(beanFactory));
 
     }
 
