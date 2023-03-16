@@ -212,24 +212,36 @@ class RenameProject {
                         .replace(fromLower, toLower)
                         .replace(fromUpper, toUpper)
                         .replace(fromTitle, toTitle)
-                        // reflect reality: use currently valid XML namespace URIs
-                        // (that is, reverting replacements above) 
+
+                        // update schema declarations in .layout.xml files.
+                        // terrible hack - we are assuming the target is 'isis'
                         .replace(
-                                "https://" + toLower + ".apache.org/applib/layout",
-                                "https://" + fromLower + ".apache.org/applib/layout")
-                        // redirect all concrete xsd urls to their layout-v1 variants
+                                "https://causeway.apache.org/applib/layout/menubars/bootstrap3 https://causeway.apache.org/applib/layout/menubars/bootstrap3/menubars.xsd",
+                                "http://isis.apache.org/applib/layout/menubars/bootstrap3 https://causeway.apache.org/applib/layout-v1/menubars/bootstrap3/menubars.xsd")
                         .replace(
-                                "/applib/layout/component/component.xsd",
-                                "/applib/layout-v1/component/component.xsd")
+                                "https://causeway.apache.org/applib/layout/component https://causeway.apache.org/applib/layout/component/component.xsd",
+                                "http://isis.apache.org/applib/layout/component https://causeway.apache.org/applib/layout-v1/component/component.xsd")
                         .replace(
-                                "/applib/layout/grid/bootstrap3/bootstrap3.xsd",
-                                "/applib/layout-v1/grid/bootstrap3/bootstrap3.xsd")
+                                "https://causeway.apache.org/applib/layout/grid/bootstrap3 https://causeway.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd",
+                                "http://isis.apache.org/applib/layout/grid/bootstrap3 https://causeway.apache.org/applib/layout-v1/grid/bootstrap3/bootstrap3.xsd")
                         .replace(
-                                "/applib/layout/links/links.xsd",
-                                "/applib/layout-v1/links/links.xsd")
+                                "https://causeway.apache.org/applib/layout/links https://causeway.apache.org/applib/layout/links/links.xsd",
+                                "http://isis.apache.org/applib/layout/links https://causeway.apache.org/applib/layout-v1/links/links.xsd")
+
+                        // update namespace declarations in all files (.layout.xml and also constants in .java classes)
                         .replace(
-                                "/applib/layout/menubars/bootstrap3/menubars.xsd",
-                                "/applib/layout-v1/menubars/bootstrap3/menubars.xsd")
+                                "\"https://causeway.apache.org/applib/layout/menubars/bootstrap3\"",
+                                "\"http://isis.apache.org/applib/layout/menubars/bootstrap3\"")
+                        .replace(
+                                "\"https://causeway.apache.org/applib/layout/component\"",
+                                "\"http://isis.apache.org/applib/layout/component\"")
+                        .replace(
+                                "\"https://causeway.apache.org/applib/layout/grid/bootstrap3\"",
+                                "\"http://isis.apache.org/applib/layout/grid/bootstrap3\"")
+                        .replace(
+                                "\"https://causeway.apache.org/applib/layout/links",
+                                "\"http://isis.apache.org/applib/layout/links")
+
                         ;
                 newLines.add(newLine);
                 return line.equals(newLine)
@@ -334,7 +346,7 @@ class RenameProject {
 }
 
 var rootPath = "" + System.getenv("ROOT_PATH_LEGACY");
-if(rootPath.isBlank() 
+if(rootPath.isBlank()
         || ! new File(rootPath).exists()) {
     System.err.println("env ROOT_PATH_LEGACY must point to an existing directory");
     /exit 1
