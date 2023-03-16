@@ -117,11 +117,7 @@ implements
             }
         }
 
-        beanFactory.registerScope("causeway-domain-object",
-                new CausewayDomainObjectScope(
-                        () -> beanFactory.getBean(BookmarkService.class),
-                        () -> beanFactory.createBean(InteractionService.class)
-                ));
+        beanFactory.registerScope("causeway-domain-object", new CausewayDomainObjectScope(beanFactory));
 
     }
 

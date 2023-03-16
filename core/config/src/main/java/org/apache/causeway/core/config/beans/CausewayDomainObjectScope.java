@@ -30,6 +30,7 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.Scope;
 
@@ -37,8 +38,7 @@ import org.springframework.beans.factory.config.Scope;
 @Log4j2
 class CausewayDomainObjectScope implements Scope {
 
-    private final Provider<BookmarkService> bookmarkServiceProvider;
-    private final Provider<InteractionService> interactionServiceProvider;
+    private final BeanFactory beanFactory;
 
     @Override
     public Object get(String name, ObjectFactory<?> objectFactory) {
@@ -81,10 +81,10 @@ class CausewayDomainObjectScope implements Scope {
     }
 
     private BookmarkService bookmarkService() {
-        return bookmarkServiceProvider.get();
+        return beanFactory.getBean(BookmarkService.class);
     }
 
     private InteractionService interactionService() {
-        return interactionServiceProvider.get();
+        return beanFactory.getBean(InteractionService.class);
     }
 }
