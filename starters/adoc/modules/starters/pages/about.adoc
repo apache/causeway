@@ -11,13 +11,13 @@ The helloworld app is a very minimal app, intended just as a starting point to l
 
 The source code is in this link:https://github.com/apache/causeway-app-helloworld[git repo] which you can either fork, or just download as a zip:
 
-* use JDO as the ORM, use:
-+
-include::helloworld-script-jdo.adoc[]
-
 * to use JPA as the ORM, use:
 +
 include::helloworld-script-jpa.adoc[]
+
+* use JDO as the ORM, use:
++
+include::helloworld-script-jdo.adoc[]
 
 
 TIP: A much more complete explanation of the structure of the app (and how to use it) can be found *xref:docs:starters:helloworld.adoc[here]*.
@@ -30,13 +30,13 @@ It also includes some xref:testing:integtestsupport:about.adoc[integration tests
 
 The source code can be found in this link:https://github.com/apache/causeway-app-simpleapp[git repo] which you can either fork, or just download as a zip:
 
-* to use JDO as the ORM, use:
-+
-include::simpleapp-script-jdo.adoc[]
-
 * to use JPA for the ORM, use:
 +
 include::simpleapp-script-jpa.adoc[]
+
+* to use JDO as the ORM, use:
++
+include::simpleapp-script-jdo.adoc[]
 
 
 
