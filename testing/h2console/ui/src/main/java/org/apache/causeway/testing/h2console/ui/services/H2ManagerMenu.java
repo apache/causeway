@@ -27,15 +27,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.DomainService;
-import org.apache.causeway.applib.annotation.DomainServiceLayout;
-import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.NatureOfService;
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.annotation.RestrictTo;
-import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.annotation.*;
 import org.apache.causeway.applib.value.LocalResourcePath;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.testing.h2console.ui.CausewayModuleTestingH2ConsoleUi;
@@ -74,7 +66,7 @@ public class H2ManagerMenu {
         return getPathToH2Console().orElse(null);
     }
     @MemberSupport public boolean hideOpenH2Console() {
-        return getPathToH2Console().isEmpty() || ! causewayConfiguration.getPrototyping().getH2Console().isWebAllowRemoteAccess();
+        return getPathToH2Console().isEmpty();
     }
 
     // -- HELPER
