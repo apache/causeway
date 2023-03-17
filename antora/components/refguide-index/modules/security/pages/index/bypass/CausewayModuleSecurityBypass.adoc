@@ -9,6 +9,7 @@ Auth/bypass for eg. Integration Testing
 .CausewayModuleSecurityBypass.java
 ----
 class CausewayModuleSecurityBypass {
+  public static final String NAMESPACE;
 }
 ----
 

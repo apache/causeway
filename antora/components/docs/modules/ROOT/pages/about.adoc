@@ -116,10 +116,11 @@ _Releases_
 * xref:docs:ROOT:downloads/how-to.adoc[Downloads]
 * xref:relnotes:ROOT:about.adoc[Release Notes]
 
-_Nightly Builds_
+_Interim Builds_
 
-* link:https://github.com/apache/causeway[Packages] (ASF hosted)
-* link:https://github.com/apache-causeway-committers/causeway-nightly[Packages] (not ASF hosted)
+* xref:comguide:ROOT:nightly-builds.adoc[]
+* xref:comguide:ROOT:nightly-deploys.adoc[]
+* xref:comguide:ROOT:weekly-builds.adoc[]
 * link:https://apache-causeway-committers.github.io/causeway-nightly[Website preview] (not ASF hosted)
 
 
@@ -135,6 +136,12 @@ _Process_
 _Automated Analysis_
 
 * link:https://sonarcloud.io/dashboard?id=apache_causeway[SonarCloud.io]
+
+_Interim Builds_
+
+* xref:comguide:ROOT:nightly-builds.adoc[]
+* xref:comguide:ROOT:weekly-builds.adoc[]
+* link:https://apache-causeway-committers.github.io/causeway-nightly[Website Preview]
 
 _Development_
 

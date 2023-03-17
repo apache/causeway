@@ -82,3 +82,18 @@ An object that acts as a mix-in to some other object, contributing behavior and/
 === BEAN
 
 An object that is entirely managed by the underlying IoC container.
+
+Some possible use cases for this are:
+
+* As a helper service that is used to emit messages through _Action#executionPublishing()_ .
++
+--
+The service itself isn't rendered anywhere, but its actions can be invoked through the _org.apache.causeway.applib.services.wrapper.WrapperFactory_ . (Or as a variant, it might expose a xref:refguide:applib:index/annotation/Programmatic.adoc[Programmatic] API and then delegate to its own action via the _org.apache.causeway.applib.services.wrapper.WrapperFactory_ .
+--
+* As a service representing a facade to a module, so that code in another (untrusted) module can only execute through xref:refguide:applib:index/annotation/Action.adoc[Action] s
++
+--
+Again, either the calling module is expected to use the _org.apache.causeway.applib.services.wrapper.WrapperFactory_ when invoking the facade service, or - since the calling code is treated untrusted - then the same self-delegation approach as for the previous example could be used, whereby the facade service exposes a xref:refguide:applib:index/annotation/Programmatic.adoc[Programmatic] API and then delegates to its own action via the _org.apache.causeway.applib.services.wrapper.WrapperFactory_ .
+--
+
+ *IMPORTANT* the class must _also_ be annotated with an appropriate _org.springframework.context.annotation.Scope_ , eg `@Scope("singleton")` or `@Scope("prototype")` 

@@ -111,8 +111,9 @@ implements
                     log.debug("renaming bean {} -> {}", beanDefinitionName, beanNameOverride);
                 }
             }
-
         }
+
+        beanFactory.registerScope("causeway-domain-object", new CausewayDomainObjectScope(beanFactory));
 
     }
 

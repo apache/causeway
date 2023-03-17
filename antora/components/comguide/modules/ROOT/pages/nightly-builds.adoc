@@ -5,8 +5,19 @@
 :page-partial:
 
 A nightly build of the framework is performed at the link:https://github.com/apache-causeway-committers/causeway-nightly[apache-causeway-committers/causeway-nightly] repo.
+The README of that repo describes how to setup your `pom.xml` to download the packages.
 
-This also includes a preview of the website, accessible link:https://apache-causeway-committers.github.io/causeway-nightly/[here].
+A preview of the website if also generated nightly, and is accessible link:https://apache-causeway-committers.github.io/causeway-nightly/[here].
 
 
+[WARNING]
+====
+*These nightly builds should not be used in production.*
+
+Nightly builds are interim builds that are untested and unsupported.
+
+These unreleased builds may have undocumented features, known and unknown defects, and any number of other issues.
+
+They are intended for use by developers and others wishing to help with the development of the framework.
+====
 

@@ -8,6 +8,7 @@
 * Nightly
 ** xref:nightly-builds.adoc[Nightly Builds]
 ** xref:nightly-deploys.adoc[Nightly Deploys]
+** xref:weekly-builds.adoc[Weekly Builds]
 * Release
 ** xref:cutting-a-release.adoc[Cutting a Release]
 ** xref:verifying-releases.adoc[Verifying Releases]

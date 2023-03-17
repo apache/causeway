@@ -115,7 +115,11 @@ class RenameProject {
     static final List<String> UNCONDITIONAL_INCLUSIONS = List.of(
             "/META-INF/services/");
 
-    public RenameProject(final File root, final String oldName, final String newName) {
+    public static RenameProject renameBackToLegacy(final File root) {
+        return new RenameProject(root, "causeway", "isis");
+    }
+
+    private RenameProject(final File root, final String oldName, final String newName) {
         this.root = root;
         this.fromLower = oldName.toLowerCase();
         this.toLower = newName.toLowerCase();
@@ -212,24 +216,38 @@ class RenameProject {
                         .replace(fromLower, toLower)
                         .replace(fromUpper, toUpper)
                         .replace(fromTitle, toTitle)
-                        // reflect reality: use currently valid XML namespace URIs
-                        // (that is, reverting replacements above) 
+
+                        // update schema declarations in .layout.xml files.
+                        // terrible hack - we are assuming the target is 'isis'
+                        // (also, the first arg has to handle the case that we've already converted replaced 'causeway' -> 'isis' throughout...)
                         .replace(
-                                "https://" + toLower + ".apache.org/applib/layout",
-                                "https://" + fromLower + ".apache.org/applib/layout")
-                        // redirect all concrete xsd urls to their layout-v1 variants
+                                "https://isis.apache.org/applib/layout/menubars/bootstrap3 https://isis.apache.org/applib/layout/menubars/bootstrap3/menubars.xsd",
+                                "http://isis.apache.org/applib/layout/menubars/bootstrap3 https://causeway.apache.org/applib/layout-v1/menubars/bootstrap3/menubars.xsd")
                         .replace(
-                                "/applib/layout/component/component.xsd",
-                                "/applib/layout-v1/component/component.xsd")
+                                "https://isis.apache.org/applib/layout/component https://isis.apache.org/applib/layout/component/component.xsd",
+                                "http://isis.apache.org/applib/layout/component https://causeway.apache.org/applib/layout-v1/component/component.xsd")
                         .replace(
-                                "/applib/layout/grid/bootstrap3/bootstrap3.xsd",
-                                "/applib/layout-v1/grid/bootstrap3/bootstrap3.xsd")
+                                "https://isis.apache.org/applib/layout/grid/bootstrap3 https://isis.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd",
+                                "http://isis.apache.org/applib/layout/grid/bootstrap3 https://causeway.apache.org/applib/layout-v1/grid/bootstrap3/bootstrap3.xsd")
                         .replace(
-                                "/applib/layout/links/links.xsd",
-                                "/applib/layout-v1/links/links.xsd")
+                                "https://isis.apache.org/applib/layout/links https://isis.apache.org/applib/layout/links/links.xsd",
+                                "http://isis.apache.org/applib/layout/links https://causeway.apache.org/applib/layout-v1/links/links.xsd")
+
+                        // update namespace declarations in all files (.layout.xml and also constants in .java classes)
+                        // (again, the first arg has to handle the case that we've already converted replaced 'causeway' -> 'isis' throughout...)
                         .replace(
-                                "/applib/layout/menubars/bootstrap3/menubars.xsd",
-                                "/applib/layout-v1/menubars/bootstrap3/menubars.xsd")
+                                "\"https://isis.apache.org/applib/layout/menubars/bootstrap3\"",
+                                "\"http://isis.apache.org/applib/layout/menubars/bootstrap3\"")
+                        .replace(
+                                "\"https://isis.apache.org/applib/layout/component\"",
+                                "\"http://isis.apache.org/applib/layout/component\"")
+                        .replace(
+                                "\"https://isis.apache.org/applib/layout/grid/bootstrap3\"",
+                                "\"http://isis.apache.org/applib/layout/grid/bootstrap3\"")
+                        .replace(
+                                "\"https://isis.apache.org/applib/layout/links",
+                                "\"http://isis.apache.org/applib/layout/links")
+
                         ;
                 newLines.add(newLine);
                 return line.equals(newLine)
@@ -334,7 +352,7 @@ class RenameProject {
 }
 
 var rootPath = "" + System.getenv("ROOT_PATH_LEGACY");
-if(rootPath.isBlank() 
+if(rootPath.isBlank()
         || ! new File(rootPath).exists()) {
     System.err.println("env ROOT_PATH_LEGACY must point to an existing directory");
     /exit 1
@@ -342,7 +360,7 @@ if(rootPath.isBlank()
 
 var root = new File(rootPath);
 
-var renamer = new RenameProject(root, "causeway", "isis");
+var renamer = RenameProject.renameBackToLegacy(root);
 System.out.printf("processing root %s%n", root.getAbsolutePath());
 
 renamer.renameAllFiles();

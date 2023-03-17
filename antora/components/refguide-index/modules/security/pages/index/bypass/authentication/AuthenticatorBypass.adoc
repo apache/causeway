@@ -9,6 +9,7 @@ Implementation that bypasses authentication.
 .AuthenticatorBypass.java
 ----
 class AuthenticatorBypass {
+  public static final String LOGICAL_TYPE_NAME;
   boolean isValid(AuthenticationRequest request)
   boolean canAuthenticate(Class<? extends AuthenticationRequest> authenticationRequestClass)
 }

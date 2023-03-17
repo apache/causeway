@@ -74,6 +74,39 @@ public enum Nature {
 
     /**
      * An object that is entirely managed by the underlying IoC container.
+     *
+     * <p>
+     *     Some possible use cases for this are:
+     *
+     *     <ul>
+     *         <li>
+     *             <p>
+     *                 As a helper service that is used to emit messages through {@link Action#executionPublishing()}.
+     *             </p>
+     *             <p>
+     *                 The service itself isn't rendered anywhere, but its actions can be invoked through the {@link org.apache.causeway.applib.services.wrapper.WrapperFactory}.
+     *                 (Or as a variant, it might expose a {@link Programmatic} API and then delegate to its own action via the {@link org.apache.causeway.applib.services.wrapper.WrapperFactory}.
+     *             </p>
+     *         </li>
+     *         <li>
+     *             <p>
+     *                 As a service representing a facade to a module, so that code in another (untrusted) module can only execute through {@link Action}s
+     *             </p>
+     *             <p>
+     *                 Again, either the calling module is expected to use the {@link org.apache.causeway.applib.services.wrapper.WrapperFactory} when invoking
+     *                 the facade service, or - since the calling code is treated untrusted - then the same self-delegation approach as for the previous example could be used,
+     *                 whereby the facade service exposes a {@link Programmatic} API and then delegates to its own action via the {@link org.apache.causeway.applib.services.wrapper.WrapperFactory}.
+     *             </p>
+     *         </li>
+     *     </ul>
+     * </p>
+     *
+     *
+     * <p>
+     *     <b>IMPORTANT</b> the class must <i>also</i> be annotated with an appropriate
+     *     {@link org.springframework.context.annotation.Scope}, eg <code>@Scope(&quot;singleton&quot;)</code> or <code>@Scope(&quot;prototype&quot;)</code>
+     * </p>
+     *
      * @apiNote EXPERIMENTAL
      */
     BEAN,

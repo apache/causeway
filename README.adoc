@@ -18,52 +18,6 @@ For help and support, join our https://causeway.apache.org/docs/2.0.0-M9/support
 
 toc::[]
 
-== Nightly Builds
-
-Nightly builds are available as link:https://github.com/orgs/apache/packages?repo_name=causeway[packages] of this repo.
-
-One way to make them available is to add the following to your `~/.m2/settings.xml` file.
-You will need to add a github token in the location indicated:
-
-[source,xml]
-.~/.m2/settings.xml
-----
-<settings>
-  <servers>
-    <server>
-      <id>github-apache-causeway</id>
-      <username>myusername</username>                               <!--.-->
-      <password>ghp_TOKEN_WITH_PACKAGE_REPO_READ_ACCESS</password>  <!--.-->
-    </server>
-  </servers>
-  <profiles>
-    <profile>
-      <id>github-apache-causeway</id>
-      <activation>
-        <property>
-          <name>!skip.github-apache-causeway</name>
-        </property>
-      </activation>
-      <repositories>
-        <repository>
-          <id>github-apache-causeway</id>
-          <url>https://maven.pkg.github.com/apache/causeway</url>
-          <snapshots>
-            <enabled>true</enabled>
-          </snapshots>
-        </repository>
-      </repositories>
-    </profile>
-  </profiles>
-  <activeProfiles>
-    <activeProfile>github-apache-causeway</activeProfile>
-  </activeProfiles>
-</settings>
-----
-<.> your github username.
-<.> a corresponding personal token to provide access, as per link:https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry#authenticating-to-github-packages[these docs].
-
-You can find the latest version by browsing the link:https://github.com/apache/causeway/packages/1304938[org.apache.causeway.core.causeway-applib] package.
 
 == Core Features
 

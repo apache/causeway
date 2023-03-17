@@ -302,7 +302,16 @@ public class FixtureScripts {
      *     Also allows arbitrary parameters to be specified for said fixture script.
      * </p>
      *
-     * @param fixtureScriptName
+     * <p>
+     *     <b>NOTE</b>: this method can only be used for {@link FixtureScript} implementations that are discoverable
+     *     by Spring (eg annotated with {@link org.springframework.stereotype.Service} or
+     *     {@link org.springframework.stereotype.Component}.  <i>Moreover</i>, the {@link FixtureScript} must <i>not</i>
+     *     be a view model, ie must not be annotated with {@link org.apache.causeway.applib.annotation.DomainObject}.
+     *     (This is because the lifecycle of view models is unknown to by Spring).
+     *     Instead, use {@link #runFixtureScript(FixtureScript, String)}, passing in the {@link FixtureScript} instance.
+     * </p>
+     *
+     * @param fixtureScriptName - the {@link FixtureScript#getFriendlyName() (friendly) name} of the {@link FixtureScript}.
      * @param parameters
      */
     @Action(
