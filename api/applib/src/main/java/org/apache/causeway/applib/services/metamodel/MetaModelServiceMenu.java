@@ -18,30 +18,18 @@
  */
 package org.apache.causeway.applib.services.metamodel;
 
+import lombok.val;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.SortedSet;
 import java.util.function.BiFunction;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.DomainService;
-import org.apache.causeway.applib.annotation.DomainServiceLayout;
-import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.NatureOfService;
-import org.apache.causeway.applib.annotation.Optionality;
-import org.apache.causeway.applib.annotation.Parameter;
-import org.apache.causeway.applib.annotation.ParameterLayout;
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.annotation.RestrictTo;
-import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.annotation.*;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
@@ -51,7 +39,7 @@ import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.io.JaxbUtils;
 import org.apache.causeway.schema.metamodel.v2.MetamodelDto;
 
-import lombok.val;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * Provides a UI to allow domain model metadata (obtained from {@link MetaModelService}) to be downloaded.
@@ -71,28 +59,41 @@ public class MetaModelServiceMenu {
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".MetaModelServiceMenu";
 
-    public static enum ExportFormat implements BiFunction<String, MetamodelDto, Clob>  {
+    public enum ExportFormat implements BiFunction<String, MetaModelServiceAndConfig, Clob>  {
         ASCII{
-            @Override public Clob apply(final String fileName, final MetamodelDto dto) {
+            @Override public Clob apply(final String fileName, final MetaModelServiceAndConfig metaModelServiceAndConfig) {
+                val dto =  metaModelServiceAndConfig.metaModelService.exportMetaModel(metaModelServiceAndConfig.config);
                 val content = _AsciiExport.toAscii(dto).toString();
                 return Clob.of(fileName, CommonMimeType.TXT, content);
             }
         },
         CSV{
-            @Override public Clob apply(final String fileName, final MetamodelDto dto) {
+            @Override public Clob apply(final String fileName, final MetaModelServiceAndConfig metaModelServiceAndConfig) {
+                val dto =  metaModelServiceAndConfig.metaModelService.exportMetaModel(metaModelServiceAndConfig.config);
                 val content = _CsvExport2.toCsv(dto);
                 return Clob.of(fileName, CommonMimeType.CSV, content);
             }
         },
+        DETAILED_CSV{
+            @Override public Clob apply(final String fileName, final MetaModelServiceAndConfig metaModelServiceAndConfig) {
+
+                val domainModel =  metaModelServiceAndConfig.metaModelService.getDomainModel();
+                final StringBuilder csv = _CsvExport.toCsv(domainModel);
+
+                return Clob.of(fileName, CommonMimeType.CSV, csv);
+            }
+        },
         //XXX infinite recursion
 //        JSON{
-//            @Override public Clob apply(final String fileName, final MetamodelDto dto) {
+//        @Override public Clob apply(final String fileName, final MetaModelServiceAndConfig metaModelServiceAndConfig) {
+//                val dto =  metaModelServiceAndConfig.metaModelService.exportMetaModel(metaModelServiceAndConfig.config);
 //                val content = _Json.toString(dto);
 //                return Clob.of(fileName, CommonMimeType.JSON, content);
 //            }
 //        },
         XML{
-            @Override public Clob apply(final String fileName, final MetamodelDto dto) {
+            @Override public Clob apply(final String fileName, final MetaModelServiceAndConfig metaModelServiceAndConfig) {
+                val dto =  metaModelServiceAndConfig.metaModelService.exportMetaModel(metaModelServiceAndConfig.config);
                 val content = JaxbUtils.mapperFor(MetamodelDto.class, opts->opts
                         .useContextCache(true)
                         .formattedOutput(true))
@@ -102,7 +103,8 @@ public class MetaModelServiceMenu {
         },
         //XXX empty
 //        YAML{
-//            @Override public Clob apply(final String fileName, final MetamodelDto dto) {
+//        @Override public Clob apply(final String fileName, final MetaModelServiceAndConfig metaModelServiceAndConfig) {
+//                val dto =  metaModelServiceAndConfig.metaModelService.exportMetaModel(metaModelServiceAndConfig.config);
 //                val content = _Yaml.toString(dto).ifFailureFail().getValue().orElse("");
 //                return Clob.of(fileName, CommonMimeType.YAML, content);
 //            }
@@ -146,9 +148,7 @@ public class MetaModelServiceMenu {
 
             val config = defaultConfig(includeInterfaces, namespaces);
 
-            final MetamodelDto metamodelDto =  metaModelService.exportMetaModel(config);
-
-            val blob = exportFormat.apply(fileName, metamodelDto)
+            val blob = exportFormat.apply(fileName, new MetaModelServiceAndConfig(metaModelService, config))
                     .toBlob(UTF_8);
             return zip
                     ? blob.zip()
@@ -172,37 +172,6 @@ public class MetaModelServiceMenu {
 
     }
 
-
-    @Action(
-            domainEvent = downloadMetaModelCsv.ActionDomainEvent.class,
-            semantics = SemanticsOf.NON_IDEMPOTENT, //disable client-side caching
-            restrictTo = RestrictTo.PROTOTYPING
-            )
-    @ActionLayout(
-            cssClassFa = "fa-download",
-            named = "Download Meta Model (CSV)",
-            sequence="500.500.2")
-    public class downloadMetaModelCsv {
-
-        public class ActionDomainEvent extends MetaModelServiceMenu.ActionDomainEvent<downloadMetaModelCsv> { }
-
-        @MemberSupport public Blob act(
-                @ParameterLayout(named = ".csv file name")
-                final String csvFileName) {
-
-            final DomainModel domainModel =  metaModelService.getDomainModel();
-            final StringBuilder csv = _CsvExport.toCsv(domainModel);
-
-            return Clob.of(csvFileName, CommonMimeType.CSV, csv)
-                    .toBlob(UTF_8)
-                    .zip();
-        }
-
-        @MemberSupport public String default0Act() {
-            return "metamodel.csv";
-        }
-
-    }
 
     @Action(
             domainEvent = downloadMetaModelDiff.ActionDomainEvent.class,
@@ -276,6 +245,12 @@ public class MetaModelServiceMenu {
 
 
     // -- HELPER
+
+    @lombok.Value
+    static class MetaModelServiceAndConfig {
+        MetaModelService metaModelService;
+        Config config;
+    }
 
     private Config defaultConfig(
             final boolean includeInterfaces,
