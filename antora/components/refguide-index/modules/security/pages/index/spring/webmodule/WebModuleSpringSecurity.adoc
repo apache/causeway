@@ -9,6 +9,7 @@ WebModule to enable support for Spring Security.
 .WebModuleSpringSecurity.java
 ----
 class WebModuleSpringSecurity {
+  public static final String LOGICAL_TYPE_NAME;
   WebModuleSpringSecurity(ServiceInjector serviceInjector)
   Can<ServletContextListener> init(ServletContext ctx)
 }

@@ -9,6 +9,7 @@ Server-sent events.
 .SseServiceDefault.java
 ----
 class SseServiceDefault {
+  public static final String LOGICAL_TYPE_NAME;
   Optional<SseChannel> lookupByType(Class<?> sourceType)
   void submit(SseSource task, ExecutionBehavior executionBehavior)
 }

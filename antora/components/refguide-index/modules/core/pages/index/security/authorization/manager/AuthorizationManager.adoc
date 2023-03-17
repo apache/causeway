@@ -9,6 +9,7 @@ Authorizes the user in the current session view and use members of an object.
 .AuthorizationManager.java
 ----
 class AuthorizationManager {
+  public static final String LOGICAL_TYPE_NAME;
   AuthorizationManager(CausewayConfiguration config, ActionSemanticsResolver actionSemanticsResolver, List<Authorizor> authorizors, Optional<AuthorizorChooser> authorizorChooserIfAny)
   boolean isUsable(InteractionContext authentication, Identifier identifier)     // <.>
   boolean isVisible(InteractionContext authentication, Identifier identifier)     // <.>

@@ -7,6 +7,7 @@
 .XmlServiceDefault.java
 ----
 class XmlServiceDefault {
+  public static final String LOGICAL_TYPE_NAME;
   Document asDocument(String xmlStr)
   String asString(Document doc)
   Element getChildElement(Element el, String tagname)
