@@ -479,7 +479,10 @@ implements ActionPromptProvider {
     @Override
     public void renderPage() {
 
-        val pageType = getPageClassRegistry().getPageType(this).asApplibPageType();
+        val pageType = Optional.ofNullable(getPageClassRegistry().getPageType(this))
+                .map(PageType::asApplibPageType)
+                .orElse(PageRenderSubscriber.PageType.OTHER);
+
         val enabledPageRenderSubscribers = enabledPageRenderSubscriber();
 
         enabledPageRenderSubscribers
