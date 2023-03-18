@@ -16,6 +16,7 @@ One use case is for "headless" execution of background commands, eg as scheduled
 Another important use case is within testing.
 The xref:refguide:testing:index/integtestsupport/applib/CausewayInteractionHandler.adoc[] JUnit 5 extension takes responsibility for wrapping each test with an `Interaction` (taking account any xref:refguide:testing:index/integtestsupport/applib/annotation/InteractAs.adoc[] annotation if present).
 The xref:refguide:testing:index/integtestsupport/applib/CausewayIntegrationTestAbstract.adoc[] is provided as a convenient superclass for integration tests, and is already annotated with the `CausewayInteractionHandler` extension.
+(Alternatively, xref:refguide:testing:index/integtestsupport/applib/CausewayIntegrationGwtAbstract.adoc[] is _not_ annotated with the handler; instead it provides `given(...)`, `when(...)` and `then(...)` methods that each execute the provided `Runnable`/`Callable` within the context of its own `Interaction`.
 
 Integration tests can also simulate multiple interactions (HTTP requests) within a single test using xref:refguide:applib:index/services/iactnlayer/InteractionService.adoc#nextInteraction_[InteractionService#nextInteraction].
 When called, any state changes made in the previous `Interaction` will be committed, and any references to entities should be either discarded or else be re-retrieved in the next `Interaction`.
