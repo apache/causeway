@@ -844,7 +844,7 @@ In all cases, votes last for 72 hours and require a +3 (binding) vote from membe
 [#start-voting-thread-on-dev-mailing-list]
 === Start voting thread on dev mailing list
 
-That is, link:mailto:dev@apache.causeway.org[]
+That is, link:mailto:dev@causeway.apache.org[]
 
 The following boilerplate is for a release of the Apache Causeway Core.
 Adapt as required:
