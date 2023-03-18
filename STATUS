@@ -193,7 +193,7 @@ Resources:
   Mailing list    users  users@causeway.apache.org
   JIRA            www    https://issues.apache.org/jira/browse/CAUSEWAY
   Wiki            www    https://cwiki.apache.org/confluence/display/CAUSEWAY/Index
-  Sonarcloud      www    https://sonarcloud.io/project/overview?id=apache_isis
+  Sonarcloud      www    https://sonarcloud.io/project/overview?id=apache_causeway
   CI (unofficial) www    https://github.com/apache-causeway-committers/causeway-nightly/actions
   CI (demo apps)  www    https://github.com/apache-causeway-committers/causeway-nightly-deploys/actions
 
