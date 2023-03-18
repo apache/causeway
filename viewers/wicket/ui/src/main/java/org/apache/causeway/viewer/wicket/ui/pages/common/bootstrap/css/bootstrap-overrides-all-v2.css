@@ -37,7 +37,7 @@ body {
     margin-bottom: 0px;
 }
 
-.navbar.primary ul.dropdown-menu,
+.navbar-nav.primary ul.dropdown-menu,
 .navbar-nav.secondary ul.dropdown-menu,
 .navbar-nav.tertiary ul.dropdown-menu {
     max-height: 600px;
