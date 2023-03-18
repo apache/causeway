@@ -34,8 +34,8 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.extensions.fullcalendar.applib.spi.CalendarableDereferencingService;
 import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
-import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.Event;
-import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.EventProvider;
+import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.Event;
+import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.EventProvider;
 import org.apache.causeway.valuetypes.jodatime.applib.value.JodaTimeConverters;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 

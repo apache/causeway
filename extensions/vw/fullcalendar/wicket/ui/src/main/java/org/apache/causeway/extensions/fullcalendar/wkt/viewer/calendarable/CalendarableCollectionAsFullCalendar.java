@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.extensions.fullcalendar.wkt.fullcalendar.EventProvider;
+import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.EventProvider;
 import org.apache.causeway.extensions.fullcalendar.wkt.viewer.CalendaredCollectionAbstract;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 
