@@ -67,11 +67,11 @@ causeway:
       translation:
         po:
           mode: disabled
-          
+
   value-types:
     kroki:
       # don't use this in production, as you might not want to share sensitive data over the public wire
-      # instead use a private docker instance like eg. yuzutech/kroki 
+      # instead use a private docker instance like eg. yuzutech/kroki
       backend-url: https://kroki.io
 
   viewer:
@@ -88,9 +88,9 @@ causeway:
         about: This application demonstrates many aspects of the Apache Causeway programming model, as well as some of the most significant domain services and extensions such as the WrapperFactory, security, commands and publishing.
       credit:
         - url:  https://causeway.apache.org
-          image: images/apache-causeway/logo-48x48.png
+          image: images/apache-causeway/causeway-logo-65x48.png
           name: Apache Causeway
-          
+
     wicket:
       css: css/application.css
       js: scripts/application.js
