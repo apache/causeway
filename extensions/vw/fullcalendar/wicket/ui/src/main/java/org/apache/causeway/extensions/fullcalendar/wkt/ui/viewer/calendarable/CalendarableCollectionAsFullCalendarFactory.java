@@ -16,31 +16,31 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.fullcalendar.wkt.viewer.calendareventable;
+package org.apache.causeway.extensions.fullcalendar.wkt.ui.viewer.calendarable;
 
 import org.apache.wicket.Component;
 import org.springframework.stereotype.Service;
 
-import org.apache.causeway.extensions.fullcalendar.applib.CalendarEventable;
-import org.apache.causeway.extensions.fullcalendar.wkt.viewer.CalendaredCollectionFactoryAbstract;
+import org.apache.causeway.extensions.fullcalendar.applib.Calendarable;
+import org.apache.causeway.extensions.fullcalendar.wkt.ui.viewer.CalendaredCollectionFactoryAbstract;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 
 /**
- * {@link ComponentFactory} for {@link CalendarEventableCollectionAsFullCalendar}.
+ * {@link ComponentFactory} for {@link CalendarableCollectionAsFullCalendar}.
  */
 @Service
-public class CalendarEventableCollectionAsFullCalendarFactory
-extends CalendaredCollectionFactoryAbstract<CalendarEventable> {
+public class CalendarableCollectionAsFullCalendarFactory
+extends CalendaredCollectionFactoryAbstract<Calendarable> {
 
     private static final long serialVersionUID = 1L;
 
-    public CalendarEventableCollectionAsFullCalendarFactory() {
-        super(CalendarEventable.class);
+    public CalendarableCollectionAsFullCalendarFactory() {
+        super(Calendarable.class);
     }
 
     @Override
     protected Component newComponent(final String id, final EntityCollectionModel collectionModel) {
-        return new CalendarEventableCollectionAsFullCalendar(id, collectionModel);
+        return new CalendarableCollectionAsFullCalendar(id, collectionModel);
     }
 }

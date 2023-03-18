@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.fullcalendar.wkt.viewer.calendareventable;
+package org.apache.causeway.extensions.fullcalendar.wkt.ui.viewer.calendarable;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -25,15 +25,15 @@ import java.util.stream.Collectors;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.EventProvider;
-import org.apache.causeway.extensions.fullcalendar.wkt.viewer.CalendaredCollectionAbstract;
+import org.apache.causeway.extensions.fullcalendar.wkt.ui.viewer.CalendaredCollectionAbstract;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 
-public class CalendarEventableCollectionAsFullCalendar
+public class CalendarableCollectionAsFullCalendar
 extends CalendaredCollectionAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public CalendarEventableCollectionAsFullCalendar(final String id, final EntityCollectionModel model) {
+    public CalendarableCollectionAsFullCalendar(final String id, final EntityCollectionModel model) {
         super(id, model);
     }
 
@@ -41,13 +41,14 @@ extends CalendaredCollectionAbstract {
     protected EventProvider newEventProvider(
             final EntityCollectionModel model,
             final String calendarName) {
-        return new CalendarEventableEventProvider(model, calendarName);
+        return new CalendarableEventProvider(model, calendarName);
     }
 
     @Override
     protected Set<String> getCalendarNames(final Iterable<ManagedObject> entityList) {
         return _NullSafe.stream(entityList)
-                .map(CalendarEventableEventProvider::getCalendarName)
+                .map(CalendarableEventProvider::getCalendarNames)
+                .flatMap(_NullSafe::stream)
                 .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 

@@ -61,6 +61,7 @@ import lombok.experimental.Accessors;
 
 @Component
 @Import({
+    // mixins
     CalendarEventSemantics.CalendarEvent_default.class
 })
 public class CalendarEventSemantics

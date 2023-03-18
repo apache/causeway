@@ -10,7 +10,7 @@
  * the License.
  */
 
-package org.apache.causeway.extensions.fullcalendar.wkt.viewer;
+package org.apache.causeway.extensions.fullcalendar.wkt.ui.viewer;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;

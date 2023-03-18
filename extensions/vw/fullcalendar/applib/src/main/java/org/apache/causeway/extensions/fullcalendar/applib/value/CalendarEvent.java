@@ -45,7 +45,7 @@ import lombok.With;
  * @since 2.0 {@index}
  * @apiNote implements Comparable<CalendarEvent> based on epochMillis
  */
-@Named(CausewayModuleExtFullCalendarApplib.NAMESPACE + ".value.CalendarEvent")
+@Named(CalendarEvent.LOGICAL_TYPE_NAME)
 @org.apache.causeway.applib.annotation.Value
 @XmlJavaTypeAdapter(CalendarEvent.JaxbAdapter.class)
 @Getter @With
@@ -55,6 +55,8 @@ public class CalendarEvent
 implements
     Comparable<CalendarEvent>,
     Serializable {
+
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleExtFullCalendarApplib.NAMESPACE + ".value.CalendarEvent";
 
     private static final long serialVersionUID = 1L;
 

@@ -16,26 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.fullcalendar.wkt.ui;
+package org.apache.causeway.extensions.fullcalendar.wkt.ui.viewer;
 
-import org.apache.causeway.extensions.fullcalendar.wkt.integration.CausewayModuleExtFullcalendarWicketIntegration;
-import org.apache.causeway.extensions.fullcalendar.wkt.ui.viewer.calendarable.CalendarableCollectionAsFullCalendarFactory;
-import org.apache.causeway.extensions.fullcalendar.wkt.ui.viewer.calendareventable.CalendarEventableCollectionAsFullCalendarFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import org.apache.causeway.extensions.fullcalendar.applib.CausewayModuleExtFullCalendarApplib;
+import org.apache.causeway.extensions.fullcalendar.wkt.ui.viewer.calendarable.CalendarableCollectionAsFullCalendarFactory;
+import org.apache.causeway.extensions.fullcalendar.wkt.ui.viewer.calendareventable.CalendarEventableCollectionAsFullCalendarFactory;
 
 /**
  * @since 2.0 {@index}
  */
 @Configuration
 @Import({
-        // Modules
-        CausewayModuleExtFullcalendarWicketIntegration.class,
+        CausewayModuleExtFullCalendarApplib.class,
 
-        // Services
         CalendarEventableCollectionAsFullCalendarFactory.class,
-        CalendarableCollectionAsFullCalendarFactory.class,
+        CalendarableCollectionAsFullCalendarFactory.class
 })
-public class CausewayModuleExtFullcalendarWicketUi {
-
+public class CausewayModuleExtFullCalendarWicketUi {
 }

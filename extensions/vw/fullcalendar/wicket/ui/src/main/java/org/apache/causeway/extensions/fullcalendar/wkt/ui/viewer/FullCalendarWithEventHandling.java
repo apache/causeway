@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.fullcalendar.wkt.viewer;
+package org.apache.causeway.extensions.fullcalendar.wkt.ui.viewer;
 
 import org.apache.wicket.RestartResponseException;
 

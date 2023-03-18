@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.fullcalendar.wkt.viewer.calendarable;
+package org.apache.causeway.extensions.fullcalendar.wkt.ui.viewer.calendarable;
 
 import java.util.Set;
 
@@ -25,7 +25,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.extensions.fullcalendar.applib.CalendarEventable;
 import org.apache.causeway.extensions.fullcalendar.applib.Calendarable;
 import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
-import org.apache.causeway.extensions.fullcalendar.wkt.viewer.EventProviderAbstract;
+import org.apache.causeway.extensions.fullcalendar.wkt.ui.viewer.EventProviderAbstract;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 
 public class CalendarableEventProvider extends EventProviderAbstract {
