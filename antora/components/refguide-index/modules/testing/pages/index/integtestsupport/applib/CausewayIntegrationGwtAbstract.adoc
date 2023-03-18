@@ -1,0 +1,18 @@
+= CausewayIntegrationGwtAbstract
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Convenient base class to extend for integration tests.
+
+Unlike xref:refguide:testing:index/integtestsupport/applib/CausewayIntegrationTestAbstract.adoc[CausewayIntegrationTestAbstract] , this class is not _ExtendWith extended with_ xref:refguide:testing:index/integtestsupport/applib/CausewayInteractionHandler.adoc[CausewayInteractionHandler] , which means that there is _no_ _org.apache.causeway.applib.services.iactn.Interaction_ set up implicitly. Instead the _#given(Callable)_ , _#when(Callable)_ and _#then(Callable)_ (and their various overrides) can be used with the provided _Callable_ or xref:refguide:commons:index/functional/ThrowingRunnable.adoc[ThrowingRunnable] being called within its own _org.apache.causeway.applib.services.iactn.Interaction_ .
+
+Note that this means that references to entities must be re-retrieved within each given/when/then phase. _org.apache.causeway.applib.services.bookmark.Bookmark_ s and the _org.apache.causeway.applib.services.bookmark.BookmarkService_ can be a good way to do perform this re-retrieval.
+
+== API
+
+[source,java]
+.CausewayIntegrationGwtAbstract.java
+----
+class CausewayIntegrationGwtAbstract {
+}
+----
+
