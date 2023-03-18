@@ -16,14 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.pages.emptyreturn;
+package org.apache.causeway.viewer.wicket.ui.pages.voidreturn;
 
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
-import org.apache.causeway.viewer.wicket.model.models.EmptyModel;
+import org.apache.causeway.viewer.wicket.model.models.VoidModel;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -32,18 +32,18 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
  * Web page representing an action invocation.
  */
 @AuthorizeInstantiation(UserMemento.AUTHORIZED_USER_ROLE)
-public class EmptyReturnPage extends PageAbstract {
+public class VoidReturnPage extends PageAbstract {
 
     private static final long serialVersionUID = 1L;
 
     private static final String ID_ACTION_NAME = "actionName";
 
-    public EmptyReturnPage(final EmptyModel model) {
+    public VoidReturnPage(final VoidModel model) {
         this(model, actionNameFrom(model));
     }
 
-    private EmptyReturnPage(final EmptyModel model, final String actionName) {
-        super(PageParameterUtils.newPageParameters(), actionName, UiComponentType.EMPTY_RETURN);
+    private VoidReturnPage(final VoidModel model, final String actionName) {
+        super(PageParameterUtils.newPageParameters(), actionName, UiComponentType.VOID_RETURN);
 
         Wkt.labelAdd(themeDiv, ID_ACTION_NAME, actionName);
 
@@ -51,8 +51,8 @@ public class EmptyReturnPage extends PageAbstract {
         addBookmarkedPages(themeDiv);
     }
 
-    private static String actionNameFrom(final EmptyModel model) {
-        ActionModel actionModel = model.getActionHint();
+    private static String actionNameFrom(final VoidModel model) {
+        ActionModel actionModel = model.getActionModelHint();
         if(actionModel != null) {
             return actionModel.getFriendlyName();
         }

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.emptyreturn;
+package org.apache.causeway.viewer.wicket.ui.components.voidreturn;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
@@ -28,12 +28,12 @@ import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 /**
  * {@link ComponentFactory} to represent an action that returns void.
  */
-public class EmptyReturnPanelFactory extends ComponentFactoryAbstract {
+public class VoidReturnPanelFactory extends ComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public EmptyReturnPanelFactory() {
-        super(UiComponentType.EMPTY_RETURN, EmptyReturnPanel.class);
+    public VoidReturnPanelFactory() {
+        super(UiComponentType.VOID_RETURN, VoidReturnPanel.class);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class EmptyReturnPanelFactory extends ComponentFactoryAbstract {
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        return new EmptyReturnPanel(id);
+        return new VoidReturnPanel(id);
     }
 
 }

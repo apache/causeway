@@ -134,9 +134,9 @@ public enum UiComponentType {
      */
     EMPTY_COLLECTION,
     /**
-     * A <code>null</code> result from an action.
+     * A void result from an action.
      */
-    EMPTY_RETURN,
+    VOID_RETURN,
     /**
      * A list of models, rendered as a list of links.
      */
