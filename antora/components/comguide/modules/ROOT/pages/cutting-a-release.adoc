@@ -161,7 +161,7 @@ The next step is to generate the website, ensuring that the config, examples, pr
 +
 [source,bash,subs="attributes+"]
 ----
-mvn -D module-tooling -D skip.essential install -DskipTests
+mvn -D module-tooling -D skip.essential install -DskipTests -T1C
 ----
 
 * Then, generate the website:
