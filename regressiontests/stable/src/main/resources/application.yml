@@ -56,7 +56,7 @@ causeway:
         about: Smoke Tests
       credit:
         - url:  https://causeway.apache.org
-          image: images/apache-causeway/logo-48x48.png
+          image: images/apache-causeway/causeway-logo-65x48.png
           name: Apache Causeway
     wicket:
       css: css/application.css

@@ -22,8 +22,6 @@ import java.net.URL;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.request.IRequestHandler;
-import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
-import org.apache.wicket.request.cycle.RequestCycle;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.value.Blob;
@@ -32,7 +30,6 @@ import org.apache.causeway.applib.value.LocalResourcePath;
 import org.apache.causeway.applib.value.OpenUrlStrategy;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -41,15 +38,15 @@ import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.core.security.authentication.logout.LogoutMenu.LoginRedirect;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
-import org.apache.causeway.viewer.wicket.model.models.EmptyModel;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelStandalone;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
+import org.apache.causeway.viewer.wicket.model.models.VoidModel;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
-import org.apache.causeway.viewer.wicket.ui.pages.emptyreturn.EmptyReturnPage;
 import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.causeway.viewer.wicket.ui.pages.standalonecollection.StandaloneCollectionPage;
 import org.apache.causeway.viewer.wicket.ui.pages.value.ValuePage;
+import org.apache.causeway.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -186,23 +183,6 @@ public enum ActionResultResponseType {
             return ActionResultResponse.withHandler(handler);
         }
     },
-    /** render the 'empty page' */
-    EMPTY {
-        @Override
-        public ActionResultResponse interpretResult(
-                final ActionModel actionModel,
-                final AjaxRequestTarget target,
-                final @Nullable ManagedObject resultAdapter, // arg is not used
-                final Can<ManagedObject> args) {
-            final var commonContext = actionModel.getMetaModelContext();
-            final EmptyModel emptyModel = new EmptyModel(commonContext);
-            emptyModel.setActionHint(actionModel);
-            return ActionResultResponse.toPage(EmptyReturnPage.class, new EmptyReturnPage(emptyModel));
-        }
-    },
-    /**
-     * Issues a (current) page reload.
-     */
     VOID {
         @Override
         public ActionResultResponse interpretResult(
@@ -210,9 +190,10 @@ public enum ActionResultResponseType {
                 final AjaxRequestTarget target,
                 final @Nullable ManagedObject resultAdapter, // arg is not used
                 final Can<ManagedObject> args) {
-            val currentPage = PageRequestHandlerTracker.getLastHandler(RequestCycle.get()).getPage();
-            val pageClass = currentPage.getClass();
-            return ActionResultResponse.toPage(PageRedirectRequest.forPage(pageClass, _Casts.uncheckedCast(currentPage)));
+            final var commonContext = actionModel.getMetaModelContext();
+            final VoidModel voidModel = new VoidModel(commonContext);
+            voidModel.setActionHint(actionModel);
+            return ActionResultResponse.toPage(VoidReturnPage.class, new VoidReturnPage(voidModel));
         }
     },
     SIGN_IN {
@@ -248,8 +229,8 @@ public enum ActionResultResponseType {
             final @Nullable ManagedObject resultAdapter,
             final Can<ManagedObject> args) {
 
-        val typeAndAdapter = determineFor(resultAdapter, targetIfAny, model.getAction().getElementType().isVoid());
-        return typeAndAdapter.type // mapped to EMPTY if adapter is unspecified or null
+        val typeAndAdapter = determineFor(resultAdapter, targetIfAny);
+        return typeAndAdapter.type // mapped to VOID if adapter is unspecified or null
                 .interpretResult(model, targetIfAny, typeAndAdapter.resultAdapter, args);
     }
 
@@ -286,15 +267,10 @@ public enum ActionResultResponseType {
 
     private static TypeAndAdapter determineFor(
             final ManagedObject resultAdapter,
-            final AjaxRequestTarget targetIfAny,
-            final boolean isActionWithVoidReturn) {
-
-        if(isActionWithVoidReturn) {
-            return TypeAndAdapter.of(ActionResultResponseType.VOID, resultAdapter);
-        }
+            final AjaxRequestTarget targetIfAny) {
 
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(resultAdapter)) {
-            return TypeAndAdapter.of(ActionResultResponseType.EMPTY, resultAdapter);
+            return TypeAndAdapter.of(ActionResultResponseType.VOID, resultAdapter);
         }
 
         val resultSpec = resultAdapter.getSpecification();
@@ -343,7 +319,7 @@ public enum ActionResultResponseType {
             case 1:
                 val firstElement = unpacked.getFirstElseFail();
                 // recursively unwrap
-                return determineFor(firstElement, targetIfAny, false);
+                return determineFor(firstElement, targetIfAny);
             default:
                 return TypeAndAdapter.of(ActionResultResponseType.COLLECTION, resultAdapter);
             }
