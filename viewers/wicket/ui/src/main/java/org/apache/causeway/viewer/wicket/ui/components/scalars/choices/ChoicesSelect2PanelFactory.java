@@ -18,19 +18,16 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.scalars.choices;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.model.IModel;
-
-import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
-import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.string.ScalarTitleBadgePanel;
 
 import lombok.val;
 
-public class ChoicesSelect2PanelFactory extends ComponentFactoryAbstract {
+public class ChoicesSelect2PanelFactory
+extends ComponentFactoryScalarAbstract {
 
     private static final long serialVersionUID = 1L;
 
@@ -50,18 +47,11 @@ public class ChoicesSelect2PanelFactory extends ComponentFactoryAbstract {
     }
 
     public ChoicesSelect2PanelFactory() {
-        super(UiComponentType.SCALAR_NAME_AND_VALUE);
+        super(ScalarPanelAbstract.class);
     }
 
     @Override
-    public ApplicationAdvice appliesTo(final IModel<?> model) {
-        return appliesIf(_Casts.castTo(ScalarModel.class, model)
-                .isPresent());
-    }
-
-    @Override
-    public final Component createComponent(final String id, final IModel<?> model) {
-        val scalarModel = (ScalarModel) model;
+    protected ScalarPanelAbstract createComponent(final String id, final ScalarModel scalarModel) {
         val componentSort = ComponentSort.valueOf(scalarModel);
         switch(componentSort) {
         case TITLE_BADGE:
@@ -74,6 +64,11 @@ public class ChoicesSelect2PanelFactory extends ComponentFactoryAbstract {
         default:
             throw _Exceptions.unmatchedCase(componentSort);
         }
+    }
+
+    @Override
+    protected ApplicationAdvice appliesTo(final ScalarModel scalarModel) {
+        return ApplicationAdvice.APPLIES; //FIXME depends on registration order, can we do better?
     }
 
 }

@@ -61,7 +61,7 @@ import org.apache.causeway.viewer.wicket.ui.components.header.HeaderPanelFactory
 import org.apache.causeway.viewer.wicket.ui.components.layout.bs.BSGridPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.property.PropertyEditFormPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.property.PropertyEditPanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryScalarTypeConstrainedAbstract;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithTemporalPicker;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemantics;
@@ -273,7 +273,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
     // -- UTILTIY
 
-    public static <T extends Serializable> ComponentFactoryScalarAbstract
+    public static <T extends Serializable> ComponentFactoryScalarTypeConstrainedAbstract
     createForValueSemantics(final ValueSemanticsProvider<T> valueSemantics) {
 
         if(valueSemantics.isNumberType()) {
@@ -292,7 +292,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     }
 
     public static class ScalarPanelFactoryForTextField<T extends Serializable>
-    extends ComponentFactoryScalarAbstract {
+    extends ComponentFactoryScalarTypeConstrainedAbstract {
 
         private static final long serialVersionUID = 1L;
 
@@ -311,7 +311,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
 
     public static class ScalarPanelFactoryForNumberField<T extends Serializable>
-    extends ComponentFactoryScalarAbstract {
+    extends ComponentFactoryScalarTypeConstrainedAbstract {
 
         private static final long serialVersionUID = 1L;
 
@@ -329,7 +329,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     }
 
     public static class ScalarPanelFactoryForTemporalPicker<T extends Serializable>
-    extends ComponentFactoryScalarAbstract {
+    extends ComponentFactoryScalarTypeConstrainedAbstract {
 
         private static final long serialVersionUID = 1L;
 
@@ -338,7 +338,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         protected ScalarPanelFactoryForTemporalPicker(final Class<T> valueTypeClass) {
             super(ScalarPanelTextFieldWithTemporalPicker.class,
                     // assuming there is no primitive temporal type
-                    Can.<Class<?>>ofSingleton(valueTypeClass));
+                    valueTypeClass);
             this.valueTypeClass = valueTypeClass;
         }
 
@@ -349,7 +349,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     }
 
     public static class ScalarPanelFactoryForCompositeValue<T extends Serializable>
-    extends ComponentFactoryScalarAbstract {
+    extends ComponentFactoryScalarTypeConstrainedAbstract {
 
         private static final long serialVersionUID = 1L;
 
@@ -358,7 +358,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         protected ScalarPanelFactoryForCompositeValue(final Class<T> valueTypeClass) {
             super(CompositeValuePanel.class,
                     // assuming there is no primitive composite type
-                    Can.<Class<?>>ofSingleton(valueTypeClass));
+                    valueTypeClass);
             this.valueTypeClass = valueTypeClass;
         }
 
@@ -376,7 +376,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
         // collect those registered up to this point, so we don't override with generic ones at steps below
         val registeredScalarTypes =
-                componentFactories.stream(ComponentFactoryScalarAbstract.class)
+                componentFactories.stream(ComponentFactoryScalarTypeConstrainedAbstract.class)
                 .flatMap(f->f.getScalarTypes().stream())
                 .collect(Collectors.toSet());
 

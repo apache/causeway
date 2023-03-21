@@ -21,47 +21,18 @@ package org.apache.causeway.viewer.wicket.ui.components.scalars;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
-
-import lombok.Getter;
-import lombok.val;
 
 public abstract class ComponentFactoryScalarAbstract
 extends ComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    @Getter
-    private final Can<Class<?>> scalarTypes;
-
     protected ComponentFactoryScalarAbstract(
-            final Class<?> componentClass,
-            final Class<?>... scalarTypes) {
-        this(componentClass, Can.ofArray(scalarTypes));
-    }
-
-    protected ComponentFactoryScalarAbstract(
-            final Class<?> componentClass,
-            final Can<Class<?>> scalarTypes) {
+            final Class<?> componentClass) {
         super(UiComponentType.SCALAR_NAME_AND_VALUE, componentClass);
-        this.scalarTypes = scalarTypes;
-    }
-
-    @Override
-    public ApplicationAdvice appliesTo(final IModel<?> model) {
-        if (!(model instanceof ScalarModel)) {
-            return ApplicationAdvice.DOES_NOT_APPLY;
-        }
-        val scalarModel = (ScalarModel) model;
-        if(!scalarModel.isScalarTypeAnyOf(scalarTypes)) {
-            return ApplicationAdvice.DOES_NOT_APPLY;
-        }
-        // autoComplete not supported on values, only references
-        return appliesIf( !(scalarModel.hasChoices()
-                /*|| scalarModel.hasAutoComplete()*/) );
     }
 
     @Override
@@ -69,6 +40,15 @@ extends ComponentFactoryAbstract {
         return createComponent(id, (ScalarModel) model);
     }
 
+    @Override
+    public final ApplicationAdvice appliesTo(final IModel<?> model) {
+        if (!(model instanceof ScalarModel)) {
+            return ApplicationAdvice.DOES_NOT_APPLY;
+        }
+        return appliesTo((ScalarModel)model);
+    }
+
     protected abstract Component createComponent(String id, ScalarModel scalarModel);
+    protected abstract ApplicationAdvice appliesTo(ScalarModel scalarModel);
 
 }
