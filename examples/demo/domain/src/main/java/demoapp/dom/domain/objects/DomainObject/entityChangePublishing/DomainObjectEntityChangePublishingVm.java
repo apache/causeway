@@ -29,6 +29,7 @@ import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.domain._changes.ExposeCapturedChanges;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -37,7 +38,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @Named("demo.DomainObjectEntityChangePublishingVm")
 @DomainObject(
         nature=Nature.VIEW_MODEL)
-public class DomainObjectEntityChangePublishingVm implements HasAsciiDocDescription {
+public class DomainObjectEntityChangePublishingVm implements HasAsciiDocDescription, ExposeCapturedChanges {
 
     @ObjectSupport public String title() {
         return "DomainObject#entityChangePublishing";

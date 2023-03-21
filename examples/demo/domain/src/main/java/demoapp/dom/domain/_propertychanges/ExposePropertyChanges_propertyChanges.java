@@ -16,38 +16,36 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain._interactions;
+package demoapp.dom.domain._propertychanges;
 
-import java.util.LinkedList;
+import lombok.RequiredArgsConstructor;
+
 import java.util.List;
 
 import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry;
+import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntryRepository;
 
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 //tag::class[]
 @Collection
 @RequiredArgsConstructor
-public class ExposeCapturedInteractions_interactions {
+public class ExposePropertyChanges_propertyChanges {
     // ...
 //end::class[]
 
-    private final ExposeCapturedInteractions exposeCapturedInteractions;
+    @SuppressWarnings("unused")
+    private final ExposePropertyChanges exposeexposePropertyChanges;
 
+    @MemberSupport
 //tag::class[]
-    public List<InteractionDtoVm> coll() {
-        val list = new LinkedList<InteractionDtoVm>();
-        executionListenerToCaptureInteractionsInMemory
-                .streamInteractionDtos()
-                .map(InteractionDtoVm::new)
-                .forEach(list::push);   // reverse order
-        return list;
+    public List<? extends AuditTrailEntry> coll() {
+        return auditTrailEntryRepository.findAll();
     }
 
-    @Inject
-    ExecutionListenerToCaptureInteractionsInMemory executionListenerToCaptureInteractionsInMemory;
+    @Inject AuditTrailEntryRepository<? extends AuditTrailEntry> auditTrailEntryRepository;
 }
 //end::class[]

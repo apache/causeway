@@ -29,6 +29,7 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepos
 
 import lombok.RequiredArgsConstructor;
 
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 //tag::class[]
 @Collection
 @CollectionLayout(defaultView = "table")

@@ -18,6 +18,6 @@ This application's home page is pretty simple, not much more than a couple of ha
 A more common implementation of a home page is as a dashboard, displaying the most useful current information to the user (perhaps a task list, or alerts).
 Such a home page would have a number of repository services injected into it, in order to query and render those tasks or alerts.
 
-It would probably also have the framework's link:https://causeway.apache.org/refguide/${CAUSEWAY_VERSION}/applib-svc/UserService.html[UserService] injected, in order that the information displayed is relevant to the current user.
+It would probably also have the framework's link:https://causeway.apache.org/refguide/${CAUSEWAY_VERSION}/applib/index/services/user/UserService.html[UserService] injected, in order that the information displayed is relevant to the current user.
 As you can see, this app's home page does actually do this, in order to "personalise" the title.
 

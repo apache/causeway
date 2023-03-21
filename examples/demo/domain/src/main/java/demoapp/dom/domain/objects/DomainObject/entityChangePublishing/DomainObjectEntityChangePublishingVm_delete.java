@@ -32,18 +32,21 @@ import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled.DomainObjectEntityChangePublishingEnabledEntity;
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotatedEntity;
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenEntity;
+import lombok.RequiredArgsConstructor;
 
+import java.util.Collections;
+import java.util.List;
+
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 //tag::class[]
 @Action(semantics = SemanticsOf.IDEMPOTENT)
 @ActionLayout(
     describedAs = "Deletes one publishing enabled entity and one publishing disabled entity",
     sequence = "3.0")
+@RequiredArgsConstructor
 public class DomainObjectEntityChangePublishingVm_delete {
 
     private final DomainObjectEntityChangePublishingVm domainObjectAuditingVm;
-    public DomainObjectEntityChangePublishingVm_delete(final DomainObjectEntityChangePublishingVm domainObjectAuditingVm) {
-        this.domainObjectAuditingVm = domainObjectAuditingVm;
-    }
 
     @MemberSupport public DomainObjectEntityChangePublishingVm act(
             @Nullable final DomainObjectEntityChangePublishingEnabledEntity enabledEntity
@@ -68,34 +71,43 @@ public class DomainObjectEntityChangePublishingVm_delete {
     @MemberSupport public DomainObjectEntityChangePublishingEnabledEntity default0Act() {
         return publishingEnabledEntities.first().orElse(null);
     }
+    @MemberSupport public List<? extends DomainObjectEntityChangePublishingEnabledEntity> choices0Act() {
+        return listOf(default0Act());
+    }
     @MemberSupport public DomainObjectEntityChangePublishingDisabledEntity default1Act() {
         return publishingDisabledEntities.first().orElse(null);
+    }
+    @MemberSupport public List<? extends DomainObjectEntityChangePublishingDisabledEntity> choices1Act() {
+        return listOf(default1Act());
     }
     @MemberSupport public DomainObjectEntityChangePublishingEnabledMetaAnnotatedEntity default2Act() {
         return publishingEnabledMetaAnnotatedEntities.first().orElse(null);
     }
+    @MemberSupport public List<? extends DomainObjectEntityChangePublishingEnabledMetaAnnotatedEntity> choices2Act() {
+        return listOf(default2Act());
+    }
     @MemberSupport public DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenEntity default3Act() {
         return publishingEnabledMetaAnnotOverriddenEntities.first().orElse(null);
     }
+    @MemberSupport public List<? extends DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenEntity> choices3Act() {
+        return listOf(default3Act());
+    }
     @MemberSupport public String disableAct() {
-        if(!publishingEnabledEntities.first().isPresent()) { return "No EnabledJdo to delete"; }
-        if(!publishingDisabledEntities.first().isPresent()) { return "No DisabledJdo to delete"; }
-        if(!publishingEnabledMetaAnnotatedEntities.first().isPresent()) { return "No MetaAnnotated to delete"; }
-        if(!publishingEnabledMetaAnnotOverriddenEntities.first().isPresent()) { return "No MetaAnnotated But Overridden to delete"; }
+        if(publishingEnabledEntities.first().isEmpty()) { return "No Enabled entity to delete"; }
+        if(publishingDisabledEntities.first().isEmpty()) { return "No Disabled entity to delete"; }
+        if(publishingEnabledMetaAnnotatedEntities.first().isEmpty()) { return "No MetaAnnotated entity to delete"; }
+        if(publishingEnabledMetaAnnotOverriddenEntities.first().isEmpty()) { return "No MetaAnnotated But Overridden entity to delete"; }
         return null;
     }
 
-    @Inject
-    ValueHolderRepository<String, ? extends DomainObjectEntityChangePublishingEnabledEntity> publishingEnabledEntities;
+    private static <T> List<? extends T> listOf(T t) {
+        return t == null ? Collections.emptyList() : Collections.singletonList(t);
+    }
 
-    @Inject
-    ValueHolderRepository<String, ? extends DomainObjectEntityChangePublishingDisabledEntity> publishingDisabledEntities;
-
-    @Inject
-    ValueHolderRepository<String, ? extends DomainObjectEntityChangePublishingEnabledMetaAnnotatedEntity> publishingEnabledMetaAnnotatedEntities;
-
-    @Inject
-    ValueHolderRepository<String, ? extends DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenEntity> publishingEnabledMetaAnnotOverriddenEntities;
+    @Inject ValueHolderRepository<String, ? extends DomainObjectEntityChangePublishingEnabledEntity> publishingEnabledEntities;
+    @Inject ValueHolderRepository<String, ? extends DomainObjectEntityChangePublishingDisabledEntity> publishingDisabledEntities;
+    @Inject ValueHolderRepository<String, ? extends DomainObjectEntityChangePublishingEnabledMetaAnnotatedEntity> publishingEnabledMetaAnnotatedEntities;
+    @Inject ValueHolderRepository<String, ? extends DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenEntity> publishingEnabledMetaAnnotOverriddenEntities;
 
 }
 //end::class[]

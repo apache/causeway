@@ -16,18 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled;
+package demoapp.dom.domain._propertychanges;
 
-import javax.inject.Named;
-
-import org.apache.causeway.applib.annotation.DomainObject;
-
-import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingEntity;
-
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
-@Named("demo.DomainObjectEntityChangePublishingDisabledEntity") // shared permissions with concrete sub class
-@DomainObject
-public abstract class DomainObjectEntityChangePublishingDisabledEntity
-extends DomainObjectEntityChangePublishingEntity {
-
+/**
+ * Marker interface for mixins to contribute to.
+ */
+//tag::class[]
+public interface ExposePropertyChanges {
 }
+//end::class[]

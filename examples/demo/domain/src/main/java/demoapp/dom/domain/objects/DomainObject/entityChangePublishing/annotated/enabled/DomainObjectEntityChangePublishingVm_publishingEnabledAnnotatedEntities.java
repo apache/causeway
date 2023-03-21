@@ -23,6 +23,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
@@ -30,6 +31,7 @@ import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObje
 import lombok.RequiredArgsConstructor;
 
 @Collection()
+@CollectionLayout(paged = 3)
 @RequiredArgsConstructor
 public class DomainObjectEntityChangePublishingVm_publishingEnabledAnnotatedEntities {
 

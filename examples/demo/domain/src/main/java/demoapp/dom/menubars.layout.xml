@@ -298,13 +298,8 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
                 <mb3:serviceAction objectType="causeway.applib.LayoutServiceMenu" id="downloadMenuBarsLayout"/>
             </mb3:section>
             <mb3:section>
-                <mb3:named>Site-Map</mb3:named>
-                <mb3:serviceAction objectType="causeway.applib.SitemapServiceMenu" id="downloadSitemap"/>
-            </mb3:section>
-            <mb3:section>
                 <mb3:named>Meta Model and Features</mb3:named>
                 <mb3:serviceAction objectType="causeway.applib.MetaModelServiceMenu" id="downloadMetaModel"/>
-                <mb3:serviceAction objectType="causeway.applib.MetaModelServiceMenu" id="downloadMetaModelCsv"/>
                 <mb3:serviceAction objectType="causeway.applib.MetaModelServiceMenu" id="downloadMetaModelDiff"/>
                 <mb3:serviceAction objectType="causeway.feat.ApplicationFeatureMenu" id="allNamespaces"/>
                 <mb3:serviceAction objectType="causeway.feat.ApplicationFeatureMenu" id="allTypes"/>
@@ -319,9 +314,9 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
             </mb3:section>
             <mb3:section>
                 <mb3:named>REST API</mb3:named>
-                <mb3:serviceAction objectType="causeway.viewer.restfulobjects.SwaggerServiceMenu" id="openSwaggerUi"/>
-                <mb3:serviceAction objectType="causeway.viewer.restfulobjects.SwaggerServiceMenu" id="openRestApi"/>
-                <mb3:serviceAction objectType="causeway.viewer.restfulobjects.SwaggerServiceMenu" id="downloadSwaggerSchemaDefinition"/>
+                <mb3:serviceAction objectType="causeway.viewer.roRendering.SwaggerServiceMenu" id="openSwaggerUi"/>
+                <mb3:serviceAction objectType="causeway.viewer.roRendering.SwaggerServiceMenu" id="openRestApi"/>
+                <mb3:serviceAction objectType="causeway.viewer.roRendering.SwaggerServiceMenu" id="downloadSwaggerSchemaDefinition"/>
             </mb3:section>
             <mb3:section>
                 <mb3:named>i18n</mb3:named>
@@ -329,6 +324,12 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
                 <mb3:serviceAction objectType="causeway.applib.TranslationServicePoMenu" id="resetTranslationCache"/>
                 <mb3:serviceAction objectType="causeway.applib.TranslationServicePoMenu" id="switchToReadingTranslations"/>
                 <mb3:serviceAction objectType="causeway.applib.TranslationServicePoMenu" id="switchToWritingTranslations"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Manual Testing</mb3:named>
+                <mb3:serviceAction objectType="causeway.applib.SitemapServiceMenu" id="downloadSitemap">
+                    <cpt:named>Download Site-Map Template (Adoc)</cpt:named>
+                </mb3:serviceAction>
             </mb3:section>
 			<mb3:section>
                 <mb3:named>Prototype Actions (on Object)</mb3:named>
@@ -338,6 +339,39 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
                 <mb3:serviceAction objectType="demo.PrototypeActionsVisibilityAdvisor" id="doNotShowPrototypeActions">
                     <cpt:named>Do not Show for Object</cpt:named>
                 </mb3:serviceAction>
+            </mb3:section>
+        </mb3:menu>
+
+        <mb3:menu>
+            <mb3:named>Activity</mb3:named>
+            <mb3:section>
+                <mb3:named>Sessions</mb3:named>
+                <mb3:serviceAction id="activeSessions" objectType="causeway.ext.sessionLog.SessionLogMenu"/>
+                <mb3:serviceAction id="findSessions" objectType="causeway.ext.sessionLog.SessionLogMenu"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Commands</mb3:named>
+                <mb3:serviceAction id="activeCommands" objectType="causeway.ext.commandLog.CommandLogMenu"/>
+                <mb3:serviceAction id="findMostRecent" objectType="causeway.ext.commandLog.CommandLogMenu"/>
+                <mb3:serviceAction id="findCommands" objectType="causeway.ext.commandLog.CommandLogMenu"/>
+                <mb3:serviceAction id="findAll" objectType="causeway.ext.commandLog.CommandLogMenu"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Execution Log</mb3:named>
+                <mb3:serviceAction id="findMostRecent" objectType="causeway.ext.executionLog.ExecutionLogMenu"/>
+                <mb3:serviceAction id="findExecutions" objectType="causeway.ext.executionLog.ExecutionLogMenu"/>
+                <mb3:serviceAction id="findAll" objectType="causeway.ext.executionLog.ExecutionLogMenu"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Audit Trail</mb3:named>
+                <mb3:serviceAction id="findMostRecent" objectType="causeway.ext.auditTrail.AuditTrailMenu"/>
+                <mb3:serviceAction id="findAuditEntries" objectType="causeway.ext.auditTrail.AuditTrailMenu"/>
+                <mb3:serviceAction id="findAll" objectType="causeway.ext.auditTrail.AuditTrailMenu"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Execution Outbox</mb3:named>
+                <mb3:serviceAction id="findOldest" objectType="causeway.ext.executionOutbox.ExecutionOutboxMenu"/>
+                <mb3:serviceAction id="findAll" objectType="causeway.ext.executionOutbox.ExecutionOutboxMenu"/>
             </mb3:section>
         </mb3:menu>
 
@@ -364,32 +398,6 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
                 <mb3:serviceAction objectType="causeway.ext.secman.ApplicationTenancyMenu" id="findTenancies"/>
             </mb3:section>
         </mb3:menu>
-        <mb3:menu>
-            <mb3:named>Activity</mb3:named>
-            <mb3:section>
-                <mb3:named>Command Log</mb3:named>
-                <mb3:serviceAction objectType="causeway.ext.commandLog.CommandLogMenu" id="activeCommands"/>
-                <mb3:serviceAction objectType="causeway.ext.commandLog.CommandLogMenu" id="findCommands"/>
-                <mb3:serviceAction objectType="causeway.ext.commandLog.CommandLogMenu" id="findCommandById"/>
-                <mb3:serviceAction objectType="causeway.ext.commandLog.CommandLogMenu" id="truncateLog"/>
-            </mb3:section>
-            <mb3:section>
-                <mb3:named>Command Replay - Primary</mb3:named>
-                <mb3:serviceAction objectType="causeway.ext.commandReplayPrimary.CommandReplayOnPrimaryService" id="findCommands"/>
-                <mb3:serviceAction objectType="causeway.ext.commandReplayPrimary.CommandReplayOnPrimaryService" id="downloadCommands"/>
-                <mb3:serviceAction objectType="causeway.ext.commandReplayPrimary.CommandReplayOnPrimaryService" id="downloadCommandById"/>
-            </mb3:section>
-            <mb3:section>
-                <mb3:named>Command Replay - Secondary</mb3:named>
-                <mb3:serviceAction objectType="causeway.ext.commandReplaySecondary.CommandReplayOnSecondaryService" id="findMostRecentReplayed"/>
-                <mb3:serviceAction objectType="causeway.ext.commandReplaySecondary.CommandReplayOnSecondaryService" id="uploadCommands"/>
-            </mb3:section>
-            <mb3:section>
-                <mb3:named>Demo Replay Controller</mb3:named>
-                <mb3:serviceAction objectType="demo.web.DemoReplayController" id="pauseReplay"/>
-                <mb3:serviceAction objectType="demo.web.DemoReplayController" id="resumeReplay"/>
-            </mb3:section>
-        </mb3:menu>
 
     </mb3:secondary>
     <mb3:tertiary>
@@ -411,10 +419,8 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
             </mb3:section>
             <mb3:section>
                 <mb3:named>Security</mb3:named>
-                <mb3:serviceAction objectType="causeway.ext.secman.MeService" id="me">
-                    <cpt:named>Me (SecMan)</cpt:named>
-                </mb3:serviceAction>
-                <mb3:serviceAction objectType="causeway.applib.UserMenu" id="me"/>
+                <mb3:serviceAction objectType="causeway.applib.UserMenu" id="me"/>  <!-- this is hidden by secman -->
+                <mb3:serviceAction objectType="causeway.ext.secman.MeService" id="me"/>
 	            <mb3:serviceAction objectType="causeway.security.LogoutMenu" id="logout"/>
 	        </mb3:section>
 

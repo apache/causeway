@@ -22,6 +22,6 @@ package demoapp.dom.domain._interactions;
  * Marker interface for mixins to contribute to.
  */
 //tag::class[]
-public interface ExposeCapturedInteractions {
+public interface ExposePersistedInteractions {
 }
 //end::class[]

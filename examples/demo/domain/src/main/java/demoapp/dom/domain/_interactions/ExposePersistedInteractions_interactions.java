@@ -18,33 +18,40 @@
  */
 package demoapp.dom.domain._interactions;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import javax.inject.Inject;
 
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry;
+import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 //tag::class[]
-@Action(
-    semantics = SemanticsOf.IDEMPOTENT)
-@ActionLayout(
-    associateWith = "interactions")
+@Collection
 @RequiredArgsConstructor
-public class ExposeCapturedInteractions_clear {
+public class ExposePersistedInteractions_interactions {
     // ...
 //end::class[]
 
-    private final ExposeCapturedInteractions exposeCapturedInteractions;
+    @SuppressWarnings("unused")
+    private final ExposePersistedInteractions exposePersistedInteractions;
 
 //tag::class[]
-    public ExposeCapturedInteractions act() {
-        executionListenerToCaptureInteractionsInMemory.clear();
-        return exposeCapturedInteractions;
+    public List<InteractionDtoVm> coll() {
+        val list = new LinkedList<InteractionDtoVm>();
+        executionLogEntryRepository.findAll()
+                .stream()
+                .map(x -> x.getInteractionDto())
+                .map(InteractionDtoVm::new)
+                .forEach(list::push);   // reverse order
+        return list;
     }
 
-    @Inject
-    ExecutionListenerToCaptureInteractionsInMemory executionListenerToCaptureInteractionsInMemory;
+    @Inject ExecutionLogEntryRepository<? extends ExecutionLogEntry> executionLogEntryRepository;
 }
 //end::class[]

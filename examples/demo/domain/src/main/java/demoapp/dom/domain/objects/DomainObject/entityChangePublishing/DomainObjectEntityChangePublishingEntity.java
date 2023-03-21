@@ -32,7 +32,6 @@ import demoapp.dom.domain._changes.ExposeCapturedChanges;
 public abstract class DomainObjectEntityChangePublishingEntity
 implements
     HasAsciiDocDescription,
-    ExposeCapturedChanges,
     ValueHolder<String> {
 
     @Override
