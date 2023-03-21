@@ -30,6 +30,7 @@ import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryScalarTypeConstrainedAbstract;
 
 import lombok.val;
 
@@ -51,34 +52,20 @@ public class MarkupPanelFactories {
     // -- PARENTED (ABSTRACT)
 
     public static abstract class ParentedAbstract<T extends Serializable>
-    extends ComponentFactoryAbstract {
+    extends ComponentFactoryScalarTypeConstrainedAbstract {
 
         private static final long serialVersionUID = 1L;
 
         private final Class<T> valueType;
 
-        public ParentedAbstract(final Class<T> valueType) {
-            super(UiComponentType.SCALAR_NAME_AND_VALUE, ScalarMarkupPanel.class);
+        protected ParentedAbstract(final Class<T> valueType) {
+            super(ScalarMarkupPanel.class, valueType);
             this.valueType = valueType;
         }
 
         @Override
-        public ApplicationAdvice appliesTo(final IModel<?> model) {
-            if (!(model instanceof ScalarModel)) {
-                return ApplicationAdvice.DOES_NOT_APPLY;
-            }
-
-            val scalarModel = (ScalarModel) model;
-            val scalarSpec = scalarModel.getScalarTypeSpec();
-            val scalarType = scalarSpec.getCorrespondingClass();
-
-            return appliesIf(scalarType.equals(valueType));
-
-        }
-
-        @Override
-        public final Component createComponent(final String id, final IModel<?> model) {
-            return new ScalarMarkupPanel<T>(id, (ScalarModel) model, valueType, this::newMarkupComponent);
+        protected Component createComponent(final String id, final ScalarModel scalarModel) {
+            return new ScalarMarkupPanel<T>(id, scalarModel, valueType, this::newMarkupComponent);
         }
 
         protected abstract MarkupComponent newMarkupComponent(String id, ScalarModel model);

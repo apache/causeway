@@ -24,6 +24,8 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.scalar.UiParameter;
+import org.apache.causeway.viewer.commons.model.scalar.UiScalar;
+import org.apache.causeway.viewer.commons.model.scalar.UiScalar.ChoiceProviderSort;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 
 import lombok.val;
@@ -33,23 +35,7 @@ extends ChoiceProviderAbstractForScalarModel {
 
     private static final long serialVersionUID = 1L;
 
-    static enum ChoiceProviderSort {
-        NO_CHOICES,
-        CHOICES,
-        AUTO_COMPLETE,
-        OBJECT_AUTO_COMPLETE;
-        static ChoiceProviderSort valueOf(final ScalarModel scalarModel) {
-            if (scalarModel.hasChoices()) {
-                return ChoiceProviderSort.CHOICES;
-            } else if(scalarModel.hasAutoComplete()) {
-                return ChoiceProviderSort.AUTO_COMPLETE;
-            } else {
-                return ChoiceProviderSort.OBJECT_AUTO_COMPLETE;
-            }
-        }
-    }
-
-    private final ChoiceProviderSort choiceProviderSort;
+    private final UiScalar.ChoiceProviderSort choiceProviderSort;
 
     public ChoiceProviderForReferences(
             final ScalarModel scalarModel) {
@@ -65,18 +51,25 @@ extends ChoiceProviderAbstractForScalarModel {
         case AUTO_COMPLETE:
             return queryWithAutoComplete(term);
         case OBJECT_AUTO_COMPLETE:
+            return queryWithAutoCompleteUsingObjectSpecification(term);
+        case NO_CHOICES:
+        default:
             // fall through
         }
-        val scalarTypeSpec = scalarModel().getScalarTypeSpec();
-        val autoCompleteAdapters = Facets.autoCompleteExecute(scalarTypeSpec, term);
-        return autoCompleteAdapters
-                .map(ManagedObject::getMementoElseFail);
+        return Can.empty();
     }
 
     // -- HELPER
 
     private Can<ObjectMemento> queryAll() {
         return scalarModel().getChoices() // must not return detached entities
+                .map(ManagedObject::getMementoElseFail);
+    }
+
+    private Can<ObjectMemento> queryWithAutoCompleteUsingObjectSpecification(final String term) {
+        val autoCompleteAdapters = Facets
+                .autoCompleteExecute(scalarModel().getScalarTypeSpec(), term);
+        return autoCompleteAdapters
                 .map(ManagedObject::getMementoElseFail);
     }
 

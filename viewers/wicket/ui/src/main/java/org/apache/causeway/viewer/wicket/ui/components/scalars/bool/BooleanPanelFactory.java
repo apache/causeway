@@ -20,19 +20,20 @@ package org.apache.causeway.viewer.wicket.ui.components.scalars.bool;
 
 import org.apache.wicket.Component;
 
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryScalarTypeConstrainedAbstract;
 
 /**
  * {@link ComponentFactory} for {@link BooleanPanel}.
  */
-public class BooleanPanelFactory extends ComponentFactoryScalarAbstract {
+public class BooleanPanelFactory extends ComponentFactoryScalarTypeConstrainedAbstract {
 
     private static final long serialVersionUID = 1L;
 
     public BooleanPanelFactory() {
-        super(BooleanPanel.class, boolean.class, Boolean.class);
+        super(BooleanPanel.class, Can.of(boolean.class, Boolean.class));
     }
 
     @Override

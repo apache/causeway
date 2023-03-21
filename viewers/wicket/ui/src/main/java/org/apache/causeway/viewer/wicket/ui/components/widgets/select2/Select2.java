@@ -41,10 +41,8 @@ import org.apache.causeway.viewer.wicket.model.models.ScalarModelWithSingleChoic
 import org.apache.causeway.viewer.wicket.model.util.WktContext;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarModelChangeDispatcher;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
-import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstractForScalarModel;
 
 import lombok.NonNull;
-import lombok.SneakyThrows;
 import lombok.val;
 
 /**
@@ -97,18 +95,19 @@ implements
     }
 
     // not sure if required any more
-    @SneakyThrows
+//    @SneakyThrows
+    @Deprecated
     public void rebuildChoiceProvider() {
-        val oldProvider = (ChoiceProviderAbstractForScalarModel)
-                select2Choice.fold(
-                        Select2ChoiceExt::getProvider,
-                        Select2MultiChoiceExt::getProvider);
-        val scalarModel = oldProvider.scalarModel();
-        val constr = oldProvider.getClass().getConstructor(ScalarModel.class);
-        val newProvider = constr.newInstance(scalarModel);
-        select2Choice.accept(
-                single->single.setProvider(newProvider),
-                multi->multi.setProvider(newProvider));
+//        val oldProvider = (ChoiceProviderAbstractForScalarModel)
+//                select2Choice.fold(
+//                        Select2ChoiceExt::getProvider,
+//                        Select2MultiChoiceExt::getProvider);
+//        val scalarModel = oldProvider.scalarModel();
+//        val constr = oldProvider.getClass().getConstructor(ScalarModel.class);
+//        val newProvider = constr.newInstance(scalarModel);
+//        select2Choice.accept(
+//                single->single.setProvider(newProvider),
+//                multi->multi.setProvider(newProvider));
     }
 
     public AbstractSelect2Choice<ObjectMemento, ?> asComponent() {

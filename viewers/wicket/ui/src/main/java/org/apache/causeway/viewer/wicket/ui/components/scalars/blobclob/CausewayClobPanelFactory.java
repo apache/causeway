@@ -22,12 +22,12 @@ import org.apache.wicket.Component;
 
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryScalarTypeConstrainedAbstract;
 
 /**
  * {@link ComponentFactory} for {@link CausewayBlobPanel}.
  */
-public class CausewayClobPanelFactory extends ComponentFactoryScalarAbstract {
+public class CausewayClobPanelFactory extends ComponentFactoryScalarTypeConstrainedAbstract {
 
     private static final long serialVersionUID = 1L;
 

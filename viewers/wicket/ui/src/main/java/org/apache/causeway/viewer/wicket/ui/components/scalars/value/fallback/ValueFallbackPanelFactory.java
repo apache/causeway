@@ -20,13 +20,10 @@ package org.apache.causeway.viewer.wicket.ui.components.scalars.value.fallback;
 
 
 import org.apache.wicket.Component;
-import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
-
-import lombok.val;
 
 /**
  * {@link ComponentFactory} for the {@link ValueFallbackPanel}.
@@ -42,24 +39,19 @@ extends ComponentFactoryScalarAbstract {
     }
 
     @Override
-    public ApplicationAdvice appliesTo(final IModel<?> model) {
-        if (!(model instanceof ScalarModel)) {
-            return ApplicationAdvice.DOES_NOT_APPLY;
-        }
-        val scalarModel = (ScalarModel) model;
+    public Component createComponent(final String id, final ScalarModel scalarModel) {
+        return new ValueFallbackPanel(id, scalarModel);
+    }
+
+    @Override
+    protected ApplicationAdvice appliesTo(final ScalarModel scalarModel) {
         if(!scalarModel.getScalarTypeSpec().isValue()) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
 
-        final boolean hasChoices = scalarModel.hasChoices();
         // autoComplete not supported for values, only for references
         // final boolean hasAutoComplete = scalarModel.hasAutoComplete();
-        return appliesIf( !(hasChoices /*|| hasAutoComplete*/) );
-    }
-
-    @Override
-    public Component createComponent(final String id, final ScalarModel scalarModel) {
-        return new ValueFallbackPanel(id, scalarModel);
+        return appliesIf( !(scalarModel.hasChoices() /*|| hasAutoComplete*/) );
     }
 
 
