@@ -53,15 +53,15 @@ extends ComponentFactoryScalarAbstract {
     @Override
     protected final ApplicationAdvice appliesTo(final ScalarModel scalarModel) {
 
-        // discriminates based on given scalarTypeConstraints, if any
+        // discriminates based on given scalarTypes, if any
         if(scalarTypes.isNotEmpty()
                 && !scalarModel.isScalarTypeAnyOf(scalarTypes)) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
 
-        // autoComplete not supported on values, only references
-        return appliesIf( !(scalarModel.hasChoices()
-                /*|| scalarModel.hasAutoComplete()*/) );
+        // if has any choices, use select-2 component instead
+        return appliesIf( !scalarModel.hasChoices()
+                && !scalarModel.hasAutoComplete() );
     }
 
 }

@@ -104,17 +104,17 @@ public interface UiScalar extends UiModel, HasMetaModelContext {
         return ChoiceProviderSort.valueOf(this);
     }
 
-    static enum ChoiceProviderSort {
+    public static enum ChoiceProviderSort {
         NO_CHOICES,
         CHOICES,
         AUTO_COMPLETE,
         OBJECT_AUTO_COMPLETE;
-        static ChoiceProviderSort valueOf(final UiScalar scalarModel) {
+        public static ChoiceProviderSort valueOf(final UiScalar scalarModel) {
             if (scalarModel.hasChoices()) {
                 return ChoiceProviderSort.CHOICES;
             } else if(scalarModel.hasAutoComplete()) {
                 return ChoiceProviderSort.AUTO_COMPLETE;
-            } else if(scalarModel.hasObjectAutoComplete()) {
+            } else if(Facets.autoCompleteIsPresent(scalarModel.getScalarTypeSpec())) {
                 return ChoiceProviderSort.OBJECT_AUTO_COMPLETE;
             }
             return NO_CHOICES;

@@ -68,7 +68,7 @@ extends ComponentFactoryScalarAbstract {
 
     @Override
     protected ApplicationAdvice appliesTo(final ScalarModel scalarModel) {
-        return ApplicationAdvice.APPLIES; //FIXME depends on registration order, can we do better?
+        return ApplicationAdvice.APPLIES; //XXX depends on registration order, can we do better?
     }
 
 }
