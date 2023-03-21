@@ -2,7 +2,7 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-The PDF.js module integrates with the xref:vw:ROOT:about.adoc[Wicket Viewer], rendering a `Blob` property containing a PDF using the link:https://mozilla.github.io/pdf.js/[pdf.js] library.
+The PDF.js module integrates with the xref:vw:ROOT:about.adoc[Wicket Viewer], rendering a `Blob` property containing a PDF using the link:https://mozilla.github.io/pdf.js/[PDF.js] library.
 
 
 == Usage
@@ -11,16 +11,17 @@ To use the extension, annotate an xref:refguide:applib:index/value/Blob.adoc[Blo
 
 For example:
 
-[source,xml]
-.pom.xml
+[source,java]
 ----
-@PdfJsViewer
+@PdfJsViewer            // <.>
 @Property()
 @PropertyLayout(fieldSetId = "content", sequence = "1")
 public Blob getAttachment() { ... }
 ----
 
-IMPORTANT: The `Blob` should only ever return a bytes that correspond to a PDF, with a mime type of "application/pdf".
+<.> indicates that the `Blob` returns a set of bytes that correspond to a PDF, and so should be rendered as such.
++
+NOTE: The `Blob` is expected also to have a mime type of `application/pdf`.
 
 Optionally, you can also provide an implementation of the xref:refguide:extensions:index/pdfjs/applib/spi/PdfJsViewerAdvisor.adoc[] SPI, which advises on the size of the viewer (and has callbacks to keep track of which page of the PDF is being viewed).
 The framework provides a fallback implementation that sets the height to 800px, and scaled to 75% normal size.

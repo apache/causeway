@@ -10,6 +10,9 @@
 *** xref:testing:ROOT:about.adoc[Testing Guide]
 *** xref:security:ROOT:about.adoc[Security Guide]
 
+** for use in apps
+***  xref:valuetypes:ROOT:about.adoc[Value Types]
+
 ** Development
 *** xref:setupguide:ROOT:about.adoc[Setup Guide]
 *** xref:conguide:ROOT:about.adoc[Contributors' Guide]
