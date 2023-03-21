@@ -176,7 +176,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <spring-boot.version>2.7.9</spring-boot.version>
         <summernote.version>0.8.20</summernote.version>
         <surefire-plugin.argLine>-Xmx384m</surefire-plugin.argLine>
-        <swagger-core.version>2.2.8</swagger-core.version>
+        <swagger-core.version>2.2.9</swagger-core.version>
 
         <togglz.version>3.3.3</togglz.version>
 
