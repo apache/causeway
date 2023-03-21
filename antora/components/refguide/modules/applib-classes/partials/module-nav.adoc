@@ -19,7 +19,6 @@
 
 ** xref:applib-classes:utility.adoc[Utility Classes]
 *** xref:applib:index/util/Enums.adoc[Enums]
-*** xref:applib:index/util/JaxbUtil.adoc[JaxbUtil]
 *** xref:applib:index/util/ObjectContracts.adoc[ObjectContracts]
 *** xref:applib:index/util/Reasons.adoc[Reasons]
 *** xref:applib:index/util/ReasonBuffer.adoc[ReasonBuffer]
