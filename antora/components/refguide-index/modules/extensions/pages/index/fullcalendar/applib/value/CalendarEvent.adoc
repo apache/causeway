@@ -9,6 +9,7 @@ Value type representing an event on a calendar.
 .CalendarEvent.java
 ----
 class CalendarEvent {
+  public static final String LOGICAL_TYPE_NAME;
   CalendarEvent of(ZonedDateTime dateTime, String calendarName, String title)
   CalendarEvent of(ZonedDateTime dateTime, String calendarName, String title, String notes)
   CalendarEvent withDateTime(ZonedDateTime dateTime)

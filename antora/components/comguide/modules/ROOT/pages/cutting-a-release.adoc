@@ -161,7 +161,7 @@ The next step is to generate the website, ensuring that the config, examples, pr
 +
 [source,bash,subs="attributes+"]
 ----
-mvn -D module-tooling -D skip.essential install -DskipTests
+mvn -D module-tooling -D skip.essential install -DskipTests -T1C
 ----
 
 * Then, generate the website:
@@ -569,7 +569,7 @@ git pull --ff-only
 
 git checkout -b $CAUSEWAYBRANCH-jpa
 
-mvn versions:update-parent -DparentVersion=$CAUSEWAYREL # <.>
+mvn versions:update-parent -DparentVersion=$CAUSEWAYREL -Dskip.nightly # <.>
 mvn versions:set -DnewVersion=$CAUSEWAYREL
 
 git add .
@@ -606,7 +606,7 @@ git pull --ff-only
 
 git checkout -b $CAUSEWAYBRANCH-jdo
 
-mvn versions:update-parent -DparentVersion=$CAUSEWAYREL
+mvn versions:update-parent -DparentVersion=$CAUSEWAYREL -Dskip.nightly
 mvn versions:set -DnewVersion=$CAUSEWAYREL
 
 git add .
@@ -662,7 +662,7 @@ git pull --ff-only
 
 git checkout -b $CAUSEWAYBRANCH-jpa
 
-mvn versions:update-parent -DparentVersion=$CAUSEWAYREL  # <.>
+mvn versions:update-parent -DparentVersion=$CAUSEWAYREL -Dskip.nightly  # <.>
 mvn versions:set -DnewVersion=$CAUSEWAYREL
 
 git add .
@@ -699,7 +699,7 @@ git pull --ff-only
 
 git checkout -b $CAUSEWAYBRANCH-jdo
 
-mvn versions:update-parent -DparentVersion=$CAUSEWAYREL
+mvn versions:update-parent -DparentVersion=$CAUSEWAYREL -Dskip.nightly
 mvn versions:set -DnewVersion=$CAUSEWAYREL
 
 git add .
@@ -844,7 +844,7 @@ In all cases, votes last for 72 hours and require a +3 (binding) vote from membe
 [#start-voting-thread-on-dev-mailing-list]
 === Start voting thread on dev mailing list
 
-That is, link:mailto:dev@apache.causeway.org[]
+That is, link:mailto:dev@causeway.apache.org[]
 
 The following boilerplate is for a release of the Apache Causeway Core.
 Adapt as required:
