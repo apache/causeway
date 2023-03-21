@@ -114,7 +114,7 @@ public interface UiScalar extends UiModel, HasMetaModelContext {
                 return ChoiceProviderSort.CHOICES;
             } else if(scalarModel.hasAutoComplete()) {
                 return ChoiceProviderSort.AUTO_COMPLETE;
-            } else if(Facets.autoCompleteIsPresent(scalarModel.getScalarTypeSpec())) {
+            } else if(scalarModel.hasObjectAutoComplete()) {
                 return ChoiceProviderSort.OBJECT_AUTO_COMPLETE;
             }
             return NO_CHOICES;
