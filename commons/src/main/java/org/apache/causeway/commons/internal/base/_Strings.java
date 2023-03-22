@@ -38,7 +38,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
-import java.util.stream.Collector;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -739,6 +739,21 @@ public final class _Strings {
     }
 
     /**
+     * Factory counterpart to {@link String#codePoints()}.
+     * @return null if {@code codePoints} is null
+     */
+    public static final String ofCodePoints(final @Nullable IntStream codePoints) {
+        if(codePoints==null) {
+            return null;
+        }
+        return codePoints.collect(
+                StringBuilder::new,
+                StringBuilder::appendCodePoint,
+                StringBuilder::append)
+            .toString();
+    }
+
+    /**
      * Converts the {@code input} to a byte array using the specified {@code charset},
      * then applies the byte manipulation operator {@code converter},
      * then converts the (manipulated) byte array back to a string, again using the specified {@code charset}.
@@ -814,13 +829,23 @@ public final class _Strings {
      * isReady             -&gt; Ready
      * </pre>
      */
-    public static final String asPrefixDropped(final @Nullable String name) {
-        return isNotEmpty(name)
-                ? _Strings
-                    .streamCharacters(name)
-                    .dropWhile(c->c != '_' && Character.isLowerCase(c))
-                    .collect(_Strings.joiningCharacters())
-                : name;
+    public static final String asPrefixDropped(final @Nullable CharSequence chars) {
+        return isNotEmpty(chars)
+                ? ofCodePoints(
+                        chars.codePoints()
+                            .dropWhile(c->c != '_' && Character.isLowerCase(c)))
+                : chars!=null ? "" : null;
+    }
+
+    /**
+     * Within given string, converts any special UTF-8 variants of the space ' ' character to the regular one.
+     */
+    public static final String asRegularSpaces(final @Nullable CharSequence chars) {
+        return isNotEmpty(chars)
+                ? ofCodePoints(
+                        chars.codePoints()
+                            .map(_Strings::toRegularSpaceCharacter))
+                : chars!=null ? "" : null;
     }
 
     // -- SHORTCUTS
@@ -865,18 +890,22 @@ public final class _Strings {
 
     // -- CHARACTER PROCESSING
 
-    public static Stream<Character> streamCharacters(final @Nullable String str) {
-        return isNotEmpty(str)
-                ? str.codePoints().mapToObj(c -> (char) c)
-                : Stream.empty();
-    }
-
-    public static Collector<Character, StringBuilder, String> joiningCharacters() {
-        return Collector.of(
-                StringBuilder::new,
-                StringBuilder::append,
-                StringBuilder::append,
-                StringBuilder::toString);
+    /**
+     * Converts any special UTF-8 variants of the space ' ' character to the regular one.
+     */
+    public static int toRegularSpaceCharacter(final int codePoint) {
+        // NO-BREAK SPACE (UTF-8/160)
+        // THIN SPACE (UTF-8/8201)
+        // NARROW NO-BREAK SPACE (UTF-8/8239)
+        // REGULAR SPACE (UTF-8/32)
+        switch (codePoint) {
+        case 160:
+        case 8201:
+        case 8239:
+            return 32;
+        default:
+            return codePoint;
+        }
     }
 
     // -- TRUNCATION
