@@ -24,30 +24,34 @@ import java.util.List;
 import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry;
+import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 //tag::class[]
 @Collection
 @RequiredArgsConstructor
-public class ExposeCapturedInteractions_interactions {
+public class ExposePersistedInteractions_interactions {
     // ...
 //end::class[]
 
-    private final ExposeCapturedInteractions exposeCapturedInteractions;
+    @SuppressWarnings("unused")
+    private final ExposePersistedInteractions exposePersistedInteractions;
 
 //tag::class[]
     public List<InteractionDtoVm> coll() {
         val list = new LinkedList<InteractionDtoVm>();
-        executionListenerToCaptureInteractionsInMemory
-                .streamInteractionDtos()
+        executionLogEntryRepository.findAll()
+                .stream()
+                .map(x -> x.getInteractionDto())
                 .map(InteractionDtoVm::new)
                 .forEach(list::push);   // reverse order
         return list;
     }
 
-    @Inject
-    ExecutionListenerToCaptureInteractionsInMemory executionListenerToCaptureInteractionsInMemory;
+    @Inject ExecutionLogEntryRepository<? extends ExecutionLogEntry> executionLogEntryRepository;
 }
 //end::class[]

@@ -24,6 +24,7 @@ import org.apache.causeway.applib.annotation.DomainObject;
 
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingEntity;
 
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @Named("demo.DomainObjectEntityChangePublishingDisabledEntity") // shared permissions with concrete sub class
 @DomainObject
 public abstract class DomainObjectEntityChangePublishingDisabledEntity

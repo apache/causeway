@@ -16,12 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain._interactions;
+package demoapp.dom.domain._propertychanges;
 
 /**
  * Marker interface for mixins to contribute to.
  */
 //tag::class[]
-public interface ExposeCapturedInteractions {
+public interface ExposePropertyChanges {
 }
 //end::class[]

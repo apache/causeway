@@ -281,7 +281,12 @@ div.listingblock div.title {
 }
 
 /* customized Prism theme COY */
-.listingblock pre[class*="language-"]::after, 
+.listingblock pre[class*="language-"]::after,
 .listingblock pre[class*="language-"]::before {
 	box-shadow: none;
+}
+
+
+div.sectionbody > div.ulist {
+    margin-left: 10px;
 }

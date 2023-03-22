@@ -16,34 +16,36 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain._commands;
+package demoapp.dom.domain._propertychanges;
 
 import java.util.List;
 
 import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Collection;
-import org.apache.causeway.applib.annotation.CollectionLayout;
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry;
+import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntryRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 //tag::class[]
 @Collection
-@CollectionLayout(defaultView = "table")
 @RequiredArgsConstructor
-public class ExposePersistedCommands_commands {
+public class ExposePropertyChanges_propertyChanges {
     // ...
 //end::class[]
-    private final ExposePersistedCommands exposePersistedCommands;
 
-    //tag::class[]
-    public List<? extends CommandLogEntry> coll() {
-        return commandModelRepository.findCompleted();
+    @SuppressWarnings("unused")
+    private final ExposePropertyChanges exposeexposePropertyChanges;
+
+    @MemberSupport
+//tag::class[]
+    public List<? extends AuditTrailEntry> coll() {
+        return auditTrailEntryRepository.findAll();
     }
 
-    @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandModelRepository;
+    @Inject AuditTrailEntryRepository<? extends AuditTrailEntry> auditTrailEntryRepository;
 }
 //end::class[]

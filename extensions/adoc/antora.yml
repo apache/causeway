@@ -16,7 +16,7 @@
 #  under the License.
 
 name: extensions
-title: "Extensions Catalog"
+title: "Extensions"
 version: latest
 start_page: ROOT:about.adoc
 nav:

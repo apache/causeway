@@ -1,24 +1,24 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-WARNING: TODO: was renamed/moved from auditing+publishing to entityChangePublishing
+If the `entityChangePublishing` element has been specified using a custom meta-annotation, for example as disabled, it can still be overridden on a per-class basis.
 
-The `entityChangePublishing` element can also be specified using a custom meta-annotation:
+This would be useful if you used a common meta-annotation for a bunch of semantics, but wanted to override just this `entityChangePublishing` semantic for a particular class.
 
-:examples/demo/domain/src/main/java/demoapp/dom/annotDomain/DomainObject/publishing/metaAnnotOverridden/enabled/DomainObjectPublishingEnabledMetaAnnotOverriddenJdo-description.adoc
-
-* the meta-annotation is defined as:
+* So, with a meta-annotation is defined as:
 +
 [source,java]
 ----
 include::../../DomainObjectEntityChangePublishingDisabledMetaAnnotation.java[tags=class]
 ----
-<.> annotated for a domain object
+<.> disables the `entityChangePublishing` for all domain object that it is applied to
 <.> annotation can be applied to the type or a further meta-annotation type only
 
-* and can be applied to a domain object:
+* it can be overridden at the domain class:
 +
 [source,java,indent=0]
 ----
 include::DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdo.java[tags=class]
 ----
-<.> semantic is inherited from the meta-annotation
+<.> the `entityChangePublishing` semantic is inherited from the meta-annotation, however...
+<.> it is overridden at the domain class level
+

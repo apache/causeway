@@ -60,6 +60,10 @@ _Core_
 * *xref:testing:ROOT:about.adoc[Testing Guide]*
 * *xref:security:ROOT:about.adoc[Security Guide]*
 
+_For use in apps_
+
+* xref:valuetypes:ROOT:about.adoc[Value Types]
+
 _Development_
 
 * xref:setupguide:ROOT:about.adoc[Setup Guide]
@@ -68,6 +72,13 @@ _Development_
 |
 [discrete]
 == Components
+
+_Security_
+
+* xref:security:bypass:about.adoc[Bypass]
+* xref:security:shiro:about.adoc[Shiro]
+* xref:security:spring:about.adoc[Spring]
+* xref:security:keycloak:about.adoc[Keycloak]
 
 _Viewers_
 
@@ -79,25 +90,31 @@ _Persistence_
 * xref:pjpa:ROOT:about.adoc[JPA (EclipseLink)]
 * xref:pjdo:ROOT:about.adoc[JDO (DataNucleus)]
 
-_Security_
-
-* xref:security:bypass:about.adoc[Bypass]
-* xref:security:shiro:about.adoc[Shiro]
-* xref:security:spring:about.adoc[Spring]
-* xref:security:keycloak:about.adoc[Keycloak]
-
 
 |
 [discrete]
-== Catalogs
+== (Common) Extensions
 
-_For Use in Domain Apps_
 
-* *xref:valuetypes:ROOT:about.adoc[Value Type Catalog]*
+_Core_
 
-_Extending the framework itself_
+** *xref:userguide:commandlog:about.adoc[]*
+** xref:userguide:executionoutbox:about.adoc[]
+** *xref:userguide:flyway:about.adoc[]*
 
-* *xref:extensions:ROOT:about.adoc[Extensions Catalog]*
+
+_Security_
+
+** *xref:security:secman:about.adoc[SecMan]*
+** *xref:security:audittrail:about.adoc[]*
+** xref:security:spring-oauth2:about.adoc[]
+** xref:security:sessionlog:about.adoc[]
+
+
+_Web UI (Wicket)_
+
+** *xref:vw:exceldownload:about.adoc[]*
+** *xref:vw:pdfjs:about.adoc[]*
 
 
 |

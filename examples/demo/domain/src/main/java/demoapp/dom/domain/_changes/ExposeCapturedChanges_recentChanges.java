@@ -29,6 +29,7 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 //tag::class[]
 @Collection
 @RequiredArgsConstructor
@@ -50,7 +51,6 @@ public class ExposeCapturedChanges_recentChanges {
         return list;
     }
 
-    @Inject
-    EntityChangesSubscriberToCaptureChangesInMemory entityChangesSubscriberToCaptureChangesInMemory;
+    @Inject EntityChangesSubscriberToCaptureChangesInMemory entityChangesSubscriberToCaptureChangesInMemory;
 }
 //end::class[]

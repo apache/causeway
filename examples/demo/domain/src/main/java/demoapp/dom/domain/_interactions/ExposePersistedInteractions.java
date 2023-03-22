@@ -18,33 +18,10 @@
  */
 package demoapp.dom.domain._interactions;
 
-import jakarta.inject.Inject;
-
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.SemanticsOf;
-
-import lombok.RequiredArgsConstructor;
-
+/**
+ * Marker interface for mixins to contribute to.
+ */
 //tag::class[]
-@Action(
-    semantics = SemanticsOf.IDEMPOTENT)
-@ActionLayout(
-    associateWith = "interactions")
-@RequiredArgsConstructor
-public class ExposeCapturedInteractions_clear {
-    // ...
-//end::class[]
-
-    private final ExposeCapturedInteractions exposeCapturedInteractions;
-
-//tag::class[]
-    public ExposeCapturedInteractions act() {
-        executionListenerToCaptureInteractionsInMemory.clear();
-        return exposeCapturedInteractions;
-    }
-
-    @Inject
-    ExecutionListenerToCaptureInteractionsInMemory executionListenerToCaptureInteractionsInMemory;
+public interface ExposePersistedInteractions {
 }
 //end::class[]

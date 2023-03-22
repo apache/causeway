@@ -3,7 +3,7 @@
 [#actionDomainEvent]
 == actionDomainEvent
 
-Indicates that an invocation of _any_ action of the domain object (that do not themselves specify their own `@Action(domainEvent=...)` should be posted to the _org.apache.causeway.applib.services.eventbus.EventBusService event bus_ using the specified custom (subclass of) xref:refguide:applib:index/events/domain/ActionDomainEvent.adoc[ActionDomainEvent] .
+Indicates that an invocation of _any_ action of the domain object (that do not themselves specify their own `@Action(domainEvent=...)` should be posted to the _org.apache.causeway.applib.services.eventbus.EventBusService event bus_ using the specified custom (subclass of) https://causeway.apache.org/refguide/${CAUSEWAY_VERSION}/applib/index/events/domain/ActionDomainEvent.html[ActionDomainEvent] .
 
 For example:
 
@@ -25,7 +25,7 @@ This subclass must provide a no-arg constructor; the fields are set reflectively
 [#propertyDomainEvent]
 == propertyDomainEvent
 
-Indicates that changes to _any_ property of the domain object (that do not themselves specify their own `@Property(domainEvent=...)` should be posted to the _org.apache.causeway.applib.services.eventbus.EventBusService event bus_ using the specified custom (subclass of) xref:refguide:applib:index/events/domain/PropertyDomainEvent.adoc[PropertyDomainEvent] .
+Indicates that changes to _any_ property of the domain object (that do not themselves specify their own `@Property(domainEvent=...)` should be posted to the _org.apache.causeway.applib.services.eventbus.EventBusService event bus_ using the specified custom (subclass of) https://causeway.apache.org/refguide/${CAUSEWAY_VERSION}/applib/index/events/domain/PropertyDomainEvent.html[PropertyDomainEvent] .
 
 For example:
 
@@ -43,7 +43,7 @@ This subclass must provide a no-arg constructor; the fields are set reflectively
 [#collectionDomainEvent]
 == collectionDomainEvent
 
-Indicates that changes to _any_ collection of the domain object (that do not themselves specify their own `@Collection(domainEvent=...)` should be posted to the _org.apache.causeway.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/domain/CollectionDomainEvent.adoc[CollectionDomainEvent] .
+Indicates that changes to _any_ collection of the domain object (that do not themselves specify their own `@Collection(domainEvent=...)` should be posted to the https://causeway.apache.org/refguide/${CAUSEWAY_VERSION}/applib/index/services/eventbus/EventBusService.html[EventBusService] event bus_ using a custom (subclass of) https://causeway.apache.org/refguide/${CAUSEWAY_VERSION}/applib/index/events/domain/CollectionDomainEvent.html[CollectionDomainEvent] .
 
 For example:
 

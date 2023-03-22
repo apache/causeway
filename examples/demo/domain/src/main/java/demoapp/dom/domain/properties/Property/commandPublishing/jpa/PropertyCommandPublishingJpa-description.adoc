@@ -1,20 +1,20 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-The `commandPublishing` element is used to allow or suppress the reification of a property edit into a xref:refguide:applib:index/services/command/Command.adoc[Command].
+The `commandPublishing` element is used to allow or suppress the reification of a property edit into a https://causeway.apache.org/refguide/${CAUSEWAY_VERSION}/applib/index/services/command/Command.html[Command].
 
 
-When allowed (the default), then the xref:refguide:applib:index/services/command/Command.adoc[Command] is sent to registered implementation(s) of https://causeway.apache.org/refguide/2.0.0-M5/applib-svc/CommandSubscriber.html#section-top[CommandSubscriber] SPI, _after_ the interaction has completed.
+When allowed (the default), then the https://causeway.apache.org/refguide/${CAUSEWAY_VERSION}/applib/index/services/command/Command.html[Command] is sent to registered implementation(s) of https://causeway.apache.org/refguide/${CAUSEWAY_VERSION}/applib/index/services/publishing/spi/CommandSubscriber.html[CommandSubscriber] SPI, _after_ the interaction has completed.
 One use case is to replicate and replay commands to a secondary system, for example for regression testing.
 For more on this, see the "Command Replay" section below.
 
-Commands are also used under the covers to allow property edits to be made asynchronously using the link:https://causeway.apache.org/refguide/2.0.0-M3/applib-svc/WrapperFactory.html[WrapperFactory].
+Commands are also used under the covers to allow property edits to be made asynchronously using the link:https://causeway.apache.org/refguide/${CAUSEWAY_VERSION}/applib/index/services/wrapper/WrapperFactory.html[WrapperFactory].
 
 [NOTE]
 ====
-The list of persisted xref:refguide:applib:index/services/command/Command.adoc[Command]s can be viewed in a collection at the left bottom of the page.
-xref:refguide:applib:index/services/command/Command.adoc[Command]s are persisted after the page rendering phase, so to view a just-persisted command, refresh the page.
+The list of persisted https://causeway.apache.org/refguide/${CAUSEWAY_VERSION}/applib/index/services/command/Command.html[Command]s can be viewed in a collection at the left bottom of the page.
+https://causeway.apache.org/refguide/${CAUSEWAY_VERSION}/applib/index/services/command/Command.html[Command]s are persisted after the page rendering phase, so to view a just-persisted command, refresh the page.
 
-If running in prototype mode, the list of persisted xref:refguide:applib:index/services/command/Command.adoc[Command]s can also be truncated from the activity menu.
+If running in prototype mode, the list of persisted https://causeway.apache.org/refguide/${CAUSEWAY_VERSION}/applib/index/services/command/Command.html[Command]s can also be truncated from the activity menu.
 ====
 
 == Annotated
@@ -73,9 +73,9 @@ include::PropertyCommandPublishingJpa.java[tags=meta-annotation-overridden]
 
 == CommandSubscriber
 
-The demo includes the link:https://causeway.apache.org/extensions/2.0.0-M3/commandlog/about.html[Command Log] extension, so every command is persisted.
+The demo includes the link:https://causeway.apache.org/userguide/${CAUSEWAY_VERSION}/commandlog/about.html extension, so every command is persisted.
 These can be viewed in the collection at the bottom of the left page.
-xref:refguide:applib:index/services/command/Command.adoc[Command]s are persisted after the page rendering phase, so to view a just-persisted command, refresh the page.
+https://causeway.apache.org/refguide/${CAUSEWAY_VERSION}/applib/index/services/command/Command.html[Command]s are persisted after the page rendering phase, so to view a just-persisted command, refresh the page.
 
 
 == Configuration
@@ -102,11 +102,11 @@ In other words actions are reified to commands except for those that don't chang
 //
 //== Command Replay
 //
-//The link:https://causeway.apache.org/extensions/2.0.0-M3/commandlog/about.html[Command Log] extension provides an implementation of `CommandServiceListener` to allow xref:refguide:applib:index/services/command/Command.adoc[Command]s to be persisted.
-//It also provides a RESTful endpoint to allow xref:refguide:applib:index/services/command/Command.adoc[Command]s to be queried.
+//The link:https://causeway.apache.org/userguide/${CAUSEWAY_VERSION}/commandlog/about.html extension provides an implementation of `CommandServiceListener` to allow https://causeway.apache.org/refguide/${CAUSEWAY_VERSION}/applib/index/services/command/Command.html[Command]s to be persisted.
+//It also provides a RESTful endpoint to allow https://causeway.apache.org/refguide/${CAUSEWAY_VERSION}/applib/index/services/command/Command.html[Command]s to be queried.
 //This is used by the link:https://causeway.apache.org/extensions/2.0.0-M3/commandreplay/about.html[Command Replay] extension to allow commands to be replayed on a secondary system, for regression testing.
 //
-//The associated `commandDtoProcessor()` element allows the xref:refguide:applib:index/services/command/Command.adoc[Command] XML representation (as a `CommandDto`) to be processed before being surfaced through the REST endpoint.
+//The associated `commandDtoProcessor()` element allows the https://causeway.apache.org/refguide/${CAUSEWAY_VERSION}/applib/index/services/command/Command.html[Command] XML representation (as a `CommandDto`) to be processed before being surfaced through the REST endpoint.
 //One use case is to allow data to be obfuscated for security, or to replace large payloads (such as Blobs) with a smaller dummy payload.
 //As well as specifying DTO processing at the action level, it can be specified globally by implementing the link:https://causeway.apache.org/refguide/2.0.0-M3/applib-svc/CommandDtoProcessorService.html[CommandDtoProcessorService] SPI.
 //
