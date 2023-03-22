@@ -37,7 +37,6 @@ import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.
 import lombok.Getter;
 import lombok.Setter;
 
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @Profile("demo-jdo")
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")

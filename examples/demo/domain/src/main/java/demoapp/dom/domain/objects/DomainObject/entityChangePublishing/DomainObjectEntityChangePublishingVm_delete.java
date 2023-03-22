@@ -18,6 +18,9 @@
  */
 package demoapp.dom.domain.objects.DomainObject.entityChangePublishing;
 
+import java.util.Collections;
+import java.util.List;
+
 import jakarta.inject.Inject;
 
 import org.springframework.lang.Nullable;
@@ -34,10 +37,6 @@ import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenEntity;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Collections;
-import java.util.List;
-
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 //tag::class[]
 @Action(semantics = SemanticsOf.IDEMPOTENT)
 @ActionLayout(
@@ -100,7 +99,7 @@ public class DomainObjectEntityChangePublishingVm_delete {
         return null;
     }
 
-    private static <T> List<? extends T> listOf(T t) {
+    private static <T> List<? extends T> listOf(final T t) {
         return t == null ? Collections.emptyList() : Collections.singletonList(t);
     }
 

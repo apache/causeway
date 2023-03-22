@@ -29,7 +29,6 @@ import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntryRepos
 
 import lombok.RequiredArgsConstructor;
 
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 //tag::class[]
 @Collection
 @RequiredArgsConstructor

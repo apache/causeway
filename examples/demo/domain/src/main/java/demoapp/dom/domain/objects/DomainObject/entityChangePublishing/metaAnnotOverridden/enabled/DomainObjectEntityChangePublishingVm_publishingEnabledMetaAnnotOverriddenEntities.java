@@ -29,7 +29,6 @@ import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingVm;
 import lombok.RequiredArgsConstructor;
 
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @Collection()
 @CollectionLayout(paged = 3)
 @RequiredArgsConstructor
