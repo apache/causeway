@@ -205,17 +205,17 @@ implements TemporalValueSemantics<T> {
 
         val dateAndTimeFormatStyle = DateAndTimeFormatStyle.forContext(mmc, context);
 
+        val temporalNoZoneRenderingFormat = getTemporalNoZoneRenderingFormat(
+                context, temporalCharacteristic, offsetCharacteristic,
+                dateAndTimeFormatStyle.getDateFormatStyle(),
+                dateAndTimeFormatStyle.getTimeFormatStyle());
+
+        val temporalZoneOnlyRenderingFormat = getTemporalZoneOnlyRenderingFormat(
+                context, temporalCharacteristic, offsetCharacteristic).orElse(null);
+
+        val timeZoneTranslation = dateAndTimeFormatStyle.getTimeZoneTranslation();
+
         return time-> {
-
-                final var temporalNoZoneRenderingFormat = getTemporalNoZoneRenderingFormat(
-                        context, temporalCharacteristic, offsetCharacteristic,
-                        dateAndTimeFormatStyle.getDateFormatStyle(),
-                        dateAndTimeFormatStyle.getTimeFormatStyle());
-
-                final var temporalZoneOnlyRenderingFormat = getTemporalZoneOnlyRenderingFormat(
-                        context, temporalCharacteristic, offsetCharacteristic).orElse(null);
-
-                final var timeZoneTranslation = dateAndTimeFormatStyle.getTimeZoneTranslation();
 
                 final var asLocalicedTime = translateToUserLocalTimeZone(context, time);
 
@@ -264,7 +264,7 @@ implements TemporalValueSemantics<T> {
                     break;
                 }
 
-                return sb.toString();
+                return _Strings.asRegularSpaces(sb);
         };
     }
 
