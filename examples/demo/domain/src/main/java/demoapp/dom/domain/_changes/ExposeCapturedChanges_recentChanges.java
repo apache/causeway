@@ -29,7 +29,6 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 //tag::class[]
 @Collection
 @RequiredArgsConstructor

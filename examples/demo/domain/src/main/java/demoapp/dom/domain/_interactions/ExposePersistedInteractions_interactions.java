@@ -30,7 +30,6 @@ import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryR
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 //tag::class[]
 @Collection
 @RequiredArgsConstructor

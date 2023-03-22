@@ -27,7 +27,6 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingVm;
 import lombok.RequiredArgsConstructor;
 
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 //tag::class[]
 @Action(
     semantics = SemanticsOf.IDEMPOTENT)

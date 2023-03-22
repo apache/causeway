@@ -18,8 +18,6 @@
  */
 package demoapp.dom.domain._propertychanges;
 
-import lombok.RequiredArgsConstructor;
-
 import java.util.List;
 
 import javax.inject.Inject;
@@ -29,7 +27,8 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry;
 import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntryRepository;
 
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
+import lombok.RequiredArgsConstructor;
+
 //tag::class[]
 @Collection
 @RequiredArgsConstructor
