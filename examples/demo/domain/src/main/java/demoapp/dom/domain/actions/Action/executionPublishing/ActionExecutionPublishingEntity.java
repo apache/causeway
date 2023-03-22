@@ -24,14 +24,14 @@ import org.apache.causeway.applib.annotation.DomainObject;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
-import demoapp.dom.domain._interactions.ExposePersistedInteractions;
+import demoapp.dom.domain._interactions.ExposePersistedExecutions;
 
 @Named("demo.ActionExecutionPublishingEntity") // shared permissions with concrete sub class
 @DomainObject
 public abstract class ActionExecutionPublishingEntity
 implements
     HasAsciiDocDescription,
-        ExposePersistedInteractions,
+        ExposePersistedExecutions,
     ValueHolder<String> {
 
     @Override

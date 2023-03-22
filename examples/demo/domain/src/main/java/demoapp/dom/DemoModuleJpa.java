@@ -28,6 +28,7 @@ import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistence
 
 import demoapp.dom.domain.actions.Action.commandPublishing.jpa.ActionCommandPublishingJpa;
 import demoapp.dom.domain.actions.Action.executionPublishing.jpa.ActionExecutionPublishingJpa;
+import demoapp.dom.domain.objects.DomainObject.aliased.jpa.AddressJpa;
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.jpa.DomainObjectEntityChangePublishingDisabledJpa;
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled.jpa.DomainObjectEntityChangePublishingEnabledJpa;
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.jpa.DomainObjectEntityChangePublishingEnabledMetaAnnotatedJpa;
@@ -90,6 +91,8 @@ import demoapp.dom.types.primitive.shorts.jpa.PrimitiveShortJpa;
     CausewayModuleExtCommandLogPersistenceJpa.class,
 })
 @EntityScan(basePackageClasses = {
+
+        AddressJpa.class,
 
         CausewayBlobJpa.class,
         CausewayClobJpa.class,

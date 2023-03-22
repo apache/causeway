@@ -33,12 +33,12 @@ import lombok.val;
 //tag::class[]
 @Collection
 @RequiredArgsConstructor
-public class ExposePersistedInteractions_interactions {
+public class ExposePersistedExecutions_interactions {
     // ...
 //end::class[]
 
     @SuppressWarnings("unused")
-    private final ExposePersistedInteractions exposePersistedInteractions;
+    private final ExposePersistedExecutions exposePersistedExecutions;
 
 //tag::class[]
     public List<InteractionDtoVm> coll() {

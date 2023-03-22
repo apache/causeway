@@ -16,37 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.Property.executionPublishing;
+package demoapp.dom.domain.objects.DomainObject.aliased;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolder;
 
 import javax.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom._infra.values.ValueHolder;
-import demoapp.dom.domain._interactions.ExposePersistedExecutions;
-
-@Named("demo.PropertyExecutionPublishingEntity") // shared permissions with concrete sub class
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
+@Named("address.Address") // shared permissions with concrete sub class
 @DomainObject
-public abstract class PropertyExecutionPublishingEntity
-implements
-    HasAsciiDocDescription,
-        ExposePersistedExecutions,
-    ValueHolder<String> {
+public abstract class Address
+        implements
+        HasAsciiDocDescription,
+        ValueHolder<String> {
 
     @Override
     public String value() {
-        return getProperty();
+        return getAddressLine();
     }
 
-    protected abstract String getProperty();
-    protected abstract void setProperty(String value);
-
-    protected abstract String getPropertyMetaAnnotated();
-    protected abstract void setPropertyMetaAnnotated(String value);
-
-    protected abstract String getPropertyMetaAnnotatedOverridden();
-    protected abstract void setPropertyMetaAnnotatedOverridden(String value);
+    public abstract String getAddressLine();
+    public abstract void setAddressLine(String value);
 
 }
-

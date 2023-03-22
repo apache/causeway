@@ -16,12 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain._interactions;
+package demoapp.dom.domain.objects.DomainObject.aliased.jpa;
 
-/**
- * Marker interface for mixins to contribute to.
- */
-//tag::class[]
-public interface ExposePersistedInteractions {
+import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.jpa.DomainObjectEntityChangePublishingDisabledJpa;
+
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
+
+@Profile("demo-jpa")
+@Service
+public class AddressJpaEntities
+extends ValueHolderRepository<String, AddressJpa> {
+
+    protected AddressJpaEntities() {
+        super(AddressJpa.class);
+    }
+
+    @Override
+    protected AddressJpa newDetachedEntity(String value) {
+        return new AddressJpa(value);
+    }
+
 }
-//end::class[]
