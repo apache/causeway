@@ -60,6 +60,7 @@ import demoapp.webapp.wicket.common.ui.DemoAppWicketCommon;
 
     // UI (Wicket Viewer)
     CausewayModuleViewerWicketViewer.class,
+    CausewayModuleViewerWicketApplibMixins.class,
     CausewayModuleExtSseWicket.class,
     CausewayModuleValAsciidocUiWkt.class,
     CausewayModuleValMarkdownUiWkt.class,

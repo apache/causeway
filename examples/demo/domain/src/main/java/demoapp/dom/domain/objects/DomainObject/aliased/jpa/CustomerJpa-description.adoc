@@ -2,7 +2,7 @@
 
 [source,java,indent=0]
 ----
-include::AddressJpa.java[tags=class]
+include::CustomerJpa.java[tags=class]
 ----
 <.> current logical type name
 <.> previous logical type names

@@ -18,47 +18,23 @@
  */
 package demoapp.dom.domain.objects.DomainObject.aliased.jpa;
 
-import demoapp.dom.domain.objects.DomainObject.aliased.Address;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
-import javax.inject.Named;
-import javax.persistence.*;
-
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
 
 @Profile("demo-jpa")
-//tag::class[]
-@Entity
-@Table(
-    schema = "demo",
-    name = "AddressJpa"
-)
-@EntityListeners(CausewayEntityListener.class)
-@Named("address.Address")               // <.>
-@DomainObject(
-        aliased = {"customer.Address"}  // <.>
-)
-@NoArgsConstructor
-public class AddressJpa extends Address {
-    // ...
-//end::class[]
+@Service
+public class CustomerJpaEntities
+extends ValueHolderRepository<String, CustomerJpa> {
 
-    public AddressJpa(String value) {
-        setAddressLine(value);
+    protected CustomerJpaEntities() {
+        super(CustomerJpa.class);
     }
 
-    @Id
-    @GeneratedValue
-    private Long id;
+    @Override
+    protected CustomerJpa newDetachedEntity(String value) {
+        return new CustomerJpa(value);
+    }
 
-    @Getter @Setter
-    private String addressLine;
-
-
-//tag::class[]
 }
-//end::class[]

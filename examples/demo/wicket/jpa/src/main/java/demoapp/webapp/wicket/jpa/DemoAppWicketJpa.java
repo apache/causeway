@@ -18,6 +18,7 @@
  */
 package demoapp.webapp.wicket.jpa;
 
+import org.apache.causeway.viewer.wicket.applib.CausewayModuleViewerWicketApplibMixins;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
@@ -59,6 +60,7 @@ import demoapp.webapp.wicket.common.ui.DemoAppWicketCommon;
 
     // UI (Wicket Viewer)
     CausewayModuleViewerWicketViewer.class,
+    CausewayModuleViewerWicketApplibMixins.class,
     CausewayModuleExtSseWicket.class,
     CausewayModuleValAsciidocUiWkt.class,
     CausewayModuleValMarkdownUiWkt.class,

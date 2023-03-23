@@ -21,24 +21,45 @@ package demoapp.dom.domain.objects.DomainObject.aliased;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.Title;
+import org.apache.causeway.applib.services.bookmark.BookmarkService;
 
 @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
-@Named("address.Address") // shared permissions with concrete sub class
-@DomainObject
-public abstract class Address
+@Named("demo.party.Customer")                   // <.>
+@DomainObject(
+        aliased = {"demo.customer.Customer"}    // <.>
+)
+public abstract class Customer
         implements
         HasAsciiDocDescription,
         ValueHolder<String> {
 
-    @Override
-    public String value() {
-        return getAddressLine();
+    public String title() {
+        return value();
     }
 
-    public abstract String getAddressLine();
-    public abstract void setAddressLine(String value);
+    @Override
+    public String value() {
+        return getName();
+    }
 
+    public abstract String getName();
+    public abstract void setName(String value);
+
+    @Property
+    public String getBookmark() {
+        return bookmarkService.bookmarkFor(this).orElseThrow().stringify();
+    }
+
+    @Property
+    public String getPreviousBookmark() {
+        return getBookmark().replace("demo.party.", "demo.customer.");
+    }
+
+    @Inject private BookmarkService bookmarkService;
 }

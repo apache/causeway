@@ -26,12 +26,12 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AddressSeeding
+public class CustomerSeeding
 extends SeedServiceAbstract {
 
     @Inject
-    public AddressSeeding(
-            ValueHolderRepository<String, ? extends Address> entities) {
+    public CustomerSeeding(
+            ValueHolderRepository<String, ? extends Customer> entities) {
         super(entities);
     }
 

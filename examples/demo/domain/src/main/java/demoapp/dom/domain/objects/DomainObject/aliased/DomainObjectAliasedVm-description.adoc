@@ -10,12 +10,14 @@ Perhaps the domain class has to be moved from one module to another, and you wou
 
 The purpose of the link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/DomainObject.html#aliased[@DomainObject#aliased] attribute is to record additional logical type names, so that the main logical type name can be changed.
 
-For example, suppose an `Address` type initially is part of the "customer" module and its original logical type name is "customer.Address".
-Later on, you decide to move `Address` to its own "address" module, with a new logical type name being "address.Address".
-However, any bookmarks in the old format of "customer.Address:1234" should still resolve.
+For example, suppose an `Customer` type initially is part of the "customer" module and its original logical type name is "customer.Customer".
+Later on, you decide to move `Customer` to a more generic "party" module, with a new logical type name being "party.Customer".
+However, any bookmarks in the old format of "customer.Customer:1234" should still resolve.
 
 === Explanation of this Demo
 
-The collection on the left shows a set of `Address` entity instances.
+The collection on the left shows a set of `Customer` entity instances, each indicating their current bookmark and a previous bookmark that corresponds to the value of their link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/DomainObject.html#aliased[@DomainObject#alias].
+
+The "lookup" action allows any of these objects to be shown using either bookmark.
 
 
