@@ -39,6 +39,7 @@ import org.apache.causeway.valuetypes.vega.metamodel.CausewayModuleValVegaMetaMo
 import org.apache.causeway.valuetypes.vega.persistence.jpa.CausewayModuleValVegaPersistenceJpa;
 import org.apache.causeway.valuetypes.vega.ui.wkt.CausewayModuleValVegaUiWkt;
 import org.apache.causeway.viewer.graphql.viewer.CausewayModuleIncViewerGraphqlViewer;
+import org.apache.causeway.viewer.wicket.applib.CausewayModuleViewerWicketApplibMixins;
 import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 
 import demoapp.web.DemoAppManifestJpa;
