@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.incubator.viewer.vaadin.ui.pages.login;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;

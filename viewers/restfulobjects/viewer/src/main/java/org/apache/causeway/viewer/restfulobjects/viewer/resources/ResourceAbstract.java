@@ -22,19 +22,20 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.function.UnaryOperator;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.Request;
-import javax.ws.rs.core.SecurityContext;
-import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.ext.Providers;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.Request;
+import jakarta.ws.rs.core.SecurityContext;
+import jakarta.ws.rs.core.UriInfo;
+import jakarta.ws.rs.ext.Providers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.codec._UrlDecoderUtil;
@@ -100,7 +101,9 @@ implements HasMetaModelContext {
             final ResourceDescriptor resourceDescriptor,
             final String urlUnencodedQueryString) {
 
-        if (!getInteractionService().isInInteraction()) {
+        _Assert.assertNotNull(metaModelContext, ()->"injection points not resolved for " + this.getClass());
+
+        if (!metaModelContext.getInteractionService().isInInteraction()) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED);
         }
 

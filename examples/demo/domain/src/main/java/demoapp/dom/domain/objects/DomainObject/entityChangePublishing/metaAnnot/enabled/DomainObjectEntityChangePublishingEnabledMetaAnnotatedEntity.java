@@ -18,7 +18,7 @@
  */
 package demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 

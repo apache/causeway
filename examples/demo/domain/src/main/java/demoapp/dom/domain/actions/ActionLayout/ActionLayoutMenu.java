@@ -18,7 +18,7 @@
  */
 package demoapp.dom.domain.actions.ActionLayout;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -41,7 +41,7 @@ import demoapp.dom.domain.actions.ActionLayout.sequence.ActionLayoutSequenceVm;
 
 @DomainService(nature=NatureOfService.VIEW)
 @Named("demo.ActionLayoutMenu")
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 //@Log4j2
 public class ActionLayoutMenu {
 

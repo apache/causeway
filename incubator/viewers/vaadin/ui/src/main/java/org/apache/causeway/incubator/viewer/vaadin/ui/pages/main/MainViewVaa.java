@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.incubator.viewer.vaadin.ui.pages.main;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;

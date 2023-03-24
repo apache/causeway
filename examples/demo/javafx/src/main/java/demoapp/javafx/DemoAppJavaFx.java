@@ -25,6 +25,7 @@ import org.springframework.context.annotation.Import;
 import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault;
+import org.apache.causeway.extensions.secman.jpa.CausewayModuleExtSecmanPersistenceJpa;
 import org.apache.causeway.incubator.viewer.javafx.model.events.JavaFxViewerConfig;
 import org.apache.causeway.incubator.viewer.javafx.model.util._fx;
 import org.apache.causeway.incubator.viewer.javafx.viewer.CausewayModuleIncViewerJavaFxViewer;
@@ -42,6 +43,8 @@ import demoapp.dom.DemoModuleJpa;
 
     // INCUBATING
     CausewayModuleSecurityBypass.class,
+    // Security Manager Extension (secman)
+    CausewayModuleExtSecmanPersistenceJpa.class,
     CausewayModuleIncViewerJavaFxViewer.class,
 
 })

@@ -18,18 +18,29 @@
  */
 package org.apache.causeway.applib.services.metamodel;
 
-import lombok.val;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import static java.nio.charset.StandardCharsets.UTF_8;
+
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
-import org.apache.causeway.applib.annotation.*;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.DomainService;
+import org.apache.causeway.applib.annotation.DomainServiceLayout;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.NatureOfService;
+import org.apache.causeway.applib.annotation.Optionality;
+import org.apache.causeway.applib.annotation.Parameter;
+import org.apache.causeway.applib.annotation.ParameterLayout;
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.annotation.RestrictTo;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
@@ -39,7 +50,7 @@ import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.io.JaxbUtils;
 import org.apache.causeway.schema.metamodel.v2.MetamodelDto;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
+import lombok.val;
 
 /**
  * Provides a UI to allow domain model metadata (obtained from {@link MetaModelService}) to be downloaded.
@@ -54,7 +65,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 public class MetaModelServiceMenu {
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".MetaModelServiceMenu";

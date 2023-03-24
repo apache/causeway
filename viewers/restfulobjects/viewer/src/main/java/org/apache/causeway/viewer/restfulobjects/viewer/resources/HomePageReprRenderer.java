@@ -20,7 +20,7 @@ package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
 import java.util.stream.Stream;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.commons.collections.Can;

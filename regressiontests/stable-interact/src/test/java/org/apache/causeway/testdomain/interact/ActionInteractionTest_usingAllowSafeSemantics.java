@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.testdomain.interact;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -63,7 +63,7 @@ class ActionInteractionTest_usingAllowSafeSemantics extends InteractionTestAbstr
 
     @Service
     @Named("regressiontests.AuthorizorDenyUse")
-    @javax.annotation.Priority(PriorityPrecedence.EARLY)
+    @jakarta.annotation.Priority(PriorityPrecedence.EARLY)
     @Qualifier("Testing")
     public static class AuthorizorDenyUse implements Authorizor {
 

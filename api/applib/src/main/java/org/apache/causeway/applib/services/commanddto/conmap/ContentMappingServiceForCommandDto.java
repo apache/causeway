@@ -20,11 +20,6 @@ package org.apache.causeway.applib.services.commanddto.conmap;
 
 import java.util.List;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.ws.rs.core.MediaType;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -38,6 +33,10 @@ import org.apache.causeway.applib.services.conmap.ContentMappingService;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.ws.rs.core.MediaType;
 import lombok.val;
 
 /**

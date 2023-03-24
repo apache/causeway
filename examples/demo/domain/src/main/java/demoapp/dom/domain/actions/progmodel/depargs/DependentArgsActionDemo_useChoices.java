@@ -21,7 +21,7 @@ package demoapp.dom.domain.actions.progmodel.depargs;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;

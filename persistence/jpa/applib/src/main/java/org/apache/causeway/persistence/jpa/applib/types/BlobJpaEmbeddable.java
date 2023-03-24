@@ -21,10 +21,10 @@ package org.apache.causeway.persistence.jpa.applib.types;
 import java.util.Arrays;
 import java.util.Optional;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Lob;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Lob;
 
 import org.apache.causeway.applib.value.Blob;
 
@@ -70,7 +70,7 @@ import lombok.val;
  * </p>
  *
  * <p>
- *     Lastly; note that {@link javax.persistence.AttributeOverrides} and {@link javax.persistence.AttributeOverride}
+ *     Lastly; note that {@link jakarta.persistence.AttributeOverrides} and {@link jakarta.persistence.AttributeOverride}
  *     provide a standardised way of fine-tuning the column definitions.
  * </p>
  *

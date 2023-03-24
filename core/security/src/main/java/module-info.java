@@ -31,9 +31,9 @@ module org.apache.causeway.security.api {
     exports org.apache.causeway.core.security.authorization;
     exports org.apache.causeway.core.security.util;
 
-    requires java.annotation;
+    requires jakarta.annotation;
     requires java.desktop;
-    requires java.inject;
+    requires jakarta.inject;
     requires lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;

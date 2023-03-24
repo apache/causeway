@@ -20,7 +20,7 @@ package demoapp.dom._infra.seed;
 
 import java.util.function.Supplier;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.events.metamodel.MetamodelListener;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;

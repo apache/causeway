@@ -20,9 +20,9 @@ package org.apache.causeway.incubator.viewer.vaadin.viewer;
 
 import java.io.IOException;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import com.vaadin.flow.spring.SpringServlet;
 
@@ -42,8 +42,7 @@ import lombok.extern.log4j.Log4j2;
  *
  */
 @Log4j2
-public class CausewayServletForVaadin
-extends SpringServlet {
+public class CausewayServletForVaadin extends SpringServlet {
 
     private static final long serialVersionUID = 1L;
 
@@ -59,8 +58,8 @@ extends SpringServlet {
 
 
     @Override
-    protected void service(HttpServletRequest request,
-            HttpServletResponse response) throws ServletException, IOException {
+    protected void service(final HttpServletRequest request,
+            final HttpServletResponse response) throws ServletException, IOException {
 
         val authentication = AuthSessionStoreUtil.get(request.getSession(true))
                 .orElse(null);
@@ -85,7 +84,5 @@ extends SpringServlet {
         }
 
     }
-
-
 
 }

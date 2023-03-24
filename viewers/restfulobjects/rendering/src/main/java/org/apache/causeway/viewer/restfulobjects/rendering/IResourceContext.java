@@ -21,8 +21,8 @@ package org.apache.causeway.viewer.restfulobjects.rendering;
 import java.util.List;
 import java.util.Optional;
 
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.MediaType;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;

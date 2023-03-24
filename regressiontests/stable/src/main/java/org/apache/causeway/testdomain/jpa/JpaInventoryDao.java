@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.testdomain.jpa;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;

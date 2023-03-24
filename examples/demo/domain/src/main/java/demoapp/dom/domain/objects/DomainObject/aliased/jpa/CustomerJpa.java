@@ -18,17 +18,22 @@
  */
 package demoapp.dom.domain.objects.DomainObject.aliased.jpa;
 
+import jakarta.inject.Named;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+import org.springframework.context.annotation.Profile;
+
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
+
 import demoapp.dom.domain.objects.DomainObject.aliased.Customer;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.inject.Named;
-import javax.persistence.*;
-
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
-import org.springframework.context.annotation.Profile;
 
 @Profile("demo-jpa")
 //tag::class[]
@@ -47,7 +52,7 @@ public class CustomerJpa extends Customer {
     // ...
 //end::class[]
 
-    public CustomerJpa(String value) {
+    public CustomerJpa(final String value) {
         setName(value);
     }
 

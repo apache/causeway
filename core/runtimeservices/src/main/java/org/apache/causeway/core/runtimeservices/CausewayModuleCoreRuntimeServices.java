@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.runtimeservices;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import org.apache.causeway.core.runtimeservices.session.InteractionIdGeneratorDefault;
 import org.springframework.context.annotation.Bean;

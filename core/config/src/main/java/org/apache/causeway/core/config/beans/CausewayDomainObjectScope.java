@@ -18,21 +18,19 @@
  */
 package org.apache.causeway.core.config.beans;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
-
 import java.util.UUID;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.beans.factory.config.Scope;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.ObjectFactory;
-import org.springframework.beans.factory.config.Scope;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 @RequiredArgsConstructor
 @Log4j2
@@ -41,7 +39,7 @@ class CausewayDomainObjectScope implements Scope {
     private final BeanFactory beanFactory;
 
     @Override
-    public Object get(String name, ObjectFactory<?> objectFactory) {
+    public Object get(final String name, final ObjectFactory<?> objectFactory) {
         if (!interactionService().isInInteraction()) {
             throw new IllegalStateException("No Causeway Interaction is currently active");
         }
@@ -51,12 +49,12 @@ class CausewayDomainObjectScope implements Scope {
     }
 
     @Override
-    public Object remove(String name) {
+    public Object remove(final String name) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void registerDestructionCallback(String name, Runnable runnable) {
+    public void registerDestructionCallback(final String name, final Runnable runnable) {
         if (!interactionService().isInInteraction()) {
             throw new IllegalStateException("No Causeway Interaction is currently active");
         }
@@ -64,7 +62,7 @@ class CausewayDomainObjectScope implements Scope {
     }
 
     @Override
-    public Object resolveContextualObject(String key) {
+    public Object resolveContextualObject(final String key) {
         return bookmarkService();
     }
 

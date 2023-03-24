@@ -21,7 +21,7 @@ package org.apache.causeway.persistence.jpa.eclipselink;
 import java.sql.SQLException;
 import java.util.Map;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.ObjectProvider;
@@ -181,7 +181,7 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
 
                 }
 
-                // (null-able) converts javax.persistence exceptions to Spring's hierarchy
+                // (null-able) converts jakarta.persistence exceptions to Spring's hierarchy
                 val translatedEx = super.translateExceptionIfPossible(ex);
 
                 if((translatedEx==null

@@ -18,7 +18,7 @@
  */
 package demoapp.dom.services.core.eventbusservice;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.ObjectSupport;

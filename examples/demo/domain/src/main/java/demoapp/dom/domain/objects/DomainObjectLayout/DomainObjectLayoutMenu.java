@@ -18,7 +18,7 @@
  */
 package demoapp.dom.domain.objects.DomainObjectLayout;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -43,7 +43,7 @@ import demoapp.dom.domain.objects.DomainObjectLayout.xxxUiEvent.DomainObjectLayo
 @DomainService(
         nature=NatureOfService.VIEW
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 //@Log4j2
 public class DomainObjectLayoutMenu {
 

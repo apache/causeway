@@ -23,8 +23,8 @@ import java.util.Objects;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
-import javax.annotation.Priority;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Component;
 

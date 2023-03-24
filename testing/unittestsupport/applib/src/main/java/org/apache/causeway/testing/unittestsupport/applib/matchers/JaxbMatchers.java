@@ -24,9 +24,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -43,7 +43,7 @@ public class JaxbMatchers {
     private JaxbMatchers(){}
 
     /**
-     * Performs an equality comparison of a {@link javax.xml.bind.annotation.XmlRootElement}-annotated class
+     * Performs an equality comparison of a {@link jakarta.xml.bind.annotation.XmlRootElement}-annotated class
      * to another by converting into XML first.
      */
     public static <T> Matcher<? super T> isEquivalentTo(final T expected) {

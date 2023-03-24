@@ -25,7 +25,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.bind.SchemaOutputResolver;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.transform.Result;
 import javax.xml.transform.Transformer;
@@ -42,6 +41,8 @@ import org.xml.sax.InputSource;
 import org.apache.causeway.commons.internal.codec._DocumentFactories;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
+
+import jakarta.xml.bind.SchemaOutputResolver;
 
 /**
  * An implementation of {@link SchemaOutputResolver} that keeps track of all the schemas for which it has

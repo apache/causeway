@@ -18,9 +18,10 @@
  */
 package org.apache.causeway.incubator.viewer.vaadin.viewer;
 
+
 import java.util.HashMap;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import com.vaadin.flow.spring.RootMappedCondition;
 import com.vaadin.flow.spring.SpringBootAutoConfiguration;

@@ -26,10 +26,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.Consumer;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.validation.constraints.Digits;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.validation.constraints.Digits;
 
 import org.apache.causeway.applib.annotation.*;
 import org.apache.causeway.commons.internal.base._Casts;

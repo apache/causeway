@@ -22,7 +22,7 @@ package org.apache.causeway.extensions.secman.delegated.shiro.realm;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;

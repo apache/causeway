@@ -29,6 +29,7 @@ import org.springframework.context.annotation.Import;
 import org.apache.causeway.extensions.cors.impl.CausewayModuleExtCors;
 import org.apache.causeway.extensions.secman.encryption.spring.CausewayModuleExtSecmanEncryptionSpring;
 import org.apache.causeway.extensions.secman.integration.CausewayModuleExtSecmanIntegration;
+import org.apache.causeway.extensions.secman.integration.authenticator.AuthenticatorSecmanAutoConfiguration;
 import org.apache.causeway.extensions.viewer.wicket.exceldownload.ui.CausewayModuleExtExcelDownloadWicketUi;
 import org.apache.causeway.testing.h2console.ui.CausewayModuleTestingH2ConsoleUi;
 import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.CausewayModuleViewerRestfulObjectsJaxrsResteasy;
@@ -47,6 +48,8 @@ import lombok.extern.log4j.Log4j2;
     // Security Manager Extension (secman)
     CausewayModuleExtSecmanIntegration.class,
     CausewayModuleExtSecmanEncryptionSpring.class,
+    // autoconfig
+    AuthenticatorSecmanAutoConfiguration.class,
 
     // REST
     CausewayModuleViewerRestfulObjectsViewer.class,

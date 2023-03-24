@@ -20,7 +20,7 @@ package org.apache.causeway.applib.services.user;
 
 import java.io.Serializable;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
@@ -32,14 +32,18 @@ import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Value;
+import lombok.val;
 
 /**
  * Immutable serializable value held by {@link UserMemento}.
  *
  * @since 1.x revised for 2.0 {@index}
  */
-@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @Named(RoleMemento.LOGICAL_TYPE_NAME)
 @DomainObject(
         nature = Nature.VIEW_MODEL)

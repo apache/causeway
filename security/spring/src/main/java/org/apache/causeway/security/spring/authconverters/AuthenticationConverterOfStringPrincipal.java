@@ -30,7 +30,7 @@ import lombok.NonNull;
  * Applies if {@link Authentication} holds a principal of type {@link String}.
  */
 @Component
-@javax.annotation.Priority(PriorityPrecedence.LATE + 100)
+@jakarta.annotation.Priority(PriorityPrecedence.LATE + 100)
 public class AuthenticationConverterOfStringPrincipal
 extends AuthenticationConverter.Abstract<String> {
 

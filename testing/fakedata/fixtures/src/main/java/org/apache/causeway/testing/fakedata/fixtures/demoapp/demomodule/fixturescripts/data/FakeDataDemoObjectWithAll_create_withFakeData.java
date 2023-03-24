@@ -87,9 +87,9 @@ public class FakeDataDemoObjectWithAll_create_withFakeData extends FixtureScript
         executionContext.addResult(this, fakeDataDemoObject);
     }
 
-    @javax.inject.Inject
+    @jakarta.inject.Inject
     FakeDataDemoObjectWithAllMenu demoObjectWithAllMenu;
 
-    @javax.inject.Inject
+    @jakarta.inject.Inject
     FakeDataService fakeDataService;
 }

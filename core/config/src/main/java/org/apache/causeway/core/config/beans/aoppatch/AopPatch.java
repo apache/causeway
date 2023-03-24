@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.config.beans.aoppatch;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;

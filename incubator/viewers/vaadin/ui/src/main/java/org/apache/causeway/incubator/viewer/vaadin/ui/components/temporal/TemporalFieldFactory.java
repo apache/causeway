@@ -38,7 +38,7 @@ import org.apache.causeway.viewer.commons.model.components.UiComponentFactory.Co
 import lombok.val;
 
 @org.springframework.stereotype.Component
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 public class TemporalFieldFactory implements UiComponentHandlerVaa {
 
     @Override

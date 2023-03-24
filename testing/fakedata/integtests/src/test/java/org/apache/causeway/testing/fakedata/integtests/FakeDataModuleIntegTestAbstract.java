@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.testing.fakedata.integtests;
 
-import javax.transaction.Transactional;
-
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -35,6 +33,8 @@ import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testing.fakedata.fixtures.CausewayModuleTestingFakeDataFixtures;
 import org.apache.causeway.testing.fixtures.applib.CausewayIntegrationTestAbstractWithFixtures;
 import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
+
+import jakarta.transaction.Transactional;
 
 @SpringBootTest(
         classes = FakeDataModuleIntegTestAbstract.TestManifest.class

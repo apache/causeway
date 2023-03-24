@@ -20,8 +20,8 @@ package demoapp.dom.services.core.eventbusservice;
 
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;

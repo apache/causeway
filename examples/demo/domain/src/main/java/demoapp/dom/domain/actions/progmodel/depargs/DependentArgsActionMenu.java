@@ -18,8 +18,8 @@
  */
 package demoapp.dom.domain.actions.progmodel.depargs;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -37,7 +37,7 @@ import lombok.val;
         nature=NatureOfService.VIEW
 )
 @DomainObjectLayout(named="Associated Action")
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class DependentArgsActionMenu {
 

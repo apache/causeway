@@ -21,8 +21,8 @@ package org.apache.causeway.core.config.environment;
 import java.util.Locale;
 import java.util.Optional;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
+import jakarta.annotation.PostConstruct;
+import jakarta.inject.Inject;
 
 import org.springframework.stereotype.Component;
 

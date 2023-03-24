@@ -20,7 +20,7 @@ package org.apache.causeway.extensions.commandlog.applib.integtest;
 
 import java.util.List;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.junit.jupiter.api.AfterAll;

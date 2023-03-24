@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.causeway.core</groupId>
         <artifactId>causeway-core</artifactId>
-    	<version>2.0.0-SNAPSHOT</version>
+    	<version>3.0.0-SNAPSHOT</version>
         <relativePath>../../core/pom.xml</relativePath>
     </parent>
 
@@ -39,8 +39,10 @@
     	<!-- apache shiro is not migrated to JPMS yet, so no point in converting ours to JPMS -->
         <jar-plugin.automaticModuleName>org.apache.causeway.security.shiro</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/causeway/security/shiro</git-plugin.propertiesDir>
+        
+        <!-- override surefire defaults from bom, as this is not a Java module yet -->
+		<surefire-plugin.argLine>-Xmx384m</surefire-plugin.argLine>
     </properties>
-
 
     <dependencies>
 

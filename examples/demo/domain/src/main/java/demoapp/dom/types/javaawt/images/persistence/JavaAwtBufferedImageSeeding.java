@@ -20,7 +20,7 @@ package demoapp.dom.types.javaawt.images.persistence;
 
 import java.awt.image.BufferedImage;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.springframework.stereotype.Service;
 

@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.applib.annotation;
 
-import javax.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.XmlType;
 
 /**
  * How prompting for new values of a property/arguments for an action should be performed

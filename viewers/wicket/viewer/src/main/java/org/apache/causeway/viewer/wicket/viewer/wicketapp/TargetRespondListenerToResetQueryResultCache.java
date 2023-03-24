@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.viewer.wicket.viewer.wicketapp;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 

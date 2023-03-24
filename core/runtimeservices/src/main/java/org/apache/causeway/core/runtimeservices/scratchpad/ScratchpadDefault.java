@@ -20,8 +20,8 @@ package org.apache.causeway.core.runtimeservices.scratchpad;
 
 import java.util.Map;
 
-import javax.annotation.Priority;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;

@@ -20,8 +20,8 @@ package demoapp.dom._infra.resources;
 
 import java.util.*;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.springframework.core.env.Environment;

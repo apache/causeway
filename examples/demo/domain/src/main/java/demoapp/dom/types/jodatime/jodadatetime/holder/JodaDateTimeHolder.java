@@ -18,7 +18,7 @@
  */
 package demoapp.dom.types.jodatime.jodadatetime.holder;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 @Named("demo.JodaDateTimeHolder")
 //tag::class[]

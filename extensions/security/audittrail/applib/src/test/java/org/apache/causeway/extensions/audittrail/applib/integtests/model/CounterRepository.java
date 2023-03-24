@@ -22,7 +22,7 @@ package org.apache.causeway.extensions.audittrail.applib.integtests.model;
 
 import java.util.List;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.services.repository.RepositoryService;
 

@@ -18,7 +18,7 @@
  */
 package demoapp.dom._infra.values;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 @Named("demo.ValueHolder")
 public interface ValueHolder<T> {

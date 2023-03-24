@@ -18,7 +18,7 @@
  */
 package demoapp.dom.domain.collections.Collection.domainEvent.subscribers;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 
 // tag::class[]
 @Service
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
 class CollectionDomainEventControlService {
 

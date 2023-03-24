@@ -18,9 +18,6 @@
  */
 package org.apache.causeway.applib.services.publishing.log;
 
-import javax.annotation.Priority;
-import javax.inject.Named;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +26,8 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
 
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
 import lombok.extern.log4j.Log4j2;
 
 /**

@@ -22,6 +22,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.causeway.incubator.viewer.javafx.ui.CausewayModuleIncViewerJavaFxUi;
+import org.apache.causeway.viewer.commons.services.CausewayModuleViewerCommonsServices;
 
 /**
  *
@@ -32,6 +33,7 @@ import org.apache.causeway.incubator.viewer.javafx.ui.CausewayModuleIncViewerJav
         // Modules
 
         CausewayModuleIncViewerJavaFxUi.class,
+        CausewayModuleViewerCommonsServices.class,
 
         // @Service's
 

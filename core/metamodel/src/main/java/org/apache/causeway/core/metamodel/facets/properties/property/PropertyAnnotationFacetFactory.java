@@ -20,9 +20,6 @@ package org.apache.causeway.core.metamodel.facets.properties.property;
 
 import java.util.Optional;
 
-import javax.inject.Inject;
-import javax.validation.constraints.Pattern;
-
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
@@ -63,6 +60,8 @@ import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidato
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorForConflictingOptionality;
 import org.apache.causeway.core.metamodel.util.EventUtil;
 
+import jakarta.inject.Inject;
+import jakarta.validation.constraints.Pattern;
 import lombok.val;
 
 public class PropertyAnnotationFacetFactory

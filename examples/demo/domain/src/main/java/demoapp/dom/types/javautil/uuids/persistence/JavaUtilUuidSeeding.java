@@ -18,7 +18,7 @@
  */
 package demoapp.dom.types.javautil.uuids.persistence;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.springframework.stereotype.Service;
 

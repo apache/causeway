@@ -32,11 +32,11 @@ import javax.imageio.ImageIO;
 
 import org.springframework.core.io.Resource;
 import org.springframework.lang.Nullable;
+import org.springframework.util.function.ThrowingConsumer;
+import org.springframework.util.function.ThrowingFunction;
+import org.springframework.util.function.ThrowingSupplier;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.functional.ThrowingConsumer;
-import org.apache.causeway.commons.functional.ThrowingFunction;
-import org.apache.causeway.commons.functional.ThrowingSupplier;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._NullSafe;

@@ -1,15 +1,15 @@
 package demoapp.dom.domain.objects.DomainObject.aliased;
 
-import demoapp.dom._infra.values.ValueHolderRepository;
-import lombok.RequiredArgsConstructor;
+import jakarta.inject.Inject;
 
-import java.util.List;
-
-import javax.inject.Inject;
-
-import org.apache.causeway.applib.annotation.*;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
+
+import lombok.RequiredArgsConstructor;
 
 @Action(semantics = SemanticsOf.SAFE)
 @ActionLayout(associateWith = "people")

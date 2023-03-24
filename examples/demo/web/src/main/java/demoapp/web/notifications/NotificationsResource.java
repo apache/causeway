@@ -18,14 +18,14 @@
  */
 package demoapp.web.notifications;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 @Path("/notifications")
 public class NotificationsResource {
@@ -39,7 +39,7 @@ public class NotificationsResource {
     @GET
     @Path("/get/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getNotification(@PathParam("id") int id) {
+    public Response getNotification(@PathParam("id") final int id) {
         return Response.ok()
                 .entity(new Notification(id, "john", "test notification"))
                 .build();
@@ -49,7 +49,7 @@ public class NotificationsResource {
     @Path("/post/")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response postNotification(Notification notification) {
+    public Response postNotification(final Notification notification) {
         return Response.status(201).entity(notification).build();
     }
 }

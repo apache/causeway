@@ -21,11 +21,9 @@ module org.apache.causeway.persistence.jpa.eclipselink {
     exports org.apache.causeway.persistence.jpa.eclipselink;
     exports org.apache.causeway.persistence.jpa.eclipselink.config;
 
-    requires jakarta.el.api;
-    requires jakarta.enterprise.cdi.api;
-    requires java.annotation;
-    requires java.inject;
-    requires java.persistence;
+    requires jakarta.annotation;
+    requires jakarta.inject;
+    requires jakarta.persistence;
     requires java.sql;
     requires lombok;
     requires org.apache.causeway.applib;
@@ -42,4 +40,6 @@ module org.apache.causeway.persistence.jpa.eclipselink {
     requires spring.jdbc;
     requires spring.orm;
     requires spring.tx;
+    requires jakarta.cdi;
+    requires jakarta.el;
 }

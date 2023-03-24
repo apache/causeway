@@ -20,8 +20,6 @@ package demoapp.dom.types.causewayext.cal.persistence;
 
 import java.util.Optional;
 
-import javax.inject.Named;
-
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.extensions.fullcalendar.applib.CalendarEventable;
 import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
@@ -29,6 +27,7 @@ import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.causewayext.cal.holder.CausewayCalendarEventHolder2;
+import jakarta.inject.Named;
 
 @Named("demo.CalendarEventEntity") // shared permissions with concrete sub class
 @DomainObject

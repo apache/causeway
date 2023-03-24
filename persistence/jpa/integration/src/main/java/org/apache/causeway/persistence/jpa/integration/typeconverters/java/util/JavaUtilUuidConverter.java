@@ -20,8 +20,8 @@ package org.apache.causeway.persistence.jpa.integration.typeconverters.java.util
 
 import java.util.UUID;
 
-import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
+import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
 
 /**
  * @since 2.0 {@index}

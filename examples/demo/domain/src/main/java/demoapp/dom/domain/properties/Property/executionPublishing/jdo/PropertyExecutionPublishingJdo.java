@@ -18,12 +18,12 @@
  */
 package demoapp.dom.domain.properties.Property.executionPublishing.jdo;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
-import javax.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElement;
 
 import org.springframework.context.annotation.Profile;
 

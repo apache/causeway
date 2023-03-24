@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.facets.properties.property;
 
 import java.lang.reflect.Method;
 
-import javax.validation.constraints.Pattern;
+import jakarta.validation.constraints.Pattern;
 
 import org.junit.jupiter.api.BeforeEach;
 

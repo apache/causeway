@@ -20,7 +20,7 @@ package demoapp.dom.types.javaawt.images.persistence;
 
 import java.awt.image.BufferedImage;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 

@@ -23,6 +23,8 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import org.springframework.lang.Nullable;
+import org.springframework.util.function.ThrowingConsumer;
+import org.springframework.util.function.ThrowingFunction;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

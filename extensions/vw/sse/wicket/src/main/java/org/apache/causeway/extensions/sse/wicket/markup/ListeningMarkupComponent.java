@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.extensions.sse.wicket.markup;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;

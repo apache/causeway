@@ -18,9 +18,6 @@
  */
 package org.apache.causeway.applib.services.user;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -35,6 +32,8 @@ import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.message.MessageService;
 
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -60,7 +59,7 @@ import lombok.RequiredArgsConstructor;
         named = "Security",
         menuBar = DomainServiceLayout.MenuBar.TERTIARY
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ImpersonateStopMenu {
 

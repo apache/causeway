@@ -27,11 +27,11 @@
  * </p>
  *
  */
-@javax.xml.bind.annotation.XmlSchema(
+@jakarta.xml.bind.annotation.XmlSchema(
         namespace = "https://causeway.apache.org/applib/layout/links",
-        elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED,
+        elementFormDefault = jakarta.xml.bind.annotation.XmlNsForm.QUALIFIED,
         xmlns = {
-                @javax.xml.bind.annotation.XmlNs(
+                @jakarta.xml.bind.annotation.XmlNs(
                         namespaceURI = "https://causeway.apache.org/applib/layout/links", prefix = "lnk")
         }
         )

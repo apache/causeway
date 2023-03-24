@@ -26,8 +26,9 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.function.Consumer;
 
-import org.apache.causeway.commons.functional.ThrowingConsumer;
-import org.apache.causeway.commons.functional.ThrowingSupplier;
+import org.springframework.util.function.ThrowingConsumer;
+import org.springframework.util.function.ThrowingSupplier;
+
 import org.apache.causeway.commons.functional.Try;
 
 import lombok.NonNull;

@@ -20,9 +20,6 @@ package org.apache.causeway.core.metamodel.facets.value.semantics;
 
 import java.util.Optional;
 
-import javax.inject.Inject;
-import javax.validation.constraints.Digits;
-
 import org.apache.causeway.applib.annotation.ValueSemantics;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -32,6 +29,8 @@ import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractiona
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacetAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorForAmbiguousMixinAnnotations;
 
+import jakarta.inject.Inject;
+import jakarta.validation.constraints.Digits;
 import lombok.val;
 
 public class ValueSemanticsAnnotationFacetFactory
@@ -50,7 +49,7 @@ extends FacetFactoryAbstract {
                         () -> MetaModelValidatorForAmbiguousMixinAnnotations
                             .addValidationFailure(processMethodContext.getFacetHolder(), ValueSemantics.class));
 
-        // support for @javax.validation.constraints.Digits
+        // support for @jakarta.validation.constraints.Digits
         val digitsIfAny = processMethodContext
                 .synthesizeOnMethodOrMixinType(
                         Digits.class,
@@ -64,7 +63,7 @@ extends FacetFactoryAbstract {
     public void processParams(final ProcessParameterContext processParameterContext) {
         val valueSemanticsIfAny = processParameterContext.synthesizeOnParameter(ValueSemantics.class);
 
-        // support for @javax.validation.constraints.Digits
+        // support for @jakarta.validation.constraints.Digits
         val digitsIfAny = processParameterContext.synthesizeOnParameter(Digits.class);
 
         processAll(processParameterContext.getFacetHolder(), valueSemanticsIfAny, digitsIfAny);
@@ -100,7 +99,7 @@ extends FacetFactoryAbstract {
                 MaxTotalDigitsFacetAbstract.minimum(
                         MaxTotalDigitsFacetFromValueSemanticsAnnotation
                         .create(valueSemanticsIfAny, facetHolder),
-                        // support for @javax.validation.constraints.Digits
+                        // support for @jakarta.validation.constraints.Digits
                         MaxTotalDigitsFacetFromJavaxValidationDigitsAnnotation
                         .create(digitsIfAny, facetHolder)
                         ));
@@ -113,7 +112,7 @@ extends FacetFactoryAbstract {
                 MaxFractionalDigitsFacetAbstract.minimum(
                         MaxFractionalDigitsFacetFromValueSemanticsAnnotation
                         .create(valueSemanticsIfAny, facetHolder),
-                        // support for @javax.validation.constraints.Digits
+                        // support for @jakarta.validation.constraints.Digits
                         MaxFractionalDigitsFacetFromJavaxValidationDigitsAnnotation
                         .create(digitsIfAny, facetHolder)
                         ));

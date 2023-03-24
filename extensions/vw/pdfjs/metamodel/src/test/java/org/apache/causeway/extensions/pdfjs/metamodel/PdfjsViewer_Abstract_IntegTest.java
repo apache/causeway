@@ -18,21 +18,11 @@
  */
 package org.apache.causeway.extensions.pdfjs.metamodel;
 
-import lombok.val;
-
 import java.util.Collections;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
-import org.apache.causeway.applib.services.jaxb.JaxbService;
-import org.apache.causeway.applib.services.metamodel.Config;
-import org.apache.causeway.applib.services.metamodel.MetaModelService;
-import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
-import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
-import org.apache.causeway.testing.integtestsupport.applib.ApprovalsOptions;
-import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 import org.approvaltests.Approvals;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
@@ -42,6 +32,17 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.TransactionStatus;
+
+import org.apache.causeway.applib.services.jaxb.JaxbService;
+import org.apache.causeway.applib.services.metamodel.Config;
+import org.apache.causeway.applib.services.metamodel.MetaModelService;
+import org.apache.causeway.core.config.presets.CausewayPresets;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
+import org.apache.causeway.testing.integtestsupport.applib.ApprovalsOptions;
+import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
+
+import lombok.val;
 
 public abstract class PdfjsViewer_Abstract_IntegTest extends CausewayIntegrationTestAbstract {
 

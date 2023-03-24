@@ -36,7 +36,7 @@ import lombok.val;
  * Applies if {@link Authentication} holds a principal of type {@link OAuth2User}.
  */
 @Component
-@javax.annotation.Priority(PriorityPrecedence.LATE - 150)
+@jakarta.annotation.Priority(PriorityPrecedence.LATE - 150)
 public class AuthenticationConverterOfOAuth2UserPrincipal
 extends AuthenticationConverter.Abstract<OAuth2User> {
 

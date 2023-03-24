@@ -18,7 +18,7 @@
  */
 package demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.springframework.stereotype.Service;
 

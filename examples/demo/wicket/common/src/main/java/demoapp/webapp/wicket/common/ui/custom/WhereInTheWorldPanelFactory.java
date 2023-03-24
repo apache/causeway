@@ -18,8 +18,6 @@
  */
 package demoapp.webapp.wicket.common.ui.custom;
 
-import javax.inject.Inject;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
@@ -32,10 +30,11 @@ import org.apache.causeway.viewer.wicket.ui.components.entity.EntityComponentFac
 
 import demoapp.dom.featured.customui.geocoding.GeoapifyClient;
 import demoapp.dom.featured.customui.vm.WhereInTheWorldVm;
+import jakarta.inject.Inject;
 
 //tag::class[]
 @org.springframework.stereotype.Component
-@javax.annotation.Priority(PriorityPrecedence.EARLY)                                             // <.>
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)                                             // <.>
 public class WhereInTheWorldPanelFactory extends EntityComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;

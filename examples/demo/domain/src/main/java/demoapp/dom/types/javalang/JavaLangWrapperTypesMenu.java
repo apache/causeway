@@ -18,7 +18,7 @@
  */
 package demoapp.dom.types.javalang;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -44,7 +44,7 @@ import demoapp.dom.types.javalang.shorts.WrapperShorts;
 @DomainObjectLayout(
         named="JavaLangWrapperTypes"
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 public class JavaLangWrapperTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)

@@ -21,21 +21,22 @@ package org.apache.causeway.viewer.restfulobjects.client;
 import java.net.URI;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.UnaryOperator;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Invocation.Builder;
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Invocation.Builder;
+import jakarta.ws.rs.core.GenericType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriBuilder;
 
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.context._Context;
+import org.apache.causeway.commons.io.JsonUtils;
 import org.apache.causeway.viewer.restfulobjects.client.auth.BasicAuthFilter;
 import org.apache.causeway.viewer.restfulobjects.client.auth.BasicAuthFilter.Credentials;
 import org.apache.causeway.viewer.restfulobjects.client.log.ClientConversationLogger;
@@ -113,7 +114,7 @@ public class RestfulClient implements AutoCloseable {
         final ClientBuilder clientBuilder = configRefiner.apply(ClientBuilder.newBuilder());
         this.client = clientBuilder.build();
 
-        registerDefaultJsonProvider();
+        registerDefaultJsonProviderForJaxb(Optional.ofNullable(clientConfig.getJsonProviderForJaxb()));
         registerBasicAuthFilter();
         registerConversationFilters();
     }
@@ -192,15 +193,17 @@ public class RestfulClient implements AutoCloseable {
 
     // -- HELPER FILTER
 
-    private void registerDefaultJsonProvider() {
-        try {
-            Class<?> MOXyJsonProvider = _Context.loadClass("org.eclipse.persistence.jaxb.rs.MOXyJsonProvider");
-            client.register(MOXyJsonProvider);
-        } catch (Exception e) {
-            log.warn("This implementation of RestfulClient does require the class 'MOXyJsonProvider'"
-                    + " on the class-path."
-                    + " Are you missing a maven dependency?");
-        }
+    private void registerDefaultJsonProviderForJaxb(final Optional<Class<?>> jsonProviderForJaxbOverride) {
+        jsonProviderForJaxbOverride
+            .or(JsonUtils::getPlatformDefaultJsonProviderForJaxb)
+            .ifPresent(jsonProviderForJaxb->{
+
+                Try.run(()->client.register(jsonProviderForJaxb))
+                .ifFailure(cause->
+                    log.error("Failed to register the JsonProviderForJaxb {} for the Restful Client to use."
+                            + " Are you missing a Maven dependency?", jsonProviderForJaxb.getName(), cause));
+
+            });
     }
 
     private void registerBasicAuthFilter() {

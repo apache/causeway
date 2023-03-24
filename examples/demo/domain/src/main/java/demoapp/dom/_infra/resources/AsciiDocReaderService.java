@@ -18,7 +18,7 @@
  */
 package demoapp.dom._infra.resources;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Service;
 

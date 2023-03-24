@@ -24,8 +24,8 @@ module org.apache.causeway.security.bypass {
     requires org.apache.causeway.applib;
     requires org.apache.causeway.security.api;
     requires org.apache.causeway.core.runtimeservices;
-    requires java.annotation;
-    requires java.inject;
+    requires jakarta.annotation;
+    requires jakarta.inject;
     requires spring.beans;
     requires spring.context;
 }

@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.persistence.jdo.datanucleus.test;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import javax.jdo.PersistenceManagerFactory;
 import javax.sql.DataSource;
 

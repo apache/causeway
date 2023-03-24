@@ -20,10 +20,10 @@ package demoapp.dom.domain.properties.PropertyLayout.navigable;
 
 import java.nio.file.FileSystems;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Provider;
-import javax.servlet.http.HttpSession;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Provider;
+import jakarta.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Service;
 

@@ -21,7 +21,7 @@ package org.apache.causeway.valuetypes.markdown.applib.jaxb;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.valuetypes.markdown.applib.value.Markdown;

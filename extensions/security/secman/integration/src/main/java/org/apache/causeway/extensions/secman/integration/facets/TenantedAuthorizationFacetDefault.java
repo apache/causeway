@@ -22,7 +22,7 @@ import lombok.val;
 
 import java.util.List;
 
-import javax.inject.Provider;
+import jakarta.inject.Provider;
 
 import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.causeway.applib.services.user.UserService;

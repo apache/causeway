@@ -39,8 +39,8 @@ import org.apache.shiro.realm.ldap.DefaultLdapRealm;
 import org.apache.shiro.realm.ldap.LdapContextFactory;
 import org.apache.shiro.realm.ldap.LdapUtils;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.util.StringUtils;
 
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.security.shiro.permrolemapper.PermissionToRoleMapper;
@@ -371,7 +371,7 @@ public class CausewayLdapRealm extends DefaultLdapRealm {
     }
 
     public void setUniqueMemberAttributeValueTemplate(final String template) {
-        if (!StringUtils.hasText(template)) {
+        if (_Strings.isNullOrEmpty(template)) {
             String msg = "User DN template cannot be null or empty.";
             throw new IllegalArgumentException(msg);
         }

@@ -20,11 +20,6 @@ package org.apache.causeway.testdomain.util.rest;
 
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.ws.rs.client.Invocation;
-import javax.ws.rs.core.GenericType;
-import javax.xml.bind.JAXBException;
-
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +41,10 @@ import org.apache.causeway.viewer.restfulobjects.client.RestfulClientConfig;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClientMediaType;
 import org.apache.causeway.viewer.restfulobjects.client.log.ClientConversationFilter;
 
+import jakarta.inject.Inject;
+import jakarta.ws.rs.client.Invocation;
+import jakarta.ws.rs.core.GenericType;
+import jakarta.xml.bind.JAXBException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;

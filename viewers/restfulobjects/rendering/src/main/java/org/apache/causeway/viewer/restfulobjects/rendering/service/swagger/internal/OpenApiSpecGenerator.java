@@ -18,9 +18,6 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import org.springframework.stereotype.Component;
@@ -33,6 +30,8 @@ import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRest
 import io.swagger.v3.core.util.Json;
 import io.swagger.v3.core.util.Yaml;
 import io.swagger.v3.oas.models.OpenAPI;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 @Component
 @Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".OpenApiSpecGenerator")

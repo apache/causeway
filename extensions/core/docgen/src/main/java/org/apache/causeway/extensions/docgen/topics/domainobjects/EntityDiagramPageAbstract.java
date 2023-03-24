@@ -21,7 +21,7 @@ package org.apache.causeway.extensions.docgen.topics.domainobjects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Component;
 

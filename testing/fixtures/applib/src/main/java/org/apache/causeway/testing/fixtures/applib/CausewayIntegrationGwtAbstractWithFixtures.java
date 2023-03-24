@@ -18,7 +18,10 @@
  */
 package org.apache.causeway.testing.fixtures.applib;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
@@ -26,9 +29,6 @@ import org.apache.causeway.testing.fixtures.applib.modules.ModuleWithFixturesSer
 import org.apache.causeway.testing.fixtures.applib.personas.BuilderScriptAbstract;
 import org.apache.causeway.testing.fixtures.applib.personas.PersonaWithBuilderScript;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationGwtAbstract;
-import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 
 /**
  * @since 2.x {@index}

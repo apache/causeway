@@ -23,8 +23,8 @@ package org.apache.causeway.extensions.sessionlog.applib.app;
 import java.time.LocalDate;
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.lang.Nullable;
 

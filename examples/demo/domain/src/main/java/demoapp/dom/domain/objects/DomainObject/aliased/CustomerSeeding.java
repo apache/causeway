@@ -18,12 +18,12 @@
  */
 package demoapp.dom.domain.objects.DomainObject.aliased;
 
-import demoapp.dom._infra.seed.SeedServiceAbstract;
-import demoapp.dom._infra.values.ValueHolderRepository;
-
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.springframework.stereotype.Service;
+
+import demoapp.dom._infra.seed.SeedServiceAbstract;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
 @Service
 public class CustomerSeeding
@@ -31,7 +31,7 @@ extends SeedServiceAbstract {
 
     @Inject
     public CustomerSeeding(
-            ValueHolderRepository<String, ? extends Customer> entities) {
+            final ValueHolderRepository<String, ? extends Customer> entities) {
         super(entities);
     }
 

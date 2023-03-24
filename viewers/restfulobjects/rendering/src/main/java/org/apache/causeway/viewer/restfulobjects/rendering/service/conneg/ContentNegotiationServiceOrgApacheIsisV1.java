@@ -20,10 +20,10 @@ package org.apache.causeway.viewer.restfulobjects.rendering.service.conneg;
 
 import java.util.List;
 
-import javax.inject.Named;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
+import jakarta.inject.Named;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.ResponseBuilder;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -45,7 +45,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named(ContentNegotiationServiceOrgApacheIsisV1.LOGICAL_TYPE_NAME)
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT - 200)
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT - 200)
 @Qualifier("OrgApacheIsisV1")
 @Log4j2
 public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiationServiceAbstract {

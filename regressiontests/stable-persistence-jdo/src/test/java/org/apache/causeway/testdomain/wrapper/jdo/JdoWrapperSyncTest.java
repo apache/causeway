@@ -20,7 +20,7 @@ package org.apache.causeway.testdomain.wrapper.jdo;
 
 import java.util.concurrent.ExecutionException;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

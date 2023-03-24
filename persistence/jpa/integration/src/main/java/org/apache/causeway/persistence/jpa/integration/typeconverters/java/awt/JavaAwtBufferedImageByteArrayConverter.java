@@ -20,8 +20,8 @@ package org.apache.causeway.persistence.jpa.integration.typeconverters.java.awt;
 
 import java.awt.image.BufferedImage;
 
-import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
+import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
 
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.image._Images;
@@ -41,7 +41,7 @@ implements AttributeConverter<BufferedImage, byte[]> {
         try {
             return _Images.toBytes(memberValue);
         } catch (Exception e) {
-            throw new javax.persistence.PersistenceException(
+            throw new jakarta.persistence.PersistenceException(
                     "Error serialising object of type BufferedImage to byte array", e);
         }
     }
@@ -54,7 +54,7 @@ implements AttributeConverter<BufferedImage, byte[]> {
         try {
             return _Images.fromBytes(datastoreValue);
         } catch (Exception e) {
-            throw new javax.persistence.PersistenceException(
+            throw new jakarta.persistence.PersistenceException(
                     "Error deserialising image datastoreValue", e);
         }
     }

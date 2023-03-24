@@ -27,9 +27,11 @@ import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.xml.bind.annotation.XmlRootElement;
+
+import org.springframework.context.annotation.Import;
 
 import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.annotation.Action;
@@ -81,7 +83,11 @@ import lombok.val;
         named="Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@Import({
+    // Auto Configuration
+    FixtureScriptsSpecificationProviderAutoConfiguration.class,
+    ExecutionParametersServiceAutoConfiguration.class})
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 public class FixtureScripts {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleTestingFixturesApplib.NAMESPACE + ".FixtureScripts"; // secman seeding

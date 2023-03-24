@@ -18,7 +18,7 @@
  */
 package demoapp.dom.types.causeway.markups.persistence;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 

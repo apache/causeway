@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.applib.services.sitemap;
 
-import javax.inject.Named;
-
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -34,6 +32,8 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.commons.internal.base._Strings;
 
+import jakarta.inject.Named;
+
 /**
  * Simply provides a UI to allow a site-map (obtained from {@link SitemapService}) to be downloaded.
  *
@@ -45,7 +45,7 @@ import org.apache.causeway.commons.internal.base._Strings;
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 public class SitemapServiceMenu {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".SitemapServiceMenu";

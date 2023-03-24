@@ -1,16 +1,19 @@
 package demoapp.dom.domain.objects.DomainObject.aliased;
 
-import demoapp.dom._infra.values.ValueHolderRepository;
-import lombok.RequiredArgsConstructor;
-
 import java.util.List;
-import java.util.Optional;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
-import org.apache.causeway.applib.annotation.*;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.applib.annotation.CollectionLayout;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
+
+import demoapp.dom._infra.values.ValueHolderRepository;
+import lombok.RequiredArgsConstructor;
 
 @Collection()
 @CollectionLayout()

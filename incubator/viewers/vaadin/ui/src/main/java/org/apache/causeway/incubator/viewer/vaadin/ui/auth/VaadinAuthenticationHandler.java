@@ -20,7 +20,7 @@ package org.apache.causeway.incubator.viewer.vaadin.ui.auth;
 
 import java.util.concurrent.Callable;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.router.BeforeEnterEvent;

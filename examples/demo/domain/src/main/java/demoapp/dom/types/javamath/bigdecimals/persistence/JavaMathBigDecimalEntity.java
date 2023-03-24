@@ -20,7 +20,7 @@ package demoapp.dom.types.javamath.bigdecimals.persistence;
 
 import java.math.BigDecimal;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 

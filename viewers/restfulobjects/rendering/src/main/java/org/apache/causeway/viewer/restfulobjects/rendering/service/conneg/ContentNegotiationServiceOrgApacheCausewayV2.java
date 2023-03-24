@@ -23,9 +23,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import javax.inject.Named;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.inject.Named;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 import com.fasterxml.jackson.databind.node.POJONode;
 
@@ -64,7 +64,7 @@ import lombok.val;
  */
 @Service
 @Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".ContentNegotiationServiceOrgApacheCausewayV2")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT - 200)
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT - 200)
 @Qualifier("OrgApacheCausewayV2")
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class ContentNegotiationServiceOrgApacheCausewayV2

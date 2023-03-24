@@ -21,7 +21,7 @@ package org.apache.causeway.persistence.jdo.metamodel.facets.object.query;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import javax.jdo.annotations.Queries;
 import javax.jdo.annotations.Query;
 

@@ -20,8 +20,6 @@ package org.apache.causeway.core.metamodel.facets.param.parameter;
 
 import java.lang.reflect.Method;
 
-import javax.validation.constraints.Pattern;
-
 import org.junit.jupiter.api.BeforeEach;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -35,6 +33,8 @@ import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessParameterContext;
 import org.apache.causeway.core.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.causeway.core.metamodel.facets.param.parameter.regex.RegExFacetForPatternAnnotationOnParameter;
+
+import jakarta.validation.constraints.Pattern;
 
 class RegExAnnotationOnParameterFacetFactoryTest extends AbstractFacetFactoryTest {
 

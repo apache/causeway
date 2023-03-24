@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.persistence.jpa.integration.services;
 
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
 
 import org.springframework.data.jpa.repository.JpaContext;
 

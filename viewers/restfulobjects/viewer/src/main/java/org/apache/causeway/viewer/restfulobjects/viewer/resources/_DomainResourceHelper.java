@@ -20,7 +20,7 @@ package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
 import java.util.concurrent.atomic.LongAdder;
 
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response;
 
 import org.springframework.lang.Nullable;
 

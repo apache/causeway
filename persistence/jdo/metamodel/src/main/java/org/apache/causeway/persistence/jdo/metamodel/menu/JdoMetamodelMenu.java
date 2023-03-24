@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.persistence.jdo.metamodel.menu;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.metadata.TypeMetadata;
 
@@ -48,7 +48,7 @@ import lombok.val;
         menuBar = DomainServiceLayout.MenuBar.SECONDARY,
         named = "Prototyping"
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class JdoMetamodelMenu {
 

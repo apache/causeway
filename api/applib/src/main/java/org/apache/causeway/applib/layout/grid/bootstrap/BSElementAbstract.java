@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.applib.layout.grid.bootstrap;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlAttribute;
 
 /**
  * Superclass for all layout classes, factoring out the common {@link #getCssClass()} attribute.

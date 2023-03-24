@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.notinservicemenu.derived;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;

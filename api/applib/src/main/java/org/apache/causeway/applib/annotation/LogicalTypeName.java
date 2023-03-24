@@ -24,8 +24,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import javax.inject.Named;
-
 /**
  * Introduced to allow for abstract types to be mapped to a logical-type-name,
  * for the security model to apply permission checks against.

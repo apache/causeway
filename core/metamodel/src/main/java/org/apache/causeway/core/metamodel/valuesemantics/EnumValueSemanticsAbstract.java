@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
-import javax.inject.Provider;
+import jakarta.inject.Provider;
 
 import org.apache.causeway.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.causeway.applib.services.i18n.TranslationContext;

@@ -21,8 +21,8 @@ package org.apache.causeway.core.runtimeservices.xml;
 import java.io.StringReader;
 import java.io.StringWriter;
 
-import javax.annotation.Priority;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;

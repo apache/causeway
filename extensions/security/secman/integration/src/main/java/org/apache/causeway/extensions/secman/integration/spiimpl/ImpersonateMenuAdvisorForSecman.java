@@ -23,9 +23,9 @@ import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Provider;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Provider;
 
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -49,8 +49,9 @@ import lombok.val;
 
 @Service
 @Named(CausewayModuleExtSecmanApplib.NAMESPACE + ".ImpersonateMenuAdvisorForSecman")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Secman")
+
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ImpersonateMenuAdvisorForSecman implements ImpersonateMenuAdvisor {
 

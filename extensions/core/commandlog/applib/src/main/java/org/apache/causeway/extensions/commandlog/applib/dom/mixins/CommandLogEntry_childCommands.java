@@ -54,7 +54,7 @@ public class CommandLogEntry_childCommands {
         return commandLogEntryRepository.findByParent(commandLogEntry);
     }
 
-    @javax.inject.Inject
+    @jakarta.inject.Inject
     private CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
 
 }

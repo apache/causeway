@@ -28,9 +28,9 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.Predicate;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;

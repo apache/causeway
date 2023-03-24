@@ -20,9 +20,9 @@
 
 package org.apache.causeway.extensions.audittrail.applib.spiimpl;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.springframework.beans.factory.annotation.Qualifier;

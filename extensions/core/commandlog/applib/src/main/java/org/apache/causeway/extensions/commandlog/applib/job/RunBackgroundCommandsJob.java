@@ -21,7 +21,7 @@ package org.apache.causeway.extensions.commandlog.applib.job;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;

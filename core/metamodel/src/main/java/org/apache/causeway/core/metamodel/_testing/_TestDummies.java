@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel._testing;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.annotation.DomainObject;

@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.viewer.wicket.ui.pages.accmngt.signup;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 

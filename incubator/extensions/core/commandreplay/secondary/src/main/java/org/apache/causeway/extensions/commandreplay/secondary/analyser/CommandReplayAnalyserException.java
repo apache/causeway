@@ -20,8 +20,8 @@ package org.apache.causeway.extensions.commandreplay.secondary.analyser;
 
 import java.util.Objects;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Named;
+import jakarta.annotation.PostConstruct;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Service;
 
@@ -42,7 +42,7 @@ import lombok.val;
  */
 @Service
 @Named(CausewayModuleExtCommandReplaySecondary.NAMESPACE + ".CommandReplayAnalyserException")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @RequiredArgsConstructor
 public class CommandReplayAnalyserException implements CommandReplayAnalyser {
 

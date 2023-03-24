@@ -18,19 +18,19 @@
  */
 package org.apache.causeway.extensions.executionlog.applib.spiimpl;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.extensions.executionlog.applib.CausewayModuleExtExecutionLogApplib;
-import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.publishing.spi.ExecutionSubscriber;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.extensions.executionlog.applib.CausewayModuleExtExecutionLogApplib;
+import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -58,7 +58,7 @@ public class ExecutionSubscriberForExecutionLog implements ExecutionSubscriber {
     }
 
     @Override
-    public void onExecution(Execution<?, ?> execution) {
+    public void onExecution(final Execution<?, ?> execution) {
         if (!isEnabled()) {
             return;
         }

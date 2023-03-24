@@ -20,8 +20,8 @@ package org.apache.causeway.incubator.viewer.javafx.ui.decorator.prototyping;
 
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 
 import org.springframework.stereotype.Component;
 

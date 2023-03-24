@@ -20,17 +20,18 @@
 
 package org.apache.causeway.core.runtimeservices.session;
 
-import lombok.extern.log4j.Log4j2;
-
 import java.util.UUID;
 
-import javax.annotation.Priority;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
+
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".InteractionIdGenerator")
@@ -39,6 +40,7 @@ import org.springframework.stereotype.Service;
 @Log4j2
 public class InteractionIdGeneratorDefault implements InteractionIdGenerator {
 
+    @Override
     public UUID interactionId() {
         return UUID.randomUUID();
     }

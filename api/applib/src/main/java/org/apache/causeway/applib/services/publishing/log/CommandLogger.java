@@ -18,9 +18,6 @@
  */
 package org.apache.causeway.applib.services.publishing.log;
 
-import javax.annotation.Priority;
-import javax.inject.Named;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +27,8 @@ import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 

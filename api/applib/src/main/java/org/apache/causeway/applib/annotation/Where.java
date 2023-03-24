@@ -18,9 +18,9 @@
  */
 package org.apache.causeway.applib.annotation;
 
-import javax.xml.bind.annotation.XmlType;
-
 import org.apache.causeway.applib.util.Enums;
+
+import jakarta.xml.bind.annotation.XmlType;
 
 /**
  * Represents the location in the user interface where a class member is to be rendered.

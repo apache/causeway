@@ -24,8 +24,6 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import javax.annotation.Priority;
-
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal._Constants;

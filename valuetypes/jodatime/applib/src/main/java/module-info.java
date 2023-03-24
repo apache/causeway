@@ -22,7 +22,7 @@ module org.apache.causeway.valuetypes.jodatime.applib {
     exports org.apache.causeway.valuetypes.jodatime.applib.value;
 
     requires java.xml;
-    requires java.xml.bind;
+    requires jakarta.xml.bind;
     requires lombok;
     requires org.apache.causeway.applib;
     requires org.joda.time;

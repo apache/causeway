@@ -18,7 +18,7 @@
  */
 package demoapp.dom.domain.properties.Property.executionPublishing;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.springframework.stereotype.Service;
 

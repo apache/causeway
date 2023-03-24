@@ -21,7 +21,7 @@ package org.apache.causeway.extensions.excel.integtests.tests;
 import java.net.URL;
 import java.util.List;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

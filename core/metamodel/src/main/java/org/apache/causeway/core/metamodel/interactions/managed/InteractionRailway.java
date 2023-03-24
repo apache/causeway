@@ -20,9 +20,10 @@ package org.apache.causeway.core.metamodel.interactions.managed;
 
 import java.io.Serializable;
 
+import org.springframework.util.function.ThrowingFunction;
+
 import org.apache.causeway.commons.functional.Railway;
 import org.apache.causeway.commons.functional.Railway.HasRailway;
-import org.apache.causeway.commons.functional.ThrowingFunction;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;

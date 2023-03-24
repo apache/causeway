@@ -20,7 +20,7 @@ package org.apache.causeway.testdomain.jdo.entities;
 
 import java.sql.Timestamp;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;

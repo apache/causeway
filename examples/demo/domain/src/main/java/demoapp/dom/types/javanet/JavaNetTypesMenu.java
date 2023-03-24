@@ -18,7 +18,7 @@
  */
 package demoapp.dom.types.javanet;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -37,7 +37,7 @@ import demoapp.dom.types.javanet.urls.JavaNetUrls;
 @DomainObjectLayout(
         named="JavaNetTypes"
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 public class JavaNetTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
