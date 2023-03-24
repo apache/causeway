@@ -18,18 +18,16 @@
  */
 package demoapp.dom.domain.objects.DomainObject.aliased;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom._infra.values.ValueHolder;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.Title;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolder;
+
 @Named("demo.party.Customer")                   // <.>
 @DomainObject(
         aliased = {"demo.customer.Customer"}    // <.>
