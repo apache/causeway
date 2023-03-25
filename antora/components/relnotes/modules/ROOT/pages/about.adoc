@@ -22,9 +22,9 @@ This table summarises all releases of Apache Causeway v2.0 to date.
 | 2.0.0-RC1
 |
 | First release candidate for Apache Causeway 2.0.0
-| ?
-| ?
-| ?
+| 16
+| 13
+| 39
 |
 * xref:relnotes:ROOT:2023/2.0.0-RC1/relnotes.adoc[Release Notes]
 * xref:relnotes:ROOT:2023/2.0.0-RC1/mignotes.adoc[Migration Notes]
