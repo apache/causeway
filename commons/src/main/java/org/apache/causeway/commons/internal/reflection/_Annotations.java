@@ -107,6 +107,29 @@ public final class _Annotations {
      * If annotations from a getter method are competing with annotations from its corresponding field,
      * let the one win, that is 'nearer' to the <i>Class</i> that is subject to introspection.
      * <p>
+     * Perform a full search of the entire type hierarchy,
+     * including super-classes and implemented interfaces.p
+     * Super-class annotations do not need to be meta-annotated with {@link Inherited}.
+     *
+     * @param <A>
+     * @param annotatedElement
+     * @param annotationType
+     * @return non-null
+     */
+    public static <A extends Annotation> Optional<A> synthesizeWrtEnclosingClass(
+            final AnnotatedElement annotatedElement,
+            final Class<A> annotationType) {
+
+        return synthesize(annotatedElement, annotationType, SearchStrategy.TYPE_HIERARCHY_AND_ENCLOSING_CLASSES);
+    }
+
+    /**
+     * Optionally create a type-safe synthesized version of this annotation based on presence.
+     * <p>
+     * Also includes annotated fields, getter methods might be associated with.
+     * If annotations from a getter method are competing with annotations from its corresponding field,
+     * let the one win, that is 'nearer' to the <i>Class</i> that is subject to introspection.
+     * <p>
      * Find only directly declared annotations,
      * without considering {@link Inherited} annotations and
      * without searching super-classes or implemented interfaces.

@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # to be shared among all steps of this job
-      BASELINE: 2.0.0-M9
+      BASELINE: 2.0.0-RC1
       PROJECT_ROOT_PATH: ${{ github.workspace }}
       CI_SCRIPTS_PATH: ${{ github.workspace }}/scripts/ci
 
@@ -39,7 +39,7 @@ jobs:
       uses: actions/setup-java@v3
       with:
         distribution: 'zulu'
-        # tried 19 on 2023-02-05 casing org.codehaus.plexus.archiver.ArchiverException: 
+        # tried 19 on 2023-02-05 casing org.codehaus.plexus.archiver.ArchiverException:
         # Could not create modular JAR file. The JDK jar tool exited with 1
         java-version: 18
 

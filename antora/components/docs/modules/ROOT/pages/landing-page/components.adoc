@@ -8,6 +8,11 @@ This page provides user/config guides for each of the main components of the fra
 Also, the xref:core:_overview:about.adoc[System Overview] maps these components back to the corresponding Maven modules (and their respective dependencies).
 
 
+== Security
+
+The xref:security:ROOT:about.adoc[Security Guide] describes the security architecture and explains how to configure each of the various security components that integrate with Apache Causeway.
+
+
 == Viewers
 
 The framework provides two viewers that will automatically render the domain objects in your application into the presentation layer:
@@ -36,9 +41,5 @@ for use with the JDO API.
 
 Alternatively, you can "roll your own" (by implementing the xref:refguide:applib:index/ViewModel.adoc[ViewModel] interface) and persist with any data persistence technology that is supported by Spring Boot.
 
-
-== Security
-
-The xref:security:ROOT:about.adoc[Security Guide] describes how to configure each of the various security implementations that integrate with Apache Causeway.
 
 
