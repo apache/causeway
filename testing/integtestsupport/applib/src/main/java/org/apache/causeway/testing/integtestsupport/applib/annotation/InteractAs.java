@@ -44,10 +44,14 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionService;
  * }
  * </pre>
  *
+ * <p>
+ * It can also be applied to a class, meaning it will apply to all tests within that class.
+ * </p>
+ *
  * @since 2.0 {@index}
  */
 @Inherited
-@Target({ ElementType.METHOD, ElementType.ANNOTATION_TYPE })
+@Target({ ElementType.METHOD, ElementType.ANNOTATION_TYPE, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface InteractAs {
 
