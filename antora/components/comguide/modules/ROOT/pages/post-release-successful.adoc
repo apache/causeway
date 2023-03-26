@@ -442,7 +442,7 @@ include::partial$publish-and-index-website.adoc[]
 
 Because we release from a branch, the changes made in the branch should be merged back from the release branch back into the `master` branch.
 
-In the `causeway` repo ():
+In the `causeway` repo:
 
 [source,bash,subs="attributes+"]
 ----
