@@ -233,7 +233,7 @@ done
 
 [source,bash,subs="attributes+"]
 ----
-sh upd.sh{page-causewayrel}
+sh upd.sh {page-causewayrel}
 ----
 
 The script downloads the artifacts from the Nexus release repository and adds the artifacts to subversion.

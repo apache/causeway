@@ -110,7 +110,6 @@ is experimental and not recommended for production.
 == Tasks: Rename project
 
 * link:https://issues.apache.org/jira/browse/CAUSEWAY-3382[CAUSEWAY-3382] - Rename script needs to handle layout schemas correctly, also for their location to "layout-v1"
-* link:https://issues.apache.org/jira/browse/CAUSEWAY-3370[CAUSEWAY-3370] - OpenJDK Quality Outreach
 * link:https://issues.apache.org/jira/browse/CAUSEWAY-3367[CAUSEWAY-3367] - update descriptoin on github repo.
 * link:https://issues.apache.org/jira/browse/CAUSEWAY-3359[CAUSEWAY-3359] - Update helloworld, simpleapp and demo : docker image, frontpage logo + banner
 * link:https://issues.apache.org/jira/browse/CAUSEWAY-3354[CAUSEWAY-3354] - Rename XML namespace identifiers in antora/supplemental-ui/applib/layout XSD files
