@@ -68,13 +68,16 @@ class ColBuilder : UiBuilder() {
         col.collectionList.forEach {
             val id = it.id
             val objectDM = dsp.displayModel
-            // static analysis says objectDM is never null, but runtime disagrees
-            if (objectDM != null) {
-                val cdm = objectDM.getCollectionDisplayModelFor(id)
+            try {
+                // objectDM is sometimes null
+                val cdm = objectDM.getCollectionDisplayModelFor(id)!!
                 val fsPanel = FieldsetPanel(legend = cdm.getTitle())
                 fsPanel.add(RoTable(cdm))
                 panel.add(fsPanel)
                 cdm.isRendered = true
+            } catch (npe: NullPointerException) {
+                console.log("[CB_create] failed with NPE")
+                throw npe
             }
         }
         return panel

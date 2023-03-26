@@ -44,12 +44,16 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
         }
     }
 
+    fun hasCollectionModels(): Boolean {
+        return collectionModelList.isNotEmpty()
+    }
+
     fun addLayout(grid: GridBs, aggregator: ObjectAggregator, referrer: String?) {
         layout = ObjectLayout(grid, aggregator, referrer!!)
     }
 
-    fun getCollectionDisplayModelFor(id: String): CollectionDM {
-        return collectionModelList.firstOrNull { it.id == id }!!
+    fun getCollectionDisplayModelFor(id: String): CollectionDM? {
+        return collectionModelList.firstOrNull { it.id == id }
     }
 
     override fun readyToRender(): Boolean {

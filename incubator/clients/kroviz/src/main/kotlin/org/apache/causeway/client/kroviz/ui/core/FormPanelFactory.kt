@@ -74,13 +74,17 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
                     ValueType.SVG_INLINE -> add(createInline(fi))
                     ValueType.SVG_MAPPED -> add(createSvgMap(fi))
                     ValueType.BUTTON -> add(createButton(fi))
+                    ValueType.VEGA -> {
+                        TODO("implement VEGA")
+                    }
                 }
             }
         }
     }
 
     private fun createButton(fi: FormItem): Button {
-        val item = Button(text = fi.label, icon = IconManager.find(fi.label))
+        val icon = IconManager.find(fi.label)
+        val item = Button(text = fi.label, icon = icon)
         val obj = fi.callBack!! as Controller
         val action = fi.callBackAction
         item.onClick {
@@ -92,8 +96,8 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
     private fun createBoolean(fi: FormItem): Component {
         val value = fi.content
         val bools = arrayOf("true", "false")
-        return when {
-            value in bools -> CheckBox(label = fi.label, value = (value == "true"))
+        return when (value) {
+            in bools -> CheckBox(label = fi.label, value = (value == "true"))
             else -> createText(fi)
         }
     }
@@ -137,6 +141,8 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
     }
 
     private fun createTextArea(fi: FormItem): TextArea {
+        console.log("[FPF_createTextArea]")
+        console.log(fi)
         val rows = fi.size
         val item: TextArea = if (rows != null) {
             val rowCnt = maxOf(3, rows)
@@ -181,10 +187,10 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
                     //image(require("img/kroviz-logo.svg"))
                 }
                 else -> {
+                    TODO("implement")
                 }
             }
         }
-        //TODO
         panel.add(fi.content as Image)
         panel.addCssClass("form-panel")
         return panel

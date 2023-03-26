@@ -35,7 +35,7 @@ class RoDisplay(val displayModel: ObjectDM) : Displayable, VPanel() {
     init {
         val model = displayModel.data!!
         val tObject: TObject = model.delegate
-        val grid = (displayModel.layout as ObjectLayout).grid!!
+        val grid = (displayModel.layout as ObjectLayout).grid
         objectPanel = LayoutBuilder().create(grid, tObject, this)
         objectPanel.overflow = Overflow.AUTO
         objectPanel.width = CssSize(100, UNIT.perc)

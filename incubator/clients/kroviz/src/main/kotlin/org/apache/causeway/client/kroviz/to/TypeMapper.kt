@@ -25,6 +25,7 @@ enum class ValueType(val type: String) {
     BOOLEAN("Boolean"),
     DATE("Date"),
     HTML("Html"),
+    IFRAME("IFrame"),
     IMAGE("Image"),
     NUMERIC("Numeric"),
     PASSWORD("Password"),
@@ -36,7 +37,7 @@ enum class ValueType(val type: String) {
     SHELL("Shell"),
     SVG_MAPPED("Map"),
     SVG_INLINE("Inline"),
-    IFRAME("IFrame")
+    VEGA("Vega"),
 }
 
 class TypeMapper {
@@ -68,23 +69,31 @@ class TypeMapper {
             else -> ValueType.TEXT.type
         }
     }
+    fun forString(content: String): ValueType {
+        return when {
+            content.startsWith(":Notice:") -> ValueType.TEXT_AREA
+            else -> ValueType.TEXT
+        }
+    }
 
     fun forType(type: String): ValueType {
-        when {
-            type == ValueType.BOOLEAN.type -> return ValueType.BOOLEAN
-            type == ValueType.DATE.type -> return ValueType.DATE
-            type == ValueType.HTML.type -> return ValueType.HTML
-            type == ValueType.IMAGE.type -> return ValueType.IMAGE
-            type == ValueType.NUMERIC.type -> return ValueType.NUMERIC
-            type == ValueType.PASSWORD.type -> return ValueType.PASSWORD
-            type == ValueType.TEXT.type -> return ValueType.TEXT
-            type == ValueType.TEXT_AREA.type -> return ValueType.TEXT_AREA
-            type == ValueType.TIME.type -> return ValueType.TIME
-            type == ValueType.SIMPLE_SELECT.type -> return ValueType.SIMPLE_SELECT
-            type == ValueType.SLIDER.type -> return ValueType.SLIDER
-            type == ValueType.SVG_MAPPED.type -> return ValueType.SVG_MAPPED
-            type == ValueType.SVG_INLINE.type -> return ValueType.SVG_INLINE
-            type == ValueType.IFRAME.type -> return ValueType.IFRAME
+        console.log("[TM_forType] $type")
+        when (type) {
+            ValueType.BOOLEAN.type -> return ValueType.BOOLEAN
+            ValueType.DATE.type -> return ValueType.DATE
+            ValueType.HTML.type -> return ValueType.HTML
+            ValueType.IFRAME.type -> return ValueType.IFRAME
+            ValueType.IMAGE.type -> return ValueType.IMAGE
+            ValueType.NUMERIC.type -> return ValueType.NUMERIC
+            ValueType.PASSWORD.type -> return ValueType.PASSWORD
+            ValueType.TEXT.type -> return ValueType.TEXT
+            ValueType.TEXT_AREA.type -> return ValueType.TEXT_AREA
+            ValueType.TIME.type -> return ValueType.TIME
+            ValueType.SIMPLE_SELECT.type -> return ValueType.SIMPLE_SELECT
+            ValueType.SLIDER.type -> return ValueType.SLIDER
+            ValueType.SVG_MAPPED.type -> return ValueType.SVG_MAPPED
+            ValueType.SVG_INLINE.type -> return ValueType.SVG_INLINE
+            ValueType.VEGA.type -> return ValueType.VEGA
             else -> {
                 return ValueType.TEXT
             }

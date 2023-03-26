@@ -176,8 +176,6 @@ object ViewManager {
     fun openObjectView(aggregator: SystemAggregator) {
         console.log("[VM_openObjectView]")
         val dm = aggregator.displayModel
-/*        val panel = RoDisplay(dm)
-        add(aggregator.getTitle(), panel, aggregator)*/
         dm.isRendered = true
         setNormalCursor()
     }

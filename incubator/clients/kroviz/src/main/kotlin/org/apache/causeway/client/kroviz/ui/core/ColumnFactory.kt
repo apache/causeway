@@ -57,14 +57,15 @@ class ColumnFactory {
             hozAlign = Align.CENTER,
             width = "40",
             headerSort = false,
-            clickMenu = { component: dynamic, _: dynamic ->
-                buildObjectMenu(component)
+            clickMenu = { _: dynamic, cellComponent: dynamic ->
+                buildObjectMenu(cellComponent.unsafeCast<Tabulator.CellComponent>())
             }
         )
     }
 
     private fun buildObjectMenu(cell: Tabulator.CellComponent): dynamic {
-        val exposer = cell.getData() as Exposer
+        val row = cell.getRow()
+        val exposer = row.getData() as Exposer
         val tObject = exposer.delegate
         return DynamicMenuBuilder.buildObjectMenu(tObject)
     }
