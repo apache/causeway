@@ -97,30 +97,40 @@ public final class _Annotations {
             final AnnotatedElement annotatedElement,
             final Class<A> annotationType) {
 
-        return synthesize(annotatedElement, annotationType, SearchStrategy.TYPE_HIERARCHY);
+        val collected = collect(annotatedElement, SearchStrategy.TYPE_HIERARCHY);
+
+        // also handle annotated fields, getter methods might be associated with
+        val associated =
+                annotatedFieldForAnnotatedElement(annotatedElement, annotationType)
+                        .map(fieldForGetter->collect(fieldForGetter, SearchStrategy.TYPE_HIERARCHY));
+
+        return _Annotations_SynthesizedMergedAnnotationInvocationHandler
+                .createProxy(collected, associated, annotationType);
     }
 
     /**
      * Optionally create a type-safe synthesized version of this annotation based on presence.
-     * <p>
-     * Also includes annotated fields, getter methods might be associated with.
-     * If annotations from a getter method are competing with annotations from its corresponding field,
-     * let the one win, that is 'nearer' to the <i>Class</i> that is subject to introspection.
      * <p>
      * Perform a full search of the entire type hierarchy,
      * including super-classes and implemented interfaces.p
      * Super-class annotations do not need to be meta-annotated with {@link Inherited}.
      *
      * @param <A>
-     * @param annotatedElement
+     * @param annotatedMethod
      * @param annotationType
      * @return non-null
      */
-    public static <A extends Annotation> Optional<A> synthesizeWrtEnclosingClass(
-            final AnnotatedElement annotatedElement,
+    public static <A extends Annotation> Optional<A> synthesizeConsideringClass(
+            final Method annotatedMethod,
             final Class<A> annotationType) {
 
-        return synthesize(annotatedElement, annotationType, SearchStrategy.TYPE_HIERARCHY_AND_ENCLOSING_CLASSES);
+        val collected = collect(annotatedMethod, SearchStrategy.TYPE_HIERARCHY);
+
+        // also handle containing class
+        val associatedClass = collect(annotatedMethod.getDeclaringClass(), SearchStrategy.TYPE_HIERARCHY);
+
+        return _Annotations_SynthesizedMergedAnnotationInvocationHandler
+                .createProxy(collected, Optional.of(associatedClass), annotationType);
     }
 
     /**
@@ -143,7 +153,15 @@ public final class _Annotations {
             final AnnotatedElement annotatedElement,
             final Class<A> annotationType) {
 
-        return synthesize(annotatedElement, annotationType, SearchStrategy.DIRECT);
+        val collected = collect(annotatedElement, SearchStrategy.DIRECT);
+
+        // also handle annotated fields, getter methods might be associated with
+        val associated =
+                annotatedFieldForAnnotatedElement(annotatedElement, annotationType)
+                        .map(fieldForGetter->collect(fieldForGetter, SearchStrategy.DIRECT));
+
+        return _Annotations_SynthesizedMergedAnnotationInvocationHandler
+                .createProxy(collected, associated, annotationType);
     }
 
     // -- HELPER
@@ -167,10 +185,8 @@ public final class _Annotations {
                 annotatedFieldForAnnotatedElement(annotatedElement, annotationType)
                         .map(fieldForGetter->collect(fieldForGetter, searchStrategy));
 
-        val proxyIfAny = _Annotations_SynthesizedMergedAnnotationInvocationHandler
+        return _Annotations_SynthesizedMergedAnnotationInvocationHandler
                 .createProxy(collected, associated, annotationType);
-
-        return proxyIfAny;
     }
 
     /**

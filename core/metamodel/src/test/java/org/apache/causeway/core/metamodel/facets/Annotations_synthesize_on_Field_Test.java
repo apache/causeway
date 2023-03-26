@@ -36,7 +36,7 @@ import org.apache.causeway.commons.internal.reflection._Annotations;
 import lombok.val;
 
 @SuppressWarnings("unused")
-public class Annotations_getAnnotations_on_Field_Test {
+public class Annotations_synthesize_on_Field_Test {
 
 
     @Property(executionPublishing = Publishing.ENABLED)

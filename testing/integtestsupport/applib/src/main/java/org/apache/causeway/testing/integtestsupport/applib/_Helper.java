@@ -44,7 +44,7 @@ class _Helper {
      */
     static Optional<InteractionContext> getCustomInteractionContext(final ExtensionContext extensionContext) {
         return extensionContext.getTestMethod()
-        .flatMap(testMethod->_Annotations.synthesize(testMethod, InteractAs.class))
+        .flatMap(testMethod->_Annotations.synthesizeConsideringClass(testMethod, InteractAs.class))
         .map(InteractAsUtils::toInteractionContext);
     }
 

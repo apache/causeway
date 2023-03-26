@@ -35,7 +35,7 @@ import org.apache.causeway.commons.internal.reflection._Annotations;
 
 import lombok.val;
 
-public class Annotations_getAnnotations_on_Class_Test {
+public class Annotations_synthesize_on_Class_Test {
 
 
     @Inherited

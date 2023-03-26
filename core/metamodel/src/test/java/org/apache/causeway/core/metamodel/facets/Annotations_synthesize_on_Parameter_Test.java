@@ -33,11 +33,12 @@ import org.apache.causeway.commons.internal.reflection._Annotations;
 
 import lombok.val;
 
-public class Annotations_getAnnotations_on_Method_Test {
+@SuppressWarnings("unused")
+public class Annotations_synthesize_on_Parameter_Test {
 
 
     @Inherited
-    @Target({ ElementType.METHOD, ElementType.ANNOTATION_TYPE })
+    @Target({ ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     public @interface DomainObj { // cf @DomainObject
         enum Publishng { // cf Publishing enum
@@ -50,21 +51,21 @@ public class Annotations_getAnnotations_on_Method_Test {
 
     @DomainObj(publishng = DomainObj.Publishng.YES)
     @Inherited
-    @Target({ ElementType.METHOD, ElementType.ANNOTATION_TYPE })
+    @Target({ ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface Published {
     }
 
     @DomainObj(publishng = DomainObj.Publishng.NO)
     @Inherited
-    @Target({ ElementType.METHOD, ElementType.ANNOTATION_TYPE })
+    @Target({ ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface NotPublished {
     }
 
     @Published
     @Inherited
-    @Target({ ElementType.METHOD, ElementType.ANNOTATION_TYPE })
+    @Target({ ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface MetaPublished {
     }
@@ -73,27 +74,32 @@ public class Annotations_getAnnotations_on_Method_Test {
     public void direct() throws Exception {
 
         class SomeDomainObject {
-            @DomainObj(publishng = DomainObj.Publishng.YES)
-            public void updateName(final String name) {}
+            public void updateName(
+                    @DomainObj(publishng = DomainObj.Publishng.YES) final
+                    String name
+                    ) {}
         }
 
         val method = SomeDomainObject.class.getMethod("updateName", String.class);
-        val nearest = _Annotations.synthesize(method, DomainObj.class);
+        val nearest = _Annotations.synthesize(method.getParameters()[0], DomainObj.class);
 
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().publishng(), is(DomainObj.Publishng.YES));
+
     }
 
     @Test
     public void meta() throws Exception {
 
         class SomeDomainObject {
-            @Published
-            public void updateName(final String name) {}
+            public void updateName(
+                    @Published final
+                    String name
+                    ) {}
         }
 
         val method = SomeDomainObject.class.getMethod("updateName", String.class);
-        val nearest = _Annotations.synthesize(method, DomainObj.class);
+        val nearest = _Annotations.synthesize(method.getParameters()[0], DomainObj.class);
 
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().publishng(), is(DomainObj.Publishng.YES));
@@ -103,12 +109,14 @@ public class Annotations_getAnnotations_on_Method_Test {
     public void metaMeta() throws Exception {
 
         class SomeDomainObject {
-            @MetaPublished
-            public void updateName(final String name) {}
+            public void updateName(
+                    @MetaPublished final
+                    String name
+                    ) {}
         }
 
         val method = SomeDomainObject.class.getMethod("updateName", String.class);
-        val nearest = _Annotations.synthesize(method, DomainObj.class);
+        val nearest = _Annotations.synthesize(method.getParameters()[0], DomainObj.class);
 
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().publishng(), is(DomainObj.Publishng.YES));
@@ -118,13 +126,15 @@ public class Annotations_getAnnotations_on_Method_Test {
     public void meta_and_metaMeta() throws Exception {
 
         class SomeDomainObject {
-            @MetaPublished
-            @Published
-            public void updateName(final String name) {}
+            public void updateName(
+                    @MetaPublished
+                    @Published final
+                    String name
+                    ) {}
         }
 
         val method = SomeDomainObject.class.getMethod("updateName", String.class);
-        val nearest = _Annotations.synthesize(method, DomainObj.class);
+        val nearest = _Annotations.synthesize(method.getParameters()[0], DomainObj.class);
 
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().publishng(), is(DomainObj.Publishng.YES));
@@ -134,13 +144,15 @@ public class Annotations_getAnnotations_on_Method_Test {
     public void meta_overrides_metaMeta() throws Exception {
 
         class SomeDomainObject {
-            @MetaPublished
-            @NotPublished
-            public void updateName(final String name) {}
+            public void updateName(
+                    @MetaPublished
+                    @NotPublished final
+                    String name
+                    ) {}
         }
 
         val method = SomeDomainObject.class.getMethod("updateName", String.class);
-        val nearest = _Annotations.synthesize(method, DomainObj.class);
+        val nearest = _Annotations.synthesize(method.getParameters()[0], DomainObj.class);
 
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().publishng(), is(DomainObj.Publishng.NO));
@@ -150,14 +162,16 @@ public class Annotations_getAnnotations_on_Method_Test {
     public void direct_overrides_metaMeta() throws Exception {
 
         class SomeDomainObject {
-            @MetaPublished
-            @Published
-            @DomainObj(publishng = DomainObj.Publishng.NO)
-            public void updateName(final String name) {}
+            public void updateName(
+                    @MetaPublished
+                    @Published
+                    @DomainObj(publishng = DomainObj.Publishng.NO) final
+                    String name
+                    ) {}
         }
 
         val method = SomeDomainObject.class.getMethod("updateName", String.class);
-        val nearest = _Annotations.synthesize(method, DomainObj.class);
+        val nearest = _Annotations.synthesize(method.getParameters()[0], DomainObj.class);
 
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().publishng(), is(DomainObj.Publishng.NO));
@@ -168,14 +182,16 @@ public class Annotations_getAnnotations_on_Method_Test {
     public void direct_overrides_metaMeta_2() throws Exception {
 
         class SomeDomainObject {
-            @MetaPublished
-            @NotPublished
-            @DomainObj(publishng = DomainObj.Publishng.YES)
-            public void updateName(final String name) {}
+            public void updateName(
+                    @MetaPublished
+                    @NotPublished
+                    @DomainObj(publishng = DomainObj.Publishng.YES) final
+                    String name
+                    ) {}
         }
 
         val method = SomeDomainObject.class.getMethod("updateName", String.class);
-        val nearest = _Annotations.synthesize(method, DomainObj.class);
+        val nearest = _Annotations.synthesize(method.getParameters()[0], DomainObj.class);
 
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().publishng(), is(DomainObj.Publishng.YES));
