@@ -19,20 +19,14 @@
 package demoapp.dom.domain.objects.DomainObject.aliased;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
-import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 
-@Named("demo.party.Customer")                   // <.>
-@DomainObject(
-        aliased = {"demo.customer.Customer"}    // <.>
-)
-public abstract class Customer
+public abstract class DomainObjectAliased
         implements
         HasAsciiDocDescription,
         ValueHolder<String> {

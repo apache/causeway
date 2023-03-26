@@ -16,31 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.aliased;
+package demoapp.dom.domain.objects.DomainObject.aliased.jpa;
 
-import javax.inject.Named;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+@Profile("demo-jpa")
+@Service
+public class DomainObjectAliasedJpaEntities
+extends ValueHolderRepository<String, DomainObjectAliasedJpa> {
 
-@XmlRootElement(name = "root")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.DomainObjectAliasedVm")
-@DomainObject(
-        aliased = {"demo.domain-object.AliasedVm"})
-public class DomainObjectAliasedVm implements HasAsciiDocDescription {
+    protected DomainObjectAliasedJpaEntities() {
+        super(DomainObjectAliasedJpa.class);
+    }
 
-    @ObjectSupport public String title() {
-        return "DomainObject#aliased";
+    @Override
+    protected DomainObjectAliasedJpa newDetachedEntity(String value) {
+        return new DomainObjectAliasedJpa(value);
     }
 
 }
-//tag::class[]
-//end::class[]

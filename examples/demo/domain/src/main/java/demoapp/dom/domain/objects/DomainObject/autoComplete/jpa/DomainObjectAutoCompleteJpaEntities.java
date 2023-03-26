@@ -16,23 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.aliased;
+package demoapp.dom.domain.objects.DomainObject.autoComplete.jpa;
 
-import demoapp.dom._infra.seed.SeedServiceAbstract;
 import demoapp.dom._infra.values.ValueHolderRepository;
 
-import javax.inject.Inject;
-
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+@Profile("demo-jpa")
 @Service
-public class CustomerSeeding
-extends SeedServiceAbstract {
+public class DomainObjectAutoCompleteJpaEntities
+extends ValueHolderRepository<String, DomainObjectAutoCompleteJpa> {
 
-    @Inject
-    public CustomerSeeding(
-            ValueHolderRepository<String, ? extends Customer> entities) {
-        super(entities);
+    protected DomainObjectAutoCompleteJpaEntities() {
+        super(DomainObjectAutoCompleteJpa.class);
+    }
+
+    @Override
+    protected DomainObjectAutoCompleteJpa newDetachedEntity(String value) {
+        return new DomainObjectAutoCompleteJpa(value);
     }
 
 }

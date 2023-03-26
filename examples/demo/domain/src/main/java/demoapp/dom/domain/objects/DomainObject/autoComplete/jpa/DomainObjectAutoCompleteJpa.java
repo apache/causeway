@@ -16,9 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.aliased.jpa;
+package demoapp.dom.domain.objects.DomainObject.autoComplete.jpa;
 
-import demoapp.dom.domain.objects.DomainObject.aliased.Customer;
+import demoapp.dom.domain.objects.DomainObject.autoComplete.DomainObjectAutoComplete;
+import demoapp.dom.domain.objects.DomainObject.autoComplete.DomainObjectAutoCompleteRepository;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -35,19 +36,20 @@ import org.springframework.context.annotation.Profile;
 @Entity
 @Table(
     schema = "demo",
-    name = "AddressJpa"
+    name = "DomainObjectAutoCompleteCustomerJpa"
 )
 @EntityListeners(CausewayEntityListener.class)
-@Named("demo.address.Address")                  // <.>
+@Named("demo.autoComplete.Customer")
 @DomainObject(
-    aliased = {"demo.customer.Address"}         // <.>
+        autoCompleteRepository = DomainObjectAutoCompleteRepository.class,  // <.>
+        autoCompleteMethod = "findMatching"                 // <.>
 )
 @NoArgsConstructor
-public class CustomerJpa extends Customer {
+public class DomainObjectAutoCompleteJpa extends DomainObjectAutoComplete {
     // ...
 //end::class[]
 
-    public CustomerJpa(String value) {
+    public DomainObjectAutoCompleteJpa(String value) {
         setName(value);
     }
 

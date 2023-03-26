@@ -14,7 +14,7 @@ The element can be specified using either the `@DomainObject` annotation, or thr
 NOTE: Publishing of domain objects is only supported for domain entities, not view models.
 
 
-== Explanation of the Demo
+=== How this demo works
 
 This current page is a view model which has four collections of entities, each a different annotations:
 

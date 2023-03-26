@@ -16,31 +16,49 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.aliased;
+package demoapp.dom.domain.objects.DomainObject.aliased.jpa;
+
+import demoapp.dom.domain.objects.DomainObject.aliased.DomainObjectAliased;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.inject.Named;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.persistence.*;
 
 import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
+import org.springframework.context.annotation.Profile;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-
-@XmlRootElement(name = "root")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.DomainObjectAliasedVm")
+@Profile("demo-jpa")
+//tag::class[]
+@Entity
+@Table(
+    schema = "demo",
+    name = "DomainObjectAliasedJpa"
+)
+@EntityListeners(CausewayEntityListener.class)
+@Named("demo.party.Customer")                   // <.>
 @DomainObject(
-        aliased = {"demo.domain-object.AliasedVm"})
-public class DomainObjectAliasedVm implements HasAsciiDocDescription {
+        aliased = {"demo.customer.Customer"}    // <.>
+)
+@NoArgsConstructor
+public class DomainObjectAliasedJpa extends DomainObjectAliased {
+    // ...
+//end::class[]
 
-    @ObjectSupport public String title() {
-        return "DomainObject#aliased";
+    public DomainObjectAliasedJpa(String value) {
+        setName(value);
     }
 
-}
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @Getter @Setter
+    private String name;
+
+
 //tag::class[]
+}
 //end::class[]

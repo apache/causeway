@@ -14,10 +14,16 @@ For example, suppose an `Customer` type initially is part of the "customer" modu
 Later on, you decide to move `Customer` to a more generic "party" module, with a new logical type name being "party.Customer".
 However, any bookmarks in the old format of "customer.Customer:1234" should still resolve.
 
-=== Explanation of this Demo
+=== How this demo works
 
 The collection on the left shows a set of `Customer` entity instances, each indicating their current bookmark and a previous bookmark that corresponds to the value of their link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/DomainObject.html#aliased[@DomainObject#alias].
 
-The "lookup" action allows any of these objects to be shown using either bookmark.
+The "lookup" (mixin) action allows any of these objects to be shown using either bookmark:
 
+[source,java,indent=0]
+----
+include::DomainObjectAliasedVm_lookup.java[tags=class]
+----
+
+Navigate through to the entity to see the corresponding source code.
 
