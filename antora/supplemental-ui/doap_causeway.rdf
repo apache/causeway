@@ -38,6 +38,14 @@
 
     <release>
       <Version>
+        <name>causeway</name>
+        <created>2023-03-25</created>
+        <revision>2.0.0-RC1</revision>
+      </Version>
+    </release>
+
+    <release>
+      <Version>
         <name>isis</name>
         <created>2022-10-18</created>
         <revision>2.0.0-M9</revision>
