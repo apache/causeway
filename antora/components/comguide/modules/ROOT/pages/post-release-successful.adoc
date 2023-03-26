@@ -332,11 +332,54 @@ git branch {page-causewayrel}
 git push origin {page-causewayrel}
 ----
 
-Finally, revert the last commit (backing out changes to `antora.yml` files):
+Revert the last commit (backing out changes to `antora.yml` files):
 
 [source,bash,subs="attributes+"]
 ----
 git revert HEAD
+----
+
+=== Update the doc branch
+
+Now we make sure that the docs in the new doc branch are actually up to date:
+
+* checkout the branch:
++
+[source,bash,subs="attributes+"]
+----
+git checkout {page-causewayrel}
+----
+
+* build prereqs
++
+[source,bash,subs="attributes+"]
+----
+git checkout $CAUSEWAYBRANCH
+pushd bom
+mvn clean install -DskipTests -Dreleased
+popd
+mvn -D module-tooling -D skip.essential install -DskipTests
+----
+
+* generate the website:
++
+[source,bash,subs="attributes+"]
+----
+sh preview.sh
+----
+
+* push the updated doc branch:
++
+[source,bash,subs="attributes+"]
+----
+git push origin {page-causewayrel}
+----
+
+* finally switch back to the release branch:
++
+[source,bash,subs="attributes+"]
+----
+git checkout $CAUSEWAYBRANCH
 ----
 
 [#update-index-html-site-yml-generate]
@@ -356,7 +399,13 @@ This will reference the new branch, and any previous branches.
 Every content source needs to be updated:
 +
 ** `branches: HEAD` -> `branches: [2.0.0-M5, 2.0.0-M6, ... , {page-causewayrel}]`
++
+[WARNING]
+====
+Actually though not every component is available from `2.0.0-M5`, which means that some manual adjustment is required, otherwise Antora will fail.
 
+Easiest thing to do is to use the `site.yml` git history to compare with its state when previous releases were made.
+====
 
 * commit this change, too (there's no need to push):
 +
@@ -367,27 +416,13 @@ git commit -m "$CAUSEWAYJIRA: updates references to version in index.html and si
 ----
 
 We are now in a position to actually generate the Antora website.
-(NOTE, this needs to be performed in the `../causeway` directory because Antora currently doesn't support git worktrees)
-
-* build prereqs
-+
-[source,bash,subs="attributes+"]
-----
-git checkout $CAUSEWAYBRANCH
-pushd bom
-mvn clean install -DskipTests -Dreleased
-popd
-mvn -D module-tooling -D skip.essential install -DskipTests
-----
 
 * generate the website:
 +
 [source,bash,subs="attributes+"]
 ----
-sh preview.sh
+sh preview.sh -AS
 ----
-+
-NOTE: this now runs `mvn clean install -pl core/config` automatically.
 +
 This will write to `antora/target/site`; we'll use the results in the xref:#publish-website[next section].
 
