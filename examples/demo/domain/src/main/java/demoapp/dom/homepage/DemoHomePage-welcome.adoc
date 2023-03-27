@@ -4,7 +4,7 @@ This is an link:https://causeway.apache.org[Apache Causeway] application to demo
 
 On the left hand side of each web page you'll find the feature, and on the right hand side you'll find an explanation of the feature with code examples.
 
-== Page Layout
+=== Page Layout
 
 This is as good place as any to explain the page layout of an Apache Causeway webapp:
 
@@ -31,7 +31,7 @@ Click into the application and try things out.
 The demo app uses an in-memory database, so any changes made will be lost when the app is stopped.
 ====
 
-== Getting Help and Assistance
+=== Getting Help and Assistance
 
 There is plenty of documentation on our link:https://causeway.apache.org/docs/${CAUSEWAY_VERSION}/about.html[website].
 Also subscribe to our link:https://causeway.apache.org/docs/${CAUSEWAY_VERSION}/support/mailing-list.html[mailing list] or join our link:https://causeway.apache.org/docs/${CAUSEWAY_VERSION}/support/slack-channel.html[Slack channel].

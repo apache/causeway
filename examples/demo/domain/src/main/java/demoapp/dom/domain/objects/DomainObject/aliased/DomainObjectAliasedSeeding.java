@@ -18,29 +18,21 @@
  */
 package demoapp.dom.domain.objects.DomainObject.aliased;
 
-import jakarta.inject.Named;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlType;
+import jakarta.inject.Inject;
 
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.springframework.stereotype.Service;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.seed.SeedServiceAbstract;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
-@XmlRootElement(name = "root")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.DomainObjectAliasedVm")
-@DomainObject(
-        aliased = {"demo.domain-object.AliasedVm"})
-public class DomainObjectAliasedVm implements HasAsciiDocDescription {
+@Service
+public class DomainObjectAliasedSeeding
+extends SeedServiceAbstract {
 
-    @ObjectSupport public String title() {
-        return "DomainObject#aliased";
+    @Inject
+    public DomainObjectAliasedSeeding(
+            final ValueHolderRepository<String, ? extends DomainObjectAliased> entities) {
+        super(entities);
     }
 
 }
-//tag::class[]
-//end::class[]

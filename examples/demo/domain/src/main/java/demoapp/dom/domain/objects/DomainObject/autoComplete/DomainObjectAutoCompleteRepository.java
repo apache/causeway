@@ -18,12 +18,32 @@
  */
 package demoapp.dom.domain.objects.DomainObject.autoComplete;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+
 import org.springframework.stereotype.Repository;
 
+import org.apache.causeway.applib.annotation.MinLength;
+import org.apache.causeway.applib.services.repository.RepositoryService;
+
+@Named("demo.DomainObjectAutoCompleteRepository")
 //tag::class[]
 @Repository
-public class DomainObjectAutoCompleteRepository {
+public class DomainObjectAutoCompleteRepository {                               // <.>
 
+    public List<DomainObjectAutoComplete> findMatching(                         // <.>
+                @MinLength(1)                                                   // <.>
+                final String search
+    ) {
+        return repositoryService.allInstances(DomainObjectAutoComplete.class)   // <.>
+                .stream()
+                .filter(x -> x.getName().contains(search))
+                .collect(Collectors.toList());
+    }
 
+    @Inject private RepositoryService repositoryService;
 }
 //end::class[]

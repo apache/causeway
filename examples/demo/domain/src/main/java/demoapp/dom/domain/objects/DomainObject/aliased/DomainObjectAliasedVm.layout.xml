@@ -27,7 +27,7 @@
 	<bs3:row>
 		<bs3:col span="6">
 			<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
-			<cpt:collection id="people">
+			<cpt:collection id="objects">
 				<cpt:action id="lookup"/>
 			</cpt:collection>
 		</bs3:col>
@@ -39,6 +39,7 @@
 				<cpt:action id="downloadMetamodelXml"  position="PANEL_DROPDOWN"/>
 				<cpt:action id="inspectMetamodel"  position="PANEL_DROPDOWN"/>
                 <cpt:action id="recentCommands"  position="PANEL_DROPDOWN"/>
+				<cpt:action id="downloadJdoMetadata"  position="PANEL_DROPDOWN"/>
 				<cpt:action id="openRestApi" position="PANEL_DROPDOWN" />
 				<cpt:property id="description"/>
 			</cpt:fieldSet>

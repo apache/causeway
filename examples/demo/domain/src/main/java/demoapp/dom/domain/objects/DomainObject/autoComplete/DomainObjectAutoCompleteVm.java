@@ -30,7 +30,6 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
-//tag::class[]
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -43,12 +42,4 @@ public class DomainObjectAutoCompleteVm implements HasAsciiDocDescription {
         return "DomainObject#autoComplete...";
     }
 
-    /*
-     * TODO on an entity ...
-    @DomainObject(
-        autoCompleteRepository = DomainObjectAutoCompleteRepository.class,
-        autoCompleteMethod = "myAutoComplete")
-    */
-
 }
-//end::class[]

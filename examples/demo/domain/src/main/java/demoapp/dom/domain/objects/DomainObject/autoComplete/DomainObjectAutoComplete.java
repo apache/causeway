@@ -16,23 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.aliased;
-
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
+package demoapp.dom.domain.objects.DomainObject.autoComplete;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 
-@Named("demo.party.Customer")                   // <.>
-@DomainObject(
-        aliased = {"demo.customer.Customer"}    // <.>
-)
-public abstract class Customer
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
+public abstract class DomainObjectAutoComplete
         implements
         HasAsciiDocDescription,
         ValueHolder<String> {
@@ -49,15 +39,4 @@ public abstract class Customer
     public abstract String getName();
     public abstract void setName(String value);
 
-    @Property
-    public String getBookmark() {
-        return bookmarkService.bookmarkFor(this).orElseThrow().stringify();
-    }
-
-    @Property
-    public String getPreviousBookmark() {
-        return getBookmark().replace("demo.party.", "demo.customer.");
-    }
-
-    @Inject private BookmarkService bookmarkService;
 }

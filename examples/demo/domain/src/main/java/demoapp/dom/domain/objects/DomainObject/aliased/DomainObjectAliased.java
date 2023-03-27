@@ -20,19 +20,38 @@ package demoapp.dom.domain.objects.DomainObject.aliased;
 
 import jakarta.inject.Inject;
 
-import org.springframework.stereotype.Service;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.services.bookmark.BookmarkService;
 
-import demoapp.dom._infra.seed.SeedServiceAbstract;
-import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolder;
 
-@Service
-public class CustomerSeeding
-extends SeedServiceAbstract {
+public abstract class DomainObjectAliased
+        implements
+        HasAsciiDocDescription,
+        ValueHolder<String> {
 
-    @Inject
-    public CustomerSeeding(
-            final ValueHolderRepository<String, ? extends Customer> entities) {
-        super(entities);
+    public String title() {
+        return value();
     }
 
+    @Override
+    public String value() {
+        return getName();
+    }
+
+    public abstract String getName();
+    public abstract void setName(String value);
+
+    @Property
+    public String getBookmark() {
+        return bookmarkService.bookmarkFor(this).orElseThrow().stringify();
+    }
+
+    @Property
+    public String getPreviousBookmark() {
+        return getBookmark().replace("demo.party.", "demo.customer.");
+    }
+
+    @Inject private BookmarkService bookmarkService;
 }

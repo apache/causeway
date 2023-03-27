@@ -30,7 +30,7 @@ import org.springframework.context.annotation.Profile;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
-import demoapp.dom.domain.objects.DomainObject.aliased.Customer;
+import demoapp.dom.domain.objects.DomainObject.aliased.DomainObjectAliased;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -40,19 +40,19 @@ import lombok.Setter;
 @Entity
 @Table(
     schema = "demo",
-    name = "AddressJpa"
+    name = "DomainObjectAliasedJpa"
 )
 @EntityListeners(CausewayEntityListener.class)
-@Named("demo.address.Address")                  // <.>
+@Named("demo.party.Customer")                   // <.>
 @DomainObject(
-    aliased = {"demo.customer.Address"}         // <.>
+        aliased = {"demo.customer.Customer"}    // <.>
 )
 @NoArgsConstructor
-public class CustomerJpa extends Customer {
+public class DomainObjectAliasedJpa extends DomainObjectAliased {
     // ...
 //end::class[]
 
-    public CustomerJpa(final String value) {
+    public DomainObjectAliasedJpa(final String value) {
         setName(value);
     }
 
