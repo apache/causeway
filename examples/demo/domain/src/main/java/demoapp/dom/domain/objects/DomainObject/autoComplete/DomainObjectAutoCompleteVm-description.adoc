@@ -11,15 +11,17 @@ TIP: In fact, the return type of the `autoComplete` method does not need to exac
 
 === How this demo works
 
-The collection on the left shows a set of `Customer` entity instances.
+The collection on the left shows a set of entity instances, of type `DomainObjectAutoComplete`.
 
-The "find" (mixin) action defines a `Customer` as its parameter type, and simply returns it.
+The "find" (mixin) action defines the entity class as its parameter type, and simply returns it.
 
 [source,java,indent=0]
 ----
 include::DomainObjectAutoCompleteVm_find.java[tags=class]
 ----
 
-The autoComplete search is specified in the `Customer` type itself, using the link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/DomainObject.html#autoCompleteRepository[autoCompleteRepository] and link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/DomainObject.html#autoCompleteMethod[autoCompleteMethod] attributes.
+<.> xxx
+
+The autoComplete search to perform is specified using the link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/DomainObject.html#autoCompleteRepository[autoCompleteRepository] and link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/DomainObject.html#autoCompleteMethod[autoCompleteMethod] attributes.
 
 Navigate through to the entity to see the corresponding source code.

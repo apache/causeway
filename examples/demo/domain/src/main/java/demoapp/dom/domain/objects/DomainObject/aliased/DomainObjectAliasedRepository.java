@@ -16,33 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.aliased.jpa;
+package demoapp.dom.domain.objects.DomainObject.aliased;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.objects.DomainObject.aliased.DomainObjectAliased;
-import demoapp.dom.domain.objects.DomainObject.aliased.DomainObjectAliasedRepository;
+import demoapp.dom.domain.objects.DomainObject.aliased.jpa.DomainObjectAliasedJpa;
 
 import java.util.List;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-@Profile("demo-jpa")
-@Service
-public class DomainObjectAliasedJpaEntities
-extends ValueHolderRepository<String, DomainObjectAliasedJpa> implements DomainObjectAliasedRepository {
+public interface DomainObjectAliasedRepository {
 
-    protected DomainObjectAliasedJpaEntities() {
-        super(DomainObjectAliasedJpa.class);
-    }
-
-    @Override
-    protected DomainObjectAliasedJpa newDetachedEntity(String value) {
-        return new DomainObjectAliasedJpa(value);
-    }
-
-    @Override
-    public List<? extends DomainObjectAliased> allInstances() {
-        return all();
-    }
+    List<? extends DomainObjectAliased> allInstances();
 }

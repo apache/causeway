@@ -16,9 +16,10 @@ However, any bookmarks in the old format of "customer.Customer:1234" should stil
 
 === How this demo works
 
-The collection on the left shows a set of `Customer` entity instances, each indicating their current bookmark and a previous bookmark that corresponds to the value of their link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/DomainObject.html#aliased[@DomainObject#alias].
+The collection on the left shows a set of entity instances, each indicating their current bookmark and a previous bookmark that corresponds to the value of their link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/DomainObject.html#aliased[@DomainObject#alias].
 
-The "lookup" (mixin) action allows any of these objects to be shown using either bookmark:
+The "lookup" (mixin) action uses the https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/services/bookmark/BookmarkService.html[BookmarkService] to lookup any object using either their current bookmark (defined by `@Named`) or their previous bookmark (defined by `@DomainObject#alias`).
+For convenience, the action provides a choices method for all possible values.
 
 [source,java,indent=0]
 ----
