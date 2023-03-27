@@ -21,35 +21,52 @@
 		<version>3.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>causeway-viewer-javafx-ui</artifactId>
-	<name>Apache Causeway Inc - Viewer JavaFX (UI Components)</name>
+	<artifactId>causeway-viewer-javafx-headless</artifactId>
+	<name>Apache Causeway Inc - Viewer JavaFX (Headless)</name>
+	<description>Basic starting block providing a JavaFx Application 
+		with Spring support and a StageReadyEvent.</description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.causeway.incubator.viewer.javafx.ui</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/causeway/incubator/viewer/javafx/ui</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.causeway.incubator.viewer.javafx.headless</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/incubator/viewer/javafx/headless</git-plugin.propertiesDir>
 	</properties>
-
 
 	<dependencies>
 
 		<dependency>
-			<groupId>org.apache.causeway.incubator.viewer</groupId>
-			<artifactId>causeway-viewer-javafx-model</artifactId>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-base</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-controls</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-swing</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-fxml</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-web</artifactId>
+		</dependency>
+
+
+		<!-- TEST DEPENDENCIES -->
 
 		<dependency>
 			<groupId>org.apache.causeway.core</groupId>
-			<artifactId>causeway-core-runtimeservices</artifactId>
+			<artifactId>causeway-core-internaltestsupport</artifactId>
+			<scope>test</scope>
 		</dependency>
 
-		<!-- JavaFX -->
-
-
-		<dependency>
-		    <groupId>org.apache.causeway.incubator.viewer</groupId>
-		    <artifactId>causeway-viewer-javafx-headless</artifactId>
-		    <version>3.0.0-SNAPSHOT</version>
-		</dependency>
 	</dependencies>
 
 </project>

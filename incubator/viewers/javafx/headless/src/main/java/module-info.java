@@ -16,21 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.incubator.viewer.javafx.model.events;
+/**
+ * Do NOT release incubator projects, unstable module name!
+ */
+module org.apache.causeway.incubator.viewer.javafx.headless {
+    exports org.apache.causeway.incubator.viewer.javafx.headless;
 
-import org.springframework.context.ApplicationEvent;
-
-import javafx.stage.Stage;
-
-public class PrimaryStageReadyEvent extends ApplicationEvent {
-
-    private static final long serialVersionUID = 1L;
-
-    public PrimaryStageReadyEvent(Object source) {
-        super(source);
-    }
-
-    public Stage getStage() {
-        return (Stage) getSource();
-    }
+    requires transitive javafx.base;
+    requires transitive javafx.graphics;
+    requires transitive org.apache.causeway.commons;
+    requires spring.beans;
+    requires spring.boot;
+    requires spring.context;
+    requires spring.core;
 }

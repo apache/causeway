@@ -18,32 +18,17 @@
  */
 package org.apache.causeway.incubator.viewer.javafx.ui.components.markup;
 
-import java.util.OptionalInt;
-import java.util.function.Consumer;
-
 import jakarta.inject.Inject;
-
-import org.w3c.dom.events.EventTarget;
-import org.w3c.dom.html.HTMLAnchorElement;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.incubator.viewer.javafx.ui.components.UiComponentHandlerFx;
 import org.apache.causeway.viewer.commons.model.components.UiComponentFactory.ComponentRequest;
 
 import javafx.application.HostServices;
-import javafx.application.Platform;
-import javafx.collections.ListChangeListener;
-import javafx.concurrent.Worker.State;
-import javafx.geometry.HPos;
-import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.layout.Region;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
-import netscape.javascript.JSException;
 
 @org.springframework.stereotype.Component
 @jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
@@ -88,7 +73,7 @@ public class MarkupFieldFactory implements UiComponentHandlerFx {
     @Log4j2
     private static final class WebViewFitContent extends Region {
 
-        /*sonar-ignore-on*/
+        /*
 
         private final Consumer<String> hrefHandler;
         private final WebView webview = new WebView();
@@ -180,7 +165,7 @@ public class MarkupFieldFactory implements UiComponentHandlerFx {
                     "<div id=\"mydiv\">" + content + "</div>" +
                     "</body></html>";
         }
-        /*sonar-ignore-off*/
+        */
 
     }
 

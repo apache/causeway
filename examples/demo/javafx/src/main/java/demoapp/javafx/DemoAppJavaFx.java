@@ -29,7 +29,6 @@ import org.apache.causeway.extensions.secman.jpa.CausewayModuleExtSecmanPersiste
 import org.apache.causeway.incubator.viewer.javafx.model.events.JavaFxViewerConfig;
 import org.apache.causeway.incubator.viewer.javafx.model.util._fx;
 import org.apache.causeway.incubator.viewer.javafx.viewer.CausewayModuleIncViewerJavaFxViewer;
-import org.apache.causeway.incubator.viewer.javafx.viewer.JavafxViewer;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 
 import demoapp.dom.DemoModuleJpa;
@@ -68,7 +67,7 @@ public class DemoAppJavaFx {
         CausewayPresets.prototyping(); // use prototyping mode as default, unless explicitly overridden (INCUBATING)
         System.setProperty("spring.profiles.active", "demo-jpa");
 
-        JavafxViewer.launch(DemoAppJavaFx.class, args);
+        CausewayModuleIncViewerJavaFxViewer.launch(DemoAppJavaFx.class, args);
     }
 
 }

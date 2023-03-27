@@ -23,14 +23,13 @@ import java.util.Optional;
 import jakarta.inject.Inject;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.core.interaction.scope.TransactionBoundaryAware;
+import org.apache.causeway.incubator.viewer.javafx.headless.PrimaryStageInitializer;
 import org.apache.causeway.incubator.viewer.javafx.model.events.JavaFxViewerConfig;
-import org.apache.causeway.incubator.viewer.javafx.model.events.PrimaryStageReadyEvent;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -44,14 +43,14 @@ import lombok.extern.log4j.Log4j2;
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
-public class UiBuilderFx implements TransactionBoundaryAware {
+public class UiBuilderFx implements PrimaryStageInitializer, TransactionBoundaryAware {
 
     private final ApplicationContext springContext;
     private final JavaFxViewerConfig viewerConfig;
 
-    @EventListener(PrimaryStageReadyEvent.class)
     @SneakyThrows
-    public void onStageReady(PrimaryStageReadyEvent event) {
+    @Override
+    public void onPrimaryStageReady(final Stage primaryStage) {
         log.info("JavaFX primary stage is ready");
         val layoutUrl = this.viewerConfig.getUiLayout().getURL();
         val fxmlLoader = new FXMLLoader(layoutUrl);
@@ -59,22 +58,21 @@ public class UiBuilderFx implements TransactionBoundaryAware {
         val uiRoot = (Parent)fxmlLoader.load();
         val scene = new Scene(uiRoot);
         scene.getStylesheets().add("/ui.css");
-        val stage = event.getStage();
-        stage.setScene(scene);
-        setupTitle(stage);
-        setupIcon(stage);
-        stage.show();
+
+        primaryStage.setScene(scene);
+        setupTitle(primaryStage);
+        setupIcon(primaryStage);
     }
 
     @Override
-    public void beforeEnteringTransactionalBoundary(Interaction interaction) {
+    public void beforeEnteringTransactionalBoundary(final Interaction interaction) {
         //TODO this would be the place to indicate to the user, that a long running task has started
         //scene.getRoot().cursorProperty().set(Cursor.WAIT);
         _Probe.errOut("Transaction HAS_STARTED conversationId=%s", interaction.getInteractionId());
     }
 
     @Override
-    public void afterLeavingTransactionalBoundary(Interaction interaction) {
+    public void afterLeavingTransactionalBoundary(final Interaction interaction) {
         //TODO this would be the place to indicate to the user, that a long running task has ended
         //scene.getRoot().cursorProperty().set(Cursor.DEFAULT);
         _Probe.errOut("Transaction IS_ENDING interactionId=%s", interaction.getInteractionId());
@@ -82,20 +80,19 @@ public class UiBuilderFx implements TransactionBoundaryAware {
 
     // -- HELPER
 
-    private void setupTitle(Stage stage) {
+    private void setupTitle(final Stage stage) {
         val title = Optional.ofNullable(viewerConfig.getApplicationTitle())
                 .orElse("Unknonw Title");
         stage.setTitle(title);
     }
 
-    private void setupIcon(Stage stage) {
+    private void setupIcon(final Stage stage) {
         val icon = viewerConfig.getApplicationIcon();
         if(icon==null) {
             return;
         }
         stage.getIcons().add(icon);
     }
-
 
 
 }

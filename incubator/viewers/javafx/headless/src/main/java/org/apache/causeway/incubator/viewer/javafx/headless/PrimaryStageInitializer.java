@@ -16,17 +16,32 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.incubator.viewer.javafx.viewer;
+package org.apache.causeway.incubator.viewer.javafx.headless;
 
-import javafx.application.Application;
-import lombok.experimental.UtilityClass;
+import org.springframework.context.ApplicationListener;
 
-@UtilityClass
-public class JavafxViewer {
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import lombok.val;
 
-    public static final void launch(Class<?> appClass, String... args) {
-        JavafxViewerApplication.sources = new Class<?>[]{appClass};
-        Application.launch(JavafxViewerApplication.class, args);
+/**
+ *
+ * @since 3.0
+ */
+@FunctionalInterface
+public interface PrimaryStageInitializer
+extends ApplicationListener<PrimaryStageReadyEvent> {
+
+    @Override
+    public default void onApplicationEvent(final PrimaryStageReadyEvent event) {
+        val primaryStage = event.getStage();
+        onPrimaryStageReady(primaryStage);
+        primaryStage.show();
     }
+
+    /**
+     * Implementing classes are expected to populate a {@link Scene} and set it on the primary {@link Stage}.
+     */
+    void onPrimaryStageReady(Stage primaryStage);
 
 }
