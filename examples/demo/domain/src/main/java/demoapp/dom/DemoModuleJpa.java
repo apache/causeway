@@ -31,6 +31,7 @@ import demoapp.dom.domain.actions.Action.executionPublishing.jpa.ActionExecution
 import demoapp.dom.domain.objects.DomainObject.aliased.jpa.DomainObjectAliasedJpa;
 import demoapp.dom.domain.objects.DomainObject.autoComplete.jpa.DomainObjectAutoCompleteJpa;
 import demoapp.dom.domain.objects.DomainObject.bounded.jpa.DomainObjectBoundingJpa;
+import demoapp.dom.domain.objects.DomainObject.editing.jpa.DomainObjectEditingJpa;
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.jpa.DomainObjectEntityChangePublishingDisabledJpa;
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled.jpa.DomainObjectEntityChangePublishingEnabledJpa;
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.jpa.DomainObjectEntityChangePublishingEnabledMetaAnnotatedJpa;
@@ -97,6 +98,7 @@ import demoapp.dom.types.primitive.shorts.jpa.PrimitiveShortJpa;
         DomainObjectAliasedJpa.class,
         DomainObjectAutoCompleteJpa.class,
         DomainObjectBoundingJpa.class,
+        DomainObjectEditingJpa.class,
 
         CausewayBlobJpa.class,
         CausewayClobJpa.class,
