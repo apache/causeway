@@ -665,17 +665,7 @@ skinparam rectangle<<Examples.DemoDomain>> {
   FontColor #fffffe
   BorderColor #2e6295
 }
-skinparam rectangle<<Examples.DemoJavaFX>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-}
 skinparam rectangle<<Examples.DemoParent>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-}
-skinparam rectangle<<Examples.DemoVaadin>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2e6295
@@ -710,25 +700,21 @@ rectangle "Examples\n<size:10>[Software System]</size>" <<Examples>> {
   skinparam RectangleBorderColor<<Examples>> #9a9a9a
   skinparam RectangleFontColor<<Examples>> #9a9a9a
 
-  rectangle "==Demo - Wicket/JPA (with GraphQL)\n<size:10>[Container: packaging: jar]</size>" <<Examples.DemoWicketJPAwithGraphQL>> as Examples.DemoWicketJPAwithGraphQL
   rectangle "==Demo - Parent\n<size:10>[Container: packaging: pom]</size>" <<Examples.DemoParent>> as Examples.DemoParent
   rectangle "==Demo - Domain\n<size:10>[Container: packaging: jar]</size>" <<Examples.DemoDomain>> as Examples.DemoDomain
-  rectangle "==Demo - JavaFX\n<size:10>[Container: packaging: jar]</size>" <<Examples.DemoJavaFX>> as Examples.DemoJavaFX
-  rectangle "==Demo - Vaadin\n<size:10>[Container: packaging: jar]</size>" <<Examples.DemoVaadin>> as Examples.DemoVaadin
   rectangle "==Demo - Web\n<size:10>[Container: packaging: jar]</size>" <<Examples.DemoWeb>> as Examples.DemoWeb
   rectangle "==Demo - Wicket (Common)\n<size:10>[Container: packaging: jar]</size>" <<Examples.DemoWicketCommon>> as Examples.DemoWicketCommon
   rectangle "==Demo - Wicket/JDO\n<size:10>[Container: packaging: jar]</size>" <<Examples.DemoWicketJDO>> as Examples.DemoWicketJDO
   rectangle "==Demo - Wicket/JPA\n<size:10>[Container: packaging: jar]</size>" <<Examples.DemoWicketJPA>> as Examples.DemoWicketJPA
+  rectangle "==Demo - Wicket/JPA (with GraphQL)\n<size:10>[Container: packaging: jar]</size>" <<Examples.DemoWicketJPAwithGraphQL>> as Examples.DemoWicketJPAwithGraphQL
 }
 
-Examples.DemoParent .[#707070,thickness=2].> Examples.DemoDomain : "<color:#707070>"
-Examples.DemoParent .[#707070,thickness=2].> Examples.DemoJavaFX : "<color:#707070>"
-Examples.DemoParent .[#707070,thickness=2].> Examples.DemoVaadin : "<color:#707070>"
 Examples.DemoParent .[#707070,thickness=2].> Examples.DemoWeb : "<color:#707070>"
 Examples.DemoParent .[#707070,thickness=2].> Examples.DemoWicketCommon : "<color:#707070>"
 Examples.DemoParent .[#707070,thickness=2].> Examples.DemoWicketJDO : "<color:#707070>"
 Examples.DemoParent .[#707070,thickness=2].> Examples.DemoWicketJPA : "<color:#707070>"
 Examples.DemoParent .[#707070,thickness=2].> Examples.DemoWicketJPAwithGraphQL : "<color:#707070>"
+Examples.DemoParent .[#707070,thickness=2].> Examples.DemoDomain : "<color:#707070>"
 @enduml
 ----
 .Projects/Modules (Examples)
@@ -774,7 +760,6 @@ demoapp.dom._infra.samples.markdown.CausewayMarkdownSamples +
 demoapp.dom._infra.urlencoding.UrlEncodingServiceNaiveInMemory +
 demoapp.dom.domain._changes.EntityChangesSubscriberToCaptureChangesInMemory +
 demoapp.dom.domain._commands.ExposePersistedCommands$TableColumnOrderDefault +
-demoapp.dom.domain._interactions.ExecutionListenerToCaptureInteractionsInMemory +
 demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingSeeding +
 demoapp.dom.domain.actions.Action.commandPublishing.jdo.ActionCommandPublishingJdoEntities +
 demoapp.dom.domain.actions.Action.commandPublishing.jpa.ActionCommandPublishingJpaEntities +
@@ -783,6 +768,8 @@ demoapp.dom.domain.actions.Action.executionPublishing.ActionExecutionPublishingS
 demoapp.dom.domain.actions.Action.executionPublishing.jdo.ActionExecutionPublishingJdoEntities +
 demoapp.dom.domain.actions.Action.executionPublishing.jpa.ActionExecutionPublishingJpaEntities +
 demoapp.dom.domain.collections.Collection.domainEvent.subscribers.CollectionDomainEventControlService +
+demoapp.dom.domain.objects.DomainObject.aliased.CustomerSeeding +
+demoapp.dom.domain.objects.DomainObject.aliased.jpa.CustomerJpaEntities +
 demoapp.dom.domain.objects.DomainObject.autoComplete.DomainObjectAutoCompleteRepository +
 demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectEntityChangePublishingDisabledSeeding +
 demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.jdo.DomainObjectEntityChangePublishingDisabledJdoEntities +
@@ -1034,50 +1021,6 @@ org.apache.causeway.valuetypes:causeway-valuetypes-vega-persistence-jdo:jar:<man
 org.apache.causeway.valuetypes:causeway-valuetypes-vega-persistence-jpa:jar:<managed> +
 org.assertj:assertj-core:jar:<managed> +
 org.springframework.boot:spring-boot-configuration-processor:jar:<managed> +
-****
-
-|Demo - JavaFX
-[source,yaml]
-----
-Group: org.apache.causeway.examples.apps
-Artifact: demo-javafx
-Type: jar
-Directory: /examples/demo/javafx
-----
-|.Dependencies
-****
-org.apache.causeway.core:causeway-core-runtimeservices:jar:<managed> +
-org.apache.causeway.core:causeway-core-security:jar:<managed> +
-org.apache.causeway.examples.apps:demo-domain:jar:${project.version} +
-org.apache.causeway.incubator.viewer:causeway-viewer-javafx-viewer:jar:${project.version} +
-org.apache.causeway.persistence:causeway-persistence-jdo-applib:jar:<managed> +
-org.apache.causeway.security:causeway-security-bypass:jar:<managed> +
-org.apache.causeway.security:causeway-security-shiro:jar:<managed> +
-org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
-org.apache.causeway.valuetypes:causeway-valuetypes-asciidoc-metamodel:jar:<managed> +
-org.apache.causeway.valuetypes:causeway-valuetypes-asciidoc-ui:pom:${project.version} +
-org.apache.causeway.valuetypes:causeway-valuetypes-markdown-metamodel:jar:<managed> +
-org.apache.causeway.valuetypes:causeway-valuetypes-markdown-ui:pom:${project.version} +
-org.projectlombok:lombok:jar:<managed> +
-****
-
-|Demo - Vaadin
-[source,yaml]
-----
-Group: org.apache.causeway.examples.apps
-Artifact: demo-vaadin
-Type: jar
-Directory: /examples/demo/vaadin
-----
-|.Dependencies
-****
-org.apache.causeway.examples.apps:demo-web:jar:<managed> +
-org.apache.causeway.extensions:causeway-extensions-sse-wicket:jar:<managed> +
-org.apache.causeway.incubator.viewer:causeway-viewer-vaadin-viewer:jar:${project.version} +
-org.apache.causeway.valuetypes:causeway-valuetypes-asciidoc-ui-vaa:jar:<managed> +
-org.apache.causeway.valuetypes:causeway-valuetypes-asciidoc-ui-wkt:jar:<managed> +
-org.apache.causeway.valuetypes:causeway-valuetypes-markdown-ui-wkt:jar:<managed> +
-org.projectlombok:lombok:jar:<managed> +
 ****
 
 |Demo - Web
@@ -3761,11 +3704,6 @@ skinparam rectangle<<Asciidoc.ApacheCausewayValAsciidoctorpersistenceJPA>> {
   FontColor #fffffe
   BorderColor #2e6295
 }
-skinparam rectangle<<Asciidoc.ApacheCausewayValAsciidoctoruivaadin>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-}
 skinparam rectangle<<Asciidoc.ApacheCausewayValAsciidoctoruiwicket>> {
   BackgroundColor #438dd5
   FontColor #fffffe
@@ -3787,16 +3725,15 @@ rectangle "Asciidoc\n<size:10>[Software System]</size>" <<Asciidoc>> {
   rectangle "==Apache Causeway Val - Asciidoctor (Persistence JDO)\n<size:10>[Container: packaging: jar]</size>" <<Asciidoc.ApacheCausewayValAsciidoctorPersistenceJDO>> as Asciidoc.ApacheCausewayValAsciidoctorPersistenceJDO
   rectangle "==Apache Causeway Val - Asciidoctor (persistence JPA)\n<size:10>[Container: packaging: jar]</size>" <<Asciidoc.ApacheCausewayValAsciidoctorpersistenceJPA>> as Asciidoc.ApacheCausewayValAsciidoctorpersistenceJPA
   rectangle "==Apache Causeway Val - Asciidoctor (ui)\n<size:10>[Container: packaging: pom]</size>" <<Asciidoc.ApacheCausewayValAsciidoctorui>> as Asciidoc.ApacheCausewayValAsciidoctorui
-  rectangle "==Apache Causeway Val - Asciidoctor (ui vaadin)\n<size:10>[Container: packaging: jar]</size>" <<Asciidoc.ApacheCausewayValAsciidoctoruivaadin>> as Asciidoc.ApacheCausewayValAsciidoctoruivaadin
   rectangle "==Apache Causeway Val - Asciidoctor (ui wicket)\n<size:10>[Container: packaging: jar]</size>" <<Asciidoc.ApacheCausewayValAsciidoctoruiwicket>> as Asciidoc.ApacheCausewayValAsciidoctoruiwicket
 }
 
-Asciidoc.ApacheCausewayValAsciidoctorparent .[#707070,thickness=2].> Asciidoc.ApacheCausewayValAsciidoctorapplib : "<color:#707070>"
 Asciidoc.ApacheCausewayValAsciidoctorparent .[#707070,thickness=2].> Asciidoc.ApacheCausewayValAsciidoctorMetaModel : "<color:#707070>"
 Asciidoc.ApacheCausewayValAsciidoctorparent .[#707070,thickness=2].> Asciidoc.ApacheCausewayValAsciidoctorPersistenceJDO : "<color:#707070>"
 Asciidoc.ApacheCausewayValAsciidoctorparent .[#707070,thickness=2].> Asciidoc.ApacheCausewayValAsciidoctorpersistenceJPA : "<color:#707070>"
 Asciidoc.ApacheCausewayValAsciidoctorparent .[#707070,thickness=2].> Asciidoc.ApacheCausewayValAsciidoctorui : "<color:#707070>"
 Asciidoc.ApacheCausewayValAsciidoctorui .[#707070,thickness=2].> Asciidoc.ApacheCausewayValAsciidoctoruiwicket : "<color:#707070>"
+Asciidoc.ApacheCausewayValAsciidoctorparent .[#707070,thickness=2].> Asciidoc.ApacheCausewayValAsciidoctorapplib : "<color:#707070>"
 @enduml
 ----
 .Projects/Modules (Asciidoc)
@@ -3918,19 +3855,6 @@ com.github.jnr:jnr-posix:jar:3.1.16 +
 org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
 org.apache.causeway.valuetypes:causeway-valuetypes-asciidoc-applib:jar:<managed> +
 org.asciidoctor:asciidoctorj:jar:${asciidoctorj.version} +
-****
-
-|Apache Causeway Val - Asciidoctor (ui vaadin)
-[source,yaml]
-----
-Group: org.apache.causeway.valuetypes
-Artifact: causeway-valuetypes-asciidoc-ui-vaa
-Type: jar
-Directory: /valuetypes/asciidoc/ui/vaadin
-----
-|.Dependencies
-****
-org.apache.causeway.incubator.viewer:causeway-viewer-vaadin-ui:jar:${project.version} +
 ****
 
 |Apache Causeway Val - Asciidoctor (ui wicket)
@@ -7122,7 +7046,16 @@ Artifact: causeway-viewer-graphql-viewer
 Type: jar
 Directory: /incubator/viewers/graphql/viewer
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.viewer.graphql.viewer.source.ExecutionStrategyResolvingWithinInteraction +
+o.a.i.viewer.graphql.viewer.source.GraphQlServiceForCauseway +
+o.a.i.viewer.graphql.viewer.source.GraphQlSourceForCauseway +
+o.a.i.viewer.graphql.viewer.source.ObjectTypeFactory +
+o.a.i.viewer.graphql.viewer.source.QueryFieldFactory +
+****
+
+.Dependencies
 ****
 org.apache.causeway.core:causeway-core-webapp:jar:<managed> +
 org.apache.causeway.incubator.viewer:causeway-viewer-graphql-model:jar:<managed> +
@@ -7132,252 +7065,7 @@ org.springframework.boot:spring-boot-starter-websocket:jar:<managed> +
 
 === Vaadin Viewer
 
-[plantuml,Vaadin Viewer,svg]
-----
-@startuml
-set separator none
-title Vaadin Viewer - Containers
-
-left to right direction
-
-skinparam {
-  shadowing false
-  arrowFontSize 10
-  defaultTextAlignment center
-  wrapWidth 200
-  maxMessageSize 100
-}
-
-hide stereotype
-
-skinparam rectangle<<VaadinViewer.ApacheCausewayIncViewerVaadin>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-}
-skinparam rectangle<<VaadinViewer.ApacheCausewayIncViewerVaadinModel>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-}
-skinparam rectangle<<VaadinViewer.ApacheCausewayIncViewerVaadinUIComponents>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-}
-skinparam rectangle<<VaadinViewer.ApacheCausewayIncViewerVaadinViewer>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-}
-
-rectangle "Vaadin Viewer\n<size:10>[Software System]</size>" <<VaadinViewer>> {
-  skinparam RectangleBorderColor<<VaadinViewer>> #9a9a9a
-  skinparam RectangleFontColor<<VaadinViewer>> #9a9a9a
-
-  rectangle "==Apache Causeway Inc - Viewer Vaadin\n<size:10>[Container: packaging: pom]</size>" <<VaadinViewer.ApacheCausewayIncViewerVaadin>> as VaadinViewer.ApacheCausewayIncViewerVaadin
-  rectangle "==Apache Causeway Inc - Viewer Vaadin (Model)\n<size:10>[Container: packaging: jar]</size>" <<VaadinViewer.ApacheCausewayIncViewerVaadinModel>> as VaadinViewer.ApacheCausewayIncViewerVaadinModel
-  rectangle "==Apache Causeway Inc - Viewer Vaadin (UI Components)\n<size:10>[Container: packaging: jar]</size>" <<VaadinViewer.ApacheCausewayIncViewerVaadinUIComponents>> as VaadinViewer.ApacheCausewayIncViewerVaadinUIComponents
-  rectangle "==Apache Causeway Inc - Viewer Vaadin (Viewer)\n<size:10>[Container: packaging: jar]</size>" <<VaadinViewer.ApacheCausewayIncViewerVaadinViewer>> as VaadinViewer.ApacheCausewayIncViewerVaadinViewer
-}
-
-VaadinViewer.ApacheCausewayIncViewerVaadin .[#707070,thickness=2].> VaadinViewer.ApacheCausewayIncViewerVaadinModel : "<color:#707070>"
-VaadinViewer.ApacheCausewayIncViewerVaadin .[#707070,thickness=2].> VaadinViewer.ApacheCausewayIncViewerVaadinUIComponents : "<color:#707070>"
-VaadinViewer.ApacheCausewayIncViewerVaadin .[#707070,thickness=2].> VaadinViewer.ApacheCausewayIncViewerVaadinViewer : "<color:#707070>"
-@enduml
-----
-.Projects/Modules (Vaadin Viewer)
-[cols="3a,5a", options="header"]
-|===
-|Coordinates |Description 
-
-|Apache Causeway Inc - Viewer Vaadin
-[source,yaml]
-----
-Group: org.apache.causeway.incubator.viewer
-Artifact: causeway-viewer-vaadin
-Type: pom
-Directory: /incubator/viewers/vaadin
-----
-|Initial sketches
-
-|Apache Causeway Inc - Viewer Vaadin (Model)
-[source,yaml]
-----
-Group: org.apache.causeway.incubator.viewer
-Artifact: causeway-viewer-vaadin-model
-Type: jar
-Directory: /incubator/viewers/vaadin/model
-----
-|.Dependencies
-****
-com.github.fge:jackson-coreutils:jar:1.8 +
-com.vaadin:vaadin:jar:<managed> +
-io.swagger:swagger-compat-spec-parser:jar:1.0.64 +
-io.swagger:swagger-parser:jar:1.0.64 +
-io.swagger.core.v3:swagger-core:jar:2.2.8 +
-io.swagger.core.v3:swagger-models:jar:2.2.8 +
-io.swagger.parser.v3:swagger-parser-core:jar:2.1.11 +
-io.swagger.parser.v3:swagger-parser-v3:jar:2.1.11 +
-org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
-org.apache.causeway.core:causeway-core-webapp:jar:<managed> +
-org.apache.causeway.viewer:causeway-viewer-commons-model:jar:<managed> +
-****
-
-|Apache Causeway Inc - Viewer Vaadin (UI Components)
-[source,yaml]
-----
-Group: org.apache.causeway.incubator.viewer
-Artifact: causeway-viewer-vaadin-ui
-Type: jar
-Directory: /incubator/viewers/vaadin/ui
-----
-|.Dependencies
-****
-com.vaadin:vaadin-spring:jar:<managed> +
-commons-fileupload:commons-fileupload:jar:1.5 +
-org.apache.causeway.core:causeway-core-runtimeservices:jar:<managed> +
-org.apache.causeway.incubator.viewer:causeway-viewer-vaadin-model:jar:<managed> +
-org.apache.causeway.viewer:causeway-viewer-commons-prism:jar:<managed> +
-org.apache.causeway.viewer:causeway-viewer-commons-services:jar:<managed> +
-****
-
-|Apache Causeway Inc - Viewer Vaadin (Viewer)
-[source,yaml]
-----
-Group: org.apache.causeway.incubator.viewer
-Artifact: causeway-viewer-vaadin-viewer
-Type: jar
-Directory: /incubator/viewers/vaadin/viewer
-----
-|.Dependencies
-****
-com.vaadin:vaadin-core:jar:<managed> +
-com.vaadin:vaadin-spring:jar:<managed> +
-org.apache.causeway.core:causeway-core-runtimeservices:jar:<managed> +
-org.apache.causeway.incubator.viewer:causeway-viewer-vaadin-model:jar:<managed> +
-org.apache.causeway.incubator.viewer:causeway-viewer-vaadin-ui:jar:<managed> +
-org.springframework.boot:spring-boot-starter-web:jar:<managed> +
-****
-|===
-
 === JavaFX Viewer
-
-[plantuml,JavaFX Viewer,svg]
-----
-@startuml
-set separator none
-title JavaFX Viewer - Containers
-
-left to right direction
-
-skinparam {
-  shadowing false
-  arrowFontSize 10
-  defaultTextAlignment center
-  wrapWidth 200
-  maxMessageSize 100
-}
-
-hide stereotype
-
-skinparam rectangle<<JavaFXViewer.ApacheCausewayIncViewerJavaFX>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-}
-skinparam rectangle<<JavaFXViewer.ApacheCausewayIncViewerJavaFXModel>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-}
-skinparam rectangle<<JavaFXViewer.ApacheCausewayIncViewerJavaFXUIComponents>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-}
-skinparam rectangle<<JavaFXViewer.ApacheCausewayIncViewerJavaFXViewer>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-}
-
-rectangle "JavaFX Viewer\n<size:10>[Software System]</size>" <<JavaFXViewer>> {
-  skinparam RectangleBorderColor<<JavaFXViewer>> #9a9a9a
-  skinparam RectangleFontColor<<JavaFXViewer>> #9a9a9a
-
-  rectangle "==Apache Causeway Inc - Viewer JavaFX\n<size:10>[Container: packaging: pom]</size>" <<JavaFXViewer.ApacheCausewayIncViewerJavaFX>> as JavaFXViewer.ApacheCausewayIncViewerJavaFX
-  rectangle "==Apache Causeway Inc - Viewer JavaFX (Model)\n<size:10>[Container: packaging: jar]</size>" <<JavaFXViewer.ApacheCausewayIncViewerJavaFXModel>> as JavaFXViewer.ApacheCausewayIncViewerJavaFXModel
-  rectangle "==Apache Causeway Inc - Viewer JavaFX (UI Components)\n<size:10>[Container: packaging: jar]</size>" <<JavaFXViewer.ApacheCausewayIncViewerJavaFXUIComponents>> as JavaFXViewer.ApacheCausewayIncViewerJavaFXUIComponents
-  rectangle "==Apache Causeway Inc - Viewer JavaFX (Viewer)\n<size:10>[Container: packaging: jar]</size>" <<JavaFXViewer.ApacheCausewayIncViewerJavaFXViewer>> as JavaFXViewer.ApacheCausewayIncViewerJavaFXViewer
-}
-
-JavaFXViewer.ApacheCausewayIncViewerJavaFX .[#707070,thickness=2].> JavaFXViewer.ApacheCausewayIncViewerJavaFXModel : "<color:#707070>"
-JavaFXViewer.ApacheCausewayIncViewerJavaFX .[#707070,thickness=2].> JavaFXViewer.ApacheCausewayIncViewerJavaFXUIComponents : "<color:#707070>"
-JavaFXViewer.ApacheCausewayIncViewerJavaFX .[#707070,thickness=2].> JavaFXViewer.ApacheCausewayIncViewerJavaFXViewer : "<color:#707070>"
-@enduml
-----
-.Projects/Modules (JavaFX Viewer)
-[cols="3a,5a", options="header"]
-|===
-|Coordinates |Description 
-
-|Apache Causeway Inc - Viewer JavaFX
-[source,yaml]
-----
-Group: org.apache.causeway.incubator.viewer
-Artifact: causeway-viewer-javafx
-Type: pom
-Directory: /incubator/viewers/javafx
-----
-|Initial sketches
-
-|Apache Causeway Inc - Viewer JavaFX (Model)
-[source,yaml]
-----
-Group: org.apache.causeway.incubator.viewer
-Artifact: causeway-viewer-javafx-model
-Type: jar
-Directory: /incubator/viewers/javafx/model
-----
-|.Dependencies
-****
-org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
-org.apache.causeway.viewer:causeway-viewer-commons-model:jar:<managed> +
-org.openjfx:javafx-base:jar:<managed> +
-org.openjfx:javafx-controls:jar:<managed> +
-org.openjfx:javafx-fxml:jar:<managed> +
-org.openjfx:javafx-swing:jar:<managed> +
-org.openjfx:javafx-web:jar:<managed> +
-****
-
-|Apache Causeway Inc - Viewer JavaFX (UI Components)
-[source,yaml]
-----
-Group: org.apache.causeway.incubator.viewer
-Artifact: causeway-viewer-javafx-ui
-Type: jar
-Directory: /incubator/viewers/javafx/ui
-----
-|.Dependencies
-****
-org.apache.causeway.core:causeway-core-runtimeservices:jar:<managed> +
-org.apache.causeway.incubator.viewer:causeway-viewer-javafx-model:jar:<managed> +
-****
-
-|Apache Causeway Inc - Viewer JavaFX (Viewer)
-[source,yaml]
-----
-Group: org.apache.causeway.incubator.viewer
-Artifact: causeway-viewer-javafx-viewer
-Type: jar
-Directory: /incubator/viewers/javafx/viewer
-----
-|.Dependencies
-****
-org.apache.causeway.incubator.viewer:causeway-viewer-javafx-ui:jar:<managed> +
-****
-|===
 
 == Other
 
@@ -7453,6 +7141,12 @@ Directory: /incubator/extensions/core/commandreplay/primary
 ----
 |A module for obtaining commands from a primary
 
+.Components
+****
+o.a.i.extensions.commandreplay.primary.config.PrimaryConfig +
+o.a.i.extensions.commandreplay.primary.spiimpl.CaptureResultOfCommand +
+****
+
 .Dependencies
 ****
 org.apache.causeway.core:causeway-core-config:jar:<managed> +
@@ -7477,6 +7171,16 @@ Directory: /incubator/extensions/core/commandreplay/secondary
 ----
 |A module providing a Quartz Job to run on a secondary system,
 for obtaining commands from a primary and saving them so that they are replayed.
+
+.Components
+****
+o.a.i.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserException +
+o.a.i.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserResult +
+o.a.i.extensions.commandreplay.secondary.analysis.CommandReplayAnalysisService +
+o.a.i.extensions.commandreplay.secondary.config.SecondaryConfig +
+o.a.i.extensions.commandreplay.secondary.fetch.CommandFetcher +
+o.a.i.extensions.commandreplay.secondary.job.ReplicateAndReplayJob +
+****
 
 .Dependencies
 ****

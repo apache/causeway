@@ -252,13 +252,13 @@ Note that this also includes the Restful Objects and GraphQL viewers.
 | The GraphQL Viewer
 
 | module-incubator-javafx
-| The JavaFX Viewer
+| The JavaFX Viewer (version 3+ only)
 
 | module-incubator-kroviz
 | The Kroviz Client (standalone viewer)
 
 | module-incubator-vaadin
-| The Vaadin Viewer
+| The Vaadin Viewer (version 3+ only)
 
 | module-regressiontests
 | Regression Tests (for the CI pipelines)
