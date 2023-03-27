@@ -16,10 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.autoComplete.jpa;
+package demoapp.dom.domain.objects.DomainObject.bounded.jpa;
 
-import demoapp.dom.domain.objects.DomainObject.autoComplete.DomainObjectAutoComplete;
-import demoapp.dom.domain.objects.DomainObject.autoComplete.DomainObjectAutoCompleteRepository;
+import demoapp.dom.domain.objects.DomainObject.bounded.DomainObjectBounding;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,6 +26,7 @@ import lombok.Setter;
 import javax.inject.Named;
 import javax.persistence.*;
 
+import org.apache.causeway.applib.annotation.Bounding;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 import org.springframework.context.annotation.Profile;
@@ -36,20 +36,19 @@ import org.springframework.context.annotation.Profile;
 @Entity
 @Table(
     schema = "demo",
-    name = "DomainObjectAutoCompleteJpa"
+    name = "DomainObjectBoundingJpa"
 )
 @EntityListeners(CausewayEntityListener.class)
-@Named("demo.DomainObjectAutoComplete")
+@Named("demo.DomainObjectBounding")
 @DomainObject(
-        autoCompleteRepository = DomainObjectAutoCompleteRepository.class,  // <.>
-        autoCompleteMethod = "findMatching"                 // <.>
+        bounding = Bounding.BOUNDED         // <.>
 )
 @NoArgsConstructor
-public class DomainObjectAutoCompleteJpa extends DomainObjectAutoComplete {
+public class DomainObjectBoundingJpa extends DomainObjectBounding {
     // ...
 //end::class[]
 
-    public DomainObjectAutoCompleteJpa(String value) {
+    public DomainObjectBoundingJpa(String value) {
         setName(value);
     }
 

@@ -22,6 +22,7 @@ The "lookup" (mixin) action uses the https://causeway.apache.org/refguide/2.0.0-
 For convenience, the action provides a choices method for all possible values.
 
 [source,java,indent=0]
+.DomainObjectAliasedVm_lookup.java
 ----
 include::DomainObjectAliasedVm_lookup.java[tags=class]
 ----

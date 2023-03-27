@@ -1,7 +1,6 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 If an action parameter is a reference type (typically an entity), then a mechanism is required to present a list of relevant existing instances for the end-user to select.
-One means to do that is to write a supporting `choices` or `autoComplete` method for the action; `choices` if there is a comparatively short list, or `autoComplete` if the list of candidates if long: the end-user enters some characters and these are used to search for available instances that are relevant for this particular action.
 
 If the list of available instances is always or often the same, then this can result in a lot of boilerplate.
 The link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/DomainObject.html#autoCompleteRepository[@DomainObject#autoCompleteRepository] attribute allows a `@Repository` service to be nominated as containing a suitable `autoComplete(String)` method returning a list of the corresponding domain class.
@@ -16,11 +15,13 @@ The collection on the left shows a set of entity instances, of type `DomainObjec
 The "find" (mixin) action defines the entity class as its parameter type, and simply returns it.
 
 [source,java,indent=0]
+.DomainObjectAutoCompleteVm_find.java
 ----
 include::DomainObjectAutoCompleteVm_find.java[tags=class]
 ----
 
-<.> xxx
+<.> just returns the provided object.
+The main work is performed when the framework renders the action prompt, using the `autoCompleteXxx` attributes to determine how to obtain the objects to provide (in a drop-down list box).
 
 The autoComplete search to perform is specified using the link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/DomainObject.html#autoCompleteRepository[autoCompleteRepository] and link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/DomainObject.html#autoCompleteMethod[autoCompleteMethod] attributes.
 

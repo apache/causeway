@@ -1,6 +1,5 @@
 package demoapp.dom.domain.objects.DomainObject.autoComplete;
 
-import demoapp.dom.domain.objects.DomainObject.aliased.DomainObjectAliased;
 import lombok.RequiredArgsConstructor;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -16,8 +15,8 @@ public class DomainObjectAutoCompleteVm_find {
     private final DomainObjectAutoCompleteVm mixee;
 
     @MemberSupport
-    public DomainObjectAliased act(final DomainObjectAliased domainObjectAliased) {  // <.>
-        return domainObjectAliased;
+    public DomainObjectAutoComplete act(final DomainObjectAutoComplete domainObjectAutoComplete) {  // <.>
+        return domainObjectAutoComplete;
     }
 
 }
