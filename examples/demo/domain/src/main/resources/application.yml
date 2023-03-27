@@ -174,13 +174,6 @@ spring:
   quartz:
     job-store-type: memory
 
-vaadin:
-  compatibilityMode: false
-  whitelisted-packages: com.vaadin
-  urlMapping: "/vaadin/*"
-  servlet:
-      productionMode: true
-
 management:
   endpoint:
     health:
