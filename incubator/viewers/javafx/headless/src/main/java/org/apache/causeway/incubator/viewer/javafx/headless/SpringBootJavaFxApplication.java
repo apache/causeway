@@ -33,6 +33,26 @@ import javafx.stage.Stage;
 /**
  * JavaFx {@link Application},
  * that also initializes a Spring {@link GenericApplicationContext} in the background.
+ * <p>
+ * Example usage:
+ * <pre>
+ * // Bootstrap the application.
+ * &#64;SpringBootApplication
+ * &#64;Import({
+ *     StageInitializer.class
+ * })
+ * public class JavaFxSampleApp {
+ *   public static void main(final String[] args) {
+ *     SpringBootJavaFxApplication.launchSpringBootApplication(JavaFxSampleApp.class, args);
+ *   }
+ * }
+ *
+ * public class StageInitializer implements PrimaryStageInitializer {
+ *   public void onPrimaryStageReady(final Stage primaryStage) {
+ *     primaryStage.setScene(new Scene(new Label("Hello World!"), 250, 150));
+ *   }
+ * }
+ * </pre>
  *
  * @since 3.0
  */

@@ -24,7 +24,7 @@
 	<artifactId>causeway-viewer-javafx-headless</artifactId>
 	<name>Apache Causeway Inc - Viewer JavaFX (Headless)</name>
 	<description>Basic starting block providing a JavaFx Application 
-		with Spring support and a StageReadyEvent.</description>
+		with Spring support and a PrimaryStageReadyEvent.</description>
 
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.causeway.incubator.viewer.javafx.headless</jar-plugin.automaticModuleName>
