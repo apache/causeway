@@ -34,6 +34,7 @@ import demoapp.dom.domain.objects.DomainObject.autoComplete.DomainObjectAutoComp
 import demoapp.dom.domain.objects.DomainObject.bounded.DomainObjectBoundingVm;
 import demoapp.dom.domain.objects.DomainObject.editing.DomainObjectEditingVm;
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingVm;
+import demoapp.dom.domain.objects.DomainObject.introspection.DomainObjectIntrospectionVm;
 import demoapp.dom.domain.objects.DomainObject.mixinMethod.DomainObjectMixinMethodVm;
 import demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.StatefulVmJaxbRefsEntity;
 import demoapp.dom.domain.objects.DomainObject.nature.viewmodels.usingjaxb.StatefulVmUsingJaxb;
@@ -78,6 +79,12 @@ public class DomainObjectMenu {
     @ActionLayout(cssClassFa="fa-book", describedAs = "Entity changed events as XML")
     public DomainObjectEntityChangePublishingVm entityChangePublishing(){
         return new DomainObjectEntityChangePublishingVm();
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-book", describedAs = "Control over introspection process")
+    public DomainObjectIntrospectionVm introspection(){
+        return new DomainObjectIntrospectionVm();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
