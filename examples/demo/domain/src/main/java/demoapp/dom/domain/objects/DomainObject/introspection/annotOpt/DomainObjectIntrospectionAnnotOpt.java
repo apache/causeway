@@ -20,19 +20,14 @@ package demoapp.dom.domain.objects.DomainObject.introspection.annotOpt;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
+import demoapp.dom.domain.objects.DomainObject.introspection.DomainObjectIntrospection;
 
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Property;
 
 @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 public abstract class DomainObjectIntrospectionAnnotOpt
-        implements
-        HasAsciiDocDescription,
-        ValueHolder<String> {
-
-    public String title() {
-        return value();
-    }
+        implements DomainObjectIntrospection {
 
     @Override
     public String value() {
@@ -42,9 +37,4 @@ public abstract class DomainObjectIntrospectionAnnotOpt
     public abstract String getName();
     public abstract void setName(String value);
 
-    @Property(editing = Editing.DISABLED, editingDisabledReason = "This property cannot be edited")
-    public abstract String getOriginalName();
-    public abstract void setOriginalName(String value);
-
-    public abstract Character getInitialCharacter();
 }

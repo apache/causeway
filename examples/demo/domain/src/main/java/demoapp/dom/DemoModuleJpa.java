@@ -25,6 +25,10 @@ import demoapp.dom.domain.objects.DomainObject.autoComplete.jpa.DomainObjectAuto
 import demoapp.dom.domain.objects.DomainObject.bounded.jpa.DomainObjectBoundingJpa;
 import demoapp.dom.domain.objects.DomainObject.editing.jpa.DomainObjectEditingJpa;
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.jpa.DomainObjectEntityChangePublishingJpa;
+import demoapp.dom.domain.objects.DomainObject.introspection.annotOpt.jpa.DomainObjectIntrospectionAnnotOptJpa;
+import demoapp.dom.domain.objects.DomainObject.introspection.annotReqd.jpa.DomainObjectIntrospectionAnnotReqdJpa;
+import demoapp.dom.domain.objects.DomainObject.introspection.encapsulated.DomainObjectIntrospectionEncapsulated;
+import demoapp.dom.domain.objects.DomainObject.introspection.encapsulated.jpa.DomainObjectIntrospectionEncapsulatedJpa;
 import demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.jpa.JaxbRefJpa;
 import demoapp.dom.domain.objects.other.embedded.jpa.NumberConstantJpa;
 import demoapp.dom.domain.properties.Property.commandPublishing.jpa.PropertyCommandPublishingJpa;
@@ -96,6 +100,9 @@ import org.springframework.context.annotation.Profile;
         DomainObjectBoundingJpa.class,
         DomainObjectEditingJpa.class,
         DomainObjectEntityChangePublishingJpa.class,
+        DomainObjectIntrospectionAnnotOptJpa.class,
+        DomainObjectIntrospectionAnnotReqdJpa.class,
+        DomainObjectIntrospectionEncapsulatedJpa.class,
 
         CausewayBlobJpa.class,
         CausewayClobJpa.class,

@@ -16,18 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.introspection.encapsulated;
+package demoapp.dom.domain.objects.DomainObject.introspection;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
-import demoapp.dom.domain.objects.DomainObject.introspection.DomainObjectIntrospection;
-
-import org.apache.causeway.applib.annotation.Editing;
-import org.apache.causeway.applib.annotation.Programmatic;
-import org.apache.causeway.applib.annotation.Property;
 
 @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
-public abstract class DomainObjectIntrospectionEncapsulated
-        implements DomainObjectIntrospection {
+public interface DomainObjectIntrospection
+        extends
+        HasAsciiDocDescription,
+        ValueHolder<String> {
+
+    default String title() { return value(); }
 
 }

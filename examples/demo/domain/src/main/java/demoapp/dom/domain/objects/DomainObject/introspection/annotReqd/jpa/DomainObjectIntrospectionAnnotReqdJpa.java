@@ -18,7 +18,8 @@
  */
 package demoapp.dom.domain.objects.DomainObject.introspection.annotReqd.jpa;
 
-import demoapp.dom.domain.objects.DomainObject.editing.DomainObjectEditing;
+import demoapp.dom.domain.objects.DomainObject.introspection.annotOpt.jpa.DomainObjectIntrospectionAnnotOptJpa;
+import demoapp.dom.domain.objects.DomainObject.introspection.annotReqd.DomainObjectIntrospectionAnnotReqd;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,33 +27,31 @@ import lombok.Setter;
 import javax.inject.Named;
 import javax.persistence.*;
 
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Editing;
-import org.apache.causeway.applib.annotation.Introspection;
-import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.*;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 import org.springframework.context.annotation.Profile;
 
 @Profile("demo-jpa")
-//tag::class[]
 @Entity
 @Table(
     schema = "demo",
-    name = "DomainObjectIntrospectionJpa"
+    name = "DomainObjectIntrospectionAnnotReqdJpa"
 )
 @EntityListeners(CausewayEntityListener.class)
-@Named("demo.DomainObjectIntrospection")
+@Named("demo.DomainObjectIntrospectionAnnotReqdJpa")
+@NoArgsConstructor
+//tag::class[]
+// ...
 @DomainObject(
         introspection = Introspection.ANNOTATION_REQUIRED
 )
-@NoArgsConstructor
-public class DomainObjectIntrospectionAnnotReqdJpa extends DomainObjectEditing {
+public class DomainObjectIntrospectionAnnotReqdJpa
+        extends DomainObjectIntrospectionAnnotReqd {
     // ...
 //end::class[]
 
     public DomainObjectIntrospectionAnnotReqdJpa(String value) {
         setName(value);
-        setOriginalName(value);
     }
 
     @Id
@@ -60,22 +59,23 @@ public class DomainObjectIntrospectionAnnotReqdJpa extends DomainObjectEditing {
     private Long id;
 //tag::class[]
 
-    @Getter @Setter
-    private String name;                        // <.>
-
-    @Property(
-            editing = Editing.DISABLED,         // <.>
-            editingDisabledReason = "This property may not be edited"
-    )
-    @Getter @Setter
-    private String originalName;
-
-    public Character getInitialCharacter() {    // <.>
-        return getName().charAt(0);
+    private String name;
+    @Property                                                                   // <.>
+    public String getName() {
+        return name;
     }
-//end::class[]
+    public void setName(String name) {
+        this.name = name;
+    }
 
-
-//tag::class[]
+    @Action(semantics = SemanticsOf.IDEMPOTENT)                                 // <.>
+    public DomainObjectIntrospectionAnnotReqdJpa updateName(final String name) {
+        setName(name);
+        return this;
+    }
+    @MemberSupport                                                              // <.>
+    public String default0UpdateName() {
+        return getName();
+    }
 }
 //end::class[]

@@ -18,30 +18,31 @@
  */
 package demoapp.dom.domain.objects.DomainObject.introspection;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.domain.objects.DomainObject.introspection.annotReqd.DomainObjectIntrospectionAnnotReqd;
+import lombok.RequiredArgsConstructor;
 
-import javax.inject.Named;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import java.util.List;
 
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Introspection;
-import org.apache.causeway.applib.annotation.ObjectSupport;
+import javax.inject.Inject;
 
-//tag::class[]
-@XmlRootElement(name = "root")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.DomainObjectIntrospectionVm")
-@DomainObject(
-        introspection = Introspection.ENCAPSULATION_ENABLED)
-public class DomainObjectIntrospectionVm implements HasAsciiDocDescription {
+import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.applib.annotation.CollectionLayout;
+import org.apache.causeway.applib.annotation.MemberSupport;
 
-    @ObjectSupport public String title() {
-        return "DomainObject#introspection";
+@Collection()
+@CollectionLayout()
+@RequiredArgsConstructor
+public class DomainObjectIntrospectionVm_annotationRequired {
+
+    @SuppressWarnings("unused")
+    private final DomainObjectIntrospectionVm mixee;
+
+    @MemberSupport
+    public List<? extends DomainObjectIntrospectionAnnotReqd> coll() {
+        return entities.all();
     }
 
+    @Inject ValueHolderRepository<String, ? extends DomainObjectIntrospectionAnnotReqd> entities;
+
 }
-//end::class[]

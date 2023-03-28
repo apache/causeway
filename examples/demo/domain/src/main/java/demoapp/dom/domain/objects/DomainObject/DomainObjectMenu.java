@@ -82,7 +82,7 @@ public class DomainObjectMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-book", describedAs = "Control over introspection process")
+    @ActionLayout(cssClassFa="fa-triangle-person-digging", describedAs = "Control over introspection process")
     public DomainObjectIntrospectionVm introspection(){
         return new DomainObjectIntrospectionVm();
     }

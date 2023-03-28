@@ -32,17 +32,14 @@ import org.apache.causeway.applib.annotation.*;
 import org.springframework.context.annotation.Profile;
 
 @Profile("demo-jdo")
-//tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @Named("demo.DomainObjectEntityChangePublishingEntity")
+//tag::class[]
+// ...
 @DomainObject(
     nature=Nature.ENTITY
     , entityChangePublishing = Publishing.ENABLED            // <.>
-    , bounding = Bounding.BOUNDED
-)
-@DomainObjectLayout(
-    describedAs = "@DomainObject(entityChangePublishing=ENABLED)"
 )
 public class DomainObjectEntityChangePublishingJdo
                 extends DomainObjectEntityChangePublishingEntity {

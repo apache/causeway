@@ -31,30 +31,30 @@
 					<bs3:row>
 						<bs3:col span="12">
 							<cpt:fieldSet name="General" id="general" >
-								<cpt:property id="name"/>
-								<cpt:property id="originalName"/>
-								<cpt:property id="initialCharacter"/>
+								<cpt:property id="name">
+									<cpt:action id="updateName"/>
+								</cpt:property>
 							</cpt:fieldSet>
 						</bs3:col>
 					</bs3:row>
 				</bs3:tab>
 				<bs3:tab name="Metadata">
-					<bs3:row>
-						<bs3:col span="12">
+			<bs3:row>
+				<bs3:col span="12">
 							<cpt:fieldSet name="Metadata" id="metadata" >
 								<cpt:property id="id"/>
 								<cpt:property id="logicalTypeName"/>
 								<cpt:property id="version"/>
 							</cpt:fieldSet>
-						</bs3:col>
-					</bs3:row>
+				</bs3:col>
+			</bs3:row>
 				</bs3:tab>
 				<bs3:tab name="Other">
-					<bs3:row>
-						<bs3:col span="12">
-							<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
-						</bs3:col>
-					</bs3:row>
+			<bs3:row>
+				<bs3:col span="12">
+			<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
+				</bs3:col>
+			</bs3:row>
 				</bs3:tab>
 			</bs3:tabGroup>
 		</bs3:col>

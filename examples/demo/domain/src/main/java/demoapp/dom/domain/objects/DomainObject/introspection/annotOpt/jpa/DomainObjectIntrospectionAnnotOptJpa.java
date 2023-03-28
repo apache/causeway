@@ -18,7 +18,7 @@
  */
 package demoapp.dom.domain.objects.DomainObject.introspection.annotOpt.jpa;
 
-import demoapp.dom.domain.objects.DomainObject.editing.DomainObjectEditing;
+import demoapp.dom.domain.objects.DomainObject.introspection.annotOpt.DomainObjectIntrospectionAnnotOpt;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,32 +27,31 @@ import javax.inject.Named;
 import javax.persistence.*;
 
 import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Introspection;
-import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 import org.springframework.context.annotation.Profile;
 
 @Profile("demo-jpa")
-//tag::class[]
 @Entity
 @Table(
     schema = "demo",
-    name = "DomainObjectIntrospectionJpa"
+    name = "DomainObjectIntrospectionAnnotOptJpa"
 )
 @EntityListeners(CausewayEntityListener.class)
-@Named("demo.DomainObjectIntrospection")
-@DomainObject(
-        introspection = Introspection.ANNOTATION_REQUIRED
-)
+@Named("demo.DomainObjectIntrospectionAnnotOpt")
 @NoArgsConstructor
-public class DomainObjectIntrospectionAnnotOptJpa extends DomainObjectEditing {
+//tag::class[]
+// ...
+@DomainObject(
+        introspection = Introspection.ANNOTATION_OPTIONAL
+)
+public class DomainObjectIntrospectionAnnotOptJpa
+        extends DomainObjectIntrospectionAnnotOpt {
     // ...
 //end::class[]
 
     public DomainObjectIntrospectionAnnotOptJpa(String value) {
         setName(value);
-        setOriginalName(value);
     }
 
     @Id
@@ -60,22 +59,20 @@ public class DomainObjectIntrospectionAnnotOptJpa extends DomainObjectEditing {
     private Long id;
 //tag::class[]
 
-    @Getter @Setter
-    private String name;                        // <.>
-
-    @Property(
-            editing = Editing.DISABLED,         // <.>
-            editingDisabledReason = "This property may not be edited"
-    )
-    @Getter @Setter
-    private String originalName;
-
-    public Character getInitialCharacter() {    // <.>
-        return getName().charAt(0);
+    private String name;                                                        // <.>
+    public String getName() {
+        return name;
     }
-//end::class[]
+    public void setName(String name) {
+        this.name = name;
+    }
 
-
-//tag::class[]
+    public DomainObjectIntrospectionAnnotOptJpa updateName(final String name) { // <.>
+        setName(name);
+        return this;
+    }
+    public String default0UpdateName() {                                        // <.>
+        return getName();
+    }
 }
 //end::class[]

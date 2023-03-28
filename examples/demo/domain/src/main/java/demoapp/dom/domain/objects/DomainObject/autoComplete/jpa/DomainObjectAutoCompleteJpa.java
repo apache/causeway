@@ -28,11 +28,11 @@ import javax.inject.Named;
 import javax.persistence.*;
 
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 import org.springframework.context.annotation.Profile;
 
 @Profile("demo-jpa")
-//tag::class[]
 @Entity
 @Table(
     schema = "demo",
@@ -40,11 +40,14 @@ import org.springframework.context.annotation.Profile;
 )
 @EntityListeners(CausewayEntityListener.class)
 @Named("demo.DomainObjectAutoComplete")
+@NoArgsConstructor
+//tag::class[]
+// ...
 @DomainObject(
+        nature = Nature.ENTITY,
         autoCompleteRepository = DomainObjectAutoCompleteRepository.class,  // <.>
         autoCompleteMethod = "findMatching"                 // <.>
 )
-@NoArgsConstructor
 public class DomainObjectAutoCompleteJpa extends DomainObjectAutoComplete {
     // ...
 //end::class[]
