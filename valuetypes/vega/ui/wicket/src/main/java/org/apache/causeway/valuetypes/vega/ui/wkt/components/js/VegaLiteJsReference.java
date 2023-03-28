@@ -44,6 +44,6 @@ extends JavaScriptResourceReference {
     }
 
     private VegaLiteJsReference() {
-        super(VegaLiteJsReference.class, "vega-lite@5.6.1");
+        super(VegaLiteJsReference.class, "vega-lite@5.6.1.js");
     }
 }
