@@ -427,7 +427,7 @@ class JsonValueEncoderTest {
     private JsonRepresentation representationFor(
             final Object value, final Context context, final Consumer<Object> valueAsObjectVerifier) {
         val valueAdapter = mmc.getObjectManager().adapt(value);
-        val jsonValueEncoder = JsonValueEncoderServiceDefault.forTesting(mmc.getSpecificationLoader());
+        val jsonValueEncoder = new JsonValueEncoderServiceDefault(mmc.getSpecificationLoader());
 
         valueAsObjectVerifier.accept(jsonValueEncoder.asObject(valueAdapter, context));
 
