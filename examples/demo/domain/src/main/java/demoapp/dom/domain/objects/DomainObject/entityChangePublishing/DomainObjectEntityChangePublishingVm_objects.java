@@ -16,23 +16,33 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled;
+package demoapp.dom.domain.objects.DomainObject.entityChangePublishing;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
-import org.springframework.stereotype.Service;
+import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.applib.annotation.CollectionLayout;
+import org.apache.causeway.applib.annotation.MemberSupport;
 
-import demoapp.dom._infra.seed.SeedServiceAbstract;
 import demoapp.dom._infra.values.ValueHolderRepository;
+import lombok.RequiredArgsConstructor;
 
-@Service
-public class DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenSeeding
-extends SeedServiceAbstract {
+@Collection()
+@CollectionLayout()
+@RequiredArgsConstructor
+public class DomainObjectEntityChangePublishingVm_objects {
+
+    @SuppressWarnings("unused")
+    private final DomainObjectEntityChangePublishingVm mixee;
+
+    @MemberSupport
+    public List<? extends DomainObjectEntityChangePublishingEntity> coll() {
+        return publishingEnabledEntities.all();
+    }
 
     @Inject
-    public DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenSeeding(
-            ValueHolderRepository<String, ? extends DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenEntity> entities) {
-        super(entities);
-    }
+    ValueHolderRepository<String, ? extends DomainObjectEntityChangePublishingEntity> publishingEnabledEntities;
 
 }

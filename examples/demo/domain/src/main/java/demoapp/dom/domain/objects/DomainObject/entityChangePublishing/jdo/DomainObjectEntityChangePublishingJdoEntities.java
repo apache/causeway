@@ -16,17 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled;
+package demoapp.dom.domain.objects.DomainObject.entityChangePublishing.jdo;
 
-import javax.inject.Named;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
 
-import org.apache.causeway.applib.annotation.DomainObject;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
-import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingEntity;
+@Profile("demo-jdo")
+@Service
+public class DomainObjectEntityChangePublishingJdoEntities
+extends ValueHolderRepository<String, DomainObjectEntityChangePublishingJdo> {
 
-@Named("demo.DomainObjectEntityChangePublishingDisabledEntity") // shared permissions with concrete sub class
-@DomainObject
-public abstract class DomainObjectEntityChangePublishingDisabledEntity
-extends DomainObjectEntityChangePublishingEntity {
+    protected DomainObjectEntityChangePublishingJdoEntities() {
+        super(DomainObjectEntityChangePublishingJdo.class);
+    }
+
+    @Override
+    protected DomainObjectEntityChangePublishingJdo newDetachedEntity(String value) {
+        return new DomainObjectEntityChangePublishingJdo(value);
+    }
 
 }

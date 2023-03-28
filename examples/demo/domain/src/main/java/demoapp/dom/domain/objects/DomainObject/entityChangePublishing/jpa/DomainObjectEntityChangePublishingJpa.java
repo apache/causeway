@@ -16,54 +16,44 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.jpa;
+package demoapp.dom.domain.objects.DomainObject.entityChangePublishing.jpa;
 
-import javax.inject.Named;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-import org.springframework.context.annotation.Profile;
-
-import org.apache.causeway.applib.annotation.Bounding;
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.DomainObjectLayout;
-import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.Publishing;
-import org.apache.causeway.applib.annotation.Title;
-import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
-
-import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectEntityChangePublishingDisabledEntity;
+import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.inject.Named;
+import javax.persistence.*;
+
+import org.apache.causeway.applib.annotation.*;
+import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
+import org.springframework.context.annotation.Profile;
 
 @Profile("demo-jpa")
 //tag::class[]
 @Entity
 @Table(
     schema = "demo",
-    name = "DomainObjectEntityChangePublishingDisabledJpa"
+    name = "DomainObjectEntityChangePublishingEnabledJpa"
 )
 @EntityListeners(CausewayEntityListener.class)
-@Named("demo.DomainObjectEntityChangePublishingDisabledEntity")
+@Named("demo.DomainObjectEntityChangePublishingEntity")
 @DomainObject(
         nature=Nature.ENTITY
-        , entityChangePublishing = Publishing.DISABLED           // <.>
+        , entityChangePublishing = Publishing.ENABLED            // <.>
         , bounding = Bounding.BOUNDED
     )
     @DomainObjectLayout(
-        describedAs = "@DomainObject(entityChangePublishing=DISABLED)"
+        describedAs = "@DomainObject(entityChangePublishing=ENABLED)"
     )
 @NoArgsConstructor
-public class DomainObjectEntityChangePublishingDisabledJpa
-                extends DomainObjectEntityChangePublishingDisabledEntity {
+public class DomainObjectEntityChangePublishingJpa
+                extends DomainObjectEntityChangePublishingEntity {
     // ...
 //end::class[]
 
-    public DomainObjectEntityChangePublishingDisabledJpa(final String initialValue) {
+    public DomainObjectEntityChangePublishingJpa(final String initialValue) {
         this.property = initialValue;
         this.propertyUpdatedByAction = initialValue;
     }

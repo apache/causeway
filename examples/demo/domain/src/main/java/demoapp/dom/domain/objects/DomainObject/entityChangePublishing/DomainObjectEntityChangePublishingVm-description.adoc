@@ -1,47 +1,15 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-The `entityChangePublishing` element for a domain object means that all registered implementation(s) of the link:https://causeway.apache.org/refguide/${CAUSEWAY_VERSION}/applib/index/services/publishing/spi/EntityChangesSubscriber.html#spi[EntityChangesSubscriber] SPI will be notified of the identity and nature of the change (created/updated/deleted) to each modified domain objects.
-This is provided in the https://causeway.apache.org/refguide/${CAUSEWAY_VERSION}/schema/chg.html[ChangesDto], obtained from the  link:https://causeway.apache.org/refguide/${CAUSEWAY_VERSION}/applib/index/services/publishing/spi/EntityChanges.html[`EntityChanges`] parameter of the callback.
-
-This notification is done only once per interaction, so will include _all_ domain objects that were changed.
-The event object can be converted to type .
+Entity change publishing allows the application to subscribe to events that indicate which entities have been created/updated/deleted, as provided by the link:https://causeway.apache.org/refguide/${CAUSEWAY_VERSION}/applib/index/services/publishing/spi/EntityChangesSubscriber.html#spi[EntityChangesSubscriber] SPI.
+The details are provided in the https://causeway.apache.org/refguide/${CAUSEWAY_VERSION}/schema/chg.html[ChangesDto], obtained from the  link:https://causeway.apache.org/refguide/${CAUSEWAY_VERSION}/applib/index/services/publishing/spi/EntityChanges.html[`EntityChanges`] parameter of the callback.
+This callback is done only at the end of the interaction.
 
 Common use cases are to replicate data to another system, or for gathering metrics ("which objects change the most?").
 A typical SPI implementation could publish the event over the network, or perhaps store in a database.
 
-The element can be specified using either the `@DomainObject` annotation, or through a meta-annotation.
-
 NOTE: Publishing of domain objects is only supported for domain entities, not view models.
 
-
-=== How this demo works
-
-This current page is a view model which has four collections of entities, each a different annotations:
-
-* annotated using `@DomainObject(entityChangePublishing=...)` as enabled
-
-* annotated using `@DomainObject(entityChangePublishing=...)` as disabled
-
-* meta-annotated as enabled
-
-* meta-annotated as disabled, but then overridden
-
-Navigate into each of the domain entities to see the code examples.
-
-Using this view model, you can use the `create` action to create an instance for each of the four variations.
-With the `update all` action, you can update each of the instances.
-Or, with the `delete` action you can delete the first entity in each collection.
-You can also update an individual entity by drilling through to it and invoking its action.
-
-The demo includes an implementation of link:https://causeway.apache.org/refguide/${CAUSEWAY_VERSION}/applib/index/services/publishing/spi/EntityChangesSubscriber.html#spi[EntityChangesSubscriber] that captures changes and simply holds them in-memory.
-To observe these captured changes that have been made, just scroll down on this page and inspect the "changes" collection.
-(There will be some anyway from the fixture scripts run when the application first bootstraps.)
-
-
-== Configuration
-
-By default, publishing of changes to domain objects is disabled.
-It is enabled as follows:
+Entity change publishing can be enabled or disabled globally using a configuration property:
 
 [source,yaml]
 .application.yml
@@ -50,6 +18,24 @@ causeway:
   applib:
     annotation:
       domain-object:
-        entity-change-publishing: all
+        entity-change-publishing: 'none'    # 'none' | 'all'
 ----
 
+This demo app has entity change publishing disabled by default.
+
+Entity change publishing can also be enabled on a case by case basis using the link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/DomainObject.html#entitychangepublishing[@DomainObject#entitychangepublishing] attribute.
+
+
+
+=== How this demo works
+
+The collection on the left shows a set of entity instances, which have `@DomainObject#entityChangePublishing` to enable the publishing of any changes to their state.
+
+Using this view model, you can use the actions to create new instances of the entity, update them or to delete them.
+
+Meanwhile, at the bottom of this page is a collection that simply lists all of the changes that have been received.
+This uses an implementation of link:https://causeway.apache.org/refguide/${CAUSEWAY_VERSION}/applib/index/services/publishing/spi/EntityChangesSubscriber.html#spi[EntityChangesSubscriber] that captures changes and simply holds them in-memory.
+
+NOTE: there will always be some listed from the fixture scripts run when the application first bootstraps.)
+
+Navigate into each of the domain entities to see the code examples.

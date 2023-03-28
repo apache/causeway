@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.jpa;
+package demoapp.dom.domain.objects.DomainObject.entityChangePublishing.jpa;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -25,16 +25,16 @@ import demoapp.dom._infra.values.ValueHolderRepository;
 
 @Profile("demo-jpa")
 @Service
-public class DomainObjectEntityChangePublishingEnabledMetaAnnotatedJpaEntities
-extends ValueHolderRepository<String, DomainObjectEntityChangePublishingEnabledMetaAnnotatedJpa> {
+public class DomainObjectEntityChangePublishingJpaEntities
+extends ValueHolderRepository<String, DomainObjectEntityChangePublishingJpa> {
 
-    protected DomainObjectEntityChangePublishingEnabledMetaAnnotatedJpaEntities() {
-        super(DomainObjectEntityChangePublishingEnabledMetaAnnotatedJpa.class);
+    protected DomainObjectEntityChangePublishingJpaEntities() {
+        super(DomainObjectEntityChangePublishingJpa.class);
     }
 
     @Override
-    protected DomainObjectEntityChangePublishingEnabledMetaAnnotatedJpa newDetachedEntity(String value) {
-        return new DomainObjectEntityChangePublishingEnabledMetaAnnotatedJpa(value);
+    protected DomainObjectEntityChangePublishingJpa newDetachedEntity(String value) {
+        return new DomainObjectEntityChangePublishingJpa(value);
     }
 
 }

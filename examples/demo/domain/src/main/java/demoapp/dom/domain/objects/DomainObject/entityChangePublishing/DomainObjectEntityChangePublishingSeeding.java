@@ -16,25 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.jdo;
+package demoapp.dom.domain.objects.DomainObject.entityChangePublishing;
 
-import org.springframework.context.annotation.Profile;
+import javax.inject.Inject;
+
 import org.springframework.stereotype.Service;
 
+import demoapp.dom._infra.seed.SeedServiceAbstract;
 import demoapp.dom._infra.values.ValueHolderRepository;
 
-@Profile("demo-jdo")
 @Service
-public class DomainObjectEntityChangePublishingDisabledJdoEntities
-extends ValueHolderRepository<String, DomainObjectEntityChangePublishingDisabledJdo> {
+public class DomainObjectEntityChangePublishingSeeding
+extends SeedServiceAbstract {
 
-    protected DomainObjectEntityChangePublishingDisabledJdoEntities() {
-        super(DomainObjectEntityChangePublishingDisabledJdo.class);
-    }
-
-    @Override
-    protected DomainObjectEntityChangePublishingDisabledJdo newDetachedEntity(String value) {
-        return new DomainObjectEntityChangePublishingDisabledJdo(value);
+    @Inject
+    public DomainObjectEntityChangePublishingSeeding(
+            ValueHolderRepository<String, ? extends DomainObjectEntityChangePublishingEntity> entities) {
+        super(entities);
     }
 
 }

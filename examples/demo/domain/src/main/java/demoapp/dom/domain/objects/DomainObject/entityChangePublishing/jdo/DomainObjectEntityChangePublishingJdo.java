@@ -16,7 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.jdo;
+package demoapp.dom.domain.objects.DomainObject.entityChangePublishing.jdo;
+
+import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingEntity;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.inject.Named;
 import javax.jdo.annotations.DatastoreIdentity;
@@ -24,38 +28,28 @@ import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 
+import org.apache.causeway.applib.annotation.*;
 import org.springframework.context.annotation.Profile;
-
-import org.apache.causeway.applib.annotation.Bounding;
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.DomainObjectLayout;
-import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.Publishing;
-import org.apache.causeway.applib.annotation.Title;
-
-import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectEntityChangePublishingDisabledEntity;
-import lombok.Getter;
-import lombok.Setter;
 
 @Profile("demo-jdo")
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@Named("demo.DomainObjectEntityChangePublishingDisabledEntity")
+@Named("demo.DomainObjectEntityChangePublishingEntity")
 @DomainObject(
     nature=Nature.ENTITY
-    , entityChangePublishing = Publishing.DISABLED           // <.>
+    , entityChangePublishing = Publishing.ENABLED            // <.>
     , bounding = Bounding.BOUNDED
 )
 @DomainObjectLayout(
-    describedAs = "@DomainObject(entityChangePublishing=DISABLED)"
+    describedAs = "@DomainObject(entityChangePublishing=ENABLED)"
 )
-public class DomainObjectEntityChangePublishingDisabledJdo
-                extends DomainObjectEntityChangePublishingDisabledEntity {
+public class DomainObjectEntityChangePublishingJdo
+                extends DomainObjectEntityChangePublishingEntity {
     // ...
 //end::class[]
 
-    public DomainObjectEntityChangePublishingDisabledJdo(final String initialValue) {
+    public DomainObjectEntityChangePublishingJdo(final String initialValue) {
         this.property = initialValue;
         this.propertyUpdatedByAction = initialValue;
     }
