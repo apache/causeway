@@ -11,6 +11,11 @@ on:
       - spring6
 
 jobs:
+  # This is a matrix build {'java', 'javascript'}, 
+  # where only the 'java' part triggers the Maven build,
+  # and only the 'javascript' part triggers the CodeQL autobuild. 
+  # Those builds must run in between the "CodeQL: Initialize" and "CodeQL: Perform Analysis" steps!
+  # CodeQL can be disabled via SKIP_CODE_QL: true
   build:
     name: build-local-no-push
     runs-on: ubuntu-latest
