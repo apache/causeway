@@ -10,13 +10,21 @@ on:
       - master
       - spring6
 
-permissions:
-  contents: read
-
 jobs:
   build:
     name: build-local-no-push
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    strategy:
+      matrix:
+        # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby' ]
+        # Use only 'java' to analyze code written in Java, Kotlin or both
+        # Use only 'javascript' to analyze code written in JavaScript, TypeScript or both
+        # Learn more about CodeQL language support at https://aka.ms/codeql-docs/language-support  
+        language: [ 'java', 'javascript' ]
     env:
       # to be shared among all steps of this job
       BASELINE: 2.0.0-RC1
@@ -31,6 +39,9 @@ jobs:
       # set this to 'deploy' when intent is to push the built packages to a repo
       # requires 'secrets' which we don't have yet
       MVN_STAGES: install
+      
+      # options
+      SKIP_CODE_QL: false
 
     steps:
     - uses: actions/checkout@v3
@@ -86,6 +97,19 @@ jobs:
           -Dmaven.source.skip=true
           -Denforcer.failFast=true
           -e
+
+    # CodeQL Analysis (https://codeql.github.com/docs/codeql-overview/about-codeql/)
+    - name: Initialize CodeQL
+      if: env.SKIP_CODE_QL != 'true' 
+      uses: github/codeql-action/init@v2
+      with:
+        languages: ${{ matrix.language }}
+    - name: Perform CodeQL Analysis
+      if: env.SKIP_CODE_QL != 'true'
+      uses: github/codeql-action/analyze@v2
+      with:
+        category: "/language:${{matrix.language}}"
+           
 
 # FOR DEBUG USE
 #   - name: Dump GitHub context
