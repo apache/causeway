@@ -18,22 +18,13 @@
  */
 package demoapp.dom;
 
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Profile;
-
-import org.apache.causeway.extensions.commandlog.jpa.CausewayModuleExtCommandLogPersistenceJpa;
-import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistenceJpaEclipselink;
-
 import demoapp.dom.domain.actions.Action.commandPublishing.jpa.ActionCommandPublishingJpa;
 import demoapp.dom.domain.actions.Action.executionPublishing.jpa.ActionExecutionPublishingJpa;
 import demoapp.dom.domain.objects.DomainObject.aliased.jpa.DomainObjectAliasedJpa;
 import demoapp.dom.domain.objects.DomainObject.autoComplete.jpa.DomainObjectAutoCompleteJpa;
-import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.jpa.DomainObjectEntityChangePublishingDisabledJpa;
-import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled.jpa.DomainObjectEntityChangePublishingEnabledJpa;
-import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.jpa.DomainObjectEntityChangePublishingEnabledMetaAnnotatedJpa;
-import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.jpa.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJpa;
+import demoapp.dom.domain.objects.DomainObject.bounded.jpa.DomainObjectBoundingJpa;
+import demoapp.dom.domain.objects.DomainObject.editing.jpa.DomainObjectEditingJpa;
+import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.jpa.DomainObjectEntityChangePublishingJpa;
 import demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.jpa.JaxbRefJpa;
 import demoapp.dom.domain.objects.other.embedded.jpa.NumberConstantJpa;
 import demoapp.dom.domain.properties.Property.commandPublishing.jpa.PropertyCommandPublishingJpa;
@@ -84,6 +75,13 @@ import demoapp.dom.types.primitive.ints.jpa.PrimitiveIntJpa;
 import demoapp.dom.types.primitive.longs.jpa.PrimitiveLongJpa;
 import demoapp.dom.types.primitive.shorts.jpa.PrimitiveShortJpa;
 
+import org.apache.causeway.extensions.commandlog.jpa.CausewayModuleExtCommandLogPersistenceJpa;
+import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistenceJpaEclipselink;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Profile;
+
 @Configuration
 @Profile("demo-jpa")
 @Import({
@@ -95,6 +93,9 @@ import demoapp.dom.types.primitive.shorts.jpa.PrimitiveShortJpa;
 
         DomainObjectAliasedJpa.class,
         DomainObjectAutoCompleteJpa.class,
+        DomainObjectBoundingJpa.class,
+        DomainObjectEditingJpa.class,
+        DomainObjectEntityChangePublishingJpa.class,
 
         CausewayBlobJpa.class,
         CausewayClobJpa.class,
@@ -147,10 +148,6 @@ import demoapp.dom.types.primitive.shorts.jpa.PrimitiveShortJpa;
         TenantedJpa.class,
         WrapperFactoryJpa.class,
 
-        DomainObjectEntityChangePublishingDisabledJpa.class,
-        DomainObjectEntityChangePublishingEnabledJpa.class,
-        DomainObjectEntityChangePublishingEnabledMetaAnnotatedJpa.class,
-        DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJpa.class,
         ActionCommandPublishingJpa.class,
         ActionExecutionPublishingJpa.class,
         PropertyCommandPublishingJpa.class,

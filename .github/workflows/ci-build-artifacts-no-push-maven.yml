@@ -10,13 +10,26 @@ on:
       - master
       - spring6
 
-permissions:
-  contents: read
-
 jobs:
+  # This is a matrix build {'java', 'javascript'}, 
+  # where only the 'java' part triggers the Maven build,
+  # and only the 'javascript' part triggers the CodeQL autobuild. 
+  # Those builds must run in between the "CodeQL: Initialize" and "CodeQL: Perform Analysis" steps!
+  # CodeQL can be disabled via SKIP_CODE_QL: true
   build:
     name: build-local-no-push
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    strategy:
+      matrix:
+        # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby' ]
+        # Use only 'java' to analyze code written in Java, Kotlin or both
+        # Use only 'javascript' to analyze code written in JavaScript, TypeScript or both
+        # Learn more about CodeQL language support at https://aka.ms/codeql-docs/language-support  
+        language: [ 'java', 'javascript' ]
     env:
       # to be shared among all steps of this job
       BASELINE: 2.0.0-RC1
@@ -31,11 +44,15 @@ jobs:
       # set this to 'deploy' when intent is to push the built packages to a repo
       # requires 'secrets' which we don't have yet
       MVN_STAGES: install
+      
+      # options
+      SKIP_CODE_QL: false
 
     steps:
     - uses: actions/checkout@v3
 
     - name: Set up JDK 18
+      if: matrix.language == 'java'
       uses: actions/setup-java@v3
       with:
         distribution: 'zulu'
@@ -44,9 +61,11 @@ jobs:
         java-version: 18
 
     - name: Print Maven Version
+      if: matrix.language == 'java'
       run: mvn --version
 
     - name: Activate Cache for Maven Downloads
+      if: matrix.language == 'java'
       uses: actions/cache@v3
       env:
         # change the cache-name if we want to rebuild the cache
@@ -60,6 +79,7 @@ jobs:
           ${{ runner.os }}-
 
     - name: Setup Script Environment
+      if: matrix.language == 'java'
       shell: bash
       run: |
         echo ==============  ENV  =================
@@ -69,8 +89,16 @@ jobs:
         echo CI_SCRIPTS_PATH  \: $CI_SCRIPTS_PATH
         echo MVN_STAGES       \: $MVN_STAGES
         echo ======================================
+        
+    # CodeQL Analysis (https://codeql.github.com/docs/codeql-overview/about-codeql/)
+    - name: "CodeQL: Initialize"
+      if: env.SKIP_CODE_QL != 'true' 
+      uses: github/codeql-action/init@v2
+      with:
+        languages: ${{ matrix.language }}
 
     - name: Build Artifacts
+      if: matrix.language == 'java'
       shell: bash
       run: bash $CI_SCRIPTS_PATH/build-artifacts.sh
       env:
@@ -86,6 +114,19 @@ jobs:
           -Dmaven.source.skip=true
           -Denforcer.failFast=true
           -e
+          
+    # Autobuild attempts to build any compiled languages  (C/C++, C#, Go, or Java).
+    # If this step fails, then you should remove it and run the build manually
+    - name: "CodeQL: Autobuild" 
+      if: env.SKIP_CODE_QL != 'true' && matrix.language == 'javascript'
+      uses: github/codeql-action/autobuild@v2
+          
+    - name: "CodeQL: Perform Analysis"
+      if: env.SKIP_CODE_QL != 'true'
+      uses: github/codeql-action/analyze@v2
+      with:
+        category: "/language:${{matrix.language}}"
+               
 
 # FOR DEBUG USE
 #   - name: Dump GitHub context

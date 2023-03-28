@@ -16,54 +16,64 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.autoComplete.jpa;
+package demoapp.dom.domain.objects.DomainObject.editing.jpa;
 
-import jakarta.inject.Named;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-
-import org.springframework.context.annotation.Profile;
-
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
-
-import demoapp.dom.domain.objects.DomainObject.autoComplete.DomainObjectAutoComplete;
-import demoapp.dom.domain.objects.DomainObject.autoComplete.DomainObjectAutoCompleteRepository;
+import demoapp.dom.domain.objects.DomainObject.editing.DomainObjectEditing;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import jakarta.inject.Named;
+import jakarta.persistence.*;
+
+import org.apache.causeway.applib.annotation.Bounding;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Editing;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
+import org.springframework.context.annotation.Profile;
 
 @Profile("demo-jpa")
 //tag::class[]
 @Entity
 @Table(
     schema = "demo",
-    name = "DomainObjectAutoCompleteJpa"
+    name = "DomainObjectEditingJpa"
 )
 @EntityListeners(CausewayEntityListener.class)
-@Named("demo.DomainObjectAutoComplete")
+@Named("demo.DomainObjectEditing")
 @DomainObject(
-        autoCompleteRepository = DomainObjectAutoCompleteRepository.class,  // <.>
-        autoCompleteMethod = "findMatching"                 // <.>
+        editing = Editing.ENABLED               // <.>
 )
 @NoArgsConstructor
-public class DomainObjectAutoCompleteJpa extends DomainObjectAutoComplete {
+public class DomainObjectEditingJpa extends DomainObjectEditing {
     // ...
 //end::class[]
 
-    public DomainObjectAutoCompleteJpa(final String value) {
+    public DomainObjectEditingJpa(String value) {
         setName(value);
+        setOriginalName(value);
     }
 
     @Id
     @GeneratedValue
     private Long id;
+//tag::class[]
 
     @Getter @Setter
-    private String name;
+    private String name;                        // <.>
+
+    @Property(
+            editing = Editing.DISABLED,         // <.>
+            editingDisabledReason = "This property may not be edited"
+    )
+    @Getter @Setter
+    private String originalName;
+
+    public Character getInitialCharacter() {    // <.>
+        return getName().charAt(0);
+    }
+//end::class[]
 
 
 //tag::class[]
