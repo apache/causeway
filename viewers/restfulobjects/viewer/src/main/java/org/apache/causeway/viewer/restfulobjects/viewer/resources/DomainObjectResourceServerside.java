@@ -63,7 +63,7 @@ import org.apache.causeway.viewer.restfulobjects.applib.domainobjects.DomainObje
 import org.apache.causeway.viewer.restfulobjects.rendering.Responses;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
-import org.apache.causeway.viewer.restfulobjects.rendering.util.Util;
+import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestParams;
 import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
 
 import lombok.NonNull;
@@ -101,8 +101,7 @@ implements DomainObjectResource {
         val resourceContext = createResourceContext(
                 RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS, RepresentationService.Intent.JUST_CREATED);
 
-        final String objectStr = Util.asStringUtf8(object);
-        final JsonRepresentation objectRepr = Util.readAsMap(objectStr);
+        final JsonRepresentation objectRepr = RequestParams.ofRequestBody(object).asMap();
         if (!objectRepr.isMap()) {
             throw _EndpointLogging.error(log, "POST /objects/{}", domainType,
                     RestfulObjectsApplicationException
@@ -195,8 +194,7 @@ implements DomainObjectResource {
         val resourceContext = createResourceContext(
                 RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS, RepresentationService.Intent.ALREADY_PERSISTENT);
 
-        final String objectStr = Util.asStringUtf8(object);
-        final JsonRepresentation argRepr = Util.readAsMap(objectStr);
+        final JsonRepresentation argRepr = RequestParams.ofRequestBody(object).asMap();
         if (!argRepr.isMap()) {
             throw _EndpointLogging.error(log, "PUT /objects/{}/{}", domainType, instanceId,
                     RestfulObjectsApplicationException
@@ -448,7 +446,7 @@ implements DomainObjectResource {
         .checkUsability(AccessIntent.MUTATE)
         .modifyProperty(property->{
             val proposedNewValue = new JsonParserHelper(resourceContext, property.getElementType())
-                    .parseAsMapWithSingleValue(Util.asStringUtf8(body));
+                    .parseAsMapWithSingleValue(RequestParams.ofRequestBody(body));
 
             return proposedNewValue;
         })
@@ -692,10 +690,12 @@ implements DomainObjectResource {
             final @QueryParam("x-causeway-querystring") String xCausewayUrlEncodedQueryString) {
 
         final String urlUnencodedQueryString = _UrlDecoderUtil
-                .urlDecodeNullSafe(xCausewayUrlEncodedQueryString != null? xCausewayUrlEncodedQueryString: httpServletRequest.getQueryString());
+                .urlDecodeNullSafe(xCausewayUrlEncodedQueryString != null
+                    ? xCausewayUrlEncodedQueryString
+                    : httpServletRequest.getQueryString());
         val resourceContext = createResourceContext(
                 ResourceDescriptor.of(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
-                urlUnencodedQueryString);
+                RequestParams.ofQueryString(urlUnencodedQueryString));
 
         final JsonRepresentation arguments = resourceContext.getQueryStringAsJsonRepr();
 

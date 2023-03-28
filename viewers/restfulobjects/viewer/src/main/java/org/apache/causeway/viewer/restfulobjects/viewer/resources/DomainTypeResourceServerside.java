@@ -59,7 +59,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.domaintypes.PropertyD
 import org.apache.causeway.viewer.restfulobjects.rendering.domaintypes.TypeActionResultReprRenderer;
 import org.apache.causeway.viewer.restfulobjects.rendering.domaintypes.TypeListReprRenderer;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
-import org.apache.causeway.viewer.restfulobjects.rendering.util.Util;
+import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestParams;
 import org.apache.causeway.viewer.restfulobjects.viewer.util.UrlParserUtils;
 
 import lombok.NonNull;
@@ -393,16 +393,16 @@ implements DomainTypeResource {
         }
 
         // formal style; must parse from args that has a link with an href to the domain type
-        final String argsAsQueryString = UrlEncodingUtils.urlDecode(argsAsUrlEncodedQueryString);
-        final String href = linkFromFormalArgs(argsAsQueryString, argsParamName, onRoException);
+        val requestParams = RequestParams.ofQueryString(UrlEncodingUtils.urlDecode(argsAsUrlEncodedQueryString));
+        final String href = linkFromFormalArgs(requestParams, argsParamName, onRoException);
         return UrlParserUtils.domainTypeFrom(href);
     }
 
     private static String linkFromFormalArgs(
-            final String argumentsAsQueryString,
+            final RequestParams requestParams,
             final String paramName,
             final @NonNull UnaryOperator<RestfulObjectsApplicationException> onRoException) {
-        final JsonRepresentation arguments = Util.readQueryStringAsMap(argumentsAsQueryString);
+        final JsonRepresentation arguments = requestParams.asMap();
         if (!arguments.isLink(paramName)) {
             throw onRoException.apply(RestfulObjectsApplicationException
                     .createWithMessage(HttpStatusCode.BAD_REQUEST, "Args should contain a link '%s'", paramName));

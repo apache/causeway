@@ -29,7 +29,7 @@ import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.JsonValueEncoderService;
-import org.apache.causeway.viewer.restfulobjects.rendering.util.Util;
+import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestParams;
 
 import lombok.val;
 
@@ -59,8 +59,8 @@ public class JsonParserHelper {
      *            - as per {@link org.apache.causeway.viewer.restfulobjects.rendering.util.Util#asStringUtf8(java.io.InputStream)}
      * @return
      */
-    ManagedObject parseAsMapWithSingleValue(final String bodyAsString) {
-        final JsonRepresentation arguments = Util.readAsMap(bodyAsString);
+    ManagedObject parseAsMapWithSingleValue(final RequestParams body) {
+        final JsonRepresentation arguments = body.asMap();
         return parseAsMapWithSingleValue(arguments);
     }
 

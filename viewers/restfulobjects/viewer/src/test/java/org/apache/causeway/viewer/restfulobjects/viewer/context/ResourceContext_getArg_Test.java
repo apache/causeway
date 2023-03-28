@@ -40,6 +40,7 @@ import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulRequest.RequestParameter;
 import org.apache.causeway.viewer.restfulobjects.applib.util.UrlEncodingUtils;
+import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestParams;
 import org.apache.causeway.viewer.restfulobjects.viewer.resources.ResourceDescriptor;
 
 class ResourceContext_getArg_Test {
@@ -96,7 +97,7 @@ class ResourceContext_getArg_Test {
         final String queryString = UrlEncodingUtils.urlEncode(JsonRepresentation.newMap("x-ro-page", "123").asJsonNode());
 
         resourceContext = new ResourceContext(ResourceDescriptor.empty(), null, null, null, null, null,
-                _UrlDecoderUtil.urlDecodeNullSafe(queryString),
+                RequestParams.ofQueryString(_UrlDecoderUtil.urlDecodeNullSafe(queryString)),
                 mockHttpServletRequest, null, null,
                 metaModelContext, null, null) {
             @Override
@@ -113,7 +114,7 @@ class ResourceContext_getArg_Test {
         final String queryString = UrlEncodingUtils.urlEncode(JsonRepresentation.newMap("xxx", "123").asJsonNode());
 
         resourceContext = new ResourceContext(ResourceDescriptor.empty(), null, null, null, null, null,
-                _UrlDecoderUtil.urlDecodeNullSafe(queryString),
+                RequestParams.ofQueryString(_UrlDecoderUtil.urlDecodeNullSafe(queryString)),
                 mockHttpServletRequest, null, null,
                 metaModelContext, null, null) {
             @Override

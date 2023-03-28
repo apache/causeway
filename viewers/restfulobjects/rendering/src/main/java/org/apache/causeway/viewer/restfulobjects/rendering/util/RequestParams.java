@@ -25,6 +25,8 @@ import java.nio.charset.StandardCharsets;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
@@ -32,68 +34,82 @@ import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.causeway.viewer.restfulobjects.applib.util.JsonMapper;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 
-public final class Util {
+import lombok.NonNull;
+import lombok.experimental.Accessors;
 
-    private Util(){}
+@lombok.Value(staticConstructor = "of")
+@Accessors(fluent=true) //XXX record candidate
+public class RequestParams {
 
-    // //////////////////////////////////////////////////////////////
-    // parsing
-    // //////////////////////////////////////////////////////////////
+    static enum Nature {
+        REQUEST_BODY,
+        QUERY_STRING
+    }
+
+    private final @NonNull RequestParams.Nature nature;
+    private final @Nullable String raw;
+
+    public static RequestParams ofRequestBody(final InputStream is) {
+        return of(Nature.REQUEST_BODY, asStringUtf8(is));
+    }
+
+    public static RequestParams ofQueryString(final String queryString) {
+        return of(Nature.QUERY_STRING, queryString);
+    }
+
+    public static RequestParams ofEmptyQueryString() {
+        return of(Nature.QUERY_STRING, "");
+    }
+
+    public JsonRepresentation asMap() {
+        return readAsMap(raw, nature.name());
+    }
+
+    // -- HELPER
 
     /**
      * Parse {@link java.io.InputStream} to String, else throw exception
      */
-    public static String asStringUtf8(final InputStream body) {
+    private static String asStringUtf8(final InputStream body) {
         try {
             return _Strings.ofBytes(_Bytes.of(body), StandardCharsets.UTF_8);
         } catch (final IOException e) {
-            throw RestfulObjectsApplicationException.createWithCauseAndMessage(RestfulResponse.HttpStatusCode.BAD_REQUEST, e, "could not read body");
+            throw RestfulObjectsApplicationException
+                .createWithCauseAndMessage(RestfulResponse.HttpStatusCode.BAD_REQUEST, e, "could not read body");
         }
     }
 
     /**
      * Parse (body) string to {@link org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation}, else throw exception
      */
-    public static JsonRepresentation readAsMap(final String body) {
-        if (body == null) {
+    private static JsonRepresentation readAsMap(final String rawArgs, final String argsNature) {
+        if (rawArgs == null) {
             return JsonRepresentation.newMap();
         }
-        final String bodyTrimmed = body.trim();
+        final String bodyTrimmed = rawArgs.trim();
         if (bodyTrimmed.isEmpty()) {
             return JsonRepresentation.newMap();
         }
-        return read(bodyTrimmed, "body");
-    }
 
-    /**
-     * Parse (query) string to {@link org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation}, else throw exception
-     */
-    public static JsonRepresentation readQueryStringAsMap(final String queryString) {
-        if (queryString == null) {
-            return JsonRepresentation.newMap();
-        }
-        final String queryStringTrimmed = queryString.trim();
-        if (queryStringTrimmed.isEmpty()) {
-            return JsonRepresentation.newMap();
-        }
-        return read(queryStringTrimmed, "query string");
-    }
 
-    private static JsonRepresentation read(final String args, final String argsNature) {
         try {
-            final JsonRepresentation jsonRepr = JsonMapper.instance().read(args);
+            final JsonRepresentation jsonRepr = JsonMapper.instance().read(rawArgs);
             if (!jsonRepr.isMap()) {
-                throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.BAD_REQUEST, "could not read %s as a JSON map", argsNature);
+                throw RestfulObjectsApplicationException
+                .createWithMessage(RestfulResponse.HttpStatusCode.BAD_REQUEST, "could not read %s as a JSON map", argsNature);
             }
             return jsonRepr;
         } catch (final JsonParseException e) {
-            throw RestfulObjectsApplicationException.createWithCauseAndMessage(RestfulResponse.HttpStatusCode.BAD_REQUEST, e, "could not parse %s", argsNature);
+            throw RestfulObjectsApplicationException
+                .createWithCauseAndMessage(RestfulResponse.HttpStatusCode.BAD_REQUEST, e, "could not parse %s", argsNature);
         } catch (final JsonMappingException e) {
-            throw RestfulObjectsApplicationException.createWithCauseAndMessage(RestfulResponse.HttpStatusCode.BAD_REQUEST, e, "could not read %s as JSON", argsNature);
+            throw RestfulObjectsApplicationException
+                .createWithCauseAndMessage(RestfulResponse.HttpStatusCode.BAD_REQUEST, e, "could not read %s as JSON", argsNature);
         } catch (final IOException e) {
-            throw RestfulObjectsApplicationException.createWithCauseAndMessage(RestfulResponse.HttpStatusCode.BAD_REQUEST, e, "could not parse %s", argsNature);
+            throw RestfulObjectsApplicationException
+                .createWithCauseAndMessage(RestfulResponse.HttpStatusCode.BAD_REQUEST, e, "could not parse %s", argsNature);
         }
-    }
 
+    }
 
 }
