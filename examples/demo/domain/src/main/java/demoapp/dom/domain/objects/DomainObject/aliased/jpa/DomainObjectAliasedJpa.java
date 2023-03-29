@@ -28,6 +28,7 @@ import jakarta.persistence.Table;
 import org.springframework.context.annotation.Profile;
 
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
 import demoapp.dom.domain.objects.DomainObject.aliased.DomainObjectAliased;
@@ -36,7 +37,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Profile("demo-jpa")
-//tag::class[]
 @Entity
 @Table(
     schema = "demo",
@@ -44,10 +44,13 @@ import lombok.Setter;
 )
 @EntityListeners(CausewayEntityListener.class)
 @Named("demo.party.Customer")                   // <.>
+@NoArgsConstructor
+//tag::class[]
+// ...
 @DomainObject(
+        nature = Nature.ENTITY,
         aliased = {"demo.customer.Customer"}    // <.>
 )
-@NoArgsConstructor
 public class DomainObjectAliasedJpa extends DomainObjectAliased {
     // ...
 //end::class[]

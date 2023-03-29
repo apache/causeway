@@ -41,7 +41,8 @@ class ZipUtilsTest {
 
     @Test
     void zipUnzipRountrip() throws Exception {
-        assertArrayEquals(bytes, unZip(zip(bytes)));
+        assertArrayEquals(bytes, unZip_usingStream(zip(bytes)));
+        assertArrayEquals(bytes, unZip_usingOptional(zip(bytes)));
     }
 
     // -- HELPER
@@ -53,9 +54,16 @@ class ZipUtilsTest {
     }
 
     @SneakyThrows
-    private static byte[] unZip(final byte[] zipped) {
+    private static byte[] unZip_usingStream(final byte[] zipped) {
         return ZipUtils.streamZipEntries(DataSource.ofBytes(zipped))
         .findFirst()
+        .map(entry->entry.bytes())
+        .orElseGet(()->new byte[0]);
+    }
+
+    @SneakyThrows
+    private static byte[] unZip_usingOptional(final byte[] zipped) {
+        return ZipUtils.firstZipEntry(DataSource.ofBytes(zipped))
         .map(entry->entry.bytes())
         .orElseGet(()->new byte[0]);
     }

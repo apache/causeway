@@ -16,24 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.restfulobjects.rendering.util;
+package demoapp.dom.domain.objects.DomainObject.introspection.annotReqd.jpa;
 
-import java.util.List;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.viewer.restfulobjects.applib.util.PathNode;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
 
-public final class FollowSpecUtil {
+@Profile("demo-jpa")
+@Service
+public class DomainObjectIntrospectionAnnotReqdJpaEntities
+extends ValueHolderRepository<String, DomainObjectIntrospectionAnnotReqdJpa> {
 
-    private FollowSpecUtil() {
+    protected DomainObjectIntrospectionAnnotReqdJpaEntities() {
+        super(DomainObjectIntrospectionAnnotReqdJpa.class);
     }
 
-    public static final List<List<PathNode>> asFollowSpecs(final List<List<String>> links) {
-
-        final List<List<PathNode>> unmodifiable = _Lists.map(links, (List<String> pathParts) -> {
-            return _Lists.newArrayList(_Lists.map(pathParts, (String input)->PathNode.parse(input)));
-        });
-
-        return _Lists.newArrayList(unmodifiable);
+    @Override
+    protected DomainObjectIntrospectionAnnotReqdJpa newDetachedEntity(String value) {
+        return new DomainObjectIntrospectionAnnotReqdJpa(value);
     }
+
 }

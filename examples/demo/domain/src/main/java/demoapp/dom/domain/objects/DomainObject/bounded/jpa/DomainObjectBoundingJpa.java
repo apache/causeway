@@ -28,11 +28,11 @@ import jakarta.persistence.*;
 
 import org.apache.causeway.applib.annotation.Bounding;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 import org.springframework.context.annotation.Profile;
 
 @Profile("demo-jpa")
-//tag::class[]
 @Entity
 @Table(
     schema = "demo",
@@ -40,10 +40,13 @@ import org.springframework.context.annotation.Profile;
 )
 @EntityListeners(CausewayEntityListener.class)
 @Named("demo.DomainObjectBounding")
+@NoArgsConstructor
+//tag::class[]
+// ...
 @DomainObject(
+        nature = Nature.ENTITY,
         bounding = Bounding.BOUNDED         // <.>
 )
-@NoArgsConstructor
 public class DomainObjectBoundingJpa extends DomainObjectBounding {
     // ...
 //end::class[]

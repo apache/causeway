@@ -18,19 +18,31 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.util.PathNode;
-import org.apache.causeway.viewer.restfulobjects.rendering.util.FollowSpecUtil;
 
 public final class LinkFollowSpecs {
 
     public static final LinkFollowSpecs create(final List<List<String>> links) {
-        final List<List<PathNode>> specs = FollowSpecUtil.asFollowSpecs(links);
+        final List<List<PathNode>> specs = asFollowSpecs(links);
         return new LinkFollowSpecs(specs, Mode.FOLLOWING, null);
+    }
+
+    private static final List<List<PathNode>> asFollowSpecs(final List<List<String>> links) {
+        return _NullSafe.stream(links)
+        .map(_NullSafe::stream)
+        .map((final Stream<String> pathPartStream)->pathPartStream
+                .map(PathNode::parse)
+                .collect(Collectors.toCollection(ArrayList::new)))
+        .collect(Collectors.toCollection(ArrayList::new));
     }
 
     private enum Mode {

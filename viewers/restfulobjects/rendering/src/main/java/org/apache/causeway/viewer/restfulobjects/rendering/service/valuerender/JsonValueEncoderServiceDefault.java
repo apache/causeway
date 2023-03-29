@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -38,7 +37,6 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueSerializer;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueSerializer.Format;
@@ -63,14 +61,13 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
 
-    @Inject private SpecificationLoader specificationLoader;
+    private final SpecificationLoader specificationLoader;
+    private final Map<Class<?>, JsonValueConverter> converterByClass;
 
-    private Map<Class<?>, JsonValueConverter> converterByClass = _Maps.newLinkedHashMap();
-
-    @PostConstruct
-    public void init() {
-        new _JsonValueConverters().asList()
-            .forEach(converter->converterByClass.put(converter.getValueClass(), converter));
+    @Inject
+    public JsonValueEncoderServiceDefault(final SpecificationLoader specificationLoader) {
+        this.specificationLoader = specificationLoader;
+        this.converterByClass = _JsonValueConverters.byClass();
     }
 
     @Override
@@ -248,16 +245,6 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
         // else
         return Facets.valueSerializerElseFail(objectSpec, cls)
                 .enstring(Format.JSON, _Casts.uncheckedCast(adapter.getPojo()));
-    }
-
-    /**
-     * JUnit support
-     */
-    public static JsonValueEncoderServiceDefault forTesting(final SpecificationLoader specificationLoader) {
-        val jsonValueEncoder = new JsonValueEncoderServiceDefault();
-        jsonValueEncoder.specificationLoader = specificationLoader;
-        jsonValueEncoder.init();
-        return jsonValueEncoder;
     }
 
 }

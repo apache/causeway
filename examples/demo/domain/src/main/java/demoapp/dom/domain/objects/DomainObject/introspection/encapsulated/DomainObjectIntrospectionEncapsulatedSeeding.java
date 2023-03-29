@@ -16,23 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.restfulobjects.rendering.util;
+package demoapp.dom.domain.objects.DomainObject.introspection.encapsulated;
 
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.inject.Inject;
 
-public final class ListUtils {
+import org.springframework.stereotype.Service;
 
-    private ListUtils() {
-    }
+import demoapp.dom._infra.seed.SeedServiceAbstract;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
-    @SuppressWarnings("unchecked")
-    public static <T> List<T> toList(final Object[] objects) {
-        final List<T> list = new ArrayList<T>();
-        for (final Object o : objects) {
-            list.add((T) o);
-        }
-        return list;
+@Service
+public class DomainObjectIntrospectionEncapsulatedSeeding
+extends SeedServiceAbstract {
+
+    @Inject
+    public DomainObjectIntrospectionEncapsulatedSeeding(
+            final ValueHolderRepository<String, ? extends DomainObjectIntrospectionEncapsulated> entities) {
+        super(entities);
     }
 
 }

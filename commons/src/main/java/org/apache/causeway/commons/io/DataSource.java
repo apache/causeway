@@ -160,6 +160,22 @@ public interface DataSource {
                 .asHexString();
     }
 
+    // -- MAP
+
+    /**
+     * Returns a new {@link DataSource} that maps the {@link InputStream} of this {@link DataSource} to another
+     * through means of applying given unary operator {@code inputStreamMapper}.
+     * (eg the decode or encode the originating input stream)
+     */
+    default DataSource map(final @NonNull ThrowingFunction<InputStream, InputStream> inputStreamMapper) {
+        val self = this;
+        return new DataSource() {
+            @Override public <T> Try<T> tryReadAll(final @NonNull Function<InputStream, Try<T>> consumingMapper) {
+                return self.tryReadAll(is->consumingMapper.apply(inputStreamMapper.apply(is)));
+            }
+        };
+    }
+
     // -- PIPE
 
     /**

@@ -31,7 +31,6 @@ import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityList
 import org.springframework.context.annotation.Profile;
 
 @Profile("demo-jpa")
-//tag::class[]
 @Entity
 @Table(
     schema = "demo",
@@ -39,15 +38,13 @@ import org.springframework.context.annotation.Profile;
 )
 @EntityListeners(CausewayEntityListener.class)
 @Named("demo.DomainObjectEntityChangePublishingEntity")
-@DomainObject(
-        nature=Nature.ENTITY
-        , entityChangePublishing = Publishing.ENABLED            // <.>
-        , bounding = Bounding.BOUNDED
-    )
-    @DomainObjectLayout(
-        describedAs = "@DomainObject(entityChangePublishing=ENABLED)"
-    )
 @NoArgsConstructor
+//tag::class[]
+// ...
+@DomainObject(
+        nature=Nature.ENTITY,
+        entityChangePublishing = Publishing.ENABLED              // <.>
+)
 public class DomainObjectEntityChangePublishingJpa
                 extends DomainObjectEntityChangePublishingEntity {
     // ...

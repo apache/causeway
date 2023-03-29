@@ -49,7 +49,7 @@ import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse.HttpStat
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.causeway.viewer.restfulobjects.rendering.UrlDecoderUtils;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
-import org.apache.causeway.viewer.restfulobjects.rendering.util.Util;
+import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestParams;
 import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
 
 import lombok.Getter;
@@ -86,20 +86,20 @@ implements HasMetaModelContext {
 
     protected ResourceContext createResourceContext(final ResourceDescriptor resourceDescriptor) {
         String queryStringIfAny = getUrlDecodedQueryStringIfAny();
-        return createResourceContext(resourceDescriptor, queryStringIfAny);
+        return createResourceContext(resourceDescriptor, RequestParams.ofQueryString(queryStringIfAny));
     }
 
     protected ResourceContext createResourceContext(
             final ResourceDescriptor resourceDescriptor,
             final InputStream arguments) {
 
-        final String urlDecodedQueryString = Util.asStringUtf8(arguments);
+        val urlDecodedQueryString = RequestParams.ofRequestBody(arguments);
         return createResourceContext(resourceDescriptor, urlDecodedQueryString);
     }
 
     protected ResourceContext createResourceContext(
             final ResourceDescriptor resourceDescriptor,
-            final String urlUnencodedQueryString) {
+            final RequestParams requestParams) {
 
         _Assert.assertNotNull(metaModelContext, ()->"injection points not resolved for " + this.getClass());
 
@@ -130,7 +130,7 @@ implements HasMetaModelContext {
                 resourceDescriptor,
                 applicationAbsoluteBase,
                 restfulAbsoluteBase,
-                urlUnencodedQueryString,
+                requestParams,
                 httpServletRequest.getParameterMap());
     }
 
@@ -170,7 +170,7 @@ implements HasMetaModelContext {
             final ResourceDescriptor resourceDescriptor,
             final String applicationAbsoluteBase,
             final String restfulAbsoluteBase,
-            final String urlUnencodedQueryString,
+            final RequestParams urlUnencodedQueryString,
             final Map<String, String[]> requestParams) {
 
         return new ResourceContext(

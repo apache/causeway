@@ -18,33 +18,28 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering.util;
 
-import java.io.IOException;
-
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.viewer.restfulobjects.applib.util.JsonMapper;
 
+import lombok.SneakyThrows;
 import lombok.val;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public final class JsonWriterUtil {
 
-    private JsonWriterUtil(){}
-
-    public static String jsonFor(Object object, JsonMapper.PrettyPrinting prettyPrinting) {
-        try {
-            return JsonMapper.instance(prettyPrinting).write(object);
-        } catch (final IOException e) {
-            throw new RuntimeException(e);
-        }
+    @SneakyThrows
+    public String jsonFor(final Object object, final JsonMapper.PrettyPrinting prettyPrinting) {
+        return JsonMapper.instance(prettyPrinting).write(object);
     }
 
-    public static String jsonFor(Object object, @Nullable CausewaySystemEnvironment systemEnvironment) {
+    public String jsonFor(final Object object, @Nullable final CausewaySystemEnvironment systemEnvironment) {
         val prettyPrinting = (systemEnvironment!=null && systemEnvironment.isPrototyping())
                 ? JsonMapper.PrettyPrinting.ENABLE
-                        : JsonMapper.PrettyPrinting.DISABLE;
+                : JsonMapper.PrettyPrinting.DISABLE;
         return jsonFor(object, prettyPrinting);
     }
-
 
 }

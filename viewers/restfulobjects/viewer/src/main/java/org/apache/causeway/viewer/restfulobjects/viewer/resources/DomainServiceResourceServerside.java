@@ -51,6 +51,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplica
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.DomainServiceLinkTo;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
+import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestParams;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -268,10 +269,12 @@ implements DomainServiceResource {
             final @QueryParam("x-causeway-querystring") String xCausewayUrlEncodedQueryString) {
 
         final String urlUnencodedQueryString = _UrlDecoderUtil
-                .urlDecodeNullSafe(xCausewayUrlEncodedQueryString != null? xCausewayUrlEncodedQueryString: httpServletRequest.getQueryString());
+                .urlDecodeNullSafe(xCausewayUrlEncodedQueryString != null
+                    ? xCausewayUrlEncodedQueryString
+                    : httpServletRequest.getQueryString());
         val resourceContext = createResourceContext(
                 ResourceDescriptor.of(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
-                urlUnencodedQueryString);
+                RequestParams.ofQueryString(urlUnencodedQueryString));
 
         final JsonRepresentation arguments = resourceContext.getQueryStringAsJsonRepr();
 

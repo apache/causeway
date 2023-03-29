@@ -28,6 +28,7 @@ import jakarta.persistence.Table;
 import org.springframework.context.annotation.Profile;
 
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
 import demoapp.dom.domain.objects.DomainObject.autoComplete.DomainObjectAutoComplete;
@@ -37,7 +38,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Profile("demo-jpa")
-//tag::class[]
 @Entity
 @Table(
     schema = "demo",
@@ -45,11 +45,14 @@ import lombok.Setter;
 )
 @EntityListeners(CausewayEntityListener.class)
 @Named("demo.DomainObjectAutoComplete")
+@NoArgsConstructor
+//tag::class[]
+// ...
 @DomainObject(
+        nature = Nature.ENTITY,
         autoCompleteRepository = DomainObjectAutoCompleteRepository.class,  // <.>
         autoCompleteMethod = "findMatching"                 // <.>
 )
-@NoArgsConstructor
 public class DomainObjectAutoCompleteJpa extends DomainObjectAutoComplete {
     // ...
 //end::class[]

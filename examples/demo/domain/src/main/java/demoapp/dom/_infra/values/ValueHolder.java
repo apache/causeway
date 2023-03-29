@@ -20,9 +20,12 @@ package demoapp.dom._infra.values;
 
 import jakarta.inject.Named;
 
+import org.apache.causeway.applib.annotation.Programmatic;
+
 @Named("demo.ValueHolder")
 public interface ValueHolder<T> {
 
+    @Programmatic
     T value();
 
 }
