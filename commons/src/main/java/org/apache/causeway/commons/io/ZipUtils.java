@@ -25,6 +25,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -161,6 +162,45 @@ public class ZipUtils {
     public Stream<ZipEntryDataSource> streamZipEntries(
             final @NonNull DataSource zippedSource) {
         return streamZipEntries(zippedSource, ZipOptions.builder().build());
+    }
+
+    /**
+     * Optionally the first zip-entry as {@link ZipEntryDataSource}, based on whether an entry exists.
+     */
+    public Optional<ZipEntryDataSource> firstZipEntry(
+            final @NonNull DataSource zippedSource,
+            final @NonNull ZipOptions zipOptions) {
+
+        val zipEntryDataSources = _Lists.<ZipEntryDataSource>newArrayList(1);
+
+        zippedSource.tryReadAndAccept(is->{
+            try(final ZipInputStream in = new ZipInputStream(
+                    new BufferedInputStream(is, zipOptions.bufferSize()),
+                    zipOptions.zipEntryCharset())) {
+
+                ZipEntry zipEntry;
+                while((zipEntry = in.getNextEntry())!=null) {
+                    if(zipEntry.isDirectory()) continue;
+                    if(zipOptions.zipEntryFilter().test(zipEntry)) {
+                        zipEntryDataSources.add(
+                                new ZipEntryDataSource(zipEntry, _Bytes.ofKeepOpen(in)));
+                        return; // stop further processing
+                    }
+                }
+            }
+        })
+        .ifFailureFail();
+
+        return _Lists.firstElement(zipEntryDataSources);
+    }
+
+    /**
+     * Shortcut for {@code firstZipEntry(zippedSource, ZipOptions.builder().build())}
+     * @see #firstZipEntry(DataSource, ZipOptions)
+     */
+    public Optional<ZipEntryDataSource> firstZipEntry(
+            final @NonNull DataSource zippedSource) {
+        return firstZipEntry(zippedSource, ZipOptions.builder().build());
     }
 
     // -- WRITING

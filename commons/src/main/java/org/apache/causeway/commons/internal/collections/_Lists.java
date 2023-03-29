@@ -57,6 +57,20 @@ public final class _Lists {
 
     // -- LIST ACCESS
 
+    public static <T> T firstElementIfAny(final @Nullable List<T> list) {
+        if(_NullSafe.isEmpty(list)) {
+            return null;
+        }
+        return list.get(0);
+    }
+
+    public static <T> Optional<T> firstElement(final @Nullable List<T> list) {
+        if(_NullSafe.isEmpty(list)) {
+            return Optional.empty();
+        }
+        return Optional.ofNullable(list.get(0));
+    }
+
     public static <T> T lastElementIfAny(final @Nullable List<T> list) {
         if(_NullSafe.isEmpty(list)) {
             return null;

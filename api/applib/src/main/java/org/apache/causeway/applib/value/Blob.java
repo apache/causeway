@@ -254,12 +254,11 @@ public final class Blob implements NamedWithMimeType {
     }
 
     public Blob unZip(final @NonNull CommonMimeType resultingMimeType) {
-        return ZipUtils.streamZipEntries(asDataSource())
+        return ZipUtils.firstZipEntry(asDataSource()) // assuming first entry is the one we want
                 .map(zipEntryDataSource->Blob.of(
                         zipEntryDataSource.zipEntry().getName(),
                         resultingMimeType,
                         zipEntryDataSource.bytes()))
-                .findFirst() // assuming first entry is the one we want
                 .orElseThrow(()->_Exceptions
                       .unrecoverable("failed to unzip blob, no entry found %s", getName()));
     }
