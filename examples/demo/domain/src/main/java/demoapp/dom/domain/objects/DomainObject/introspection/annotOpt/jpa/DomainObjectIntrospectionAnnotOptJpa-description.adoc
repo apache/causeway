@@ -7,8 +7,7 @@ The introspection of this domain object indicates that annotations are optional,
 ----
 include::DomainObjectIntrospectionAnnotOptJpa.java[tags=class]
 ----
-<.> no need to annotate as `@Property`
-+
+<.> no need to annotate with `@Property`.
 It would also be ok to remove the methods but then annotate the field with `@lombok.Getter` and `@lombok.Setter`
-<.> no need to annotate as `@Action`
-<.> no need to annotate as `@MemberSupport` or `@Domain.Include`
+<.> no need to annotate with `@Action`
+<.> no need to annotate with `@MemberSupport`

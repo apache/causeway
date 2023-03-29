@@ -27,8 +27,8 @@
 	<bs3:row>
 		<bs3:col span="6">
 			<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
-			<cpt:collection id="annotationRequired" paged="5"/>
 			<cpt:collection id="annotationOptional" paged="5"/>
+			<cpt:collection id="annotationRequired" paged="5"/>
 			<cpt:collection id="encapsulationEnabled" paged="5"/>
 		</bs3:col>
 		<bs3:col span="6">

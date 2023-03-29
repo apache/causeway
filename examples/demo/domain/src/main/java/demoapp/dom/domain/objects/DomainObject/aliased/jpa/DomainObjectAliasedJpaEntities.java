@@ -45,4 +45,11 @@ extends ValueHolderRepository<String, DomainObjectAliasedJpa> implements DomainO
     public List<? extends DomainObjectAliased> allInstances() {
         return all();
     }
+
+    public List<? extends DomainObjectAliased> allMatches(final String s) {
+        return all();
+    }
+    public List<? extends DomainObjectAliased> allMatches() {
+        return all();
+    }
 }

@@ -73,8 +73,7 @@ public class DomainObjectIntrospectionAnnotReqdJpa
         setName(name);
         return this;
     }
-    @MemberSupport                                                              // <.>
-    public String default0UpdateName() {
+    public String default0UpdateName() {                                        // <.>
         return getName();
     }
 }

@@ -82,13 +82,13 @@ public class DomainObjectMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-triangle-person-digging", describedAs = "Control over introspection process")
+    @ActionLayout(cssClassFa="fa-pen-ruler", describedAs = "Control over introspection process")
     public DomainObjectIntrospectionVm introspection(){
         return new DomainObjectIntrospectionVm();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-tools", describedAs = "For mixins, override the default method name")
+    @ActionLayout(cssClassFa="fa-mortar-pestle", describedAs = "For mixins, override the default method name")
     public DomainObjectMixinMethodVm mixinMethod() {
         return new DomainObjectMixinMethodVm();
     }
