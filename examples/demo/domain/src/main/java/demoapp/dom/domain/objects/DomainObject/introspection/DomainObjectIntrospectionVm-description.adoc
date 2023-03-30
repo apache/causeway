@@ -44,4 +44,4 @@ However, it the need arises then it can be overridden on a class by class basis 
 
 The collections on the left show three variants of the same entity, each with a property and an action, but each configured to use a different introspection policy.
 
-Navigate through to each class to inspect the differences in their source code.
+Navigate through to the entity to inspect the differences in their source code.

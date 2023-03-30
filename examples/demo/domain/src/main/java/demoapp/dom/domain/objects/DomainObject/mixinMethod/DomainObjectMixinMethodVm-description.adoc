@@ -37,6 +37,4 @@ include::DomainObjectMixinMethodVm_updateName.java[tags=class]
 <.> method representing the contributed domain collection, using the overridden method name
 
 The 'initialCharacter' column in the table is also a mixin, this time of the domain class in the collection.
-
-
-Navigate through to each class to inspect that mixin.
+Navigate through to the entity to inspect that mixin's source code.
