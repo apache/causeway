@@ -87,11 +87,8 @@ public class DomainObjectMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa = "fa-gamepad", describedAs = "@DomainObject(nature=VIEW_MODEL) for a Stateful View Model")
-    public DomainObjectNaturePage natureStateful() {
+    public DomainObjectNaturePage nature() {
         return new DomainObjectNaturePage();
-    }
-    @MemberSupport public String default0NatureStateful() {
-        return "Some initial state";
     }
 
     @Action(semantics = SemanticsOf.SAFE)

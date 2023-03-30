@@ -12,20 +12,16 @@ import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 
-@DomainObject(mixinMethod = "collection")                           // <.>
 @Collection()
-@CollectionLayout()
 @RequiredArgsConstructor
 public class DomainObjectNaturePage_entities {
 
     @SuppressWarnings("unused")
     private final DomainObjectNaturePage mixee;
 
-    public List<? extends DomainObjectNatureEntity> collection() {   // <.>
+    public List<? extends DomainObjectNatureEntity> coll() {
         return objectRepository.all();
     }
 
-    @Inject
-    ValueHolderRepository<String, ? extends DomainObjectNatureEntity> objectRepository;
-
+    @Inject ValueHolderRepository<String, ? extends DomainObjectNatureEntity> objectRepository;
 }

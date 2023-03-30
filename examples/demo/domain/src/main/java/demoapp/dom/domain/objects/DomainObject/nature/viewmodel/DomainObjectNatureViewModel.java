@@ -40,14 +40,11 @@ import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
 import org.apache.causeway.applib.services.title.TitleService;
 
 //tag::class[]
-@XmlRootElement(name = "root")
-@XmlType(
-        propOrder = {"message", "favoriteChild", "children"}
-)
-@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = "root")                              // <.>
+@XmlType(propOrder = {"message", "underlying"})             // <1>
+@XmlAccessorType(XmlAccessType.FIELD)                       // <1>
 @Named("demo.StatefulViewModelJaxbRefsEntity")
-@DomainObject(
-        nature=Nature.VIEW_MODEL)
+@DomainObject(nature=Nature.VIEW_MODEL)                     // <.>
 @NoArgsConstructor
 public class DomainObjectNatureViewModel
         implements HasAsciiDocDescription {
@@ -57,8 +54,7 @@ public class DomainObjectNatureViewModel
         this.underlying = underlying;
     }
 
-    @Inject TitleService titleService;
-    @ObjectSupport public String title() {
+    @ObjectSupport public String title() {                  // <.>
         return message != null ? message : titleService.titleOf(underlying);
     }
 
@@ -69,9 +65,10 @@ public class DomainObjectNatureViewModel
 
     @Property
     @Getter @Setter
-    @XmlElement                                             // <.>
-    @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
+    @XmlElement
+    @XmlJavaTypeAdapter(PersistentEntityAdapter.class)      // <.>
     private DomainObjectNatureEntity underlying;
 
+    @Inject @XmlTransient TitleService titleService;
 }
 //end::class[]

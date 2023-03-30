@@ -33,8 +33,7 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
                 <mb3:serviceAction objectType="demo.DomainObjectMenu" id="entityChangePublishing"/>
                 <mb3:serviceAction objectType="demo.DomainObjectMenu" id="introspection"/>
                 <mb3:serviceAction objectType="demo.DomainObjectMenu" id="mixinMethod"/>
-                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="natureStateful"/>
-                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="natureStatefulRefsEntity"/>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="nature"/>
                 <mb3:serviceAction objectType="demo.DomainObjectMenu" id="domainEvents"/>
                 <mb3:serviceAction objectType="demo.DomainObjectMenu" id="lifecycleEvents"/>
             </mb3:section>

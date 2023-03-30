@@ -33,18 +33,16 @@ import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityList
 import org.springframework.context.annotation.Profile;
 
 @Profile("demo-jpa")
-@Entity
-@Table(
+//tag::class[]
+@Entity                                             // <.>
+@Table(                                             // <1>
     schema = "demo",
     name = "DomainObjectNatureJpa"
 )
 @EntityListeners(CausewayEntityListener.class)
 @Named("demo.DomainObjectNatureJpa")
+@DomainObject(nature = Nature.ENTITY)               // <.>
 @NoArgsConstructor
-//tag::class[]
-// ...
-@DomainObject(
-        nature = Nature.ENTITY)                     // <.>
 public class DomainObjectNatureJpa
         extends DomainObjectNatureEntity {
     // ...
@@ -62,6 +60,6 @@ public class DomainObjectNatureJpa
     @Getter @Setter
     private String name;
 
-    //tag::class[]
+//tag::class[]
 }
 //end::class[]

@@ -35,12 +35,11 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 @XmlType                                                    // <1>
 @XmlAccessorType(XmlAccessType.FIELD)                       // <1>
 @Named("demo.DomainObjectNaturePage")
-@DomainObject(
-        nature=Nature.VIEW_MODEL)                           // <.>
+@DomainObject(nature=Nature.VIEW_MODEL)                     // <.>
 public class DomainObjectNaturePage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "DomainObject#mixinMethod";
+        return "DomainObject#nature";
     }
 }
 //end::class[]

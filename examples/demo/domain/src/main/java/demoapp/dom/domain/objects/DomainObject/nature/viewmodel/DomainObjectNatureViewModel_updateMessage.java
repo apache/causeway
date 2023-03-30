@@ -1,38 +1,37 @@
-package demoapp.dom.domain.objects.DomainObject.nature;
+package demoapp.dom.domain.objects.DomainObject.nature.viewmodel;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.domain.objects.DomainObject.nature.DomainObjectNaturePage;
 import demoapp.dom.domain.objects.DomainObject.nature.entity.DomainObjectNatureEntity;
-import demoapp.dom.domain.objects.DomainObject.nature.viewmodel.DomainObjectNatureViewModel;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 
+import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 
 //tag::class[]
-@Collection()
+@Action()
 @RequiredArgsConstructor
-public class DomainObjectNaturePage_viewModels {
+public class DomainObjectNatureViewModel_updateMessage {
     // ...
 //end::class[]
     @SuppressWarnings("unused")
-    private final DomainObjectNaturePage mixee;
+    private final DomainObjectNatureViewModel mixee;
 
 //tag::class[]
-    public List<DomainObjectNatureViewModel> coll() {
-        return entities.all().stream()
-                .map(DomainObjectNatureViewModel::new)  // <.>
-                .collect(Collectors.toList());
+    public DomainObjectNatureViewModel act(@Nullable String newMessage) {   // <.>
+        mixee.setMessage(newMessage);
+        return mixee;
     }
-//end::class[]
-
-    @Inject ValueHolderRepository<String, ? extends DomainObjectNatureEntity> entities;
-
-//tag::class[]
+    public String default0Act() {
+        return mixee.getMessage();
+    }
 }
 //end::class[]
