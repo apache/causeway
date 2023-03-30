@@ -27,9 +27,7 @@ import javax.inject.Named;
 import javax.persistence.*;
 
 import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 import org.springframework.context.annotation.Profile;
 

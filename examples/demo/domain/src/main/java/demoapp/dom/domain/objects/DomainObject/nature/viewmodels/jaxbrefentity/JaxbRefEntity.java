@@ -18,6 +18,8 @@
  */
 package demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity;
 
+import demoapp.dom._infra.values.ValueHolder;
+
 import java.util.Objects;
 
 import javax.inject.Named;
@@ -25,8 +27,6 @@ import javax.inject.Named;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
-
-import demoapp.dom._infra.values.ValueHolder;
 
 @Named("demo.JaxbRefEntity") // shared permissions with concrete sub class
 @DomainObject

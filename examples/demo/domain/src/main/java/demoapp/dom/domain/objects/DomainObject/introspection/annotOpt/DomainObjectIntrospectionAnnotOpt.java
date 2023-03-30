@@ -18,12 +18,7 @@
  */
 package demoapp.dom.domain.objects.DomainObject.introspection.annotOpt;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.domain.objects.DomainObject.introspection.DomainObjectIntrospection;
-
-import org.apache.causeway.applib.annotation.Editing;
-import org.apache.causeway.applib.annotation.Property;
 
 @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 public abstract class DomainObjectIntrospectionAnnotOpt

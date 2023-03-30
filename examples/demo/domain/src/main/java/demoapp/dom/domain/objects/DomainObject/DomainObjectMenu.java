@@ -18,17 +18,6 @@
  */
 package demoapp.dom.domain.objects.DomainObject;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.DomainService;
-import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.NatureOfService;
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.annotation.SemanticsOf;
-
 import demoapp.dom.domain.objects.DomainObject.aliased.DomainObjectAliasedVm;
 import demoapp.dom.domain.objects.DomainObject.autoComplete.DomainObjectAutoCompleteVm;
 import demoapp.dom.domain.objects.DomainObject.bounded.DomainObjectBoundingVm;
@@ -42,6 +31,11 @@ import demoapp.dom.domain.objects.DomainObject.xxxDomainEvent.DomainObjectDomain
 import demoapp.dom.domain.objects.DomainObject.xxxLifecycleEvent.DomainObjectLifecyleEventsVm;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.apache.causeway.applib.annotation.*;
 
 @Named("demo.DomainObjectMenu")
 @DomainService(

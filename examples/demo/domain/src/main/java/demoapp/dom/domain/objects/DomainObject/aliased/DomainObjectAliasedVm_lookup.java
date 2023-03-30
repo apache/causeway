@@ -8,10 +8,11 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.applib.annotation.*;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.applib.services.repository.RepositoryService;
 
 //tag::class[]
 @Action(semantics = SemanticsOf.SAFE)

@@ -7,9 +7,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.applib.annotation.*;
-import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.applib.annotation.CollectionLayout;
+import org.apache.causeway.applib.annotation.MemberSupport;
 
 @Collection()
 @CollectionLayout()

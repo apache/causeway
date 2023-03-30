@@ -1,16 +1,15 @@
 package demoapp.dom.domain.objects.DomainObject.autoComplete;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.objects.DomainObject.aliased.DomainObjectAliased;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.applib.annotation.*;
-import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.applib.annotation.CollectionLayout;
+import org.apache.causeway.applib.annotation.MemberSupport;
 
 @Collection()
 @CollectionLayout()

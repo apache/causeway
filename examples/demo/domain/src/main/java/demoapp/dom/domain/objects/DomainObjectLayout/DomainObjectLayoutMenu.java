@@ -18,18 +18,6 @@
  */
 package demoapp.dom.domain.objects.DomainObjectLayout;
 
-import javax.inject.Named;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.DomainService;
-import org.apache.causeway.applib.annotation.NatureOfService;
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.services.factory.FactoryService;
-
 import demoapp.dom.domain.objects.DomainObjectLayout.bookmarking.DomainObjectLayoutBookmarkingVm;
 import demoapp.dom.domain.objects.DomainObjectLayout.cssClass.DomainObjectLayoutCssClassVm;
 import demoapp.dom.domain.objects.DomainObjectLayout.cssClassFa.DomainObjectLayoutCssClassFaVm;
@@ -38,6 +26,12 @@ import demoapp.dom.domain.objects.DomainObjectLayout.named.DomainObjectLayoutNam
 import demoapp.dom.domain.objects.DomainObjectLayout.paged.DomainObjectLayoutPagedVm;
 import demoapp.dom.domain.objects.DomainObjectLayout.tabledec.DomainObjectLayoutTableDecoratorVm;
 import demoapp.dom.domain.objects.DomainObjectLayout.xxxUiEvent.DomainObjectLayoutXxxUiEventVm;
+
+import javax.inject.Named;
+
+import org.apache.causeway.applib.annotation.*;
+import org.apache.causeway.applib.services.factory.FactoryService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Named("demo.DomainObjectLayoutMenu")
 @DomainService(

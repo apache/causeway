@@ -1,8 +1,6 @@
 package demoapp.dom.domain.objects.DomainObject.bounded;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.objects.DomainObject.autoComplete.DomainObjectAutoComplete;
-import demoapp.dom.domain.objects.DomainObject.autoComplete.DomainObjectAutoCompleteVm;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;

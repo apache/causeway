@@ -1,7 +1,6 @@
 package demoapp.dom.domain.objects.DomainObject.editing;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.objects.DomainObject.bounded.DomainObjectBoundingVm;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;

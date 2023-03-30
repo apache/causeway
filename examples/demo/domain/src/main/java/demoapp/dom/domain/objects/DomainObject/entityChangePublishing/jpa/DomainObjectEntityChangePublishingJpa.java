@@ -26,7 +26,10 @@ import lombok.Setter;
 import javax.inject.Named;
 import javax.persistence.*;
 
-import org.apache.causeway.applib.annotation.*;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.Publishing;
+import org.apache.causeway.applib.annotation.Title;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 import org.springframework.context.annotation.Profile;
 

@@ -18,11 +18,8 @@
  */
 package demoapp.dom.domain.objects.DomainObject.introspection.annotReqd.jpa;
 
-import demoapp.dom.domain.objects.DomainObject.introspection.annotOpt.jpa.DomainObjectIntrospectionAnnotOptJpa;
 import demoapp.dom.domain.objects.DomainObject.introspection.annotReqd.DomainObjectIntrospectionAnnotReqd;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.inject.Named;
 import javax.persistence.*;

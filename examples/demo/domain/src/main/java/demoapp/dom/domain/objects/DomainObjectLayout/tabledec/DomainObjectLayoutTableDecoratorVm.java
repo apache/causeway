@@ -18,29 +18,17 @@
  */
 package demoapp.dom.domain.objects.DomainObjectLayout.tabledec;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 import java.util.UUID;
 
 import javax.inject.Named;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.Collection;
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.DomainObjectLayout;
-import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.annotation.Optionality;
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.TableDecorator;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import lombok.Getter;
-import lombok.Setter;
+import org.apache.causeway.applib.annotation.*;
 
 //tag::class[]
 @XmlRootElement(name = "root")

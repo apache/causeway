@@ -18,26 +18,21 @@
  */
 package demoapp.dom.domain.objects.other.embedded.jpa;
 
-import javax.inject.Named;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import demoapp.dom.domain.objects.other.embedded.ComplexNumber;
+import demoapp.dom.domain.objects.other.embedded.persistence.NumberConstantEntity;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import org.springframework.context.annotation.Profile;
+import javax.inject.Named;
+import javax.persistence.*;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
-
-import demoapp.dom.domain.objects.other.embedded.ComplexNumber;
-import demoapp.dom.domain.objects.other.embedded.persistence.NumberConstantEntity;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.springframework.context.annotation.Profile;
 
 @Profile("demo-jpa")
 //tag::class[]

@@ -20,8 +20,6 @@ package demoapp.dom.domain.objects.DomainObject.introspection.encapsulated.jpa;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.domain.objects.DomainObject.introspection.DomainObjectIntrospectionVm;
-import demoapp.dom.domain.objects.DomainObject.introspection.annotReqd.DomainObjectIntrospectionAnnotReqd;
-import demoapp.dom.domain.objects.DomainObject.introspection.encapsulated.DomainObjectIntrospectionEncapsulated;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;

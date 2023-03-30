@@ -18,25 +18,19 @@
  */
 package demoapp.dom.domain.objects.other.embedded.jdo;
 
-import javax.inject.Named;
-import javax.jdo.annotations.Column;
-import javax.jdo.annotations.DatastoreIdentity;
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
+import demoapp.dom.domain.objects.other.embedded.ComplexNumber;
+import demoapp.dom.domain.objects.other.embedded.persistence.NumberConstantEntity;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.springframework.context.annotation.Profile;
+import javax.inject.Named;
+import javax.jdo.annotations.*;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
-
-import demoapp.dom.domain.objects.other.embedded.ComplexNumber;
-import demoapp.dom.domain.objects.other.embedded.persistence.NumberConstantEntity;
-import lombok.Getter;
-import lombok.Setter;
+import org.springframework.context.annotation.Profile;
 
 @Profile("demo-jdo")
 //tag::class[]

@@ -8,7 +8,9 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.applib.annotation.*;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.DomainObject;
 
 //tag::class[]
 @DomainObject(mixinMethod = "action")                           // <.>

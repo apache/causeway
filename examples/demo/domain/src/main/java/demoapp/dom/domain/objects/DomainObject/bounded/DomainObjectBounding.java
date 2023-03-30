@@ -21,9 +21,6 @@ package demoapp.dom.domain.objects.DomainObject.bounded;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 
-import org.apache.causeway.applib.annotation.Bounding;
-import org.apache.causeway.applib.annotation.DomainObject;
-
 @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 public abstract class DomainObjectBounding
         implements

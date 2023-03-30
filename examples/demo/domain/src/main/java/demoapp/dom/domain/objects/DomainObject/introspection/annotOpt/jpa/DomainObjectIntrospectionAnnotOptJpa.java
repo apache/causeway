@@ -19,9 +19,7 @@
 package demoapp.dom.domain.objects.DomainObject.introspection.annotOpt.jpa;
 
 import demoapp.dom.domain.objects.DomainObject.introspection.annotOpt.DomainObjectIntrospectionAnnotOpt;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.inject.Named;
 import javax.persistence.*;

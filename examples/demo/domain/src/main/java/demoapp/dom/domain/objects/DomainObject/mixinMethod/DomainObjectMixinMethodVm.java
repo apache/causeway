@@ -18,6 +18,8 @@
  */
 package demoapp.dom.domain.objects.DomainObject.mixinMethod;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+
 import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -25,8 +27,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.ObjectSupport;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
 @XmlRootElement(name = "root")

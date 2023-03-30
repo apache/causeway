@@ -20,7 +20,6 @@ package demoapp.dom.domain.objects.DomainObject.introspection;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.domain.objects.DomainObject.introspection.annotOpt.DomainObjectIntrospectionAnnotOpt;
-import demoapp.dom.domain.objects.DomainObject.introspection.annotReqd.DomainObjectIntrospectionAnnotReqd;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;

@@ -18,24 +18,18 @@
  */
 package demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.jpa;
 
-import javax.inject.Named;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-import org.springframework.context.annotation.Profile;
-
-import org.apache.causeway.applib.annotation.Bounding;
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
-
 import demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.JaxbRefEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.inject.Named;
+import javax.persistence.*;
+
+import org.apache.causeway.applib.annotation.Bounding;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
+import org.springframework.context.annotation.Profile;
 
 @Profile("demo-jpa")
 //tag::class[]

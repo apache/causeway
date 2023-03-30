@@ -18,11 +18,11 @@
  */
 package demoapp.dom.domain.objects.other.mixins;
 
+import lombok.RequiredArgsConstructor;
+
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
-
-import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action

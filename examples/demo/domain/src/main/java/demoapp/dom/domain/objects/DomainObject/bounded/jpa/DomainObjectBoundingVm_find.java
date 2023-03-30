@@ -1,6 +1,5 @@
 package demoapp.dom.domain.objects.DomainObject.bounded.jpa;
 
-import demoapp.dom.domain.objects.DomainObject.bounded.DomainObjectBounding;
 import demoapp.dom.domain.objects.DomainObject.bounded.DomainObjectBoundingVm;
 import lombok.RequiredArgsConstructor;
 

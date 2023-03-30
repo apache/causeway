@@ -1,8 +1,6 @@
 package demoapp.dom.domain.objects.DomainObject.mixinMethod;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.objects.DomainObject.editing.DomainObjectEditing;
-import demoapp.dom.domain.objects.DomainObject.editing.DomainObjectEditingVm;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -12,7 +10,6 @@ import javax.inject.Inject;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.MemberSupport;
 
 //tag::class[]
 @DomainObject(mixinMethod = "collection")                           // <.>

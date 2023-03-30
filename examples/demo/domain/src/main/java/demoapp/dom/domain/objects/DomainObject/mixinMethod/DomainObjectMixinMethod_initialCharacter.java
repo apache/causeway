@@ -13,7 +13,6 @@ import org.apache.causeway.applib.annotation.Property;
 @RequiredArgsConstructor
 public class DomainObjectMixinMethod_initialCharacter {
 
-    @SuppressWarnings("unused")
     private final DomainObjectMixinMethod mixee;
 
     @MemberSupport

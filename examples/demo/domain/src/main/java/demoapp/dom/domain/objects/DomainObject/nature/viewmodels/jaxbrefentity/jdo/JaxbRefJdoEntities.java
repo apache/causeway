@@ -18,10 +18,10 @@
  */
 package demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.jdo;
 
+import demoapp.dom._infra.values.ValueHolderRepository;
+
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
-
-import demoapp.dom._infra.values.ValueHolderRepository;
 
 @Profile("demo-jdo")
 @Service

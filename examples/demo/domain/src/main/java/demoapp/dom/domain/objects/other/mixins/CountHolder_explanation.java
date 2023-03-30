@@ -18,10 +18,10 @@
  */
 package demoapp.dom.domain.objects.other.mixins;
 
+import lombok.RequiredArgsConstructor;
+
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
-
-import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Property                                   // <.>
