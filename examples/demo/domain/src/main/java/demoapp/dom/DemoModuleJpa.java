@@ -29,6 +29,7 @@ import demoapp.dom.domain.objects.DomainObject.introspection.annotOpt.jpa.Domain
 import demoapp.dom.domain.objects.DomainObject.introspection.annotReqd.jpa.DomainObjectIntrospectionAnnotReqdJpa;
 import demoapp.dom.domain.objects.DomainObject.introspection.encapsulated.DomainObjectIntrospectionEncapsulated;
 import demoapp.dom.domain.objects.DomainObject.introspection.encapsulated.jpa.DomainObjectIntrospectionEncapsulatedJpa;
+import demoapp.dom.domain.objects.DomainObject.mixinMethod.jpa.DomainObjectMixinMethodJpa;
 import demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.jpa.JaxbRefJpa;
 import demoapp.dom.domain.objects.other.embedded.jpa.NumberConstantJpa;
 import demoapp.dom.domain.properties.Property.commandPublishing.jpa.PropertyCommandPublishingJpa;
@@ -103,6 +104,7 @@ import org.springframework.context.annotation.Profile;
         DomainObjectIntrospectionAnnotOptJpa.class,
         DomainObjectIntrospectionAnnotReqdJpa.class,
         DomainObjectIntrospectionEncapsulatedJpa.class,
+        DomainObjectMixinMethodJpa.class,
 
         CausewayBlobJpa.class,
         CausewayClobJpa.class,
