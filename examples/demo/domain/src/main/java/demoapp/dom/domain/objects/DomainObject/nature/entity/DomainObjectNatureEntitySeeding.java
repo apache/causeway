@@ -16,30 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.mixinMethod;
+package demoapp.dom.domain.objects.DomainObject.nature.entity;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom._infra.values.ValueHolder;
+import demoapp.dom._infra.seed.SeedServiceAbstract;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
-import org.apache.causeway.applib.annotation.ObjectSupport;
+import javax.inject.Inject;
 
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
-public abstract class DomainObjectMixinMethod
-        implements
-        HasAsciiDocDescription,
-        ValueHolder<String> {
+import org.springframework.stereotype.Service;
 
-    @ObjectSupport
-    public String title() {
-        return getName();
+@Service
+public class DomainObjectNatureEntitySeeding
+extends SeedServiceAbstract {
+
+    @Inject
+    public DomainObjectNatureEntitySeeding(ValueHolderRepository<String, ? extends DomainObjectNatureEntity> entities) {
+        super(entities);
     }
-
-    @Override
-    public String value() {
-        return getName();
-    }
-
-    public abstract String getName();
-    public abstract void setName(String value);
 
 }

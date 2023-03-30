@@ -27,10 +27,9 @@ import demoapp.dom.domain.objects.DomainObject.editing.jpa.DomainObjectEditingJp
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.jpa.DomainObjectEntityChangePublishingJpa;
 import demoapp.dom.domain.objects.DomainObject.introspection.annotOpt.jpa.DomainObjectIntrospectionAnnotOptJpa;
 import demoapp.dom.domain.objects.DomainObject.introspection.annotReqd.jpa.DomainObjectIntrospectionAnnotReqdJpa;
-import demoapp.dom.domain.objects.DomainObject.introspection.encapsulated.DomainObjectIntrospectionEncapsulated;
 import demoapp.dom.domain.objects.DomainObject.introspection.encapsulated.jpa.DomainObjectIntrospectionEncapsulatedJpa;
 import demoapp.dom.domain.objects.DomainObject.mixinMethod.jpa.DomainObjectMixinMethodJpa;
-import demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.jpa.JaxbRefJpa;
+import demoapp.dom.domain.objects.DomainObject.nature.entity.jpa.DomainObjectNatureJpa;
 import demoapp.dom.domain.objects.other.embedded.jpa.NumberConstantJpa;
 import demoapp.dom.domain.properties.Property.commandPublishing.jpa.PropertyCommandPublishingJpa;
 import demoapp.dom.domain.properties.Property.executionPublishing.jpa.PropertyExecutionPublishingJpa;
@@ -163,7 +162,7 @@ import org.springframework.context.annotation.Profile;
         PropertyExecutionPublishingJpa.class,
         PropertyProjectingChildJpa.class,
 
-        JaxbRefJpa.class,
+        DomainObjectNatureJpa.class,
         NumberConstantJpa.class,
 
 })

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.mixinMethod;
+package demoapp.dom.domain.objects.DomainObject.nature.entity;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
@@ -24,13 +24,12 @@ import demoapp.dom._infra.values.ValueHolder;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 
 @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
-public abstract class DomainObjectMixinMethod
+public abstract class DomainObjectNatureEntity
         implements
         HasAsciiDocDescription,
         ValueHolder<String> {
 
-    @ObjectSupport
-    public String title() {
+    @ObjectSupport public String title() {
         return getName();
     }
 

@@ -16,10 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.introspection.encapsulated.jpa;
+package demoapp.dom.domain.objects.DomainObject.introspection;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.objects.DomainObject.introspection.DomainObjectIntrospectionPage;
+import demoapp.dom.domain.objects.DomainObject.introspection.annotReqd.DomainObjectIntrospectionAnnotReqd;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -29,22 +29,20 @@ import javax.inject.Inject;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
-import org.springframework.context.annotation.Profile;
 
-@Profile("demo-jpa")
 @Collection()
 @CollectionLayout()
 @RequiredArgsConstructor
-public class DomainObjectIntrospectionVm_encapsulationEnabled {
+public class DomainObjectIntrospectionPage_annotationRequired {
 
     @SuppressWarnings("unused")
     private final DomainObjectIntrospectionPage mixee;
 
     @MemberSupport
-    public List<DomainObjectIntrospectionEncapsulatedJpa> coll() {
+    public List<? extends DomainObjectIntrospectionAnnotReqd> coll() {
         return entities.all();
     }
 
-    @Inject ValueHolderRepository<String, DomainObjectIntrospectionEncapsulatedJpa> entities;
+    @Inject ValueHolderRepository<String, ? extends DomainObjectIntrospectionAnnotReqd> entities;
 
 }

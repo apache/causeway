@@ -34,7 +34,7 @@ The collection on the left shows a set of entity instances, which have `@DomainO
 Using this view model, you can use the actions to create new instances of the entity, update them or to delete them.
 
 Meanwhile, at the bottom of this page is a collection that simply lists all of the changes that have been received.
-This uses an implementation of link:https://causeway.apache.org/refguide/${CAUSEWAY_VERSION}/applib/index/services/publishing/spi/EntityChangesSubscriber.html#spi[EntityChangesSubscriber] that captures changes and simply holds them in-memory.
+This uses an implementation of `EntityChangesSubscriber` that captures changes and simply holds them in-memory.
 
 NOTE: there will always be some listed from the fixture scripts run when the application first bootstraps.)
 

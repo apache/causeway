@@ -16,30 +16,31 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.mixinMethod;
+package demoapp.dom.domain.objects.DomainObject.aliased;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom._infra.values.ValueHolder;
 
+import javax.inject.Named;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
+import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
-public abstract class DomainObjectMixinMethod
-        implements
-        HasAsciiDocDescription,
-        ValueHolder<String> {
+@XmlRootElement(name = "root")
+@XmlType
+@XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.DomainObjectAliasedVm")
+@DomainObject(
+        aliased = {"demo.domain-object.AliasedVm"})
+public class DomainObjectAliasedPage implements HasAsciiDocDescription {
 
-    @ObjectSupport
-    public String title() {
-        return getName();
+    @ObjectSupport public String title() {
+        return "DomainObject#aliased";
     }
-
-    @Override
-    public String value() {
-        return getName();
-    }
-
-    public abstract String getName();
-    public abstract void setName(String value);
 
 }
+//tag::class[]
+//end::class[]

@@ -16,30 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.mixinMethod;
+package demoapp.dom.domain.objects.DomainObject.nature.entity.jpa;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom._infra.values.ValueHolder;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
-import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
 
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
-public abstract class DomainObjectMixinMethod
-        implements
-        HasAsciiDocDescription,
-        ValueHolder<String> {
+@Profile("demo-jpa")
+@Service
+public class DomainObjectNatureJpaEntities
+extends ValueHolderRepository<String, DomainObjectNatureJpa> {
 
-    @ObjectSupport
-    public String title() {
-        return getName();
+    protected DomainObjectNatureJpaEntities() {
+        super(DomainObjectNatureJpa.class);
     }
 
     @Override
-    public String value() {
-        return getName();
+    protected DomainObjectNatureJpa newDetachedEntity(String value) {
+        return new DomainObjectNatureJpa(value);
     }
-
-    public abstract String getName();
-    public abstract void setName(String value);
 
 }
