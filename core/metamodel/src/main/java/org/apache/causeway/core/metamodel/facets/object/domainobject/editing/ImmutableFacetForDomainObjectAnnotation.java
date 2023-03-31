@@ -24,6 +24,7 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.metamodel.facets.DomainObjectConfigOptions;
+import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacetAbstract;
@@ -46,7 +47,8 @@ extends ImmutableFacetAbstract {
 
         if(domainObjectIfAny.isPresent()) {
             val domainObject = domainObjectIfAny.get();
-            val disabledReason = domainObject.editingDisabledReason();
+            val disabledReason = ImmutableFacetAbstract
+                    .createDisabledReason(domainObject.editingDisabledReason());
 
             switch (domainObject.editing()) {
             case NOT_SPECIFIED:
@@ -77,7 +79,7 @@ extends ImmutableFacetAbstract {
     // -- CONSTRUCTOR
 
     protected ImmutableFacetForDomainObjectAnnotation(
-            final String reason,
+            final VetoReason reason,
             final FacetHolder holder) {
         super(reason, holder);
     }

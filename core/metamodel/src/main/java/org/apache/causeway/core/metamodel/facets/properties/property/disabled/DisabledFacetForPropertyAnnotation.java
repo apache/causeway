@@ -23,6 +23,8 @@ import java.util.Optional;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
@@ -47,7 +49,8 @@ extends DisabledFacetAbstract {
                 return null;
 
             case DISABLED:
-                final String disabledReason = property.editingDisabledReason();
+                final String reasonString = _Strings.nullToEmpty(property.editingDisabledReason());
+                final VetoReason disabledReason = VetoReason.explicit(reasonString);
                 return new DisabledFacetForPropertyAnnotation(disabledReason, holder);
             case ENABLED:
                 return new DisabledFacetForPropertyAnnotationInvertedSemantics(holder);
@@ -57,7 +60,7 @@ extends DisabledFacetAbstract {
         });
     }
 
-    private DisabledFacetForPropertyAnnotation(final String reason, final FacetHolder holder) {
+    private DisabledFacetForPropertyAnnotation(final VetoReason reason, final FacetHolder holder) {
         super(Where.EVERYWHERE, reason, holder);
     }
 

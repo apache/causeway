@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainobject.editing;
 
+import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacetAbstract;
@@ -28,12 +29,13 @@ extends ImmutableFacetAbstract {
     // -- FACTORY
 
     public static ImmutableFacetFromConfiguration create(final FacetHolder holder) {
-        return new ImmutableFacetFromConfiguration("Disabled (by configuration defaults)", holder);
+        return new ImmutableFacetFromConfiguration(
+                VetoReason.explicit("Disabled (by configuration defaults)"), holder);
     }
 
     // -- CONSTRUCTOR
 
-    private ImmutableFacetFromConfiguration(final String reason, final FacetHolder holder) {
+    private ImmutableFacetFromConfiguration(final VetoReason reason, final FacetHolder holder) {
         super(reason, holder, Precedence.LOW);
     }
 

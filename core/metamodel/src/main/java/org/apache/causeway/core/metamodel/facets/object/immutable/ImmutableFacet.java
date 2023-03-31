@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.immutable;
 
+import java.util.Optional;
+
+import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
@@ -44,6 +47,6 @@ extends Facet, DisablingInteractionAdvisor {
      */
     ImmutableFacet clone(FacetHolder holder);
 
-    String disabledReason(ManagedObject targetAdapter);
+    Optional<VetoReason> disabledReason(ManagedObject targetAdapter);
 
 }

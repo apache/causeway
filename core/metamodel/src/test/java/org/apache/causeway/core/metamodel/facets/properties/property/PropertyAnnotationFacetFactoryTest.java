@@ -44,6 +44,7 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
 import org.apache.causeway.applib.spec.Specification;
 import org.apache.causeway.core.metamodel.commons.matchers.CausewayMatchers;
+import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -538,7 +539,7 @@ class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJupiterTest
             assertTrue(disabledFacet instanceof DisabledFacetForPropertyAnnotation);
             val disabledFacet2 = (DisabledFacetForPropertyAnnotation) disabledFacet;
             assertThat(disabledFacet.where(), is(Where.EVERYWHERE));
-            assertThat(disabledFacet2.disabledReason(null), is(expectedDisabledReason));
+            assertThat(disabledFacet2.disabledReason(null).map(VetoReason::string).orElse(null), is(expectedDisabledReason));
         }
 
     }

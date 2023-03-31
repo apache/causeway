@@ -19,12 +19,14 @@
 package org.apache.causeway.core.metamodel.facets.members.disabled.method;
 
 import java.lang.reflect.Method;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.applib.services.i18n.TranslatableString;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
+import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.interactions.UsabilityContext;
@@ -59,21 +61,21 @@ implements ImperativeFacet {
      * The reason this object is disabled, or <tt>null</tt> otherwise.
      */
     @Override
-    public String disables(final UsabilityContext ic) {
+    public Optional<VetoReason> disables(final UsabilityContext ic) {
         final ManagedObject target = ic.getTarget();
         if (target == null) {
-            return null;
+            return Optional.empty();
         }
         val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
         final Object returnValue = MmInvokeUtil.invokeAutofit(method, target);
-        if(returnValue instanceof String) {
-            return (String) returnValue;
-        }
-        if(returnValue instanceof TranslatableString) {
-            final TranslatableString ts = (TranslatableString) returnValue;
-            return ts.translate(getTranslationService(), translationContext);
-        }
-        return null;
+        final String reasonString = returnValue instanceof String
+                ? (String) returnValue
+                : returnValue instanceof TranslatableString
+                    ? ((TranslatableString) returnValue).translate(getTranslationService(), translationContext)
+                    : null;
+
+        return Optional.ofNullable(reasonString)
+            .map(VetoReason::explicit);
     }
 
     @Override

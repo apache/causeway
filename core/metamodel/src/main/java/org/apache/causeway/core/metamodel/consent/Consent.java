@@ -18,7 +18,32 @@
  */
 package org.apache.causeway.core.metamodel.consent;
 
+import java.io.Serializable;
+import java.util.Optional;
+
+import lombok.NonNull;
+import lombok.experimental.Accessors;
+
 public interface Consent {
+
+    //XXX record candidate
+    @lombok.Value @Accessors(fluent=true)
+    public static class VetoReason implements Serializable {
+        private static final long serialVersionUID = 1L;
+        /** Reason inferred by the framework or explicitly given otherwise. */
+        private final boolean inferred;
+        private final @NonNull String string;
+        public static VetoReason inferred(final String reason) {
+            return new VetoReason(true, reason);
+        }
+        public static VetoReason explicit(final String reason) {
+            return new VetoReason(false, reason);
+        }
+        public Optional<VetoReason> toOptional() {
+            return Optional.of(this);
+        }
+    }
+
 
     /**
      * Returns true if this object is giving permission.

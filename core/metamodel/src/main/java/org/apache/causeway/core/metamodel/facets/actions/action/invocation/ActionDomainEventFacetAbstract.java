@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.action.invocation;
 
+import java.util.Optional;
+
 import org.apache.causeway.applib.events.domain.AbstractDomainEvent;
 import org.apache.causeway.applib.events.domain.ActionDomainEvent;
 import org.apache.causeway.applib.services.i18n.TranslatableString;
@@ -25,6 +27,7 @@ import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.DomainEventHelper;
 import org.apache.causeway.core.metamodel.facets.SingleClassValueFacetAbstract;
@@ -87,7 +90,7 @@ implements ActionDomainEventFacet {
     }
 
     @Override
-    public String disables(final UsabilityContext ic) {
+    public Optional<VetoReason> disables(final UsabilityContext ic) {
 
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
@@ -102,12 +105,15 @@ implements ActionDomainEventFacet {
                         null);
         if (event != null && event.isDisabled()) {
             final TranslatableString reasonTranslatable = event.getDisabledReasonTranslatable();
-            if(reasonTranslatable != null) {
-                return reasonTranslatable.translate(translationService, translationContext);
+            final String reasonString = reasonTranslatable != null
+                    ? reasonTranslatable.translate(translationService, translationContext)
+                    : event.getDisabledReason();
+
+            if(reasonString!=null) {
+                return VetoReason.explicit(reasonString).toOptional();
             }
-            return event.getDisabledReason();
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override

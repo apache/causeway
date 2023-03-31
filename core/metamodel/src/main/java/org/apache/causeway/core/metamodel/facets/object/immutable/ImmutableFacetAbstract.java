@@ -18,16 +18,20 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.immutable;
 
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.interactions.UsabilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+
+import lombok.NonNull;
 
 public abstract class ImmutableFacetAbstract
 extends FacetAbstract
@@ -37,17 +41,16 @@ implements ImmutableFacet {
         return ImmutableFacet.class;
     }
 
-    protected final @Nullable String reason;
+    protected final @NonNull VetoReason reason;
 
-    public ImmutableFacetAbstract(
-            final String reason,
+    protected ImmutableFacetAbstract(
+            final VetoReason reason,
             final FacetHolder holder) {
-        super(type(), holder);
-        this.reason = reason;
+        this(reason, holder, Facet.Precedence.DEFAULT);
     }
 
-    public ImmutableFacetAbstract(
-            final String reason,
+    protected ImmutableFacetAbstract(
+            final VetoReason reason,
             final FacetHolder holder,
             final Facet.Precedence precedence) {
         super(type(), holder, precedence);
@@ -55,23 +58,21 @@ implements ImmutableFacet {
     }
 
     @Override
-    public final String disabledReason(final ManagedObject targetAdapter) {
-        return !_Strings.isNullOrEmpty(reason)
-                ? reason
-                : "Always immmutable"; // assuming there is no ImmutableFacet(s) with inverted semantics
+    public final Optional<VetoReason> disabledReason(final ManagedObject targetAdapter) {
+        return Optional.of(reason);
     }
 
     @Override
     public final void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("reason", reason);
+        visitor.accept("reason", reason.string());
     }
 
     /**
      * Immutable facet only prevents changes to a property or a collection.
      */
     @Override
-    public String disables(final UsabilityContext ic) {
+    public Optional<VetoReason> disables(final UsabilityContext ic) {
         final ManagedObject target = ic.getTarget();
         switch (ic.getInteractionType()) {
         case PROPERTY_MODIFY:
@@ -79,8 +80,17 @@ implements ImmutableFacet {
         case COLLECTION_REMOVE_FROM:
             return disabledReason(target);
         default:
-            return null;
+            return Optional.empty();
         }
+    }
+
+    // -- HELPER
+
+    protected static VetoReason createDisabledReason(@Nullable final String explicitReasonString) {
+        return _Strings.nonEmpty(explicitReasonString)
+                .map(VetoReason::explicit)
+                // assuming there is no ImmutableFacet(s) with inverted semantics
+                .orElseGet(()->VetoReason.inferred("Always immmutable"));
     }
 
 
