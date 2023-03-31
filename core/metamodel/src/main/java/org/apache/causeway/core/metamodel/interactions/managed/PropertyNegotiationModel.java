@@ -101,7 +101,7 @@ public class PropertyNegotiationModel implements ManagedValue {
         validation = _Observables.lazy(()->
             isValidationFeedbackActive()
             ? managedProperty.checkValidity(getValue().getValue())
-                    .map(InteractionVeto::getReason)
+                    .flatMap(InteractionVeto::getReasonAsString)
                     .orElse(null)
             : (String)null);
     }

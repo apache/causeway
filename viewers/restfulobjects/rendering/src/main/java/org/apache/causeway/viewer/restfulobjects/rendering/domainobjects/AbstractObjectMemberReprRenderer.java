@@ -282,7 +282,7 @@ extends ReprRendererAbstract<ManagedMember> {
         if(resourceContext.config().isSuppressMemberDisabledReason()) {
             return;
         }
-        final String disabledReasonRep = usability().getReason();
+        final String disabledReasonRep = usability().getReasonAsString().orElse(null);
         representation.mapPutString("disabledReason", disabledReasonRep);
     }
 

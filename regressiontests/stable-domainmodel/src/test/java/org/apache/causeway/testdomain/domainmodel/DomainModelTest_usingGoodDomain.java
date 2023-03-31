@@ -857,7 +857,7 @@ class DomainModelTest_usingGoodDomain {
                             pendingArgsThen.getObservableParamValidation(1).getValue());
                     assertEquals(
                             "my validation",
-                            pendingArgsThen.validateParameterSetForAction().getReason());
+                            pendingArgsThen.validateParameterSetForAction().getReasonAsString().orElse(null));
                 });
 
         // namedEmail(): String = "my email"

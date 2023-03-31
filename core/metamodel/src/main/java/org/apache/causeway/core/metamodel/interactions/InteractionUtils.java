@@ -18,7 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.interactions;
 
-import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
+import java.util.Optional;
+
+import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionAdvisor;
 import org.apache.causeway.core.metamodel.consent.InteractionResult;
 import org.apache.causeway.core.metamodel.consent.InteractionResultSet;
@@ -38,7 +40,11 @@ public final class InteractionUtils {
         facetHolder.streamFacets(HidingInteractionAdvisor.class)
         .filter(advisor->compatible(advisor, context))
         .forEach(advisor->{
-            val hidingReason = advisor.hides(context);
+            val hidingReasonString = advisor.hides(context);
+            val hidingReason = Optional.ofNullable(hidingReasonString)
+                    .map(Consent.VetoReason::explicit)
+                    .orElse(null);
+
             iaResult.advise(hidingReason, advisor);
         });
 
@@ -53,7 +59,7 @@ public final class InteractionUtils {
         facetHolder.streamFacets(DisablingInteractionAdvisor.class)
         .filter(advisor->compatible(advisor, context))
         .forEach(advisor->{
-            val disablingReason = advisor.disables(context).map(VetoReason::string).orElse(null);
+            val disablingReason = advisor.disables(context).orElse(null);
             isResult.advise(disablingReason, advisor);
         });
 
@@ -67,7 +73,10 @@ public final class InteractionUtils {
         facetHolder.streamFacets(ValidatingInteractionAdvisor.class)
         .filter(advisor->compatible(advisor, context))
         .forEach(advisor->{
-            val invalidatingReason = advisor.invalidates(context);
+            val invalidatingReasonString = advisor.invalidates(context);
+            val invalidatingReason = Optional.ofNullable(invalidatingReasonString)
+                    .map(Consent.VetoReason::explicit)
+                    .orElse(null);
             iaResult.advise(invalidatingReason, advisor);
         });
 

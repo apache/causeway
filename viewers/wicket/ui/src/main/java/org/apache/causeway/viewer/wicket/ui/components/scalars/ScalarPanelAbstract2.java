@@ -279,7 +279,8 @@ extends ScalarPanelAbstract {
                 Wkt.faIcon("fa-solid fa-ban"), ajaxTarget->{/*no-op*/});
 
         val disabledReason = scalarModel().disabledReason()
-                .map(InteractionVeto::getReason).orElse("framework bug: should provide a reason");
+                .flatMap(InteractionVeto::getReasonAsString)
+                .orElse("framework bug: should provide a reason");
 
         WktTooltips.addTooltip(disableReasonButton, translate(disabledReason));
 

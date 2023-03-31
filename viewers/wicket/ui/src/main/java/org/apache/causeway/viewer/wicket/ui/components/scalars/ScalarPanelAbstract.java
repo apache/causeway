@@ -364,7 +364,9 @@ implements ScalarModelChangeListener {
 
         val scalarModel = scalarModel();
 
-        final String disableReasonIfAny = scalarModel.disabledReason().map(InteractionVeto::getReason).orElse(null);
+        final String disableReasonIfAny = scalarModel.disabledReason()
+                .flatMap(InteractionVeto::getReasonAsString)
+                .orElse(null);
         final boolean mustBeEditable = scalarModel.mustBeEditable();
         if (disableReasonIfAny != null) {
             if(mustBeEditable) {
@@ -628,7 +630,7 @@ implements ScalarModelChangeListener {
        if(usabilityAfter) {
            onEditable(target);
        } else {
-           onNotEditable(usabilityConsent.getReason(), target);
+           onNotEditable(usabilityConsent.getReasonAsString().orElse(null), target);
        }
 
        val paramValue = paramModel.getValue();

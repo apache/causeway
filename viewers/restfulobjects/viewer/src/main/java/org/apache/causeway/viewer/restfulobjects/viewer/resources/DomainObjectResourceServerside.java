@@ -138,7 +138,7 @@ implements DomainObjectResource {
         if (validity.isVetoed()) {
             throw _EndpointLogging.error(log, "POST /objects/{}", domainType,
                     RestfulObjectsApplicationException
-                    .createWithBody(HttpStatusCode.BAD_REQUEST, objectRepr, validity.getReason()));
+                    .createWithBody(HttpStatusCode.BAD_REQUEST, objectRepr, validity.getReasonAsString().orElse(null)));
         }
 
         MmEntityUtil.persistInCurrentTransaction(adapter);
@@ -218,7 +218,7 @@ implements DomainObjectResource {
             throw _EndpointLogging.error(log, "PUT /objects/{}/{}", domainType, instanceId,
                     RestfulObjectsApplicationException
                     .createWithBody(
-                            HttpStatusCode.BAD_REQUEST, argRepr, validity.getReason()));
+                            HttpStatusCode.BAD_REQUEST, argRepr, validity.getReasonAsString().orElse(null)));
         }
 
         val domainResourceHelper = _DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);

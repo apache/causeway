@@ -34,18 +34,21 @@ public interface Consent {
     public static class VetoReason implements Serializable {
         private static final long serialVersionUID = 1L;
         /** Reason inferred by the framework or explicitly given otherwise. */
-        private final boolean inferred;
+        private final boolean explicit;
         private final @NonNull String string;
         public static VetoReason inferred(final String reason) {
             _Assert.assertTrue(_Strings.isNotEmpty(reason));
-            return new VetoReason(true, reason);
+            return new VetoReason(false, reason);
         }
         public static VetoReason explicit(final String reason) {
             _Assert.assertTrue(_Strings.isNotEmpty(reason));
-            return new VetoReason(false, reason);
+            return new VetoReason(true, reason);
         }
         public Optional<VetoReason> toOptional() {
             return Optional.of(this);
+        }
+        public VetoReason concatenate(final VetoReason other) {
+            return new VetoReason(this.explicit || other.explicit, this.string + "; " + other.string);
         }
     }
 
@@ -61,18 +64,21 @@ public interface Consent {
     boolean isVetoed();
 
     /**
-     * Why consent is being vetoed.
-     *
-     * <p>
-     * Will be non-<tt>null</tt> and non-empty if vetoed. Will be <tt>null</tt>
-     * (<i>not</i> the empty string) if this is consent is is allowed.
-     *
+     * Optionally the {@link VetoReason}, why consent is being vetoed, based on whether not allowed.
      * <p>
      * Will correspond to the {@link InteractionResult#getReason() reason} in
      * the contained {@link #getInteractionResult() InteractionResult} (if one
      * was specified).
      */
-    String getReason();
+    Optional<VetoReason> getReason();
+
+    /**
+     * Optionally the {@link VetoReason} as String, why consent is being vetoed, based on whether not allowed.
+     */
+    default Optional<String> getReasonAsString() {
+        return getReason().map(VetoReason::string);
+    }
+
 
     /**
      * Description of the interaction that this consent represents.

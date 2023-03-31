@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.scalars;
 
+import org.apache.causeway.core.metamodel.consent.Consent;
+import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFragement;
@@ -36,7 +38,9 @@ enum ScalarPanelAdditionalButton {
                 final RenderScenario renderScenario,
                 final FieldFragement fieldFragement) {
             return scalarModel.disabledReason()
-                    .map(InteractionVeto::isExplicitlyGiven)
+                    .map(InteractionVeto::getVetoConsent)
+                    .flatMap(Consent::getReason)
+                    .map(VetoReason::explicit)
                     .orElse(false);
         }
     },

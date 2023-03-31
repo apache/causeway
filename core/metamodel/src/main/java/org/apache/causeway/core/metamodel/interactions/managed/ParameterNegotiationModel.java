@@ -255,11 +255,9 @@ public class ParameterNegotiationModel {
 
     private String actionValidationMessage() {
         val validityConsentForAction = this.validateParameterSetForAction();
-        if(validityConsentForAction!=null
-                && validityConsentForAction.isVetoed()) {
-            return validityConsentForAction.getReason();
-        }
-        return null;
+        return validityConsentForAction!=null
+                ? validityConsentForAction.getReasonAsString().orElse(null)
+                : null;
     }
 
     // -- INTERNAL HOLDER OF PARAMETER BINDABLES
@@ -329,7 +327,7 @@ public class ParameterNegotiationModel {
                 isValidationFeedbackActive()
                 ? getMetaModel()
                         .isValid(getNegotiationModel().getHead(), getNegotiationModel().getParamValues(), InteractionInitiatedBy.USER)
-                        .getReason()
+                        .getReasonAsString().orElse(null)
                 : (String)null);
 
         }

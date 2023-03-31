@@ -19,11 +19,13 @@
 package org.apache.causeway.core.metamodel.interactions.managed;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.core.metamodel.consent.Consent;
+import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.consent.Veto;
 
 import lombok.AccessLevel;
@@ -53,14 +55,6 @@ public class InteractionVeto implements Serializable {
 
     @NonNull private final VetoType vetoType;
     @NonNull private final Consent vetoConsent;
-
-    /**
-     * Veto explicitly given. That is, not inferred by the framework.
-     * <p>
-     * Introduced to help decide whether or not to display a 'disabled-reason' icon in the UI.
-     */
-    @Getter
-    private final boolean explicitlyGiven = true; //FIXME[3401] false for inferred cases
 
     public static InteractionVeto notFound(
             @NonNull final Identifier.Type memberType,
@@ -103,8 +97,11 @@ public class InteractionVeto implements Serializable {
         return of(VetoType.ACTION_PARAM_INVALID, new Veto(reason));
     }
 
-    public String getReason() {
+    public Optional<VetoReason> getReason() {
         return getVetoConsent().getReason();
+    }
+    public Optional<String> getReasonAsString() {
+        return getVetoConsent().getReasonAsString();
     }
 
     public String getDescription() {
@@ -113,7 +110,7 @@ public class InteractionVeto implements Serializable {
 
     @Override
     public String toString() {
-        return getReason();
+        return getReason().map(VetoReason::string).orElse("not vetoed");
     }
 
 }
