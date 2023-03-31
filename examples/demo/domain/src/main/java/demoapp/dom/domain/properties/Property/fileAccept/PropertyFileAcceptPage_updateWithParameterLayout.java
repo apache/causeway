@@ -16,42 +16,47 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.Action.domainEvent.subscribers;
-
-import javax.inject.Inject;
+package demoapp.dom.domain.properties.Property.fileAccept;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.PromptStyle;
+import org.apache.causeway.applib.annotation.Optionality;
+import org.apache.causeway.applib.annotation.Parameter;
+import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.value.Blob;
 
-import demoapp.dom.domain.actions.Action.domainEvent.ActionDomainEventVm;
 import lombok.RequiredArgsConstructor;
 
-
-//tag::class[]
 @Action(
     semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
-    promptStyle = PromptStyle.INLINE
-    , associateWith = "controlUpdateText"
+    associateWith = "pdfPropertyUsingAnnotation"
     , sequence = "1")
 @RequiredArgsConstructor
-public class ActionDomainEventVm_controlUpdateTextInvocation {
+public class PropertyFileAcceptPage_updateWithParameterLayout {
 
-    private final ActionDomainEventVm actionDomainEventVm;
+    private final PropertyFileAcceptPage propertyFileAcceptVm;
 
-    @MemberSupport public ActionDomainEventVm act(final ActionDomainEventControlStrategy controlStrategy) {
-        eventActionDomainEventControlService.controlStrategy = controlStrategy;
-        return actionDomainEventVm;
+//tag::annotation[]
+    @MemberSupport public PropertyFileAcceptPage act(
+            @Parameter(
+                fileAccept = ".pdf"                     // <.>
+                , optionality = Optionality.OPTIONAL
+            )
+            @ParameterLayout(
+                describedAs =
+                    "@Parameter(fileAccept = \".pdf\")"
+            )
+            final Blob pdfParameterUsingAnnotation) {
+        propertyFileAcceptVm.setPdfPropertyUsingAnnotation(pdfParameterUsingAnnotation);
+        return propertyFileAcceptVm;
     }
-    @MemberSupport public ActionDomainEventControlStrategy default0Act() {
-        return eventActionDomainEventControlService.controlStrategy;
+//end::annotation[]
+    @MemberSupport public Blob default0Act() {
+        return propertyFileAcceptVm.getPdfPropertyUsingAnnotation();
     }
 
-    @Inject
-    ActionDomainEventControlService eventActionDomainEventControlService;
 }
-//end::class[]

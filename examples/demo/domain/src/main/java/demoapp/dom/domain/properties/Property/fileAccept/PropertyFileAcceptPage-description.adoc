@@ -16,16 +16,18 @@ The `fileAccept` element can be specified explicitly using an annotation (on a `
 * for properties, using `@Property#fileAccept()`:
 +
 [source,java,indent=0]
+.PropertyFileAcceptPage.java
 ----
-include::PropertyFileAcceptVm.java[tags=annotation]
+include::PropertyFileAcceptPage.java[tags=annotation]
 ----
 <.> explicitly specifies that only PDFs can be accepted for the property
 
 * for parameters, using `@Parameter#fileAccept()`:
 +
 [source,java,indent=0]
+.PropertyFileAcceptPage_updateWithParameterLayout.java
 ----
-include::PropertyFileAcceptVm_updateWithParameterLayout.java[tags=annotation]
+include::PropertyFileAcceptPage_updateWithParameterLayout.java[tags=annotation]
 ----
 <.> explicitly specifies that only PDFs can be accepted for the parameter
 
@@ -34,16 +36,18 @@ This also works for ``Clob``s:
 * for properties, using `@Property#fileAccept()`:
 +
 [source,java,indent=0]
+.PropertyFileAcceptPage.java
 ----
-include::PropertyFileAcceptVm.java[tags=annotation-clob]
+include::PropertyFileAcceptPage.java[tags=annotation-clob]
 ----
 <.> explicitly specifies that only PDFs can be accepted for the property
 
 * for parameters, using `@Parameter#fileAccept()`:
 +
 [source,java,indent=0]
+.PropertyFileAcceptPage_updateClobWithParameterLayout.java
 ----
-include::PropertyFileAcceptVm_updateClobWithParameterLayout.java[tags=annotation]
+include::PropertyFileAcceptPage_updateClobWithParameterLayout.java[tags=annotation]
 ----
 <.> explicitly specifies that only PDFs can be accepted for the parameter
 
@@ -67,16 +71,18 @@ include::FileAcceptPdfMetaAnnotation.java[tags=class]
 * and can be applied to a property:
 +
 [source,java,indent=0]
+.PropertyFileAcceptPage.java
 ----
-include::PropertyFileAcceptVm.java[tags=meta-annotated]
+include::PropertyFileAcceptPage.java[tags=meta-annotated]
 ----
 <.> semantic is inherited from the meta-annotation
 
 * or can be applied to a parameter:
 +
 [source,java,indent=0]
+.PropertyFileAcceptPage_updateWithMetaAnnotation.java
 ----
-include::PropertyFileAcceptVm_updateWithMetaAnnotation.java[tags=meta-annotation]
+include::PropertyFileAcceptPage_updateWithMetaAnnotation.java[tags=meta-annotation]
 ----
 <.> semantic is inherited from the meta-annotation
 
@@ -88,8 +94,9 @@ The meta-annotation can itself be overridden:
 * in a property:
 +
 [source,java,indent=0]
+.PropertyFileAcceptPage.java
 ----
-include::PropertyFileAcceptVm.java[tags=meta-annotated-overridden]
+include::PropertyFileAcceptPage.java[tags=meta-annotated-overridden]
 ----
 <.> semantic from meta-annotation ...
 <.> \... is overridden by the `@Property` annotation
@@ -97,8 +104,9 @@ include::PropertyFileAcceptVm.java[tags=meta-annotated-overridden]
 * or a parameter:
 +
 [source,java,indent=0]
+.PropertyFileAcceptPage_updateWithMetaAnnotationOverridden.java
 ----
-include::PropertyFileAcceptVm_updateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
+include::PropertyFileAcceptPage_updateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
 ----
 <.> semantic from meta-annotation ...
 <.> \... is overridden by the `@Parameter` annotation

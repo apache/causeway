@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.Property.editing;
+package demoapp.dom.domain.actions.Action.domainEvent;
 
 import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -25,72 +25,40 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Editing;
+import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.events.domain.ActionDomainEvent;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-//tag::class[]
-@XmlRootElement(name = "root")
+@XmlRootElement(name = "demo.ActionDomainEventPage")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.PropertyEditingVm")
-@DomainObject(
-        nature=Nature.VIEW_MODEL,
-        editing = Editing.DISABLED              // <.>
-)
-public class PropertyEditingVm implements HasAsciiDocDescription {
-    // ...
-//end::class[]
+@Named("demo.ActionDomainEventPage")
+@DomainObject(nature=Nature.VIEW_MODEL)
+@NoArgsConstructor
+public class ActionDomainEventPage implements HasAsciiDocDescription {
 
-    @ObjectSupport public String title() {
-        return "Property#editing";
+    public ActionDomainEventPage(final String text) {
+        this.text = text;
     }
 
-//tag::annotation[]
-    @Property(
-        editing = Editing.ENABLED               // <.>
-    )
-    @PropertyLayout(
-        describedAs = "@Property(editing = ENABLED)",
-        fieldSetId = "annotation", sequence = "1")
-    @XmlElement(required = true)
-    @Getter @Setter
-    private String propertyUsingAnnotation;
-//end::annotation[]
+    @ObjectSupport public String title() {
+        return "Action#domainEvent";
+    }
 
-//tag::meta-annotated[]
     @Property()
-    @EditingEnabledMetaAnnotation               // <.>
-    @PropertyLayout(
-        describedAs = "@EditingEnabledMetaAnnotation",
-        fieldSetId = "meta-annotated", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
-    private String propertyUsingMetaAnnotation;
-//end::meta-annotated[]
+    private String text;
 
-//tag::meta-annotated-overridden[]
-    @EditingEnabledMetaAnnotation               // <.>
-    @Property(
-        editing = Editing.DISABLED              // <.>
-    )
-    @PropertyLayout(
-        describedAs =
-            "@EditingEnabledMetaAnnotation " +
-            "@PropertyLayout(editing = DISABLED)",
-            fieldSetId = "meta-annotated-overridden", sequence = "1")
-    @XmlElement(required = false)
-    @Getter @Setter
-    private String propertyUsingMetaAnnotationButOverridden;
-//end::meta-annotated-overridden[]
-
-//tag::class[]
 }
-//end::class[]

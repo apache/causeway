@@ -42,11 +42,11 @@ import lombok.Setter;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.PropertyFileAcceptVm")
+@Named("demo.PropertyFileAcceptPage")
 @DomainObject(
         nature=Nature.VIEW_MODEL,
         editing = Editing.ENABLED)
-public class PropertyFileAcceptVm implements HasAsciiDocDescription {
+public class PropertyFileAcceptPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
         return "Property#fileAccept";

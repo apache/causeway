@@ -33,7 +33,7 @@ import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.domain.actions.Action.associateWith.ActionAssociateWithVm;
 import demoapp.dom.domain.actions.Action.associateWith.child.ActionAssociateWithChildVm;
 import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingEntity;
-import demoapp.dom.domain.actions.Action.domainEvent.ActionDomainEventVm;
+import demoapp.dom.domain.actions.Action.domainEvent.ActionDomainEventPage;
 import demoapp.dom.domain.actions.Action.executionPublishing.ActionExecutionPublishingEntity;
 import demoapp.dom.domain.actions.Action.hidden.ActionHiddenVm;
 import demoapp.dom.domain.actions.Action.restrictTo.ActionRestrictToVm;
@@ -80,8 +80,8 @@ public class ActionMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-asterisk", describedAs = "Class of the domain event emitted when interacting with the action")
-    public ActionDomainEventVm domainEvent(){
-        return new ActionDomainEventVm("value");
+    public ActionDomainEventPage domainEvent(){
+        return new ActionDomainEventPage("value");
     }
 
     @Action(semantics = SemanticsOf.SAFE)

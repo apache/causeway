@@ -30,6 +30,8 @@ import demoapp.dom.domain.objects.DomainObject.introspection.annotReqd.jpa.Domai
 import demoapp.dom.domain.objects.DomainObject.introspection.encapsulated.jpa.DomainObjectIntrospectionEncapsulatedJpa;
 import demoapp.dom.domain.objects.DomainObject.mixinMethod.jpa.DomainObjectMixinMethodJpa;
 import demoapp.dom.domain.objects.DomainObject.nature.entity.jpa.DomainObjectNatureJpa;
+import demoapp.dom.domain.objects.DomainObject.xxxDomainEvent.jpa.DomainObjectXxxDomainEventJpa;
+import demoapp.dom.domain.objects.DomainObject.xxxLifecycleEvent.jpa.DomainObjectXxxLifecycleEventJpa;
 import demoapp.dom.domain.objects.other.embedded.jpa.NumberConstantJpa;
 import demoapp.dom.domain.properties.Property.commandPublishing.jpa.PropertyCommandPublishingJpa;
 import demoapp.dom.domain.properties.Property.executionPublishing.jpa.PropertyExecutionPublishingJpa;
@@ -104,6 +106,8 @@ import org.springframework.context.annotation.Profile;
         DomainObjectIntrospectionAnnotReqdJpa.class,
         DomainObjectIntrospectionEncapsulatedJpa.class,
         DomainObjectMixinMethodJpa.class,
+        DomainObjectXxxDomainEventJpa.class,
+        DomainObjectXxxLifecycleEventJpa.class,
 
         CausewayBlobJpa.class,
         CausewayClobJpa.class,

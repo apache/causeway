@@ -34,10 +34,10 @@ import org.apache.causeway.applib.value.Clob;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandPublishingEntity;
-import demoapp.dom.domain.properties.Property.domainEvent.PropertyDomainEventVm;
-import demoapp.dom.domain.properties.Property.editing.PropertyEditingVm;
+import demoapp.dom.domain.properties.Property.domainEvent.PropertyDomainEventPage;
+import demoapp.dom.domain.properties.Property.editing.PropertyEditingPage;
 import demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingEntity;
-import demoapp.dom.domain.properties.Property.fileAccept.PropertyFileAcceptVm;
+import demoapp.dom.domain.properties.Property.fileAccept.PropertyFileAcceptPage;
 import demoapp.dom.domain.properties.Property.hidden.PropertyHiddenVm;
 import demoapp.dom.domain.properties.Property.hidden.child.PropertyHiddenChildVm;
 import demoapp.dom.domain.properties.Property.maxLength.PropertyMaxLengthVm;
@@ -74,14 +74,14 @@ public class PropertyMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-asterisk", describedAs = "Class of the domain event emitted when interacting with the property")
-    public PropertyDomainEventVm domainEvent(){
-        return new PropertyDomainEventVm("change me");
+    public PropertyDomainEventPage domainEvent(){
+        return new PropertyDomainEventPage("change me");
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-pencil-alt", describedAs = "Editable fields")
-    public PropertyEditingVm editing(){
-        val vm = new PropertyEditingVm();
+    public PropertyEditingPage editing(){
+        val vm = new PropertyEditingPage();
 
         vm.setPropertyUsingAnnotation("this property is editable");
         vm.setPropertyUsingMetaAnnotation("this property is also editable");
@@ -97,8 +97,8 @@ public class PropertyMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-file-upload", describedAs = "Length of text fields")
-    public PropertyFileAcceptVm fileAccept(){
-        val vm = new PropertyFileAcceptVm();
+    public PropertyFileAcceptPage fileAccept(){
+        val vm = new PropertyFileAcceptPage();
 
         setSampleBlob(".pdf", vm::setPdfPropertyUsingAnnotation);
         setSampleBlob(".pdf", vm::setPdfPropertyUsingMetaAnnotation);

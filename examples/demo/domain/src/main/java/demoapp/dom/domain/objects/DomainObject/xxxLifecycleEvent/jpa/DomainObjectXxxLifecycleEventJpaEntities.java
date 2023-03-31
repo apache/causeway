@@ -16,30 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.Property.domainEvent.subscribers;
+package demoapp.dom.domain.objects.DomainObject.xxxLifecycleEvent.jpa;
 
-import javax.inject.Inject;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
 
-import demoapp.dom.domain.properties.Property.domainEvent.PropertyDomainEventPage;
-import lombok.RequiredArgsConstructor;
+@Profile("demo-jpa")
+@Service
+public class DomainObjectXxxLifecycleEventJpaEntities
+extends ValueHolderRepository<String, DomainObjectXxxLifecycleEventJpa> {
 
-
-//tag::class[]
-@Property()
-@PropertyLayout(fieldSetId = "contributed", sequence = "1")
-@RequiredArgsConstructor
-public class PropertyDomainEventVm_controlText {
-
-    private final PropertyDomainEventPage propertyDomainEventVm;
-
-    public PropertyDomainEventControlStrategy prop() {
-        return eventControlService.controlStrategy;
+    protected DomainObjectXxxLifecycleEventJpaEntities() {
+        super(DomainObjectXxxLifecycleEventJpa.class);
     }
 
-    @Inject
-    PropertyDomainEventControlService eventControlService;
+    @Override
+    protected DomainObjectXxxLifecycleEventJpa newDetachedEntity(String value) {
+        return new DomainObjectXxxLifecycleEventJpa(value);
+    }
+
 }
-//end::class[]

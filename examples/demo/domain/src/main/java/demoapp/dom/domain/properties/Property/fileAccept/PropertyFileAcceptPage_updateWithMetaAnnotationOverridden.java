@@ -32,27 +32,31 @@ import lombok.RequiredArgsConstructor;
     semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
-        associateWith = "pdfPropertyUsingMetaAnnotation"
+        associateWith = "docxPropertyUsingMetaAnnotationButOverridden"
         , sequence = "1")
 @RequiredArgsConstructor
-public class PropertyFileAcceptVm_updateWithMetaAnnotation {
+public class PropertyFileAcceptPage_updateWithMetaAnnotationOverridden {
 
-    private final PropertyFileAcceptVm propertyFileAcceptVm;
+    private final PropertyFileAcceptPage propertyFileAcceptVm;
 
-//tag::meta-annotation[]
-    @MemberSupport public PropertyFileAcceptVm act(
-            @FileAcceptPdfMetaAnnotation                            // <.>
-            @Parameter()
-            @ParameterLayout(
-                describedAs = "@FileAcceptPdfMetaAnnotation"
+//tag::meta-annotation-overridden[]
+    @MemberSupport public PropertyFileAcceptPage act(
+            @FileAcceptPdfMetaAnnotation                    // <.>
+            @Parameter(
+                fileAccept = ".docx"                        // <.>
             )
-            final Blob pdfParameterUsingMetaAnnotation) {
-        propertyFileAcceptVm.setPdfPropertyUsingMetaAnnotation(pdfParameterUsingMetaAnnotation);
+            @ParameterLayout(
+                describedAs =
+                    "@FileAcceptPdfMetaAnnotation " +
+                    "@ParameterLayout(fileAccept = \".docx\")"
+            )
+            final Blob docxParameterUsingMetaAnnotationButOverridden) {
+        propertyFileAcceptVm.setDocxPropertyUsingMetaAnnotationButOverridden(docxParameterUsingMetaAnnotationButOverridden);
         return propertyFileAcceptVm;
     }
-//end::meta-annotation[]
+//end::meta-annotation-overridden[]
     @MemberSupport public Blob default0Act() {
-        return propertyFileAcceptVm.getPdfPropertyUsingMetaAnnotation();
+        return propertyFileAcceptVm.getDocxPropertyUsingMetaAnnotationButOverridden();
     }
 
 }

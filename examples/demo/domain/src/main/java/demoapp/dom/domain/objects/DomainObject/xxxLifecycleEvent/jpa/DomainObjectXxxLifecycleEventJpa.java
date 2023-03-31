@@ -16,32 +16,49 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.xxxDomainEvent;
+package demoapp.dom.domain.objects.DomainObject.xxxLifecycleEvent.jpa;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.domain.objects.DomainObject.xxxLifecycleEvent.DomainObjectXxxLifecycleEvent;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.inject.Named;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.persistence.*;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
+import org.springframework.context.annotation.Profile;
 
+@Profile("demo-jpa")
+@Entity
+@Table(
+    schema = "demo",
+    name = "DomainObjectXxxLifecycleEventJpa"
+)
+@EntityListeners(CausewayEntityListener.class)
+@Named("demo.DomainObjectXxxLifecycleEventJpa")
+@NoArgsConstructor
 //tag::class[]
-@XmlRootElement(name = "root")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.DomainObjectDomainEventsVm")
-@DomainObject(
-        nature = Nature.VIEW_MODEL)
-public class DomainObjectDomainEventsVm implements HasAsciiDocDescription {
+// ...
+@DomainObject(nature = Nature.ENTITY)
+public class DomainObjectXxxLifecycleEventJpa
+                extends DomainObjectXxxLifecycleEvent {
+    // ...
+//end::class[]
 
-    @ObjectSupport public String title() {
-        return "DomainObject#...DomainEvent";
+    public DomainObjectXxxLifecycleEventJpa(String value) {
+        setName(value);
     }
+
+    @Id
+    @GeneratedValue
+    private Long id;
+//tag::class[]
+
+    @Getter @Setter
+    private String name;
 
 }
 //end::class[]

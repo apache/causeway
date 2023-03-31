@@ -24,8 +24,9 @@ The fallback domain event can be suppressed using the `causeway.applib.annotatio
 In the demo, the `PropertyDomainEventVm` class defines an editable property, "text", annotated with `domainEvent`:
 
 [source,java]
+.PropertyDomainEventPage.java
 ----
-include::PropertyDomainEventVm.java[tags=class]
+include::PropertyDomainEventPage.java[tags=class]
 ----
 <.> the event class to emit; genericised by the target type and the property type
 <.> indicates that the framework should emit this type

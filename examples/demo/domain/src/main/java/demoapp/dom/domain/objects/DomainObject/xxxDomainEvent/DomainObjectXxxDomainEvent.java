@@ -16,30 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.Property.domainEvent.subscribers;
+package demoapp.dom.domain.objects.DomainObject.xxxDomainEvent;
 
-import javax.inject.Inject;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolder;
 
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.ObjectSupport;
 
-import demoapp.dom.domain.properties.Property.domainEvent.PropertyDomainEventPage;
-import lombok.RequiredArgsConstructor;
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
+public abstract class DomainObjectXxxDomainEvent
+        implements
+        HasAsciiDocDescription,
+        ValueHolder<String> {
 
-
-//tag::class[]
-@Property()
-@PropertyLayout(fieldSetId = "contributed", sequence = "1")
-@RequiredArgsConstructor
-public class PropertyDomainEventVm_controlText {
-
-    private final PropertyDomainEventPage propertyDomainEventVm;
-
-    public PropertyDomainEventControlStrategy prop() {
-        return eventControlService.controlStrategy;
+    @ObjectSupport
+    public String title() {
+        return getName();
     }
 
-    @Inject
-    PropertyDomainEventControlService eventControlService;
+    @Override
+    public String value() {
+        return getName();
+    }
+
+    public abstract String getName();
+    public abstract void setName(String value);
+
 }
-//end::class[]

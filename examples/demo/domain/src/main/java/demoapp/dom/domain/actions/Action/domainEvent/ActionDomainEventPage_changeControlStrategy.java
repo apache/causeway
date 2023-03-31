@@ -16,44 +16,33 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.Property.domainEvent.subscribers;
+package demoapp.dom.domain.actions.Action.domainEvent;
 
 import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.PromptStyle;
-import org.apache.causeway.applib.annotation.Redirect;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
-import demoapp.dom.domain.properties.Property.domainEvent.PropertyDomainEventPage;
 import lombok.RequiredArgsConstructor;
 
+
 //tag::class[]
-@Action(
-    semantics = SemanticsOf.IDEMPOTENT
-)
-@ActionLayout(
-    promptStyle = PromptStyle.INLINE_AS_IF_EDIT
-    , redirectPolicy = Redirect.EVEN_IF_SAME                        // <.>
-    , associateWith = "controlText"
-    , sequence = "1"
-)
+@Action(semantics = SemanticsOf.IDEMPOTENT)
 @RequiredArgsConstructor
-public class PropertyDomainEventVm_controlTextEditing {
+public class ActionDomainEventPage_changeControlStrategy {
 
-    private final PropertyDomainEventPage propertyDomainEventVm;
+    private final ActionDomainEventPage actionDomainEventVm;
 
-    @MemberSupport public PropertyDomainEventPage act(final PropertyDomainEventControlStrategy controlStrategy) {
-        eventControlService.controlStrategy = controlStrategy;
-        return propertyDomainEventVm;
+    @MemberSupport public ActionDomainEventPage act(final ActionDomainEventControlStrategy controlStrategy) {
+        eventActionDomainEventControlService.controlStrategy = controlStrategy;
+        return actionDomainEventVm;
     }
-    @MemberSupport public PropertyDomainEventControlStrategy default0Act() {
-        return eventControlService.controlStrategy;
+    @MemberSupport public ActionDomainEventControlStrategy default0Act() {
+        return eventActionDomainEventControlService.controlStrategy;
     }
 
     @Inject
-    PropertyDomainEventControlService eventControlService;
+    ActionDomainEventControlSubscriber eventActionDomainEventControlService;
 }
 //end::class[]

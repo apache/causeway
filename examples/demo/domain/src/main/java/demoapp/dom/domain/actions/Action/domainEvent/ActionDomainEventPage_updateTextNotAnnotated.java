@@ -16,30 +16,32 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.Action.domainEvent.subscribers;
+package demoapp.dom.domain.actions.Action.domainEvent;
 
-import javax.inject.Inject;
-
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
-
-import demoapp.dom.domain.actions.Action.domainEvent.ActionDomainEventVm;
 import lombok.RequiredArgsConstructor;
+
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.events.domain.ActionDomainEvent;
 
 
 //tag::class[]
-@Property()
-@PropertyLayout(fieldSetId = "contributed", sequence = "1")
+@Action()                                                       // <.>
 @RequiredArgsConstructor
-public class ActionDomainEventVm_controlUpdateText {
+public class ActionDomainEventPage_updateTextNotAnnotated {
+    // ...
+//end::class[]
 
-    private final ActionDomainEventVm actionDomainEventVm;
+    private final ActionDomainEventPage actionDomainEventVm;
 
-    public ActionDomainEventControlStrategy prop() {
-        return eventActionDomainEventControlService.controlStrategy;
+    @MemberSupport public ActionDomainEventPage act(final String text) {
+        actionDomainEventVm.setText(text);
+        return actionDomainEventVm;
     }
-
-    @Inject
-    ActionDomainEventControlService eventActionDomainEventControlService;
+    @MemberSupport public String default0Act() {
+        return actionDomainEventVm.getText();
+    }
+//tag::class[]
 }
 //end::class[]

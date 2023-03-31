@@ -16,9 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.mixinMethod.jpa;
+package demoapp.dom.domain.objects.DomainObject.xxxDomainEvent.jpa;
 
-import demoapp.dom.domain.objects.DomainObject.mixinMethod.DomainObjectMixinMethod;
+import demoapp.dom.domain.objects.DomainObject.xxxDomainEvent.DomainObjectXxxDomainEvent;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -35,20 +35,20 @@ import org.springframework.context.annotation.Profile;
 @Entity
 @Table(
     schema = "demo",
-    name = "DomainObjectMixinMethodJpa"
+    name = "DomainObjectXxxDomainEventJpa"
 )
 @EntityListeners(CausewayEntityListener.class)
-@Named("demo.DomainObjectMixinMethodJpa")
+@Named("demo.DomainObjectXxxDomainEventJpa")
 @NoArgsConstructor
 //tag::class[]
 // ...
 @DomainObject(nature = Nature.ENTITY)
-public class DomainObjectMixinMethodJpa
-                extends DomainObjectMixinMethod {
+public class DomainObjectXxxDomainEventJpa
+                extends DomainObjectXxxDomainEvent {
     // ...
 //end::class[]
 
-    public DomainObjectMixinMethodJpa(String value) {
+    public DomainObjectXxxDomainEventJpa(String value) {
         setName(value);
     }
 

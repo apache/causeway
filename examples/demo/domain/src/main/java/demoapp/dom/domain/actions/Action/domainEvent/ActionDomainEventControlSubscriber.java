@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.Action.domainEvent.subscribers;
+package demoapp.dom.domain.actions.Action.domainEvent;
 
 import javax.inject.Inject;
 
@@ -25,28 +25,20 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 
-import demoapp.dom.domain.actions.Action.domainEvent.ActionDomainEventVm;
-import demoapp.dom.domain.actions.Action.domainEvent.ActionDomainEventVm_mixinUpdateText;
 import lombok.RequiredArgsConstructor;
 
 // tag::class[]
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-class ActionDomainEventControlService {
+class ActionDomainEventControlSubscriber {
 
     final ServiceRegistry serviceRegistry;
 
-    ActionDomainEventControlStrategy controlStrategy = ActionDomainEventControlStrategy.DO_NOTHING;         // <.>
+    ActionDomainEventControlStrategy controlStrategy = ActionDomainEventControlStrategy.DO_NOTHING;
 
-    @EventListener(ActionDomainEventVm.UpdateTextDomainEvent.class)       // <.>
-    public void on(ActionDomainEventVm.UpdateTextDomainEvent ev) {
-        controlStrategy.on(ev, serviceRegistry);
+    @EventListener(ActionDomainEventPage_updateText.DomainEvent.class)      // <.>
+    public void on(ActionDomainEventPage_updateText.DomainEvent ev) {
+        controlStrategy.on(ev, serviceRegistry);                            // <.>
     }
-
-    @EventListener(ActionDomainEventVm_mixinUpdateText.DomainEvent.class) // <.>
-    public void on(ActionDomainEventVm_mixinUpdateText.DomainEvent ev) {
-        controlStrategy.on(ev, serviceRegistry);
-    }
-
 }
 // end::class[]

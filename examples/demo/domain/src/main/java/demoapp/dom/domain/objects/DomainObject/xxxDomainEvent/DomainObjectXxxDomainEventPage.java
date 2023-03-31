@@ -16,49 +16,32 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.mixinMethod.jpa;
+package demoapp.dom.domain.objects.DomainObject.xxxDomainEvent;
 
-import demoapp.dom.domain.objects.DomainObject.mixinMethod.DomainObjectMixinMethod;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 import javax.inject.Named;
-import javax.persistence.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
-import org.springframework.context.annotation.Profile;
+import org.apache.causeway.applib.annotation.ObjectSupport;
 
-@Profile("demo-jpa")
-@Entity
-@Table(
-    schema = "demo",
-    name = "DomainObjectMixinMethodJpa"
-)
-@EntityListeners(CausewayEntityListener.class)
-@Named("demo.DomainObjectMixinMethodJpa")
-@NoArgsConstructor
 //tag::class[]
-// ...
-@DomainObject(nature = Nature.ENTITY)
-public class DomainObjectMixinMethodJpa
-                extends DomainObjectMixinMethod {
-    // ...
-//end::class[]
+@XmlRootElement(name = "root")
+@XmlType
+@XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.DomainObjectXxxDomainEventPage")
+@DomainObject(
+        nature = Nature.VIEW_MODEL)
+public class DomainObjectXxxDomainEventPage implements HasAsciiDocDescription {
 
-    public DomainObjectMixinMethodJpa(String value) {
-        setName(value);
+    @ObjectSupport public String title() {
+        return "@DomainObject#xxxDomainEvent";
     }
-
-    @Id
-    @GeneratedValue
-    private Long id;
-//tag::class[]
-
-    @Getter @Setter
-    private String name;
 
 }
 //end::class[]

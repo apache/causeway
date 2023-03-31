@@ -16,43 +16,43 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.Action.domainEvent;
+package demoapp.dom.domain.properties.Property.fileAccept;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.Parameter;
+import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.events.domain.ActionDomainEvent;
+import org.apache.causeway.applib.value.Blob;
 
 import lombok.RequiredArgsConstructor;
 
-
-//tag::class[]
 @Action(
-    semantics = SemanticsOf.SAFE
-    , domainEvent =
-        ActionDomainEventVm_mixinUpdateText.DomainEvent.class           // <.>
+    semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
-    describedAs =
-        "@Action(domainEvent = ActionDomainEventVm_mixinUpdateText.DomainEvent.class)"
-    , associateWith = "text"
-    , sequence = "2"
-)
+        associateWith = "pdfPropertyUsingMetaAnnotation"
+        , sequence = "1")
 @RequiredArgsConstructor
-public class ActionDomainEventVm_mixinUpdateText {
+public class PropertyFileAcceptPage_updateWithMetaAnnotation {
 
-    public static class DomainEvent                                     // <.>
-            extends ActionDomainEvent<ActionDomainEventVm> {}
+    private final PropertyFileAcceptPage propertyFileAcceptVm;
 
-    private final ActionDomainEventVm actionDomainEventVm;
-
-    @MemberSupport public ActionDomainEventVm act(final String text) {
-        actionDomainEventVm.setText(text);
-        return actionDomainEventVm;
+//tag::meta-annotation[]
+    @MemberSupport public PropertyFileAcceptPage act(
+            @FileAcceptPdfMetaAnnotation                            // <.>
+            @Parameter()
+            @ParameterLayout(
+                describedAs = "@FileAcceptPdfMetaAnnotation"
+            )
+            final Blob pdfParameterUsingMetaAnnotation) {
+        propertyFileAcceptVm.setPdfPropertyUsingMetaAnnotation(pdfParameterUsingMetaAnnotation);
+        return propertyFileAcceptVm;
     }
-    @MemberSupport public String default0Act() {
-        return actionDomainEventVm.getText();
+//end::meta-annotation[]
+    @MemberSupport public Blob default0Act() {
+        return propertyFileAcceptVm.getPdfPropertyUsingMetaAnnotation();
     }
+
 }
-//end::class[]
