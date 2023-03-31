@@ -24,10 +24,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Property;
 
 //tag::class[]
-@Property(editingDisabledReason = "disabled "
+@Property(
+        editing = Editing.DISABLED,
+        editingDisabledReason = "disabled "
         + "for demo purposes (meta annot.)")        // <.>
 @Inherited
 @Target({

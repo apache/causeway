@@ -54,7 +54,9 @@ public class PropertyEditingReasonDisabledPage implements HasAsciiDocDescription
     }
 
 //tag::annotation[]
-    @Property(editingDisabledReason = "disabled for demo purposes") // <.>
+    @Property(
+            editing = Editing.DISABLED,
+            editingDisabledReason = "disabled for demo purposes") // <.>
     @PropertyLayout(
         describedAs = "@Property(editingDisabledReason = \"disabled for demo purposes\")",
         fieldSetId = "annotation", sequence = "1")
@@ -76,7 +78,9 @@ public class PropertyEditingReasonDisabledPage implements HasAsciiDocDescription
 
 //tag::meta-annotated-overridden[]
     @EditingReasonDisabledMetaAnnotation                            // <.>
-    @Property(editingDisabledReason = "disabled for demo purposes") // <.>
+    @Property(
+            editing = Editing.DISABLED,
+            editingDisabledReason = "disabled for demo purposes") // <.>
     @PropertyLayout(
         describedAs =
             "@EditingReasonDisabledMetaAnnotation " +
