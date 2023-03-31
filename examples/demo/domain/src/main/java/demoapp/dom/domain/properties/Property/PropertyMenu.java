@@ -36,6 +36,7 @@ import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandPublishingEntity;
 import demoapp.dom.domain.properties.Property.domainEvent.PropertyDomainEventPage;
 import demoapp.dom.domain.properties.Property.editing.PropertyEditingPage;
+import demoapp.dom.domain.properties.Property.editingReasonDisabled.PropertyEditingReasonDisabledPage;
 import demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingEntity;
 import demoapp.dom.domain.properties.Property.fileAccept.PropertyFileAcceptPage;
 import demoapp.dom.domain.properties.Property.hidden.PropertyHiddenVm;
@@ -85,6 +86,17 @@ public class PropertyMenu {
 
         vm.setPropertyUsingAnnotation("this property is editable");
         vm.setPropertyUsingMetaAnnotation("this property is also editable");
+        vm.setPropertyUsingMetaAnnotationButOverridden("this property is NOT editable");
+        return vm;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-pencil-alt", describedAs = "Not editable fields")
+    public PropertyEditingReasonDisabledPage editingReasonDisabled(){
+        val vm = new PropertyEditingReasonDisabledPage();
+
+        vm.setPropertyUsingAnnotation("this property NOT is editable");
+        vm.setPropertyUsingMetaAnnotation("this property is also NOT editable");
         vm.setPropertyUsingMetaAnnotationButOverridden("this property is NOT editable");
         return vm;
     }

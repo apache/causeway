@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.Property.editing;
+package demoapp.dom.domain.properties.Property.editingReasonDisabled;
 
 import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -40,25 +40,23 @@ import lombok.Setter;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.PropertyEditingPage")
+@Named("demo.PropertyEditingReasonDisabledPage")
 @DomainObject(
         nature=Nature.VIEW_MODEL,
         editing = Editing.DISABLED              // <.>
 )
-public class PropertyEditingPage implements HasAsciiDocDescription {
+public class PropertyEditingReasonDisabledPage implements HasAsciiDocDescription {
     // ...
 //end::class[]
 
     @ObjectSupport public String title() {
-        return "Property#editing";
+        return "Property#editingReasonDisabled";
     }
 
 //tag::annotation[]
-    @Property(
-        editing = Editing.ENABLED               // <.>
-    )
+    @Property(editingDisabledReason = "disabled for demo purposes") // <.>
     @PropertyLayout(
-        describedAs = "@Property(editing = ENABLED)",
+        describedAs = "@Property(editingDisabledReason = \"disabled for demo purposes\")",
         fieldSetId = "annotation", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
@@ -67,9 +65,9 @@ public class PropertyEditingPage implements HasAsciiDocDescription {
 
 //tag::meta-annotated[]
     @Property()
-    @EditingEnabledMetaAnnotation               // <.>
+    @EditingReasonDisabledMetaAnnotation                            // <.>
     @PropertyLayout(
-        describedAs = "@EditingEnabledMetaAnnotation",
+        describedAs = "@EditingReasonDisabledMetaAnnotation",
         fieldSetId = "meta-annotated", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
@@ -77,14 +75,12 @@ public class PropertyEditingPage implements HasAsciiDocDescription {
 //end::meta-annotated[]
 
 //tag::meta-annotated-overridden[]
-    @EditingEnabledMetaAnnotation               // <.>
-    @Property(
-        editing = Editing.DISABLED              // <.>
-    )
+    @EditingReasonDisabledMetaAnnotation                            // <.>
+    @Property(editingDisabledReason = "disabled for demo purposes") // <.>
     @PropertyLayout(
         describedAs =
-            "@EditingEnabledMetaAnnotation " +
-            "@Property(editing = DISABLED)",
+            "@EditingReasonDisabledMetaAnnotation " +
+            "@Property(editingDisabledReason = \"disabled for demo purposes\")",
             fieldSetId = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
