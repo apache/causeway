@@ -22,6 +22,8 @@ import java.net.URL;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.value.Blob;
@@ -30,6 +32,7 @@ import org.apache.causeway.applib.value.LocalResourcePath;
 import org.apache.causeway.applib.value.OpenUrlStrategy;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -183,7 +186,8 @@ public enum ActionResultResponseType {
             return ActionResultResponse.withHandler(handler);
         }
     },
-    VOID {
+    /** render the 'empty page' */
+    VOID_AS_EMPTY {
         @Override
         public ActionResultResponse interpretResult(
                 final ActionModel actionModel,
@@ -194,6 +198,21 @@ public enum ActionResultResponseType {
             final VoidModel voidModel = new VoidModel(commonContext);
             voidModel.setActionHint(actionModel);
             return ActionResultResponse.toPage(VoidReturnPage.class, new VoidReturnPage(voidModel));
+        }
+    },
+    /**
+     * Issues a (current) page reload.
+     */
+    VOID_AS_RELOAD {
+        @Override
+        public ActionResultResponse interpretResult(
+                final ActionModel actionModel,
+                final AjaxRequestTarget target,
+                final @Nullable ManagedObject resultAdapter, // arg is not used
+                final Can<ManagedObject> args) {
+            val currentPage = PageRequestHandlerTracker.getLastHandler(RequestCycle.get()).getPage();
+            val pageClass = currentPage.getClass();
+            return ActionResultResponse.toPage(PageRedirectRequest.forPage(pageClass, _Casts.uncheckedCast(currentPage)));
         }
     },
     SIGN_IN {
@@ -229,8 +248,12 @@ public enum ActionResultResponseType {
             final @Nullable ManagedObject resultAdapter,
             final Can<ManagedObject> args) {
 
-        val typeAndAdapter = determineFor(resultAdapter, targetIfAny);
-        return typeAndAdapter.type // mapped to VOID if adapter is unspecified or null
+        val mapAbsentResultTo = model.getAction().getReturnType().isVoid()
+                ? ActionResultResponseType.VOID_AS_RELOAD
+                : ActionResultResponseType.VOID_AS_EMPTY;
+
+        val typeAndAdapter = determineFor(resultAdapter, mapAbsentResultTo, targetIfAny);
+        return typeAndAdapter.type // mapped to 'mapAbsentResultTo' if adapter is unspecified or null
                 .interpretResult(model, targetIfAny, typeAndAdapter.resultAdapter, args);
     }
 
@@ -267,10 +290,12 @@ public enum ActionResultResponseType {
 
     private static TypeAndAdapter determineFor(
             final ManagedObject resultAdapter,
+            final ActionResultResponseType mapAbsentResultTo,
             final AjaxRequestTarget targetIfAny) {
 
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(resultAdapter)) {
-            return TypeAndAdapter.of(ActionResultResponseType.VOID, resultAdapter);
+            // triage based on whether action return type is 'void'
+            return TypeAndAdapter.of(mapAbsentResultTo, resultAdapter);
         }
 
         val resultSpec = resultAdapter.getSpecification();
@@ -319,7 +344,7 @@ public enum ActionResultResponseType {
             case 1:
                 val firstElement = unpacked.getFirstElseFail();
                 // recursively unwrap
-                return determineFor(firstElement, targetIfAny);
+                return determineFor(firstElement, ActionResultResponseType.VOID_AS_EMPTY, targetIfAny);
             default:
                 return TypeAndAdapter.of(ActionResultResponseType.COLLECTION, resultAdapter);
             }
