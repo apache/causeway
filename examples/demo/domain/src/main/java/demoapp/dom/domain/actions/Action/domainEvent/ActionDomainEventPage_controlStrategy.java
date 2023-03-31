@@ -16,32 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.xxxDomainEvent;
+package demoapp.dom.domain.actions.Action.domainEvent;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import jakarta.inject.Inject;
 
-import jakarta.inject.Named;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlType;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
 
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.ObjectSupport;
+import lombok.RequiredArgsConstructor;
+
 
 //tag::class[]
-@XmlRootElement(name = "root")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.DomainObjectDomainEventsVm")
-@DomainObject(
-        nature = Nature.VIEW_MODEL)
-public class DomainObjectDomainEventsVm implements HasAsciiDocDescription {
+@Property()
+@PropertyLayout(fieldSetId = "contributed", sequence = "1")
+@RequiredArgsConstructor
+public class ActionDomainEventPage_controlStrategy {
 
-    @ObjectSupport public String title() {
-        return "DomainObject#...DomainEvent";
+    private final ActionDomainEventPage actionDomainEventVm;
+
+    public ActionDomainEventControlStrategy prop() {
+        return eventActionDomainEventControlService.controlStrategy;
     }
 
+    @Inject
+    ActionDomainEventControlSubscriber eventActionDomainEventControlService;
 }
 //end::class[]

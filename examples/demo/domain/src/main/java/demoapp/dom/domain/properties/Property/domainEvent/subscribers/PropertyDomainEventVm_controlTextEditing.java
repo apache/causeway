@@ -27,7 +27,7 @@ import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.Redirect;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
-import demoapp.dom.domain.properties.Property.domainEvent.PropertyDomainEventVm;
+import demoapp.dom.domain.properties.Property.domainEvent.PropertyDomainEventPage;
 import lombok.RequiredArgsConstructor;
 
 //tag::class[]
@@ -43,9 +43,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PropertyDomainEventVm_controlTextEditing {
 
-    private final PropertyDomainEventVm propertyDomainEventVm;
+    private final PropertyDomainEventPage propertyDomainEventVm;
 
-    @MemberSupport public PropertyDomainEventVm act(final PropertyDomainEventControlStrategy controlStrategy) {
+    @MemberSupport public PropertyDomainEventPage act(final PropertyDomainEventControlStrategy controlStrategy) {
         eventControlService.controlStrategy = controlStrategy;
         return propertyDomainEventVm;
     }

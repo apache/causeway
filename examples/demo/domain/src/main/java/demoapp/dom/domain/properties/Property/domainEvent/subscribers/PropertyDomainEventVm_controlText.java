@@ -23,7 +23,7 @@ import jakarta.inject.Inject;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 
-import demoapp.dom.domain.properties.Property.domainEvent.PropertyDomainEventVm;
+import demoapp.dom.domain.properties.Property.domainEvent.PropertyDomainEventPage;
 import lombok.RequiredArgsConstructor;
 
 
@@ -33,7 +33,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PropertyDomainEventVm_controlText {
 
-    private final PropertyDomainEventVm propertyDomainEventVm;
+    private final PropertyDomainEventPage propertyDomainEventVm;
 
     public PropertyDomainEventControlStrategy prop() {
         return eventControlService.controlStrategy;

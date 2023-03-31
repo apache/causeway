@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.xxxLifecycleEvent;
+package demoapp.dom.domain.objects.DomainObject.xxxDomainEvent;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
@@ -34,13 +34,13 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.DomainObjectLifecyleEventsVm")
+@Named("demo.DomainObjectXxxDomainEventPage")
 @DomainObject(
         nature = Nature.VIEW_MODEL)
-public class DomainObjectLifecyleEventsVm implements HasAsciiDocDescription {
+public class DomainObjectXxxDomainEventPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "DomainObject#...LifecyleEvent";
+        return "@DomainObject#xxxDomainEvent";
     }
 
 }

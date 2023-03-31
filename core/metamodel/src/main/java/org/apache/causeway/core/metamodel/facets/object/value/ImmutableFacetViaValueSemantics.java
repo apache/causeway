@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.value;
 
+import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacetAbstract;
@@ -26,7 +27,7 @@ public class ImmutableFacetViaValueSemantics
 extends ImmutableFacetAbstract {
 
     public ImmutableFacetViaValueSemantics(final FacetHolder holder) {
-        super("Value types are immutable", holder);
+        super(VetoReason.inferred("Value types are immutable"), holder);
     }
 
     @Override

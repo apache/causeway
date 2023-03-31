@@ -21,14 +21,14 @@ package demoapp.dom.domain.properties.Property.domainEvent.subscribers;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 
-import demoapp.dom.domain.properties.Property.domainEvent.PropertyDomainEventVm;
+import demoapp.dom.domain.properties.Property.domainEvent.PropertyDomainEventPage;
 
 // tag::class[]
 enum PropertyDomainEventControlStrategy {
 
     DO_NOTHING{
         @Override
-        void on(PropertyDomainEventVm.TextDomainEvent ev
+        void on(PropertyDomainEventPage.TextDomainEvent ev
                 , ServiceRegistry serviceRegistry) {
         }
     },
@@ -38,7 +38,7 @@ enum PropertyDomainEventControlStrategy {
 // tag::hide[]
     HIDE {
         @Override
-        void on(PropertyDomainEventVm.TextDomainEvent ev
+        void on(PropertyDomainEventPage.TextDomainEvent ev
                 , ServiceRegistry serviceRegistry) {
             switch (ev.getEventPhase()) {
                 case HIDE:
@@ -51,7 +51,7 @@ enum PropertyDomainEventControlStrategy {
 // tag::disable[]
     DISABLE{
         @Override
-        void on(PropertyDomainEventVm.TextDomainEvent ev
+        void on(PropertyDomainEventPage.TextDomainEvent ev
                 , ServiceRegistry serviceRegistry) {
             switch (ev.getEventPhase()) {
                 case DISABLE:
@@ -65,7 +65,7 @@ enum PropertyDomainEventControlStrategy {
 // tag::validate[]
     VALIDATE_MUST_BE_UPPER_CASE{
         @Override
-        void on(PropertyDomainEventVm.TextDomainEvent ev
+        void on(PropertyDomainEventPage.TextDomainEvent ev
                 , ServiceRegistry serviceRegistry) {
             switch (ev.getEventPhase()) {
                 case VALIDATE:
@@ -82,7 +82,7 @@ enum PropertyDomainEventControlStrategy {
 // tag::executing[]
     EXECUTING_FORCE_UPPER_CASE{
         @Override
-        void on(PropertyDomainEventVm.TextDomainEvent ev
+        void on(PropertyDomainEventPage.TextDomainEvent ev
                 , ServiceRegistry serviceRegistry) {
 
             switch (ev.getEventPhase()) {
@@ -98,7 +98,7 @@ enum PropertyDomainEventControlStrategy {
 // tag::executed[]
     EXECUTED_ANNOUNCE{
         @Override
-        void on(PropertyDomainEventVm.TextDomainEvent ev
+        void on(PropertyDomainEventPage.TextDomainEvent ev
                 , ServiceRegistry serviceRegistry) {
             switch (ev.getEventPhase()) {
                 case EXECUTED:
@@ -118,7 +118,7 @@ enum PropertyDomainEventControlStrategy {
 
 // tag::class[]
     ;
-    abstract void on(PropertyDomainEventVm.TextDomainEvent ev
+    abstract void on(PropertyDomainEventPage.TextDomainEvent ev
             , ServiceRegistry serviceRegistry);
 }
 // end::class[]

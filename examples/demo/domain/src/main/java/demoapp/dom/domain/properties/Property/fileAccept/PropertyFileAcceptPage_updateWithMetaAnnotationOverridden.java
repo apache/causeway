@@ -21,11 +21,10 @@ package demoapp.dom.domain.properties.Property.fileAccept;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.value.Clob;
+import org.apache.causeway.applib.value.Blob;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,30 +32,31 @@ import lombok.RequiredArgsConstructor;
     semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
-        associateWith = "txtPropertyUsingAnnotation"
+        associateWith = "docxPropertyUsingMetaAnnotationButOverridden"
         , sequence = "1")
 @RequiredArgsConstructor
-public class PropertyFileAcceptVm_updateClobWithParameterLayout {
+public class PropertyFileAcceptPage_updateWithMetaAnnotationOverridden {
 
-    private final PropertyFileAcceptVm propertyFileAcceptVm;
+    private final PropertyFileAcceptPage propertyFileAcceptVm;
 
-//tag::annotation[]
-    @MemberSupport public PropertyFileAcceptVm act(
+//tag::meta-annotation-overridden[]
+    @MemberSupport public PropertyFileAcceptPage act(
+            @FileAcceptPdfMetaAnnotation                    // <.>
             @Parameter(
-                fileAccept = ".txt"                     // <.>
-                , optionality = Optionality.OPTIONAL
+                fileAccept = ".docx"                        // <.>
             )
             @ParameterLayout(
                 describedAs =
-                    "@Parameter(fileAccept = \".txt\")"
+                    "@FileAcceptPdfMetaAnnotation " +
+                    "@ParameterLayout(fileAccept = \".docx\")"
             )
-            final Clob parameterUsingAnnotation) {
-        propertyFileAcceptVm.setTxtPropertyUsingAnnotation(parameterUsingAnnotation);
+            final Blob docxParameterUsingMetaAnnotationButOverridden) {
+        propertyFileAcceptVm.setDocxPropertyUsingMetaAnnotationButOverridden(docxParameterUsingMetaAnnotationButOverridden);
         return propertyFileAcceptVm;
     }
-//end::annotation[]
-    @MemberSupport public Clob default0Act() {
-        return propertyFileAcceptVm.getTxtPropertyUsingAnnotation();
+//end::meta-annotation-overridden[]
+    @MemberSupport public Blob default0Act() {
+        return propertyFileAcceptVm.getDocxPropertyUsingMetaAnnotationButOverridden();
     }
 
 }

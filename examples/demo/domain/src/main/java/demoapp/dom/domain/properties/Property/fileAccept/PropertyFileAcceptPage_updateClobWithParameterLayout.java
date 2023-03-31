@@ -25,7 +25,7 @@ import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.applib.value.Clob;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,30 +33,30 @@ import lombok.RequiredArgsConstructor;
     semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
-    associateWith = "pdfPropertyUsingAnnotation"
-    , sequence = "1")
+        associateWith = "txtPropertyUsingAnnotation"
+        , sequence = "1")
 @RequiredArgsConstructor
-public class PropertyFileAcceptVm_updateWithParameterLayout {
+public class PropertyFileAcceptPage_updateClobWithParameterLayout {
 
-    private final PropertyFileAcceptVm propertyFileAcceptVm;
+    private final PropertyFileAcceptPage propertyFileAcceptVm;
 
 //tag::annotation[]
-    @MemberSupport public PropertyFileAcceptVm act(
+    @MemberSupport public PropertyFileAcceptPage act(
             @Parameter(
-                fileAccept = ".pdf"                     // <.>
+                fileAccept = ".txt"                     // <.>
                 , optionality = Optionality.OPTIONAL
             )
             @ParameterLayout(
                 describedAs =
-                    "@Parameter(fileAccept = \".pdf\")"
+                    "@Parameter(fileAccept = \".txt\")"
             )
-            final Blob pdfParameterUsingAnnotation) {
-        propertyFileAcceptVm.setPdfPropertyUsingAnnotation(pdfParameterUsingAnnotation);
+            final Clob parameterUsingAnnotation) {
+        propertyFileAcceptVm.setTxtPropertyUsingAnnotation(parameterUsingAnnotation);
         return propertyFileAcceptVm;
     }
 //end::annotation[]
-    @MemberSupport public Blob default0Act() {
-        return propertyFileAcceptVm.getPdfPropertyUsingAnnotation();
+    @MemberSupport public Clob default0Act() {
+        return propertyFileAcceptVm.getTxtPropertyUsingAnnotation();
     }
 
 }

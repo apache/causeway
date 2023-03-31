@@ -376,13 +376,13 @@ implements ObjectAction {
         // use it?
         final Consent usability = isUsable(target, interactionInitiatedBy, where);
         if(usability.isVetoed()) {
-            throw new DisabledException(usability.getReason());
+            throw new DisabledException(usability.getReasonAsString().orElse("no reason given"));
         }
 
         // do it?
         final Consent validity = isArgumentSetValid(head, arguments, interactionInitiatedBy);
         if(validity.isVetoed()) {
-            throw new RecoverableException(validity.getReason());
+            throw new RecoverableException(validity.getReasonAsString().orElse("no reason given"));
         }
 
         return execute(head, arguments, interactionInitiatedBy);

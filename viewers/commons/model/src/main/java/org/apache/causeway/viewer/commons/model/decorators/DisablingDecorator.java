@@ -46,7 +46,7 @@ public interface DisablingDecorator<T> {
 
         public static Optional<DisablingDecorationModel> of(@NonNull final Optional<InteractionVeto> usabilityVeto) {
             return usabilityVeto
-                    .map(veto->of(veto.getReason()));
+                    .map(veto->of(veto.getReasonAsString().orElse(null)));
         }
 
         public static Optional<DisablingDecorationModel> of(@NonNull final MemberInteraction<?, ?> memberInteraction) {

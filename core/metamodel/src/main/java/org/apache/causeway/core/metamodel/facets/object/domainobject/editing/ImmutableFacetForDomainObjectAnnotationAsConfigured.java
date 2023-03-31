@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainobject.editing;
 
+import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
 
@@ -25,7 +26,7 @@ public class ImmutableFacetForDomainObjectAnnotationAsConfigured
 extends ImmutableFacetForDomainObjectAnnotation {
 
     public ImmutableFacetForDomainObjectAnnotationAsConfigured(
-            final String reason,
+            final VetoReason reason,
             final FacetHolder holder) {
         super(reason, holder);
     }

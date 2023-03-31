@@ -35,12 +35,12 @@ import lombok.RequiredArgsConstructor;
         associateWith = "pdfPropertyUsingMetaAnnotation"
         , sequence = "1")
 @RequiredArgsConstructor
-public class PropertyFileAcceptVm_updateWithMetaAnnotation {
+public class PropertyFileAcceptPage_updateWithMetaAnnotation {
 
-    private final PropertyFileAcceptVm propertyFileAcceptVm;
+    private final PropertyFileAcceptPage propertyFileAcceptVm;
 
 //tag::meta-annotation[]
-    @MemberSupport public PropertyFileAcceptVm act(
+    @MemberSupport public PropertyFileAcceptPage act(
             @FileAcceptPdfMetaAnnotation                            // <.>
             @Parameter()
             @ParameterLayout(

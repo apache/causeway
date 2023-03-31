@@ -137,7 +137,7 @@ public class ObjectAdapterUpdateHelper {
                 }
                 if (disabled) {
                     // not allowed to update
-                    propertyRepr.mapPutString("invalidReason", usability.getReason());
+                    propertyRepr.mapPutString("invalidReason", usability.getReasonAsString().orElse(null));
                     allOk = false;
                     return allOk;
                 }
@@ -166,7 +166,7 @@ public class ObjectAdapterUpdateHelper {
                     allOk = false;
                 }
             } else {
-                propertyRepr.mapPutString("invalidReason", validity.getReason());
+                propertyRepr.mapPutString("invalidReason", validity.getReasonAsString().orElse(null));
                 allOk = false;
             }
         }

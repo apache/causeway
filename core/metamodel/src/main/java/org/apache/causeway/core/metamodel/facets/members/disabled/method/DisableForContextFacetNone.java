@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.facets.members.disabled.method;
 
+import java.util.Optional;
+
+import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.interactions.UsabilityContext;
 
@@ -32,11 +35,11 @@ extends DisableForContextFacetAbstract {
      * The reason this object is disabled, or <tt>null</tt> otherwise.
      *
      * <p>
-     * Always returns <tt>null</tt>.
+     * Always returns <tt>Optional.empty()</tt>.
      */
     @Override
-    public String disables(final UsabilityContext ic) {
-        return null;
+    public Optional<VetoReason> disables(final UsabilityContext ic) {
+        return Optional.empty();
     }
 
 }

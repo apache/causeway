@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.Action.domainEvent.subscribers;
+package demoapp.dom.domain.actions.Action.domainEvent;
 
 import java.util.List;
 
@@ -24,26 +24,21 @@ import org.apache.causeway.applib.events.domain.ActionDomainEvent;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 
-import demoapp.dom.domain.actions.Action.domainEvent.ActionDomainEventVm;
-import demoapp.dom.domain.actions.Action.domainEvent.ActionDomainEventVm_mixinUpdateText;
-
 // tag::class[]
 enum ActionDomainEventControlStrategy {
 
     DO_NOTHING{
         @Override
-        void on(ActionDomainEvent<?> ev
-                , ServiceRegistry serviceRegistry) {
+        void on(ActionDomainEvent<?> ev, ServiceRegistry serviceRegistry) {
         }
     },
     // ...
 // end::class[]
 
 // tag::hide[]
-    HIDE_BOTH {
+    HIDE_ACTION {
         @Override
-        void on(ActionDomainEvent<?> ev
-                , ServiceRegistry serviceRegistry) {
+        void on(ActionDomainEvent<?> ev, ServiceRegistry serviceRegistry) {
             switch (ev.getEventPhase()) {
                 case HIDE:
                     ev.hide();
@@ -51,53 +46,23 @@ enum ActionDomainEventControlStrategy {
             }
         }
     },
-    HIDE_REGULAR_ACTION {
-        @Override
-        void on(ActionDomainEvent<?> ev
-                , ServiceRegistry serviceRegistry) {
-            if (ev instanceof ActionDomainEventVm.UpdateTextDomainEvent) {
-                switch (ev.getEventPhase()) {
-                    case HIDE:
-                        ev.hide();
-                        break;
-                }
-            }
-        }
-    },
 // end::hide[]
 // tag::disable[]
-    DISABLE_BOTH {
+    DISABLE {
         @Override
-        void on(ActionDomainEvent<?> ev
-                , ServiceRegistry serviceRegistry) {
+        void on(ActionDomainEvent<?> ev, ServiceRegistry serviceRegistry) {
             switch (ev.getEventPhase()) {
                 case DISABLE:
-                    ev.disable("ControlStrategy set to DISABLE_BOTH");
+                    ev.disable("ControlStrategy set to DISABLE");
                     break;
             }
-
-        }
-    },
-    DISABLE_MIXIN_ACTION {
-        @Override
-        void on(ActionDomainEvent<?> ev
-                , ServiceRegistry serviceRegistry) {
-            if(ev instanceof ActionDomainEventVm_mixinUpdateText.DomainEvent) {
-                switch (ev.getEventPhase()) {
-                    case DISABLE:
-                        ev.disable("ControlStrategy set to DISABLE_MIXIN_ACTION");
-                        break;
-                }
-            }
-
         }
     },
 // end::disable[]
 // tag::validate[]
     VALIDATE_MUST_BE_UPPER_CASE{
         @Override
-        void on(ActionDomainEvent<?> ev
-                , ServiceRegistry serviceRegistry) {
+        void on(ActionDomainEvent<?> ev, ServiceRegistry serviceRegistry) {
             switch (ev.getEventPhase()) {
                 case VALIDATE:
                     String argument = (String) ev.getArguments().get(0);
@@ -106,16 +71,13 @@ enum ActionDomainEventControlStrategy {
                     }
                     break;
             }
-
         }
     },
 // end::validate[]
 // tag::executing[]
     EXECUTING_FORCE_UPPER_CASE{
         @Override
-        void on(ActionDomainEvent<?> ev
-                , ServiceRegistry serviceRegistry) {
-
+        void on(ActionDomainEvent<?> ev, ServiceRegistry serviceRegistry) {
             switch (ev.getEventPhase()) {
                 case EXECUTING:
                     List<Object> arguments = ev.getArguments();
@@ -129,8 +91,7 @@ enum ActionDomainEventControlStrategy {
 // tag::executed[]
     EXECUTED_ANNOUNCE{
         @Override
-        void on(ActionDomainEvent<?> ev
-                , ServiceRegistry serviceRegistry) {
+        void on(ActionDomainEvent<?> ev, ServiceRegistry serviceRegistry) {
             switch (ev.getEventPhase()) {
                 case EXECUTED:
                     serviceRegistry
@@ -146,7 +107,6 @@ enum ActionDomainEventControlStrategy {
 
 // tag::class[]
     ;
-    abstract void on(ActionDomainEvent<?> ev
-            , ServiceRegistry serviceRegistry);
+    abstract void on(ActionDomainEvent<?> ev, ServiceRegistry serviceRegistry);
 }
 // end::class[]

@@ -13,10 +13,6 @@ If no `domainEvent` is specified on the property itself, then the domain event c
 
 And if not specified at the class level, then an instance of `org.apache.causeway.applib.events.domain.CollectionDomainEvent.Default` is emitted as the fallback.
 
-[TIP]
-====
-The fallback domain event can be suppressed using the `causeway.applib.annotation.collection.domain-event.post-for-default` configuration property.
-====
 
 
 == Annotated Collection

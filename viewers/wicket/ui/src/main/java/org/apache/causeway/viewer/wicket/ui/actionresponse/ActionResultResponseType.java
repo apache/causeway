@@ -259,9 +259,6 @@ public enum ActionResultResponseType {
         val mapAbsentResultTo = /*model.getAction().getReturnType().isVoid()
                 ? ActionResultResponseType.VOID_AS_RELOAD : */
                 ActionResultResponseType.VOID_AS_EMPTY;
-        System.err.printf("model.getAction()-> %s%n", model.getAction().getFeatureIdentifier());
-        System.err.printf("model.getAction().getReturnType()-> %s%n",  model.getAction().getReturnType());
-        System.err.printf("mapAbsentResultTo-> %s%n", mapAbsentResultTo);
 
         val typeAndAdapter = determineFor(resultAdapter, mapAbsentResultTo, targetIfAny);
         return typeAndAdapter.type // mapped to 'mapAbsentResultTo' if adapter is unspecified or null

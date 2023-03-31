@@ -16,42 +16,32 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.Action.domainEvent.subscribers;
+package demoapp.dom.domain.actions.Action.domainEvent;
 
 import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
-import demoapp.dom.domain.actions.Action.domainEvent.ActionDomainEventVm;
 import lombok.RequiredArgsConstructor;
 
 
 //tag::class[]
-@Action(
-    semantics = SemanticsOf.IDEMPOTENT
-)
-@ActionLayout(
-    promptStyle = PromptStyle.INLINE
-    , associateWith = "controlUpdateText"
-    , sequence = "1")
+@Action(semantics = SemanticsOf.IDEMPOTENT)
 @RequiredArgsConstructor
-public class ActionDomainEventVm_controlUpdateTextInvocation {
+public class ActionDomainEventPage_changeControlStrategy {
 
-    private final ActionDomainEventVm actionDomainEventVm;
+    private final ActionDomainEventPage mixee;
 
-    @MemberSupport public ActionDomainEventVm act(final ActionDomainEventControlStrategy controlStrategy) {
-        eventActionDomainEventControlService.controlStrategy = controlStrategy;
-        return actionDomainEventVm;
+    @MemberSupport public ActionDomainEventPage act(ActionDomainEventControlStrategy controlStrategy) {
+        subscriber.controlStrategy = controlStrategy;
+        return mixee;
     }
     @MemberSupport public ActionDomainEventControlStrategy default0Act() {
-        return eventActionDomainEventControlService.controlStrategy;
+        return subscriber.controlStrategy;
     }
 
-    @Inject
-    ActionDomainEventControlService eventActionDomainEventControlService;
+    @Inject ActionDomainEventControlSubscriber subscriber;
 }
 //end::class[]

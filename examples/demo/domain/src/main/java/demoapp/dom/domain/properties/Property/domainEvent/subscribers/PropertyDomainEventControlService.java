@@ -26,7 +26,7 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 
-import demoapp.dom.domain.properties.Property.domainEvent.PropertyDomainEventVm;
+import demoapp.dom.domain.properties.Property.domainEvent.PropertyDomainEventPage;
 import lombok.RequiredArgsConstructor;
 
 // tag::class[]
@@ -39,8 +39,8 @@ class PropertyDomainEventControlService {
 
     PropertyDomainEventControlStrategy controlStrategy = PropertyDomainEventControlStrategy.DO_NOTHING;   // <.>
 
-    @EventListener(PropertyDomainEventVm.TextDomainEvent.class)     // <.>
-    public void on(PropertyDomainEventVm.TextDomainEvent ev) {
+    @EventListener(PropertyDomainEventPage.TextDomainEvent.class)     // <.>
+    public void on(PropertyDomainEventPage.TextDomainEvent ev) {
         controlStrategy.on(ev, serviceRegistry);
     }
 

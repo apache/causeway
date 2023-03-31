@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.Property.editing;
+package demoapp.dom.domain.properties.Property.fileAccept;
 
 import jakarta.inject.Named;
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -31,6 +31,8 @@ import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.applib.value.Clob;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
@@ -40,57 +42,66 @@ import lombok.Setter;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.PropertyEditingVm")
+@Named("demo.PropertyFileAcceptPage")
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        editing = Editing.DISABLED              // <.>
-)
-public class PropertyEditingVm implements HasAsciiDocDescription {
-    // ...
-//end::class[]
+        editing = Editing.ENABLED)
+public class PropertyFileAcceptPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "Property#editing";
+        return "Property#fileAccept";
     }
 
 //tag::annotation[]
     @Property(
-        editing = Editing.ENABLED               // <.>
-    )
-    @PropertyLayout(
-        describedAs = "@Property(editing = ENABLED)",
-        fieldSetId = "annotation", sequence = "1")
-    @XmlElement(required = true)
-    @Getter @Setter
-    private String propertyUsingAnnotation;
-//end::annotation[]
-
-//tag::meta-annotated[]
-    @Property()
-    @EditingEnabledMetaAnnotation               // <.>
-    @PropertyLayout(
-        describedAs = "@EditingEnabledMetaAnnotation",
-        fieldSetId = "meta-annotated", sequence = "1")
-    @XmlElement(required = true)
-    @Getter @Setter
-    private String propertyUsingMetaAnnotation;
-//end::meta-annotated[]
-
-//tag::meta-annotated-overridden[]
-    @EditingEnabledMetaAnnotation               // <.>
-    @Property(
-        editing = Editing.DISABLED              // <.>
+        fileAccept = ".pdf"                                 // <.>
     )
     @PropertyLayout(
         describedAs =
-            "@EditingEnabledMetaAnnotation " +
-            "@PropertyLayout(editing = DISABLED)",
-            fieldSetId = "meta-annotated-overridden", sequence = "1")
-    @XmlElement(required = false)
+            "@Property(fileAccept = \".pdf\")",
+        fieldSetId = "annotation", sequence = "1")
+    @XmlElement(required = true)
     @Getter @Setter
-    private String propertyUsingMetaAnnotationButOverridden;
+    private Blob pdfPropertyUsingAnnotation;
+//end::annotation[]
+
+//tag::annotation-clob[]
+    @Property(
+        fileAccept = ".txt"                     // <.>
+    )
+    @PropertyLayout(
+        describedAs =
+            "@Property(fileAccept = \".txt\")",
+        fieldSetId = "annotation", sequence = "1")
+    @XmlElement(required = true)
+    @Getter @Setter
+    private Clob txtPropertyUsingAnnotation;
+//end::annotation-clob[]
+
+//tag::meta-annotated[]
+    @Property()
+    @FileAcceptPdfMetaAnnotation                            // <.>
+    @PropertyLayout(
+        describedAs = "@FileAcceptPdfMetaAnnotation",
+        fieldSetId = "meta-annotated", sequence = "1")
+    @XmlElement(required = true)
+    @Getter @Setter
+    private Blob pdfPropertyUsingMetaAnnotation;
+//end::meta-annotated[]
+
+//tag::meta-annotated-overridden[]
+    @FileAcceptPdfMetaAnnotation                            // <.>
+    @Property(
+        fileAccept = ".docx"                                // <.>
+    )
+    @PropertyLayout(
+        describedAs =
+            "@FileAcceptPdfMetaAnnotation @PropertyLayout(...)",
+        fieldSetId = "meta-annotated-overridden", sequence = "1")
+    @XmlElement(required = true)
+    @Getter @Setter
+    private Blob docxPropertyUsingMetaAnnotationButOverridden;
 //end::meta-annotated-overridden[]
 
-//tag::class[]
 }
 //end::class[]

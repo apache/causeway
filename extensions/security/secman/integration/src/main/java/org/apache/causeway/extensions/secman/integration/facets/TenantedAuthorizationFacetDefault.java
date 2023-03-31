@@ -18,14 +18,14 @@
  */
 package org.apache.causeway.extensions.secman.integration.facets;
 
-import lombok.val;
-
 import java.util.List;
+import java.util.Optional;
 
 import jakarta.inject.Provider;
 
 import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.causeway.applib.services.user.UserService;
+import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -35,7 +35,8 @@ import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
 import org.apache.causeway.extensions.secman.applib.tenancy.spi.ApplicationTenancyEvaluator;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
-import org.springframework.lang.Nullable;
+
+import lombok.val;
 
 public class TenantedAuthorizationFacetDefault
 extends FacetAbstract
@@ -65,20 +66,21 @@ implements TenantedAuthorizationFacet {
 
     @Override
     public String hides(final VisibilityContext ic) {
-        return evaluate(ApplicationTenancyEvaluator::hides, ic.getHead());
+        return evaluate(ApplicationTenancyEvaluator::hides, ic.getHead())
+                .orElse(null);
     }
 
     @Override
-    public String disables(final UsabilityContext ic) {
-        return evaluate(ApplicationTenancyEvaluator::disables, ic.getHead());
+    public Optional<VetoReason> disables(final UsabilityContext ic) {
+        return evaluate(ApplicationTenancyEvaluator::disables, ic.getHead())
+                .map(VetoReason::explicit);
     }
 
-    @Nullable
-    private String evaluate(EvaluationDispatcher evaluationDispatcher, InteractionHead head) {
+    private Optional<String> evaluate(final EvaluationDispatcher evaluationDispatcher, final InteractionHead head) {
         if(evaluators == null
                 || evaluators.isEmpty()
                 || userService.isCurrentUserWithSudoAccessAllRole()) {
-            return null;
+            return Optional.empty();
         }
 
         val domainObject = head.getOwner().getPojo();
@@ -87,16 +89,16 @@ implements TenantedAuthorizationFacet {
         val applicationUser = findApplicationUser(userName);
         if (applicationUser == null) {
             // not expected, but best to be safe...
-            return "Could not locate application user for " + userName;
+            return Optional.of("Could not locate application user for " + userName);
         }
 
         for (val evaluator : evaluators) {
-            final String reason = evaluationDispatcher.dispatch(evaluator, domainObject, applicationUser);
-            if(reason != null) {
-                return reason;
+            final String reasonString = evaluationDispatcher.dispatch(evaluator, domainObject, applicationUser);
+            if(reasonString != null) {
+                return Optional.of(reasonString);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     interface EvaluationDispatcher {

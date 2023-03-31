@@ -21,6 +21,7 @@ package demoapp.dom.domain.properties.Property.fileAccept;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.SemanticsOf;
@@ -32,31 +33,30 @@ import lombok.RequiredArgsConstructor;
     semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
-        associateWith = "docxPropertyUsingMetaAnnotationButOverridden"
-        , sequence = "1")
+    associateWith = "pdfPropertyUsingAnnotation"
+    , sequence = "1")
 @RequiredArgsConstructor
-public class PropertyFileAcceptVm_updateWithMetaAnnotationOverridden {
+public class PropertyFileAcceptPage_updateWithParameterLayout {
 
-    private final PropertyFileAcceptVm propertyFileAcceptVm;
+    private final PropertyFileAcceptPage propertyFileAcceptVm;
 
-//tag::meta-annotation-overridden[]
-    @MemberSupport public PropertyFileAcceptVm act(
-            @FileAcceptPdfMetaAnnotation                    // <.>
+//tag::annotation[]
+    @MemberSupport public PropertyFileAcceptPage act(
             @Parameter(
-                fileAccept = ".docx"                        // <.>
+                fileAccept = ".pdf"                     // <.>
+                , optionality = Optionality.OPTIONAL
             )
             @ParameterLayout(
                 describedAs =
-                    "@FileAcceptPdfMetaAnnotation " +
-                    "@ParameterLayout(fileAccept = \".docx\")"
+                    "@Parameter(fileAccept = \".pdf\")"
             )
-            final Blob docxParameterUsingMetaAnnotationButOverridden) {
-        propertyFileAcceptVm.setDocxPropertyUsingMetaAnnotationButOverridden(docxParameterUsingMetaAnnotationButOverridden);
+            final Blob pdfParameterUsingAnnotation) {
+        propertyFileAcceptVm.setPdfPropertyUsingAnnotation(pdfParameterUsingAnnotation);
         return propertyFileAcceptVm;
     }
-//end::meta-annotation-overridden[]
+//end::annotation[]
     @MemberSupport public Blob default0Act() {
-        return propertyFileAcceptVm.getDocxPropertyUsingMetaAnnotationButOverridden();
+        return propertyFileAcceptVm.getPdfPropertyUsingAnnotation();
     }
 
 }

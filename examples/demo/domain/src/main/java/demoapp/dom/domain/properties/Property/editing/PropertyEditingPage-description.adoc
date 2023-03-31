@@ -15,8 +15,9 @@ Editing can also be specified at the class level.
 This will override any configured defaults, but just for the properties of that class:
 
 [source,java,indent=0]
+.PropertyEditingPage.java
 ----
-include::PropertyEditingVm.java[tags=class]
+include::PropertyEditingPage.java[tags=class]
 ----
 
 The property-level element can, in turn, overrides the configured or class-level default.
@@ -29,8 +30,9 @@ The `editing` element can be specified explicitly using an annotation:
 * for properties, using `@Property#editing()`:
 +
 [source,java,indent=0]
+.PropertyEditingPage.java
 ----
-include::PropertyEditingVm.java[tags=annotation]
+include::PropertyEditingPage.java[tags=annotation]
 ----
 <.> explicitly specifies that the property is editable
 
@@ -52,8 +54,9 @@ include::EditingEnabledMetaAnnotation.java[tags=class]
 * and can be applied to a property:
 +
 [source,java,indent=0]
+.PropertyEditingPage.java
 ----
-include::PropertyEditingVm.java[tags=meta-annotated]
+include::PropertyEditingPage.java[tags=meta-annotated]
 ----
 <.> semantic is inherited from the meta-annotation
 
@@ -66,8 +69,9 @@ The meta-annotation can itself be overridden:
 * in a property:
 +
 [source,java,indent=0]
+.PropertyEditingPage.java
 ----
-include::PropertyEditingVm.java[tags=meta-annotated-overridden]
+include::PropertyEditingPage.java[tags=meta-annotated-overridden]
 ----
 <.> semantic from meta-annotation ...
 <.> \... is overridden by the `@Property` annotation

@@ -90,7 +90,7 @@ class ActionInteractionTest_notUsingAllowSafeSemantics extends InteractionTestAb
                 .checkVisibility()
                 .checkUsability();
         val veto = actionInteraction.getInteractionVeto().orElseThrow(); // should not throw
-        assertEquals("Not authorized to edit", veto.getReason());
+        assertEquals("Not authorized to edit", veto.getReasonAsString().orElse(null));
     }
 
     @Test
@@ -99,7 +99,7 @@ class ActionInteractionTest_notUsingAllowSafeSemantics extends InteractionTestAb
                 .checkVisibility()
                 .checkUsability();
         val veto = actionInteraction.getInteractionVeto().orElseThrow(); // should not throw
-        assertEquals("Not authorized to edit", veto.getReason());
+        assertEquals("Not authorized to edit", veto.getReasonAsString().orElse(null));
     }
 
 }

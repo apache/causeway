@@ -18,7 +18,10 @@
  */
 package org.apache.causeway.core.metamodel.facets.param.disable;
 
+import java.util.Optional;
+
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.interactions.DisablingInteractionAdvisor;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -33,8 +36,8 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 public interface ActionParameterDisabledFacet extends Facet, DisablingInteractionAdvisor {
 
     /**
-     * Reason why the parameter is disabled, or <tt>null</tt> if okay.
+     * Reason why the parameter is disabled, or <tt>Optional.empts()</tt> if okay.
      */
-    public String disabledReason(ManagedObject target, Can<ManagedObject> arguments);
+    public Optional<VetoReason> disabledReason(ManagedObject target, Can<ManagedObject> arguments);
 
 }

@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.property.modify;
 
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -27,6 +28,7 @@ import org.apache.causeway.applib.services.i18n.TranslatableString;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.DomainEventHelper;
 import org.apache.causeway.core.metamodel.facets.SingleClassValueFacetAbstract;
@@ -100,7 +102,7 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
     }
 
     @Override
-    public String disables(final UsabilityContext ic) {
+    public Optional<VetoReason> disables(final UsabilityContext ic) {
 
         final PropertyDomainEvent<?, ?> event =
                 domainEventHelper.postEventForProperty(
@@ -108,14 +110,18 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
                         getEventType(), null,
                         getFacetHolder(), ic.getHead(),
                         null, null);
-        if (event != null && event.isDisabled()) {
+        if (event != null
+                && event.isDisabled()) {
+
             final TranslatableString reasonTranslatable = event.getDisabledReasonTranslatable();
-            if(reasonTranslatable != null) {
-                return reasonTranslatable.translate(translationService, translationContext);
-            }
-            return event.getDisabledReason();
+            final String reasonString = reasonTranslatable != null
+                    ? reasonTranslatable.translate(translationService, translationContext)
+                    : event.getDisabledReason();
+
+            return Optional.ofNullable(reasonString)
+                .map(VetoReason::explicit);
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override

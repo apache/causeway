@@ -35,7 +35,7 @@ import org.springframework.context.annotation.Profile;
 @Entity
 @Table(
     schema = "demo",
-    name = "DomainObjectMixinMethodJpaJpa"
+    name = "DomainObjectMixinMethodJpa"
 )
 @EntityListeners(CausewayEntityListener.class)
 @Named("demo.DomainObjectMixinMethodJpa")

@@ -19,11 +19,13 @@
 package org.apache.causeway.core.metamodel.interactions.managed;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.core.metamodel.consent.Consent;
+import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.consent.Veto;
 
 import lombok.AccessLevel;
@@ -95,8 +97,11 @@ public class InteractionVeto implements Serializable {
         return of(VetoType.ACTION_PARAM_INVALID, new Veto(reason));
     }
 
-    public String getReason() {
+    public Optional<VetoReason> getReason() {
         return getVetoConsent().getReason();
+    }
+    public Optional<String> getReasonAsString() {
+        return getVetoConsent().getReasonAsString();
     }
 
     public String getDescription() {
@@ -105,7 +110,7 @@ public class InteractionVeto implements Serializable {
 
     @Override
     public String toString() {
-        return getReason();
+        return getReason().map(VetoReason::string).orElse("not vetoed");
     }
 
 }

@@ -18,41 +18,30 @@
  */
 package demoapp.dom.domain.actions.Action.domainEvent;
 
+import lombok.RequiredArgsConstructor;
+
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.events.domain.ActionDomainEvent;
-
-import lombok.RequiredArgsConstructor;
 
 
 //tag::class[]
-@Action(
-    semantics = SemanticsOf.SAFE
-    , domainEvent =
-        ActionDomainEventVm_mixinUpdateText.DomainEvent.class           // <.>
-)
-@ActionLayout(
-    describedAs =
-        "@Action(domainEvent = ActionDomainEventVm_mixinUpdateText.DomainEvent.class)"
-    , associateWith = "text"
-    , sequence = "2"
-)
+@Action()                                                       // <.>
 @RequiredArgsConstructor
-public class ActionDomainEventVm_mixinUpdateText {
+public class ActionDomainEventPage_updateTextNotAnnotated {
+    // ...
+//end::class[]
 
-    public static class DomainEvent                                     // <.>
-            extends ActionDomainEvent<ActionDomainEventVm> {}
+    private final ActionDomainEventPage actionDomainEventVm;
 
-    private final ActionDomainEventVm actionDomainEventVm;
-
-    @MemberSupport public ActionDomainEventVm act(final String text) {
+    @MemberSupport public ActionDomainEventPage act(final String text) {
         actionDomainEventVm.setText(text);
         return actionDomainEventVm;
     }
     @MemberSupport public String default0Act() {
         return actionDomainEventVm.getText();
     }
+//tag::class[]
 }
 //end::class[]

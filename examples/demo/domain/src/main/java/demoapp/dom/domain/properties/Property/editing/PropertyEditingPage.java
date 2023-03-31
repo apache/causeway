@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.Property.fileAccept;
+package demoapp.dom.domain.properties.Property.editing;
 
 import jakarta.inject.Named;
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -31,8 +31,6 @@ import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.value.Blob;
-import org.apache.causeway.applib.value.Clob;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
@@ -42,66 +40,57 @@ import lombok.Setter;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.PropertyFileAcceptVm")
+@Named("demo.PropertyEditingPage")
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        editing = Editing.ENABLED)
-public class PropertyFileAcceptVm implements HasAsciiDocDescription {
+        editing = Editing.DISABLED              // <.>
+)
+public class PropertyEditingPage implements HasAsciiDocDescription {
+    // ...
+//end::class[]
 
     @ObjectSupport public String title() {
-        return "Property#fileAccept";
+        return "Property#editing";
     }
 
 //tag::annotation[]
     @Property(
-        fileAccept = ".pdf"                                 // <.>
+        editing = Editing.ENABLED               // <.>
     )
     @PropertyLayout(
-        describedAs =
-            "@Property(fileAccept = \".pdf\")",
+        describedAs = "@Property(editing = ENABLED)",
         fieldSetId = "annotation", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
-    private Blob pdfPropertyUsingAnnotation;
+    private String propertyUsingAnnotation;
 //end::annotation[]
-
-//tag::annotation-clob[]
-    @Property(
-        fileAccept = ".txt"                     // <.>
-    )
-    @PropertyLayout(
-        describedAs =
-            "@Property(fileAccept = \".txt\")",
-        fieldSetId = "annotation", sequence = "1")
-    @XmlElement(required = true)
-    @Getter @Setter
-    private Clob txtPropertyUsingAnnotation;
-//end::annotation-clob[]
 
 //tag::meta-annotated[]
     @Property()
-    @FileAcceptPdfMetaAnnotation                            // <.>
+    @EditingEnabledMetaAnnotation               // <.>
     @PropertyLayout(
-        describedAs = "@FileAcceptPdfMetaAnnotation",
+        describedAs = "@EditingEnabledMetaAnnotation",
         fieldSetId = "meta-annotated", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
-    private Blob pdfPropertyUsingMetaAnnotation;
+    private String propertyUsingMetaAnnotation;
 //end::meta-annotated[]
 
 //tag::meta-annotated-overridden[]
-    @FileAcceptPdfMetaAnnotation                            // <.>
+    @EditingEnabledMetaAnnotation               // <.>
     @Property(
-        fileAccept = ".docx"                                // <.>
+        editing = Editing.DISABLED              // <.>
     )
     @PropertyLayout(
         describedAs =
-            "@FileAcceptPdfMetaAnnotation @PropertyLayout(...)",
-        fieldSetId = "meta-annotated-overridden", sequence = "1")
-    @XmlElement(required = true)
+            "@EditingEnabledMetaAnnotation " +
+            "@Property(editing = DISABLED)",
+            fieldSetId = "meta-annotated-overridden", sequence = "1")
+    @XmlElement(required = false)
     @Getter @Setter
-    private Blob docxPropertyUsingMetaAnnotationButOverridden;
+    private String propertyUsingMetaAnnotationButOverridden;
 //end::meta-annotated-overridden[]
 
+//tag::class[]
 }
 //end::class[]

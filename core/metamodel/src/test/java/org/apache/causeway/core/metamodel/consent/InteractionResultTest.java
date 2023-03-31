@@ -26,6 +26,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
+
 class InteractionResultTest {
 
     private InteractionResult result;
@@ -42,7 +44,7 @@ class InteractionResultTest {
 
     @Test
     public void shouldHaveNullReasonWhenJustInstantiated() {
-        assertEquals(null, result.getReason());
+        assertEquals(null, extractReason(result));
     }
 
     @Test
@@ -53,20 +55,20 @@ class InteractionResultTest {
 
     @Test
     public void shouldHaveNonNullReasonWhenAdvisedWithNonNull() {
-        result.advise("foo", InteractionAdvisor.forTesting());
-        assertEquals("foo", result.getReason());
+        result.advise(vetoReason("foo"), InteractionAdvisor.forTesting());
+        assertEquals("foo", extractReason(result));
     }
 
     @Test
     public void shouldConcatenateAdviseWhenAdvisedWithNonNull() {
-        result.advise("foo", InteractionAdvisor.forTesting());
-        result.advise("bar", InteractionAdvisor.forTesting());
-        assertEquals("foo; bar", result.getReason());
+        result.advise(vetoReason("foo"), InteractionAdvisor.forTesting());
+        result.advise(vetoReason("bar"), InteractionAdvisor.forTesting());
+        assertEquals("foo; bar", extractReason(result));
     }
 
     @Test
     public void shouldNotBeEmptyWhenAdvisedWithNonNull() {
-        result.advise("foo", InteractionAdvisor.forTesting());
+        result.advise(vetoReason("foo"), InteractionAdvisor.forTesting());
         assertTrue(result.isVetoing());
         assertFalse(result.isNotVetoing());
     }
@@ -76,7 +78,17 @@ class InteractionResultTest {
         result.advise(null, InteractionAdvisor.forTesting());
         assertTrue(result.isNotVetoing());
         assertFalse(result.isVetoing());
-        assertEquals(null, result.getReason());
+        assertEquals(null, extractReason(result));
+    }
+
+    // -- HELPER
+
+    static Consent.VetoReason vetoReason(final String reasonString) {
+        return Consent.VetoReason.explicit(reasonString);
+    }
+
+    static String extractReason(final InteractionResult result) {
+        return result.getReason().map(VetoReason::string).orElse(null);
     }
 
 }

@@ -975,6 +975,7 @@
         <mml:attr name="facet" value="ImmutableFacetForDomainObjectAnnotationAsConfigured"/>
         <mml:attr name="interactionAdvisors" value="DisablingOrEnabling"/>
         <mml:attr name="precedence" value="DEFAULT"/>
+        <mml:attr name="reason" value="Always immmutable"/>
       </mml:facet>
       <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
         <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>

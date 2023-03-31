@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.interactions;
 
+import java.util.Optional;
+
+import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract.DisablingOrEnabling;
 
 /**
@@ -40,6 +43,6 @@ extends InteractionAdvisorFacet, DisablingOrEnabling {
      * They must however guard against a <tt>null</tt>
      * {@link InteractionContext#getTarget() target} - this is not guaranteed to be populated.
      */
-    String disables(UsabilityContext ic);
+    Optional<VetoReason> disables(UsabilityContext ic);
 
 }

@@ -31,6 +31,7 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFragement;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
@@ -82,7 +83,7 @@ extends ScalarPanelAbstract2 {
         case CAN_EDIT_INLINE_VIA_ACTION:
         case EDITING_WITH_LINK_TO_NESTED:
             // setup as output-format (with links to edit)
-            fieldFragement = FieldFragement.LINK;
+            fieldFragement = FieldFragement.LINK_TO_PROMT;
             break;
         case EDITING:
             // setup as input-format
@@ -149,7 +150,7 @@ extends ScalarPanelAbstract2 {
                     .orElseGet(()->formComponent.getClass().getName()));
             xrayDetails.put("formComponent.id", formComponent.getId());
             xrayDetails.put("formComponent.validators (count)", ""+_NullSafe.size(formComponent.getValidators()));
-            xrayDetails.put("scalarModel.disableReasonIfAny", ""+scalarModel().disableReasonIfAny());
+            xrayDetails.put("scalarModel.disableReason", ""+scalarModel().disabledReason().map(InteractionVeto::getReason).orElse(null));
             xrayDetails.put("scalarModel.whetherHidden", ""+scalarModel().whetherHidden());
             xrayDetails.put("scalarModel.identifier", ""+scalarModel().getIdentifier());
             xrayDetails.put("scalarModel.choices (count)", ""+scalarModel().getChoices().size());

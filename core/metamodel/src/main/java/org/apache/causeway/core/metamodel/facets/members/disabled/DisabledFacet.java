@@ -18,8 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.facets.members.disabled;
 
-import org.springframework.lang.Nullable;
+import java.util.Optional;
 
+import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.WhereValueFacet;
 import org.apache.causeway.core.metamodel.interactions.DisablingInteractionAdvisor;
@@ -38,33 +39,24 @@ public interface DisabledFacet
 extends WhereValueFacet, DisablingInteractionAdvisor {
 
     public enum Semantics {
-
         /** regular semantics */
         DISABLED,
-
         /** inverted semantics */
         ENABLED;
-
-        public boolean isDisabled() {
-            return this == DISABLED;
-        }
-
-        public boolean isEnabled() {
-            return this == ENABLED;
-        }
+        public boolean isDisabled() { return this == DISABLED; }
+        public boolean isEnabled() { return this == ENABLED; }
     }
 
     /**
      * "Special" phrase returned for facets which are always disabled.
      */
-    String ALWAYS_DISABLED_REASON = "Always disabled";
+    VetoReason ALWAYS_DISABLED_REASON = VetoReason.inferred("Always disabled");
 
     /**
-     * The reason why the (feature of the) target object is currently disabled,
-     * or <tt>null</tt> if enabled.
+     * Optionally the reason why the (feature of the) target object is currently disabled,
+     * or <tt>Optional.empty()</tt> if enabled.
      */
-    @Nullable
-    public String disabledReason(ManagedObject target);
+    public Optional<VetoReason> disabledReason(ManagedObject target);
 
     public Semantics getSemantics();
 

@@ -72,7 +72,7 @@ implements HasUiProperty {
     public String validate(final ManagedObject proposedNewValue) {
         return getManagedProperty()
                 .checkValidity(proposedNewValue)
-                .map(InteractionVeto::getReason)
+                .flatMap(InteractionVeto::getReasonAsString)
                 .orElse(null);
     }
 

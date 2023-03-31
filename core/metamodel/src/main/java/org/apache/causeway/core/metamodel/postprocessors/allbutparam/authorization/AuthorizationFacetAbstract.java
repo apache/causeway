@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization;
 
+import java.util.Optional;
+
+import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -67,10 +70,10 @@ implements AuthorizationFacet {
     }
 
     @Override
-    public String disables(final UsabilityContext ic) {
+    public Optional<VetoReason> disables(final UsabilityContext ic) {
 
         if(ic.getHead().getOwner().getSpecification().isValue()) {
-            return null; // never disable value-types
+            return Optional.empty(); // never disable value-types
         }
 
         val disables = authorizationManager
@@ -84,7 +87,7 @@ implements AuthorizationFacet {
             log.debug("disables[{}] -> {}", ic.getIdentifier(), disables);
         }
 
-        return disables;
+        return Optional.ofNullable(disables).map(VetoReason::explicit);
     }
 
 
