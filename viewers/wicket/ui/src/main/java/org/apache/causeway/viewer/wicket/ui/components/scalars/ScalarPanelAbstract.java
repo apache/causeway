@@ -45,6 +45,7 @@ import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.debug._Probe.EntryPoint;
 import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
 import org.apache.causeway.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
+import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.util.Facets;
@@ -363,7 +364,7 @@ implements ScalarModelChangeListener {
 
         val scalarModel = scalarModel();
 
-        final String disableReasonIfAny = scalarModel.disableReasonIfAny();
+        final String disableReasonIfAny = scalarModel.disabledReason().map(InteractionVeto::getReason).orElse(null);
         final boolean mustBeEditable = scalarModel.mustBeEditable();
         if (disableReasonIfAny != null) {
             if(mustBeEditable) {

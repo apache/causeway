@@ -31,7 +31,6 @@ import org.apache.wicket.model.IModel;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
@@ -104,33 +103,65 @@ public class ScalarFragmentFactory {
 
     @RequiredArgsConstructor
     public static enum FieldFragement {
-        LINK("fragment-fieldFrame-withLink"){
+        /**
+         * field linking to its editing prompt
+         */
+        LINK_TO_PROMT("fragment-fieldFrame-withLink"){
             @Override
             public RepeatingView createButtonContainer(
                     final MarkupContainer container) {
                 return Wkt.repeatingViewAdd(container, "scalarValueInlinePromptLink-buttons");
             }
         },
-        NO_LINK_VIEWING("fragment-fieldFrame-withoutLink-viewing"),
+        /**
+         * readonly field
+         */
+        NO_LINK_VIEWING("fragment-fieldFrame-withoutLink-viewing") {
+            @Override
+            public RepeatingView createButtonContainer(
+                    final MarkupContainer container) {
+                // typically would hold buttons 'reason-disabled' and 'copy-to-clipboard'
+                return Wkt.repeatingViewAdd(container, "scalarValueView-buttons");
+            }
+        },
+        /**
+         * directly editable field
+         */
         NO_LINK_EDITING("fragment-fieldFrame-withoutLink-editing") {
             @Override
             public RepeatingView createButtonContainer(
                     final MarkupContainer container) {
+                // typically would hold buttons 'edit', 'clear-field' and 'copy-to-clipboard'
                 return Wkt.repeatingViewAdd(container, "scalarValueInput-buttons");
             }
-        },
-        ;
+        };
+
+        public boolean isLinkToPrompt() { return this == LINK_TO_PROMT; }
+        public boolean isNoLinkViewing() { return this == NO_LINK_VIEWING; }
+        public boolean isNoLinkEditing() { return this == NO_LINK_EDITING; }
+
+        public static Optional<FieldFragement> matching(final @Nullable MarkupContainer container) {
+            if(container instanceof Fragment) {
+                final String fragmentId = ((Fragment)container).getAssociatedMarkupId();
+                for(var fieldFragement : FieldFragement.values()) {
+                    if(fieldFragement.getFragmentId().equals(fragmentId)) {
+                        return Optional.of(fieldFragement);
+                    }
+                }
+            }
+            return Optional.empty();
+        }
+
         @Getter private final String fragmentId;
         @Getter private final String containerId = "container-fieldFrame";
-        public boolean isMatching(final @Nullable MarkupContainer container) {
+
+        private boolean isMatching(final @Nullable MarkupContainer container) {
             if(container instanceof Fragment) {
                 return fragmentId.equals(((Fragment)container).getAssociatedMarkupId());
             }
             return false;
         }
-        public RepeatingView createButtonContainer(final MarkupContainer container) {
-            throw _Exceptions.unsupportedOperation("not supported by %s", this);
-        }
+        public abstract RepeatingView createButtonContainer(final MarkupContainer container);
     }
 
 

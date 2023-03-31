@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.interactions.managed;
 
+import java.util.Optional;
+
 import org.apache.causeway.commons.binding.Bindable;
 import org.apache.causeway.commons.binding.Observable;
 import org.apache.causeway.commons.collections.Can;
@@ -179,11 +181,9 @@ public class PropertyNegotiationModel implements ManagedValue {
 
     // -- USABILITY
 
-    public String disableReasonIfAny() {
+    public Optional<InteractionVeto> disabledReason() {
         return managedProperty
-                .checkUsability()
-                .map(InteractionVeto::getReason)
-                .orElse(null);
+                .checkUsability();
     }
 
     // -- VALIDATION

@@ -54,6 +54,14 @@ public class InteractionVeto implements Serializable {
     @NonNull private final VetoType vetoType;
     @NonNull private final Consent vetoConsent;
 
+    /**
+     * Veto explicitly given. That is, not inferred by the framework.
+     * <p>
+     * Introduced to help decide whether or not to display a 'disabled-reason' icon in the UI.
+     */
+    @Getter
+    private final boolean explicitlyGiven = true; //FIXME[3401] false for inferred cases
+
     public static InteractionVeto notFound(
             @NonNull final Identifier.Type memberType,
             @Nullable final String memberId) {
