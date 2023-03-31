@@ -21,8 +21,6 @@ package org.apache.causeway.core.metamodel.facets.members.disabled;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
@@ -49,7 +47,7 @@ implements DisabledFacet {
      * when either sub-classes override {@link #disabledReason(ManagedObject)}
      * or the semantics is inverted (ENABLED)
      */
-    private final @Nullable VetoReason reason;
+    private final @NonNull VetoReason reason;
 
     protected DisabledFacetAbstract(
             final Where where,
@@ -71,18 +69,16 @@ implements DisabledFacet {
 
     @Override
     public Optional<VetoReason> disabledReason(final ManagedObject targetAdapter) {
-        if(getSemantics().isEnabled()) {
-            return Optional.empty();
-        }
-        return Optional.of(reason!=null
-                ? reason
-                : ALWAYS_DISABLED_REASON);
+        // handle inverted semantics
+        return getSemantics().isEnabled()
+            ? Optional.empty()
+            : Optional.of(reason);
     }
 
     @Override
     public Optional<VetoReason> disables(final UsabilityContext ic) {
         if(getSemantics().isEnabled()) {
-            return null;
+            return Optional.empty();
         }
         final ManagedObject target = ic.getTarget();
         final Optional<VetoReason> disabledReason = disabledReason(target);

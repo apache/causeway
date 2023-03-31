@@ -49,8 +49,10 @@ extends DisabledFacetAbstract {
                 return null;
 
             case DISABLED:
-                final String reasonString = _Strings.nullToEmpty(property.editingDisabledReason());
-                final VetoReason disabledReason = VetoReason.explicit(reasonString);
+                 final VetoReason disabledReason = _Strings.isNullOrEmpty(property.editingDisabledReason())
+                     ? ALWAYS_DISABLED_REASON
+                     : VetoReason.explicit(property.editingDisabledReason());
+
                 return new DisabledFacetForPropertyAnnotation(disabledReason, holder);
             case ENABLED:
                 return new DisabledFacetForPropertyAnnotationInvertedSemantics(holder);

@@ -21,6 +21,9 @@ package org.apache.causeway.core.metamodel.consent;
 import java.io.Serializable;
 import java.util.Optional;
 
+import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.base._Strings;
+
 import lombok.NonNull;
 import lombok.experimental.Accessors;
 
@@ -34,9 +37,11 @@ public interface Consent {
         private final boolean inferred;
         private final @NonNull String string;
         public static VetoReason inferred(final String reason) {
+            _Assert.assertTrue(_Strings.isNotEmpty(reason));
             return new VetoReason(true, reason);
         }
         public static VetoReason explicit(final String reason) {
+            _Assert.assertTrue(_Strings.isNotEmpty(reason));
             return new VetoReason(false, reason);
         }
         public Optional<VetoReason> toOptional() {
