@@ -248,9 +248,20 @@ public enum ActionResultResponseType {
             final @Nullable ManagedObject resultAdapter,
             final Can<ManagedObject> args) {
 
-        val mapAbsentResultTo = model.getAction().getReturnType().isVoid()
-                ? ActionResultResponseType.VOID_AS_RELOAD
-                : ActionResultResponseType.VOID_AS_EMPTY;
+        /*
+         * XXX won't implement CAUSEWAY-3372 (reload on void action result)
+         * because we found a counter example, where we don't want this behavior, that is:
+         * @Action
+         * public void delete() {
+         *     repositoryService.removeAndFlush(this);
+         * }
+         */
+        val mapAbsentResultTo = /*model.getAction().getReturnType().isVoid()
+                ? ActionResultResponseType.VOID_AS_RELOAD : */
+                ActionResultResponseType.VOID_AS_EMPTY;
+        System.err.printf("model.getAction()-> %s%n", model.getAction().getFeatureIdentifier());
+        System.err.printf("model.getAction().getReturnType()-> %s%n",  model.getAction().getReturnType());
+        System.err.printf("mapAbsentResultTo-> %s%n", mapAbsentResultTo);
 
         val typeAndAdapter = determineFor(resultAdapter, mapAbsentResultTo, targetIfAny);
         return typeAndAdapter.type // mapped to 'mapAbsentResultTo' if adapter is unspecified or null
