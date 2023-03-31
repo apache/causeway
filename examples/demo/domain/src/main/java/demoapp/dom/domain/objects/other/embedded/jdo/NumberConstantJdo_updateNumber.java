@@ -18,14 +18,13 @@
  */
 package demoapp.dom.domain.objects.other.embedded.jdo;
 
-import org.springframework.context.annotation.Profile;
+import lombok.RequiredArgsConstructor;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.PromptStyle;
-
-import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 
 @Profile("demo-jdo")
 // tag::class[]

@@ -18,25 +18,15 @@
  */
 package demoapp.dom.domain.objects.DomainObject.introspection.encapsulated.jpa;
 
-import jakarta.inject.Named;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-
-import org.springframework.context.annotation.Profile;
-
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Introspection;
-import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
-
 import demoapp.dom.domain.objects.DomainObject.introspection.encapsulated.DomainObjectIntrospectionEncapsulated;
 import lombok.NoArgsConstructor;
+
+import jakarta.inject.Named;
+import jakarta.persistence.*;
+
+import org.apache.causeway.applib.annotation.*;
+import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
+import org.springframework.context.annotation.Profile;
 
 @Profile("demo-jpa")
 @Entity
@@ -57,7 +47,7 @@ public class DomainObjectIntrospectionEncapsulatedJpa
     // ...
 //end::class[]
 
-    public DomainObjectIntrospectionEncapsulatedJpa(final String value) {
+    public DomainObjectIntrospectionEncapsulatedJpa(String value) {
         setName(value);
     }
 
@@ -76,7 +66,7 @@ public class DomainObjectIntrospectionEncapsulatedJpa
     private String getName() {                                                      // <1>
         return name;
     }
-    private void setName(final String name) {
+    private void setName(String name) {
         this.name = name;
     }
 

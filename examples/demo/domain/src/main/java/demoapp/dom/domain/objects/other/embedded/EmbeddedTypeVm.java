@@ -18,6 +18,10 @@
  */
 package demoapp.dom.domain.objects.other.embedded;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.domain.objects.other.embedded.persistence.NumberConstantEntity;
+
 import java.util.List;
 
 import jakarta.inject.Inject;
@@ -27,10 +31,6 @@ import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.objects.other.embedded.persistence.NumberConstantEntity;
 
 // tag::class[]
 @Named("demo.EmbeddedTypeVm")

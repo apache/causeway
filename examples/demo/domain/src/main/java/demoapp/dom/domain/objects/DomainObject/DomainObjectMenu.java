@@ -24,24 +24,21 @@ import jakarta.inject.Named;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainService;
-import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
-import demoapp.dom.domain.objects.DomainObject.aliased.DomainObjectAliasedVm;
-import demoapp.dom.domain.objects.DomainObject.autoComplete.DomainObjectAutoCompleteVm;
-import demoapp.dom.domain.objects.DomainObject.bounded.DomainObjectBoundingVm;
-import demoapp.dom.domain.objects.DomainObject.editing.DomainObjectEditingVm;
+import demoapp.dom.domain.objects.DomainObject.aliased.DomainObjectAliasedPage;
+import demoapp.dom.domain.objects.DomainObject.autoComplete.DomainObjectAutoCompletePage;
+import demoapp.dom.domain.objects.DomainObject.bounded.DomainObjectBoundingPage;
+import demoapp.dom.domain.objects.DomainObject.editing.DomainObjectEditingPage;
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingVm;
-import demoapp.dom.domain.objects.DomainObject.introspection.DomainObjectIntrospectionVm;
-import demoapp.dom.domain.objects.DomainObject.mixinMethod.DomainObjectMixinMethodVm;
-import demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.StatefulVmJaxbRefsEntity;
-import demoapp.dom.domain.objects.DomainObject.nature.viewmodels.usingjaxb.StatefulVmUsingJaxb;
+import demoapp.dom.domain.objects.DomainObject.introspection.DomainObjectIntrospectionPage;
+import demoapp.dom.domain.objects.DomainObject.mixinMethod.DomainObjectMixinMethodPage;
+import demoapp.dom.domain.objects.DomainObject.nature.DomainObjectNaturePage;
 import demoapp.dom.domain.objects.DomainObject.xxxDomainEvent.DomainObjectDomainEventsVm;
 import demoapp.dom.domain.objects.DomainObject.xxxLifecycleEvent.DomainObjectLifecyleEventsVm;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @Named("demo.DomainObjectMenu")
 @DomainService(
@@ -53,26 +50,26 @@ public class DomainObjectMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-circle", describedAs = "Specify logical type name aliases")
-    public DomainObjectAliasedVm aliased() {
-        return new DomainObjectAliasedVm();
+    public DomainObjectAliasedPage aliased() {
+        return new DomainObjectAliasedPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-question-circle", describedAs = "Search object in prompt")
-    public DomainObjectAutoCompleteVm autoComplete(){
-        return new DomainObjectAutoCompleteVm();
+    public DomainObjectAutoCompletePage autoComplete(){
+        return new DomainObjectAutoCompletePage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-list-ul", describedAs = "Choose 'reference data' object (one of a bounded set) in prompt")
-    public DomainObjectBoundingVm bounding(){
-        return new DomainObjectBoundingVm();
+    public DomainObjectBoundingPage bounding(){
+        return new DomainObjectBoundingPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-pencil-alt", describedAs = "Default editability of properties")
-    public DomainObjectEditingVm editing() {
-        return new DomainObjectEditingVm();
+    public DomainObjectEditingPage editing() {
+        return new DomainObjectEditingPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
@@ -82,37 +79,21 @@ public class DomainObjectMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-triangle-person-digging", describedAs = "Control over introspection process")
-    public DomainObjectIntrospectionVm introspection(){
-        return new DomainObjectIntrospectionVm();
+    @ActionLayout(cssClassFa="fa-pen-ruler", describedAs = "Control over introspection process")
+    public DomainObjectIntrospectionPage introspection(){
+        return new DomainObjectIntrospectionPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-tools", describedAs = "For mixins, override the default method name")
-    public DomainObjectMixinMethodVm mixinMethod() {
-        return new DomainObjectMixinMethodVm();
+    @ActionLayout(cssClassFa="fa-mortar-pestle", describedAs = "For mixins, override the default method name")
+    public DomainObjectMixinMethodPage mixinMethod() {
+        return new DomainObjectMixinMethodPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa = "fa-gamepad", describedAs = "@DomainObject(nature=VIEW_MODEL) for a Stateful View Model")
-    public StatefulVmUsingJaxb natureStateful(final String message) {
-        val viewModel = new StatefulVmUsingJaxb();
-        viewModel.setMessage(message);
-        return viewModel;
-    }
-    @MemberSupport public String default0NatureStateful() {
-        return "Some initial state";
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa = "fa-gamepad", describedAs = "@DomainObject(nature=VIEW_MODEL) for a Stateful View Model referencing an entity")
-    public StatefulVmJaxbRefsEntity natureStatefulRefsEntity(final String message) {
-        val viewModel = new StatefulVmJaxbRefsEntity();
-        viewModel.setMessage(message);
-        return viewModel;
-    }
-    @MemberSupport public String default0NatureStatefulRefsEntity() {
-        return "Some initial state";
+    public DomainObjectNaturePage nature() {
+        return new DomainObjectNaturePage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)

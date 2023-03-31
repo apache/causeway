@@ -18,19 +18,14 @@
  */
 package demoapp.dom.domain.objects.other.mixins;
 
-import jakarta.inject.Named;
-
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Editing;
-import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.Where;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import jakarta.inject.Named;
+
+import org.apache.causeway.applib.annotation.*;
 
 @Named("demo.FibonacciNumberVm")
 @DomainObject(

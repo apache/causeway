@@ -18,14 +18,14 @@
  */
 package demoapp.dom.domain.objects.other.embedded.persistence;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolder;
+import demoapp.dom.domain.objects.other.embedded.ComplexNumber;
+
 import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Property;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom._infra.values.ValueHolder;
-import demoapp.dom.domain.objects.other.embedded.ComplexNumber;
 
 @Named("demo.NumberConstantEntity") // shared permissions with concrete sub class
 @DomainObject

@@ -5,7 +5,6 @@ title Payment Terminal - System Context
 top to bottom direction
 
 skinparam {
-  shadowing false
   arrowFontSize 10
   defaultTextAlignment center
   wrapWidth 200
@@ -18,16 +17,19 @@ skinparam rectangle<<FraudDetector>> {
   BackgroundColor #dddddd
   FontColor #fffffe
   BorderColor #9a9a9a
+  shadowing false
 }
 skinparam person<<Merchant>> {
   BackgroundColor #08427b
   FontColor #ffffff
   BorderColor #052e56
+  shadowing false
 }
 skinparam rectangle<<PaymentTerminal>> {
   BackgroundColor #dddddd
   FontColor #fffffe
   BorderColor #9a9a9a
+  shadowing false
 }
 
 person "==Merchant\n<size:10>[Person]</size>\n\nMerchant" <<Merchant>> as Merchant

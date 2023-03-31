@@ -18,16 +18,16 @@
  */
 package demoapp.dom.domain.objects.other.embedded.jpa;
 
+import demoapp.dom.domain.objects.other.embedded.ComplexNumber;
+import lombok.AccessLevel;
+import lombok.val;
+
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Value;
-
-import demoapp.dom.domain.objects.other.embedded.ComplexNumber;
-import lombok.AccessLevel;
-import lombok.val;
 
 // tag::class[]
 //@Entity                                                               // <.>

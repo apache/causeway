@@ -18,13 +18,12 @@
  */
 package demoapp.dom.domain.objects.DomainObject.entityChangePublishing;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolder;
+
 import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainObject;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom._infra.values.ValueHolder;
-import demoapp.dom.domain._changes.ExposeCapturedChanges;
 
 @Named("demo.DomainObjectEntityChangePublishingEntity")
 @DomainObject

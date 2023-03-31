@@ -18,25 +18,15 @@
  */
 package demoapp.dom.domain.objects.DomainObject.introspection.annotReqd.jpa;
 
-import jakarta.inject.Named;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-
-import org.springframework.context.annotation.Profile;
-
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Introspection;
-import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
-
 import demoapp.dom.domain.objects.DomainObject.introspection.annotReqd.DomainObjectIntrospectionAnnotReqd;
 import lombok.NoArgsConstructor;
+
+import jakarta.inject.Named;
+import jakarta.persistence.*;
+
+import org.apache.causeway.applib.annotation.*;
+import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
+import org.springframework.context.annotation.Profile;
 
 @Profile("demo-jpa")
 @Entity
@@ -57,7 +47,7 @@ public class DomainObjectIntrospectionAnnotReqdJpa
     // ...
 //end::class[]
 
-    public DomainObjectIntrospectionAnnotReqdJpa(final String value) {
+    public DomainObjectIntrospectionAnnotReqdJpa(String value) {
         setName(value);
     }
 
@@ -67,13 +57,11 @@ public class DomainObjectIntrospectionAnnotReqdJpa
 //tag::class[]
 
     private String name;
-    @Override
     @Property                                                                   // <.>
     public String getName() {
         return name;
     }
-    @Override
-    public void setName(final String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -82,8 +70,7 @@ public class DomainObjectIntrospectionAnnotReqdJpa
         setName(name);
         return this;
     }
-    @MemberSupport                                                              // <.>
-    public String default0UpdateName() {
+    public String default0UpdateName() {                                        // <.>
         return getName();
     }
 }
