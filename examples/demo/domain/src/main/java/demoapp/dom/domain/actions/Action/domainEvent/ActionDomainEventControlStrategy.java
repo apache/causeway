@@ -56,7 +56,6 @@ enum ActionDomainEventControlStrategy {
                     ev.disable("ControlStrategy set to DISABLE");
                     break;
             }
-
         }
     },
 // end::disable[]
@@ -79,7 +78,6 @@ enum ActionDomainEventControlStrategy {
     EXECUTING_FORCE_UPPER_CASE{
         @Override
         void on(ActionDomainEvent<?> ev, ServiceRegistry serviceRegistry) {
-
             switch (ev.getEventPhase()) {
                 case EXECUTING:
                     List<Object> arguments = ev.getArguments();
