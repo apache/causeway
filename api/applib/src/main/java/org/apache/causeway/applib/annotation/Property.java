@@ -131,6 +131,8 @@ public @interface Property {
     /**
      * If {@link #editing()} is set to {@link Editing#DISABLED},
      * then the reason to provide to the user as to why this property cannot be edited.
+     * <p>
+     * If left empty (default), no reason is given.
      *
      * @see Property#editing()
      */

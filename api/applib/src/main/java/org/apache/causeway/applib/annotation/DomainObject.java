@@ -135,11 +135,13 @@ public @interface DomainObject {
     /**
      * If {@link #editing()} is set to {@link Editing#DISABLED},
      * then the reason to provide to the user as to why the object's properties cannot be edited/collections modified.
+     * <p>
+     * If left empty (default), no reason is given.
      *
      * @see DomainObject#editing()
      */
     String editingDisabledReason()
-            default "Disabled";
+            default "";
 
     /**
      * Whether entity changes (persistent property updates) should be published to

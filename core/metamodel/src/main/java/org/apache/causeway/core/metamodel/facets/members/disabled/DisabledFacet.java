@@ -48,11 +48,6 @@ extends WhereValueFacet, DisablingInteractionAdvisor {
     }
 
     /**
-     * "Special" phrase returned for facets which are always disabled.
-     */
-    VetoReason ALWAYS_DISABLED_REASON = VetoReason.inferred("Always disabled");
-
-    /**
      * Optionally the reason why the (feature of the) target object is currently disabled,
      * or <tt>Optional.empty()</tt> if enabled.
      */

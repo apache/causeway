@@ -27,11 +27,11 @@ public class DisabledFacetForPropertyAnnotationInvertedSemantics
 extends DisabledFacetAbstract {
 
     DisabledFacetForPropertyAnnotationInvertedSemantics(final FacetHolder holder) {
-        super(Where.EVERYWHERE, VetoReason.inferred(
-                "enabled, based on Property annotation with inverted semantics"),
-                holder,
-                Semantics.ENABLED, Precedence.DEFAULT);
+        super(Where.EVERYWHERE,
+                // arbitrarily using explicit, because flag is ignored when semantics is inverted
+                VetoReason.explicit(
+                        "enabled, based on Property annotation with inverted semantics"),
+                holder, Semantics.ENABLED, Precedence.DEFAULT);
     }
-
 
 }

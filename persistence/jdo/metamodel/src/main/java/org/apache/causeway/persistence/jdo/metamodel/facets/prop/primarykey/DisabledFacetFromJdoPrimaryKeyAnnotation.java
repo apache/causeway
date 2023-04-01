@@ -31,7 +31,7 @@ public class DisabledFacetFromJdoPrimaryKeyAnnotation
 extends DisabledFacetAbstract {
 
     public DisabledFacetFromJdoPrimaryKeyAnnotation(final FacetHolder holder) {
-        super(Where.ANYWHERE, VetoReason.inferred("Primary-keys are immutable"), holder);
+        super(Where.ANYWHERE, VetoReason.immutablePrimaryKey(), holder);
     }
 
 }

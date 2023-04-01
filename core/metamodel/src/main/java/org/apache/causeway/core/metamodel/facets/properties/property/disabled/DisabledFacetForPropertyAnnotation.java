@@ -50,7 +50,7 @@ extends DisabledFacetAbstract {
 
             case DISABLED:
                  final VetoReason disabledReason = _Strings.isNullOrEmpty(property.editingDisabledReason())
-                     ? ALWAYS_DISABLED_REASON
+                     ? VetoReason.editingDisabledReasonNotGiven()
                      : VetoReason.explicit(property.editingDisabledReason());
 
                 return new DisabledFacetForPropertyAnnotation(disabledReason, holder);

@@ -110,7 +110,7 @@ public class InteractionVeto implements Serializable {
 
     @Override
     public String toString() {
-        return getReason().map(VetoReason::string).orElse("not vetoed");
+        return getReasonAsString().orElse("allowed (not vetoed)");
     }
 
 }

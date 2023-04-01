@@ -27,7 +27,7 @@ public class ImmutableFacetViaValueSemantics
 extends ImmutableFacetAbstract {
 
     public ImmutableFacetViaValueSemantics(final FacetHolder holder) {
-        super(VetoReason.inferred("Value types are immutable"), holder);
+        super(VetoReason.immutableValueType(), holder);
     }
 
     @Override

@@ -40,7 +40,7 @@ enum ScalarPanelAdditionalButton {
             return scalarModel.disabledReason()
                     .map(InteractionVeto::getVetoConsent)
                     .flatMap(Consent::getReason)
-                    .map(VetoReason::explicit)
+                    .map(VetoReason::showInUi)
                     .orElse(false);
         }
     },

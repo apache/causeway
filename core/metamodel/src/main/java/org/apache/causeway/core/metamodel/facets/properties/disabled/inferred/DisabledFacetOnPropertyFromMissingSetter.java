@@ -19,6 +19,7 @@
 package org.apache.causeway.core.metamodel.facets.properties.disabled.inferred;
 
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
 
@@ -26,7 +27,7 @@ public class DisabledFacetOnPropertyFromMissingSetter
 extends DisabledFacetAbstract {
 
     public DisabledFacetOnPropertyFromMissingSetter(final FacetHolder holder) {
-        super(Where.ANYWHERE, ALWAYS_DISABLED_REASON, holder);
+        super(Where.ANYWHERE, VetoReason.propertyHasNoSetter(), holder);
     }
 
 
