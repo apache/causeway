@@ -74,7 +74,7 @@
         <mml:attr name="facet" value="ImmutableFacetForDomainObjectAnnotationAsConfigured"/>
         <mml:attr name="interactionAdvisors" value="DisablingOrEnabling"/>
         <mml:attr name="precedence" value="DEFAULT"/>
-        <mml:attr name="reason" value="Disabled"/>
+        <mml:attr name="reason" value="Disabled, via @DomainObject annotation, reason not given."/>
       </mml:facet>
       <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
         <mml:attr name="facet" value="ObjectValidPropertiesFacetImpl"/>
@@ -118,7 +118,7 @@
             <mml:attr name="facet" value="DisabledFacetOnPropertyFromMissingSetter"/>
             <mml:attr name="interactionAdvisors" value="DisablingOrEnabling"/>
             <mml:attr name="precedence" value="DEFAULT"/>
-            <mml:attr name="reason" value="Always disabled"/>
+            <mml:attr name="reason" value="Disabled, property has no setter."/>
             <mml:attr name="semantics" value="DISABLED"/>
             <mml:attr name="where" value="ANYWHERE"/>
           </mml:facet>

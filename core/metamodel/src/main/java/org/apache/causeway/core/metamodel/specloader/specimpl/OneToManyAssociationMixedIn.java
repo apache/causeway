@@ -138,7 +138,7 @@ implements MixedInMember {
             return originalFacet;
         }
         // ensure that the contributed association is always disabled
-        return new DisabledFacetForContributee(VetoReason.inferred("Contributed collection"), this);
+        return new DisabledFacetForContributee(VetoReason.mixedinCollection(), this);
     }
 
     @Override

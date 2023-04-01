@@ -53,9 +53,7 @@ extends DisabledFacetAbstract {
             final @NonNull FacetHolder holder,
             final @NonNull ImmutableFacet reasonProvidingImmutableFacet) {
 
-        super(Where.ANYWHERE, VetoReason.inferred(
-                "calculated at runtime, delegating to ImmutableFacet " +
-                        reasonProvidingImmutableFacet.getClass()),
+        super(Where.ANYWHERE, VetoReason.delegatedTo(reasonProvidingImmutableFacet.getClass()),
                 holder);
 
         this.reasonProvidingImmutableFacet = reasonProvidingImmutableFacet;
@@ -66,7 +64,7 @@ extends DisabledFacetAbstract {
         val reason = reasonProvidingImmutableFacet.disabledReason(target);
         // ensure non empty reason
         return reason
-                .or(()->VetoReason.inferred("Immutable").toOptional());
+                .or(()->VetoReason.immutableIfNoReasonGivenByImmutableFacet().toOptional());
     }
 
 

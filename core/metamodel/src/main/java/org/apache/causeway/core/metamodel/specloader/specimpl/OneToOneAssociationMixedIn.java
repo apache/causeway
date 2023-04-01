@@ -119,7 +119,7 @@ implements MixedInMember {
             return originalFacet;
         }
         // ensure that the contributed association is always disabled
-        return new DisabledFacetForContributee(VetoReason.inferred("Contributed property"), this);
+        return new DisabledFacetForContributee(VetoReason.mixedinProperty(), this);
     }
 
     @Override

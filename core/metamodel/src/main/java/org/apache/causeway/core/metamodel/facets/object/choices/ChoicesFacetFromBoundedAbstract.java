@@ -102,7 +102,7 @@ implements
      * Optional hook method for subclasses to override.
      */
     public Optional<VetoReason> disabledReason(final ManagedObject inObject) {
-        return VetoReason.inferred("Bounded").toOptional();
+        return VetoReason.bounded().toOptional();
     }
 
     @SneakyThrows

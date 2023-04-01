@@ -23,6 +23,7 @@ import java.util.Optional;
 
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
 
 import lombok.NonNull;
 import lombok.experimental.Accessors;
@@ -33,22 +34,56 @@ public interface Consent {
     @lombok.Value @Accessors(fluent=true)
     public static class VetoReason implements Serializable {
         private static final long serialVersionUID = 1L;
-        /** Reason inferred by the framework or explicitly given otherwise. */
-        private final boolean explicit;
+        /**
+         * Introduced to help decide whether or not to display a 'ban' icon
+         * in the UI, with a tooltip showing the disabled reason.
+         */
+        private final boolean showInUi;
         private final @NonNull String string;
-        public static VetoReason inferred(final String reason) {
-            _Assert.assertTrue(_Strings.isNotEmpty(reason));
-            return new VetoReason(false, reason);
-        }
         public static VetoReason explicit(final String reason) {
             _Assert.assertTrue(_Strings.isNotEmpty(reason));
             return new VetoReason(true, reason);
+        }
+        private static VetoReason inferred(final String reason) {
+            _Assert.assertTrue(_Strings.isNotEmpty(reason));
+            return new VetoReason(false, reason);
         }
         public Optional<VetoReason> toOptional() {
             return Optional.of(this);
         }
         public VetoReason concatenate(final VetoReason other) {
-            return new VetoReason(this.explicit || other.explicit, this.string + "; " + other.string);
+            return new VetoReason(this.showInUi || other.showInUi, this.string + "; " + other.string);
+        }
+        // -- PREDEFINED REASONS
+        public static VetoReason editingObjectDisabledReasonNotGiven() {
+            return VetoReason.inferred("Disabled, via @DomainObject annotation, reason not given.");
+        }
+        public static VetoReason editingPropertyDisabledReasonNotGiven() {
+            return VetoReason.inferred("Disabled, via @Property annotation, reason not given.");
+        }
+        public static VetoReason propertyHasNoSetter() {
+            return VetoReason.inferred("Disabled, property has no setter.");
+        }
+        public static VetoReason bounded() {
+            return VetoReason.inferred("Cannot edit a bounded member.");
+        }
+        public static VetoReason immutableValueType() {
+            return VetoReason.inferred("Value types are immutable.");
+        }
+        public static VetoReason immutablePrimaryKey() {
+            return VetoReason.inferred("Primary-keys are immutable.");
+        }
+        public static VetoReason mixedinCollection() {
+            return inferred("Cannot edit a mixed-in collection.");
+        }
+        public static VetoReason mixedinProperty() {
+            return inferred("Cannot edit a mixed-in property.");
+        }
+        public static VetoReason immutableIfNoReasonGivenByImmutableFacet() {
+            return inferred("Immutable, no reason given by ImmutableFacet.");
+        }
+        public static VetoReason delegatedTo(@NonNull final Class<? extends ImmutableFacet> cls) {
+            return inferred("Calculated at runtime, delegating to ImmutableFacet " + cls + ".");
         }
     }
 

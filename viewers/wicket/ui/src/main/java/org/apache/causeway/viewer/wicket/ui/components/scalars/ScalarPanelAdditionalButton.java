@@ -40,7 +40,20 @@ enum ScalarPanelAdditionalButton {
             return scalarModel.disabledReason()
                     .map(InteractionVeto::getVetoConsent)
                     .flatMap(Consent::getReason)
-                    .map(VetoReason::explicit)
+                    .map(VetoReason::showInUi)
+                    .orElse(false);
+        }
+    },
+    DISABLED_REASON_PROTOTYPING {
+        @Override
+        boolean isVisible(
+                final ScalarModel scalarModel,
+                final RenderScenario renderScenario,
+                final FieldFragement fieldFragement) {
+            return scalarModel.disabledReason()
+                    .map(InteractionVeto::getVetoConsent)
+                    .flatMap(Consent::getReason)
+                    .map(vetoReason->!vetoReason.showInUi())
                     .orElse(false);
         }
     },

@@ -21,9 +21,6 @@ package org.apache.causeway.core.metamodel.facets.object.immutable;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import org.springframework.lang.Nullable;
-
-import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
@@ -83,15 +80,5 @@ implements ImmutableFacet {
             return Optional.empty();
         }
     }
-
-    // -- HELPER
-
-    protected static VetoReason createDisabledReason(@Nullable final String explicitReasonString) {
-        return _Strings.nonEmpty(explicitReasonString)
-                .map(VetoReason::explicit)
-                // assuming there is no ImmutableFacet(s) with inverted semantics
-                .orElseGet(()->VetoReason.inferred("Always immmutable"));
-    }
-
 
 }

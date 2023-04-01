@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.facets.object.domainobject.editing;
 import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.metamodel.facets.DomainObjectConfigOptions;
@@ -47,8 +48,7 @@ extends ImmutableFacetAbstract {
 
         if(domainObjectIfAny.isPresent()) {
             val domainObject = domainObjectIfAny.get();
-            val disabledReason = ImmutableFacetAbstract
-                    .createDisabledReason(domainObject.editingDisabledReason());
+            val disabledReason = createDisabledReason(domainObject);
 
             switch (domainObject.editing()) {
             case NOT_SPECIFIED:
@@ -60,7 +60,7 @@ extends ImmutableFacetAbstract {
                 }
 
                 return editingDisabledByDefault
-                        ? Optional.of((ImmutableFacet) new ImmutableFacetForDomainObjectAnnotationAsConfigured(disabledReason, holder))
+                        ? Optional.of(new ImmutableFacetForDomainObjectAnnotationAsConfigured(disabledReason, holder))
                         : Optional.empty();
             case DISABLED:
                 return Optional.of(new ImmutableFacetForDomainObjectAnnotation(disabledReason, holder));
@@ -89,6 +89,19 @@ extends ImmutableFacetAbstract {
     @Override
     public ImmutableFacet clone(final FacetHolder holder) {
         return new ImmutableFacetForDomainObjectAnnotation(reason, holder);
+    }
+
+    // -- HELPER
+
+    /**
+     * If a reason is explicitly given via {@link DomainObject} annotation, we use it here,
+     * otherwise using a fallback reason.
+     */
+    private static VetoReason createDisabledReason(final DomainObject domainObject) {
+        return _Strings.nonEmpty(domainObject.editingDisabledReason())
+                .map(VetoReason::explicit)
+                // assuming there is no ImmutableFacet(s) with inverted semantics
+                .orElseGet(()->VetoReason.editingObjectDisabledReasonNotGiven());
     }
 
 
