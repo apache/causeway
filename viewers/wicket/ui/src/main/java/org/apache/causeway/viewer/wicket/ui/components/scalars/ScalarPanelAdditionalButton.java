@@ -44,6 +44,19 @@ enum ScalarPanelAdditionalButton {
                     .orElse(false);
         }
     },
+    DISABLED_REASON_PROTOTYPING {
+        @Override
+        boolean isVisible(
+                final ScalarModel scalarModel,
+                final RenderScenario renderScenario,
+                final FieldFragement fieldFragement) {
+            return scalarModel.disabledReason()
+                    .map(InteractionVeto::getVetoConsent)
+                    .flatMap(Consent::getReason)
+                    .map(vetoReason->!vetoReason.showInUi())
+                    .orElse(false);
+        }
+    },
     CLEAR_FIELD {
         @Override
         boolean isVisible(

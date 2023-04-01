@@ -262,7 +262,11 @@ extends ScalarPanelAbstract {
                     //XXX Future extension
                     break;
                 case DISABLED_REASON:
-                    addDisabledReasonIcon(buttonContainer);
+                    addDisabledReasonIcon(buttonContainer, "fa-solid fa-ban", "");
+                    break;
+                case DISABLED_REASON_PROTOTYPING:
+                    addDisabledReasonIcon(buttonContainer, "fa-solid fa-text-slash icon-prototyping",
+                            " Note: This icon only appears in prototyping mode.");
                     break;
                 case CLEAR_FIELD:
                     addClearFieldButton(buttonContainer);
@@ -274,15 +278,18 @@ extends ScalarPanelAbstract {
         }
     }
 
-    private void addDisabledReasonIcon(final @NonNull RepeatingView buttonContainer) {
+    private void addDisabledReasonIcon(
+            final @NonNull RepeatingView buttonContainer,
+            final @NonNull String faClass,
+            final @NonNull String reasonSuffix) {
         val disableReasonButton = Wkt.linkAddWithBody(buttonContainer,
-                Wkt.faIcon("fa-solid fa-ban"), ajaxTarget->{/*no-op*/});
+                Wkt.faIcon(faClass), ajaxTarget->{/*no-op*/});
 
         val disabledReason = scalarModel().disabledReason()
                 .flatMap(InteractionVeto::getReasonAsString)
                 .orElse("framework bug: should provide a reason");
 
-        WktTooltips.addTooltip(disableReasonButton, translate(disabledReason));
+        WktTooltips.addTooltip(disableReasonButton, translate(disabledReason) + translate(reasonSuffix));
 
         if(scalarModel().isParameter()) {
             // allow the client-side popover cleaner to kick in

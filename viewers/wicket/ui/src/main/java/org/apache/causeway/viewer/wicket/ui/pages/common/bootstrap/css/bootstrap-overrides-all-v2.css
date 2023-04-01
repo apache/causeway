@@ -583,6 +583,10 @@ div.additionalLinkList {
 
 }
 
+.icon-prototyping {
+    color: silver;
+}
+
 /* dropdown-menu: distinguished rendering for disabled menu-items
    (assuming grey foreground text color is reasonable to apply to light as well as dark themes) */
 .dropdown-menu > .disabled > a,
