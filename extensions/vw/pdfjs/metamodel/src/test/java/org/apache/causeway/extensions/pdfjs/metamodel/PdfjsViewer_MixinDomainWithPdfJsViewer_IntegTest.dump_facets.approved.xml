@@ -74,7 +74,7 @@
         <mml:attr name="facet" value="ImmutableFacetForDomainObjectAnnotationAsConfigured"/>
         <mml:attr name="interactionAdvisors" value="DisablingOrEnabling"/>
         <mml:attr name="precedence" value="DEFAULT"/>
-        <mml:attr name="reason" value="Disabled"/>
+        <mml:attr name="reason" value="Disabled, via annotation, reason not given."/>
       </mml:facet>
       <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
         <mml:attr name="facet" value="ObjectValidPropertiesFacetImpl"/>
@@ -163,7 +163,7 @@
             <mml:attr name="facet" value="DisabledFacetForContributee"/>
             <mml:attr name="interactionAdvisors" value="DisablingOrEnabling"/>
             <mml:attr name="precedence" value="DEFAULT"/>
-            <mml:attr name="reason" value="Contributed property"/>
+            <mml:attr name="reason" value="Cannot edit a mixed-in property."/>
             <mml:attr name="semantics" value="DISABLED"/>
             <mml:attr name="where" value="ANYWHERE"/>
           </mml:facet>
@@ -982,7 +982,7 @@
         <mml:attr name="facet" value="ImmutableFacetForDomainObjectAnnotationAsConfigured"/>
         <mml:attr name="interactionAdvisors" value="DisablingOrEnabling"/>
         <mml:attr name="precedence" value="DEFAULT"/>
-        <mml:attr name="reason" value="Always immmutable"/>
+        <mml:attr name="reason" value="Disabled, via annotation, reason not given."/>
       </mml:facet>
       <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
         <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
@@ -1076,7 +1076,7 @@
             <mml:attr name="facet" value="DisabledFacetForContributee"/>
             <mml:attr name="interactionAdvisors" value="DisablingOrEnabling"/>
             <mml:attr name="precedence" value="DEFAULT"/>
-            <mml:attr name="reason" value="Contributed property"/>
+            <mml:attr name="reason" value="Cannot edit a mixed-in property."/>
             <mml:attr name="semantics" value="DISABLED"/>
             <mml:attr name="where" value="ANYWHERE"/>
           </mml:facet>

@@ -9948,7 +9948,7 @@
                         <mml:attr name="facet" value="DisabledFacetOnPropertyFromMissingSetter"/>
                         <mml:attr name="interactionAdvisors" value="DisablingOrEnabling"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="reason" value="Always disabled"/>
+                        <mml:attr name="reason" value="Disabled, property has no setter."/>
                         <mml:attr name="semantics" value="DISABLED"/>
                         <mml:attr name="where" value="ANYWHERE"/>
                     </mml:facet>
@@ -13701,7 +13701,7 @@
                         <mml:attr name="facet" value="DisabledFacetForContributee"/>
                         <mml:attr name="interactionAdvisors" value="DisablingOrEnabling"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="reason" value="Contributed property"/>
+                        <mml:attr name="reason" value="Cannot edit a mixed-in property."/>
                         <mml:attr name="semantics" value="DISABLED"/>
                         <mml:attr name="where" value="ANYWHERE"/>
                     </mml:facet>
@@ -13828,7 +13828,7 @@
                         <mml:attr name="facet" value="DisabledFacetForContributee"/>
                         <mml:attr name="interactionAdvisors" value="DisablingOrEnabling"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="reason" value="Contributed property"/>
+                        <mml:attr name="reason" value="Cannot edit a mixed-in property."/>
                         <mml:attr name="semantics" value="DISABLED"/>
                         <mml:attr name="where" value="ANYWHERE"/>
                     </mml:facet>
@@ -13955,7 +13955,7 @@
                         <mml:attr name="facet" value="DisabledFacetForContributee"/>
                         <mml:attr name="interactionAdvisors" value="DisablingOrEnabling"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="reason" value="Contributed property"/>
+                        <mml:attr name="reason" value="Cannot edit a mixed-in property."/>
                         <mml:attr name="semantics" value="DISABLED"/>
                         <mml:attr name="where" value="ANYWHERE"/>
                     </mml:facet>
@@ -14063,7 +14063,7 @@
                         <mml:attr name="facet" value="DisabledFacetForContributee"/>
                         <mml:attr name="interactionAdvisors" value="DisablingOrEnabling"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="reason" value="Contributed collection"/>
+                        <mml:attr name="reason" value="Cannot edit a mixed-in collection."/>
                         <mml:attr name="semantics" value="DISABLED"/>
                         <mml:attr name="where" value="ANYWHERE"/>
                     </mml:facet>
@@ -14181,7 +14181,7 @@
                         <mml:attr name="facet" value="DisabledFacetForContributee"/>
                         <mml:attr name="interactionAdvisors" value="DisablingOrEnabling"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="reason" value="Contributed collection"/>
+                        <mml:attr name="reason" value="Cannot edit a mixed-in collection."/>
                         <mml:attr name="semantics" value="DISABLED"/>
                         <mml:attr name="where" value="ANYWHERE"/>
                     </mml:facet>
@@ -14292,7 +14292,7 @@
                         <mml:attr name="facet" value="DisabledFacetForContributee"/>
                         <mml:attr name="interactionAdvisors" value="DisablingOrEnabling"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="reason" value="Contributed collection"/>
+                        <mml:attr name="reason" value="Cannot edit a mixed-in collection."/>
                         <mml:attr name="semantics" value="DISABLED"/>
                         <mml:attr name="where" value="ANYWHERE"/>
                     </mml:facet>
@@ -21953,7 +21953,7 @@
                         <mml:attr name="facet" value="DisabledFacetForContributee"/>
                         <mml:attr name="interactionAdvisors" value="DisablingOrEnabling"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="reason" value="Contributed collection"/>
+                        <mml:attr name="reason" value="Cannot edit a mixed-in collection."/>
                         <mml:attr name="semantics" value="DISABLED"/>
                         <mml:attr name="where" value="ANYWHERE"/>
                     </mml:facet>
@@ -22162,7 +22162,7 @@
                         <mml:attr name="facet" value="DisabledFacetForContributee"/>
                         <mml:attr name="interactionAdvisors" value="DisablingOrEnabling"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="reason" value="Contributed collection"/>
+                        <mml:attr name="reason" value="Cannot edit a mixed-in collection."/>
                         <mml:attr name="semantics" value="DISABLED"/>
                         <mml:attr name="where" value="ANYWHERE"/>
                     </mml:facet>
@@ -22364,7 +22364,7 @@
                         <mml:attr name="facet" value="DisabledFacetForContributee"/>
                         <mml:attr name="interactionAdvisors" value="DisablingOrEnabling"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="reason" value="Contributed collection"/>
+                        <mml:attr name="reason" value="Cannot edit a mixed-in collection."/>
                         <mml:attr name="semantics" value="DISABLED"/>
                         <mml:attr name="where" value="ANYWHERE"/>
                     </mml:facet>
@@ -22545,7 +22545,7 @@
                         <mml:attr name="facet" value="DisabledFacetForContributee"/>
                         <mml:attr name="interactionAdvisors" value="DisablingOrEnabling"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="reason" value="Contributed property"/>
+                        <mml:attr name="reason" value="Cannot edit a mixed-in property."/>
                         <mml:attr name="semantics" value="DISABLED"/>
                         <mml:attr name="where" value="ANYWHERE"/>
                     </mml:facet>
@@ -22763,7 +22763,7 @@
                         <mml:attr name="facet" value="DisabledFacetForContributee"/>
                         <mml:attr name="interactionAdvisors" value="DisablingOrEnabling"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="reason" value="Contributed property"/>
+                        <mml:attr name="reason" value="Cannot edit a mixed-in property."/>
                         <mml:attr name="semantics" value="DISABLED"/>
                         <mml:attr name="where" value="ANYWHERE"/>
                     </mml:facet>
@@ -22981,7 +22981,7 @@
                         <mml:attr name="facet" value="DisabledFacetForContributee"/>
                         <mml:attr name="interactionAdvisors" value="DisablingOrEnabling"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="reason" value="Contributed property"/>
+                        <mml:attr name="reason" value="Cannot edit a mixed-in property."/>
                         <mml:attr name="semantics" value="DISABLED"/>
                         <mml:attr name="where" value="ANYWHERE"/>
                     </mml:facet>
