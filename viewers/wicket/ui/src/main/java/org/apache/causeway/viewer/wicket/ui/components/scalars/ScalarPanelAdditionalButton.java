@@ -50,7 +50,8 @@ enum ScalarPanelAdditionalButton {
                 final ScalarModel scalarModel,
                 final RenderScenario renderScenario,
                 final FieldFragement fieldFragement) {
-            return scalarModel.disabledReason()
+            return scalarModel.getSystemEnvironment().isPrototyping()
+                    && scalarModel.disabledReason()
                     .map(InteractionVeto::getVetoConsent)
                     .flatMap(Consent::getReason)
                     .map(vetoReason->!vetoReason.showInUi())
