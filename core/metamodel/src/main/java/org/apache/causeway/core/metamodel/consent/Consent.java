@@ -55,8 +55,11 @@ public interface Consent {
             return new VetoReason(this.showInUi || other.showInUi, this.string + "; " + other.string);
         }
         // -- PREDEFINED REASONS
-        public static VetoReason editingDisabledReasonNotGiven() {
-            return VetoReason.inferred("Disabled, via annotation, reason not given.");
+        public static VetoReason editingObjectDisabledReasonNotGiven() {
+            return VetoReason.inferred("Disabled, via @DomainObject annotation, reason not given.");
+        }
+        public static VetoReason editingPropertyDisabledReasonNotGiven() {
+            return VetoReason.inferred("Disabled, via @Property annotation, reason not given.");
         }
         public static VetoReason propertyHasNoSetter() {
             return VetoReason.inferred("Disabled, property has no setter.");

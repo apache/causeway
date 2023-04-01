@@ -101,7 +101,7 @@ extends ImmutableFacetAbstract {
         return _Strings.nonEmpty(domainObject.editingDisabledReason())
                 .map(VetoReason::explicit)
                 // assuming there is no ImmutableFacet(s) with inverted semantics
-                .orElseGet(()->VetoReason.editingDisabledReasonNotGiven());
+                .orElseGet(()->VetoReason.editingObjectDisabledReasonNotGiven());
     }
 
 
