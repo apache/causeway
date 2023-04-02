@@ -29,6 +29,7 @@ import demoapp.dom.domain.objects.DomainObject.nature.DomainObjectNaturePage;
 import demoapp.dom.domain.objects.DomainObject.xxxDomainEvent.DomainObjectXxxDomainEventPage;
 import demoapp.dom.domain.objects.DomainObject.xxxLifecycleEvent.DomainObjectXxxLifecyleEventPage;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -94,7 +95,11 @@ public class DomainObjectMenu {
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-asterisk", describedAs = "Default class of the domain event emitted when interacting with the domain object's actions, properties or collections")
     public DomainObjectXxxDomainEventPage domainEvents() {
-        return new DomainObjectXxxDomainEventPage();
+        val page = new DomainObjectXxxDomainEventPage("change me");
+        page.addChild("#1");
+        page.addChild("#2");
+        page.addChild("#3");
+        return page;
     }
 
     @Action(semantics = SemanticsOf.SAFE)

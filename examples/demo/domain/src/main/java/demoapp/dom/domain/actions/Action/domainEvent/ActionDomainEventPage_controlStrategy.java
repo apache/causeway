@@ -32,6 +32,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ActionDomainEventPage_controlStrategy {
 
+    @SuppressWarnings("unused")
     private final ActionDomainEventPage page;
 
     public ActionDomainEventControlStrategy prop() {

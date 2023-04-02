@@ -47,7 +47,6 @@ import org.apache.causeway.applib.events.domain.CollectionDomainEvent;
 public class CollectionDomainEventPage implements HasAsciiDocDescription {
     // ...
 //end::class[]
-    int lastChildNumberAdded;
 
     @ObjectSupport public String title() {
         return "@Collection#domainEvent";

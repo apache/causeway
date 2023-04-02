@@ -53,11 +53,9 @@ public class CollectionMenu {
         page.addChild("#1");
         page.addChild("#2");
         page.addChild("#3");
-
         page.addOtherChild("#1");
         page.addOtherChild("#2");
         page.addOtherChild("#3");
-
         return page;
     }
 

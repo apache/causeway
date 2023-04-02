@@ -16,34 +16,40 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.Action.domainEvent;
-
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.events.domain.ActionDomainEvent;
+package demoapp.dom.domain.objects.DomainObject.xxxDomainEvent;
 
 import lombok.RequiredArgsConstructor;
 
+import javax.inject.Inject;
+
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.events.domain.ActionDomainEvent;
+
 
 //tag::class[]
-@Action(domainEvent = ActionDomainEventPage_updateText.DomainEvent.class)   // <.>
+@Action(
+        domainEvent = DomainObjectXxxDomainEventPage_changeControlStrategy.DomainEvent.class,   // <.>
+        semantics = SemanticsOf.IDEMPOTENT
+)
 @RequiredArgsConstructor
-public class ActionDomainEventPage_updateText {
+public class DomainObjectXxxDomainEventPage_changeControlStrategy {
 
-    public static class DomainEvent                                         // <.>
-            extends ActionDomainEvent<ActionDomainEventPage> {}
-    // ...
-//end::class[]
+    public static class DomainEvent                                                             // <1>
+            extends ActionDomainEvent<DomainObjectXxxDomainEventPage> {}
 
-    private final ActionDomainEventPage page;
+    private final DomainObjectXxxDomainEventPage page;
 
-    @MemberSupport public ActionDomainEventPage act(final String text) {
-        page.setText(text);
+    @MemberSupport public DomainObjectXxxDomainEventPage act(
+            DomainObjectXxxDomainEventControlStrategy controlStrategy) {
+        subscriber.controlStrategy = controlStrategy;
         return page;
     }
-    @MemberSupport public String default0Act() {
-        return page.getText();
+    @MemberSupport public DomainObjectXxxDomainEventControlStrategy default0Act() {
+        return subscriber.controlStrategy;
     }
-//tag::class[]
+
+    @Inject DomainObjectXxxDomainEventControlSubscriber subscriber;
 }
 //end::class[]

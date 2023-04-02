@@ -16,34 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.Action.domainEvent;
-
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.events.domain.ActionDomainEvent;
+package demoapp.dom.domain.objects.DomainObject.xxxDomainEvent;
 
 import lombok.RequiredArgsConstructor;
 
+import javax.inject.Inject;
 
-//tag::class[]
-@Action(domainEvent = ActionDomainEventPage_updateText.DomainEvent.class)   // <.>
-@RequiredArgsConstructor
-public class ActionDomainEventPage_updateText {
+import org.apache.causeway.applib.services.registry.ServiceRegistry;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
 
-    public static class DomainEvent                                         // <.>
-            extends ActionDomainEvent<ActionDomainEventPage> {}
-    // ...
-//end::class[]
+// tag::class[]
+@Service
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
+class DomainObjectXxxDomainEventControlSubscriber {
 
-    private final ActionDomainEventPage page;
+    final ServiceRegistry serviceRegistry;
 
-    @MemberSupport public ActionDomainEventPage act(final String text) {
-        page.setText(text);
-        return page;
+    DomainObjectXxxDomainEventControlStrategy controlStrategy =
+            DomainObjectXxxDomainEventControlStrategy.DO_NOTHING;           // <.>
+
+    @EventListener(DomainObjectXxxDomainEventPage.DomainEventMarker.class)  // <.>
+    public void on(DomainObjectXxxDomainEventPage.DomainEventMarker ev) {
+        controlStrategy.on(ev, serviceRegistry);                            // <.>
     }
-    @MemberSupport public String default0Act() {
-        return page.getText();
-    }
-//tag::class[]
 }
-//end::class[]
+// end::class[]

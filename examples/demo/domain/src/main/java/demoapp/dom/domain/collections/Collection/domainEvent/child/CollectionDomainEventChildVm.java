@@ -37,12 +37,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 //tag::class[]
-@XmlRootElement(name = "child")
+@XmlRootElement(name = "demo.CollectionDomainEventChildVm")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.CollectionDomainEventChildVm")
-@DomainObject(
-        nature=Nature.VIEW_MODEL)
+@DomainObject(nature=Nature.VIEW_MODEL)
 @NoArgsConstructor
 public class CollectionDomainEventChildVm implements HasAsciiDocDescription {
 
@@ -54,7 +53,6 @@ public class CollectionDomainEventChildVm implements HasAsciiDocDescription {
 //tag::class[]
     @Title
     @Property()
-    @PropertyLayout(fieldSetId = "properties", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String value;

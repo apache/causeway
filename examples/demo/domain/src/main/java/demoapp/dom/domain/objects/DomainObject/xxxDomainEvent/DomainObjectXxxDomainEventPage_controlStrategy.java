@@ -16,34 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.Action.domainEvent;
-
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.events.domain.ActionDomainEvent;
+package demoapp.dom.domain.objects.DomainObject.xxxDomainEvent;
 
 import lombok.RequiredArgsConstructor;
 
+import javax.inject.Inject;
+
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
+
 
 //tag::class[]
-@Action(domainEvent = ActionDomainEventPage_updateText.DomainEvent.class)   // <.>
+@Property()
+@PropertyLayout(fieldSetId = "contributed", sequence = "1")
 @RequiredArgsConstructor
-public class ActionDomainEventPage_updateText {
+public class DomainObjectXxxDomainEventPage_controlStrategy {
 
-    public static class DomainEvent                                         // <.>
-            extends ActionDomainEvent<ActionDomainEventPage> {}
-    // ...
-//end::class[]
+    private final DomainObjectXxxDomainEventPage page;
 
-    private final ActionDomainEventPage page;
-
-    @MemberSupport public ActionDomainEventPage act(final String text) {
-        page.setText(text);
-        return page;
+    public DomainObjectXxxDomainEventControlStrategy prop() {
+        return eventActionDomainEventControlService.controlStrategy;
     }
-    @MemberSupport public String default0Act() {
-        return page.getText();
-    }
-//tag::class[]
+
+    @Inject
+    DomainObjectXxxDomainEventControlSubscriber eventActionDomainEventControlService;
 }
 //end::class[]

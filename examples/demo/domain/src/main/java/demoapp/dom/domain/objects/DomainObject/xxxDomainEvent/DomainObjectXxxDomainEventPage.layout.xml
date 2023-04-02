@@ -18,7 +18,6 @@
 	<bs3:row>
 		<bs3:col span="10" unreferencedActions="true">
 			<cpt:domainObject />
-			<cpt:action id="toggleEvents"/>
 		</bs3:col>
 		<bs3:col span="2">
 			<cpt:fieldSet name="" id="sources" />
@@ -27,10 +26,34 @@
 
 	<bs3:row>
 		<bs3:col span="6">
-			<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
-			<cpt:collection id="objects">
-				<cpt:action id="updateName"/>
-			</cpt:collection>
+			<bs3:row>
+				<bs3:col span="12">
+					<cpt:fieldSet name="Object" id="object">
+						<cpt:property id="text">
+							<cpt:action id="updateText">
+								<cpt:named>update</cpt:named>
+							</cpt:action>
+						</cpt:property>
+					</cpt:fieldSet>
+				</bs3:col>
+			</bs3:row>
+			<bs3:row>
+				<bs3:col span="12">
+					<cpt:collection id="children"/>
+				</bs3:col>
+			</bs3:row>
+			<bs3:row>
+				<bs3:col span="12">
+					<cpt:fieldSet name="Control" id="contributed">
+						<cpt:property id="controlStrategy">
+							<cpt:action id="changeControlStrategy">
+								<cpt:named>Change</cpt:named>
+							</cpt:action>
+						</cpt:property>
+					</cpt:fieldSet>
+					<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
+				</bs3:col>
+			</bs3:row>
 		</bs3:col>
 		<bs3:col span="6">
 			<cpt:fieldSet name="Description" id="description" >

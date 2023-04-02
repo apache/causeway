@@ -16,34 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.Action.domainEvent;
-
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.events.domain.ActionDomainEvent;
+package demoapp.dom.domain.objects.DomainObject.xxxDomainEvent;
 
 import lombok.RequiredArgsConstructor;
 
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.MemberSupport;
+
 
 //tag::class[]
-@Action(domainEvent = ActionDomainEventPage_updateText.DomainEvent.class)   // <.>
+@Action()
 @RequiredArgsConstructor
-public class ActionDomainEventPage_updateText {
+public class DomainObjectXxxDomainEventPage_updateTextMixin {
 
-    public static class DomainEvent                                         // <.>
-            extends ActionDomainEvent<ActionDomainEventPage> {}
-    // ...
-//end::class[]
+    private final DomainObjectXxxDomainEventPage page;
 
-    private final ActionDomainEventPage page;
-
-    @MemberSupport public ActionDomainEventPage act(final String text) {
+    @MemberSupport public DomainObjectXxxDomainEventPage act(final String text) {
         page.setText(text);
         return page;
     }
     @MemberSupport public String default0Act() {
         return page.getText();
     }
-//tag::class[]
 }
 //end::class[]

@@ -16,34 +16,38 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.Action.domainEvent;
+package demoapp.dom.domain.objects.DomainObject.xxxDomainEvent.child;
 
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.events.domain.ActionDomainEvent;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import lombok.RequiredArgsConstructor;
+import javax.inject.Named;
+import javax.xml.bind.annotation.*;
 
+import org.apache.causeway.applib.annotation.*;
 
 //tag::class[]
-@Action(domainEvent = ActionDomainEventPage_updateText.DomainEvent.class)   // <.>
-@RequiredArgsConstructor
-public class ActionDomainEventPage_updateText {
+@XmlRootElement(name = "demo.DomainObjectXxxDomainEventChildVm")
+@XmlType
+@XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.DomainObjectXxxDomainEventChildVm")
+@DomainObject(nature=Nature.VIEW_MODEL)
+@NoArgsConstructor
+public class DomainObjectXxxDomainEventChildVm implements HasAsciiDocDescription {
 
-    public static class DomainEvent                                         // <.>
-            extends ActionDomainEvent<ActionDomainEventPage> {}
-    // ...
 //end::class[]
-
-    private final ActionDomainEventPage page;
-
-    @MemberSupport public ActionDomainEventPage act(final String text) {
-        page.setText(text);
-        return page;
+    public DomainObjectXxxDomainEventChildVm(final String value) {
+        this.value = value;
     }
-    @MemberSupport public String default0Act() {
-        return page.getText();
-    }
+
 //tag::class[]
+    @Title
+    @Property()
+    @XmlElement(required = true)
+    @Getter @Setter
+    private String value;
+
 }
 //end::class[]
