@@ -16,30 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.collections.Collection.domainEvent.subscribers;
+package demoapp.dom.domain.collections.Collection.domainEvent;
+
+import lombok.RequiredArgsConstructor;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
-
-import demoapp.dom.domain.collections.Collection.domainEvent.CollectionDomainEventVm;
-import lombok.RequiredArgsConstructor;
-
+import org.apache.causeway.applib.annotation.*;
 
 //tag::class[]
-@Property()
+@Action(semantics = SemanticsOf.IDEMPOTENT)
+@ActionLayout(redirectPolicy = Redirect.EVEN_IF_SAME)       // <.>
 @RequiredArgsConstructor
-public class CollectionDomainEventVm_controlChildren {
+public class CollectionDomainEventPage_changeControlStrategy {
 
-    private final CollectionDomainEventVm collectionDomainEventVm;
+    private final CollectionDomainEventPage page;
 
-    @PropertyLayout(fieldSetId = "contributed", sequence = "1")
-    public CollectionDomainEventControlStrategy prop() {
-        return eventControlService.controlStrategy;
+    @MemberSupport public CollectionDomainEventPage act(CollectionDomainEventControlStrategy controlStrategy) {
+        subscriber.controlStrategy = controlStrategy;
+        return page;
+    }
+    @MemberSupport public CollectionDomainEventControlStrategy default0Act() {
+        return subscriber.controlStrategy;
     }
 
-    @Inject
-    CollectionDomainEventControlService eventControlService;
+    @Inject CollectionDomainEventControlSubscriber subscriber;
 }
 //end::class[]

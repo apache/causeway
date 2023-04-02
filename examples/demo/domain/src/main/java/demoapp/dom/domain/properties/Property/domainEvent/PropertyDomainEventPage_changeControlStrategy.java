@@ -18,21 +18,14 @@
  */
 package demoapp.dom.domain.properties.Property.domainEvent;
 
-import javax.inject.Inject;
-
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.PromptStyle;
-import org.apache.causeway.applib.annotation.Redirect;
-import org.apache.causeway.applib.annotation.SemanticsOf;
-
 import lombok.RequiredArgsConstructor;
 
+import javax.inject.Inject;
+
+import org.apache.causeway.applib.annotation.*;
+
 //tag::class[]
-@Action(
-    semantics = SemanticsOf.IDEMPOTENT
-)
+@Action(semantics = SemanticsOf.IDEMPOTENT)
 @ActionLayout(redirectPolicy = Redirect.EVEN_IF_SAME)       // <.>
 @RequiredArgsConstructor
 public class PropertyDomainEventPage_changeControlStrategy {
@@ -40,13 +33,13 @@ public class PropertyDomainEventPage_changeControlStrategy {
     private final PropertyDomainEventPage page;
 
     @MemberSupport public PropertyDomainEventPage act(PropertyDomainEventControlStrategy controlStrategy) {
-        eventControlService.controlStrategy = controlStrategy;
+        subscriber.controlStrategy = controlStrategy;
         return page;
     }
     @MemberSupport public PropertyDomainEventControlStrategy default0Act() {
-        return eventControlService.controlStrategy;
+        return subscriber.controlStrategy;
     }
 
-    @Inject PropertyDomainEventControlSubscriber eventControlService;
+    @Inject PropertyDomainEventControlSubscriber subscriber;
 }
 //end::class[]

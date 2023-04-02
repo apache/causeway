@@ -11,7 +11,7 @@ Domain service subscribers can influence this interaction, either by:
 
 The link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/Property.html#domainevent element specifies the class to be emitted; this must be a subclass of the abstract link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/events/domain/PropertyDomainEvent.html[PropertyDomainEvent] class.
 
-If no `domainEvent` is specified on the property itself, then the domain event class can be specified at the class level using link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/DomainObject.html#actiondomainevent[@DomainObject#propertyDomainEvent].
+If no `domainEvent` is specified on the property itself, then the domain event class can be specified at the class level using link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/DomainObject.html#propertydomainevent[@DomainObject#propertyDomainEvent].
 And if not specified at the class level, then an instance of `o.a.c.applib.events.domain.PropertyDomainEvent.Default` is emitted as the fallback.
 
 == How this demo works
@@ -35,7 +35,7 @@ include::PropertyDomainEventPage.java[tags=class]
 <.> the event class to emit; genericised by the target type and the property type
 It's common to define these as nested classes.
 <.> indicates that the framework should emit domain events of this type
-<.> emits the default domain event
+<.> not annotated and so will emit the default property domain event
 
 * the subscriber that listens to the events:
 +
@@ -55,7 +55,7 @@ include::PropertyDomainEventControlSubscriber.java[tags=class]
 ----
 include::PropertyDomainEventPage_changeControlStrategy.java[tags=class]
 ----
-// <.> forces the page to redraw
+<.> Forces page to fully redraw
 
 * the different strategies:
 

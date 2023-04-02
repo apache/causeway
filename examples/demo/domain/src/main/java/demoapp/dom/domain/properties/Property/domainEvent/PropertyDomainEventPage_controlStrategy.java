@@ -18,17 +18,15 @@
  */
 package demoapp.dom.domain.properties.Property.domainEvent;
 
+import lombok.RequiredArgsConstructor;
+
 import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
-
-import lombok.RequiredArgsConstructor;
 
 
 //tag::class[]
 @Property()
-@PropertyLayout(fieldSetId = "contributed", sequence = "1")
 @RequiredArgsConstructor
 public class PropertyDomainEventPage_controlStrategy {
 

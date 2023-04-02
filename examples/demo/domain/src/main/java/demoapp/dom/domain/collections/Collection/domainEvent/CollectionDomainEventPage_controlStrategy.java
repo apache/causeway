@@ -18,32 +18,24 @@
  */
 package demoapp.dom.domain.collections.Collection.domainEvent;
 
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.SemanticsOf;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.domain.collections.Collection.domainEvent.child.CollectionDomainEventChildVm;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
+import javax.inject.Inject;
+
+import org.apache.causeway.applib.annotation.Property;
+
 
 //tag::class[]
-@Action(
-    semantics = SemanticsOf.NON_IDEMPOTENT,
-    choicesFrom = "children"
-)
-@ActionLayout(sequence = "1")
+@Property()
 @RequiredArgsConstructor
-public class CollectionDomainEventVm_addChild implements HasAsciiDocDescription {
+public class CollectionDomainEventPage_controlStrategy {
 
-    private final CollectionDomainEventVm collectionDomainEventVm;
+    private final CollectionDomainEventPage page;
 
-    public CollectionDomainEventVm_addChild act() {
-        val child = new CollectionDomainEventChildVm("Child #" + ++collectionDomainEventVm.lastChildNumberAdded);
-        collectionDomainEventVm.getChildren().add(child);
-        return this;
+    public CollectionDomainEventControlStrategy prop() {
+        return eventControlService.controlStrategy;
     }
 
-
+    @Inject CollectionDomainEventControlSubscriber eventControlService;
 }
 //end::class[]

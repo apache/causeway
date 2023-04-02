@@ -18,65 +18,63 @@
  */
 package demoapp.dom.domain.collections.Collection.domainEvent;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.domain.collections.Collection.domainEvent.child.CollectionDomainEventChildVm;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.val;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Named;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 
 import org.apache.causeway.applib.annotation.Collection;
-import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.events.domain.CollectionDomainEvent;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.domain.collections.Collection.domainEvent.child.CollectionDomainEventChildVm;
-import lombok.Getter;
-import lombok.Setter;
-
-@XmlRootElement(name = "root")
+@XmlRootElement(name = "demo.PropertyDomainEventPage")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.CollectionDomainEventVm")
-@DomainObject(
-    nature=Nature.VIEW_MODEL,
-    editing = Editing.ENABLED
-)
+@DomainObject(nature=Nature.VIEW_MODEL)
+@NoArgsConstructor
 //tag::class[]
-public class CollectionDomainEventVm implements HasAsciiDocDescription {
+public class CollectionDomainEventPage implements HasAsciiDocDescription {
     // ...
 //end::class[]
+    int lastChildNumberAdded;
 
     @ObjectSupport public String title() {
-        return "Collection#domainEvent";
+        return "@Collection#domainEvent";
+    }
+
+    public void addChild(String value) {
+        this.getChildren().add(new CollectionDomainEventChildVm(value));
+    }
+
+    public void addOtherChild(String value) {
+        this.getMoreChildren().add(new CollectionDomainEventChildVm(value));
     }
 //tag::class[]
 
-    public static class ChildrenDomainEvent             // <.>
-        extends CollectionDomainEvent<CollectionDomainEventVm,CollectionDomainEventChildVm> {}
+    public static class ChildrenDomainEvent                             // <.>
+        extends CollectionDomainEvent<CollectionDomainEventPage,CollectionDomainEventChildVm> {}
 
-//tag::children[]
-    @Collection(
-        domainEvent = ChildrenDomainEvent.class         // <.>
-    )
-    @CollectionLayout(
-        describedAs = "@Collection(domainEvent = ChildrenDomainEvent.class)"
-    )
+    @Collection(domainEvent = ChildrenDomainEvent.class)                // <.>
     @XmlElementWrapper(name = "children")
     @XmlElement(name = "child")
     @Getter @Setter
     private List<CollectionDomainEventChildVm> children = new ArrayList<>();
-//end::children[]
 
-    int lastChildNumberAdded;
-
+    @Collection()                                                       // <.>
+    @XmlElementWrapper(name = "moreChildren")
+    @XmlElement(name = "child")
+    @Getter @Setter
+    private List<CollectionDomainEventChildVm> moreChildren = new ArrayList<>();
 }
 //end::class[]

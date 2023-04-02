@@ -29,8 +29,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.factory.FactoryService;
 
-import demoapp.dom.domain.collections.Collection.domainEvent.CollectionDomainEventVm;
-import demoapp.dom.domain.collections.Collection.domainEvent.CollectionDomainEventVm_addChild;
+import demoapp.dom.domain.collections.Collection.domainEvent.CollectionDomainEventPage;
 import demoapp.dom.domain.collections.Collection.hidden.CollectionHiddenVm;
 import demoapp.dom.domain.collections.Collection.typeOf.CollectionTypeOfVm;
 import lombok.RequiredArgsConstructor;
@@ -49,14 +48,17 @@ public class CollectionMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-asterisk", describedAs = "Class of the domain event emitted when interacting with the collection")
-    public CollectionDomainEventVm domainEvent(){
-        val collectionDomainEventVm = new CollectionDomainEventVm();
+    public CollectionDomainEventPage domainEvent(){
+        val page = new CollectionDomainEventPage();
+        page.addChild("#1");
+        page.addChild("#2");
+        page.addChild("#3");
 
-        addChild(collectionDomainEventVm).act();
-        addChild(collectionDomainEventVm).act();
-        addChild(collectionDomainEventVm).act();
+        page.addOtherChild("#1");
+        page.addOtherChild("#2");
+        page.addOtherChild("#3");
 
-        return collectionDomainEventVm;
+        return page;
     }
 
     @Action(semantics = SemanticsOf.SAFE)
@@ -69,12 +71,6 @@ public class CollectionMenu {
     @ActionLayout(cssClassFa="fa-shapes", describedAs = "Element type of collections")
     public CollectionTypeOfVm typeOf(){
         return new CollectionTypeOfVm();
-    }
-
-    // -- HELPER
-
-    private CollectionDomainEventVm_addChild addChild(final CollectionDomainEventVm collectionDomainEventVm) {
-        return factoryService.mixin(CollectionDomainEventVm_addChild.class, collectionDomainEventVm);
     }
 
 

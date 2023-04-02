@@ -16,33 +16,37 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.collections.Collection.domainEvent.subscribers;
+package demoapp.dom.domain.collections.Collection.domainEvent;
 
-import javax.inject.Inject;
-
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Service;
-
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 
-import demoapp.dom.domain.collections.Collection.domainEvent.CollectionDomainEventVm;
-import lombok.RequiredArgsConstructor;
+@SuppressWarnings("SwitchStatementWithTooFewBranches")
+// tag::class[]
+enum CollectionDomainEventControlStrategy {
+
+    DO_NOTHING{
+        @Override
+        void on(CollectionDomainEventPage.ChildrenDomainEvent ev, ServiceRegistry serviceRegistry) {
+        }
+    },
+    // ...
+// end::class[]
+
+// tag::hide[]
+    HIDE {
+        @Override
+        void on(CollectionDomainEventPage.ChildrenDomainEvent ev, ServiceRegistry serviceRegistry) {
+            switch (ev.getEventPhase()) {
+                case HIDE:
+                    ev.hide();
+                    break;
+            }
+        }
+    },
+// end::hide[]
 
 // tag::class[]
-@Service
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
-@RequiredArgsConstructor(onConstructor_ = { @Inject })
-class CollectionDomainEventControlService {
-
-    final ServiceRegistry serviceRegistry;
-
-    CollectionDomainEventControlStrategy controlStrategy = CollectionDomainEventControlStrategy.DO_NOTHING;   // <.>
-
-    @EventListener(CollectionDomainEventVm.ChildrenDomainEvent.class)     // <.>
-    public void on(CollectionDomainEventVm.ChildrenDomainEvent ev) {
-        controlStrategy.on(ev, serviceRegistry);
-    }
-
+    ;
+    abstract void on(CollectionDomainEventPage.ChildrenDomainEvent ev, ServiceRegistry serviceRegistry);
 }
 // end::class[]
