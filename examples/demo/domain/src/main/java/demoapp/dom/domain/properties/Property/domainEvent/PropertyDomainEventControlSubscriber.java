@@ -16,8 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.Property.domainEvent.subscribers;
+package demoapp.dom.domain.properties.Property.domainEvent;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 
 import org.springframework.context.event.EventListener;
@@ -26,23 +27,21 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 
-import demoapp.dom.domain.properties.Property.domainEvent.PropertyDomainEventPage;
 import lombok.RequiredArgsConstructor;
 
 // tag::class[]
 @Service
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
-class PropertyDomainEventControlService {
+class PropertyDomainEventControlSubscriber {
 
     final ServiceRegistry serviceRegistry;
 
-    PropertyDomainEventControlStrategy controlStrategy = PropertyDomainEventControlStrategy.DO_NOTHING;   // <.>
+    PropertyDomainEventControlStrategy controlStrategy =
+            PropertyDomainEventControlStrategy.DO_NOTHING;              // <.>
 
-    @EventListener(PropertyDomainEventPage.TextDomainEvent.class)     // <.>
+    @EventListener(PropertyDomainEventPage.TextDomainEvent.class)       // <.>
     public void on(PropertyDomainEventPage.TextDomainEvent ev) {
-        controlStrategy.on(ev, serviceRegistry);
+        controlStrategy.on(ev, serviceRegistry);                        // <.>
     }
-
 }
 // end::class[]

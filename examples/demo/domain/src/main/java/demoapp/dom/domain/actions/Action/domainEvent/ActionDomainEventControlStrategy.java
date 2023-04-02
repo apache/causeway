@@ -36,7 +36,7 @@ enum ActionDomainEventControlStrategy {
 // end::class[]
 
 // tag::hide[]
-    HIDE_ACTION {
+    HIDE {
         @Override
         void on(ActionDomainEvent<?> ev, ServiceRegistry serviceRegistry) {
             switch (ev.getEventPhase()) {

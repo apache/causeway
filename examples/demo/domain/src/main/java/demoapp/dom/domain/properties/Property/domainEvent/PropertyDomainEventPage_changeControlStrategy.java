@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.Property.domainEvent.subscribers;
+package demoapp.dom.domain.properties.Property.domainEvent;
 
 import javax.inject.Inject;
 
@@ -27,33 +27,26 @@ import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.Redirect;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
-import demoapp.dom.domain.properties.Property.domainEvent.PropertyDomainEventPage;
 import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(
     semantics = SemanticsOf.IDEMPOTENT
 )
-@ActionLayout(
-    promptStyle = PromptStyle.INLINE_AS_IF_EDIT
-    , redirectPolicy = Redirect.EVEN_IF_SAME                        // <.>
-    , associateWith = "controlText"
-    , sequence = "1"
-)
+@ActionLayout(redirectPolicy = Redirect.EVEN_IF_SAME)       // <.>
 @RequiredArgsConstructor
-public class PropertyDomainEventVm_controlTextEditing {
+public class PropertyDomainEventPage_changeControlStrategy {
 
-    private final PropertyDomainEventPage propertyDomainEventVm;
+    private final PropertyDomainEventPage page;
 
-    @MemberSupport public PropertyDomainEventPage act(final PropertyDomainEventControlStrategy controlStrategy) {
+    @MemberSupport public PropertyDomainEventPage act(PropertyDomainEventControlStrategy controlStrategy) {
         eventControlService.controlStrategy = controlStrategy;
-        return propertyDomainEventVm;
+        return page;
     }
     @MemberSupport public PropertyDomainEventControlStrategy default0Act() {
         return eventControlService.controlStrategy;
     }
 
-    @Inject
-    PropertyDomainEventControlService eventControlService;
+    @Inject PropertyDomainEventControlSubscriber eventControlService;
 }
 //end::class[]

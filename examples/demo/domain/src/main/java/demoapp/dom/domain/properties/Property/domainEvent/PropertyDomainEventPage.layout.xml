@@ -28,8 +28,17 @@
 		<bs3:col span="6">
 			<bs3:row>
 				<bs3:col span="12">
-					<cpt:fieldSet name="Annotated" id="annotation"/>
-					<cpt:fieldSet name="Contributed" id="contributed"/>
+					<cpt:fieldSet name="Object" id="object">
+						<cpt:property id="text"/>
+						<cpt:property id="otherText"/>
+					</cpt:fieldSet>
+					<cpt:fieldSet name="Control" id="contributed">
+						<cpt:property id="controlStrategy">
+							<cpt:action id="changeControlStrategy">
+								<cpt:named>Change</cpt:named>
+							</cpt:action>
+						</cpt:property>
+					</cpt:fieldSet>
 					<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
 				</bs3:col>
 			</bs3:row>
@@ -37,12 +46,15 @@
 		<bs3:col span="6">
 			<cpt:fieldSet name="Description" id="description" >
 				<cpt:action id="clearHints" position="PANEL" />
-				<cpt:action id="downloadLayoutXml"  position="PANEL_DROPDOWN"/>
 				<cpt:action id="rebuildMetamodel" position="PANEL"/>
-				<cpt:action id="downloadMetamodelXml"  position="PANEL_DROPDOWN"/>
+				<cpt:action id="downloadLayout"  position="PANEL_DROPDOWN"/>
 				<cpt:action id="inspectMetamodel"  position="PANEL_DROPDOWN"/>
+				<cpt:action id="downloadMetamodelXml"  position="PANEL_DROPDOWN"/>
+				<cpt:action id="downloadJdoMetamodel"  position="PANEL_DROPDOWN"/>
                 <cpt:action id="recentCommands"  position="PANEL_DROPDOWN"/>
-				<cpt:action id="downloadJdoMetadata"  position="PANEL_DROPDOWN"/>
+                <cpt:action id="recentExecutions"  position="PANEL_DROPDOWN"/>
+                <cpt:action id="recentAuditTrailEntries"  position="PANEL_DROPDOWN"/>
+				<cpt:action id="impersonateWithRoles"  position="PANEL_DROPDOWN"/>
 				<cpt:action id="openRestApi" position="PANEL_DROPDOWN" />
 				<cpt:property id="description"/>
 			</cpt:fieldSet>

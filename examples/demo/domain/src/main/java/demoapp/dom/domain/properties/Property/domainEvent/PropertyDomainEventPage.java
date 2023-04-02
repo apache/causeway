@@ -18,59 +18,52 @@
  */
 package demoapp.dom.domain.properties.Property.domainEvent;
 
-import javax.inject.Named;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Editing;
-import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
-
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@XmlRootElement(name = "root")
+import javax.inject.Named;
+import javax.xml.bind.annotation.*;
+
+import org.apache.causeway.applib.annotation.*;
+import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
+
+@XmlRootElement(name = "demo.PropertyDomainEventPage")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.PropertyDomainEventPage")
-@DomainObject(
-    nature=Nature.VIEW_MODEL,
-    editing = Editing.ENABLED)
 @NoArgsConstructor
 //tag::class[]
+// ...
+@DomainObject(
+    nature=Nature.VIEW_MODEL,
+    editing = Editing.ENABLED)                                      // <.>
 public class PropertyDomainEventPage implements HasAsciiDocDescription {
     // ...
 //end::class[]
 
     public PropertyDomainEventPage(final String text) {
         this.text = text;
+        this.otherText = text;
     }
 
     @ObjectSupport public String title() {
-        return "Property#domainEvent";
+        return "@Property#domainEvent";
     }
-//tag::class[]
 
+//tag::class[]
     public static class TextDomainEvent                             // <.>
         extends PropertyDomainEvent<PropertyDomainEventPage,String> {}
 
-    @Property(
-        domainEvent = TextDomainEvent.class                         // <.>
-    )
-    @PropertyLayout(
-        describedAs = "@Property(domainEvent = TextDomainEvent.class)",
-        fieldSetId = "annotation", sequence = "1")
+    @Property(domainEvent = TextDomainEvent.class)                  // <.>
     @XmlElement(required = true)
     @Getter @Setter
     private String text;
+
+    @Property()                                                     // <.>
+    @XmlElement(required = true)
+    @Getter @Setter
+    private String otherText;
 }
 //end::class[]

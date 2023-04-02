@@ -32,13 +32,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ActionDomainEventPage_controlStrategy {
 
-    private final ActionDomainEventPage actionDomainEventVm;
+    private final ActionDomainEventPage page;
 
     public ActionDomainEventControlStrategy prop() {
         return eventActionDomainEventControlService.controlStrategy;
     }
 
-    @Inject
-    ActionDomainEventControlSubscriber eventActionDomainEventControlService;
+    @Inject ActionDomainEventControlSubscriber eventActionDomainEventControlService;
 }
 //end::class[]

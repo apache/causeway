@@ -34,7 +34,8 @@ class ActionDomainEventControlSubscriber {
 
     final ServiceRegistry serviceRegistry;
 
-    ActionDomainEventControlStrategy controlStrategy = ActionDomainEventControlStrategy.DO_NOTHING;
+    ActionDomainEventControlStrategy controlStrategy =
+            ActionDomainEventControlStrategy.DO_NOTHING;                    // <.>
 
     @EventListener(ActionDomainEventPage_updateText.DomainEvent.class)      // <.>
     public void on(ActionDomainEventPage_updateText.DomainEvent ev) {
