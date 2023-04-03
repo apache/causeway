@@ -28,4 +28,5 @@ module org.apache.causeway.incubator.viewer.thymeflux.model {
     requires spring.beans;
     requires thymeleaf.spring6;
     requires org.apache.causeway.applib;
+    requires org.apache.causeway.core.metamodel;
 }

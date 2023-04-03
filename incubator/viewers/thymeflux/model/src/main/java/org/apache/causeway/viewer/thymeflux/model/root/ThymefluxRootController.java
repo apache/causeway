@@ -48,18 +48,11 @@ public class ThymefluxRootController {
 
             var headerUiModel = headerUiModelProvider.getHeader();
 
-            headerUiModel.getBranding();
-            headerUiModel.getUserProfile();
-            //addServiceActionMenuBars(headerUiModel);
-
             model.addAttribute("headerUiModel", headerUiModel);
-
-            model.addAttribute("helloMsg", "Hello World!");
 
         });
 
-
-
+        //TODO on error use error template instead
         return "root";
     }
 
