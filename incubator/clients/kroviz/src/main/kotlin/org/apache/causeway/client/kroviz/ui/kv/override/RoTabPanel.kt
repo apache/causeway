@@ -30,7 +30,6 @@ import io.kvision.core.WidgetWrapper
 import io.kvision.panel.SimplePanel
 import io.kvision.routing.RoutingManager
 import io.kvision.snabbdom.VNode
-import io.kvision.utils.auto
 import io.kvision.utils.obj
 import org.apache.causeway.client.kroviz.ui.core.ViewManager
 
@@ -117,7 +116,7 @@ open class RoTabPanel(
 
     init {
         //TODO to be set by caller
-        width = auto
+        width = CssSize(100, UNIT.vw)
         marginTop = CssSize(40, UNIT.px)
         when (tabPosition) {
             TabPosition.TOP -> {

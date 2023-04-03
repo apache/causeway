@@ -24,6 +24,7 @@ import io.kvision.core.UNIT
 import io.kvision.dropdown.DropDown
 import io.kvision.dropdown.separator
 import io.kvision.html.ButtonStyle
+import io.kvision.utils.auto
 import org.apache.causeway.client.kroviz.core.event.ResourceProxy
 import org.apache.causeway.client.kroviz.to.Link
 import org.apache.causeway.client.kroviz.to.TObject
@@ -44,7 +45,7 @@ object DropDownMenuBuilder {
         disableSaveUndo(dd)
         dd.marginTop = CssSize(Constants.spacing, UNIT.px)
         dd.marginBottom = CssSize(Constants.spacing, UNIT.px)
-        dd.width = CssSize(100, UNIT.perc)
+        dd.width = auto
         return dd
     }
 

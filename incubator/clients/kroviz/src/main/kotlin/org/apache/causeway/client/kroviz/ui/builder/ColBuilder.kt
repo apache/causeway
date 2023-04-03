@@ -72,7 +72,8 @@ class ColBuilder : UiBuilder() {
                 // objectDM is sometimes null
                 val cdm = objectDM.getCollectionDisplayModelFor(id)!!
                 val fsPanel = FieldsetPanel(legend = cdm.getTitle())
-                fsPanel.add(RoTable(cdm))
+                val tablePanel = RoTable(cdm)
+                fsPanel.add(tablePanel)
                 panel.add(fsPanel)
                 cdm.isRendered = true
             } catch (npe: NullPointerException) {
@@ -109,7 +110,7 @@ class ColBuilder : UiBuilder() {
         val proportion = col.span.toDouble().div(12)
         val percent = proportion * 100
         val rounded = round(percent)
-        val cssWidth = CssSize(rounded, UNIT.perc)
+        val cssWidth = CssSize(rounded, UNIT.vw)
         panel.flexBasis = cssWidth
         panel.flexGrow = 1
     }

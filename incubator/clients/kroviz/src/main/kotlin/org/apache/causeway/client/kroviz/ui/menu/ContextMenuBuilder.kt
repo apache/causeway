@@ -46,16 +46,11 @@ object ContextMenuBuilder {
     fun buildForObject(
         tObject: TObject,
         withText: Boolean = true,
-//        iconName: String = "Actions",
     )
             : ContextMenu {
         val type = tObject.domainType
         val text = if (withText) "Actions for $type" else ""
-//        val icon = IconManager.find(iconName)
         val cm = ContextMenu(
-//            text = text,
-//            icon = icon,
-//            style = ButtonStyle.LINK
         )
         val actions = tObject.getActions()
         actions.forEach {

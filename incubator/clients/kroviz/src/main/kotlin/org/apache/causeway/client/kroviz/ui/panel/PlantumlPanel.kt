@@ -36,7 +36,7 @@ object PlantumlPanel : VPanel() {
 
     var diagramPanel = vPanel(spacing = 3) {
         id = "diagramPanel"
-        width = CssSize(100, UNIT.perc)
+        width = CssSize(100, UNIT.vw)
     }
 
     val textBox = TextArea(label = "Enter plantuml code here", rows = 20)
