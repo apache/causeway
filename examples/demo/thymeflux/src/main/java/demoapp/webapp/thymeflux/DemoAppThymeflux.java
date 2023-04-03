@@ -78,8 +78,8 @@ public class DemoAppThymeflux extends SpringBootServletInitializer {
         CausewayPresets.prototyping();
         //CausewayPresets.logging(WebRequestCycleForCauseway.class, "debug");
 
-        SpringProfileUtil.removeActiveProfile("demo-jpa"); // just in case
-        SpringProfileUtil.addActiveProfile("demo-jdo");
+        SpringProfileUtil.removeActiveProfile("demo-jdo"); // just in case
+        SpringProfileUtil.addActiveProfile("demo-jpa");
 
         CausewayModuleExtCommandLogApplib.honorSystemEnvironment();
 

@@ -19,8 +19,13 @@
 module org.apache.causeway.incubator.viewer.thymeflux.model {
     exports org.apache.causeway.viewer.thymeflux.model;
 
+    requires static lombok;
     requires org.apache.causeway.core.config;
     requires org.apache.causeway.incubator.viewer.thymeflux.applib;
     requires spring.context;
     requires spring.web;
+    requires org.apache.causeway.viewer.commons.applib;
+    requires spring.beans;
+    requires thymeleaf.spring6;
+    requires org.apache.causeway.applib;
 }

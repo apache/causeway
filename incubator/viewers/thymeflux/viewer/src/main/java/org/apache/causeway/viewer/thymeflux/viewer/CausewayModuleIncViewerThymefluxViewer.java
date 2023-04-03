@@ -22,11 +22,13 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.causeway.viewer.commons.services.CausewayModuleViewerCommonsServices;
 import org.apache.causeway.viewer.thymeflux.model.CausewayModuleIncViewerThymefluxModel;
 
 @Configuration
 @Import({
         // @Service's
+        CausewayModuleViewerCommonsServices.class,
 
         // Modules
         CausewayModuleIncViewerThymefluxModel.class,

@@ -18,16 +18,47 @@
  */
 package org.apache.causeway.viewer.thymeflux.model.root;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.user.UserMemento;
+import org.apache.causeway.viewer.commons.applib.services.header.HeaderUiService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+
 @Controller
+@RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class ThymefluxRootController {
+
+    private final InteractionService interactionService;
+    private final HeaderUiService headerUiModelProvider;
 
     @RequestMapping("/tflux")
     public String root(final Model model) {
-        model.addAttribute("helloMsg", "Hello World!");
+
+        val svenMockup = UserMemento.ofNameAndRoleNames("sven", "causeway-ext-secman-admin", "demo");
+        val interactionContextMockup = InteractionContext.ofUserWithSystemDefaults(svenMockup);
+
+        interactionService.run(interactionContextMockup, ()->{
+
+            var headerUiModel = headerUiModelProvider.getHeader();
+
+            headerUiModel.getBranding();
+            headerUiModel.getUserProfile();
+            //addServiceActionMenuBars(headerUiModel);
+
+            model.addAttribute("headerUiModel", headerUiModel);
+
+            model.addAttribute("helloMsg", "Hello World!");
+
+        });
+
+
 
         return "root";
     }

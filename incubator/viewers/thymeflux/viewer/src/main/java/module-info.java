@@ -33,4 +33,5 @@ module org.apache.causeway.incubator.viewer.thymeflux.viewer {
     requires spring.core;
     requires spring.tx;
     requires org.apache.causeway.incubator.viewer.thymeflux.model;
+    requires org.apache.causeway.viewer.commons.services;
 }

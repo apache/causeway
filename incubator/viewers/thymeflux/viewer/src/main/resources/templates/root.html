@@ -69,6 +69,45 @@
             <h1>Spring WebFlux + Thymeleaf</h1>
         </div>
         
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th width="25%">Model</th>
+                <th>Data</th>
+            </tr>
+            </thead>
+            <tbody>
+            
+            <tr class="result">
+                <td>Branding Name</td>
+                <td>[[${headerUiModel.branding.name}]]</td>
+            </tr>
+            <tr class="result">
+                <td>Branding Logo</td>
+                <td>[[${headerUiModel.branding.logoHref}]]</td>
+            </tr>
+            
+            <tr class="result" th:each="menuModel : ${headerUiModel.primary}">
+                <td>[[${menuModel.menuBarSelect}]]</td>
+                <td>[[${menuModel.menuContributingServiceIds}]]</td>
+            </tr>
+            <tr class="result" th:each="menuModel : ${headerUiModel.secondary}">
+                <td>[[${menuModel.menuBarSelect}]]</td>
+                <td>[[${menuModel.menuContributingServiceIds}]]</td>
+            </tr>
+            <tr class="result" th:each="menuModel : ${headerUiModel.tertiary}">
+                <td>[[${menuModel.menuBarSelect}]]</td>
+                <td>[[${menuModel.menuContributingServiceIds}]]</td>
+            </tr>
+            
+            <tr class="result">
+                <td>User</td>
+                <td>[[${headerUiModel.userProfile.userMemento.name}]]</td>
+            </tr>
+            
+            </tbody>
+        </table>
+        
         <label>[[${helloMsg}]]</label>
         
         

@@ -50,14 +50,14 @@
 			<version>3.0.0-SNAPSHOT</version>
 		</dependency>
 
-		<!-- EXTENSIONS THYMEFLUX 
+		<!-- EXTENSIONS THYMEFLUX --> 
 
 		<dependency>
 			<groupId>org.apache.causeway.valuetypes</groupId>
-			<artifactId>causeway-valuetypes-asciidoc-ui-thymeflux</artifactId>
+			<artifactId>causeway-valuetypes-asciidoc-ui</artifactId>
+			<version>3.0.0-SNAPSHOT</version>
+			<type>pom</type>
 		</dependency>
-		
-		-->
 
 		<!-- OTHER DEPENDENCIES -->
 

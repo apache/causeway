@@ -27,10 +27,10 @@ module org.apache.causeway.incubator.viewer.javafx.model {
     exports org.apache.causeway.incubator.viewer.javafx.model.util;
     exports org.apache.causeway.incubator.viewer.javafx.model.events;
 
+    requires static lombok;
     requires javafx.base;
     requires javafx.controls;
     requires javafx.graphics;
-    requires lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;
     requires org.apache.causeway.core.config;

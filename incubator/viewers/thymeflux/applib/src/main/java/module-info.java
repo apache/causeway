@@ -19,5 +19,6 @@
 module org.apache.causeway.incubator.viewer.thymeflux.applib {
     exports org.apache.causeway.viewer.thymeflux.applib;
 
+    requires static lombok;
     requires spring.context;
 }
