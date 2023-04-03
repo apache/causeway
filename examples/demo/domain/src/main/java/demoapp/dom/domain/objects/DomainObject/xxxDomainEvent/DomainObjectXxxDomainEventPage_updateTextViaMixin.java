@@ -27,7 +27,7 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 //tag::class[]
 @Action()
 @RequiredArgsConstructor
-public class DomainObjectXxxDomainEventPage_updateTextMixin {
+public class DomainObjectXxxDomainEventPage_updateTextViaMixin {
 
     private final DomainObjectXxxDomainEventPage page;
 

@@ -43,24 +43,24 @@ import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
 //tag::class[]
 // ...
 @DomainObject(
-    actionDomainEvent = DomainObjectXxxDomainEventPage.ActionEvent.class,           //  <.>
-    propertyDomainEvent = DomainObjectXxxDomainEventPage.PropertyEvent.class,       //  <.>
-    collectionDomainEvent = DomainObjectXxxDomainEventPage.CollectionEvent.class,   //  <.>
+    actionDomainEvent = DomainObjectXxxDomainEventPage.ActionEvent.class,           // <.>
+    propertyDomainEvent = DomainObjectXxxDomainEventPage.PropertyEvent.class,       // <.>
+    collectionDomainEvent = DomainObjectXxxDomainEventPage.CollectionEvent.class,   // <.>
     nature=Nature.VIEW_MODEL
 )
 public class DomainObjectXxxDomainEventPage implements HasAsciiDocDescription {
 
-    public interface DomainEventMarker {}                                           //  <.>
+    public interface DomainEventMarker {}                                           // <.>
 
-    public static class ActionEvent                                                 //  <1>
+    public static class ActionEvent                                                 // <1>
             extends ActionDomainEvent<DomainObjectXxxDomainEventPage>
             implements DomainEventMarker {}
 
-    public static class PropertyEvent                                               //  <2>
+    public static class PropertyEvent                                               // <2>
             extends PropertyDomainEvent<DomainObjectXxxDomainEventPage, Object>
             implements DomainEventMarker {}
 
-    public static class CollectionEvent                                             //  <3>
+    public static class CollectionEvent                                             // <3>
             extends CollectionDomainEvent<DomainObjectXxxDomainEventPage, Object>
             implements DomainEventMarker {}
     // ...
@@ -84,14 +84,14 @@ public class DomainObjectXxxDomainEventPage implements HasAsciiDocDescription {
     @Getter @Setter
     private String text;
 
-    public DomainObjectXxxDomainEventPage updateTextDirectly(String text) {
+    @Action(semantics = SemanticsOf.SAFE)
+    public DomainObjectXxxDomainEventPage updateTextDirectly(String text) {         // <.>
         setText(text);
         return this;
     }
-    public String default0UpdateTextDirectly() {
+    @MemberSupport public String default0UpdateTextDirectly() {
         return getText();
     }
-
 
     @Collection
     @XmlElementWrapper(name = "children")

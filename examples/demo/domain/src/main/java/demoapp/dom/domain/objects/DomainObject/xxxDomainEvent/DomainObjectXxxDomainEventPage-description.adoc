@@ -35,14 +35,16 @@ include::DomainObjectXxxDomainEventPage.java[tags=class]
 <.> the collection domain event class to emit (if not annotated at the member level)
 <.> marker interface.
 All the domain event classes implement this interface, and the subscriber (see below) subscribes on this type
-<.> the property can be edited directly (and can also be modified using a action (see below)
+<.> the property can be edited directly
+<.> the property can also be edited by this action.
+The property can also be edited via a mixin action (see next)
 
-* the mixin action to update the property
+* the mixin action to update the property:
 +
 [source,java]
 .DomainObjectXxxDomainEventPage_updateText.java
 ----
-include::DomainObjectXxxDomainEventPage_updateText.java[tags=class]
+include::DomainObjectXxxDomainEventPage_updateTextViaMixin.java[tags=class]
 ----
 
 
@@ -64,6 +66,7 @@ include::DomainObjectXxxDomainEventControlSubscriber.java[tags=class]
 ----
 include::DomainObjectXxxDomainEventPage_changeControlStrategy.java[tags=class]
 ----
+<.> Emits its own domain event just so that it won't hide itself (!)
 
 * the different strategies:
 

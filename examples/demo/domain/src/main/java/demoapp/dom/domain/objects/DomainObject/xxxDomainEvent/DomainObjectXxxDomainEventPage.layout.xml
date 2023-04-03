@@ -17,6 +17,13 @@
 
 	<bs3:row>
 		<bs3:col span="10" unreferencedActions="true">
+			<!-- have located these actions here rather than with the 'text' property, so can validate that they do correctly hide themselves -->
+			<cpt:action id="updateTextDirectly">
+				<cpt:named>update text</cpt:named>
+			</cpt:action>
+			<cpt:action id="updateTextViaMixin">
+				<cpt:named>update text (via mixin)</cpt:named>
+			</cpt:action>
 			<cpt:domainObject />
 		</bs3:col>
 		<bs3:col span="2">
@@ -30,9 +37,6 @@
 				<bs3:col span="12">
 					<cpt:fieldSet name="Object" id="object">
 						<cpt:property id="text">
-							<cpt:action id="updateText">
-								<cpt:named>update</cpt:named>
-							</cpt:action>
 						</cpt:property>
 					</cpt:fieldSet>
 				</bs3:col>
