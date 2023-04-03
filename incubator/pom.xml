@@ -208,6 +208,7 @@
  		<module>extensions/core/commandreplay</module>
 		<module>viewers/graphql</module>
 		<module>viewers/javafx</module>
+		<module>viewers/thymeflux</module>
 		<module>viewers/vaadin</module>
 		<module>../valuetypes/asciidoc/ui/vaadin</module>
 	</modules>
