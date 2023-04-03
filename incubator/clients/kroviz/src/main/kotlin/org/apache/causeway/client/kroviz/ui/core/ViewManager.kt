@@ -102,7 +102,7 @@ object ViewManager {
         val tObject = aggregator.getObject()
         var menu: ContextMenu? = null
         if (tObject != null) {
-            menu = ContextMenuBuilder.buildForObjectWithSaveAndUndo(tObject)
+            menu = ContextMenuBuilder().buildForObjectWithSaveAndUndo(tObject)
         }
         getRoView().addTab(title, panel, menu)
         getEventStore().addView(title, aggregator, panel)

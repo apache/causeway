@@ -32,7 +32,6 @@ import org.apache.causeway.client.kroviz.core.event.ResourceSpecification
 import org.apache.causeway.client.kroviz.core.model.Exposer
 import org.apache.causeway.client.kroviz.to.TObject
 import org.apache.causeway.client.kroviz.ui.menu.DropDownMenuBuilder
-import org.apache.causeway.client.kroviz.ui.menu.DropDownMenuBuilder.buildForTitle
 import org.apache.causeway.client.kroviz.utils.IconManager
 import org.apache.causeway.client.kroviz.utils.StringUtils
 
@@ -110,7 +109,7 @@ class RoIconBar : SimplePanel() {
                 val hasIconName = ed.hasOwnProperty("iconName") as Boolean
                 val iconName = if (hasIconName) (ed["iconName"] as String) else ""
 
-                val icon = DropDownMenuBuilder.buildForObject(
+                val icon = DropDownMenuBuilder().buildForObject(
                     tObject = obj,
                     iconName = iconName,
                     withText = false)
@@ -127,12 +126,12 @@ class RoIconBar : SimplePanel() {
         val titles = id.split(Constants.actionSeparator)
         val menuTitle = titles[0]
         val actionTitle = titles[1]
-        val icon = DropDownMenuBuilder.buildForAction(menuTitle, actionTitle)!!
+        val icon = DropDownMenuBuilder().buildForAction(menuTitle, actionTitle)!!
         return initIcon(icon, id, id, "icon-bar-action", icon.id!!)
     }
 
     private fun createFactoryIcon(id: String): SimplePanel {
-        val icon = buildForTitle(id)!!
+        val icon = DropDownMenuBuilder().buildForTitle(id)!!
         return initIcon(icon, id, id, "icon-bar-factory", icon.buttonId()!!)
     }
 

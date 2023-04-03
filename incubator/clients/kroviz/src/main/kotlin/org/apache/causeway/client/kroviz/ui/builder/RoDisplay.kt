@@ -48,13 +48,13 @@ class RoDisplay(val displayModel: ObjectDM) : Displayable, VPanel() {
             this.fontStyle = FontStyle.ITALIC
             this.fontWeight = FontWeight.BOLD
             if (menu != null) {
-                DropDownMenuBuilder.enableSaveUndo(menu!!)
+                DropDownMenuBuilder().enableSaveUndo(menu!!)
             }
         } else {
             this.fontStyle = FontStyle.NORMAL
             this.fontWeight = FontWeight.NORMAL
             if (menu != null) {
-                DropDownMenuBuilder.disableSaveUndo(menu!!)
+                DropDownMenuBuilder().disableSaveUndo(menu!!)
             }
         }
     }

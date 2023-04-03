@@ -99,7 +99,7 @@ class ColBuilder : UiBuilder() {
         val panel = HPanel()
         style(panel)
 
-        val dd = DropDownMenuBuilder.buildForObjectWithSaveAndUndo(tObject)
+        val dd = DropDownMenuBuilder().buildForObjectWithSaveAndUndo(tObject)
         dsp.menu = dd
         panel.add(dd)
 

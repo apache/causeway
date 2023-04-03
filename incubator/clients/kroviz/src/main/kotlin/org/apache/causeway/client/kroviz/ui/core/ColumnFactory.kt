@@ -67,7 +67,7 @@ class ColumnFactory {
         val row = cell.getRow()
         val exposer = row.getData() as Exposer
         val tObject = exposer.delegate
-        return DynamicMenuBuilder.buildObjectMenu(tObject)
+        return DynamicMenuBuilder().buildObjectMenu(tObject)
     }
 
     private fun addColumnForObjectIcon(
