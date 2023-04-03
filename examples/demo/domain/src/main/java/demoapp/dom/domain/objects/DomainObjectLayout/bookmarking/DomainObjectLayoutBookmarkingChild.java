@@ -19,36 +19,28 @@
 package demoapp.dom.domain.objects.DomainObjectLayout.bookmarking;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolder;
 
-import javax.inject.Named;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import org.apache.causeway.applib.annotation.BookmarkPolicy;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 
-import org.apache.causeway.applib.annotation.*;
-
-//tag::class[]
-@XmlRootElement(name = "root")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.DomainObjectLayoutBookmarkingVm")
-@DomainObject(
-        nature=Nature.VIEW_MODEL)
 @DomainObjectLayout(
-        bookmarking = BookmarkPolicy.AS_ROOT    // <.>
+        bookmarking = BookmarkPolicy.AS_CHILD    // <.>
 )
-public class DomainObjectLayoutBookmarkingPage implements HasAsciiDocDescription {
+public abstract class DomainObjectLayoutBookmarkingChild
+        implements
+        HasAsciiDocDescription,
+        ValueHolder<String> {
 
-    @ObjectSupport public String title() {
-        return "DomainObjectLayout#bookmarking";
+    public String title() {
+        return value();
     }
 
-    @Action
-    public DomainObjectLayoutBookmarkingNestedVm nestedObject() {
-        return new DomainObjectLayoutBookmarkingNestedVm(this);
+    @Override
+    public String value() {
+        return getName();
     }
 
-
+    public abstract String getName();
+    public abstract void setName(String value);
 }
-//end::class[]

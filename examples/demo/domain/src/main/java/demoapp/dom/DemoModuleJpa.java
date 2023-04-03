@@ -31,6 +31,8 @@ import demoapp.dom.domain.objects.DomainObject.introspection.encapsulated.jpa.Do
 import demoapp.dom.domain.objects.DomainObject.mixinMethod.jpa.DomainObjectMixinMethodJpa;
 import demoapp.dom.domain.objects.DomainObject.nature.entity.jpa.DomainObjectNatureJpa;
 import demoapp.dom.domain.objects.DomainObject.xxxLifecycleEvent.jpa.DomainObjectXxxLifecycleEventJpa;
+import demoapp.dom.domain.objects.DomainObjectLayout.bookmarking.jpa.DomainObjectLayoutBookmarkingChildJpa;
+import demoapp.dom.domain.objects.DomainObjectLayout.bookmarking.jpa.DomainObjectLayoutBookmarkingJpa;
 import demoapp.dom.domain.objects.other.embedded.jpa.NumberConstantJpa;
 import demoapp.dom.domain.properties.Property.commandPublishing.jpa.PropertyCommandPublishingJpa;
 import demoapp.dom.domain.properties.Property.executionPublishing.jpa.PropertyExecutionPublishingJpa;
@@ -106,6 +108,8 @@ import org.springframework.context.annotation.Profile;
         DomainObjectIntrospectionEncapsulatedJpa.class,
         DomainObjectMixinMethodJpa.class,
         DomainObjectXxxLifecycleEventJpa.class,
+        DomainObjectLayoutBookmarkingJpa.class,
+        DomainObjectLayoutBookmarkingChildJpa.class,
 
         CausewayBlobJpa.class,
         CausewayClobJpa.class,

@@ -20,7 +20,7 @@ public class DomainObjectMixinMethodPage_objects {
     // ...
 //end::class[]
     @SuppressWarnings("unused")
-    private final DomainObjectMixinMethodPage mixee;
+    private final DomainObjectMixinMethodPage page;
 
 //tag::class[]
     public List<? extends DomainObjectMixinMethod> collection() {   // <.>

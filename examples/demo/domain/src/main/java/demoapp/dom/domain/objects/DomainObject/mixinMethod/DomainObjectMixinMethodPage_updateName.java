@@ -20,7 +20,7 @@ import org.apache.causeway.applib.annotation.DomainObject;
 public class DomainObjectMixinMethodPage_updateName {
     // ...
 //end::class[]
-    private final DomainObjectMixinMethodPage mixee;
+    private final DomainObjectMixinMethodPage page;
 
 //tag::class[]
     public DomainObjectMixinMethodPage action(          // <.>
@@ -30,7 +30,7 @@ public class DomainObjectMixinMethodPage_updateName {
         // ...
 //end::class[]
         object.setName(newName);
-        return mixee;
+        return page;
 //tag::class[]
     }
 //end::class[]

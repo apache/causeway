@@ -16,33 +16,42 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.introspection;
+package demoapp.dom.domain.objects.DomainObjectLayout.bookmarking;
 
-import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.objects.DomainObject.introspection.annotOpt.DomainObjectIntrospectionAnnotOpt;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolder;
+import demoapp.dom.types.Samples;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.applib.annotation.Collection;
-import org.apache.causeway.applib.annotation.CollectionLayout;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.BookmarkPolicy;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 
-@Collection()
-@CollectionLayout()
+@Action
 @RequiredArgsConstructor
-public class DomainObjectIntrospectionPage_annotationOptional {
+public class DomainObjectLayoutBookmarking_addChildren {
 
-    @SuppressWarnings("unused")
-    private final DomainObjectIntrospectionPage page;
+    private final DomainObjectLayoutBookmarking parent;
 
     @MemberSupport
-    public List<? extends DomainObjectIntrospectionAnnotOpt> coll() {
-        return entities.all();
+    public DomainObjectLayoutBookmarking act(int number) {
+        val strings = samples.stream().collect(Collectors.toList());
+        for (int i = 0; i < number; i++) {
+            parent.addChild(parent.getName() + " - " + strings.get(i));
+        }
+        return parent;
+    }
+    @MemberSupport public int default0Act() {
+        return 3;
     }
 
-    @Inject ValueHolderRepository<String, ? extends DomainObjectIntrospectionAnnotOpt> entities;
 
+    @Inject Samples<String> samples;
 }

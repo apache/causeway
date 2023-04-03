@@ -16,33 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.introspection;
+package demoapp.dom.domain.objects.DomainObjectLayout.bookmarking;
 
+import demoapp.dom._infra.seed.SeedServiceAbstract;
 import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.objects.DomainObject.introspection.annotOpt.DomainObjectIntrospectionAnnotOpt;
-import lombok.RequiredArgsConstructor;
-
-import java.util.List;
+import demoapp.dom.types.Samples;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.applib.annotation.Collection;
-import org.apache.causeway.applib.annotation.CollectionLayout;
-import org.apache.causeway.applib.annotation.MemberSupport;
+import org.springframework.stereotype.Service;
 
-@Collection()
-@CollectionLayout()
-@RequiredArgsConstructor
-public class DomainObjectIntrospectionPage_annotationOptional {
+@Service
+public class DomainObjectLayoutBookmarkingSeeding
+extends SeedServiceAbstract {
 
-    @SuppressWarnings("unused")
-    private final DomainObjectIntrospectionPage page;
-
-    @MemberSupport
-    public List<? extends DomainObjectIntrospectionAnnotOpt> coll() {
-        return entities.all();
+    @Inject
+    public DomainObjectLayoutBookmarkingSeeding(
+            ValueHolderRepository<String, ? extends DomainObjectLayoutBookmarking> entities) {
+        super(entities);
     }
-
-    @Inject ValueHolderRepository<String, ? extends DomainObjectIntrospectionAnnotOpt> entities;
 
 }

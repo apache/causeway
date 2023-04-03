@@ -17,7 +17,7 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 public class DomainObjectBoundingPage_objects {
 
     @SuppressWarnings("unused")
-    private final DomainObjectBoundingPage mixee;
+    private final DomainObjectBoundingPage page;
 
     @MemberSupport
     public List<? extends DomainObjectBounding> coll() {

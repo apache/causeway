@@ -12,7 +12,7 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 public class DomainObjectAutoCompletePage_find {
 
     @SuppressWarnings("unused")
-    private final DomainObjectAutoCompletePage mixee;
+    private final DomainObjectAutoCompletePage page;
 
     @MemberSupport
     public DomainObjectAutoComplete act(final DomainObjectAutoComplete domainObjectAutoComplete) {  // <.>
