@@ -27,15 +27,15 @@ import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
-import demoapp.dom.domain.collections.CollectionLayout.cssClass.CollectionLayoutCssClassVm;
-import demoapp.dom.domain.collections.CollectionLayout.defaultView.CollectionLayoutDefaultViewVm;
-import demoapp.dom.domain.collections.CollectionLayout.describedAs.CollectionLayoutDescribedAsVm;
-import demoapp.dom.domain.collections.CollectionLayout.hidden.CollectionLayoutHiddenVm;
-import demoapp.dom.domain.collections.CollectionLayout.named.CollectionLayoutNamedVm;
-import demoapp.dom.domain.collections.CollectionLayout.paged.CollectionLayoutPagedVm;
-import demoapp.dom.domain.collections.CollectionLayout.sequence.CollectionLayoutSequenceVm;
-import demoapp.dom.domain.collections.CollectionLayout.sortedBy.CollectionLayoutSortedByVm;
-import demoapp.dom.domain.collections.CollectionLayout.tableDecorator.CollectionLayoutTableDecoratorVm;
+import demoapp.dom.domain.collections.CollectionLayout.cssClass.CollectionLayoutCssClassPage;
+import demoapp.dom.domain.collections.CollectionLayout.defaultView.CollectionLayoutDefaultViewPage;
+import demoapp.dom.domain.collections.CollectionLayout.describedAs.CollectionLayoutDescribedAsPage;
+import demoapp.dom.domain.collections.CollectionLayout.hidden.CollectionLayoutHiddenPage;
+import demoapp.dom.domain.collections.CollectionLayout.named.CollectionLayoutNamedPage;
+import demoapp.dom.domain.collections.CollectionLayout.paged.CollectionLayoutPagedPage;
+import demoapp.dom.domain.collections.CollectionLayout.sequence.CollectionLayoutSequencePage;
+import demoapp.dom.domain.collections.CollectionLayout.sortedBy.CollectionLayoutSortedByPage;
+import demoapp.dom.domain.collections.CollectionLayout.tableDecorator.CollectionLayoutTableDecoratorPage;
 
 @Named("demo.CollectionLayoutMenu")
 @DomainService(
@@ -48,64 +48,64 @@ public class CollectionLayoutMenu {
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-pen-nib",
         describedAs = "CSS class to wrap the UI component representing this collection")
-    public CollectionLayoutCssClassVm cssClass(){
-        return new CollectionLayoutCssClassVm();
+    public CollectionLayoutCssClassPage cssClass(){
+        return new CollectionLayoutCssClassPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-atom",
         describedAs = "View collection as a table, or collapsed, or some other representation if available")
-    public CollectionLayoutDefaultViewVm defaultView(){
-        return new CollectionLayoutDefaultViewVm();
+    public CollectionLayoutDefaultViewPage defaultView(){
+        return new CollectionLayoutDefaultViewPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-comment",
         describedAs = "Description of the collection, shown as a tooltip")
-    public CollectionLayoutDescribedAsVm describedAs(){
-        return new CollectionLayoutDescribedAsVm();
+    public CollectionLayoutDescribedAsPage describedAs(){
+        return new CollectionLayoutDescribedAsPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-glasses",
         describedAs = "Visibility of the collection in different contexts")
-    public CollectionLayoutHiddenVm hidden(){
-        return new CollectionLayoutHiddenVm();
+    public CollectionLayoutHiddenPage hidden(){
+        return new CollectionLayoutHiddenPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-signature",
         describedAs = "Custom text for the collection's label")
-    public CollectionLayoutNamedVm named(){
-        return new CollectionLayoutNamedVm();
+    public CollectionLayoutNamedPage named(){
+        return new CollectionLayoutNamedPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-fast-forward",
         describedAs = "Number of domain objects per page in this collection")
-    public CollectionLayoutPagedVm paged(){
-        return new CollectionLayoutPagedVm();
+    public CollectionLayoutPagedPage paged(){
+        return new CollectionLayoutPagedPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-sharp fa-solid fa-sort",
         describedAs = "Order of this member relative to other members in the same (layout) group.")
-    public CollectionLayoutSequenceVm sequence(){
-        return new CollectionLayoutSequenceVm();
+    public CollectionLayoutSequencePage sequence(){
+        return new CollectionLayoutSequencePage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-solid fa-arrow-down-a-z",
         describedAs = "Sort domain objects in this collection, overriding their default comparator")
-    public CollectionLayoutSortedByVm sortedBy(){
-        return new CollectionLayoutSortedByVm();
+    public CollectionLayoutSortedByPage sortedBy(){
+        return new CollectionLayoutSortedByPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-solid fa-table-columns",
         describedAs = "Allows to specify a custom client side table renderer.")
-    public CollectionLayoutTableDecoratorVm tableDecorator(){
-        return new CollectionLayoutTableDecoratorVm();
+    public CollectionLayoutTableDecoratorPage tableDecorator(){
+        return new CollectionLayoutTableDecoratorPage();
     }
 
 }

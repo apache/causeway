@@ -41,7 +41,7 @@ import org.apache.causeway.applib.annotation.*;
 @NoArgsConstructor
 public class DomainObjectLayoutBookmarkingNestedVm implements HasAsciiDocDescription {
 
-    public DomainObjectLayoutBookmarkingNestedVm(final DomainObjectLayoutBookmarkingVm parent) {
+    public DomainObjectLayoutBookmarkingNestedVm(final DomainObjectLayoutBookmarkingPage parent) {
         setParent(parent);
     }
 
@@ -52,7 +52,7 @@ public class DomainObjectLayoutBookmarkingNestedVm implements HasAsciiDocDescrip
     @Property(optionality = Optionality.OPTIONAL)
     @XmlElement(required = false)
     @Getter @Setter
-    private DomainObjectLayoutBookmarkingVm parent;
+    private DomainObjectLayoutBookmarkingPage parent;
 
 }
 //end::class[]

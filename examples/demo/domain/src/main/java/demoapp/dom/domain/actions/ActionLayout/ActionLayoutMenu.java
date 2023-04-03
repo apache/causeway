@@ -27,17 +27,17 @@ import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
-import demoapp.dom.domain.actions.ActionLayout.associateWith.ActionLayoutAssociateWithVm;
-import demoapp.dom.domain.actions.ActionLayout.cssClass.ActionLayoutCssClassVm;
-import demoapp.dom.domain.actions.ActionLayout.cssClassFa.ActionLayoutCssClassFaVm;
-import demoapp.dom.domain.actions.ActionLayout.describedAs.ActionLayoutDescribedAsVm;
-import demoapp.dom.domain.actions.ActionLayout.fieldSet.ActionLayoutFieldSetVm;
-import demoapp.dom.domain.actions.ActionLayout.hidden.ActionLayoutHiddenVm;
-import demoapp.dom.domain.actions.ActionLayout.named.ActionLayoutNamedVm;
-import demoapp.dom.domain.actions.ActionLayout.position.ActionLayoutPositionVm;
-import demoapp.dom.domain.actions.ActionLayout.promptStyle.ActionLayoutPromptStyleVm;
-import demoapp.dom.domain.actions.ActionLayout.redirectPolicy.ActionLayoutRedirectPolicyVm;
-import demoapp.dom.domain.actions.ActionLayout.sequence.ActionLayoutSequenceVm;
+import demoapp.dom.domain.actions.ActionLayout.associateWith.ActionLayoutAssociateWithPage;
+import demoapp.dom.domain.actions.ActionLayout.cssClass.ActionLayoutCssClassPage;
+import demoapp.dom.domain.actions.ActionLayout.cssClassFa.ActionLayoutCssClassFaPage;
+import demoapp.dom.domain.actions.ActionLayout.describedAs.ActionLayoutDescribedAsPage;
+import demoapp.dom.domain.actions.ActionLayout.fieldSet.ActionLayoutFieldSetPage;
+import demoapp.dom.domain.actions.ActionLayout.hidden.ActionLayoutHiddenPage;
+import demoapp.dom.domain.actions.ActionLayout.named.ActionLayoutNamedPage;
+import demoapp.dom.domain.actions.ActionLayout.position.ActionLayoutPositionPage;
+import demoapp.dom.domain.actions.ActionLayout.promptStyle.ActionLayoutPromptStylePage;
+import demoapp.dom.domain.actions.ActionLayout.redirectPolicy.ActionLayoutRedirectPolicyPage;
+import demoapp.dom.domain.actions.ActionLayout.sequence.ActionLayoutSequencePage;
 
 @DomainService(nature=NatureOfService.VIEW)
 @Named("demo.ActionLayoutMenu")
@@ -48,79 +48,79 @@ public class ActionLayoutMenu {
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-solid fa-arrows-left-right",
         describedAs = "Associate an action with a property or collection, specifying its id")
-    public ActionLayoutAssociateWithVm associateWith(){
-        return new ActionLayoutAssociateWithVm();
+    public ActionLayoutAssociateWithPage associateWith(){
+        return new ActionLayoutAssociateWithPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-pen-nib",
         describedAs = "CSS class to wrap the UI component representing this action")
-    public ActionLayoutCssClassVm cssClass(){
-        return new ActionLayoutCssClassVm();
+    public ActionLayoutCssClassPage cssClass(){
+        return new ActionLayoutCssClassPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-font-awesome-flag",
         describedAs = "Font awesome icon to represent action")
-    public ActionLayoutCssClassFaVm cssClassFa(){
-        return new ActionLayoutCssClassFaVm();
+    public ActionLayoutCssClassFaPage cssClassFa(){
+        return new ActionLayoutCssClassFaPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-comment",
         describedAs = "Description of the action, shown as a tooltip")
-    public ActionLayoutDescribedAsVm describedAs(){
-        return new ActionLayoutDescribedAsVm();
+    public ActionLayoutDescribedAsPage describedAs(){
+        return new ActionLayoutDescribedAsPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-solid fa-vector-square",
         //TODO[CAUSEWAY-3310] missing description - need to double check how this behaves or should behave
         describedAs = "todo - how does this behave?")
-    public ActionLayoutFieldSetVm fieldSet(){
-        return new ActionLayoutFieldSetVm();
+    public ActionLayoutFieldSetPage fieldSet(){
+        return new ActionLayoutFieldSetPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-glasses",
         describedAs = "Visibility of the action in different contexts")
-    public ActionLayoutHiddenVm hidden(){
-        return new ActionLayoutHiddenVm();
+    public ActionLayoutHiddenPage hidden(){
+        return new ActionLayoutHiddenPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-signature",
         describedAs = "Custom text for the action's label")
-    public ActionLayoutNamedVm named(){
-        return new ActionLayoutNamedVm();
+    public ActionLayoutNamedPage named(){
+        return new ActionLayoutNamedPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-map-pin",
         describedAs = "Position of action buttons")
-    public ActionLayoutPositionVm position(){
-        return new ActionLayoutPositionVm();
+    public ActionLayoutPositionPage position(){
+        return new ActionLayoutPositionPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-question-circle",
         describedAs = "Location and style of action's prompt dialog")
-    public ActionLayoutPromptStyleVm promptStyle(){
-        return new ActionLayoutPromptStyleVm();
+    public ActionLayoutPromptStylePage promptStyle(){
+        return new ActionLayoutPromptStylePage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-random",
         describedAs = "Whether to redraw page if action returns same object")
-    public ActionLayoutRedirectPolicyVm redirectPolicy(){
-        return new ActionLayoutRedirectPolicyVm();
+    public ActionLayoutRedirectPolicyPage redirectPolicy(){
+        return new ActionLayoutRedirectPolicyPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-sharp fa-solid fa-sort",
         describedAs = "Order an action relative to other members in the same (layout) group.")
-    public ActionLayoutSequenceVm sequence(){
-        return new ActionLayoutSequenceVm();
+    public ActionLayoutSequencePage sequence(){
+        return new ActionLayoutSequencePage();
     }
 
 }

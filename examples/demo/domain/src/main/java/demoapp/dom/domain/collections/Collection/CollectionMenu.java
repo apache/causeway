@@ -30,8 +30,8 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.factory.FactoryService;
 
 import demoapp.dom.domain.collections.Collection.domainEvent.CollectionDomainEventPage;
-import demoapp.dom.domain.collections.Collection.hidden.CollectionHiddenVm;
-import demoapp.dom.domain.collections.Collection.typeOf.CollectionTypeOfVm;
+import demoapp.dom.domain.collections.Collection.hidden.CollectionHiddenPage;
+import demoapp.dom.domain.collections.Collection.typeOf.CollectionTypeOfPage;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -61,14 +61,14 @@ public class CollectionMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of collections")
-    public CollectionHiddenVm hidden(){
-        return new CollectionHiddenVm();
+    public CollectionHiddenPage hidden(){
+        return new CollectionHiddenPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-shapes", describedAs = "Element type of collections")
-    public CollectionTypeOfVm typeOf(){
-        return new CollectionTypeOfVm();
+    public CollectionTypeOfPage typeOf(){
+        return new CollectionTypeOfPage();
     }
 
 
