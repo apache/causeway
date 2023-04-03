@@ -16,30 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.Property.domainEvent.subscribers;
+package demoapp.dom.domain.collections.Collection.domainEvent;
+
+import lombok.RequiredArgsConstructor;
 
 import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
-
-import demoapp.dom.domain.properties.Property.domainEvent.PropertyDomainEventPage;
-import lombok.RequiredArgsConstructor;
 
 
 //tag::class[]
 @Property()
-@PropertyLayout(fieldSetId = "contributed", sequence = "1")
 @RequiredArgsConstructor
-public class PropertyDomainEventVm_controlText {
+public class CollectionDomainEventPage_controlStrategy {
 
-    private final PropertyDomainEventPage propertyDomainEventVm;
+    private final CollectionDomainEventPage page;
 
-    public PropertyDomainEventControlStrategy prop() {
+    public CollectionDomainEventControlStrategy prop() {
         return eventControlService.controlStrategy;
     }
 
-    @Inject
-    PropertyDomainEventControlService eventControlService;
+    @Inject CollectionDomainEventControlSubscriber eventControlService;
 }
 //end::class[]

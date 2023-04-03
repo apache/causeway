@@ -16,30 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.Action.domainEvent;
-
-import jakarta.inject.Inject;
-
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Service;
-
-import org.apache.causeway.applib.services.registry.ServiceRegistry;
+package demoapp.dom.domain.properties.Property.domainEvent;
 
 import lombok.RequiredArgsConstructor;
 
-// tag::class[]
-@Service
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
-class ActionDomainEventControlSubscriber {
+import jakarta.inject.Inject;
 
-    final ServiceRegistry serviceRegistry;
+import org.apache.causeway.applib.annotation.*;
 
-    ActionDomainEventControlStrategy controlStrategy =
-            ActionDomainEventControlStrategy.DO_NOTHING;                    // <.>
+//tag::class[]
+@Action(semantics = SemanticsOf.IDEMPOTENT)
+@ActionLayout(redirectPolicy = Redirect.EVEN_IF_SAME)       // <.>
+@RequiredArgsConstructor
+public class PropertyDomainEventPage_changeControlStrategy {
 
-    @EventListener(ActionDomainEventPage_updateText.DomainEvent.class)      // <.>
-    public void on(ActionDomainEventPage_updateText.DomainEvent ev) {
-        controlStrategy.on(ev, serviceRegistry);                            // <.>
+    private final PropertyDomainEventPage page;
+
+    @MemberSupport public PropertyDomainEventPage act(PropertyDomainEventControlStrategy controlStrategy) {
+        subscriber.controlStrategy = controlStrategy;
+        return page;
     }
+    @MemberSupport public PropertyDomainEventControlStrategy default0Act() {
+        return subscriber.controlStrategy;
+    }
+
+    @Inject PropertyDomainEventControlSubscriber subscriber;
 }
-// end::class[]
+//end::class[]

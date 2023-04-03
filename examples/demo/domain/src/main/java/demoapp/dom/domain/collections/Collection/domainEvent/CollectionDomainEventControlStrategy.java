@@ -16,20 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.collections.Collection.domainEvent.subscribers;
+package demoapp.dom.domain.collections.Collection.domainEvent;
 
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 
-import demoapp.dom.domain.collections.Collection.domainEvent.CollectionDomainEventVm;
-
-// tag::class[]
 @SuppressWarnings("SwitchStatementWithTooFewBranches")
+// tag::class[]
 enum CollectionDomainEventControlStrategy {
 
     DO_NOTHING{
         @Override
-        void on(CollectionDomainEventVm.ChildrenDomainEvent ev
-                , ServiceRegistry serviceRegistry) {
+        void on(CollectionDomainEventPage.ChildrenDomainEvent ev, ServiceRegistry serviceRegistry) {
         }
     },
     // ...
@@ -38,8 +35,7 @@ enum CollectionDomainEventControlStrategy {
 // tag::hide[]
     HIDE {
         @Override
-        void on(CollectionDomainEventVm.ChildrenDomainEvent ev
-                , ServiceRegistry serviceRegistry) {
+        void on(CollectionDomainEventPage.ChildrenDomainEvent ev, ServiceRegistry serviceRegistry) {
             switch (ev.getEventPhase()) {
                 case HIDE:
                     ev.hide();
@@ -51,7 +47,6 @@ enum CollectionDomainEventControlStrategy {
 
 // tag::class[]
     ;
-    abstract void on(CollectionDomainEventVm.ChildrenDomainEvent ev
-            , ServiceRegistry serviceRegistry);
+    abstract void on(CollectionDomainEventPage.ChildrenDomainEvent ev, ServiceRegistry serviceRegistry);
 }
 // end::class[]

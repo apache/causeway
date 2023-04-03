@@ -32,11 +32,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ActionDomainEventPage_changeControlStrategy {
 
-    private final ActionDomainEventPage mixee;
+    private final ActionDomainEventPage page;
 
     @MemberSupport public ActionDomainEventPage act(ActionDomainEventControlStrategy controlStrategy) {
         subscriber.controlStrategy = controlStrategy;
-        return mixee;
+        return page;
     }
     @MemberSupport public ActionDomainEventControlStrategy default0Act() {
         return subscriber.controlStrategy;

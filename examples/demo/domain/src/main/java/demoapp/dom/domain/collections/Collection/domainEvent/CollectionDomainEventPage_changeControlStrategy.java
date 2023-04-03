@@ -18,32 +18,28 @@
  */
 package demoapp.dom.domain.collections.Collection.domainEvent;
 
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.SemanticsOf;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.domain.collections.Collection.domainEvent.child.CollectionDomainEventChildVm;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
+import jakarta.inject.Inject;
+
+import org.apache.causeway.applib.annotation.*;
 
 //tag::class[]
-@Action(
-    semantics = SemanticsOf.NON_IDEMPOTENT,
-    choicesFrom = "children"
-)
-@ActionLayout(sequence = "1")
+@Action(semantics = SemanticsOf.IDEMPOTENT)
+@ActionLayout(redirectPolicy = Redirect.EVEN_IF_SAME)       // <.>
 @RequiredArgsConstructor
-public class CollectionDomainEventVm_addChild implements HasAsciiDocDescription {
+public class CollectionDomainEventPage_changeControlStrategy {
 
-    private final CollectionDomainEventVm collectionDomainEventVm;
+    private final CollectionDomainEventPage page;
 
-    public CollectionDomainEventVm_addChild act() {
-        val child = new CollectionDomainEventChildVm("Child #" + ++collectionDomainEventVm.lastChildNumberAdded);
-        collectionDomainEventVm.getChildren().add(child);
-        return this;
+    @MemberSupport public CollectionDomainEventPage act(CollectionDomainEventControlStrategy controlStrategy) {
+        subscriber.controlStrategy = controlStrategy;
+        return page;
+    }
+    @MemberSupport public CollectionDomainEventControlStrategy default0Act() {
+        return subscriber.controlStrategy;
     }
 
-
+    @Inject CollectionDomainEventControlSubscriber subscriber;
 }
 //end::class[]

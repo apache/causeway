@@ -16,30 +16,32 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.collections.Collection.domainEvent.subscribers;
+package demoapp.dom.domain.properties.Property.domainEvent;
 
+import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
 
-import demoapp.dom.domain.collections.Collection.domainEvent.CollectionDomainEventVm;
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.services.registry.ServiceRegistry;
+
 import lombok.RequiredArgsConstructor;
 
+// tag::class[]
+@Service
+@RequiredArgsConstructor(onConstructor_ = { @Inject })
+class PropertyDomainEventControlSubscriber {
 
-//tag::class[]
-@Property()
-@RequiredArgsConstructor
-public class CollectionDomainEventVm_controlChildren {
+    final ServiceRegistry serviceRegistry;
 
-    private final CollectionDomainEventVm collectionDomainEventVm;
+    PropertyDomainEventControlStrategy controlStrategy =
+            PropertyDomainEventControlStrategy.DO_NOTHING;              // <.>
 
-    @PropertyLayout(fieldSetId = "contributed", sequence = "1")
-    public CollectionDomainEventControlStrategy prop() {
-        return eventControlService.controlStrategy;
+    @EventListener(PropertyDomainEventPage.TextDomainEvent.class)       // <.>
+    public void on(PropertyDomainEventPage.TextDomainEvent ev) {
+        controlStrategy.on(ev, serviceRegistry);                        // <.>
     }
-
-    @Inject
-    CollectionDomainEventControlService eventControlService;
 }
-//end::class[]
+// end::class[]
