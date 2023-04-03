@@ -20,14 +20,60 @@ package demoapp.dom.domain.objects.DomainObject.xxxLifecycleEvent;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
+import demoapp.dom.domain.objects.DomainObject.xxxLifecycleEvent.jpa.DomainObjectXxxLifecycleEventJpa;
 
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.events.lifecycle.*;
 
 @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
-public abstract class DomainObjectXxxLifecycleEvent
+//tag::class[]
+@DomainObject(
+        nature = Nature.ENTITY,
+        createdLifecycleEvent = DomainObjectXxxLifecycleEventJpa.CreatedEvent.class,        // <.>
+        persistingLifecycleEvent = DomainObjectXxxLifecycleEventJpa.PersistingEvent.class,  // <.>
+        persistedLifecycleEvent = DomainObjectXxxLifecycleEventJpa.PersistedEvent.class,    // <.>
+        updatingLifecycleEvent = DomainObjectXxxLifecycleEventJpa.UpdatingEvent.class,      // <.>
+        updatedLifecycleEvent = DomainObjectXxxLifecycleEventJpa.UpdatedEvent.class,        // <.>
+        removingLifecycleEvent = DomainObjectXxxLifecycleEventJpa.RemovingEvent.class,      // <.>
+        loadedLifecycleEvent = DomainObjectXxxLifecycleEventJpa.LoadedEvent.class           // <.>
+)
+public abstract class DomainObjectXxxLifecycleEvent                                         // <.>
+//end::class[]
         implements
         HasAsciiDocDescription,
-        ValueHolder<String> {
+        ValueHolder<String>
+//tag::class[]
+{
+    public interface LifecycleEvent {                                                       // <.>
+        DomainObjectXxxLifecycleEvent getSource();
+    }
+
+    public static class CreatedEvent
+            extends ObjectCreatedEvent<DomainObjectXxxLifecycleEvent>                       // <1>
+            implements LifecycleEvent { }                                                   // <9>
+    public static class PersistingEvent
+            extends ObjectPersistingEvent<DomainObjectXxxLifecycleEvent>                    // <2>
+            implements LifecycleEvent { }                                                   // <9>
+    public static class PersistedEvent
+            extends ObjectPersistedEvent<DomainObjectXxxLifecycleEvent>                     // <3>
+            implements LifecycleEvent { }                                                   // <9>
+    public static class UpdatingEvent
+            extends ObjectUpdatingEvent<DomainObjectXxxLifecycleEvent>                      // <4>
+            implements LifecycleEvent { }                                                   // <9>
+    public static class UpdatedEvent
+            extends ObjectUpdatedEvent<DomainObjectXxxLifecycleEvent>                       // <5>
+            implements LifecycleEvent { }                                                   // <9>
+    public static class RemovingEvent
+            extends ObjectRemovingEvent<DomainObjectXxxLifecycleEvent>                      // <6>
+            implements LifecycleEvent { }                                                   // <9>
+    public static class LoadedEvent
+            extends ObjectLoadedEvent<DomainObjectXxxLifecycleEvent>                        // <7>
+            implements LifecycleEvent { }                                                   // <9>
+
+    // ...
+//end::class[]
 
     @ObjectSupport
     public String title() {
@@ -42,4 +88,6 @@ public abstract class DomainObjectXxxLifecycleEvent
     public abstract String getName();
     public abstract void setName(String value);
 
+//tag::class[]
 }
+//end::class[]

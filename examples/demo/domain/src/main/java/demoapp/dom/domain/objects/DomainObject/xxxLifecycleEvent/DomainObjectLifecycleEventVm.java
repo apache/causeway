@@ -16,53 +16,49 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.xxxLifecycleEvent.jpa;
+package demoapp.dom.domain.objects.DomainObject.xxxLifecycleEvent;
 
-import demoapp.dom.domain.objects.DomainObject.xxxLifecycleEvent.DomainObjectXxxLifecycleEvent;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.inject.Named;
-import javax.persistence.*;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.events.lifecycle.*;
-import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
-import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
-import org.springframework.context.annotation.Profile;
+import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.Property;
 
-@Profile("demo-jpa")
-@Entity
-@Table(
-    schema = "demo",
-    name = "DomainObjectXxxLifecycleEventJpa"
-)
-@EntityListeners(CausewayEntityListener.class)
-@Named("demo.DomainObjectXxxLifecycleEventJpa")
-@NoArgsConstructor
 //tag::class[]
-// ...
-@DomainObject(nature = Nature.ENTITY)
-public class DomainObjectXxxLifecycleEventJpa
-                extends DomainObjectXxxLifecycleEvent {
+@XmlRootElement(name = "demo.DomainObjectLifecycleEventVm")
+@XmlType
+@XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.DomainObjectLifecycleEventVm")
+@DomainObject(nature = Nature.VIEW_MODEL)
+@NoArgsConstructor
+public class DomainObjectLifecycleEventVm implements HasAsciiDocDescription {
 
-    // ...
-//end::class[]
-
-    public DomainObjectXxxLifecycleEventJpa(String value) {
-        setName(value);
+    public DomainObjectLifecycleEventVm(String eventType, String bookmark) {
+        this.eventType = eventType;
+        this.bookmark = bookmark;
     }
 
-    @Id
-    @GeneratedValue
-    private Long id;
-//tag::class[]
+    @ObjectSupport public String title() {
+        return eventType + ": " + bookmark;
+    }
 
+    @Property
     @Getter @Setter
-    private String name;
+    private String eventType;
+
+    @Property
+    @Getter @Setter
+    private String bookmark;
 
 }
 //end::class[]

@@ -27,7 +27,7 @@ import demoapp.dom.domain.objects.DomainObject.introspection.DomainObjectIntrosp
 import demoapp.dom.domain.objects.DomainObject.mixinMethod.DomainObjectMixinMethodPage;
 import demoapp.dom.domain.objects.DomainObject.nature.DomainObjectNaturePage;
 import demoapp.dom.domain.objects.DomainObject.xxxDomainEvent.DomainObjectXxxDomainEventPage;
-import demoapp.dom.domain.objects.DomainObject.xxxLifecycleEvent.DomainObjectXxxLifecyleEventPage;
+import demoapp.dom.domain.objects.DomainObject.xxxLifecycleEvent.DomainObjectXxxLifecycleEventPage;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -104,8 +104,8 @@ public class DomainObjectMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-redo", describedAs = "Class of the lifecycle event emitted when the domain entity transitions through its persistence lifecycle")
-    public DomainObjectXxxLifecyleEventPage lifecycleEvents() {
-        return new DomainObjectXxxLifecyleEventPage();
+    public DomainObjectXxxLifecycleEventPage lifecycleEvents() {
+        return new DomainObjectXxxLifecycleEventPage();
     }
 
 }

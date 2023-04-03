@@ -19,29 +19,36 @@
 package demoapp.dom.domain.objects.DomainObject.xxxLifecycleEvent;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Named;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.*;
+import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
 
 //tag::class[]
-@XmlRootElement(name = "root")
+@XmlRootElement(name = "demo.DomainObjectXxxLifecycleEventPage")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.DomainObjectXxxLifecyleEventPage")
+@Named("demo.DomainObjectXxxLifecycleEventPage")
 @DomainObject(
         nature = Nature.VIEW_MODEL)
-public class DomainObjectXxxLifecyleEventPage implements HasAsciiDocDescription {
+public class DomainObjectXxxLifecycleEventPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
         return "DomainObject#xxxLifecyleEvent";
     }
+
+    @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
+    @Property
+    @Getter @Setter
+    private DomainObjectXxxLifecycleEvent entity;
 
 }
 //end::class[]
