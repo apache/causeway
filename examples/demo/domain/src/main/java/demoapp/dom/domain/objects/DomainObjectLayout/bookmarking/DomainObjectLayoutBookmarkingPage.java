@@ -37,7 +37,7 @@ import org.apache.causeway.applib.annotation.*;
         nature=Nature.VIEW_MODEL)
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_ROOT    // <.>
-        )
+)
 public class DomainObjectLayoutBookmarkingPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
@@ -48,6 +48,7 @@ public class DomainObjectLayoutBookmarkingPage implements HasAsciiDocDescription
     public DomainObjectLayoutBookmarkingNestedVm nestedObject() {
         return new DomainObjectLayoutBookmarkingNestedVm(this);
     }
+
 
 }
 //end::class[]

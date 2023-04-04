@@ -46,7 +46,6 @@ import demoapp.dom.DemoModuleJpa;
     CausewayModuleExtExecutionOutboxPersistenceJpa.class,
     CausewayModuleExtAuditTrailPersistenceJpa.class,
 })
-
 public class DemoAppManifestJpa {
 
 }

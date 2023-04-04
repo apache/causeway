@@ -17,7 +17,7 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 public class DomainObjectAliasedPage_objects {
 
     @SuppressWarnings("unused")
-    private final DomainObjectAliasedPage mixee;
+    private final DomainObjectAliasedPage page;
 
     @MemberSupport
     public List<? extends DomainObjectAliased> coll() {

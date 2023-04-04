@@ -17,7 +17,7 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 public class DomainObjectEditingPage_objects {
 
     @SuppressWarnings("unused")
-    private final DomainObjectEditingPage mixee;
+    private final DomainObjectEditingPage page;
 
     @MemberSupport
     public List<? extends DomainObjectEditing> coll() {

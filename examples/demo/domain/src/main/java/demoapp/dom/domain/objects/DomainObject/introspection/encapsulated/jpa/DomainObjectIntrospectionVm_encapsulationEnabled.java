@@ -38,7 +38,7 @@ import org.springframework.context.annotation.Profile;
 public class DomainObjectIntrospectionVm_encapsulationEnabled {
 
     @SuppressWarnings("unused")
-    private final DomainObjectIntrospectionPage mixee;
+    private final DomainObjectIntrospectionPage page;
 
     @MemberSupport
     public List<DomainObjectIntrospectionEncapsulatedJpa> coll() {

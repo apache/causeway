@@ -11,8 +11,6 @@ import java.util.stream.Collectors;
 import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Collection;
-import org.apache.causeway.applib.annotation.CollectionLayout;
-import org.apache.causeway.applib.annotation.DomainObject;
 
 //tag::class[]
 @Collection()
@@ -21,7 +19,7 @@ public class DomainObjectNaturePage_viewModels {
     // ...
 //end::class[]
     @SuppressWarnings("unused")
-    private final DomainObjectNaturePage mixee;
+    private final DomainObjectNaturePage page;
 
 //tag::class[]
     public List<DomainObjectNatureViewModel> coll() {

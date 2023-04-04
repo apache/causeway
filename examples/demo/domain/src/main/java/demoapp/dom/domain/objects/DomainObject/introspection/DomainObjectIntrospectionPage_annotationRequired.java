@@ -36,7 +36,7 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 public class DomainObjectIntrospectionPage_annotationRequired {
 
     @SuppressWarnings("unused")
-    private final DomainObjectIntrospectionPage mixee;
+    private final DomainObjectIntrospectionPage page;
 
     @MemberSupport
     public List<? extends DomainObjectIntrospectionAnnotReqd> coll() {

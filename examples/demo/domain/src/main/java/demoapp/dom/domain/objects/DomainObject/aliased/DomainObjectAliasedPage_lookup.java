@@ -20,7 +20,7 @@ import org.apache.causeway.applib.services.bookmark.BookmarkService;
 public class DomainObjectAliasedPage_lookup {
 
     @SuppressWarnings("unused")
-    private final DomainObjectAliasedPage mixee;
+    private final DomainObjectAliasedPage page;
 
     @MemberSupport
     public DomainObjectAliased act(final String bookmark) {

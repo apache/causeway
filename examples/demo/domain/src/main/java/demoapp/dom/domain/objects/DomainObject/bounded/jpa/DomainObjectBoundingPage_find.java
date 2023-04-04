@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Profile;
 public class DomainObjectBoundingPage_find {
 
     @SuppressWarnings("unused")
-    private final DomainObjectBoundingPage mixee;
+    private final DomainObjectBoundingPage page;
 
     @MemberSupport
     public DomainObjectBoundingJpa act(final DomainObjectBoundingJpa domainObjectBounding) {  // <.>

@@ -9,15 +9,13 @@ import java.util.List;
 import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Collection;
-import org.apache.causeway.applib.annotation.CollectionLayout;
-import org.apache.causeway.applib.annotation.DomainObject;
 
 @Collection()
 @RequiredArgsConstructor
 public class DomainObjectNaturePage_entities {
 
     @SuppressWarnings("unused")
-    private final DomainObjectNaturePage mixee;
+    private final DomainObjectNaturePage page;
 
     public List<? extends DomainObjectNatureEntity> coll() {
         return objectRepository.all();

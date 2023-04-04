@@ -17,7 +17,7 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 public class DomainObjectAutoCompletePage_objects {
 
     @SuppressWarnings("unused")
-    private final DomainObjectAutoCompletePage mixee;
+    private final DomainObjectAutoCompletePage page;
 
     @MemberSupport
     public List<? extends DomainObjectAutoComplete> coll() {
