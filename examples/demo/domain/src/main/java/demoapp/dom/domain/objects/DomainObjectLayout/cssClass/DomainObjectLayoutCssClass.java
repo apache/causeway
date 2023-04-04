@@ -19,32 +19,40 @@
 package demoapp.dom.domain.objects.DomainObjectLayout.cssClass;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolder;
+import demoapp.dom.domain.objects.DomainObjectLayout.bookmarking.DomainObjectLayoutBookmarkingChild;
 
-import jakarta.inject.Named;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlType;
+import java.util.Set;
 
-import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
-import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.ObjectSupport;
 
 //tag::class[]
-@XmlRootElement(name = "root")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.DomainObjectLayoutCssClassPage")
-@DomainObject(nature=Nature.VIEW_MODEL)
 @DomainObjectLayout(
-        cssClass = "green-title"                    // <.>
+        cssClass = "custom"             // <.>
 )
-public class DomainObjectLayoutCssClassPage implements HasAsciiDocDescription {
+public abstract class DomainObjectLayoutCssClass
+//end::class[]
+        implements
+        HasAsciiDocDescription,
+        ValueHolder<String>
+//tag::class[]
+{
+    // ...
+//end::class[]
 
-    @ObjectSupport public String title() {
-        return "@DomainObjectLayout#cssClass";
+    public String title() {
+        return value();
     }
 
+    @Override
+    public String value() {
+        return getName();
+    }
+
+    public abstract String getName();
+    public abstract void setName(String value);
+
+//tag::class[]
 }
 //end::class[]

@@ -18,10 +18,21 @@
  */
 package demoapp.testing.jdo;
 
+import org.approvaltests.Approvals;
+import org.approvaltests.core.Options;
+import org.approvaltests.reporters.DiffReporter;
+import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.object.MmSpecUtil;
+
+import lombok.val;
 
 @SpringBootTest(
         classes = {
@@ -31,10 +42,24 @@ import org.springframework.test.context.ActiveProfiles;
         })
 @ActiveProfiles(profiles = "demo-jdo")
 class SpinUpDemoJdoTest {
-    
+
+    @Autowired MetaModelContext mmc;
+
     @Test @Disabled("missing DomainObjectAliasedJdo, ...") //TODO demo domain is currently WIP
-    void contextLoads() {
-        
+    @DisplayName("verifyAllSpecificationsDiscovered")
+    @UseReporter(DiffReporter.class)
+    void verify() {
+
+        val specificationsBySortAsYaml =
+                MmSpecUtil.specificationsBySortAsYaml(mmc.getSpecificationLoader());
+
+        //debug
+        //System.err.printf("%s%n", specificationsBySortAsYaml);
+
+        // verify against approved run
+        Approvals.verify(specificationsBySortAsYaml, new Options()
+                .forFile()
+                .withExtension(".yaml"));
     }
 
 }

@@ -20,11 +20,11 @@ package demoapp.dom.domain.objects.DomainObjectLayout.cssClass;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
-import jakarta.inject.Named;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlType;
+import javax.inject.Named;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
@@ -32,19 +32,12 @@ import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 
 //tag::class[]
-@XmlRootElement(name = "root")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.DomainObjectLayoutCssClassPage")
-@DomainObject(nature=Nature.VIEW_MODEL)
-@DomainObjectLayout(
-        cssClass = "green-title"                    // <.>
-)
-public class DomainObjectLayoutCssClassPage implements HasAsciiDocDescription {
+public enum Status{
 
-    @ObjectSupport public String title() {
-        return "@DomainObjectLayout#cssClass";
-    }
+    NEW,
+    IN_PROGRESS,
+    COMPLETE,
+    DISCARDED
 
 }
 //end::class[]

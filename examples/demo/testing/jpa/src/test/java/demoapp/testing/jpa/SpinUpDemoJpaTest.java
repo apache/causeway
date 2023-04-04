@@ -18,10 +18,6 @@
  */
 package demoapp.testing.jpa;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-
 import org.approvaltests.Approvals;
 import org.approvaltests.core.Options;
 import org.approvaltests.reporters.DiffReporter;
@@ -32,9 +28,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import org.apache.causeway.commons.internal.collections._Multimaps;
-import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.object.MmSpecUtil;
 
 import lombok.val;
 
@@ -48,39 +43,22 @@ import lombok.val;
         })
 @ActiveProfiles(profiles = "demo-jpa")
 class SpinUpDemoJpaTest {
-    
+
     @Autowired MetaModelContext mmc;
-    @Autowired CausewayBeanTypeRegistry causewayBeanTypeRegistry; 
-    
+
     @Test
     @DisplayName("verifyAllSpecificationsDiscovered")
     @UseReporter(DiffReporter.class)
     void verify() {
-        
-        var specsBySort = _Multimaps.<String, String>newListMultimap(LinkedHashMap<String, List<String>>::new, ArrayList::new);
 
-        // collect all ObjectSpecifications into a list-multi-map, where BeanSort is the key
-        mmc.getSpecificationLoader().snapshotSpecifications()
-                .stream()
-                .sorted()
-                .forEach(spec->specsBySort.putElement(spec.getBeanSort().name(), spec.getLogicalTypeName()));
-        
-        // export the list-multi-map to YAML format
-        val sb = new StringBuilder();
-        sb.append("ObjectSpecifications:\n");
-        specsBySort
-            .forEach((key, list)->{
-                sb.append(String.format("  %s:\n", key));
-                list.forEach(logicalTypeName->{
-                    sb.append(String.format("  - %s\n", logicalTypeName));
-                });
-            });
-        
+        val specificationsBySortAsYaml =
+                MmSpecUtil.specificationsBySortAsYaml(mmc.getSpecificationLoader());
+
         //debug
-        //System.err.printf("%s%n", sb.toString());
-        
+        //System.err.printf("%s%n", specificationsBySortAsYaml);
+
         // verify against approved run
-        Approvals.verify(sb.toString(), new Options()
+        Approvals.verify(specificationsBySortAsYaml, new Options()
                 .forFile()
                 .withExtension(".yaml"));
     }
