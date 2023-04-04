@@ -32,19 +32,12 @@ import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 
 //tag::class[]
-@XmlRootElement(name = "root")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.DomainObjectLayoutCssClassPage")
-@DomainObject(nature=Nature.VIEW_MODEL)
-@DomainObjectLayout(
-        cssClass = "green-title"                    // <.>
-)
-public class DomainObjectLayoutCssClassPage implements HasAsciiDocDescription {
+public enum Status{
 
-    @ObjectSupport public String title() {
-        return "@DomainObjectLayout#cssClass";
-    }
+    NEW,
+    IN_PROGRESS,
+    COMPLETE,
+    DISCARDED
 
 }
 //end::class[]

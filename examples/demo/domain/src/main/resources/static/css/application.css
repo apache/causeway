@@ -290,3 +290,15 @@ div.listingblock div.title {
 div.sectionbody > div.ulist {
     margin-left: 10px;
 }
+
+tr.even.custom > td,
+tr.odd.custom > td,
+.entityPage.custom .iconAndTitle span
+{
+    font-style: italic;
+    color: orangered;
+}
+
+.line-through {
+    text-decoration: line-through;
+}
