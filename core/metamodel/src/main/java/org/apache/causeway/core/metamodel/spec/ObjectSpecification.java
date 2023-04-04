@@ -79,6 +79,7 @@ import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionMixedI
 
 import lombok.NonNull;
 import lombok.val;
+import lombok.experimental.UtilityClass;
 
 /**
  * Represents an entity or value (cf {@link java.lang.Class}) within the
@@ -96,18 +97,30 @@ extends
     ObjectActionContainer,
     ObjectAssociationContainer,
     Hierarchical,
-    HasLogicalType {
+    HasLogicalType,
+    Comparable<ObjectSpecification> {
 
-    final class Comparators{
-        private Comparators(){}
+    @UtilityClass
+    class Comparators{
 
-        public static final Comparator<ObjectSpecification> FULLY_QUALIFIED_CLASS_NAME =
-                (final ObjectSpecification o1, final ObjectSpecification o2) ->
-        o1.getFullIdentifier().compareTo(o2.getFullIdentifier());
+        public final Comparator<ObjectSpecification> BY_BEANSORT_THEN_LOGICALTYPE =
+                Comparator.comparing(ObjectSpecification::getBeanSort)
+                    .thenComparing(ObjectSpecification::getLogicalType);
+        
+        public final Comparator<ObjectSpecification> FULLY_QUALIFIED_CLASS_NAME =
+                Comparator.comparing(ObjectSpecification::getFullIdentifier);
 
-        public static final Comparator<ObjectSpecification> SHORT_IDENTIFIER_IGNORE_CASE =
+        public final Comparator<ObjectSpecification> SHORT_IDENTIFIER_IGNORE_CASE =
                 (final ObjectSpecification s1, final ObjectSpecification s2) ->
-        s1.getShortIdentifier().compareToIgnoreCase(s2.getShortIdentifier());
+            s1.getShortIdentifier().compareToIgnoreCase(s2.getShortIdentifier());
+    }
+    
+    /**
+     * Natural order, that is, by {@link BeanSort} then by {@link LogicalType}. 
+     */
+    @Override
+    default int compareTo(ObjectSpecification o) {
+        return Comparators.BY_BEANSORT_THEN_LOGICALTYPE.compare(this, o);
     }
 
     /**
