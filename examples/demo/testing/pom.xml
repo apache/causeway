@@ -115,7 +115,7 @@
 		            <groupId>org.picocontainer</groupId>
 		            <artifactId>picocontainer</artifactId>
 		        </exclusion>
-			</exclusions>
+		    </exclusions>
     	</dependency>
 		
 	</dependencies>
