@@ -16,32 +16,39 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObjectLayout.describedAs;
+package demoapp.dom.domain.objects.DomainObjectLayout.tabledec;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolder;
 
-import javax.inject.Named;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-
-import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
-import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.ObjectSupport;
 
 //tag::class[]
-@XmlRootElement(name = "root")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.DomainObjectLayoutDescribedAsPage")
-@DomainObject(nature=Nature.VIEW_MODEL)
-public class DomainObjectLayoutDescribedAsPage implements HasAsciiDocDescription {
+@DomainObjectLayout(
+        cssClassFa = "fa-user"             // <.>
+)
+public abstract class DomainObjectLayoutTableDecorator
+//end::class[]
+        implements
+        HasAsciiDocDescription,
+        ValueHolder<String>
+//tag::class[]
+{
+    // ...
+//end::class[]
 
-    @ObjectSupport public String title() {
-        return "DomainObjectLayout#describedAs";
+    public String title() {
+        return value();
     }
 
+    @Override
+    public String value() {
+        return getName();
+    }
+
+    public abstract String getName();
+    public abstract void setName(String value);
+
+//tag::class[]
 }
 //end::class[]
