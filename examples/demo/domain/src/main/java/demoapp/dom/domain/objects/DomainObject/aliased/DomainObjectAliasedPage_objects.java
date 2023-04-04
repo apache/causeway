@@ -24,7 +24,6 @@ public class DomainObjectAliasedPage_objects {
         return objectRepository.all();
     }
 
-    @Inject
-    ValueHolderRepository<String, ? extends DomainObjectAliased> objectRepository;
+    @Inject ValueHolderRepository<String, ? extends DomainObjectAliased> objectRepository;
 
 }

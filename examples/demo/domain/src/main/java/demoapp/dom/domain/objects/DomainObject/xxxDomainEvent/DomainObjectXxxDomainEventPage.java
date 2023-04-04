@@ -18,30 +18,98 @@
  */
 package demoapp.dom.domain.objects.DomainObject.xxxDomainEvent;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.inject.Named;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Editing;
+import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.events.domain.ActionDomainEvent;
+import org.apache.causeway.applib.events.domain.CollectionDomainEvent;
+import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
 
-//tag::class[]
-@XmlRootElement(name = "root")
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.domain.objects.DomainObject.xxxDomainEvent.child.DomainObjectXxxDomainEventChildVm;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@XmlRootElement(name = "demo.DomainObjectxxxDomainEventPage")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.DomainObjectXxxDomainEventPage")
+@Named("demo.DomainObjectxxxDomainEventPage")
+@NoArgsConstructor
+//tag::class[]
+// ...
 @DomainObject(
-        nature = Nature.VIEW_MODEL)
+    actionDomainEvent = DomainObjectXxxDomainEventPage.ActionEvent.class,           // <.>
+    propertyDomainEvent = DomainObjectXxxDomainEventPage.PropertyEvent.class,       // <.>
+    collectionDomainEvent = DomainObjectXxxDomainEventPage.CollectionEvent.class,   // <.>
+    nature=Nature.VIEW_MODEL
+)
 public class DomainObjectXxxDomainEventPage implements HasAsciiDocDescription {
+
+    public interface DomainEventMarker {}                                           // <.>
+
+    public static class ActionEvent                                                 // <1>
+            extends ActionDomainEvent<DomainObjectXxxDomainEventPage>
+            implements DomainEventMarker {}
+
+    public static class PropertyEvent                                               // <2>
+            extends PropertyDomainEvent<DomainObjectXxxDomainEventPage, Object>
+            implements DomainEventMarker {}
+
+    public static class CollectionEvent                                             // <3>
+            extends CollectionDomainEvent<DomainObjectXxxDomainEventPage, Object>
+            implements DomainEventMarker {}
+    // ...
+
+//end::class[]
+    public DomainObjectXxxDomainEventPage(final String text) {
+        this.text = text;
+    }
 
     @ObjectSupport public String title() {
         return "@DomainObject#xxxDomainEvent";
     }
 
+    public void addChild(final String value) {
+        this.getChildren().add(new DomainObjectXxxDomainEventChildVm(value));
+    }
+
+//tag::class[]
+    @Property(editing = Editing.ENABLED)                                            // <.>
+    @XmlElement(required = true)
+    @Getter @Setter
+    private String text;
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public DomainObjectXxxDomainEventPage updateTextDirectly(final String text) {         // <.>
+        setText(text);
+        return this;
+    }
+    @MemberSupport public String default0UpdateTextDirectly() {
+        return getText();
+    }
+
+    @Collection
+    @XmlElementWrapper(name = "children")
+    @XmlElement(name = "child")
+    @Getter @Setter
+    private List<DomainObjectXxxDomainEventChildVm> children = new ArrayList<>();
 }
 //end::class[]

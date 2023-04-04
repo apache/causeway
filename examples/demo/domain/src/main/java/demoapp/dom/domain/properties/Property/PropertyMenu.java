@@ -39,16 +39,16 @@ import demoapp.dom.domain.properties.Property.editing.PropertyEditingPage;
 import demoapp.dom.domain.properties.Property.editingReasonDisabled.PropertyEditingReasonDisabledPage;
 import demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingEntity;
 import demoapp.dom.domain.properties.Property.fileAccept.PropertyFileAcceptPage;
-import demoapp.dom.domain.properties.Property.hidden.PropertyHiddenVm;
+import demoapp.dom.domain.properties.Property.hidden.PropertyHiddenPage;
 import demoapp.dom.domain.properties.Property.hidden.child.PropertyHiddenChildVm;
-import demoapp.dom.domain.properties.Property.maxLength.PropertyMaxLengthVm;
-import demoapp.dom.domain.properties.Property.mustSatisfy.PropertyMustSatisfyVm;
-import demoapp.dom.domain.properties.Property.optionality.PropertyOptionalityVm;
-import demoapp.dom.domain.properties.Property.projecting.PropertyProjectingVm;
+import demoapp.dom.domain.properties.Property.maxLength.PropertyMaxLengthPage;
+import demoapp.dom.domain.properties.Property.mustSatisfy.PropertyMustSatisfyPage;
+import demoapp.dom.domain.properties.Property.optionality.PropertyOptionalityPage;
+import demoapp.dom.domain.properties.Property.projecting.PropertyProjectingPage;
 import demoapp.dom.domain.properties.Property.projecting.child.PropertyProjectingChildVm;
 import demoapp.dom.domain.properties.Property.projecting.persistence.PropertyProjectingChildEntity;
-import demoapp.dom.domain.properties.Property.regexPattern.PropertyRegexPatternVm;
-import demoapp.dom.domain.properties.Property.snapshot.PropertySnapshotVm;
+import demoapp.dom.domain.properties.Property.regexPattern.PropertyRegexPatternPage;
+import demoapp.dom.domain.properties.Property.snapshot.PropertySnapshotPage;
 import demoapp.dom.types.Samples;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -122,8 +122,8 @@ public class PropertyMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of properties, eg in tables")
-    public PropertyHiddenVm hidden() {
-        val vm = new PropertyHiddenVm();
+    public PropertyHiddenPage hidden() {
+        val vm = new PropertyHiddenPage();
         vm.setPropertyHiddenAnywhere("hidden anywhere");
         vm.setPropertyHiddenEverywhere("hidden everywhere");
         vm.setPropertyHiddenNowhereUsingAnnotation("hidden nowhere using annotation");
@@ -138,8 +138,8 @@ public class PropertyMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-ruler-horizontal", describedAs = "Length of text fields")
-    public PropertyMaxLengthVm maxLength(){
-        val vm = new PropertyMaxLengthVm();
+    public PropertyMaxLengthPage maxLength(){
+        val vm = new PropertyMaxLengthPage();
         vm.setPropertyUsingAnnotation("abcdefghij");
         vm.setPropertyUsingMetaAnnotation("abcdefghij");
         vm.setPropertyUsingMetaAnnotationButOverridden("abc");
@@ -148,8 +148,8 @@ public class PropertyMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-star-half-alt", describedAs = "Regular expressions, such as email")
-    public PropertyMustSatisfyVm mustSatisfy(){
-        val vm = new PropertyMustSatisfyVm();
+    public PropertyMustSatisfyPage mustSatisfy(){
+        val vm = new PropertyMustSatisfyPage();
         vm.setCustomerAgePropertyUsingAnnotation(18);
         vm.setCustomerAgePropertyUsingMetaAnnotation(65);
         vm.setCustomerAgePropertyUsingMetaAnnotationButOverridden(66);
@@ -158,8 +158,8 @@ public class PropertyMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-infinity", describedAs = "Regular expressions, such as email")
-    public PropertyOptionalityVm optionality(){
-        val vm = new PropertyOptionalityVm();
+    public PropertyOptionalityPage optionality(){
+        val vm = new PropertyOptionalityPage();
         vm.setPropertyUsingAnnotation(null);
         vm.setMandatoryPropertyUsingAnnotation("mandatory");
         vm.setPropertyUsingMetaAnnotation(null);
@@ -169,8 +169,8 @@ public class PropertyMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-external-link-square-alt", describedAs = "Regular expressions, such as email")
-    public PropertyProjectingVm projecting(){
-        val vm = new PropertyProjectingVm();
+    public PropertyProjectingPage projecting(){
+        val vm = new PropertyProjectingPage();
 
         propertyProjectingChildEntities.all().forEach(childEntity -> {
             val childVm = new PropertyProjectingChildVm(childEntity);
@@ -182,8 +182,8 @@ public class PropertyMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-equals", describedAs = "Regular expressions, such as email")
-    public PropertyRegexPatternVm regexPattern(){
-        val vm = new PropertyRegexPatternVm();
+    public PropertyRegexPatternPage regexPattern(){
+        val vm = new PropertyRegexPatternPage();
         vm.setEmailAddressPropertyUsingAnnotation("joe@bloggs.com");
         vm.setEmailAddressPropertyUsingMetaAnnotation("flo@bloggs.com");
         vm.setEmailAddressPropertyUsingMetaAnnotationButOverridden("mo@bloggs.org");
@@ -192,8 +192,8 @@ public class PropertyMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-camera", describedAs = "Snapshot inclusion/exclusion")
-    public PropertySnapshotVm snapshot(){
-        return new PropertySnapshotVm("value");
+    public PropertySnapshotPage snapshot(){
+        return new PropertySnapshotPage("value");
     }
 
     private void setSampleBlob(final String suffix, final Consumer<Blob> blobConsumer) {

@@ -34,7 +34,7 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.domain.properties.Property.hidden.PropertyHiddenVm;
+import demoapp.dom.domain.properties.Property.hidden.PropertyHiddenPage;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -49,7 +49,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class PropertyHiddenChildVm implements HasAsciiDocDescription {
 
-    public PropertyHiddenChildVm(final String value, final PropertyHiddenVm parent) {
+    public PropertyHiddenChildVm(final String value, final PropertyHiddenPage parent) {
         setPropertyHiddenNowhere(value);
         setPropertyHiddenEverywhere(value);
         setPropertyHiddenAnywhere(value);
@@ -183,7 +183,7 @@ public class PropertyHiddenChildVm implements HasAsciiDocDescription {
         fieldSetId = "variants", sequence = "8")
     @XmlTransient   // to avoid cycles
     @Getter @Setter
-    private PropertyHiddenVm propertyHiddenReferencesParent;
+    private PropertyHiddenPage propertyHiddenReferencesParent;
 //tag::variants-references_parent[]
 
 }

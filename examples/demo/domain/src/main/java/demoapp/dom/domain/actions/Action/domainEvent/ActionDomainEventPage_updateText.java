@@ -19,7 +19,6 @@
 package demoapp.dom.domain.actions.Action.domainEvent;
 
 import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.events.domain.ActionDomainEvent;
 
@@ -36,14 +35,14 @@ public class ActionDomainEventPage_updateText {
     // ...
 //end::class[]
 
-    private final ActionDomainEventPage actionDomainEventVm;
+    private final ActionDomainEventPage page;
 
     @MemberSupport public ActionDomainEventPage act(final String text) {
-        actionDomainEventVm.setText(text);
-        return actionDomainEventVm;
+        page.setText(text);
+        return page;
     }
     @MemberSupport public String default0Act() {
-        return actionDomainEventVm.getText();
+        return page.getText();
     }
 //tag::class[]
 }

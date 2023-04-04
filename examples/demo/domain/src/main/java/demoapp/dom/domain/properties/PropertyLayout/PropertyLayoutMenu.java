@@ -33,17 +33,17 @@ import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 
-import demoapp.dom.domain.properties.PropertyLayout.cssClass.PropertyLayoutCssClassVm;
-import demoapp.dom.domain.properties.PropertyLayout.describedAs.PropertyLayoutDescribedAsVm;
-import demoapp.dom.domain.properties.PropertyLayout.hidden.PropertyLayoutHiddenVm;
+import demoapp.dom.domain.properties.PropertyLayout.cssClass.PropertyLayoutCssClassPage;
+import demoapp.dom.domain.properties.PropertyLayout.describedAs.PropertyLayoutDescribedAsPage;
+import demoapp.dom.domain.properties.PropertyLayout.hidden.PropertyLayoutHiddenPage;
 import demoapp.dom.domain.properties.PropertyLayout.hidden.child.PropertyLayoutHiddenChildVm;
-import demoapp.dom.domain.properties.PropertyLayout.labelPosition.PropertyLayoutLabelPositionVm;
-import demoapp.dom.domain.properties.PropertyLayout.multiLine.PropertyLayoutMultiLineVm;
-import demoapp.dom.domain.properties.PropertyLayout.named.PropertyLayoutNamedVm;
+import demoapp.dom.domain.properties.PropertyLayout.labelPosition.PropertyLayoutLabelPositionPage;
+import demoapp.dom.domain.properties.PropertyLayout.multiLine.PropertyLayoutMultiLinePage;
+import demoapp.dom.domain.properties.PropertyLayout.named.PropertyLayoutNamedPage;
 import demoapp.dom.domain.properties.PropertyLayout.navigable.FileNodeVm;
-import demoapp.dom.domain.properties.PropertyLayout.renderDay.PropertyLayoutRenderDayVm;
-import demoapp.dom.domain.properties.PropertyLayout.repainting.PropertyLayoutRepaintingVm;
-import demoapp.dom.domain.properties.PropertyLayout.typicalLength.PropertyLayoutTypicalLengthVm;
+import demoapp.dom.domain.properties.PropertyLayout.renderDay.PropertyLayoutRenderDayPage;
+import demoapp.dom.domain.properties.PropertyLayout.repainting.PropertyLayoutRepaintingPage;
+import demoapp.dom.domain.properties.PropertyLayout.typicalLength.PropertyLayoutTypicalLengthPage;
 import demoapp.dom.types.Samples;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -63,24 +63,24 @@ public class PropertyLayoutMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-pen-nib", describedAs = "CSS class to wrap the UI component representing this property")
-    public PropertyLayoutCssClassVm cssClass(){
-        return new PropertyLayoutCssClassVm();
+    public PropertyLayoutCssClassPage cssClass(){
+        return new PropertyLayoutCssClassPage();
     }
 
 
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-comment", describedAs = "Description of the property, shown as a tooltip")
-    public PropertyLayoutDescribedAsVm describedAs(){
-        return new PropertyLayoutDescribedAsVm();
+    public PropertyLayoutDescribedAsPage describedAs(){
+        return new PropertyLayoutDescribedAsPage();
     }
 
 
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of the property in different contexts")
-    public PropertyLayoutHiddenVm hidden() {
-        val vm = new PropertyLayoutHiddenVm();
+    public PropertyLayoutHiddenPage hidden() {
+        val vm = new PropertyLayoutHiddenPage();
         vm.setPropertyHiddenAnywhere("hidden anywhere");
         vm.setPropertyHiddenEverywhere("hidden everywhere");
         vm.setPropertyHiddenNowhereUsingAnnotation("hidden nowhere using annotation");
@@ -97,16 +97,16 @@ public class PropertyLayoutMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-tag", describedAs = "Label positions")
-    public PropertyLayoutLabelPositionVm labelPosition(){
-        return new PropertyLayoutLabelPositionVm();
+    public PropertyLayoutLabelPositionPage labelPosition(){
+        return new PropertyLayoutLabelPositionPage();
     }
 
 
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-align-justify", describedAs = "Textboxes")
-    public PropertyLayoutMultiLineVm multiLine(){
-        val vm = new PropertyLayoutMultiLineVm();
+    public PropertyLayoutMultiLinePage multiLine(){
+        val vm = new PropertyLayoutMultiLinePage();
         vm.setPropertyUsingAnnotation(
                 "A multiline string\n" +
                 "spanning\n" +
@@ -126,8 +126,8 @@ public class PropertyLayoutMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-signature", describedAs = "Custom text for the property's label")
-    public PropertyLayoutNamedVm named(){
-        return new PropertyLayoutNamedVm();
+    public PropertyLayoutNamedPage named(){
+        return new PropertyLayoutNamedPage();
     }
 
 
@@ -142,16 +142,16 @@ public class PropertyLayoutMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-step-forward", describedAs = "Inclusive and exclusive date ranges")
-    public PropertyLayoutRenderDayVm renderDay(){
-        return new PropertyLayoutRenderDayVm(clockService.getClock().nowAsLocalDate(ZoneId.systemDefault()));
+    public PropertyLayoutRenderDayPage renderDay(){
+        return new PropertyLayoutRenderDayPage(clockService.getClock().nowAsLocalDate(ZoneId.systemDefault()));
     }
 
 
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-paint-brush", describedAs = "Performance hint for properties holding unchanging large objects")
-    public PropertyLayoutRepaintingVm repainting(){
-        val vm = new PropertyLayoutRepaintingVm();
+    public PropertyLayoutRepaintingPage repainting(){
+        val vm = new PropertyLayoutRepaintingPage();
         vm.setEditMe("Modify this field to see if repainting occurs...");
         samples.stream()
                 .filter(x -> CommonMimeType.PDF.matches(x.getMimeType()))
@@ -169,8 +169,8 @@ public class PropertyLayoutMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-ruler-horizontal", describedAs = "Length of text fields")
-    public PropertyLayoutTypicalLengthVm typicalLength(){
-        val vm = new PropertyLayoutTypicalLengthVm();
+    public PropertyLayoutTypicalLengthPage typicalLength(){
+        val vm = new PropertyLayoutTypicalLengthPage();
         vm.setPropertyUsingAnnotation("abcdefghij");
         vm.setPropertyUsingLayout("abcdefghij");
         vm.setPropertyUsingMetaAnnotation("abcdefghij");

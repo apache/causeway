@@ -30,15 +30,15 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import demoapp.dom._infra.samples.NameSamples;
 import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.actions.Action.associateWith.ActionAssociateWithVm;
+import demoapp.dom.domain.actions.Action.associateWith.ActionAssociateWithPage;
 import demoapp.dom.domain.actions.Action.associateWith.child.ActionAssociateWithChildVm;
 import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingEntity;
 import demoapp.dom.domain.actions.Action.domainEvent.ActionDomainEventPage;
 import demoapp.dom.domain.actions.Action.executionPublishing.ActionExecutionPublishingEntity;
-import demoapp.dom.domain.actions.Action.hidden.ActionHiddenVm;
-import demoapp.dom.domain.actions.Action.restrictTo.ActionRestrictToVm;
-import demoapp.dom.domain.actions.Action.semantics.ActionSemanticsVm;
-import demoapp.dom.domain.actions.Action.typeOf.ActionTypeOfVm;
+import demoapp.dom.domain.actions.Action.hidden.ActionHiddenPage;
+import demoapp.dom.domain.actions.Action.restrictTo.ActionRestrictToPage;
+import demoapp.dom.domain.actions.Action.semantics.ActionSemanticsPage;
+import demoapp.dom.domain.actions.Action.typeOf.ActionTypeOfPage;
 import demoapp.dom.domain.actions.Action.typeOf.child.ActionTypeOfChildVm;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -55,8 +55,8 @@ public class ActionMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-ring", describedAs = "Semantic relationship between actions and other properties or collections")
-    public ActionAssociateWithVm associateWith(){
-        val associateWithVm = new ActionAssociateWithVm("value");
+    public ActionAssociateWithPage associateWith(){
+        val associateWithVm = new ActionAssociateWithPage("value");
         val children = associateWithVm.getChildren();
         val favorites = associateWithVm.getFavorites();
 
@@ -92,26 +92,26 @@ public class ActionMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of actions")
-    public ActionHiddenVm hidden(){
-        return new ActionHiddenVm("value");
+    public ActionHiddenPage hidden(){
+        return new ActionHiddenPage("value");
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-paper-plane", describedAs = "Availability of actions per environment")
-    public ActionRestrictToVm restrictTo(){
-        return new ActionRestrictToVm("value");
+    public ActionRestrictToPage restrictTo(){
+        return new ActionRestrictToPage("value");
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-skull-crossbones", describedAs = "Whether the action has side-effects")
-    public ActionSemanticsVm semantics(){
-        return new ActionSemanticsVm(123);
+    public ActionSemanticsPage semantics(){
+        return new ActionSemanticsPage(123);
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-shapes", describedAs = "Semantic relationship between actions and other properties or collections")
-    public ActionTypeOfVm typeOf(){
-        val typeOfVm = new ActionTypeOfVm();
+    public ActionTypeOfPage typeOf(){
+        val typeOfVm = new ActionTypeOfPage();
         val children = typeOfVm.getChildren();
 
         // add to either one collection or the other

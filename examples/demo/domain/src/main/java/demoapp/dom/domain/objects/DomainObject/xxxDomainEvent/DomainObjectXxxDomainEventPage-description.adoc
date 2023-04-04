@@ -1,61 +1,114 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-[#actionDomainEvent]
-== actionDomainEvent
+Usually a domain event is emitted by the framework to emit whenever the user interacts with an object member, in other words an action, property or collection.
+Domain service subscribers can influence this interaction, either by:
 
-Indicates that an invocation of _any_ action of the domain object (that do not themselves specify their own `@Action(domainEvent=...)` should be posted to the _org.apache.causeway.applib.services.eventbus.EventBusService event bus_ using the specified custom (subclass of) https://causeway.apache.org/refguide/${CAUSEWAY_VERSION}/applib/index/events/domain/ActionDomainEvent.html[ActionDomainEvent] .
+* hiding the action, property or collection
+* disabling the action or property.
+(This does not apply to collections as they cannot be modified directly).
+* validating arguments of the action invocation or property edit
+* performing arbitrary operations before the action has been invoked / property edited (including modifying the argument values to be used)
+* performing arbitrary operations after the action has been invoked / property edited
 
-For example:
+Most commonly the domain event to emit is specified at the member level, using link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/Action.html#domainevent[@Action#actionDomainEvent], link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/Property.html#domainevent[@Property#actionDomainEvent] or link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/Collection.html#domainevent[@Collection#actionDomainEvent].
+But as a fallback the `domainEvent` can also be at the class level using link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/DomainObject.html#actiondomainevent[@DomainObject#actionDomainEvent].
 
+
+=== How this demo works
+
+This page object has a single (editable) property, `text`, an action to update it, and a collection.
+None of these domain members are annotated with a domainEvent directly, but their containing page object _is_ annotated.
+
+The interactions with these members can be controlled using the "change control strategy" action, influencing whether they are hidden, disabled, and so on.
+
+In terms of code:
+
+* this page object defines a set of domain event classes:
++
+[source,java]
+.DomainObjectXxxDomainEventPage.java
+----
+include::DomainObjectXxxDomainEventPage.java[tags=class]
+----
+<.> the action domain event class to emit (if not annotated at the member level)
+<.> the property domain event class to emit (if not annotated at the member level)
+<.> the collection domain event class to emit (if not annotated at the member level)
+<.> marker interface.
+All the domain event classes implement this interface, and the subscriber (see below) subscribes on this type
+<.> the property can be edited directly
+<.> the property can also be edited by this action.
+The property can also be edited via a mixin action (see next)
+
+* the mixin action to update the property:
++
+[source,java]
+.DomainObjectXxxDomainEventPage_updateText.java
+----
+include::DomainObjectXxxDomainEventPage_updateTextViaMixin.java[tags=class]
 ----
 
-@DomainObject(actionDomainEvent=SomeObject.GenericActionDomainEvent.class)
-public class SomeObject{
-    public static class GenericActionDomainEvent extends ActionDomainEvent<Object> { ... }
 
-    public void changeStartDate(final Date startDate) { ...}
-    ...
-}
+* the subscriber that listens to the events:
++
+[source,java]
+.DomainObjectXxxDomainEventControlSubscriber.java
+----
+include::DomainObjectXxxDomainEventControlSubscriber.java[tags=class]
+----
+<.> currently selected strategy
+<.> listens to the custom event (marker interface)
+<.> dispatches to the currently selected control strategy (see below)
+
+* the action that selects the strategy in effect:
++
+[source,java]
+.DomainObjectXxxDomainEventPage_changeControlStrategy
+----
+include::DomainObjectXxxDomainEventPage_changeControlStrategy.java[tags=class]
+----
+<.> Emits its own domain event just so that it won't hide itself (!)
+
+* the different strategies:
+
+** do nothing
++
+[source,java]
+----
+include::DomainObjectXxxDomainEventControlStrategy.java[tags=class]
 ----
 
-This will result in all actions as a more specific type to use) to emit this event.
-
-This subclass must provide a no-arg constructor; the fields are set reflectively. It must also use `Object` as its generic type. This is to allow mixins to also emit the same event.
-
-[#propertyDomainEvent]
-== propertyDomainEvent
-
-Indicates that changes to _any_ property of the domain object (that do not themselves specify their own `@Property(domainEvent=...)` should be posted to the _org.apache.causeway.applib.services.eventbus.EventBusService event bus_ using the specified custom (subclass of) https://causeway.apache.org/refguide/${CAUSEWAY_VERSION}/applib/index/events/domain/PropertyDomainEvent.html[PropertyDomainEvent] .
-
-For example:
-
+** hide
++
+[source,java,indent=0]
+----
+include::DomainObjectXxxDomainEventControlStrategy.java[tags=hide]
 ----
 
-@DomainObject(propertyDomainEvent=SomeObject.GenericPropertyDomainEvent.class)
-public class SomeObject{
-
-   public LocalDate getStartDate() { ...}
-}
+** disable
++
+[source,java,indent=0]
+----
+include::DomainObjectXxxDomainEventControlStrategy.java[tags=disable]
 ----
 
-This subclass must provide a no-arg constructor; the fields are set reflectively. It must also use `Object` as its generic type. This is to allow mixins to also emit the same event.
-
-[#collectionDomainEvent]
-== collectionDomainEvent
-
-Indicates that changes to _any_ collection of the domain object (that do not themselves specify their own `@Collection(domainEvent=...)` should be posted to the https://causeway.apache.org/refguide/${CAUSEWAY_VERSION}/applib/index/services/eventbus/EventBusService.html[EventBusService] event bus_ using a custom (subclass of) https://causeway.apache.org/refguide/${CAUSEWAY_VERSION}/applib/index/events/domain/CollectionDomainEvent.html[CollectionDomainEvent] .
-
-For example:
-
+** validate
++
+[source,java,indent=0]
+----
+include::DomainObjectXxxDomainEventControlStrategy.java[tags=validate]
 ----
 
-@DomainObject(collectionDomainEvent=Order.GenericCollectionDomainEvent.class)
-public class Order {
-
-  public SortedSet<OrderLine> getLineItems() { ...}
-}
+** executing
++
+[source,java,indent=0]
+----
+include::DomainObjectXxxDomainEventControlStrategy.java[tags=executing]
 ----
 
-This subclass must provide a no-arg constructor; the fields are set reflectively. It must also use `Object` as its generic type. This is to allow mixins to also emit the same event.
-
+** executed
++
+[source,java,indent=0]
+----
+include::DomainObjectXxxDomainEventControlStrategy.java[tags=executed]
+----
 

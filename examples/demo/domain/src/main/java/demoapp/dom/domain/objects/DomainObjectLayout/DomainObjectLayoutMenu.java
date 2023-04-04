@@ -30,14 +30,14 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.factory.FactoryService;
 
-import demoapp.dom.domain.objects.DomainObjectLayout.bookmarking.DomainObjectLayoutBookmarkingVm;
-import demoapp.dom.domain.objects.DomainObjectLayout.cssClass.DomainObjectLayoutCssClassVm;
-import demoapp.dom.domain.objects.DomainObjectLayout.cssClassFa.DomainObjectLayoutCssClassFaVm;
-import demoapp.dom.domain.objects.DomainObjectLayout.describedAs.DomainObjectLayoutDescribedAsVm;
-import demoapp.dom.domain.objects.DomainObjectLayout.named.DomainObjectLayoutNamedVm;
-import demoapp.dom.domain.objects.DomainObjectLayout.paged.DomainObjectLayoutPagedVm;
-import demoapp.dom.domain.objects.DomainObjectLayout.tabledec.DomainObjectLayoutTableDecoratorVm;
-import demoapp.dom.domain.objects.DomainObjectLayout.xxxUiEvent.DomainObjectLayoutXxxUiEventVm;
+import demoapp.dom.domain.objects.DomainObjectLayout.bookmarking.DomainObjectLayoutBookmarkingPage;
+import demoapp.dom.domain.objects.DomainObjectLayout.cssClass.DomainObjectLayoutCssClassPage;
+import demoapp.dom.domain.objects.DomainObjectLayout.cssClassFa.DomainObjectLayoutCssClassFaPage;
+import demoapp.dom.domain.objects.DomainObjectLayout.describedAs.DomainObjectLayoutDescribedAsPage;
+import demoapp.dom.domain.objects.DomainObjectLayout.named.DomainObjectLayoutNamedPage;
+import demoapp.dom.domain.objects.DomainObjectLayout.paged.DomainObjectLayoutPagedPage;
+import demoapp.dom.domain.objects.DomainObjectLayout.tabledec.DomainObjectLayoutTableDecoratorPage;
+import demoapp.dom.domain.objects.DomainObjectLayout.xxxUiEvent.DomainObjectLayoutXxxUiEventPage;
 
 @Named("demo.DomainObjectLayoutMenu")
 @DomainService(
@@ -52,58 +52,58 @@ public class DomainObjectLayoutMenu {
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-bookmark",
         describedAs = "Add link to object once visited as a bookmark")
-    public DomainObjectLayoutBookmarkingVm bookmarking(){
-        return factoryService.viewModel(new DomainObjectLayoutBookmarkingVm());
+    public DomainObjectLayoutBookmarkingPage bookmarking(){
+        return factoryService.viewModel(new DomainObjectLayoutBookmarkingPage());
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-pen-nib",
         describedAs = "CSS class to wrap the UI component representing the domain object")
-    public DomainObjectLayoutCssClassVm cssClass(){
-        return factoryService.viewModel(new DomainObjectLayoutCssClassVm());
+    public DomainObjectLayoutCssClassPage cssClass(){
+        return factoryService.viewModel(new DomainObjectLayoutCssClassPage());
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-font-awesome-flag",
         describedAs = "Font awesome icon to represent domain object")
-    public DomainObjectLayoutCssClassFaVm cssClassFa(){
-        return factoryService.viewModel(new DomainObjectLayoutCssClassFaVm());
+    public DomainObjectLayoutCssClassFaPage cssClassFa(){
+        return factoryService.viewModel(new DomainObjectLayoutCssClassFaPage());
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-comment",
         describedAs = "Description of the property, shown as a tooltip")
-    public DomainObjectLayoutDescribedAsVm describedAs(){
-        return factoryService.viewModel(new DomainObjectLayoutDescribedAsVm());
+    public DomainObjectLayoutDescribedAsPage describedAs(){
+        return factoryService.viewModel(new DomainObjectLayoutDescribedAsPage());
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-signature",
         describedAs = "Custom text for the domain object's type wherever labeled")
-    public DomainObjectLayoutNamedVm named(){
-        return factoryService.viewModel(new DomainObjectLayoutNamedVm());
+    public DomainObjectLayoutNamedPage named(){
+        return factoryService.viewModel(new DomainObjectLayoutNamedPage());
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-fast-forward",
         describedAs = "Number of domain objects per page in collections")
-    public DomainObjectLayoutPagedVm paged(){
-        return factoryService.viewModel(new DomainObjectLayoutPagedVm());
+    public DomainObjectLayoutPagedPage paged(){
+        return factoryService.viewModel(new DomainObjectLayoutPagedPage());
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-solid fa-table-columns",
         describedAs = "Allows to specify a custom client side table renderer.")
-    public DomainObjectLayoutTableDecoratorVm tableDecorator(){
-        return factoryService.viewModel(new DomainObjectLayoutTableDecoratorVm());
+    public DomainObjectLayoutTableDecoratorPage tableDecorator(){
+        return factoryService.viewModel(new DomainObjectLayoutTableDecoratorPage());
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-desktop",
         describedAs = "Class of the UI events emitted to allow subscribers to specify "
                 + "title, icon, style and layout")
-    public DomainObjectLayoutXxxUiEventVm uiEvents(){
-        return factoryService.viewModel(new DomainObjectLayoutXxxUiEventVm());
+    public DomainObjectLayoutXxxUiEventPage uiEvents(){
+        return factoryService.viewModel(new DomainObjectLayoutXxxUiEventPage());
     }
 
 }

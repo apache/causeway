@@ -37,8 +37,9 @@ import demoapp.dom.domain.objects.DomainObject.introspection.DomainObjectIntrosp
 import demoapp.dom.domain.objects.DomainObject.mixinMethod.DomainObjectMixinMethodPage;
 import demoapp.dom.domain.objects.DomainObject.nature.DomainObjectNaturePage;
 import demoapp.dom.domain.objects.DomainObject.xxxDomainEvent.DomainObjectXxxDomainEventPage;
-import demoapp.dom.domain.objects.DomainObject.xxxLifecycleEvent.DomainObjectXxxLifecyleEventPage;
+import demoapp.dom.domain.objects.DomainObject.xxxLifecycleEvent.DomainObjectXxxLifecycleEventPage;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Named("demo.DomainObjectMenu")
 @DomainService(
@@ -99,13 +100,17 @@ public class DomainObjectMenu {
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-asterisk", describedAs = "Default class of the domain event emitted when interacting with the domain object's actions, properties or collections")
     public DomainObjectXxxDomainEventPage domainEvents() {
-        return new DomainObjectXxxDomainEventPage();
+        val page = new DomainObjectXxxDomainEventPage("change me");
+        page.addChild("#1");
+        page.addChild("#2");
+        page.addChild("#3");
+        return page;
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-redo", describedAs = "Class of the lifecycle event emitted when the domain entity transitions through its persistence lifecycle")
-    public DomainObjectXxxLifecyleEventPage lifecycleEvents() {
-        return new DomainObjectXxxLifecyleEventPage();
+    public DomainObjectXxxLifecycleEventPage lifecycleEvents() {
+        return new DomainObjectXxxLifecycleEventPage();
     }
 
 }
