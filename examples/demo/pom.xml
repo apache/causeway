@@ -217,6 +217,19 @@
 
 	<profiles>
 		<profile>
+			<id>module-examples-demo-testing</id>
+			<activation>
+				<property>
+					<name>module-examples-demo-testing</name>
+				</property>
+			</activation>
+			<modules>
+				<module>domain</module>
+				<module>web</module>
+				<module>testing</module>
+			</modules>
+		</profile>
+		<profile>
 			<id>module-examples-demo-wicket</id>
 			<activation>
 				<property>

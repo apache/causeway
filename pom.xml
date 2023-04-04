@@ -198,6 +198,17 @@
 		</profile>
 
 		<profile>
+			<id>module-examples-demo-testing</id>
+			<activation>
+				<property>
+					<name>module-examples-demo-testing</name>
+				</property>
+			</activation>
+			<modules>
+				<module>examples/demo</module>
+			</modules>
+		</profile>
+		<profile>
 			<id>module-examples-demo-wicket</id>
 			<activation>
 				<property>
