@@ -97,13 +97,26 @@
 			<artifactId>spring-boot-starter-log4j2</artifactId>
 		</dependency>
 		
-		<!-- APPROVAL TESTING -->
+		<!-- TESTING UTILS -->
 		
 		<dependency>
-			<groupId>com.approvaltests</groupId>
-			<artifactId>approvaltests</artifactId>
-			<scope>test</scope>
-		</dependency>
+        	<groupId>org.apache.causeway.testing</groupId>
+        	<artifactId>causeway-testing-unittestsupport-applib</artifactId>
+        	<exclusions>
+		        <exclusion>
+		            <groupId>org.jmock</groupId>
+		            <artifactId>jmock</artifactId>
+		        </exclusion>
+		        <exclusion>
+		            <groupId>org.jmock</groupId>
+		            <artifactId>jmock-junit4</artifactId>
+		        </exclusion>
+		        <exclusion>
+		            <groupId>org.picocontainer</groupId>
+		            <artifactId>picocontainer</artifactId>
+		        </exclusion>
+			</exclusions>
+    	</dependency>
 		
 	</dependencies>
 	

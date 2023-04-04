@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.collections._Multimaps;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -65,11 +66,11 @@ public final class MmSpecUtil {
     public String specificationsBySortAsYaml(final @NonNull Can<ObjectSpecification> specs) {
 
         // collect all ObjectSpecifications into a list-multi-map, where BeanSort is the key
-        var specsBySort = _Multimaps.<String, String>newListMultimap(LinkedHashMap<String, List<String>>::new, ArrayList::new);
+        var specsBySort = _Multimaps.<String, LogicalType>newListMultimap(LinkedHashMap<String, List<LogicalType>>::new, ArrayList::new);
         specs
                 .stream()
                 .sorted()
-                .forEach(spec->specsBySort.putElement(spec.getBeanSort().name(), spec.getLogicalTypeName()));
+                .forEach(spec->specsBySort.putElement(spec.getBeanSort().name(), spec.getLogicalType()));
 
         // export the list-multi-map to YAML format
         val sb = new StringBuilder();
@@ -77,8 +78,8 @@ public final class MmSpecUtil {
         specsBySort
             .forEach((key, list)->{
                 sb.append(String.format("  %s:\n", key));
-                list.forEach(logicalTypeName->{
-                    sb.append(String.format("  - %s\n", logicalTypeName));
+                list.forEach(logicalType->{
+                    sb.append(String.format("  - %s(%s)\n", logicalType.getLogicalTypeName(), logicalType.getClassName()));
                 });
             });
 

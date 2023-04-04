@@ -22,6 +22,7 @@ import org.approvaltests.Approvals;
 import org.approvaltests.core.Options;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.MmSpecUtil;
+import org.apache.causeway.testing.unittestsupport.applib.util.ApprovalUtils;
 
 import lombok.val;
 
@@ -45,6 +47,12 @@ import lombok.val;
 class SpinUpDemoJpaTest {
 
     @Autowired MetaModelContext mmc;
+
+    @BeforeAll
+    static void beforeAll() {
+        // enables .yaml for approval testing's text compare
+        ApprovalUtils.registerFileExtensionForTextCompare(".yaml");
+    }
 
     @Test
     @DisplayName("verifyAllSpecificationsDiscovered")
