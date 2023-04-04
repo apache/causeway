@@ -18,13 +18,12 @@
  */
 package demoapp.dom.domain.objects.DomainObjectLayout.bookmarking;
 
+import jakarta.inject.Inject;
+
+import org.springframework.stereotype.Service;
+
 import demoapp.dom._infra.seed.SeedServiceAbstract;
 import demoapp.dom._infra.values.ValueHolderRepository;
-
-import javax.inject.Inject;
-
-import org.apache.causeway.applib.services.xactn.TransactionService;
-import org.springframework.stereotype.Service;
 
 @Service
 public class DomainObjectLayoutBookmarkingSeeding
@@ -32,7 +31,7 @@ extends SeedServiceAbstract {
 
     @Inject
     public DomainObjectLayoutBookmarkingSeeding(
-            ValueHolderRepository<String, ? extends DomainObjectLayoutBookmarking> entities) {
+            final ValueHolderRepository<String, ? extends DomainObjectLayoutBookmarking> entities) {
         super(entities);
     }
 

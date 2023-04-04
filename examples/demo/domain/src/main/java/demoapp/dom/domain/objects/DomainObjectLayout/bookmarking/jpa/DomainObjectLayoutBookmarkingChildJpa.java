@@ -18,19 +18,26 @@
  */
 package demoapp.dom.domain.objects.DomainObjectLayout.bookmarking.jpa;
 
-import demoapp.dom.domain.objects.DomainObjectLayout.bookmarking.DomainObjectLayoutBookmarkingChild;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.inject.Named;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
-import javax.inject.Named;
-import javax.persistence.*;
+import org.springframework.context.annotation.Profile;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
-import org.springframework.context.annotation.Profile;
+
+import demoapp.dom.domain.objects.DomainObjectLayout.bookmarking.DomainObjectLayoutBookmarkingChild;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Profile("demo-jpa")
 @Entity
@@ -48,7 +55,7 @@ public class DomainObjectLayoutBookmarkingChildJpa extends DomainObjectLayoutBoo
     // ...
 //end::class[]
 
-    public DomainObjectLayoutBookmarkingChildJpa(DomainObjectLayoutBookmarkingJpa parent, String value) {
+    public DomainObjectLayoutBookmarkingChildJpa(final DomainObjectLayoutBookmarkingJpa parent, final String value) {
         setParent(parent);
         setName(value);
     }

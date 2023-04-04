@@ -24,7 +24,6 @@ import demoapp.dom.types.Samples;
 
 import java.util.Set;
 
-import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;

@@ -18,21 +18,16 @@
  */
 package demoapp.dom.domain.objects.DomainObjectLayout.bookmarking;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom._infra.values.ValueHolder;
+import java.util.stream.Collectors;
+
+import jakarta.inject.Inject;
+
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.MemberSupport;
+
 import demoapp.dom.types.Samples;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.inject.Inject;
-
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.BookmarkPolicy;
-import org.apache.causeway.applib.annotation.DomainObjectLayout;
-import org.apache.causeway.applib.annotation.MemberSupport;
 
 @Action
 @RequiredArgsConstructor
@@ -41,7 +36,7 @@ public class DomainObjectLayoutBookmarking_addChildren {
     private final DomainObjectLayoutBookmarking parent;
 
     @MemberSupport
-    public DomainObjectLayoutBookmarking act(int number) {
+    public DomainObjectLayoutBookmarking act(final int number) {
         val strings = samples.stream().collect(Collectors.toList());
         for (int i = 0; i < number; i++) {
             parent.addChild(parent.getName() + " - " + strings.get(i));
