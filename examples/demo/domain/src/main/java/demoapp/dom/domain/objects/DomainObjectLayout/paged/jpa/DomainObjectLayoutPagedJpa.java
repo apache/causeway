@@ -35,10 +35,10 @@ import org.springframework.context.annotation.Profile;
 @Entity
 @Table(
     schema = "demo",
-    name = "DomainObjectLayoutCssClassFaJpa"
+    name = "DomainObjectLayoutPagedJpa"
 )
 @EntityListeners(CausewayEntityListener.class)
-@Named("demo.DomainObjectLayoutCssClassFaJpa")
+@Named("demo.DomainObjectLayoutPagedJpa")
 @NoArgsConstructor
 //tag::class[]
 // ...
