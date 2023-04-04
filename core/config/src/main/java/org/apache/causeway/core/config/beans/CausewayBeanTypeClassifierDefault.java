@@ -51,7 +51,6 @@ implements CausewayBeanTypeClassifier {
     private final Can<CausewayBeanTypeClassifier> classifierPlugins = CausewayBeanTypeClassifier.get();
 
     // handle arbitrary types ...
-    @SuppressWarnings("deprecation")
     @Override
     public CausewayBeanMetaData classify(
             final @NonNull Class<?> type) {
@@ -126,20 +125,19 @@ implements CausewayBeanTypeClassifier {
 
         val entityAnnotation = _Annotations.synthesize(type, Entity.class).orElse(null);
         if(entityAnnotation!=null) {
-            return CausewayBeanMetaData.causewayManaged(BeanSort.ENTITY, LogicalType.infer(type));
+            return CausewayBeanMetaData.entity(PersistenceStack.JPA, LogicalType.infer(type));
         }
 
         val aDomainObject = _Annotations.synthesize(type, DomainObject.class).orElse(null);
         if(aDomainObject!=null) {
             switch (aDomainObject.nature()) {
             case BEAN:
-                val logicalType = LogicalType.infer(type);
                 return CausewayBeanMetaData
-                        .injectableNamedByCauseway(BeanSort.MANAGED_BEAN_CONTRIBUTING, logicalType);
+                        .indifferent(BeanSort.MANAGED_BEAN_CONTRIBUTING, type);
             case MIXIN:
                 return CausewayBeanMetaData.causewayManaged(BeanSort.MIXIN, type);
             case ENTITY:
-                return CausewayBeanMetaData.causewayManaged(BeanSort.ENTITY, type);
+                return CausewayBeanMetaData.entity(PersistenceStack.UNSPECIFIED, LogicalType.infer(type));
             case VIEW_MODEL:
             case NOT_SPECIFIED:
                 //because object is not associated with a persistence context unless discovered above

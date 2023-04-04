@@ -34,6 +34,10 @@ module org.apache.causeway.core.config {
     exports org.apache.causeway.core.config.validators;
     exports org.apache.causeway.core.config.viewer.web;
 
+    requires static lombok;
+
+    requires transitive org.apache.causeway.applib;
+    requires transitive org.apache.causeway.commons;
     requires jakarta.activation;
     requires java.annotation;
     requires java.persistence;
@@ -41,9 +45,6 @@ module org.apache.causeway.core.config {
     requires java.validation;
     requires java.ws.rs;
     requires java.inject;
-    requires lombok;
-    requires org.apache.causeway.applib;
-    requires org.apache.causeway.commons;
     requires org.apache.logging.log4j;
     requires org.eclipse.persistence.core;
     requires org.hibernate.validator;

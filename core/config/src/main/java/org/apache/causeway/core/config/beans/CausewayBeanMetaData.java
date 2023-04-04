@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.config.beans;
 
+import java.util.Optional;
+
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 
@@ -33,9 +35,6 @@ public class CausewayBeanMetaData {
         SPRING,
         /** other Spring managed component, or not managed at all */
         INDIFFERENT,
-        /** @deprecated in support of deprecated {@code @DomainService(logicalTypeName=...)}*/
-        @Deprecated
-        SPRING_NAMED_BY_CAUSEWAY,
         ;
         public boolean isNone() { return this == NONE; }
         public boolean isCauseway() { return this == CAUSEWAY; }
@@ -53,12 +52,16 @@ public class CausewayBeanMetaData {
          * Whether we interfere with Spring's naming strategy.
          */
         public boolean isBeanNameOverride() {
-            return this == CAUSEWAY
-                    || this == SPRING_NAMED_BY_CAUSEWAY;
+            return this == CAUSEWAY;
         }
     }
 
     private final @NonNull BeanSort beanSort;
+    /**
+     * Optionally the {@link PersistenceStack},
+     * based on whether {@link #getBeanSort()} is {@link BeanSort#ENTITY}.
+     */
+    private final @NonNull Optional<PersistenceStack> persistenceStack;
     private final @NonNull LogicalType logicalType;
     private @NonNull ManagedBy managedBy;
 
@@ -75,7 +78,7 @@ public class CausewayBeanMetaData {
     public static CausewayBeanMetaData notManaged(
             final @NonNull BeanSort beanSort,
             final @NonNull LogicalType logicalType) {
-        return of(beanSort, logicalType, ManagedBy.NONE);
+        return of(beanSort, Optional.empty(), logicalType, ManagedBy.NONE);
     }
 
     public static CausewayBeanMetaData notManaged(
@@ -87,16 +90,16 @@ public class CausewayBeanMetaData {
     public static CausewayBeanMetaData injectable(
             final @NonNull BeanSort beanSort,
             final @NonNull LogicalType logicalType) {
-        return of(beanSort, logicalType, ManagedBy.SPRING);
+        return of(beanSort, Optional.empty(), logicalType, ManagedBy.SPRING);
     }
 
-    /** @deprecated in support of deprecated {@code @DomainService(logicalTypeName=...)}*/
-    @Deprecated
-    public static CausewayBeanMetaData injectableNamedByCauseway(
-            final @NonNull BeanSort beanSort,
-            final @NonNull LogicalType logicalType) {
-        return of(beanSort, logicalType, ManagedBy.SPRING_NAMED_BY_CAUSEWAY);
-    }
+//    /** @deprecated in support of deprecated {@code @DomainService(logicalTypeName=...)}*/
+//    @Deprecated
+//    public static CausewayBeanMetaData injectableNamedByCauseway(
+//            final @NonNull BeanSort beanSort,
+//            final @NonNull LogicalType logicalType) {
+//        return of(beanSort, logicalType, ManagedBy.SPRING_NAMED_BY_CAUSEWAY);
+//    }
 
     /**
      * Let <i>Spring</i> decide.
@@ -104,14 +107,20 @@ public class CausewayBeanMetaData {
     public static CausewayBeanMetaData indifferent(
             final @NonNull BeanSort beanSort,
             final @NonNull Class<?> type) {
-        return of(beanSort, LogicalType.infer(type),
+        return of(beanSort, Optional.empty(), LogicalType.infer(type),
                 ManagedBy.INDIFFERENT);
+    }
+
+    public static CausewayBeanMetaData entity(
+            final @NonNull PersistenceStack persistenceStack,
+            final @NonNull LogicalType logicalType) {
+        return of(BeanSort.ENTITY, Optional.of(persistenceStack), logicalType, ManagedBy.CAUSEWAY);
     }
 
     public static CausewayBeanMetaData causewayManaged(
             final @NonNull BeanSort beanSort,
             final @NonNull LogicalType logicalType) {
-        return of(beanSort, logicalType, ManagedBy.CAUSEWAY);
+        return of(beanSort, Optional.empty(), logicalType, ManagedBy.CAUSEWAY);
     }
 
     public static CausewayBeanMetaData causewayManaged(
@@ -119,5 +128,7 @@ public class CausewayBeanMetaData {
             final @NonNull Class<?> type) {
         return causewayManaged(beanSort, LogicalType.infer(type));
     }
+
+
 
 }

@@ -23,11 +23,11 @@ import java.util.Locale;
 import javax.jdo.annotations.EmbeddedOnly;
 
 import org.apache.causeway.applib.id.LogicalType;
-import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeClassifier;
+import org.apache.causeway.core.config.beans.PersistenceStack;
 
 import lombok.val;
 
@@ -73,7 +73,7 @@ public class JdoBeanTypeClassifier implements CausewayBeanTypeClassifier {
                 }
             }
 
-            return CausewayBeanMetaData.causewayManaged(BeanSort.ENTITY, logicalType);
+            return CausewayBeanMetaData.entity(PersistenceStack.JDO, logicalType);
         }
 
         return null; // we don't see fit to classify given type
