@@ -2,5 +2,6 @@
 
 The `named` attribute ...
 
+link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/DomainObjectLayout.html#named[@DomainObjectLayout#named]
 WARNING: TODO[CAUSEWAY-3309]
 Custom text for the domain object's type wherever labeled

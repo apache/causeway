@@ -5,3 +5,5 @@ The `paged` attribute ...
 WARNING: TODO[CAUSEWAY-3309]
 Add link to object once visited as a bookmark
 Number of domain objects per page in collections
+
+link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/DomainObjectLayout.html#paged[@DomainObjectLayout#paged]

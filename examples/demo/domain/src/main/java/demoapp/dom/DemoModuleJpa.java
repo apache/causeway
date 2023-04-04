@@ -39,6 +39,7 @@ import demoapp.dom.domain.objects.DomainObjectLayout.describedAs.jpa.DomainObjec
 import demoapp.dom.domain.objects.DomainObjectLayout.named.jpa.DomainObjectLayoutNamedJpa;
 import demoapp.dom.domain.objects.DomainObjectLayout.paged.jpa.DomainObjectLayoutPagedJpa;
 import demoapp.dom.domain.objects.DomainObjectLayout.tabledec.jpa.DomainObjectLayoutTableDecoratorJpa;
+import demoapp.dom.domain.objects.DomainObjectLayout.xxxUiEvent.jpa.DomainObjectLayoutXxxUiEventJpa;
 import demoapp.dom.domain.objects.other.embedded.jpa.NumberConstantJpa;
 import demoapp.dom.domain.properties.Property.commandPublishing.jpa.PropertyCommandPublishingJpa;
 import demoapp.dom.domain.properties.Property.executionPublishing.jpa.PropertyExecutionPublishingJpa;
@@ -122,6 +123,7 @@ import org.springframework.context.annotation.Profile;
         DomainObjectLayoutNamedJpa.class,
         DomainObjectLayoutPagedJpa.class,
         DomainObjectLayoutTableDecoratorJpa.class,
+        DomainObjectLayoutXxxUiEventJpa.class,
 
         CausewayBlobJpa.class,
         CausewayClobJpa.class,

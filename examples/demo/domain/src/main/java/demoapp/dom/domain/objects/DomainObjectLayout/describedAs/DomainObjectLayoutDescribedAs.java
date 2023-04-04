@@ -25,7 +25,9 @@ import org.apache.causeway.applib.annotation.DomainObjectLayout;
 
 //tag::class[]
 @DomainObjectLayout(
-        cssClassFa = "fa-user"             // <.>
+        describedAs = "This tooltip corresponds to the " +      // <.>
+            "'describedAs' attribute of the " +
+            "@DomainObjectLayout annotation"
 )
 public abstract class DomainObjectLayoutDescribedAs
 //end::class[]

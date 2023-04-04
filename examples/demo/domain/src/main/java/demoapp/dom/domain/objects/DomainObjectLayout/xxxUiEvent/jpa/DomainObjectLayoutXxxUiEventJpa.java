@@ -38,7 +38,7 @@ import org.springframework.context.annotation.Profile;
     name = "DomainObjectLayoutXxxUiEventJpa"
 )
 @EntityListeners(CausewayEntityListener.class)
-@Named("demo.DomainObjectLayoutCssClassFaJpa")
+@Named("demo.DomainObjectLayoutXxxUiEventJpa")
 @NoArgsConstructor
 //tag::class[]
 // ...

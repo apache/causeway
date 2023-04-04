@@ -2,5 +2,13 @@
 
 The `xxxUiEvent` attribute ...
 
+link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/DomainObjectLayout.html#titleuievent[@DomainObjectLayout#titleUiEvent]
+
+link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/DomainObjectLayout.html#iconuievent[@DomainObjectLayout#iconUiEvent]
+
+link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/DomainObjectLayout.html#cssclassuievent[@DomainObjectLayout#cssClassUiEvent]
+
+link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/DomainObjectLayout.html#layoutuievent[@DomainObjectLayout#layoutUiEvent]
+
 WARNING: TODO[CAUSEWAY-3309]
 Class of the UI events emitted to allow subscribers to specify title, icon etc
