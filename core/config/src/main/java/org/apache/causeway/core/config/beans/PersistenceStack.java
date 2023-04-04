@@ -23,16 +23,14 @@ import org.apache.causeway.commons.internal.base._Strings;
 public enum PersistenceStack {
     JPA,
     JDO,
-    OTHER,
+    /**
+     * eg. abstract entity type
+     */
+    UNSPECIFIED,
     ;
-
-    public boolean isJpa() {
-        return this == JPA;
-    }
-
-    public boolean isJdo() {
-        return this == JDO;
-    }
+    public boolean isJpa() { return this == JPA; }
+    public boolean isJdo() { return this == JDO; }
+    public boolean isUnspecified() { return this == UNSPECIFIED; }
 
     public String titleCase() {
         return _Strings.capitalize(_Strings.lower(name()));
