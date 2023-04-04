@@ -93,14 +93,6 @@ public class CausewayBeanMetaData {
         return of(beanSort, Optional.empty(), logicalType, ManagedBy.SPRING);
     }
 
-//    /** @deprecated in support of deprecated {@code @DomainService(logicalTypeName=...)}*/
-//    @Deprecated
-//    public static CausewayBeanMetaData injectableNamedByCauseway(
-//            final @NonNull BeanSort beanSort,
-//            final @NonNull LogicalType logicalType) {
-//        return of(beanSort, logicalType, ManagedBy.SPRING_NAMED_BY_CAUSEWAY);
-//    }
-
     /**
      * Let <i>Spring</i> decide.
      */

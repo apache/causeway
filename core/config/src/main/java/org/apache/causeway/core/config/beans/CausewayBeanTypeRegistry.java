@@ -57,6 +57,7 @@ public interface CausewayBeanTypeRegistry {
     /**
      * Returns 'JDO' or 'JPA' based on metadata found during {@link CausewayBeanTypeClassifier type-classification}.
      * If no (concrete) entity type is found, returns 'UNSPECIFIED'.
+     * @implNote assumes that there can be only one persistence stack
      */
     default PersistenceStack determineCurrentPersistenceStack() {
         return getEntityTypes().values().stream()
