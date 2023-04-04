@@ -18,24 +18,23 @@
  */
 package demoapp.dom.domain.objects.DomainObjectLayout.cssClass.jpa;
 
-import demoapp.dom.domain.objects.DomainObjectLayout.bookmarking.jpa.DomainObjectLayoutBookmarkingChildJpa;
+import jakarta.inject.Named;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+import org.springframework.context.annotation.Profile;
+
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
+
 import demoapp.dom.domain.objects.DomainObjectLayout.cssClass.DomainObjectLayoutCssClass;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.Set;
-import java.util.TreeSet;
-
-import javax.inject.Named;
-import javax.persistence.*;
-
-import org.apache.causeway.applib.annotation.Collection;
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.DomainObjectLayout;
-import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
-import org.springframework.context.annotation.Profile;
 
 @Profile("demo-jpa")
 @Entity
@@ -53,7 +52,7 @@ public class DomainObjectLayoutCssClassJpa extends DomainObjectLayoutCssClass {
     // ...
 //end::class[]
 
-    public DomainObjectLayoutCssClassJpa(String value) {
+    public DomainObjectLayoutCssClassJpa(final String value) {
         setName(value);
     }
 

@@ -21,7 +21,7 @@ package demoapp.dom.domain.objects.DomainObjectLayout.cssClass;
 import demoapp.dom._infra.seed.SeedServiceAbstract;
 import demoapp.dom._infra.values.ValueHolderRepository;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
