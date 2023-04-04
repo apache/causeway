@@ -18,9 +18,17 @@
  */
 package org.apache.causeway.core.metamodel.object;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.collections._Multimaps;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.NonNull;
+import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -40,6 +48,41 @@ public final class MmSpecUtil {
                 // else lookup
                 : MmAssertionUtil.assertTypeOf(guess)
                     .apply(guess.getSpecificationLoader().specForTypeElseFail(requiredType));
+    }
+
+    /**
+     * Introduced for JUnit testing.
+     * <p>
+     * Shortcut for {@code specificationsBySortAsYaml(specLoader.snapshotSpecifications())}.
+     */
+    public String specificationsBySortAsYaml(final @NonNull SpecificationLoader specLoader) {
+        return specificationsBySortAsYaml(specLoader.snapshotSpecifications());
+    }
+
+    /**
+     * Introduced for JUnit testing.
+     */
+    public String specificationsBySortAsYaml(final @NonNull Can<ObjectSpecification> specs) {
+
+        // collect all ObjectSpecifications into a list-multi-map, where BeanSort is the key
+        var specsBySort = _Multimaps.<String, String>newListMultimap(LinkedHashMap<String, List<String>>::new, ArrayList::new);
+        specs
+                .stream()
+                .sorted()
+                .forEach(spec->specsBySort.putElement(spec.getBeanSort().name(), spec.getLogicalTypeName()));
+
+        // export the list-multi-map to YAML format
+        val sb = new StringBuilder();
+        sb.append("ObjectSpecifications:\n");
+        specsBySort
+            .forEach((key, list)->{
+                sb.append(String.format("  %s:\n", key));
+                list.forEach(logicalTypeName->{
+                    sb.append(String.format("  - %s\n", logicalTypeName));
+                });
+            });
+
+        return sb.toString();
     }
 
 }
