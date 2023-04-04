@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.thymeflux.test;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
@@ -27,20 +26,23 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.ui.Model;
 import org.springframework.validation.support.BindingAwareModelMap;
 
-import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
-import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.apache.causeway.viewer.thymeflux.model.root.ThymefluxRootController;
 import org.apache.causeway.viewer.thymeflux.viewer.CausewayModuleIncViewerThymefluxViewer;
 
+import demoapp.testing.jpa.DemoDomainJpa_forTesting;
+
 @SpringBootTest(
-    classes = {
-            //DemoModuleJpa.class,
-            CausewayModuleCoreRuntimeServices.class,
-            CausewayModuleSecurityBypass.class,
-            CausewayModuleIncViewerThymefluxViewer.class
-    }
-    //,webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
-)
+        classes = {
+                DemoDomainJpa_forTesting.class,
+                CausewayModuleIncViewerThymefluxViewer.class
+        },
+        //webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+        properties = {
+                //"spring.jpa.show-sql=true",
+                //"logging.level.org.springframework.orm.jpa=DEBUG"
+        })
 @ActiveProfiles(profiles = "demo-jpa")
 @AutoConfigureWebTestClient
 class ThymefluxViewerTests {
@@ -49,13 +51,12 @@ class ThymefluxViewerTests {
     @Autowired private ThymefluxRootController rootController;
 
     @Test
-    void contextLoads() {
-    }
-
-    @Test @Disabled
     void rootController() {
-        Model model = new BindingAwareModelMap();
+        final Model model = new BindingAwareModelMap();
         rootController.root(model);
+
+        var headerUiModel = model.getAttribute("headerUiModel");
+        assertNotNull(headerUiModel);
     }
 
 

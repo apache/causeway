@@ -40,81 +40,16 @@
 	<dependencies>
 
 		<dependency>
+			<groupId>org.apache.causeway.examples.apps</groupId>
+			<artifactId>demo-testing-jpa</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.apache.causeway.incubator.viewer</groupId>
 			<artifactId>causeway-viewer-thymeflux-viewer</artifactId>
 		</dependency>
-
-		<dependency>
-			<groupId>org.apache.causeway.examples.apps</groupId>
-			<artifactId>demo-web</artifactId>
-			<version>3.0.0-SNAPSHOT</version>
-		</dependency>
-
-		<!-- EXTENSIONS THYMEFLUX --> 
-
-		<dependency>
-			<groupId>org.apache.causeway.valuetypes</groupId>
-			<artifactId>causeway-valuetypes-asciidoc-ui</artifactId>
-			<version>3.0.0-SNAPSHOT</version>
-			<type>pom</type>
-		</dependency>
-
-		<!-- TESTING -->
-
-		<dependency>
-		  <groupId>org.springframework.boot</groupId>
-		  <artifactId>spring-boot-starter-test</artifactId>
-		  <scope>test</scope>
-		</dependency>
-
-		<dependency>
-		    <groupId>io.projectreactor</groupId>
-		    <artifactId>reactor-test</artifactId>
-		    <scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.causeway.core</groupId>
-			<artifactId>causeway-core-internaltestsupport</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.causeway.security</groupId>
-			<artifactId>causeway-security-bypass</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.causeway.core</groupId>
-			<artifactId>causeway-core-runtimeservices</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.causeway.testing</groupId>
-			<artifactId>causeway-testing-fixtures-applib</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.approvaltests</groupId>
-			<artifactId>approvaltests</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.causeway.persistence</groupId>
-			<artifactId>causeway-persistence-jpa-eclipselink</artifactId>
-			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>org.eclipse.persistence</groupId>
-					<artifactId>jakarta.persistence</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
+		
 	</dependencies>
 
 

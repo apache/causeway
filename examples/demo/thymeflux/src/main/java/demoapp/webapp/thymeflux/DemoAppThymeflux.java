@@ -56,9 +56,9 @@ import demoapp.dom.DemoModuleJpa;
     //TODO CausewayModuleValVegaPersistenceJdoDn.class,
 
     // THYMEFLUX INTEGRATION
-    CausewayModuleIncViewerThymefluxViewer.class, // vaadin viewer
+    CausewayModuleIncViewerThymefluxViewer.class,
     // INCUBATING
-    //TODO CausewayModuleValAsciidocUiThymeflux.class, // ascii-doc rendering support (for Vaadin)
+    //TODO CausewayModuleValAsciidocUiThymeflux.class, // ascii-doc rendering support
     //TODO CausewayModuleExtFullCalendarThymeflux.class,
 
 })
