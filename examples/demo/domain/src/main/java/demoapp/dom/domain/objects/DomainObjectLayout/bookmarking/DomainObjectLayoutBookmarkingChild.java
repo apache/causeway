@@ -24,13 +24,19 @@ import demoapp.dom._infra.values.ValueHolder;
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 
+//tag::class[]
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_CHILD    // <.>
 )
 public abstract class DomainObjectLayoutBookmarkingChild
+//end::class[]
         implements
         HasAsciiDocDescription,
-        ValueHolder<String> {
+        ValueHolder<String>
+//tag::class[]
+{
+    // ...
+//end::class[]
 
     public String title() {
         return value();
@@ -43,4 +49,6 @@ public abstract class DomainObjectLayoutBookmarkingChild
 
     public abstract String getName();
     public abstract void setName(String value);
+//tag::class[]
 }
+//end::class[]

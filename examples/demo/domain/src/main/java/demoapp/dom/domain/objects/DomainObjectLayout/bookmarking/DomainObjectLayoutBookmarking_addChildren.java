@@ -52,6 +52,5 @@ public class DomainObjectLayoutBookmarking_addChildren {
         return 3;
     }
 
-
     @Inject Samples<String> samples;
 }

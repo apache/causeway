@@ -20,10 +20,10 @@ package demoapp.dom.domain.objects.DomainObjectLayout.bookmarking;
 
 import demoapp.dom._infra.seed.SeedServiceAbstract;
 import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.types.Samples;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.springframework.stereotype.Service;
 
 @Service

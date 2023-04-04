@@ -21,26 +21,27 @@ package demoapp.dom.domain.objects.DomainObjectLayout.bookmarking;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.Samples;
-import lombok.val;
 
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
-import org.apache.causeway.applib.annotation.SemanticsOf;
 
+//tag::class[]
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_ROOT        // <.>
 )
 public abstract class DomainObjectLayoutBookmarking
+//end::class[]
         implements
         HasAsciiDocDescription,
-        ValueHolder<String> {
+        ValueHolder<String>
+//tag::class[]
+{
+    // ...
+//end::class[]
 
     public String title() {
         return value();
@@ -56,16 +57,8 @@ public abstract class DomainObjectLayoutBookmarking
 
     public abstract void addChild(String value);
 
-    @Action
-    public DomainObjectLayoutBookmarking addChildren(int number) {
-        val strings = samples.stream().collect(Collectors.toList());
-        for (int i = 0; i < number; i++) {
-            addChild(strings.get(i));
-        }
-        return this;
-    }
-
     public abstract Set<? extends DomainObjectLayoutBookmarkingChild> getChildren();
 
-    @Inject Samples<String> samples;
+//tag::class[]
 }
+//end::class[]
