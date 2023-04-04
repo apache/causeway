@@ -18,31 +18,21 @@
  */
 package demoapp.dom.domain.objects.DomainObjectLayout.cssClassFa;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.seed.SeedServiceAbstract;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
-import javax.inject.Named;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.inject.Inject;
 
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.DomainObjectLayout;
-import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.springframework.stereotype.Service;
 
-//tag::class[]
-@XmlRootElement(name = "root")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.DomainObjectLayoutCssClassFaPage")
-@DomainObject(
-        nature=Nature.VIEW_MODEL)
-public class DomainObjectLayoutCssClassFaPage implements HasAsciiDocDescription {
+@Service
+public class DomainObjectLayoutCssClassFaSeeding
+extends SeedServiceAbstract {
 
-    @ObjectSupport public String title() {
-        return "@DomainObjectLayout#cssClassFa";
+    @Inject
+    public DomainObjectLayoutCssClassFaSeeding(
+            ValueHolderRepository<String, ? extends DomainObjectLayoutCssClassFa> entities) {
+        super(entities);
     }
 
 }
-//end::class[]

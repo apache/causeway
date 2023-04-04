@@ -34,6 +34,7 @@ import demoapp.dom.domain.objects.DomainObject.xxxLifecycleEvent.jpa.DomainObjec
 import demoapp.dom.domain.objects.DomainObjectLayout.bookmarking.jpa.DomainObjectLayoutBookmarkingChildJpa;
 import demoapp.dom.domain.objects.DomainObjectLayout.bookmarking.jpa.DomainObjectLayoutBookmarkingJpa;
 import demoapp.dom.domain.objects.DomainObjectLayout.cssClass.jpa.DomainObjectLayoutCssClassJpa;
+import demoapp.dom.domain.objects.DomainObjectLayout.cssClassFa.jpa.DomainObjectLayoutCssClassFaJpa;
 import demoapp.dom.domain.objects.other.embedded.jpa.NumberConstantJpa;
 import demoapp.dom.domain.properties.Property.commandPublishing.jpa.PropertyCommandPublishingJpa;
 import demoapp.dom.domain.properties.Property.executionPublishing.jpa.PropertyExecutionPublishingJpa;
@@ -112,6 +113,7 @@ import org.springframework.context.annotation.Profile;
         DomainObjectLayoutBookmarkingJpa.class,
         DomainObjectLayoutBookmarkingChildJpa.class,
         DomainObjectLayoutCssClassJpa.class,
+        DomainObjectLayoutCssClassFaJpa.class,
 
         CausewayBlobJpa.class,
         CausewayClobJpa.class,

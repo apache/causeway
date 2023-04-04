@@ -35,13 +35,6 @@
 							</cpt:fieldSet>
 						</bs3:col>
 					</bs3:row>
-					<bs3:row>
-						<bs3:col span="12">
-							<cpt:collection id="children">
-								<cpt:action id="addChildren"/>
-							</cpt:collection>
-						</bs3:col>
-					</bs3:row>
 				</bs3:tab>
 				<bs3:tab name="Metadata">
 					<bs3:row>

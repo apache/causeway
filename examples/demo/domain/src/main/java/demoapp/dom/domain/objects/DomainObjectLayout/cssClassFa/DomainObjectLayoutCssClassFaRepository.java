@@ -16,28 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObjectLayout.cssClass;
+package demoapp.dom.domain.objects.DomainObjectLayout.cssClassFa;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import java.util.List;
 
-import javax.inject.Named;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+public interface DomainObjectLayoutCssClassFaRepository {
 
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.DomainObjectLayout;
-import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.ObjectSupport;
-
-//tag::class[]
-public enum Status{
-
-    NEW,
-    IN_PROGRESS,
-    COMPLETE,
-    DISCARDED
-
+    List<? extends DomainObjectLayoutCssClassFa> allInstances();
 }
-//end::class[]
