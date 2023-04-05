@@ -35,7 +35,7 @@ import org.apache.causeway.applib.events.domain.ActionDomainEvent;
 import org.apache.causeway.applib.events.domain.CollectionDomainEvent;
 import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
 
-@XmlRootElement(name = "demo.DomainObjectxxxDomainEventPage")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.DomainObjectxxxDomainEventPage")

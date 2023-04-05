@@ -25,7 +25,7 @@ import org.apache.causeway.applib.annotation.DomainObjectLayout;
 
 //tag::class[]
 @DomainObjectLayout(
-        cssClassFa = "fa-user"             // <.>
+        paged = 5                   // <.>
 )
 public abstract class DomainObjectLayoutPaged
 //end::class[]

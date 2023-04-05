@@ -50,7 +50,7 @@ import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.value.Markup;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.domain.actions.progmodel.assoc.DemoItem;
+import demoapp.dom.domain.progmodel.actions.assoc.assoc.DemoItem;
 import lombok.Getter;
 import lombok.Setter;
 

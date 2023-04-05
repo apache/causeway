@@ -40,7 +40,7 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 public class DomainObjectLayoutDescribedAsPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "DomainObjectLayout#describedAs";
+        return "@DomainObjectLayout#describedAs";
     }
 
 }

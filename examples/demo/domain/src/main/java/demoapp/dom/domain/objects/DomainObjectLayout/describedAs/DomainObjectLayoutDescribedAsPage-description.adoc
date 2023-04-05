@@ -5,7 +5,7 @@ The purpose of the link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/appl
 === How this demo works
 
 The collection on the left hand side shows a set of objects that have been annotated with `describedAs`.
-Hover over the icons of the objects in the collection, and this text will be shown in a tooltip.
+Hover over the icons of the objects in the collection, and this text will be shown in (the bottom half of) each tooltip.
 
 Navigate into any of the objects and the same text is shown when hovering over the object's title.
 

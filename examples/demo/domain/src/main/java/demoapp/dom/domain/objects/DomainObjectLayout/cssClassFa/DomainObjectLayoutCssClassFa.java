@@ -25,7 +25,7 @@ import org.apache.causeway.applib.annotation.DomainObjectLayout;
 
 //tag::class[]
 @DomainObjectLayout(
-        cssClassFa = "fa-user"             // <.>
+        cssClassFa = "user"                 // <.>
 )
 public abstract class DomainObjectLayoutCssClassFa
 //end::class[]
