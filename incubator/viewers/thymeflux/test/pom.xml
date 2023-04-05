@@ -50,6 +50,12 @@
 			<artifactId>causeway-viewer-thymeflux-viewer</artifactId>
 		</dependency>
 		
+		<dependency>
+		    <groupId>io.github.wimdeblauwe</groupId>
+		    <artifactId>htmx-spring-boot-thymeleaf</artifactId>
+		    <version>2.0.0</version>
+		</dependency>
+		
 	</dependencies>
 
 

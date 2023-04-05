@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor
+	license agreements. See the NOTICE file distributed with this work for additional
+	information regarding copyright ownership. The ASF licenses this file to
+	you under the Apache License, Version 2.0 (the "License"); you may not use
+	this file except in compliance with the License. You may obtain a copy of
+	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required
+	by applicable law or agreed to in writing, software distributed under the
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS
+	OF ANY KIND, either express or implied. See the License for the specific
+	language governing permissions and limitations under the License. -->
+
+<!--
+For latest we use: https://raw.githubusercontent.com/apache/causeway/master/antora/supplemental-ui/applib/layout/menubars/bootstrap3/menubars.xsd
+      rather than: https://causeway.apache.org/applib/layout/menubars/bootstrap3/menubars.xsd
+ -->
+<mb3:menuBars
+        xsi:schemaLocation="https://causeway.apache.org/applib/layout/menubars/bootstrap3 https://raw.githubusercontent.com/apache/causeway/master/antora/supplemental-ui/applib/layout/menubars/bootstrap3/menubars.xsd https://causeway.apache.org/applib/layout/component https://causeway.apache.org/applib/layout/component/component.xsd"
+        xmlns:cpt="https://causeway.apache.org/applib/layout/component"
+        xmlns:mb3="https://causeway.apache.org/applib/layout/menubars/bootstrap3"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <mb3:primary>
+
+        <mb3:menu>
+            <mb3:named>Basic Types</mb3:named>
+            <mb3:section>
+                <mb3:named>Primitives</mb3:named>
+                <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="shorts"/>
+                <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="ints"/>
+                <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="longs"/>
+                <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="bytes"/>
+                <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="floats"/>
+                <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="doubles"/>
+                <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="chars"/>
+                <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="booleans"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Wrappers</mb3:named>
+                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="bytes"/>
+                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="shorts"/>
+                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="integers"/>
+                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="longs"/>
+                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="floats"/>
+                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="doubles"/>
+                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="characters"/>
+                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="booleans"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Common</mb3:named>
+                <mb3:serviceAction objectType="demo.JavaLangTypesMenu" id="enums"/>
+                <mb3:serviceAction objectType="demo.JavaLangTypesMenu" id="strings"/>
+                <mb3:serviceAction objectType="demo.JavaLangTypesMenu" id="voids"/>
+            </mb3:section>
+        </mb3:menu>
+
+        <mb3:menu unreferencedActions="true">
+            <mb3:named>Other</mb3:named>
+        </mb3:menu>
+    </mb3:primary>
+	<mb3:secondary>
+        <mb3:menu>
+            <mb3:named>Prototyping</mb3:named>
+            <mb3:section>
+                <mb3:named>Fixtures</mb3:named>
+                <mb3:serviceAction objectType="causeway.testing.fixtures.FixtureScripts" id="runFixtureScript"/>
+                <mb3:serviceAction objectType="causeway.testing.fixtures.FixtureScripts" id="recreateObjectsAndReturnFirst"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Layouts</mb3:named>
+                <mb3:serviceAction objectType="causeway.applib.LayoutServiceMenu" id="downloadLayouts"/>
+                <mb3:serviceAction objectType="causeway.applib.LayoutServiceMenu" id="downloadMenuBarsLayout"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Meta Model and Features</mb3:named>
+                <mb3:serviceAction objectType="causeway.applib.MetaModelServiceMenu" id="downloadMetaModel"/>
+                <mb3:serviceAction objectType="causeway.applib.MetaModelServiceMenu" id="downloadMetaModelDiff"/>
+                <mb3:serviceAction objectType="causeway.feat.ApplicationFeatureMenu" id="allNamespaces"/>
+                <mb3:serviceAction objectType="causeway.feat.ApplicationFeatureMenu" id="allTypes"/>
+                <mb3:serviceAction objectType="causeway.feat.ApplicationFeatureMenu" id="allActions"/>
+                <mb3:serviceAction objectType="causeway.feat.ApplicationFeatureMenu" id="allProperties"/>
+                <mb3:serviceAction objectType="causeway.feat.ApplicationFeatureMenu" id="allCollections"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Persistence</mb3:named>
+                <mb3:serviceAction objectType="causeway.persistence.jdo.JdoMetamodelMenu" id="downloadMetamodels"/>
+                <mb3:serviceAction objectType="causeway.ext.h2Console.H2ManagerMenu" id="openH2Console"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>REST API</mb3:named>
+                <mb3:serviceAction objectType="causeway.viewer.roRendering.SwaggerServiceMenu" id="openSwaggerUi"/>
+                <mb3:serviceAction objectType="causeway.viewer.roRendering.SwaggerServiceMenu" id="openRestApi"/>
+                <mb3:serviceAction objectType="causeway.viewer.roRendering.SwaggerServiceMenu" id="downloadSwaggerSchemaDefinition"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>i18n</mb3:named>
+                <mb3:serviceAction objectType="causeway.applib.TranslationServicePoMenu" id="downloadTranslations"/>
+                <mb3:serviceAction objectType="causeway.applib.TranslationServicePoMenu" id="resetTranslationCache"/>
+                <mb3:serviceAction objectType="causeway.applib.TranslationServicePoMenu" id="switchToReadingTranslations"/>
+                <mb3:serviceAction objectType="causeway.applib.TranslationServicePoMenu" id="switchToWritingTranslations"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Manual Testing</mb3:named>
+                <mb3:serviceAction objectType="causeway.applib.SitemapServiceMenu" id="downloadSitemap">
+                    <cpt:named>Download Site-Map Template (Adoc)</cpt:named>
+                </mb3:serviceAction>
+            </mb3:section>
+        </mb3:menu>
+
+        <mb3:menu>
+            <mb3:named>Security</mb3:named>
+            <mb3:section>
+                <mb3:named>Users</mb3:named>
+            	<mb3:serviceAction objectType="causeway.ext.secman.ApplicationUserMenu" id="userManager"/>
+            	<mb3:serviceAction objectType="causeway.ext.secman.ApplicationUserMenu" id="findUsers"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Roles</mb3:named>
+                <mb3:serviceAction objectType="causeway.ext.secman.ApplicationRoleMenu" id="roleManager"/>
+                <mb3:serviceAction objectType="causeway.ext.secman.ApplicationRoleMenu" id="findRoles"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Permissions</mb3:named>
+                <mb3:serviceAction objectType="causeway.ext.secman.ApplicationPermissionMenu" id="allPermissions"/>
+                <mb3:serviceAction objectType="causeway.ext.secman.ApplicationPermissionMenu" id="findOrphanedPermissions"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Tenancies</mb3:named>
+                <mb3:serviceAction objectType="causeway.ext.secman.ApplicationTenancyMenu" id="tenancyManager"/>
+                <mb3:serviceAction objectType="causeway.ext.secman.ApplicationTenancyMenu" id="findTenancies"/>
+            </mb3:section>
+        </mb3:menu>
+
+    </mb3:secondary>
+    <mb3:tertiary>
+        <mb3:menu>
+            <mb3:named/>
+            <mb3:section>
+                <mb3:named>Documentation</mb3:named>
+                <mb3:serviceAction objectType="causeway.ext.docgen.DocumentationMenu" id="help"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Configuration</mb3:named>
+                <mb3:serviceAction objectType="causeway.conf.ConfigurationMenu" id="configuration"/>
+	        </mb3:section>
+            <mb3:section>
+                <mb3:named>Impersonate</mb3:named>
+                <mb3:serviceAction objectType="causeway.sudo.ImpersonateMenu" id="impersonate"/>
+                <mb3:serviceAction objectType="causeway.sudo.ImpersonateMenu" id="impersonateWithRoles"/>
+                <mb3:serviceAction objectType="causeway.applib.ImpersonateStopMenu" id="stopImpersonating"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Security</mb3:named>
+                <mb3:serviceAction objectType="causeway.applib.UserMenu" id="me"/>  <!-- this is hidden by secman -->
+                <mb3:serviceAction objectType="causeway.ext.secman.MeService" id="me"/>
+	            <mb3:serviceAction objectType="causeway.security.LogoutMenu" id="logout"/>
+	        </mb3:section>
+
+        </mb3:menu>
+    </mb3:tertiary>
+</mb3:menuBars>
