@@ -341,13 +341,15 @@ public final class Facets {
     }
     private Optional<Class<? extends TableDecorator>> parentedTableDecorator(
             final FacetHolder facetHolder) {
-        return facetHolder.lookupFacet(CollectionLayoutTableDecoratorFacet.class)
-                .map(CollectionLayoutTableDecoratorFacet::value);
+        return (Optional) facetHolder.lookupFacet(CollectionLayoutTableDecoratorFacet.class)
+                .map(CollectionLayoutTableDecoratorFacet::value)
+                .filter(x -> x != TableDecorator.Default.class);
     }
     private Optional<Class<? extends TableDecorator>> standaloneTableDecorator(
             final FacetHolder facetHolder) {
-        return facetHolder.lookupFacet(DomainObjectLayoutTableDecoratorFacet.class)
-                .map(DomainObjectLayoutTableDecoratorFacet::value);
+        return (Optional)facetHolder.lookupFacet(DomainObjectLayoutTableDecoratorFacet.class)
+                .map(DomainObjectLayoutTableDecoratorFacet::value)
+                .filter(x -> x != TableDecorator.Default.class);
     }
 
     public Optional<ObjectSpecification> elementSpec(final FacetHolder facetHolder) {
