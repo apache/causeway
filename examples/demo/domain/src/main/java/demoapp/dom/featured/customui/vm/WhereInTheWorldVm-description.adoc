@@ -106,7 +106,7 @@ include::../../../../webapp/wicket/ui/custom/WhereInTheWorldPanel.java[tags=crea
 [source,java,indent=0]
 .WhereInTheWorldPanel.java
 ----
-include::../../../../webapp/wicket/ui/custom/WhereInTheWorldPanel.java[tags=createPropertyComponent]
+include::../../../../../webapp/wicket/common/ui/custom/WhereInTheWorldPanel.java[tags=createPropertyComponent]
 ----
 <.> obtains the `ObjectSpecification` (the framework's equivalent of `java.lang.Class`) for the domain object
 <.> obtains the `OneToOneAssociation` (the framework's equivalent of a `java.lang.reflect.Method`) for the specified property

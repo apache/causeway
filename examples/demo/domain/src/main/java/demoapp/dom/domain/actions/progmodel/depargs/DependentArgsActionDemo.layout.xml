@@ -21,14 +21,14 @@
 			<cpt:action id="downloadLayoutXml" />
 			<cpt:action id="openRestApi" />
 			<cpt:action id="rebuildMetamodel" />
-			
+
 		</bs3:col>
 	</bs3:row>
 
 	<bs3:row>
-	
+
 		<bs3:col span="6">
-		
+
 			<cpt:fieldSet name="Action Parameter Support" id="actions-dep1">
 				<cpt:action id="useChoices"/>
 				<cpt:action id="useChoices2"/>
@@ -45,23 +45,38 @@
 	            <cpt:property id="dependentText2"/>
                 <cpt:property id="dialogCheckboxDefault" />
 			</cpt:fieldSet>
-			
+
 			<cpt:fieldSet name="Action Parameter Support" id="actions-indep">
 				<cpt:action id="useIndependent"/>
 	            <cpt:property id="independentText"/>
 			</cpt:fieldSet>
 
-			<cpt:collection defaultView="table" id="items" />			
-            
+			<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
+
+			<cpt:collection defaultView="table" id="items" />
+
 		</bs3:col>
-		
-		<bs3:col span="6" unreferencedCollections="true">
-			<cpt:fieldSet name="Description" id="description"
-				unreferencedProperties="true">
-				<cpt:property labelPosition="NONE" id="description" />
+
+		<bs3:col span="6">
+			<cpt:fieldSet name="Description" id="description" >
+				<cpt:action id="clearHints" position="PANEL" />
+				<cpt:action id="rebuildMetamodel" position="PANEL"/>
+				<cpt:action id="downloadLayout"  position="PANEL_DROPDOWN"/>
+				<cpt:action id="inspectMetamodel"  position="PANEL_DROPDOWN"/>
+				<cpt:action id="downloadMetamodelXml"  position="PANEL_DROPDOWN"/>
+				<cpt:action id="downloadJdoMetamodel"  position="PANEL_DROPDOWN"/>
+				<cpt:action id="recentCommands"  position="PANEL_DROPDOWN"/>
+				<cpt:action id="recentExecutions"  position="PANEL_DROPDOWN"/>
+				<cpt:action id="recentAuditTrailEntries"  position="PANEL_DROPDOWN"/>
+				<cpt:action id="impersonateWithRoles"  position="PANEL_DROPDOWN"/>
+				<cpt:action id="openRestApi" position="PANEL_DROPDOWN" />
+				<cpt:property id="description"/>
 			</cpt:fieldSet>
 		</bs3:col>
-		
+
+	</bs3:row>
+	<bs3:row>
+		<bs3:col span="12" unreferencedCollections="true"/>
 	</bs3:row>
 
 </bs3:grid>

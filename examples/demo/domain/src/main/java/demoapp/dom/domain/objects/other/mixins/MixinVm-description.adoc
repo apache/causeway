@@ -29,7 +29,7 @@ They don't contribute directly to the concrete `MixinVm` class, however; since a
 include::CountHolder.java[tags=class]
 ----
 
-== Contributed action
+=== Contributed action
 
 The `CountHolder_updateCount` mixin allows the count to be updated within a certain range:
 
@@ -42,7 +42,7 @@ include::CountHolder_updateCount.java[tags=class]
 <.> useful lombok annotation to generate the 1-arg constructor
 <.> the contributee
 
-== Contributed collection
+=== Contributed collection
 
 The `CountHolder_fibonacciSequence` mixin dynamically computes the first N number of fibonacci numbers:
 
@@ -55,7 +55,7 @@ include::CountHolder_fibonacciSequence.java[tags=class]
 <.> useful lombok annotation to generate the 1-arg constructor
 <.> the contributee
 
-== Contributed property
+=== Contributed property
 
 The `CountHolder_explanation` mixin simply provides a property that explains what's going on:
 
