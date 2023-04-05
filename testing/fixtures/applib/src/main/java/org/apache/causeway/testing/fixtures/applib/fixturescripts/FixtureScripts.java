@@ -439,14 +439,21 @@ public class FixtureScripts {
 
     @SafeVarargs
     @Programmatic
-    public final void runPersonas(final PersonaWithBuilderScript<?,? extends BuilderScriptAbstract<?>> ... personaScripts) {
-        for (val personaWithBuilderScript : personaScripts) {
-
-            val script = _Casts.<PersonaWithBuilderScript<Object,BuilderScriptAbstract<Object>>>
-                uncheckedCast(personaWithBuilderScript);
-
-            runPersona(script);
-        }
+    public final void runPersonas(final PersonaWithBuilderScript<?,? extends BuilderScriptAbstract<?>> ... personas) {
+        interactionService.callAnonymous(()->
+            transactionService.callWithinCurrentTransactionElseCreateNew(()->
+                runFixtureScript(new FixtureScript() {
+                    @Override
+                    protected void execute(final ExecutionContext executionContext) {
+                        for (val personaWithBuilderScript : personas) {
+                            val fixtureScript = personaWithBuilderScript.builder();
+                            executionContext.executeChild(this, fixtureScript);
+                        }
+                    }
+                }, null)
+            )
+        )
+        .ifFailureFail();
     }
 
     @Programmatic
