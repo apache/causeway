@@ -49,7 +49,7 @@ import lombok.Setter;
 public class PropertyFileAcceptPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "Property#fileAccept";
+        return "@Property#fileAccept";
     }
 
 //tag::annotation[]

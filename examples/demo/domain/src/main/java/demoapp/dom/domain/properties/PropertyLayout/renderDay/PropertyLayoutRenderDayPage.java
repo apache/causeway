@@ -60,7 +60,7 @@ public class PropertyLayoutRenderDayPage implements HasAsciiDocDescription {
     }
 
     @ObjectSupport public String title() {
-        return "PropertyLayout#renderDay";
+        return "@PropertyLayout#renderDay";
     }
 
 //tag::render-not-specified[]

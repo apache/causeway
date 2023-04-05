@@ -49,7 +49,7 @@ import lombok.Setter;
 public class PropertyLayoutLabelPositionPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "PropertyLayout#labelPosition";
+        return "@PropertyLayout#labelPosition";
     }
 
 //tag::annotation[]

@@ -41,7 +41,7 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 public class DomainObjectEntityChangePublishingVm implements HasAsciiDocDescription, ExposeCapturedChanges {
 
     @ObjectSupport public String title() {
-        return "DomainObject#entityChangePublishing";
+        return "@DomainObject#entityChangePublishing";
     }
 
 }

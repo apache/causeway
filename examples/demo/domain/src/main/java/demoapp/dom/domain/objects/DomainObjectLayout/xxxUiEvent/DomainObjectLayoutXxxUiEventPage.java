@@ -48,7 +48,7 @@ public class DomainObjectLayoutXxxUiEventPage implements HasAsciiDocDescription 
     public static class LayoutUiEvent extends org.apache.causeway.applib.events.ui.LayoutUiEvent<DomainObjectLayoutXxxUiEventPage> { }
 
     @ObjectSupport public String title() {
-        return "DomainObjectLayout#xxxUiEvent (should be overwritten by ui-title-event-listener)";
+        return "@DomainObjectLayout#xxxUiEvent (should be overwritten by ui-title-event-listener)";
     }
 
     @ObjectSupport public String layout() {

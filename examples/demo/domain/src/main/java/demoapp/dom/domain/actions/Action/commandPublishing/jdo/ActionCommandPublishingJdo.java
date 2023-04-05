@@ -66,7 +66,7 @@ public class ActionCommandPublishingJdo
     }
 
     @ObjectSupport public String title() {
-        return "Action#commandPublishing (JDO)";
+        return "@Action#commandPublishing (JDO)";
     }
 
 //tag::property[]

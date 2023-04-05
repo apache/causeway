@@ -59,7 +59,7 @@ public class ActionHiddenPage implements HasAsciiDocDescription {
     }
 
     @ObjectSupport public String title() {
-        return "Action#hidden";
+        return "@Action#hidden";
     }
 
     @Property()

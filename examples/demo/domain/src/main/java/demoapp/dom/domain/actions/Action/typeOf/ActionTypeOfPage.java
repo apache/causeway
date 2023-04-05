@@ -55,7 +55,7 @@ public class ActionTypeOfPage implements HasAsciiDocDescription {
 //end::class-collections-children[]
 
     @ObjectSupport public String title() {
-        return "Action#typeOf";
+        return "@Action#typeOf";
     }
 
 //tag::class-collections-children[]

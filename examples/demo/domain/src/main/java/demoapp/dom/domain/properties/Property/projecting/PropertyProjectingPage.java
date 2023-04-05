@@ -54,7 +54,7 @@ import lombok.Setter;
 public class PropertyProjectingPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "Property#projecting";
+        return "@Property#projecting";
     }
 
 //tag::property[]

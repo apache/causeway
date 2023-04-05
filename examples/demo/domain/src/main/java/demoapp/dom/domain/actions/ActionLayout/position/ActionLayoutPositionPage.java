@@ -47,7 +47,7 @@ import lombok.Setter;
 public class ActionLayoutPositionPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "ActionLayout#position";
+        return "@ActionLayout#position";
     }
 
     @Property(optionality = Optionality.OPTIONAL)

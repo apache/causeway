@@ -66,7 +66,7 @@ public class PropertyLayoutHiddenChildVm implements HasAsciiDocDescription {
     }
 
     @ObjectSupport public String title() {
-        return "PropertyLayout#hidden (child object)";
+        return "@PropertyLayout#hidden (child object)";
     }
 
 //tag::variants-nowhere[]

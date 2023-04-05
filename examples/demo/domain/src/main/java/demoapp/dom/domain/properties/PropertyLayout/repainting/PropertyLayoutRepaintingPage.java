@@ -50,7 +50,7 @@ import lombok.Setter;
 public class PropertyLayoutRepaintingPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "PropertyLayout#repainting";
+        return "@PropertyLayout#repainting";
     }
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)

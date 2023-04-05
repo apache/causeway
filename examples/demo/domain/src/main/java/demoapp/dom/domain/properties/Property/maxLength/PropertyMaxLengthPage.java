@@ -47,7 +47,7 @@ import lombok.Setter;
 public class PropertyMaxLengthPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "Property#maxLength";
+        return "@Property#maxLength";
     }
 
 //tag::annotation[]

@@ -62,7 +62,7 @@ public class PropertyCommandPublishingJdo
     }
 
     @ObjectSupport public String title() {
-        return "Property#commandPublishing (JDO)";
+        return "@Property#commandPublishing (JDO)";
     }
 
 //tag::annotation[]

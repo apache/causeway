@@ -20,6 +20,6 @@ In terms of code:
 ----
 include::DomainObjectLayoutNamed.java[tags=class]
 ----
-<.> provides the description.
-The viewer renders this in a tooltip.
+<.> overrides the default name.
+The viewer renders this name in a tooltip.
 

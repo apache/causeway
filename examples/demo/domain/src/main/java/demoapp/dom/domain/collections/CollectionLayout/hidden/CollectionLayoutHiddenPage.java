@@ -50,7 +50,7 @@ import lombok.Setter;
 public class CollectionLayoutHiddenPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "CollectionLayout#hidden";
+        return "@CollectionLayout#hidden";
     }
 
 //tag::collection[]

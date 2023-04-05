@@ -44,7 +44,7 @@ public class ActionDomainEventPage implements HasAsciiDocDescription {
     }
 
     @ObjectSupport public String title() {
-        return "Action#domainEvent";
+        return "@Action#domainEvent";
     }
 
     @Property()

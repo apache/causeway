@@ -42,7 +42,7 @@ import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
 public class DomainObjectXxxLifecycleEventPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "DomainObject#xxxLifecyleEvent";
+        return "@DomainObject#xxxLifecyleEvent";
     }
 
     @XmlJavaTypeAdapter(PersistentEntityAdapter.class)

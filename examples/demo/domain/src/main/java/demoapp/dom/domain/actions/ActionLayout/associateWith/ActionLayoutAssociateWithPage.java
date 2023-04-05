@@ -46,7 +46,7 @@ import lombok.Setter;
 public class ActionLayoutAssociateWithPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "ActionLayout#associateWith";
+        return "@ActionLayout#associateWith";
     }
 
 //tag::act_and_prop[]

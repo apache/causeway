@@ -50,7 +50,7 @@ public class PropertyOptionalityPage implements HasAsciiDocDescription {
 //end::class[]
 
     @ObjectSupport public String title() {
-        return "Property#optionality";
+        return "@Property#optionality";
     }
 
 //tag::annotation[]

@@ -67,7 +67,7 @@ public class PropertyExecutionPublishingJpa
     }
 
     @ObjectSupport public String title() {
-        return "Property#executionPublishing (JDO)";
+        return "@Property#executionPublishing (JDO)";
     }
 
     @Id

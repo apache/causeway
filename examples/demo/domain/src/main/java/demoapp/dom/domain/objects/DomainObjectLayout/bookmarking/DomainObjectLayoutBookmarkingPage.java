@@ -41,7 +41,7 @@ import org.apache.causeway.applib.annotation.*;
 public class DomainObjectLayoutBookmarkingPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "DomainObjectLayout#bookmarking";
+        return "@DomainObjectLayout#bookmarking";
     }
 
     @Action

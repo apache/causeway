@@ -38,7 +38,7 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 public class DomainObjectAliasedPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "DomainObject#aliased";
+        return "@DomainObject#aliased";
     }
 
 }

@@ -42,7 +42,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 public class ActionLayoutCssClassPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "ActionLayout#cssClass";
+        return "@ActionLayout#cssClass";
     }
 
 //tag::act[]

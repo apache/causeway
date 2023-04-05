@@ -52,7 +52,7 @@ import lombok.Setter;
 public class CollectionTypeOfPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "Collection#typeOf";
+        return "@Collection#typeOf";
     }
 
 //tag::collection[]

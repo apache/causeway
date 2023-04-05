@@ -43,7 +43,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 public class ActionLayoutHiddenPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "ActionLayout#hidden";
+        return "@ActionLayout#hidden";
     }
 
 //tag::act[]
