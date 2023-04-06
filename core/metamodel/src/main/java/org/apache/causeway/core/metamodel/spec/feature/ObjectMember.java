@@ -259,10 +259,9 @@ public interface ObjectMember extends ObjectFeature {
     }
 
     default Optional<TableDecorator> getTableDecorator() {
-        return FacetUtil.lookupFacetIn(TableDecoratorFacet.class, this, getElementType())
+        return FacetUtil.lookupFacetInButExcluding(TableDecoratorFacet.class, o -> o == TableDecorator.Default.class, getElementType())
             .stream()
             .map(SingleValueFacet::value)
-            .filter(x -> x != TableDecorator.Default.class)
             .map(decoratorClass -> {
                 val decorator = _InstanceUtil.createInstance(decoratorClass, decoratorClass, _Constants.emptyObjects);
                 return injectServicesInto(decorator);

@@ -15,29 +15,36 @@
  *  KIND, either express or implied.  See the License for the
  *  specific language governing permissions and limitations
  *  under the License.
- *
  */
 package org.apache.causeway.core.metamodel.facets.collections.layout.tabledec;
 
+import java.util.Optional;
+
 import org.apache.causeway.applib.annotation.TableDecorator;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.SingleValueFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet;
 import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacetAbstract;
 
-abstract class CollectionLayoutTableDecoratorFacetAbstract
-extends TableDecoratorFacetAbstract
-implements CollectionLayoutTableDecoratorFacet {
+public class TableDecoratorFacetForCollectionLayoutXml
+extends TableDecoratorFacetAbstract {
 
-    protected CollectionLayoutTableDecoratorFacetAbstract(
+    public static Optional<TableDecoratorFacet> create(
+            final CollectionLayoutData collectionLayout,
+            final FacetHolder holder,
+            final Precedence precedence) {
+
+        return Optional.ofNullable(collectionLayout)
+        .map(CollectionLayoutData::getTableDecorator)
+        .map(tableDecorator->
+            new TableDecoratorFacetForCollectionLayoutXml(tableDecorator, holder, precedence));
+    }
+
+    private TableDecoratorFacetForCollectionLayoutXml(
             final Class<? extends TableDecorator> value,
             final FacetHolder holder,
             final Precedence precedence) {
         super(value, holder, precedence);
     }
 
-    protected CollectionLayoutTableDecoratorFacetAbstract(
-            final Class<? extends TableDecorator> value, final FacetHolder holder) {
-        super(value, holder);
-    }
 }

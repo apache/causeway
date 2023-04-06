@@ -16,34 +16,37 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.collections.layout.tabledec;
+package org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec;
 
 import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.TableDecorator;
-import org.apache.causeway.applib.layout.component.CollectionLayoutData;
+import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet;
+import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacetAbstract;
 
-public class CollectionLayoutTableDecoratorFacetForCollectionLayoutXml
-extends CollectionLayoutTableDecoratorFacetAbstract {
+public class TableDecoratorFacetForDomainObjectLayoutXml
+extends TableDecoratorFacetAbstract {
 
     public static Optional<TableDecoratorFacet> create(
-            final CollectionLayoutData collectionLayout,
+            final DomainObjectLayoutData domainObjectLayout,
             final FacetHolder holder,
-            final Precedence precedence) {
+            final Facet.Precedence precedence) {
 
-        return Optional.ofNullable(collectionLayout)
-        .map(CollectionLayoutData::getTableDecorator)
+        return Optional.ofNullable(domainObjectLayout)
+        .map(DomainObjectLayoutData::getTableDecorator)
         .map(tableDecorator->
-            new CollectionLayoutTableDecoratorFacetForCollectionLayoutXml(tableDecorator, holder, precedence));
+            new TableDecoratorFacetForDomainObjectLayoutXml(tableDecorator, holder, precedence));
     }
 
-    private CollectionLayoutTableDecoratorFacetForCollectionLayoutXml(
+    private TableDecoratorFacetForDomainObjectLayoutXml(
             final Class<? extends TableDecorator> value,
             final FacetHolder holder,
-            final Precedence precedence) {
+            final Facet.Precedence precedence) {
         super(value, holder, precedence);
     }
+
 
 }

@@ -20,11 +20,8 @@ package org.apache.causeway.core.metamodel.facets.object.tabledec;
 
 import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.SingleValueFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec.DomainObjectLayoutTableDecoratorFacet;
-import org.apache.causeway.core.metamodel.facets.object.paged.PagedFacet;
 
 import java.util.function.BiConsumer;
 
@@ -35,6 +32,7 @@ implements TableDecoratorFacet {
     public static final Class<TableDecoratorFacet> type() {
         return TableDecoratorFacet.class;
     }
+
 
     protected TableDecoratorFacetAbstract(
             final Class<? extends TableDecorator> value,
@@ -54,4 +52,5 @@ implements TableDecoratorFacet {
         super.visitAttributes(visitor);
         visitor.accept("value", value());
     }
+
 }
