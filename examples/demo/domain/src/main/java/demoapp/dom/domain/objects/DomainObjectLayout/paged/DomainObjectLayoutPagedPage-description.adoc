@@ -22,7 +22,7 @@ In terms of code:
 include::DomainObjectLayoutPaged.java[tags=class]
 ----
 <.> indicates that collections of this domain class should have no more than 5 objects per page.
-
+p
 
 === Related configuration property
 
