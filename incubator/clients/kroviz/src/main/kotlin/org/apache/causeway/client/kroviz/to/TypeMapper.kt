@@ -66,13 +66,8 @@ class TypeMapper {
         return when {
             isoDate.matches(contentStr) -> ValueType.DATE.type
             XmlHelper.isXml(contentStr) -> ValueType.HTML.type
+            contentStr.startsWith(":Notice:") -> ValueType.TEXT_AREA.type
             else -> ValueType.TEXT.type
-        }
-    }
-    fun forString(content: String): ValueType {
-        return when {
-            content.startsWith(":Notice:") -> ValueType.TEXT_AREA
-            else -> ValueType.TEXT
         }
     }
 

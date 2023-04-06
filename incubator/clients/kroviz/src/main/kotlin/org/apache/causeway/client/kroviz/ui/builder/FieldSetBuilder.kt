@@ -21,6 +21,7 @@ package org.apache.causeway.client.kroviz.ui.builder
 import io.kvision.form.FormPanel
 import org.apache.causeway.client.kroviz.to.TObject
 import org.apache.causeway.client.kroviz.to.TypeMapper
+import org.apache.causeway.client.kroviz.to.ValueType
 import org.apache.causeway.client.kroviz.to.bs.FieldSetBs
 import org.apache.causeway.client.kroviz.ui.core.FormItem
 import org.apache.causeway.client.kroviz.ui.core.FormPanelFactory
@@ -37,15 +38,21 @@ class FieldSetBuilder {
         val items = mutableListOf<FormItem>()
 
         for (p in fieldSetLayout.propertyList) {
-            val label = p.id
+            var label = p.id
             val member = members.firstOrNull() { it.id == label }
             if (member != null) {
                 val memberType = TypeMapper().forType(member.type!!)
+                var content = member.value?.content
+                label = p.named
+                if (memberType == ValueType.TEXT_AREA && content is String) {
+                    content = content.replace(":Notice: ", "")
+                    //          label = "Notice"
+                }
                 val size = maxOf(1, p.multiLine)
                 val fi = FormItem(
-                    label = p.named,
+                    label = label,
                     type = memberType,
-                    content = member.value?.content,
+                    content = content,
                     size = size,
                     description = p.describedAs,
                     member = member,

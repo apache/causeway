@@ -29,10 +29,9 @@ class RowBuilder : UiBuilder() {
 
     fun create(row: RowBs, tObject: TObject, dsp: RoDisplay): SimplePanel {
         val panel = buildPanel()
-        panel.justifyContent = JustifyContent.SPACEBETWEEN
 
         for (c in row.colList) {
-            val cpt = ColBuilder().create(c, tObject, dsp)
+            val cpt = ColBuilder(c, tObject, dsp).panel
             panel.add(cpt)
         }
         return panel
@@ -44,7 +43,7 @@ class RowBuilder : UiBuilder() {
             FlexWrap.NOWRAP,
             JustifyContent.FLEXSTART,
             AlignItems.FLEXSTART,
-            AlignContent.STRETCH,
+            AlignContent.FLEXSTART,
             spacing = Constants.spacing
         )
     }
