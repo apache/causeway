@@ -26,7 +26,35 @@
 
 	<bs3:row>
 		<bs3:col span="6">
-			<cpt:fieldSet name="Alternative Layout selected via Object-Support-Method" id="other" unreferencedProperties="true"/>
+			<bs3:tabGroup>
+				<bs3:tab name="Alternative Layout selected via UI-Event">
+					<bs3:row>
+						<bs3:col span="12">
+							<cpt:fieldSet name="General" id="general" >
+								<cpt:property id="name"/>
+							</cpt:fieldSet>
+						</bs3:col>
+					</bs3:row>
+				</bs3:tab>
+				<bs3:tab name="Metadata">
+					<bs3:row>
+						<bs3:col span="12">
+							<cpt:fieldSet name="Metadata" id="metadata" >
+								<cpt:property id="id"/>
+								<cpt:property id="logicalTypeName"/>
+								<cpt:property id="version"/>
+							</cpt:fieldSet>
+						</bs3:col>
+					</bs3:row>
+				</bs3:tab>
+				<bs3:tab name="Other">
+					<bs3:row>
+						<bs3:col span="12">
+							<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
+						</bs3:col>
+					</bs3:row>
+				</bs3:tab>
+			</bs3:tabGroup>
 		</bs3:col>
 		<bs3:col span="6">
 			<cpt:fieldSet name="Description" id="description" >

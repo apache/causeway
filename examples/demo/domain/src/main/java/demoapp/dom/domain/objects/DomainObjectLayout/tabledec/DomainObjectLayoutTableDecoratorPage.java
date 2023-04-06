@@ -34,7 +34,7 @@ import org.apache.causeway.applib.annotation.*;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.DomainObjectLayoutTableDecoratorVm")
+@Named("demo.DomainObjectLayoutTableDecoratorPage")
 @DomainObject(
         nature=Nature.VIEW_MODEL)
 @DomainObjectLayout(
@@ -44,30 +44,5 @@ public class DomainObjectLayoutTableDecoratorPage implements HasAsciiDocDescript
     @ObjectSupport public String title() {
         return "@DomainObjectLayout#tableDecorator";
     }
-
-    @Action
-    public List<DomainObjectLayoutTableDecoratorPage> standaloneTable() {
-        return getSamples();
-    }
-
-    @Collection
-    //@CollectionLayout(tableDecorator = TableDecorator.DatatablesNet.class) -> //TODO[CAUSEWAY-3311] see collection layout demo instead
-    private List<DomainObjectLayoutTableDecoratorPage> samples;
-    public List<DomainObjectLayoutTableDecoratorPage> getSamples() {
-        if(samples==null) {
-            samples = List.of(
-                    new DomainObjectLayoutTableDecoratorPage(),
-                    new DomainObjectLayoutTableDecoratorPage(),
-                    new DomainObjectLayoutTableDecoratorPage(),
-                    new DomainObjectLayoutTableDecoratorPage());
-        }
-        return samples;
-    }
-
-    @Property(optionality = Optionality.OPTIONAL)
-    @XmlElement(required = false)
-    @Getter @Setter
-    private String uuid = UUID.randomUUID().toString();
-
 }
 //end::class[]

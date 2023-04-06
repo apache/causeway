@@ -30,10 +30,10 @@ import org.springframework.stereotype.Service;
 @Service
 @Named("demo.DomainObjectLayoutXxxUiEventService")
 @Log4j2
-public class DomainObjectLayoutXxxUiEventService {
+public class DomainObjectLayoutXxxUiEventSubscriber {
 
     @EventListener
-    void onTitleUiEvent(final DomainObjectLayoutXxxUiEventPage.TitleUiEvent titleUiEvent) {
+    void onTitleUiEvent(final DomainObjectLayoutXxxUiEvent.TitleEvent titleUiEvent) {
         val in = titleUiEvent.getTitle();
         val out = "DomainObjectLayout-UiEvents";
         titleUiEvent.setTitle(out);
@@ -41,7 +41,7 @@ public class DomainObjectLayoutXxxUiEventService {
     }
 
     @EventListener
-    void onIconUiEvent(final DomainObjectLayoutXxxUiEventPage.IconUiEvent iconUiEvent) {
+    void onIconUiEvent(final DomainObjectLayoutXxxUiEvent.IconEvent iconUiEvent) {
         val in = iconUiEvent.getIconName();
         val out = "signature";
         iconUiEvent.setIconName(out);
@@ -49,15 +49,15 @@ public class DomainObjectLayoutXxxUiEventService {
     }
 
     @EventListener
-    void onCssClassUiEvent(final DomainObjectLayoutXxxUiEventPage.CssClassUiEvent cssClassUiEvent) {
+    void onCssClassUiEvent(final DomainObjectLayoutXxxUiEvent.CssClassEvent cssClassUiEvent) {
         val in = cssClassUiEvent.getCssClass();
-        val out = "bg-dark";
+        val out = "custom";
         cssClassUiEvent.setCssClass(out);
         log.info("cssClassUiEvent: {}->{}", in, out);
     }
 
     @EventListener
-    void onLayoutUiEvent(final DomainObjectLayoutXxxUiEventPage.LayoutUiEvent layoutUiEvent) {
+    void onLayoutUiEvent(final DomainObjectLayoutXxxUiEvent.LayoutEvent layoutUiEvent) {
         val in = layoutUiEvent.getLayout();
         val out = "alternative2";
         layoutUiEvent.setLayout(out);
