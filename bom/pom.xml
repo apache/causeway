@@ -106,11 +106,11 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <datanucleus-api-jdo.version>6.0.1</datanucleus-api-jdo.version>
         <datanucleus-api-jpa.version>6.0.1</datanucleus-api-jpa.version>
-        <datanucleus-core.version>6.0.3</datanucleus-core.version>
+        <datanucleus-core.version>6.0.4</datanucleus-core.version>
         <datanucleus-jdo-api.version>3.2.1</datanucleus-jdo-api.version>
         <datanucleus-jdo-query.version>6.0.1</datanucleus-jdo-query.version>
-        <datanucleus-jodatime.version>6.0.0-release</datanucleus-jodatime.version>
-        <datanucleus-rdbms.version>6.0.3</datanucleus-rdbms.version>
+        <datanucleus-jodatime.version>6.0.1</datanucleus-jodatime.version>
+        <datanucleus-rdbms.version>6.0.4</datanucleus-rdbms.version>
 
         <datatables.version>1.13.2</datatables.version> <!-- keep in sync with DatatablesDotNet -->
 
@@ -2920,7 +2920,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                             <dependency>
                                 <groupId>org.apache.apache.resources</groupId>
                                 <artifactId>apache-source-release-assembly-descriptor</artifactId>
-                                <version>1.0.6</version>
+                                <version>1.5</version>
                             </dependency>
                         </dependencies>
                         <executions>
