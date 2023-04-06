@@ -21,8 +21,7 @@ In terms of code:
 ----
 include::DomainObjectLayoutPaged.java[tags=class]
 ----
-<.> provides the description.
-The viewer renders this in a tooltip.
+<.> indicates that collections of this domain class should have no more than 5 objects per page.
 
 
 === Related configuration property

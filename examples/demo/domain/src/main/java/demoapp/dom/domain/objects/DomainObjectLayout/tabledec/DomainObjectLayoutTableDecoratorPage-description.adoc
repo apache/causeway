@@ -20,8 +20,7 @@ In terms of code:
 ----
 include::DomainObjectLayoutTableDecorator.java[tags=class]
 ----
-<.> provides the description.
-The viewer renders this in a tooltip.
+<.> indicates that the "datatables" decoration is used.
 
 
 === Related configuration property
