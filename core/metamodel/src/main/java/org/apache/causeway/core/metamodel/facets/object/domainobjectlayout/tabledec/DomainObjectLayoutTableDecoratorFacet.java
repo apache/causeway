@@ -27,6 +27,7 @@ import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.commons.internal.base._Optionals;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.SingleValueFacet;
+import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet;
 
 /**
  * Determines how dependent parameter values should be updated,
@@ -37,7 +38,7 @@ import org.apache.causeway.core.metamodel.facets.SingleValueFacet;
  * @since 2.0
  */
 public interface DomainObjectLayoutTableDecoratorFacet
-extends SingleValueFacet<Class<? extends TableDecorator>> {
+extends TableDecoratorFacet {
 
     static Optional<DomainObjectLayoutTableDecoratorFacet> create(
             final Optional<DomainObjectLayout> domainObjectLayoutIfAny,

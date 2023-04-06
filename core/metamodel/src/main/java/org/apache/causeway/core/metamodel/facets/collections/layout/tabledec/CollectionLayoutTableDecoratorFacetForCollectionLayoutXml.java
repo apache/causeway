@@ -23,15 +23,12 @@ import java.util.Optional;
 import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet;
 
 public class CollectionLayoutTableDecoratorFacetForCollectionLayoutXml
 extends CollectionLayoutTableDecoratorFacetAbstract {
 
-    public static final Class<CollectionLayoutTableDecoratorFacet> type() {
-        return CollectionLayoutTableDecoratorFacet.class;
-    }
-
-    public static Optional<CollectionLayoutTableDecoratorFacet> create(
+    public static Optional<TableDecoratorFacet> create(
             final CollectionLayoutData collectionLayout,
             final FacetHolder holder,
             final Precedence precedence) {

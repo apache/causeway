@@ -24,15 +24,13 @@ import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet;
+import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacetAbstract;
 
 public class DomainObjectLayoutTableDecoratorFacetForDomainObjectLayoutXml
 extends DomainObjectLayoutTableDecoratorFacetAbstract {
 
-    public static final Class<DomainObjectLayoutTableDecoratorFacet> type() {
-        return DomainObjectLayoutTableDecoratorFacet.class;
-    }
-
-    public static Optional<DomainObjectLayoutTableDecoratorFacet> create(
+    public static Optional<TableDecoratorFacet> create(
             final DomainObjectLayoutData domainObjectLayout,
             final FacetHolder holder,
             final Facet.Precedence precedence) {

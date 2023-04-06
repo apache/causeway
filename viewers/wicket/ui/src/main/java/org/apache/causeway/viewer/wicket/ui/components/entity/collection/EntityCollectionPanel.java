@@ -140,7 +140,7 @@ implements HasDynamicallyVisibleContent {
             Facets.cssClass(collectionMetaModel, objectAdapter)
             .ifPresent(cssClass->Wkt.cssAppend(div, cssClass));
 
-            this.tableDecorator = Facets.tableDecorator(collectionMetaModel);
+            this.tableDecorator = collectionMetaModel.getTableDecorator();
             tableDecorator.ifPresent(tableDecorator->{
                     Wkt.cssAppend(div, tableDecorator.cssClass());
                 });
@@ -169,10 +169,10 @@ implements HasDynamicallyVisibleContent {
     // TableDecorator caching
     private transient Optional<TableDecorator> tableDecorator;
     private Optional<TableDecorator> tableDecorator() {
-        if(tableDecorator==null) {
+        if(tableDecorator == null) {
             val collectionModel = EntityCollectionModelParented.forParentObjectModel(getModel(), layoutData);
             val collectionMetaModel = collectionModel.getMetaModel();
-            this.tableDecorator = Facets.tableDecorator(collectionMetaModel);
+            this.tableDecorator = collectionMetaModel.getTableDecorator();
         }
         return tableDecorator;
     }

@@ -76,7 +76,8 @@ implements CollectionCountProvider, CollectionPresentationSelectorProvider {
         Wkt.cssAppend(outerDiv, featureId);
         Wkt.cssAppend(outerDiv, collectionModel.getElementType().getFeatureIdentifier());
 
-        this.tableDecorator = Facets.tableDecorator(collectionModel.getElementType());
+
+        this.tableDecorator = collectionModel.getTableDecoratorIfAny();
         tableDecorator.ifPresent(tableDecorator->{
             Wkt.cssAppend(outerDiv, tableDecorator.cssClass());
         });
@@ -136,10 +137,10 @@ implements CollectionCountProvider, CollectionPresentationSelectorProvider {
     // TableDecorator caching
     private transient Optional<TableDecorator> tableDecorator;
     private Optional<TableDecorator> tableDecorator() {
-        if(tableDecorator==null) {
+        //noinspection OptionalAssignedToNull
+        if(tableDecorator==null) {  // this is NOT a bug; we are caching an Optional
             val collectionModel = getModel();
-            val collectionMetaModel = collectionModel.getElementType();
-            this.tableDecorator = Facets.tableDecorator(collectionMetaModel);
+            this.tableDecorator = collectionModel.getTableDecoratorIfAny();
         }
         return tableDecorator;
     }
