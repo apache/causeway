@@ -50,7 +50,7 @@ import lombok.Setter;
 public class CollectionLayoutTableDecoratorPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "CollectionLayout#tableDecorator";
+        return "@CollectionLayout#tableDecorator";
     }
 
 //tag::collection[]

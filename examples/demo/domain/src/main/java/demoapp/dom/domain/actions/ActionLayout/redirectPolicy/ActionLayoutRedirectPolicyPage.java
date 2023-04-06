@@ -49,7 +49,7 @@ implements HasAsciiDocDescription
 //end::act[]
 
     @ObjectSupport public String title() {
-        return "ActionLayout#redirectPolicy";
+        return "@ActionLayout#redirectPolicy";
     }
 
 //tag::act[]

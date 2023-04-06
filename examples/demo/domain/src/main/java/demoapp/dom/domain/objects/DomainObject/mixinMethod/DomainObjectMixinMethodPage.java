@@ -36,7 +36,7 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 public class DomainObjectMixinMethodPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "DomainObject#mixinMethod";
+        return "@DomainObject#mixinMethod";
     }
 
 }

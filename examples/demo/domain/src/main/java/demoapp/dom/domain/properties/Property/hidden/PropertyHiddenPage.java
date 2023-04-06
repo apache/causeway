@@ -56,7 +56,7 @@ import lombok.Setter;
 public class PropertyHiddenPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "Property#hidden";
+        return "@Property#hidden";
     }
 
 //tag::annotation[]

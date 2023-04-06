@@ -48,7 +48,7 @@ import lombok.Setter;
 public class PropertyLayoutNamedPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "PropertyLayout#named";
+        return "@PropertyLayout#named";
     }
 
 //tag::annotation[]

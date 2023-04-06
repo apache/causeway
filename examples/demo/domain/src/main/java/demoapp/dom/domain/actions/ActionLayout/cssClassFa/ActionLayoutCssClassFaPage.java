@@ -43,7 +43,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 public class ActionLayoutCssClassFaPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "ActionLayout#cssClassFa";
+        return "@ActionLayout#cssClassFa";
     }
 
 //tag::actLeftAndRight[]

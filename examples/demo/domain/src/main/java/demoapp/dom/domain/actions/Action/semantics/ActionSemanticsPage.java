@@ -78,7 +78,7 @@ public class ActionSemanticsPage implements HasAsciiDocDescription {
     }
 
     @ObjectSupport public String title() {
-        return "Action#semantics";
+        return "@Action#semantics";
     }
 
     @Property()

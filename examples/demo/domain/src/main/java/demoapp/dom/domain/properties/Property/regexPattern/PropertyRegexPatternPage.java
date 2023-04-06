@@ -49,7 +49,7 @@ import lombok.Setter;
 public class PropertyRegexPatternPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "Property#regexPattern";
+        return "@Property#regexPattern";
     }
 
 //tag::annotation[]

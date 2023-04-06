@@ -49,7 +49,7 @@ import lombok.Setter;
 public class CollectionLayoutDescribedAsPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "CollectionLayout#describedAs";
+        return "@CollectionLayout#describedAs";
     }
 
 //tag::collection[]

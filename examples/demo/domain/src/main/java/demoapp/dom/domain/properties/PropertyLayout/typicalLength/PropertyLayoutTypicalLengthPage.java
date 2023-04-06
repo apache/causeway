@@ -48,7 +48,7 @@ import lombok.Setter;
 public class PropertyLayoutTypicalLengthPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "PropertyLayout#typicalLength";
+        return "@PropertyLayout#typicalLength";
     }
 
 //tag::annotation[]

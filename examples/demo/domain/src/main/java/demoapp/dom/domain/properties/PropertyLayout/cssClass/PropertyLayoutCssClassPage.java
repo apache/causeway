@@ -48,7 +48,7 @@ import lombok.Setter;
 public class PropertyLayoutCssClassPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "PropertyLayout#cssClass";
+        return "@PropertyLayout#cssClass";
     }
 
 //tag::annotation[]

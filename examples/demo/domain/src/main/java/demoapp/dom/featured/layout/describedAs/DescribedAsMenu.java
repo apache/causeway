@@ -29,7 +29,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.factory.FactoryService;
 
-import demoapp.dom.domain.actions.progmodel.assoc.DemoItem;
+import demoapp.dom.domain.progmodel.actions.assoc.assoc.DemoItem;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 

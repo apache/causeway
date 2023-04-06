@@ -48,7 +48,7 @@ import lombok.Setter;
 public class PropertyLayoutMultiLinePage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "PropertyLayout#multiLine";
+        return "@PropertyLayout#multiLine";
     }
 
 //tag::annotation[]

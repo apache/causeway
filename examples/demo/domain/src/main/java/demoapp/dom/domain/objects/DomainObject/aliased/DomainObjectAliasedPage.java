@@ -38,7 +38,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 public class DomainObjectAliasedPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "DomainObject#aliased";
+        return "@DomainObject#aliased";
     }
 
 }

@@ -47,7 +47,7 @@ import lombok.Setter;
 public class PropertyMustSatisfyPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "Property#mustSatisfy";
+        return "@Property#mustSatisfy";
     }
 
 //tag::annotation[]

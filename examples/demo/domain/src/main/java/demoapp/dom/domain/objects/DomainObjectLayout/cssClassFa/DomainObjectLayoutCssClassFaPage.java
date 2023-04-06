@@ -35,15 +35,13 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.DomainObjectLayoutCssClassFaVm")
+@Named("demo.DomainObjectLayoutCssClassFaPage")
 @DomainObject(
         nature=Nature.VIEW_MODEL)
-@DomainObjectLayout(
-        cssClassFa = "bus")
 public class DomainObjectLayoutCssClassFaPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "DomainObjectLayout#cssClassFa";
+        return "@DomainObjectLayout#cssClassFa";
     }
 
 }

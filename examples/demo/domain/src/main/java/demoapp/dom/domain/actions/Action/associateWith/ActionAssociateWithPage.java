@@ -69,7 +69,7 @@ public class ActionAssociateWithPage implements HasAsciiDocDescription {
     }
 
     @ObjectSupport public String title() {
-        return "Action#choicesFrom/ActionLayout#associateWith";
+        return "@Action#choicesFrom/ActionLayout#associateWith";
     }
 
 //tag::class-properties[]

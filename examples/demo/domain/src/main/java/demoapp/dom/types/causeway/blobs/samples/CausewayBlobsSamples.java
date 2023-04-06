@@ -40,7 +40,7 @@ public class CausewayBlobsSamples implements Samples<Blob> {
     private final Can<Blob> blobs = Can.of(
             "file-sample_100kB.docx",
             //"file-sample_150kB.pdf",
-            "causeway-logo-568x286.png",
+            "causeway-logo-605x449.png",
             "compressed.tracemonkey-pldi-09.pdf" // advanced example from the Mozilla pdf.js project
             )
         .map(this::loadBlob);

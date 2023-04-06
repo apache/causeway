@@ -50,7 +50,7 @@ public class PropertyEditingPage implements HasAsciiDocDescription {
 //end::class[]
 
     @ObjectSupport public String title() {
-        return "Property#editing";
+        return "@Property#editing";
     }
 
 //tag::annotation[]

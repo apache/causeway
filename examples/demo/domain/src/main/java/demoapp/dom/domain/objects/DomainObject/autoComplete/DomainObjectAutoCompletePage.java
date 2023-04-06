@@ -39,7 +39,7 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 public class DomainObjectAutoCompletePage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "DomainObject#autoComplete...";
+        return "@DomainObject#autoComplete...";
     }
 
 }

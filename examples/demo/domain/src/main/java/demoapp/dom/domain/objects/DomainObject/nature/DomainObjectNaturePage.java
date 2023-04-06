@@ -39,7 +39,7 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 public class DomainObjectNaturePage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "DomainObject#nature";
+        return "@DomainObject#nature";
     }
 }
 //end::class[]

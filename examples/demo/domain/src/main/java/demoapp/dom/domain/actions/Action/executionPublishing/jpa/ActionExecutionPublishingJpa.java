@@ -70,7 +70,7 @@ public class ActionExecutionPublishingJpa
     }
 
     @ObjectSupport public String title() {
-        return "Action#executionPublishing (JPA)";
+        return "@Action#executionPublishing (JPA)";
     }
 
     @Id

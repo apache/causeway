@@ -47,7 +47,7 @@ import lombok.Setter;
 public class ActionLayoutPromptStylePage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "ActionLayout#promptStyle";
+        return "@ActionLayout#promptStyle";
     }
 
     @Property(editing = Editing.DISABLED)

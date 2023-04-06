@@ -42,7 +42,7 @@ import org.apache.causeway.applib.annotation.*;
 public class DomainObjectLayoutTableDecoratorPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "DomainObjectLayout#tableDecorator";
+        return "@DomainObjectLayout#tableDecorator";
     }
 
     @Action

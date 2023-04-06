@@ -62,7 +62,7 @@ public class ActionRestrictToPage implements HasAsciiDocDescription {
     }
 
     @ObjectSupport public String title() {
-        return "Action#restrictTo";
+        return "@Action#restrictTo";
     }
 
     @Property()

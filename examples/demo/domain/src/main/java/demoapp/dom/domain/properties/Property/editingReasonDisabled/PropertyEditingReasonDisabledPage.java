@@ -50,7 +50,7 @@ public class PropertyEditingReasonDisabledPage implements HasAsciiDocDescription
 //end::class[]
 
     @ObjectSupport public String title() {
-        return "Property#editingReasonDisabled";
+        return "@Property#editingReasonDisabled";
     }
 
 //tag::annotation[]

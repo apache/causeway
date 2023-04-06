@@ -61,7 +61,7 @@ public class PropertyExecutionPublishingJdo
     }
 
     @ObjectSupport public String title() {
-        return "Property#executionPublishing (JDO)";
+        return "@Property#executionPublishing (JDO)";
     }
 
 //tag::annotation[]

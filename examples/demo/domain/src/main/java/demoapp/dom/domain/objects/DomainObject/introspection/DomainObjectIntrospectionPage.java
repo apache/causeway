@@ -40,7 +40,7 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 public class DomainObjectIntrospectionPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "DomainObject#introspection";
+        return "@DomainObject#introspection";
     }
 
 }

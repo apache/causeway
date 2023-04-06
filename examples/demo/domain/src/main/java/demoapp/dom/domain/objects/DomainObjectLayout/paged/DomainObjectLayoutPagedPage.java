@@ -34,34 +34,13 @@ import org.apache.causeway.applib.annotation.*;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.DomainObjectLayoutPagedVm")
-@DomainObject(
-        nature=Nature.VIEW_MODEL)
-@DomainObjectLayout(
-        paged=3)
+@Named("demo.DomainObjectLayoutPagedPage")
+@DomainObject(nature=Nature.VIEW_MODEL)
 public class DomainObjectLayoutPagedPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "DomainObjectLayout#paged";
+        return "@DomainObjectLayout#paged";
     }
-
-    @Collection
-    private List<DomainObjectLayoutPagedPage> samples;
-    public List<DomainObjectLayoutPagedPage> getSamples() {
-        if(samples==null) {
-            samples = List.of(
-                    new DomainObjectLayoutPagedPage(),
-                    new DomainObjectLayoutPagedPage(),
-                    new DomainObjectLayoutPagedPage(),
-                    new DomainObjectLayoutPagedPage());
-        }
-        return samples;
-    }
-
-    @Property(optionality = Optionality.OPTIONAL)
-    @XmlElement(required = false)
-    @Getter @Setter
-    private String uuid = UUID.randomUUID().toString();
 
 }
 //end::class[]

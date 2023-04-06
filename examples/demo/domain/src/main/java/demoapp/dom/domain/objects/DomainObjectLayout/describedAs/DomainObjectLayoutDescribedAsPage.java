@@ -35,15 +35,12 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.DomainObjectLayoutDescribedAsVm")
-@DomainObject(
-        nature=Nature.VIEW_MODEL)
-@DomainObjectLayout(
-        describedAs = "This could be a good object description.")
+@Named("demo.DomainObjectLayoutDescribedAsPage")
+@DomainObject(nature=Nature.VIEW_MODEL)
 public class DomainObjectLayoutDescribedAsPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "DomainObjectLayout#describedAs";
+        return "@DomainObjectLayout#describedAs";
     }
 
 }

@@ -29,7 +29,7 @@ import jakarta.xml.bind.annotation.*;
 import org.apache.causeway.applib.annotation.*;
 import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
 
-@XmlRootElement(name = "demo.PropertyDomainEventPage")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.PropertyDomainEventPage")

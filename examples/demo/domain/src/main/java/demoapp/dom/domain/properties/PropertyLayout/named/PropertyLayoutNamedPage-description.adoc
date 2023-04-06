@@ -30,7 +30,7 @@ include::PropertyLayoutNamedPage.java[tags=annotation]
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutNamedVm_updateWithParameterLayout.java[tags=annotation]
+include::PropertyLayoutNamedPage_updateWithParameterLayout.java[tags=annotation]
 ----
 <.> explicitly specifies the name of the parameter
 
@@ -89,7 +89,7 @@ include::PropertyLayoutNamedPage.java[tags=meta-annotated]
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutNamedVm_updateWithMetaAnnotation.java[tags=meta-annotation]
+include::PropertyLayoutNamedPAge_updateWithMetaAnnotation.java[tags=meta-annotation]
 ----
 <.> parameter's name is inherited from the meta-annotation
 
@@ -108,7 +108,7 @@ include::PropertyLayoutNamedPage.java[tags=meta-annotated-overridden]
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutNamedVm_updateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
+include::PropertyLayoutNamedPage_updateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
 ----
 <.> name from meta-annotation ...
 <.> \... is overridden by the `@PropertyLayout` annotation

@@ -23,7 +23,7 @@ package demoapp.dom.domain.objects.other.customvaluetypes;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import demoapp.dom.domain.objects.other.embedded.jdo.ComplexNumberJdo;
+import demoapp.dom.domain.progmodel.objects.embedded.embedded.jdo.ComplexNumberJdo;
 import lombok.val;
 
 class ComplexNumberJdo_Test {

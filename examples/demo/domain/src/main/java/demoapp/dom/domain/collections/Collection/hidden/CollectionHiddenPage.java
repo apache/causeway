@@ -53,7 +53,7 @@ import lombok.Setter;
 public class CollectionHiddenPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "Collection#hidden";
+        return "@Collection#hidden";
     }
 
 //tag::collection[]

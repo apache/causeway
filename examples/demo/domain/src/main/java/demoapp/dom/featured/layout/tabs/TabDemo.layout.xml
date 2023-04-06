@@ -19,17 +19,17 @@
             <cpt:action id="downloadLayoutXml"/>
             <cpt:action id="openRestApi"/>
             <cpt:action id="rebuildMetamodel"/>
-            
+
             <cpt:action id="doHideField"/>
             <cpt:action id="doShowField"/>
-            
+
         </bs3:col>
     </bs3:row>
     <bs3:row>
         <bs3:col span="6">
-        
+
         	<bs3:tabGroup>
-				
+
 				<bs3:tab name="Tab 1">
 					<bs3:row>
 						<bs3:col span="12">
@@ -39,7 +39,7 @@
 						</bs3:col>
 					</bs3:row>
 				</bs3:tab>
-				
+
 				<bs3:tab name="Tab 2">
 					<bs3:row>
 						<bs3:col span="12">
@@ -49,7 +49,7 @@
 						</bs3:col>
 					</bs3:row>
 				</bs3:tab>
-				
+
 				<bs3:tab name="Tab 3">
 					<bs3:row>
 						<bs3:col span="12">
@@ -62,21 +62,42 @@
 						</bs3:col>
 					</bs3:row>
 				</bs3:tab>
-				
+
 			</bs3:tabGroup>
-        
+			<bs3:row>
+				<bs3:col span="12">
+					<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
+				</bs3:col>
+			</bs3:row>
+
+
 <!--         	<cpt:fieldSet name="Tabs" id="tabs"> -->
 <!--                 <cpt:property id="field"/> -->
 <!--             </cpt:fieldSet> -->
-            
+
         </bs3:col>
-        <bs3:col span="6" unreferencedCollections="true">
-        
-            <cpt:fieldSet name="Description" id="description" unreferencedProperties="true">
-                <cpt:property id="description" labelPosition="NONE"/>
-                
-            </cpt:fieldSet>
-            
+        <bs3:col span="6">
+
+			<cpt:fieldSet name="Description" id="description" >
+				<cpt:action id="clearHints" position="PANEL" />
+				<cpt:action id="rebuildMetamodel" position="PANEL"/>
+				<cpt:action id="downloadLayout"  position="PANEL_DROPDOWN"/>
+				<cpt:action id="inspectMetamodel"  position="PANEL_DROPDOWN"/>
+				<cpt:action id="downloadMetamodelXml"  position="PANEL_DROPDOWN"/>
+				<cpt:action id="downloadJdoMetamodel"  position="PANEL_DROPDOWN"/>
+				<cpt:action id="recentCommands"  position="PANEL_DROPDOWN"/>
+				<cpt:action id="recentExecutions"  position="PANEL_DROPDOWN"/>
+				<cpt:action id="recentAuditTrailEntries"  position="PANEL_DROPDOWN"/>
+				<cpt:action id="impersonateWithRoles"  position="PANEL_DROPDOWN"/>
+				<cpt:action id="openRestApi" position="PANEL_DROPDOWN" />
+				<cpt:property id="description"/>
+			</cpt:fieldSet>
+
         </bs3:col>
     </bs3:row>
+	<bs3:row>
+		<bs3:col span="12" unreferencedCollections="true"/>
+	</bs3:row>
+
+
 </bs3:grid>

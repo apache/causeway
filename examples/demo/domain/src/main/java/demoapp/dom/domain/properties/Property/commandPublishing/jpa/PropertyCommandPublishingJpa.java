@@ -67,7 +67,7 @@ public class PropertyCommandPublishingJpa
     }
 
     @ObjectSupport public String title() {
-        return "Property#commandPublishing (JPA)";
+        return "@Property#commandPublishing (JPA)";
     }
 
     @Id

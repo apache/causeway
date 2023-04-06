@@ -40,7 +40,7 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 public class DomainObjectBoundingPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "DomainObject#bounding";
+        return "@DomainObject#bounding";
     }
 
     /*

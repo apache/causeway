@@ -24,7 +24,7 @@ include::PropertyRegexPatternPage.java[tags=annotation]
 +
 [source,java,indent=0]
 ----
-include::PropertyRegexPatternVm_updateWithParameterLayout.java[tags=annotation]
+include::PropertyRegexPatternPage_updateWithParameterLayout.java[tags=annotation]
 ----
 <.> explicitly specifies that the property must match the regex pattern
 
@@ -57,7 +57,7 @@ include::PropertyRegexPatternPage.java[tags=meta-annotated]
 +
 [source,java,indent=0]
 ----
-include::PropertyRegexPatternVm_updateWithMetaAnnotation.java[tags=meta-annotation]
+include::PropertyRegexPatternPage_updateWithMetaAnnotation.java[tags=meta-annotation]
 ----
 <.> semantic is inherited from the meta-annotation
 
@@ -80,7 +80,7 @@ include::PropertyRegexPatternPage.java[tags=meta-annotated-overridden]
 +
 [source,java,indent=0]
 ----
-include::PropertyRegexPatternVm_updateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
+include::PropertyRegexPatternPage_updateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
 ----
 <.> semantic from meta-annotation ...
 <.> \... is overridden by the `@Parameter` annotation
