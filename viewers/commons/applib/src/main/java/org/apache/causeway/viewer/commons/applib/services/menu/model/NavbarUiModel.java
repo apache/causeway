@@ -21,8 +21,8 @@ package org.apache.causeway.viewer.commons.applib.services.menu.model;
 import lombok.NonNull;
 
 public record NavbarUiModel(
-        @NonNull NavBarSection primary,
-        @NonNull NavBarSection secondary,
-        @NonNull NavBarSection tertiary) {
+        @NonNull NavbarSection primary,
+        @NonNull NavbarSection secondary,
+        @NonNull NavbarSection tertiary) {
 
 }

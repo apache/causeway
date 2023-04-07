@@ -18,21 +18,34 @@
  */
 package org.apache.causeway.commons.io;
 
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.RecordComponent;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.UnaryOperator;
 
 import org.springframework.lang.Nullable;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.DumperOptions.LineBreak;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
+import org.yaml.snakeyaml.error.YAMLException;
+import org.yaml.snakeyaml.introspector.BeanAccess;
+import org.yaml.snakeyaml.introspector.MethodProperty;
+import org.yaml.snakeyaml.introspector.Property;
+import org.yaml.snakeyaml.introspector.PropertyUtils;
+import org.yaml.snakeyaml.representer.Representer;
 
 import org.apache.causeway.commons.functional.Try;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
+import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -114,7 +127,6 @@ public class YamlUtils {
     private Yaml createMapper(
             final Class<?> mappedType,
             final YamlUtils.YamlCustomizer ... customizers) {
-        var mapper = new Yaml(new Constructor(mappedType));
         var options = new DumperOptions();
         options.setIndent(2);
         options.setLineBreak(LineBreak.UNIX); // fixated for consistency
@@ -124,7 +136,32 @@ public class YamlUtils {
             options = Optional.ofNullable(customizer.apply(options))
                     .orElse(options);
         }
+        var presenter = new Representer(options);
+        presenter.setPropertyUtils(new PropertyUtils2());
+        var mapper = new Yaml(new Constructor(mappedType, new LoaderOptions()), presenter);
         return mapper;
+    }
+
+    // -- REPRESENTING RECORD TYPES
+
+    static class PropertyUtils2 extends PropertyUtils {
+        @Override
+        protected Map<String, Property> getPropertiesMap(final Class<?> type, final BeanAccess bAccess) {
+            if(!type.isRecord()) {
+                return super.getPropertiesMap(type, bAccess);
+            }
+            setAllowReadOnlyProperties(true);
+            try {
+                val properties = new LinkedHashMap<String, Property>();
+                for(RecordComponent rc: type.getRecordComponents()) {
+                    val propertyDescriptor = new PropertyDescriptor(rc.getName(), rc.getAccessor(), null);
+                    properties.put(rc.getName(), new MethodProperty(propertyDescriptor));
+                }
+                return properties;
+            } catch (IntrospectionException e) {
+                throw new YAMLException(e);
+            }
+        }
     }
 
 }

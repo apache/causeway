@@ -29,7 +29,7 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuVisitor;
 import org.apache.causeway.viewer.commons.applib.services.menu.model.MenuAction;
 import org.apache.causeway.viewer.commons.applib.services.menu.model.MenuDropdown;
-import org.apache.causeway.viewer.commons.applib.services.menu.model.NavBarSection;
+import org.apache.causeway.viewer.commons.applib.services.menu.model.NavbarSection;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktDecorators;
@@ -129,7 +129,7 @@ public final class ServiceActionUtil {
 
     public static void buildMenu(
             final MetaModelContext commonContext,
-            final NavBarSection navBarSection,
+            final NavbarSection navBarSection,
             final Consumer<CssMenuItem> onNewMenuItem) {
 
         navBarSection.visitMenuItems(

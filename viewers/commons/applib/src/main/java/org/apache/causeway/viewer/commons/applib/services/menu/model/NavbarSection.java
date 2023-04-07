@@ -28,7 +28,7 @@ import org.apache.causeway.viewer.commons.applib.services.menu.MenuVisitor;
 
 import lombok.val;
 
-public record NavBarSection(
+public record NavbarSection(
         DomainServiceLayout.MenuBar menuBarSelect,
         Can<MenuDropdown> topLevelEntries) {
 

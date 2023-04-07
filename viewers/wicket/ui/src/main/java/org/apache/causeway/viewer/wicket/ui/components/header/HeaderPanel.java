@@ -25,7 +25,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.causeway.viewer.commons.applib.services.branding.BrandingUiModel;
 import org.apache.causeway.viewer.commons.applib.services.header.HeaderUiModel;
-import org.apache.causeway.viewer.commons.applib.services.menu.model.NavBarSection;
+import org.apache.causeway.viewer.commons.applib.services.menu.model.NavbarSection;
 import org.apache.causeway.viewer.commons.applib.services.userprof.UserProfileUiModel;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.ServiceActionsModel;
@@ -70,8 +70,8 @@ extends PanelAbstract<String, Model<String>> {
 
         val headerUiModel = super.getHeaderModel();
 
-        addApplicationName(headerUiModel.getBranding());
-        addUserName(headerUiModel.getUserProfile());
+        addApplicationName(headerUiModel.branding());
+        addUserName(headerUiModel.userProfile());
         addServiceActionMenuBars(headerUiModel);
     }
 
@@ -108,7 +108,7 @@ extends PanelAbstract<String, Model<String>> {
     }
 
     protected void addServiceActionMenuBars(final HeaderUiModel headerUiModel) {
-        val navbar = headerUiModel.getNavbar();
+        val navbar = headerUiModel.navbar();
         if (getPage() instanceof ErrorPage) {
             WktComponents.permanentlyHide(this, ID_PRIMARY_MENU_BAR);
             WktComponents.permanentlyHide(this, ID_SECONDARY_MENU_BAR);
@@ -122,7 +122,7 @@ extends PanelAbstract<String, Model<String>> {
 
     private void addMenuBar(
             final String id,
-            final NavBarSection menuUiModel) {
+            final NavbarSection menuUiModel) {
 
         final MarkupContainer container = this;
         val menuModel = new ServiceActionsModel(super.getMetaModelContext(), menuUiModel);

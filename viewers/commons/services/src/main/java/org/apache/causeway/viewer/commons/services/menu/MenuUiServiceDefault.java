@@ -36,7 +36,7 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuItemDto;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuUiService;
 import org.apache.causeway.viewer.commons.applib.services.menu.model.MenuDropdownBuilder;
-import org.apache.causeway.viewer.commons.applib.services.menu.model.NavBarSection;
+import org.apache.causeway.viewer.commons.applib.services.menu.model.NavbarSection;
 import org.apache.causeway.viewer.commons.applib.services.menu.model.NavbarUiModel;
 import org.apache.causeway.viewer.commons.services.CausewayModuleViewerCommonsServices;
 
@@ -64,7 +64,7 @@ implements MenuUiService {
 
     // -- HELPER
 
-    private NavBarSection buildNavBarSection(final MenuBar menuBarSelect) {
+    private NavbarSection buildNavBarSection(final MenuBar menuBarSelect) {
 
         val menuBar = (BSMenuBar) menuBarsService.menuBars()
                 .menuBarFor(menuBarSelect);
@@ -98,7 +98,7 @@ implements MenuUiService {
 
         });
 
-        return new NavBarSection(menuBarSelect, Can.ofCollection(topLevelEntries)
+        return new NavbarSection(menuBarSelect, Can.ofCollection(topLevelEntries)
                 .map(MenuDropdownBuilder::build));
     }
 

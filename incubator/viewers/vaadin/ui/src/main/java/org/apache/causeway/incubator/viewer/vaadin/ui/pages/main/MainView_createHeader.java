@@ -46,7 +46,7 @@ final class MainView_createHeader {
             final Consumer<ManagedAction> menuActionEventHandler,
             final Runnable onHomepageLinkClick) {
 
-        val titleOrLogo = createTitleOrLogo(commonContext, headerUiModel.getBranding());
+        val titleOrLogo = createTitleOrLogo(commonContext, headerUiModel.branding());
         Vaa.setOnClick(titleOrLogo, onHomepageLinkClick);
 
         val leftMenuBar = new MenuBar();
@@ -72,9 +72,9 @@ final class MainView_createHeader {
         val leftMenuBuilder = MenuBuilderVaa.of(commonContext, menuActionEventHandler, leftMenuBar);
         val rightMenuBuilder = MenuBuilderVaa.of(commonContext, menuActionEventHandler, rightMenuBar);
 
-        headerUiModel.getNavbar().primary().visitMenuItems(leftMenuBuilder);
-        headerUiModel.getNavbar().secondary().visitMenuItems(rightMenuBuilder);
-        headerUiModel.getNavbar().tertiary().visitMenuItems(rightMenuBuilder);
+        headerUiModel.navbar().primary().visitMenuItems(leftMenuBuilder);
+        headerUiModel.navbar().secondary().visitMenuItems(rightMenuBuilder);
+        headerUiModel.navbar().tertiary().visitMenuItems(rightMenuBuilder);
 
         return menuBarContainer;
 

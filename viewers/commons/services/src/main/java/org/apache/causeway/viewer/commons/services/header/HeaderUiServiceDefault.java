@@ -49,7 +49,7 @@ implements HeaderUiService {
 
     @Override
     public HeaderUiModel getHeader() {
-        return HeaderUiModel.of(
+        return new HeaderUiModel(
                 brandingUiService.getHeaderBranding(),
                 userProfileUiService.userProfile(),
                 menuUiService.getMenu());

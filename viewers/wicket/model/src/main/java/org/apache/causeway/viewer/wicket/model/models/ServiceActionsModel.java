@@ -20,16 +20,16 @@ package org.apache.causeway.viewer.wicket.model.models;
 
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.viewer.commons.applib.services.menu.model.NavBarSection;
+import org.apache.causeway.viewer.commons.applib.services.menu.model.NavbarSection;
 /**
  * Backing model for actions of application services menu bar (typically, as
  * displayed along the top or side of the page).
  */
-public class ServiceActionsModel extends ModelAbstract<NavBarSection> {
+public class ServiceActionsModel extends ModelAbstract<NavbarSection> {
 
     private static final long serialVersionUID = 1L;
 
-    private final NavBarSection navBarSection;
+    private final NavbarSection navBarSection;
 
     /**
      * @param commonContext
@@ -37,14 +37,14 @@ public class ServiceActionsModel extends ModelAbstract<NavBarSection> {
      */
     public ServiceActionsModel(
             final MetaModelContext commonContext,
-            final NavBarSection navBarSection) {
+            final NavbarSection navBarSection) {
 
         super(commonContext);
         this.navBarSection = navBarSection;
     }
 
     @Override
-    protected NavBarSection load() {
+    protected NavbarSection load() {
         return navBarSection;
     }
 

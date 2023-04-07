@@ -87,18 +87,20 @@
                 <td>[[${headerUiModel.branding.logoHref}]]</td>
             </tr>
             
-            <tr class="result" th:each="topLevelEntry : ${primary.topLevelEntries()}">
+            <tr class="result" th:each="topLevelEntry : ${headerUiModel.navbar().primary().topLevelEntries()}">
                 <td>[[${topLevelEntry.name}]]</td>
                 <td>[[${topLevelEntry.subEntries}]]</td>
             </tr>
-            <tr class="result" th:each="topLevelEntry : ${secondary.topLevelEntries()}">
+            </th:block>
+            <tr class="result" th:each="topLevelEntry : ${headerUiModel.navbar().secondary().topLevelEntries()}">
                 <td>[[${topLevelEntry.name}]]</td>
                 <td>[[${topLevelEntry.subEntries}]]</td>
             </tr>
-            <tr class="result" th:each="topLevelEntry : ${tertiary.topLevelEntries()}">
+            <tr class="result" th:each="topLevelEntry : ${headerUiModel.navbar().tertiary().topLevelEntries()}">
                 <td>[[${topLevelEntry.name}]]</td>
                 <td>[[${topLevelEntry.subEntries}]]</td>
             </tr>
+            
             
             <tr class="result">
                 <td>User</td>

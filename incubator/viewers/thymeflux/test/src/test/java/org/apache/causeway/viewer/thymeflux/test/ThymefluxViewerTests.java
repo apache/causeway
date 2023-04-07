@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.causeway.applib.annotation.DomainServiceLayout.MenuBar;
 import org.apache.causeway.viewer.commons.applib.services.header.HeaderUiModel;
-import org.apache.causeway.viewer.commons.applib.services.menu.model.NavBarSection;
+import org.apache.causeway.viewer.commons.applib.services.menu.model.NavbarSection;
 import org.apache.causeway.viewer.thymeflux.model.root.ThymefluxRootController;
 import org.apache.causeway.viewer.thymeflux.viewer.CausewayModuleIncViewerThymefluxViewer;
 
@@ -62,13 +62,16 @@ class ThymefluxViewerTests {
         var headerUiModel = (HeaderUiModel)model.getAttribute("headerUiModel");
         assertNotNull(headerUiModel);
 
-        var primary   = (NavBarSection)headerUiModel.getNavbar().primary();
-        var secondary = (NavBarSection)headerUiModel.getNavbar().secondary();
-        var tertiary  = (NavBarSection)headerUiModel.getNavbar().tertiary();
+        var primary   = (NavbarSection)headerUiModel.navbar().primary();
+        var secondary = (NavbarSection)headerUiModel.navbar().secondary();
+        var tertiary  = (NavbarSection)headerUiModel.navbar().tertiary();
 
         assertEquals(MenuBar.PRIMARY,   primary.menuBarSelect());
         assertEquals(MenuBar.SECONDARY, secondary.menuBarSelect());
         assertEquals(MenuBar.TERTIARY,  tertiary.menuBarSelect());
+
+        System.err.printf("%s%n", headerUiModel.toYaml());
+
 
         primary.topLevelEntries().forEach(top->System.err.printf("prim: %s%n", top.name()));
         secondary.topLevelEntries().forEach(top->System.err.printf("sec: %s%n", top.name()));
