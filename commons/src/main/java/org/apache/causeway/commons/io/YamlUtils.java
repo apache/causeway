@@ -22,8 +22,10 @@ import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.Method;
 import java.lang.reflect.RecordComponent;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.UnaryOperator;
@@ -41,11 +43,14 @@ import org.yaml.snakeyaml.introspector.Property;
 import org.yaml.snakeyaml.introspector.PropertyUtils;
 import org.yaml.snakeyaml.representer.Representer;
 
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
+import lombok.experimental.Accessors;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -145,23 +150,91 @@ public class YamlUtils {
     // -- REPRESENTING RECORD TYPES
 
     static class PropertyUtils2 extends PropertyUtils {
+
         @Override
         protected Map<String, Property> getPropertiesMap(final Class<?> type, final BeanAccess bAccess) {
-            if(!type.isRecord()) {
-                return super.getPropertiesMap(type, bAccess);
-            }
-            setAllowReadOnlyProperties(true);
-            try {
-                val properties = new LinkedHashMap<String, Property>();
-                for(RecordComponent rc: type.getRecordComponents()) {
-                    val propertyDescriptor = new PropertyDescriptor(rc.getName(), rc.getAccessor(), null);
-                    properties.put(rc.getName(), new MethodProperty(propertyDescriptor));
+            if(type==Class.class) {
+                setAllowReadOnlyProperties(true);
+                try {
+                    val properties = new LinkedHashMap<String, Property>();
+                    val propertyDescriptor = new PropertyDescriptor("name", className(), null);
+                    properties.put("name", new MethodProperty(propertyDescriptor));
+                    return properties;
+                } catch (IntrospectionException e) {
+                    throw new YAMLException(e);
                 }
-                return properties;
-            } catch (IntrospectionException e) {
-                throw new YAMLException(e);
             }
+            if(type.isRecord()) {
+                setAllowReadOnlyProperties(true);
+                try {
+                    val properties = new LinkedHashMap<String, Property>();
+                    for(RecordComponent rc: type.getRecordComponents()) {
+                        val propertyDescriptor = new PropertyDescriptor(rc.getName(), rc.getAccessor(), null);
+                        properties.put(rc.getName(), new MethodProperty(propertyDescriptor));
+                    }
+                    return postProcessMap(properties);
+                } catch (IntrospectionException e) {
+                    throw new YAMLException(e);
+                }
+            }
+            val map = super.getPropertiesMap(type, bAccess);
+            return postProcessMap(map);
         }
+
+        private Map<String, Property> postProcessMap(final Map<String, Property> map) {
+            //debug
+            //System.err.printf("%s map: %s%n", type.getName(), map);
+            map.replaceAll((k, v)->{
+                if(Can.class.isAssignableFrom(v.getType())) {
+                    return MethodPropertyFromCanToList.wrap((MethodProperty)v);
+                }
+                return v;
+            });
+            return map;
+        }
+
+        @Getter(lazy = true) @Accessors(fluent=true)
+        private final static Method className = lookupClassName();
+        @SneakyThrows
+        private static Method lookupClassName() {
+            return Class.class.getMethod("getName");
+        }
+
+        @Getter(lazy = true) @Accessors(fluent=true)
+        private final static Method canToList = lookupCanToList();
+        @SneakyThrows
+        private static Method lookupCanToList() {
+            return Can.class.getMethod("toList");
+        }
+
+    }
+
+    /** Wraps any {@link MethodProperty} that represent a {@link Can} type
+     * and acts as a {@link List} representing MethodProperty facade instead. */
+    static class MethodPropertyFromCanToList extends MethodProperty {
+
+        @SneakyThrows
+        static MethodPropertyFromCanToList wrap(final MethodProperty wrappedMethodProperty) {
+            return new MethodPropertyFromCanToList(
+                    wrappedMethodProperty,
+                    new PropertyDescriptor(wrappedMethodProperty.getName(), null, null));
+        }
+
+        final MethodProperty wrappedMethodProperty;
+
+        MethodPropertyFromCanToList(
+                final MethodProperty wrappedMethodProperty,
+                final PropertyDescriptor property) {
+            super(property);
+            this.wrappedMethodProperty = wrappedMethodProperty;
+        }
+
+        @Override public Object get(final Object object) {
+            return ((Can<?>)wrappedMethodProperty.get(object)).toList();
+        }
+        @Override public Class<?> getType() { return List.class; }
+        @Override public boolean isReadable() { return true; }
+
     }
 
 }
