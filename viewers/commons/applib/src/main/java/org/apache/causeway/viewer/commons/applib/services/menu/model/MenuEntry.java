@@ -16,21 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.commons.applib.services.header;
+package org.apache.causeway.viewer.commons.applib.services.menu.model;
 
-import org.apache.causeway.viewer.commons.applib.services.branding.BrandingUiModel;
-import org.apache.causeway.viewer.commons.applib.services.menu.model.NavbarUiModel;
-import org.apache.causeway.viewer.commons.applib.services.userprof.UserProfileUiModel;
+import java.io.Serializable;
+import java.util.Optional;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import org.apache.causeway.commons.internal.base._Casts;
 
-@Getter
-@AllArgsConstructor(staticName = "of")
-public class HeaderUiModel {
+public interface MenuEntry extends Serializable {
 
-    private final BrandingUiModel branding;
-    private final UserProfileUiModel userProfile;
-    private final NavbarUiModel navbar;
+    default Optional<MenuAction> asAction() {
+        return _Casts.castTo(MenuAction.class, this);
+    }
+
+    default Optional<MenuSpacer> asSpacer() {
+        return _Casts.castTo(MenuSpacer.class, this);
+    }
 
 }

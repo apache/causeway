@@ -16,21 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.commons.applib.services.header;
+package org.apache.causeway.viewer.commons.applib.services.menu.model;
 
-import org.apache.causeway.viewer.commons.applib.services.branding.BrandingUiModel;
-import org.apache.causeway.viewer.commons.applib.services.menu.model.NavbarUiModel;
-import org.apache.causeway.viewer.commons.applib.services.userprof.UserProfileUiModel;
+import org.apache.causeway.commons.collections.Can;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.NonNull;
 
-@Getter
-@AllArgsConstructor(staticName = "of")
-public class HeaderUiModel {
-
-    private final BrandingUiModel branding;
-    private final UserProfileUiModel userProfile;
-    private final NavbarUiModel navbar;
+public record MenuDropdown (
+        @NonNull String name,
+        @NonNull Can<MenuEntry> subEntries) implements MenuEntry {
 
 }

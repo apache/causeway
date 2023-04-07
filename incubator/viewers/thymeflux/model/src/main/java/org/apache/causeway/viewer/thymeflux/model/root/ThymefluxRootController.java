@@ -47,9 +47,7 @@ public class ThymefluxRootController {
         interactionService.run(interactionContextMockup, ()->{
 
             var headerUiModel = headerUiModelProvider.getHeader();
-
             model.addAttribute("headerUiModel", headerUiModel);
-
         });
 
         //TODO on error use error template instead

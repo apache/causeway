@@ -16,21 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.commons.applib.services.header;
+package org.apache.causeway.viewer.commons.applib.services.menu.model;
 
-import org.apache.causeway.viewer.commons.applib.services.branding.BrandingUiModel;
-import org.apache.causeway.viewer.commons.applib.services.menu.model.NavbarUiModel;
-import org.apache.causeway.viewer.commons.applib.services.userprof.UserProfileUiModel;
+import lombok.NonNull;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+public record MenuSpacer(@NonNull String label) implements MenuEntry {
 
-@Getter
-@AllArgsConstructor(staticName = "of")
-public class HeaderUiModel {
+    public static MenuSpacer empty() {
+        return new MenuSpacer("");
+    }
 
-    private final BrandingUiModel branding;
-    private final UserProfileUiModel userProfile;
-    private final NavbarUiModel navbar;
+    public boolean isEmpty() {
+        return label.length() == 0;
+    }
 
 }

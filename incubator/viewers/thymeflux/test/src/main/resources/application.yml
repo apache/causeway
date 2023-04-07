@@ -91,6 +91,34 @@ causeway:
         - url:  https://causeway.apache.org
           image: images/gift_48.png
           name: Apache Causeway
+          
+  # schema auto creation etc. ...
+  persistence:
+    schema:
+       autoCreateSchemas: causewayExtSecman,causewayExtCommandLog,causewayExtExecutionLog,causewayExtExecutionOutbox,causewayExtSessionLog,causewayExtAuditTrail,demo
+
+  extensions:
+    secman:
+      seed:
+        admin:
+          user-name: "sven"
+          password: "pass"
+          role-name: "causeway-ext-secman-admin"
+          namespace-permissions:
+            sticky: "causeway"
+            additional: "demo"
+        regular-user:
+          role-name: "causeway-ext-secman-user"
+      permissionsEvaluationPolicy: ALLOW_BEATS_VETO
+
+  testing:
+    fixtures:
+      fixture-scripts-specification:
+        context-class: demoapp.dom._infra.fixtures.DemoFixtureScript
+        multiple-execution-strategy: execute_once_by_value
+        non-persisted-objects-strategy: ignore
+        recreate: demoapp.dom._infra.fixtures.DemoFixtureScript
+        run-script-default: demoapp.dom._infra.fixtures.DemoFixtureScript          
 
 server:
   http2:

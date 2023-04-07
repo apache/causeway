@@ -25,7 +25,6 @@ import jakarta.inject.Named;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import org.apache.causeway.applib.annotation.DomainServiceLayout.MenuBar;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.viewer.commons.applib.services.branding.BrandingUiService;
 import org.apache.causeway.viewer.commons.applib.services.header.HeaderUiModel;
@@ -53,9 +52,7 @@ implements HeaderUiService {
         return HeaderUiModel.of(
                 brandingUiService.getHeaderBranding(),
                 userProfileUiService.userProfile(),
-                menuUiService.getMenu(MenuBar.PRIMARY),
-                menuUiService.getMenu(MenuBar.SECONDARY),
-                menuUiService.getMenu(MenuBar.TERTIARY));
+                menuUiService.getMenu());
     }
 
 }

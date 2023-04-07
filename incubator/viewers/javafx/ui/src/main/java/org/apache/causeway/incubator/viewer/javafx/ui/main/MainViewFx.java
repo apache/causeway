@@ -104,9 +104,9 @@ public class MainViewFx {
         val leftMenuBuilder = MenuBuilderFx.of(uiContext, menuBarLeft, uiActionHandler::handleActionLinkClicked);
         val rightMenuBuilder = MenuBuilderFx.of(uiContext, menuBarRight, uiActionHandler::handleActionLinkClicked);
 
-        header.getPrimary().buildMenuItems(metaModelContext, leftMenuBuilder);
-        header.getSecondary().buildMenuItems(metaModelContext, rightMenuBuilder);
-        header.getTertiary().buildMenuItems(metaModelContext, rightMenuBuilder);
+        header.getNavbar().primary().visitMenuItems(leftMenuBuilder);
+        header.getNavbar().secondary().visitMenuItems(rightMenuBuilder);
+        header.getNavbar().tertiary().visitMenuItems(rightMenuBuilder);
     }
 
     private void replaceContent(final Node node) {

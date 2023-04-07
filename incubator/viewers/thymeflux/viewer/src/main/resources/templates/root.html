@@ -87,17 +87,17 @@
                 <td>[[${headerUiModel.branding.logoHref}]]</td>
             </tr>
             
-            <tr class="result" th:each="menuModel : ${headerUiModel.primary}">
-                <td>[[${menuModel.menuBarSelect}]]</td>
-                <td>[[${menuModel.menuContributingServiceIds}]]</td>
+            <tr class="result" th:each="topLevelEntry : ${primary.topLevelEntries()}">
+                <td>[[${topLevelEntry.name}]]</td>
+                <td>[[${topLevelEntry.subEntries}]]</td>
             </tr>
-            <tr class="result" th:each="menuModel : ${headerUiModel.secondary}">
-                <td>[[${menuModel.menuBarSelect}]]</td>
-                <td>[[${menuModel.menuContributingServiceIds}]]</td>
+            <tr class="result" th:each="topLevelEntry : ${secondary.topLevelEntries()}">
+                <td>[[${topLevelEntry.name}]]</td>
+                <td>[[${topLevelEntry.subEntries}]]</td>
             </tr>
-            <tr class="result" th:each="menuModel : ${headerUiModel.tertiary}">
-                <td>[[${menuModel.menuBarSelect}]]</td>
-                <td>[[${menuModel.menuContributingServiceIds}]]</td>
+            <tr class="result" th:each="topLevelEntry : ${tertiary.topLevelEntries()}">
+                <td>[[${topLevelEntry.name}]]</td>
+                <td>[[${topLevelEntry.subEntries}]]</td>
             </tr>
             
             <tr class="result">

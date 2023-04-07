@@ -18,14 +18,13 @@
  */
 package org.apache.causeway.viewer.commons.applib.services.menu;
 
-import org.apache.causeway.applib.annotation.DomainServiceLayout;
+import org.apache.causeway.viewer.commons.applib.services.menu.model.NavbarUiModel;
 
 /**
- * @since 2.0 {@index}}
+ * @since 2.0 {@index}
  */
 public interface MenuUiService {
 
-    MenuUiModel getMenu(DomainServiceLayout.MenuBar menuBarSelect);
-    void buildMenuItems(MenuUiModel menuUiModel, MenuVisitor menuBuilder);
+    NavbarUiModel getMenu();
 
 }

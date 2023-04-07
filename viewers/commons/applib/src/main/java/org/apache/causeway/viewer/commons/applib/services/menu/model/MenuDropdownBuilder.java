@@ -16,21 +16,32 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.commons.applib.services.header;
+package org.apache.causeway.viewer.commons.applib.services.menu.model;
 
-import org.apache.causeway.viewer.commons.applib.services.branding.BrandingUiModel;
-import org.apache.causeway.viewer.commons.applib.services.menu.model.NavbarUiModel;
-import org.apache.causeway.viewer.commons.applib.services.userprof.UserProfileUiModel;
+import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 
-@Getter
-@AllArgsConstructor(staticName = "of")
-public class HeaderUiModel {
+import lombok.NonNull;
 
-    private final BrandingUiModel branding;
-    private final UserProfileUiModel userProfile;
-    private final NavbarUiModel navbar;
+public record MenuDropdownBuilder (
+        @NonNull String name,
+        @NonNull List<MenuEntry> subEntries) {
 
+    public void addSectionSpacer() {
+        subEntries().add(MenuSpacer.empty());
+    }
+
+    public void addSectionSpacer(final @NonNull String label) {
+        subEntries().add(new MenuSpacer(label));
+    }
+
+    public void addAction(final ManagedAction action) {
+        subEntries().add(MenuAction.of(action));
+    }
+
+    public MenuDropdown build() {
+        return new MenuDropdown(name, Can.ofCollection(subEntries));
+    }
 }

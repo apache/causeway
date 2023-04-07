@@ -26,8 +26,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.ui.Model;
 import org.springframework.validation.support.BindingAwareModelMap;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import org.apache.causeway.applib.annotation.DomainServiceLayout.MenuBar;
+import org.apache.causeway.viewer.commons.applib.services.header.HeaderUiModel;
+import org.apache.causeway.viewer.commons.applib.services.menu.model.NavBarSection;
 import org.apache.causeway.viewer.thymeflux.model.root.ThymefluxRootController;
 import org.apache.causeway.viewer.thymeflux.viewer.CausewayModuleIncViewerThymefluxViewer;
 
@@ -55,8 +59,25 @@ class ThymefluxViewerTests {
         final Model model = new BindingAwareModelMap();
         rootController.root(model);
 
-        var headerUiModel = model.getAttribute("headerUiModel");
+        var headerUiModel = (HeaderUiModel)model.getAttribute("headerUiModel");
         assertNotNull(headerUiModel);
+
+        var primary   = (NavBarSection)headerUiModel.getNavbar().primary();
+        var secondary = (NavBarSection)headerUiModel.getNavbar().secondary();
+        var tertiary  = (NavBarSection)headerUiModel.getNavbar().tertiary();
+
+        assertEquals(MenuBar.PRIMARY,   primary.menuBarSelect());
+        assertEquals(MenuBar.SECONDARY, secondary.menuBarSelect());
+        assertEquals(MenuBar.TERTIARY,  tertiary.menuBarSelect());
+
+        primary.topLevelEntries().forEach(top->System.err.printf("prim: %s%n", top.name()));
+        secondary.topLevelEntries().forEach(top->System.err.printf("sec: %s%n", top.name()));
+        tertiary.topLevelEntries().forEach(top->System.err.printf("tert: %s%n", top.name()));
+
+        primary.topLevelEntries().forEach(top->System.err.printf("prim: %s%n", top));
+        secondary.topLevelEntries().forEach(top->System.err.printf("sec: %s%n", top));
+        tertiary.topLevelEntries().forEach(top->System.err.printf("tert: %s%n", top));
+
     }
 
 

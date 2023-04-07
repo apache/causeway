@@ -29,8 +29,9 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.incubator.viewer.vaadin.model.action.ActionUiModelFactoryVaa;
 import org.apache.causeway.incubator.viewer.vaadin.model.decorator.Decorators;
-import org.apache.causeway.viewer.commons.applib.services.menu.MenuItemDto;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuVisitor;
+import org.apache.causeway.viewer.commons.applib.services.menu.model.MenuAction;
+import org.apache.causeway.viewer.commons.applib.services.menu.model.MenuDropdown;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -47,20 +48,20 @@ class MenuBuilderVaa implements MenuVisitor {
     private ActionUiModelFactoryVaa actionUiModelFactory = new ActionUiModelFactoryVaa();
 
     @Override
-    public void addTopLevel(MenuItemDto menuDto) {
+    public void onTopLevel(final MenuDropdown menuDto) {
 
-        if(menuDto.isTertiaryRoot()) {
-            currentTopLevelMenu = menuBar.addItem(Decorators.getUser()
-                    .decorateWithAvatar(new Label(), commonContext));
-        } else {
+//        if(menuDto.isTertiaryRoot()) {
+//            currentTopLevelMenu = menuBar.addItem(Decorators.getUser()
+//                    .decorateWithAvatar(new Label(), commonContext));
+//        } else {
             currentTopLevelMenu = menuBar.addItem(Decorators.getMenu()
-                    .decorateTopLevel(new Label(menuDto.getName())));
-        }
+                    .decorateTopLevel(new Label(menuDto.name())));
+//        }
     }
 
     @Override
-    public void addSubMenu(MenuItemDto menu) {
-        val managedAction = menu.getManagedAction();
+    public void onMenuAction(final MenuAction menuAction) {
+        val managedAction = menuAction.managedAction();
 
         val actionUiModel = actionUiModelFactory.newActionUiModel(managedAction);
         currentTopLevelMenu.getSubMenu()
@@ -68,7 +69,7 @@ class MenuBuilderVaa implements MenuVisitor {
     }
 
     @Override
-    public void addSectionSpacer() {
+    public void onSectionSpacer() {
         val sectionSpacer = new Hr();
         val menuItem = currentTopLevelMenu.getSubMenu().addItem(sectionSpacer);
         menuItem.setEnabled(false);
@@ -77,7 +78,7 @@ class MenuBuilderVaa implements MenuVisitor {
     }
 
     @Override
-    public void addSectionLabel(String named) {
+    public void onSectionLabel(final String named) {
         val sectionLabel = new Label(named);
         sectionLabel.addClassName("section-label");
         val menuItem = currentTopLevelMenu.getSubMenu().addItem(sectionLabel);
