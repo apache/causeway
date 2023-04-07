@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.commons.applib.services.header;
 
-import org.apache.causeway.commons.io.YamlUtils;
 import org.apache.causeway.viewer.commons.applib.services.branding.BrandingUiModel;
 import org.apache.causeway.viewer.commons.applib.services.menu.model.NavbarUiModel;
 import org.apache.causeway.viewer.commons.applib.services.userprof.UserProfileUiModel;
@@ -29,9 +28,5 @@ public record HeaderUiModel(
         @NonNull BrandingUiModel branding,
         @NonNull UserProfileUiModel userProfile,
         @NonNull NavbarUiModel navbar) {
-
-    public String toYaml() {
-        return YamlUtils.toStringUtf8(this);
-    }
 
 }

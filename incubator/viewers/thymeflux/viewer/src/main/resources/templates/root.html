@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Licensed to the Apache Software Foundation (ASF) under one
+<!--/* Licensed to the Apache Software Foundation (ASF) under one
   or more contributor license agreements.  See the NOTICE file
   distributed with this work for additional information
   regarding copyright ownership.  The ASF licenses this file
@@ -14,55 +14,80 @@
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
   KIND, either express or implied.  See the License for the
   specific language governing permissions and limitations
-  under the License. -->
+  under the License. */-->
+<html lang="en" 
+	xmlns:th="http://www.thymeleaf.org"  
+	xmlns:hx="http://www.w3.org/1999/xhtml">
+	
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+	<!--/* PROTOTYPING --> 
+  	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous"/>
+    <link href="../static/css/causeway-thymeflux.css" rel="stylesheet" />
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous" defer></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous" defer></script>
+	<!--*/-->
+	
+	<!--/*/
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
     <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.3/css/bootstrap.min.css}" />
-    <link data-th-href="@{/css/causeway-thymeflux.css}" rel="stylesheet">
+    <link th:rel="stylesheet" th:href="@{/css/causeway-thymeflux.css}">
+    <script th:src="@{/webjars/popper.js/2.9.3/umd/popper.min.js}" defer></script>
+    <script th:src="@{/webjars/bootstrap/5.2.3/js/bootstrap.bundle.min.js}" defer></script>
+    <script th:src="@{/webjars/htmx.org/1.8.6/dist/htmx.min.js}" defer></script>
+	/*/-->
+    
 </head>
+
+
 <body>
 
+<nav class="navbar navbar-expand-md sticky-top bg-light">
+  <div class="container-fluid">
+
+	<!-- BRANDING -->
+
+    <a th:with="branding = ${headerUiModel.branding()}"
+    	class="navbar-brand"  
+    	href="#">
+    	<img class="navbar-brand-logo" alt="Brand"
+			 src="prototyping/image-solid.svg" height="48px"/>
+    	[[${branding.name.orElse("")}]]
+    </a>
+    
+    <!-- NAVBAR COLLAPSE TOGGLER -->
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <!-- NAVBAR -->
+    
+    <div class="collapse navbar-collapse mr-auto" id="navbarSupportedContent">
+    
+      <!--  PRIMARY SECTION -->
+	  
+	  <ul th:insert="nav/topNavSection :: topNavSection(${headerUiModel.navbar().primary()})" 
+             class="navbar-nav me-auto mb-2 mb-lg-0">
+	  </ul>
+	  
+	  <!--  SECONDARY AND TERTIARY SECTION -->
+	  
+	  <ul th:insert="nav/topNavSection :: topNavSection(${headerUiModel.navbar().secondary()})" 
+             class="navbar-nav">
+	  </ul>
+	  <ul th:insert="nav/topNavSection :: topNavSection(${headerUiModel.navbar().tertiary()})" 
+             class="navbar-nav">
+	  </ul>
+	  
+	</div>
+
+</nav>
+
 <div class="container">
-
-	<nav class="navbar navbar-expand-lg bg-light">
-	  <div class="container-fluid">
-	    <a class="navbar-brand" href="#">Navbar</a>
-	    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-	      <span class="navbar-toggler-icon"></span>
-	    </button>
-	    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-	      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-	        <li class="nav-item">
-	          <a class="nav-link active" aria-current="page" href="#">Home</a>
-	        </li>
-	        <li class="nav-item">
-	          <a class="nav-link" href="#">Link</a>
-	        </li>
-	        <li class="nav-item dropdown">
-	          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-	            Dropdown
-	          </a>
-	          <ul class="dropdown-menu">
-	            <li><a class="dropdown-item" href="#">Action</a></li>
-	            <li><a class="dropdown-item" href="#">Another action</a></li>
-	            <li><hr class="dropdown-divider"></li>
-	            <li><a class="dropdown-item" href="#">Something else here</a></li>
-	          </ul>
-	        </li>
-	        <li class="nav-item">
-	          <a class="nav-link disabled">Disabled</a>
-	        </li>
-	      </ul>
-	      <form class="d-flex" role="search">
-	        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-	        <button class="btn btn-outline-success" type="submit">Search</button>
-	      </form>
-	    </div>
-	  </div>
-	</nav>
-
 
     <div class="row">
         <div id="title">
@@ -87,20 +112,26 @@
                 <td>[[${headerUiModel.branding.logoHref}]]</td>
             </tr>
             
-            <tr class="result" th:each="topLevelEntry : ${headerUiModel.navbar().primary().topLevelEntries()}">
+            <th:block th:with="topNavSection=${headerUiModel.navbar().primary()}">
+            <tr class="result" th:each="topLevelEntry : ${topNavSection.topLevelEntries()}">
                 <td>[[${topLevelEntry.name}]]</td>
                 <td>[[${topLevelEntry.subEntries}]]</td>
             </tr>
             </th:block>
-            <tr class="result" th:each="topLevelEntry : ${headerUiModel.navbar().secondary().topLevelEntries()}">
-                <td>[[${topLevelEntry.name}]]</td>
-                <td>[[${topLevelEntry.subEntries}]]</td>
-            </tr>
-            <tr class="result" th:each="topLevelEntry : ${headerUiModel.navbar().tertiary().topLevelEntries()}">
-                <td>[[${topLevelEntry.name}]]</td>
-                <td>[[${topLevelEntry.subEntries}]]</td>
-            </tr>
             
+            <th:block th:with="topNavSection=${headerUiModel.navbar().secondary()}">
+            <tr class="result" th:each="topLevelEntry : ${topNavSection.topLevelEntries()}">
+                <td>[[${topLevelEntry.name}]]</td>
+                <td>[[${topLevelEntry.subEntries}]]</td>
+            </tr>
+            </th:block>
+            
+            <th:block th:with="topNavSection=${headerUiModel.navbar().tertiary()}">
+            <tr class="result" th:each="topLevelEntry : ${topNavSection.topLevelEntries()}">
+                <td>[[${topLevelEntry.name}]]</td>
+                <td>[[${topLevelEntry.subEntries}]]</td>
+            </tr>
+            </th:block>
             
             <tr class="result">
                 <td>User</td>
@@ -119,3 +150,4 @@
 
 </div>
 </body>
+</html>

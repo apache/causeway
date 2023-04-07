@@ -184,12 +184,11 @@ public class YamlUtils {
         private Map<String, Property> postProcessMap(final Map<String, Property> map) {
             //debug
             //System.err.printf("%s map: %s%n", type.getName(), map);
-            map.replaceAll((k, v)->{
-                if(Can.class.isAssignableFrom(v.getType())) {
-                    return MethodPropertyFromCanToList.wrap((MethodProperty)v);
-                }
-                return v;
-            });
+            map.replaceAll((k, v)->
+                Can.class.isAssignableFrom(v.getType())
+                    && v instanceof MethodProperty // no field support yet
+                    ? MethodPropertyFromCanToList.wrap((MethodProperty)v)
+                    : v);
             return map;
         }
 
