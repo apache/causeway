@@ -1,20 +1,10 @@
 package demoapp.dom.domain.objects.DomainObject.nature.viewmodel;
 
-import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.objects.DomainObject.nature.DomainObjectNaturePage;
-import demoapp.dom.domain.objects.DomainObject.nature.entity.DomainObjectNatureEntity;
-import lombok.RequiredArgsConstructor;
-
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.annotation.Nullable;
-import javax.inject.Inject;
+import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.Collection;
-import org.apache.causeway.applib.annotation.CollectionLayout;
-import org.apache.causeway.applib.annotation.DomainObject;
+
+import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action()
@@ -22,11 +12,10 @@ import org.apache.causeway.applib.annotation.DomainObject;
 public class DomainObjectNatureViewModel_updateMessage {
     // ...
 //end::class[]
-    @SuppressWarnings("unused")
     private final DomainObjectNatureViewModel mixee;
 
 //tag::class[]
-    public DomainObjectNatureViewModel act(@Nullable String newMessage) {   // <.>
+    public DomainObjectNatureViewModel act(@Nullable final String newMessage) {   // <.>
         mixee.setMessage(newMessage);
         return mixee;
     }
