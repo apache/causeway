@@ -73,22 +73,17 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.causeway.viewer</groupId>
-			<artifactId>causeway-viewer-wicket-viewer</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.causeway.viewer</groupId>
-			<artifactId>causeway-viewer-restfulobjects-jaxrsresteasy</artifactId>
-		</dependency>
-
-		<dependency>
 			<groupId>org.apache.causeway.core</groupId>
 			<artifactId>causeway-core-security</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.causeway.security</groupId>
 			<artifactId>causeway-security-bypass</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.causeway.core</groupId>
+			<artifactId>causeway-core-runtimeservices</artifactId>
 		</dependency>
 
 		<!--
@@ -125,11 +120,6 @@
 			<artifactId>causeway-security-spring</artifactId>
 		</dependency>
 		-->
-
-		<dependency>
-			<groupId>org.apache.causeway.core</groupId>
-			<artifactId>causeway-core-runtimeservices</artifactId>
-		</dependency>
 
 	</dependencies>
 
