@@ -10,3 +10,39 @@ This page will be added to as development progresses.
 Incubator projects `viewer-vaadin` and `viewer-javafx` were discontinued in version 2.x, 
 but these are continued in version 3.x.
 
+=== causeway-mavendeps-webapp
+
+Dependencies 
+
+[source,xml]
+.pom.xml
+----
+<dependency>
+	<groupId>org.apache.causeway.viewer</groupId>
+	<artifactId>causeway-viewer-wicket-viewer</artifactId>
+</dependency>
+
+<dependency>
+	<groupId>org.apache.causeway.viewer</groupId>
+	<artifactId>causeway-viewer-restfulobjects-jaxrsresteasy</artifactId>
+</dependency>
+----
+
+were removed from
+
+[source,xml]
+.pom.xml
+---- 
+<dependency>
+    <groupId>org.apache.causeway.mavendeps</groupId>
+    <artifactId>causeway-mavendeps-webapp</artifactId>
+    <type>pom</type>
+</dependency>
+----
+
+[NOTE]
+====
+Other viewers are in incubation phase. 
+This change allows for fine grained control on which viewers to add, 
+while providing a minimal _Spring_ web stack.
+====
