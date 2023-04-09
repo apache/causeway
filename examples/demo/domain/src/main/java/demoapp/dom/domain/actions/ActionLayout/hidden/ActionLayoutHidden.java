@@ -19,33 +19,30 @@
 package demoapp.dom.domain.actions.ActionLayout.hidden;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import lombok.NoArgsConstructor;
+import demoapp.dom._infra.values.ValueHolder;
 
-import javax.inject.Named;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.ObjectSupport;
-
-@XmlRootElement(name = "root")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.ActionLayoutHiddenPage")
-@DomainObject(
-    nature=Nature.VIEW_MODEL)
-@NoArgsConstructor
 //tag::class[]
-public class ActionLayoutHiddenPage implements HasAsciiDocDescription {
+public abstract class ActionLayoutHidden
+//end::class[]
+        implements
+        HasAsciiDocDescription,
+        ValueHolder<String>
+//tag::class[]
+{
     // ...
 //end::class[]
 
-    @ObjectSupport public String title() {
-        return "@Action#hidden";
+    public String title() {
+        return value();
     }
+
+    @Override
+    public String value() {
+        return getName();
+    }
+
+    public abstract String getName();
+    public abstract void setName(String value);
 
 //tag::class[]
 }

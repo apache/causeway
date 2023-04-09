@@ -18,35 +18,21 @@
  */
 package demoapp.dom.domain.actions.ActionLayout.hidden;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import lombok.NoArgsConstructor;
+import demoapp.dom._infra.seed.SeedServiceAbstract;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
-import javax.inject.Named;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.inject.Inject;
 
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.springframework.stereotype.Service;
 
-@XmlRootElement(name = "root")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.ActionLayoutHiddenPage")
-@DomainObject(
-    nature=Nature.VIEW_MODEL)
-@NoArgsConstructor
-//tag::class[]
-public class ActionLayoutHiddenPage implements HasAsciiDocDescription {
-    // ...
-//end::class[]
+@Service
+public class ActionLayoutHiddenSeeding
+extends SeedServiceAbstract {
 
-    @ObjectSupport public String title() {
-        return "@Action#hidden";
+    @Inject
+    public ActionLayoutHiddenSeeding(
+            ValueHolderRepository<String, ? extends ActionLayoutHidden> entities) {
+        super(entities);
     }
 
-//tag::class[]
 }
-//end::class[]
