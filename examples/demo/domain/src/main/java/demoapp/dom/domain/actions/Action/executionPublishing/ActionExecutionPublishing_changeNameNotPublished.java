@@ -1,3 +1,4 @@
+
 /*
  *  Licensed to the Apache Software Foundation (ASF) under one
  *  or more contributor license agreements.  See the NOTICE file
@@ -18,23 +19,32 @@
  */
 package demoapp.dom.domain.actions.Action.executionPublishing;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import lombok.RequiredArgsConstructor;
+
+import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Publishing;
 
 //tag::class[]
-@Action(executionPublishing = Publishing.DISABLED)   // <.>
-@Inherited
-@Target({
-        ElementType.TYPE, ElementType.METHOD         // <.>
-})
-@Retention(RetentionPolicy.RUNTIME)
-public @interface ActionExecutionPublishingDisabledMetaAnnotation {
+@Action(executionPublishing = Publishing.DISABLED)                    // <.>
+@RequiredArgsConstructor
+public class ActionExecutionPublishing_changeNameNotPublished {
 
+    private final ActionExecutionPublishing entity;
+
+    @MemberSupport public ActionExecutionPublishing act(
+            final String newName) {
+        entity.setName(newName);
+        return entity;
+    }
+
+    public String default0Act() {
+        return entity.getName();
+    }
+
+    @Inject
+    ActionExecutionPublishingRepository repository;
 }
 //end::class[]

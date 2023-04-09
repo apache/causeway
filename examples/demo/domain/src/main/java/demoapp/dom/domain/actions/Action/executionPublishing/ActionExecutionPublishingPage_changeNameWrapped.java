@@ -1,4 +1,3 @@
-
 /*
  *  Licensed to the Apache Software Foundation (ASF) under one
  *  or more contributor license agreements.  See the NOTICE file
@@ -17,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.Action.commandPublishing;
+package demoapp.dom.domain.actions.Action.executionPublishing;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,22 +27,30 @@ import javax.inject.Inject;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Publishing;
+import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 
 //tag::class[]
-@Action(commandPublishing = Publishing.DISABLED)                    // <.>
+@Action(executionPublishing = Publishing.ENABLED)                                                             // <.>
 @RequiredArgsConstructor
-public class ActionCommandPublishing_changeNameNotPublished {
+public class ActionExecutionPublishingPage_changeNameWrapped {
 
-    private final ActionCommandPublishing entity;
+    private final ActionExecutionPublishingPage page;
 
-    @MemberSupport public ActionCommandPublishing act(
+    @MemberSupport public ActionExecutionPublishingPage act(
+            final ActionExecutionPublishing entity,
             final String newName) {
-        entity.setName(newName);
-        return entity;
+        wrapperFactory.wrapMixin(ActionExecutionPublishing_changeNamePublished.class, entity).act(newName); // <.>
+        return page;
     }
 
-    public String default0Act() {
-        return entity.getName();
+    public List<? extends ActionExecutionPublishing> choices0Act() {
+        return repository.allInstances();
     }
+    public String default1Act(ActionExecutionPublishing entity) {
+        return entity != null ? entity.getName() : null;
+    }
+
+    @Inject ActionExecutionPublishingRepository repository;
+    @Inject WrapperFactory wrapperFactory;
 }
 //end::class[]

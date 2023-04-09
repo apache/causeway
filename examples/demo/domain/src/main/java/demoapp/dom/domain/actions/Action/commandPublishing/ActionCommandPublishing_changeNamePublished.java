@@ -43,7 +43,5 @@ public class ActionCommandPublishing_changeNamePublished {
     public String default0Act() {
         return entity.getName();
     }
-
-    @Inject ActionCommandPublishingRepository repository;
 }
 //end::class[]

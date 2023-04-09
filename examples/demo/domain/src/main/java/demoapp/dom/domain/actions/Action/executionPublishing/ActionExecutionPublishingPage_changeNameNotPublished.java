@@ -1,4 +1,3 @@
-
 /*
  *  Licensed to the Apache Software Foundation (ASF) under one
  *  or more contributor license agreements.  See the NOTICE file
@@ -17,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.Action.commandPublishing;
+package demoapp.dom.domain.actions.Action.executionPublishing;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,20 +29,26 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Publishing;
 
 //tag::class[]
-@Action(commandPublishing = Publishing.DISABLED)                    // <.>
+@Action(executionPublishing = Publishing.DISABLED)                    // <.>
 @RequiredArgsConstructor
-public class ActionCommandPublishing_changeNameNotPublished {
+public class ActionExecutionPublishingPage_changeNameNotPublished {
 
-    private final ActionCommandPublishing entity;
+    private final ActionExecutionPublishingPage page;
 
-    @MemberSupport public ActionCommandPublishing act(
+    @MemberSupport public ActionExecutionPublishingPage act(
+            final ActionExecutionPublishing entity,
             final String newName) {
         entity.setName(newName);
-        return entity;
+        return page;
     }
 
-    public String default0Act() {
-        return entity.getName();
+    public List<? extends ActionExecutionPublishing> choices0Act() {
+        return repository.allInstances();
     }
+    public String default1Act(ActionExecutionPublishing entity) {
+        return entity != null ? entity.getName() : null;
+    }
+
+    @Inject ActionExecutionPublishingRepository repository;
 }
 //end::class[]

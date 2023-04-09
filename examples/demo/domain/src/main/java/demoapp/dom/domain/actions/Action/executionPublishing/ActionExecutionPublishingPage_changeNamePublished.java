@@ -18,23 +18,37 @@
  */
 package demoapp.dom.domain.actions.Action.executionPublishing;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
+import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Publishing;
 
 //tag::class[]
-@Action(executionPublishing = Publishing.ENABLED)               // <.>
-@Inherited
-@Target({
-        ElementType.TYPE, ElementType.METHOD                    // <.>
-})
-@Retention(RetentionPolicy.RUNTIME)
-public @interface ActionExecutionPublishingEnabledMetaAnnotation {
+@Action(executionPublishing = Publishing.ENABLED)                    // <.>
+@RequiredArgsConstructor
+public class ActionExecutionPublishingPage_changeNamePublished {
 
+    private final ActionExecutionPublishingPage page;
+
+    @MemberSupport public ActionExecutionPublishingPage act(
+            final ActionExecutionPublishing entity,
+            final String newName) {
+        entity.setName(newName);
+        return page;
+    }
+
+    public List<? extends ActionExecutionPublishing> choices0Act() {
+        return repository.allInstances();
+    }
+    public String default1Act(ActionExecutionPublishing entity) {
+        return entity != null ? entity.getName() : null;
+    }
+
+    @Inject ActionExecutionPublishingRepository repository;
 }
 //end::class[]

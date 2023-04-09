@@ -1,3 +1,4 @@
+
 /*
  *  Licensed to the Apache Software Foundation (ASF) under one
  *  or more contributor license agreements.  See the NOTICE file
@@ -18,21 +19,32 @@
  */
 package demoapp.dom.domain.actions.Action.executionPublishing;
 
-import demoapp.dom._infra.seed.SeedServiceAbstract;
-import demoapp.dom._infra.values.ValueHolderRepository;
+import lombok.RequiredArgsConstructor;
 
 import javax.inject.Inject;
 
-import org.springframework.stereotype.Service;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.Publishing;
 
-@Service
-public class ActionExecutionPublishingSeeding
-extends SeedServiceAbstract {
+//tag::class[]
+@Action(executionPublishing = Publishing.ENABLED)                    // <.>
+@RequiredArgsConstructor
+public class ActionExecutionPublishing_changeNamePublished {
 
-    @Inject
-    public ActionExecutionPublishingSeeding(
-            ValueHolderRepository<String, ? extends ActionExecutionPublishing> entities) {
-        super(entities);
+    private final ActionExecutionPublishing entity;
+
+    @MemberSupport public ActionExecutionPublishing act(
+            final String newName) {
+        entity.setName(newName);
+        return entity;
     }
 
+    public String default0Act() {
+        return entity.getName();
+    }
+
+    @Inject
+    ActionExecutionPublishingRepository repository;
 }
+//end::class[]

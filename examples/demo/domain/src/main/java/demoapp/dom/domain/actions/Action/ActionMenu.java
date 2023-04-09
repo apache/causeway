@@ -18,22 +18,11 @@
  */
 package demoapp.dom.domain.actions.Action;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.DomainService;
-import org.apache.causeway.applib.annotation.NatureOfService;
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.annotation.SemanticsOf;
-
 import demoapp.dom._infra.samples.NameSamples;
-import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.domain.actions.Action.choicesFrom.ActionChoicesFromPage;
 import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingPage;
 import demoapp.dom.domain.actions.Action.domainEvent.ActionDomainEventPage;
-import demoapp.dom.domain.actions.Action.executionPublishing.ActionExecutionPublishingEntity;
+import demoapp.dom.domain.actions.Action.executionPublishing.ActionExecutionPublishingPage;
 import demoapp.dom.domain.actions.Action.hidden.ActionHiddenPage;
 import demoapp.dom.domain.actions.Action.restrictTo.ActionRestrictToPage;
 import demoapp.dom.domain.actions.Action.semantics.ActionSemanticsPage;
@@ -42,13 +31,17 @@ import demoapp.dom.domain.actions.Action.typeOf.child.ActionTypeOfChildVm;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.apache.causeway.applib.annotation.*;
+
 @Named("demo.ActionMenu")
 @DomainService(nature=NatureOfService.VIEW)
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ActionMenu {
 
-    final ValueHolderRepository<String, ? extends ActionExecutionPublishingEntity> actionPublishingEntities;
     final NameSamples samples;
 
     @Action(semantics = SemanticsOf.SAFE)
@@ -63,7 +56,6 @@ public class ActionMenu {
         return new ActionCommandPublishingPage();
     }
 
-
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-asterisk", describedAs = "Class of the domain event emitted when interacting with the action")
     public ActionDomainEventPage domainEvent(){
@@ -72,8 +64,8 @@ public class ActionMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-book", describedAs = "Action invocation events as XML")
-    public ActionExecutionPublishingEntity executionPublishing(){
-        return actionPublishingEntities.first().orElse(null);
+    public ActionExecutionPublishingPage executionPublishing(){
+        return new ActionExecutionPublishingPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)

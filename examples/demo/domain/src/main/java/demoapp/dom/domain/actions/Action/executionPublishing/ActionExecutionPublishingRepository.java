@@ -16,25 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.Action.executionPublishing.jdo;
+package demoapp.dom.domain.actions.Action.executionPublishing;
 
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Service;
+import java.util.List;
 
-import demoapp.dom._infra.values.ValueHolderRepository;
+public interface ActionExecutionPublishingRepository {
 
-@Profile("demo-jdo")
-@Service
-public class ActionExecutionPublishingJdoEntities
-extends ValueHolderRepository<String, ActionExecutionPublishingJdo> {
-
-    protected ActionExecutionPublishingJdoEntities() {
-        super(ActionExecutionPublishingJdo.class);
-    }
-
-    @Override
-    protected ActionExecutionPublishingJdo newDetachedEntity(String value) {
-        return new ActionExecutionPublishingJdo(value);
-    }
-
+    List<? extends ActionExecutionPublishing> allInstances();
 }

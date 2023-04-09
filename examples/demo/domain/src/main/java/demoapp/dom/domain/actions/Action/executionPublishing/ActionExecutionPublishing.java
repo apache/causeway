@@ -18,21 +18,32 @@
  */
 package demoapp.dom.domain.actions.Action.executionPublishing;
 
-import demoapp.dom._infra.seed.SeedServiceAbstract;
-import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolder;
 
-import javax.inject.Inject;
+//tag::class[]
+public abstract class ActionExecutionPublishing
+//end::class[]
+        implements
+        HasAsciiDocDescription,
+        ValueHolder<String>
+//tag::class[]
+{
+    // ...
+//end::class[]
 
-import org.springframework.stereotype.Service;
-
-@Service
-public class ActionExecutionPublishingSeeding
-extends SeedServiceAbstract {
-
-    @Inject
-    public ActionExecutionPublishingSeeding(
-            ValueHolderRepository<String, ? extends ActionExecutionPublishing> entities) {
-        super(entities);
+    public String title() {
+        return value();
     }
 
+    @Override
+    public String value() {
+        return getName();
+    }
+
+    public abstract String getName();
+    public abstract void setName(String value);
+
+//tag::class[]
 }
+//end::class[]
