@@ -27,7 +27,7 @@
 	<bs3:row>
 		<bs3:col span="6">
 			<bs3:tabGroup>
-				<bs3:tab name="Alternative Layout selected via Object-Support-Method">
+				<bs3:tab name="Alternative Layout #1">
 					<bs3:row>
 						<bs3:col span="12">
 							<cpt:fieldSet name="General" id="general" >

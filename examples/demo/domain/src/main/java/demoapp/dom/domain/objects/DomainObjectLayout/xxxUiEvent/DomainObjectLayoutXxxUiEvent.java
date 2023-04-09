@@ -41,17 +41,14 @@ public abstract class DomainObjectLayoutXxxUiEvent
         ValueHolder<String>
 //tag::class[]
 {
-
     public static class TitleEvent                                              // <1>
-            extends TitleUiEvent<DomainObjectLayoutXxxUiEventPage> { }
+            extends TitleUiEvent<DomainObjectLayoutXxxUiEvent> { }
     public static class IconEvent                                               // <2>
             extends IconUiEvent<DomainObjectLayoutXxxUiEvent> { }
     public static class CssClassEvent                                           // <3>
             extends CssClassUiEvent<DomainObjectLayoutXxxUiEvent> { }
     public static class LayoutEvent                                             // <4>
             extends LayoutUiEvent<DomainObjectLayoutXxxUiEvent> { }
-
-
     // ...
 //end::class[]
 

@@ -299,6 +299,22 @@ tr.odd.custom > td,
     color: orangered;
 }
 
+tr.even.custom1 > td,
+tr.odd.custom1 > td,
+.entityPage.custom1 .iconAndTitle span
+{
+    font-style: italic;
+    color: #00bf00;
+}
+
+tr.even.custom2 > td,
+tr.odd.custom2 > td,
+.entityPage.custom2 .iconAndTitle span
+{
+    font-style: italic;
+    color: blueviolet;
+}
+
 .line-through {
     text-decoration: line-through;
 }

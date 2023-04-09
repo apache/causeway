@@ -21,8 +21,12 @@ package demoapp.dom.domain.objects.DomainObjectLayout.xxxUiEvent;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
+import java.util.Locale;
+
+import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.causeway.applib.services.title.TitleService;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
@@ -31,38 +35,57 @@ import org.springframework.stereotype.Service;
 @Named("demo.DomainObjectLayoutXxxUiEventService")
 @Log4j2
 public class DomainObjectLayoutXxxUiEventSubscriber {
+    // ...
 
+//end::class[]
+
+//tag::titleUiEvent[]
     @EventListener
     void onTitleUiEvent(final DomainObjectLayoutXxxUiEvent.TitleEvent titleUiEvent) {
-        val in = titleUiEvent.getTitle();
-        val out = "DomainObjectLayout-UiEvents";
-        titleUiEvent.setTitle(out);
-        log.info("titleUiEvent: {}->{}", in, out);
+        val source = titleUiEvent.getSource();
+        titleUiEvent.setTitle(
+                hasNameInFirstHalfOfAlphabet(source)
+                        ? source.getName().toUpperCase()
+                        : source.getName().toLowerCase());
     }
+//end::titleUiEvent[]
 
+//tag::iconUiEvent[]
     @EventListener
     void onIconUiEvent(final DomainObjectLayoutXxxUiEvent.IconEvent iconUiEvent) {
-        val in = iconUiEvent.getIconName();
-        val out = "signature";
-        iconUiEvent.setIconName(out);
-        log.info("iconUiEvent: {}->{}", in, out);
+        val source = iconUiEvent.getSource();
+        if (hasNameInFirstHalfOfAlphabet(source)) {
+            iconUiEvent.setIconName("signature");
+        }
     }
+//end::iconUiEvent[]
 
+//tag::cssClassUiEvent[]
     @EventListener
     void onCssClassUiEvent(final DomainObjectLayoutXxxUiEvent.CssClassEvent cssClassUiEvent) {
-        val in = cssClassUiEvent.getCssClass();
-        val out = "custom";
-        cssClassUiEvent.setCssClass(out);
-        log.info("cssClassUiEvent: {}->{}", in, out);
+        val source = cssClassUiEvent.getSource();
+        cssClassUiEvent.setCssClass(hasNameInFirstHalfOfAlphabet(source)
+                ? "custom1"
+                : "custom2");
     }
+//end::cssClassUiEvent[]
 
+//tag::layoutUiEvent[]
     @EventListener
     void onLayoutUiEvent(final DomainObjectLayoutXxxUiEvent.LayoutEvent layoutUiEvent) {
-        val in = layoutUiEvent.getLayout();
-        val out = "alternative2";
-        layoutUiEvent.setLayout(out);
-        log.info("layoutUiEvent: {}->{}", in, out);
+        val source = layoutUiEvent.getSource();
+        layoutUiEvent.setLayout(
+                hasNameInFirstHalfOfAlphabet(source)
+                    ? "alternative1"
+                    : "alternative2");
+    }
+//end::layoutUiEvent[]
+
+//tag::class[]
+    private boolean hasNameInFirstHalfOfAlphabet(DomainObjectLayoutXxxUiEvent source) {
+        return source.getName().toLowerCase().compareTo("m") < 0;
     }
 
+    @Inject TitleService titleService;
 }
 //end::class[]

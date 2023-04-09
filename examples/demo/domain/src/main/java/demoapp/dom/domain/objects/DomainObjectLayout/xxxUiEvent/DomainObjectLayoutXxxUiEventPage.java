@@ -31,24 +31,13 @@ import org.apache.causeway.applib.annotation.*;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.DomainObjectLayoutXxxUiEventVm")
+@Named("demo.DomainObjectLayoutXxxUiEventPage")
 @DomainObject(
         nature=Nature.VIEW_MODEL)
 public class DomainObjectLayoutXxxUiEventPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "@DomainObjectLayout#xxxUiEvent (should be overwritten by ui-title-event-listener)";
+        return "@DomainObjectLayout#xxxUiEvent";
     }
-
-    @ObjectSupport public String layout() {
-        return "alternative1"; // should be overwritten by ui-layout-event-listener
-    }
-
-    //TODO[CAUSEWAY-3309]
-    @Property(optionality = Optionality.OPTIONAL)
-    @XmlElement(required = false)
-    @Getter @Setter
-    private String dummy;
-
 }
 //end::class[]

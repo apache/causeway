@@ -17,6 +17,7 @@ Here again the `tableDecorator` value _is_ honoured.
 In terms of code:
 
 [source,java,indent=0]
+.DomainObjectLayoutTableDecorator.java
 ----
 include::DomainObjectLayoutTableDecorator.java[tags=class]
 ----
