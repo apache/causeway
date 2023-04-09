@@ -39,7 +39,7 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 public class ActionCommandPublishingPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "@Action#choicesFrom";
+        return "@Action#commandPublishing";
     }
 }
 //end::class[]

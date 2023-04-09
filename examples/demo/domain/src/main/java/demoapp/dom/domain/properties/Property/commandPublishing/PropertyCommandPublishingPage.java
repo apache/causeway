@@ -18,23 +18,28 @@
  */
 package demoapp.dom.domain.properties.Property.commandPublishing;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.Publishing;
+import javax.inject.Named;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.ObjectSupport;
 
 //tag::class[]
-@Property(commandPublishing = Publishing.DISABLED)   // <.>
-@Inherited
-@Target({
-        ElementType.FIELD, ElementType.METHOD        // <.>
-})
-@Retention(RetentionPolicy.RUNTIME)
-public @interface PropertyCommandPublishingDisabledMetaAnnotation {
+@XmlRootElement(name = "root")
+@XmlType
+@XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.PropertyCommandPublishingPage")
+@DomainObject(nature=Nature.VIEW_MODEL)
+public class PropertyCommandPublishingPage implements HasAsciiDocDescription {
 
+    @ObjectSupport public String title() {
+        return "@Property#commandPublishing";
+    }
 }
 //end::class[]

@@ -33,7 +33,7 @@ import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandPublishingEntity;
+import demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandPublishingPage;
 import demoapp.dom.domain.properties.Property.domainEvent.PropertyDomainEventPage;
 import demoapp.dom.domain.properties.Property.editing.PropertyEditingPage;
 import demoapp.dom.domain.properties.Property.editingReasonDisabled.PropertyEditingReasonDisabledPage;
@@ -61,7 +61,6 @@ import lombok.val;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class PropertyMenu {
 
-    final ValueHolderRepository<String, ? extends PropertyCommandPublishingEntity> propertyCommandPublishingEntities;
     final ValueHolderRepository<String, ? extends PropertyExecutionPublishingEntity> propertyExecutionPublishingEntities;
     final ValueHolderRepository<String, ? extends PropertyProjectingChildEntity> propertyProjectingChildEntities;
     final Samples<Blob> blobSamples;
@@ -69,8 +68,8 @@ public class PropertyMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-terminal", describedAs = "Action invocation intentions as XML")
-    public PropertyCommandPublishingEntity commandPublishing(){
-        return propertyCommandPublishingEntities.first().orElse(null);
+    public PropertyCommandPublishingPage commandPublishing(){
+        return new PropertyCommandPublishingPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
