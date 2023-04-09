@@ -18,184 +18,46 @@
  */
 package demoapp.dom.domain.actions.Action.commandPublishing.jpa;
 
-import javax.inject.Named;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-import org.springframework.context.annotation.Profile;
-
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Editing;
-import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.annotation.Publishing;
-import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
-
-import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingDisabledMetaAnnotation;
-import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingEnabledMetaAnnotation;
-import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingEntity;
+import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishing;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.inject.Named;
+import javax.persistence.*;
+
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
+import org.springframework.context.annotation.Profile;
+
 @Profile("demo-jpa")
-//tag::class[]
 @Entity
 @Table(
     schema = "demo",
     name = "ActionCommandPublishingJpa"
 )
 @EntityListeners(CausewayEntityListener.class)
-@Named("demo.ActionCommandPublishingEntity")
-@DomainObject(
-    editing = Editing.DISABLED)
+@Named("demo.ActionCommandPublishingJpa")
 @NoArgsConstructor
-public class ActionCommandPublishingJpa
-        extends ActionCommandPublishingEntity {
+//tag::class[]
+// ...
+@DomainObject(nature = Nature.ENTITY)
+public class ActionCommandPublishingJpa extends ActionCommandPublishing {
     // ...
 //end::class[]
 
-    public ActionCommandPublishingJpa(final String initialValue) {
-        this.property = initialValue;
-        this.propertyCommandDisabled = initialValue;
-        this.propertyMetaAnnotated = initialValue;
-        this.propertyMetaAnnotatedOverridden = initialValue;
-    }
-
-    @ObjectSupport public String title() {
-        return "@Action#commandPublishing (JPA)";
+    public ActionCommandPublishingJpa(String value) {
+        setName(value);
     }
 
     @Id
     @GeneratedValue
     private Long id;
 
-//tag::property[]
-    @Property()
-    @PropertyLayout(fieldSetId = "annotation", sequence = "1")
     @Getter @Setter
-    private String property;
-
-    @Property()
-    @PropertyLayout(fieldSetId = "annotation", sequence = "2")
-    @Getter @Setter
-    private String propertyCommandDisabled;
-
-    @Property()
-    @PropertyLayout(fieldSetId = "meta-annotated", sequence = "1")
-    @Getter @Setter
-    private String propertyMetaAnnotated;
-
-    @Property()
-    @PropertyLayout(fieldSetId = "meta-annotated-overridden", sequence = "1")
-    @Getter @Setter
-    private String propertyMetaAnnotatedOverridden;
-//end::property[]
-
-//tag::annotation[]
-    @Action(
-        commandPublishing = Publishing.ENABLED                  // <.>
-        , semantics = SemanticsOf.IDEMPOTENT
-    )
-    @ActionLayout(
-        named = "Update Property"
-        , describedAs = "@Action(command = ENABLED)"
-        , associateWith = "property"
-        , sequence = "1"
-    )
-    public ActionCommandPublishingJpa updatePropertyUsingAnnotation(final String value) {
-        // ...
-//end::annotation[]
-        setProperty(value);
-        return this;
-    }
-    @MemberSupport public String default0UpdatePropertyUsingAnnotation() {
-        return getProperty();
-//tag::annotation[]
-    }
-//end::annotation[]
-
-//tag::annotation-2[]
-    @Action(
-        commandPublishing = Publishing.DISABLED                 // <.>
-        , semantics = SemanticsOf.IDEMPOTENT
-    )
-    @ActionLayout(
-        named = "Update Property"
-        , describedAs = "@Action(command = ENABLED)"
-        , associateWith = "propertyCommandDisabled"
-        , sequence = "1"
-    )
-    public ActionCommandPublishingJpa updatePropertyCommandDisabledUsingAnnotation(final String value) {
-        // ...
-//end::annotation-2[]
-        setPropertyCommandDisabled(value);
-        return this;
-    }
-    @MemberSupport public String default0UpdatePropertyCommandDisabledUsingAnnotation() {
-        return getPropertyCommandDisabled();
-//tag::annotation-2[]
-    }
-//end::annotation-2[]
-
-//tag::meta-annotation[]
-    @ActionCommandPublishingEnabledMetaAnnotation                 // <.>
-    @Action(
-        semantics = SemanticsOf.IDEMPOTENT
-    )
-    @ActionLayout(
-        named = "Update Property"
-        , describedAs = "@ActionCommandEnabledMetaAnnotation"
-        , associateWith = "propertyMetaAnnotated"
-        , sequence = "1"
-    )
-    public ActionCommandPublishingJpa updatePropertyUsingMetaAnnotation(final String value) {
-        // ...
-//end::meta-annotation[]
-        setPropertyMetaAnnotated(value);
-        return this;
-    }
-    @MemberSupport public String default0UpdatePropertyUsingMetaAnnotation() {
-        return getPropertyMetaAnnotated();
-//tag::meta-annotation[]
-    }
-//end::meta-annotation[]
-
-//tag::meta-annotation-overridden[]
-    @ActionCommandPublishingDisabledMetaAnnotation                // <.>
-    @Action(
-        semantics = SemanticsOf.IDEMPOTENT
-        , commandPublishing = Publishing.ENABLED                  // <.>
-    )
-    @ActionLayout(
-        named = "Update Property"
-        , describedAs =
-            "@ActionCommandDisabledMetaAnnotation @Action(command = ENABLED)"
-        , associateWith = "propertyMetaAnnotatedOverridden"
-        , sequence = "1"
-    )
-    public ActionCommandPublishingJpa updatePropertyUsingMetaAnnotationButOverridden(final String value) {
-        // ...
-//end::meta-annotation-overridden[]
-        setPropertyMetaAnnotatedOverridden(value);
-        return this;
-    }
-    @MemberSupport public String default0UpdatePropertyUsingMetaAnnotationButOverridden() {
-        return getPropertyMetaAnnotatedOverridden();
-//tag::meta-annotation-overridden[]
-    }
-//end::meta-annotation-overridden[]
-
+    private String name;
 
 //tag::class[]
-
 }
 //end::class[]

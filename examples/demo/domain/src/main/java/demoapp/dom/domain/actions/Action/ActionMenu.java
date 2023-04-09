@@ -31,7 +31,7 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import demoapp.dom._infra.samples.NameSamples;
 import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.domain.actions.Action.choicesFrom.ActionChoicesFromPage;
-import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingEntity;
+import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingPage;
 import demoapp.dom.domain.actions.Action.domainEvent.ActionDomainEventPage;
 import demoapp.dom.domain.actions.Action.executionPublishing.ActionExecutionPublishingEntity;
 import demoapp.dom.domain.actions.Action.hidden.ActionHiddenPage;
@@ -48,7 +48,6 @@ import lombok.val;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ActionMenu {
 
-    final ValueHolderRepository<String, ? extends ActionCommandPublishingEntity> actionCommandEntities;
     final ValueHolderRepository<String, ? extends ActionExecutionPublishingEntity> actionPublishingEntities;
     final NameSamples samples;
 
@@ -60,8 +59,8 @@ public class ActionMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-terminal", describedAs = "Action invocation intentions as XML")
-    public ActionCommandPublishingEntity commandPublishing(){
-        return actionCommandEntities.first().orElse(null);
+    public ActionCommandPublishingPage commandPublishing(){
+        return new ActionCommandPublishingPage();
     }
 
 

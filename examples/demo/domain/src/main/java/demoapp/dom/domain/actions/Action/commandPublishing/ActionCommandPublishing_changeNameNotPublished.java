@@ -1,3 +1,4 @@
+
 /*
  *  Licensed to the Apache Software Foundation (ASF) under one
  *  or more contributor license agreements.  See the NOTICE file
@@ -18,41 +19,33 @@
  */
 package demoapp.dom.domain.actions.Action.commandPublishing;
 
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.Publishing;
-import org.apache.causeway.applib.annotation.SemanticsOf;
-
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.Publishing;
 
 //tag::class[]
-@Action(
-    commandPublishing = Publishing.DISABLED       // <.>
-    , semantics = SemanticsOf.IDEMPOTENT
-)
-@ActionLayout(
-    named = "Mixin Update Property"
-    , describedAs = "@Action(command = DISABLED)"
-    , associateWith = "propertyCommandDisabled"
-    , sequence = "2"
-)
+@Action(commandPublishing = Publishing.DISABLED)                    // <.>
 @RequiredArgsConstructor
-public class ActionCommandPublishingEntity_mixinUpdatePropertyCommandDisabled {
-    // ...
-//end::class[]
+public class ActionCommandPublishing_changeNameNotPublished {
 
-    private final ActionCommandPublishingEntity actionCommandEntity;
+    private final ActionCommandPublishing entity;
 
-    @MemberSupport public ActionCommandPublishingEntity act(final String value) {
-        actionCommandEntity.setPropertyCommandDisabled(value);
-        return actionCommandEntity;
+    @MemberSupport public ActionCommandPublishing act(
+            final String newName) {
+        entity.setName(newName);
+        return entity;
     }
 
-    @MemberSupport public String default0Act() {
-        return actionCommandEntity.getPropertyCommandDisabled();
+    public String default0Act() {
+        return entity.getName();
     }
-//tag::class[]
+
+    @Inject ActionCommandPublishingRepository repository;
 }
 //end::class[]

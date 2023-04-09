@@ -18,37 +18,32 @@
  */
 package demoapp.dom.domain.actions.Action.commandPublishing;
 
-import javax.inject.Named;
-
-import org.apache.causeway.applib.annotation.DomainObject;
-
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
-import demoapp.dom.domain._commands.ExposePersistedCommands;
 
-@Named("demo.ActionCommandPublishingEntity") // shared permissions with concrete sub class
-@DomainObject
-public abstract class ActionCommandPublishingEntity
-implements
-    HasAsciiDocDescription,
-    ExposePersistedCommands,
-    ValueHolder<String> {
+//tag::class[]
+public abstract class ActionCommandPublishing
+//end::class[]
+        implements
+        HasAsciiDocDescription,
+        ValueHolder<String>
+//tag::class[]
+{
+    // ...
+//end::class[]
+
+    public String title() {
+        return value();
+    }
 
     @Override
     public String value() {
-        return getProperty();
+        return getName();
     }
 
-    protected abstract String getProperty();
-    protected abstract void setProperty(String value);
+    public abstract String getName();
+    public abstract void setName(String value);
 
-    protected abstract String getPropertyCommandDisabled();
-    protected abstract void setPropertyCommandDisabled(String value);
-
-    protected abstract String getPropertyMetaAnnotated();
-    protected abstract void setPropertyMetaAnnotated(String value);
-
-    protected abstract String getPropertyMetaAnnotatedOverridden();
-    protected abstract void setPropertyMetaAnnotatedOverridden(String value);
-
+//tag::class[]
 }
+//end::class[]

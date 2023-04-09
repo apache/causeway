@@ -130,8 +130,8 @@ import org.springframework.context.annotation.Profile;
 
         ActionChoicesFromJpa.class,
         ActionCommandPublishingJpa.class,
-
         ActionExecutionPublishingJpa.class,
+
         PropertyCommandPublishingJpa.class,
         PropertyExecutionPublishingJpa.class,
         PropertyProjectingChildJpa.class,

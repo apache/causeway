@@ -18,40 +18,37 @@
  */
 package demoapp.dom.domain.actions.Action.commandPublishing;
 
+import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
 import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Publishing;
-import org.apache.causeway.applib.annotation.SemanticsOf;
 
 //tag::class[]
-@Action(
-    commandPublishing = Publishing.ENABLED        // <.>
-    , semantics = SemanticsOf.IDEMPOTENT
-)
-@ActionLayout(
-    named = "Mixin Update Property"
-    , describedAs = "@Action(command = ENABLED)"
-    , associateWith = "property"
-    , sequence = "2"
-)
-public class ActionCommandPublishingEntity_mixinUpdateProperty {
-    // ...
-//end::class[]
+@Action(commandPublishing = Publishing.DISABLED)                    // <.>
+@RequiredArgsConstructor
+public class ActionCommandPublishingPage_changeNameNotPublished {
 
-    private final ActionCommandPublishingEntity actionCommandEntity;
+    private final ActionCommandPublishingPage page;
 
-    public ActionCommandPublishingEntity_mixinUpdateProperty(final ActionCommandPublishingEntity actionCommandEntity) {
-        this.actionCommandEntity = actionCommandEntity;
+    @MemberSupport public ActionCommandPublishingPage act(
+            final ActionCommandPublishing entity,
+            final String newName) {
+        entity.setName(newName);
+        return page;
     }
 
-    @MemberSupport public ActionCommandPublishingEntity act(final String value) {
-        actionCommandEntity.setProperty(value);
-        return actionCommandEntity;
+    public List<? extends ActionCommandPublishing> choices0Act() {
+        return repository.allInstances();
     }
-    @MemberSupport public String default0Act() {
-        return actionCommandEntity.getProperty();
+    public String default1Act(ActionCommandPublishing entity) {
+        return entity != null ? entity.getName() : null;
     }
-//tag::class[]
+
+    @Inject ActionCommandPublishingRepository repository;
 }
 //end::class[]
