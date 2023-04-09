@@ -1,3 +1,4 @@
+
 /*
  *  Licensed to the Apache Software Foundation (ASF) under one
  *  or more contributor license agreements.  See the NOTICE file
@@ -18,45 +19,30 @@
  */
 package demoapp.dom.domain.actions.Action.hidden;
 
-import javax.inject.Named;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import lombok.RequiredArgsConstructor;
 
 import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.Where;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-@XmlRootElement(name = "root")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.ActionHiddenPage")
-@DomainObject(
-    nature=Nature.VIEW_MODEL)
-@NoArgsConstructor
 //tag::class[]
-public class ActionHiddenPage implements HasAsciiDocDescription {
+@Action(hidden = Where.EVERYWHERE)                    // <.>
+@RequiredArgsConstructor
+public class ActionHidden_changeNameHiddenEverywhere {
     // ...
 //end::class[]
 
-    @ObjectSupport public String title() {
-        return "@Action#hidden";
+    private final ActionHidden entity;
+
+    @MemberSupport public ActionHidden act(
+            final String newName) {
+        entity.setName(newName);
+        return entity;
     }
 
+    public String default0Act() {
+        return entity.getName();
+    }
 //tag::class[]
 }
 //end::class[]

@@ -1,3 +1,4 @@
+
 /*
  *  Licensed to the Apache Software Foundation (ASF) under one
  *  or more contributor license agreements.  See the NOTICE file
@@ -18,37 +19,30 @@
  */
 package demoapp.dom.domain.actions.Action.hidden;
 
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.annotation.Where;
-
 import lombok.RequiredArgsConstructor;
 
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.Publishing;
 
 //tag::class[]
-@Action(
-    semantics = SemanticsOf.SAFE
-    , hidden = Where.EVERYWHERE     // <.>
-)
-@ActionLayout(
-    describedAs =
-        "@Action(hidden = Where.EVERYWHERE)"
-    , associateWith = "otherText"
-    , sequence = "4"
-)
+@Action()                    // <.>
 @RequiredArgsConstructor
-public class ActionHiddenPage_mixinUpdateTextButHiddenEverywhere {
+public class ActionHidden_changeName {
+    // ...
+//end::class[]
 
-    private final ActionHiddenPage page;
+    private final ActionHidden entity;
 
-    @MemberSupport public ActionHiddenPage act(final String text) {
-        page.setOtherText(text);
-        return page;
+    @MemberSupport public ActionHidden act(
+            final String newName) {
+        entity.setName(newName);
+        return entity;
     }
-    @MemberSupport public String default0Act() {
-        return page.getOtherText();
+
+    public String default0Act() {
+        return entity.getName();
     }
+//tag::class[]
 }
 //end::class[]

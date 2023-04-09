@@ -22,6 +22,7 @@ import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.domain.actions.Action.choicesFrom.jpa.ActionChoicesFromJpa;
 import demoapp.dom.domain.actions.Action.commandPublishing.jpa.ActionCommandPublishingJpa;
 import demoapp.dom.domain.actions.Action.executionPublishing.jpa.ActionExecutionPublishingJpa;
+import demoapp.dom.domain.actions.Action.hidden.jpa.ActionHiddenJpa;
 import demoapp.dom.domain.objects.DomainObject.aliased.jpa.DomainObjectAliasedJpa;
 import demoapp.dom.domain.objects.DomainObject.autoComplete.jpa.DomainObjectAutoCompleteJpa;
 import demoapp.dom.domain.objects.DomainObject.bounded.jpa.DomainObjectBoundingJpa;
@@ -131,6 +132,7 @@ import org.springframework.context.annotation.Profile;
         ActionChoicesFromJpa.class,
         ActionCommandPublishingJpa.class,
         ActionExecutionPublishingJpa.class,
+        ActionHiddenJpa.class,
 
         PropertyCommandPublishingJpa.class,
         PropertyExecutionPublishingJpa.class,

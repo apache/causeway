@@ -69,9 +69,9 @@ public class ActionMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of actions")
+    @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of actions in different contexts")
     public ActionHiddenPage hidden(){
-        return new ActionHiddenPage("value");
+        return new ActionHiddenPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)

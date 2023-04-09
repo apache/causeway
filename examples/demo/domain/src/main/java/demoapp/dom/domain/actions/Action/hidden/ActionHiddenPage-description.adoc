@@ -1,49 +1,57 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-The `hidden` element specifies whether the action should be visible in the UI or not.
+The link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/Action.html#executionpublishing[@Action#hidden] element specifies whether an action should be visible in the UI or not.
 
+=== How this demo works
 
-[source,java]
-----
-include::ActionHiddenPage.java[tags=class]
-----
+The collection on the left hand side shows a set of domain objects.
+That domain object defines four actions, and depending upon context, they may be visible on an object form or when rendered in a collection.
+From this page, you can inspect the visibility of the actions from the context of a parented collection.
 
-== Regular Actions
+Navigate into each domain object to inspect the visibility of the actions on an object form.
 
-Four actions:
+The four actions are:
 
-* `updateTextNoAnnotation` does not specify whether it is hidden or not.
-The fallback is that actions are not hidden:
+* `hidden` not specified:
 +
 [source,java]
 ----
-include::ActionHiddenPage.java[tags=action-no-annotation]
+include::ActionHidden_changeName.java[tags=class]
 ----
+<.> action _should_ be visible for this entity.
++
+However, the Wicket viewer does _not_ render actions on instances of collections, so the action will not in fact be shown as visible.
 
-* `updateTextAndHiddenNowhere` action is explicitly annotated as not hidden:
+* `hidden` everywhere:
 +
 [source,java]
+.ActionHidden_changeNameHiddenEverywhere.java
 ----
-include::ActionHiddenPage.java[tags=action-hidden-nowhere]
+include::ActionHidden_changeNameHiddenEverywhere.java[tags=class]
 ----
+<.> action should _NOT_ be visible for this entity.
 
-* `updateTextButHiddenEverywhere` action is explicitly annotated as hidden everywhere.
-It therefore should not be visible in the UI:
+* `hidden` on object forms (but not necessarily on collections):
 +
 [source,java]
+.ActionHidden_changeNameHiddenObjectForms.java
 ----
-include::ActionHiddenPage.java[tags=action-but-hidden-everywhere]
+include::ActionHidden_changeNameHiddenObjectForms.java[tags=class]
 ----
+<.> action should be visible for this entity.
++
+However, the Wicket viewer does _not_ render actions on instances of collections, so the action will not in fact be shown as visible.
 
-* `updateTextAndHiddenOnForm` action is explicitly annotated as hidden on an object form.
-It therefore should not be visible in the UI:
+* `hidden` on collections (but not necessarily on object forms):
 +
 [source,java]
+.ActionHidden_changeNameHiddenAllTables.java
 ----
-include::ActionHiddenPage.java[tags=action-but-hidden-on-forms]
+include::ActionHidden_changeNameHiddenAllTables.java[tags=class]
 ----
+<.> action should _NOT_ be visible for this entity.
+
+Currently the Wicket viewer does _not_ render actions of instances of collections, and so none of these actions will be visible on this page.
+However, if you navigate into these domain objects then some of these actions will be visible.
 
 
-== Mixin actions
-
-TODO

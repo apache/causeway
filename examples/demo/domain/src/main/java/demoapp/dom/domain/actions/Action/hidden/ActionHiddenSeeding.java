@@ -18,36 +18,21 @@
  */
 package demoapp.dom.domain.actions.Action.hidden;
 
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.SemanticsOf;
+import demoapp.dom._infra.seed.SeedServiceAbstract;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
-import lombok.RequiredArgsConstructor;
+import javax.inject.Inject;
 
+import org.springframework.stereotype.Service;
 
-//tag::class[]
-@Action(
-    semantics = SemanticsOf.SAFE
-    // no hidden attribute              // <.>
-)
-@ActionLayout(
-    describedAs =
-        "@Action()"
-    , associateWith = "otherText"
-    , sequence = "1"
-)
-@RequiredArgsConstructor
-public class ActionHiddenPage_mixinUpdateTextNoAnnotation {
+@Service
+public class ActionHiddenSeeding
+extends SeedServiceAbstract {
 
-    private final ActionHiddenPage page;
-
-    @MemberSupport public ActionHiddenPage act(final String text) {
-        page.setOtherText(text);
-        return page;
+    @Inject
+    public ActionHiddenSeeding(
+            ValueHolderRepository<String, ? extends ActionHidden> entities) {
+        super(entities);
     }
-    @MemberSupport public String default0Act() {
-        return page.getOtherText();
-    }
+
 }
-//end::class[]
