@@ -16,34 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.Action.associateWith;
-
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.MemberSupport;
+package demoapp.dom.domain.actions.Action.choicesFrom;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.MemberSupport;
+
 //tag::class[]
-@Action(choicesFrom = "favorites")
-@ActionLayout(
-    describedAs =
-            "@Action(choicesFrom = \"favorites\") " +
-            "@ActionLayout(associateWith = \"otherProperty\", sequence = \"2\")"
-    , associateWith = "otherProperty"                           // <.>
-    , sequence = "2"                                            // <.>
-)
+@Action(choicesFrom = "objects")                    // <.>
 @RequiredArgsConstructor
-public class ActionAssociateWithPage_updateOtherProperty {
+public class ActionChoicesFromPage_makeUpperCase {
 
-    private final ActionAssociateWithPage page;
+    private final ActionChoicesFromPage page;
 
-    @MemberSupport public ActionAssociateWithPage act(final String newValue) {
-        page.setOtherProperty(newValue);
+    @MemberSupport public ActionChoicesFromPage act(
+            final List<ActionChoicesFrom> children) {
+        for (ActionChoicesFrom child : children) {
+            child.setName(child.getName().toUpperCase());
+        }
         return page;
-    }
-    @MemberSupport public String default0Act() {
-        return page.getOtherProperty();
     }
 }
 //end::class[]

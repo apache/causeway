@@ -30,8 +30,7 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import demoapp.dom._infra.samples.NameSamples;
 import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.actions.Action.associateWith.ActionAssociateWithPage;
-import demoapp.dom.domain.actions.Action.associateWith.child.ActionAssociateWithChildVm;
+import demoapp.dom.domain.actions.Action.choicesFrom.ActionChoicesFromPage;
 import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingEntity;
 import demoapp.dom.domain.actions.Action.domainEvent.ActionDomainEventPage;
 import demoapp.dom.domain.actions.Action.executionPublishing.ActionExecutionPublishingEntity;
@@ -54,21 +53,9 @@ public class ActionMenu {
     final NameSamples samples;
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-ring", describedAs = "Semantic relationship between actions and other properties or collections")
-    public ActionAssociateWithPage associateWith(){
-        val associateWithVm = new ActionAssociateWithPage("value");
-        val children = associateWithVm.getChildren();
-        val favorites = associateWithVm.getFavorites();
-
-        // add to either one collection or the other
-        final boolean[] which = {false};
-        samples.stream()
-                .map(ActionAssociateWithChildVm::new)
-                .forEach(e -> {
-                    (which[0] ? children : favorites).add(e);
-                    which[0] = !which[0];
-                });
-        return associateWithVm;
+    @ActionLayout(cssClassFa="fa-list-ul", describedAs = "Choices for multi-valued parameters taken from corresponding collection (aka \"bulk\" actions)")
+    public ActionChoicesFromPage choicesFrom(){
+        return new ActionChoicesFromPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)

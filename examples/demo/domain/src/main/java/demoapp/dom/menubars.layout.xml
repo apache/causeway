@@ -55,7 +55,7 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
             <mb3:named>@Action</mb3:named>
             <mb3:section>
                 <mb3:named>@Action</mb3:named>
-                <mb3:serviceAction objectType="demo.ActionMenu" id="associateWith"/>
+                <mb3:serviceAction objectType="demo.ActionMenu" id="choicesFrom"/>
                 <mb3:serviceAction objectType="demo.ActionMenu" id="commandPublishing"/>
                 <mb3:serviceAction objectType="demo.ActionMenu" id="domainEvent"/>
                 <mb3:serviceAction objectType="demo.ActionMenu" id="executionPublishing"/>

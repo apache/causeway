@@ -16,31 +16,36 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObjectLayout.named;
+package demoapp.dom.domain.actions.Action.choicesFrom;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolder;
 
-import javax.inject.Named;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 
 //tag::class[]
-@XmlRootElement(name = "root")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.DomainObjectLayoutNamedPage")
-@DomainObject(nature=Nature.VIEW_MODEL)
-public class DomainObjectLayoutNamedPage implements HasAsciiDocDescription {
+public abstract class ActionChoicesFrom
+//end::class[]
+        implements
+        HasAsciiDocDescription,
+        ValueHolder<String>
+//tag::class[]
+{
+    // ...
+//end::class[]
 
-    @ObjectSupport public String title() {
-        return "@DomainObjectLayout#named";
+    public String title() {
+        return value();
     }
 
+    @Override
+    public String value() {
+        return getName();
+    }
+
+    public abstract String getName();
+    public abstract void setName(String value);
+
+//tag::class[]
 }
 //end::class[]

@@ -16,50 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.Action.associateWith.child;
+package demoapp.dom.domain.actions.Action.choicesFrom;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 //tag::class[]
-@XmlRootElement(name = "child")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.ActionAssociateWithChildVm")
-@DomainObject(
-        nature=Nature.VIEW_MODEL
-)
-@NoArgsConstructor
-public class ActionAssociateWithChildVm implements HasAsciiDocDescription {
-
-    public ActionAssociateWithChildVm(final String value) {
-        setValue(value);
-    }
+@Named("demo.ActionChoicesFromPage")
+@DomainObject(nature=Nature.VIEW_MODEL)
+public class ActionChoicesFromPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return getValue();
+        return "@Action#choicesFrom";
     }
-
-    @Property()
-    @PropertyLayout(fieldSetId = "annotation", sequence = "1")
-    @XmlElement(required = false)
-    @Getter @Setter
-    private String value;
-
 }
 //end::class[]

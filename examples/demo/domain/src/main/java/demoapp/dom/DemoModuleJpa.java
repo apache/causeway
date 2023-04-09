@@ -18,6 +18,8 @@
  */
 package demoapp.dom;
 
+import demoapp.dom._infra.values.ValueHolder;
+import demoapp.dom.domain.actions.Action.choicesFrom.jpa.ActionChoicesFromJpa;
 import demoapp.dom.domain.actions.Action.commandPublishing.jpa.ActionCommandPublishingJpa;
 import demoapp.dom.domain.actions.Action.executionPublishing.jpa.ActionExecutionPublishingJpa;
 import demoapp.dom.domain.objects.DomainObject.aliased.jpa.DomainObjectAliasedJpa;
@@ -114,6 +116,7 @@ import org.springframework.context.annotation.Profile;
         DomainObjectIntrospectionAnnotReqdJpa.class,
         DomainObjectIntrospectionEncapsulatedJpa.class,
         DomainObjectMixinMethodJpa.class,
+        DomainObjectNatureJpa.class,
         DomainObjectXxxLifecycleEventJpa.class,
         DomainObjectLayoutBookmarkingJpa.class,
         DomainObjectLayoutBookmarkingChildJpa.class,
@@ -124,6 +127,14 @@ import org.springframework.context.annotation.Profile;
         DomainObjectLayoutPagedJpa.class,
         DomainObjectLayoutTableDecoratorJpa.class,
         DomainObjectLayoutXxxUiEventJpa.class,
+
+        ActionChoicesFromJpa.class,
+        ActionCommandPublishingJpa.class,
+
+        ActionExecutionPublishingJpa.class,
+        PropertyCommandPublishingJpa.class,
+        PropertyExecutionPublishingJpa.class,
+        PropertyProjectingChildJpa.class,
 
         CausewayBlobJpa.class,
         CausewayClobJpa.class,
@@ -176,13 +187,6 @@ import org.springframework.context.annotation.Profile;
         TenantedJpa.class,
         WrapperFactoryJpa.class,
 
-        ActionCommandPublishingJpa.class,
-        ActionExecutionPublishingJpa.class,
-        PropertyCommandPublishingJpa.class,
-        PropertyExecutionPublishingJpa.class,
-        PropertyProjectingChildJpa.class,
-
-        DomainObjectNatureJpa.class,
         NumberConstantJpa.class,
 
 })

@@ -16,39 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.Action.associateWith;
+package demoapp.dom.domain.actions.Action.choicesFrom;
+
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
-import java.util.Objects;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 
-import demoapp.dom.domain.actions.Action.associateWith.child.ActionAssociateWithChildVm;
-import lombok.RequiredArgsConstructor;
-
 //tag::class[]
-@Action
-@ActionLayout(
-    describedAs =
-            "@Action " +
-            "@ActionLayout(associateWith = \"favorites\", sequence = \"1\")"
-    , associateWith = "favorites"                               // <.>
-    , sequence = "1"                                            // <.>
-)
+@Action(choicesFrom = "objects")                // <.>
 @RequiredArgsConstructor
-public class ActionAssociateWithPage_makeFavorite {
+public class ActionChoicesFromPage_makeLowerCase {
 
-    private final ActionAssociateWithPage page;
+    private final ActionChoicesFromPage page;
 
-    @MemberSupport public ActionAssociateWithPage act(final ActionAssociateWithChildVm childVm) {
-        page.getFavorites().add(childVm);
-        page.getChildren().removeIf(x -> Objects.equals(x.getValue(), childVm.getValue()));
+    @MemberSupport public ActionChoicesFromPage act(
+            final List<ActionChoicesFrom> children) {
+        for (ActionChoicesFrom child : children) {
+            child.setName(child.getName().toLowerCase());
+        }
         return page;
-    }
-    @MemberSupport public List<ActionAssociateWithChildVm> choices0Act() {     // <.>
-        return page.getChildren();
     }
 }
 //end::class[]
