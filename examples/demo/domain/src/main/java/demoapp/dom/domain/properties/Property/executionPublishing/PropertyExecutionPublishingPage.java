@@ -18,35 +18,28 @@
  */
 package demoapp.dom.domain.properties.Property.executionPublishing;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+
 import javax.inject.Named;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.ObjectSupport;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom._infra.values.ValueHolder;
-import demoapp.dom.domain._interactions.ExposePersistedExecutions;
+//tag::class[]
+@XmlRootElement(name = "root")
+@XmlType
+@XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.PropertyExecutionPublishingPage")
+@DomainObject(nature=Nature.VIEW_MODEL)
+public class PropertyExecutionPublishingPage implements HasAsciiDocDescription {
 
-@Named("demo.PropertyExecutionPublishingEntity") // shared permissions with concrete sub class
-@DomainObject
-public abstract class PropertyExecutionPublishingEntity
-implements
-    HasAsciiDocDescription,
-        ExposePersistedExecutions,
-    ValueHolder<String> {
-
-    @Override
-    public String value() {
-        return getProperty();
+    @ObjectSupport public String title() {
+        return "@Property#executionPublishing";
     }
-
-    protected abstract String getProperty();
-    protected abstract void setProperty(String value);
-
-    protected abstract String getPropertyMetaAnnotated();
-    protected abstract void setPropertyMetaAnnotated(String value);
-
-    protected abstract String getPropertyMetaAnnotatedOverridden();
-    protected abstract void setPropertyMetaAnnotatedOverridden(String value);
-
 }
-
+//end::class[]

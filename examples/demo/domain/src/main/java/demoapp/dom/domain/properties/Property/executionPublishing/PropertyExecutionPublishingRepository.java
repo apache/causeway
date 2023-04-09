@@ -18,23 +18,9 @@
  */
 package demoapp.dom.domain.properties.Property.executionPublishing;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.util.List;
 
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.Publishing;
+public interface PropertyExecutionPublishingRepository {
 
-//tag::class[]
-@Property(executionPublishing = Publishing.ENABLED) // <.>
-@Inherited
-@Target({
-        ElementType.METHOD, ElementType.FIELD       // <.>
-})
-@Retention(RetentionPolicy.RUNTIME)
-public @interface PropertyExecutionPublishingEnabledMetaAnnotation {
-
+    List<? extends PropertyExecutionPublishing> allInstances();
 }
-//end::class[]

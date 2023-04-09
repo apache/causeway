@@ -37,7 +37,7 @@ import demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandP
 import demoapp.dom.domain.properties.Property.domainEvent.PropertyDomainEventPage;
 import demoapp.dom.domain.properties.Property.editing.PropertyEditingPage;
 import demoapp.dom.domain.properties.Property.editingReasonDisabled.PropertyEditingReasonDisabledPage;
-import demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingEntity;
+import demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingPage;
 import demoapp.dom.domain.properties.Property.fileAccept.PropertyFileAcceptPage;
 import demoapp.dom.domain.properties.Property.hidden.PropertyHiddenPage;
 import demoapp.dom.domain.properties.Property.hidden.child.PropertyHiddenChildVm;
@@ -61,7 +61,6 @@ import lombok.val;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class PropertyMenu {
 
-    final ValueHolderRepository<String, ? extends PropertyExecutionPublishingEntity> propertyExecutionPublishingEntities;
     final ValueHolderRepository<String, ? extends PropertyProjectingChildEntity> propertyProjectingChildEntities;
     final Samples<Blob> blobSamples;
     final Samples<Clob> clobSamples;
@@ -102,8 +101,8 @@ public class PropertyMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-book", describedAs = "Property changed events as XML")
-    public PropertyExecutionPublishingEntity executionPublishing(){
-        return propertyExecutionPublishingEntities.first().orElse(null);
+    public PropertyExecutionPublishingPage executionPublishing(){
+        return new PropertyExecutionPublishingPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
