@@ -16,33 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.PropertyLayout.hidden.child;
+package demoapp.dom.domain.properties.PropertyLayout.hidden;
 
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.annotation.Where;
+import java.util.List;
 
-import lombok.RequiredArgsConstructor;
+public interface PropertyLayoutHiddenRepository {
 
-//tag::class[]
-@Property()
-@PropertyLayout(
-    hidden = Where.ALL_TABLES                   // <.>
-    , describedAs =
-        "@PropertyLayout(hidden = ALL_TABLES)",
-    fieldSetId = "contributed", sequence = "1"
-)
-@RequiredArgsConstructor
-public class PropertyLayoutHiddenChildVm_mixinProperty {
-    // ...
-//end::class[]
-
-    private final PropertyLayoutHiddenChildVm propertyLayoutHiddenChildVm;
-
-    public String prop() {
-        return propertyLayoutHiddenChildVm.getPropertyHiddenNowhere();
-    }
-
-//tag::class[]
+    List<? extends PropertyLayoutHidden> allInstances();
 }
-//end::class[]

@@ -18,25 +18,23 @@
  */
 package demoapp.dom.domain.properties.PropertyLayout.hidden;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import demoapp.dom._infra.seed.SeedServiceAbstract;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
-import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.annotation.Where;
+import javax.inject.Inject;
 
-//tag::class[]
-@PropertyLayout(hidden = Where.EVERYWHERE)          // <.>
-@Inherited
-@Target({
-        ElementType.METHOD, ElementType.FIELD,      // <.>
-        ElementType.PARAMETER,                      // <.>
-        ElementType.TYPE                            // <.>
-})
-@Retention(RetentionPolicy.RUNTIME)
-public @interface HiddenEverywhereMetaAnnotation {
+import org.springframework.stereotype.Service;
+
+@Service
+public class PropertyLayoutHiddenSeeding
+extends SeedServiceAbstract {
+
+    @Inject
+    public PropertyLayoutHiddenSeeding(
+            ValueHolderRepository<String, ? extends PropertyLayoutHidden> entities) {
+        super(entities);
+    }
+
+
 
 }
-//end::class[]
