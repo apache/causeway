@@ -77,7 +77,7 @@ public class ActionMenu {
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-paper-plane", describedAs = "Availability of actions per environment")
     public ActionRestrictToPage restrictTo(){
-        return new ActionRestrictToPage("value");
+        return new ActionRestrictToPage("change me");
     }
 
     @Action(semantics = SemanticsOf.SAFE)

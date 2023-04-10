@@ -28,16 +28,14 @@
 		<bs3:col span="6">
 			<bs3:row>
 				<bs3:col span="12">
-					<cpt:fieldSet name="Not annotated" id="not-annotated"/>
-					<cpt:fieldSet name="Annotated" id="annotated"/>
-					<cpt:fieldSet name="Meta-annotated" id="meta-annotated"/>
-					<cpt:fieldSet name="Meta-annotated Overridden" id="meta-annotated-overridden"/>
+					<cpt:fieldSet name="General" id="general">
+						<cpt:property id="value">
+							<cpt:action id="updateNoAnnotation"/>
+							<cpt:action id="updateRestrictToPrototyping"/>
+							<cpt:action id="updateRestrictToNoRestrictions"/>
+						</cpt:property>
+					</cpt:fieldSet>
 					<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
-				</bs3:col>
-			</bs3:row>
-			<bs3:row>
-				<bs3:col span="12">
-					<cpt:collection id="events"/>
 				</bs3:col>
 			</bs3:row>
 		</bs3:col>
