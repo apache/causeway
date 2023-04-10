@@ -15,33 +15,38 @@
  *  KIND, either express or implied.  See the License for the
  *  specific language governing permissions and limitations
  *  under the License.
- *
  */
 package org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec;
 
+import java.util.Optional;
+
 import org.apache.causeway.applib.annotation.TableDecorator;
+import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.SingleValueFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet;
+import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacetAbstract;
 
-abstract class DomainObjectLayoutTableDecoratorFacetAbstract
-extends SingleValueFacetAbstract<Class<? extends TableDecorator>>
-implements DomainObjectLayoutTableDecoratorFacet {
+public class TableDecoratorFacetForDomainObjectLayoutXml
+extends TableDecoratorFacetAbstract {
 
-    private static final Class<? extends Facet> type() {
-        return DomainObjectLayoutTableDecoratorFacet.class;
+    public static Optional<TableDecoratorFacet> create(
+            final DomainObjectLayoutData domainObjectLayout,
+            final FacetHolder holder,
+            final Facet.Precedence precedence) {
+
+        return Optional.ofNullable(domainObjectLayout)
+        .map(DomainObjectLayoutData::getTableDecorator)
+        .map(tableDecorator->
+            new TableDecoratorFacetForDomainObjectLayoutXml(tableDecorator, holder, precedence));
     }
 
-    protected DomainObjectLayoutTableDecoratorFacetAbstract(
+    private TableDecoratorFacetForDomainObjectLayoutXml(
             final Class<? extends TableDecorator> value,
             final FacetHolder holder,
             final Facet.Precedence precedence) {
-        super(type(), value, holder, precedence);
+        super(value, holder, precedence);
     }
 
-    protected DomainObjectLayoutTableDecoratorFacetAbstract(
-            final Class<? extends TableDecorator> value,
-            final FacetHolder holder) {
-        super(type(), value, holder);
-    }
+
 }

@@ -21,11 +21,12 @@ package org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabl
 
 import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacetAbstract;
 
-public class DomainObjectLayoutTableDecoratorFacetForDomainObjectLayoutAnnotation
-extends DomainObjectLayoutTableDecoratorFacetAbstract {
+public class TableDecoratorFacetFromConfiguration
+extends TableDecoratorFacetAbstract {
 
-    DomainObjectLayoutTableDecoratorFacetForDomainObjectLayoutAnnotation(
+    TableDecoratorFacetFromConfiguration(
             final Class<? extends TableDecorator> value, final FacetHolder holder) {
         super(value, holder);
     }

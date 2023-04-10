@@ -25,6 +25,7 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 
+import org.apache.causeway.applib.annotation.TableDecorator;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
@@ -171,6 +172,10 @@ implements MultiselectChoices {
 
     public int getPageSize(final int pageSizeDefault) {
         return getMetaModel().getPageSize().orElse(pageSizeDefault);
+    }
+
+    public Optional<TableDecorator> getTableDecoratorIfAny() {
+        return getMetaModel().getTableDecorator();
     }
 
     /**

@@ -19,15 +19,37 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec;
 
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.TableDecorator;
+import org.apache.causeway.commons.internal.base._Optionals;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet;
+import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacetAbstract;
 
-public class DomainObjectLayoutTableDecoratorFacetForDomainObjectLayoutAnnotationAsConfigured
-extends DomainObjectLayoutTableDecoratorFacetForDomainObjectLayoutAnnotation {
+import java.util.Optional;
 
-    DomainObjectLayoutTableDecoratorFacetForDomainObjectLayoutAnnotationAsConfigured(
+public class TableDecoratorFacetForDomainObjectLayoutAnnotation
+extends TableDecoratorFacetAbstract {
+
+    TableDecoratorFacetForDomainObjectLayoutAnnotation(
             final Class<? extends TableDecorator> value, final FacetHolder holder) {
         super(value, holder);
     }
 
+    public static Optional<TableDecoratorFacet> create(
+            final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
+            final FacetHolder holder) {
+
+        return _Optionals.orNullable(
+
+        domainObjectLayoutIfAny
+        .map(DomainObjectLayout::tableDecorator)
+        .<TableDecoratorFacet>map(tableDecorator ->
+                new TableDecoratorFacetForDomainObjectLayoutAnnotation(
+                        tableDecorator, holder))
+        ,
+        () -> new TableDecoratorFacetFromConfiguration(
+                holder.getConfiguration().getApplib().getAnnotation().getDomainObjectLayout().getTableDecorator(),
+                holder));
+    }
 }

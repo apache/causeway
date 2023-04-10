@@ -19,15 +19,38 @@
  */
 package org.apache.causeway.core.metamodel.facets.collections.layout.tabledec;
 
+import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.TableDecorator;
+import org.apache.causeway.commons.internal.base._Optionals;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet;
+import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacetAbstract;
 
-public class CollectionLayoutTableDecoratorFacetFromConfiguration
-extends CollectionLayoutTableDecoratorFacetAbstract {
+import java.util.Optional;
 
-    CollectionLayoutTableDecoratorFacetFromConfiguration(
+public class TableDecoratorFacetForCollectionLayoutAnnotation
+extends TableDecoratorFacetAbstract {
+
+    TableDecoratorFacetForCollectionLayoutAnnotation(
             final Class<? extends TableDecorator> value, final FacetHolder holder) {
         super(value, holder);
     }
 
+    public static Optional<TableDecoratorFacet> create(
+            final Optional<CollectionLayout> collectionLayoutIfAny,
+            final FacetHolder holder) {
+
+        return _Optionals.orNullable(
+
+        collectionLayoutIfAny
+        .map(CollectionLayout::tableDecorator)
+        .<TableDecoratorFacet>map(tableDecorator -> {
+                return new TableDecoratorFacetForCollectionLayoutAnnotation(
+                        tableDecorator, holder);
+        })
+        ,
+        () -> new TableDecoratorFacetFromConfiguration(
+                holder.getConfiguration().getApplib().getAnnotation().getCollectionLayout().getTableDecorator(), holder));
+
+    }
 }

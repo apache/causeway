@@ -17,15 +17,16 @@
  *  under the License.
  *
  */
-package org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec;
+package org.apache.causeway.core.metamodel.facets.collections.layout.tabledec;
 
 import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacetAbstract;
 
-public class DomainObjectLayoutTableDecoratorFacetFromConfiguration
-extends DomainObjectLayoutTableDecoratorFacetAbstract {
+public class TableDecoratorFacetFromConfiguration
+extends TableDecoratorFacetAbstract {
 
-    DomainObjectLayoutTableDecoratorFacetFromConfiguration(
+    TableDecoratorFacetFromConfiguration(
             final Class<? extends TableDecorator> value, final FacetHolder holder) {
         super(value, holder);
     }

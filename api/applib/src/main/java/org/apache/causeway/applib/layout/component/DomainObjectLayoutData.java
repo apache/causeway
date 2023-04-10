@@ -47,6 +47,7 @@ import org.apache.causeway.applib.layout.links.Link;
                 , "cssClass"
                 , "cssClassFa"
                 , "cssClassFaPosition"
+                , "paged"
                 , "tableDecorator"
                 , "metadataError"
                 , "link"
@@ -150,17 +151,41 @@ HasBookmarking, HasCssClass, HasCssClassFa, HasDescribedAs, HasNamed {
 
 
 
+    /**
+     * @deprecated - unused, to remove.
+     */
+    @Deprecated
     private String plural;
 
+    /**
+     * @deprecated - unused, to remove.
+     */
+    @Deprecated
     @XmlElement(required = false)
     public String getPlural() {
         return plural;
     }
 
+    /**
+     * @deprecated - unused, to remove.
+     */
+    @Deprecated
     public void setPlural(final String plural) {
         this.plural = plural;
     }
 
+
+
+    private Integer paged;
+
+    @XmlElement(required = false)
+    public Integer getPaged() {
+        return paged;
+    }
+
+    public void setPaged(Integer paged) {
+        this.paged = paged;
+    }
 
 
     private Class<? extends TableDecorator> tableDecorator;

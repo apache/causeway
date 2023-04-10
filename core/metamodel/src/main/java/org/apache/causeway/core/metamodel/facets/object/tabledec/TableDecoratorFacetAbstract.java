@@ -16,37 +16,41 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.collections.layout.tabledec;
-
-import java.util.Optional;
+package org.apache.causeway.core.metamodel.facets.object.tabledec;
 
 import org.apache.causeway.applib.annotation.TableDecorator;
-import org.apache.causeway.applib.layout.component.CollectionLayoutData;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.SingleValueFacetAbstract;
 
-public class CollectionLayoutTableDecoratorFacetForCollectionLayoutXml
-extends CollectionLayoutTableDecoratorFacetAbstract {
+import java.util.function.BiConsumer;
 
-    public static final Class<CollectionLayoutTableDecoratorFacet> type() {
-        return CollectionLayoutTableDecoratorFacet.class;
+public abstract class TableDecoratorFacetAbstract
+extends SingleValueFacetAbstract<Class<? extends TableDecorator>>
+implements TableDecoratorFacet {
+
+    public static final Class<TableDecoratorFacet> type() {
+        return TableDecoratorFacet.class;
     }
 
-    public static Optional<CollectionLayoutTableDecoratorFacet> create(
-            final CollectionLayoutData collectionLayout,
-            final FacetHolder holder,
-            final Precedence precedence) {
 
-        return Optional.ofNullable(collectionLayout)
-        .map(CollectionLayoutData::getTableDecorator)
-        .map(tableDecorator->
-            new CollectionLayoutTableDecoratorFacetForCollectionLayoutXml(tableDecorator, holder, precedence));
-    }
-
-    private CollectionLayoutTableDecoratorFacetForCollectionLayoutXml(
+    protected TableDecoratorFacetAbstract(
             final Class<? extends TableDecorator> value,
             final FacetHolder holder,
-            final Precedence precedence) {
-        super(value, holder, precedence);
+            final Facet.Precedence precedence) {
+        super(type(), value, holder, precedence);
+    }
+
+    protected TableDecoratorFacetAbstract(
+            final Class<? extends TableDecorator> value,
+            final FacetHolder holder) {
+        super(type(), value, holder);
+    }
+
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("value", value());
     }
 
 }

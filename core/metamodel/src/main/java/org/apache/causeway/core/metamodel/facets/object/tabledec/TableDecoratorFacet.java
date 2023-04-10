@@ -15,19 +15,16 @@
  *  KIND, either express or implied.  See the License for the
  *  specific language governing permissions and limitations
  *  under the License.
- *
  */
-package org.apache.causeway.core.metamodel.facets.collections.layout.tabledec;
+package org.apache.causeway.core.metamodel.facets.object.tabledec;
 
 import org.apache.causeway.applib.annotation.TableDecorator;
-import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.SingleValueFacet;
 
-public class CollectionLayoutTableDecoratorFacetForCollectionLayoutAnnotationAsConfigured
-extends CollectionLayoutTableDecoratorFacetForCollectionLayoutAnnotation {
-
-    CollectionLayoutTableDecoratorFacetForCollectionLayoutAnnotationAsConfigured(
-            final Class<? extends TableDecorator> value, final FacetHolder holder) {
-        super(value, holder);
-    }
+/**
+ * Mechanism for obtaining the page sizes for tables showing instances of a class.
+ */
+public interface TableDecoratorFacet
+        extends SingleValueFacet<Class<? extends TableDecorator>> {
 
 }
