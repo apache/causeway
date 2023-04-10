@@ -23,15 +23,6 @@ include::ActionLayoutHidden_changeName.java[tags=class]
 +
 However, the Wicket viewer does _not_ render actions on instances of collections, so the action will not in fact be shown as visible.
 
-* `hidden` everywhere:
-+
-[source,java]
-.ActionLayoutHidden_changeNameHiddenEverywhere.java
-----
-include::ActionLayoutHidden_changeNameHiddenEverywhere.java[tags=class]
-----
-<.> action should _NOT_ be visible for this entity.
-
 * `hidden` on object forms (but not necessarily on collections):
 +
 [source,java]
@@ -55,4 +46,23 @@ include::ActionLayoutHidden_changeNameHiddenAllTables.java[tags=class]
 Currently the Wicket viewer does _not_ render actions of instances of collections, and so none of these actions will be visible on this page.
 However, if you navigate into these domain objects then some of these actions will be visible.
 
+* `hidden` everywhere:
++
+[source,java]
+.ActionLayoutHidden_changeNameHiddenEverywhere.java
+----
+include::ActionLayoutHidden_changeNameHiddenEverywhere.java[tags=class]
+----
+<.> action should _NOT_ be visible for this entity.
 
+Currently the Wicket viewer does _not_ render actions of instances of collections, and so none of these actions will be visible on this page.
+However, if you navigate into these domain objects then some of these actions will be visible.
+
+[TIP]
+.What is the difference between a hidden action and one annotated with `@Programmatic` ?
+====
+Although there is no difference in the UI, a hidden action _is_ part of the metadamodel while a link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/Programmatic.html#hidden[@Programmatic] property is not.
+
+A rare (but valid) use case is to invoke such a hidden action using the link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/services/wrapper/WrapperFactory.html#wrap(t,-synccontrol)[@WrapperFactory] (skipping rules).
+This can be for example to publish executions to any registered link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/services/publishing/spi/ExecutionSubscriber.html[ExecutionSubscriber]s.
+====

@@ -18,27 +18,23 @@
  */
 package demoapp.dom.domain.properties.Property.hidden;
 
-import java.util.List;
+import demoapp.dom._infra.seed.SeedServiceAbstract;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.SemanticsOf;
+import javax.inject.Inject;
 
-import demoapp.dom.domain.properties.Property.hidden.child.PropertyHiddenChildVm;
-import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
-@Action(
-    semantics = SemanticsOf.SAFE
-)
-@RequiredArgsConstructor
-public class PropertyHiddenPage_returnsChildren {
+@Service
+public class PropertyHiddenSeeding
+extends SeedServiceAbstract {
 
-    private final PropertyHiddenPage page;
-
-//tag::meta-annotation[]
-    @MemberSupport public List<PropertyHiddenChildVm> act() {
-        return page.getChildren();
+    @Inject
+    public PropertyHiddenSeeding(
+            ValueHolderRepository<String, ? extends PropertyHidden> entities) {
+        super(entities);
     }
-//end::meta-annotation[]
+
+
 
 }

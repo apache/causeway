@@ -18,25 +18,9 @@
  */
 package demoapp.dom.domain.properties.Property.hidden;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.util.List;
 
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.Where;
+public interface PropertyHiddenRepository {
 
-//tag::class[]
-@Property(hidden = Where.EVERYWHERE)                // <.>
-@Inherited
-@Target({
-        ElementType.METHOD, ElementType.FIELD,      // <.>
-        ElementType.PARAMETER,                      // <.>
-        ElementType.TYPE                            // <.>
-})
-@Retention(RetentionPolicy.RUNTIME)
-public @interface HiddenEverywhereMetaAnnotation {
-
+    List<? extends PropertyHidden> allInstances();
 }
-//end::class[]

@@ -17,15 +17,6 @@ include::ActionLayoutHidden_changeName.java[tags=class]
 ----
 <.> no `hidden` element specified, so implicitly visible
 
-* `hidden` everywhere:
-+
-[source,java]
-.ActionLayoutHidden_changeNameHiddenEverywhere.java
-----
-include::ActionLayoutHidden_changeNameHiddenEverywhere.java[tags=class]
-----
-<.> action should _NOT_ be visible for this entity.
-
 * `hidden` on object forms (but not necessarily on collections):
 +
 [source,java]
@@ -43,6 +34,15 @@ include::ActionLayoutHidden_changeNameHiddenObjectForms.java[tags=class]
 include::ActionLayoutHidden_changeNameHiddenAllTables.java[tags=class]
 ----
 <.> action _should_ be visible for this entity.
+
+* `hidden` everywhere:
++
+[source,java]
+.ActionLayoutHidden_changeNameHiddenEverywhere.java
+----
+include::ActionLayoutHidden_changeNameHiddenEverywhere.java[tags=class]
+----
+<.> action should _NOT_ be visible for this entity.
 
 
 

@@ -40,7 +40,6 @@ import demoapp.dom.domain.properties.Property.editingReasonDisabled.PropertyEdit
 import demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingPage;
 import demoapp.dom.domain.properties.Property.fileAccept.PropertyFileAcceptPage;
 import demoapp.dom.domain.properties.Property.hidden.PropertyHiddenPage;
-import demoapp.dom.domain.properties.Property.hidden.child.PropertyHiddenChildVm;
 import demoapp.dom.domain.properties.Property.maxLength.PropertyMaxLengthPage;
 import demoapp.dom.domain.properties.Property.mustSatisfy.PropertyMustSatisfyPage;
 import demoapp.dom.domain.properties.Property.optionality.PropertyOptionalityPage;
@@ -119,19 +118,9 @@ public class PropertyMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of properties, eg in tables")
+    @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of properties in different contexts")
     public PropertyHiddenPage hidden() {
-        val vm = new PropertyHiddenPage();
-        vm.setPropertyHiddenAnywhere("hidden anywhere");
-        vm.setPropertyHiddenEverywhere("hidden everywhere");
-        vm.setPropertyHiddenNowhereUsingAnnotation("hidden nowhere using annotation");
-        vm.setPropertyUsingMetaAnnotation("using meta-annotation");
-        vm.setPropertyUsingMetaAnnotationButOverridden("using meta-annotation but overridden");
-
-        vm.getChildren().add(new PropertyHiddenChildVm("child 1", vm));
-        vm.getChildren().add(new PropertyHiddenChildVm("child 2", vm));
-        vm.getChildren().add(new PropertyHiddenChildVm("child 3", vm));
-        return vm;
+        return new PropertyHiddenPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)

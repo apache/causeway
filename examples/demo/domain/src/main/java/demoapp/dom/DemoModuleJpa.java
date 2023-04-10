@@ -47,6 +47,7 @@ import demoapp.dom.domain.objects.DomainObjectLayout.xxxUiEvent.jpa.DomainObject
 import demoapp.dom.domain.progmodel.objects.embedded.embedded.jpa.NumberConstantJpa;
 import demoapp.dom.domain.properties.Property.commandPublishing.jpa.PropertyCommandPublishingJpa;
 import demoapp.dom.domain.properties.Property.executionPublishing.jpa.PropertyExecutionPublishingJpa;
+import demoapp.dom.domain.properties.Property.hidden.jpa.PropertyHiddenJpa;
 import demoapp.dom.domain.properties.Property.projecting.jpa.PropertyProjectingChildJpa;
 import demoapp.dom.services.core.eventbusservice.EventLogEntryJpa;
 import demoapp.dom.services.core.wrapperFactory.jpa.WrapperFactoryJpa;
@@ -140,6 +141,7 @@ import org.springframework.context.annotation.Profile;
         PropertyCommandPublishingJpa.class,
         PropertyExecutionPublishingJpa.class,
         PropertyProjectingChildJpa.class,
+        PropertyHiddenJpa.class,
 
         CausewayBlobJpa.class,
         CausewayClobJpa.class,
