@@ -25,21 +25,23 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
+import org.apache.causeway.viewer.commons.model.mixin.HasIcon;
 import org.apache.causeway.viewer.commons.model.mixin.HasTitle;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 
 public interface BookmarkableModel
-extends HasTitle {
+extends HasTitle, HasIcon {
 
     /**
      * So can be bookmarked / added to <tt>BookmarkedPagesModel</tt>.
      */
-    public abstract PageParameters getPageParameters();
+    PageParameters getPageParameters();
 
-    public abstract PageParameters getPageParametersWithoutUiHints();
+    PageParameters getPageParametersWithoutUiHints();
 
     /** governs how to populate the BookmarkPanel in the UI */
-    public abstract BookmarkPolicy getBookmarkPolicy();
+    BookmarkPolicy getBookmarkPolicy();
 
     default Optional<Bookmark> toBookmark() {
         return PageParameterUtils.toBookmark(getPageParametersWithoutUiHints());
@@ -53,6 +55,18 @@ extends HasTitle {
      */
     default Stream<Bookmark> streamPropertyBookmarks() {
         return Stream.empty();
+    }
+
+    /**
+     * XXX refactoring hint
+     * @apiNote There should be a unified common model for Object and Action icons,
+     * as both could utilize the same resource lookup and caching mechanics in the background.
+     * While objects do support font-awesome or image file icons,
+     * I believe actions only support the former. Hence the asymmetry here.
+     */
+    @Override
+    default ObjectIcon getIcon() {
+        return null; // overwritten for domain objects
     }
 
 }

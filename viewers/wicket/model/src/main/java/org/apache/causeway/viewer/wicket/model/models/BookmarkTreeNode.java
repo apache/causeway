@@ -24,8 +24,10 @@ import java.util.Optional;
 import java.util.concurrent.atomic.LongAdder;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.ResourceReference;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.functions._Functions;
 
@@ -45,6 +47,7 @@ implements
     @Getter private final @NonNull PageParameters pageParameters;
 
     @Getter private String title;
+    @Getter private ResourceReference iconResourceReference;
 
     //private final Set<Bookmark> propertyBookmarks; ... in support of parents referencing their child
 
@@ -69,6 +72,9 @@ implements
 //                .collect(Collectors.toCollection(HashSet::new));
 
         this.title = bookmarkableModel.getTitle();
+        this.iconResourceReference = _Casts.castTo(UiObjectWkt.class, bookmarkableModel)
+                .map(UiObjectWkt::getIconAsResourceReference)
+                .orElse(null);
 
         this.depth = depth;
     }

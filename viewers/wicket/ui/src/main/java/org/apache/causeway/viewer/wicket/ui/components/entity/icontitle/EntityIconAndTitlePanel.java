@@ -123,7 +123,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
                 final CssClassFaFactory cssClassFaFactory = spec.getCssClassFaFactory().orElse(null);
                 if (iconName != null || cssClassFaFactory == null) {
                     Wkt.imageAddCachable(link, ID_ENTITY_ICON,
-                                    getImageResourceCache().resourceReferenceFor(targetAdapter));
+                                    getImageResourceCache().resourceReferenceForObjectIcon(targetAdapter.getIcon()));
                     WktComponents.permanentlyHide(link, ID_ENTITY_FONT_AWESOME);
                 } else {
                     Label dummy = Wkt.labelAdd(link, ID_ENTITY_FONT_AWESOME, "");

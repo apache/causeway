@@ -16,24 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.model.models;
-
-import java.io.Serializable;
-
-import org.apache.wicket.request.resource.ResourceReference;
+package org.apache.causeway.viewer.commons.model.mixin;
 
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 
-/**
- * Ideally I'd like to move this to the <tt>org.apache.causeway.viewer.wicket.model.causeway</tt>
- * package, however to do so would break existing API (gmap3 has a dependency on this, for example).
- */
-public interface ImageResourceCache extends Serializable {
+@FunctionalInterface
+public interface HasIcon {
 
-    //ResourceReference resourceReferenceFor(ManagedObject adapter);
+    ObjectIcon getIcon();
 
-    //ResourceReference resourceReferenceForSpec(ObjectSpecification objectSpecification);
-
-    ResourceReference resourceReferenceForObjectIcon(final ObjectIcon objectIcon);
-    
 }

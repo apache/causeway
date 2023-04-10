@@ -24,6 +24,7 @@ import java.util.stream.Stream;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.ResourceReference;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -34,6 +35,7 @@ import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -185,6 +187,15 @@ implements
     }
 
     @Override
+    public ObjectIcon getIcon() {
+        return getManagedObject().getIcon();
+    }
+
+    public ResourceReference getIconAsResourceReference() {
+        return imageResourceCache().resourceReferenceForObjectIcon(getIcon());
+    }
+
+    @Override
     public ManagedObject getManagedObject() {
         return getObject();
     }
@@ -288,6 +299,11 @@ implements
     private transient HintStore hintStore;
     private HintStore hintStore() {
         return hintStore = getMetaModelContext().loadServiceIfAbsent(HintStore.class, hintStore);
+    }
+
+    private transient ImageResourceCache imageResourceCache;
+    private ImageResourceCache imageResourceCache() {
+        return imageResourceCache = getMetaModelContext().loadServiceIfAbsent(ImageResourceCache.class, imageResourceCache);
     }
 
 
