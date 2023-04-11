@@ -7,24 +7,29 @@ This page will be added to as development progresses.
 
 == Maven Artifacts
 
-Incubator projects `viewer-vaadin` and `viewer-javafx` were discontinued in version 2.x, 
+Incubator projects `viewer-vaadin` and `viewer-javafx` were discontinued in version 2.x,
 but these are continued in version 3.x.
+
+=== v1 schemas
+
+The v1 versions of the schemas for `common`, `chg`, `cmd` and `ixn` have been made available (again) under link:https://causeway.apache.org/schema-v1[].
+
 
 === causeway-mavendeps-webapp
 
-Dependencies 
+Dependencies
 
 [source,xml]
 .pom.xml
 ----
 <dependency>
-	<groupId>org.apache.causeway.viewer</groupId>
-	<artifactId>causeway-viewer-wicket-viewer</artifactId>
+    <groupId>org.apache.causeway.viewer</groupId>
+    <artifactId>causeway-viewer-wicket-viewer</artifactId>
 </dependency>
 
 <dependency>
-	<groupId>org.apache.causeway.viewer</groupId>
-	<artifactId>causeway-viewer-restfulobjects-jaxrsresteasy</artifactId>
+    <groupId>org.apache.causeway.viewer</groupId>
+    <artifactId>causeway-viewer-restfulobjects-jaxrsresteasy</artifactId>
 </dependency>
 ----
 
@@ -32,7 +37,7 @@ were removed from
 
 [source,xml]
 .pom.xml
----- 
+----
 <dependency>
     <groupId>org.apache.causeway.mavendeps</groupId>
     <artifactId>causeway-mavendeps-webapp</artifactId>
@@ -42,7 +47,8 @@ were removed from
 
 [NOTE]
 ====
-Other viewers are in incubation phase. 
-This change allows for fine grained control on which viewers to add, 
+Other viewers are in incubation phase.
+This change allows for fine grained control on which viewers to add,
 while providing a minimal _Spring_ web stack.
 ====
+
