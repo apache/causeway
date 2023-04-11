@@ -28,12 +28,36 @@
 		<bs3:col span="6">
 			<bs3:row>
 				<bs3:col span="12">
-					<cpt:fieldSet name="Not annotated" id="not-annotated"/>
-					<cpt:fieldSet name="Annotated as Safe" id="annotated-safe"/>
-					<cpt:fieldSet name="Annotated as Idempotent" id="annotated-idempotent"/>
-					<cpt:fieldSet name="Annotated as Non-Idempotent" id="annotated-non-idempotent"/>
-					<cpt:fieldSet name="Meta-annotated" id="meta-annotated"/>
-					<cpt:fieldSet name="Meta-annotated Overridden" id="meta-annotated-overridden"/>
+					<cpt:fieldSet name="Not annotated" id="not-annotated">
+						<cpt:property id="propertyNoAnnotation">
+							<cpt:action id="incrementByAmountNoAnnotation"/>
+						</cpt:property>
+					</cpt:fieldSet>
+					<cpt:fieldSet name="Annotated as Safe" id="annotated-safe">
+						<cpt:property id="propertyForSafe">
+							<cpt:action id="reportPropertyForSafe"/>
+						</cpt:property>
+						<cpt:property id="propertyForSafeAndRequestCacheable">
+							<cpt:action id="reportPropertyForSafeAndRequestCacheable"/>
+						</cpt:property>
+					</cpt:fieldSet>
+					<cpt:fieldSet name="Annotated as Idempotent" id="annotated-idempotent">
+						<cpt:property id="propertyForIdempotent">
+							<cpt:action id="updatePropertyForIdempotent"/>
+						</cpt:property>
+						<cpt:property id="propertyForIdempotentAreYouSure">
+							<cpt:action id="updatePropertyForIdempotentAreYouSure"/>
+						</cpt:property>
+					</cpt:fieldSet>
+					<cpt:fieldSet name="Annotated as Non-Idempotent" id="annotated-non-idempotent">
+						<cpt:property id="propertyForNonIdempotent">
+							<cpt:action id="incrementByAmountPropertyForNonIdempotent"/>
+						</cpt:property>
+						<cpt:property id="propertyForNonIdempotentAreYouSure">
+							<cpt:action id="incrementPropertyForNonIdempotentAreYouSure"/>
+							<cpt:action id="incrementByAmountPropertyForNonIdempotentAreYouSure"/>
+						</cpt:property>
+					</cpt:fieldSet>
 					<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
 				</bs3:col>
 			</bs3:row>

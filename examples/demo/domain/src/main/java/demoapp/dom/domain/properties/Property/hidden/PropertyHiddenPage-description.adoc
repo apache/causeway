@@ -51,7 +51,7 @@ If you navigate into these domain objects then different properties will be visb
 ====
 Although there is no difference in the UI, a hidden property _is_ part of the metadamodel while a link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/Programmatic.html#hidden[@Programmatic] property is not.
 
-A rare (but valid) use case is to invoke such a hidden property using the link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/services/wrapper/WrapperFactory.html#wrap(t,-synccontrol)[@WrapperFactory] (skipping rules).
+A rare (but valid) use case is to invoke such a hidden property using the link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/services/wrapper/WrapperFactory.html#wrap(t,-synccontrol)[WrapperFactory] (skipping rules).
 This can be for example to publish executions to any registered link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/services/publishing/spi/ExecutionSubscriber.html[ExecutionSubscriber]s.
 ====
 
