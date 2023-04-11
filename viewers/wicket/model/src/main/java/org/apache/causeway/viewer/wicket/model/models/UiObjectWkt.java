@@ -29,12 +29,14 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.hint.HintStore;
+import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
@@ -187,12 +189,14 @@ implements
     }
 
     @Override
-    public ObjectIcon getIcon() {
-        return getManagedObject().getIcon();
+    public Either<ObjectIcon, CssClassFaFactory> getIcon() {
+        return getManagedObject().eitherIconOrFaClass();
     }
 
-    public ResourceReference getIconAsResourceReference() {
-        return imageResourceCache().resourceReferenceForObjectIcon(getIcon());
+    public Either<ResourceReference, CssClassFaFactory> getIconAsResourceReference() {
+        return getIcon()
+                .mapLeft(objectIcon->
+                    imageResourceCache().resourceReferenceForObjectIcon(objectIcon));
     }
 
     @Override

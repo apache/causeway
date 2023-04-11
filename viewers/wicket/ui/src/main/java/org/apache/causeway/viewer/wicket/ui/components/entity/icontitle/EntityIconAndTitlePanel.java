@@ -119,14 +119,14 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
                 targetAdapter.eitherIconOrFaClass()
                 .accept(
                         objectIcon->{
-                            WktComponents.permanentlyHide(link, ID_ENTITY_FONT_AWESOME);
                             Wkt.imageAddCachable(link, ID_ENTITY_ICON,
                                     getImageResourceCache().resourceReferenceForObjectIcon(targetAdapter.getIcon()));
+                            WktComponents.permanentlyHide(link, ID_ENTITY_FONT_AWESOME);
                         },
                         cssClassFaFactory->{
+                            WktComponents.permanentlyHide(link, ID_ENTITY_ICON);
                             final Label dummyLabel = Wkt.labelAdd(link, ID_ENTITY_FONT_AWESOME, "");
                             Wkt.cssAppend(dummyLabel, cssClassFaFactory.asSpaceSeparatedWithAdditional("fa-2x"));
-                            WktComponents.permanentlyHide(link, ID_ENTITY_ICON);
                         });
 
                 final String title = determineTitle();

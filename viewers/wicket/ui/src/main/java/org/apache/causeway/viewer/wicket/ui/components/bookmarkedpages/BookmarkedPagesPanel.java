@@ -60,6 +60,7 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
     private static final String ID_BOOKMARKED_PAGE_TITLE = "bookmarkedPageTitle";
 
     private static final String ID_BOOKMARKED_PAGE_ICON = "bookmarkedPageImage";
+    private static final String ID_BOOKMARKED_PAGE_ICON_FA = "bookmarkedPageFontAwesome";
 
     private static final String CLEAR_BOOKMARKS = "clearBookmarks";
 
@@ -133,9 +134,19 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
                                 bookmarkNode.getPageParameters(),
                                 pageClass));
 
-                Optional.ofNullable(bookmarkNode.getIconResourceReference())
-                .ifPresent(icon->
-                    Wkt.imageAddCachable(link, ID_BOOKMARKED_PAGE_ICON, icon));
+                bookmarkNode.eitherIconOrFaClass()
+                .accept(
+                        iconResourceRef->{
+                            Optional.ofNullable(iconResourceRef)
+                            .ifPresent(icon->
+                                Wkt.imageAddCachable(link, ID_BOOKMARKED_PAGE_ICON, icon));
+                            WktComponents.permanentlyHide(link, ID_BOOKMARKED_PAGE_ICON_FA);
+                        },
+                        cssFaClass->{
+                            WktComponents.permanentlyHide(link, ID_BOOKMARKED_PAGE_ICON);
+                            final Label dummyLabel = Wkt.labelAdd(link, ID_BOOKMARKED_PAGE_ICON_FA, "");
+                            Wkt.cssAppend(dummyLabel, cssFaClass);
+                        });
 
                 Wkt.labelAdd(link, ID_BOOKMARKED_PAGE_TITLE, bookmarkNode.getTitle());
 

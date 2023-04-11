@@ -27,6 +27,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ResourceReference;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.functions._Functions;
@@ -47,7 +48,11 @@ implements
     @Getter private final @NonNull PageParameters pageParameters;
 
     @Getter private String title;
-    @Getter private ResourceReference iconResourceReference;
+
+    /** its either a iconResourceReference or a iconFaClass or neither (decomposed for easy serialization) */
+    private ResourceReference iconResourceReference;
+    /** its either a iconResourceReference or a iconFaClass or neither (decomposed for easy serialization) */
+    private String iconFaClass;
 
     //private final Set<Bookmark> propertyBookmarks; ... in support of parents referencing their child
 
@@ -72,11 +77,26 @@ implements
 //                .collect(Collectors.toCollection(HashSet::new));
 
         this.title = bookmarkableModel.getTitle();
-        this.iconResourceReference = _Casts.castTo(UiObjectWkt.class, bookmarkableModel)
-                .map(UiObjectWkt::getIconAsResourceReference)
-                .orElse(null);
+
+        _Casts.castTo(UiObjectWkt.class, bookmarkableModel)
+        .map(UiObjectWkt::getIconAsResourceReference)
+        .ifPresent(either->either.accept(
+                iconResourceReference->
+                    this.iconResourceReference = iconResourceReference,
+                faFactory->
+                    this.iconFaClass = faFactory.asSpaceSeparated()
+                )
+        );
 
         this.depth = depth;
+    }
+
+    // -- ICON
+
+    public Either<ResourceReference, String> eitherIconOrFaClass() {
+        return iconFaClass==null
+                ? Either.left(iconResourceReference)
+                : Either.right(iconFaClass);
     }
 
     // -- COMPARATOR

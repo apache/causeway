@@ -18,11 +18,13 @@
  */
 package org.apache.causeway.viewer.commons.model.mixin;
 
+import org.apache.causeway.commons.functional.Either;
+import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 
 @FunctionalInterface
 public interface HasIcon {
 
-    ObjectIcon getIcon();
+    Either<ObjectIcon, CssClassFaFactory> getIcon();
 
 }
