@@ -29,12 +29,10 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import demoapp.dom._infra.samples.NameSamples;
-import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.actions.Action.associateWith.ActionAssociateWithPage;
-import demoapp.dom.domain.actions.Action.associateWith.child.ActionAssociateWithChildVm;
-import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingEntity;
+import demoapp.dom.domain.actions.Action.choicesFrom.ActionChoicesFromPage;
+import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingPage;
 import demoapp.dom.domain.actions.Action.domainEvent.ActionDomainEventPage;
-import demoapp.dom.domain.actions.Action.executionPublishing.ActionExecutionPublishingEntity;
+import demoapp.dom.domain.actions.Action.executionPublishing.ActionExecutionPublishingPage;
 import demoapp.dom.domain.actions.Action.hidden.ActionHiddenPage;
 import demoapp.dom.domain.actions.Action.restrictTo.ActionRestrictToPage;
 import demoapp.dom.domain.actions.Action.semantics.ActionSemanticsPage;
@@ -49,34 +47,19 @@ import lombok.val;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ActionMenu {
 
-    final ValueHolderRepository<String, ? extends ActionCommandPublishingEntity> actionCommandEntities;
-    final ValueHolderRepository<String, ? extends ActionExecutionPublishingEntity> actionPublishingEntities;
     final NameSamples samples;
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-ring", describedAs = "Semantic relationship between actions and other properties or collections")
-    public ActionAssociateWithPage associateWith(){
-        val associateWithVm = new ActionAssociateWithPage("value");
-        val children = associateWithVm.getChildren();
-        val favorites = associateWithVm.getFavorites();
-
-        // add to either one collection or the other
-        final boolean[] which = {false};
-        samples.stream()
-                .map(ActionAssociateWithChildVm::new)
-                .forEach(e -> {
-                    (which[0] ? children : favorites).add(e);
-                    which[0] = !which[0];
-                });
-        return associateWithVm;
+    @ActionLayout(cssClassFa="fa-list-ul", describedAs = "Choices for multi-valued parameters taken from corresponding collection (aka \"bulk\" actions)")
+    public ActionChoicesFromPage choicesFrom(){
+        return new ActionChoicesFromPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-terminal", describedAs = "Action invocation intentions as XML")
-    public ActionCommandPublishingEntity commandPublishing(){
-        return actionCommandEntities.first().orElse(null);
+    public ActionCommandPublishingPage commandPublishing(){
+        return new ActionCommandPublishingPage();
     }
-
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-asterisk", describedAs = "Class of the domain event emitted when interacting with the action")
@@ -86,14 +69,14 @@ public class ActionMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-book", describedAs = "Action invocation events as XML")
-    public ActionExecutionPublishingEntity executionPublishing(){
-        return actionPublishingEntities.first().orElse(null);
+    public ActionExecutionPublishingPage executionPublishing(){
+        return new ActionExecutionPublishingPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of actions")
+    @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of actions in different contexts")
     public ActionHiddenPage hidden(){
-        return new ActionHiddenPage("value");
+        return new ActionHiddenPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)

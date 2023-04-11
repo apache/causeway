@@ -26,6 +26,7 @@ import java.util.OptionalInt;
 import java.util.stream.Stream;
 
 import org.apache.causeway.applib.annotation.CollectionLayout;
+import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._Casts;
@@ -39,11 +40,13 @@ import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
+import org.apache.causeway.core.metamodel.facets.SingleValueFacet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet;
 import org.apache.causeway.core.metamodel.facets.object.paged.PagedFacet;
+import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
@@ -252,6 +255,17 @@ public interface ObjectMember extends ObjectFeature {
         return FacetUtil.lookupFacetIn(PagedFacet.class, this, getElementType())
             .stream()
             .mapToInt(PagedFacet::value)
+            .findFirst();
+    }
+
+    default Optional<TableDecorator> getTableDecorator() {
+        return FacetUtil.lookupFacetInButExcluding(TableDecoratorFacet.class, o -> o == TableDecorator.Default.class, getElementType())
+            .stream()
+            .map(SingleValueFacet::value)
+            .map(decoratorClass -> {
+                val decorator = _InstanceUtil.createInstance(decoratorClass, decoratorClass, _Constants.emptyObjects);
+                return injectServicesInto(decorator);
+            })
             .findFirst();
     }
 

@@ -18,8 +18,12 @@
  */
 package demoapp.dom;
 
+import demoapp.dom._infra.values.ValueHolder;
+import demoapp.dom.domain.actions.Action.choicesFrom.jpa.ActionChoicesFromJpa;
 import demoapp.dom.domain.actions.Action.commandPublishing.jpa.ActionCommandPublishingJpa;
 import demoapp.dom.domain.actions.Action.executionPublishing.jpa.ActionExecutionPublishingJpa;
+import demoapp.dom.domain.actions.Action.hidden.jpa.ActionHiddenJpa;
+import demoapp.dom.domain.actions.ActionLayout.hidden.jpa.ActionLayoutHiddenJpa;
 import demoapp.dom.domain.objects.DomainObject.aliased.jpa.DomainObjectAliasedJpa;
 import demoapp.dom.domain.objects.DomainObject.autoComplete.jpa.DomainObjectAutoCompleteJpa;
 import demoapp.dom.domain.objects.DomainObject.bounded.jpa.DomainObjectBoundingJpa;
@@ -43,7 +47,10 @@ import demoapp.dom.domain.objects.DomainObjectLayout.xxxUiEvent.jpa.DomainObject
 import demoapp.dom.domain.progmodel.objects.embedded.embedded.jpa.NumberConstantJpa;
 import demoapp.dom.domain.properties.Property.commandPublishing.jpa.PropertyCommandPublishingJpa;
 import demoapp.dom.domain.properties.Property.executionPublishing.jpa.PropertyExecutionPublishingJpa;
+import demoapp.dom.domain.properties.Property.hidden.jpa.PropertyHiddenJpa;
 import demoapp.dom.domain.properties.Property.projecting.jpa.PropertyProjectingChildJpa;
+import demoapp.dom.domain.properties.PropertyLayout.hidden.PropertyLayoutHidden;
+import demoapp.dom.domain.properties.PropertyLayout.hidden.jpa.PropertyLayoutHiddenJpa;
 import demoapp.dom.services.core.eventbusservice.EventLogEntryJpa;
 import demoapp.dom.services.core.wrapperFactory.jpa.WrapperFactoryJpa;
 import demoapp.dom.services.extensions.secman.apptenancy.jpa.TenantedJpa;
@@ -114,6 +121,7 @@ import org.springframework.context.annotation.Profile;
         DomainObjectIntrospectionAnnotReqdJpa.class,
         DomainObjectIntrospectionEncapsulatedJpa.class,
         DomainObjectMixinMethodJpa.class,
+        DomainObjectNatureJpa.class,
         DomainObjectXxxLifecycleEventJpa.class,
         DomainObjectLayoutBookmarkingJpa.class,
         DomainObjectLayoutBookmarkingChildJpa.class,
@@ -124,6 +132,20 @@ import org.springframework.context.annotation.Profile;
         DomainObjectLayoutPagedJpa.class,
         DomainObjectLayoutTableDecoratorJpa.class,
         DomainObjectLayoutXxxUiEventJpa.class,
+
+        ActionChoicesFromJpa.class,
+        ActionCommandPublishingJpa.class,
+        ActionExecutionPublishingJpa.class,
+        ActionHiddenJpa.class,
+
+        ActionLayoutHiddenJpa.class,
+
+        PropertyCommandPublishingJpa.class,
+        PropertyExecutionPublishingJpa.class,
+        PropertyProjectingChildJpa.class,
+        PropertyHiddenJpa.class,
+
+        PropertyLayoutHiddenJpa.class,
 
         CausewayBlobJpa.class,
         CausewayClobJpa.class,
@@ -176,13 +198,6 @@ import org.springframework.context.annotation.Profile;
         TenantedJpa.class,
         WrapperFactoryJpa.class,
 
-        ActionCommandPublishingJpa.class,
-        ActionExecutionPublishingJpa.class,
-        PropertyCommandPublishingJpa.class,
-        PropertyExecutionPublishingJpa.class,
-        PropertyProjectingChildJpa.class,
-
-        DomainObjectNatureJpa.class,
         NumberConstantJpa.class,
 
 })

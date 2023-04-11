@@ -20,10 +20,7 @@ package org.apache.causeway.core.metamodel.layout;
 
 import java.util.Comparator;
 
-import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.BookmarkPolicy;
-import org.apache.causeway.applib.annotation.LabelPosition;
-import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.annotation.*;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
@@ -53,6 +50,7 @@ import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.causeway.core.metamodel.facets.object.paged.PagedFacet;
+import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.daterenderedadjust.DateRenderAdjustFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
@@ -144,6 +142,7 @@ public class LayoutFacetUtil {
         .ifPresent(hasNamed::setNamed);
     }
 
+
     private void setObjectDescribedIfAny(
             final HasDescribedAs hasDescribedAs,
             final FacetHolder facetHolder) {
@@ -153,6 +152,33 @@ public class LayoutFacetUtil {
         .filter(_Strings::isNotEmpty)
         .ifPresent(hasDescribedAs::setDescribedAs);
     }
+
+    public void setPagedIfAny(
+            final DomainObjectLayoutData domainObjectLayoutData,
+            final FacetHolder facetHolder) {
+
+        val pagedFacet = FacetUtil.lookupFacetIn(PagedFacet.class, facetHolder).orElse(null);
+        if(isDoOp(pagedFacet)) {
+            final int value = pagedFacet.value();
+            if(value > 0) {
+                domainObjectLayoutData.setPaged(value);
+            }
+        }
+    }
+
+    public void setTableDecoratorIfAny(
+            final DomainObjectLayoutData domainObjectLayoutData,
+            final FacetHolder facetHolder) {
+
+        val tableDecoratorFacet = FacetUtil.lookupFacetIn(TableDecoratorFacet.class, facetHolder).orElse(null);
+        if(isDoOp(tableDecoratorFacet)) {
+            final Class<? extends TableDecorator> value = tableDecoratorFacet.value();
+            if(value != TableDecorator.Default.class) {
+                domainObjectLayoutData.setTableDecorator(value);
+            }
+        }
+    }
+
 
     private void setMemberNamedIfAny(
             final HasNamed hasNamed,
@@ -238,6 +264,19 @@ public class LayoutFacetUtil {
             final int value = pagedFacet.value();
             if(value > 0) {
                 collectionLayoutData.setPaged(value);
+            }
+        }
+    }
+
+    public void setTableDecoratorIfAny(
+            final CollectionLayoutData collectionLayoutData,
+            final FacetHolder facetHolder, final ObjectSpecification objectSpec) {
+
+        val tableDecoratorFacet = FacetUtil.lookupFacetIn(TableDecoratorFacet.class, facetHolder, objectSpec).orElse(null);
+        if(isDoOp(tableDecoratorFacet)) {
+            final Class<? extends TableDecorator> value = tableDecoratorFacet.value();
+            if(value != TableDecorator.Default.class) {
+                collectionLayoutData.setTableDecorator(value);
             }
         }
     }
@@ -357,6 +396,7 @@ public class LayoutFacetUtil {
                 setHiddenIfAny(collectionLayoutData, collection);
                 setMemberNamedIfAny(collectionLayoutData, collection);
                 setPagedIfAny(collectionLayoutData, collection, objectSpec);
+                setTableDecoratorIfAny(collectionLayoutData, collection, objectSpec);
                 setSortedByIfAny(collectionLayoutData, collection);
             });
         }
@@ -383,6 +423,7 @@ public class LayoutFacetUtil {
             setCssClassFaIfAny(domainObjectLayoutData, objectSpec);
             setObjectDescribedIfAny(domainObjectLayoutData, objectSpec);
             setObjectNamedIfAny(domainObjectLayoutData, objectSpec);
+            setPagedIfAny(domainObjectLayoutData, objectSpec);
         }
     }
 

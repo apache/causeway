@@ -22,10 +22,17 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
+import org.apache.causeway.applib.events.ui.CssClassUiEvent;
+import org.apache.causeway.applib.events.ui.IconUiEvent;
+import org.apache.causeway.applib.events.ui.LayoutUiEvent;
+import org.apache.causeway.applib.events.ui.TitleUiEvent;
 
 //tag::class[]
 @DomainObjectLayout(
-        cssClassFa = "fa-user"             // <.>
+    titleUiEvent = DomainObjectLayoutXxxUiEvent.TitleEvent.class,               // <.>
+    iconUiEvent = DomainObjectLayoutXxxUiEvent.IconEvent.class,                 // <.>
+    cssClassUiEvent = DomainObjectLayoutXxxUiEvent.CssClassEvent.class,         // <.>
+    layoutUiEvent = DomainObjectLayoutXxxUiEvent.LayoutEvent.class              // <.>
 )
 public abstract class DomainObjectLayoutXxxUiEvent
 //end::class[]
@@ -34,6 +41,14 @@ public abstract class DomainObjectLayoutXxxUiEvent
         ValueHolder<String>
 //tag::class[]
 {
+    public static class TitleEvent                                              // <1>
+            extends TitleUiEvent<DomainObjectLayoutXxxUiEvent> { }
+    public static class IconEvent                                               // <2>
+            extends IconUiEvent<DomainObjectLayoutXxxUiEvent> { }
+    public static class CssClassEvent                                           // <3>
+            extends CssClassUiEvent<DomainObjectLayoutXxxUiEvent> { }
+    public static class LayoutEvent                                             // <4>
+            extends LayoutUiEvent<DomainObjectLayoutXxxUiEvent> { }
     // ...
 //end::class[]
 

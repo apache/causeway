@@ -36,7 +36,6 @@ import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import demoapp.dom.domain.properties.PropertyLayout.cssClass.PropertyLayoutCssClassPage;
 import demoapp.dom.domain.properties.PropertyLayout.describedAs.PropertyLayoutDescribedAsPage;
 import demoapp.dom.domain.properties.PropertyLayout.hidden.PropertyLayoutHiddenPage;
-import demoapp.dom.domain.properties.PropertyLayout.hidden.child.PropertyLayoutHiddenChildVm;
 import demoapp.dom.domain.properties.PropertyLayout.labelPosition.PropertyLayoutLabelPositionPage;
 import demoapp.dom.domain.properties.PropertyLayout.multiLine.PropertyLayoutMultiLinePage;
 import demoapp.dom.domain.properties.PropertyLayout.named.PropertyLayoutNamedPage;
@@ -80,17 +79,7 @@ public class PropertyLayoutMenu {
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of the property in different contexts")
     public PropertyLayoutHiddenPage hidden() {
-        val vm = new PropertyLayoutHiddenPage();
-        vm.setPropertyHiddenAnywhere("hidden anywhere");
-        vm.setPropertyHiddenEverywhere("hidden everywhere");
-        vm.setPropertyHiddenNowhereUsingAnnotation("hidden nowhere using annotation");
-        vm.setPropertyUsingMetaAnnotation("using meta-annotation");
-        vm.setPropertyUsingMetaAnnotationButOverridden("using meta-annotation but overridden");
-
-        vm.getChildren().add(new PropertyLayoutHiddenChildVm("child 1", vm));
-        vm.getChildren().add(new PropertyLayoutHiddenChildVm("child 2", vm));
-        vm.getChildren().add(new PropertyLayoutHiddenChildVm("child 3", vm));
-        return vm;
+        return new PropertyLayoutHiddenPage();
     }
 
 

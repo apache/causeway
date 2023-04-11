@@ -18,15 +18,19 @@
  */
 package demoapp.dom.domain.actions.Action.executionPublishing.jpa;
 
+import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.domain.actions.Action.executionPublishing.ActionExecutionPublishing;
+import demoapp.dom.domain.actions.Action.executionPublishing.ActionExecutionPublishingRepository;
+
+import java.util.List;
+
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
-
-import demoapp.dom._infra.values.ValueHolderRepository;
 
 @Profile("demo-jpa")
 @Service
 public class ActionExecutionPublishingJpaEntities
-extends ValueHolderRepository<String, ActionExecutionPublishingJpa> {
+extends ValueHolderRepository<String, ActionExecutionPublishingJpa> implements ActionExecutionPublishingRepository {
 
     protected ActionExecutionPublishingJpaEntities() {
         super(ActionExecutionPublishingJpa.class);
@@ -37,4 +41,15 @@ extends ValueHolderRepository<String, ActionExecutionPublishingJpa> {
         return new ActionExecutionPublishingJpa(value);
     }
 
+    @Override
+    public List<? extends ActionExecutionPublishing> allInstances() {
+        return all();
+    }
+
+    public List<? extends ActionExecutionPublishing> allMatches(final String s) {
+        return all();
+    }
+    public List<? extends ActionExecutionPublishing> allMatches() {
+        return all();
+    }
 }

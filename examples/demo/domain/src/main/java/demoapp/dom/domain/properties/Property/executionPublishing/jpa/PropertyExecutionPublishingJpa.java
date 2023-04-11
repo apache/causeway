@@ -24,93 +24,47 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.xml.bind.annotation.XmlElement;
 
 import org.springframework.context.annotation.Profile;
 
 import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Editing;
-import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.annotation.Publishing;
+import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
-import demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingDisabledMetaAnnotation;
-import demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingEnabledMetaAnnotation;
-import demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingEntity;
+import demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishing;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Profile("demo-jpa")
-//tag::class[]
 @Entity
 @Table(
-      schema = "demo",
-      name = "PropertyExecutionPublishingJpa"
+    schema = "demo",
+    name = "PropertyExecutionPublishingJpa"
 )
 @EntityListeners(CausewayEntityListener.class)
-@Named("demo.PropertyExecutionPublishingEntity")
-@DomainObject(
-        editing = Editing.ENABLED)
+@Named("demo.PropertyExecutionPublishingJpa")
 @NoArgsConstructor
-public class PropertyExecutionPublishingJpa
-        extends PropertyExecutionPublishingEntity {
+//tag::class[]
+// ...
+@DomainObject(nature = Nature.ENTITY)
+public class PropertyExecutionPublishingJpa extends PropertyExecutionPublishing {
     // ...
 //end::class[]
 
-    public PropertyExecutionPublishingJpa(final String initialValue) {
-        this.property = initialValue;
-        this.propertyMetaAnnotated = initialValue;
-        this.propertyMetaAnnotatedOverridden = initialValue;
-    }
-
-    @ObjectSupport public String title() {
-        return "@Property#executionPublishing (JDO)";
+    public PropertyExecutionPublishingJpa(final String value) {
+        setName(value);
     }
 
     @Id
     @GeneratedValue
     private Long id;
 
-//tag::annotation[]
-    @Property(
-            executionPublishing = Publishing.ENABLED             // <.>
-    )
-    @PropertyLayout(
-        describedAs =
-            "@Property(executionPublishing = ENABLED)",
-        fieldSetId = "annotation", sequence = "1")
     @Getter @Setter
-    private String property;
-//end::annotation[]
+    private String name;
 
-//tag::meta-annotated[]
-    @PropertyExecutionPublishingEnabledMetaAnnotation                // <.>
-    @Property()
-    @PropertyLayout(
-        describedAs = "@PropertyPublishingEnabledMetaAnnotation",
-        fieldSetId = "meta-annotated", sequence = "1")
-    @XmlElement(required = true)
     @Getter @Setter
-    private String propertyMetaAnnotated;
-//end::meta-annotated[]
-
-//tag::meta-annotated-overridden[]
-    @PropertyExecutionPublishingDisabledMetaAnnotation   // <.>
-    @Property(
-            executionPublishing = Publishing.ENABLED   // <.>
-    )
-    @PropertyLayout(
-        describedAs =
-            "@PropertyPublishingDisabledMetaAnnotation " +
-            "@Property(executionPublishing = ENABLED)",
-        fieldSetId = "meta-annotated-overridden", sequence = "1")
-    @XmlElement(required = false)
-    @Getter @Setter
-    private String propertyMetaAnnotatedOverridden;
-//end::meta-annotated-overridden[]
+    private String notes;
 
 //tag::class[]
 }

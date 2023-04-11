@@ -33,14 +33,13 @@ import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandPublishingEntity;
+import demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandPublishingPage;
 import demoapp.dom.domain.properties.Property.domainEvent.PropertyDomainEventPage;
 import demoapp.dom.domain.properties.Property.editing.PropertyEditingPage;
 import demoapp.dom.domain.properties.Property.editingReasonDisabled.PropertyEditingReasonDisabledPage;
-import demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingEntity;
+import demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingPage;
 import demoapp.dom.domain.properties.Property.fileAccept.PropertyFileAcceptPage;
 import demoapp.dom.domain.properties.Property.hidden.PropertyHiddenPage;
-import demoapp.dom.domain.properties.Property.hidden.child.PropertyHiddenChildVm;
 import demoapp.dom.domain.properties.Property.maxLength.PropertyMaxLengthPage;
 import demoapp.dom.domain.properties.Property.mustSatisfy.PropertyMustSatisfyPage;
 import demoapp.dom.domain.properties.Property.optionality.PropertyOptionalityPage;
@@ -61,16 +60,14 @@ import lombok.val;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class PropertyMenu {
 
-    final ValueHolderRepository<String, ? extends PropertyCommandPublishingEntity> propertyCommandPublishingEntities;
-    final ValueHolderRepository<String, ? extends PropertyExecutionPublishingEntity> propertyExecutionPublishingEntities;
     final ValueHolderRepository<String, ? extends PropertyProjectingChildEntity> propertyProjectingChildEntities;
     final Samples<Blob> blobSamples;
     final Samples<Clob> clobSamples;
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-terminal", describedAs = "Action invocation intentions as XML")
-    public PropertyCommandPublishingEntity commandPublishing(){
-        return propertyCommandPublishingEntities.first().orElse(null);
+    public PropertyCommandPublishingPage commandPublishing(){
+        return new PropertyCommandPublishingPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
@@ -103,8 +100,8 @@ public class PropertyMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-book", describedAs = "Property changed events as XML")
-    public PropertyExecutionPublishingEntity executionPublishing(){
-        return propertyExecutionPublishingEntities.first().orElse(null);
+    public PropertyExecutionPublishingPage executionPublishing(){
+        return new PropertyExecutionPublishingPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
@@ -121,19 +118,9 @@ public class PropertyMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of properties, eg in tables")
+    @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of properties in different contexts")
     public PropertyHiddenPage hidden() {
-        val vm = new PropertyHiddenPage();
-        vm.setPropertyHiddenAnywhere("hidden anywhere");
-        vm.setPropertyHiddenEverywhere("hidden everywhere");
-        vm.setPropertyHiddenNowhereUsingAnnotation("hidden nowhere using annotation");
-        vm.setPropertyUsingMetaAnnotation("using meta-annotation");
-        vm.setPropertyUsingMetaAnnotationButOverridden("using meta-annotation but overridden");
-
-        vm.getChildren().add(new PropertyHiddenChildVm("child 1", vm));
-        vm.getChildren().add(new PropertyHiddenChildVm("child 2", vm));
-        vm.getChildren().add(new PropertyHiddenChildVm("child 3", vm));
-        return vm;
+        return new PropertyHiddenPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)

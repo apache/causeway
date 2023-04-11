@@ -12,7 +12,6 @@ import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 
 @Collection()
-@CollectionLayout()
 @RequiredArgsConstructor
 public class DomainObjectLayoutTableDecoratorPage_objects {
 

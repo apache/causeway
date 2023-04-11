@@ -9,7 +9,7 @@ NOTE: for parented collections, the `paged` value can be overridden on a case-by
 
 === How this demo works
 
-The collection on the left hand side shows a set of objects that have been annotated with `paged` of 5.
+The collection on the left hand side shows a set of objects that have been annotated with `paged` of 5.`
 Accordingly, only 5 objects are shown per page.
 
 The associated action "actionReturningCollection" returns these same objects as a standalone collection.
@@ -21,9 +21,8 @@ In terms of code:
 ----
 include::DomainObjectLayoutPaged.java[tags=class]
 ----
-<.> provides the description.
-The viewer renders this in a tooltip.
-
+<.> indicates that collections of this domain class should have no more than 5 objects per page.
+p
 
 === Related configuration property
 

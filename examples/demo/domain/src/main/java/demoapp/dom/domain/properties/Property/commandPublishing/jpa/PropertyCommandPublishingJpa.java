@@ -28,96 +28,44 @@ import jakarta.persistence.Table;
 import org.springframework.context.annotation.Profile;
 
 import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Editing;
-import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.annotation.Publishing;
+import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
-import demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandPublishingDisabledMetaAnnotation;
-import demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandPublishingEnabledMetaAnnotation;
-import demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandPublishingEntity;
+import demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandPublishing;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Profile("demo-jpa")
-//tag::class[]
 @Entity
 @Table(
-        schema = "demo",
-        name = "PropertyCommandPublishingJpa"
+    schema = "demo",
+    name = "PropertyCommandPublishingJpa"
 )
 @EntityListeners(CausewayEntityListener.class)
-@Named("demo.PropertyCommandPublishingEntity")
-@DomainObject(
-        editing = Editing.ENABLED)
+@Named("demo.PropertyCommandPublishingJpa")
 @NoArgsConstructor
-public class PropertyCommandPublishingJpa
-        extends PropertyCommandPublishingEntity {
+//tag::class[]
+// ...
+@DomainObject(nature = Nature.ENTITY)
+public class PropertyCommandPublishingJpa extends PropertyCommandPublishing {
     // ...
 //end::class[]
 
-    public PropertyCommandPublishingJpa(final String initialValue) {
-        this.property = initialValue;
-        this.propertyCommandPublishingDisabled = initialValue;
-        this.propertyMetaAnnotated = initialValue;
-        this.propertyMetaAnnotatedOverridden = initialValue;
-    }
-
-    @ObjectSupport public String title() {
-        return "@Property#commandPublishing (JPA)";
+    public PropertyCommandPublishingJpa(final String value) {
+        setName(value);
     }
 
     @Id
     @GeneratedValue
     private Long id;
 
-//tag::annotation[]
-    @Property(
-        commandPublishing = Publishing.ENABLED                  // <.>
-    )
-    @PropertyLayout(
-        describedAs = "@Property(commandPublishing = ENABLED)",
-        fieldSetId = "annotation", sequence = "1")
     @Getter @Setter
-    private String property;
-//end::annotation[]
+    private String name;
 
-//tag::annotation-2[]
-    @Property(
-        commandPublishing = Publishing.DISABLED                 // <.>
-    )
-    @PropertyLayout(
-        describedAs = "@Property(commandPublishing = DISABLED)",
-        fieldSetId = "annotation", sequence = "2")
     @Getter @Setter
-    private String propertyCommandPublishingDisabled;
-//end::annotation-2[]
-
-//tag::meta-annotation[]
-    @PropertyCommandPublishingEnabledMetaAnnotation               // <.>
-    @PropertyLayout(
-            describedAs = "@PropertyCommandEnabledMetaAnnotation",
-            fieldSetId = "meta-annotated", sequence = "1")
-    @Getter @Setter
-    private String propertyMetaAnnotated;
-//end::meta-annotation[]
-
-//tag::meta-annotation-overridden[]
-    @PropertyCommandPublishingDisabledMetaAnnotation              // <.>
-    @Property(commandPublishing = Publishing.ENABLED)             // <.>
-    @PropertyLayout(
-        describedAs =
-            "@PropertyCommandDisabledMetaAnnotation " +
-            "@Property(commandPublishing = ENABLED)",
-            fieldSetId = "meta-annotated-overridden", sequence = "1")
-    @Getter @Setter
-    private String propertyMetaAnnotatedOverridden;
-//end::meta-annotation-overridden[]
+    private String notes;
 
 //tag::class[]
-
 }
 //end::class[]

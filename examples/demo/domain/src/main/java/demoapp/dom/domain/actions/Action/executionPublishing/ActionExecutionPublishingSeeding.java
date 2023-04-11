@@ -18,19 +18,20 @@
  */
 package demoapp.dom.domain.actions.Action.executionPublishing;
 
+import demoapp.dom._infra.seed.SeedServiceAbstract;
+import demoapp.dom._infra.values.ValueHolderRepository;
+
 import jakarta.inject.Inject;
 
 import org.springframework.stereotype.Service;
-
-import demoapp.dom._infra.seed.SeedServiceAbstract;
-import demoapp.dom._infra.values.ValueHolderRepository;
 
 @Service
 public class ActionExecutionPublishingSeeding
 extends SeedServiceAbstract {
 
     @Inject
-    public ActionExecutionPublishingSeeding(ValueHolderRepository<String, ? extends ActionExecutionPublishingEntity> entities) {
+    public ActionExecutionPublishingSeeding(
+            ValueHolderRepository<String, ? extends ActionExecutionPublishing> entities) {
         super(entities);
     }
 

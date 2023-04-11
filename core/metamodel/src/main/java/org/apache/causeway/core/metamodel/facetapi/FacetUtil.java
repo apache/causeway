@@ -188,4 +188,23 @@ public final class FacetUtil {
                 : a);
     }
 
+    /** Looks up specified facetType within given {@link FacetHolder}s, honoring Facet {@link Precedence},
+     * while first one found wins over later found if they have the same precedence. */
+    public static <F extends Facet> Optional<F> lookupFacetInButExcluding(
+            final @NonNull Class<F> facetType,
+            final Predicate<Object> excluded,
+            final FacetHolder ... facetHolders) {
+        if(facetHolders==null) {
+            return Optional.empty();
+        }
+        return Stream.of(facetHolders)
+        .filter(_NullSafe::isPresent)
+        .filter(x -> !excluded.test(x))
+        .map(facetHolder->facetHolder.getFacet(facetType))
+        .filter(_NullSafe::isPresent)
+        .reduce((a, b)->b.getPrecedence().ordinal()>a.getPrecedence().ordinal()
+                ? b
+                : a);
+    }
+
 }

@@ -22,10 +22,11 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
+import org.apache.causeway.applib.annotation.TableDecorator;
 
 //tag::class[]
 @DomainObjectLayout(
-        cssClassFa = "fa-user"             // <.>
+        tableDecorator = TableDecorator.DatatablesNet.class     // <.>
 )
 public abstract class DomainObjectLayoutTableDecorator
 //end::class[]

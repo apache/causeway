@@ -29,6 +29,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
+import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.core.metamodel.object.ManagedObject.Specialization.BookmarkPolicy;
 import org.apache.causeway.core.metamodel.spec.HasObjectSpecification;
@@ -354,8 +355,7 @@ extends
     // -- SHORTCUT - ICON
 
     /**
-     * Returns the name of an icon to use if this object is to be displayed
-     * graphically.
+     * Returns the name of an icon to use for this object.
      * <p>
      * May return <code>null</code> if no icon is specified.
      */
@@ -365,6 +365,21 @@ extends
 
     default ObjectIcon getIcon() {
         return getSpecification().getIcon(this);
+    }
+
+    /**
+     * Domain Objects may either have an icon corresponding to an icon resource,
+     * or they use a font awesome icon.
+     */
+    default Either<ObjectIcon, CssClassFaFactory> eitherIconOrFaClass() {
+        val iconName = getIconName();
+        val cssClassFaFactory = getSpecification().getCssClassFaFactory().orElse(null);
+        if (iconName != null
+                || cssClassFaFactory == null) {
+            return Either.left(getIcon());
+        } else {
+            return Either.right(cssClassFaFactory);
+        }
     }
 
     default Either<ManagedObject, ManagedObject> asEitherWithOrWithoutMemoizedBookmark() {

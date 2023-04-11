@@ -27,7 +27,9 @@ import jakarta.inject.Named;
 import jakarta.persistence.*;
 
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 import org.springframework.context.annotation.Profile;
 
@@ -43,6 +45,7 @@ import org.springframework.context.annotation.Profile;
 //tag::class[]
 // ...
 @DomainObject(nature = Nature.ENTITY)
+@DomainObjectLayout(tableDecorator = TableDecorator.DatatablesNet.class)
 public class DomainObjectLayoutTableDecoratorJpa extends DomainObjectLayoutTableDecorator {
     // ...
 //end::class[]

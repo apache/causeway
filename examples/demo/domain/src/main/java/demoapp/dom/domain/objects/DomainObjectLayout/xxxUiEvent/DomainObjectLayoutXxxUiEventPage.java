@@ -31,35 +31,13 @@ import org.apache.causeway.applib.annotation.*;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.DomainObjectLayoutXxxUiEventVm")
+@Named("demo.DomainObjectLayoutXxxUiEventPage")
 @DomainObject(
         nature=Nature.VIEW_MODEL)
-@DomainObjectLayout(
-        titleUiEvent = DomainObjectLayoutXxxUiEventPage.TitleUiEvent.class,
-        iconUiEvent = DomainObjectLayoutXxxUiEventPage.IconUiEvent.class,
-        cssClassUiEvent = DomainObjectLayoutXxxUiEventPage.CssClassUiEvent.class,
-        layoutUiEvent = DomainObjectLayoutXxxUiEventPage.LayoutUiEvent.class
-        )
 public class DomainObjectLayoutXxxUiEventPage implements HasAsciiDocDescription {
 
-    public static class TitleUiEvent extends org.apache.causeway.applib.events.ui.TitleUiEvent<DomainObjectLayoutXxxUiEventPage> { }
-    public static class IconUiEvent extends org.apache.causeway.applib.events.ui.IconUiEvent<DomainObjectLayoutXxxUiEventPage> { }
-    public static class CssClassUiEvent extends org.apache.causeway.applib.events.ui.CssClassUiEvent<DomainObjectLayoutXxxUiEventPage> { }
-    public static class LayoutUiEvent extends org.apache.causeway.applib.events.ui.LayoutUiEvent<DomainObjectLayoutXxxUiEventPage> { }
-
     @ObjectSupport public String title() {
-        return "@DomainObjectLayout#xxxUiEvent (should be overwritten by ui-title-event-listener)";
+        return "@DomainObjectLayout#xxxUiEvent";
     }
-
-    @ObjectSupport public String layout() {
-        return "alternative1"; // should be overwritten by ui-layout-event-listener
-    }
-
-    //TODO[CAUSEWAY-3309]
-    @Property(optionality = Optionality.OPTIONAL)
-    @XmlElement(required = false)
-    @Getter @Setter
-    private String dummy;
-
 }
 //end::class[]

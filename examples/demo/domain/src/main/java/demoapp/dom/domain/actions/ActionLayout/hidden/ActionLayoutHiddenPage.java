@@ -18,42 +18,35 @@
  */
 package demoapp.dom.domain.actions.ActionLayout.hidden;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import lombok.NoArgsConstructor;
+
 import jakarta.inject.Named;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.annotation.Where;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-
-//tag::class[]
-@DomainObject(
-        nature=Nature.VIEW_MODEL)
-@Named("demo.ActionLayoutHiddenVm")
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.ActionLayoutHiddenPage")
+@DomainObject(
+    nature=Nature.VIEW_MODEL)
+@NoArgsConstructor
+//tag::class[]
 public class ActionLayoutHiddenPage implements HasAsciiDocDescription {
+    // ...
+//end::class[]
 
     @ObjectSupport public String title() {
-        return "@ActionLayout#hidden";
+        return "@Action#hidden";
     }
 
-//tag::act[]
-    @Action
-    @ActionLayout(
-            hidden = Where.EVERYWHERE) // <.>
-    public Object act(final String arg) {
-        return this;
-    }
-//end::act[]
-
+//tag::class[]
 }
 //end::class[]

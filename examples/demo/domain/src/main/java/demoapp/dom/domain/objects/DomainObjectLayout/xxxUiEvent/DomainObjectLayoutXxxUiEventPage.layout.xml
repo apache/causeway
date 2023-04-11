@@ -26,7 +26,16 @@
 
 	<bs3:row>
 		<bs3:col span="6">
+			<bs3:row>
+				<bs3:col span="12">
 			<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
+		</bs3:col>
+			</bs3:row>
+			<bs3:row>
+				<bs3:col span="12">
+					<cpt:collection id="objects"/>
+				</bs3:col>
+			</bs3:row>
 		</bs3:col>
 		<bs3:col span="6">
 			<cpt:fieldSet name="Description" id="description" >

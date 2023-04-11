@@ -62,12 +62,11 @@
 			<groupId>org.apache.causeway.mavendeps</groupId>
 			<artifactId>causeway-mavendeps-webapp</artifactId>
 			<type>pom</type>
-			<exclusions>
-				<exclusion>
-					<groupId>org.apache.causeway.viewer</groupId>
-					<artifactId>causeway-viewer-wicket-viewer</artifactId>
-				</exclusion>
-			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.causeway.viewer</groupId>
+			<artifactId>causeway-viewer-restfulobjects-jaxrsresteasy</artifactId>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>

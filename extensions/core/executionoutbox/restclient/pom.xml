@@ -102,13 +102,11 @@
             <artifactId>causeway-mavendeps-webapp</artifactId>
             <type>pom</type>
             <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.causeway.viewer</groupId>
-                    <artifactId>causeway-viewer-wicket-viewer</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
+        <dependency>
+			<groupId>org.apache.causeway.viewer</groupId>
+			<artifactId>causeway-viewer-restfulobjects-jaxrsresteasy</artifactId>
+		</dependency>
 
         <dependency>
             <groupId>com.h2database</groupId>

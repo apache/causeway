@@ -22,8 +22,7 @@ import java.io.Serializable;
 
 import org.apache.wicket.request.resource.ResourceReference;
 
-import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 
 /**
  * Ideally I'd like to move this to the <tt>org.apache.causeway.viewer.wicket.model.causeway</tt>
@@ -31,8 +30,10 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
  */
 public interface ImageResourceCache extends Serializable {
 
-    ResourceReference resourceReferenceFor(ManagedObject adapter);
+    //ResourceReference resourceReferenceFor(ManagedObject adapter);
 
-    ResourceReference resourceReferenceForSpec(ObjectSpecification objectSpecification);
+    //ResourceReference resourceReferenceForSpec(ObjectSpecification objectSpecification);
 
+    ResourceReference resourceReferenceForObjectIcon(final ObjectIcon objectIcon);
+    
 }

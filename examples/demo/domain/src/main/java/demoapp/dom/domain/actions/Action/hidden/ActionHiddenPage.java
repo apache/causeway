@@ -44,7 +44,7 @@ import lombok.Setter;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.ActionHiddenVm")
+@Named("demo.ActionHiddenPage")
 @DomainObject(
     nature=Nature.VIEW_MODEL)
 @NoArgsConstructor
@@ -53,107 +53,9 @@ public class ActionHiddenPage implements HasAsciiDocDescription {
     // ...
 //end::class[]
 
-    public ActionHiddenPage(final String value) {
-        this.text = value;
-        this.otherText = value;
-    }
-
     @ObjectSupport public String title() {
         return "@Action#hidden";
     }
-
-    @Property()
-    @PropertyLayout(fieldSetId = "properties", sequence = "1")
-    @XmlElement(required = true)
-    @Getter @Setter
-    private String text;
-
-    @Property()
-    @PropertyLayout(fieldSetId = "properties", sequence = "2")
-    @XmlElement(required = true)
-    @Getter @Setter
-    private String otherText;
-
-//tag::action-no-annotation[]
-    @Action(
-            semantics = SemanticsOf.IDEMPOTENT
-            // no hidden attribute              // <.>
-    )
-    @ActionLayout(
-        describedAs =
-            "@Action()"
-        , associateWith = "text"
-        , sequence = "1"
-    )
-    public ActionHiddenPage updateTextNoAnnotation(final String text) {
-        setText(text);
-        return this;
-    }
-    @MemberSupport public String default0UpdateTextNoAnnotation() {
-        return getText();
-    }
-//end::action-no-annotation[]
-
-//tag::action-hidden-nowhere[]
-    @Action(
-        semantics = SemanticsOf.IDEMPOTENT
-        , hidden = Where.NOWHERE               // <.>
-    )
-    @ActionLayout(
-        describedAs =
-            "@Action(hidden = Where.NOWHERE)"
-        , associateWith = "text"
-        , sequence = "2"
-    )
-    public ActionHiddenPage updateTextAndHiddenNowhere(final String text) {
-        setText(text);
-        return this;
-    }
-    @MemberSupport public String default0UpdateTextAndHiddenNowhere() {
-        return getText();
-    }
-//end::action-hidden-nowhere[]
-
-//tag::action-but-hidden-on-forms[]
-    @Action(
-        semantics = SemanticsOf.IDEMPOTENT
-        , hidden = Where.OBJECT_FORMS       // <.>
-    )
-    @ActionLayout(
-        describedAs =
-            "@Action(hidden = Where.OBJECT_FORMS)"
-        , associateWith = "text"
-        , sequence = "3"
-    )
-    public ActionHiddenPage updateTextButHiddenOnForms(final String text) {
-        setText(text);
-        return this;
-    }
-    @MemberSupport public String default0UpdateTextButHiddenOnForms() {
-        return getText();
-    }
-//end::action-but-hidden-on-forms[]
-
-//tag::action-but-hidden-everywhere[]
-    @Action(
-        semantics = SemanticsOf.IDEMPOTENT
-
-        , hidden = Where.EVERYWHERE         // <.>
-    )
-    @ActionLayout(
-        describedAs =
-            "@Action(hidden = Where.EVERYWHERE)"
-        , associateWith = "text"
-        , sequence = "4"
-    )
-    public ActionHiddenPage updateTextButHiddenEverywhere(final String text) {
-        setText(text);
-        return this;
-    }
-    @MemberSupport public String default0UpdateTextButHiddenEverywhere() {
-        return getText();
-    }
-//end::action-but-hidden-everywhere[]
 
 //tag::class[]
 }

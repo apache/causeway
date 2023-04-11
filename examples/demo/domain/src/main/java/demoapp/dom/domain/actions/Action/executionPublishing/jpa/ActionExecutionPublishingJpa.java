@@ -27,136 +27,41 @@ import jakarta.persistence.Table;
 
 import org.springframework.context.annotation.Profile;
 
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Editing;
-import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.annotation.Publishing;
-import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
-import demoapp.dom.domain.actions.Action.executionPublishing.ActionExecutionPublishingDisabledMetaAnnotation;
-import demoapp.dom.domain.actions.Action.executionPublishing.ActionExecutionPublishingEnabledMetaAnnotation;
-import demoapp.dom.domain.actions.Action.executionPublishing.ActionExecutionPublishingEntity;
+import demoapp.dom.domain.actions.Action.executionPublishing.ActionExecutionPublishing;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Profile("demo-jpa")
-//tag::class[]
 @Entity
 @Table(
-      schema = "demo",
-      name = "ActionExecutionPublishingJpa"
+    schema = "demo",
+    name = "ActionExecutionPublishingJpa"
 )
 @EntityListeners(CausewayEntityListener.class)
-@Named("demo.ActionExecutionPublishingEntity")
-@DomainObject(
-        editing = Editing.DISABLED)
+@Named("demo.ActionExecutionPublishingJpa")
 @NoArgsConstructor
-public class ActionExecutionPublishingJpa
-        extends ActionExecutionPublishingEntity {
+//tag::class[]
+// ...
+@DomainObject(nature = Nature.ENTITY)
+public class ActionExecutionPublishingJpa extends ActionExecutionPublishing {
     // ...
 //end::class[]
 
-    public ActionExecutionPublishingJpa(final String initialValue) {
-        this.property = initialValue;
-        this.propertyMetaAnnotated = initialValue;
-        this.propertyMetaAnnotatedOverridden = initialValue;
-    }
-
-    @ObjectSupport public String title() {
-        return "@Action#executionPublishing (JPA)";
+    public ActionExecutionPublishingJpa(final String value) {
+        setName(value);
     }
 
     @Id
     @GeneratedValue
     private Long id;
 
-//tag::property[]
-    @Property()
-    @PropertyLayout(fieldSetId = "annotation", sequence = "1")
     @Getter @Setter
-    private String property;
-
-    @Property()
-    @PropertyLayout(fieldSetId = "meta-annotated", sequence = "1")
-    @Getter @Setter
-    private String propertyMetaAnnotated;
-
-    @Property()
-    @PropertyLayout(fieldSetId = "meta-annotated-overridden", sequence = "1")
-    @Getter @Setter
-    private String propertyMetaAnnotatedOverridden;
-//end::property[]
-
-//tag::annotation[]
-    @Action(
-        executionPublishing = Publishing.ENABLED       // <.>
-        , semantics = SemanticsOf.IDEMPOTENT
-    )
-    @ActionLayout(
-        named = "Update Property"
-        , describedAs = "@Action(publishing = ENABLED)"
-        , associateWith = "property"
-        , sequence = "1"
-    )
-    public ActionExecutionPublishingJpa updatePropertyUsingAnnotation(final String value) {
-        setProperty(value);
-        return this;
-    }
-    @MemberSupport public String default0UpdatePropertyUsingAnnotation() {
-        return getProperty();
-    }
-
-//end::annotation[]
-
-//tag::meta-annotation[]
-    @ActionExecutionPublishingEnabledMetaAnnotation      // <.>
-    @Action(
-        semantics = SemanticsOf.IDEMPOTENT
-    )
-    @ActionLayout(
-        named = "Update Property"
-        , describedAs = "@ActionPublishingEnabledMetaAnnotation"
-        , associateWith = "propertyMetaAnnotated"
-        , sequence = "1"
-    )
-    public ActionExecutionPublishingJpa updatePropertyUsingMetaAnnotation(final String value) {
-        setPropertyMetaAnnotated(value);
-        return this;
-    }
-    @MemberSupport public String default0UpdatePropertyUsingMetaAnnotation() {
-        return getPropertyMetaAnnotated();
-    }
-//end::meta-annotation[]
-
-//tag::meta-annotation-overridden[]
-    @ActionExecutionPublishingDisabledMetaAnnotation     // <.>
-    @Action(
-        executionPublishing = Publishing.ENABLED       // <.>
-        , semantics = SemanticsOf.IDEMPOTENT
-    )
-    @ActionLayout(
-        named = "Update Property"
-        , describedAs =
-            "@ActionPublishingDisabledMetaAnnotation " +
-            "@Action(publishing = ENABLED)"
-        , associateWith = "propertyMetaAnnotatedOverridden"
-        , sequence = "1"
-    )
-    public ActionExecutionPublishingJpa updatePropertyUsingMetaAnnotationButOverridden(final String value) {
-        setPropertyMetaAnnotatedOverridden(value);
-        return this;
-    }
-    @MemberSupport public String default0UpdatePropertyUsingMetaAnnotationButOverridden() {
-        return getPropertyMetaAnnotatedOverridden();
-    }
-//end::meta-annotation-overridden[]
+    private String name;
 
 //tag::class[]
 }
