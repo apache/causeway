@@ -158,7 +158,7 @@ public @interface Action {
      * @deprecated use {@link ActionLayout#hidden()} instead
      */
     @Deprecated(forRemoval = true, since = "2.0.0-RC2")
-    Where hidden()
+    Where hidden2()
             default Where.NOT_SPECIFIED;
 
     /**

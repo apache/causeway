@@ -20,6 +20,9 @@ package org.apache.causeway.core.metamodel.facets.properties.property;
 
 import java.util.Optional;
 
+import jakarta.inject.Inject;
+import jakarta.validation.constraints.Pattern;
+
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
@@ -38,7 +41,6 @@ import org.apache.causeway.core.metamodel.facets.properties.projection.Projectin
 import org.apache.causeway.core.metamodel.facets.properties.property.disabled.DisabledFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.entitychangepublishing.EntityPropertyChangePublishingPolicyFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.fileaccept.FileAcceptFacetForPropertyAnnotation;
-import org.apache.causeway.core.metamodel.facets.properties.property.hidden.HiddenFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.MandatoryFacetInvertedByNullableAnnotationOnProperty;
 import org.apache.causeway.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForPropertyAnnotation;
@@ -60,8 +62,6 @@ import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidato
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorForConflictingOptionality;
 import org.apache.causeway.core.metamodel.util.EventUtil;
 
-import jakarta.inject.Inject;
-import jakarta.validation.constraints.Pattern;
 import lombok.val;
 
 public class PropertyAnnotationFacetFactory
@@ -84,7 +84,6 @@ extends FacetFactoryAbstract {
         inferIntentWhenOnTypeLevel(processMethodContext, propertyIfAny);
 
         processModify(processMethodContext, propertyIfAny);
-        processHidden(processMethodContext, propertyIfAny);
         processEditing(processMethodContext, propertyIfAny);
         processCommandPublishing(processMethodContext, propertyIfAny);
         processProjecting(processMethodContext, propertyIfAny);
@@ -205,15 +204,6 @@ extends FacetFactoryAbstract {
             }
         }
         return propertyDomainEventType;
-    }
-
-    void processHidden(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
-        val facetHolder = processMethodContext.getFacetHolder();
-
-        // search for @Property(hidden=...)
-        addFacetIfPresent(
-                HiddenFacetForPropertyAnnotation
-                .create(propertyIfAny, facetHolder));
     }
 
     void processEditing(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
