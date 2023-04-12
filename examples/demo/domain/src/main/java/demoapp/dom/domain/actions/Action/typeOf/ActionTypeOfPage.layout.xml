@@ -35,9 +35,11 @@
 			</bs3:row>
 			<bs3:row>
 				<bs3:col span="12">
-					<cpt:collection id="children"/>
-					<cpt:collection id="favorites"/>
-					<cpt:collection id="mixinChildren"/>
+					<cpt:collection id="children">
+						<cpt:action id="find"/>
+						<cpt:action id="findReturningRawList"/>
+						<cpt:action id="findReturningRawListButAnnotated"/>
+					</cpt:collection>
 				</bs3:col>
 			</bs3:row>
 		</bs3:col>

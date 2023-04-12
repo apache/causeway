@@ -89,14 +89,11 @@ public class ActionMenu {
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-shapes", describedAs = "Semantic relationship between actions and other properties or collections")
     public ActionTypeOfPage typeOf(){
-        val typeOfVm = new ActionTypeOfPage();
-        val children = typeOfVm.getChildren();
-
-        // add to either one collection or the other
+        val page = new ActionTypeOfPage();
         samples.stream()
                 .map(ActionTypeOfChildVm::new)
-                .forEach(children::add);
-        return typeOfVm;
+                .forEach(e -> page.getChildren().add(e));
+        return page;
     }
 
 
