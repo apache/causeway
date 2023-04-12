@@ -26,24 +26,19 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.calls;
 
 import org.apache.causeway.applib.annotation.Collection;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
 import org.apache.causeway.core.metamodel.commons.matchers.CausewayMatchers;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature;
-import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.causeway.core.metamodel.facets.collections.collection.hidden.HiddenFacetForCollectionAnnotation;
 import org.apache.causeway.core.metamodel.facets.collections.collection.typeof.TypeOfFacetForCollectionAnnotation;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
@@ -73,13 +68,6 @@ extends AbstractFacetFactoryJupiterTestCase {
         facetFactory.processModify(processMethodContext, collectionIfAny);
     }
 
-    private static void processHidden(
-            final CollectionAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
-        val collectionIfAny = processMethodContext.synthesizeOnMethod(Collection.class);
-        facetFactory.processHidden(processMethodContext, collectionIfAny);
-    }
-
-
     private static void processTypeOf(
             final CollectionAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
         val collectionIfAny = processMethodContext.synthesizeOnMethod(Collection.class);
@@ -96,48 +84,6 @@ extends AbstractFacetFactoryJupiterTestCase {
     @AfterEach
     public void tearDown() throws Exception {
         facetFactory = null;
-    }
-
-
-    @Deprecated(forRemoval = true, since = "2.0.0-RC2")
-    static class Hidden extends CollectionAnnotationFacetFactoryTest {
-
-        @Test
-        void withAnnotation() {
-
-            class Order {
-            }
-            class Customer {
-                @Collection(hidden = Where.REFERENCES_PARENT)
-                public List<Order> getOrders() {
-                    return null;
-                }
-
-                public void setOrders(final List<Order> orders) {
-                }
-            }
-
-            // given
-            final Class<?> cls = Customer.class;
-            collectionMethod = findMethod(Customer.class, "getOrders");
-
-            // when
-            final FacetFactory.ProcessMethodContext processMethodContext = ProcessMethodContext
-                    .forTesting(cls, null, collectionMethod, mockMethodRemover, facetedMethod);
-            processHidden(facetFactory, processMethodContext);
-
-            // then
-            final HiddenFacet hiddenFacet = facetedMethod.getFacet(HiddenFacet.class);
-            assertNotNull(hiddenFacet);
-            assertTrue(hiddenFacet instanceof HiddenFacetForCollectionAnnotation);
-            final HiddenFacetForCollectionAnnotation hiddenFacetImpl = (HiddenFacetForCollectionAnnotation) hiddenFacet;
-            assertThat(hiddenFacetImpl.where(), is(Where.REFERENCES_PARENT));
-
-            final Facet hiddenFacetForColl = facetedMethod.getFacet(HiddenFacet.class);
-            assertNotNull(hiddenFacetForColl);
-            assertTrue(hiddenFacet == hiddenFacetForColl);
-        }
-
     }
 
     static class TypeOf extends CollectionAnnotationFacetFactoryTest {

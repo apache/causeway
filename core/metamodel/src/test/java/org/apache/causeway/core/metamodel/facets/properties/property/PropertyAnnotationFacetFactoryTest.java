@@ -52,7 +52,6 @@ import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
@@ -62,7 +61,6 @@ import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCol
 import org.apache.causeway.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet;
 import org.apache.causeway.core.metamodel.facets.properties.property.disabled.DisabledFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.entitychangepublishing.EntityPropertyChangePublishingPolicyFacet;
-import org.apache.causeway.core.metamodel.facets.properties.property.hidden.HiddenFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromDefault;
@@ -103,12 +101,6 @@ class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJupiterTest
             final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
         val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         facetFactory.processModify(processMethodContext, propertyIfAny);
-    }
-
-    private static void processHidden(
-            final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
-        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
-        facetFactory.processHidden(processMethodContext, propertyIfAny);
     }
 
     private static void processOptional(
@@ -390,42 +382,6 @@ class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJupiterTest
             final PropertyClearFacetForDomainEventFromDefault clearFacetImpl = (PropertyClearFacetForDomainEventFromDefault) clearFacet;
             assertThat(clearFacetImpl.value(), CausewayMatchers.classEqualTo(PropertyDomainEvent.Default.class));
         }
-    }
-
-    public static class Hidden extends PropertyAnnotationFacetFactoryTest {
-
-        @Test
-        @Deprecated(forRemoval = true, since = "2.0.0-RC2")
-        public void withAnnotation() {
-
-            @SuppressWarnings("unused")
-            class Customer {
-                @Property(hidden = Where.REFERENCES_PARENT)
-                @Getter @Setter private String name;
-            }
-
-            // given
-            final Class<?> cls = Customer.class;
-            propertyMethod = findMethod(Customer.class, "getName");
-
-            // when
-            val processMethodContext = ProcessMethodContext
-                    .forTesting(cls, null,
-                    propertyMethod, mockMethodRemover, facetedMethod);
-            processHidden(facetFactory, processMethodContext);
-
-            // then
-            final HiddenFacet hiddenFacet = facetedMethod.getFacet(HiddenFacet.class);
-            assertNotNull(hiddenFacet);
-            assertTrue(hiddenFacet instanceof HiddenFacetForPropertyAnnotation);
-            final HiddenFacetForPropertyAnnotation hiddenFacetImpl = (HiddenFacetForPropertyAnnotation) hiddenFacet;
-            assertThat(hiddenFacetImpl.where(), is(Where.REFERENCES_PARENT));
-
-            final Facet hiddenFacetForProp = facetedMethod.getFacet(HiddenFacet.class);
-            assertNotNull(hiddenFacetForProp);
-            assertTrue(hiddenFacet == hiddenFacetForProp);
-        }
-
     }
 
     @SuppressWarnings("unused")
