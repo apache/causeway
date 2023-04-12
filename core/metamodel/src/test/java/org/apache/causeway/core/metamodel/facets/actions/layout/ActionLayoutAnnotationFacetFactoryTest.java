@@ -31,15 +31,19 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacetFallback;
+import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 
-class ActionLayoutXmlLayoutAnnotationFacetFactoryTest
+import lombok.val;
+
+class ActionLayoutAnnotationFacetFactoryTest
 extends AbstractFacetFactoryJupiterTestCase {
 
     ActionLayoutFacetFactory facetFactory;
@@ -50,7 +54,7 @@ extends AbstractFacetFactoryJupiterTestCase {
     }
 
     @Test
-    void testActionLayoutAnnotationPickedUp() {
+    void testActionLayoutAnnotation_position() {
 
         class Customer {
             @ActionLayout(position = ActionLayout.Position.PANEL)
@@ -67,8 +71,30 @@ extends AbstractFacetFactoryJupiterTestCase {
         final Facet facet = facetedMethod.getFacet(ActionPositionFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof ActionPositionFacetForActionLayoutAnnotation);
-        final ActionPositionFacetForActionLayoutAnnotation actionLayoutFacetAnnotation = (ActionPositionFacetForActionLayoutAnnotation) facet;
+        val actionLayoutFacetAnnotation = (ActionPositionFacetForActionLayoutAnnotation) facet;
         assertEquals(ActionLayout.Position.PANEL, actionLayoutFacetAnnotation.position());
+    }
+
+    @Test
+    void testActionLayoutAnnotation_hidden() {
+
+        class Customer {
+            @ActionLayout(hidden = Where.ALL_TABLES)
+            public String foz() {
+                return null;
+            }
+        }
+
+        final Method method = findMethod(Customer.class, "foz");
+
+        facetFactory.process(ProcessMethodContext.forTesting(Customer.class, null, method, mockMethodRemover,
+                facetedMethod));
+
+        final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
+        assertNotNull(facet);
+        assertTrue(facet instanceof HiddenFacetForActionLayoutAnnotation);
+        val actionLayoutFacetAnnotation = (HiddenFacetForActionLayoutAnnotation) facet;
+        assertEquals(Where.ALL_TABLES, actionLayoutFacetAnnotation.where());
     }
 
     @Test
@@ -91,7 +117,7 @@ extends AbstractFacetFactoryJupiterTestCase {
         assertTrue(facet instanceof ActionPositionFacetFallback);
     }
 
-    static class CssClassFa extends ActionLayoutXmlLayoutAnnotationFacetFactoryTest {
+    static class CssClassFa extends ActionLayoutAnnotationFacetFactoryTest {
 
         @Test
         void testDefaultPosition() {
@@ -110,7 +136,7 @@ extends AbstractFacetFactoryJupiterTestCase {
             Facet facet = facetedMethod.getFacet(CssClassFaFacet.class);
             assertThat(facet, is(notNullValue()));
             assertThat(facet, is(instanceOf(CssClassFaFacetForActionLayoutAnnotation.class)));
-            CssClassFaFacetForActionLayoutAnnotation classFaFacetForActionLayoutAnnotation = (CssClassFaFacetForActionLayoutAnnotation) facet;
+            val classFaFacetForActionLayoutAnnotation = (CssClassFaFacetForActionLayoutAnnotation) facet;
             assertThat(classFaFacetForActionLayoutAnnotation.asSpaceSeparated(), is(equalTo("fa fa-fw fa-font-awesome")));
             assertThat(classFaFacetForActionLayoutAnnotation.getPosition(), is(CssClassFaPosition.LEFT));
         }
@@ -132,7 +158,7 @@ extends AbstractFacetFactoryJupiterTestCase {
             Facet facet = facetedMethod.getFacet(CssClassFaFacet.class);
             assertThat(facet, is(notNullValue()));
             assertThat(facet, is(instanceOf(CssClassFaFacetForActionLayoutAnnotation.class)));
-            CssClassFaFacetForActionLayoutAnnotation classFaFacetForActionLayoutAnnotation = (CssClassFaFacetForActionLayoutAnnotation) facet;
+            val classFaFacetForActionLayoutAnnotation = (CssClassFaFacetForActionLayoutAnnotation) facet;
             assertThat(classFaFacetForActionLayoutAnnotation.asSpaceSeparated(), is(equalTo("fa fa-fw fa-font-awesome")));
             assertThat(classFaFacetForActionLayoutAnnotation.getPosition(), is(CssClassFaPosition.RIGHT));
         }
