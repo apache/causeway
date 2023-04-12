@@ -560,6 +560,11 @@ span.containedButtonPanel {
 	margin-right: 2px;
 }
 
+/** top alignment for additional buttons on scalar value inputs */
+.scalarValueInput .additionalButtons .btn-group {
+  vertical-align: top;
+}
+
 /* from additionalLinksPanel.css */
 
 .additionalLinkList {
