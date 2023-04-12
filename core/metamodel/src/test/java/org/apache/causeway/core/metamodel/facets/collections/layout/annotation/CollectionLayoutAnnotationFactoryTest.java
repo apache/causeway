@@ -21,26 +21,36 @@ package org.apache.causeway.core.metamodel.facets.collections.layout.annotation;
 import java.lang.reflect.Method;
 import java.util.SortedSet;
 
+import org.junit.jupiter.api.Test;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.CollectionLayout;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.internal.collections._Sets;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.collections.layout.CollectionLayoutFacetFactory;
+import org.apache.causeway.core.metamodel.facets.collections.layout.HiddenFacetForCollectionLayoutAnnotation;
 import org.apache.causeway.core.metamodel.facets.collections.layout.MemberNamedFacetForCollectionLayoutAnnotation;
 
 import lombok.val;
 
-public class NamedFacetForCollectionLayoutAnnotationFactoryTest extends AbstractFacetFactoryTest {
+class CollectionLayoutAnnotationFactoryTest extends AbstractFacetFactoryTest {
 
-    public void testCollectionLayoutAnnotationNamed() {
+    @Test
+    public void testCollectionLayoutAnnotation_named() {
         val facetFactory = new CollectionLayoutFacetFactory(metaModelContext);
 
         class Customer {
@@ -58,6 +68,29 @@ public class NamedFacetForCollectionLayoutAnnotationFactoryTest extends Abstract
         assertThat(facet, is(notNullValue()));
         assertThat(facet, is(instanceOf(MemberNamedFacetForCollectionLayoutAnnotation.class)));
         assertThat(((HasStaticText)facet).text(), is(equalTo("1st names")));
+    }
+
+    @Test
+    void testCollectionLayoutAnnotation_hidden() {
+        val facetFactory = new CollectionLayoutFacetFactory(metaModelContext);
+
+        class Customer {
+            @CollectionLayout(hidden = Where.OBJECT_FORMS)
+            public SortedSet<String> getFirstNames() {
+                return _Sets.newTreeSet();
+            }
+        }
+        final Method method = findMethod(Customer.class, "getFirstNames");
+
+        facetFactory.process(ProcessMethodContext
+                .forTesting(Customer.class, null, method, methodRemover, facetedMethod));
+
+        final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
+        assertNotNull(facet);
+        assertTrue(facet instanceof HiddenFacetForCollectionLayoutAnnotation);
+        final HiddenFacetForCollectionLayoutAnnotation collLayoutFacetAnnotation = (HiddenFacetForCollectionLayoutAnnotation) facet;
+        assertEquals(Where.OBJECT_FORMS, collLayoutFacetAnnotation.where());
+
     }
 
 }
