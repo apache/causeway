@@ -210,8 +210,10 @@ footer > .navbar {
 }
 
 .collectionContentsAsAjaxTablePanel table.contents caption { text-align: left; }
+/*
 .collectionContentsAsAjaxTablePanel table.contents tr {
 }
+*/
 
 .collectionContentsAsAjaxTablePanel table.contents tr th,
 .collectionContentsAsAjaxTablePanel table.contents tr th a span {
@@ -298,10 +300,11 @@ footer > .navbar {
     padding:0 0;
 }
 
-/* bootstrap seems to set to 'pointer' */
+/* bootstrap seems to set to 'pointer' 
 .collectionContentsAsAjaxTablePanel label:hover {
-    /*cursor: default;*/
+    cursor: default;
 }
+*/
 
 .collectionContentsAsAjaxTablePanel div input[type=text][disabled] {
     padding: 0;
@@ -795,9 +798,10 @@ div.label-right .scalarValueWrapper .feedback-links-below-wrapper {
     margin-bottom: 0px;
     margin-top: -4px;
 }
+/*
 .standaloneCollectionPanel .selectorDropdown {
-    /*margin-top: -4px;*/
-}
+    margin-top: -4px;
+}*/
 .standaloneCollectionPanel div.iconAndTitle {
     min-height: 45px;
 }
@@ -836,14 +840,16 @@ div.referencePanel.scalarNameAndValueComponentType {
     padding-bottom: 5px; /* different from entityCollectionsPanel because of display-inline ? of additionalLinks */
 }
 
+/*
 .additionalLinks.float-right {
-    /*margin-right: 5px;*/
-}
+    margin-right: 5px;
+}*/
 
+/*
 .additionalLinks.float-right div {
-    /* display: inline-block; */
-    /*margin-left: 5px;*/
-}
+    display: inline-block;
+    margin-left: 5px;
+}*/
 
 .additionalLinks.float-right div .additionalLinkListDropDown {
     margin-left: 10px;
@@ -856,13 +862,13 @@ div.referencePanel.scalarNameAndValueComponentType {
 }
 
 .scalarValueWrapper ul.additionalLinkList {
-    padding-bottom: 5px;
-    margin-left: -6.4px;
+    padding-top: 0.2rem;
 }
 
+/*
 .scalarValueWrapper ul.additionalLinkListInline li.additionalLinkItem {
-    /*padding-bottom: 5px;*/
-}
+    padding-bottom: 5px;
+}*/
 
 .scalarValueWrapper .form-text {
     margin-bottom: 5px;
@@ -1204,6 +1210,10 @@ li.list-separator {
 .list-inline > li.additionalLinkItem {
     padding-left: 0.4em;
     margin: 1px;
+}
+/** except, don't left indent for additional Actions associated with Properties */
+.scalarValueWrapper .list-inline>li.additionalLinkItem {
+	padding-left: 0px;
 }
 
 ul.sidebar-nav {
