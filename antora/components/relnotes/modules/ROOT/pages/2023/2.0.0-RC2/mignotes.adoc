@@ -5,6 +5,17 @@
 
 This page will be added to as development progresses.
 
+== Programming Model
+
+=== Removed
+* `ActionLayout#bookmarking` ... had conflicting semantics with `DomainObjectLayout#bookmarking`,
+that is, if the latter was present on an Action's return type, hence removed
+
+=== Marked Deprecated for Removal
+* `Action#hidden` ... use `ActionLayout#hidden` instead
+* `Collection#hidden` ... use `CollectionLayout#hidden` instead
+* `Property#hidden` ... use `PropertyLayout#hidden` instead
+
 == Maven Artifacts
 
 Incubator projects `viewer-vaadin` and `viewer-javafx` were discontinued in version 2.x,
