@@ -84,10 +84,10 @@ public @interface Collection {
     /**
      * Indicates when the collection is not visible to the user.
      *
-     * @see Action#hidden()
-     * @see Property#hidden()
-     * @see Collection#hidden()
+     * @see CollectionLayout#hidden()
+     * @deprecated use CollectionLayout#hidden() instead
      */
+    @Deprecated(forRemoval = true, since = "2.0.0-RC2")
     Where hidden()
             default Where.NOT_SPECIFIED;
 

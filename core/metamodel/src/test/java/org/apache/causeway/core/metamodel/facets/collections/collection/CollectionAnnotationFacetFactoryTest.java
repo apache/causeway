@@ -33,6 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.calls;
 
 import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
 import org.apache.causeway.core.metamodel.commons.matchers.CausewayMatchers;
@@ -107,7 +108,8 @@ extends AbstractFacetFactoryJupiterTestCase {
             class Order {
             }
             class Customer {
-                @Collection(hidden = Where.REFERENCES_PARENT)
+                @Collection
+                @CollectionLayout(hidden = Where.REFERENCES_PARENT)
                 public List<Order> getOrders() {
                     return null;
                 }

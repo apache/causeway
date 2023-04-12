@@ -18,11 +18,12 @@
  */
 package demoapp.dom.domain.properties.PropertyLayout.hidden;
 
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.Where;
+
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
-
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.Where;
 
 //tag::class[]
 public abstract class PropertyLayoutHidden
@@ -51,19 +52,22 @@ public abstract class PropertyLayoutHidden
 //end::none[]
 
 //tag::object-forms[]
-    @Property(hidden = Where.OBJECT_FORMS)          // <.>
+    @Property
+    @PropertyLayout(hidden = Where.OBJECT_FORMS)          // <.>
     public abstract String getNameHiddenObjectForms();
     public abstract void setNameHiddenObjectForms(String value);
 //end::object-forms[]
 
 //tag::all-tables[]
-    @Property(hidden = Where.ALL_TABLES)            // <.>
+    @Property
+    @PropertyLayout(hidden = Where.ALL_TABLES)            // <.>
     public abstract String getNameHiddenAllTables();
     public abstract void setNameHiddenAllTables(String value);
 //end::all-tables[]
 
 //tag::everywhere[]
-    @Property(hidden = Where.EVERYWHERE)            // <.>
+    @Property
+    @PropertyLayout(hidden = Where.EVERYWHERE)            // <.>
     public abstract String getNameHiddenEverywhere();
     public abstract void setNameHiddenEverywhere(String value);
 //end::everywhere[]

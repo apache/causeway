@@ -158,8 +158,8 @@ public class ActionSemanticsPage implements HasAsciiDocDescription {
 //tag::action-semantics-safe-and-request-cacheable[]
     @Action(
         semantics = SemanticsOf.SAFE_AND_REQUEST_CACHEABLE          // <.>
-        , hidden = Where.EVERYWHERE                                 // <.>
     )
+    @ActionLayout(hidden = Where.EVERYWHERE)                        // <.>
     public int queryPropertyForSafeAndRequestCacheable() {
         ++numberOfTimesActionSafeAndRequestCacheableWasExecuted;    // <.>
         return getPropertyForSafeAndRequestCacheable();

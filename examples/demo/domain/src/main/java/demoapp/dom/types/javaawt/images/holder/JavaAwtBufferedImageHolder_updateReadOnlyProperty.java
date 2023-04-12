@@ -25,14 +25,12 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.annotation.Where;
 
 import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(
-        semantics = SemanticsOf.IDEMPOTENT,
-        hidden = Where.EVERYWHERE   // TODO: action parameters for images not yet supported.
+        semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
         promptStyle = PromptStyle.INLINE

@@ -18,14 +18,20 @@
  */
 package demoapp.dom.domain.progmodel.objects.mixins.mixins;
 
+import javax.inject.Named;
+
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Editing;
+import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.Where;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.inject.Named;
-
-import org.apache.causeway.applib.annotation.*;
 
 @Named("demo.FibonacciNumberVm")
 @DomainObject(
@@ -47,7 +53,8 @@ public class FibonacciNumberVm {
     @Getter @Setter
     private int fibonacci;
 
-    @Property(hidden = Where.REFERENCES_PARENT)
+    @Property
+    @PropertyLayout(hidden = Where.REFERENCES_PARENT)
     @Getter @Setter
     private CountHolder parent;
 

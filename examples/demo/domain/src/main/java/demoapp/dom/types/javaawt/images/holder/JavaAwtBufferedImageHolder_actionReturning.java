@@ -22,15 +22,13 @@ import java.awt.image.BufferedImage;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.annotation.Where;
 
 import lombok.RequiredArgsConstructor;
 
 
 //tag::class[]
 @Action(
-        semantics = SemanticsOf.SAFE,
-        hidden = Where.EVERYWHERE   // TODO: not yet supported
+        semantics = SemanticsOf.SAFE
     )
 @RequiredArgsConstructor
 public class JavaAwtBufferedImageHolder_actionReturning {

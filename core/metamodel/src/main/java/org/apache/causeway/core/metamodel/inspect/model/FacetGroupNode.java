@@ -31,6 +31,7 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.schema.metamodel.v2.FacetHolder.Facets;
@@ -52,7 +53,8 @@ public class FacetGroupNode extends MMNode {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".FacetGroupNode";
 
-    @Property(hidden = Where.EVERYWHERE)
+    @Property
+    @PropertyLayout(hidden = Where.EVERYWHERE)
     @Getter @Setter private Facets facets;
 
     @Override

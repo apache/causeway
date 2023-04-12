@@ -18,20 +18,26 @@
  */
 package demoapp.dom.domain.properties.PropertyLayout.hidden.jpa;
 
-import demoapp.dom.domain.properties.PropertyLayout.hidden.PropertyLayoutHidden;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import javax.inject.Named;
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.springframework.context.annotation.Profile;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
-import org.springframework.context.annotation.Profile;
+
+import demoapp.dom.domain.properties.PropertyLayout.hidden.PropertyLayoutHidden;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Profile("demo-jpa")
 @Entity
@@ -49,7 +55,7 @@ public class PropertyLayoutHiddenJpa extends PropertyLayoutHidden {
     // ...
 //end::class[]
 
-    public PropertyLayoutHiddenJpa(String value) {
+    public PropertyLayoutHiddenJpa(final String value) {
         setName(value);
         setNameHiddenAllTables(value);
         setNameHiddenEverywhere(value);
@@ -64,15 +70,18 @@ public class PropertyLayoutHiddenJpa extends PropertyLayoutHidden {
     @Getter @Setter
     private String name;
 
-    @Property(hidden = Where.ALL_TABLES)
+    @Property
+    @PropertyLayout(hidden = Where.ALL_TABLES)
     @Getter @Setter
     private String nameHiddenAllTables;
 
-    @Property(hidden = Where.EVERYWHERE)
+    @Property
+    @PropertyLayout(hidden = Where.EVERYWHERE)
     @Getter @Setter
     private String nameHiddenEverywhere;
 
-    @Property(hidden = Where.OBJECT_FORMS)
+    @Property
+    @PropertyLayout(hidden = Where.OBJECT_FORMS)
     @Getter @Setter
     private String nameHiddenObjectForms;
 

@@ -26,6 +26,7 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
+@Deprecated(forRemoval = true, since = "2.0.0-RC2")
 public class HiddenFacetForCollectionAnnotation extends HiddenFacetAbstract {
 
     public static Optional<HiddenFacetForCollectionAnnotation> create(

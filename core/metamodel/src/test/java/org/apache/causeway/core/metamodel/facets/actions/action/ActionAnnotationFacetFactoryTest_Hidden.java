@@ -26,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
@@ -46,7 +47,8 @@ extends ActionAnnotationFacetFactoryTest {
     void withAnnotation() {
 
         class Customer {
-            @Action(hidden = Where.REFERENCES_PARENT)
+            @Action
+            @ActionLayout(hidden = Where.REFERENCES_PARENT)
             public void someAction() {
             }
         }

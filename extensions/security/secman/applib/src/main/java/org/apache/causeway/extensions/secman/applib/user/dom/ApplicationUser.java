@@ -553,9 +553,8 @@ public abstract class ApplicationUser
 
     // -- ENCRYPTED PASSWORD
 
-    @Property(
-            hidden = Where.EVERYWHERE
-    )
+    @Property
+    @PropertyLayout(hidden = Where.EVERYWHERE)
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     public @interface EncryptedPassword {

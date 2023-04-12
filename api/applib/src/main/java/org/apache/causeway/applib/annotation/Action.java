@@ -150,17 +150,14 @@ public @interface Action {
 
     /**
      * Indicates where (in the UI) the action is not visible to the user.
-     *
-     * <p>
-     * It is also possible to suppress an action's visibility using {@link ActionLayout#hidden()}.
-     *
      * <p>
      * For {@link DomainService domain service} actions, the action's visibility is dependent upon its
      * {@link DomainService#nature() nature}.
      *
-     * @see Property#hidden()
-     * @see Collection#hidden()
+     * @see ActionLayout#hidden()
+     * @deprecated use {@link ActionLayout#hidden()} instead
      */
+    @Deprecated(forRemoval = true, since = "2.0.0-RC2")
     Where hidden()
             default Where.NOT_SPECIFIED;
 

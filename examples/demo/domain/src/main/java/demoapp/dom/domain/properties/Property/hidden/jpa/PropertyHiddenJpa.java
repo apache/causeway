@@ -18,19 +18,26 @@
  */
 package demoapp.dom.domain.properties.Property.hidden.jpa;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom._infra.values.ValueHolder;
+import javax.inject.Named;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.springframework.context.annotation.Profile;
+
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
+
 import demoapp.dom.domain.properties.Property.hidden.PropertyHidden;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.inject.Named;
-import javax.persistence.*;
-
-import org.apache.causeway.applib.annotation.*;
-import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
-import org.springframework.context.annotation.Profile;
 
 @Profile("demo-jpa")
 @Entity
@@ -48,7 +55,7 @@ public class PropertyHiddenJpa extends PropertyHidden {
     // ...
 //end::class[]
 
-    public PropertyHiddenJpa(String value) {
+    public PropertyHiddenJpa(final String value) {
         setName(value);
         setNameHiddenAllTables(value);
         setNameHiddenEverywhere(value);
@@ -63,15 +70,18 @@ public class PropertyHiddenJpa extends PropertyHidden {
     @Getter @Setter
     private String name;
 
-    @Property(hidden = Where.ALL_TABLES)
+    @Property // TODO Property's hidden attribute will be removed in 2.0
+    @PropertyLayout(hidden = Where.ALL_TABLES)
     @Getter @Setter
     private String nameHiddenAllTables;
 
-    @Property(hidden = Where.EVERYWHERE)
+    @Property // TODO Property's hidden attribute will be removed in 2.0
+    @PropertyLayout(hidden = Where.EVERYWHERE)
     @Getter @Setter
     private String nameHiddenEverywhere;
 
-    @Property(hidden = Where.OBJECT_FORMS)
+    @Property // TODO Property's hidden attribute will be removed in 2.0
+    @PropertyLayout(hidden = Where.OBJECT_FORMS)
     @Getter @Setter
     private String nameHiddenObjectForms;
 
