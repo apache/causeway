@@ -56,10 +56,10 @@ public interface Consent {
         }
         // -- PREDEFINED REASONS
         public static VetoReason editingObjectDisabledReasonNotGiven() {
-            return VetoReason.inferred("Disabled, via @DomainObject annotation, reason not given.");
+            return VetoReason.inferred("Disabled via @DomainObject annotation, reason not given.");
         }
         public static VetoReason editingPropertyDisabledReasonNotGiven() {
-            return VetoReason.inferred("Disabled, via @Property annotation, reason not given.");
+            return VetoReason.inferred("Disabled via @Property annotation, reason not given.");
         }
         public static VetoReason propertyHasNoSetter() {
             return VetoReason.inferred("Disabled, property has no setter.");

@@ -27,7 +27,7 @@ import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstra
 
 /**
  * In order of appearance in the UI.
- * XXX refactoring hint: whether or not buttons are visible should be answered by the scalar (or meta-model) model itself
+ * XXX refactoring hint: whether or not buttons are visible should be answered by the scalar-model (or meta-model) itself
  */
 enum ScalarPanelAdditionalButton {
 
@@ -37,7 +37,8 @@ enum ScalarPanelAdditionalButton {
                 final ScalarModel scalarModel,
                 final RenderScenario renderScenario,
                 final FieldFragement fieldFragement) {
-            return scalarModel.disabledReason()
+            return renderScenario!=RenderScenario.CAN_EDIT_INLINE_VIA_ACTION
+                    && scalarModel.disabledReason()
                     .map(InteractionVeto::getVetoConsent)
                     .flatMap(Consent::getReason)
                     .map(VetoReason::showInUi)
@@ -51,6 +52,7 @@ enum ScalarPanelAdditionalButton {
                 final RenderScenario renderScenario,
                 final FieldFragement fieldFragement) {
             return scalarModel.getSystemEnvironment().isPrototyping()
+                    && renderScenario!=RenderScenario.CAN_EDIT_INLINE_VIA_ACTION
                     && scalarModel.disabledReason()
                     .map(InteractionVeto::getVetoConsent)
                     .flatMap(Consent::getReason)
