@@ -38,7 +38,6 @@ import static org.mockito.Mockito.calls;
 
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.Snapshot;
 import org.apache.causeway.applib.annotation.Where;
@@ -396,12 +395,12 @@ class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJupiterTest
     public static class Hidden extends PropertyAnnotationFacetFactoryTest {
 
         @Test
+        @Deprecated(forRemoval = true, since = "2.0.0-RC2")
         public void withAnnotation() {
 
             @SuppressWarnings("unused")
             class Customer {
-                @Property
-                @PropertyLayout(hidden = Where.REFERENCES_PARENT)
+                @Property(hidden = Where.REFERENCES_PARENT)
                 @Getter @Setter private String name;
             }
 
