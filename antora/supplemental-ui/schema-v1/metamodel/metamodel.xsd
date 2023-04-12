@@ -1,0 +1,386 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+         http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<xs:schema targetNamespace="http://isis.apache.org/schema/metamodel"
+           elementFormDefault="qualified"
+           xmlns="http://isis.apache.org/schema/metamodel"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:element name="metamodelDto">
+        <xs:complexType>
+            <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                <xs:element ref="domainClassDto"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="domainClassDto">
+        <xs:complexType>
+            <xs:annotation>
+                <xs:documentation>Represents a domain class.
+                    Corresponds to ObjectSpecification in the internal metamodel.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:complexContent>
+                <xs:extension base="facetHolder">
+                    <xs:sequence>
+                        <xs:element name="majorVersion" type="xs:string" minOccurs="0" maxOccurs="1" default="2">
+                            <xs:annotation>
+                                <xs:documentation>The major version of the schema that an XML instance was created using.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element name="minorVersion" type="xs:string" minOccurs="0" maxOccurs="1" default="0">
+                            <xs:annotation>
+                                <xs:documentation>The minor version of the schema that an XML instance was created using.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element name="properties" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation>The properties, if any, of this domain class.  This will include any mixin properties.
+                                </xs:documentation>
+                            </xs:annotation>
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="prop" type="property" minOccurs="0" maxOccurs="unbounded"/>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="collections" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation>The collections, if any, of this domain class.  This will include any mixin collections.
+                                </xs:documentation>
+                            </xs:annotation>
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="coll" type="collection" minOccurs="0" maxOccurs="unbounded"/>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="actions" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation>The actions, if any, of this domain class.  This will include any mixin actions.
+                                </xs:documentation>
+                            </xs:annotation>
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="act" type="action" minOccurs="0" maxOccurs="unbounded"/>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                    <xs:attribute name="id" type="xs:ID">
+                        <xs:annotation>
+                            <xs:documentation>The fully qualified class name of the underlying Java class.
+                                This is declared as 'xs:ID' so can be referenced elsewhere (using 'xs:IDREF')
+
+                                In the internal metamodel, corresponds to ObjectSpecification#getFullIdentifier()
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="service" type="xs:boolean">
+                        <xs:annotation>
+                            <xs:documentation>Whether this is a domain service</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+
+    <xs:complexType name="member">
+    	<xs:annotation>
+    		<xs:documentation>
+    			Represents a member of a class (property, collection or
+    			action). Corresponds to ObjectMember in the internal
+    			metamodel.
+    		</xs:documentation>
+    	</xs:annotation>
+    	<xs:complexContent>
+    		<xs:extension base="facetHolder">
+    			<xs:attribute name="id" type="xs:string">
+    				<xs:annotation>
+    					<xs:documentation>
+    						The id of the member, which should be unique
+    						within the domain class. NB: this assumes no
+    						overloading of method names.
+    					</xs:documentation>
+    				</xs:annotation>
+    			</xs:attribute>
+    			<xs:attribute name="mixedIn" type="xs:boolean" use="required">
+    				<xs:annotation>
+    					<xs:documentation>
+    						Whether the member (action, property or collection) is mixed in.
+    					</xs:documentation>
+    				</xs:annotation>
+    			</xs:attribute>
+    		</xs:extension>
+    	</xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="property">
+        <xs:annotation>
+            <xs:documentation>Represents a property of a domain class.
+                Corresponds to OneToOneAssociation in the internal metamodel.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="member">
+                <xs:sequence>
+                    <xs:element name="type" type="xs:IDREF">
+                        <xs:annotation>
+                            <xs:documentation>A (reference to ) the type of this property, eg a String or a Customer.
+                                Corresponds to OneToOneAssociation#getSpecification() in the internal metamodel.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="collection">
+        <xs:annotation>
+            <xs:documentation>Represents a collection of a domain class.
+                Corresponds to OneToManyAssociation in the internal metamodel.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="member">
+                <xs:sequence>
+                    <xs:element name="type" type="xs:IDREF">
+                        <xs:annotation>
+                            <xs:documentation>A (reference to ) the _element_ type of this collection, eg a String or a Customer.
+                                Corresponds to OneToOneAssociation#getSpecification() in the internal metamodel.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="action">
+        <xs:annotation>
+            <xs:documentation>Represents an action of a domain class.
+                Corresponds to ObjectAction in the internal metamodel.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="member">
+                <xs:sequence>
+                    <xs:element name="returnType" type="xs:IDREF">
+                        <xs:annotation>
+                            <xs:documentation>A (reference to) the return type of this action, eg a String or a Customer.
+                                Corresponds to ObjectAction#getReturnType() in the internal metamodel.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="params">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="param" type="param" minOccurs="0" maxOccurs="unbounded"/>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="param">
+        <xs:annotation>
+            <xs:documentation>Represents the parameter of an action
+                Corresponds to ObjectActionParameter in the internal metamodel.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="facetHolder">
+                <xs:sequence>
+                    <xs:element name="type" type="xs:IDREF">
+                        <xs:annotation>
+                            <xs:documentation>(A reference to) the type of this action parameter, eg a String or a Customer.
+                                For vector parameters, this is the element types of the collection parameter.
+                                Corresponds to ObjectActionParameter#getSpecification() in the internal metamodel.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+                <xs:attribute name="id" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation>The id of the parameter, which should be unique within the action.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="scalarParam">
+        <xs:annotation>
+            <xs:documentation>Represents a parameter of an action
+                Corresponds to OneToOneActionParameter in the internal metamodel.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="param">
+                <xs:sequence>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="vectorParam">
+        <xs:annotation>
+            <xs:documentation>Represents a multi-valued parameter of an action
+                Corresponds to OneToManyActionParameter in the internal metamodel.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="param">
+                <xs:sequence>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+	<xs:complexType name="facetHolder">
+		<xs:annotation>
+			<xs:documentation>
+				Corresponds to FacetHolder interface in the internal metamodel.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="metamodelElement">
+				<xs:sequence>
+					<xs:element name="facets" minOccurs="0">
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="facet" type="facet" minOccurs="0"
+									maxOccurs="unbounded" />
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="facet">
+		<xs:annotation>
+			<xs:documentation>
+				Describes a facet of the metamodel, for example whether
+				an action can be disabled, or the name of a class.
+				Corresponds to Facet interface in the internal
+				metamodel.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="metamodelElement">
+				<xs:sequence>
+					<xs:element name="attr" type="facetAttr" minOccurs="0"
+						maxOccurs="unbounded" />				</xs:sequence>
+				<xs:attribute name="id" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>
+							The facet type (fqcn) that is common to a set of
+							concrete facet implementations. These ids are
+							usually known to the framework for there well
+							defined semantics within the programming model.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="fqcn" type="xs:string" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="facetAttr">
+		<xs:annotation>
+			<xs:documentation>
+				Describes an attribute of a facet of the metamodel, as a
+				simple key/value pair of strings (the key is modelled as
+				an attribute of the value).
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="metamodelElement">
+				<xs:attribute name="name" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>
+							The name of the attribute, unique across all
+							facet attributes of a facet.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="value" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>
+							The value of the attribute.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="annotation">
+        <xs:annotation>
+            <xs:documentation>Not part of the metamodel. Enables export tools to add arbitrary meta data.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:annotation>
+                    <xs:documentation>The value of the annotation.
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:attribute name="name" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation>The name annotation.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+	<xs:complexType name="metamodelElement">
+        <xs:annotation>
+        	<xs:documentation>Common ancestor of facet and facetHolder.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+			<xs:element name="annotations" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Not part of the metamodel. Enables export tools
+						to add arbitrary meta data.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="asList" type="annotation"
+							minOccurs="0" maxOccurs="unbounded" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+    
+</xs:schema>

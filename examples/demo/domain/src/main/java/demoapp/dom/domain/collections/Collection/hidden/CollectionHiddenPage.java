@@ -29,6 +29,7 @@ import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
@@ -57,8 +58,8 @@ public class CollectionHiddenPage implements HasAsciiDocDescription {
     }
 
 //tag::collection[]
-    @Collection(
-            hidden = Where.PARENTED_TABLES)
+    @Collection // TODO Collection's hidden attribute will be removed in 2.0
+    @CollectionLayout(hidden = Where.PARENTED_TABLES)
     @XmlTransient
     @Getter @Setter
     private List<DemoEntity> collection = new ArrayList<>();

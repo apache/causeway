@@ -1,0 +1,221 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+         http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<xs:schema targetNamespace="http://isis.apache.org/schema/ixn"
+           elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="http://isis.apache.org/schema/ixn"
+           xmlns:cmd="http://isis.apache.org/schema/cmd"
+           xmlns:com="http://isis.apache.org/schema/common"
+>
+
+    <xs:import namespace="http://isis.apache.org/schema/common" schemaLocation="../common/common-1.1.xsd"/>
+    <xs:import namespace="http://isis.apache.org/schema/cmd" schemaLocation="../cmd/cmd-1.4.xsd"/>
+
+    <xs:element name="interactionDto">
+        <xs:annotation>
+            <xs:documentation>Represents v1.3 of this schema (as per majorVersion.minorVersion @default attribute, below); just updates to use cmd v1.4 schema.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="majorVersion" type="xs:string" minOccurs="0" maxOccurs="1" default="1">
+                    <xs:annotation>
+                        <xs:documentation>The major version of the schema that an XML instance was created using.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="minorVersion" type="xs:string" minOccurs="0" maxOccurs="1" default="3">
+                    <xs:annotation>
+                        <xs:documentation>The minor version of the schema that an XML instance was created using.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="transactionId" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation>Unique identifier of the interaction which this member was interacted with (action invoked/property edited); can be used to locate the corresponding Command object (which may have been persisted).
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="execution" type="memberExecutionDto"/>
+            </xs:sequence>
+        </xs:complexType>
+
+    </xs:element>
+
+    <xs:complexType name="memberExecutionDto" abstract="true">
+        <xs:annotation>
+            <xs:documentation>Represents either an action invocation or a property edit.  Is subclassed by both.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="sequence" type="xs:int">
+                <xs:annotation>
+                    <xs:documentation>Unique sequence number of an individual member interaction within the overall interaction.  There could be many such member interactions (within a single transaction) for two reasons: either a single top-level interaction could call sub-interactions (by virtue of WrapperFactory), or there may be a bulk action interaction against many targets.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="target" type="com:oidDto">
+                <xs:annotation>
+                    <xs:documentation>For target domain object being interacted with.  For regular actions/properties, represents the entity or view model upon which the action is to be invoked/property edited.  For mixin actions/properties, is the object being mixed-into (the constructor arg to the mixin).  For contributed actions/properties, is the domain service (the contributee object will be one of the action arguments within the payload).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="logicalMemberIdentifier" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>Logical formal identifier (object type, as per @DomainObject(objectType=), and member name) of the member being interacted with (action or property).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="memberIdentifier" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>Formal identifier (class name and member name) of the member being interacted with (action or property).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="user" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>The name of the user that invoked this action.  Note that this isn't necessarily the user that initiated the original command; the SudoService may be being used to temporarily switch the effective user.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="title" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>User-friendly title of the 'target' object.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="metrics" type="metricsDto">
+                <xs:annotation>
+                    <xs:documentation>Profiling metrics capturng the this time/number of objects affected as a result of performing this member interaction (invoke the action, or edit the property).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="threw" type="exceptionDto" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation>Captures any exception thrown by an action.  Either the 'returned' or the 'threw' element will be populated.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="childExecutions" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="execution" type="memberExecutionDto" minOccurs="0" maxOccurs="unbounded">
+                            <xs:annotation>
+                                <xs:documentation>Capture interactions with other pathsToInclude from this interaction, using the WrapperFactory service.  Typically this will be actions invoking other actions, but it is also possible for an action to perform a property edit, and - much rarer - for a property edit to invoke an action.  Whatever; these interactions nest together into a call/stack, more generally into a graph.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute  name="interactionType" type="com:interactionType">
+            <xs:annotation>
+                <xs:documentation>Indicates whether this is an intention to invoke an action, or edit a property.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
+    <xs:complexType name="actionInvocationDto">
+        <xs:complexContent>
+            <xs:extension base="memberExecutionDto">
+                <xs:sequence>
+                    <xs:element name="parameters" type="cmd:paramsDto">
+                        <xs:annotation>
+                            <xs:documentation>The list of parameter/argument values for this action invocation.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="returned" type="com:valueWithTypeDto" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation>The value returned by this action (including the type of that returned value).  Either the 'returned' or the 'threw' element (from 'memberExecutionDto') will be populated.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="propertyEditDto">
+        <xs:complexContent>
+            <xs:extension base="memberExecutionDto">
+                <xs:sequence>
+                    <xs:element name="newValue" type="com:valueWithTypeDto"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="metricsDto">
+        <xs:sequence>
+            <xs:element name="timings" type="com:periodDto">
+                <xs:annotation>
+                    <xs:documentation>The time taken to perform the member interaction (invoke the action, or edit the property).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="objectCounts" type="objectCountsDto">
+                <xs:annotation>
+                    <xs:documentation>How many objets were affected by the member interaction.
+                    </xs:documentation>
+                </xs:annotation>
+
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="objectCountsDto">
+        <xs:sequence>
+            <xs:element name="loaded" type="com:differenceDto">
+                <xs:annotation>
+                    <xs:documentation>The number of objects loaded.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="dirtied" type="com:differenceDto">
+                <xs:annotation>
+                    <xs:documentation>The number of objects dirtied (ie updated).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+
+    </xs:complexType>
+
+    <xs:complexType name="exceptionDto">
+        <xs:annotation>
+            <xs:documentation>Captures any exception thrown by an action invocation.  Use as the xsd:type of the 'threw' element.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="message" type="xs:string"/>
+            <xs:element name="stackTrace" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>A formatted stack trace.  (A future version of the 'exceptionDto' element might refine this to more easily parseable stack trace elements).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="causedBy" type="exceptionDto" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

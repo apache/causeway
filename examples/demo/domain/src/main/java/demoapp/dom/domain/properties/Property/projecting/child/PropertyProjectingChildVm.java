@@ -66,9 +66,9 @@ public class PropertyProjectingChildVm implements HasAsciiDocDescription {
 
 //tag::projecting[]
     @Property(
-        projecting = Projecting.PROJECTED   // <.>
-        , hidden = Where.EVERYWHERE         // <.>
+        projecting = Projecting.PROJECTED       // <.>
     )
+    @PropertyLayout(hidden = Where.EVERYWHERE)  // <.>
     public PropertyProjectingChildEntity getBackingEntity() {
         return backingEntityJpa!=null
                 ? backingEntityJpa

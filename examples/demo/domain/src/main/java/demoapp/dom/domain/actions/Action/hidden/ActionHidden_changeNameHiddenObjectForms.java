@@ -19,14 +19,16 @@
  */
 package demoapp.dom.domain.actions.Action.hidden;
 
-import lombok.RequiredArgsConstructor;
-
 import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Where;
 
+import lombok.RequiredArgsConstructor;
+
 //tag::class[]
-@Action(hidden = Where.OBJECT_FORMS)                    // <.>
+@Action // TODO Actions's hidden attribute will be removed in 2.0
+@ActionLayout(hidden = Where.OBJECT_FORMS)                    // <.>
 @RequiredArgsConstructor
 public class ActionHidden_changeNameHiddenObjectForms {
     // ...

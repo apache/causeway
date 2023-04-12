@@ -277,7 +277,8 @@ implements Serializable {
      * It should return an empty string {@literal ""}
      * if this is an anonymous (unauthenticated) user.
      */
-    @Property(hidden = Where.EVERYWHERE)
+    @Property
+    @PropertyLayout(hidden = Where.EVERYWHERE)
     @Getter @Builder.Default @With(onMethod_ = {@Programmatic})
     @NonNull
     String authenticationCode = DEFAULT_AUTH_VALID_CODE;

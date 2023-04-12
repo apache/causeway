@@ -30,6 +30,7 @@ import org.springframework.context.annotation.Profile;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
@@ -69,15 +70,18 @@ public class PropertyLayoutHiddenJpa extends PropertyLayoutHidden {
     @Getter @Setter
     private String name;
 
-    @Property(hidden = Where.ALL_TABLES)
+    @Property
+    @PropertyLayout(hidden = Where.ALL_TABLES)
     @Getter @Setter
     private String nameHiddenAllTables;
 
-    @Property(hidden = Where.EVERYWHERE)
+    @Property
+    @PropertyLayout(hidden = Where.EVERYWHERE)
     @Getter @Setter
     private String nameHiddenEverywhere;
 
-    @Property(hidden = Where.OBJECT_FORMS)
+    @Property
+    @PropertyLayout(hidden = Where.OBJECT_FORMS)
     @Getter @Setter
     private String nameHiddenObjectForms;
 

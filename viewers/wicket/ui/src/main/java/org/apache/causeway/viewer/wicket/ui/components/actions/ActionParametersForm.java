@@ -149,12 +149,14 @@ extends PromptFormAbstract<ActionModel> {
             .map(paramModel->{
 
                 val paramIndexForReassessment = paramModel.getParameterIndex();
+                val paramPanel = paramPanels.get(paramIndexForReassessment);
                 val actionParameter = paramModel.getMetaModel();
 
+                // updates the paramNegotiationModel
                 actionParameter.reassessDefault(paramNegotiationModel);
                 _Xray.reassessedDefault(paramIndexForReassessment, paramNegotiationModel);
 
-                val paramPanel = paramPanels.get(paramIndexForReassessment);
+                // repaint is calculated based on changes to the
                 val paramRepaint = paramPanel.updateIfNecessary(paramModel, Optional.of(target));
                 if(paramRepaint.isParamOnly()) {
                     paramOnlyUpdateRequestsHavingParamIndex.add(paramIndexForReassessment);

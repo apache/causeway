@@ -75,16 +75,6 @@ public @interface ActionLayout {
             default "";
 
     /**
-     * @deprecated Conflicting semantics with {@link DomainObjectLayout#bookmarking()},
-     * that is, if present on this action's return type, hence deprecated for removal.
-     *
-     * @see DomainObjectLayout#bookmarking()
-     */
-    @Deprecated(forRemoval = true, since = "2.0.0-RC1")
-    BookmarkPolicy bookmarking()
-            default BookmarkPolicy.NOT_SPECIFIED;
-
-    /**
      * Indicates the css class that an action should have.
      *
      * <p>

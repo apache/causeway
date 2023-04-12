@@ -32,6 +32,7 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.internal.collections._Streams;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
@@ -57,7 +58,8 @@ public class TypeNode extends MMNode {
 
     @Inject protected transient SpecificationLoader specificationLoader;
 
-    @Property(hidden = Where.EVERYWHERE)
+    @Property
+    @PropertyLayout(hidden = Where.EVERYWHERE)
     @Getter @Setter private DomainClassDto domainClassDto;
 
     @Override

@@ -30,6 +30,7 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.schema.metamodel.v2.Action;
 import org.apache.causeway.schema.metamodel.v2.Annotation;
@@ -52,7 +53,8 @@ public class ActionNode extends MemberNode {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".node.ActionNode";
 
-    @Property(hidden = Where.EVERYWHERE)
+    @Property
+    @PropertyLayout(hidden = Where.EVERYWHERE)
     @Getter @Setter private Action action;
 
     @Override

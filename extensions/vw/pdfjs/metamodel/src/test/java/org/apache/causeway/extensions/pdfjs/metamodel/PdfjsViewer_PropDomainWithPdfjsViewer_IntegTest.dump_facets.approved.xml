@@ -69,7 +69,7 @@
         <mml:attr name="facet" value="ImmutableFacetForDomainObjectAnnotationAsConfigured"/>
         <mml:attr name="interactionAdvisors" value="DisablingOrEnabling"/>
         <mml:attr name="precedence" value="DEFAULT"/>
-        <mml:attr name="reason" value="Disabled, via @DomainObject annotation, reason not given."/>
+        <mml:attr name="reason" value="Disabled via @DomainObject annotation, reason not given."/>
       </mml:facet>
       <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
         <mml:attr name="facet" value="ObjectValidPropertiesFacetImpl"/>

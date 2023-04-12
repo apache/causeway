@@ -608,7 +608,11 @@ implements ScalarModelChangeListener {
     * @param paramModel - the action being invoked
     * @param target - in case there's more to be repainted...
     *
-    * @return - true if changed as a result of these pending arguments.
+    * @return - {@link Repaint} as a result of these pending arguments<ul>
+    * <li>{@link Repaint#NOTHING} if nothing changed</li>
+    * <li>{@link Repaint#PARAM_ONLY} if param value changed</li>
+    * <li>{@link Repaint#ENTIRE_FORM} if layout changed</li>
+    * </ul>
     */
    public Repaint updateIfNecessary(
            final @NonNull UiParameter paramModel,

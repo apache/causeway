@@ -51,8 +51,7 @@ import lombok.Setter;
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.ActionSemanticsVm")
-@DomainObject(
-    nature=Nature.VIEW_MODEL)
+@DomainObject(nature=Nature.VIEW_MODEL)
 @NoArgsConstructor
 //tag::class[]
 public class ActionSemanticsPage implements HasAsciiDocDescription {
@@ -73,8 +72,6 @@ public class ActionSemanticsPage implements HasAsciiDocDescription {
         this.propertyForIdempotentAreYouSure = value;
         this.propertyForNonIdempotent = value;
         this.propertyForNonIdempotentAreYouSure = value;
-        this.propertyForMetaAnnotations = value;
-        this.propertyForMetaAnnotationsOverridden = value;
     }
 
     @ObjectSupport public String title() {
@@ -82,38 +79,31 @@ public class ActionSemanticsPage implements HasAsciiDocDescription {
     }
 
     @Property()
-    @PropertyLayout(fieldSetId = "not-annotated", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyNoAnnotation;
 
     @Property()
-    @PropertyLayout(fieldSetId = "annotated-safe", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyForSafe;
 
     @Property()
-    @PropertyLayout(fieldSetId = "annotated-safe", sequence = "2")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyForSafeAndRequestCacheable;
 
-
     @Property()
-    @PropertyLayout(fieldSetId = "annotated-idempotent", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyForIdempotent;
 
     @Property()
-    @PropertyLayout(fieldSetId = "annotated-idempotent", sequence = "2")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyForIdempotentAreYouSure;
 
     @Property()
-    @PropertyLayout(fieldSetId = "annotated-non-idempotent", sequence = "5")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyForNonIdempotent;
@@ -124,28 +114,8 @@ public class ActionSemanticsPage implements HasAsciiDocDescription {
     @Getter @Setter
     private int propertyForNonIdempotentAreYouSure;
 
-    @Property()
-    @PropertyLayout(fieldSetId = "meta-annotated", sequence = "1")
-    @XmlElement(required = true)
-    @Getter @Setter
-    private int propertyForMetaAnnotations;
-
-    @Property()
-    @PropertyLayout(fieldSetId = "meta-annotated-overridden", sequence = "1")
-    @XmlElement(required = true)
-    @Getter @Setter
-    private int propertyForMetaAnnotationsOverridden;
-
 //tag::action-no-annotation[]
-    @Action(
-        // no semantics attribute              // <.>
-    )
-    @ActionLayout(
-        named = "Increment by Amount",
-        describedAs = "@Action()"
-        , associateWith = "propertyNoAnnotation"
-        , sequence = "1"
-    )
+    @Action()                                   // <.>
     public ActionSemanticsPage incrementByAmountNoAnnotation(final int amount) {
         setPropertyNoAnnotation(getPropertyNoAnnotation() + amount);
         return this;
@@ -159,13 +129,6 @@ public class ActionSemanticsPage implements HasAsciiDocDescription {
     @Action(
         semantics = SemanticsOf.SAFE            // <.>
     )
-    @ActionLayout(
-        named = "Report",
-        describedAs =
-            "@Action(semantics = SemanticsOf.SAFE)"
-        , associateWith = "propertyForSafe"
-        , sequence = "1"
-    )
     public ActionSemanticsPage reportPropertyForSafe() {
         messageService.informUser(String.format(
                 "'PropertyForSafe' has value %d "
@@ -177,12 +140,6 @@ public class ActionSemanticsPage implements HasAsciiDocDescription {
 //tag::action-semantics-safe-and-request-cacheable-caller[]
     @Action(
         semantics = SemanticsOf.SAFE
-    )
-    @ActionLayout(
-        named = "Report"
-        , describedAs = "@Action(semantics = SemanticsOf.SAFE)"
-        , associateWith = "propertyForSafeAndRequestCacheable"
-        , sequence = "1"
     )
     public ActionSemanticsPage reportPropertyForSafeAndRequestCacheable() {
         int val = 0;
@@ -201,8 +158,8 @@ public class ActionSemanticsPage implements HasAsciiDocDescription {
 //tag::action-semantics-safe-and-request-cacheable[]
     @Action(
         semantics = SemanticsOf.SAFE_AND_REQUEST_CACHEABLE          // <.>
-        , hidden = Where.EVERYWHERE                                 // <.>
     )
+    @ActionLayout(hidden = Where.EVERYWHERE)                        // <.>
     public int queryPropertyForSafeAndRequestCacheable() {
         ++numberOfTimesActionSafeAndRequestCacheableWasExecuted;    // <.>
         return getPropertyForSafeAndRequestCacheable();
@@ -214,17 +171,11 @@ public class ActionSemanticsPage implements HasAsciiDocDescription {
     @Action(
         semantics = SemanticsOf.IDEMPOTENT              // <.>
     )
-    @ActionLayout(
-        named = "Set to Value"
-        , describedAs = "@Action(semantics = SemanticsOf.IDEMPOTENT)"
-        , associateWith = "propertyForIdempotent"
-        , sequence = "1"
-    )
-    public ActionSemanticsPage setToValuePropertyForIdempotent(final int value) {
+    public ActionSemanticsPage updatePropertyForIdempotent(final int value) {
         setPropertyForIdempotent(value);
         return this;
     }
-    @MemberSupport public int default0SetToValuePropertyForIdempotent() {
+    @MemberSupport public int default0UpdatePropertyForIdempotent() {
         return getPropertyForIdempotent();
     }
 //end::action-semantics-idempotent[]
@@ -233,17 +184,11 @@ public class ActionSemanticsPage implements HasAsciiDocDescription {
     @Action(
         semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE              // <.>
     )
-    @ActionLayout(
-        named = "Set to Value",
-        describedAs = "@Action(semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)"
-        , associateWith = "propertyForIdempotent"
-        , sequence = "1"
-    )
-    public ActionSemanticsPage setToValuePropertyForIdempotentAreYouSure(final int value) {
+    public ActionSemanticsPage updatePropertyForIdempotentAreYouSure(final int value) {
         setPropertyForIdempotentAreYouSure(value);
         return this;
     }
-    @MemberSupport public int default0SetToValuePropertyForIdempotentAreYouSure() {
+    @MemberSupport public int default0UpdatePropertyForIdempotentAreYouSure() {
         return getPropertyForIdempotentAreYouSure();
     }
 //end::action-semantics-idempotent-are-you-sure[]
@@ -251,13 +196,6 @@ public class ActionSemanticsPage implements HasAsciiDocDescription {
 //tag::action-semantics-non-idempotent[]
     @Action(
         semantics = SemanticsOf.NON_IDEMPOTENT      // <.>
-    )
-    @ActionLayout(
-        named = "Increment by Amount"
-        , describedAs =
-            "@Action(semantics = SemanticsOf.NON_IDEMPOTENT)"
-        , associateWith = "propertyForNonIdempotent"
-        , sequence = "1"
     )
     public ActionSemanticsPage incrementByAmountPropertyForNonIdempotent(final int amount) {
         setPropertyForNonIdempotent(getPropertyForNonIdempotent() + amount);
@@ -268,84 +206,29 @@ public class ActionSemanticsPage implements HasAsciiDocDescription {
     }
 //end::action-semantics-non-idempotent[]
 
-//tag::action-semantics-non-idempotent-are-you-sure[]
+//tag::action-semantics-non-idempotent-are-you-sure-1[]
     @Action(
         semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE     // <.>
-    )
-    @ActionLayout(
-        named = "Increment"
-        , describedAs =
-            "@Action(semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE)"
-        , associateWith = "propertyForNonIdempotentAreYouSure"
-        , sequence = "1"
     )
     public ActionSemanticsPage incrementPropertyForNonIdempotentAreYouSure() {
         setPropertyForNonIdempotentAreYouSure(
                 getPropertyForNonIdempotentAreYouSure() + 1);
         return this;
     }
+//end::action-semantics-non-idempotent-are-you-sure-1[]
 
+//tag::action-semantics-non-idempotent-are-you-sure-2[]
     @Action(
         semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE     // <.>
-    )
-    @ActionLayout(
-        named = "Increment by Amount"
-        , describedAs =
-            "@Action(semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE)"
-        , associateWith = "propertyForNonIdempotentAreYouSure"
-        , sequence = "2"
     )
     public ActionSemanticsPage incrementByAmountPropertyForNonIdempotentAreYouSure(final int amount) {
         setPropertyForNonIdempotentAreYouSure(getPropertyForNonIdempotentAreYouSure() + amount);
         return this;
     }
     @MemberSupport public int default0IncrementByAmountPropertyForNonIdempotentAreYouSure() {
-        return 1;
+        return 5;
     }
-//end::action-semantics-non-idempotent-are-you-sure[]
-
-//tag::action-meta-annotated[]
-    @ActionSemanticsIdempotentMetaAnnotation      // <.>
-    @Action(
-        semantics = SemanticsOf.IDEMPOTENT
-    )
-    @ActionLayout(
-        named = "Set to Value"
-        , describedAs =
-            "@ActionSemanticsIdempotentMetaAnnotation"
-        , associateWith = "propertyForMetaAnnotations"
-        , sequence = "1"
-    )
-    public ActionSemanticsPage setToValueMetaAnnotated(final int value) {
-        setPropertyForMetaAnnotations(value);
-        return this;
-    }
-    @MemberSupport public int default0SetToValueMetaAnnotated() {
-        return getPropertyForMetaAnnotations();
-    }
-//end::action-meta-annotated[]
-
-//tag::action-meta-annotated-overridden[]
-    @ActionSemanticsSafeMetaAnnotation              // <.>
-    @Action(
-        semantics = SemanticsOf.IDEMPOTENT      // <.>
-    )
-    @ActionLayout(
-        named = "Set to Value"
-        , describedAs =
-            "@ActionSemanticsSafeMetaAnnotation " +
-            "@Action(semantics = SemanticsOf.IDEMPOTENT)"
-        , associateWith = "propertyForMetaAnnotationsOverridden"
-        , sequence = "1"
-    )
-    public ActionSemanticsPage setToValueMetaAnnotatedOverridden(final int val) {
-        setPropertyForMetaAnnotationsOverridden(val);
-        return this;
-    }
-    @MemberSupport public int default0SetToValueMetaAnnotatedOverridden() {
-        return getPropertyForMetaAnnotationsOverridden();
-    }
-//end::action-meta-annotated-overridden[]
+//end::action-semantics-non-idempotent-are-you-sure-2[]
 
 //tag::class[]
 }

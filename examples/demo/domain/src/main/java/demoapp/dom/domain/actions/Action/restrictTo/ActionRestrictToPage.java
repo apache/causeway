@@ -26,7 +26,6 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Nature;
@@ -44,9 +43,8 @@ import lombok.Setter;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.ActionRestrictToVm")
-@DomainObject(
-    nature=Nature.VIEW_MODEL)
+@Named("demo.ActionRestrictToPage")
+@DomainObject(nature=Nature.VIEW_MODEL)
 @NoArgsConstructor
 //tag::class[]
 public class ActionRestrictToPage implements HasAsciiDocDescription {
@@ -54,11 +52,7 @@ public class ActionRestrictToPage implements HasAsciiDocDescription {
 //end::class[]
 
     public ActionRestrictToPage(final String value) {
-        this.propertyNoAnnotation = value;
-        this.propertyForPrototyping = value;
-        this.propertyForNoRestrictions = value;
-        this.propertyForMetaAnnotations = value;
-        this.propertyForMetaAnnotationsOverridden = value;
+        this.value = value;
     }
 
     @ObjectSupport public String title() {
@@ -66,136 +60,51 @@ public class ActionRestrictToPage implements HasAsciiDocDescription {
     }
 
     @Property()
-    @PropertyLayout(fieldSetId = "not-annotated", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
-    private String propertyNoAnnotation;
-
-    @Property()
-    @PropertyLayout(fieldSetId = "annotated", sequence = "1")
-    @XmlElement(required = true)
-    @Getter @Setter
-    private String propertyForPrototyping;
-
-    @Property()
-    @PropertyLayout(fieldSetId = "annotated", sequence = "2")
-    @XmlElement(required = true)
-    @Getter @Setter
-    private String propertyForNoRestrictions;
-
-    @Property()
-    @PropertyLayout(fieldSetId = "meta-annotated", sequence = "1")
-    @XmlElement(required = true)
-    @Getter @Setter
-    private String propertyForMetaAnnotations;
-
-    @Property()
-    @PropertyLayout(fieldSetId = "meta-annotated-overridden", sequence = "1")
-    @XmlElement(required = true)
-    @Getter @Setter
-    private String propertyForMetaAnnotationsOverridden;
+    private String value;
 
 //tag::action-no-annotation[]
     @Action(
             semantics = SemanticsOf.IDEMPOTENT
-            // no restrictTo attribute              // <.>
-    )
-    @ActionLayout(
-        describedAs =
-            "@Action()"
-        , associateWith = "propertyNoAnnotation"
-        , sequence = "1"
+            // no restrictTo attribute                  // <.>
     )
     public ActionRestrictToPage updateNoAnnotation(final String text) {
-        setPropertyNoAnnotation(text);
+        setValue(text);
         return this;
     }
     @MemberSupport public String default0UpdateNoAnnotation() {
-        return getPropertyNoAnnotation();
+        return getValue();
     }
 //end::action-no-annotation[]
 
 //tag::action-restrict-to-prototyping[]
     @Action(
-        semantics = SemanticsOf.IDEMPOTENT
-        , restrictTo = RestrictTo.PROTOTYPING         // <.>
-    )
-    @ActionLayout(
-        describedAs =
-            "@Action(restrictTo = RestrictTo.PROTOTYPING)"
-        , associateWith = "propertyForPrototyping"
-        , sequence = "1"
+        semantics = SemanticsOf.IDEMPOTENT,
+        restrictTo = RestrictTo.PROTOTYPING             // <.>
     )
     public ActionRestrictToPage updateRestrictToPrototyping(final String text) {
-        setPropertyForPrototyping(text);
+        setValue(text);
         return this;
     }
     @MemberSupport public String default0UpdateRestrictToPrototyping() {
-        return getPropertyForPrototyping();
+        return getValue();
     }
 //end::action-restrict-to-prototyping[]
 
 //tag::action-restrict-to-no-restrictions[]
     @Action(
-        semantics = SemanticsOf.IDEMPOTENT
-        , restrictTo = RestrictTo.NO_RESTRICTIONS      // <.>
-    )
-    @ActionLayout(
-        describedAs =
-            "@Action(restrictTo = RestrictTo.NO_RESTRICTIONS)"
-        , associateWith = "propertyForNoRestrictions"
-        , sequence = "1"
+        semantics = SemanticsOf.IDEMPOTENT,
+        restrictTo = RestrictTo.NO_RESTRICTIONS         // <.>
     )
     public ActionRestrictToPage updateRestrictToNoRestrictions(final String text) {
-        setPropertyForNoRestrictions(text);
+        setValue(text);
         return this;
     }
     @MemberSupport public String default0UpdateRestrictToNoRestrictions() {
-        return getPropertyForNoRestrictions();
+        return getValue();
     }
 //end::action-restrict-to-no-restrictions[]
-
-//tag::action-meta-annotated[]
-    @ActionRestrictToPrototypingMetaAnnotation      // <.>
-    @Action(
-        semantics = SemanticsOf.IDEMPOTENT
-    )
-    @ActionLayout(
-        describedAs =
-            "@ActionRestrictToPrototypingMetaAnnotation"
-        , associateWith = "propertyForMetaAnnotations"
-        , sequence = "1"
-    )
-    public ActionRestrictToPage updateMetaAnnotated(final String text) {
-        setPropertyForMetaAnnotations(text);
-        return this;
-    }
-    @MemberSupport public String default0UpdateMetaAnnotated() {
-        return getPropertyForMetaAnnotations();
-    }
-//end::action-meta-annotated[]
-
-//tag::action-meta-annotated-overridden[]
-    @ActionRestrictToNoRestrictionsMetaAnnotation   // <.>
-    @Action(
-        semantics = SemanticsOf.IDEMPOTENT
-        , restrictTo = RestrictTo.PROTOTYPING   // <.>
-    )
-    @ActionLayout(
-        describedAs =
-            "@ActionRestrictToNoRestrictionsMetaAnnotation " +
-            "@Action(restrictTo = RestrictTo.PROTOTYPING)"
-        , associateWith = "propertyForMetaAnnotationsOverridden"
-        , sequence = "1"
-    )
-    public ActionRestrictToPage updateMetaAnnotatedOverridden(final String text) {
-        setPropertyForMetaAnnotationsOverridden(text);
-        return this;
-    }
-    @MemberSupport public String default0UpdateMetaAnnotatedOverridden() {
-        return getPropertyForMetaAnnotationsOverridden();
-    }
-//end::action-meta-annotated-overridden[]
 
 //tag::class[]
 }

@@ -43,6 +43,7 @@ extends ActionAnnotationFacetFactoryTest {
     }
 
     @Test
+    @Deprecated(forRemoval = true, since = "2.0.0-RC2")
     void withAnnotation() {
 
         class Customer {

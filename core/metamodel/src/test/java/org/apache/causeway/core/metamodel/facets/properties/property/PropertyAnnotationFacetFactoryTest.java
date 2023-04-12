@@ -395,6 +395,7 @@ class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJupiterTest
     public static class Hidden extends PropertyAnnotationFacetFactoryTest {
 
         @Test
+        @Deprecated(forRemoval = true, since = "2.0.0-RC2")
         public void withAnnotation() {
 
             @SuppressWarnings("unused")

@@ -29,7 +29,6 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -67,38 +66,31 @@ public class ActionTypeOfPage implements HasAsciiDocDescription {
     // ...
 //end::class-collections-children[]
 
-//tag::action[]
-    @Action(
-            semantics = SemanticsOf.SAFE
-            , typeOf = ActionTypeOfChildVm.class     // <.>
-            , choicesFrom = "children"
-    )
-    @ActionLayout(
-        describedAs =
-            "@Action(typeOf = ActionTypeOfChildVm.class)"
-        , sequence = "1"
-    )
-    public List find(final String value) {          // <.>
+//tag::action-returning-generic-list[]
+    @Action(semantics = SemanticsOf.SAFE)
+    public List<ActionTypeOfChildVm> find(final String value) {         // <.>
         return getChildren().stream()
                 .filter(x -> x.getValue().contains(value))
                 .collect(Collectors.toList());
     }
-//end::action[]
+//end::action-returning-generic-list[]
 
-//tag::action-no-annotation[]
-    @Action(
-            semantics = SemanticsOf.SAFE
-            , choicesFrom = "children"
-    )
-    @ActionLayout(
-        describedAs =
-            "@Action()"
-        , sequence = "2"
-    )
-    public List findButNoTypeOfAnnotation(final String value) {     // <.>
+//tag::action-returning-raw-list[]
+    @Action(semantics = SemanticsOf.SAFE)
+    public List findReturningRawList(final String value) {              // <.>
         return find(value);
     }
-//end::action-no-annotation[]
+//end::action-returning-raw-list[]
+
+//tag::action-returning-raw-list-but-annotated[]
+    @Action(
+            semantics = SemanticsOf.SAFE,
+            typeOf = ActionTypeOfChildVm.class                          // <.>
+    )
+    public List findReturningRawListButAnnotated(final String value) {  // <.>
+        return find(value);
+    }
+//end::action-returning-raw-list-but-annotated[]
 
 //tag::class-collections-children[]
 

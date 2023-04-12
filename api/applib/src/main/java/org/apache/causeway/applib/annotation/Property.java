@@ -186,9 +186,10 @@ public @interface Property {
     /**
      * Indicates where the property is not visible to the user.
      *
-     * @see Action#hidden()
-     * @see Collection#hidden()
+     * @see PropertyLayout#hidden()
+     * @deprecated use {@link PropertyLayout#hidden()} instead
      */
+    @Deprecated(forRemoval = true, since = "2.0.0-RC2")
     Where hidden()
             default Where.NOT_SPECIFIED;
 

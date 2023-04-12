@@ -38,12 +38,12 @@ import lombok.RequiredArgsConstructor;
  * @since 2.0 {@index}
  */
 @Property(
-        editing = Editing.DISABLED,
-        hidden = Where.ALL_TABLES)
+        editing = Editing.DISABLED)
 @PropertyLayout(
         fieldSetId = "regional",
         describedAs = "Timezone ID as stored in your current session. (Logout/Login to change.)",
-        sequence = "2"
+        sequence = "2",
+        hidden = Where.ALL_TABLES
 )
 @RequiredArgsConstructor
 public class ApplicationUser_timeZone {

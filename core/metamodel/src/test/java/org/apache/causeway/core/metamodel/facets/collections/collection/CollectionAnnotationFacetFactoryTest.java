@@ -99,6 +99,7 @@ extends AbstractFacetFactoryJupiterTestCase {
     }
 
 
+    @Deprecated(forRemoval = true, since = "2.0.0-RC2")
     static class Hidden extends CollectionAnnotationFacetFactoryTest {
 
         @Test

@@ -8,6 +8,8 @@ However, using link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/i
 
 * link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/DomainObject.html#createdlifecycleevent[@DomainObject#createdLifecycleEvent] - when an entity is instantiated in memory (but not yet persisted).
 Must be a subclass of https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/events/lifecycle/ObjectCreatedEvent[ObjectCreatedEvent].
++
+CAUTION: the "created" lifecycle event is currently not emitted; see link:https://issues.apache.org/jira/browse/CAUSEWAY-3408[CAUSEWAY-3408].
 
 * link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/DomainObject.html#persistinglifecycleevent[@DomainObject#persistingLifecycleEvent] - when a newly instantiated entity is about to be INSERTed for the first time to the database.
 Must be a subclass of https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/events/lifecycle/ObjectPersistingEvent[ObjectPersistingEvent].

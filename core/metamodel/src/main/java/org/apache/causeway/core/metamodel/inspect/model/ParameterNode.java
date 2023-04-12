@@ -31,6 +31,7 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.schema.metamodel.v2.Annotation;
 import org.apache.causeway.schema.metamodel.v2.MetamodelElement;
@@ -53,7 +54,8 @@ public class ParameterNode extends MMNode {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".ParameterNode";
 
-    @Property(hidden = Where.EVERYWHERE)
+    @Property
+    @PropertyLayout(hidden = Where.EVERYWHERE)
     @Getter @Setter private Param parameter;
 
     @Override
