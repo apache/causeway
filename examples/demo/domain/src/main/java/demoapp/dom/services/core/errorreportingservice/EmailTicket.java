@@ -20,16 +20,18 @@ package demoapp.dom.services.core.errorreportingservice;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.causeway.applib.services.error.ErrorDetails;
 import org.apache.causeway.applib.services.error.ErrorReportingService;
 import org.apache.causeway.applib.services.error.SimpleTicket;
-import org.apache.causeway.applib.services.error.Ticket.StackTracePolicy;
+import org.apache.causeway.commons.internal.base._Strings;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
 import lombok.Builder;
+import lombok.val;
 
 /**
  * Response from the {@link ErrorReportingService}, containing information to show to the end-user.
@@ -51,18 +53,27 @@ public class EmailTicket extends SimpleTicket {
 
         private static final long serialVersionUID = -817872853109724987L;
 
+        @Builder.Default
         private String linkName = "Email";
+        @Builder.Default
         private String receiver = "no-one@nowhere";
+        @Builder.Default
         private String subject = "[Module-Name] Unexpected Error (#ref)";
+        @Builder.Default
         private String body = "empty body";
 
         public String toHtmlLink() {
-            return String.format("<a href=\"mailto:%s?subject=%s&body=%s\">%s</a>",
-                    receiver,
-                    htmlEscape(subject),
-                    htmlEscape(body),
-                    linkName
-                    );
+
+            val messageProperties = Map.<String, Object>of(
+                    "receiver", receiver,
+                    "subject", htmlEscape(subject),
+                    "body", htmlEscape(body),
+                    "linkName", linkName);
+
+            return _Strings.format("<a href=\"mailto:${receiver}"
+                    + "?subject=${subject}"
+                    + "&body=${body}\">${linkName}</a>",
+                    messageProperties);
         }
 
         // -- STACKTRACE FORMATTING

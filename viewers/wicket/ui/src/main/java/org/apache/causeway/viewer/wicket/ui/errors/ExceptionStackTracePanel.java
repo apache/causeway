@@ -44,6 +44,8 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import org.apache.causeway.viewer.wicket.ui.util.WktLinks;
 
+import lombok.val;
+
 public class ExceptionStackTracePanel
 extends PanelBase<List<StackTraceDetail>> {
 
@@ -78,29 +80,34 @@ extends PanelBase<List<StackTraceDetail>> {
 
     public ExceptionStackTracePanel(
             final PageClassRegistry pageClassRegistry,
-            final String id, final ExceptionModel exceptionModel) {
+            final String id,
+            final ExceptionModel exceptionModel) {
+
         super(id, exceptionModel);
 
-        final Ticket ticket = exceptionModel.getTicket();
-        final String mainMessage =
-                ticket != null
-                    && ticket.getUserMessage() != null
-                        ? ticket.getUserMessage()
-                        : exceptionModel.getMainMessage();
+        val ticketIfAny = exceptionModel.getTicket();
 
+        val mainMessage = ticketIfAny
+            .map(Ticket::getUserMessage)
+            .orElseGet(exceptionModel::getMainMessage);
         Wkt.labelAdd(this, ID_MAIN_MESSAGE, mainMessage);
 
-        final String ticketMarkup = ticket != null ? ticket.getMarkup(): null;
-        if(ticketMarkup == null) {
-            WktComponents.permanentlyHide(this, ID_TICKET_MARKUP);
-        } else {
-            Wkt.markupAdd(this, ID_TICKET_MARKUP, ticket.getMarkup());
-        }
+        ticketIfAny
+            .map(Ticket::getMarkup)
+            .ifPresentOrElse(ticketMarkup->{
+                Wkt.markupAdd(this, ID_TICKET_MARKUP, ticketMarkup);
+            }, ()->{
+                WktComponents.permanentlyHide(this, ID_TICKET_MARKUP);
+            });
 
         final boolean suppressExceptionDetail =
-                exceptionModel.isAuthorizationException() ||
-                exceptionModel.isRecognized() ||
-                (ticket != null && ticket.getStackTracePolicy() == Ticket.StackTracePolicy.HIDE);
+                exceptionModel.isAuthorizationException()
+                || exceptionModel.isRecognized()
+                || ticketIfAny
+                    .map(Ticket::getStackTracePolicy)
+                    .map(Ticket.StackTracePolicy.HIDE::equals)
+                    .orElse(false);
+
         if(suppressExceptionDetail) {
             WktComponents.permanentlyHide(this, ID_EXCEPTION_DETAIL_DIV);
         } else {
