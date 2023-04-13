@@ -20,15 +20,16 @@ package org.apache.causeway.viewer.wicket.ui.components.scalars.image;
 
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.Model;
 
-import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.decorators.FormLabelDecorator.FormLabelDecorationModel;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
+import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import org.apache.causeway.viewer.wicket.ui.util.WktDecorators;
 import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 
@@ -53,7 +54,7 @@ extends PanelAbstract<ManagedObject, ScalarModel> {
 
         Wkt.add(this, createScalarNameLabel(ID_SCALAR_NAME));
 
-        val wicketImage = WicketImageUtil.asWicketImage(ID_SCALAR_VALUE, scalarModel())
+        val wicketImage = _WktImageUtil.asWicketImage(ID_SCALAR_VALUE, scalarModel())
                 .orElse(null);
         if(wicketImage != null) {
             addOrReplace(wicketImage);
@@ -64,22 +65,23 @@ extends PanelAbstract<ManagedObject, ScalarModel> {
                     new ComponentFeedbackMessageFilter(wicketImage)));
 
         } else {
-            permanentlyHide(ID_SCALAR_VALUE, ID_FEEDBACK);
+            WktComponents.permanentlyHide(this, ID_SCALAR_VALUE, ID_FEEDBACK);
         }
-
     }
 
-    /** copied over from {@link ScalarPanelAbstract} */
+    @Override
+    public String getVariation() {
+        val scalarModel = scalarModel();
+        return Facets.labelAt(scalarModel.getMetaModel())
+            .map(LabelPosition::name)
+            .orElse(LabelPosition.LEFT.name());
+    }
+
+    /** see also {@link ScalarPanelAbstract} */
     protected Label createScalarNameLabel(final String id) {
 
-        val labelCaption = Model.of(scalarModel().getFriendlyName());
-
-        final Label scalarNameLabel = Wkt.label(id, labelCaption);
-        if(_Strings.isNullOrEmpty(labelCaption.getObject())) {
-            return scalarNameLabel;
-        }
-
         val scalarModel = scalarModel();
+        val scalarNameLabel = Wkt.label(id, scalarModel.getFriendlyName());
 
         WktDecorators.getFormLabel()
             .decorate(scalarNameLabel, FormLabelDecorationModel
@@ -87,7 +89,7 @@ extends PanelAbstract<ManagedObject, ScalarModel> {
                             && scalarModel.isEnabled()));
 
         scalarModel.getDescribedAs()
-        .ifPresent(describedAs->WktTooltips.addTooltip(scalarNameLabel, describedAs));
+            .ifPresent(describedAs->WktTooltips.addTooltip(scalarNameLabel, describedAs));
         return scalarNameLabel;
     }
 

@@ -76,6 +76,8 @@ Main action - as exposed in the UI - to execute the specified fixture script.
 
 Also allows arbitrary parameters to be specified for said fixture script.
 
+NOTE: this method can only be used for xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] implementations that are discoverable by Spring (eg annotated with _org.springframework.stereotype.Service_ or _org.springframework.stereotype.Component_ . Moreover, the xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] must _not_ be a view model, ie must not be annotated with _org.apache.causeway.applib.annotation.DomainObject_ . (This is because the lifecycle of view models is unknown to by Spring). Instead, use _#runFixtureScript(FixtureScript, String)_ , passing in the xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] instance.
+
 [#recreateObjectsAndReturnFirst_]
 === recreateObjectsAndReturnFirst()
 

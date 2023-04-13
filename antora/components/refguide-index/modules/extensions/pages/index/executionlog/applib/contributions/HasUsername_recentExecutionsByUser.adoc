@@ -11,7 +11,6 @@ For example the _secman_ extension's `ApplicationUser` entity implements this in
 .HasUsername_recentExecutionsByUser.java
 ----
 class HasUsername_recentExecutionsByUser {
-  HasUsername_recentExecutionsByUser(HasUsername hasUsername)
   List<? extends ExecutionLogEntry> coll()
   boolean hideColl()
 }

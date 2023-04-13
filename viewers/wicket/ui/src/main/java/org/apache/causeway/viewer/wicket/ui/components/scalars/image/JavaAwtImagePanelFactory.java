@@ -19,38 +19,32 @@
 package org.apache.causeway.viewer.wicket.ui.components.scalars.image;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.core.metamodel.valuesemantics.ImageValueSemantics;
-import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
-import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
 
 import lombok.val;
 
-public class JavaAwtImagePanelFactory extends ComponentFactoryAbstract {
+public class JavaAwtImagePanelFactory
+extends ComponentFactoryScalarAbstract {
 
     private static final long serialVersionUID = 1L;
 
     public JavaAwtImagePanelFactory() {
-        super(UiComponentType.SCALAR_NAME_AND_VALUE, JavaAwtImagePanel.class);
+        super(JavaAwtImagePanel.class);
     }
 
     @Override
-    public ApplicationAdvice appliesTo(final IModel<?> model) {
-        if (!(model instanceof ScalarModel)) {
-            return ApplicationAdvice.DOES_NOT_APPLY;
-        }
-        val scalarModel = (ScalarModel) model;
+    protected Component createComponent(final String id, final ScalarModel scalarModel) {
+        return new JavaAwtImagePanel(id, scalarModel);
+    }
+
+    @Override
+    protected ApplicationAdvice appliesTo(final ScalarModel scalarModel) {
         val typeSpec = scalarModel.getScalarTypeSpec();
         return appliesIf(typeSpec != null
                 && Facets.valueHasSemantics(typeSpec, ImageValueSemantics.class));
-    }
-
-    @Override
-    public Component createComponent(final String id, final IModel<?> model) {
-        val scalarModel = (ScalarModel) model;
-        return new JavaAwtImagePanel(id, scalarModel);
     }
 }

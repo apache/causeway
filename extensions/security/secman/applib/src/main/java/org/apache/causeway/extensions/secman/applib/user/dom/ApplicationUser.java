@@ -26,8 +26,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
@@ -49,6 +49,7 @@ import org.apache.causeway.applib.services.user.RoleMemento;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.applib.util.ObjectContracts;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
@@ -552,9 +553,8 @@ public abstract class ApplicationUser
 
     // -- ENCRYPTED PASSWORD
 
-    @Property(
-            hidden = Where.EVERYWHERE
-    )
+    @Property
+    @PropertyLayout(hidden = Where.EVERYWHERE)
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     public @interface EncryptedPassword {
@@ -656,10 +656,14 @@ public abstract class ApplicationUser
 
     @Programmatic public boolean isRunAsAdministrator() {
         val currentUser = currentUser();
-        val adminRoleSuffix = ":" + getAdminRoleName();
+        val adminRoleName = getAdminRoleName(); // is guarded to not be empty
+        val adminRoleSuffix = ":" + adminRoleName;
         for (final RoleMemento role : currentUser.getRoles()) {
             final String roleName = role.getName();
-            // format is realmName:roleName.
+            if(adminRoleName.equals(roleName)) {
+                return true;
+            }
+            // format could also be realmName:roleName, eg. with Shiro
             // since we don't know what the realm's name is (depends on its configuration in shiro.ini),
             // simply check that the last part matches the role name.
             if(roleName.endsWith(adminRoleSuffix)) {
@@ -681,7 +685,10 @@ public abstract class ApplicationUser
     }
 
     @Programmatic private String getAdminRoleName() {
-        return getSecmanConfig().getSeed().getAdmin().getRoleName();
+        val adminRoleName = _Strings.emptyToNull(getSecmanConfig().getSeed().getAdmin().getRoleName());
+        // guard against empty admin role name
+        _Assert.assertNotNull(adminRoleName, ()->"secman-config.seed.admin.role-name must not be empty");
+        return adminRoleName;
     }
 
     @Programmatic private UserMemento currentUser() {

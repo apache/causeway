@@ -55,7 +55,7 @@ import org.apache.causeway.extensions.secman.applib.tenancy.dom.mixins.Applicati
 import org.apache.causeway.extensions.secman.applib.tenancy.man.mixins.ApplicationTenancyManager_allTenancies;
 import org.apache.causeway.extensions.secman.applib.tenancy.man.mixins.ApplicationTenancyManager_newTenancy;
 import org.apache.causeway.extensions.secman.applib.tenancy.menu.ApplicationTenancyMenu;
-import org.apache.causeway.extensions.secman.applib.user.contributions.HasUsername_open;
+import org.apache.causeway.extensions.secman.applib.user.contributions.HasUsername_associatedUser;
 import org.apache.causeway.extensions.secman.applib.user.dom.mixins.ApplicationUser_addRole;
 import org.apache.causeway.extensions.secman.applib.user.dom.mixins.ApplicationUser_delete;
 import org.apache.causeway.extensions.secman.applib.user.dom.mixins.ApplicationUser_duplicate;
@@ -165,7 +165,7 @@ import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixtures
         ApplicationFeatureViewModel_permissions.class,
 
         // HasUsername
-        HasUsername_open.class,
+        HasUsername_associatedUser.class,
 
         // ApplicationUserManager
         ApplicationUserManager_allUsers.class,

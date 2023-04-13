@@ -20,15 +20,12 @@ package org.apache.causeway.testdomain.rest;
 
 import java.util.function.UnaryOperator;
 
-import javax.inject.Inject;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 
@@ -46,6 +43,7 @@ import org.apache.causeway.testdomain.util.rest.RestEndpointService;
 import org.apache.causeway.viewer.restfulobjects.client.log.ClientConversationFilter;
 import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.CausewayModuleViewerRestfulObjectsJaxrsResteasy;
 
+import jakarta.inject.Inject;
 import lombok.val;
 
 @SpringBootTest(
@@ -68,7 +66,6 @@ import lombok.val;
 @TestMethodOrder(OrderAnnotation.class) // run tests in sequence, to ease debugging
 class CorsFilterTest {
 
-    @LocalServerPort int port;
     @Inject RestEndpointService restService;
 
     private final RoSpecSampler refSampler = new RoSpecSampler();
@@ -108,7 +105,7 @@ class CorsFilterTest {
     <T> Try<T> digestUsingPost(
             final String actionName,
             final Class<T> entityType,
-            final UnaryOperator<javax.ws.rs.client.Invocation.Builder> onRequestBuilder) {
+            final UnaryOperator<jakarta.ws.rs.client.Invocation.Builder> onRequestBuilder) {
 
         assertTrue(restService.getPort()>0);
 
@@ -132,7 +129,7 @@ class CorsFilterTest {
     <T> Try<T> digestUsingGet(
             final String actionName,
             final Class<T> entityType,
-            final UnaryOperator<javax.ws.rs.client.Invocation.Builder> onRequestBuilder) {
+            final UnaryOperator<jakarta.ws.rs.client.Invocation.Builder> onRequestBuilder) {
 
         assertTrue(restService.getPort()>0);
 

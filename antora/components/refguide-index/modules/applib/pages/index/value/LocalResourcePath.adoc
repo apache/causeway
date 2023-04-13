@@ -13,6 +13,7 @@ xref:refguide:applib:index/value/OpenUrlStrategy.adoc[OpenUrlStrategy] gives con
 .LocalResourcePath.java
 ----
 class LocalResourcePath {
+  public static final String LOGICAL_TYPE_NAME;
   LocalResourcePath(String path)
   LocalResourcePath(String path, OpenUrlStrategy openUrlStrategy)
   String getValue()

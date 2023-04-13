@@ -19,7 +19,7 @@
  */
 package demoapp.dom.types.javatime;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -43,7 +43,7 @@ import demoapp.dom.types.javatime.javatimezoneddatetime.JavaTimeZonedDateTimes;
 @DomainObjectLayout(
         named="JavaTimeTypes"
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 public class JavaTimeTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)

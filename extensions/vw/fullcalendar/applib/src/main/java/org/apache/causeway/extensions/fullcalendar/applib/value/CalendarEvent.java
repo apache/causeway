@@ -24,9 +24,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-import javax.inject.Named;
-import javax.xml.bind.annotation.adapters.XmlAdapter;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import jakarta.inject.Named;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.springframework.lang.Nullable;
 
@@ -45,7 +45,7 @@ import lombok.With;
  * @since 2.0 {@index}
  * @apiNote implements Comparable<CalendarEvent> based on epochMillis
  */
-@Named(CausewayModuleExtFullCalendarApplib.NAMESPACE + ".value.CalendarEvent")
+@Named(CalendarEvent.LOGICAL_TYPE_NAME)
 @org.apache.causeway.applib.annotation.Value
 @XmlJavaTypeAdapter(CalendarEvent.JaxbAdapter.class)
 @Getter @With
@@ -55,6 +55,8 @@ public class CalendarEvent
 implements
     Comparable<CalendarEvent>,
     Serializable {
+
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleExtFullCalendarApplib.NAMESPACE + ".value.CalendarEvent";
 
     private static final long serialVersionUID = 1L;
 

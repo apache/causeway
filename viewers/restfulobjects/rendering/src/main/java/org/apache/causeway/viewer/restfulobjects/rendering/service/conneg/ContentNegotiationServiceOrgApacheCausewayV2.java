@@ -20,20 +20,24 @@ package org.apache.causeway.viewer.restfulobjects.rendering.service.conneg;
 
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
-import javax.inject.Named;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.inject.Named;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 import com.fasterxml.jackson.databind.node.POJONode;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.client.RepresentationTypeSimplifiedV2;
 import org.apache.causeway.applib.client.SuppressionType;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
@@ -52,6 +56,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.Responses;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectPropertyReprRenderer;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
@@ -59,9 +64,11 @@ import lombok.val;
  */
 @Service
 @Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".ContentNegotiationServiceOrgApacheCausewayV2")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT - 200)
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT - 200)
 @Qualifier("OrgApacheCausewayV2")
-public class ContentNegotiationServiceOrgApacheCausewayV2 extends ContentNegotiationServiceAbstract {
+@RequiredArgsConstructor(onConstructor_ = {@Autowired})
+public class ContentNegotiationServiceOrgApacheCausewayV2
+extends ContentNegotiationServiceAbstract {
 
     /**
      * Unlike RO v1.0, use a single content-type of <code>application/json;profile="urn:org.apache.causeway/v2"</code>.
@@ -71,11 +78,6 @@ public class ContentNegotiationServiceOrgApacheCausewayV2 extends ContentNegotia
     public static final String ACCEPT_PROFILE = "urn:org.apache.causeway/v2";
 
     private final ContentNegotiationServiceForRestfulObjectsV1_0 restfulObjectsV1_0;
-
-    public ContentNegotiationServiceOrgApacheCausewayV2(final ContentNegotiationServiceForRestfulObjectsV1_0 restfulObjectsV1_0) {
-        this.restfulObjectsV1_0 = restfulObjectsV1_0;
-    }
-
 
     /**
      * Domain object is returned as a map with the RO 1.0 representation as a special '$$ro' property
@@ -263,10 +265,9 @@ public class ContentNegotiationServiceOrgApacheCausewayV2 extends ContentNegotia
 
             objectAndActionInvocation.streamElementAdapters()
             .map(elementAdapter->{
-                val pojo = elementAdapter.getPojo();
-                return pojo==null
-                    ? ScalarValueDtoV2.forNull(elementAdapter.getSpecification().getCorrespondingClass())
-                    : ScalarValueDtoV2.forValue(pojo);
+                val dto = dtoForValue(returnedAdapter)
+                        .orElseGet(()->elementAdapter.getSpecification().getCorrespondingClass());
+                return dto;
             })
             .forEach(rootRepresentation::arrayAdd);
 
@@ -275,16 +276,14 @@ public class ContentNegotiationServiceOrgApacheCausewayV2 extends ContentNegotia
             break;
 
         case SCALAR_VALUE:
-
-            val pojo = returnedAdapter.getPojo();
-            if(pojo==null) {
+            val dto = dtoForValue(returnedAdapter).orElse(null);
+            if(dto==null) {
                 // 404 not found
                 return Responses.ofNotFound();
             }
 
-            val dto = ScalarValueDtoV2.forValue(pojo);
-
-            rootRepresentation = new JsonRepresentation(new POJONode(dto));
+            val jsonNode = new POJONode(dto);
+            rootRepresentation = new JsonRepresentation(jsonNode);
             headerContentType = RepresentationTypeSimplifiedV2.VALUE;
 
             break;
@@ -303,6 +302,20 @@ public class ContentNegotiationServiceOrgApacheCausewayV2 extends ContentNegotia
                 .type(headerContentType.getContentTypeHeaderValue(ACCEPT_PROFILE));  // set appropriate Content-Type
 
         return responseBuilder(responseBuilder);
+    }
+
+    private Optional<Object> dtoForValue(final @Nullable ManagedObject valueObject) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(valueObject)
+                || !valueObject.getSpecification().isValue()) {
+            return Optional.empty();
+        }
+        val valSpec = valueObject.getSpecification();
+        val dto = valSpec.isCompositeValue()
+                ? ScalarValueDtoV2.forValue(valueObject.getPojo(),
+                        //XXX honor value semantics context?
+                        _Casts.uncheckedCast(valSpec.valueFacetElseFail().selectDefaultSemantics().orElseThrow()))
+                : ScalarValueDtoV2.forValue(valueObject.getPojo());
+        return Optional.of(dto);
     }
 
     /**

@@ -19,12 +19,12 @@
 package org.apache.causeway.core.metamodel.consent;
 
 import java.io.Serializable;
+import java.util.Optional;
+
+import org.springframework.lang.Nullable;
 
 public abstract class ConsentAbstract implements Serializable, Consent {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
 
     /**
@@ -38,7 +38,7 @@ public abstract class ConsentAbstract implements Serializable, Consent {
     }
 
     private final InteractionResult interactionResult;
-    private final String reason;
+    private final @Nullable VetoReason reason;
 
     /**
      * Can be subsequently {@link #setDescription(String) modified}, but is only
@@ -47,11 +47,11 @@ public abstract class ConsentAbstract implements Serializable, Consent {
      */
     private String description;
 
-    private static String determineReason(final InteractionResult interactionResult) {
-        if (interactionResult == null) {
-            return null;
-        }
-        return interactionResult.getReason();
+    @Nullable
+    private static VetoReason determineReason(final InteractionResult interactionResult) {
+        return interactionResult == null
+            ? null
+            : interactionResult.getReason().orElse(null);
     }
 
     /**
@@ -76,25 +76,22 @@ public abstract class ConsentAbstract implements Serializable, Consent {
      *            - if not <tt>null</tt> and not empty, is the reason this
      *            consent is vetoed.
      */
-    protected ConsentAbstract(final String description, final String reason) {
+    protected ConsentAbstract(final String description, final @Nullable VetoReason reason) {
         this(null, description, reason);
     }
 
     private ConsentAbstract(
             final InteractionResult interactionResult,
             final String description,
-            final String reason) {
+            final @Nullable VetoReason reason) {
         this.interactionResult = interactionResult;
         this.description = description;
         this.reason = reason;
     }
 
-    /**
-     * The reason why this has been vetoed.
-     */
     @Override
-    public String getReason() {
-        return isVetoed() ? this.reason : null;
+    public Optional<VetoReason> getReason() {
+        return isVetoed() ? Optional.of(this.reason) : Optional.empty();
     }
 
     @Override

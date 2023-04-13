@@ -20,14 +20,13 @@ package org.apache.causeway.core.metamodel.facets.properties.property;
 
 import java.util.Optional;
 
-import javax.inject.Inject;
-import javax.validation.constraints.Pattern;
+import jakarta.inject.Inject;
+import jakarta.validation.constraints.Pattern;
 
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
@@ -42,7 +41,6 @@ import org.apache.causeway.core.metamodel.facets.properties.projection.Projectin
 import org.apache.causeway.core.metamodel.facets.properties.property.disabled.DisabledFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.entitychangepublishing.EntityPropertyChangePublishingPolicyFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.fileaccept.FileAcceptFacetForPropertyAnnotation;
-import org.apache.causeway.core.metamodel.facets.properties.property.hidden.HiddenFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.MandatoryFacetInvertedByNullableAnnotationOnProperty;
 import org.apache.causeway.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForPropertyAnnotation;
@@ -86,7 +84,6 @@ extends FacetFactoryAbstract {
         inferIntentWhenOnTypeLevel(processMethodContext, propertyIfAny);
 
         processModify(processMethodContext, propertyIfAny);
-        processHidden(processMethodContext, propertyIfAny);
         processEditing(processMethodContext, propertyIfAny);
         processCommandPublishing(processMethodContext, propertyIfAny);
         processProjecting(processMethodContext, propertyIfAny);
@@ -209,15 +206,6 @@ extends FacetFactoryAbstract {
         return propertyDomainEventType;
     }
 
-    void processHidden(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
-        val facetHolder = processMethodContext.getFacetHolder();
-
-        // search for @Property(hidden=...)
-        addFacetIfPresent(
-                HiddenFacetForPropertyAnnotation
-                .create(propertyIfAny, facetHolder));
-    }
-
     void processEditing(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
         val facetHolder = processMethodContext.getFacetHolder();
 
@@ -324,11 +312,7 @@ extends FacetFactoryAbstract {
         val holder = processMethodContext.getFacetHolder();
 
         // check for @Nullable
-        val hasNullable =
-                _NullSafe.stream(method.getAnnotations())
-                    .map(annot->annot.annotationType().getSimpleName())
-                    .anyMatch(name->name.equals("Nullable"));
-        //val nullableIfAny = processMethodContext.synthesizeOnMethod(Nullable.class);
+        val hasNullable = method.isAnnotatedAsNullable();
 
         addFacetIfPresent(
                 MandatoryFacetInvertedByNullableAnnotationOnProperty

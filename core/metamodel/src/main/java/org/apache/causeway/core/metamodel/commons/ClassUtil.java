@@ -24,8 +24,6 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-import static org.apache.causeway.commons.internal.base._With.requiresNotEmpty;
-
 import lombok.NonNull;
 import lombok.val;
 import lombok.experimental.UtilityClass;
@@ -131,7 +129,7 @@ public final class ClassUtil {
     }
 
     public Class<?> forNameElseFail(final String fullName) {
-        requiresNotEmpty(fullName, "fullName");
+        _Strings.requireNonEmpty(fullName, "Full Name");
         final Class<?> builtIn = ClassUtil.getBuiltIn(fullName);
         if (builtIn != null) {
             return builtIn;

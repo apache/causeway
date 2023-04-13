@@ -20,8 +20,9 @@ package org.apache.causeway.testing.h2console.ui.services;
 
 import java.util.Optional;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Action;
@@ -34,8 +35,11 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.value.LocalResourcePath;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.testing.h2console.ui.CausewayModuleTestingH2ConsoleUi;
 import org.apache.causeway.testing.h2console.ui.webmodule.WebModuleH2Console;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * @since 2.0 {@index}
@@ -48,15 +52,12 @@ import org.apache.causeway.testing.h2console.ui.webmodule.WebModuleH2Console;
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@Priority(PriorityPrecedence.EARLY)
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class H2ManagerMenu {
 
     private final WebModuleH2Console webModule;
-
-    @Inject
-    public H2ManagerMenu(final WebModuleH2Console webModule) {
-        this.webModule = webModule;
-    }
+    private final CausewayConfiguration causewayConfiguration;
 
     public static class ActionDomainEvent extends CausewayModuleApplib.ActionDomainEvent<H2ManagerMenu>{}
 

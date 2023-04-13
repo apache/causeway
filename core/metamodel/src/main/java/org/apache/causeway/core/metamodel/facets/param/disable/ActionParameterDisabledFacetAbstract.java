@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.facets.param.disable;
 
+import java.util.Optional;
+
+import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -37,9 +40,9 @@ implements ActionParameterDisabledFacet {
     }
 
     @Override
-    public String disables(final UsabilityContext context) {
+    public Optional<VetoReason> disables(final UsabilityContext context) {
         if (!(context instanceof ActionArgUsabilityContext)) {
-            return null;
+            return Optional.empty();
         }
         final ActionArgUsabilityContext actionArgUsabilityContext = (ActionArgUsabilityContext) context;
         return disabledReason(actionArgUsabilityContext.getTarget(), actionArgUsabilityContext.getArgs());

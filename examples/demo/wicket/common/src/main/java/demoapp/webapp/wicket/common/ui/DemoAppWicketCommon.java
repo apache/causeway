@@ -21,7 +21,8 @@ package demoapp.webapp.wicket.common.ui;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.causeway.extensions.fullcalendar.wkt.viewer.CausewayModuleExtFullCalendarWicketUi;
+import org.apache.causeway.extensions.fullcalendar.wkt.ui.viewer.CausewayModuleExtFullCalendarWicketUi;
+import org.apache.causeway.extensions.viewer.wicket.exceldownload.ui.CausewayModuleExtExcelDownloadWicketUi;
 
 import demoapp.webapp.wicket.common.ui.custom.WhereInTheWorldPanelFactory;
 
@@ -32,6 +33,7 @@ import demoapp.webapp.wicket.common.ui.custom.WhereInTheWorldPanelFactory;
 @Import({
     WhereInTheWorldPanelFactory.class,
     CausewayModuleExtFullCalendarWicketUi.class,
+    CausewayModuleExtExcelDownloadWicketUi.class, // allows for collection download as excel
 })
 public class DemoAppWicketCommon {
 

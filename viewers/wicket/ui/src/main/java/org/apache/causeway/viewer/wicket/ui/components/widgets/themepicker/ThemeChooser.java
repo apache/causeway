@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.widgets.themepicker;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.ComponentTag;

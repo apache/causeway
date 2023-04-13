@@ -19,12 +19,13 @@
 package org.apache.causeway.core.metamodel.facets.members.disabled;
 
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
 public class DisabledFacetForContributee
 extends DisabledFacetAbstract {
 
-    public DisabledFacetForContributee(final String reason, final FacetHolder holder) {
+    public DisabledFacetForContributee(final VetoReason reason, final FacetHolder holder) {
         super(Where.ANYWHERE, reason, holder);
     }
 }

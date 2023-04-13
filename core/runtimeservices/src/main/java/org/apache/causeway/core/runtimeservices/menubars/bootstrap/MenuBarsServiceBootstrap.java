@@ -25,9 +25,9 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -59,11 +59,8 @@ import org.apache.causeway.core.metamodel.facets.actions.layout.CssClassFacetFor
 import org.apache.causeway.core.metamodel.facets.actions.layout.MemberDescribedFacetForMenuBarXml;
 import org.apache.causeway.core.metamodel.facets.actions.layout.MemberNamedFacetForMenuBarXml;
 import org.apache.causeway.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
-import org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
-import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.causeway.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.causeway.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet;
@@ -90,8 +87,8 @@ import lombok.extern.log4j.Log4j2;
 public class MenuBarsServiceBootstrap
 implements MenuBarsService {
 
-    public static final String MB3_TNS = "http://causeway.apache.org/applib/layout/menubars/bootstrap3";
-    public static final String MB3_SCHEMA_LOCATION = "http://causeway.apache.org/applib/layout/menubars/bootstrap3/menubars.xsd";
+    public static final String MB3_TNS = "https://causeway.apache.org/applib/layout/menubars/bootstrap3";
+    public static final String MB3_SCHEMA_LOCATION = "https://causeway.apache.org/applib/layout/menubars/bootstrap3/menubars.xsd";
 
     public static final String COMPONENT_TNS = GridServiceDefault.COMPONENT_TNS;
     public static final String COMPONENT_SCHEMA_LOCATION = GridServiceDefault.COMPONENT_SCHEMA_LOCATION;
@@ -199,29 +196,17 @@ implements MenuBarsService {
 
                 val layoutData = serviceActionLayoutDataByActionId.get(actionId);
 
-                FacetUtil.updateFacet(
-                        MemberNamedFacet.class,
-                        facet->facet instanceof MemberNamedFacetForMenuBarXml,
-                        MemberNamedFacetForMenuBarXml.create(layoutData, objectAction),
-                        objectAction);
+                FacetUtil.updateFacetIfPresent(
+                        MemberNamedFacetForMenuBarXml.create(layoutData, objectAction));
 
-                FacetUtil.updateFacet(
-                        MemberDescribedFacet.class,
-                        facet->facet instanceof MemberDescribedFacetForMenuBarXml,
-                        MemberDescribedFacetForMenuBarXml.create(layoutData, objectAction),
-                        objectAction);
+                FacetUtil.updateFacetIfPresent(
+                        MemberDescribedFacetForMenuBarXml.create(layoutData, objectAction));
 
-                FacetUtil.updateFacet(
-                        CssClassFacet.class,
-                        facet->facet instanceof CssClassFacetForMenuBarXml,
-                        CssClassFacetForMenuBarXml.create(layoutData, objectAction),
-                        objectAction);
+                FacetUtil.updateFacetIfPresent(
+                        CssClassFacetForMenuBarXml.create(layoutData, objectAction));
 
-                FacetUtil.updateFacet(
-                        CssClassFaFacet.class,
-                        facet->facet instanceof CssClassFaFacetForMenuBarXml,
-                        CssClassFaFacetForMenuBarXml.create(layoutData, objectAction),
-                        objectAction);
+                FacetUtil.updateFacetIfPresent(
+                        CssClassFaFacetForMenuBarXml.create(layoutData, objectAction));
 
             });
 

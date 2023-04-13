@@ -23,8 +23,8 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -72,7 +72,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named("causeway.security.AuthenticatorShiro")
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @Qualifier("Shiro")
 @Log4j2
 public class AuthenticatorShiro implements Authenticator {

@@ -22,12 +22,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.ResponseBuilder;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -40,6 +40,7 @@ import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.object.MmTitleUtil;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
@@ -320,21 +321,7 @@ implements ContentNegotiationService {
             final Collection<ManagedObject> collectionAdapters,
             final ObjectSpecification elementSpec) {
         final String singularName = elementSpec.getSingularName();
-        final String pluralName = elementSpec.getPluralName();
-        int size = collectionAdapters.size();
-        final String title;
-        switch (size) {
-        case 0:
-            title = "0 " + pluralName;
-            break;
-        case 1:
-            title = "1 " + singularName;
-            break;
-        default:
-            title = size + " " + pluralName;
-            break;
-        }
-        return title;
+        return MmTitleUtil.formatAnyCardinalityAsTitle(collectionAdapters.size(), singularName, elementSpec.getTranslationService());
     }
 
     /**

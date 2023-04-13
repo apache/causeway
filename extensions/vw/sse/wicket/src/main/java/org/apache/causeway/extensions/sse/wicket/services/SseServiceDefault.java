@@ -18,25 +18,19 @@
  */
 package org.apache.causeway.extensions.sse.wicket.services;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Queue;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ForkJoinPool;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
+import lombok.extern.log4j.Log4j2;
+import lombok.val;
+
+import java.util.*;
+import java.util.concurrent.*;
 import java.util.function.Predicate;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
@@ -45,12 +39,9 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.extensions.sse.applib.annotations.SseSource;
 import org.apache.causeway.extensions.sse.applib.service.SseChannel;
 import org.apache.causeway.extensions.sse.applib.service.SseService;
-
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Value;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import org.apache.causeway.extensions.sse.wicket.CausewayModuleExtSseWicket;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 /**
  * Server-sent events.
@@ -60,11 +51,13 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0 {@index}
  */
 @Service
-@Named("causeway.val.SseServiceDefault")
+@Named(SseServiceDefault.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2
 public class SseServiceDefault implements SseService {
+
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSseWicket.NAMESPACE + ".SseServiceDefault";
 
     @Inject private TransactionService transactionService;
     @Inject private InteractionService interactionService;

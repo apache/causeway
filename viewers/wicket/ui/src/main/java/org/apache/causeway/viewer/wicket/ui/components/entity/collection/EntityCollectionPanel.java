@@ -19,12 +19,15 @@
 package org.apache.causeway.viewer.wicket.ui.components.entity.collection;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 
+import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.config.metamodel.facets.CollectionLayoutConfigOptions;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -74,11 +77,13 @@ implements HasDynamicallyVisibleContent {
     @Getter(value = AccessLevel.PROTECTED)
     private CollectionPresentationSelectorPanel selectorDropdownPanel;
 
+    private final CollectionLayoutData layoutData;
     private final WebMarkupContainer div;
 
-    public EntityCollectionPanel(final String id, final UiObjectWkt entityModel) {
+    public EntityCollectionPanel(final String id, final UiObjectWkt entityModel, final CollectionLayoutData layoutData) {
         super(id, entityModel);
 
+        this.layoutData = layoutData;
         this.div = new WebMarkupContainer(ID_COLLECTION_GROUP);
 
         selectedItemHintKey = ComponentHintKey.create(super.getMetaModelContext(),
@@ -87,7 +92,6 @@ implements HasDynamicallyVisibleContent {
 
         buildGui();
     }
-
 
     /**
      * Attach UI only after added to parent.
@@ -106,9 +110,18 @@ implements HasDynamicallyVisibleContent {
 
     }
 
+    @Override
+    public void renderHead(final IHeaderResponse response) {
+        super.renderHead(response);
+        tableDecorator().ifPresent(tableDecorator->
+            renderHeadForTableDecorator(response, tableDecorator));
+    }
+
+    // -- HELPER
+
     private void buildGui() {
 
-        val collectionModel = EntityCollectionModelParented.forParentObjectModel(getModel());
+        val collectionModel = EntityCollectionModelParented.forParentObjectModel(getModel(), layoutData);
         div.setMarkupId("collection-" + collectionModel.getLayoutData().getId());
 
         val collectionMetaModel = collectionModel.getMetaModel();
@@ -127,9 +140,10 @@ implements HasDynamicallyVisibleContent {
             Facets.cssClass(collectionMetaModel, objectAdapter)
             .ifPresent(cssClass->Wkt.cssAppend(div, cssClass));
 
-            Facets.tableDecoration(collectionMetaModel)
-                .map(CollectionLayoutConfigOptions.TableDecoration::cssClass)
-                .ifPresent(tableDecorationCssClass->Wkt.cssAppend(div, tableDecorationCssClass));
+            this.tableDecorator = collectionMetaModel.getTableDecorator();
+            tableDecorator.ifPresent(tableDecorator->{
+                    Wkt.cssAppend(div, tableDecorator.cssClass());
+                });
 
             val collectionPanel = new CollectionPanel(ID_COLLECTION, collectionModel);
             div.addOrReplace(collectionPanel);
@@ -152,6 +166,17 @@ implements HasDynamicallyVisibleContent {
         }
     }
 
+    // TableDecorator caching
+    private transient Optional<TableDecorator> tableDecorator;
+    private Optional<TableDecorator> tableDecorator() {
+        if(tableDecorator == null) {
+            val collectionModel = EntityCollectionModelParented.forParentObjectModel(getModel(), layoutData);
+            val collectionMetaModel = collectionModel.getMetaModel();
+            this.tableDecorator = collectionMetaModel.getTableDecorator();
+        }
+        return tableDecorator;
+    }
+
     private void createSelectorDropdownPanel(final EntityCollectionModel collectionModel) {
 
         final CollectionPresentationSelectorHelper selectorHelper =
@@ -161,7 +186,7 @@ implements HasDynamicallyVisibleContent {
         final List<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
 
         if (componentFactories.size() <= 1) {
-            permanentlyHide(ID_SELECTOR_DROPDOWN);
+            WktComponents.permanentlyHide(div, ID_SELECTOR_DROPDOWN);
         } else {
             selectorDropdownPanel = new CollectionPresentationSelectorPanel(ID_SELECTOR_DROPDOWN,
                     collectionModel, selectedItemHintKey);

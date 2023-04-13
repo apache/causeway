@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.valuesemantics.temporal;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Component;
 
@@ -30,7 +30,7 @@ import org.apache.causeway.commons.internal.base._Temporals;
 import org.apache.causeway.schema.common.v2.ValueType;
 
 @Component
-@Named("causeway.val.OffsetDateTimeValueSemantics")
+@Named("causeway.metamodel.value.OffsetDateTimeValueSemantics")
 //@Log4j2
 public class OffsetDateTimeValueSemantics
 extends TemporalValueSemanticsProvider<OffsetDateTime> {

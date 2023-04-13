@@ -54,34 +54,27 @@ fi
 
 shift $((OPTIND-1))
 
-ISSUE=$(git rev-parse --abbrev-ref HEAD | cut -d- -f1,2)
+BRANCH=$(git rev-parse --abbrev-ref HEAD | cut -d- -f1,2)
 MSG=$*
 
-echo "ISSUE     : $ISSUE"
-echo "MSG       : $MSG"
-echo "(NO-)ADD  : $ADD"
-echo "PUSH      : $PUSH"
-
-if [ -d _pipeline-resources ]
-then
-  pushd _pipeline-resources || exit
-  if [ -z "$ADD" ]
-  then
-    git add .
-  fi
-  git commit -m "$ISSUE: ${MSG}"
-  if [ -n "$PUSH" ]
-  then
-    git push
-  fi
-  popd || exit
+if [ "$BRANCH" != "master" ]; then
+  COMMIT_MSG="$BRANCH: ${MSG}"
+else
+  COMMIT_MSG="${MSG}"
 fi
+
+echo "BRANCH     : $BRANCH"
+echo "MSG        : $MSG"
+#echo "COMMIT_MSG : $COMMIT_MSG"
+echo "(NO-)ADD   : $ADD"
+echo "PUSH       : $PUSH"
 
 if [ -z "$ADD" ]
 then
   git add .
 fi
-git commit -m "$ISSUE: ${MSG}"
+
+git commit -m "${COMMIT_MSG}"
 if [ -n "$PUSH" ]
 then
   git push

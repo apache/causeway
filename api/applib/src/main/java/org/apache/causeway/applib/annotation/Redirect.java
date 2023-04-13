@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.applib.annotation;
 
-import javax.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.XmlType;
 
 /**
  * The available policies for rendering the next page if the result is the same as the target
@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  * @since 1.x {@index}
  */
 @XmlType(
-        namespace = "http://causeway.apache.org/applib/layout/component"
+        namespace = "https://causeway.apache.org/applib/layout/component"
         )
 public enum Redirect {
     /**

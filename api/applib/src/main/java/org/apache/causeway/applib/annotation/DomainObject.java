@@ -24,8 +24,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import javax.inject.Named;
-
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -51,7 +49,8 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
  * </p>
  *
  * @apiNote Meta annotation {@link Component} allows for the Spring framework to pick up (discover) the
- * annotated type.
+ * annotated type.  However, the custom {@link Scope} of &quot;causeway-domain-object&quot; is a clue that these
+ * objects (either entities or view models) <i>cannot</i> be obtained from the Spring application context.
  * For more details see <code>org.apache.causeway.core.config.beans.CausewayBeanFactoryPostProcessorForSpring</code>
  *
  * @see Action
@@ -68,7 +67,7 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
         ElementType.ANNOTATION_TYPE
 })
 @Retention(RetentionPolicy.RUNTIME)
-@Component @Scope("prototype")
+@Component @Scope("causeway-domain-object")
 public @interface DomainObject {
 
     /**
@@ -134,11 +133,13 @@ public @interface DomainObject {
     /**
      * If {@link #editing()} is set to {@link Editing#DISABLED},
      * then the reason to provide to the user as to why the object's properties cannot be edited/collections modified.
+     * <p>
+     * If left empty (default), no reason is given.
      *
      * @see DomainObject#editing()
      */
     String editingDisabledReason()
-            default "Disabled";
+            default "";
 
     /**
      * Whether entity changes (persistent property updates) should be published to
@@ -173,6 +174,12 @@ public @interface DomainObject {
      * Typical examples are "act", "prop", "coll", "exec", "execute", "invoke",
      * "apply" and so on. The default name is `$$`.
      * </p>
+     *
+     * <p>
+     *     <b>NOTE</b>: it's more typical to instead use {@link Action}, {@link Property} or {@link Collection} as the
+     *     class-level annotation, indicating that the domain object is a mixin.  The mixin method name for these is,
+     *     respectively, "act", "prop" and "coll".
+     * </p>
      */
     String mixinMethod()
             default "$$";
@@ -180,28 +187,21 @@ public @interface DomainObject {
     /**
      * The nature of this domain object.
      *
+     * <p>
+     *     Most common are natures of {@link Nature#ENTITY} and {@link Nature#VIEW_MODEL}.  For mixins, rather than
+     *     use a nature of {@link Nature#MIXIN}, it's more typical to instead use {@link Action}, {@link Property} or
+     *     {@link Collection} as the class-level annotation, indicating that the domain object is a mixin.
+     *     The {@link #mixinMethod() mixin method name}  for these is, respectively, "act", "prop" and "coll".
+     * </p>
+     *
+     * <p>
+     *     The {@link Nature#BEAN} nature is for internally use, and should not normally be specified explicitly.
+     * </p>
+     *
      * @see DomainService#nature()
      */
     Nature nature()
             default Nature.NOT_SPECIFIED;
-
-    /**
-     * The logical name of this object's type, that uniquely and fully qualifies it.
-     * The logical name is analogous to - but independent of - the actual fully qualified class name.
-     * eg. {@code sales.Customer} for a class 'org.mycompany.dom.Customer'
-     * <p>
-     * This value, if specified, is used in the serialized form of the object's {@link Bookmark}.
-     * A {@link Bookmark} is used by the framework to uniquely identify an object over time
-     * (same concept as a URN).
-     * Otherwise, if not specified, the fully qualified class name is used instead.
-     * </p>
-     * @deprecated use {@link Named} instead
-     * @see Named
-     */
-    @Deprecated(forRemoval = true, since = "2.0.0-M8")
-    String logicalTypeName()
-            default "";
-
 
     /**
      * Indicates that the loading of the domain object should be posted to the

@@ -21,10 +21,10 @@ package org.apache.causeway.viewer.restfulobjects.client.auth;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
-import javax.annotation.Priority;
-import javax.ws.rs.client.ClientRequestContext;
-import javax.ws.rs.client.ClientRequestFilter;
-import javax.xml.bind.DatatypeConverter;
+import jakarta.annotation.Priority;
+import jakarta.ws.rs.client.ClientRequestContext;
+import jakarta.ws.rs.client.ClientRequestFilter;
+import jakarta.xml.bind.DatatypeConverter;
 
 import org.apache.causeway.commons.internal.base._Strings;
 

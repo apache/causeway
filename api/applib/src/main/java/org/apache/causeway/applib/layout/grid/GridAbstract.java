@@ -22,8 +22,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlTransient;
-
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.ActionLayoutDataOwner;
@@ -34,6 +32,8 @@ import org.apache.causeway.applib.layout.component.FieldSetOwner;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.layout.LayoutService;
+
+import jakarta.xml.bind.annotation.XmlTransient;
 
 /**
  * All top-level page layout classes should implement this interface.
@@ -77,22 +77,30 @@ public abstract class GridAbstract implements Grid {
         this.tnsAndSchemaLocation = tnsAndSchemaLocation;
     }
 
+    private boolean fallback;
+    @Override
+    @Programmatic
+    @XmlTransient
+    public boolean isFallback() {
+        return fallback;
+    }
+    @Programmatic
+    public void setFallback(final boolean fallback) {
+        this.fallback = fallback;
+    }
 
     private boolean normalized;
-
     @Override
     @Programmatic
     @XmlTransient
     public boolean isNormalized() {
         return normalized;
     }
-
     @Override
     @Programmatic
     public void setNormalized(final boolean normalized) {
         this.normalized = normalized;
     }
-
 
     /**
      * Convenience for subclasses.

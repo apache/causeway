@@ -36,6 +36,7 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.execution.InteractionInternal;
+import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -99,9 +100,10 @@ implements InteractionInternal {
             final ActionInvocation actionInvocation,
             final ClockService clockService,
             final MetricsService metricsService,
+            final CommandPublisher commandPublisher,
             final Command command) {
 
-        pushAndStart(actionInvocation, clockService, metricsService, command);
+        pushAndStart(actionInvocation, clockService, metricsService, commandPublisher, command);
         try {
             return executeInternal(memberExecutor, actionInvocation);
         } finally {
@@ -109,9 +111,14 @@ implements InteractionInternal {
         }
     }
 
-    private void pushAndStart(final ActionInvocation actionInvocation, final ClockService clockService, final MetricsService metricsService, final Command command) {
+    private void pushAndStart(
+            final ActionInvocation actionInvocation,
+            final ClockService clockService,
+            final MetricsService metricsService,
+            final CommandPublisher commandPublisher,
+            final Command command) {
         push(actionInvocation);
-        start(actionInvocation, clockService, metricsService, command);
+        start(actionInvocation, clockService, metricsService, commandPublisher, command);
     }
 
     @Override
@@ -120,10 +127,11 @@ implements InteractionInternal {
             final PropertyEdit propertyEdit,
             final ClockService clockService,
             final MetricsService metricsService,
+            final CommandPublisher commandPublisher,
             final Command command) {
 
         push(propertyEdit);
-        start(propertyEdit, clockService, metricsService, command);
+        start(propertyEdit, clockService, metricsService, commandPublisher, command);
         try {
             return executeInternal(memberExecutor, propertyEdit);
         } finally {
@@ -186,6 +194,7 @@ implements InteractionInternal {
             final Execution<?,?> execution,
             final ClockService clockService,
             final MetricsService metricsService,
+            final CommandPublisher commandPublisher,
             final Command command) {
         // set the startedAt (and update command if this is the top-most member execution)
         // (this isn't done within Interaction#execute(...) because it requires the DTO
@@ -193,7 +202,9 @@ implements InteractionInternal {
         val startedAt = execution.start(clockService, metricsService);
         if(command.getStartedAt() == null) {
             command.updater().setStartedAt(startedAt);
+            command.updater().setPublishingPhase(Command.CommandPublishingPhase.STARTED);
         }
+        commandPublisher.start(command);
     }
 
     /**

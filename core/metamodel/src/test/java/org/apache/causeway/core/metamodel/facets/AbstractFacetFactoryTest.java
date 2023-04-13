@@ -23,7 +23,6 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -61,8 +60,8 @@ public abstract class AbstractFacetFactoryTest {
         }
     }
 
-    @Mock protected TranslationService mockTranslationService;
-    @Mock protected InteractionService mockInteractionService;
+    protected TranslationService mockTranslationService;
+    protected InteractionService mockInteractionService;
     protected final InteractionContext iaContext = InteractionContextFactory.testing();
     protected MethodRemover_forTesting methodRemover;
 
@@ -73,6 +72,9 @@ public abstract class AbstractFacetFactoryTest {
 
     @BeforeEach
     protected void setUp() throws Exception {
+
+        mockTranslationService = Mockito.mock(TranslationService.class);
+        mockInteractionService = Mockito.mock(InteractionService.class);
 
         methodRemover = new MethodRemover_forTesting();
 
@@ -135,8 +137,8 @@ public abstract class AbstractFacetFactoryTest {
             final String methodName,
             final Class<?>[] signature) {
 
-        facetFactory.processParams(new FacetFactory
-                .ProcessParameterContext(type, IntrospectionPolicy.ANNOTATION_OPTIONAL,
+        facetFactory.processParams(FacetFactory.ProcessParameterContext
+                .forTesting(type, IntrospectionPolicy.ANNOTATION_OPTIONAL,
                         findMethod(type, methodName, signature),
                         null, facetedMethodParameter));
     }

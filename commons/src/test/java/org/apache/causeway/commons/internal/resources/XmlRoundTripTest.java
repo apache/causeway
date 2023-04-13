@@ -18,17 +18,14 @@
  */
 package org.apache.causeway.commons.internal.resources;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlType;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.causeway.commons.io.JaxbUtils;
 
@@ -39,33 +36,8 @@ import lombok.val;
 
 class XmlRoundTripTest {
 
-    @AfterEach
-    void cleanUp() {
-        JaxbUtils.usePlatformDefault();
-    }
-
     @Test @SneakyThrows
-    void testMoxy() {
-
-        JaxbUtils.useMoxy();
-
-        // test prerequisites
-        assertNotNull(JAXBContext.newInstance(SampleDto.class));
-
-        val dto = getSample();
-        val mapper = JaxbUtils
-                .mapperFor(SampleDto.class, opts->opts.allowMissingRootElement(true));
-        assertEquals(dto, mapper.clone(dto));
-    }
-
-    @Test @SneakyThrows
-    void testPlatformDefault() {
-
-        JaxbUtils.usePlatformDefault();
-
-        // test prerequisites
-        assertNotNull(JAXBContext.newInstance(SampleDto.class));
-
+    void testFrameworkDefault() {
         val dto = getSample();
         val mapper = JaxbUtils
                 .mapperFor(SampleDto.class, opts->opts.allowMissingRootElement(true));

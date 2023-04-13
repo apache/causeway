@@ -20,8 +20,8 @@ package org.apache.causeway.core.runtimeservices.recognizer.dae;
 
 import java.util.Optional;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.ConcurrencyFailureException;
@@ -50,7 +50,7 @@ import lombok.val;
  */
 @Service
 @Named(ExceptionRecognizerForDataAccessException.LOGICAL_TYPE_NAME)
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class ExceptionRecognizerForDataAccessException
 implements ExceptionRecognizer {

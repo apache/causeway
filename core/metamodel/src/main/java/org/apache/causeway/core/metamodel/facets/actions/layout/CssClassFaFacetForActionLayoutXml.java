@@ -32,20 +32,24 @@ extends CssClassFaStaticFacetAbstract {
 
     public static Optional<CssClassFaFacet> create(
             final ActionLayoutData actionLayout,
-            final FacetHolder holder) {
+            final FacetHolder holder,
+            final Precedence precedence) {
         if(actionLayout == null) {
             return Optional.empty();
         }
         final String cssClassFa = _Strings.emptyToNull(actionLayout.getCssClassFa());
         CssClassFaPosition cssClassFaPosition = actionLayout.getCssClassFaPosition();
         return cssClassFa != null
-                ? Optional.of(new CssClassFaFacetForActionLayoutXml(cssClassFa, cssClassFaPosition, holder))
+                ? Optional.of(new CssClassFaFacetForActionLayoutXml(cssClassFa, cssClassFaPosition, holder, precedence))
                 : Optional.empty();
     }
 
     private CssClassFaFacetForActionLayoutXml(
-            final String value, final CssClassFaPosition position, final FacetHolder holder) {
-        super(value, position, holder);
+            final String value,
+            final CssClassFaPosition position,
+            final FacetHolder holder,
+            final Precedence precedence) {
+        super(value, position, holder, precedence);
     }
 
     @Override

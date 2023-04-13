@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.incubator.viewer.vaadin.ui.auth;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import com.vaadin.flow.server.VaadinRequest;
 import com.vaadin.flow.server.VaadinSession;

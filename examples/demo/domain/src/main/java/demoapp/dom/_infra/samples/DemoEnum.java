@@ -18,9 +18,25 @@
  */
 package demoapp.dom._infra.samples;
 
+import org.apache.causeway.applib.annotation.Title;
+import org.apache.causeway.applib.util.Enums;
+
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public enum DemoEnum {
-    CIRCLE,
-    TRIANGLE,
-    SQUARE,
-    PENTAGON
+    CIRCLE("◯"),
+    TRIANGLE("△"),
+    SQUARE("□"),
+    PENTAGON("⬠");
+
+    final String symbol;
+
+    @Title
+    public String demoTitle() {
+        return String.format("%s %s",
+                symbol,
+                Enums.getFriendlyNameOf(name()));
+    }
+
 }

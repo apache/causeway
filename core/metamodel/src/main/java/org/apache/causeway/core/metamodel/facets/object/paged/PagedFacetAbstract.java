@@ -33,8 +33,8 @@ implements PagedFacet {
 
     private final int value;
 
-    public PagedFacetAbstract(int value, final FacetHolder holder) {
-        super(type(), holder, Precedence.INFERRED);
+    protected PagedFacetAbstract(final int value, final FacetHolder holder, final Precedence precedence) {
+        super(type(), holder, precedence);
         this.value = value;
     }
 

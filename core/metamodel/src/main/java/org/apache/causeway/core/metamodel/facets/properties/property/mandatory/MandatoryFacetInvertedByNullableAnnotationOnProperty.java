@@ -18,11 +18,11 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.property.mandatory;
 
-import java.lang.reflect.Method;
 import java.util.Optional;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetAbstract;
@@ -41,7 +41,7 @@ extends MandatoryFacetAbstract {
 
     public static Optional<MandatoryFacet> create(
             final boolean hasNullable,
-            final Method method,
+            final MethodFacade method,
             final FacetHolder holder) {
 
         if(!hasNullable) {

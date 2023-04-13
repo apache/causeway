@@ -8,12 +8,7 @@
 ----
 class InteractionDtoUtils {
   void init()
-  JAXBContext getJaxbContext()
-  InteractionDto fromXml(Reader reader)
-  InteractionDto fromXml(String xml)
-  InteractionDto fromXml(Class<?> contextClass, String resourceName, Charset charset)
-  String toXml(InteractionDto interactionDto)
-  void toXml(InteractionDto interactionDto, Writer writer)
+  DtoMapper<InteractionDto> dtoMapper()
   InteractionDto newInteractionDto(Execution<?, ?> execution)     // <.>
   InteractionDto newInteractionDto(Execution<?, ?> execution, Strategy strategy)     // <.>
   ActionInvocationDto newActionInvocation(int sequence, Bookmark targetBookmark, String actionIdentifier, List<ParamDto> parameterDtos, String user)
@@ -27,7 +22,6 @@ class InteractionDtoUtils {
   String getParameterName(ActionInvocationDto ai, int paramNum)
   ValueType getParameterType(ActionInvocationDto ai, int paramNum)
   boolean isNull(ActionInvocationDto ai, int paramNum)
-  void dump(InteractionDto ixnDto, PrintStream out)
 }
 ----
 

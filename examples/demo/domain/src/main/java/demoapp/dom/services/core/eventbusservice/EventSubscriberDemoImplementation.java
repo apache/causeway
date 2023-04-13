@@ -20,10 +20,11 @@ package demoapp.dom.services.core.eventbusservice;
 
 import static demoapp.dom._infra.utils.LogUtils.emphasize;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
@@ -62,7 +63,7 @@ public class EventSubscriberDemoImplementation {
 
     @Named("demo.eventLogWriter")
     @DomainObject(
-            nature = Nature.BEAN) // <-- have this Object's lifecycle managed by Spring
+            nature = Nature.BEAN) @Scope("prototype") // <-- have this Object's lifecycle managed by Spring
     public static class EventLogWriter {
 
         @Inject private EventLogEntryRepository<? extends EventLogEntry> eventLogEntryRepository;

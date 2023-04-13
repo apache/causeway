@@ -18,14 +18,16 @@
  */
 package org.apache.causeway.core.runtimeservices.executor;
 
-import java.lang.reflect.Method;
 import java.util.Optional;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Provider;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Provider;
 
+import org.apache.causeway.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
+import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -44,13 +46,13 @@ import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.execution.InteractionInternal;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
 import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
 import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertySetterOrClearFacetForDomainEventAbstract.EditingVariant;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
@@ -76,6 +78,8 @@ import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
+import static org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet.isPublishingEnabled;
+
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".MemberExecutorServiceDefault")
 @Priority(PriorityPrecedence.EARLY)
@@ -95,6 +99,7 @@ implements MemberExecutorService {
     private final @Getter Provider<ExecutionPublisher> executionPublisherProvider;
     private final @Getter MetamodelEventService metamodelEventService;
     private final @Getter TransactionService transactionService;
+    private final Provider<CommandPublisher> commandPublisherProvider;
 
     private MetricsService metricsService() {
         return metricsServiceProvider.get();
@@ -116,7 +121,7 @@ implements MemberExecutorService {
             final @NonNull InteractionHead head,
             final @NonNull Can<ManagedObject> argumentAdapters,
             final @NonNull InteractionInitiatedBy interactionInitiatedBy,
-            final @NonNull Method method,
+            final @NonNull MethodFacade methodFacade,
             final @NonNull ActionExecutorFactory actionExecutorFactory,
             final @NonNull FacetHolder facetHolder) {
 
@@ -129,14 +134,14 @@ implements MemberExecutorService {
         }});
 
         if(interactionInitiatedBy.isPassThrough()) {
-            val resultPojo = invokeMethodPassThrough(method, head, argumentAdapters);
+            val resultPojo = invokeMethodPassThrough(methodFacade, head, argumentAdapters);
             return facetHolder.getObjectManager().adapt(resultPojo);
         }
 
         val interaction = getInteractionElseFail();
         val command = interaction.getCommand();
 
-        CommandPublishingFacet.prepareCommandForPublishing(command, head, owningAction, facetHolder);
+        prepareCommandForPublishing(command, head, owningAction, facetHolder);
 
         val xrayHandle = _Xray.enterActionInvocation(interactionLayerTracker, interaction, owningAction, head, argumentAdapters);
 
@@ -155,7 +160,7 @@ implements MemberExecutorService {
         val memberExecutor = actionExecutorFactory.createExecutor(owningAction, head, argumentAdapters);
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
-        interaction.execute(memberExecutor, actionInvocation, clockService, metricsService(), command);
+        interaction.execute(memberExecutor, actionInvocation, clockService, metricsService(), commandPublisherProvider.get(), command);
 
         // handle any exceptions
         val priorExecution = interaction.getPriorExecutionOrThrowIfAnyException(actionInvocation);
@@ -189,10 +194,11 @@ implements MemberExecutorService {
             executionPublisher().publishActionInvocation(priorExecution);
         }
 
-        val result = resultFilteredHonoringVisibility(method, returnedAdapter, interactionInitiatedBy);
+        val result = resultFilteredHonoringVisibility(returnedAdapter, interactionInitiatedBy);
         _Xray.exitInvocation(xrayHandle);
         return result;
     }
+
 
     @Override
     public ManagedObject setOrClearProperty(
@@ -210,7 +216,7 @@ implements MemberExecutorService {
             return head.getTarget();
         }
 
-        CommandPublishingFacet.prepareCommandForPublishing(command, head, owningProperty, facetHolder);
+        prepareCommandForPublishing(command, head, owningProperty, facetHolder);
 
         val xrayHandle = _Xray.enterPropertyEdit(interactionLayerTracker, interaction, owningProperty, head, newValueAdapter);
 
@@ -226,7 +232,7 @@ implements MemberExecutorService {
                         interactionInitiatedBy, editingVariant);
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
-        val targetPojo = interaction.execute(executor, propertyEdit, clockService, metricsService(), command);
+        val targetPojo = interaction.execute(executor, propertyEdit, clockService, metricsService(), commandPublisherProvider.get(), command);
 
         // handle any exceptions
         final Execution<?, ?> priorExecution = interaction.getPriorExecution();
@@ -256,13 +262,13 @@ implements MemberExecutorService {
 
     @SneakyThrows
     private Object invokeMethodPassThrough(
-            final Method method,
+            final MethodFacade methodFacade,
             final InteractionHead head,
             final Can<ManagedObject> arguments) {
 
         final Object[] executionParameters = MmUnwrapUtil.multipleAsArray(arguments);
         final Object targetPojo = MmUnwrapUtil.single(head.getTarget());
-        return CanonicalInvoker.invoke(method, targetPojo, executionParameters);
+        return CanonicalInvoker.invoke(methodFacade, targetPojo, executionParameters);
     }
 
     private void setCommandResultIfEntity(
@@ -280,7 +286,7 @@ implements MemberExecutorService {
             return;
         }
         if(entityState.isDetached()
-                || entityState.isSpecicalJpaDetachedWithOid()) {
+                || entityState.isJpaSpecificDetachedWithOid()) {
             // ensure that any still-to-be-persisted adapters get persisted to DB.
             getTransactionService().flushTransaction();
         }
@@ -295,7 +301,6 @@ implements MemberExecutorService {
     }
 
     private ManagedObject resultFilteredHonoringVisibility(
-            final Method method,
             final ManagedObject resultAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
@@ -311,6 +316,27 @@ implements MemberExecutorService {
         return MmVisibilityUtil.isVisible(resultAdapter, interactionInitiatedBy)
                 ? resultAdapter
                 : null;
+    }
+
+
+    /**
+     * Will set the command's CommandPublishingPhase to READY,
+     * if command and objectMember have a matching member-id
+     * and if the facetHolder has a CommandPublishingFacet (has commandPublishing=ENABLED).
+     */
+    void prepareCommandForPublishing(
+            final @NonNull Command command,
+            final @NonNull InteractionHead interactionHead,
+            final @NonNull ObjectMember objectMember,
+            final @NonNull FacetHolder facetHolder) {
+
+        if(IdentifierUtil.isCommandForMember(command, interactionHead, objectMember)
+                && isPublishingEnabled(facetHolder)) {
+            command.updater().setPublishingPhase(Command.CommandPublishingPhase.READY);
+        }
+
+        commandPublisherProvider.get().ready(command);
+
     }
 
 }

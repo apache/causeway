@@ -19,6 +19,7 @@
 package org.apache.causeway.persistence.jdo.metamodel.facets.prop.primarykey;
 
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
 
@@ -30,7 +31,7 @@ public class DisabledFacetFromJdoPrimaryKeyAnnotation
 extends DisabledFacetAbstract {
 
     public DisabledFacetFromJdoPrimaryKeyAnnotation(final FacetHolder holder) {
-        super(Where.ANYWHERE, "Primary-keys are immutable", holder);
+        super(Where.ANYWHERE, VetoReason.immutablePrimaryKey(), holder);
     }
 
 }

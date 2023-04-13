@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.testdomain.transactions.jpa;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;

@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.fixturescripts;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.persistence.jdo.applib.services.JdoSupportService;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;

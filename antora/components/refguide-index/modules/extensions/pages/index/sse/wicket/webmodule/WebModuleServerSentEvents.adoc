@@ -9,6 +9,7 @@ WebModule providing support for Server Sent Events.
 .WebModuleServerSentEvents.java
 ----
 class WebModuleServerSentEvents {
+  public static final String LOGICAL_TYPE_NAME;
   WebModuleServerSentEvents(ServiceInjector serviceInjector)
   Can<ServletContextListener> init(ServletContext ctx)
 }

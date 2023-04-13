@@ -22,11 +22,10 @@ import java.awt.image.BufferedImage;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.annotation.Where;
 
 import demoapp.dom.types.Samples;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +33,7 @@ import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(
-        semantics = SemanticsOf.SAFE,
-        hidden = Where.EVERYWHERE   // TODO: not yet supported
+        semantics = SemanticsOf.SAFE
 )
 @RequiredArgsConstructor
 public class JavaAwtBufferedImageHolder_actionReturningCollection {

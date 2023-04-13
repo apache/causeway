@@ -21,8 +21,8 @@ package org.apache.causeway.core.metamodel.valuesemantics;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import javax.annotation.Priority;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Component;
 
@@ -41,7 +41,7 @@ import lombok.SneakyThrows;
 import lombok.val;
 
 @Component
-@Named("causeway.val.URLValueSemantics")
+@Named("causeway.metamodel.value.URLValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class URLValueSemantics
 extends ValueSemanticsAbstract<java.net.URL>

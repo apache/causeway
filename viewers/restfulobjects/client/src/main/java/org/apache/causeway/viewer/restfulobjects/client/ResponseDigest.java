@@ -24,9 +24,9 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status.Family;
+import jakarta.ws.rs.core.GenericType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status.Family;
 
 import org.springframework.lang.Nullable;
 
@@ -178,6 +178,18 @@ class ResponseDigest<T> {
             entities = Can.empty();
             failureCause = _Exceptions.unrecoverable(e, "failed to read JAX-RS response content");
         }
+
+        // guard against entity type mismatch, but don't shadow a failureCause, if there is already one
+        failureCause = failureCause!=null
+                ? failureCause
+                : entities.stream()
+                    .filter(entity->!entityType.isAssignableFrom(entity.getClass()))
+                    .map(entityOfWrongType->
+                        _Exceptions.unrecoverable("type mismatch when digesting REST response, expected: %s, got: %s",
+                            entityType,
+                            entityOfWrongType.getClass()))
+                    .findAny()
+                    .orElse(null);
 
         return this;
     }

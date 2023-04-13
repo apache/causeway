@@ -18,10 +18,10 @@
  */
 package org.apache.causeway.core.metamodel.objectmanager;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
@@ -78,6 +78,8 @@ public class ObjectManagerDefault implements ObjectManager {
         if(memento instanceof ObjectMementoForEmpty) {
             val objectMementoForEmpty = (ObjectMementoForEmpty) memento;
             val logicalType = objectMementoForEmpty.getLogicalType();
+            /* note: we recover from (corresponding) class not logical-type-name,
+             * as the latter can be ambiguous, when shared in a type hierarchy*/
             val spec = getSpecificationLoader().specForLogicalType(logicalType);
             return spec.isPresent()
                     ? ManagedObject.empty(spec.get())
@@ -87,7 +89,10 @@ public class ObjectManagerDefault implements ObjectManager {
         if(memento instanceof ObjectMementoCollection) {
             val objectMementoCollection = (ObjectMementoCollection) memento;
 
-            val elementSpec = getSpecificationLoader().specForLogicalTypeNameElseFail(memento.getLogicalTypeName());
+            val logicalType = objectMementoCollection.getLogicalType();
+            /* note: we recover from (corresponding) class not logical-type-name,
+             * as the latter can be ambiguous, when shared in a type hierarchy*/
+            val elementSpec = getSpecificationLoader().specForLogicalTypeElseFail(logicalType);
 
             val objects = objectMementoCollection.unwrapList().stream()
                     .map(this::demementify)

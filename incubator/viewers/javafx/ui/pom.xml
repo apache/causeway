@@ -18,7 +18,7 @@
 	<parent>
 		<groupId>org.apache.causeway.incubator.viewer</groupId>
 		<artifactId>causeway-viewer-javafx</artifactId>
-		<version>2.0.0-SNAPSHOT</version>
+		<version>3.0.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>causeway-viewer-javafx-ui</artifactId>
@@ -45,6 +45,11 @@
 		<!-- JavaFX -->
 
 
+		<dependency>
+		    <groupId>org.apache.causeway.incubator.viewer</groupId>
+		    <artifactId>causeway-viewer-javafx-headless</artifactId>
+		    <version>3.0.0-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 </project>

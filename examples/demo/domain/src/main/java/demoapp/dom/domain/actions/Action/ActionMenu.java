@@ -18,8 +18,8 @@
  */
 package demoapp.dom.domain.actions.Action;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -29,97 +29,76 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import demoapp.dom._infra.samples.NameSamples;
-import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.actions.Action.associateWith.ActionAssociateWithVm;
-import demoapp.dom.domain.actions.Action.associateWith.child.ActionAssociateWithChildVm;
-import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingEntity;
-import demoapp.dom.domain.actions.Action.domainEvent.ActionDomainEventVm;
-import demoapp.dom.domain.actions.Action.executionPublishing.ActionExecutionPublishingEntity;
-import demoapp.dom.domain.actions.Action.hidden.ActionHiddenVm;
-import demoapp.dom.domain.actions.Action.restrictTo.ActionRestrictToVm;
-import demoapp.dom.domain.actions.Action.semantics.ActionSemanticsVm;
-import demoapp.dom.domain.actions.Action.typeOf.ActionTypeOfVm;
+import demoapp.dom.domain.actions.Action.choicesFrom.ActionChoicesFromPage;
+import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingPage;
+import demoapp.dom.domain.actions.Action.domainEvent.ActionDomainEventPage;
+import demoapp.dom.domain.actions.Action.executionPublishing.ActionExecutionPublishingPage;
+import demoapp.dom.domain.actions.Action.hidden.ActionHiddenPage;
+import demoapp.dom.domain.actions.Action.restrictTo.ActionRestrictToPage;
+import demoapp.dom.domain.actions.Action.semantics.ActionSemanticsPage;
+import demoapp.dom.domain.actions.Action.typeOf.ActionTypeOfPage;
 import demoapp.dom.domain.actions.Action.typeOf.child.ActionTypeOfChildVm;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Named("demo.ActionMenu")
 @DomainService(nature=NatureOfService.VIEW)
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ActionMenu {
 
-    final ValueHolderRepository<String, ? extends ActionCommandPublishingEntity> actionCommandEntities;
-    final ValueHolderRepository<String, ? extends ActionExecutionPublishingEntity> actionPublishingEntities;
     final NameSamples samples;
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-ring", describedAs = "Semantic relationship between actions and other properties or collections")
-    public ActionAssociateWithVm associateWith(){
-        val associateWithVm = new ActionAssociateWithVm("value");
-        val children = associateWithVm.getChildren();
-        val favorites = associateWithVm.getFavorites();
-
-        // add to either one collection or the other
-        final boolean[] which = {false};
-        samples.stream()
-                .map(ActionAssociateWithChildVm::new)
-                .forEach(e -> {
-                    (which[0] ? children : favorites).add(e);
-                    which[0] = !which[0];
-                });
-        return associateWithVm;
+    @ActionLayout(cssClassFa="fa-list-ul", describedAs = "Choices for multi-valued parameters taken from corresponding collection (aka \"bulk\" actions)")
+    public ActionChoicesFromPage choicesFrom(){
+        return new ActionChoicesFromPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-terminal", describedAs = "Action invocation intentions as XML")
-    public ActionCommandPublishingEntity commandPublishing(){
-        return actionCommandEntities.first().orElse(null);
+    public ActionCommandPublishingPage commandPublishing(){
+        return new ActionCommandPublishingPage();
     }
-
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-asterisk", describedAs = "Class of the domain event emitted when interacting with the action")
-    public ActionDomainEventVm domainEvent(){
-        return new ActionDomainEventVm("value");
+    public ActionDomainEventPage domainEvent(){
+        return new ActionDomainEventPage("value");
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-book", describedAs = "Action invocation events as XML")
-    public ActionExecutionPublishingEntity executionPublishing(){
-        return actionPublishingEntities.first().orElse(null);
+    public ActionExecutionPublishingPage executionPublishing(){
+        return new ActionExecutionPublishingPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of actions")
-    public ActionHiddenVm hidden(){
-        return new ActionHiddenVm("value");
+    @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of actions in different contexts")
+    public ActionHiddenPage hidden(){
+        return new ActionHiddenPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-paper-plane", describedAs = "Availability of actions per environment")
-    public ActionRestrictToVm restrictTo(){
-        return new ActionRestrictToVm("value");
+    public ActionRestrictToPage restrictTo(){
+        return new ActionRestrictToPage("change me");
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-skull-crossbones", describedAs = "Whether the action has side-effects")
-    public ActionSemanticsVm semantics(){
-        return new ActionSemanticsVm(123);
+    public ActionSemanticsPage semantics(){
+        return new ActionSemanticsPage(123);
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-shapes", describedAs = "Semantic relationship between actions and other properties or collections")
-    public ActionTypeOfVm typeOf(){
-        val typeOfVm = new ActionTypeOfVm();
-        val children = typeOfVm.getChildren();
-
-        // add to either one collection or the other
+    public ActionTypeOfPage typeOf(){
+        val page = new ActionTypeOfPage();
         samples.stream()
                 .map(ActionTypeOfChildVm::new)
-                .forEach(children::add);
-        return typeOfVm;
+                .forEach(e -> page.getChildren().add(e));
+        return page;
     }
-
 
 }

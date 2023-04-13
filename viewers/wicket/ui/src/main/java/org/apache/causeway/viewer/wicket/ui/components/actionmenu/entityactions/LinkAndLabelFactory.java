@@ -21,9 +21,11 @@ package org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions
 import java.util.function.Function;
 
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.viewer.commons.applib.services.menu.model.MenuAction;
 import org.apache.causeway.viewer.wicket.model.links.ActionLinkUiComponentFactoryWkt;
 import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
@@ -43,12 +45,14 @@ import lombok.val;
 public interface LinkAndLabelFactory
 extends Function<ObjectAction, LinkAndLabel> {
 
-    public static LinkAndLabelFactory forMenu(
-            final UiObjectWkt serviceModel) {
-        return action -> LinkAndLabel.of(
+    public static LinkAndLabel linkAndLabelForMenu(
+            @NonNull final MetaModelContext commonContext,
+            @NonNull final MenuAction menuAction) {
+        val serviceModel = UiObjectWkt.ofBookmark(commonContext, menuAction.serviceBookmark());
+        return LinkAndLabel.of(
                 ActionModelImpl.forEntity(
                         serviceModel,
-                        action.getFeatureIdentifier(),
+                        menuAction.actionId(),
                         Where.ANYWHERE,
                         null, null, null),
                 new MenuLinkFactory());

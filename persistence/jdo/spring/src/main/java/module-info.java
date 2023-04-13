@@ -23,13 +23,11 @@ module org.apache.causeway.persistence.jdo.spring {
     exports org.apache.causeway.persistence.jdo.spring.integration;
 
     requires glassfish.corba.omgapi;
-    requires java.naming;
-    requires java.persistence;
+    requires jakarta.persistence;
     requires java.sql;
-    requires java.transaction;
-    requires java.transaction.xa;
+    requires jakarta.transaction;
     requires javax.jdo;
-    requires javax.servlet.api;
+    requires jakarta.servlet;
     requires lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.core.config;

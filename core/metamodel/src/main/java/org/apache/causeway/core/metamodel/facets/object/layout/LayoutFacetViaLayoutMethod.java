@@ -46,7 +46,7 @@ implements HasImperativeAspect {
         return Optional.ofNullable(methodIfAny)
         .map(method->
             new LayoutFacetViaLayoutMethod(
-                    ImperativeAspect.singleMethod(method, Intent.UI_HINT),
+                    ImperativeAspect.singleRegularMethod(method, Intent.UI_HINT),
                     holder));
     }
 

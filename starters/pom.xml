@@ -20,13 +20,13 @@
 		in build-artifacts.sh -->
 	<groupId>org.apache.causeway.app</groupId>
 	<artifactId>causeway-app-starter-parent</artifactId>
-	<version>2.0.0-SNAPSHOT</version>
+	<version>3.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.7</version>
+		<version>3.0.5</version>
 		<relativePath />
 	</parent>
 
@@ -39,12 +39,13 @@
 
 	<properties>
 
-		<maven.compiler.release>11</maven.compiler.release>
+		<maven.compiler.release>17</maven.compiler.release>
 
-		<spring-boot.version>2.7.7</spring-boot.version>
-		<approvaltests.version>18.5.0</approvaltests.version>
+		<spring-boot.version>3.0.5</spring-boot.version>
+		<approvaltests.version>18.6.0</approvaltests.version>
 
-		<resteasy.version>5.0.0.Final</resteasy.version> <!-- keep in sync with property defined in resteasy-spring-boot-starter -->
+		<!-- IMPORTANT: keep in sync with property defined in resteasy-spring-boot-starter -->
+		<resteasy.version>6.0.0.Alpha2</resteasy.version>
 
 	</properties>
 
@@ -74,7 +75,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-project-info-reports-plugin</artifactId>
-					<version>3.4.1</version>
+					<version>3.4.2</version>
 				</plugin>
 
 			</plugins>
@@ -85,51 +86,9 @@
 			<dependency>
 				<groupId>org.apache.causeway</groupId>
 				<artifactId>causeway-bom</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<scope>import</scope>
 				<type>pom</type>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.causeway.extensions</groupId>
-				<artifactId>causeway-extensions</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-				<scope>import</scope>
-				<type>pom</type>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.causeway.testing</groupId>
-				<artifactId>causeway-testing</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-				<scope>import</scope>
-				<type>pom</type>
-			</dependency>
-			
-			<dependency>
-				<groupId>org.apache.causeway.testing</groupId>
-				<artifactId>causeway-testing-fakedata-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-		
-			<dependency>
-				<groupId>org.apache.causeway.testing</groupId>
-				<artifactId>causeway-testing-fixtures-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.causeway.valuetypes</groupId>
-				<artifactId>causeway-valuetypes</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-				<scope>import</scope>
-				<type>pom</type>
-			</dependency>
-			
-			<dependency>
-				<groupId>org.apache.causeway.testing</groupId>
-				<artifactId>causeway-testing-integtestsupport-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
@@ -146,17 +105,71 @@
 		<profile>
 			<id>causeway-app-starter-datanucleusenhance</id>
 			<activation>
-				<property>
-					<name>causeway-app-starter-datanucleusenhance</name>
-					<value>true</value>
-				</property>
+				<file>
+					<exists>${basedir}/logging-dn-enhance.properties</exists>
+				</file>
 			</activation>
+			<properties>
+
+				<!-- IMPORTANT: keep in sync with versions used in Apache Causeway, see causeway-bom -->
+				<datanucleus-api-jdo.version>6.0.1</datanucleus-api-jdo.version>
+				<datanucleus-api-jpa.version>6.0.1</datanucleus-api-jpa.version>
+				<datanucleus-core.version>6.0.4</datanucleus-core.version>
+				<datanucleus-jodatime.version>6.0.1</datanucleus-jodatime.version>
+
+				<datanucleus-maven-plugin.version>6.0.0-release</datanucleus-maven-plugin.version>
+
+				<datanucleus-maven-plugin.log4jConfiguration>${basedir}/logging-dn-enhance.properties</datanucleus-maven-plugin.log4jConfiguration>
+				<datanucleus-maven-plugin.verbose>true</datanucleus-maven-plugin.verbose>
+				<datanucleus-maven-plugin.fork>false</datanucleus-maven-plugin.fork>
+			</properties>
 			<build>
 				<plugins>
-					<plugin>
+                    <plugin>
 						<groupId>org.datanucleus</groupId>
 						<artifactId>datanucleus-maven-plugin</artifactId>
-						<inherited>true</inherited>
+						<version>${datanucleus-maven-plugin.version}</version>
+						<configuration>
+							<fork>${datanucleus-maven-plugin.fork}</fork>
+							<log4jConfiguration>${datanucleus-maven-plugin.log4jConfiguration}</log4jConfiguration>
+							<verbose>${datanucleus-maven-plugin.verbose}</verbose>
+						</configuration>
+						<executions>
+							<execution>
+								<id>process-classes</id>
+								<phase>process-classes</phase>
+								<goals>
+									<goal>enhance</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>process-test-classes</id>
+								<phase>process-test-classes</phase>
+								<goals>
+									<goal>test-enhance</goal>
+								</goals>
+								<configuration>
+									<metadataDirectory>${project.build.testOutputDirectory}</metadataDirectory>
+								</configuration>
+							</execution>
+						</executions>
+						<dependencies>
+							<dependency>
+								<groupId>org.datanucleus</groupId>
+								<artifactId>datanucleus-core</artifactId>
+								<version>${datanucleus-core.version}</version>
+							</dependency>
+							<dependency>
+								<groupId>org.datanucleus</groupId>
+								<artifactId>datanucleus-api-jdo</artifactId>
+								<version>${datanucleus-api-jdo.version}</version>
+							</dependency>
+							<dependency>
+								<groupId>org.datanucleus</groupId>
+								<artifactId>datanucleus-jodatime</artifactId>
+								<version>${datanucleus-jodatime.version}</version>
+							</dependency>
+						</dependencies>
 					</plugin>
 				</plugins>
 			</build>
@@ -440,7 +453,7 @@
 				<plugins>
 					<plugin>
 					    <artifactId>maven-deploy-plugin</artifactId>
-					    <version>3.0.0</version>
+					    <version>3.1.1</version>
 					    <configuration>
 					        <altDeploymentRepository>
 					            nightly-localfs-repo::default::file://${MVN_SNAPSHOTS_PATH}

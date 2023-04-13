@@ -21,7 +21,7 @@ package org.apache.causeway.viewer.wicket.ui.components.bookmarkedpages;
 import java.util.List;
 import java.util.Optional;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
@@ -42,6 +42,7 @@ import org.apache.causeway.viewer.wicket.model.models.PageType;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
+import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import org.apache.causeway.viewer.wicket.ui.util.WktLinks;
 
 import lombok.val;
@@ -59,6 +60,7 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
     private static final String ID_BOOKMARKED_PAGE_TITLE = "bookmarkedPageTitle";
 
     private static final String ID_BOOKMARKED_PAGE_ICON = "bookmarkedPageImage";
+    private static final String ID_BOOKMARKED_PAGE_ICON_FA = "bookmarkedPageFontAwesome";
 
     private static final String CLEAR_BOOKMARKS = "clearBookmarks";
 
@@ -117,7 +119,7 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
                 val clearBookmarkLink = Wkt.linkAdd(item, ID_CLEAR_BOOKMARK_LINK, target->{
                     bookmarkedPagesModel.remove(bookmarkNode);
                     if(bookmarkedPagesModel.isEmpty()) {
-                        permanentlyHide(CLEAR_BOOKMARKS);
+                        WktComponents.permanentlyHide(this, CLEAR_BOOKMARKS);
                     }
                     target.add(container, clearAllBookmarksLink);
                 });
@@ -132,12 +134,19 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
                                 bookmarkNode.getPageParameters(),
                                 pageClass));
 
-                Optional.ofNullable(bookmarkNode.getOidNoVer())
-                .flatMap(oid->getSpecificationLoader().specForLogicalTypeName(oid.getLogicalTypeName()))
-                .ifPresent(objectSpec->{
-                    Wkt.imageAddCachable(link, ID_BOOKMARKED_PAGE_ICON,
-                            getImageResourceCache().resourceReferenceForSpec(objectSpec));
-                });
+                bookmarkNode.eitherIconOrFaClass()
+                .accept(
+                        iconResourceRef->{
+                            Optional.ofNullable(iconResourceRef)
+                            .ifPresent(icon->
+                                Wkt.imageAddCachable(link, ID_BOOKMARKED_PAGE_ICON, icon));
+                            WktComponents.permanentlyHide(link, ID_BOOKMARKED_PAGE_ICON_FA);
+                        },
+                        cssFaClass->{
+                            WktComponents.permanentlyHide(link, ID_BOOKMARKED_PAGE_ICON);
+                            final Label dummyLabel = Wkt.labelAdd(link, ID_BOOKMARKED_PAGE_ICON_FA, "");
+                            Wkt.cssAppend(dummyLabel, cssFaClass);
+                        });
 
                 Wkt.labelAdd(link, ID_BOOKMARKED_PAGE_TITLE, bookmarkNode.getTitle());
 

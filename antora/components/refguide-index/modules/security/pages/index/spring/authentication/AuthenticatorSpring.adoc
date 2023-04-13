@@ -7,6 +7,7 @@
 .AuthenticatorSpring.java
 ----
 class AuthenticatorSpring {
+  public static final String LOGICAL_TYPE_NAME;
   boolean canAuthenticate(Class<? extends AuthenticationRequest> authenticationRequestClass)
   InteractionContext authenticate(AuthenticationRequest request, String code)
   void logout(InteractionContext session)

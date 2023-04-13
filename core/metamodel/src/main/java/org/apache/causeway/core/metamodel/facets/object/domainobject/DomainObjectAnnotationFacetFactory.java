@@ -24,8 +24,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Action;
@@ -45,7 +45,6 @@ import org.apache.causeway.applib.events.lifecycle.ObjectRemovingEvent;
 import org.apache.causeway.applib.events.lifecycle.ObjectUpdatedEvent;
 import org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent;
 import org.apache.causeway.applib.id.LogicalType;
-import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Multimaps;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -161,8 +160,7 @@ implements
         }
 
         if(domainObject.nature().isMixin()
-                && (_Strings.isNotEmpty(domainObject.logicalTypeName())
-                        || processClassContext.synthesizeOnType(Named.class).isPresent())) {
+                && processClassContext.synthesizeOnType(Named.class).isPresent()) {
             // just a console warning, not decided yet whether we should be strict and fail MM validation
             log.warn("Mixins don't need a logicalTypeName, as was declared with {}.", cls.getName());
         }

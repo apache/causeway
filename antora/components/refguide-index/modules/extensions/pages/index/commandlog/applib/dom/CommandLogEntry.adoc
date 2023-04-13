@@ -15,7 +15,7 @@ class CommandLogEntry {
   public static final String SCHEMA;
   public static final String TABLE;
   CommandLogEntry(CommandDto commandDto, org.apache.causeway.extensions.commandlog.applib.dom.ReplayState replayState, int targetIndex)     // <.>
-  void init(Command command)
+  void sync(Command command)
   void copyOver(CommandDto commandDto, String key, Consumer<String> consume)
   String title()
   ChangeType getType()
@@ -29,7 +29,6 @@ class CommandLogEntry {
   void saveAnalysis(String analysis)
   int compareTo(CommandLogEntry other)
   String toString()
-  CommandOutcomeHandler outcomeHandler()
 }
 ----
 

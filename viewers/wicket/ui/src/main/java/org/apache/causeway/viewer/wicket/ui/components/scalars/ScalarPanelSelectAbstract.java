@@ -66,19 +66,19 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
                 choiceProviderFactory.apply(scalarModel),
                 getScalarModelChangeDispatcher());
         val settings = select2.getSettings();
+        settings.setPlaceholder(scalarModel.getFriendlyName());
+
         switch(scalarModel.getChoiceProviderSort()) {
         case CHOICES:
-            settings.setPlaceholder(scalarModel.getFriendlyName());
             break;
         case AUTO_COMPLETE:
-            settings.setPlaceholder(scalarModel.getFriendlyName());
             settings.setMinimumInputLength(scalarModel.getAutoCompleteMinLength());
             break;
         case OBJECT_AUTO_COMPLETE:
-            //TODO render object place holder?
             Facets.autoCompleteMinLength(scalarModel.getScalarTypeSpec())
             .ifPresent(settings::setMinimumInputLength);
             break;
+        case NO_CHOICES:
         default:
             // ignore if no choices
         }
@@ -94,14 +94,14 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
          */
     }
 
-    protected final boolean isEditableWithEitherAutoCompleteOrChoices() {
-        if(scalarModel().getRenderingHint().isInTable()) {
-            return false;
-        }
-        // doesn't apply if not editable, either
-        if(scalarModel().isViewMode()) {
-            return false;
-        }
+    protected final boolean isEditable() {
+        val scalarModel = scalarModel();
+        // cannot edit if in table or is view-mode
+        return !scalarModel.getRenderingHint().isInTable()
+                && !scalarModel.isViewMode();
+    }
+
+    protected final boolean hasAnyChoices() {
         return scalarModel().getChoiceProviderSort().isChoicesAny();
     }
 

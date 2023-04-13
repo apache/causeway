@@ -18,9 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.services;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
@@ -42,11 +42,13 @@ import lombok.val;
  *
  */
 @Service
-@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ServiceInjectorDefault")
+@Named(ServiceInjectorDefault.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ServiceInjectorDefault implements ServiceInjector {
+
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleCoreMetamodel.NAMESPACE + ".ServiceInjectorDefault";
 
     private final AutowireCapableBeanFactory autowireCapableBeanFactory;
 

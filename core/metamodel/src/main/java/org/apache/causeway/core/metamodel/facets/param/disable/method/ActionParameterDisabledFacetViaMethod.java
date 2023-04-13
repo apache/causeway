@@ -26,6 +26,8 @@ import java.util.function.BiConsumer;
 import org.apache.causeway.applib.services.i18n.TranslatableString;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
+import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.param.disable.ActionParameterDisabledFacetAbstract;
@@ -40,7 +42,7 @@ public class ActionParameterDisabledFacetViaMethod
 extends ActionParameterDisabledFacetAbstract
 implements ImperativeFacet {
 
-    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
+    @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
     private final TranslationContext translationContext;
     private final Optional<Constructor<?>> patConstructor;
 
@@ -50,34 +52,31 @@ implements ImperativeFacet {
             final FacetHolder holder) {
 
         super(holder);
-        this.methods = ImperativeFacet.singleMethod(method);
+        this.methods = ImperativeFacet.singleMethod(method, patConstructor);
         this.translationContext = holder.getTranslationContext();
         this.patConstructor = patConstructor;
     }
 
     @Override
-    public Intent getIntent(final Method method) {
+    public Intent getIntent() {
         return Intent.CHECK_IF_VALID;
     }
 
     @Override
-    public String disabledReason(
+    public Optional<VetoReason> disabledReason(
             final ManagedObject owningAdapter,
             final Can<ManagedObject> pendingArgs) {
 
         val method = methods.getFirstElseFail();
-        final Object returnValue = patConstructor.isPresent()
-                ? MmInvokeUtil.invokeWithPAT(patConstructor.get(), method, owningAdapter, pendingArgs)
-                : MmInvokeUtil.invokeAutofit(method, owningAdapter, pendingArgs);
+        final Object returnValue = MmInvokeUtil.invokeAutofit(patConstructor, method, owningAdapter, pendingArgs);
+        final String reasonString = returnValue instanceof String
+                ? (String) returnValue
+                : returnValue instanceof TranslatableString
+                    ? ((TranslatableString) returnValue).translate(getTranslationService(), translationContext)
+                    : null;
 
-        if(returnValue instanceof String) {
-            return (String) returnValue;
-        }
-        if(returnValue instanceof TranslatableString) {
-            final TranslatableString ts = (TranslatableString) returnValue;
-            return ts.translate(getTranslationService(), translationContext);
-        }
-        return null;
+        return Optional.ofNullable(reasonString)
+            .map(VetoReason::explicit);
     }
 
     @Override

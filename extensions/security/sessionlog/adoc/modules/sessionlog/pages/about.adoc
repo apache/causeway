@@ -26,8 +26,8 @@ To get you started, the following fragment adds all of the actions to an "Activi
         ...
         <mb3:section>
             <mb3:named>Sessions</mb3:named>
-            <mb3:serviceAction id="activeSessions" objectType="isis.ext.sessionLog.SessionLogMenu"/>
-            <mb3:serviceAction id="findSessions" objectType="isis.ext.sessionLog.SessionLogMenu"/>
+            <mb3:serviceAction id="activeSessions" objectType="causeway.ext.sessionLog.SessionLogMenu"/>
+            <mb3:serviceAction id="findSessions" objectType="causeway.ext.sessionLog.SessionLogMenu"/>
         </mb3:section>
         ...
     </mb3:menu>

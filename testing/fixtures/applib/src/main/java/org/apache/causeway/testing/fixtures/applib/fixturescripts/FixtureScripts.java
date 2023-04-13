@@ -27,9 +27,11 @@ import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.xml.bind.annotation.XmlRootElement;
+
+import org.springframework.context.annotation.Import;
 
 import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.annotation.Action;
@@ -81,7 +83,11 @@ import lombok.val;
         named="Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@Import({
+    // Auto Configuration
+    FixtureScriptsSpecificationProviderAutoConfiguration.class,
+    ExecutionParametersServiceAutoConfiguration.class})
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 public class FixtureScripts {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleTestingFixturesApplib.NAMESPACE + ".FixtureScripts"; // secman seeding
@@ -296,7 +302,16 @@ public class FixtureScripts {
      *     Also allows arbitrary parameters to be specified for said fixture script.
      * </p>
      *
-     * @param fixtureScriptName
+     * <p>
+     *     NOTE: this method can only be used for {@link FixtureScript} implementations that are discoverable
+     *     by Spring (eg annotated with {@link org.springframework.stereotype.Service} or
+     *     {@link org.springframework.stereotype.Component}.  Moreover, the {@link FixtureScript} must <i>not</i>
+     *     be a view model, ie must not be annotated with {@link org.apache.causeway.applib.annotation.DomainObject}.
+     *     (This is because the lifecycle of view models is unknown to by Spring).
+     *     Instead, use {@link #runFixtureScript(FixtureScript, String)}, passing in the {@link FixtureScript} instance.
+     * </p>
+     *
+     * @param fixtureScriptName - the {@link FixtureScript#getFriendlyName() (friendly) name} of the {@link FixtureScript}.
      * @param parameters
      */
     @Action(
@@ -430,14 +445,21 @@ public class FixtureScripts {
 
     @SafeVarargs
     @Programmatic
-    public final void runPersonas(final PersonaWithBuilderScript<?,? extends BuilderScriptAbstract<?>> ... personaScripts) {
-        for (val personaWithBuilderScript : personaScripts) {
-
-            val script = _Casts.<PersonaWithBuilderScript<Object,BuilderScriptAbstract<Object>>>
-                uncheckedCast(personaWithBuilderScript);
-
-            runPersona(script);
-        }
+    public final void runPersonas(final PersonaWithBuilderScript<?,? extends BuilderScriptAbstract<?>> ... personas) {
+        interactionService.callAnonymous(()->
+            transactionService.callWithinCurrentTransactionElseCreateNew(()->
+                runFixtureScript(new FixtureScript() {
+                    @Override
+                    protected void execute(final ExecutionContext executionContext) {
+                        for (val personaWithBuilderScript : personas) {
+                            val fixtureScript = personaWithBuilderScript.builder();
+                            executionContext.executeChild(this, fixtureScript);
+                        }
+                    }
+                }, null)
+            )
+        )
+        .ifFailureFail();
     }
 
     @Programmatic

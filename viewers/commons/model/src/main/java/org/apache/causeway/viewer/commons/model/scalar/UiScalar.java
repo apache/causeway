@@ -24,6 +24,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
+import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
@@ -45,7 +46,12 @@ public interface UiScalar extends UiModel, HasMetaModelContext {
     String getIdentifier();
     String getCssClass();
     boolean whetherHidden();
-    String disableReasonIfAny();
+
+    /**
+     * Optionally the veto that prevents from editing.
+     * Could be an explicit reason, or just an inferred veto originating from read-only semantics.
+     */
+    Optional<InteractionVeto> disabledReason();
 
     /** feature name */
     default String getFriendlyName() {
@@ -104,12 +110,12 @@ public interface UiScalar extends UiModel, HasMetaModelContext {
         return ChoiceProviderSort.valueOf(this);
     }
 
-    static enum ChoiceProviderSort {
+    public static enum ChoiceProviderSort {
         NO_CHOICES,
         CHOICES,
         AUTO_COMPLETE,
         OBJECT_AUTO_COMPLETE;
-        static ChoiceProviderSort valueOf(final UiScalar scalarModel) {
+        public static ChoiceProviderSort valueOf(final UiScalar scalarModel) {
             if (scalarModel.hasChoices()) {
                 return ChoiceProviderSort.CHOICES;
             } else if(scalarModel.hasAutoComplete()) {

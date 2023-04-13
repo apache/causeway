@@ -1,0 +1,231 @@
+= Interactions, Commands and Executions
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+== Interactions
+
+An xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] is created for each and every request made to the application; you could think of it as analogous to `HttpRequest`.
+Thus, an `Interaction` is created for every action invocation or property edit, but an `Interaction` is _also_ created to render an object, or to render an action prompt, or even to evaluate the set of choices from a supporting `choicesNAct()` method.
+It is the responsibility of the viewer implementation to ensure that an `Interaction` is created early on in the request processing, and torn down later.
+
+An `Interaction` can also be created programmatically, using the xref:refguide:applib:index/services/iactnlayer/InteractionService.adoc[].
+One use case is for "headless" execution of background commands, eg as scheduled by a Quartz cron job.
+
+Another important use case is within testing.
+The xref:refguide:testing:index/integtestsupport/applib/CausewayInteractionHandler.adoc[] JUnit 5 extension takes responsibility for wrapping each test with an `Interaction` (taking account any xref:refguide:testing:index/integtestsupport/applib/annotation/InteractAs.adoc[] annotation if present).
+The xref:refguide:testing:index/integtestsupport/applib/CausewayIntegrationTestAbstract.adoc[] is provided as a convenient superclass for integration tests, and is already annotated with the `CausewayInteractionHandler` extension.
+(Alternatively, xref:refguide:testing:index/integtestsupport/applib/CausewayIntegrationGwtAbstract.adoc[] is _not_ annotated with the handler; instead it provides `given(...)`, `when(...)` and `then(...)` methods that each execute the provided `Runnable`/`Callable` within the context of its own `Interaction`.
+
+Integration tests can also simulate multiple interactions (HTTP requests) within a single test using xref:refguide:applib:index/services/iactnlayer/InteractionService.adoc#nextInteraction_[InteractionService#nextInteraction].
+When called, any state changes made in the previous `Interaction` will be committed, and any references to entities should be either discarded or else be re-retrieved in the next `Interaction`.
+(In the case of the JDO ORM, any entities from the previous `Interaction` will be reset to null when that `Interaction` completes).
+
+[#executions]
+=== Executions
+
+Contained within an `Interaction` is an xref:refguide:applib:index/services/iactn/Execution.adoc[].
+In many cases there will be only a single such `Execution`, and these come in two varieties, representing either an action invocation or a property edit.
+However, ``Execution``s can be nested.
+This will occur if the "top-level" action invokes another action (or property edit) using the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[] service.
+
+Conversely, in many cases an ``Interaction`` will occur where no ``Execution``s occur within it.
+For example, if the interaction is to render an object, or to render an action prompt, or to display a list of choices, then no action would have been invoked nor property edited, and thus its xref:refguide:applib:index/services/iactn/Interaction.adoc#getCurrentExecution_[Interaction#getCurrentExecution()] will be simply empty.
+
+== Commands
+
+Every `Interaction` has a corresponding xref:refguide:applib:index/services/command/Command.adoc[], accessible using  xref:refguide:applib:index/services/iactn/Interaction.adoc#getCommand_[Interaction#getCommand].
+Both the `Interaction` and `Command` are identified by a UUID (xref:refguide:applib:index/services/iactn/Interaction.adoc#getInteractionId_[Interaction#getInteractionId()] and xref:refguide:applib:index/services/command/Command.adoc#getInteractionId_[Command#getInteractionId()] respectively); these will have the same value and correlate the `Interaction` and `Command` with each other.
+
+Whereas an `Interaction` (or more precisely, the ``Execution``s within an `Interaction`) represent an action invocation or property edit having occurred, a `Command` represents the _intention_ to invoke an action/edit a property.
+Think of this in terms of cause and effect: the `Command` is the cause, the `Execution` is the effect.
+However, there is only ever one `Command`, and this represents the "top-level" action; there will be a corresponding `Execution` but (as explained above) there could in theory be nested ``Execution``s within if the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[] has been used; and for these sub-``Execution``s there will _not_ be corresponding ``Command``s.
+
+(From here on, we'll just use the phrase "invoke an action" as this is the more common case; "edit a property" can be thought of as a very particular type of action, modifying a single property with a single value).
+
+=== Interactions that do not represent executions
+
+As noted xref:executions[above], in many (in fact the majority of) cases the overarching interaction will _not_ be to invoke an action, but instead will be just torender an object, or to render an action prompt, or to display a list of choices.
+In such cases there will be no `Execution`.
+While every `Interaction` _does_ hold a corresponding `Command`, this corresponding `Command` will remain mostly empty.
+In particular, its xref:refguide:applib:index/services/command/Command.adoc#getCommandDto_[Command#getCommandDto()] will remain null.
+
+Only when the interaction is to _actually_ invoke an action, then the ``Command``'s xref:refguide:schema:cmd.adoc#commanddto[CommandDto] and other properties will be fleshed out.
+
+== Publishing
+
+=== Command Publishing
+
+_If_ the overarching interaction is to actually invoke an action, then the corresponding `Command` will be populated and will be published to any registered xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[]s.
+
+Because a `Command` represents the _intention_ to invoke an action, the  xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc#onReady_Command[CommandSubscriber#onReady()] callback is called first.
+The xref:refguide:extensions:index/commandlog/applib/subscriber/CommandSubscriberForCommandLog.adoc[] subscriber uses this to persist a xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[] which represents the fact that the action represented by the `Command` is to be executed.
+
+Just before the action is executed, the xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc#onStarted_Command[CommandSubscriber#onStarted()] callback is called.
+The xref:refguide:extensions:index/commandlog/applib/subscriber/CommandSubscriberForCommandLog.adoc[] subscriber uses this to update the persisted xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[] (its startedAt field etc.
+
+_However_, recall that there is only ever one `Command`, representing the invocation of the top-level command.
+The final xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc#onCompleted_Command[CommandSubscriber#onCompleted()] callback is called only when the overarching `Interaction` is being closed.
+
+
+=== Execution Publishing
+
+Whenever an ``Interaction``s `Execution` is complete, it will be published to any xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[]s.
+This happens more or less immediately after the `Execution` is complete, in other words it isn't deferred until the closing of the top-level `Interaction`.
+
+Normally there will only be a single `Execution` per `Interaction`, so this publishing will occur immediately prior to the `Command` being completed is published (see previous section).
+
+
+[#summary]
+=== Summary
+
+To summarise the previous sections: the "usual" way in which commands/executions are published are as the result of a user invoking an action through the viewer (e.g. clicking on the OK button in an action prompt):
+
+* An xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] is created as part of the HTTP request processing.
+This contains a corresponding xref:refguide:applib:index/services/command/Command.adoc[], mostly empty at this point.
+* The Wicket UI code delegates down to an `ObjectAction`; it is this that sets up the state within xref:refguide:applib:index/services/command/Command.adoc[], in particular its xref:refguide:schema:cmd.adoc#commanddto[CommandDto]
+* The xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc#onReady_Command[CommandSubscriber#onReady()] callback is called.
+* An xref:refguide:applib:index/services/iactn/Execution.adoc[] is created and held by its owning xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction]
+* The xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc#onStarted_Command[CommandSubscriber#onStarted()] callback is called
+* The action (domain logic) itself is called
+* The xref:refguide:applib:index/services/iactn/Execution.adoc[] is updated as completed
+* xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc#[]'s xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc#onExecution_Execution[onExecution()] callback is called
+* The overarching xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] is closed; as part of that processing:
+** the associated top-level xref:refguide:applib:index/services/command/Command.adoc[] is marked as complete and
+** the xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc#onCompleted_Command[CommandSubscriber#onCompleted()] callback is called.
+
+The above assumes of course that the action has command and publishing enabled.
+If either are disabled then the corresponding subscribers won't be called.
+
+== Other publishing scenarios to consider
+
+As well as the "usual" way of executing actions (described xref:#summary[above]), there are a number of other ways in which commands and executions may be published.
+
+=== Wrapper Factory
+
+When a domain object is wrapped (or more accurately: proxied) using the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[], the wrapping proxy delegates to the `DomainObjectInvocationHandler` framework class.
+This looks up the `ObjectAction` from the `java.lang.reflect.Method` being invoked on the proxy and calls it.
+
+If this is done in production code, then there will already be an `Interaction` with a corresponding `Command`, and this will be set up with the action whose body is calling the wrapped object.
+Therefore this scenario has no impact on the `Command` and ``CommandSubscriber``s will not be called.
+
+On the other hand, the wrapped action _is_ an `Execution`, and so this will result in an execution graph of two levels: the top-level action invoked by the user, and then the nested action invoked via the proxy.
+Any ``ExecutionSubscriber``s _will_ be notified as soon as the nested action has completed.
+(Of course, the nesting could be arbitrarily deep).
+
+If the wrapped domain object's action is called in _test_ code, then things will probably be different.
+The integration test itself will most likely have set up a top-level `Interaction` (through the xref:refguide:testing:index/integtestsupport/applib/CausewayInteractionHandler.adoc[] JUnit 5 extension) with a mostly-empty `Command`.
+When the wrapped action is invoked, this will in effect be the top-level action for the interaction, and so the `CommandDto` will be set up with the details of that wrapped action, and any ``CommandSubscriber``s will be notified.
+
+
+[#asynchronous-commands]
+=== Asynchronous Commands
+
+The `WrapperFactory` allows wrapped actions to be invoked synchronously or asynchronously.
+The former is more common, and is the process described above.
+
+If the wrapper is created for asynchronous invocation (using xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc#asyncWrap_T_AsyncControl[WrapperFactory#asyncWrap()] or similar), then the framework passes an xref:refguide:applib:index/services/wrapper/callable/AsyncCallable.adoc[] (a subtype of `Callable`) to the configured `ExecutorService`.
+(The default `ExecutorService` is the simple `ForkJoinPool`, though this can be replaced if required).
+
+The `AsyncCallable` interface is implemented by an internal framework class (`AsyncTask`).
+It's worth understanding the data that it holds and its behaviour:
+
+* in terms of its data, it holds a representation of the action to be invoked as a `CommandDto`.
++
+Since this is a "child" command, the `CommandDto` will have a new UUID identifier.
+This _isn't_ the UUID of the `Command` of the action that actually called the wrapped action; that is instead saved as the UUID of the "parent" command
+
+* It also holds an xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[] that determines the who, when and timezone of the "virtual" user that is executing the action.
++
+This is derived from the xref:refguide:applib:index/services/wrapper/control/AsyncControl.adoc[] passed into `WrapperFactory` combined with the `InteractionContext` of the original parent action.
+
+* in terms of its behaviour, it simply delegates back to the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc#execute_AsyncCallable[WrapperFactory#execute()], in a double-dispatch pattern.
++
+This in turn:
++
+** uses the xref:refguide:applib:index/services/iactnlayer/InteractionService.adoc[] to create a new `Interaction`, because of course the `ExecutorService` will be running the `Callable` in a separate thread.
++
+Of course, as a side-effect, this `Interaction` will be associated with a mostly empty `Command`.
+
+** then, it uses xref:refguide:applib:index/services/command/CommandExecutorService.adoc[] to actually execute the command, "taking over" the (still mostly empty) `Command` from this `Interaction` with the DTO obtained from `AsyncCallable`.
++
+This service is also responsible for calling the `onReady` and `onStarted` xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[] callback methods at the appropriate times.
+
++
+The `InteractionService` calls the final `onCompleted` callback of `CommandSubscriber` when the `Interaction` is torn down.
+
+Typical production usage of wrapped asynchronous actions will result in those actions being invoked in a new `Interaction` on a separate thread.
+If required, the code that calls the async action can obtain a `Future` from the xref:refguide:applib:index/services/wrapper/control/AsyncControl.adoc[] passed into xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc#asyncWrap_T_AsyncControl[WrapperFactory#asyncWrap] or similar.
+Or, it may simply "fire-n-forget".
+As described above, because the wrapped action is invoked in its own thread/`Interaction`, then it will be published to any xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[]s and xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[]s.
+
+Typical test production is very similar, though test code is more likely to want to obtain the `Future` in order to assert that the wrapped async action was executed correctly.
+
+
+[#background-commands]
+=== Background Commands
+
+One consideration when invoking actions asynchronously (as described xref:#asynchronous-commands[above]) is that there are no hard transactional guarantees.
+In other words, if the async action hits a problem and aborts, then the original calling action will not also abort.
+Now, that code _can_ of course obtain the `Future` from the `AsyncControl`, and manually abort if the (eventual) returned value of the `Future` is not as expected.
+However, there's little point in using an async action if the calling action is just going to wait on that child async action's `Future` to resolve.
+And, if the point of using async actions was to fan out and start multiple async actions in parallel, then there's no way to rollback all of these actions if any one of them has failed.
+
+An alternative approach is to use the `WrapperFactory` async API to persist the commands in some form, and then have a Quartz cron job or similar pick up those queued commands and execute them.
+If any of those commands fail, there is at least a record as to how they might have failed.
+This is the philosophy behind the xref:refguide:extensions:index/commandlog/applib/dom/BackgroundService.adoc[], part of the xref:userguide:commandlog:about.adoc[Command Log] extension.
+
+Under the covers the `BackgroundService` calls `WrapperFactory`, but with a custom `ExecutorService` (the xref:refguide:extensions:index/commandlog/applib/dom/BackgroundService_PersistCommandExecutorService.adoc[BackgroundService.PersistCommandExecutorService] class) which simply persists the implied command as a xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[].
+Its xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc#getExecuteIn_[executeIn] field indicates that the command is to be executed "in the background".
+
+The xref:userguide:commandlog:about.adoc[Command Log] extension also provides the xref:refguide:extensions:index/commandlog/applib/job/RunBackgroundCommandsJob.adoc[], which is a Quartz `Job` implementation.
+Conceptually this is similar to the `AsyncCallable` described xref:asynchronous-commands[previously], but will run (the ``CommandDto``s of) all queued ``CommandLogEntry``s, rather than just a single `CommandDto`.
+
+To use the `RunBackgroundCommandsJob`, we configure Quartz to run it periodically, eg every 10 seconds.
+When run by Quartz, it performs these steps:
+
+* uses the xref:refguide:applib:index/services/iactnlayer/InteractionService.adoc[] to start a new `Interaction` (because -- obviously -- the Quartz job runs in a separate thread to the original action that queued up the command)
+
+* runs a query to find any new ``CommandLogEntry``s since last time, using xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntryRepository.adoc#findBackgroundAndNotYetStarted_[CommandLogEntryRepository#findBackgroundAndNotYetStarted()], and extracts out the xref:refguide:schema:cmd.adoc#commanddto[CommandDto] from each
+
+* for each such `CommandDto`:
+
+** starts a new transaction
+
+** uses the xref:refguide:applib:index/services/command/CommandExecutorService.adoc[] to execute the `CommandDto`.
+
+As described in the xref:asynchronous-commands[previous section], the `CommandExecutorService` will call the `onReady` and `onStarted` callbacks of any ``CommandSubscriber``s, while tearing down the overarching `Interaction` will call the final `onCompleted` callback.
+
+One wrinkle though that the xref:refguide:extensions:index/commandlog/applib/subscriber/CommandSubscriberForCommandLog.adoc[] subscriber has to cater for is that -- when its `onReady` callback is called -- the `CommandLogEntry` will already exist for the command; because (of course) this is what is being used by `RunBackgroundCommandsJob`.
+Therefore, rather than persist a _new_ `CommandLogEntry`, instead callback is a no-op.
+
+The above describes how this all works in production code, with a Quartz scheduler set up to run periodically.
+When in test code, however, we won't want to be running Quartz, so we need to call `RunBackgroundCommandsJob` within the test.
+There are two options:
+
+* the best approximation of Quartz (within a test) would be to simply create a new thread and just execute the `RunBackgroundCommandsJob` within it.
++
+The test can then wait for this manually spawned background thread to complete.
+
+* alternatively, the `RunBackgroundCommandsJob` can simply be executed within the thread of the test itself.
++
+*However*, this runs the risk of confusing the `Interaction` of the test with the `Interaction` of the background command.
+Therefore, call xref:refguide:applib:index/services/iactnlayer/InteractionService.adoc#nextInteraction_[InteractionService.adoc#nextInteraction()] to ensure that the final `onCompleted` callback for the async command is correctly called at the end.
+This will *also* require re-retrieving any entities etc in the test because they will have become detached as the result of calling `nextInteraction()`.
+
+
+== Transactions
+
+It's worth quickly mentioning that sitting between the overarching `Interaction` and the `Command`, the framework will always be using xref:refguide:applib:index/services/xactn/TransactionService.adoc[] to create a new transaction.
+
+This is done by:
+
+* the action invocation facet (the `ActionInvocationFacetForDomainEventAbstract` internal framework class)
+* xref:refguide:applib:index/services/wrapper/callable/AsyncCallable.adoc[] for xref:#asynchronous-commands[async commands]
+* xref:refguide:extensions:index/commandlog/applib/job/RunBackgroundCommandsJob.adoc[] for xref:#background-commands[background commands].
+
+Ultimately all of the scenarios will use the action invocation facet to invoke the action.
+That code will only create a new transaction if one is not already in progress, so there's no harm in `AsyncCallable` or `RunBackgroundCommandsJob` in explicitly managing the transactions.
+This is particulary important for `RunBackgroundCommandsJob` because it intentionally runs each of the queued commands in a separate transaction.
+

@@ -51,16 +51,9 @@ implements
         return bookmarkedObject;
     }
 
-    // -- SHORTCUTS
-
-    public final boolean hasAsRootPolicy() {
-        return Facets.bookmarkPolicyMatches(BookmarkPolicy.AS_ROOT::equals)
-                .test(getTypeOfSpecification());
-    }
-
-    public final boolean hasAsChildPolicy() {
-        return Facets.bookmarkPolicyMatches(BookmarkPolicy.AS_CHILD::equals)
-                .test(getTypeOfSpecification());
+    /** governs how to populate the BookmarkPanel in the UI */
+    public final BookmarkPolicy getBookmarkPolicy() {
+        return Facets.bookmarkPolicyOrElseNotSpecified(getTypeOfSpecification());
     }
 
     public final ObjectSpecification getTypeOfSpecification() {

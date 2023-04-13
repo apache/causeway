@@ -26,6 +26,7 @@ import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
 
 import lombok.val;
 
@@ -36,32 +37,24 @@ public class TreePanelFactories {
 
     // -- PARENTED
 
-    static class Parented extends ComponentFactoryAbstract {
+    static class Parented extends ComponentFactoryScalarAbstract {
         private static final long serialVersionUID = 1L;
 
         public Parented() {
-            super(UiComponentType.SCALAR_NAME_AND_VALUE, ParentedTreePanel.class);
+            super(ParentedTreePanel.class);
         }
 
         @Override
-        public ApplicationAdvice appliesTo(final IModel<?> model) {
-            if (!(model instanceof ScalarModel)) {
-                return ApplicationAdvice.DOES_NOT_APPLY;
-            }
+        protected Component createComponent(final String id, final ScalarModel scalarModel) {
+            return new ParentedTreePanel(id, scalarModel);
+        }
 
-            final ScalarModel scalarModel = (ScalarModel) model;
-
+        @Override
+        protected ApplicationAdvice appliesTo(final ScalarModel scalarModel) {
             if(!scalarModel.isScalarTypeSubtypeOf(org.apache.causeway.applib.graph.tree.TreeNode.class)) {
                 return ApplicationAdvice.DOES_NOT_APPLY;
             }
-
             return appliesIf( !scalarModel.hasChoices() );
-        }
-
-        @Override
-        public final Component createComponent(final String id, final IModel<?> model) {
-
-            return new ParentedTreePanel(id, (ScalarModel) model);
         }
     }
 

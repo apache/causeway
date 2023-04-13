@@ -20,8 +20,10 @@ package org.apache.causeway.core.metamodel.object;
 
 import java.util.Optional;
 
+import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
 import lombok.val;
@@ -40,12 +42,12 @@ final class _InternalTitleUtil {
             return managedObject.getTitle();
         }
 
-        return managedObject.getSpecification().isSingular()
+        val objSpec = managedObject.getSpecification();
+
+        return objSpec.isSingular()
             ? objectTitleString(titleRenderRequest)
                     .trim()
-            : collectionTitleString(
-                    managedObject,
-                    managedObject.getSpecification().getFacet(CollectionFacet.class));
+            : formatAnyCardinalityAsTitle(objSpec, managedObject);
     }
 
     // -- HELPER
@@ -68,36 +70,20 @@ final class _InternalTitleUtil {
                 .orElseGet(()->getDefaultTitle(managedObject));
     }
 
-    private String collectionTitleString(final ManagedObject managedObject, final CollectionFacet facet) {
-        final int size = facet.size(managedObject);
-        val elementSpec = managedObject.getElementSpecification().orElse(null);
-        if (elementSpec == null
-                || elementSpec.getFullIdentifier().equals(Object.class.getName())) {
-            switch (size) {
-            case -1:
-                return "Objects";
-            case 0:
-                return "No objects";
-            case 1:
-                return "1 object";
-            default:
-                return size + " objects";
-            }
-        } else {
-            switch (size) {
-            case -1:
-                return elementSpec.getPluralName();
-            case 0:
-                return "No " + elementSpec.getPluralName();
-            case 1:
-                return "1 " + elementSpec.getSingularName();
-            default:
-                return size + " " + elementSpec.getPluralName();
-            }
-        }
-    }
-
     private String getDefaultTitle(final ManagedObject managedObject) {
         return "A" + (" " + managedObject.getSpecification().getSingularName()).toLowerCase();
     }
+
+    private String formatAnyCardinalityAsTitle(@NonNull final ObjectSpecification objSpec, @NonNull final ManagedObject managedObject) {
+        final int size = objSpec.getFacet(CollectionFacet.class).size(managedObject);
+        val elementSpec = objSpec.getElementSpecification().orElse(null);
+        objSpec.getTranslationService().translate(TranslationContext.forClassName(objSpec.getCorrespondingClass()), null);
+
+        final String noun = (elementSpec == null
+                || elementSpec.getFullIdentifier().equals(Object.class.getName()))
+                    ? "object"
+                    : elementSpec.getSingularName();
+        return MmTitleUtil.formatAnyCardinalityAsTitle(size, noun, objSpec.getTranslationService());
+    }
+
 }

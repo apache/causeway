@@ -99,7 +99,7 @@ public final class InteractionDtoUtils {
             }
 
             private MemberExecutionDto clone(final MemberExecutionDto memberExecutionDto) {
-                return MemberExecutionDtoUtils.dtoMapper().clone(memberExecutionDto);
+                return MemberExecutionDtoUtils.dtoMapper(memberExecutionDto.getClass()).clone(memberExecutionDto);
             }
         };
 

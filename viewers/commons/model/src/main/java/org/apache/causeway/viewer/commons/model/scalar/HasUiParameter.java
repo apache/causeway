@@ -24,6 +24,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
+import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -143,8 +144,8 @@ public interface HasUiParameter extends UiParameter {
     }
 
     @Override
-    default String disableReasonIfAny() {
-        return getUiParameter().disableReasonIfAny();
+    default Optional<InteractionVeto> disabledReason() {
+        return getUiParameter().disabledReason();
     }
 
     @Override

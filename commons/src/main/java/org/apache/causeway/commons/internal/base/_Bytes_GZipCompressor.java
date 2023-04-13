@@ -24,12 +24,13 @@ import java.io.IOException;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import lombok.experimental.UtilityClass;
+
 /**
- *
- * package private mixin for utility class {@link _Bytes}
- *
+ * package private utility for {@link _Bytes}
  */
-final class _Bytes_GZipCompressor {
+@UtilityClass
+class _Bytes_GZipCompressor {
 
     static byte[] compress(final byte[] input) throws IOException {
 
@@ -43,7 +44,7 @@ final class _Bytes_GZipCompressor {
         return os.toByteArray();
     }
 
-    static byte[] decompress(byte[] compressed) throws IOException {
+    static byte[] decompress(final byte[] compressed) throws IOException {
 
         final int BUFFER_SIZE = 32;
 
@@ -58,7 +59,5 @@ final class _Bytes_GZipCompressor {
         gis.close();
         return baos.toByteArray();
     }
-
-
 
 }

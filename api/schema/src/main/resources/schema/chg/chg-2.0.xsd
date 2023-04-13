@@ -17,24 +17,24 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<xs:schema targetNamespace="http://causeway.apache.org/schema/chg"
+<xs:schema targetNamespace="https://causeway.apache.org/schema/chg"
            elementFormDefault="qualified"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           xmlns="http://causeway.apache.org/schema/chg"
-           xmlns:com="http://causeway.apache.org/schema/common"
+           xmlns="https://causeway.apache.org/schema/chg"
+           xmlns:com="https://causeway.apache.org/schema/common"
                       
           xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="2.1"
            xmlns:annox="http://annox.dev.java.net"
            jaxb:extensionBindingPrefixes="annox">
 
-    <xs:import namespace="http://causeway.apache.org/schema/common" schemaLocation="../common/common-2.0.xsd"/>
+    <xs:import namespace="https://causeway.apache.org/schema/common" schemaLocation="../common/common-2.0.xsd"/>
 
     <xs:element name="changesDto">
         <xs:annotation>
             <xs:documentation>Represents v2.0 of this schema (as per majorVersion.minorVersion @default attribute, below).  The changes (create/update/delete) to one or more domain objects within a transaction.  (nb: only published objects are included in these lists).
             </xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.chg.v2.ChangesDto")</annox:annotate>
+                <annox:annotate>@jakarta.inject.Named("causeway.schema.chg.v2.ChangesDto")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:complexType>
@@ -84,7 +84,7 @@
         <xs:annotation>
             <xs:documentation>A set of changes to domain objects.</xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.chg.v2.ObjectsDto")</annox:annotate>
+                <annox:annotate>@jakarta.inject.Named("causeway.schema.chg.v2.ObjectsDto")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:sequence>

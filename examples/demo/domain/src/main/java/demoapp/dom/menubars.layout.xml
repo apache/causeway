@@ -12,30 +12,30 @@
 
 <!--
 For latest we use: https://raw.githubusercontent.com/apache/causeway/master/antora/supplemental-ui/applib/layout/menubars/bootstrap3/menubars.xsd
-      rather than: http://causeway.apache.org/applib/layout/menubars/bootstrap3/menubars.xsd
+      rather than: https://causeway.apache.org/applib/layout/menubars/bootstrap3/menubars.xsd
  -->
 <mb3:menuBars
-        xsi:schemaLocation="http://causeway.apache.org/applib/layout/menubars/bootstrap3 https://raw.githubusercontent.com/apache/causeway/master/antora/supplemental-ui/applib/layout/menubars/bootstrap3/menubars.xsd http://causeway.apache.org/applib/layout/component http://causeway.apache.org/applib/layout/component/component.xsd"
-        xmlns:cpt="http://causeway.apache.org/applib/layout/component"
-        xmlns:mb3="http://causeway.apache.org/applib/layout/menubars/bootstrap3"
+        xsi:schemaLocation="https://causeway.apache.org/applib/layout/menubars/bootstrap3 https://raw.githubusercontent.com/apache/causeway/master/antora/supplemental-ui/applib/layout/menubars/bootstrap3/menubars.xsd https://causeway.apache.org/applib/layout/component https://causeway.apache.org/applib/layout/component/component.xsd"
+        xmlns:cpt="https://causeway.apache.org/applib/layout/component"
+        xmlns:mb3="https://causeway.apache.org/applib/layout/menubars/bootstrap3"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <mb3:primary>
 
         <mb3:menu>
-            <mb3:named>Domain Objects</mb3:named>
+            <mb3:named>@DomainObject</mb3:named>
             <mb3:section>
                 <mb3:named>@DomainObject</mb3:named>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="aliased"/>
                 <mb3:serviceAction objectType="demo.DomainObjectMenu" id="autoComplete"/>
-                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="bounded"/>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="bounding"/>
                 <mb3:serviceAction objectType="demo.DomainObjectMenu" id="editing"/>
                 <mb3:serviceAction objectType="demo.DomainObjectMenu" id="entityChangePublishing"/>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="introspection"/>
                 <mb3:serviceAction objectType="demo.DomainObjectMenu" id="mixinMethod"/>
-                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="natureStateful"/>
-                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="natureStatefulRefsEntity"/>
-                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="logicalTypeName"/>
-                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="xxxDomainEvent"/>
-                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="xxxLifecycleEvent"/>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="nature"/>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="domainEvents"/>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="lifecycleEvents"/>
             </mb3:section>
             <mb3:section>
                 <mb3:named>@DomainObjectLayout</mb3:named>
@@ -45,21 +45,16 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
                 <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="describedAs"/>
                 <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="named"/>
                 <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="paged"/>
-                <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="plural"/>
-                <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="xxxUiEvent"/>
-            </mb3:section>
-            <mb3:section>
-                <mb3:named>Other</mb3:named>
-                <mb3:serviceAction objectType="demo.MixinMenu" id="mixins"/>
-                <mb3:serviceAction objectType="demo.EmbeddedTypeMenu" id="embeddedTypes"/>
+                <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="tableDecorator"/>
+                <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="uiEvents"/>
             </mb3:section>
         </mb3:menu>
 
         <mb3:menu>
-            <mb3:named>Actions</mb3:named>
+            <mb3:named>@Action</mb3:named>
             <mb3:section>
                 <mb3:named>@Action</mb3:named>
-                <mb3:serviceAction objectType="demo.ActionMenu" id="associateWith"/>
+                <mb3:serviceAction objectType="demo.ActionMenu" id="choicesFrom"/>
                 <mb3:serviceAction objectType="demo.ActionMenu" id="commandPublishing"/>
                 <mb3:serviceAction objectType="demo.ActionMenu" id="domainEvent"/>
                 <mb3:serviceAction objectType="demo.ActionMenu" id="executionPublishing"/>
@@ -70,32 +65,28 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
             </mb3:section>
             <mb3:section>
                 <mb3:named>@ActionLayout</mb3:named>
-                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="bookmarking"/>
+                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="associateWith"/>
                 <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="cssClass"/>
                 <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="cssClassFa"/>
                 <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="describedAs"/>
+                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="fieldSet"/>
                 <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="hidden"/>
                 <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="named"/>
                 <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="position"/>
                 <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="promptStyle"/>
                 <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="redirectPolicy"/>
-            </mb3:section>
-            <mb3:section>
-                <mb3:named>Programming Model</mb3:named>
-                <mb3:serviceAction objectType="demo.AssociatedActionMenu" id="associatedActions"/>
-                <mb3:serviceAction objectType="demo.DependentArgsActionMenu" id="dependentArgsActions">
-                    <cpt:named>Dependent Arguments</cpt:named>
-                </mb3:serviceAction>
+                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="sequence"/>
             </mb3:section>
         </mb3:menu>
 
         <mb3:menu>
-            <mb3:named>Properties</mb3:named>
+            <mb3:named>@Property</mb3:named>
             <mb3:section>
                 <mb3:named>@Property</mb3:named>
                 <mb3:serviceAction objectType="demo.PropertyMenu" id="commandPublishing"/>
                 <mb3:serviceAction objectType="demo.PropertyMenu" id="domainEvent"/>
                 <mb3:serviceAction objectType="demo.PropertyMenu" id="editing"/>
+                <mb3:serviceAction objectType="demo.PropertyMenu" id="editingReasonDisabled"/>
                 <mb3:serviceAction objectType="demo.PropertyMenu" id="executionPublishing"/>
                 <mb3:serviceAction objectType="demo.PropertyMenu" id="fileAccept"/>
                 <mb3:serviceAction objectType="demo.PropertyMenu" id="hidden"/>
@@ -122,7 +113,7 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
         </mb3:menu>
 
         <mb3:menu>
-            <mb3:named>Collections</mb3:named>
+            <mb3:named>@Collection</mb3:named>
             <mb3:section>
                 <mb3:named>@Collection</mb3:named>
                 <mb3:serviceAction objectType="demo.CollectionMenu" id="domainEvent"/>
@@ -137,7 +128,25 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
                 <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="hidden"/>
                 <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="named"/>
                 <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="paged"/>
+                <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="sequence"/>
                 <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="sortedBy"/>
+                <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="tableDecorator"/>
+            </mb3:section>
+        </mb3:menu>
+
+        <mb3:menu>
+            <mb3:named>Prog Model</mb3:named>
+            <mb3:section>
+                <mb3:named>Domain Objects</mb3:named>
+                <mb3:serviceAction objectType="demo.MixinMenu" id="mixins"/>
+                <mb3:serviceAction objectType="demo.EmbeddedTypeMenu" id="embeddedTypes"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Actions</mb3:named>
+                <mb3:serviceAction objectType="demo.AssociatedActionMenu" id="associatedActions"/>
+                <mb3:serviceAction objectType="demo.DependentArgsActionMenu" id="dependentArgsActions">
+                    <cpt:named>Dependent Arguments</cpt:named>
+                </mb3:serviceAction>
             </mb3:section>
         </mb3:menu>
 
@@ -222,7 +231,7 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
                 <mb3:serviceAction objectType="demo.JavaUtilTypesMenu" id="uuids"/>
             </mb3:section>
             <mb3:section>
-                <mb3:named>Apache Causeway Core</mb3:named>
+                <mb3:named>Causeway Core</mb3:named>
                 <mb3:serviceAction objectType="demo.CausewayTypesMenu" id="blobs"/>
                 <mb3:serviceAction objectType="demo.CausewayTypesMenu" id="clobs"/>
                 <mb3:serviceAction objectType="demo.CausewayTypesMenu" id="localResourcePaths"/>
@@ -230,18 +239,10 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
                 <mb3:serviceAction objectType="demo.CausewayTypesMenu" id="passwords"/>
             </mb3:section>
             <mb3:section>
-                <mb3:named>Apache Causeway Values</mb3:named>
+                <mb3:named>Causeway Values</mb3:named>
                 <mb3:serviceAction objectType="demo.CausewayValTypesMenu" id="asciiDocs"/>
                 <mb3:serviceAction objectType="demo.CausewayValTypesMenu" id="markdowns"/>
                 <mb3:serviceAction objectType="demo.CausewayValTypesMenu" id="vegaCharts"/>
-            </mb3:section>
-            <mb3:section>
-                <mb3:named>Apache Causeway Extensions</mb3:named>
-                <mb3:serviceAction objectType="demo.CausewayExtTypesMenu" id="calendarEvents"/>
-                <mb3:serviceAction objectType="demo.AsyncActionMenu" id="asyncActions">
-                    <cpt:named>SSE</cpt:named>
-                    <cpt:describedAs>Background (Async) Actions</cpt:describedAs>
-                </mb3:serviceAction>
             </mb3:section>
         </mb3:menu>
 
@@ -255,8 +256,20 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
                 <mb3:serviceAction objectType="demo.ServicesMenu" id="wrapperFactory"/>
                 <mb3:serviceAction objectType="demo.ServicesMenu" id="xmlSnapshot"/>
             </mb3:section>
+        </mb3:menu>
+
+        <mb3:menu>
+            <mb3:named>Extensions</mb3:named>
             <mb3:section>
-                <mb3:named>Extensions - SecMan</mb3:named>
+                <mb3:named>Wicket Viewer</mb3:named>
+                <mb3:serviceAction objectType="demo.CausewayExtTypesMenu" id="calendarEvents"/>
+                <mb3:serviceAction objectType="demo.AsyncActionMenu" id="asyncActions">
+                    <cpt:named>SSE</cpt:named>
+                    <cpt:describedAs>Background (Async) Actions</cpt:describedAs>
+                </mb3:serviceAction>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>SecMan</mb3:named>
                 <mb3:serviceAction objectType="demo.ExtSecManMenu" id="appTenancy"/>
             </mb3:section>
         </mb3:menu>
@@ -264,13 +277,17 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
         <mb3:menu>
             <mb3:named>Featured</mb3:named>
             <mb3:section>
+                <mb3:named>Error</mb3:named>
+                <mb3:serviceAction objectType="demo.FeaturedMenu" id="errorPage" />
+            </mb3:section>
+            <mb3:section>
                 <mb3:named>Layout</mb3:named>
-                <mb3:serviceAction objectType="demo.DescribedAsMenu" id="describedAs"/>
-                <mb3:serviceAction objectType="demo.TabMenu" id="tabDemo" />
+                <mb3:serviceAction objectType="demo.FeaturedMenu" id="toolTips" />
+                <mb3:serviceAction objectType="demo.FeaturedMenu" id="tabDemo" />
             </mb3:section>
             <mb3:section>
                 <mb3:named>Custom UI</mb3:named>
-                <mb3:serviceAction objectType="demo.WhereInTheWorldMenu" id="whereInTheWorld" />
+                <mb3:serviceAction objectType="demo.FeaturedMenu" id="whereInTheWorld" />
             </mb3:section>
         </mb3:menu>
 
@@ -292,13 +309,8 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
                 <mb3:serviceAction objectType="causeway.applib.LayoutServiceMenu" id="downloadMenuBarsLayout"/>
             </mb3:section>
             <mb3:section>
-                <mb3:named>Site-Map</mb3:named>
-                <mb3:serviceAction objectType="causeway.applib.SitemapServiceMenu" id="downloadSitemap"/>
-            </mb3:section>
-            <mb3:section>
                 <mb3:named>Meta Model and Features</mb3:named>
                 <mb3:serviceAction objectType="causeway.applib.MetaModelServiceMenu" id="downloadMetaModel"/>
-                <mb3:serviceAction objectType="causeway.applib.MetaModelServiceMenu" id="downloadMetaModelCsv"/>
                 <mb3:serviceAction objectType="causeway.applib.MetaModelServiceMenu" id="downloadMetaModelDiff"/>
                 <mb3:serviceAction objectType="causeway.feat.ApplicationFeatureMenu" id="allNamespaces"/>
                 <mb3:serviceAction objectType="causeway.feat.ApplicationFeatureMenu" id="allTypes"/>
@@ -313,9 +325,9 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
             </mb3:section>
             <mb3:section>
                 <mb3:named>REST API</mb3:named>
-                <mb3:serviceAction objectType="causeway.viewer.restfulobjects.SwaggerServiceMenu" id="openSwaggerUi"/>
-                <mb3:serviceAction objectType="causeway.viewer.restfulobjects.SwaggerServiceMenu" id="openRestApi"/>
-                <mb3:serviceAction objectType="causeway.viewer.restfulobjects.SwaggerServiceMenu" id="downloadSwaggerSchemaDefinition"/>
+                <mb3:serviceAction objectType="causeway.viewer.roRendering.SwaggerServiceMenu" id="openSwaggerUi"/>
+                <mb3:serviceAction objectType="causeway.viewer.roRendering.SwaggerServiceMenu" id="openRestApi"/>
+                <mb3:serviceAction objectType="causeway.viewer.roRendering.SwaggerServiceMenu" id="downloadSwaggerSchemaDefinition"/>
             </mb3:section>
             <mb3:section>
                 <mb3:named>i18n</mb3:named>
@@ -323,6 +335,12 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
                 <mb3:serviceAction objectType="causeway.applib.TranslationServicePoMenu" id="resetTranslationCache"/>
                 <mb3:serviceAction objectType="causeway.applib.TranslationServicePoMenu" id="switchToReadingTranslations"/>
                 <mb3:serviceAction objectType="causeway.applib.TranslationServicePoMenu" id="switchToWritingTranslations"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Manual Testing</mb3:named>
+                <mb3:serviceAction objectType="causeway.applib.SitemapServiceMenu" id="downloadSitemap">
+                    <cpt:named>Download Site-Map Template (Adoc)</cpt:named>
+                </mb3:serviceAction>
             </mb3:section>
 			<mb3:section>
                 <mb3:named>Prototype Actions (on Object)</mb3:named>
@@ -332,6 +350,39 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
                 <mb3:serviceAction objectType="demo.PrototypeActionsVisibilityAdvisor" id="doNotShowPrototypeActions">
                     <cpt:named>Do not Show for Object</cpt:named>
                 </mb3:serviceAction>
+            </mb3:section>
+        </mb3:menu>
+
+        <mb3:menu>
+            <mb3:named>Activity</mb3:named>
+            <mb3:section>
+                <mb3:named>Sessions</mb3:named>
+                <mb3:serviceAction id="activeSessions" objectType="causeway.ext.sessionLog.SessionLogMenu"/>
+                <mb3:serviceAction id="findSessions" objectType="causeway.ext.sessionLog.SessionLogMenu"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Commands</mb3:named>
+                <mb3:serviceAction id="activeCommands" objectType="causeway.ext.commandLog.CommandLogMenu"/>
+                <mb3:serviceAction id="findMostRecent" objectType="causeway.ext.commandLog.CommandLogMenu"/>
+                <mb3:serviceAction id="findCommands" objectType="causeway.ext.commandLog.CommandLogMenu"/>
+                <mb3:serviceAction id="findAll" objectType="causeway.ext.commandLog.CommandLogMenu"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Execution Log</mb3:named>
+                <mb3:serviceAction id="findMostRecent" objectType="causeway.ext.executionLog.ExecutionLogMenu"/>
+                <mb3:serviceAction id="findExecutions" objectType="causeway.ext.executionLog.ExecutionLogMenu"/>
+                <mb3:serviceAction id="findAll" objectType="causeway.ext.executionLog.ExecutionLogMenu"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Audit Trail</mb3:named>
+                <mb3:serviceAction id="findMostRecent" objectType="causeway.ext.auditTrail.AuditTrailMenu"/>
+                <mb3:serviceAction id="findAuditEntries" objectType="causeway.ext.auditTrail.AuditTrailMenu"/>
+                <mb3:serviceAction id="findAll" objectType="causeway.ext.auditTrail.AuditTrailMenu"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Execution Outbox</mb3:named>
+                <mb3:serviceAction id="findOldest" objectType="causeway.ext.executionOutbox.ExecutionOutboxMenu"/>
+                <mb3:serviceAction id="findAll" objectType="causeway.ext.executionOutbox.ExecutionOutboxMenu"/>
             </mb3:section>
         </mb3:menu>
 
@@ -358,37 +409,15 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
                 <mb3:serviceAction objectType="causeway.ext.secman.ApplicationTenancyMenu" id="findTenancies"/>
             </mb3:section>
         </mb3:menu>
-        <mb3:menu>
-            <mb3:named>Activity</mb3:named>
-            <mb3:section>
-                <mb3:named>Command Log</mb3:named>
-                <mb3:serviceAction objectType="causeway.ext.commandLog.CommandLogMenu" id="activeCommands"/>
-                <mb3:serviceAction objectType="causeway.ext.commandLog.CommandLogMenu" id="findCommands"/>
-                <mb3:serviceAction objectType="causeway.ext.commandLog.CommandLogMenu" id="findCommandById"/>
-                <mb3:serviceAction objectType="causeway.ext.commandLog.CommandLogMenu" id="truncateLog"/>
-            </mb3:section>
-            <mb3:section>
-                <mb3:named>Command Replay - Primary</mb3:named>
-                <mb3:serviceAction objectType="causeway.ext.commandReplayPrimary.CommandReplayOnPrimaryService" id="findCommands"/>
-                <mb3:serviceAction objectType="causeway.ext.commandReplayPrimary.CommandReplayOnPrimaryService" id="downloadCommands"/>
-                <mb3:serviceAction objectType="causeway.ext.commandReplayPrimary.CommandReplayOnPrimaryService" id="downloadCommandById"/>
-            </mb3:section>
-            <mb3:section>
-                <mb3:named>Command Replay - Secondary</mb3:named>
-                <mb3:serviceAction objectType="causeway.ext.commandReplaySecondary.CommandReplayOnSecondaryService" id="findMostRecentReplayed"/>
-                <mb3:serviceAction objectType="causeway.ext.commandReplaySecondary.CommandReplayOnSecondaryService" id="uploadCommands"/>
-            </mb3:section>
-            <mb3:section>
-                <mb3:named>Demo Replay Controller</mb3:named>
-                <mb3:serviceAction objectType="demo.web.DemoReplayController" id="pauseReplay"/>
-                <mb3:serviceAction objectType="demo.web.DemoReplayController" id="resumeReplay"/>
-            </mb3:section>
-        </mb3:menu>
 
     </mb3:secondary>
     <mb3:tertiary>
         <mb3:menu>
             <mb3:named/>
+            <mb3:section>
+                <mb3:named>Documentation</mb3:named>
+                <mb3:serviceAction objectType="causeway.ext.docgen.DocumentationMenu" id="help"/>
+            </mb3:section>
             <mb3:section>
                 <mb3:named>Configuration</mb3:named>
                 <mb3:serviceAction objectType="causeway.conf.ConfigurationMenu" id="configuration"/>
@@ -401,12 +430,11 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
             </mb3:section>
             <mb3:section>
                 <mb3:named>Security</mb3:named>
-                <mb3:serviceAction objectType="causeway.ext.secman.MeService" id="me">
-                    <cpt:named>Me (SecMan)</cpt:named>
-                </mb3:serviceAction>
-                <mb3:serviceAction objectType="causeway.applib.UserMenu" id="me"/>
+                <mb3:serviceAction objectType="causeway.applib.UserMenu" id="me"/>  <!-- this is hidden by secman -->
+                <mb3:serviceAction objectType="causeway.ext.secman.MeService" id="me"/>
 	            <mb3:serviceAction objectType="causeway.security.LogoutMenu" id="logout"/>
 	        </mb3:section>
+
         </mb3:menu>
     </mb3:tertiary>
 </mb3:menuBars>

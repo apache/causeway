@@ -18,14 +18,22 @@
  */
 package org.apache.causeway.viewer.wicket.ui.pages.standalonecollection;
 
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 
+import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
 import org.apache.causeway.applib.services.user.UserMemento;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelStandalone;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
+
+import lombok.val;
 
 /**
  * Web page representing an action invocation.
@@ -35,6 +43,8 @@ public class StandaloneCollectionPage extends PageAbstract {
 
     private static final long serialVersionUID = 1L;
 
+    private final EntityCollectionModelStandalone collectionModel;
+
     /**
      * For use with {@link Component#setResponsePage(org.apache.wicket.request.component.IRequestablePage)}
      */
@@ -42,9 +52,28 @@ public class StandaloneCollectionPage extends PageAbstract {
         super(PageParameterUtils.newPageParameters(),
                 collectionModel.getName(),
                 UiComponentType.STANDALONE_COLLECTION);
+        this.collectionModel = collectionModel;
 
         addChildComponents(themeDiv, collectionModel);
         addBookmarkedPages(themeDiv);
+    }
+
+    @Override
+    public void onRendered(final Can<PageRenderSubscriber> objectRenderSubscribers) {
+
+        if(objectRenderSubscribers.isEmpty()) {
+            return;
+        }
+
+        val bookmarks =
+            collectionModel.getObject().getDataElements().getValue().stream()
+            .map(ManagedObject::getBookmark)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .collect(Collectors.toUnmodifiableList());
+
+        objectRenderSubscribers
+            .forEach(subscriber -> subscriber.onRenderedCollection(()->bookmarks));
     }
 
 }

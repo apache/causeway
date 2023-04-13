@@ -1,0 +1,73 @@
+= YamlUtils
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Utilities to convert from and to YAML format.
+
+== API
+
+[source,java]
+.YamlUtils.java
+----
+class YamlUtils {
+  Try<T> tryRead(Class<T> mappedType, String stringUtf8)     // <.>
+  Try<T> tryRead(Class<T> mappedType, DataSource source)     // <.>
+  void write(Object pojo, DataSink sink, YamlUtils.YamlCustomizer... customizers)     // <.>
+  String toStringUtf8(Object pojo, YamlUtils.YamlCustomizer... customizers)     // <.>
+  DumperOptions allowReadOnlyProperties(DumperOptions opts)     // <.>
+}
+----
+
+<.> xref:#tryRead_Class_String[tryRead(Class, String)]
++
+--
+Tries to deserialize YAML content from given UTF8 encoded _String_ into an instance of given _mappedType_ .
+--
+<.> xref:#tryRead_Class_DataSource[tryRead(Class, DataSource)]
++
+--
+Tries to deserialize YAML content from given xref:refguide:commons:index/io/DataSource.adoc[DataSource] into an instance of given _requiredType_ .
+--
+<.> xref:#write_Object_DataSink_YamlUtils_YamlCustomizer[write(Object, DataSink, YamlUtils_YamlCustomizer)]
++
+--
+Writes given _pojo_ to given xref:refguide:commons:index/io/DataSink.adoc[DataSink] .
+--
+<.> xref:#toStringUtf8_Object_YamlUtils_YamlCustomizer[toStringUtf8(Object, YamlUtils_YamlCustomizer)]
++
+--
+Converts given _pojo_ to an UTF8 encoded _String_ .
+--
+<.> xref:#allowReadOnlyProperties_DumperOptions[allowReadOnlyProperties(DumperOptions)]
++
+--
+Include read-only JavaBean properties (the ones without setters) in the YAML document.
+--
+
+== Members
+
+[#tryRead_Class_String]
+=== tryRead(Class, String)
+
+Tries to deserialize YAML content from given UTF8 encoded _String_ into an instance of given _mappedType_ .
+
+[#tryRead_Class_DataSource]
+=== tryRead(Class, DataSource)
+
+Tries to deserialize YAML content from given xref:refguide:commons:index/io/DataSource.adoc[DataSource] into an instance of given _requiredType_ .
+
+[#write_Object_DataSink_YamlUtils_YamlCustomizer]
+=== write(Object, DataSink, YamlUtils_YamlCustomizer)
+
+Writes given _pojo_ to given xref:refguide:commons:index/io/DataSink.adoc[DataSink] .
+
+[#toStringUtf8_Object_YamlUtils_YamlCustomizer]
+=== toStringUtf8(Object, YamlUtils_YamlCustomizer)
+
+Converts given _pojo_ to an UTF8 encoded _String_ .
+
+[#allowReadOnlyProperties_DumperOptions]
+=== allowReadOnlyProperties(DumperOptions)
+
+Include read-only JavaBean properties (the ones without setters) in the YAML document.
+
+By default these properties are not included to be able to parse later the same JavaBean.

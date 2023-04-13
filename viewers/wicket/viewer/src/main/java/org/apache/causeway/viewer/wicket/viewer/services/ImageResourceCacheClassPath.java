@@ -20,8 +20,8 @@ package org.apache.causeway.viewer.wicket.viewer.services;
 
 import java.io.ByteArrayInputStream;
 
-import javax.annotation.Priority;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.request.cycle.RequestCycle;
@@ -34,8 +34,6 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.wicket.model.models.ImageResourceCache;
 
 import lombok.NonNull;
@@ -60,22 +58,11 @@ implements ImageResourceCache {
     private static final long serialVersionUID = 1L;
 
     @Override
-    public ResourceReference resourceReferenceFor(final ManagedObject adapter) {
-        val objectIcon = adapter.getIcon();
-        return resourceReferenceForObjectIcon(objectIcon);
-    }
-
-    @Override
-    public ResourceReference resourceReferenceForSpec(final ObjectSpecification spec) {
-        val objectIcon = spec.getIcon(null);
-        return resourceReferenceForObjectIcon(objectIcon);
+    public ResourceReference resourceReferenceForObjectIcon(final ObjectIcon objectIcon) {
+        return new ObjectIconResourceReference(objectIcon);
     }
 
     // -- HELPER
-
-    private ResourceReference resourceReferenceForObjectIcon(final ObjectIcon objectIcon) {
-        return new ObjectIconResourceReference(objectIcon);
-    }
 
     private static class ObjectIconResourceReference
     extends ResourceReference {

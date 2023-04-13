@@ -21,8 +21,8 @@ package org.apache.causeway.core.metamodel.valuesemantics.temporal.legacy;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Component;
 
@@ -32,7 +32,7 @@ import org.apache.causeway.core.metamodel.valuesemantics.temporal.LocalDateTimeV
 import org.apache.causeway.core.metamodel.valuetypes.TemporalSemanticsAdapter;
 
 @Component
-@Named("causeway.val.JavaSqlTimeStampValueSemantics")
+@Named("causeway.metamodel.value.JavaSqlTimeStampValueSemantics")
 public class JavaSqlTimeStampValueSemantics
 extends TemporalSemanticsAdapter<Timestamp, LocalDateTime> {
 

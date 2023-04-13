@@ -23,11 +23,11 @@ import org.springframework.core.Ordered;
 import lombok.experimental.UtilityClass;
 
 /**
- * Constants for use with {@link javax.annotation.Priority}, used both to determine which service to inject into a
+ * Constants for use with {@link jakarta.annotation.Priority}, used both to determine which service to inject into a
  * scalar field when there are multiple candidates, and also to order services if injecting into a vector field (in
  * other words, into a {@link java.util.List}).
  *
- * @see javax.annotation.Priority
+ * @see jakarta.annotation.Priority
  * @see org.springframework.core.annotation.Order
  *
  * @since 2.0 {@index}
@@ -44,13 +44,13 @@ public class PriorityPrecedence {
      * </p>
      *
      * <p>
-     *     Note that this is a non-negative value, because {@link javax.annotation.Priority}'s javadoc states:
+     *     Note that this is a non-negative value, because {@link jakarta.annotation.Priority}'s javadoc states:
      *     &quot;priority values should generally be non-negative, with negative values * reserved for special meanings
      *     such as <i>undefined</i> or <i>not specified</i>.&quot;.  In particular, it is <i>not</i> the same as
      *     {@link Ordered#HIGHEST_PRECEDENCE}.
      * </p>
      *
-     * @see javax.annotation.Priority
+     * @see jakarta.annotation.Priority
      */
     public static final int FIRST = 0;
 

@@ -22,7 +22,7 @@ enum EntityState {
   boolean isAttachedNoOid()     // <.>
   boolean isDetachedCannotReattach()
   boolean isAttachedOrRemoved()     // <.>
-  boolean isSpecicalJpaDetachedWithOid()     // <.>
+  boolean isJpaSpecificDetachedWithOid()     // <.>
   boolean hasOid()
 }
 ----
@@ -88,7 +88,7 @@ Object with this state is an entity that has been removed from the database. Obj
 not supported by JPA
 ====
 --
-<.> xref:#isSpecicalJpaDetachedWithOid_[isSpecicalJpaDetachedWithOid()]
+<.> xref:#isJpaSpecificDetachedWithOid_[isJpaSpecificDetachedWithOid()]
 
 == Members
 
@@ -157,5 +157,5 @@ Only supported by JDO. Will always return false with JPA.
 not supported by JPA
 ====
 
-[#isSpecicalJpaDetachedWithOid_]
-=== isSpecicalJpaDetachedWithOid()
+[#isJpaSpecificDetachedWithOid_]
+=== isJpaSpecificDetachedWithOid()

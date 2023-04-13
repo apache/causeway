@@ -18,8 +18,10 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.disabled.fromimmutable;
 
+import java.util.Optional;
+
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
@@ -51,21 +53,18 @@ extends DisabledFacetAbstract {
             final @NonNull FacetHolder holder,
             final @NonNull ImmutableFacet reasonProvidingImmutableFacet) {
 
-        super(Where.ANYWHERE,
-                "calculated at runtime, delegating to ImmutableFacet " +
-                        reasonProvidingImmutableFacet.getClass(),
+        super(Where.ANYWHERE, VetoReason.delegatedTo(reasonProvidingImmutableFacet.getClass()),
                 holder);
 
         this.reasonProvidingImmutableFacet = reasonProvidingImmutableFacet;
     }
 
     @Override
-    public String disabledReason(final ManagedObject target) {
+    public Optional<VetoReason> disabledReason(final ManagedObject target) {
         val reason = reasonProvidingImmutableFacet.disabledReason(target);
         // ensure non empty reason
-        return _Strings.isNotEmpty(reason)
-                ? reason
-                : "Immutable";
+        return reason
+                .or(()->VetoReason.immutableIfNoReasonGivenByImmutableFacet().toOptional());
     }
 
 

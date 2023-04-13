@@ -81,7 +81,7 @@ Note that this launches the manager on the same host that the webapp runs, and s
 
 == Additional Configuration
 
-The following additional configuration is also required (all of this is present in the helloworld and simpleapp starter apps):
+The following additional configuration is also required (eg as in the xref:docs:starters:helloworld.adoc[] and xref:docs:starters:simpleapp.adoc[] starter apps):
 
 * the h2 jdbc driver is required on the classpath of the webapp:
 +
@@ -103,25 +103,24 @@ spring.sql.init.platform=h2
 spring.datasource.url=jdbc:h2:mem
 ----
 
-* finally, and most importantly, the h2 console servlet must be configured in `web.xml`, and must be mapped to `/db`:
+* because this is a potential security risk, a further configuration property must also be explicitly enabled:
 +
-[source,xml]
-.web.xml
+[source,ini]
+.application.properties
 ----
-<servlet>
-    <servlet-name>H2Console</servlet-name>
-    <servlet-class>org.h2.server.web.WebServlet</servlet-class>
-    <init-param>
-        <param-name>webAllowOthers</param-name>
-        <param-value>true</param-value>
-    </init-param>
-    <load-on-startup>1</load-on-startup>
-</servlet>
-<servlet-mapping>
-    <servlet-name>H2Console</servlet-name>
-    <url-pattern>/db/*</url-pattern>
-</servlet-mapping>
+causeway.prototyping.h2-console.web-allow-remote-access=true
 ----
+
+* and if so, then the password should be randomly generated (it will be printed to the log); this is enabled by default:
++
+[source,ini]
+.application.properties
+----
+causeway.prototyping.h2-console.generate-random-web-admin-password=true
+----
+
+
+
 
 == Disabling/hiding the menu
 
@@ -145,5 +144,5 @@ public class HideH2ManagerMenu {
 
 == Using with Secman
 
-WARNING: TODO - describe the necessary role to grant if using secman.
+If xref:security:secman:about.adoc[] is in use, then you will also need to grant the appropriate role (xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtH2ConsoleRoleAndPermissions.adoc[]) to the user.
 

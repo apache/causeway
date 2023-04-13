@@ -21,15 +21,15 @@ package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
+import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.MediaType;
 
 import org.springframework.stereotype.Component;
 
@@ -55,8 +55,8 @@ public class SwaggerSpecResource {
 
     @Inject
     public SwaggerSpecResource(
-            final SwaggerService swaggerService,
-            final InteractionService interactionService) {
+            final @Context SwaggerService swaggerService,
+            final @Context InteractionService interactionService) {
         this.swaggerService = swaggerService;
         this.interactionService = interactionService;
         log.debug("<init>");

@@ -18,13 +18,12 @@
  */
 package demoapp.dom.domain.objects.DomainObject.entityChangePublishing;
 
-import javax.inject.Named;
-
-import org.apache.causeway.applib.annotation.DomainObject;
-
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
-import demoapp.dom.domain._changes.ExposeCapturedChanges;
+
+import jakarta.inject.Named;
+
+import org.apache.causeway.applib.annotation.DomainObject;
 
 @Named("demo.DomainObjectEntityChangePublishingEntity")
 @DomainObject
@@ -32,7 +31,6 @@ import demoapp.dom.domain._changes.ExposeCapturedChanges;
 public abstract class DomainObjectEntityChangePublishingEntity
 implements
     HasAsciiDocDescription,
-    ExposeCapturedChanges,
     ValueHolder<String> {
 
     @Override

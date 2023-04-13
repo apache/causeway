@@ -18,12 +18,11 @@
  */
 package org.apache.causeway.core.metamodel.facets.members.disabled;
 
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.WhereValueFacetAbstract;
@@ -48,18 +47,18 @@ implements DisabledFacet {
      * when either sub-classes override {@link #disabledReason(ManagedObject)}
      * or the semantics is inverted (ENABLED)
      */
-    private final @Nullable String reason;
+    private final @NonNull VetoReason reason;
 
     protected DisabledFacetAbstract(
             final Where where,
-            final String reason,
+            final VetoReason reason,
             final FacetHolder holder) {
         this(where, reason, holder, Semantics.DISABLED, Precedence.DEFAULT);
     }
 
     protected DisabledFacetAbstract(
             final Where where,
-            final String reason,
+            final VetoReason reason,
             final FacetHolder holder,
             final Semantics semantics,
             final Precedence precedence) {
@@ -69,22 +68,20 @@ implements DisabledFacet {
     }
 
     @Override
-    public String disabledReason(final ManagedObject targetAdapter) {
-        if(getSemantics().isEnabled()) {
-            return null;
-        }
-        return _Strings.isNotEmpty(reason)
-                ? reason
-                : ALWAYS_DISABLED_REASON;
+    public Optional<VetoReason> disabledReason(final ManagedObject targetAdapter) {
+        // handle inverted semantics
+        return getSemantics().isEnabled()
+            ? Optional.empty()
+            : Optional.of(reason);
     }
 
     @Override
-    public String disables(final UsabilityContext ic) {
+    public Optional<VetoReason> disables(final UsabilityContext ic) {
         if(getSemantics().isEnabled()) {
-            return null;
+            return Optional.empty();
         }
         final ManagedObject target = ic.getTarget();
-        final String disabledReason = disabledReason(target);
+        final Optional<VetoReason> disabledReason = disabledReason(target);
         return disabledReason;
     }
 
@@ -92,8 +89,8 @@ implements DisabledFacet {
     public final void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("semantics", semantics);
-        if(_Strings.isNotEmpty(reason)) {
-            visitor.accept("reason", reason);
+        if(reason!=null) {
+            visitor.accept("reason", reason.string());
         }
     }
 

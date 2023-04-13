@@ -20,7 +20,7 @@
 
 package org.apache.causeway.extensions.executionrepublisher.applib.contributions;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.*;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry;

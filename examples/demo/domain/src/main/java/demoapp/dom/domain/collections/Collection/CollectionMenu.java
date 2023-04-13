@@ -18,20 +18,20 @@
  */
 package demoapp.dom.domain.collections.Collection;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainService;
-import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.factory.FactoryService;
 
-import demoapp.dom.domain.collections.Collection.domainEvent.CollectionDomainEventVm;
-import demoapp.dom.domain.collections.Collection.domainEvent.CollectionDomainEventVm_addChild;
+import demoapp.dom.domain.collections.Collection.domainEvent.CollectionDomainEventPage;
+import demoapp.dom.domain.collections.Collection.hidden.CollectionHiddenPage;
+import demoapp.dom.domain.collections.Collection.typeOf.CollectionTypeOfPage;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -39,7 +39,7 @@ import lombok.val;
 @DomainService(
         nature=NatureOfService.VIEW
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 //@Log4j2
 public class CollectionMenu {
@@ -48,40 +48,27 @@ public class CollectionMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-asterisk", describedAs = "Class of the domain event emitted when interacting with the collection")
-    public CollectionDomainEventVm domainEvent(){
-        val collectionDomainEventVm = new CollectionDomainEventVm();
-
-        addChild(collectionDomainEventVm).act();
-        addChild(collectionDomainEventVm).act();
-        addChild(collectionDomainEventVm).act();
-
-        return collectionDomainEventVm;
+    public CollectionDomainEventPage domainEvent(){
+        val page = new CollectionDomainEventPage();
+        page.addChild("#1");
+        page.addChild("#2");
+        page.addChild("#3");
+        page.addOtherChild("#1");
+        page.addOtherChild("#2");
+        page.addOtherChild("#3");
+        return page;
     }
-
-
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of collections")
-    public void hidden(){
+    public CollectionHiddenPage hidden(){
+        return new CollectionHiddenPage();
     }
-    @MemberSupport public String disableHidden(){
-        return "Visibility of collections" +
-                 " (not yet implemented in demo)";
-    }
-
-
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-shapes", describedAs = "Element type of collections")
-    public void typeOf(){
-    }
-    @MemberSupport public String disableTypeOf(){
-        return "Element type of collections" +
-                 " (not yet implemented in demo)";
-    }
-
-    private CollectionDomainEventVm_addChild addChild(final CollectionDomainEventVm collectionDomainEventVm) {
-        return factoryService.mixin(CollectionDomainEventVm_addChild.class, collectionDomainEventVm);
+    public CollectionTypeOfPage typeOf(){
+        return new CollectionTypeOfPage();
     }
 
 

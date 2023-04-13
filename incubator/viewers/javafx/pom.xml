@@ -18,7 +18,7 @@
 	<parent>
 		<groupId>org.apache.causeway.incubator</groupId>
 		<artifactId>causeway-incubator</artifactId>
-		<version>2.0.0-SNAPSHOT</version>
+		<version>3.0.0-SNAPSHOT</version>
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
@@ -30,10 +30,10 @@
 	</description>
 
 	<properties>
-		<maven.compiler.release>11</maven.compiler.release>
+		<maven.compiler.release>17</maven.compiler.release>
+		<javafx.version>17.0.2</javafx.version> 
 		<jar-plugin.automaticModuleName>org.apache.causeway.incubator.viewer.javafx</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/causeway/incubator/viewer/javafx</git-plugin.propertiesDir>
-		<javafx.version>11.0.2</javafx.version>
 	</properties>
 
 	<packaging>pom</packaging>
@@ -43,20 +43,26 @@
 
 			<dependency>
 				<groupId>org.apache.causeway.incubator.viewer</groupId>
+				<artifactId>causeway-viewer-javafx-headless</artifactId>
+				<version>3.0.0-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.causeway.incubator.viewer</groupId>
 				<artifactId>causeway-viewer-javafx-model</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
 				<groupId>org.apache.causeway.incubator.viewer</groupId>
 				<artifactId>causeway-viewer-javafx-ui</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
 				<groupId>org.apache.causeway.incubator.viewer</groupId>
 				<artifactId>causeway-viewer-javafx-viewer</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 			</dependency>
 
 			<!-- JAVA-FX -->
@@ -95,6 +101,7 @@
 	</dependencyManagement>
 
 	<modules>
+		<module>headless</module>
 		<module>model</module>
 		<module>viewer</module>
 		<module>ui</module>

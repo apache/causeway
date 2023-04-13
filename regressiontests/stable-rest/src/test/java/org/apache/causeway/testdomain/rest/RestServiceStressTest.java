@@ -20,9 +20,10 @@ package org.apache.causeway.testdomain.rest;
 
 import java.util.stream.IntStream;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -35,6 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.commons.internal.base._Timing;
+import org.apache.causeway.commons.internal.debug.swt._Swt;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
 import org.apache.causeway.testdomain.util.rest.RestEndpointService;
@@ -59,10 +61,18 @@ class RestServiceStressTest {
     @LocalServerPort int port; // just for reference (not used)
     @Inject RestEndpointService restService;
 
+    @BeforeAll
+    static void init() {
+        _Swt.enableSwing();
+    }
+
+    //TODO[ISIS-3275] performance regression compared to v2: 26s vs 6s
     @Test
     void bookOfTheWeek_stressTest() {
 
         assertTrue(restService.getPort()>0);
+
+        _Swt.prompt("get ready for stress testing");
 
         val useRequestDebugLogging = false;
         final int clients = 16;
@@ -87,6 +97,9 @@ class RestServiceStressTest {
             });
 
         });
+
+        _Swt.prompt("stress testing done");
+
     }
 
     void requestSingleBookOfTheWeek_viaRestEndpoint(final RestfulClient restfulClient) {

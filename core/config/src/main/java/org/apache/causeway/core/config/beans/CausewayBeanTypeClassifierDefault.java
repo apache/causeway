@@ -21,7 +21,7 @@ package org.apache.causeway.core.config.beans;
 import java.io.Serializable;
 import java.lang.reflect.Modifier;
 
-import javax.persistence.Entity;
+import jakarta.persistence.Entity;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -32,7 +32,6 @@ import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
@@ -52,7 +51,6 @@ implements CausewayBeanTypeClassifier {
     private final Can<CausewayBeanTypeClassifier> classifierPlugins = CausewayBeanTypeClassifier.get();
 
     // handle arbitrary types ...
-    @SuppressWarnings("deprecation")
     @Override
     public CausewayBeanMetaData classify(
             final @NonNull Class<?> type) {
@@ -109,19 +107,7 @@ implements CausewayBeanTypeClassifier {
         val aDomainService = _Annotations.synthesize(type, DomainService.class);
         if(aDomainService.isPresent()) {
             val logicalType = LogicalType.infer(type);
-
-            // whether overrides Spring naming strategy
-            @SuppressWarnings("removal")
-            val namedByCauseway = aDomainService
-                    .map(DomainService::logicalTypeName)
-                    .map(_Strings::emptyToNull)
-                    .map(logicalType.getLogicalTypeName()::equals)
-                    .orElse(false);
-
-            return namedByCauseway
-                    ? CausewayBeanMetaData
-                        .injectableNamedByCauseway(BeanSort.MANAGED_BEAN_CONTRIBUTING, logicalType)
-                    : CausewayBeanMetaData
+            return CausewayBeanMetaData
                         .injectable(BeanSort.MANAGED_BEAN_CONTRIBUTING, logicalType);
         }
 
@@ -139,20 +125,19 @@ implements CausewayBeanTypeClassifier {
 
         val entityAnnotation = _Annotations.synthesize(type, Entity.class).orElse(null);
         if(entityAnnotation!=null) {
-            return CausewayBeanMetaData.causewayManaged(BeanSort.ENTITY, LogicalType.infer(type));
+            return CausewayBeanMetaData.entity(PersistenceStack.JPA, LogicalType.infer(type));
         }
 
         val aDomainObject = _Annotations.synthesize(type, DomainObject.class).orElse(null);
         if(aDomainObject!=null) {
             switch (aDomainObject.nature()) {
             case BEAN:
-                val logicalType = LogicalType.infer(type);
                 return CausewayBeanMetaData
-                        .injectableNamedByCauseway(BeanSort.MANAGED_BEAN_CONTRIBUTING, logicalType);
+                        .indifferent(BeanSort.MANAGED_BEAN_CONTRIBUTING, type);
             case MIXIN:
                 return CausewayBeanMetaData.causewayManaged(BeanSort.MIXIN, type);
             case ENTITY:
-                return CausewayBeanMetaData.causewayManaged(BeanSort.ENTITY, type);
+                return CausewayBeanMetaData.entity(PersistenceStack.UNSPECIFIED, LogicalType.infer(type));
             case VIEW_MODEL:
             case NOT_SPECIFIED:
                 //because object is not associated with a persistence context unless discovered above

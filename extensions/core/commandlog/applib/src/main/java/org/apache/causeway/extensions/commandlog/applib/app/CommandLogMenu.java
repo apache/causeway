@@ -22,14 +22,13 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
@@ -56,7 +55,7 @@ import lombok.RequiredArgsConstructor;
     menuBar = DomainServiceLayout.MenuBar.SECONDARY,
     named = "Activity"
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class CommandLogMenu {
 
@@ -76,7 +75,7 @@ public class CommandLogMenu {
             semantics = SemanticsOf.SAFE,
             typeOf = CommandLogEntry.class
     )
-    @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, cssClassFa = "fa-bolt", sequence="10")
+    @ActionLayout(cssClassFa = "fa-bolt", sequence="10")
     public class activeCommands {
         public class DomainEvent extends ActionDomainEvent<activeCommands> { }
 

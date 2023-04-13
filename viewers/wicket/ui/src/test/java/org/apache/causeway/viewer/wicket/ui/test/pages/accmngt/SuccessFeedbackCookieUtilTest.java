@@ -20,8 +20,8 @@ package org.apache.causeway.viewer.wicket.ui.test.pages.accmngt;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.apache.wicket.ThreadContext;
 import org.apache.wicket.mock.MockWebResponse;

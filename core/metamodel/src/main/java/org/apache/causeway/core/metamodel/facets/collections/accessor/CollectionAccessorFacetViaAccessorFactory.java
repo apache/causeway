@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.facets.collections.accessor;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
@@ -49,7 +49,7 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
     }
 
     private void attachAccessorFacetForAccessorMethod(final ProcessMethodContext processMethodContext) {
-        final Method accessorMethod = processMethodContext.getMethod();
+        val accessorMethod = processMethodContext.getMethod().asMethodElseFail(); // no-arg method, should have a regular facade
         processMethodContext.removeMethod(accessorMethod);
 
         val cls = processMethodContext.getCls();

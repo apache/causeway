@@ -11,7 +11,12 @@
 
 ** Automated Analysis
 *** link:https://sonarcloud.io/dashboard?id=apache_causeway[SonarCloud.io]
-*** link:https://fisheye.apache.org/browse/~br=master/causeway-git/[ASF Fisheye]
+
+** Interim Builds
+
+*** xref:comguide:ROOT:nightly-builds.adoc[]
+*** xref:comguide:ROOT:weekly-builds.adoc[]
+*** link:https://apache-causeway-committers.github.io/causeway-nightly[Website Preview]
 
 
 ** Development

@@ -512,17 +512,6 @@ implements ObjectSpecification {
                     getFullIdentifier()));
     }
 
-    @Override
-    public String getPluralName() {
-        return lookupFacet(ObjectNamedFacet.class)
-            .flatMap(textFacet->textFacet.translated(NounForm.PLURAL))
-            // unexpected code reach, however keep for JUnit testing
-            .orElseGet(()->String.format(
-                    "(%s has neither title- nor object-named-facet)",
-                    getFullIdentifier()));
-
-    }
-
     /**
      * The translated description according to any available {@link ObjectDescribedFacet},
      * else empty string (<tt>""</tt>).
@@ -673,6 +662,10 @@ implements ObjectSpecification {
     public Optional<? extends ObjectMember> getMember(final String memberId) {
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
 
+        if(_Strings.isEmpty(memberId)) {
+            return Optional.empty();
+        }
+        
         val objectAction = getAction(memberId);
         if(objectAction.isPresent()) {
             return objectAction;
@@ -687,6 +680,11 @@ implements ObjectSpecification {
     @Override
     public Optional<ObjectAssociation> getDeclaredAssociation(final String id, final MixedIn mixedIn) {
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
+        
+        if(_Strings.isEmpty(id)) {
+            return Optional.empty();
+        }
+        
         return streamDeclaredAssociations(mixedIn)
                 .filter(objectAssociation->objectAssociation.getId().equals(id))
                 .findFirst();

@@ -110,9 +110,9 @@ To get you started, the following fragment adds all of the actions to an "Activi
         ...
         <mb3:section>
             <mb3:named>Execution Log</mb3:named>
-            <mb3:serviceAction id="findMostRecent" objectType="isis.ext.executionLog.ExecutionLogMenu"/>
-            <mb3:serviceAction id="findExecutions" objectType="isis.ext.executionLog.ExecutionLogMenu"/>
-            <mb3:serviceAction id="findAll" objectType="isis.ext.executionLog.ExecutionLogMenu"/>
+            <mb3:serviceAction id="findMostRecent" objectType="causeway.ext.executionLog.ExecutionLogMenu"/>
+            <mb3:serviceAction id="findExecutions" objectType="causeway.ext.executionLog.ExecutionLogMenu"/>
+            <mb3:serviceAction id="findAll" objectType="causeway.ext.executionLog.ExecutionLogMenu"/>
         </mb3:section>
         ...
     </mb3:menu>

@@ -18,15 +18,15 @@
  */
 package org.apache.causeway.core.metamodel.facets.collections.layout;
 
-import java.util.Optional;
-
+import lombok.val;
 import org.apache.causeway.applib.annotation.CollectionLayout;
+import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.CollectionLayoutTableDecorationFacet;
 import org.apache.causeway.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.causeway.core.metamodel.facets.object.paged.PagedFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet;
 
-import lombok.val;
+import java.util.Optional;
 
 public class PagedFacetForCollectionLayoutAnnotation extends PagedFacetAbstract {
 
@@ -34,8 +34,8 @@ public class PagedFacetForCollectionLayoutAnnotation extends PagedFacetAbstract 
             final Optional<CollectionLayout> collectionLayoutIfAny,
             final FacetHolder holder) {
 
-        val tableDecorationFacet = holder.getFacet(CollectionLayoutTableDecorationFacet.class);
-        if (tableDecorationFacet.value().isDataTablesNet()) {
+        val tableDecoratorFacet = holder.getFacet(TableDecoratorFacet.class);
+        if (TableDecorator.DatatablesNet.class.equals(tableDecoratorFacet.value())) {
             return Optional.of(new PagedFacetOverriddenByDataTablesDecoration(holder));
         }
 
@@ -46,7 +46,7 @@ public class PagedFacetForCollectionLayoutAnnotation extends PagedFacetAbstract 
     }
 
     private PagedFacetForCollectionLayoutAnnotation(final int paged, final FacetHolder holder) {
-        super(paged, holder);
+        super(paged, holder, Precedence.DEFAULT);
     }
 
 }

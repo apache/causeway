@@ -51,6 +51,17 @@ public interface Grid {
     @Programmatic
     void setTnsAndSchemaLocation(final String tnsAndSchemaLocation);
 
+    /**
+     * Indicates whether or not this grid is a fallback.
+     * {@code True}, if this Grid originates from
+     * {@link org.apache.causeway.applib.services.grid.GridSystemService#defaultGrid(Class)}.
+     * <p>
+     * Governs meta-model facet precedence, that is,
+     * facets from annotations should overrule those from fallback XML grids.
+     */
+    @Programmatic
+    default boolean isFallback() { return false; }
+
     @Programmatic
     boolean isNormalized();
 

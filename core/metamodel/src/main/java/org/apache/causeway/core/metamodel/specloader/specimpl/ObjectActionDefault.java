@@ -34,7 +34,6 @@ import org.apache.causeway.commons.collections.CanVector;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResultSet;
@@ -377,13 +376,13 @@ implements ObjectAction {
         // use it?
         final Consent usability = isUsable(target, interactionInitiatedBy, where);
         if(usability.isVetoed()) {
-            throw new DisabledException(usability.getReason());
+            throw new DisabledException(usability.getReasonAsString().orElse("no reason given"));
         }
 
         // do it?
         final Consent validity = isArgumentSetValid(head, arguments, interactionInitiatedBy);
         if(validity.isVetoed()) {
-            throw new RecoverableException(validity.getReason());
+            throw new RecoverableException(validity.getReasonAsString().orElse("no reason given"));
         }
 
         return execute(head, arguments, interactionInitiatedBy);
@@ -531,9 +530,9 @@ implements ObjectAction {
     }
 
     private boolean calculateIsExplicitlyAnnotated() {
-        val javaMethod = getFacetedMethod().getMethod();
-        return _Annotations.synthesize(javaMethod, Action.class).isPresent()
-                || _Annotations.synthesize(javaMethod, ActionLayout.class).isPresent();
+        val methodFacade = getFacetedMethod().getMethod();
+        return methodFacade.synthesize(Action.class).isPresent()
+                || methodFacade.synthesize(ActionLayout.class).isPresent();
     }
 
 }

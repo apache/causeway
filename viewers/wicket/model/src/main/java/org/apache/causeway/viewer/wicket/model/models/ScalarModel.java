@@ -195,7 +195,7 @@ implements HasRenderingHints, UiScalar, LinksProvider, FormExecutorContext {
     }
 
     public boolean isEnabled() {
-        return disableReasonIfAny() == null;
+        return !disabledReason().isPresent();
     }
 
     // //////////////////////////////////////

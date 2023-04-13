@@ -229,16 +229,16 @@ class _ExcelServiceHelper {
 
     // -- DEPENDENCIES
 
-    @javax.inject.Inject
+    @jakarta.inject.Inject
     BookmarkService bookmarkService;
 
-    @javax.inject.Inject
+    @jakarta.inject.Inject
     SpecificationLoader specificationLoader;
 
-    @javax.inject.Inject
+    @jakarta.inject.Inject
     ServiceInjector serviceInjector;
 
-    @javax.inject.Inject
+    @jakarta.inject.Inject
     ObjectManager objectManager;
 
 }

@@ -24,7 +24,7 @@ import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.services.command.CommandExecutorService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
@@ -171,7 +171,7 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
         transactionService.runWithinCurrentTransactionElseCreateNew(
                 () -> {
                     commandExecutorService.executeCommand(
-                        CommandExecutorService.InteractionContextPolicy.SWITCH_USER_AND_TIME, commandLogEntry.getCommandDto(), commandLogEntry.outcomeHandler());
+                        CommandExecutorService.InteractionContextPolicy.SWITCH_USER_AND_TIME, commandLogEntry.getCommandDto());
                 });
 
         transactionService.runWithinCurrentTransactionElseCreateNew(() -> {

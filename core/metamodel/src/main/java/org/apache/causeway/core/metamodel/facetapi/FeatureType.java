@@ -24,6 +24,7 @@ import java.lang.reflect.Method;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.commons.StringExtensions;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
 
@@ -42,25 +43,25 @@ public enum FeatureType {
          * The supplied method can be null; at any rate it will be ignored.
          */
         @Override
-        public Identifier identifierFor(final LogicalType typeIdentifier, final Method method) {
+        public Identifier identifierFor(final LogicalType typeIdentifier, final MethodFacade method) {
             return Identifier.classIdentifier(typeIdentifier);
         }
     },
     PROPERTY("Property") {
         @Override
-        public Identifier identifierFor(final LogicalType typeIdentifier, final Method method) {
-            return propertyIdentifierFor(typeIdentifier, method);
+        public Identifier identifierFor(final LogicalType typeIdentifier, final MethodFacade method) {
+            return propertyIdentifierFor(typeIdentifier, method.asMethodElseFail()); // expected regular
         }
     },
     COLLECTION("Collection") {
         @Override
-        public Identifier identifierFor(final LogicalType typeIdentifier, final Method method) {
-            return collectionIdentifierFor(typeIdentifier, method);
+        public Identifier identifierFor(final LogicalType typeIdentifier, final MethodFacade method) {
+            return collectionIdentifierFor(typeIdentifier, method.asMethodElseFail()); // expected regular
         }
     },
     ACTION("Action") {
         @Override
-        public Identifier identifierFor(final LogicalType typeIdentifier, final Method method) {
+        public Identifier identifierFor(final LogicalType typeIdentifier, final MethodFacade method) {
             final String fullMethodName = method.getName();
             final Class<?>[] parameterTypes = method.getParameterTypes();
             return Identifier.actionIdentifier(typeIdentifier, fullMethodName, parameterTypes);
@@ -71,7 +72,7 @@ public enum FeatureType {
          * Always returns <tt>null</tt>.
          */
         @Override
-        public Identifier identifierFor(final LogicalType typeIdentifier, final Method method) {
+        public Identifier identifierFor(final LogicalType typeIdentifier, final MethodFacade method) {
             return null;
         }
     },
@@ -80,7 +81,7 @@ public enum FeatureType {
          * Always returns <tt>null</tt>.
          */
         @Override
-        public Identifier identifierFor(final LogicalType typeIdentifier, final Method method) {
+        public Identifier identifierFor(final LogicalType typeIdentifier, final MethodFacade method) {
             return null;
         }
     };
@@ -150,7 +151,7 @@ public enum FeatureType {
         return isProperty() || isCollection();
     }
 
-    public abstract Identifier identifierFor(LogicalType typeIdentifier, Method method);
+    public abstract Identifier identifierFor(LogicalType typeIdentifier, MethodFacade method);
 
     @Override
     public String toString() {

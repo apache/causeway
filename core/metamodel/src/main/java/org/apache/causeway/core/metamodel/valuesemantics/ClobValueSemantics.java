@@ -20,8 +20,8 @@ package org.apache.causeway.core.metamodel.valuesemantics;
 
 import java.util.function.UnaryOperator;
 
-import javax.annotation.Priority;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Component;
 
@@ -37,7 +37,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.schema.common.v2.ValueType;
 
 @Component
-@Named("causeway.val.ClobValueSemantics")
+@Named("causeway.metamodel.value.ClobValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class ClobValueSemantics
 extends ValueSemanticsAbstract<Clob>

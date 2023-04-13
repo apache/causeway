@@ -21,7 +21,7 @@ package org.apache.causeway.extensions.executionoutbox.restclient.integtests;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -81,7 +81,7 @@ public class OutboxRestClient_IntegTest  {
 
             // mixins
             Counter_bumpUsingMixin.class,
-            Counter_bumpUsingMixinWithExecutionPublishingDisabled.class
+            Counter_bumpUsingMixinWithExecutionPublishingDisabled.class,
     })
     @PropertySources({
             @PropertySource(CausewayPresets.UseLog4j2Test)

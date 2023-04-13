@@ -23,7 +23,7 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.params.provider.Arguments;
 import org.springframework.stereotype.Service;

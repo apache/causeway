@@ -17,7 +17,7 @@
 	<parent>
 		<groupId>org.apache.causeway</groupId>
 		<artifactId>causeway-bom</artifactId>
-		<version>2.0.0-SNAPSHOT</version>
+		<version>3.0.0-SNAPSHOT</version>
 		<relativePath>../bom/pom.xml</relativePath>
 	</parent>
 
@@ -28,37 +28,27 @@
 	<description>
         Libraries and tools not depending on the _Apache Causeway Core_ ecosystem,
         eg. code mining, automated documentation.
-        (Targeted for JVM 11+)
+        (Targeted for JVM 17+)
     </description>
 
 	<packaging>pom</packaging>
 
 	<properties>
 
-		<maven.compiler.release>11</maven.compiler.release>
+		<maven.compiler.release>17</maven.compiler.release>
 
 		<jar-plugin.automaticModuleName>org.apache.causeway.tooling</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/causeway/tooling</git-plugin.propertiesDir>
-		<gradle-tooling.version>7.1.1</gradle-tooling.version>
-		<maven-model-builder.version>3.8.6</maven-model-builder.version>
-		<picocli.version>4.7.0</picocli.version>
-		<structurizr.version>1.16.2</structurizr.version>
-		<structurizr-plantuml.version>1.6.3</structurizr-plantuml.version>
-
+		<gradle-tooling.version>7.3-20210825160000+0000</gradle-tooling.version>
+		<maven-model-builder.version>3.9.1</maven-model-builder.version>
+		<picocli.version>4.7.2</picocli.version>
+		
+		<!-- brings in structurizr-core as a transitive dependency -->
+		<structurizr-export.version>1.14.0</structurizr-export.version>
+		
+		<!-- override surefire defaults from bom, as this is not a Java module yet -->
+		<surefire-plugin.argLine>-Xmx384m</surefire-plugin.argLine>
 	</properties>
-
-	<repositories>
-		<repository>
-			<id>gradle-repo</id>
-			<url>https://repo.gradle.org/gradle/libs-releases-local/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
 
 	<build>
 		<resources>
@@ -237,15 +227,9 @@
 			</dependency>
 
 			<dependency>
-				<groupId>com.structurizr</groupId>
-				<artifactId>structurizr-core</artifactId>
-				<version>${structurizr.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.structurizr</groupId>
-				<artifactId>structurizr-plantuml</artifactId>
-				<version>${structurizr-plantuml.version}</version>
+			    <groupId>com.structurizr</groupId>
+			    <artifactId>structurizr-export</artifactId>
+			    <version>${structurizr-export.version}</version>
 			</dependency>
 
 		</dependencies>
@@ -272,7 +256,7 @@
         <dependency>
 		    <groupId>org.checkerframework</groupId>
 		    <artifactId>checker-qual</artifactId>
-		    <version>3.28.0</version>
+		    <version>3.33.0</version>
 		</dependency>
 
 		<!-- LOGGING -->
@@ -302,7 +286,6 @@
 			<groupId>org.apache.causeway.core</groupId>
 			<artifactId>causeway-core-internaltestsupport</artifactId>
 			<scope>test</scope>
-			<version>${project.version}</version>
 		</dependency>
 
 	</dependencies>
@@ -317,8 +300,6 @@
 		<module>cli</module>
 	</modules>
 
-	<profiles>
-	</profiles>
 </project>
 
 

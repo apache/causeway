@@ -22,11 +22,14 @@ module org.apache.causeway.valuetypes.asciidoc.applib {
     exports org.apache.causeway.valuetypes.asciidoc.applib.jaxb;
 
     requires asciidoctorj.api;
-    requires java.inject;
-    requires java.xml.bind;
+    requires jakarta.inject;
+    requires jakarta.xml.bind;
     requires lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;
     requires spring.context;
     requires spring.core;
+    requires org.apache.causeway.core.config;
+    requires spring.boot.autoconfigure;
+    requires java.net.http;
 }

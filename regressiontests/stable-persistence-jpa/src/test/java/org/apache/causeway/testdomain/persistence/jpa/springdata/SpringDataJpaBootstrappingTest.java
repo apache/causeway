@@ -20,7 +20,7 @@ package org.apache.causeway.testdomain.persistence.jpa.springdata;
 
 import java.util.Optional;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -47,8 +47,6 @@ import org.apache.causeway.testdomain.conf.Configuration_usingSpringDataJpa;
 import org.apache.causeway.testdomain.jpa.springdata.Employee;
 import org.apache.causeway.testdomain.jpa.springdata.EmployeeRepository;
 import org.apache.causeway.testdomain.jpa.springdata.SpringDataJpaTestModule;
-import org.apache.causeway.testing.fixtures.applib.fixturescripts.ExecutionParametersServiceAutoConfiguration;
-import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScriptsSpecificationProviderAutoConfiguration;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
 import lombok.val;
@@ -56,8 +54,6 @@ import lombok.val;
 @DataJpaTest
 @ContextConfiguration(classes = {
         Configuration_usingSpringDataJpa.class,
-        FixtureScriptsSpecificationProviderAutoConfiguration.class, // because @DataJpaTest disables autoconfiguration
-        ExecutionParametersServiceAutoConfiguration.class           // because @DataJpaTest disables autoconfiguration
 })
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)

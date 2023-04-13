@@ -18,10 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.valuesemantics;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
+import org.apache.causeway.applib.CausewayModuleApplib;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -32,10 +34,12 @@ import org.apache.causeway.core.metamodel.valuetypes.ValueSemanticsAdapter;
 import org.apache.causeway.schema.common.v2.OidDto;
 
 @Component
-@Named("causeway.val.OidDtoValueSemantics")
+@Named(OidDtoValueSemantics.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.LATE)
 public class OidDtoValueSemantics
 extends ValueSemanticsAdapter<OidDto, Bookmark, Void> {
+
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleCoreMetamodel.NAMESPACE_VALUE + ".OidDtoValueSemantics";
 
     @Inject BookmarkValueSemantics bookmarkValueSemantics;
 

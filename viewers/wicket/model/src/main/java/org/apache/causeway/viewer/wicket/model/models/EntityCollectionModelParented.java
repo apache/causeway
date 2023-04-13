@@ -18,13 +18,10 @@
  */
 package org.apache.causeway.viewer.wicket.model.models;
 
-import java.util.Optional;
-
 import org.apache.wicket.Component;
 
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataTableModelWkt;
@@ -43,34 +40,35 @@ implements
     // TODO parent object model, maybe should not be exposed
     // maybe could be resolved in the process of decoupling the ActionModel from Wicket
     @Getter private final @NonNull UiObjectWkt entityModel;
+    @Getter private final @NonNull CollectionLayoutData layoutData;
 
     // -- FACTORIES
 
     public static EntityCollectionModelParented forParentObjectModel(
-            final @NonNull UiObjectWkt entityModel) {
+            final @NonNull UiObjectWkt entityModel, final @NonNull CollectionLayoutData layoutData) {
 
-        val collMetaModel =
-                Optional.ofNullable(entityModel.getCollectionLayoutData())
-                .map(collectionLayoutData->
-                    entityModel
+        val coll = entityModel
                         .getTypeOfSpecification()
-                        .getCollectionElseFail(collectionLayoutData.getId()))
-                .orElseThrow(()->_Exceptions
-                        .illegalArgument("EntityModel must have CollectionLayoutMetadata"));
+                        .getCollectionElseFail(layoutData.getId()); // collection's member-id
+
+        val dataTableModel = DataTableModelWkt
+                .forCollection(entityModel.bookmarkedObjectModel(), coll);
 
         return new EntityCollectionModelParented(
-                DataTableModelWkt
-                .forCollection(entityModel.bookmarkedObjectModel(), collMetaModel),
-                entityModel);
+                dataTableModel,
+                entityModel,
+                layoutData);
     }
 
     // -- CONSTRUCTOR
 
     protected EntityCollectionModelParented(
             final @NonNull DataTableModelWkt delegate,
-            final @NonNull UiObjectWkt parentObjectModel) { //TODO maybe instead use the delegate (?)
+            final @NonNull UiObjectWkt parentObjectModel,  //TODO maybe instead use the delegate (?)
+            final @NonNull CollectionLayoutData layoutData) {
         super(delegate, Variant.PARENTED);
         this.entityModel = parentObjectModel;
+        this.layoutData = layoutData;
     }
 
     // -- UI HINT CONTAINER
@@ -95,10 +93,6 @@ implements
     @Override
     public OneToManyAssociation getMetaModel() {
         return (OneToManyAssociation) super.getMetaModel();
-    }
-
-    public CollectionLayoutData getLayoutData() {
-        return entityModel.getCollectionLayoutData();
     }
 
     public Bookmark asHintingBookmark() {

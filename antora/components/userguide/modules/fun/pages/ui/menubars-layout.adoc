@@ -110,9 +110,9 @@ For example, here's a fragment of that provided by the xref:docs:starters:simple
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <mb3:menuBars
     xsi:schemaLocation="..."
-    xmlns:cpt="http://causeway.apache.org/applib/layout/component"
-    xmlns:lnk="http://causeway.apache.org/applib/layout/links"
-    xmlns:mb3="http://causeway.apache.org/applib/layout/menubars/bootstrap3"
+    xmlns:cpt="https://causeway.apache.org/applib/layout/component"
+    xmlns:lnk="https://causeway.apache.org/applib/layout/links"
+    xmlns:mb3="https://causeway.apache.org/applib/layout/menubars/bootstrap3"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <mb3:primary>                                               <!--.-->
         <mb3:menu>                                              <!--.-->

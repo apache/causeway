@@ -23,7 +23,7 @@ import org.apache.causeway.client.kroviz.snapshots.Response
 object FR_OBJECT_LAYOUT : Response() {
     override val url = "http://localhost:8080/restful/objects/causewayApplib.FixtureResult/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1lbWVudG8-PGtleT5kb21haW4tYXBwLWRlbW8vcGVyc2lzdC1hbGwvaXRlbS01PC9rZXk-PG9iamVjdC5ib29rbWFyaz5zaW1wbGUuU2ltcGxlT2JqZWN0OjExNDwvb2JqZWN0LmJvb2ttYXJrPjwvbWVtZW50bz4=/object-layout"
     override val str = """
-<bs3:grid xmlns:cpt="http://causeway.apache.org/applib/layout/component" xmlns:lnk="http://causeway.apache.org/applib/layout/links" xmlns:bs3="http://causeway.apache.org/applib/layout/grid/bootstrap3">
+<bs3:grid xmlns:cpt="https://causeway.apache.org/applib/layout/component" xmlns:lnk="https://causeway.apache.org/applib/layout/links" xmlns:bs3="https://causeway.apache.org/applib/layout/grid/bootstrap3">
     <bs3:row>
         <bs3:col span="12" unreferencedActions="true">
             <cpt:domainObject>

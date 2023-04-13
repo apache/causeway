@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.testdomain.model.actnsemantics;
 
-import javax.inject.Named;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import jakarta.inject.Named;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;
@@ -52,8 +52,8 @@ public class BlobDemo {
     public void initDefaults() {
 
         try {
-            val bytes = _Bytes.of(_Resources.load(BlobDemo.class, "causeway-logo-568x286.png"));
-            logo = Blob.of("causeway-logo-56x64", CommonMimeType.PNG, bytes);
+            val bytes = _Bytes.of(_Resources.load(BlobDemo.class, "causeway-logo-605x449.png"));
+            logo = Blob.of("causeway-logo-605x449.png", CommonMimeType.PNG, bytes);
         } catch (Exception e) {
             log.error("failed to create Blob from image resource", e);
         }

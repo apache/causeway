@@ -19,14 +19,14 @@
 
 package org.apache.causeway.applib.annotation;
 
-import javax.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * 
+ *
  * @since 1.x {@index}
  */
 @XmlType(
-        namespace = "http://causeway.apache.org/applib/layout/component"
+        namespace = "https://causeway.apache.org/applib/layout/component"
         )
 public enum BookmarkPolicy {
 
@@ -49,6 +49,9 @@ public enum BookmarkPolicy {
      * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta
      * annotations or superclasses/interfaces).
      */
-    NOT_SPECIFIED
+    NOT_SPECIFIED;
+
+    public boolean isRoot() {return this == AS_ROOT;}
+    public boolean isChild() {return this == AS_CHILD;}
 
 }

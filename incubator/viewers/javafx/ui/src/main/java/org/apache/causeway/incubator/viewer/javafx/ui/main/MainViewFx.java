@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.incubator.viewer.javafx.ui.main;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.springframework.stereotype.Component;
 
@@ -104,9 +104,9 @@ public class MainViewFx {
         val leftMenuBuilder = MenuBuilderFx.of(uiContext, menuBarLeft, uiActionHandler::handleActionLinkClicked);
         val rightMenuBuilder = MenuBuilderFx.of(uiContext, menuBarRight, uiActionHandler::handleActionLinkClicked);
 
-        header.getPrimary().buildMenuItems(metaModelContext, leftMenuBuilder);
-        header.getSecondary().buildMenuItems(metaModelContext, rightMenuBuilder);
-        header.getTertiary().buildMenuItems(metaModelContext, rightMenuBuilder);
+        header.navbar().primary().visitMenuItems(leftMenuBuilder);
+        header.navbar().secondary().visitMenuItems(rightMenuBuilder);
+        header.navbar().tertiary().visitMenuItems(rightMenuBuilder);
     }
 
     private void replaceContent(final Node node) {

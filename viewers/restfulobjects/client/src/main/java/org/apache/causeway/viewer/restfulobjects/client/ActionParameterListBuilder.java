@@ -22,7 +22,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.ws.rs.client.Entity;
+import jakarta.ws.rs.client.Entity;
+
+import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 
 import lombok.Getter;
 
@@ -84,6 +86,14 @@ public class ActionParameterListBuilder {
         actionParameters.put(parameterName, value(""+parameterValue));
         actionParameterTypes.put(parameterName, boolean.class);
         return this;
+    }
+
+    /**
+     * For transport of {@link ValueDecomposition} over REST.
+     * @see RestfulClient#digestValue(javax.ws.rs.core.Response, org.apache.causeway.applib.value.semantics.ValueSemanticsProvider)
+     */
+    public ActionParameterListBuilder addActionParameter(final String parameterName, final ValueDecomposition decomposition) {
+        return addActionParameter(parameterName, decomposition.stringify());
     }
 
 //XXX would be nice to have, but also requires the RO spec to be updated

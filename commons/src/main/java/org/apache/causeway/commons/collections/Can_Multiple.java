@@ -35,6 +35,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
@@ -284,6 +285,53 @@ final class Can_Multiple<T> implements Can<T> {
             }
         }
         return Can.ofCollection(newElements);
+    }
+
+    @Override
+    public Can<T> pickByIndex(final @Nullable IntStream intStream) {
+        if(intStream==null) {
+            return Can.empty();
+        }
+        val newElements = new ArrayList<T>();
+        final int maxIndex = size()-1;
+        intStream
+        .filter(index->index>=0 && index<=maxIndex)
+        .forEach(index->{
+            newElements.add(elements.get(index));
+        });
+        return _CanFactory.ofNonNullElements(newElements);
+    }
+
+    @Override
+    public Can<T> subCan(final int startInclusive, final int endExclusive) {
+        if (startInclusive >= endExclusive) {
+            return Can.empty();
+        }
+        return pickByIndex(IntStream.range(startInclusive, endExclusive));
+    }
+
+    @Override
+    public Can<Can<T>> partitionInnerBound(final int maxInnerSize) {
+        if(maxInnerSize<1) {
+            throw _Exceptions.illegalArgument("maxInnerSize %d must be greater or equal to 1", maxInnerSize);
+        }
+        final int n = size();
+        final int subCanCount = (n - 1)/maxInnerSize + 1;
+        val newElements = new ArrayList<Can<T>>(subCanCount);
+        for(int i=0; i<n; i+=maxInnerSize) {
+            newElements.add(subCan(i, i + maxInnerSize)); // index overflow is ignored
+        }
+        return _CanFactory.ofNonNullElements(newElements);
+    }
+
+    @Override
+    public Can<Can<T>> partitionOuterBound(final int outerSizeYield) {
+        if(outerSizeYield<1) {
+            throw _Exceptions.illegalArgument("outerSizeYield %d must be greater or equal to 1", outerSizeYield);
+        }
+        final int n = size();
+        final int maxInnerSize = (n - 1)/outerSizeYield + 1;
+        return partitionInnerBound(maxInnerSize);
     }
 
     @Override

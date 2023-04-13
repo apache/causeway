@@ -309,6 +309,19 @@ public final class _NullSafe {
     public static int size(final @Nullable EnumSet<?> enumSet){ return enumSet!=null ? enumSet.size() : 0; }
     public static int size(final @Nullable ImmutableEnumSet<?> enumSet){ return enumSet!=null ? enumSet.size() : 0; }
 
+    // -- NON-NULL VARIANTS
+
+    public static String toNonNull(final @Nullable String x){ return x!=null ? x : ""; }
+    public static boolean[] toNonNull(final @Nullable boolean[] array){ return array!=null ? array : new boolean[0]; }
+    public static byte[] toNonNull(final @Nullable byte[] array){ return array!=null ? array : new byte[0]; }
+    public static char[] toNonNull(final @Nullable char[] array){ return array!=null ? array : new char[0]; }
+    public static double[] toNonNull(final @Nullable double[] array){ return array!=null ? array : new double[0]; }
+    public static float[] toNonNull(final @Nullable float[] array){ return array!=null ? array : new float[0]; }
+    public static int[] toNonNull(final @Nullable int[] array){ return array!=null ? array : new int[0]; }
+    public static long[] toNonNull(final @Nullable long[] array){ return array!=null ? array : new long[0]; }
+    public static short[] toNonNull(final @Nullable short[] array){ return array!=null ? array : new short[0]; }
+    public static <T> T[] toNonNull(final @Nullable T[] array){ return array!=null ? array : _Casts.uncheckedCast(new Object[0]); }
+
     // -- TO STRING
 
     public static String toString(final @Nullable Object obj) {

@@ -15,6 +15,7 @@ interface Grid {
   void setDomainClass(Class<?> domainClass)
   String getTnsAndSchemaLocation()
   void setTnsAndSchemaLocation(String tnsAndSchemaLocation)
+  boolean isFallback()     // <.>
   boolean isNormalized()
   void setNormalized(boolean normalized)
   LinkedHashMap<String, PropertyLayoutData> getAllPropertiesById()
@@ -24,3 +25,17 @@ interface Grid {
 }
 ----
 
+<.> xref:#isFallback_[isFallback()]
++
+--
+Indicates whether or not this grid is a fallback. _True_ , if this Grid originates from _org.apache.causeway.applib.services.grid.GridSystemService#defaultGrid(Class)_ .
+--
+
+== Members
+
+[#isFallback_]
+=== isFallback()
+
+Indicates whether or not this grid is a fallback. _True_ , if this Grid originates from _org.apache.causeway.applib.services.grid.GridSystemService#defaultGrid(Class)_ .
+
+Governs meta-model facet precedence, that is, facets from annotations should overrule those from fallback XML grids.

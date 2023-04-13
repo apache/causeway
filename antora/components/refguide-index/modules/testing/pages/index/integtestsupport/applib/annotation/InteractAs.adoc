@@ -17,6 +17,8 @@ void test() {
 }
 ----
 
+It can also be applied to a class, meaning it will apply to all tests within that class.
+
 == API
 
 [source,java]

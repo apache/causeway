@@ -20,76 +20,102 @@ package org.apache.causeway.viewer.wicket.model.models;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
+import java.util.concurrent.atomic.LongAdder;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.springframework.lang.Nullable;
+import org.apache.wicket.request.resource.ResourceReference;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.base._Refs;
+import org.apache.causeway.commons.functional.Either;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.object.ManagedObjects;
-import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.causeway.viewer.wicket.model.mementos.PageParameterNames;
+import org.apache.causeway.commons.internal.functions._Functions;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.val;
 
-public class BookmarkTreeNode implements Serializable {
+public class BookmarkTreeNode
+implements
+    Comparable<BookmarkTreeNode>, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final List<BookmarkTreeNode> children = _Lists.newArrayList();
-    private final int depth;
+    @Getter private final List<BookmarkTreeNode> children = _Lists.newArrayList();
+    @Getter private final int depth; // starting at root with depth = 0
+    @Getter private final @NonNull Bookmark bookmark;
+    @Getter private final @NonNull PageParameters pageParameters;
 
-    @Getter private final Bookmark oidNoVer; //TODO rename field, versions have been removed
-    @Getter private final String oidNoVerStr; //TODO rename field, versions have been removed
+    @Getter private String title;
 
-    private String title;
-    private PageParameters pageParameters;
+    /** its either a iconResourceReference or a iconFaClass or neither (decomposed for easy serialization) */
+    private ResourceReference iconResourceReference;
+    /** its either a iconResourceReference or a iconFaClass or neither (decomposed for easy serialization) */
+    private String iconFaClass;
+
+    //private final Set<Bookmark> propertyBookmarks; ... in support of parents referencing their child
+
+    // -- FACTORIES
 
     public static BookmarkTreeNode newRoot(
-            final BookmarkableModel bookmarkableModel) {
-        return new BookmarkTreeNode(bookmarkableModel, 0);
+            final @NonNull Bookmark bookmark,
+            final @NonNull BookmarkableModel bookmarkableModel) {
+        return new BookmarkTreeNode(bookmark, bookmarkableModel, 0);
     }
+
+    // -- CONSTRUCTION
 
     private BookmarkTreeNode(
-            final BookmarkableModel bookmarkableModel,
+            final @NonNull Bookmark bookmark,
+            final @NonNull BookmarkableModel bookmarkableModel,
             final int depth) {
 
-        pageParameters = bookmarkableModel.getPageParametersWithoutUiHints();
-
-        oidNoVer = bookmarkFrom(pageParameters);
-        oidNoVerStr = oidNoVer!=null
-                ? oidNoVer.stringify()
-                : null;
-
-        // replace oid with the noVer equivalent.
-        PageParameterNames.OBJECT_OID.removeFrom(pageParameters);
-        PageParameterNames.OBJECT_OID.addStringTo(pageParameters, getOidNoVerStr());
+        this.pageParameters = bookmarkableModel.getPageParametersWithoutUiHints();
+        this.bookmark = bookmark;
+//        this.propertyBookmarks = bookmarkableModel.streamPropertyBookmarks()
+//                .collect(Collectors.toCollection(HashSet::new));
 
         this.title = bookmarkableModel.getTitle();
+
+        _Casts.castTo(UiObjectWkt.class, bookmarkableModel)
+        .map(UiObjectWkt::getIconAsResourceReference)
+        .ifPresent(either->either.accept(
+                iconResourceReference->
+                    this.iconResourceReference = iconResourceReference,
+                faFactory->
+                    this.iconFaClass = faFactory.asSpaceSeparated()
+                )
+        );
+
         this.depth = depth;
-
     }
 
-    public String getTitle() {
-        return title;
-    }
-    private void setTitle(final String title) {
-        this.title = title;
+    // -- ICON
+
+    public Either<ResourceReference, String> eitherIconOrFaClass() {
+        return iconFaClass==null
+                ? Either.left(iconResourceReference)
+                : Either.right(iconFaClass);
     }
 
-    public List<BookmarkTreeNode> getChildren() {
-        return children;
-    }
-    public BookmarkTreeNode addChild(final BookmarkableModel childModel) {
-        final BookmarkTreeNode childNode = new BookmarkTreeNode(childModel, depth+1);
-        children.add(childNode);
-        return childNode;
+    // -- COMPARATOR
+
+    @Override
+    public int compareTo(final BookmarkTreeNode o2) {
+
+        val o1 = this;
+
+        // sort by entity type
+        val typeName1 = o1.getBookmark().getLogicalTypeName();
+        val typeName2 = o2.getBookmark().getLogicalTypeName();
+
+        final int typeNameComparison = typeName1.compareTo(typeName2);
+        if(typeNameComparison != 0) {
+            return typeNameComparison;
+        }
+
+        return o1.getTitle().compareTo(o2.getTitle());
     }
 
     /**
@@ -113,6 +139,21 @@ public class BookmarkTreeNode implements Serializable {
         return false;
     }
 
+    public void appendGraphTo(final List<BookmarkTreeNode> list) {
+        list.add(this);
+        for (BookmarkTreeNode childNode : children) {
+            childNode.appendGraphTo(list);
+        }
+    }
+
+    // -- HELPER
+
+    private Optional<BookmarkTreeNode> addChild(final BookmarkableModel childModel) {
+        return childModel.toBookmark()
+                .map(bookmark->new BookmarkTreeNode(bookmark, childModel, depth+1))
+                .map(_Functions.peek(children::add));
+    }
+
     /**
      * Whether or not the provided {@link UiObjectWkt} matches that contained
      * within this node, or any of its children.
@@ -124,16 +165,14 @@ public class BookmarkTreeNode implements Serializable {
      * @return - whether the provided candidate is found or was added to this node's tree.
      */
     private boolean matchAndUpdateTitleFor(final UiObjectWkt candidateEntityModel) {
-
-        // match only on the oid string
-        final String candidateOidStr = oidStrFrom(candidateEntityModel);
-        boolean inGraph = Objects.equals(this.oidNoVerStr, candidateOidStr);
+        val candidateBookmark = candidateEntityModel.toBookmark().orElse(null);
+        boolean inGraph = getBookmark().equals(candidateBookmark);
         if(inGraph) {
-            this.setTitle(candidateEntityModel.getTitle());
+            this.title = candidateEntityModel.getTitle();
         }
 
         // and also match recursively down to all children and grand-children.
-        if(candidateEntityModel.hasAsChildPolicy()) {
+        if(candidateEntityModel.getBookmarkPolicy().isChild()) {
             for(BookmarkTreeNode childNode: this.getChildren()) {
                 inGraph = childNode.matches(candidateEntityModel) || inGraph; // evaluate each
             }
@@ -145,107 +184,67 @@ public class BookmarkTreeNode implements Serializable {
         return inGraph;
     }
 
+//    /**
+//     * Whether or not the provided {@link ActionModelImpl} matches that contained
+//     * within this node (taking into account the action's arguments).
+//     *
+//     * If it does match, then the matched node's title is updated to that of the provided
+//     * {@link ActionModelImpl}.
+//     * <p>
+//     *
+//     * @return - whether the provided candidate is found or was added to this node's tree.
+//     */
+//    private boolean matchFor(final ActionModelImpl candidateActionModel) {
+//
+//        val candidateBookmark = candidateActionModel.toBookmark().orElse(null);
+//
+//        // check if target object of the action is the same
+//        if(!Objects.equals(getBookmark(), candidateBookmark)) {
+//            return false;
+//        }
+//
+//        // check if args same
+//        List<String> thisArgs = PageParameterNames.ACTION_ARGS.getListFrom(pageParameters);
+//        PageParameters candidatePageParameters = candidateActionModel.getPageParameters();
+//        List<String> candidateArgs = PageParameterNames.ACTION_ARGS.getListFrom(candidatePageParameters);
+//        if(!Objects.equals(thisArgs, candidateArgs)) {
+//            return false;
+//        }
+//
+//        // ok, a match
+//        return true;
+//    }
+
     /**
-     * Whether or not the provided {@link ActionModelImpl} matches that contained
-     * within this node (taking into account the action's arguments).
-     *
-     * If it does match, then the matched node's title is updated to that of the provided
-     * {@link ActionModelImpl}.
-     * <p>
-     *
-     * @return - whether the provided candidate is found or was added to this node's tree.
+     * For given candidate model look into its properties and see whether one matches this node's bookmark.
+     * If so, we found a parent/child relation for the tree to populate
      */
-    private boolean matchFor(final ActionModelImpl candidateActionModel) {
-
-        // check if target object of the action is the same (the oid str)
-        final String candidateOidStr = oidStrFrom(candidateActionModel);
-        if(!Objects.equals(this.oidNoVerStr, candidateOidStr)) {
-            return false;
-        }
-
-        // check if args same
-        List<String> thisArgs = PageParameterNames.ACTION_ARGS.getListFrom(pageParameters);
-        PageParameters candidatePageParameters = candidateActionModel.getPageParameters();
-        List<String> candidateArgs = PageParameterNames.ACTION_ARGS.getListFrom(candidatePageParameters);
-        if(!Objects.equals(thisArgs, candidateArgs)) {
-            return false;
-        }
-
-        // ok, a match
-        return true;
-    }
-
     private boolean addToGraphIfParented(final BookmarkableModel candidateBookmarkableModel) {
 
-        val whetherAdded = _Refs.booleanRef(false);
+        val addedCount = new LongAdder();
 
-        // TODO: this ought to be move into a responsibility of BookmarkableModel, perhaps, rather than downcasting
-        if(candidateBookmarkableModel instanceof UiObjectWkt) {
-            val entityModel = (UiObjectWkt) candidateBookmarkableModel;
-            val candidateAdapter = entityModel.getObject();
+        candidateBookmarkableModel.streamPropertyBookmarks()
+        .filter(getBookmark()::equals)
+        .forEach(propBookmark->{
+            if(this.addChild(candidateBookmarkableModel).isPresent()) {
+                addedCount.increment();
+            }
+        });
 
-            candidateAdapter.getSpecification()
-            .streamAssociations(MixedIn.EXCLUDED)
-            .filter(ObjectAssociation.Predicates.REFERENCE_PROPERTIES) // properties only
-            .map(objectAssoc->{
-                val parentAdapter =
-                        objectAssoc.get(candidateAdapter, InteractionInitiatedBy.USER);
-                return parentAdapter;
-            })
-            .filter(_NullSafe::isPresent)
-            .map(parentAdapter->{
-                final Bookmark parentOid = ManagedObjects.bookmark(parentAdapter).orElse(null);
-                return parentOid;
-            })
-            .filter(_NullSafe::isPresent)
-            .map(parentOid->{
-                final String parentOidStr = parentOid.stringify();
-                return parentOidStr;
-            })
-            .forEach(parentOidStr->{
-                if(Objects.equals(this.oidNoVerStr, parentOidStr)) {
-                    this.addChild(candidateBookmarkableModel);
-                    whetherAdded.setValue(true);
-                }
-            });
+        if(addedCount.longValue()>0L) {
+            return true;
         }
-        return whetherAdded.isTrue();
+
+//        /* also check the other way around, that is,
+//         * whether the child is referenced from one of the parent's properties
+//         */
+//        if(candidateBookmarkableModel.toBookmark()
+//                .map(propertyBookmarks::contains)
+//                .orElse(false)) {
+//            return this.addChild(candidateBookmarkableModel).isPresent();
+//        }
+        return false;
     }
 
-    public void appendGraphTo(final List<BookmarkTreeNode> list) {
-        list.add(this);
-        for (BookmarkTreeNode childNode : children) {
-            childNode.appendGraphTo(list);
-        }
-    }
-
-    public int getDepth() {
-        return depth;
-    }
-
-
-    // //////////////////////////////////////
-
-    public PageParameters getPageParameters() {
-        return pageParameters;
-    }
-
-    // //////////////////////////////////////
-
-    public static @Nullable Bookmark bookmarkFrom(final PageParameters pageParameters) {
-        val oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
-        try {
-            return Bookmark.parse(oidStr).orElse(null);
-        } catch(Exception ex) {
-            return null;
-        }
-    }
-
-    public static String oidStrFrom(final BookmarkableModel candidateBookmarkableModel) {
-        final Bookmark bookmark = bookmarkFrom(candidateBookmarkableModel.getPageParametersWithoutUiHints());
-        return bookmark != null
-                ? bookmark.stringify()
-                : null;
-    }
 
 }

@@ -25,6 +25,8 @@
   License: https://bootstrapmade.com/license/
 */
 
+
+
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
@@ -38,8 +40,17 @@
   --color-isis-blue: #3c76bd;
   --color-dark-blue: #0c2e8a;
 
-  --color-theme-blue: var(--color-dark-blue);
-  --color-theme-green: var(--color-isis-green);
+  /* https://coolors.co/5ab1bb-8f3985-eeb4b3-2364aa-fec601 */
+  --color-causeway-purple: #8F3985;
+  --color-causeway-cyan: #5AB1BB;
+  --color-causeway-pink: #EEB4B3;
+  --color-causeway-blue: #2364AA;
+  --color-causeway-yellow: #FEC601;
+
+  --color-theme-blue: var(--color-causeway-purple);
+  --color-theme-green: var(--color-causeway-yellow);
+
+  --color-dark-overlay: #0000002e; /* black with some opacity*/
 }
 
 body {
@@ -156,7 +167,7 @@ h6 {
 --------------------------------------------------------------*/
 
 #header {
-  padding: 20px 0;
+  padding: 10px 0;
   height: 84px;
   transition: all 0.5s;
   z-index: 997;
@@ -165,19 +176,26 @@ h6 {
 }
 
 #header #logo h1 {
-  font-size: 42px;
   margin: 0;
   padding: 0;
-  line-height: 1;
-  font-family: "Montserrat", sans-serif;
-  font-weight: 700;
+  font-family: "Android Insomnia", "Montserrat", sans-serif;
+  font-weight: 900;
+  margin-top: -0.5rem; /* vertical logo and text positioning fix */
 }
 
 #header #logo h1 a {
   color: var(--color-theme-blue);
   line-height: 1;
   display: inline-block;
-  font-size: smaller;
+  font-size: inherit;
+}
+
+#header #logo h1 a span.asf {
+  color: var(--color-causeway-cyan);
+}
+
+#header #logo h1 a span.brand {
+  color: var(--color-causeway-purple);
 }
 
 #header #logo h1 a span {
@@ -185,11 +203,8 @@ h6 {
 }
 
 #header #logo img {
-  padding: 0;
-  margin: 0;
-  margin-top: -5px;
-  margin-right: 10px;
   height: 48px;
+  margin-top: 1rem;
 }
 
 /*--------------------------------------------------------------
@@ -200,7 +215,7 @@ h6 {
   width: 100%;
   height: 50vh;
   position: relative;
-  background: url("../../img/home/intro-carousel/carousel-1.jpg") no-repeat;
+  background: url("../../img/home/intro-carousel/intro-carousel-1.jpg") no-repeat;
   background-size: cover;
 }
 
@@ -234,7 +249,7 @@ h6 {
 #intro .intro-content h2 {
   color: var(--color-theme-blue);
   margin-bottom: 30px;
-  font-size: 64px;
+  /*font-size: 42px;*/
   font-weight: 700;
 }
 
@@ -243,6 +258,7 @@ h6 {
   text-decoration: underline;
 }
 
+#intro .intro-content .btn-docs,
 #intro .intro-content .btn-get-started,
 #intro .intro-content .btn-projects {
   font-family: "Raleway", sans-serif;
@@ -257,6 +273,16 @@ h6 {
   color: #fff;
 }
 
+#intro .intro-content .btn-docs {
+  background: var(--color-causeway-cyan);
+  border: 2px solid var(--color-causeway-cyan);
+}
+
+#intro .intro-content .btn-docs:hover {
+  background: none;
+  color: var(--color-causeway-cyan);
+}
+
 #intro .intro-content .btn-get-started {
   background: var(--color-theme-blue);
   border: 2px solid var(--color-theme-blue);
@@ -268,13 +294,13 @@ h6 {
 }
 
 #intro .intro-content .btn-projects {
-  background: var(--color-theme-green);
-  border: 2px solid var(--color-theme-green);
+  background: var(--color-causeway-yellow);
+  border: 2px solid var(--color-causeway-yellow);
 }
 
 #intro .intro-content .btn-projects:hover {
   background: none;
-  color: var(--color-theme-green);
+  color: var(--color-causeway-yellow);
 }
 
 #intro #intro-carousel {
@@ -371,6 +397,7 @@ h6 {
 #nav-menu-container {
   float: right;
   margin: 0;
+  padding-top: 10px;
 }
 
 /* Nav Meu Styling */
@@ -864,7 +891,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 --------------------------------*/
 
 #call-to-action {
-  background: #081e5b;
+  background: var(--color-causeway-purple);
   background-size: cover;
   padding: 40px 0;
 }
@@ -1115,6 +1142,21 @@ body.mobile-nav-active #mobile-nav-toggle {
   }
 }
 
+@media (max-width: 1200px) {
+  h1 a span.brand {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  #nav-menu-container {
+    display: none;
+  }
+  #mobile-nav-toggle {
+    display: inline;
+  }
+}
+
 @media (max-width: 768px) {
   .back-to-top {
     bottom: 15px;
@@ -1131,14 +1173,6 @@ body.mobile-nav-active #mobile-nav-toggle {
 
   #header #logo img {
     max-height: 40px;
-  }
-
-  #nav-menu-container {
-    display: none;
-  }
-
-  #mobile-nav-toggle {
-    display: inline;
   }
 
   #why .why-img {
@@ -1185,7 +1219,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 
 #call-to-action pre {
   color: wheat;
-  background-color: darkslateblue;
+  background-color: var(--color-dark-overlay);
 }
 
 img.helloworld-copy,

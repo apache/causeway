@@ -25,7 +25,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.assertj.core.api.Assertions;
 import org.joda.time.DateTime;
@@ -800,7 +800,7 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             //
             Assertions.assertThat(fakeDataDemoObject.getSomeUrl()).isNull();
 
-            java.net.URL theUrl = new java.net.URL("http://causeway.apache.org");
+            java.net.URL theUrl = new java.net.URL("https://causeway.apache.org");
 
             //
             // when

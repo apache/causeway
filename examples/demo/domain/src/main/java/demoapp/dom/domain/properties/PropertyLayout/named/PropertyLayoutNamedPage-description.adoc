@@ -1,0 +1,115 @@
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+The name of a property or parameter is used as the label of the field in the UI.
+Normally the name is inferred from the name of the corresponding field or parameter in code.
+This inferred name can be however be overridden using various mechanisms with an explicit value:
+
+* for properties, the name can be specified using either the `@PropertyLayout` annotation, or a meta-annotation, or using the `Xxx.layout.xml` layout file.
+
+* for parameters, the name can be specified using either the `@ParameterLayout` annotation, or a meta-annotation.
+
+This is useful for example if the desired name is a Java keyword (such as "default", or "package").
+
+Names can also include HTML markup.
+This can optionally be escaped.
+
+
+== Annotated
+
+The name can be specified explicitly using an annotation:
+
+* for properties, using `@PropertyLayout#named()`:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutNamedPage.java[tags=annotation]
+----
+<.> explicitly specifies the name of the property
+
+* for parameters, using `@ParameterLayout#named()`:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutNamedPage_updateWithParameterLayout.java[tags=annotation]
+----
+<.> explicitly specifies the name of the parameter
+
+== Layout File
+
+For properties (not parameters), the name can be specified using the `Xxx.layout.xml` file:
+
+* property definition:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutNamedPage.java[tags=layout-file]
+----
+<.> `named` hint is _not_ present.
+
+* layout file snippet:
++
+[source,xml,indent=0,tabsize=4]
+----
+<cpt:property id="propertyUsingLayout">
+    <cpt:named>Named using layout.xml</cpt:named>
+</cpt:property>
+----
+// TODO: for some reason this doesn't include correctly in the app...
+//include::PropertyLayoutNamedPage.layout.xml[tags=layout-file]
+
+One advantage of the layout file over the annotation is that the layout file is dynamic: it can be modified and the changes reloaded in a running application.
+
+TIP: It is sometimes necessary to invoke the `Rebuild Metamodel` action to see this take effect.
+
+== Meta-annotated
+
+The name can also be specified using a custom meta-annotation:
+
+* the meta-annotation is defined as:
++
+[source,java]
+----
+include::NamedMetaAnnotation.java[tags=class]
+----
+<.> annotated for a property ...
+<.> \... and for a parameter.
+<.> annotation can be applied to a property (either its getter or if using link:https://projectlombok.org/[Lombok] the field directly)
+<.> annotation can be applied to a parameter
+<.> annotation can be applied to a type (ie, meta-meta annotations recursively)
+
+* and can be applied to a property:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutNamedPage.java[tags=meta-annotated]
+----
+<.> property's name is inherited from the meta-annotation
+
+* or can be applied to a parameter:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutNamedPAge_updateWithMetaAnnotation.java[tags=meta-annotation]
+----
+<.> parameter's name is inherited from the meta-annotation
+
+The meta-annotation can itself be overridden:
+
+* in a property:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutNamedPage.java[tags=meta-annotated-overridden]
+----
+<.> name from meta-annotation ...
+<.> \... is overridden by the `@PropertyLayout` annotation
+
+* or a parameter:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutNamedPage_updateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
+----
+<.> name from meta-annotation ...
+<.> \... is overridden by the `@PropertyLayout` annotation
+

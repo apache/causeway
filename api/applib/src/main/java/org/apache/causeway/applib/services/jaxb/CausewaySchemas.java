@@ -18,11 +18,11 @@
  */
 package org.apache.causeway.applib.services.jaxb;
 
-import javax.inject.Named;
-
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.applib.mixins.dto.Dto_downloadXsd;
+
+import jakarta.inject.Named;
 
 /**
  * Controls whether, when generating {@link JaxbService#toXsd(Object, CausewaySchemas) XML schemas},
@@ -34,7 +34,7 @@ import org.apache.causeway.applib.mixins.dto.Dto_downloadXsd;
  * schema, that of the DTO itself.  The {@link Dto_downloadXsd} mixin uses this to return that single XSD,
  * rather than generating a ZIP of two schemas (the Causeway schema and the one for the DTO), as it would otherwise;
  * far more convenient when debugging and so on.  The Causeway schemas can always be
- * <a href="http://causeway.apache.org/schema">downloaded</a> from the Causeway website.
+ * <a href="https://causeway.apache.org/schema">downloaded</a> from the Causeway website.
  * </p>
  *
  * @since 1.0 {@index}

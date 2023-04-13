@@ -18,27 +18,51 @@
  */
 package org.apache.causeway.extensions.executionlog.applib.spiimpl;
 
-import javax.inject.Inject;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.publishing.spi.ExecutionSubscriber;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.extensions.executionlog.applib.CausewayModuleExtExecutionLogApplib;
+import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * @since 2.0 {@index}
  */
 @Service
-@RequiredArgsConstructor
+@Named(ExecutionSubscriberForExecutionLog.LOGICAL_TYPE_NAME)
+@Priority(PriorityPrecedence.MIDPOINT)
+@Qualifier("Default")
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
+@Log4j2
 public class ExecutionSubscriberForExecutionLog implements ExecutionSubscriber {
 
-    final @Inject ExecutionLogEntryRepository repository;
+    static final String LOGICAL_TYPE_NAME = CausewayModuleExtExecutionLogApplib.NAMESPACE + ".ExecutionSubscriberForExecutionLog";
+
+    final ExecutionLogEntryRepository<? extends ExecutionLogEntry> repository;
+    final CausewayConfiguration causewayConfiguration;
 
     @Override
-    public void onExecution(Execution<?, ?> execution) {
+    public boolean isEnabled() {
+        return causewayConfiguration.getExtensions().getExecutionLog().getPersist().isEnabled();
+    }
+
+    @Override
+    public void onExecution(final Execution<?, ?> execution) {
+        if (!isEnabled()) {
+            return;
+        }
+
         repository.createEntryAndPersist(execution);
     }
 

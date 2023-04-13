@@ -55,17 +55,18 @@ public interface CausewayBeanTypeRegistry {
     }
 
     /**
-     * Returns either 'JDO' or 'JPA' based on what {@link CausewayBeanTypeClassifier} we find
-     * registered with <i>Spring</i>.
-     * Alternative implementations could be considered, however this works for now.
+     * Returns 'JDO' or 'JPA' based on metadata found during {@link CausewayBeanTypeClassifier type-classification}.
+     * If no (concrete) entity type is found, returns 'UNSPECIFIED'.
+     * @implNote assumes that there can be only one persistence stack
      */
     default PersistenceStack determineCurrentPersistenceStack() {
-        return CausewayBeanTypeClassifier.get().stream()
-                .map(CausewayBeanTypeClassifier::getClass)
-                .map(Class::getSimpleName)
-                .anyMatch(classifierName->classifierName.startsWith("Jdo"))
-                ? PersistenceStack.JDO
-                : PersistenceStack.JPA;
+        return getEntityTypes().values().stream()
+            .map(meta->meta.getPersistenceStack())
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .filter(persistenceStack->!persistenceStack.isUnspecified())
+            .findFirst()
+            .orElse(PersistenceStack.UNSPECIFIED);
     }
 
 }

@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.valuesemantics;
 
-import javax.annotation.Priority;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Component;
 
@@ -38,7 +38,7 @@ import org.apache.causeway.schema.common.v2.ValueType;
 import lombok.val;
 
 @Component
-@Named("causeway.val.BookmarkValueSemantics")
+@Named("causeway.metamodel.value.BookmarkValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class BookmarkValueSemantics
 extends ValueSemanticsAbstract<Bookmark>

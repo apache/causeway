@@ -19,21 +19,23 @@
 package org.apache.causeway.applib.value;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
 import java.io.OutputStreamWriter;
+import java.io.Serializable;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
-import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
-import javax.inject.Named;
-import javax.xml.bind.annotation.adapters.XmlAdapter;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import jakarta.activation.MimeType;
+import jakarta.activation.MimeTypeParseException;
+import jakarta.inject.Named;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.springframework.lang.Nullable;
 
@@ -42,6 +44,7 @@ import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.applib.jaxb.PrimitiveJaxbAdapters;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.io.DataSource;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -75,18 +78,7 @@ import lombok.val;
 //@Log4j2
 public final class Clob implements NamedWithMimeType {
 
-    /**
-     * Computed for state:
-     *
-     * <p>
-     * <pre>
-     * private final MimeType mimeType;
-     * private final CharSequence chars;
-     * private final String name;
-     * </pre>
-     * </p>
-     */
-    private static final long serialVersionUID = 8694189924062378527L;
+    private static final long serialVersionUID = SerializationProxy.serialVersionUID;
 
     private final String name;
     private final MimeType mimeType;
@@ -98,7 +90,7 @@ public final class Clob implements NamedWithMimeType {
     /**
      * Returns a new {@link Clob} of given {@code name}, {@code mimeType} and {@code content}.
      * <p>
-     * {@code name} may or may not include the desired filename extension, it
+     * {@code name} may or may not include the desired filename extension, as it
      * is guaranteed, that the resulting {@link Clob} has the appropriate extension
      * as constraint by the given {@code mimeType}.
      * <p>
@@ -115,27 +107,33 @@ public final class Clob implements NamedWithMimeType {
     }
 
     /**
-     * Returns a new {@link Clob} of given {@code name}, {@code mimeType} and content from {@code file},
+     * Returns a new {@link Clob} of given {@code name}, {@code mimeType} and content from {@code dataSource},
      * wrapped with a {@link Try}.
      * <p>
-     * {@code name} may or may not include the desired filename extension, it
+     * {@code name} may or may not include the desired filename extension, as it
      * is guaranteed, that the resulting {@link Clob} has the appropriate extension
      * as constraint by the given {@code mimeType}.
      * <p>
      * For more fine-grained control use one of the {@link Clob} constructors directly.
      * @param name - may or may not include the desired filename extension
      * @param mimeType
-     * @param file - the file to be opened for reading
-     * @param charset - {@link Charset} to use for reading given file
+     * @param dataSource - the {@link DataSource} to be opened for reading
+     * @param charset - {@link Charset} to use for reading from given {@link DataSource}
      * @return new {@link Clob}
+     */
+    public static Try<Clob> tryRead(final String name, final CommonMimeType mimeType, final DataSource dataSource,
+            final @NonNull Charset charset) {
+        return dataSource.tryReadAsString(charset)
+                .mapSuccess(string->Clob.of(name, mimeType, string.orElse(null)));
+    }
+
+    /**
+     * Shortcut for {@code tryRead(name, mimeType, DataSource.ofFile(file), charset)}
+     * @see #tryRead(String, org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType, DataSource, Charset)
      */
     public static Try<Clob> tryRead(final String name, final CommonMimeType mimeType, final File file,
             final @NonNull Charset charset) {
-        return Try.call(()->{
-            try(val fis = new FileInputStream(file)){
-                return Clob.of(name, mimeType, _Strings.read(fis, charset));
-            }
-        });
+        return tryRead(name, mimeType, DataSource.ofFile(file), charset);
     }
 
     /**
@@ -325,5 +323,35 @@ public final class Clob implements NamedWithMimeType {
 
     }
 
+    // -- SERIALIZATION PROXY
+
+    private Object writeReplace() {
+        return new SerializationProxy(this);
+    }
+
+    private void readObject(final ObjectInputStream stream) throws InvalidObjectException {
+        throw new InvalidObjectException("Proxy required");
+    }
+
+    private static class SerializationProxy implements Serializable {
+        /**
+         * Generated, based on String, String, CharSequence
+         */
+        private static final long serialVersionUID = -3598440606899920566L;
+        private final String name;
+        private final String mimeTypeBase;
+        private final CharSequence chars;
+
+        private SerializationProxy(final Clob clob) {
+            this.name = clob.getName();
+            this.mimeTypeBase = clob.getMimeType().getBaseType();
+            this.chars = clob.getChars();
+        }
+
+        private Object readResolve() {
+            return new Clob(name, mimeTypeBase, chars);
+        }
+
+    }
 
 }

@@ -16,14 +16,14 @@
  * under the License. */
 package org.apache.causeway.core.metamodel.facets.object.domainobjectlayout;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec.DomainObjectLayoutTableDecorationFacet;
+import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec.TableDecoratorFacetForDomainObjectLayoutAnnotation;
 import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
 
 import lombok.val;
@@ -76,7 +76,7 @@ extends FacetFactoryAbstract {
                 .create(domainObjectLayoutIfAny, facetHolder));
 
         addFacetIfPresent(
-                DomainObjectLayoutTableDecorationFacet
+                TableDecoratorFacetForDomainObjectLayoutAnnotation
                         .create(domainObjectLayoutIfAny, facetHolder));
 
         addFacetIfPresent(

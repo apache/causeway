@@ -9,6 +9,7 @@ Configuration Bean to support authentication using Spring Security.
 .CausewayModuleSecuritySpring.java
 ----
 class CausewayModuleSecuritySpring {
+  public static final String NAMESPACE;
   void disableCsrf()
 }
 ----

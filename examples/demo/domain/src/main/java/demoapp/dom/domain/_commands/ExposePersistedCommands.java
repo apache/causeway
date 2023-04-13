@@ -34,7 +34,7 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 public interface ExposePersistedCommands {
 
     @Service
-    @javax.annotation.Priority(PriorityPrecedence.EARLY)
+    @jakarta.annotation.Priority(PriorityPrecedence.EARLY)
     public static class TableColumnOrderDefault extends TableColumnOrderForCollectionTypeAbstract<CommandLogEntry> {
 
         public TableColumnOrderDefault() { super(CommandLogEntry.class); }

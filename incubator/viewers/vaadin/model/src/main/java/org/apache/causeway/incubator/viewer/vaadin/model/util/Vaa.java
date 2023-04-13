@@ -26,6 +26,8 @@ import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.tabs.Tab;
+import com.vaadin.flow.component.tabs.Tabs;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;
@@ -39,6 +41,12 @@ public class Vaa {
     // -- COMPONENT FACTORIES
 
     public <T extends Component> T add(final HasComponents container, final T component) {
+        container.add(component);
+        return component;
+    }
+
+    // specific overload for tabs
+    public Tab add(final Tabs container, final Tab component) {
         container.add(component);
         return component;
     }
@@ -73,5 +81,7 @@ public class Vaa {
                 (ComponentEventListener) e->onClick.run());
         return component;
     }
+
+
 
 }

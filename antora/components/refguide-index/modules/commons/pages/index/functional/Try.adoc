@@ -13,6 +13,7 @@ Follows the *Railway Pattern* , that is, once failed, stays failed.
 .Try.java
 ----
 interface Try<T> {
+  Try<T> empty()     // <.>
   Try<T> call(Callable<T> callable)
   Try<Void> run(ThrowingRunnable runnable)
   Success<T> success(T value)
@@ -21,21 +22,33 @@ interface Try<T> {
   boolean isFailure()
   Optional<T> getValue()     // <.>
   Optional<Throwable> getFailure()     // <.>
-  Try<T> ifSuccess(Consumer<Optional<T>> valueConsumer)     // <.>
-  Try<T> ifFailure(Consumer<Throwable> exceptionConsumer)     // <.>
+  Try<T> ifSuccess(ThrowingConsumer<Optional<T>> valueConsumer)     // <.>
+  Try<T> ifSuccessAsNullable(ThrowingConsumer<T> valueConsumer)     // <.>
+  Try<T> ifFailure(ThrowingConsumer<Throwable> exceptionConsumer)     // <.>
   Try<T> ifFailureFail()     // <.>
   Try<T> ifAbsentFail()     // <.>
-  Try<R> mapSuccess(Function<T, R> successMapper)     // <.>
-  Try<T> mapFailure(UnaryOperator<Throwable> failureMapper)     // <.>
+  Try<R> mapSuccess(ThrowingFunction<Optional<T>, R> successMapper)     // <.>
+  Try<R> mapSuccessAsNullable(ThrowingFunction<T, R> successMapper)     // <.>
+  Try<T> mapFailure(ThrowingFunction<Throwable, Throwable> failureMapper)     // <.>
+  Try<T> mapFailureToSuccess(ThrowingFunction<Throwable, T> recoveryMapper)     // <.>
   Try<T> mapEmptyToFailure()     // <.>
-  Either<L, R> map(Function<Throwable, L> failureMapper, Function<Optional<T>, R> successMapper)     // <.>
-  void accept(Consumer<Throwable> failureConsumer, Consumer<Optional<T>> successConsumer)     // <.>
-  R fold(Function<Throwable, R> failureMapper, Function<Optional<T>, R> successMapper)     // <.>
+  Either<L, R> mapToEither(ThrowingFunction<Throwable, L> failureMapper, ThrowingFunction<Optional<T>, R> successMapper)     // <.>
+  Try<T> accept(ThrowingConsumer<Throwable> failureConsumer, ThrowingConsumer<Optional<T>> successConsumer)     // <.>
+  R fold(ThrowingFunction<Throwable, R> failureMapper, ThrowingFunction<Optional<T>, R> successMapper)     // <.>
   Try<R> thenCall(Callable<R> callable)     // <.>
   Try<Void> thenRun(ThrowingRunnable runnable)     // <.>
+  Try<R> then(Callable<? extends Try<R>> next)     // <.>
+  Try<T> orCall(Callable<T> fallback)     // <.>
+  T valueAsNullableElseFail()     // <.>
+  T valueAsNonNullElseFail()     // <.>
 }
 ----
 
+<.> xref:#empty_[empty()]
++
+--
+success case with no value
+--
 <.> xref:#getValue_[getValue()]
 +
 --
@@ -46,15 +59,20 @@ Optionally returns the contained _value_ based on presence, that is, if this is 
 --
 Optionally returns the contained _failure_ based on presence, that is, if this is a _Failure_ .
 --
-<.> xref:#ifSuccess_Consumer[ifSuccess(Consumer)]
+<.> xref:#ifSuccess_ThrowingConsumer[ifSuccess(ThrowingConsumer)]
 +
 --
-Peeks into the _value_ if this is a _Success_ .
+If this is a _Success_ , peeks into the _value_ wrapped in an _Optional_ .
 --
-<.> xref:#ifFailure_Consumer[ifFailure(Consumer)]
+<.> xref:#ifSuccessAsNullable_ThrowingConsumer[ifSuccessAsNullable(ThrowingConsumer)]
 +
 --
-Peeks into the _failure_ if this is a _Failure_ .
+If this is a _Success_ peeks into the (null-able) _value_ .
+--
+<.> xref:#ifFailure_ThrowingConsumer[ifFailure(ThrowingConsumer)]
++
+--
+If this is a _Failure_ , peeks into the _failure_ .
 --
 <.> xref:#ifFailureFail_[ifFailureFail()]
 +
@@ -66,32 +84,42 @@ Throws the contained failure if any.
 --
 Throws _NoSuchElementException_ if _value_ is _null_ .
 --
-<.> xref:#mapSuccess_Function[mapSuccess(Function)]
+<.> xref:#mapSuccess_ThrowingFunction[mapSuccess(ThrowingFunction)]
++
+--
+Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to another if this is a _Success_ , passing the _value_ wrapped in an _Optional_ . Otherwise if this is a _Failure_ acts as identity operator.
+--
+<.> xref:#mapSuccessAsNullable_ThrowingFunction[mapSuccessAsNullable(ThrowingFunction)]
 +
 --
 Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to another if this is a _Success_ . Otherwise if this is a _Failure_ acts as identity operator.
 --
-<.> xref:#mapFailure_UnaryOperator[mapFailure(UnaryOperator)]
+<.> xref:#mapFailure_ThrowingFunction[mapFailure(ThrowingFunction)]
 +
 --
-Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to another if its a _Failure_ . Otherwise if this is a _Success_ acts as identity operator.
+Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to another if this is a _Failure_ . Otherwise if this is a _Success_ acts as identity operator.
+--
+<.> xref:#mapFailureToSuccess_ThrowingFunction[mapFailureToSuccess(ThrowingFunction)]
++
+--
+Recovers from a failed xref:refguide:commons:index/functional/Try.adoc[Try] if its a _Failure_ . Otherwise if this is a _Success_ acts as identity operator.
 --
 <.> xref:#mapEmptyToFailure_[mapEmptyToFailure()]
 +
 --
 Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to _Failure_ if this is a _Success_ with an empty _value_ . Otherwise acts as identity operator.
 --
-<.> xref:#map_Function_Function[map(Function, Function)]
+<.> xref:#mapToEither_ThrowingFunction_ThrowingFunction[mapToEither(ThrowingFunction, ThrowingFunction)]
 +
 --
 Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to xref:refguide:commons:index/functional/Either.adoc[Either] using according mapping function _successMapper_ or _failureMapper_ .
 --
-<.> xref:#accept_Consumer_Consumer[accept(Consumer, Consumer)]
+<.> xref:#accept_ThrowingConsumer_ThrowingConsumer[accept(ThrowingConsumer, ThrowingConsumer)]
 +
 --
 Either consumes the success or the failure.
 --
-<.> xref:#fold_Function_Function[fold(Function, Function)]
+<.> xref:#fold_ThrowingFunction_ThrowingFunction[fold(ThrowingFunction, ThrowingFunction)]
 +
 --
 Maps the contained _value_ or _failure_ to a new value of type _R_ using according mapping function _successMapper_ or _failureMapper_ .
@@ -99,15 +127,40 @@ Maps the contained _value_ or _failure_ to a new value of type _R_ using accordi
 <.> xref:#thenCall_Callable[thenCall(Callable)]
 +
 --
-If this is a _Success_ , maps it to a new xref:refguide:commons:index/functional/Try.adoc[Try] based on given _Callable_ . Otherwise if its a _Failure_ acts as identity operator.
+If this is a _Success_ , maps it to a new xref:refguide:commons:index/functional/Try.adoc[Try] based on given _Callable_ . Otherwise if its a _Failure_ , acts as identity operator.
 --
 <.> xref:#thenRun_ThrowingRunnable[thenRun(ThrowingRunnable)]
 +
 --
-If this is a _Success_ , maps it to new xref:refguide:commons:index/functional/Try.adoc[Try] based on given _ThrowingRunnable_ . Otherwise if its a _Failure_ acts as identity operator.
+If this is a _Success_ , maps it to a new xref:refguide:commons:index/functional/Try.adoc[Try] based on given xref:refguide:commons:index/functional/ThrowingRunnable.adoc[ThrowingRunnable] . Otherwise if this is a _Failure_ , acts as identity operator.
+--
+<.> xref:#then_Callable[then(Callable)]
++
+--
+If this is a _Success_ , maps it to a new xref:refguide:commons:index/functional/Try.adoc[Try] based on given _Supplier_ . Otherwise if this is a _Failure_ , acts as identity operator.
+--
+<.> xref:#orCall_Callable[orCall(Callable)]
++
+--
+If this is a _Failure_ , maps it to a new xref:refguide:commons:index/functional/Try.adoc[Try] based on given _Callable_ . Otherwise if this is a _Success_ , acts as identity operator.
+--
+<.> xref:#valueAsNullableElseFail_[valueAsNullableElseFail()]
++
+--
+If this is a _Failure_ throws the contained failure, otherwise if this is a _Success_ , returns the success value as null-able.
+--
+<.> xref:#valueAsNonNullElseFail_[valueAsNonNullElseFail()]
++
+--
+If this is a _Failure_ throws the contained failure, otherwise if this is a _Success_ , either returns the success value if it is NOT `null` or throws a _NoSuchElementException_ .
 --
 
 == Members
+
+[#empty_]
+=== empty()
+
+success case with no value
 
 [#getValue_]
 === getValue()
@@ -119,15 +172,26 @@ Optionally returns the contained _value_ based on presence, that is, if this is 
 
 Optionally returns the contained _failure_ based on presence, that is, if this is a _Failure_ .
 
-[#ifSuccess_Consumer]
-=== ifSuccess(Consumer)
+[#ifSuccess_ThrowingConsumer]
+=== ifSuccess(ThrowingConsumer)
 
-Peeks into the _value_ if this is a _Success_ .
+If this is a _Success_ , peeks into the _value_ wrapped in an _Optional_ .
 
-[#ifFailure_Consumer]
-=== ifFailure(Consumer)
+If given valueConsumer throws an exception, a failed xref:refguide:commons:index/functional/Try.adoc[Try] is returned.
 
-Peeks into the _failure_ if this is a _Failure_ .
+[#ifSuccessAsNullable_ThrowingConsumer]
+=== ifSuccessAsNullable(ThrowingConsumer)
+
+If this is a _Success_ peeks into the (null-able) _value_ .
+
+If given valueConsumer throws an exception, a failed xref:refguide:commons:index/functional/Try.adoc[Try] is returned.
+
+[#ifFailure_ThrowingConsumer]
+=== ifFailure(ThrowingConsumer)
+
+If this is a _Failure_ , peeks into the _failure_ .
+
+If given exceptionConsumer throws an exception, a failed xref:refguide:commons:index/functional/Try.adoc[Try] is returned.
 
 [#ifFailureFail_]
 === ifFailureFail()
@@ -139,42 +203,86 @@ Throws the contained failure if any.
 
 Throws _NoSuchElementException_ if _value_ is _null_ .
 
-[#mapSuccess_Function]
-=== mapSuccess(Function)
+[#mapSuccess_ThrowingFunction]
+=== mapSuccess(ThrowingFunction)
+
+Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to another if this is a _Success_ , passing the _value_ wrapped in an _Optional_ . Otherwise if this is a _Failure_ acts as identity operator.
+
+If given successMapper throws an exception, a failed xref:refguide:commons:index/functional/Try.adoc[Try] is returned.
+
+[#mapSuccessAsNullable_ThrowingFunction]
+=== mapSuccessAsNullable(ThrowingFunction)
 
 Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to another if this is a _Success_ . Otherwise if this is a _Failure_ acts as identity operator.
 
-[#mapFailure_UnaryOperator]
-=== mapFailure(UnaryOperator)
+If given successMapper throws an exception, a failed xref:refguide:commons:index/functional/Try.adoc[Try] is returned.
 
-Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to another if its a _Failure_ . Otherwise if this is a _Success_ acts as identity operator.
+[#mapFailure_ThrowingFunction]
+=== mapFailure(ThrowingFunction)
+
+Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to another if this is a _Failure_ . Otherwise if this is a _Success_ acts as identity operator.
+
+If given failureMapper throws an exception, a failed xref:refguide:commons:index/functional/Try.adoc[Try] is returned (hiding the original failure).
+
+[#mapFailureToSuccess_ThrowingFunction]
+=== mapFailureToSuccess(ThrowingFunction)
+
+Recovers from a failed xref:refguide:commons:index/functional/Try.adoc[Try] if its a _Failure_ . Otherwise if this is a _Success_ acts as identity operator.
+
+If given recoveryMapper throws an exception, a failed xref:refguide:commons:index/functional/Try.adoc[Try] is returned.
 
 [#mapEmptyToFailure_]
 === mapEmptyToFailure()
 
 Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to _Failure_ if this is a _Success_ with an empty _value_ . Otherwise acts as identity operator.
 
-[#map_Function_Function]
-=== map(Function, Function)
+[#mapToEither_ThrowingFunction_ThrowingFunction]
+=== mapToEither(ThrowingFunction, ThrowingFunction)
 
 Maps this xref:refguide:commons:index/functional/Try.adoc[Try] to xref:refguide:commons:index/functional/Either.adoc[Either] using according mapping function _successMapper_ or _failureMapper_ .
 
-[#accept_Consumer_Consumer]
-=== accept(Consumer, Consumer)
+Any exceptions thrown by given failureMapper or successMapper are propagated without catching.
+
+[#accept_ThrowingConsumer_ThrowingConsumer]
+=== accept(ThrowingConsumer, ThrowingConsumer)
 
 Either consumes the success or the failure.
 
-[#fold_Function_Function]
-=== fold(Function, Function)
+However, if any of given failureConsumer or successConsumer throws an exception, a failed xref:refguide:commons:index/functional/Try.adoc[Try] is returned.
+
+[#fold_ThrowingFunction_ThrowingFunction]
+=== fold(ThrowingFunction, ThrowingFunction)
 
 Maps the contained _value_ or _failure_ to a new value of type _R_ using according mapping function _successMapper_ or _failureMapper_ .
+
+Any exceptions thrown by given failureMapper or successMapper are propagated without catching.
 
 [#thenCall_Callable]
 === thenCall(Callable)
 
-If this is a _Success_ , maps it to a new xref:refguide:commons:index/functional/Try.adoc[Try] based on given _Callable_ . Otherwise if its a _Failure_ acts as identity operator.
+If this is a _Success_ , maps it to a new xref:refguide:commons:index/functional/Try.adoc[Try] based on given _Callable_ . Otherwise if its a _Failure_ , acts as identity operator.
 
 [#thenRun_ThrowingRunnable]
 === thenRun(ThrowingRunnable)
 
-If this is a _Success_ , maps it to new xref:refguide:commons:index/functional/Try.adoc[Try] based on given _ThrowingRunnable_ . Otherwise if its a _Failure_ acts as identity operator.
+If this is a _Success_ , maps it to a new xref:refguide:commons:index/functional/Try.adoc[Try] based on given xref:refguide:commons:index/functional/ThrowingRunnable.adoc[ThrowingRunnable] . Otherwise if this is a _Failure_ , acts as identity operator.
+
+[#then_Callable]
+=== then(Callable)
+
+If this is a _Success_ , maps it to a new xref:refguide:commons:index/functional/Try.adoc[Try] based on given _Supplier_ . Otherwise if this is a _Failure_ , acts as identity operator.
+
+[#orCall_Callable]
+=== orCall(Callable)
+
+If this is a _Failure_ , maps it to a new xref:refguide:commons:index/functional/Try.adoc[Try] based on given _Callable_ . Otherwise if this is a _Success_ , acts as identity operator.
+
+[#valueAsNullableElseFail_]
+=== valueAsNullableElseFail()
+
+If this is a _Failure_ throws the contained failure, otherwise if this is a _Success_ , returns the success value as null-able.
+
+[#valueAsNonNullElseFail_]
+=== valueAsNonNullElseFail()
+
+If this is a _Failure_ throws the contained failure, otherwise if this is a _Success_ , either returns the success value if it is NOT `null` or throws a _NoSuchElementException_ .

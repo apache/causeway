@@ -20,7 +20,7 @@ package org.apache.causeway.testdomain.persistence.jpa;
 
 import java.sql.SQLException;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;

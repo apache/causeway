@@ -21,8 +21,8 @@ package org.apache.causeway.core.runtimeservices.spring;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
@@ -30,6 +30,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 import lombok.experimental.UtilityClass;
 
@@ -39,8 +40,8 @@ import lombok.experimental.UtilityClass;
  * @since 2.0 {@index}
  */
 @Service
-@Named("causeway.sub.spring.SpringBeansService")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".SpringBeansService")
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class SpringBeansService {
 

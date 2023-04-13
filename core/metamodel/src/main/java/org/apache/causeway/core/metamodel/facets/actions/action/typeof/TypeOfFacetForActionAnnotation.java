@@ -49,7 +49,8 @@ extends TypeOfFacetAbstract {
     private TypeOfFacetForActionAnnotation(
             final TypeOfAnyCardinality type,
             final FacetHolder holder) {
-        super(type, holder);
+        // overrules any generic type argument resolution that is based on reflection
+        super(type, holder, Precedence.HIGH);
     }
 
 }

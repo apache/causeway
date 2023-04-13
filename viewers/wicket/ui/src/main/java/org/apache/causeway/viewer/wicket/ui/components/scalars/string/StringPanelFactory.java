@@ -22,9 +22,9 @@ import org.apache.wicket.Component;
 
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryScalarTypeConstrainedAbstract;
 
-public class StringPanelFactory extends ComponentFactoryScalarAbstract {
+public class StringPanelFactory extends ComponentFactoryScalarTypeConstrainedAbstract {
 
     private static final long serialVersionUID = 1L;
 

@@ -18,13 +18,14 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.callbacks;
 
-import java.lang.reflect.Method;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._MethodFacades;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.CallbackMethod;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -60,21 +61,21 @@ extends MethodPrefixBasedFacetFactoryAbstract {
     private void processCallback(
             final ProcessClassContext processClassContext,
             final CallbackMethod callbackMethodEnum,
-            final BiFunction<Can<Method>, FacetHolder, CallbackFacet> callbackFacetConstructor) {
+            final BiFunction<Can<MethodFacade>, FacetHolder, CallbackFacet> callbackFacetConstructor) {
         val cls = processClassContext.getCls();
         val facetHolder = processClassContext.getFacetHolder();
 
         val callbackMethods =
-
-        MethodFinder
-        .livecycleCallback(
-                cls,
-                callbackMethodEnum.getMethodNames(),
-                processClassContext.getIntrospectionPolicy())
-        .withRequiredReturnType(void.class)
-        .streamMethodsMatchingSignature(NO_ARG)
-        .peek(processClassContext::removeMethod)
-        .collect(Can.toCan());
+            MethodFinder
+            .livecycleCallback(
+                    cls,
+                    callbackMethodEnum.getMethodNames(),
+                    processClassContext.getIntrospectionPolicy())
+            .withRequiredReturnType(void.class)
+            .streamMethodsMatchingSignature(NO_ARG)
+            .peek(processClassContext::removeMethod)
+            .map(_MethodFacades::regular)
+            .collect(Can.toCan());
 
         if(callbackMethods.isNotEmpty()) {
             addFacet(callbackFacetConstructor.apply(callbackMethods, facetHolder));

@@ -27,9 +27,9 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
@@ -61,6 +61,7 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.functions._Functions;
 import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
@@ -93,8 +94,8 @@ import lombok.extern.log4j.Log4j2;
 public class GridSystemServiceBootstrap
 extends GridSystemServiceAbstract<BSGrid> {
 
-    public static final String TNS = "http://causeway.apache.org/applib/layout/grid/bootstrap3";
-    public static final String SCHEMA_LOCATION = "http://causeway.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd";
+    public static final String TNS = "https://causeway.apache.org/applib/layout/grid/bootstrap3";
+    public static final String SCHEMA_LOCATION = "https://causeway.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd";
 
     @Inject @Lazy // circular dependency (late binding)
     @Setter @Accessors(chain = true) // JUnit support
@@ -136,19 +137,20 @@ extends GridSystemServiceAbstract<BSGrid> {
                     .filter(BSGrid.class::isInstance)
                     .map(BSGrid.class::cast)
                     .map(bsGrid -> withDomainClass(bsGrid, domainClass))
-                    .orElseGet(() -> fallback(domainClass))
-                    ;
+                    .map(_Functions.peek(bsGrid -> bsGrid.setFallback(true)))
+                    .orElseGet(() -> fallback(domainClass));
         } catch (final Exception e) {
             return fallback(domainClass);
         }
     }
 
     //
-    // only ever called if fail to load DefaultGrid.layout.xml,
+    // only ever called if fail to load GridFallbackLayout.xml,
     // which *really* shouldn't happen
     //
     private BSGrid fallback(final Class<?> domainClass) {
         final BSGrid bsGrid = withDomainClass(new BSGrid(), domainClass);
+        bsGrid.setFallback(true);
 
         final BSRow headerRow = new BSRow();
         bsGrid.getRows().add(headerRow);

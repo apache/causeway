@@ -18,8 +18,11 @@
  */
 package org.apache.causeway.viewer.commons.model.scalar;
 
+import java.util.Optional;
+
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.causeway.core.metamodel.interactions.managed.PropertyNegotiationModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -87,8 +90,8 @@ public interface UiProperty extends UiScalar {
     }
 
     @Override
-    default String disableReasonIfAny() {
-        return getPendingPropertyModel().disableReasonIfAny();
+    default Optional<InteractionVeto> disabledReason() {
+        return getPendingPropertyModel().disabledReason();
     }
 
 }

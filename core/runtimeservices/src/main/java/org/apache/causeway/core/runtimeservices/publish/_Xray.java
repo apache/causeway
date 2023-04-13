@@ -47,12 +47,36 @@ final class _Xray {
 
     // -- COMMAND
 
-    static SequenceHandle enterCommandPublishing(
+    static SequenceHandle enterCommandReadyPublishing(
             final @NonNull InteractionLayerTracker iaTracker,
             final @Nullable Command command,
             final @NonNull Can<CommandSubscriber> enabledSubscribers,
             final @NonNull Supplier<String> cannotPublishReasonSupplier) {
 
+        return enterCommandPublishing(iaTracker, command, enabledSubscribers, cannotPublishReasonSupplier, "created");
+    }
+
+    static SequenceHandle enterCommandStartedPublishing(
+            final @NonNull InteractionLayerTracker iaTracker,
+            final @Nullable Command command,
+            final @NonNull Can<CommandSubscriber> enabledSubscribers,
+            final @NonNull Supplier<String> cannotPublishReasonSupplier) {
+
+        return enterCommandPublishing(iaTracker, command, enabledSubscribers, cannotPublishReasonSupplier, "started");
+
+    }
+
+    static SequenceHandle enterCommandCompletedPublishing(
+            final @NonNull InteractionLayerTracker iaTracker,
+            final @Nullable Command command,
+            final @NonNull Can<CommandSubscriber> enabledSubscribers,
+            final @NonNull Supplier<String> cannotPublishReasonSupplier) {
+
+        return enterCommandPublishing(iaTracker, command, enabledSubscribers, cannotPublishReasonSupplier, "completed");
+    }
+
+
+    private static SequenceHandle enterCommandPublishing(InteractionLayerTracker iaTracker, Command command, Can<CommandSubscriber> enabledSubscribers, Supplier<String> cannotPublishReasonSupplier, String verb) {
         if(!XrayUi.isXrayEnabled()) {
             return null;
         }
@@ -60,10 +84,11 @@ final class _Xray {
         val cannotPublishReason = cannotPublishReasonSupplier.get();
         val canPublish = cannotPublishReason==null;
         val enteringLabel = canPublish
-                ? String.format("publishing command to %d subscriber(s):\n%s",
+                ? String.format("publishing command %s to %d subscriber(s):\n%s",
+                        verb,
                         enabledSubscribers.size(),
                         toText(command))
-                : String.format("not publishing command:\n%s", cannotPublishReason);
+                : String.format("not publishing command %s:\n%s", verb, cannotPublishReason);
 
         val handleIfAny = XrayUtil.createSequenceHandle(iaTracker, "cmd-publisher");
         handleIfAny.ifPresent(handle->{
@@ -85,7 +110,6 @@ final class _Xray {
         });
 
         return handleIfAny.orElse(null);
-
     }
 
     // -- EXECUTION

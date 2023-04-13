@@ -24,9 +24,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import javax.xml.bind.annotation.XmlType;
-
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
+
+import jakarta.xml.bind.annotation.XmlType;
 
 /**
  * Layout hints for actions.
@@ -73,18 +73,6 @@ public @interface ActionLayout {
      */
     String associateWith()
             default "";
-
-    /**
-     * Whether (and how) this action can be bookmarked in the UI.
-     *
-     * <p>
-     *     For bookmarkable actions, either {@link org.apache.causeway.applib.annotation.BookmarkPolicy#AS_ROOT}
-     *     and {@link org.apache.causeway.applib.annotation.BookmarkPolicy#AS_CHILD} can be used (they are treated
-     *     identically).
-     * </p>
-     */
-    BookmarkPolicy bookmarking()
-            default BookmarkPolicy.NOT_SPECIFIED;
 
     /**
      * Indicates the css class that an action should have.
@@ -217,7 +205,7 @@ public @interface ActionLayout {
     Position position()
             default Position.NOT_SPECIFIED;
 
-    @XmlType(namespace = "http://causeway.apache.org/applib/layout/component")
+    @XmlType(namespace = "https://causeway.apache.org/applib/layout/component")
     enum Position {
         BELOW,
         RIGHT,
@@ -240,11 +228,10 @@ public @interface ActionLayout {
      * <p>
      *     Not re-rendering can provide a smoother UI experience.
      * </p>
-     *
-     * <p>
-     *     Supported by the Wicket viewer.
-     * </p>
+     * @deprecated currently NOT supported by the Wicket viewer, but could be re-implemented with
+     *      a future release
      */
+    @Deprecated(forRemoval = false, since = "2.0.0-RC1")
     Redirect redirectPolicy()
             default Redirect.AS_CONFIGURED;
 

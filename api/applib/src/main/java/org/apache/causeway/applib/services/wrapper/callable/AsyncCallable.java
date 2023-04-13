@@ -20,6 +20,7 @@ package org.apache.causeway.applib.services.wrapper.callable;
 
 import java.io.Serializable;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 
 import org.springframework.transaction.annotation.Propagation;
@@ -68,7 +69,7 @@ import org.apache.causeway.schema.cmd.v2.CommandDto;
  *
  * @since 2.0 {@index}
  */
-public interface AsyncCallable<R> extends Serializable {
+public interface AsyncCallable<R> extends Serializable, Callable<R> {
 
     /**
      * The requested {@link InteractionContext} to execute the command, as inferred from the {@link AsyncControl}

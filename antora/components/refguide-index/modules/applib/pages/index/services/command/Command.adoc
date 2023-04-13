@@ -17,14 +17,22 @@ That said, if the sub-action is invoked asynchronously (using _WrapperFactory#as
 .Command.java
 ----
 class Command {
+  Command(UUID interactionId)
+  UUID getInteractionId()     // <.>
   String getUsername()     // <.>
   Timestamp getTimestamp()     // <.>
+  CommandDto getCommandDto()     // <.>
   Bookmark getTarget()     // <.>
   String getLogicalMemberIdentifier()     // <.>
   Updater updater()     // <.>
 }
 ----
 
+<.> xref:#getInteractionId_[getInteractionId()]
++
+--
+The unique identifier of this command (inherited from xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId] )
+--
 <.> xref:#getUsername_[getUsername()]
 +
 --
@@ -34,6 +42,11 @@ The user that created the command.
 +
 --
 The date/time at which this command was created.
+--
+<.> xref:#getCommandDto_[getCommandDto()]
++
+--
+Serializable representation of the action invocation/property edit.
 --
 <.> xref:#getTarget_[getTarget()]
 +
@@ -53,6 +66,15 @@ Derived from _#getCommandDto()_ , holds a string representation of the invoked a
 
 == Members
 
+[#getInteractionId_]
+=== getInteractionId()
+
+The unique identifier of this command (inherited from xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId] )
+
+In all cases this be the same as the xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] that wraps the command, and can be used to correlate also to any audit records ( _org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange_ s resulting from state changes occurring as a consequence of the command.
+
+Note that this is immutable in almost all cases. The one exception is if the Command is being executed through the xref:refguide:applib:index/services/command/CommandExecutorService.adoc[CommandExecutorService] , for example when executing a async action that has been reified into a _CommandDto_ . In such cases, the _CommandExecutorService#executeCommand(CommandDto)_ will _replace_ the original Id with that of the DTO being executed.
+
 [#getUsername_]
 === getUsername()
 
@@ -66,6 +88,13 @@ Derived from _#getCommandDto()_ 's _CommandDto#getUsername()_ ()}
 The date/time at which this command was created.
 
 Derived from _#getCommandDto()_ 's _CommandDto#getTimestamp()_ .
+
+[#getCommandDto_]
+=== getCommandDto()
+
+Serializable representation of the action invocation/property edit.
+
+When the framework sets this (through an internal API), it is expected that the _CommandDto#getUsername() username_ , _CommandDto#getTimestamp() timestamp_ , _CommandDto#getTargets() target(s)_ and _CommandDto#getMember() member_ will be populated. The _#getInteractionId()_ , _#getUsername()_ , _#getTimestamp()_ and _#getTarget()_ are all derived from the provided _CommandDto_ .
 
 [#getTarget_]
 === getTarget()

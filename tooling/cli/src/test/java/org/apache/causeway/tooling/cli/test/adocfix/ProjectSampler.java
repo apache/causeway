@@ -21,8 +21,8 @@ package org.apache.causeway.tooling.cli.test.adocfix;
 import java.io.File;
 import java.util.Set;
 
-import org.apache.causeway.commons.internal.base._Files;
 import org.apache.causeway.commons.internal.functions._Predicates;
+import org.apache.causeway.commons.io.FileUtils;
 
 import lombok.SneakyThrows;
 
@@ -31,21 +31,21 @@ final class ProjectSampler {
     static File local() {
         return new File("./").getAbsoluteFile();
     }
-    
+
     static File apacheCausewayRoot() {
         return new File("./").getAbsoluteFile().getParentFile().getParentFile().getParentFile();
     }
-    
+
     static File apacheCausewayApplib() {
         return new File(apacheCausewayRoot(), "api/applib");
     }
 
     @SneakyThrows
-    public static Set<File> adocFiles(File folder) {
-        return _Files.searchFiles(
-                folder, 
-                _Predicates.alwaysTrue(), 
+    public static Set<File> adocFiles(final File folder) {
+        return FileUtils.searchFiles(
+                folder,
+                _Predicates.alwaysTrue(),
                 file->file.getName().endsWith(".adoc"));
     }
-    
+
 }

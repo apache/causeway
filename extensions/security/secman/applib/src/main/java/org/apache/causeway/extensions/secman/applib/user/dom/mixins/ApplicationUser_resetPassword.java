@@ -20,7 +20,7 @@ package org.apache.causeway.extensions.secman.applib.user.dom.mixins;
 
 import java.util.Objects;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;

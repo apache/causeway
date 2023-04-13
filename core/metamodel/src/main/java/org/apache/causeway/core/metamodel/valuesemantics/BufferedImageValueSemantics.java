@@ -21,8 +21,8 @@ package org.apache.causeway.core.metamodel.valuesemantics;
 import java.awt.image.BufferedImage;
 import java.util.Optional;
 
-import javax.annotation.Priority;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
 
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
@@ -42,7 +42,7 @@ import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 
 @Component
-@Named("causeway.val.BufferedImageValueSemantics")
+@Named("causeway.metamodel.value.BufferedImageValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class BufferedImageValueSemantics
 extends ValueSemanticsAbstract<BufferedImage>

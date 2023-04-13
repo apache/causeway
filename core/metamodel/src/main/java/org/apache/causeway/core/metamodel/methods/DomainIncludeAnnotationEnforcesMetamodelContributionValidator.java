@@ -26,7 +26,7 @@ import java.util.TreeSet;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.commons.collections.Can;
@@ -34,6 +34,7 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.Violation;
 import org.apache.causeway.core.metamodel.commons.MethodUtil;
@@ -87,6 +88,7 @@ extends MetaModelVisitingValidatorAbstract {
         .map(ObjectMemberAbstract.class::cast)
         .map(ObjectMemberAbstract::getFacetedMethod)
         .map(FacetedMethod::getMethod)
+        .map(MethodFacade::asMethodForIntrospection)
         .forEach(memberMethods::add);
 
         spec
@@ -94,6 +96,7 @@ extends MetaModelVisitingValidatorAbstract {
         .map(ObjectMemberAbstract.class::cast)
         .map(ObjectMemberAbstract::getFacetedMethod)
         .map(FacetedMethod::getMethod)
+        .map(MethodFacade::asMethodForIntrospection)
         .forEach(memberMethods::add);
 
         spec
@@ -105,6 +108,7 @@ extends MetaModelVisitingValidatorAbstract {
         .map(ImperativeFacet.class::cast)
         .map(ImperativeFacet::getMethods)
         .flatMap(Can::stream)
+        .map(MethodFacade::asMethodForIntrospection)
         .forEach(supportMethods::add);
 
         val methodsIntendedToBeIncludedButNotPickedUp = _Sets.<Method>newHashSet();

@@ -53,7 +53,7 @@ abstract class JsonValueEncoderTestAbstract {
                 .withValueSemantics(new FloatValueSemantics())
                 ;
 
-        jsonValueEncoder = JsonValueEncoderServiceDefault.forTesting(mmc.getSpecificationLoader());
+        jsonValueEncoder = new JsonValueEncoderServiceDefault(mmc.getSpecificationLoader());
     }
 
     protected ObjectSpecification specFor(final Class<?> cls) {

@@ -24,8 +24,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -66,7 +66,7 @@ implements ApplicationUserRepository {
     @Inject private Provider<QueryResultsCache> queryResultsCacheProvider;
 
     // empty if no candidate is available
-    @Autowired(required = false) @Qualifier("secman") PasswordEncoder passwordEncoder;
+    @Autowired(required = false) @Qualifier("Secman") PasswordEncoder passwordEncoder;
 
 
     private final Class<U> applicationUserClass;

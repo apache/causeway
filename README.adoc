@@ -4,11 +4,11 @@
 :toc-placement!:
 
 image:https://maven-badges.herokuapp.com/maven-central/org.apache.causeway.core/causeway-applib/badge.svg[]
-image:https://github.com/apache/isis/workflows/Build%20and%20Test%20(w/%20Maven)/badge.svg[]
-image:https://sonarcloud.io/api/project_badges/measure?project=apache_isis&metric=alert_status[link="https://sonarcloud.io/dashboard?id=apache_isis"]
+image:https://github.com/apache/causeway/workflows/Build%20and%20Test%20(w/%20Maven)/badge.svg[]
+image:https://sonarcloud.io/api/project_badges/measure?project=apache_causeway&metric=alert_status[link="https://sonarcloud.io/dashboard?id=apache_causeway"]
 image:https://github.com/apache-causeway-committers/causeway-nightly/actions/workflows/apache-causeway-ci-nightly.yml/badge.svg[link="https://github.com/apache-causeway-committers/causeway-nightly/actions/workflows/apache-causeway-ci-nightly.yml"]
 
-_http://causeway.apache.org[Apache Causeway] software is a framework for rapidly developing domain-driven apps in Java. Write your business logic in entities, domain services and repositories, and the framework dynamically generates a representation of that domain model as a webapp or a RESTful API._
+_https://causeway.apache.org[Apache Causeway] software is a framework for rapidly developing domain-driven apps in Java. Write your business logic in entities, domain services and repositories, and the framework dynamically generates a representation of that domain model as a webapp or a RESTful API._
 
 Start learning about Apache Causeway using the https://github.com/apache/causeway-app-helloworld["Hello World"] starter app.
 Explore features with our daily built demo docker image https://github.com/apache/causeway/blob/master/examples/demo/domain/src/main/adoc/modules/demo/pages/about.adoc["DemoApp"].
@@ -18,52 +18,6 @@ For help and support, join our https://causeway.apache.org/docs/2.0.0-M9/support
 
 toc::[]
 
-== Nightly Builds
-
-Nightly builds are available as link:https://github.com/orgs/apache/packages?repo_name=causeway[packages] of this repo.
-
-One way to make them available is to add the following to your `~/.m2/settings.xml` file.
-You will need to add a github token in the location indicated:
-
-[source,xml]
-.~/.m2/settings.xml
-----
-<settings>
-  <servers>
-    <server>
-      <id>github-apache-causeway</id>
-      <username>myusername</username>                               <!--.-->
-      <password>ghp_TOKEN_WITH_PACKAGE_REPO_READ_ACCESS</password>  <!--.-->
-    </server>
-  </servers>
-  <profiles>
-    <profile>
-      <id>github-apache-causeway</id>
-      <activation>
-        <property>
-          <name>!skip.github-apache-causeway</name>
-        </property>
-      </activation>
-      <repositories>
-        <repository>
-          <id>github-apache-causeway</id>
-          <url>https://maven.pkg.github.com/apache/causeway</url>
-          <snapshots>
-            <enabled>true</enabled>
-          </snapshots>
-        </repository>
-      </repositories>
-    </profile>
-  </profiles>
-  <activeProfiles>
-    <activeProfile>github-apache-causeway</activeProfile>
-  </activeProfiles>
-</settings>
-----
-<.> your github username.
-<.> a corresponding personal token to provide access, as per link:https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry#authenticating-to-github-packages[these docs].
-
-You can find the latest version by browsing the link:https://github.com/apache/causeway/packages/1304938[org.apache.causeway.core.causeway-applib] package.
 
 == Core Features
 
@@ -298,10 +252,10 @@ Indeed, the example todoapp demonstrates this.
 
 == Learning More
 
-The Apache Causeway http://causeway.apache.org[website] has lots of useful information and is being continually updated.
+The Apache Causeway https://causeway.apache.org[website] has lots of useful information and is being continually updated.
 
 Or, you can just start coding using the https://github.com/apache/causeway-app-simpleapp[SimpleApp] starter app.
 
-And if you need help or support, join our https://cwiki.apache.org/confluence/display/CAUSEWAY/Signing+up+to+Slack[ASF Slack channel] or our http://causeway.apache.org/support.html[mailing list].
+And if you need help or support, join our https://cwiki.apache.org/confluence/display/CAUSEWAY/Signing+up+to+Slack[ASF Slack channel] or our https://causeway.apache.org/support.html[mailing list].
 
 

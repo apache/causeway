@@ -8,13 +8,7 @@
 ----
 class ChangesDtoUtils {
   void init()
-  JAXBContext getJaxbContext()
-  ChangesDto fromXml(Reader reader)
-  ChangesDto fromXml(String xml)
-  ChangesDto fromXml(Class<?> contextClass, String resourceName, Charset charset)
-  String toXml(ChangesDto changesDto)
-  void toXml(ChangesDto changesDto, Writer writer)
-  void dump(ChangesDto changesDto, PrintStream out)
+  DtoMapper<ChangesDto> dtoMapper()
 }
 ----
 

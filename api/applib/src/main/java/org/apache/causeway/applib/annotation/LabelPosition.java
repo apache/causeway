@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.applib.annotation;
 
-import javax.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.XmlType;
 
 /**
  * The positioning of a label for a property or action parameter.
@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlType;
  * @see org.apache.causeway.applib.annotation.ParameterLayout
  */
 @XmlType(
-        namespace = "http://causeway.apache.org/applib/layout/component"
+        namespace = "https://causeway.apache.org/applib/layout/component"
         )
 public enum LabelPosition {
 

@@ -21,6 +21,7 @@ package org.apache.causeway.core.config;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+import java.net.URL;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,17 +41,17 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-import javax.activation.DataSource;
-import javax.inject.Named;
-import javax.validation.Constraint;
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
-import javax.validation.Payload;
-import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import jakarta.activation.DataSource;
+import jakarta.inject.Named;
+import jakarta.validation.Constraint;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
+import jakarta.validation.Payload;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -59,25 +60,28 @@ import org.springframework.validation.annotation.Validated;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.CollectionLayout;
-import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.applib.annotation.PromptStyle;
+import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.services.i18n.Mode;
 import org.apache.causeway.applib.services.iactn.Execution;
+import org.apache.causeway.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.causeway.applib.services.publishing.spi.EntityChangesSubscriber;
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
+import org.apache.causeway.applib.services.publishing.spi.ExecutionSubscriber;
 import org.apache.causeway.applib.services.userreg.EmailNotificationService;
 import org.apache.causeway.applib.services.userreg.UserRegistrationService;
 import org.apache.causeway.applib.services.userui.UserMenu;
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.context._Context;
+import org.apache.causeway.core.config.CausewayConfiguration.Core;
+import org.apache.causeway.core.config.CausewayConfiguration.Viewer;
 import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.CollectionLayoutConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.DomainObjectConfigOptions;
-import org.apache.causeway.core.config.metamodel.facets.DomainObjectLayoutConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.ParameterConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.PropertyConfigOptions;
 import org.apache.causeway.core.config.metamodel.services.ApplicationFeaturesInitConfiguration;
@@ -86,7 +90,6 @@ import org.apache.causeway.core.config.viewer.web.DialogMode;
 
 import lombok.Data;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.Value;
 import lombok.val;
 
@@ -114,6 +117,17 @@ public class CausewayConfiguration {
     private final Security security = new Security();
     @Data
     public static class Security {
+
+        /**
+         * If set, allows <i>Actions</i> with SAFE Semantics to be invoked with only VIEWING permissions.
+         * <p>
+         * default: false
+         *
+         * @see org.apache.causeway.applib.annotation.Action#semantics()
+         * @see SemanticsOf
+         */
+        private boolean actionsWithSafeSemanticsRequireOnlyViewingPermission = false;
+
         private final Shiro shiro = new Shiro();
         @Data
         public static class Shiro {
@@ -570,7 +584,7 @@ public class CausewayConfiguration {
                  * Defines whether the table representation of a standalone collection of this domain class should be
                  * decorated using a client-side Javascript library, eg for client-side paging and filtering.
                  */
-                private DomainObjectLayoutConfigOptions.TableDecoration tableDecoration = DomainObjectLayoutConfigOptions.TableDecoration.NONE;
+                private Class<? extends TableDecorator> tableDecorator = TableDecorator.Default.class;
 
                 private final CssClassUiEvent cssClassUiEvent = new CssClassUiEvent();
                 @Data
@@ -750,7 +764,7 @@ public class CausewayConfiguration {
                  * The default for whether action invocations should be reified
                  * as a {@link org.apache.causeway.applib.services.command.Command},
                  * to be sent to any registered
-                 * {@link org.apache.causeway.applib.services.publishing.spi.CommandSubscriber}s,
+                 * {@link CommandSubscriber}s,
                  * typically for auditing purposes.
                  *
                  * <p>
@@ -762,10 +776,10 @@ public class CausewayConfiguration {
 
                 /**
                  * The default for whether action invocations should be sent through to the
-                 * {@link org.apache.causeway.applib.services.publishing.spi.ExecutionSubscriber} for publishing.
+                 * {@link ExecutionSubscriber} for publishing.
                  *
                  * <p>
-                 *     The service's {@link org.apache.causeway.applib.services.publishing.spi.ExecutionSubscriber#onExecution(Execution) onExecution}
+                 *     The service's {@link ExecutionSubscriber#onExecution(Execution) onExecution}
                  *     method is called only once per transaction, with
                  *     {@link Execution} collecting details of
                  *     the identity of the target object, the action invoked, the action arguments and the returned
@@ -932,7 +946,7 @@ public class CausewayConfiguration {
                  * The default for whether property edits should be reified
                  * as a {@link org.apache.causeway.applib.services.command.Command},
                  * to be sent to any registered
-                 * {@link org.apache.causeway.applib.services.publishing.spi.CommandSubscriber}s,
+                 * {@link CommandSubscriber}s,
                  * either for auditing or for replayed against a secondary
                  * system, eg for regression testing.
                  *
@@ -945,10 +959,10 @@ public class CausewayConfiguration {
 
                 /**
                  * The default for whether property edits should be sent through to the
-                 * {@link org.apache.causeway.applib.services.publishing.spi.ExecutionSubscriber} for publishing.
+                 * {@link ExecutionSubscriber} for publishing.
                  *
                  * <p>
-                 * The service's {@link org.apache.causeway.applib.services.publishing.spi.ExecutionSubscriber#onExecution(Execution)}  publish}
+                 * The service's {@link ExecutionSubscriber#onExecution(Execution)}  publish}
                  * method is called only once per transaction, with
                  * {@link Execution} collecting details of
                  * the identity of the target object, the property edited, and the new value of the property.
@@ -1102,7 +1116,7 @@ public class CausewayConfiguration {
                  * Defines whether the table representation of a collection should be decorated using a client-side
                  * Javascript library, eg for client-side paging and filtering.
                  */
-                private CollectionLayoutConfigOptions.TableDecoration tableDecoration = CollectionLayoutConfigOptions.TableDecoration.NONE;
+                private Class<? extends TableDecorator> tableDecorator = TableDecorator.Default.class;
 
             }
 
@@ -1521,14 +1535,14 @@ public class CausewayConfiguration {
                     /**
                      * If set, then ensures that for all properties of JAXB-style view models where the property's type
                      * is an entity, then that entity's type has been correctly annotated with
-                     * @{@link javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter} (so that the property's value can
+                     * @{@link jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter} (so that the property's value can
                      * be converted into a serializable form).
                      */
                     private boolean referenceTypeAdapter = true;
                     /**
                      * If set, then ensures that for all properties of JAXB-style view models where the property's type
                      * is a date or time, then that property has been correctly annotated with
-                     * @{@link javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter} (so that the property's value can
+                     * @{@link jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter} (so that the property's value can
                      * be converted into a serializable form).
                      */
                     private boolean dateTimeTypeAdapter = true;
@@ -1605,19 +1619,19 @@ public class CausewayConfiguration {
                      * Intended for testing purposes only, if set then the requested <code>to:</code> of the email will
                      * be ignored, and instead sent to this email address instead.
                      */
-                    @javax.validation.constraints.Email
+                    @jakarta.validation.constraints.Email
                     private String to;
                     /**
                      * Intended for testing purposes only, if set then the requested <code>cc:</code> of the email will
                      * be ignored, and instead sent to this email address instead.
                      */
-                    @javax.validation.constraints.Email
+                    @jakarta.validation.constraints.Email
                     private String cc;
                     /**
                      * Intended for testing purposes only, if set then the requested <code>bcc:</code> of the email will
                      * be ignored, and instead sent to this email address instead.
                      */
-                    @javax.validation.constraints.Email
+                    @jakarta.validation.constraints.Email
                     private String bcc;
                 }
 
@@ -1664,7 +1678,7 @@ public class CausewayConfiguration {
                      *     {@link org.apache.causeway.applib.services.email.EmailService}, at least).
                      * </p>
                      */
-                    @javax.validation.constraints.Email
+                    @jakarta.validation.constraints.Email
                     private String address;
                 }
 
@@ -1876,7 +1890,7 @@ public class CausewayConfiguration {
                  * If not specified, the application.name is used instead.
                  * </p>
                  */
-                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
+                @jakarta.validation.constraints.Pattern(regexp="^[^/].*$")
                 private Optional<String> brandLogoHeader = Optional.empty();
 
                 /**
@@ -1888,7 +1902,7 @@ public class CausewayConfiguration {
                  * If not specified, the {@link Application#getName() application name} is used instead.
                  * </p>
                  */
-                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
+                @jakarta.validation.constraints.Pattern(regexp="^[^/].*$")
                 private Optional<String> brandLogoSignin = Optional.empty();
 
                 /**
@@ -1898,7 +1912,7 @@ public class CausewayConfiguration {
                  *     This is expected to be a local resource.
                  * </p>
                  */
-                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
+                @jakarta.validation.constraints.Pattern(regexp="^[^/].*$")
                 private Optional<String> faviconUrl = Optional.empty();
 
                 /**
@@ -1957,7 +1971,7 @@ public class CausewayConfiguration {
                  *     {@link #getName() name} and/or {@link #getImage() image}.
                  * </p>
                  */
-                @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*$")
+                @jakarta.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*$")
                 private String url;
                 /**
                  * URL of an organisation or individual to give credit to, appearing as text in the footer.
@@ -1976,7 +1990,7 @@ public class CausewayConfiguration {
                  *     {@link #getName() name} and/or {@link #getImage() image}.
                  * </p>
                  */
-                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
+                @jakarta.validation.constraints.Pattern(regexp="^[^/].*$")
                 private String image;
 
                 /**
@@ -2096,8 +2110,8 @@ public class CausewayConfiguration {
             private boolean suppressUpdateLink = false;
 
             /**
-             * If left unset (the default), then the RO viewer will use the {@link javax.ws.rs.core.UriInfo}
-             * (injected using {@link javax.ws.rs.core.Context}) to figure out the base Uri (used to render
+             * If left unset (the default), then the RO viewer will use the {@link jakarta.ws.rs.core.UriInfo}
+             * (injected using {@link jakarta.ws.rs.core.Context}) to figure out the base Uri (used to render
              * <code>href</code>s).
              *
              * <p>
@@ -2108,7 +2122,7 @@ public class CausewayConfiguration {
              * If set, eg <code>https://dev.myapp.com/</code>, then this value will be used instead.
              * </p>
              */
-            @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?/([^/]+/)*+$")
+            @jakarta.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?/([^/]+/)*+$")
             private Optional<String> baseUri = Optional.empty();
         }
 
@@ -2135,7 +2149,7 @@ public class CausewayConfiguration {
             /**
              * The base path at which the Wicket viewer is mounted.
              */
-            @javax.validation.constraints.Pattern(regexp="^[/](.*[/]|)$") @NotNull @NotEmpty
+            @jakarta.validation.constraints.Pattern(regexp="^[/](.*[/]|)$") @NotNull @NotEmpty
             private String basePath = "/wicket/";
 
             /**
@@ -2168,7 +2182,7 @@ public class CausewayConfiguration {
              *     Spring by default under <code>static</code> package).
              * </p>
              */
-            @javax.validation.constraints.Pattern(regexp="^[^/].*$")
+            @jakarta.validation.constraints.Pattern(regexp="^[^/].*$")
             private Optional<String> css = Optional.empty();
 
             /**
@@ -2200,7 +2214,7 @@ public class CausewayConfiguration {
              *     Spring by default under <code>static</code> package).
              * </p>
              */
-            @javax.validation.constraints.Pattern(regexp="^[^/].*$")
+            @jakarta.validation.constraints.Pattern(regexp="^[^/].*$")
             private Optional<String> js = Optional.empty();
 
             /**
@@ -2653,49 +2667,6 @@ public class CausewayConfiguration {
                 }
             }
 
-            private final Table table = new Table();
-            @Data
-            public static class Table {
-
-                private final Decoration decoration = new Decoration();
-                @Data
-                public static class Decoration {
-
-                    private final DataTablesNet dataTablesNet = new DataTablesNet();
-                    @Data
-                    public static class DataTablesNet {
-
-                        /**
-                         * If specified, then the string is passed verbatim as the initialization options for the
-                         * <a href="https://datatables.net">https://datatables.net</a> table decoration
-                         * (as defined by {@link DomainObjectLayout#tableDecoration()} or by
-                         * {@link CollectionLayout#tableDecoration()}).
-                         *
-                         * <p>
-                         *     For example, a value of "info: false, pagingType: 'numbers'" will result in
-                         *     datatables.net being initialized using:
-                         *
-                         *     <pre>
-                         *     $(document).ready(function () {
-                         *       $('table.table-decoration').DataTable({
-                         *         info: false, pagingType: 'numbers'
-                         *       });
-                         *     });
-                         *     </pre>
-                         *     thus switching off the info panel and using the simple 'numbers' paging type.
-                         * </p>
-                         *
-                         * @see <a href="https://datatables.net/examples/basic_init/index.html">https://datatables.net/examples/basic_init/index.html</a>
-                         */
-                        private Optional<String> options = Optional.empty();
-
-                    }
-
-                }
-
-
-            }
-
         }
     }
 
@@ -2706,9 +2677,24 @@ public class CausewayConfiguration {
         private final Temporal temporal = new Temporal();
         @Data
         public static class Temporal {
-
             private final TemporalEditingPattern editing = new TemporalEditingPattern();
+        }
 
+        private final Kroki kroki = new Kroki();
+        @Data
+        public static class Kroki {
+            /**
+             * If set, adds plantuml support to the AsciiDoc value type.
+             * <p>
+             * Eg. via docker instance like {@literal yuzutech/kroki}.
+             */
+            private URL backendUrl = null;
+
+            /**
+             * Max time for requests to the {@link #getBackendUrl()},
+             * when waiting for a response. (default: 5 seconds)
+             */
+            private Duration requestTimeout = Duration.ofMillis(5000);
         }
 
     }
@@ -2875,34 +2861,86 @@ public class CausewayConfiguration {
     @Data
     public static class Extensions {
 
+        private final AuditTrail auditTrail = new AuditTrail();
+        @Data
+        public static class AuditTrail {
+
+            /**
+             * As per {@link AuditTrail#getPersist()}.
+             *
+             * <p>
+             *     Implementation note: we use an enum here (rather than a simple boolean) to allow for future
+             *     enhancements.
+             * </p>
+             */
+            public enum PersistPolicy {
+                /**
+                 * Persist to the audit trail.  This is the default.
+                 */
+                ENABLED,
+                /**
+                 * Do <i>NOT</i> persist to the audit trail.
+                 */
+                DISABLED;
+
+                public boolean isEnabled() { return this == ENABLED; }
+                public boolean isDisabled() { return this == DISABLED; }
+            }
+
+            /**
+             * Whether the {@link EntityPropertyChangeSubscriber} implementation provided by this extension (which
+             * persists property changes to the audit trail) is enabled or not.
+             *
+             * <p>
+             *     One reason to use this option is if you wish to provide your own implementation that wraps
+             *     or delegates to the default implementation of {@link EntityPropertyChangeSubscriber} that is
+             *     provided by the <i>audittrail</i> extension.  Because entity property changes are published to
+             *     <i>all</i> subscribers on the class path, you can disable the default implementation from
+             *     doing anything using this setting.
+             * </p>
+             */
+            private PersistPolicy persist = PersistPolicy.ENABLED;
+        }
+
         private final CommandLog commandLog = new CommandLog();
         @Data
         public static class CommandLog {
 
-            public enum PublishPolicy {
-                ALWAYS,
-                ONLY_IF_SYSTEM_CHANGED,
-                ;
-                public boolean isAlways() { return this == ALWAYS; }
-                public boolean isOnlyIfSystemChanged() { return this == ONLY_IF_SYSTEM_CHANGED; }
-
-            }
             /**
-             * Whether commands should be published always, or only if a change in the system's state has been detected.
+             * As per {@link CommandLog#getPersist()}.
              *
              * <p>
-             * In general, the default of {@link PublishPolicy#ALWAYS} should be used, <i>unless</i> the
-             * <i>Audit Trail</i> extension is also in use, which is able to advise on whether the systems state has
-             * changed.
-             * </p>
-             *
-             * <p>
-             *     Put another way, if this policy is set to {@link PublishPolicy#ONLY_IF_SYSTEM_CHANGED} but the
-             *     <i>Audit Trail</i> extension is <i>not</i> enabled, then nothing will be logged.
+             *     Implementation note: we use an enum here (rather than a simple boolean) to allow for future
+             *     enhancements.
              * </p>
              */
-            @Getter @Setter
-            private PublishPolicy publishPolicy = PublishPolicy.ALWAYS;
+            public enum PersistPolicy {
+                /**
+                 * Persist to the command log .  This is the default.
+                 */
+                ENABLED,
+                /**
+                 * Do <i>NOT</i> persist to the command log.
+                 */
+                DISABLED;
+
+                public boolean isEnabled() { return this == ENABLED; }
+                public boolean isDisabled() { return this == DISABLED; }
+            }
+
+            /**
+             * Whether the {@link CommandSubscriber} implementation
+             * provided by this extension (which persists commands to the command log) is enabled or not.
+             *
+             * <p>
+             *     One reason to use this option is if you wish to provide your own implementation that wraps
+             *     or delegates to the default implementation of {@link CommandSubscriber} that is
+             *     provided by the <i>commandlog</i> extension.  Because commands are published to
+             *     <i>all</i> subscribers on the class path, you can disable the default implementation from
+             *     doing anything using this setting.
+             * </p>
+             */
+            private PersistPolicy persist = PersistPolicy.ENABLED;
 
         }
 
@@ -2913,18 +2951,18 @@ public class CausewayConfiguration {
             private final PrimaryAccess primaryAccess = new PrimaryAccess();
             @Data
             public static class PrimaryAccess {
-                @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*([^/]+/)$")
+                @jakarta.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*([^/]+/)$")
                 private Optional<String> baseUrlRestful = Optional.empty();
                 private Optional<String> user = Optional.empty();
                 private Optional<String> password = Optional.empty();
-                @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*([^/]+/)$")
+                @jakarta.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*([^/]+/)$")
                 private Optional<String> baseUrlWicket = Optional.empty();
             }
 
             private final SecondaryAccess secondaryAccess = new SecondaryAccess();
             @Data
             public static class SecondaryAccess {
-                @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*([^/]+/)$")
+                @jakarta.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*([^/]+/)$")
                 private Optional<String> baseUrlWicket = Optional.empty();
             }
 
@@ -3079,6 +3117,47 @@ public class CausewayConfiguration {
 
         }
 
+        private final ExecutionLog executionLog = new ExecutionLog();
+        @Data
+        public static class ExecutionLog {
+
+            /**
+             * As per {@link ExecutionLog#getPersist()}.
+             *
+             * <p>
+             *     Implementation note: we use an enum here (rather than a simple boolean) to allow for future
+             *     enhancements.
+             * </p>
+             */
+            public enum PersistPolicy {
+                /**
+                 * Persist to the execution log.  This is the default.
+                 */
+                ENABLED,
+                /**
+                 * Do <i>NOT</i> persist to the execution log.
+                 */
+                DISABLED;
+
+                public boolean isEnabled() { return this == ENABLED; }
+                public boolean isDisabled() { return this == DISABLED; }
+            }
+
+            /**
+             * Whether the {@link ExecutionSubscriber} implementation
+             * provided by this extension (which persists executions to the execution log) is enabled or not.
+             *
+             * <p>
+             *     One reason to use this option is if you wish to provide your own implementation that wraps
+             *     or delegates to the default implementation of {@link ExecutionSubscriber} that is
+             *     provided by the <i>executionLog</i> extension.  Because executions are published to
+             *     <i>all</i> subscribers on the class path, you can disable the default implementation from
+             *     doing anything using this setting.
+             * </p>
+             */
+            private PersistPolicy persist = PersistPolicy.ENABLED;
+        }
+
         private final ExecutionOutbox executionOutbox = new ExecutionOutbox();
         @Valid
         @Data
@@ -3095,6 +3174,43 @@ public class CausewayConfiguration {
                 @Max(value = 1000)
                 private int maxPending = 100;
             }
+
+            /**
+             * As per {@link ExecutionLog#getPersist()}.
+             *
+             * <p>
+             *     Implementation note: we use an enum here (rather than a simple boolean) to allow for future
+             *     enhancements.
+             * </p>
+             */
+            public enum PersistPolicy {
+                /**
+                 * Persist to the outbox.  This is the default.
+                 */
+                ENABLED,
+                /**
+                 * Do <i>NOT</i> persist to the outbox.
+                 */
+                DISABLED;
+
+                public boolean isEnabled() { return this == ENABLED; }
+                public boolean isDisabled() { return this == DISABLED; }
+            }
+
+            /**
+             * Whether the {@link ExecutionSubscriber}
+             * implementation provided by this extension (which persists executions to the outbox) is enabled or not.
+             *
+             * <p>
+             *     One reason to use this option is if you wish to provide your own implementation that wraps
+             *     or delegates to the outbox implementation of {@link ExecutionSubscriber} that is
+             *     provided by the <i>executionOutbox</i> extension.  Because executions are published to
+             *     <i>all</i> subscribers on the class path, you can disable the outbox implementation from
+             *     doing anything using this setting.
+             * </p>
+             */
+            private ExecutionOutbox.PersistPolicy persist = ExecutionOutbox.PersistPolicy.ENABLED;
+
         }
 
         private final Secman secman = new Secman();
@@ -3216,7 +3332,6 @@ public class CausewayConfiguration {
                          *
                          * @see NamespacePermissions#getSticky()
                          */
-                        @Getter @Setter
                         private List<String> additional = ADMIN_ADDITIONAL_NAMESPACE_PERMISSIONS;
 
                     }
@@ -3266,7 +3381,6 @@ public class CausewayConfiguration {
                  *     or Keycloak as the authenticator; users are always auto-created.
                  * </p>
                  */
-                @Getter @Setter
                 private AutoCreatePolicy autoCreatePolicy = AutoCreatePolicy.AUTO_CREATE_AS_LOCKED;
 
                 /**

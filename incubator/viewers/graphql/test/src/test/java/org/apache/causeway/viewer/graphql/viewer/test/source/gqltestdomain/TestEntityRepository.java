@@ -21,7 +21,7 @@ package org.apache.causeway.viewer.graphql.viewer.test.source.gqltestdomain;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;

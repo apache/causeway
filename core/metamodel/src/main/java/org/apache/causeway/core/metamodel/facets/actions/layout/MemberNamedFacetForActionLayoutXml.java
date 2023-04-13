@@ -31,18 +31,19 @@ extends MemberNamedFacetWithStaticTextAbstract {
 
     public static Optional<MemberNamedFacet> create(
             final ActionLayoutData actionLayout,
-            final FacetHolder holder) {
+            final FacetHolder holder,
+            final Precedence precedence) {
         if(actionLayout == null) {
             return Optional.empty();
         }
         final String named = _Strings.emptyToNull(actionLayout.getNamed());
         return named != null
-                ? Optional.of(new MemberNamedFacetForActionLayoutXml(named, holder))
+                ? Optional.of(new MemberNamedFacetForActionLayoutXml(named, holder, precedence))
                 : Optional.empty();
     }
 
-    private MemberNamedFacetForActionLayoutXml(final String named, final FacetHolder holder) {
-        super(named, holder, Precedence.HIGH); // XML layout overrules layout from annotations
+    private MemberNamedFacetForActionLayoutXml(final String named, final FacetHolder holder, final Precedence precedence) {
+        super(named, holder, precedence);
     }
 
     @Override

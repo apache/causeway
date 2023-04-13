@@ -53,7 +53,6 @@ public class SuccessFeedbackCookieManager {
             // if successFeedback is empty we interpret that as a cookie remove request
             drainSuccessFeedback(_Functions.noopConsumer());
         }
-
     }
 
     /**
@@ -62,6 +61,7 @@ public class SuccessFeedbackCookieManager {
      * messages.
      */
     public static void drainSuccessFeedback(final @NonNull Consumer<String> onSuccessFeedback) {
+
         val cookieUtils = new CookieUtils();
         final String successFeedback = cookieUtils.load(FEEDBACK_COOKIE_NAME);
         if (_Strings.isNotEmpty(successFeedback)) {

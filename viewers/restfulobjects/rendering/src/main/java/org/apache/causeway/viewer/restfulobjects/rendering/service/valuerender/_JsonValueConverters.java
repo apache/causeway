@@ -22,6 +22,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -31,6 +32,7 @@ import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
 import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 
@@ -79,7 +81,14 @@ final class _JsonValueConverters {
         final String extendedFormat;
     }
 
-    public List<JsonValueConverter> asList() {
+    public static Map<Class<?>, JsonValueConverter> byClass() {
+        val converterByClass = _Maps.<Class<?>, JsonValueConverter>newLinkedHashMap();
+        new _JsonValueConverters().asList()
+                .forEach(converter->converterByClass.put(converter.getValueClass(), converter));
+        return converterByClass;
+    }
+
+    private List<JsonValueConverter> asList() {
 
         val converters = _Lists.<JsonValueConverter>newArrayList();
 

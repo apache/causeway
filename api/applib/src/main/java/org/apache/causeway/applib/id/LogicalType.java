@@ -26,18 +26,14 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import javax.inject.Named;
-import javax.persistence.Table;
-
 import org.springframework.lang.Nullable;
 
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.DomainService;
-import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 
+import jakarta.persistence.Table;
+import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Synchronized;
@@ -116,7 +112,6 @@ implements
      * @apiNote Does only simple inference, not involving classifier plugins.
      * Use with caution!
      */
-    @SuppressWarnings("removal")
     public static LogicalType infer(
             final @NonNull Class<?> correspondingClass) {
 
@@ -127,38 +122,6 @@ implements
                 .orElse(null));
         if(named!=null) {
             return eager(correspondingClass, named);
-        }
-
-        // 3x deprecated naming strategies ...
-
-        {
-            val logicalTypeName = _Strings.emptyToNull(
-                    _Annotations.synthesize(correspondingClass, DomainObject.class)
-                    .map(DomainObject::logicalTypeName)
-                    .orElse(null));
-            if(logicalTypeName!=null) {
-                return eager(correspondingClass, logicalTypeName);
-            }
-        }
-
-        {
-            val logicalTypeName = _Strings.emptyToNull(
-                    _Annotations.synthesize(correspondingClass, DomainService.class)
-                    .map(DomainService::logicalTypeName)
-                    .orElse(null));
-            if(logicalTypeName!=null) {
-                return eager(correspondingClass, logicalTypeName);
-            }
-        }
-
-        {
-            val logicalTypeName = _Strings.emptyToNull(
-                    _Annotations.synthesize(correspondingClass, Value.class)
-                    .map(Value::logicalTypeName)
-                    .orElse(null));
-            if(logicalTypeName!=null) {
-                return eager(correspondingClass, logicalTypeName);
-            }
         }
 
         // fallback to @Table annotations
@@ -216,7 +179,7 @@ implements
      * {@link LogicalTypeFacet}.
      *
      * <p>
-     * This will typically be the value of the {@link DomainObject#logicalTypeName()} annotation attribute.
+     * This will typically be the value of the {@link Named#value()} annotation attribute.
      * If none has been specified then will default to the fully qualified class name (with
      * {@link ClassSubstitutorRegistry class name substituted} if necessary to allow for runtime
      * bytecode enhancement.

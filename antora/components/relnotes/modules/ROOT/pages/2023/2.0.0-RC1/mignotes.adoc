@@ -1,0 +1,178 @@
+= Migrating from M8/M9 to RC1
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+== Project Rename
+
+Any occurrences of `isis` within source code, including configuration resources, have been replaced with `causeway` while keeping variants:
+
+* lower-case `isis` -> `causeway`
+* upper-case `ISIS` -> `CAUSEWAY`
+* or capital case `Isis` -> `Causeway`
+
+=== XSDs
+
+The namespace and location of XSDs has changed:
+
+* from: `http://isis.apache.org/...`
+* to `https://causeway.apache.org/...`
+
+Note the change from `http` to `https`.
+
+To update your app:
+
+* the `menubars.layout.xml` should now declare the following namespaces and locations:
++
+[source,xml]
+.menubars.layout.xml
+----
+<mb3:menuBars
+        xsi:schemaLocation="https://causeway.apache.org/applib/layout/menubars/bootstrap3 https://causeway.apache.org/applib/layout/menubars/bootstrap3/menubars.xsd https://causeway.apache.org/applib/layout/component https://causeway.apache.org/applib/layout/component/component.xsd"
+        xmlns:mb3="https://causeway.apache.org/applib/layout/menubars/bootstrap3"
+        xmlns:cpt="https://causeway.apache.org/applib/layout/component"
+        xmlns:lnk="https://causeway.apache.org/applib/layout/links"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    ...
+</mb3:menuBars>
+----
+
+* while any `Xxx.layout.xml` files (for `Xxx` domain object) should declare:
++
+[source,xml]
+.Xxx.layout.xml
+----
+<bs3:grid
+        xsi:schemaLocation="https://causeway.apache.org/applib/layout/component https://causeway.apache.org/applib/layout/component/component.xsd https://causeway.apache.org/applib/layout/grid/bootstrap3 https://causeway.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd"
+        xmlns:bs3="https://causeway.apache.org/applib/layout/grid/bootstrap3"
+        xmlns:cpt="https://causeway.apache.org/applib/layout/component"
+        xmlns:lnk="https://causeway.apache.org/applib/layout/links"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    ...
+</bs3:grid>
+----
+
+
+If you are still using the "isis" artifacts, then the old schemas are still available, but have moved to the `layout-v1` directory.
+Adjust the locations in your `.layout.xml` files accordingly:
+
+* the `menubars.layout.xml` should now declare the following locations (namespace unchanged):
++
+[source,xml]
+.menubars.layout.xml
+----
+<mb3:menuBars
+        xsi:schemaLocation="http://isis.apache.org/applib/layout/menubars/bootstrap3 https://causeway.apache.org/applib/layout-v1/menubars/bootstrap3/menubars.xsd http://isis.apache.org/applib/layout/component https://causeway.apache.org/applib/layout-v1/component/component.xsd http://isis.apache.org/applib/layout/links https://causeway.apache.org/applib/layout-v1/links/links.xsd"
+        xmlns:mb3="http://isis.apache.org/applib/layout/menubars/bootstrap3"
+        xmlns:cpt="http://isis.apache.org/applib/layout/component"
+        xmlns:lnk="http://isis.apache.org/applib/layout/links"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    ...
+</mb3:menuBars>
+----
+
+* while any `Xxx.layout.xml` files (for `Xxx` domain object) should declare:
++
+[source,xml]
+.Xxx.layout.xml
+----
+<bs3:grid
+        xsi:schemaLocation="http://isis.apache.org/applib/layout/component https://causeway.apache.org/applib/layout-v1/component/component.xsd http://isis.apache.org/applib/layout/grid/bootstrap3 https://causeway.apache.org/applib/layout-v1/grid/bootstrap3/bootstrap3.xsd http://isis.apache.org/applib/layout/links https://causeway.apache.org/applib/layout-v1/links/links.xsd"
+        xmlns:bs3="http://isis.apache.org/applib/layout/grid/bootstrap3"
+        xmlns:cpt="http://isis.apache.org/applib/layout/component"
+        xmlns:lnk="http://isis.apache.org/applib/layout/links"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    ...
+</bs3:grid>
+----
+
+== Configuration
+
+The following configuration properties have been changed:
+
+[cols="2m,3m", options="header"]
+|===
+
+| previously
+| new
+
+| causeway.viewer.wicket.application.css
+| causeway.viewer.wicket.css
+
+| causeway.viewer.wicket.application.js
+| causeway.viewer.wicket.js
+
+| causeway.viewer.*wicket*.application.menubars-layout-*xml*
+| causeway.viewer.*common*.application.menubars-layout-*file*
+
+| causeway.viewer.*wicket*.application
+| causeway.viewer.*common*.application
+
+| causeway.viewer.*wicket*.credit
+| causeway.viewer.*common*.credit
+
+|===
+
+The following configuration properties have been removed (with no replacement):
+
+* `causeway.extensions.command-log.publish-policy`
++
+As a result, commands for actions that do _not_ change state (eg queries) are now also persisted.
+
+
+== Maven Artifacts
+
+The following changed:
+[cols="2a,3a", options="header"]
+
+|===
+
+| previously
+| new
+
+|
+`o.a.c.v.restfulobjects.jaxrsresteasy4.CausewayModuleViewerRestfulObjectsJaxrsResteasy4` from
+[source,xml]
+----
+<groupId>org.apache.causeway.viewer</groupId>
+<artifactId>causeway-viewer-restfulobjects-jaxrsresteasy4</artifactId>
+----
+|
+`o.a.c.v.restfulobjects.jaxrsresteasy.CausewayModuleViewerRestfulObjectsJaxrsResteasy` from
+[source,xml]
+----
+<groupId>org.apache.causeway.viewer</groupId>
+<artifactId>causeway-viewer-restfulobjects-jaxrsresteasy</artifactId>
+----
+|===
+
+== Programming Model
+
+The following changed:
+[cols="2a,3a", options="header"]
+
+|===
+
+| previously
+| new
+
+| `ViewModel` implementations were required to have at least a _public_ single argument constructor,
+taking a `String` argument for the `ViewModel's` memento.
+| `ViewModel` implementations now allow *any* _public_ constructor signature,
+where arguments are auto-resolved by the `ServiceRegistry`.
+
+`String` arguments still get the `ViewModel's` memento passed in.
+
+If the `ViewModel` has multiple _public_ constructors, it picks (the) one,
+that has an `@Inject` or `@Autowired` annotation.
+
+| `@DomainObject(logicalTypeName=..)`
+| removed as deprecated since 2.0.0-M8; use `@Named` instead
+
+| `@DomainService(logicalTypeName=..)`
+| removed as deprecated since 2.0.0-M8; use `@Named` instead
+
+| `@Value(logicalTypeName=..)`
+| removed as deprecated since 2.0.0-M8; use `@Named` instead
+
+|===

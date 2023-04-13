@@ -21,11 +21,6 @@ package org.apache.causeway.applib.services.user;
 import java.util.List;
 import java.util.Optional;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Provider;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -37,6 +32,10 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.sudo.SudoService;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Provider;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 

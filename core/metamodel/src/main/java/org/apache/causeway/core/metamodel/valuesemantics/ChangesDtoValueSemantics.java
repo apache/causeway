@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.valuesemantics;
 
-import javax.annotation.Priority;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Component;
 
@@ -29,7 +29,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.schema.chg.v2.ChangesDto;
 
 @Component
-@Named("causeway.val.ChangesDtoValueSemantics")
+@Named("causeway.metamodel.value.ChangesDtoValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class ChangesDtoValueSemantics
 extends XmlValueSemanticsAbstract<ChangesDto> {

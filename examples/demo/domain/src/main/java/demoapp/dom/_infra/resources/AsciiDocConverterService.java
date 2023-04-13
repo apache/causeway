@@ -20,8 +20,8 @@ package demoapp.dom._infra.resources;
 
 import java.util.Map;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Attributes;

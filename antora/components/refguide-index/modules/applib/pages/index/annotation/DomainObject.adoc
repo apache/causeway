@@ -21,8 +21,6 @@ If - for the currently logged on user - none of the domain object's members are 
   Introspection introspection() default Introspection.NOT_SPECIFIED;     // <.>
   String mixinMethod() default "$$";     // <.>
   Nature nature() default Nature.NOT_SPECIFIED;     // <.>
-  @Deprecated(forRemoval = true, since = "2.0.0-M8")
-String logicalTypeName() default "";     // <.>
   Class<? extends ObjectCreatedEvent<?>> createdLifecycleEvent() default ObjectCreatedEvent.Default.class;     // <.>
   Class<? extends ObjectPersistingEvent<?>> persistingLifecycleEvent() default ObjectPersistingEvent.Default.class;     // <.>
   Class<? extends ObjectPersistedEvent<?>> persistedLifecycleEvent() default ObjectPersistedEvent.Default.class;     // <.>
@@ -85,18 +83,6 @@ Applicable only if _#nature()_ is _Nature#MIXIN_ , indicates the name of the met
 +
 --
 The nature of this domain object.
---
-<.> xref:#logicalTypeName[logicalTypeName]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _Named_ instead
-====
-
-The logical name of this object's type, that uniquely and fully qualifies it. The logical name is analogous to - but independent of - the actual fully qualified class name. eg. _sales.Customer_ for a class 'org.mycompany.dom.Customer'
 --
 <.> xref:#createdLifecycleEvent[createdLifecycleEvent]
 +
@@ -210,24 +196,16 @@ Supporting methods are then derived from that method name. For example, if the m
 
 Typical examples are "act", "prop", "coll", "exec", "execute", "invoke", "apply" and so on. The default name is `$$`.
 
+ *NOTE* : it's more typical to instead use xref:refguide:applib:index/annotation/Action.adoc[Action] , xref:refguide:applib:index/annotation/Property.adoc[Property] or xref:refguide:applib:index/annotation/Collection.adoc[Collection] as the class-level annotation, indicating that the domain object is a mixin. The mixin method name for these is, respectively, "act", "prop" and "coll".
+
 [#nature]
 === nature
 
 The nature of this domain object.
 
-[#logicalTypeName]
-=== logicalTypeName
+Most common are natures of _Nature#ENTITY_ and _Nature#VIEW_MODEL_ . For mixins, rather than use a nature of _Nature#MIXIN_ , it's more typical to instead use xref:refguide:applib:index/annotation/Action.adoc[Action] , xref:refguide:applib:index/annotation/Property.adoc[Property] or xref:refguide:applib:index/annotation/Collection.adoc[Collection] as the class-level annotation, indicating that the domain object is a mixin. The _#mixinMethod() mixin method name_ for these is, respectively, "act", "prop" and "coll".
 
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _Named_ instead
-====
-
-The logical name of this object's type, that uniquely and fully qualifies it. The logical name is analogous to - but independent of - the actual fully qualified class name. eg. _sales.Customer_ for a class 'org.mycompany.dom.Customer'
-
-This value, if specified, is used in the serialized form of the object's xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] . A xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] is used by the framework to uniquely identify an object over time (same concept as a URN). Otherwise, if not specified, the fully qualified class name is used instead.
+The _Nature#BEAN_ nature is for internally use, and should not normally be specified explicitly.
 
 [#createdLifecycleEvent]
 === createdLifecycleEvent

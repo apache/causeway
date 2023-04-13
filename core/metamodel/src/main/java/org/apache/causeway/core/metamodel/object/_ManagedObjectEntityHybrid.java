@@ -181,7 +181,12 @@ implements _Refetchable {
             makeBookmarked(pojo);
             return;
         }
-        if(isVariantBookmarked()
+        /* if the current EntityState is REMOVED, we handle variant transition 
+         * - from BOOKMARKED 
+         * - as well as from TRANSIENT 
+         * to REMOVED */
+        if((isVariantBookmarked()
+                || isVariantTransient())
                 && entityState.isRemoved()) {
             makeRemoved();
             return;

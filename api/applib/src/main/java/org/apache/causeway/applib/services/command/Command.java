@@ -47,7 +47,7 @@ import lombok.extern.log4j.Log4j2;
  * intention per (web) request, so a command is in effect interaction-scoped.
  *
  * <p>
- * Each Command holds a {@link CommandDto} (see Apache Causeway <a href="http://causeway.apache.org/schema/cmd/">cmd</a> schema)
+ * Each Command holds a {@link CommandDto} (see Apache Causeway <a href="https://causeway.apache.org/schema/cmd/">cmd</a> schema)
  * which reifies all the details in a serializable form.
  * </p>
  *
@@ -76,21 +76,39 @@ import lombok.extern.log4j.Log4j2;
  *
  * @since 1.x {@index}
  */
-@RequiredArgsConstructor
 @ToString
 @Log4j2
 public class Command implements HasInteractionId, HasUsername, HasCommandDto {
 
+    private UUID interactionId;
+
+    public Command(UUID interactionId) {
+        this.interactionId = interactionId;
+    }
+
     /**
-     * Unique identifier for the command.
+     * The unique identifier of this command (inherited from
+     * {@link HasInteractionId})
      *
      * <p>
-     *     Derived from {@link #getCommandDto()}'s {@link CommandDto#getInteractionId()}
+     *     In all cases this be the same as the {@link Interaction} that wraps the command, and can be used
+     *     to correlate also to any audit records
+     *     ({@link org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange}s resulting from state
+     *     changes occurring as a consequence of the command.
+     * </p>
+     *
+     * <p>
+     *     Note that this is immutable in almost all cases.  The one exception is if the Command is being executed
+     *     through the {@link CommandExecutorService}, for example when executing a async action that has been reified
+     *     into a {@link CommandDto}.  In such cases, the {@link CommandExecutorService#executeCommand(CommandDto)}
+     *     will <i>replace</i> the original Id with that of the DTO being executed.
      * </p>
      */
-    @Getter
-        (onMethod_ = {@Override})
-    private final UUID interactionId;
+    @Override
+    public UUID getInteractionId() {
+        return interactionId;
+    }
+
 
     /**
      * The user that created the command.
@@ -121,22 +139,26 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
                 : null;
     }
 
+    @ToString.Exclude
+    private org.apache.causeway.schema.cmd.v2.CommandDto commandDto;
+
     /**
      * Serializable representation of the action invocation/property edit.
      *
      * <p>
      *     When the framework sets this (through an internal API), it is
-     *     expected to have {@link CommandDto#getInteractionId()},
-     *     {@link CommandDto#getUsername()}, {@link CommandDto#getTimestamp()},
-     *     {@link CommandDto#getTargets()} and {@link CommandDto#getMember()}
-     *     to be populated.  The {@link #getInteractionId()}, {@link #getUsername()},
+     *     expected that the {@link CommandDto#getUsername() username},
+     *     {@link CommandDto#getTimestamp() timestamp}, {@link CommandDto#getTargets() target(s)} and
+     *     {@link CommandDto#getMember() member} will be populated.
+     *     The {@link #getInteractionId()}, {@link #getUsername()},
      *     {@link #getTimestamp()} and {@link #getTarget()} are all derived
      *     from the provided {@link CommandDto}.
      * </p>
      */
-    @ToString.Exclude
-    @Getter
-    private org.apache.causeway.schema.cmd.v2.CommandDto commandDto;
+    @Override
+    public CommandDto getCommandDto() {
+        return commandDto;
+    }
 
     /**
      * Derived from {@link #getCommandDto()}, is the {@link Bookmark} of
@@ -232,46 +254,32 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
     @Getter
     private Throwable exception;
 
-    /**
-     * Whether this command resulted in a change of state to the system.
-     *
-     * <p>
-     *     This can be used as a hint to decide whether to persist the command
-     *     to a datastore, for example for auditing (though
-     *     {@link org.apache.causeway.applib.services.publishing.spi.ExecutionSubscriber} is
-     *     an alternative for that use case) or so that it can be retrieved
-     *     and replayed on another system, eg for regression testing.
-     * </p>
-     *
-     * <p>
-     *     Note that this flag will only be accurate if the <i>Audit Trail</i> extension (or equivalent) is configured
-     *     to actually set it.
-     * </p>
-     *
-     * <p>
-     *     See also the <code>causeway.extensions.command-log.publish-policy</code> configuration property, that controls
-     *     whether the <i>Command Log</i> extension checks this flag or not.
-     * </p>
-     *
-     */
-    @Getter
-    private boolean systemStateChanged;
 
     public static enum CommandPublishingPhase {
         /** initial state: do not publish (yet) */
         ONHOLD,
-        /** publishing is enabled */
+        /**
+         * publishing is enabled, and the command will be executed.
+         */
         READY,
-        /** publishing has completed */
+        /**
+         * The command has started to be executed.
+         */
+        STARTED,
+        /**
+         * The command has completed its execution.
+         */
         COMPLETED;
-        public boolean isOnhold() {return this==ONHOLD;}
+        public boolean isOnHold() {return this==ONHOLD;}
         public boolean isReady() {return this==READY;}
+        public boolean isStarted() {return this==STARTED;}
         public boolean isCompleted() {return this==COMPLETED;}
     }
 
     /**
      * Whether this command has been enabled for publishing,
-     * that is {@link CommandSubscriber}s will be notified when this Command completes.
+     * that is {@link CommandSubscriber}s will be notified when this Command becomes {@link CommandPublishingPhase#READY ready},
+     * has {@link CommandPublishingPhase#STARTED started}, and when it {@link CommandPublishingPhase#COMPLETED completes}.
      */
     @Getter private CommandPublishingPhase publishingPhase = CommandPublishingPhase.ONHOLD;
 
@@ -344,18 +352,6 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
 
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
-         *
-         * <p>
-         * Hint that this {@link Command} has resulted in a change of state to the system.
-         * Implementations can use this to persist the command, for example.
-         * </p>
-         */
-        public void setSystemStateChanged(final boolean systemStateChanged) {
-            Command.this.systemStateChanged = systemStateChanged;
-        }
-
-        /**
-         * <b>NOT API</b>: intended to be called only by the framework.
          */
         public void setPublishingPhase(final @NonNull CommandPublishingPhase publishingPhase) {
             if(Command.this.publishingPhase.isCompleted()) {
@@ -364,6 +360,12 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
             Command.this.publishingPhase = publishingPhase;
         }
 
+        /**
+         * <b>NOT API</b>: intended to be called only by the framework.
+         */
+        public void setInteractionId(UUID interactionId) {
+            Command.this.interactionId = interactionId;
+        }
     };
 
     /**

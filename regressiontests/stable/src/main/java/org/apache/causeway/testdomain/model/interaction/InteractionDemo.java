@@ -24,13 +24,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.inject.Named;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlType;
+import jakarta.inject.Named;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
+import jakarta.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -43,6 +43,7 @@ import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._Strings;
 
@@ -102,6 +103,18 @@ public class InteractionDemo {
     @Collection
     public List<InteractionDemoItem> getItems() {
         return lazyItems.get();
+    }
+
+    // -- ACTIONS WITH VARIOUS SEMANTICS
+
+    @Action(semantics = SemanticsOf.SAFE)
+    public InteractionDemo actSafely() {
+        return this;
+    }
+
+    @Action(semantics = SemanticsOf.NOT_SPECIFIED)
+    public InteractionDemo actUnsafely() {
+        return this;
     }
 
     // -- ASSOCIATED ACTION WITH CHOICES FROM BULK SELECT

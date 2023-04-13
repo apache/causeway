@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.interactions;
 
+import java.util.Optional;
+
+import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionAdvisor;
 import org.apache.causeway.core.metamodel.consent.InteractionResult;
 import org.apache.causeway.core.metamodel.consent.InteractionResultSet;
@@ -30,14 +33,18 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public final class InteractionUtils {
 
-    public static InteractionResult isVisibleResult(FacetHolder facetHolder, VisibilityContext context) {
+    public static InteractionResult isVisibleResult(final FacetHolder facetHolder, final VisibilityContext context) {
 
         val iaResult = new InteractionResult(context.createInteractionEvent());
 
         facetHolder.streamFacets(HidingInteractionAdvisor.class)
         .filter(advisor->compatible(advisor, context))
         .forEach(advisor->{
-            val hidingReason = advisor.hides(context);
+            val hidingReasonString = advisor.hides(context);
+            val hidingReason = Optional.ofNullable(hidingReasonString)
+                    .map(Consent.VetoReason::explicit)
+                    .orElse(null);
+
             iaResult.advise(hidingReason, advisor);
         });
 
@@ -45,28 +52,31 @@ public final class InteractionUtils {
     }
 
 
-    public static InteractionResult isUsableResult(FacetHolder facetHolder, UsabilityContext context) {
+    public static InteractionResult isUsableResult(final FacetHolder facetHolder, final UsabilityContext context) {
 
         val isResult = new InteractionResult(context.createInteractionEvent());
 
         facetHolder.streamFacets(DisablingInteractionAdvisor.class)
         .filter(advisor->compatible(advisor, context))
         .forEach(advisor->{
-            val disablingReason = advisor.disables(context);
+            val disablingReason = advisor.disables(context).orElse(null);
             isResult.advise(disablingReason, advisor);
         });
 
         return isResult;
     }
 
-    public static InteractionResult isValidResult(FacetHolder facetHolder, ValidityContext context) {
+    public static InteractionResult isValidResult(final FacetHolder facetHolder, final ValidityContext context) {
 
         val iaResult = new InteractionResult(context.createInteractionEvent());
 
         facetHolder.streamFacets(ValidatingInteractionAdvisor.class)
         .filter(advisor->compatible(advisor, context))
         .forEach(advisor->{
-            val invalidatingReason = advisor.invalidates(context);
+            val invalidatingReasonString = advisor.invalidates(context);
+            val invalidatingReason = Optional.ofNullable(invalidatingReasonString)
+                    .map(Consent.VetoReason::explicit)
+                    .orElse(null);
             iaResult.advise(invalidatingReason, advisor);
         });
 
@@ -74,14 +84,14 @@ public final class InteractionUtils {
     }
 
     public static InteractionResultSet isValidResultSet(
-            FacetHolder facetHolder,
-            ValidityContext context,
-            InteractionResultSet resultSet) {
+            final FacetHolder facetHolder,
+            final ValidityContext context,
+            final InteractionResultSet resultSet) {
 
         return resultSet.add(isValidResult(facetHolder, context));
     }
 
-    private static boolean compatible(InteractionAdvisor advisor, InteractionContext ic) {
+    private static boolean compatible(final InteractionAdvisor advisor, final InteractionContext ic) {
 
         if(advisor instanceof ActionDomainEventFacet) {
             return ic instanceof ActionInteractionContext;

@@ -18,7 +18,75 @@
  */
 package org.apache.causeway.core.metamodel.consent;
 
+import java.io.Serializable;
+import java.util.Optional;
+
+import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
+
+import lombok.NonNull;
+import lombok.experimental.Accessors;
+
 public interface Consent {
+
+    //XXX record candidate
+    @lombok.Value @Accessors(fluent=true)
+    public static class VetoReason implements Serializable {
+        private static final long serialVersionUID = 1L;
+        /**
+         * Introduced to help decide whether or not to display a 'ban' icon
+         * in the UI, with a tooltip showing the disabled reason.
+         */
+        private final boolean showInUi;
+        private final @NonNull String string;
+        public static VetoReason explicit(final String reason) {
+            _Assert.assertTrue(_Strings.isNotEmpty(reason));
+            return new VetoReason(true, reason);
+        }
+        private static VetoReason inferred(final String reason) {
+            _Assert.assertTrue(_Strings.isNotEmpty(reason));
+            return new VetoReason(false, reason);
+        }
+        public Optional<VetoReason> toOptional() {
+            return Optional.of(this);
+        }
+        public VetoReason concatenate(final VetoReason other) {
+            return new VetoReason(this.showInUi || other.showInUi, this.string + "; " + other.string);
+        }
+        // -- PREDEFINED REASONS
+        public static VetoReason editingObjectDisabledReasonNotGiven() {
+            return VetoReason.inferred("Disabled via @DomainObject annotation, reason not given.");
+        }
+        public static VetoReason editingPropertyDisabledReasonNotGiven() {
+            return VetoReason.inferred("Disabled via @Property annotation, reason not given.");
+        }
+        public static VetoReason propertyHasNoSetter() {
+            return VetoReason.inferred("Disabled, property has no setter.");
+        }
+        public static VetoReason bounded() {
+            return VetoReason.inferred("Cannot edit a bounded member.");
+        }
+        public static VetoReason immutableValueType() {
+            return VetoReason.inferred("Value types are immutable.");
+        }
+        public static VetoReason immutablePrimaryKey() {
+            return VetoReason.inferred("Primary-keys are immutable.");
+        }
+        public static VetoReason mixedinCollection() {
+            return inferred("Cannot edit a mixed-in collection.");
+        }
+        public static VetoReason mixedinProperty() {
+            return inferred("Cannot edit a mixed-in property.");
+        }
+        public static VetoReason immutableIfNoReasonGivenByImmutableFacet() {
+            return inferred("Immutable, no reason given by ImmutableFacet.");
+        }
+        public static VetoReason delegatedTo(@NonNull final Class<? extends ImmutableFacet> cls) {
+            return inferred("Calculated at runtime, delegating to ImmutableFacet " + cls + ".");
+        }
+    }
+
 
     /**
      * Returns true if this object is giving permission.
@@ -31,18 +99,21 @@ public interface Consent {
     boolean isVetoed();
 
     /**
-     * Why consent is being vetoed.
-     *
-     * <p>
-     * Will be non-<tt>null</tt> and non-empty if vetoed. Will be <tt>null</tt>
-     * (<i>not</i> the empty string) if this is consent is is allowed.
-     *
+     * Optionally the {@link VetoReason}, why consent is being vetoed, based on whether not allowed.
      * <p>
      * Will correspond to the {@link InteractionResult#getReason() reason} in
      * the contained {@link #getInteractionResult() InteractionResult} (if one
      * was specified).
      */
-    String getReason();
+    Optional<VetoReason> getReason();
+
+    /**
+     * Optionally the {@link VetoReason} as String, why consent is being vetoed, based on whether not allowed.
+     */
+    default Optional<String> getReasonAsString() {
+        return getReason().map(VetoReason::string);
+    }
+
 
     /**
      * Description of the interaction that this consent represents.

@@ -20,9 +20,10 @@ package org.apache.causeway.valuetypes.jodatime.integration.valuesemantics;
 
 import java.time.ZonedDateTime;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
+import org.apache.causeway.valuetypes.jodatime.integration.CausewayModuleValJodatimeIntegration;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Component;
 
@@ -33,9 +34,11 @@ import org.apache.causeway.core.metamodel.valuetypes.TemporalSemanticsAdapter;
 import org.apache.causeway.valuetypes.jodatime.applib.value.JodaTimeConverters;
 
 @Component
-@Named("causeway.val.JodaDateTimeValueSemantics")
+@Named(JodaDateTimeValueSemantics.LOGICAL_TYPE_NAME)
 public class JodaDateTimeValueSemantics
 extends TemporalSemanticsAdapter<org.joda.time.DateTime, ZonedDateTime>  {
+
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleValJodatimeIntegration.NAMESPACE + ".JodaDateTimeValueSemantics";
 
     @Inject ZonedDateTimeValueSemantics zonedDateTimeValueSemantics;
 

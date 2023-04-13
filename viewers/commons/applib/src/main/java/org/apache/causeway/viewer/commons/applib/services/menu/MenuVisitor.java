@@ -18,15 +18,21 @@
  */
 package org.apache.causeway.viewer.commons.applib.services.menu;
 
+import org.apache.causeway.viewer.commons.applib.services.menu.model.MenuAction;
+import org.apache.causeway.viewer.commons.applib.services.menu.model.MenuDropdown;
+
+/**
+ * Depth first visitor of the nav-bar model.
+ */
 public interface MenuVisitor {
 
-    void addTopLevel(MenuItemDto menuDto);
-    void addSectionSpacer();
-    void addSubMenu(MenuItemDto menuDto);
+    void onTopLevel(MenuDropdown menuDropdown);
+    void onMenuAction(MenuAction menuAction);
 
+    void onSectionSpacer();
     /**
      * @param named - not null and not empty
      */
-    void addSectionLabel(String named);
+    void onSectionLabel(String named);
 
 }

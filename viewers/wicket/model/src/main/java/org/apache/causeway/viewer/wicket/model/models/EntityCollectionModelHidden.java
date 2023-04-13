@@ -40,4 +40,14 @@ extends EntityCollectionModelAbstract {
         return 0;
     }
 
+    @Override
+    public String getName() {
+        return "hidden";
+    }
+
+    @Override
+    public int getPageSize() {
+        return 1;
+    }
+
 }

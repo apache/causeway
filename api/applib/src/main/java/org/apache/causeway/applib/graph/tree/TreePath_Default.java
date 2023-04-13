@@ -22,6 +22,14 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.base._Refs;
+import org.apache.causeway.commons.internal.base._Strings;
+
+import lombok.NonNull;
+import lombok.val;
 
 /**
  * Package private mixin for TreePath.
@@ -32,7 +40,7 @@ class TreePath_Default implements TreePath {
     private final int[] canonicalPath;
     private final int hashCode;
 
-    TreePath_Default(int[] canonicalPath) {
+    TreePath_Default(final int[] canonicalPath) {
         Objects.requireNonNull(canonicalPath, "canonicalPath is required");
         if(canonicalPath.length<1) {
             throw new IllegalArgumentException("canonicalPath must not be empty");
@@ -42,7 +50,7 @@ class TreePath_Default implements TreePath {
     }
 
     @Override
-    public TreePath append(int indexWithinSiblings) {
+    public TreePath append(final int indexWithinSiblings) {
         final int[] newCanonicalPath = new int[canonicalPath.length+1];
         System.arraycopy(canonicalPath, 0, newCanonicalPath, 0, canonicalPath.length);
         newCanonicalPath[canonicalPath.length] = indexWithinSiblings;
@@ -64,10 +72,36 @@ class TreePath_Default implements TreePath {
         return canonicalPath.length==1;
     }
 
+    @Override
+    public String stringify(@NonNull final String delimiter) {
+        _Assert.assertTrue(_Strings.isNotEmpty(delimiter), ()->"non-empty delimiter required");
+        return delimiter + streamPathElements()
+            .mapToObj(i->""+i)
+            .collect(Collectors.joining(delimiter));
+    }
+
+    @Override
+    public IntStream streamPathElements() {
+        return IntStream.of(canonicalPath);
+    }
+
+    @Override
+    public Stream<TreePath> streamUpTheHierarchyStartingAtSelf() {
+        val hasMore = _Refs.booleanRef(true);
+        return Stream.iterate((TreePath)this, __->hasMore.isTrue(), TreePath::getParentIfAny)
+                .filter(x->{
+                    if(x.isRoot()) {
+                        hasMore.setValue(false); // stop the stream only after we have included the root
+                    }
+                    return true;
+                });
+
+    }
+
     // -- OBJECT CONTRACTS
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if(obj instanceof TreePath_Default) {
             final TreePath_Default other = (TreePath_Default) obj;
             return Arrays.equals(canonicalPath, other.canonicalPath);
@@ -82,9 +116,7 @@ class TreePath_Default implements TreePath {
 
     @Override
     public String toString() {
-        return "/" + IntStream.of(canonicalPath)
-        .mapToObj(i->""+i)
-        .collect(Collectors.joining("/"));
+        return stringify("/");
     }
 
 }

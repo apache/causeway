@@ -131,6 +131,8 @@ public @interface Property {
     /**
      * If {@link #editing()} is set to {@link Editing#DISABLED},
      * then the reason to provide to the user as to why this property cannot be edited.
+     * <p>
+     * If left empty (default), no reason is given.
      *
      * @see Property#editing()
      */
@@ -180,15 +182,6 @@ public @interface Property {
      */
     String fileAccept()
             default "";
-
-    /**
-     * Indicates where the property is not visible to the user.
-     *
-     * @see Action#hidden()
-     * @see Collection#hidden()
-     */
-    Where hidden()
-            default Where.NOT_SPECIFIED;
 
     /**
      * The maximum entry length of a field.

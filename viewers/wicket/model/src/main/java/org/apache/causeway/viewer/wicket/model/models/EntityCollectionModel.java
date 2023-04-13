@@ -20,6 +20,7 @@ package org.apache.causeway.viewer.wicket.model.models;
 
 import java.util.Optional;
 
+import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.applib.Identifier;
@@ -114,10 +115,13 @@ extends
         return getDataTableModel().getTitle().getValue();
     }
 
-    // -- DEPRECATIONS(?)
+    default int getPageSize() {
+        return getDataTableModel().getPageSize(getVariant().getPageSizeDefault());
+    }
 
-    @Deprecated // move to DataTableModel
-    int getPageSize();
+    default Optional<TableDecorator> getTableDecoratorIfAny() {
+        return getDataTableModel().getTableDecoratorIfAny();
+    }
 
     // -- PARENTED SPECIFICS
 

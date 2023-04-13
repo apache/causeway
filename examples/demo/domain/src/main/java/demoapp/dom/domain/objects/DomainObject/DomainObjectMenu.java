@@ -18,20 +18,26 @@
  */
 package demoapp.dom.domain.objects.DomainObject;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainService;
-import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
+import demoapp.dom.domain.objects.DomainObject.aliased.DomainObjectAliasedPage;
+import demoapp.dom.domain.objects.DomainObject.autoComplete.DomainObjectAutoCompletePage;
+import demoapp.dom.domain.objects.DomainObject.bounded.DomainObjectBoundingPage;
+import demoapp.dom.domain.objects.DomainObject.editing.DomainObjectEditingPage;
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingVm;
-import demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.StatefulVmJaxbRefsEntity;
-import demoapp.dom.domain.objects.DomainObject.nature.viewmodels.usingjaxb.StatefulVmUsingJaxb;
+import demoapp.dom.domain.objects.DomainObject.introspection.DomainObjectIntrospectionPage;
+import demoapp.dom.domain.objects.DomainObject.mixinMethod.DomainObjectMixinMethodPage;
+import demoapp.dom.domain.objects.DomainObject.nature.DomainObjectNaturePage;
+import demoapp.dom.domain.objects.DomainObject.xxxDomainEvent.DomainObjectXxxDomainEventPage;
+import demoapp.dom.domain.objects.DomainObject.xxxLifecycleEvent.DomainObjectXxxLifecycleEventPage;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -39,42 +45,33 @@ import lombok.val;
 @DomainService(
         nature=NatureOfService.VIEW
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class DomainObjectMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-circle", describedAs = "Specify logical type name aliases")
+    public DomainObjectAliasedPage aliased() {
+        return new DomainObjectAliasedPage();
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-question-circle", describedAs = "Search object in prompt")
-    public void autoComplete(){
+    public DomainObjectAutoCompletePage autoComplete(){
+        return new DomainObjectAutoCompletePage();
     }
-    @MemberSupport public String disableAutoComplete(){
-        return "Search object in prompt" +
-                 " (not yet implemented in demo)";
-    }
-
-
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-list-ul", describedAs = "Choose 'reference data' object (one of a bounded set) in prompt")
-    public void bounded(){
+    public DomainObjectBoundingPage bounding(){
+        return new DomainObjectBoundingPage();
     }
-    @MemberSupport public String disableBounded(){
-        return "Choose 'reference data' object (one of a bounded set) in prompt" +
-                 " (not yet implemented in demo)";
-    }
-
-
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-pencil-alt", describedAs = "Default editability of properties")
-    public void editing() {
+    public DomainObjectEditingPage editing() {
+        return new DomainObjectEditingPage();
     }
-    @MemberSupport public String disableEditing(){
-        return "Default editability of properties" +
-                 " (not yet implemented in demo)";
-    }
-
-
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-book", describedAs = "Entity changed events as XML")
@@ -82,75 +79,38 @@ public class DomainObjectMenu {
         return new DomainObjectEntityChangePublishingVm();
     }
 
-
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-pen-ruler", describedAs = "Control over introspection process")
+    public DomainObjectIntrospectionPage introspection(){
+        return new DomainObjectIntrospectionPage();
+    }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-tools", describedAs = "For mixins, override the default method name")
-    public void mixinMethod() {
+    @ActionLayout(cssClassFa="fa-mortar-pestle", describedAs = "For mixins, override the default method name")
+    public DomainObjectMixinMethodPage mixinMethod() {
+        return new DomainObjectMixinMethodPage();
     }
-    @MemberSupport public String disableMixinMethod(){
-        return "For mixins, override the default method name" +
-                 " (not yet implemented in demo)";
-    }
-
-
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa = "fa-gamepad", describedAs = "@DomainObject(nature=VIEW_MODEL) for a Stateful View Model")
-    public StatefulVmUsingJaxb natureStateful(final String message) {
-        val viewModel = new StatefulVmUsingJaxb();
-        viewModel.setMessage(message);
-        return viewModel;
+    public DomainObjectNaturePage nature() {
+        return new DomainObjectNaturePage();
     }
-    @MemberSupport public String default0NatureStateful() {
-        return "Some initial state";
-    }
-
-
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa = "fa-gamepad", describedAs = "@DomainObject(nature=VIEW_MODEL) for a Stateful View Model referencing an entity")
-    public StatefulVmJaxbRefsEntity natureStatefulRefsEntity(final String message) {
-        val viewModel = new StatefulVmJaxbRefsEntity();
-        viewModel.setMessage(message);
-        return viewModel;
-    }
-    @MemberSupport public String default0NatureStatefulRefsEntity() {
-        return "Some initial state";
-    }
-
-
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-circle", describedAs = "Explicitly specify the logical type name")
-    public void logicalTypeName() {
-    }
-    @MemberSupport public String disableLogicalTypeName(){
-        return "Explicitly specify the object type alias" +
-                 " (not yet implemented in demo)";
-    }
-
-
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-asterisk", describedAs = "Default class of the domain event emitted when interacting with the domain object's actions, properties or collections")
-    public void xxxDomainEvent() {
+    public DomainObjectXxxDomainEventPage domainEvents() {
+        val page = new DomainObjectXxxDomainEventPage("change me");
+        page.addChild("#1");
+        page.addChild("#2");
+        page.addChild("#3");
+        return page;
     }
-    @MemberSupport public String disableXxxDomainEvent(){
-        return "Default class of the domain event emitted when interacting with the domain object's actions, properties or collections" +
-                 " (not yet implemented in demo)";
-    }
-
-
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-redo", describedAs = "Class of the lifecycle event emitted when the domain entity transitions through its persistence lifecycle")
-    public void xxxLifecycleEvent() {
+    public DomainObjectXxxLifecycleEventPage lifecycleEvents() {
+        return new DomainObjectXxxLifecycleEventPage();
     }
-    @MemberSupport public String disableXxxLifecycleEvent(){
-        return "Class of the lifecycle event emitted when the domain entity transitions through its persistence lifecycle" +
-                 " (not yet implemented in demo)";
-    }
-
 
 }

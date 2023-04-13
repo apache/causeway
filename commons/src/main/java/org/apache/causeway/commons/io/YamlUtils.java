@@ -18,21 +18,39 @@
  */
 package org.apache.causeway.commons.io;
 
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.Method;
+import java.lang.reflect.RecordComponent;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.UnaryOperator;
 
 import org.springframework.lang.Nullable;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.DumperOptions.LineBreak;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
+import org.yaml.snakeyaml.error.YAMLException;
+import org.yaml.snakeyaml.introspector.BeanAccess;
+import org.yaml.snakeyaml.introspector.MethodProperty;
+import org.yaml.snakeyaml.introspector.Property;
+import org.yaml.snakeyaml.introspector.PropertyUtils;
+import org.yaml.snakeyaml.representer.Representer;
 
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.SneakyThrows;
+import lombok.val;
+import lombok.experimental.Accessors;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -65,7 +83,7 @@ public class YamlUtils {
     public <T> Try<T> tryRead(
             final @NonNull Class<T> mappedType,
             final @NonNull DataSource source) {
-        return source.readAll((final InputStream is)->{
+        return source.tryReadAll((final InputStream is)->{
             return Try.call(()->createMapper(mappedType).load(is));
         });
     }
@@ -114,7 +132,6 @@ public class YamlUtils {
     private Yaml createMapper(
             final Class<?> mappedType,
             final YamlUtils.YamlCustomizer ... customizers) {
-        var mapper = new Yaml(new Constructor(mappedType));
         var options = new DumperOptions();
         options.setIndent(2);
         options.setLineBreak(LineBreak.UNIX); // fixated for consistency
@@ -124,7 +141,99 @@ public class YamlUtils {
             options = Optional.ofNullable(customizer.apply(options))
                     .orElse(options);
         }
+        var presenter = new Representer(options);
+        presenter.setPropertyUtils(new PropertyUtils2());
+        var mapper = new Yaml(new Constructor(mappedType, new LoaderOptions()), presenter);
         return mapper;
+    }
+
+    // -- REPRESENTING RECORD TYPES
+
+    static class PropertyUtils2 extends PropertyUtils {
+
+        @Override
+        protected Map<String, Property> getPropertiesMap(final Class<?> type, final BeanAccess bAccess) {
+            if(type==Class.class) {
+                setAllowReadOnlyProperties(true);
+                try {
+                    val properties = new LinkedHashMap<String, Property>();
+                    val propertyDescriptor = new PropertyDescriptor("name", className(), null);
+                    properties.put("name", new MethodProperty(propertyDescriptor));
+                    return properties;
+                } catch (IntrospectionException e) {
+                    throw new YAMLException(e);
+                }
+            }
+            if(type.isRecord()) {
+                setAllowReadOnlyProperties(true);
+                try {
+                    val properties = new LinkedHashMap<String, Property>();
+                    for(RecordComponent rc: type.getRecordComponents()) {
+                        val propertyDescriptor = new PropertyDescriptor(rc.getName(), rc.getAccessor(), null);
+                        properties.put(rc.getName(), new MethodProperty(propertyDescriptor));
+                    }
+                    return postProcessMap(properties);
+                } catch (IntrospectionException e) {
+                    throw new YAMLException(e);
+                }
+            }
+            val map = super.getPropertiesMap(type, bAccess);
+            return postProcessMap(map);
+        }
+
+        private Map<String, Property> postProcessMap(final Map<String, Property> map) {
+            //debug
+            //System.err.printf("%s map: %s%n", type.getName(), map);
+            map.replaceAll((k, v)->
+                Can.class.isAssignableFrom(v.getType())
+                    && v instanceof MethodProperty // no field support yet
+                    ? MethodPropertyFromCanToList.wrap((MethodProperty)v)
+                    : v);
+            return map;
+        }
+
+        @Getter(lazy = true) @Accessors(fluent=true)
+        private final static Method className = lookupClassName();
+        @SneakyThrows
+        private static Method lookupClassName() {
+            return Class.class.getMethod("getName");
+        }
+
+        @Getter(lazy = true) @Accessors(fluent=true)
+        private final static Method canToList = lookupCanToList();
+        @SneakyThrows
+        private static Method lookupCanToList() {
+            return Can.class.getMethod("toList");
+        }
+
+    }
+
+    /** Wraps any {@link MethodProperty} that represent a {@link Can} type
+     * and acts as a {@link List} representing MethodProperty facade instead. */
+    static class MethodPropertyFromCanToList extends MethodProperty {
+
+        @SneakyThrows
+        static MethodPropertyFromCanToList wrap(final MethodProperty wrappedMethodProperty) {
+            return new MethodPropertyFromCanToList(
+                    wrappedMethodProperty,
+                    new PropertyDescriptor(wrappedMethodProperty.getName(), null, null));
+        }
+
+        final MethodProperty wrappedMethodProperty;
+
+        MethodPropertyFromCanToList(
+                final MethodProperty wrappedMethodProperty,
+                final PropertyDescriptor property) {
+            super(property);
+            this.wrappedMethodProperty = wrappedMethodProperty;
+        }
+
+        @Override public Object get(final Object object) {
+            return ((Can<?>)wrappedMethodProperty.get(object)).toList();
+        }
+        @Override public Class<?> getType() { return List.class; }
+        @Override public boolean isReadable() { return true; }
+
     }
 
 }

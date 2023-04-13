@@ -21,16 +21,15 @@ package org.apache.causeway.tooling.c4;
 import java.util.Optional;
 
 import com.structurizr.Workspace;
-import com.structurizr.io.plantuml.PlantUMLWriter;
-import com.structurizr.io.plantuml.StructurizrPlantUMLWriter;
+import com.structurizr.export.plantuml.StructurizrPlantUMLExporter;
 import com.structurizr.model.Element;
 import com.structurizr.model.Model;
 import com.structurizr.model.Person;
 import com.structurizr.model.SoftwareSystem;
 import com.structurizr.model.Tags;
+import com.structurizr.view.ContainerView;
 import com.structurizr.view.Shape;
 import com.structurizr.view.SystemContextView;
-import com.structurizr.view.View;
 import com.structurizr.view.ViewSet;
 
 import org.springframework.lang.Nullable;
@@ -47,7 +46,7 @@ import lombok.val;
 public class C4 {
 
     @Getter private final Workspace workspace;
-    private final PlantUMLWriter plantUMLWriter;
+    private final StructurizrPlantUMLExporter plantUMLExporter;
 
     /**
      * Creates a new workspace.
@@ -55,8 +54,8 @@ public class C4 {
      * @param name          the name of the workspace
      * @param description   a short description
      */
-    public static C4 of(@NonNull String name, @Nullable String description) {
-        val plantUMLWriter = new StructurizrPlantUMLWriter();
+    public static C4 of(@NonNull final String name, @Nullable final String description) {
+        val plantUMLWriter = new StructurizrPlantUMLExporter();
         val c4 = new C4(new Workspace(name, _Strings.nullToEmpty(description)), plantUMLWriter);
         c4.applyDefaultStyles();
         return c4;
@@ -81,33 +80,40 @@ public class C4 {
     }
 
     /**
-     * @return a single {@code view} as a PlantUML diagram definition
+     * @return a single {@link ContainerView} as a PlantUML diagram definition
      */
-    public String toPlantUML(View view) {
-        return plantUMLWriter.toString(view);
+    public String toPlantUML(final ContainerView containerView) {
+        return plantUMLExporter.export(containerView).getDefinition();
+    }
+
+    /**
+     * @return a single {@link SystemContextView} as a PlantUML diagram definition
+     */
+    public String toPlantUML(final SystemContextView systemContextView) {
+        return plantUMLExporter.export(systemContextView).getDefinition();
     }
 
     // -- SIMPLE FACTORIES
 
-    public Person person(@NonNull String name, @Nullable String description) {
+    public Person person(@NonNull final String name, @Nullable final String description) {
         return getModel().addPerson(name, _Strings.nullToEmpty(description));
     }
 
-    public SoftwareSystem softwareSystem(@NonNull String name, @Nullable String description) {
+    public SoftwareSystem softwareSystem(@NonNull final String name, @Nullable final String description) {
         return getModel().addSoftwareSystem(name, _Strings.nullToEmpty(description));
     }
 
-    public SystemContextView systemContextView(@NonNull SoftwareSystem softwareSystem, @NonNull String key, @Nullable String description) {
+    public SystemContextView systemContextView(@NonNull final SoftwareSystem softwareSystem, @NonNull final String key, @Nullable final String description) {
         return getViewSet().createSystemContextView(softwareSystem, key, _Strings.nullToEmpty(description));
     }
 
     // -- EXPERIMENTAL
 
-    public static void setTypeOverride(Element element, String typeOverride) {
+    public static void setTypeOverride(final Element element, final String typeOverride) {
         element.addProperty("typeOverride", typeOverride);
     }
 
-    public static Optional<String> getTypeOverride(Element element) {
+    public static Optional<String> getTypeOverride(final Element element) {
         return Optional.ofNullable(element.getProperties().get("typeOverride"));
     }
 

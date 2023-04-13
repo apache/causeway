@@ -25,9 +25,7 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import lombok.Value;
 
 /**
- *
- * package private mixin for utility class {@link _Strings}
- *
+ * package private utility for {@link _Strings}
  */
 @Value(staticConstructor = "of")
 final class _Strings_KeyValuePair implements _Strings.KeyValuePair {

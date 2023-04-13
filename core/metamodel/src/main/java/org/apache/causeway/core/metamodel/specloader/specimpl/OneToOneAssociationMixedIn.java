@@ -22,7 +22,7 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.reflection._Annotations;
+import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
@@ -119,7 +119,7 @@ implements MixedInMember {
             return originalFacet;
         }
         // ensure that the contributed association is always disabled
-        return new DisabledFacetForContributee("Contributed property", this);
+        return new DisabledFacetForContributee(VetoReason.mixedinProperty(), this);
     }
 
     @Override
@@ -155,9 +155,9 @@ implements MixedInMember {
     // -- HELPER
 
     private boolean calculateIsExplicitlyAnnotated() {
-        val javaMethod = getFacetedMethod().getMethod();
+        val methodFacade = getFacetedMethod().getMethod();
         return super.isExplicitlyAnnotated() // legacy programming style
-                || _Annotations.synthesize(javaMethod, Domain.Include.class).isPresent();
+                || methodFacade.synthesize(Domain.Include.class).isPresent();
     }
 
     private ExecutionPublisher executionPublisher() {

@@ -41,7 +41,7 @@ import lombok.NonNull;
 import lombok.val;
 
 /**
- * Installed by {@link CssClassFaFacetOnMemberPostProcessor},
+ * Installed by {@link CssOnActionFromConfiguredRegexPostProcessor},
  * but only if no other fa-icon is declared
  * already either via layout XML or {@link ActionLayout} annotation.
  * <p>

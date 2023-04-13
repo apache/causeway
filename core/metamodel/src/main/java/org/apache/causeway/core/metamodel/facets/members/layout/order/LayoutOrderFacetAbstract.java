@@ -32,7 +32,12 @@ implements LayoutOrderFacet {
     @Getter(onMethod_ = {@Override})
     private final String sequence;
 
-    protected LayoutOrderFacetAbstract(String sequence, FacetHolder holder) {
+    protected LayoutOrderFacetAbstract(final String sequence, final FacetHolder holder, final Precedence precedence) {
+        super(LayoutOrderFacet.class, holder, precedence);
+        this.sequence = sequence;
+    }
+
+    protected LayoutOrderFacetAbstract(final String sequence, final FacetHolder holder) {
         super(LayoutOrderFacet.class, holder);
         this.sequence = sequence;
     }

@@ -20,7 +20,7 @@ package org.apache.causeway.extensions.secman.applib.user.dom.mixins;
 
 import java.util.Objects;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -58,7 +58,7 @@ public class ApplicationUser_updatePassword {
             extends CausewayModuleExtSecmanApplib.ActionDomainEvent<ApplicationUser_updatePassword> {}
 
     @Inject private ApplicationUserRepository applicationUserRepository;
-    @Autowired(required = false) private @Qualifier("secman") PasswordEncoder passwordEncoder;
+    @Autowired(required = false) private @Qualifier("Secman") PasswordEncoder passwordEncoder;
 
     private final ApplicationUser target;
 

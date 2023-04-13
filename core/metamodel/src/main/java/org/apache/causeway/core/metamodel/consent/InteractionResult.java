@@ -21,8 +21,10 @@ package org.apache.causeway.core.metamodel.consent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.causeway.applib.services.wrapper.events.InteractionEvent;
+import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 
 public class InteractionResult {
 
@@ -41,7 +43,7 @@ public class InteractionResult {
     }
 
     private final InteractionEvent interactionEvent;
-    private final StringBuilder reasonBuf = new StringBuilder();
+    private final List<Consent.VetoReason> reasonBuf = new ArrayList<>();
     private final List<InteractionAdvisor> advisors = new ArrayList<InteractionAdvisor>();
 
     private State state = State.ADVISING;
@@ -52,7 +54,7 @@ public class InteractionResult {
 
     /**
      * Returns the contained {@link InteractionEvent}, if necessary updated with
-     * the {@link #advise(String, InteractionAdvisor) advice} of the
+     * the {@link #advise(org.apache.causeway.core.metamodel.consent.Consent.VetoReason, InteractionAdvisor) advice} of the
      * interactions.
      *
      * <p>
@@ -62,7 +64,8 @@ public class InteractionResult {
      */
     public InteractionEvent getInteractionEvent() {
         if (state == State.ADVISING) {
-            interactionEvent.advised(getReason(), getAdvisorClass());
+            final String nullableReasonString = getReason().map(VetoReason::string).orElse(null);
+            interactionEvent.advised(nullableReasonString, getAdvisorClass());
             state = State.ADVISED;
         }
         return interactionEvent;
@@ -73,18 +76,15 @@ public class InteractionResult {
         return advisor != null ? advisor.getClass() : null;
     }
 
-    public void advise(final String reason, final InteractionAdvisor facet) {
+    public void advise(final Consent.VetoReason reason, final InteractionAdvisor facet) {
         if (state == State.ADVISED) {
             throw new IllegalStateException("Cannot append since have called getInteractionEvent");
         }
         if (reason == null) {
             return;
         }
-        if (isVetoing()) {
-            reasonBuf.append("; ");
-        }
         advisors.add(facet);
-        reasonBuf.append(reason);
+        reasonBuf.add(reason);
     }
 
     public boolean isVetoing() {
@@ -92,12 +92,12 @@ public class InteractionResult {
     }
 
     public boolean isNotVetoing() {
-        return reasonBuf.length() == 0;
+        return reasonBuf.size() == 0;
     }
 
     /**
      * Returns the first of the {@link #getAdvisorFacets()} that has been
-     * {@link #advise(String, InteractionAdvisor) advised} , or <tt>null</tt> if
+     * {@link #advise(org.apache.causeway.core.metamodel.consent.Consent.VetoReason, InteractionAdvisor) advised} , or <tt>null</tt> if
      * none yet.
      *
      * @see #getAdvisorFacets()
@@ -108,7 +108,7 @@ public class InteractionResult {
 
     /**
      * Returns all {@link InteractionAdvisor advisor} (facet)s that have
-     * {@link #advise(String, InteractionAdvisor) append}ed reasons to the
+     * {@link #advise(org.apache.causeway.core.metamodel.consent.Consent.VetoReason, InteractionAdvisor) append}ed reasons to the
      * buffer.
      *
      * @see #getAdvisor()
@@ -127,27 +127,23 @@ public class InteractionResult {
 
     /**
      * Gets the reason as currently known, but does not change the state.
-     *
      * <p>
-     * If {@link #isNotVetoing()}, then returns <tt>null</tt>. Otherwise will be
-     * a non-empty string.
+     * If {@link #isNotVetoing()}, then returns <tt>Optional.empty()</tt>.
      */
-    public String getReason() {
-        return isNotVetoing() ? null : reasonBuf.toString();
+    public Optional<Consent.VetoReason> getReason() {
+        return reasonBuf.stream().reduce(Consent.VetoReason::concatenate);
     }
 
     @Override
     public String toString() {
         return String.format("%s: %s: %s (%d facets advised)",
-                interactionEvent, state, toStringInterpret(reasonBuf), advisors.size());
+                interactionEvent, state, toStringInterpret(), advisors.size());
     }
 
-    private String toStringInterpret(final StringBuilder reasonBuf) {
-        if (getReason().length() == 0) {
-            return "allowed";
-        } else {
-            return "vetoed";
-        }
+    private String toStringInterpret() {
+        return isNotVetoing()
+                ? "allowed"
+                : "vetoed";
     }
 
 }

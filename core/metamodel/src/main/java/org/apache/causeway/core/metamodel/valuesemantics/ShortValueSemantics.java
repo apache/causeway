@@ -21,8 +21,8 @@ package org.apache.causeway.core.metamodel.valuesemantics;
 import java.math.BigInteger;
 import java.util.function.UnaryOperator;
 
-import javax.annotation.Priority;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Component;
 
@@ -46,7 +46,7 @@ import lombok.val;
  * due to auto-boxing also handles the primitive variant
  */
 @Component
-@Named("causeway.val.ShortValueSemantics")
+@Named("causeway.metamodel.value.ShortValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class ShortValueSemantics
 extends ValueSemanticsAbstract<Short>

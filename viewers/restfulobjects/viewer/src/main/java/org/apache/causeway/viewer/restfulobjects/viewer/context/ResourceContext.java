@@ -21,15 +21,16 @@ package org.apache.causeway.viewer.restfulobjects.viewer.context;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Request;
-import javax.ws.rs.core.SecurityContext;
-import javax.ws.rs.ext.Providers;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Request;
+import jakarta.ws.rs.core.SecurityContext;
+import jakarta.ws.rs.ext.Providers;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -49,7 +50,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectAdapterLinkTo;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
-import org.apache.causeway.viewer.restfulobjects.rendering.util.Util;
+import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestParams;
 import org.apache.causeway.viewer.restfulobjects.viewer.resources.ResourceDescriptor;
 import org.apache.causeway.viewer.restfulobjects.viewer.resources.serialization.SerializationStrategy;
 
@@ -78,7 +79,7 @@ implements IResourceContext {
     private final Where where;
     private final RepresentationService.Intent intent;
     @Getter private final InteractionInitiatedBy interactionInitiatedBy;
-    private final String urlUnencodedQueryString;
+    private final @NonNull RequestParams urlUnencodedQueryString;
     private final JsonRepresentation readQueryStringAsMap;
 
     // -- constructor and init
@@ -90,7 +91,7 @@ implements IResourceContext {
             final Request request,
             final String applicationAbsoluteBase,
             final String restfulAbsoluteBase,
-            final String urlUnencodedQueryStringIfAny,
+            final RequestParams urlUnencodedQueryString,
             final HttpServletRequest httpServletRequest,
             final HttpServletResponse httpServletResponse,
             final SecurityContext securityContext,
@@ -105,7 +106,8 @@ implements IResourceContext {
         this.request = request;
         this.where = resourceDescriptor.getWhere();
         this.intent = resourceDescriptor.getIntent();
-        this.urlUnencodedQueryString = urlUnencodedQueryStringIfAny;
+        this.urlUnencodedQueryString = Optional.ofNullable(urlUnencodedQueryString)
+                .orElseGet(RequestParams::ofEmptyQueryString);
         this.httpServletRequest = httpServletRequest;
         this.httpServletResponse = httpServletResponse;
         this.securityContext = securityContext;
@@ -118,7 +120,6 @@ implements IResourceContext {
 
         init(resourceDescriptor.getRepresentationType());
     }
-
 
     void init(final RepresentationType representationType) {
 
@@ -142,7 +143,7 @@ implements IResourceContext {
      * Note that this can return non-null for all HTTP methods; will be either the
      * query string (GET, DELETE) or read out of the input stream (PUT, POST).
      */
-    public String getUrlUnencodedQueryString() {
+    public RequestParams getUrlUnencodedQueryString() {
         return urlUnencodedQueryString;
     }
 
@@ -171,8 +172,7 @@ implements IResourceContext {
             }
             return map;
         } else {
-            final String queryString = getUrlUnencodedQueryString();
-            return Util.readQueryStringAsMap(queryString);
+            return getUrlUnencodedQueryString().asMap();
         }
     }
 

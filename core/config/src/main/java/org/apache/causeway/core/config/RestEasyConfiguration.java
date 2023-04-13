@@ -48,13 +48,13 @@ public class RestEasyConfiguration {
          *
          * <p>
          * Note that this is used rather than <code>resteasy.servlet.mapping.prefix</code>
-         * because there is <i>NO</i> implementation of {@link javax.ws.rs.core.Application}, so we rely on it being
+         * because there is <i>NO</i> implementation of {@link jakarta.ws.rs.core.Application}, so we rely on it being
          * automatically created.
          * </p>
          *
          * @see <a href="https://github.com/resteasy/resteasy-spring-boot/blob/master/mds/USAGE.md">resteasy-spring-boot-starter docs</a>
          */
-        @javax.validation.constraints.Pattern(regexp="^[/].*[^/]$")
+        @jakarta.validation.constraints.Pattern(regexp="^[/].*[^/]$")
         private String defaultPath = "/restful";
 
         private final App app = new App();

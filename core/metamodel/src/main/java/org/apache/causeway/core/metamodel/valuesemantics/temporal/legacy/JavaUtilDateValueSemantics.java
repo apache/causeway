@@ -22,8 +22,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Component;
 
@@ -40,7 +40,7 @@ import org.apache.causeway.core.metamodel.valuetypes.TemporalSemanticsAdapter;
  * @see JavaSqlTimeValueSemantics
  */
 @Component
-@Named("causeway.val.JavaUtilDateValueSemantics")
+@Named("causeway.metamodel.value.JavaUtilDateValueSemantics")
 public class JavaUtilDateValueSemantics
 extends TemporalSemanticsAdapter<java.util.Date, LocalDateTime>  {
 

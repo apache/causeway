@@ -30,9 +30,10 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Transaction;
 import javax.sql.DataSource;
-import javax.transaction.Status;
-import javax.transaction.TransactionManager;
-import javax.transaction.UserTransaction;
+
+import jakarta.transaction.Status;
+import jakarta.transaction.TransactionManager;
+import jakarta.transaction.UserTransaction;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,7 +45,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.jta.JtaTransactionManager;
-import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -109,36 +109,33 @@ class JdoTransactionManagerTests {
 		assertTrue(!TransactionSynchronizationManager.hasResource(pmf), "Hasn't thread pm");
 		assertTrue(!TransactionSynchronizationManager.isSynchronizationActive(), "JTA synchronizations not active");
 
-		Object result = tt.execute(new TransactionCallback<Object>() {
-			@Override
-			public Object doInTransaction(final TransactionStatus status) {
-				assertTrue(TransactionSynchronizationManager.hasResource(pmf), "Has thread pm");
+		Object result = tt.execute(status -> {
+        	assertTrue(TransactionSynchronizationManager.hasResource(pmf), "Has thread pm");
 
-				TransactionAwarePersistenceManagerFactoryProxy proxyFactory =
-						new TransactionAwarePersistenceManagerFactoryProxy(mmc);
-				proxyFactory.setTargetPersistenceManagerFactory(pmf);
-				PersistenceManagerFactory pmfProxy = proxyFactory.getObject();
-				assertEquals(pm.toString(), pmfProxy.getPersistenceManager().toString());
-				pmfProxy.getPersistenceManager().flush();
-				pmfProxy.getPersistenceManager().close();
+        	TransactionAwarePersistenceManagerFactoryProxy proxyFactory =
+        			new TransactionAwarePersistenceManagerFactoryProxy(mmc);
+        	proxyFactory.setTargetPersistenceManagerFactory(pmf);
+        	PersistenceManagerFactory pmfProxy = proxyFactory.getObject();
+        	assertEquals(pm.toString(), pmfProxy.getPersistenceManager().toString());
+        	pmfProxy.getPersistenceManager().flush();
+        	pmfProxy.getPersistenceManager().close();
 
-				SpringPersistenceManagerProxyBean proxyBean = new SpringPersistenceManagerProxyBean();
-				proxyBean.setPersistenceManagerFactory(pmf);
-				proxyBean.afterPropertiesSet();
-				PersistenceManager pmProxy = proxyBean.getObject();
-				assertSame(pmf, pmProxy.getPersistenceManagerFactory());
-				pmProxy.flush();
-				pmProxy.close();
+        	SpringPersistenceManagerProxyBean proxyBean = new SpringPersistenceManagerProxyBean();
+        	proxyBean.setPersistenceManagerFactory(pmf);
+        	proxyBean.afterPropertiesSet();
+        	PersistenceManager pmProxy = proxyBean.getObject();
+        	assertSame(pmf, pmProxy.getPersistenceManagerFactory());
+        	pmProxy.flush();
+        	pmProxy.close();
 
-				StandardPersistenceManagerProxyBean stdProxyBean = new StandardPersistenceManagerProxyBean();
-				stdProxyBean.setPersistenceManagerFactory(pmf);
-				PersistenceManager stdPmProxy = stdProxyBean.getObject();
-				stdPmProxy.flush();
+        	StandardPersistenceManagerProxyBean stdProxyBean = new StandardPersistenceManagerProxyBean();
+        	stdProxyBean.setPersistenceManagerFactory(pmf);
+        	PersistenceManager stdPmProxy = stdProxyBean.getObject();
+        	stdPmProxy.flush();
 
-				PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true).flush();
-				return l;
-			}
-		});
+        	PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true).flush();
+        	return l;
+        });
 		assertTrue(result == l, "Correct result list");
 
 		assertTrue(!TransactionSynchronizationManager.hasResource(pmf), "Hasn't thread pm");
@@ -162,14 +159,11 @@ class JdoTransactionManagerTests {
 		assertTrue(!TransactionSynchronizationManager.isSynchronizationActive(), "JTA synchronizations not active");
 
 		try {
-			tt.execute(new TransactionCallback<Object>() {
-				@Override
-				public Object doInTransaction(final TransactionStatus status) {
-					assertTrue(TransactionSynchronizationManager.hasResource(pmf), "Has thread pm");
-					PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true);
-					throw new RuntimeException("application exception");
-				}
-			});
+			tt.execute(status -> {
+            	assertTrue(TransactionSynchronizationManager.hasResource(pmf), "Has thread pm");
+            	PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true);
+            	throw new RuntimeException("application exception");
+            });
 			fail("Should have thrown RuntimeException");
 		}
 		catch (RuntimeException ex) {
@@ -195,14 +189,11 @@ class JdoTransactionManagerTests {
 		assertTrue(!TransactionSynchronizationManager.isSynchronizationActive(), "JTA synchronizations not active");
 
 		try {
-			tt.execute(new TransactionCallback<Object>() {
-				@Override
-				public Object doInTransaction(final TransactionStatus status) {
-					assertTrue(TransactionSynchronizationManager.hasResource(pmf), "Has thread pm");
-					PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true);
-					throw new RuntimeException("application exception");
-				}
-			});
+			tt.execute(status -> {
+            	assertTrue(TransactionSynchronizationManager.hasResource(pmf), "Has thread pm");
+            	PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true);
+            	throw new RuntimeException("application exception");
+            });
 			fail("Should have thrown RuntimeException");
 		}
 		catch (RuntimeException ex) {
@@ -226,15 +217,12 @@ class JdoTransactionManagerTests {
 		TransactionTemplate tt = new TransactionTemplate(tm);
 		assertTrue(!TransactionSynchronizationManager.hasResource(pmf), "Hasn't thread pm");
 
-		tt.execute(new TransactionCallback<Object>() {
-			@Override
-			public Object doInTransaction(final TransactionStatus status) {
-				assertTrue(TransactionSynchronizationManager.hasResource(pmf), "Has thread pm");
-				PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true).flush();
-				status.setRollbackOnly();
-				return null;
-			}
-		});
+		tt.execute(status -> {
+        	assertTrue(TransactionSynchronizationManager.hasResource(pmf), "Has thread pm");
+        	PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true).flush();
+        	status.setRollbackOnly();
+        	return null;
+        });
 
 		assertTrue(!TransactionSynchronizationManager.hasResource(pmf), "Hasn't thread pm");
 
@@ -255,19 +243,10 @@ class JdoTransactionManagerTests {
 		val l = new ArrayList<Object>();
 		l.add("test");
 
-		Object result = tt.execute(new TransactionCallback<Object>() {
-			@Override
-			public Object doInTransaction(final TransactionStatus status) {
-
-				return tt.execute(new TransactionCallback<Object>() {
-					@Override
-					public Object doInTransaction(final TransactionStatus status) {
-						PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true).flush();
-						return l;
-					}
-				});
-			}
-		});
+		Object result = tt.execute(status -> tt.execute(status1 -> {
+        	PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true).flush();
+        	return l;
+        }));
 		assertTrue(result == l, "Correct result list");
 
 		verify(pm).flush();
@@ -284,18 +263,10 @@ class JdoTransactionManagerTests {
 		PlatformTransactionManager tm = new JdoTransactionManager(pmf);
 		final TransactionTemplate tt = new TransactionTemplate(tm);
 		try {
-			tt.execute(new TransactionCallback<Object>() {
-				@Override
-				public Object doInTransaction(final TransactionStatus status) {
-					return tt.execute(new TransactionCallback<Object>() {
-						@Override
-						public Object doInTransaction(final TransactionStatus status) {
-							PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true);
-							throw new RuntimeException("application exception");
-						}
-					});
-				}
-			});
+			tt.execute(status -> tt.execute(status1 -> {
+            	PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true);
+            	throw new RuntimeException("application exception");
+            }));
 			fail("Should have thrown RuntimeException");
 		}
 		catch (RuntimeException ex) {
@@ -321,19 +292,11 @@ class JdoTransactionManagerTests {
 		l.add("test");
 
 		try {
-			tt.execute(new TransactionCallback<Object>() {
-				@Override
-				public Object doInTransaction(final TransactionStatus status) {
-					return tt.execute(new TransactionCallback<Object>() {
-						@Override
-						public Object doInTransaction(final TransactionStatus status) {
-							PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true).flush();
-							status.setRollbackOnly();
-							return null;
-						}
-					});
-				}
-			});
+			tt.execute(status -> tt.execute(status1 -> {
+            	PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true).flush();
+            	status1.setRollbackOnly();
+            	return null;
+            }));
 			fail("Should have thrown JdoResourceFailureException");
 		}
 		catch (JdoResourceFailureException ex) {
@@ -357,18 +320,10 @@ class JdoTransactionManagerTests {
 		val l = new ArrayList<Object>();
 		l.add("test");
 
-		Object result = tt.execute(new TransactionCallback<Object>() {
-			@Override
-			public Object doInTransaction(final TransactionStatus status) {
-				return tt.execute(new TransactionCallback<Object>() {
-					@Override
-					public Object doInTransaction(final TransactionStatus status) {
-						PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true).flush();
-						return l;
-					}
-				});
-			}
-		});
+		Object result = tt.execute(status -> tt.execute(status1 -> {
+        	PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true).flush();
+        	return l;
+        }));
 		assertTrue(result == l, "Correct result list");
 		verify(tx, times(2)).begin();
 		verify(tx, times(2)).commit();
@@ -391,20 +346,14 @@ class JdoTransactionManagerTests {
 		TransactionSynchronizationManager.bindResource(pmf, new PersistenceManagerHolder(pm));
 		assertTrue(TransactionSynchronizationManager.hasResource(pmf), "Has thread pm");
 
-		Object result = tt.execute(new TransactionCallback<Object>() {
-			@Override
-			public Object doInTransaction(final TransactionStatus status) {
-				PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true);
+		Object result = tt.execute(status -> {
+        	PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true);
 
-				return tt.execute(new TransactionCallback<Object>() {
-					@Override
-					public Object doInTransaction(final TransactionStatus status) {
-						PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true).flush();
-						return l;
-					}
-				});
-			}
-		});
+        	return tt.execute(status1 -> {
+            	PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true).flush();
+            	return l;
+            });
+        });
 		assertTrue(result == l, "Correct result list");
 
 		assertTrue(TransactionSynchronizationManager.hasResource(pmf), "Has thread pm");
@@ -430,17 +379,14 @@ class JdoTransactionManagerTests {
 		assertTrue(!TransactionSynchronizationManager.hasResource(pmf), "Hasn't thread pm");
 		assertTrue(!TransactionSynchronizationManager.isSynchronizationActive(), "JTA synchronizations not active");
 
-		Object result = tt.execute(new TransactionCallback<Object>() {
-			@Override
-			public Object doInTransaction(final TransactionStatus status) {
-				assertTrue(TransactionSynchronizationManager.isSynchronizationActive(), "JTA synchronizations active");
-				assertTrue(!TransactionSynchronizationManager.hasResource(pmf), "Hasn't thread pm");
-				PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true).flush();
-				PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true).flush();
-				assertTrue(TransactionSynchronizationManager.hasResource(pmf), "Has thread pm");
-				return l;
-			}
-		});
+		Object result = tt.execute(status -> {
+        	assertTrue(TransactionSynchronizationManager.isSynchronizationActive(), "JTA synchronizations active");
+        	assertTrue(!TransactionSynchronizationManager.hasResource(pmf), "Hasn't thread pm");
+        	PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true).flush();
+        	PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true).flush();
+        	assertTrue(TransactionSynchronizationManager.hasResource(pmf), "Has thread pm");
+        	return l;
+        });
 		assertTrue(!TransactionSynchronizationManager.hasResource(pmf), "Hasn't thread pm");
 		assertTrue(result == l, "Correct result list");
 
@@ -472,27 +418,21 @@ class JdoTransactionManagerTests {
 		TransactionSynchronizationManager.bindResource(pmf, new PersistenceManagerHolder(pm));
 		assertTrue(TransactionSynchronizationManager.hasResource(pmf), "Has thread pm");
 
-		Object result = tt.execute(new TransactionCallback<Object>() {
-			@Override
-			public Object doInTransaction(final TransactionStatus status) {
-				try {
-					MockJtaTransaction transaction = new MockJtaTransaction();
-					given(tm.suspend()).willReturn(transaction);
-				}
-				catch (Exception ex) {
-				}
+		Object result = tt.execute(status -> {
+        	try {
+        		MockJtaTransaction transaction = new MockJtaTransaction();
+        		given(tm.suspend()).willReturn(transaction);
+        	}
+        	catch (Exception ex) {
+        	}
 
-				PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true);
+        	PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true);
 
-				return tt.execute(new TransactionCallback<Object>() {
-					@Override
-					public Object doInTransaction(final TransactionStatus status) {
-						PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true).flush();
-						return l;
-					}
-				});
-			}
-		});
+        	return tt.execute(status1 -> {
+            	PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true).flush();
+            	return l;
+            });
+        });
 		assertTrue(result == l, "Correct result list");
 
 		assertTrue(TransactionSynchronizationManager.hasResource(pmf), "Has thread pm");
@@ -515,15 +455,12 @@ class JdoTransactionManagerTests {
 		l.add("test");
 		assertTrue(!TransactionSynchronizationManager.hasResource(pmf), "Hasn't thread pm");
 
-		Object result = tt.execute(new TransactionCallback<Object>() {
-			@Override
-			public Object doInTransaction(final TransactionStatus status) {
-				assertTrue(!TransactionSynchronizationManager.hasResource(pmf), "Hasn't thread pm");
-				assertTrue(!status.isNewTransaction(), "Is not new transaction");
-				PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true);
-				return l;
-			}
-		});
+		Object result = tt.execute(status -> {
+        	assertTrue(!TransactionSynchronizationManager.hasResource(pmf), "Hasn't thread pm");
+        	assertTrue(!status.isNewTransaction(), "Is not new transaction");
+        	PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true);
+        	return l;
+        });
 		assertTrue(result == l, "Correct result list");
 
 		assertTrue(!TransactionSynchronizationManager.hasResource(pmf), "Hasn't thread pm");
@@ -560,14 +497,11 @@ class JdoTransactionManagerTests {
 		TransactionSynchronizationManager.bindResource(pmf, new PersistenceManagerHolder(pm));
 		assertTrue(TransactionSynchronizationManager.hasResource(pmf), "Has thread pm");
 
-		Object result = tt.execute(new TransactionCallback<Object>() {
-			@Override
-			public Object doInTransaction(final TransactionStatus status) {
-				assertTrue(TransactionSynchronizationManager.hasResource(pmf), "Has thread pm");
-				PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true);
-				return l;
-			}
-		});
+		Object result = tt.execute(status -> {
+        	assertTrue(TransactionSynchronizationManager.hasResource(pmf), "Has thread pm");
+        	PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true);
+        	return l;
+        });
 		assertTrue(result == l, "Correct result list");
 
 		assertTrue(TransactionSynchronizationManager.hasResource(pmf), "Has thread pm");
@@ -599,15 +533,12 @@ class JdoTransactionManagerTests {
 		l.add("test");
 		assertTrue(!TransactionSynchronizationManager.hasResource(pmf), "Hasn't thread pm");
 
-		Object result = tt.execute(new TransactionCallback<Object>() {
-			@Override
-			public Object doInTransaction(final TransactionStatus status) {
-				assertTrue(TransactionSynchronizationManager.hasResource(pmf), "Has thread pm");
-				assertTrue(TransactionSynchronizationManager.hasResource(ds), "Has thread con");
-				PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true);
-				return l;
-			}
-		});
+		Object result = tt.execute(status -> {
+        	assertTrue(TransactionSynchronizationManager.hasResource(pmf), "Has thread pm");
+        	assertTrue(TransactionSynchronizationManager.hasResource(ds), "Has thread con");
+        	PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true);
+        	return l;
+        });
 		assertTrue(result == l, "Correct result list");
 
 		assertTrue(!TransactionSynchronizationManager.hasResource(pmf), "Hasn't thread pm");
@@ -642,15 +573,12 @@ class JdoTransactionManagerTests {
 		l.add("test");
 		assertTrue(!TransactionSynchronizationManager.hasResource(pmf), "Hasn't thread pm");
 
-		Object result = tt.execute(new TransactionCallback<Object>() {
-			@Override
-			public Object doInTransaction(final TransactionStatus status) {
-				assertTrue(TransactionSynchronizationManager.hasResource(pmf), "Has thread pm");
-				assertTrue(TransactionSynchronizationManager.hasResource(ds), "Has thread con");
-				PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true);
-				return l;
-			}
-		});
+		Object result = tt.execute(status -> {
+        	assertTrue(TransactionSynchronizationManager.hasResource(pmf), "Has thread pm");
+        	assertTrue(TransactionSynchronizationManager.hasResource(ds), "Has thread con");
+        	PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true);
+        	return l;
+        });
 		assertTrue(result == l, "Correct result list");
 
 		assertTrue(!TransactionSynchronizationManager.hasResource(pmf), "Hasn't thread pm");
@@ -683,15 +611,12 @@ class JdoTransactionManagerTests {
 		l.add("test");
 		assertTrue(!TransactionSynchronizationManager.hasResource(pmf), "Hasn't thread pm");
 
-		Object result = tt.execute(new TransactionCallback<Object>() {
-			@Override
-			public Object doInTransaction(final TransactionStatus status) {
-				assertTrue(TransactionSynchronizationManager.hasResource(pmf), "Has thread pm");
-				assertTrue(!TransactionSynchronizationManager.hasResource(ds), "Hasn't thread con");
-				PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true).flush();
-				return l;
-			}
-		});
+		Object result = tt.execute(status -> {
+        	assertTrue(TransactionSynchronizationManager.hasResource(pmf), "Has thread pm");
+        	assertTrue(!TransactionSynchronizationManager.hasResource(ds), "Hasn't thread con");
+        	PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true).flush();
+        	return l;
+        });
 		assertTrue(result == l, "Correct result list");
 
 		assertTrue(!TransactionSynchronizationManager.hasResource(pmf), "Hasn't thread pm");
@@ -744,29 +669,26 @@ class JdoTransactionManagerTests {
 		l.add("test");
 		assertTrue(!TransactionSynchronizationManager.hasResource(pmf), "Hasn't thread pm");
 
-		Object result = tt.execute(new TransactionCallback<Object>() {
-			@Override
-			public Object doInTransaction(final TransactionStatus status) {
-				assertTrue(TransactionSynchronizationManager.hasResource(pmf), "Has thread pm");
-				assertTrue(TransactionSynchronizationManager.hasResource(ds), "Has thread con");
-				if (manualSavepoint) {
-					Object savepoint = status.createSavepoint();
-					status.rollbackToSavepoint(savepoint);
-				}
-				else {
-					tt.execute(new TransactionCallbackWithoutResult() {
-						@Override
-						protected void doInTransactionWithoutResult(final TransactionStatus status) {
-							assertTrue(TransactionSynchronizationManager.hasResource(pmf), "Has thread session");
-							assertTrue(TransactionSynchronizationManager.hasResource(ds), "Has thread connection");
-							status.setRollbackOnly();
-						}
-					});
-				}
-				PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true).flush();
-				return l;
-			}
-		});
+		Object result = tt.execute(status -> {
+        	assertTrue(TransactionSynchronizationManager.hasResource(pmf), "Has thread pm");
+        	assertTrue(TransactionSynchronizationManager.hasResource(ds), "Has thread con");
+        	if (manualSavepoint) {
+        		Object savepoint = status.createSavepoint();
+        		status.rollbackToSavepoint(savepoint);
+        	}
+        	else {
+        		tt.execute(new TransactionCallbackWithoutResult() {
+        			@Override
+        			protected void doInTransactionWithoutResult(final TransactionStatus status) {
+        				assertTrue(TransactionSynchronizationManager.hasResource(pmf), "Has thread session");
+        				assertTrue(TransactionSynchronizationManager.hasResource(ds), "Has thread connection");
+        				status.setRollbackOnly();
+        			}
+        		});
+        	}
+        	PersistenceManagerFactoryUtils.getPersistenceManager(pmf, true).flush();
+        	return l;
+        });
 		assertTrue(result == l, "Correct result list");
 
 		assertTrue(!TransactionSynchronizationManager.hasResource(pmf), "Hasn't thread pm");

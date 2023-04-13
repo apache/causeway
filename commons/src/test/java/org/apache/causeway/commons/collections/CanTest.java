@@ -242,6 +242,67 @@ class CanTest {
 
     }
 
+    @Test
+    void partitioningInner_whenLastIsSmaller() {
+        final Can<Integer> origin = Can.of(1, 2, 3, 4, 5, 6, 7, 8);
+        final Can<Can<Integer>> subCans = origin.partitionInnerBound(3);
+        assertEquals(3, subCans.size());
+        assertEquals(Can.of(1, 2, 3),
+                subCans.getElseFail(0));
+        assertEquals(Can.of(4, 5, 6),
+                subCans.getElseFail(1));
+        assertEquals(Can.of(7, 8),
+                subCans.getElseFail(2));
+    }
+
+    @Test
+    void partitioningInner_whenLastIsFull() {
+        final Can<Integer> origin = Can.of(1, 2, 3, 4, 5, 6, 7, 8, 9);
+        final Can<Can<Integer>> subCans = origin.partitionInnerBound(3);
+        assertEquals(3, subCans.size());
+        assertEquals(Can.of(1, 2, 3),
+                subCans.getElseFail(0));
+        assertEquals(Can.of(4, 5, 6),
+                subCans.getElseFail(1));
+        assertEquals(Can.of(7, 8, 9),
+                subCans.getElseFail(2));
+    }
+
+    @Test
+    void partitioningOuter_whenEvenlySized() {
+        final Can<Integer> origin = Can.of(1, 2, 3, 4, 5, 6);
+        final Can<Can<Integer>> subCans = origin.partitionOuterBound(2);
+        assertEquals(2, subCans.size());
+        assertEquals(Can.of(1, 2, 3),
+                subCans.getElseFail(0));
+        assertEquals(Can.of(4, 5, 6),
+                subCans.getElseFail(1));
+    }
+
+    @Test
+    void partitioningOuter_whenUnevenlySized() {
+        final Can<Integer> origin = Can.of(1, 2, 3, 4, 5);
+        final Can<Can<Integer>> subCans = origin.partitionOuterBound(2);
+        assertEquals(2, subCans.size());
+        assertEquals(Can.of(1, 2, 3),
+                subCans.getElseFail(0));
+        assertEquals(Can.of(4, 5),
+                subCans.getElseFail(1));
+    }
+
+    @Test
+    void partitioningOuter_whenUnderRepresented() {
+        final Can<Integer> origin = Can.of(1, 2, 3);
+        final Can<Can<Integer>> subCans = origin.partitionOuterBound(5);
+        assertEquals(3, subCans.size());
+        assertEquals(Can.of(1),
+                subCans.getElseFail(0));
+        assertEquals(Can.of(2),
+                subCans.getElseFail(1));
+        assertEquals(Can.of(3),
+                subCans.getElseFail(2));
+    }
+
 
     // -- HEPER
 

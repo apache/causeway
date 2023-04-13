@@ -20,14 +20,15 @@ package org.apache.causeway.applib.layout.component;
 
 import java.io.Serializable;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlType;
-
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
+import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.layout.links.Link;
+
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
+import jakarta.xml.bind.annotation.XmlType;
 
 /**
  * Describes the layout of the title and icon of a domain object, broadly corresponding to {@link org.apache.causeway.applib.annotation.DomainObjectLayout}.
@@ -46,7 +47,8 @@ import org.apache.causeway.applib.layout.links.Link;
                 , "cssClass"
                 , "cssClassFa"
                 , "cssClassFaPosition"
-                , "tableDecoration"
+                , "paged"
+                , "tableDecorator"
                 , "metadataError"
                 , "link"
         }
@@ -149,28 +151,52 @@ HasBookmarking, HasCssClass, HasCssClassFa, HasDescribedAs, HasNamed {
 
 
 
+    /**
+     * @deprecated - unused, to remove.
+     */
+    @Deprecated
     private String plural;
 
+    /**
+     * @deprecated - unused, to remove.
+     */
+    @Deprecated
     @XmlElement(required = false)
     public String getPlural() {
         return plural;
     }
 
+    /**
+     * @deprecated - unused, to remove.
+     */
+    @Deprecated
     public void setPlural(final String plural) {
         this.plural = plural;
     }
 
 
 
-    private TableDecoration tableDecoration;
+    private Integer paged;
 
     @XmlElement(required = false)
-    public TableDecoration getTableDecoration() {
-        return tableDecoration;
+    public Integer getPaged() {
+        return paged;
     }
 
-    public void setTableDecoration(final TableDecoration tableDecoration) {
-        this.tableDecoration = tableDecoration;
+    public void setPaged(Integer paged) {
+        this.paged = paged;
+    }
+
+
+    private Class<? extends TableDecorator> tableDecorator;
+
+    @XmlElement(required = false)
+    public Class<? extends TableDecorator> getTableDecorator() {
+        return tableDecorator;
+    }
+
+    public void setTableDecorator(final Class<? extends TableDecorator> tableDecorator) {
+        this.tableDecorator = tableDecorator;
     }
 
 

@@ -21,23 +21,29 @@ package org.apache.causeway.incubator.viewer.javafx.viewer;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.causeway.incubator.viewer.javafx.headless.SpringBootJavaFxApplication;
 import org.apache.causeway.incubator.viewer.javafx.ui.CausewayModuleIncViewerJavaFxUi;
+import org.apache.causeway.viewer.commons.services.CausewayModuleViewerCommonsServices;
 
 /**
  *
- * @since 2.0
+ * @since 3.0
  */
 @Configuration
 @Import({
         // Modules
-
         CausewayModuleIncViewerJavaFxUi.class,
-
-        // @Service's
-
-        // @Mixin's
+        CausewayModuleViewerCommonsServices.class,
 })
-
 public class CausewayModuleIncViewerJavaFxViewer {
+
+    /**
+     *
+     * @param appClass the class that is annotated with {@literal @SpringBootApplication}
+     * @param args program arguments
+     */
+    public static final void launch(final Class<?> appClass, final String... args) {
+        SpringBootJavaFxApplication.launchSpringBootApplication(appClass, args);
+    }
 
 }

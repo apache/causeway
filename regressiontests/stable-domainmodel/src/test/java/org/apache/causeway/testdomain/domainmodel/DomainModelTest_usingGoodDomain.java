@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -857,7 +857,7 @@ class DomainModelTest_usingGoodDomain {
                             pendingArgsThen.getObservableParamValidation(1).getValue());
                     assertEquals(
                             "my validation",
-                            pendingArgsThen.validateParameterSetForAction().getReason());
+                            pendingArgsThen.validateParameterSetForAction().getReasonAsString().orElse(null));
                 });
 
         // namedEmail(): String = "my email"

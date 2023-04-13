@@ -32,11 +32,11 @@ module org.apache.causeway.viewer.restfulobjects.rendering {
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
     requires jakarta.activation;
-    requires java.annotation;
-    requires java.inject;
+    requires jakarta.annotation;
+    requires jakarta.inject;
     requires java.sql;
-    requires java.ws.rs;
-    requires java.xml.bind;
+    requires jakarta.ws.rs;
+    requires jakarta.xml.bind;
     requires lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;

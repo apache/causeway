@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # to be shared among all steps of this job
-      BASELINE: 2.0.0-M7
+      BASELINE: 2.0.0-RC1
       PROJECT_ROOT_PATH: ${{ github.workspace }}
       CI_SCRIPTS_PATH: ${{ github.workspace }}/scripts/ci
       ANTORA_PLAYBOOKS_PATH: ${{ github.workspace }}/antora/playbooks
@@ -32,11 +32,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Set up JDK 18
+    - name: Set up JDK 19
       uses: actions/setup-java@v3
       with:
         distribution: 'zulu'
-        java-version: 18
+        java-version: 19
 
     - name: Setup Script Environment
       shell: bash
@@ -69,10 +69,10 @@ jobs:
       # because we have no privileges to install them globally with -g option
       run: npm i @antora/cli@^3.1.1 @antora/site-generator-default@^3.1.1  asciidoctor-kroki
 
-    - name: Print Antora Version
+    - name: List Versions of installed NPM Packages
       shell: bash
       working-directory: ${{ env.PROJECT_ROOT_PATH }}
-      run: $(npm bin)/antora version
+      run: npm list
 
     - name: Setup Groovy
       if: steps.revision.outputs.revision != 'skip'

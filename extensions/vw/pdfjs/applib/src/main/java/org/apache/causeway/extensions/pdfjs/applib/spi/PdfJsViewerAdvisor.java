@@ -20,7 +20,7 @@ package org.apache.causeway.extensions.pdfjs.applib.spi;
 
 import java.io.Serializable;
 
-import javax.annotation.Priority;
+import jakarta.annotation.Priority;
 
 import org.springframework.stereotype.Service;
 
@@ -148,7 +148,7 @@ public interface PdfJsViewerAdvisor {
 
         @Override
         public Advice advise(InstanceKey instanceKey) {
-            return new Advice(1, Scale._0_75, 800);
+            return null;
         }
 
         @Override

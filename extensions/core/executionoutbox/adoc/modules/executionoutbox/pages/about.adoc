@@ -100,6 +100,71 @@ causeway:
         max-pending: 100
 ----
 
+== Programmatic usage (queueing up commands)
+
+With the extension configured, any action (or property edit) that has execution publishing enabled will result in an xref:refguide:extensions:index/executionoutbox/applib/dom/ExecutionOutboxEntry.adoc[] being persisted.
+The REST Client (described xref:#outbox-rest-client[below]) can then be set up to poll for and subsequent remove these entries.
+
+Often the action in question should be a no-op; all that is required is create an `ExecutionOutboxEntry` with the appropriate state.
+This state will include a bookmark of the target object (on which the action was invoked) along with a serialization of the parameters.
+
+There are two options when publishing an action:
+
+* make the event as "thin" as possible, ie inform the downstream systems that a significant event has occurred, but no more.
++
+With this approach the downstream systems will probably make a RESTful API call to any additional information to perform their work
+
+* alternatively, provide supplemental information in the event, which may obviate the requirement for a REST call.
++
+This can be done by defining action that has `String` parameters that take XML or JSON; these can therefore publish as much information as is necessary to the downstream systems.
+
+For example:
+
+* define a no-op action taking XML parameters.
++
+This should have publishing enabled, but we don't want it visible in the UI so it should also be hidden:
++
+[source,java]
+----
+@Action(
+        semantics = SemanticsOf.IDEMPOTENT,
+        publishing = Publishing.ENABLED,
+        hidden = Where.EVERYWHERE
+)
+public void addSupplier(
+        final String addRequestXml,
+        final String getRequestXml) {
+    // no-op
+}
+----
+
+* define a convenience method:
++
+[source,java]
+----
+@Programmatic
+public T toOutbox() {
+    return (T)wrapperFactory.wrapSkipRules(this);
+}
+----
+
+* queue up commands, eg:
++
+[source,java]
+----
+val addRequestXml = ...;
+val getRequestXml = ...;
+toOutbox().addSupplier(addRequestXml, getRequestXml);
+----
+
+
+
+== User Interface
+
+The extension provides a number of menu actions,that allow the administrator to query the persisted commands.
+These should be added to menu bar, and access to these restricted.
+
+The sections below describe how.
 
 [#menubar-layout-xml]
 === menubar.layout.xml
@@ -118,8 +183,8 @@ To get you started, the following fragment adds all of the actions to an "Activi
         ...
         <mb3:section>
             <mb3:named>Execution Outbox</mb3:named>
-            <mb3:serviceAction id="findOldest" objectType="isis.ext.executionOutbox.ExecutionOutboxMenu"/>
-            <mb3:serviceAction id="findAll" objectType="isis.ext.executionOutbox.ExecutionOutboxMenu"/>
+            <mb3:serviceAction id="findOldest" objectType="causeway.ext.executionOutbox.ExecutionOutboxMenu"/>
+            <mb3:serviceAction id="findAll" objectType="causeway.ext.executionOutbox.ExecutionOutboxMenu"/>
         </mb3:section>
         ...
     </mb3:menu>
@@ -132,13 +197,6 @@ To get you started, the following fragment adds all of the actions to an "Activi
 If xref:security:secman:about.adoc[] extension is configured, then permissions must be granted to access the menu actions.
 
 This can be done by granting the role set up by the xref:refguide:extensions:index/secman/applib/role/seed/CausewayExtExecutionOutboxRoleAndPermissions.adoc[] seed fixture script (see its `ROLE_NAME` constant).
-
-
-== User Interface
-
-The extension provides a number of menu actions, as listed in xref:menubar-layout-xml[], above.
-They allow the administrator to query the persisted commands.
-Typically access to these actions would be restricted, see xref:secman-security-roles[security roles] above.
 
 
 [#outbox-rest-client]

@@ -18,9 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.callbacks;
 
-import java.lang.reflect.Method;
-
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
@@ -33,7 +32,7 @@ implements PersistedCallbackFacet {
     }
 
     public PersistedCallbackFacetAbstract(
-            final Can<Method> methods,
+            final Can<MethodFacade> methods,
             final FacetHolder holder) {
         super(type(), methods, holder);
     }

@@ -21,9 +21,9 @@ package org.apache.causeway.core.metamodel.valuesemantics;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Component;
 
@@ -43,7 +43,7 @@ import org.apache.causeway.commons.internal.memento._Mementos.SerializingAdapter
 import org.apache.causeway.schema.common.v2.ValueType;
 
 @Component
-@Named("causeway.val.TreeNodeValueSemantics")
+@Named("causeway.metamodel.value.TreeNodeValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class TreeNodeValueSemantics
 extends ValueSemanticsAbstract<TreeNode<?>>

@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.facets.object.domainservice.annotatio
 
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;

@@ -21,7 +21,7 @@ package org.apache.causeway.testdomain.value;
 import java.util.Optional;
 import java.util.function.Function;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -156,7 +156,7 @@ public class ValueSemanticsTester<T> {
         val xmlRef = _Refs.stringRef(rawXml);
         xmlRef.cutAtIndexOf("<ValueWithTypeDto");
         return xmlRef.cutAtLastIndexOf("</ValueWithTypeDto>")
-                .replace(" null=\"false\" xmlns:com=\"http://causeway.apache.org/schema/common\" xmlns:cmd=\"http://causeway.apache.org/schema/cmd\"", "")
+                .replace(" null=\"false\" xmlns:com=\"https://causeway.apache.org/schema/common\" xmlns:cmd=\"https://causeway.apache.org/schema/cmd\"", "")
                 + "</ValueWithTypeDto>";
 
     }

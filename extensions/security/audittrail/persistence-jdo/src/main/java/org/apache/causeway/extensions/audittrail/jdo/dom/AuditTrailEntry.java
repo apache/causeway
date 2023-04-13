@@ -22,7 +22,7 @@ package org.apache.causeway.extensions.audittrail.jdo.dom;
 
 import java.util.UUID;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -35,7 +35,7 @@ import javax.jdo.annotations.Queries;
 import javax.jdo.annotations.Query;
 import javax.jdo.annotations.Version;
 import javax.jdo.annotations.VersionStrategy;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;
@@ -141,7 +141,74 @@ import lombok.Setter;
                   + " WHERE target == :target "
                   + "    && propertyId == :propertyId "
                   + " ORDER BY timestamp DESC "
-                  + " RANGE 0,30")
+                  + " RANGE 0,30"),
+    @Query(
+            name = Nq.FIND_BY_USERNAME_AND_TIMESTAMP_BETWEEN,
+            value = "SELECT "
+                    + "  FROM " + AuditTrailEntry.FQCN + " "
+                    + " WHERE username == :username "
+                    + "    && timestamp >= :from "
+                    + "    && timestamp <= :to "
+                    + "ORDER BY timestamp DESC"),
+    @Query(
+            name = Nq.FIND_BY_USERNAME_AND_TIMESTAMP_AFTER,
+            value = "SELECT "
+                    + "  FROM " + AuditTrailEntry.FQCN + " "
+                    + " WHERE username == :username "
+                    + "    && timestamp >= :from "
+                    + " ORDER BY timestamp DESC"),
+    @Query(
+            name  = Nq.FIND_BY_USERNAME_AND_TIMESTAMP_BEFORE,
+            value = "SELECT "
+                    + "  FROM " + AuditTrailEntry.FQCN + " "
+                    + " WHERE username == :username "
+                    + "    && timestamp <= :to "
+                    + " ORDER BY timestamp DESC"),
+    @Query(
+            name  = Nq.FIND_BY_USERNAME,
+            value = "SELECT "
+                    + "  FROM " + AuditTrailEntry.FQCN + " "
+                    + " WHERE username == :username "
+                    + " ORDER BY timestamp DESC"),
+    @Query(
+            name = Nq.FIND_BY_USERNAME_AND_TARGET_AND_TIMESTAMP_BETWEEN,
+            value = "SELECT "
+                    + "  FROM " + AuditTrailEntry.FQCN + " "
+                    + " WHERE username == :username "
+                    + "    && target == :target "
+                    + "    && timestamp >= :from "
+                    + "    && timestamp <= :to "
+                    + "ORDER BY timestamp DESC"),
+    @Query(
+            name = Nq.FIND_BY_USERNAME_AND_TARGET_AND_TIMESTAMP_AFTER,
+            value = "SELECT "
+                    + "  FROM " + AuditTrailEntry.FQCN + " "
+                    + " WHERE username == :username "
+                    + "    && target == :target "
+                    + "    && timestamp >= :from "
+                    + " ORDER BY timestamp DESC"),
+    @Query(
+            name  = Nq.FIND_BY_USERNAME_AND_TARGET_AND_TIMESTAMP_BEFORE,
+            value = "SELECT "
+                    + "  FROM " + AuditTrailEntry.FQCN + " "
+                    + " WHERE username == :username "
+                    + "    && target == :target "
+                    + "    && timestamp <= :to "
+                    + " ORDER BY timestamp DESC"),
+    @Query(
+            name  = Nq.FIND_BY_USERNAME_AND_TARGET,
+            value = "SELECT "
+                    + "  FROM " + AuditTrailEntry.FQCN + " "
+                    + " WHERE username == :username "
+                    + "    && target == :target "
+                    + " ORDER BY timestamp DESC"),
+    @Query(
+            name = Nq.FIND_RECENT_BY_USERNAME,
+            value = "SELECT "
+                    + "  FROM " + AuditTrailEntry.FQCN + " "
+                    + " WHERE username == :username "
+                    + " ORDER BY timestamp DESC "
+                    + " RANGE 0,100")
 })
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")

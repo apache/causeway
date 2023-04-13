@@ -17,21 +17,26 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<xs:schema targetNamespace="http://isis.apache.org/schema/ixn"
+<xs:schema targetNamespace="https://causeway.apache.org/schema/ixn"
            elementFormDefault="qualified"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           xmlns="http://isis.apache.org/schema/ixn"
-           xmlns:cmd="http://isis.apache.org/schema/cmd"
-           xmlns:com="http://isis.apache.org/schema/common"
->
+           xmlns="https://causeway.apache.org/schema/ixn"
+           xmlns:cmd="https://causeway.apache.org/schema/cmd"
+           xmlns:com="https://causeway.apache.org/schema/common"
 
-    <xs:import namespace="http://isis.apache.org/schema/common" schemaLocation="../common/common-2.0.xsd"/>
-    <xs:import namespace="http://isis.apache.org/schema/cmd" schemaLocation="../cmd/cmd-2.0.xsd"/>
+           xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="2.1"
+           xmlns:annox="http://annox.dev.java.net"
+           jaxb:extensionBindingPrefixes="annox">
+
+    <xs:import namespace="https://causeway.apache.org/schema/common" schemaLocation="../common/common-2.0.xsd"/>
+    <xs:import namespace="https://causeway.apache.org/schema/cmd" schemaLocation="../cmd/cmd-2.0.xsd"/>
 
     <xs:element name="interactionsDto">
         <xs:annotation>
-            <xs:documentation>A collection of interactions.
-            </xs:documentation>
+            <xs:documentation>A collection of interactions.</xs:documentation>
+            <xs:appinfo>
+                <annox:annotate>@javax.inject.Named("causeway.schema.ixn.v2.InteractionsDto")</annox:annotate>
+            </xs:appinfo>
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
@@ -59,6 +64,9 @@
             <xs:documentation>Represents an interaction, that is the execution of a command on a target object.
                 There is typically just a single execution per command.  In more complex cases though executions can be nested, whereby a top-level execution causes other executions, as invoked through a wrapper (Wrapperproxy obtained from the WrapperFactory service).
             </xs:documentation>
+            <xs:appinfo>
+                <annox:annotate>@javax.inject.Named("causeway.schema.ixn.v2.InteractionDto")</annox:annotate>
+            </xs:appinfo>
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
@@ -95,6 +103,9 @@
         <xs:annotation>
             <xs:documentation>Represents either an action invocation or a property edit.  Is subclassed by both.
             </xs:documentation>
+            <xs:appinfo>
+                <annox:annotate>@javax.inject.Named("causeway.schema.ixn.v2.MemberExecutionDto")</annox:annotate>
+            </xs:appinfo>
         </xs:annotation>
         <xs:sequence>
             <xs:element name="sequence" type="xs:int">
@@ -155,6 +166,11 @@
     </xs:complexType>
 
     <xs:complexType name="actionInvocationDto">
+        <xs:annotation>
+            <xs:appinfo>
+                <annox:annotate>@javax.inject.Named("causeway.schema.ixn.v2.ActionInvocationDto")</annox:annotate>
+            </xs:appinfo>
+        </xs:annotation>
         <xs:complexContent>
             <xs:extension base="memberExecutionDto">
                 <xs:sequence>
@@ -176,6 +192,11 @@
     </xs:complexType>
 
     <xs:complexType name="propertyEditDto">
+        <xs:annotation>
+            <xs:appinfo>
+                <annox:annotate>@javax.inject.Named("causeway.schema.ixn.v2.PropertyEditDto")</annox:annotate>
+            </xs:appinfo>
+        </xs:annotation>
         <xs:complexContent>
             <xs:extension base="memberExecutionDto">
                 <xs:sequence>
@@ -186,6 +207,11 @@
     </xs:complexType>
 
     <xs:complexType name="metricsDto">
+        <xs:annotation>
+            <xs:appinfo>
+                <annox:annotate>@javax.inject.Named("causeway.schema.ixn.v2.MetricsDto")</annox:annotate>
+            </xs:appinfo>
+        </xs:annotation>
         <xs:sequence>
             <xs:element name="timings" type="com:periodDto">
                 <xs:annotation>
@@ -203,6 +229,11 @@
     </xs:complexType>
 
     <xs:complexType name="objectCountsDto">
+        <xs:annotation>
+            <xs:appinfo>
+                <annox:annotate>@javax.inject.Named("causeway.schema.ixn.v2.ObjectCountsDto")</annox:annotate>
+            </xs:appinfo>
+        </xs:annotation>
         <xs:sequence>
             <xs:element name="loaded" type="com:differenceDto">
                 <xs:annotation>
@@ -223,6 +254,9 @@
         <xs:annotation>
             <xs:documentation>Captures any exception thrown by an action invocation.  Use as the xsd:type of the 'threw' element.
             </xs:documentation>
+            <xs:appinfo>
+                <annox:annotate>@javax.inject.Named("causeway.schema.ixn.v2.ExceptionDto")</annox:annotate>
+            </xs:appinfo>
         </xs:annotation>
         <xs:sequence>
             <xs:element name="message" type="xs:string"/>

@@ -1,10 +1,10 @@
-name: Apache Causeway Nightly Build
+name: Apache Causeway Weekly Build
 
 on:
   workflow_dispatch:
   schedule:
-    # daily 02:00 (UTC) in the morning
-    - cron: '0 2 * * *'
+    # daily 02:00 (UTC) on Sunday morning
+    - cron: '0 2 * * 0'
 
 jobs:
   build:

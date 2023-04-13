@@ -20,7 +20,7 @@ package org.apache.causeway.incubator.viewer.vaadin.ui.auth;
 
 import java.util.Optional;
 
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 import com.vaadin.flow.server.VaadinSession;
 
@@ -57,11 +57,13 @@ public class AuthSessionStoreUtil {
     /** when within a VaadinSession */
     public static void put(
             final @Nullable InteractionContext auth) {
+
         Optional.ofNullable(VaadinSession.getCurrent())
         .map(VaadinSession::getSession)
         .ifPresent(sessionVaa->{
             sessionVaa.setAttribute(InteractionContext.class.getName(), auth);
         });
+
     }
 
     /** when within a VaadinSession */

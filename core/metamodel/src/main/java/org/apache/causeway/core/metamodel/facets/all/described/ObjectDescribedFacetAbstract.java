@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.all.described;
 
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.i8n.staatic.HasStaticTextFacetAbstract;
 
@@ -31,6 +32,17 @@ implements ObjectDescribedFacet {
 
     public static final Class<ObjectDescribedFacet> type() {
         return ObjectDescribedFacet.class;
+    }
+
+    protected ObjectDescribedFacetAbstract(
+            final String originalText,
+            final FacetHolder holder,
+            final Facet.Precedence precedence) {
+        super(type(),
+                holder.getTranslationContext(),
+                originalText,
+                holder,
+                precedence);
     }
 
     protected ObjectDescribedFacetAbstract(

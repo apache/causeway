@@ -28,8 +28,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 
 import org.springframework.lang.Nullable;
 
@@ -86,7 +86,7 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
     public C createEntryAndPersist(
             final Command command, final UUID parentInteractionIdIfAny, final ExecuteIn executeIn) {
         C c = factoryService.detachedEntity(commandLogEntryClass);
-        c.init(command);
+        c.sync(command);
         c.setParentInteractionId(parentInteractionIdIfAny);
         c.setExecuteIn(executeIn);
         persist(c);
@@ -369,7 +369,7 @@ public abstract class CommandLogEntryRepository<C extends CommandLogEntry> {
 
 
     public void persist(final C commandLogEntry) {
-        repositoryService().persist(commandLogEntry);
+        repositoryService().persistAndFlush(commandLogEntry);
     }
 
     public void truncateLog() {

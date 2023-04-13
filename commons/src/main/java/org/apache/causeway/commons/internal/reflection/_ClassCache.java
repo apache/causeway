@@ -28,9 +28,9 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.annotation.PostConstruct;
+import jakarta.inject.Inject;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
@@ -243,6 +243,7 @@ public final class _ClassCache implements AutoCloseable {
                 val declaredFields = type.getDeclaredFields();
                 val declaredMethods = //type.getDeclaredMethods(); ... cannot detect non overridden inherited methods
                         Can.ofStream(_Reflect.streamAllMethods(type, true));
+                val publicMethods = type.getMethods(); //XXX[CAUSEWAY-3327] order of methods returned might differ among JVM instances
 
                 val model = new ClassModel(
                         Can.ofArray(declaredFields),
@@ -265,19 +266,20 @@ public final class _ClassCache implements AutoCloseable {
 
                     val key = MethodKey.of(type, method);
                     // add all now, remove public ones later
-                    model.nonPublicDeclaredMethodsByKey.put(key, method);
+                    val methodToKeep = putIntoMapHonoringOverridingRelation(model.nonPublicDeclaredMethodsByKey, key, method);
+
                     // collect post-construct methods
-                    if(isPostConstruct(method)) {
-                        model.postConstructMethodsByKey.put(key, method);
+                    if(isPostConstruct(methodToKeep)) {
+                        model.postConstructMethodsByKey.put(key, methodToKeep);
                     }
                 }
 
                 // process public only
-                for(val method : type.getMethods()) {
+                for(val method : publicMethods) {
                     if(Modifier.isStatic(method.getModifiers())) continue;
 
                     val key = MethodKey.of(type, method);
-                    model.publicMethodsByKey.put(key, method);
+                    putIntoMapHonoringOverridingRelation(model.publicMethodsByKey, key, method);
                     model.nonPublicDeclaredMethodsByKey.remove(key);
                 }
 
@@ -285,6 +287,22 @@ public final class _ClassCache implements AutoCloseable {
 
             });
         }
+    }
+
+    /**
+     * Handles the case well, when a method is already in the map and is about to be overwritten.
+     * We keep or put that one that overrides the other (in a Java language sense) and return the winner so to speak.
+     */
+    private static Method putIntoMapHonoringOverridingRelation(
+            final Map<MethodKey, Method> map, final MethodKey key, final Method method) {
+        val methodWithSameKey = map.get(key); // in case the map is already populated
+        val methodToKeep = methodWithSameKey==null
+            ? method
+            /* key-clash originating from one method overriding the other
+             * we need to keep or put the one which is the overriding one (not the overwritten one) */
+            : _Reflect.methodsWhichIsOverridingTheOther(methodWithSameKey, method);
+        map.put(key, methodToKeep);
+        return methodToKeep;
     }
 
     /**
@@ -378,7 +396,5 @@ public final class _ClassCache implements AutoCloseable {
         }
         return _Strings.decapitalize(fieldName);
     }
-
-
 
 }

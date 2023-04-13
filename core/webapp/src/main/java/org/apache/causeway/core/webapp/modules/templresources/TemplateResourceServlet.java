@@ -21,12 +21,13 @@ package org.apache.causeway.core.webapp.modules.templresources;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -40,7 +41,6 @@ import org.apache.causeway.core.metamodel.commons.ResourceUtil;
 import org.apache.causeway.core.metamodel.commons.StringExtensions;
 
 import static org.apache.causeway.commons.internal.base._Strings.pair;
-import static org.apache.causeway.commons.internal.base._With.ifPresentElseGet;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -82,9 +82,9 @@ public class TemplateResourceServlet extends HttpServlet {
         final String servletPath = StringExtensions.stripLeadingSlash(request.getServletPath());
         log.debug("request: {}", servletPath);
 
-        val resourceInputStream = ifPresentElseGet(
-                loadFromFileSystem(request), // try to load from file-system first
-                ()->loadFromClassPath(servletPath)); // otherwise, try to load from class-path
+        val resourceInputStream = Optional
+                .ofNullable(loadFromFileSystem(request)) // try to load from file-system first
+                .orElseGet(()->loadFromClassPath(servletPath)); // otherwise, try to load from class-path
 
         if (resourceInputStream != null) {
             try {

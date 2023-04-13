@@ -18,8 +18,11 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.choices;
 
+import java.util.Optional;
+
 import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
@@ -90,7 +93,7 @@ implements
     }
 
     @Override
-    public String disables(final UsabilityContext context) {
+    public Optional<VetoReason> disables(final UsabilityContext context) {
         final ManagedObject target = context.getTarget();
         return disabledReason(target);
     }
@@ -98,8 +101,8 @@ implements
     /**
      * Optional hook method for subclasses to override.
      */
-    public String disabledReason(final ManagedObject inObject) {
-        return "Bounded";
+    public Optional<VetoReason> disabledReason(final ManagedObject inObject) {
+        return VetoReason.bounded().toOptional();
     }
 
     @SneakyThrows

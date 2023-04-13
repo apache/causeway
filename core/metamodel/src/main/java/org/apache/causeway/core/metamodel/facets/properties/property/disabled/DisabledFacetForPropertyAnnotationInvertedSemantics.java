@@ -19,6 +19,7 @@
 package org.apache.causeway.core.metamodel.facets.properties.property.disabled;
 
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
 
@@ -27,10 +28,10 @@ extends DisabledFacetAbstract {
 
     DisabledFacetForPropertyAnnotationInvertedSemantics(final FacetHolder holder) {
         super(Where.EVERYWHERE,
-                "enabled, based on Property annotation with inverted semantics",
-                holder,
-                Semantics.ENABLED, Precedence.DEFAULT);
+                // arbitrarily using explicit, because flag is ignored when semantics is inverted
+                VetoReason.explicit(
+                        "enabled, based on Property annotation with inverted semantics"),
+                holder, Semantics.ENABLED, Precedence.DEFAULT);
     }
-
 
 }

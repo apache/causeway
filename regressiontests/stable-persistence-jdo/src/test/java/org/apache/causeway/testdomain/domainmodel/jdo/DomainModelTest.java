@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.testdomain.domainmodel.jdo;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 

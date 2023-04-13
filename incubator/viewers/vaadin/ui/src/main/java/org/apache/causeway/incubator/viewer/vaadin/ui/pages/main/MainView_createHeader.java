@@ -34,7 +34,6 @@ import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.incubator.viewer.vaadin.model.util.Vaa;
 import org.apache.causeway.viewer.commons.applib.services.branding.BrandingUiModel;
 import org.apache.causeway.viewer.commons.applib.services.header.HeaderUiModel;
-import org.apache.causeway.viewer.commons.applib.services.menu.MenuUiService;
 
 import lombok.val;
 
@@ -47,7 +46,7 @@ final class MainView_createHeader {
             final Consumer<ManagedAction> menuActionEventHandler,
             final Runnable onHomepageLinkClick) {
 
-        val titleOrLogo = createTitleOrLogo(commonContext, headerUiModel.getBranding());
+        val titleOrLogo = createTitleOrLogo(commonContext, headerUiModel.branding());
         Vaa.setOnClick(titleOrLogo, onHomepageLinkClick);
 
         val leftMenuBar = new MenuBar();
@@ -73,11 +72,9 @@ final class MainView_createHeader {
         val leftMenuBuilder = MenuBuilderVaa.of(commonContext, menuActionEventHandler, leftMenuBar);
         val rightMenuBuilder = MenuBuilderVaa.of(commonContext, menuActionEventHandler, rightMenuBar);
 
-        val menuUiModelProvider = commonContext.lookupServiceElseFail(MenuUiService.class);
-
-        headerUiModel.getPrimary().buildMenuItems(menuUiModelProvider, leftMenuBuilder);
-        headerUiModel.getSecondary().buildMenuItems(menuUiModelProvider, rightMenuBuilder);
-        headerUiModel.getTertiary().buildMenuItems(menuUiModelProvider, rightMenuBuilder);
+        headerUiModel.navbar().primary().visitMenuItems(leftMenuBuilder);
+        headerUiModel.navbar().secondary().visitMenuItems(rightMenuBuilder);
+        headerUiModel.navbar().tertiary().visitMenuItems(rightMenuBuilder);
 
         return menuBarContainer;
 

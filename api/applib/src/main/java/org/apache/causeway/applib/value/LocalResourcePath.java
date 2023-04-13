@@ -21,10 +21,6 @@ package org.apache.causeway.applib.value;
 import java.io.Serializable;
 import java.util.function.UnaryOperator;
 
-import javax.inject.Named;
-import javax.xml.bind.annotation.adapters.XmlAdapter;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
@@ -32,6 +28,9 @@ import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.commons.internal.base._Blackhole;
 import org.apache.causeway.commons.internal.hardening._Hardening;
 
+import jakarta.inject.Named;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -52,10 +51,12 @@ import lombok.NonNull;
  * @since 2.0 {@index}
  * @see OpenUrlStrategy
  */
-@Named(CausewayModuleApplib.NAMESPACE + ".value.LocalResourcePath")
+@Named(LocalResourcePath.LOGICAL_TYPE_NAME)
 @Value
 @XmlJavaTypeAdapter(LocalResourcePath.JaxbToStringAdapter.class)   // for JAXB view model support
 public final class LocalResourcePath implements Serializable {
+
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".value.LocalResourcePath";
 
     private static final long serialVersionUID = 1L;
     @NonNull private final String path;

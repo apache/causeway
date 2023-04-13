@@ -19,7 +19,8 @@
 package org.apache.causeway.core.metamodel.interactions.managed;
 
 import java.io.Serializable;
-import java.util.function.Function;
+
+import org.springframework.util.function.ThrowingFunction;
 
 import org.apache.causeway.commons.functional.Railway;
 import org.apache.causeway.commons.functional.Railway.HasRailway;
@@ -55,7 +56,7 @@ implements
     @Getter private final Railway<InteractionVeto, T> railway;
 
     @Override // type-safe override
-    public InteractionRailway<T> chain(final @NonNull Function<T, Railway<InteractionVeto, T>> chainingFunction) {
+    public InteractionRailway<T> chain(final @NonNull ThrowingFunction<T, Railway<InteractionVeto, T>> chainingFunction) {
         val railway = HasRailway.super.chain(chainingFunction);
         return railway instanceof InteractionRailway
             ? (InteractionRailway<T>) railway

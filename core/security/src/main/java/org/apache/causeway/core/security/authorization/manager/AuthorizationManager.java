@@ -21,20 +21,23 @@ package org.apache.causeway.core.security.authorization.manager;
 import java.util.List;
 import java.util.Optional;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
+import org.apache.causeway.core.security.CausewayModuleCoreSecurity;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.sudo.SudoService;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.security.authorization.Authorizor;
 
 /**
@@ -43,17 +46,27 @@ import org.apache.causeway.core.security.authorization.Authorizor;
  * @since 1.x {@index}
  */
 @Service
-@Named("causeway.security.AuthorizationManager")
+@Named(AuthorizationManager.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class AuthorizationManager {
 
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleCoreSecurity.NAMESPACE + ".AuthorizationManager";
+
     private final Authorizor authorizor;
+    private final ActionSemanticsResolver actionSemanticsResolver;
+    private final boolean actionsWithSafeSemanticsRequireOnlyViewingPermission;
 
     @Inject
     public AuthorizationManager(
+            final CausewayConfiguration config,
+            final ActionSemanticsResolver actionSemanticsResolver,
             final List<Authorizor> authorizors,
             final Optional<AuthorizorChooser> authorizorChooserIfAny) {
+
+        this.actionsWithSafeSemanticsRequireOnlyViewingPermission =
+                config.getSecurity().isActionsWithSafeSemanticsRequireOnlyViewingPermission();
+        this.actionSemanticsResolver = actionSemanticsResolver;
 
         _Assert.assertTrue(_NullSafe.size(authorizors)>0, ()->
             String.format(
@@ -84,6 +97,11 @@ public class AuthorizationManager {
             return true;
         }
         if (authorizor.isUsable(authentication, identifier)) {
+            return true;
+        }
+        if (actionsWithSafeSemanticsRequireOnlyViewingPermission
+                && isActionWithSafeSemantics(identifier)
+                && this.isVisible(authentication, identifier)) {
             return true;
         }
         return false;
@@ -128,6 +146,12 @@ public class AuthorizationManager {
 
     private boolean isPerspectiveMember(final Identifier identifier) {
         return (identifier.getClassName().equals(""));
+    }
+
+    private boolean isActionWithSafeSemantics(final Identifier identifier) {
+        return actionSemanticsResolver.getActionSemanticsOf(identifier)
+            .map(SemanticsOf::isSafeInNature)
+            .orElse(false);
     }
 
 }

@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.facets.actions.action.invocation;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiConsumer;
@@ -33,6 +32,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.collections._Arrays;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.execution.InteractionInternal;
@@ -59,7 +59,7 @@ extends ActionInvocationFacetAbstract
 implements ImperativeFacet {
 
     @Getter private final Class<? extends ActionDomainEvent<?>> eventType;
-    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
+    @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
     @Getter(onMethod = @__(@Override)) private final ObjectSpecification declaringType;
     @Getter(onMethod = @__(@Override)) private final ObjectSpecification returnType;
     private final ServiceRegistry serviceRegistry;
@@ -67,7 +67,7 @@ implements ImperativeFacet {
 
     public ActionInvocationFacetForDomainEventAbstract(
             final Class<? extends ActionDomainEvent<?>> eventType,
-            final Method method,
+            final MethodFacade method,
             final ObjectSpecification declaringType,
             final ObjectSpecification returnType,
             final FacetHolder holder) {
@@ -82,7 +82,7 @@ implements ImperativeFacet {
     }
 
     @Override
-    public Intent getIntent(final Method method) {
+    public Intent getIntent() {
         return Intent.EXECUTE;
     }
 

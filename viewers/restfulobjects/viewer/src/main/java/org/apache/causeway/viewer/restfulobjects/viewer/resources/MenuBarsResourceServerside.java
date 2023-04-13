@@ -20,10 +20,10 @@ package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
 import java.util.function.Consumer;
 
-import javax.ws.rs.HttpMethod;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.HttpMethod;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 import org.springframework.stereotype.Component;
 
@@ -42,17 +42,14 @@ import org.apache.causeway.viewer.restfulobjects.rendering.service.Representatio
 import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
 
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 @Component
-@Log4j2
 public class MenuBarsResourceServerside extends ResourceAbstract implements MenuBarsResource {
 
     public static final String SERVICE_IDENTIFIER = "1";
 
     public MenuBarsResourceServerside() {
         super();
-        log.debug("<init>");
     }
 
     @Override

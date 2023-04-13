@@ -22,9 +22,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -52,11 +52,11 @@ import lombok.experimental.Accessors;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class GridServiceDefault implements GridService {
 
-    public static final String COMPONENT_TNS = "http://causeway.apache.org/applib/layout/component";
-    public static final String COMPONENT_SCHEMA_LOCATION = "http://causeway.apache.org/applib/layout/component/component.xsd";
+    public static final String COMPONENT_TNS = "https://causeway.apache.org/applib/layout/component";
+    public static final String COMPONENT_SCHEMA_LOCATION = "https://causeway.apache.org/applib/layout/component/component.xsd";
 
-    public static final String LINKS_TNS = "http://causeway.apache.org/applib/layout/links";
-    public static final String LINKS_SCHEMA_LOCATION = "http://causeway.apache.org/applib/layout/links/links.xsd";
+    public static final String LINKS_TNS = "https://causeway.apache.org/applib/layout/links";
+    public static final String LINKS_SCHEMA_LOCATION = "https://causeway.apache.org/applib/layout/links/links.xsd";
 
     private final GridLoaderService gridLoaderService;
     @Getter(onMethod_={@Override}) @Accessors(fluent = true)

@@ -24,6 +24,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
+import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -31,6 +32,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.util.Facets;
 
 import lombok.NonNull;
+import lombok.val;
 
 public interface UiParameter extends UiScalar {
 
@@ -53,8 +55,11 @@ public interface UiParameter extends UiScalar {
     }
 
     @Override
-    default String disableReasonIfAny() {
-        return getParameterNegotiationModel().getUsabilityConsent(getParameterIndex()).getReason();
+    default Optional<InteractionVeto> disabledReason() {
+        val vetoConsent = getParameterNegotiationModel().getUsabilityConsent(getParameterIndex());
+        return vetoConsent.getReason()!=null
+                ? Optional.of(InteractionVeto.readonly(vetoConsent))
+                : Optional.empty();
     }
 
     @Override

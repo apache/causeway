@@ -82,16 +82,6 @@ public @interface Collection {
             default CollectionDomainEvent.Default.class;
 
     /**
-     * Indicates when the collection is not visible to the user.
-     *
-     * @see Action#hidden()
-     * @see Property#hidden()
-     * @see Collection#hidden()
-     */
-    Where hidden()
-            default Where.NOT_SPECIFIED;
-
-    /**
      * The type-of the elements held within the collection.
      *
      * <p>

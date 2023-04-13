@@ -31,7 +31,8 @@ extends UnchangingFacetAbstract {
 
     public static Optional<UnchangingFacet> create(
             final PropertyLayoutData propertyLayout,
-            final FacetHolder holder) {
+            final FacetHolder holder,
+            final Precedence precedence) {
         if(propertyLayout == null) {
             return Optional.empty();
         }
@@ -40,11 +41,12 @@ extends UnchangingFacetAbstract {
                 || repainting == Repainting.NOT_SPECIFIED) {
             return Optional.empty();
         }
-        return Optional.of(new UnchangingFacetForPropertyLayoutXml(repainting == Repainting.NO_REPAINT, holder));
+        return Optional.of(new UnchangingFacetForPropertyLayoutXml(repainting == Repainting.NO_REPAINT, holder, precedence));
     }
 
-    private UnchangingFacetForPropertyLayoutXml(final boolean unchanging, final FacetHolder holder) {
-        super(unchanging, holder);
+    private UnchangingFacetForPropertyLayoutXml(
+            final boolean unchanging, final FacetHolder holder, final Precedence precedence) {
+        super(unchanging, holder, precedence);
     }
 
     @Override

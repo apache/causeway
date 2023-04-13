@@ -96,6 +96,7 @@ import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComp
 import org.apache.causeway.viewer.wicket.ui.components.widgets.fileinput.FileUploadFieldWithNestingFix;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.links.AjaxLinkNoPropagate;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
+import org.apache.causeway.viewer.wicket.ui.util.BootstrapConstants.ButtonSemantics;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.util.Attributes;
@@ -520,6 +521,9 @@ public class Wkt {
      */
     public <T extends Component> T cssAppend(final T component, final @Nullable String cssClass) {
         if(_Strings.isNotEmpty(cssClass)) {
+            if(ButtonSemantics.appliesTo(cssClass)) {
+                component.add(ButtonSemantics.remover());
+            }
             component.add(new CssClassNameAppender(cssClass));
         }
         return component;
@@ -527,7 +531,7 @@ public class Wkt {
 
     public <T extends Component> T cssAppend(final T component, final @Nullable IModel<String> cssClassModel) {
         if(cssClassModel!=null) {
-            component.add(new CssClassNameAppender(cssClassModel));
+            cssAppend(component, cssClassModel.getObject());
         }
         return component;
     }
@@ -1000,6 +1004,10 @@ public class Wkt {
                 : String.format("Wicket.Event.publish(Causeway.Topic.%s)", topic.name());
     }
 
+    public OnDomReadyHeaderItem javaScriptAsOnDomReadyHeaderItem(final String javaScript) {
+        return OnDomReadyHeaderItem.forScript(javaScript);
+    }
+
     // -- TABBING UTILITY
 
     public Component noTabbing(final @Nullable Component component) {
@@ -1094,5 +1102,7 @@ public class Wkt {
             tag.put("disabled", "disabled");
         }
     }
+
+
 
 }

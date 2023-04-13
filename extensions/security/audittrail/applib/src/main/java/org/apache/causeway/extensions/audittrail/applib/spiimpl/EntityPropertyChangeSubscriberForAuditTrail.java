@@ -20,10 +20,11 @@
 
 package org.apache.causeway.extensions.audittrail.applib.spiimpl;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -46,10 +47,10 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0 {@index}
  */
 @Service
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Named(EntityPropertyChangeSubscriberForAuditTrail.LOGICAL_TYPE_NAME)
-@Priority(PriorityPrecedence.LATE)
-@Qualifier("audittrail")
+@Priority(PriorityPrecedence.MIDPOINT)
+@Qualifier("Default")
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
 public class EntityPropertyChangeSubscriberForAuditTrail implements EntityPropertyChangeSubscriber {
 
@@ -57,15 +58,19 @@ public class EntityPropertyChangeSubscriberForAuditTrail implements EntityProper
 
     final TransactionService transactionService;
     final AuditTrailEntryRepository<? extends AuditTrailEntry> auditTrailEntryRepository;
-
-    @Override
-    public void onChanging(EntityPropertyChange entityPropertyChange) {
-        auditTrailEntryRepository.createFor(entityPropertyChange);
-
-    }
+    final CausewayConfiguration causewayConfiguration;
 
     @Override
     public boolean isEnabled() {
-        return EntityPropertyChangeSubscriber.super.isEnabled();
+        return causewayConfiguration.getExtensions().getAuditTrail().getPersist().isEnabled();
     }
+
+    @Override
+    public void onChanging(EntityPropertyChange entityPropertyChange) {
+        if (!isEnabled()) {
+            return;
+        }
+        auditTrailEntryRepository.createFor(entityPropertyChange);
+    }
+
 }

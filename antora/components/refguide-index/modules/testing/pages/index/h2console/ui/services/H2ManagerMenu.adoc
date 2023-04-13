@@ -7,7 +7,6 @@
 .H2ManagerMenu.java
 ----
 class H2ManagerMenu {
-  H2ManagerMenu(WebModuleH2Console webModule)
   LocalResourcePath openH2Console()
   boolean hideOpenH2Console()
 }

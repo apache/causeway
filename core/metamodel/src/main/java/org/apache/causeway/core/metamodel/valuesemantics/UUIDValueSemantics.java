@@ -20,8 +20,8 @@ package org.apache.causeway.core.metamodel.valuesemantics;
 
 import java.util.UUID;
 
-import javax.annotation.Priority;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Component;
 
@@ -40,7 +40,7 @@ import lombok.NonNull;
 import lombok.val;
 
 @Component
-@Named("causeway.val.UUIDValueSemantics")
+@Named("causeway.metamodel.value.UUIDValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class UUIDValueSemantics
 extends ValueSemanticsAbstract<UUID>

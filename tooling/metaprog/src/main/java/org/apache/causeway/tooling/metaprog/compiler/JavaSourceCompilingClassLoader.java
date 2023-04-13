@@ -31,7 +31,7 @@ import javax.tools.ToolProvider;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Bytes;
-import org.apache.causeway.commons.internal.base._Files;
+import org.apache.causeway.commons.io.FileUtils;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.functions._Functions;
 
@@ -52,12 +52,12 @@ public class JavaSourceCompilingClassLoader extends ClassLoader  {
     @SneakyThrows
     private JavaSourceCompilingClassLoader() {
         // purely for the purpose of communicating with the compiler
-        this.root = _Files.tempDir("causeway-tooling-cl").toPath();
+        this.root = FileUtils.tempDir("causeway-tooling-cl").toPath();
         log.info("tmp dir created in {}", root);
 
         Thread printingHook = new Thread(() -> {
             try {
-                _Files.deleteDirectory(root.toFile());
+                FileUtils.deleteDirectory(root.toFile());
                 log.info("Done, cleaning up temp files.");
             } catch (Exception e) {
                 System.err.printf("%s: Cleaning up temp files FAILED.%n", getClass().getSimpleName());

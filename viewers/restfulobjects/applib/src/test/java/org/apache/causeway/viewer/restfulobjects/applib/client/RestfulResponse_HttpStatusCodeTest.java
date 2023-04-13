@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.viewer.restfulobjects.applib.client;
 
-import javax.ws.rs.core.Response.Status.Family;
+import jakarta.ws.rs.core.Response.Status.Family;
 
 import org.junit.jupiter.api.Test;
 

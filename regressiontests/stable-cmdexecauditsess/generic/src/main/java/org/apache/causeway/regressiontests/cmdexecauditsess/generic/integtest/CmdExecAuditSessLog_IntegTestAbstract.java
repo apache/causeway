@@ -20,7 +20,7 @@ package org.apache.causeway.regressiontests.cmdexecauditsess.generic.integtest;
 
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -175,34 +175,17 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
                 )
         ;
 
-        // ... but command not yet persisted
+        // ... and command is also already persisted, not yet marked as completed
         var commandLogEntries = commandLogEntryRepository.findAll();
-        assertThat(commandLogEntries).isEmpty();
-
-        // ... and audit entries not yet generated
-        var auditTrailEntries = auditTrailEntryRepository.findAll();
-        assertThat(auditTrailEntries).isEmpty();
-
-        // when
-        interactionService.nextInteraction();   // flushes the command and audit trail entries
-
-        // then
-        // ... command entry created
-        commandLogEntries = commandLogEntryRepository.findAll();
         assertThat(commandLogEntries).hasSize(1);
-
         val commandLogEntry = commandLogEntries.get(0);
-
         assertThat(commandLogEntry)
                 .satisfies(e -> assertThat(e.getInteractionId()).isEqualTo(interaction.getInteractionId()))
-                .satisfies(e -> assertThat(e.getCompletedAt()).isNotNull())
-                .satisfies(e -> assertThat(e.getDuration()).isNotNull())
+                .satisfies(e -> assertThat(e.getStartedAt()).isNotNull())
                 .satisfies(e -> assertThat(e.getException()).isEqualTo(""))
                 .satisfies(e -> assertThat(e.getLogicalMemberIdentifier()).isNotNull())
                 .satisfies(e -> assertThat(e.getLogicalMemberIdentifier()).isEqualTo("cmdexecauditsess.test.Counter#bumpUsingMixin"))
                 .satisfies(e -> assertThat(e.getUsername()).isEqualTo("__system"))
-                .satisfies(e -> assertThat(e.getResult()).isNotNull())
-                .satisfies(e -> assertThat(e.getResultSummary()).isEqualTo("OK"))
                 .satisfies(e -> assertThat(e.getReplayState()).isEqualTo(ReplayState.UNDEFINED))
                 .satisfies(e -> assertThat(e.getReplayStateFailureReason()).isNull())
                 .satisfies(e -> assertThat(e.getTarget()).isEqualTo(target1))
@@ -212,7 +195,33 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
                         .satisfies(dto -> assertThat(dto).isNotNull())
                         .satisfies(dto -> assertThat(dto.getMember()).isInstanceOf(ActionDto.class))
                         .satisfies(dto -> assertThat(dto.getMember().getLogicalMemberIdentifier()).isEqualTo(commandLogEntry.getLogicalMemberIdentifier()))
-                );
+                )
+                .satisfies(e -> assertThat(e.getCompletedAt()).isNull())
+                .satisfies(e -> assertThat(e.getDuration()).isNull())
+                .satisfies(e -> assertThat(e.getResult()).isNull())
+                .satisfies(e -> assertThat(e.getResultSummary()).isEqualTo(""))
+        ;
+
+
+        assertThat(commandLogEntry.getCompletedAt()).isNull();
+
+        // ... and audit entries not yet generated
+        var auditTrailEntries = auditTrailEntryRepository.findAll();
+        assertThat(auditTrailEntries).isEmpty();
+
+        // when
+        interactionService.nextInteraction();   // flushes the command and audit trail entries
+
+        // then
+        // ... command entry now marked as complete
+        commandLogEntries = commandLogEntryRepository.findAll();
+        assertThat(commandLogEntries).hasSize(1);
+        val commandLogEntryAfter = commandLogEntries.get(0);
+        assertThat(commandLogEntryAfter)
+                .satisfies(e -> assertThat(e.getCompletedAt()).isNotNull())
+                .satisfies(e -> assertThat(e.getDuration()).isNotNull())
+                .satisfies(e -> assertThat(e.getResult()).isNotNull())
+                .satisfies(e -> assertThat(e.getResultSummary()).isEqualTo("OK"));
 
         if(!isJpa()) {
             // and then
@@ -251,11 +260,21 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
         var executionLogEntries = executionLogEntryRepository.findMostRecent();
         assertThat(executionLogEntries).hasSize(1);
 
-        // ... but command not yet persisted
+        // ... and command is also already persisted, not yet marked as completed
         var commandLogEntries = commandLogEntryRepository.findAll();
-        assertThat(commandLogEntries).isEmpty();
+        assertThat(commandLogEntries).hasSize(1);
+        val commandLogEntry = commandLogEntries.get(0);
+        assertThat(commandLogEntry)
+                .satisfies(e -> assertThat(e.getStartedAt()).isNotNull())
+                .satisfies(e -> assertThat(e.getCompletedAt()).isNull())
+                .satisfies(e -> assertThat(e.getDuration()).isNull())
+                .satisfies(e -> assertThat(e.getResult()).isNull())
+                .satisfies(e -> assertThat(e.getResultSummary()).isEqualTo(""));
 
-        // ... and audit entries not yet generated
+        assertThat(commandLogEntry.getStartedAt()).isNotNull();
+        assertThat(commandLogEntry.getCompletedAt()).isNull();
+
+        // ... but audit entries not yet generated
         var auditTrailEntries = auditTrailEntryRepository.findAll();
         assertThat(auditTrailEntries).isEmpty();
 
@@ -263,9 +282,16 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
         interactionService.nextInteraction();   // flushes the command and audit trail entries
 
         // then
-        // ... command entry created
+        // ... command entry now marked as complete
         commandLogEntries = commandLogEntryRepository.findAll();
         assertThat(commandLogEntries).hasSize(1);
+        val commandLogEntryAfter = commandLogEntries.get(0);
+        assertThat(commandLogEntryAfter)
+                .satisfies(e -> assertThat(e.getCompletedAt()).isNotNull())
+                .satisfies(e -> assertThat(e.getDuration()).isNotNull())
+                .satisfies(e -> assertThat(e.getResult()).isNotNull())
+                .satisfies(e -> assertThat(e.getResultSummary()).isEqualTo("OK"));
+
 
         if(!isJpa()) {
             // and then
@@ -291,9 +317,16 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
         var executionLogEntries = executionLogEntryRepository.findMostRecent();
         assertThat(executionLogEntries).hasSize(1);
 
-        // ... but command not yet persisted
+        // ... and command is also already persisted, not yet marked as completed
         var commandLogEntries = commandLogEntryRepository.findAll();
-        assertThat(commandLogEntries).isEmpty();
+        assertThat(commandLogEntries).hasSize(1);
+        val commandLogEntry = commandLogEntries.get(0);
+        assertThat(commandLogEntry)
+                .satisfies(e -> assertThat(e.getStartedAt()).isNotNull())
+                .satisfies(e -> assertThat(e.getCompletedAt()).isNull())
+                .satisfies(e -> assertThat(e.getDuration()).isNull())
+                .satisfies(e -> assertThat(e.getResult()).isNull())
+                .satisfies(e -> assertThat(e.getResultSummary()).isEqualTo(""));
 
         // ... and audit entries not yet generated
         var auditTrailEntries = auditTrailEntryRepository.findAll();
@@ -303,9 +336,15 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
         interactionService.nextInteraction();   // flushes the command and audit trail entries
 
         // then
-        // ... command entry created
+        // ... command entry now marked as complete
         commandLogEntries = commandLogEntryRepository.findAll();
         assertThat(commandLogEntries).hasSize(1);
+        val commandLogEntryAfter = commandLogEntries.get(0);
+        assertThat(commandLogEntryAfter)
+                .satisfies(e -> assertThat(e.getCompletedAt()).isNotNull())
+                .satisfies(e -> assertThat(e.getDuration()).isNotNull())
+                .satisfies(e -> assertThat(e.getResult()).isNull()) // property edits are effectively void actions
+                .satisfies(e -> assertThat(e.getResultSummary()).isEqualTo("OK (VOID)"));
 
         if(!isJpa()) {
             // and then
@@ -325,8 +364,6 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
     @Inject ExecutionOutboxEntryRepository<? extends ExecutionOutboxEntry> executionOutboxEntryRepository;
     @Inject ExecutionLogEntryRepository<? extends ExecutionLogEntry> executionLogEntryRepository;
     @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
-    @Inject SudoService sudoService;
-    @Inject ClockService clockService;
     @Inject InteractionService interactionService;
     @Inject CounterRepository<? extends Counter> counterRepository;
     @Inject WrapperFactory wrapperFactory;

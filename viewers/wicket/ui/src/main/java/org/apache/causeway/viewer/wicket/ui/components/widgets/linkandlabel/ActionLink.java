@@ -129,7 +129,9 @@ extends IndicatingAjaxLink<ManagedObject> {
 
     public String getReasonDisabledIfAny() {
         // no point evaluating if not visible
-        return isVisible() ? getActionModel().getUsabilityConsent().getReason() : null;
+        return isVisible()
+                ? getActionModel().getUsabilityConsent().getReasonAsString().orElse(null)
+                : null;
     }
 
     @Override

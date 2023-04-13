@@ -86,6 +86,7 @@ implements ChoiceTitleHandler {
 
     @Override
     protected FormComponent<ManagedObject> createFormComponent(final String id, final ScalarModel scalarModel) {
+
         this.entityLink = new ChoiceFormComponent(UiComponentType.ENTITY_LINK.getId(), this);
         entityLink.setRequired(scalarModel.isRequired());
 
@@ -171,47 +172,51 @@ implements ChoiceTitleHandler {
             }
         });
 
-        // syncLinkWithInputIfAutoCompleteOrChoices
-        if(isEditableWithEitherAutoCompleteOrChoices()) {
-
-            if(select2 == null) {
-                throw new IllegalStateException("select2 should be created already");
-            } else {
-                //
-                // the select2Choice already exists, so the widget has been rendered before.  If it is
-                // being re-rendered now, it may be because some other property/parameter was invalid.
-                // when the form was submitted, the selected object (its oid as a string) would have
-                // been saved as rawInput.  If the property/parameter had been valid, then this rawInput
-                // would be correctly converted and processed by the select2Choice's choiceProvider.  However,
-                // an invalid property/parameter means that the webpage is re-rendered in another request,
-                // and the rawInput can no longer be interpreted.  The net result is that the field appears
-                // with no input.
-                //
-                // The fix is therefore (I think) simply to clear any rawInput, so that the select2Choice
-                // renders its state from its model.
-                //
-                // see: FormComponent#getInputAsArray()
-                // see: Select2Choice#renderInitializationScript()
-                //
-                select2.clearInput();
-            }
-
-            if(fieldFrame != null) {
-                WktComponents.permanentlyHide(fieldFrame, ID_ENTITY_TITLE_IF_NULL);
-            }
-
-            // syncUsability
-            if(select2 != null) {
-                final boolean mutability = entityLink.isEnableAllowed() && !getModel().isViewMode();
-                select2.setEnabled(mutability);
-            }
-
-            WktComponents.permanentlyHide(entityLink, ID_ENTITY_TITLE_IF_NULL);
-        } else {
-            // this is horrid; adds a label to the id
-            // should instead be a 'temporary hide'
+        if(!isEditable()) {
             WktComponents.permanentlyHide(entityLink, ID_AUTO_COMPLETE);
-            // setSelect2(null); // this forces recreation next time around
+            return;
+        }
+
+        if(fieldFrame != null) {
+            WktComponents.permanentlyHide(fieldFrame, ID_ENTITY_TITLE_IF_NULL);
+        }
+        WktComponents.permanentlyHide(entityLink, ID_ENTITY_TITLE_IF_NULL);
+
+        if(select2 == null) {
+            throw new IllegalStateException("select2 should be created already");
+        }
+
+        // set mutability
+        select2.setEnabled(entityLink.isEnableAllowed()
+                && !getModel().isViewMode());
+
+        /* XXX not sure if required any more
+        if(hasAnyChoices()) {
+
+            // the select2Choice already exists, so the widget has been rendered before.  If it is
+            // being re-rendered now, it may be because some other property/parameter was invalid.
+            // when the form was submitted, the selected object (its oid as a string) would have
+            // been saved as rawInput.  If the property/parameter had been valid, then this rawInput
+            // would be correctly converted and processed by the select2Choice's choiceProvider.  However,
+            // an invalid property/parameter means that the webpage is re-rendered in another request,
+            // and the rawInput can no longer be interpreted.  The net result is that the field appears
+            // with no input.
+            //
+            // The fix is therefore (I think) simply to clear any rawInput, so that the select2Choice
+            // renders its state from its model.
+            //
+            // see: FormComponent#getInputAsArray()
+            // see: Select2Choice#renderInitializationScript()
+            //
+            select2.clearInput();
+
+        }*/
+
+        if(!hasAnyChoices()) {
+            //TODO for editable, but no choices (eg. param as domain-object reference, with default but without choices)
+            // if the param is optional (not mandatory) and has a default, we should provide 2 choices
+            // - 1: empty choice (none)
+            // - 2: the param's default value
         }
 
     }
@@ -241,7 +246,7 @@ implements ChoiceTitleHandler {
         val scalarModel = scalarModel();
         val pendingValue = scalarModel.proposedValue().getValue();
 
-        if(isEditableWithEitherAutoCompleteOrChoices()) {
+        if(isEditable()) {
 
             // flush changes to pending model
             val adapter = select2.getConvertedInputValue();

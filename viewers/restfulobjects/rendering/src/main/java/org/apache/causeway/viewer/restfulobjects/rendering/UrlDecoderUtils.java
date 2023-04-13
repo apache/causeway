@@ -21,7 +21,7 @@ package org.apache.causeway.viewer.restfulobjects.rendering;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
-import javax.ws.rs.WebApplicationException;
+import jakarta.ws.rs.WebApplicationException;
 
 public final class UrlDecoderUtils {
 

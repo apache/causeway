@@ -18,8 +18,6 @@
  */
 package demoapp.javafx.integtest;
 
-import javax.inject.Inject;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -29,6 +27,7 @@ import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
 import demoapp.dom.DemoModuleJdo;
+import jakarta.inject.Inject;
 
 @SpringBootTest(
         classes = {

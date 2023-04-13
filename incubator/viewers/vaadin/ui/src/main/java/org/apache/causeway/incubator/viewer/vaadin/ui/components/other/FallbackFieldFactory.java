@@ -20,8 +20,8 @@ package org.apache.causeway.incubator.viewer.vaadin.ui.components.other;
 
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 
 import com.vaadin.flow.component.Component;
 
@@ -38,7 +38,7 @@ import org.apache.causeway.viewer.commons.model.mock.UiMockup;
 import lombok.val;
 
 @org.springframework.stereotype.Component
-@javax.annotation.Priority(PriorityPrecedence.LAST)
+@jakarta.annotation.Priority(PriorityPrecedence.LAST)
 public class FallbackFieldFactory implements UiComponentHandlerVaa {
 
     @Inject private Provider<UiComponentFactoryVaa> uiComponentFactory;

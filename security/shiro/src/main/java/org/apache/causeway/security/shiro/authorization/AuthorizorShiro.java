@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.security.shiro.authorization;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.mgt.RealmSecurityManager;
@@ -50,7 +50,7 @@ import lombok.val;
  */
 @Service
 @Named("causeway.security.AuthorizorShiro")
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @Qualifier("Shiro")
 public class AuthorizorShiro implements Authorizor {
 

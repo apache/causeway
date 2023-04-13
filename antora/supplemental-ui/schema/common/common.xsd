@@ -17,25 +17,31 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<xs:schema targetNamespace="http://isis.apache.org/schema/common"
+<xs:schema targetNamespace="https://causeway.apache.org/schema/common"
            elementFormDefault="qualified"
-           xmlns="http://isis.apache.org/schema/common"
+           xmlns="https://causeway.apache.org/schema/common"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           
-           xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+
+           xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="2.1"
            xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
-           jaxb:extensionBindingPrefixes="xjc"
-           jaxb:version="1.0">
-           
-	<xs:annotation>
-	   <xs:appinfo>
-	      <jaxb:globalBindings generateIsSetMethod="false">
-	          <xjc:serializable uid="1"/>
-	      </jaxb:globalBindings>
-	   </xs:appinfo>
-	</xs:annotation>
+           xmlns:annox="http://annox.dev.java.net"
+           jaxb:extensionBindingPrefixes="xjc annox">
+
+    <xs:annotation>
+        <xs:appinfo>
+            <jaxb:globalBindings generateIsSetMethod="false">
+                <xjc:serializable uid="1"/>
+            </jaxb:globalBindings>
+        </xs:appinfo>
+    </xs:annotation>
 
     <xs:complexType name="valueDto">
+        <xs:annotation>
+            <xs:documentation>Represents a value of fundamental type.</xs:documentation>
+            <xs:appinfo>
+                <annox:annotate>@javax.inject.Named("causeway.schema.common.v2.ValueDto")</annox:annotate>
+            </xs:appinfo>
+        </xs:annotation>
         <xs:choice minOccurs="0" maxOccurs="1">
             <xs:element name="string" type="xs:string"/>
             <xs:element name="byte" type="xs:byte"/>
@@ -56,8 +62,9 @@
             <xs:element name="offsetTime" type="xs:time"/>
             <xs:element name="offsetDateTime" type="xs:dateTime"/>
             <xs:element name="zonedDateTime" type="xs:dateTime"/>
-            
-            <!-- complex types -->            <xs:element name="enum" type="enumDto"/>
+
+            <!-- complex types -->
+            <xs:element name="enum" type="enumDto"/>
             <xs:element name="reference" type="oidDto"/>
             <xs:element name="collection" type="collectionDto"/>
             <xs:element name="composite" type="typedTupleDto"/>
@@ -66,10 +73,13 @@
         </xs:choice>
     </xs:complexType>
 
-	<xs:complexType name="typedTupleDto">
+    <xs:complexType name="typedTupleDto">
         <xs:annotation>
             <xs:documentation>A fixed-size ordered list of named type/value pairs.
             </xs:documentation>
+            <xs:appinfo>
+                <annox:annotate>@javax.inject.Named("causeway.schema.common.v2.TypedTupleDto")</annox:annotate>
+            </xs:appinfo>
         </xs:annotation>
         <xs:sequence>
             <xs:element name="elements" type="namedValueWithTypeDto" minOccurs="1" maxOccurs="unbounded"/>
@@ -79,6 +89,12 @@
     </xs:complexType>
 
     <xs:complexType name="oidDto">
+        <xs:annotation>
+            <xs:documentation>Object identifier.</xs:documentation>
+            <xs:appinfo>
+                <annox:annotate>@javax.inject.Named("causeway.schema.common.v2.OidDto")</annox:annotate>
+            </xs:appinfo>
+        </xs:annotation>
         <xs:attribute name="type" type="xs:string"/>
         <xs:attribute name="id" type="xs:string"/>
     </xs:complexType>
@@ -87,6 +103,9 @@
         <xs:annotation>
             <xs:documentation>A collection of (argument) values
             </xs:documentation>
+            <xs:appinfo>
+                <annox:annotate>@javax.inject.Named("causeway.schema.common.v2.CollectionDto")</annox:annotate>
+            </xs:appinfo>
         </xs:annotation>
         <xs:sequence>
             <xs:element name="value" type="valueDto" minOccurs="1" maxOccurs="unbounded"/>
@@ -97,8 +116,10 @@
 
     <xs:complexType name="blobDto">
         <xs:annotation>
-            <xs:documentation>A collection of (argument) values
-            </xs:documentation>
+            <xs:documentation>Data type that stores binary data.</xs:documentation>
+            <xs:appinfo>
+                <annox:annotate>@javax.inject.Named("causeway.schema.common.v2.BlobDto")</annox:annotate>
+            </xs:appinfo>
         </xs:annotation>
         <xs:sequence>
             <xs:element name="name" type="xs:string"/>
@@ -109,8 +130,10 @@
 
     <xs:complexType name="clobDto">
         <xs:annotation>
-            <xs:documentation>A collection of (argument) values
-            </xs:documentation>
+            <xs:documentation>Data type that stores textual data.</xs:documentation>
+            <xs:appinfo>
+                <annox:annotate>@javax.inject.Named("causeway.schema.common.v2.ClobDto")</annox:annotate>
+            </xs:appinfo>
         </xs:annotation>
         <xs:sequence>
             <xs:element name="name" type="xs:string"/>
@@ -121,8 +144,10 @@
 
     <xs:complexType name="oidsDto">
         <xs:annotation>
-            <xs:documentation>A list of OIDs
-            </xs:documentation>
+            <xs:documentation>A list of OIDs</xs:documentation>
+            <xs:appinfo>
+                <annox:annotate>@javax.inject.Named("causeway.schema.common.v2.OidsDto")</annox:annotate>
+            </xs:appinfo>
         </xs:annotation>
         <xs:sequence>
             <xs:element name="oid" type="oidDto" minOccurs="1" maxOccurs="unbounded"/>
@@ -130,6 +155,12 @@
     </xs:complexType>
 
     <xs:complexType name="enumDto">
+        <xs:annotation>
+            <xs:documentation>Enumeration</xs:documentation>
+            <xs:appinfo>
+                <annox:annotate>@javax.inject.Named("causeway.schema.common.v2.EnumDto")</annox:annotate>
+            </xs:appinfo>
+        </xs:annotation>
         <xs:sequence>
             <xs:element name="enumType" type="xs:string"/>
             <xs:element name="enumName" type="xs:string"/>
@@ -137,8 +168,14 @@
     </xs:complexType>
 
     <xs:simpleType name="valueType">
+        <xs:annotation>
+            <xs:documentation>Value type</xs:documentation>
+            <xs:appinfo>
+                <annox:annotate>@javax.inject.Named("causeway.schema.common.v2.ValueType")</annox:annotate>
+            </xs:appinfo>
+        </xs:annotation>
         <xs:restriction base="xs:string">
-        	<xs:enumeration value="void">
+            <xs:enumeration value="void">
                 <xs:annotation>
                     <xs:documentation>Not valid to be used as the parameter type of an action; can be used as its return type.
                     </xs:documentation>
@@ -176,6 +213,9 @@
         <xs:annotation>
             <xs:documentation>Captures a period of time, eg for capturing metrics/timings.
             </xs:documentation>
+            <xs:appinfo>
+                <annox:annotate>@javax.inject.Named("causeway.schema.common.v2.PeriodDto")</annox:annotate>
+            </xs:appinfo>
         </xs:annotation>
         <xs:sequence>
             <xs:element name="startedAt" type="xs:dateTime">
@@ -197,6 +237,9 @@
         <xs:annotation>
             <xs:documentation>Captures a pair of numbers representing a difference.  Used for example to capture metrics (number objects modified before and after).
             </xs:documentation>
+            <xs:appinfo>
+                <annox:annotate>@javax.inject.Named("causeway.schema.common.v2.DifferenceType")</annox:annotate>
+            </xs:appinfo>
         </xs:annotation>
         <xs:sequence>
         </xs:sequence>
@@ -218,6 +261,9 @@
         <xs:annotation>
             <xs:documentation>Captures both a value and its corresponding type.  Used for the return value of action invocations, and for the new value in property edits.
             </xs:documentation>
+            <xs:appinfo>
+                <annox:annotate>@javax.inject.Named("causeway.schema.common.v2.ValueWithTypeDto")</annox:annotate>
+            </xs:appinfo>
         </xs:annotation>
         <xs:complexContent>
             <xs:extension base="valueDto">
@@ -226,11 +272,14 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
-    
+
     <xs:complexType name="namedValueWithTypeDto">
         <xs:annotation>
             <xs:documentation>Defines a named value, a tuple of: name, type and value.
             </xs:documentation>
+            <xs:appinfo>
+                <annox:annotate>@javax.inject.Named("causeway.schema.common.v2.NamedValueWithTypeDto")</annox:annotate>
+            </xs:appinfo>
         </xs:annotation>
         <xs:complexContent>
             <xs:extension base="valueWithTypeDto">
@@ -242,6 +291,9 @@
     <xs:simpleType name="interactionType" >
         <xs:annotation>
             <xs:documentation>Whether this interaction with a member is invoking an action, or editing a property.</xs:documentation>
+            <xs:appinfo>
+                <annox:annotate>@javax.inject.Named("causeway.schema.common.v2.InteractionType")</annox:annotate>
+            </xs:appinfo>
         </xs:annotation>
         <xs:restriction base="xs:string">
             <xs:enumeration value="action_invocation" />

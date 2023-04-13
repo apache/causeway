@@ -11,7 +11,10 @@ Represents a nullable scalar value, as used by ContentNegotiationServiceOrgApach
 class ScalarValueDtoV2 {
   ScalarValueDtoV2 forNull(Class<?> type)
   ScalarValueDtoV2 forValue(Object value)
+  ScalarValueDtoV2 forValue(T value, ValueSemanticsProvider<T> valueSemantics)
   boolean isNull()
+  boolean isValueDecomposition()
+  T getValueAs(Class<T> entityType)
 }
 ----
 

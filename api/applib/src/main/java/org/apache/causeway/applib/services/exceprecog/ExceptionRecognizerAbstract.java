@@ -23,13 +23,12 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import javax.inject.Inject;
-
 import org.apache.causeway.applib.exceptions.TranslatableException;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
+import jakarta.inject.Inject;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;

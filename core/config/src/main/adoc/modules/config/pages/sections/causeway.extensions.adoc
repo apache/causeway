@@ -12,16 +12,25 @@ include::../section-hooks/causeway.extensions~pre.adoc[]
 |Default
 |Description
 |
-[[causeway.extensions.command-log.publish-policy]]
-causeway.extensions.command-log. +
-publish-policy
+[[causeway.extensions.audit-trail.persist]]
+causeway.extensions.audit-trail. +
+persist
 
 | 
-| Whether commands should be published always, or only if a change in the system's state has been detected.
+| Whether the ``EntityPropertyChangeSubscriber`` implementation provided by this extension (which persists property changes to the audit trail) is enabled or not.
 
-In general, the default of ``PublishPolicy#ALWAYS`` should be used, _unless_ the _Audit Trail_ extension is also in use, which is able to advise on whether the systems state has changed.
+One reason to use this option is if you wish to provide your own implementation that wraps or delegates to the default implementation of ``EntityPropertyChangeSubscriber`` that is provided by the _audittrail_ extension. Because entity property changes are published to _all_ subscribers on the class path, you can disable the default implementation from doing anything using this setting.
 
-Put another way, if this policy is set to ``PublishPolicy#ONLY_IF_SYSTEM_CHANGED`` but the _Audit Trail_ extension is _not_ enabled, then nothing will be logged.
+
+|
+[[causeway.extensions.command-log.persist]]
+causeway.extensions.command-log. +
+persist
+
+| 
+| Whether the ``CommandSubscriber`` implementation provided by this extension (which persists commands to the command log) is enabled or not.
+
+One reason to use this option is if you wish to provide your own implementation that wraps or delegates to the default implementation of ``CommandSubscriber`` that is provided by the _commandlog_ extension. Because commands are published to _all_ subscribers on the class path, you can disable the default implementation from doing anything using this setting.
 
 
 |
@@ -207,6 +216,28 @@ A comma separated list of headers other than the simple response headers that br
 Default is none.
 
 For more information, check the usage of the ``headers`` init parameter for https://github.com/eBay/cors-filter[EBay CORSFilter].
+
+
+|
+[[causeway.extensions.execution-log.persist]]
+causeway.extensions.execution-log. +
+persist
+
+| 
+| Whether the ``ExecutionSubscriber`` implementation provided by this extension (which persists executions to the execution log) is enabled or not.
+
+One reason to use this option is if you wish to provide your own implementation that wraps or delegates to the default implementation of ``ExecutionSubscriber`` that is provided by the _executionLog_ extension. Because executions are published to _all_ subscribers on the class path, you can disable the default implementation from doing anything using this setting.
+
+
+|
+[[causeway.extensions.execution-outbox.persist]]
+causeway.extensions. +
+execution-outbox.persist
+
+| 
+| Whether the ``ExecutionSubscriber`` implementation provided by this extension (which persists executions to the outbox) is enabled or not.
+
+One reason to use this option is if you wish to provide your own implementation that wraps or delegates to the outbox implementation of ``ExecutionSubscriber`` that is provided by the _executionOutbox_ extension. Because executions are published to _all_ subscribers on the class path, you can disable the outbox implementation from doing anything using this setting.
 
 
 |

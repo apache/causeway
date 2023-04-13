@@ -24,14 +24,13 @@ import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.MinLength;
 import org.apache.causeway.applib.annotation.NatureOfService;
@@ -51,7 +50,7 @@ import lombok.RequiredArgsConstructor;
         nature = NatureOfService.VIEW
 )
 @Named("libExcelFixture.ExcelDemoToDoItemMenu")
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ExcelDemoToDoItemMenu {
 
@@ -61,7 +60,7 @@ public class ExcelDemoToDoItemMenu {
     final ClockService clockService;
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, sequence = "1")
+    @ActionLayout(sequence = "1")
     public List<ExcelDemoToDoItem> toDoItemsNotYetComplete() {
         final List<ExcelDemoToDoItem> items = notYetCompleteNoUi();
         if(items.isEmpty()) {

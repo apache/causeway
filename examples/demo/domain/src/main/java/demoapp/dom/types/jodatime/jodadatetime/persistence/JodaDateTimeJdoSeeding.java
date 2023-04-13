@@ -18,7 +18,7 @@
  */
 package demoapp.dom.types.jodatime.jodadatetime.persistence;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;

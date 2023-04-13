@@ -45,12 +45,12 @@ public class CausewayModuleExtSecmanEncryptionSpring {
     /**
      * @see "https://www.baeldung.com/spring-security-5-default-password-encoder"
      */
-    @Bean @Qualifier("secman") @Order(Ordered.LOWEST_PRECEDENCE)
+    @Bean @Qualifier("Secman") @Order(Ordered.LOWEST_PRECEDENCE)
     public PasswordEncoder passwordEncoder() {
         // set up the list of supported encoders and their prefixes
         val encoders = Map.<String, PasswordEncoder>of(
                 "bcrypt", new BCryptPasswordEncoder(),
-                "scrypt", new SCryptPasswordEncoder());
+                "scrypt", SCryptPasswordEncoder.defaultsForSpringSecurity_v5_8());
 
         return new DelegatingPasswordEncoder("bcrypt", encoders);
     }

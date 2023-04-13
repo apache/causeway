@@ -41,7 +41,7 @@ extends MaxTotalDigitsFacetAbstract {
     }
 
     public static Optional<MaxTotalDigitsFacet> createJpa(
-            final Optional<javax.persistence.Column> jpaColumnIfAny,
+            final Optional<jakarta.persistence.Column> jpaColumnIfAny,
             final FacetHolder holder) {
 
         return jpaColumnIfAny

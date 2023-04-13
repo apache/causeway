@@ -51,7 +51,8 @@ fi
 if [ -z "$ANTORA_CMD" ]; then
   ANTORA_CMD=$(command -v antora 2>/dev/null)
   if [ -z "$ANTORA_CMD" ]; then
-    ANTORA_CMD=$(npm bin)/antora
+#    ANTORA_CMD=$(npm bin)/antora #fails with unknown command 'bin' on ubuntu ... our CI build env
+    ANTORA_CMD="npx antora"
   fi
 fi
 

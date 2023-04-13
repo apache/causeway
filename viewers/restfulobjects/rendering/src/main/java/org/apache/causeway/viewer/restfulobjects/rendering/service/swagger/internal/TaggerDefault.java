@@ -23,8 +23,14 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
+import org.apache.causeway.applib.CausewayModuleApplib;
+import org.apache.causeway.core.config.CausewayModuleCoreConfig;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
+import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
+import org.apache.causeway.schema.CausewayModuleSchema;
+import org.apache.causeway.viewer.restfulobjects.rendering.CausewayModuleRestfulObjectsRendering;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.Programmatic;
@@ -44,31 +50,59 @@ public class TaggerDefault implements Tagger {
     public String tagForLogicalTypeName(final String logicalTypeName, final String fallback) {
 
         if (logicalTypeName.startsWith("org.apache.causeway.")) {
-            return ". apache causeway internals";
+            return "… asf causeway internals";
         }
-        if (logicalTypeName.startsWith("causeway.applib.")) {
-            return ". apache causeway applib";
+        if (logicalTypeName.startsWith(CausewayModuleApplib.NAMESPACE)) {
+            return "… asf causeway applib";
         }
-        if (logicalTypeName.startsWith("causeway.conf.")) {
-            return ". apache causeway conf";
+        if (logicalTypeName.startsWith(CausewayModuleApplib.NAMESPACE_CONF) ||
+            logicalTypeName.startsWith(CausewayModuleCoreConfig.NAMESPACE)) {
+            return "… asf causeway config";
         }
-        if (logicalTypeName.startsWith("causeway.sudo.")) {
-            return ". apache causeway sudo";
+        if (logicalTypeName.startsWith(CausewayModuleApplib.NAMESPACE_FEAT)) {
+            return "… asf causeway feat";
+        }
+        if (logicalTypeName.startsWith(CausewayModuleSchema.NAMESPACE)) {
+            return "… asf causeway schema";
+        }
+        if (logicalTypeName.startsWith(CausewayModuleApplib.NAMESPACE_SUDO)) {
+            return "… asf causeway sudo";
+        }
+        if (logicalTypeName.startsWith(CausewayModuleCoreMetamodel.NAMESPACE)) {
+            return "… asf causeway metamodel";
+        }
+        if (logicalTypeName.startsWith(CausewayModuleCoreRuntime.NAMESPACE) ||
+            logicalTypeName.startsWith("causeway.runtimeservices") ||
+            logicalTypeName.startsWith("causeway.interaction") ||
+            logicalTypeName.startsWith("causeway.transaction") ||
+            logicalTypeName.startsWith("causeway.webapp")
+        ) {
+            return "… asf causeway runtime";
+        }
+        if (logicalTypeName.startsWith(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE) ||
+            logicalTypeName.startsWith(CausewayModuleRestfulObjectsRendering.NAMESPACE)) {
+            return "… asf causeway viewer (restful)";
+        }
+        if (logicalTypeName.startsWith("causeway.viewer.wicket")) {
+            return "… asf causeway viewer (wicket)";
+        }
+        if (logicalTypeName.startsWith("causeway.viewer.")) {
+            return "… asf causeway viewer";
         }
         if (logicalTypeName.startsWith("causeway.persistence.")) {
-            return ". apache causeway persistence - " + partsOf(logicalTypeName).skip(2).limit(1).collect(Collectors.joining("."));
+            return "… asf causeway persistence - " + partsOf(logicalTypeName).skip(2).limit(1).collect(Collectors.joining("."));
         }
         if (logicalTypeName.startsWith("causeway.security.")) {
-            return ". apache causeway security";
+            return "… asf causeway security";
+        }
+        if (logicalTypeName.startsWith("causeway.testing")) {
+            return "… asf causeway testing";
         }
         if (logicalTypeName.startsWith("causeway.ext.")) {
-            return ". apache causeway extensions - " + partsOf(logicalTypeName).skip(2).limit(1).collect(Collectors.joining("."));
-        }
-        if (logicalTypeName.startsWith("causeway.sub.")) {
-            return ". apache causeway subdomains - " + partsOf(logicalTypeName).skip(2).limit(1).collect(Collectors.joining("."));
+            return "… asf causeway extensions - " + partsOf(logicalTypeName).skip(2).limit(1).collect(Collectors.joining("."));
         }
         if (logicalTypeName.startsWith("org.springframework.")) {
-            return "> spring framework " + partsOf(logicalTypeName).skip(2).limit(1).collect(Collectors.joining("."));
+            return "… spring framework " + partsOf(logicalTypeName).skip(2).limit(1).collect(Collectors.joining("."));
         }
 
         Matcher matcher;

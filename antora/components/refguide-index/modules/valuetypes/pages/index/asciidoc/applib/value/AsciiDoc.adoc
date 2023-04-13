@@ -15,19 +15,6 @@ class AsciiDoc {
   String asHtml()
   boolean isEqualTo(AsciiDoc other)
   String toString()
-  void loadJRuby()     // <.>
 }
 ----
 
-<.> xref:#loadJRuby_[loadJRuby()]
-+
---
-Not strictly required, but allows for eager loading. Is a one-shot, that may take about 5 seconds.
---
-
-== Members
-
-[#loadJRuby_]
-=== loadJRuby()
-
-Not strictly required, but allows for eager loading. Is a one-shot, that may take about 5 seconds.

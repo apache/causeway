@@ -32,7 +32,7 @@ import org.apache.causeway.extensions.secman.applib.role.fixtures.AbstractRoleAn
 public class CausewayViewerRestfulObjectsSwaggerRoleAndPermissions
 extends AbstractRoleAndPermissionsFixtureScript {
 
-    private static final String SERVICE_LOGICAL_TYPE_NAME = "causeway.viewer.restfulobjects.SwaggerServiceMenu";
+    private static final String SERVICE_LOGICAL_TYPE_NAME = "causeway.viewer.roRendering.SwaggerServiceMenu";
 
     public static final String ROLE_NAME = SERVICE_LOGICAL_TYPE_NAME.replace(".","-");
 

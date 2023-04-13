@@ -1,0 +1,64 @@
+= DataSink
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+General purpose writable byte data sink.
+
+== API
+
+[source,java]
+.DataSink.java
+----
+interface DataSink {
+  void writeAll(ThrowingConsumer<OutputStream> outputStreamConsumer)     // <.>
+  DataSink none()     // <.>
+  DataSink ofOutputStreamSupplier(ThrowingSupplier<OutputStream> outputStreamSupplier)
+  DataSink ofByteArrayConsumer(ThrowingConsumer<byte[]> byteArrayConsumer, int initalBufferSize)
+  DataSink ofByteArrayConsumer(ThrowingConsumer<byte[]> byteArrayConsumer)
+  DataSink ofFile(File file)
+  DataSink ofStringConsumer(Consumer<String> stringConsumer, Charset charset)
+  DataSink ofStringUtf8Consumer(Consumer<String> stringUtf8Consumer)
+  DataSink ofStringConsumer(StringBuilder stringConsumer, Charset charset)
+  DataSink ofStringUtf8Consumer(StringBuilder stringUtf8Consumer)     // <.>
+}
+----
+
+<.> xref:#writeAll_ThrowingConsumer[writeAll(ThrowingConsumer)]
++
+--
+Offers this xref:refguide:commons:index/io/DataSink.adoc[DataSink] 's _OutputStream_ to the caller, so it can write data to it.
+--
+<.> xref:#none_[none()]
++
+--
+Acts as a no-op.
+--
+<.> xref:#ofStringUtf8Consumer_StringBuilder[ofStringUtf8Consumer(StringBuilder)]
++
+--
+Example:
+--
+
+== Members
+
+[#writeAll_ThrowingConsumer]
+=== writeAll(ThrowingConsumer)
+
+Offers this xref:refguide:commons:index/io/DataSink.adoc[DataSink] 's _OutputStream_ to the caller, so it can write data to it.
+
+[#none_]
+=== none()
+
+Acts as a no-op.
+
+[#ofStringUtf8Consumer_StringBuilder]
+=== ofStringUtf8Consumer(StringBuilder)
+
+Example:
+
+----
+
+var sb = new StringBuffer();
+var dataSink = DataSink.ofStringUtf8Consumer(sb);
+//... write to dataSink
+String result = sb.toString(); // read the buffer
+----

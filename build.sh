@@ -28,12 +28,6 @@
 #
 
 #
-# prereq for '-t' flag
-#
-# git clone https://github.com/danhaywood/maven-timeline.git
-# mvn clean install
-#
-#
 # see serve-timeline.sh to serve up the generated website (requires JDK18)
 #
 
@@ -46,7 +40,7 @@ usage() {
  echo "  -p run 'git pull --ff-only' first"                                                            >&2
  echo "  -c include 'clean' goal"                                                                      >&2
  echo "  -t skip tests"                                                                                >&2
- echo "  -n add '-Dmaven-timeline.version=1.8-SNAPSHOT' for improved timeline output"                  >&2
+ echo "  -n serve timeline (prereq: npm i -g serve)"                                                   >&2
  echo "  -l single threaded, do NOT add '-T1C' flag"                                                   >&2
  echo "  -k use 'package' rather than 'install'.  Does not run integ tests.  Cannot combine with '-y'" >&2
  echo "  -y use 'verify' rather than 'install'.  Cannot combine with '-k'"                             >&2
@@ -54,6 +48,7 @@ usage() {
  echo "  -a append '-Dmodule-all'.  Cannot combine with '-I' or '-K'"                                  >&2
  echo "  -K append '-Dmodule-all-except-kroviz'.  Cannot combine with '-a' or '-I'"                    >&2
  echo "  -I append '-Dmodule-all-except-incubator'.  Cannot combine with '-a' or '-K'"                 >&2
+ echo "  -d use mvnd rather than mvn (requires: mvndaemon)"                                            >&2
  echo "  -F do NOT search for Failures and Errors at the end"                                          >&2
  echo "  -S do NOT print summary or last 50 lines at the end"                                          >&2
  echo "  -w whatif - don't run the command but do print it out.  Implies -v (verbose)"                 >&2
@@ -63,7 +58,9 @@ usage() {
  echo ""                                                                                               >&2
  echo "example usage:"                                                                                 >&2
  echo ""                                                                                               >&2
- echo "sh build.sh -pctOvI        # pull, clean, no offline, verbose, no incubator"                    >&2
+ echo "sh build.sh -tOd           # no tests, no offline, use mvnd, released only"                     >&2
+ echo "sh build.sh -ptOdI         # pull, no tests, no offline, use mvnd, no incubator"                >&2
+ echo "sh build.sh -pctOvI        # pull, clean, no tests, no offline, verbose, no incubator"          >&2
  echo ""                                                                                               >&2
 }
 
@@ -76,17 +73,18 @@ PACKAGE_ONLY=false
 VERIFY_ONLY=false
 WHATIF=false
 SINGLE_THREADED=false
-SKIP_SEARCH_FOR_FAILURES=false
-SKIP_SUMMARY=false
 ALL=false
 ALL_EXCEPT_KROVIZ=false
 ALL_EXCEPT_INCUBATOR=false
+USE_MVND=false
+SKIP_SEARCH_FOR_FAILURES=false
+SKIP_SUMMARY=false
 EDIT=false
 VERBOSE=false
 
 MVN_LOG=/tmp/$BASENAME_0.$$.log
 
-while getopts 'prcntlkyaIKOFSwveh' opt
+while getopts 'prcntlkyaIKOdFSwveh' opt
 do
   case $opt in
     p) export GIT_PULL=true ;;
@@ -100,6 +98,7 @@ do
     a) export ALL=true ;;
     I) export ALL_EXCEPT_INCUBATOR=true ;;
     K) export ALL_EXCEPT_KROVIZ=true ;;
+    d) export USE_MVND=true ;;
     F) export SKIP_SEARCH_FOR_FAILURES=true ;;
     S) export SKIP_SUMMARY=true ;;
     w) export WHATIF=true ;;
@@ -120,21 +119,22 @@ shift $((OPTIND-1))
 echo ""
 
 if [ "$VERBOSE" = "true" ]; then
-  echo "-p GIT_PULL                 : $GIT_PULL"
-  echo "-c CLEAN                    : $CLEAN"
-  echo "-t SKIP_TESTS               : $SKIP_TESTS"
-  echo "-n TIMELINE                 : $TIMELINE"
-  echo "-l SINGLE_THREADED          : $SINGLE_THREADED"
-  echo "-k PACKAGE_ONLY             : $PACKAGE_ONLY"
-  echo "-y VERIFY_ONLY              : $VERIFY_ONLY"
-  echo "-O SKIP_OFFLINE             : $SKIP_OFFLINE"
-  echo "-a ALL                      : $ALL"
-  echo "-I ALL_EXCEPT_INCUBATOR     : $ALL_EXCEPT_INCUBATOR"
-  echo "-K ALL_EXCEPT_KROVIZ        : $ALL_EXCEPT_KROVIZ"
-  echo "-F SKIP_SEARCH_FOR_FAILURES : $SKIP_SEARCH_FOR_FAILURES"
-  echo "-S SKIP_SUMMARY             : $SKIP_SUMMARY"
-  echo "-w WHATIF                   : $WHATIF"
-  echo "-v VERBOSE                  : $VERBOSE"
+  echo "-p (git pull --ff-only)                 : $GIT_PULL"
+  echo "-c mvn clean                            : $CLEAN"
+  echo "-t skip all tests (mvn -DskipTests)     : $SKIP_TESTS"
+  echo "-O not mvn --offline                    : $SKIP_OFFLINE"
+  echo "-l not mvn -T1C                         : $SINGLE_THREADED"
+  echo "-k mvn package                          : $PACKAGE_ONLY"
+  echo "-y mvn verify                           : $VERIFY_ONLY"
+  echo "-a include ALL modules                  : $ALL"
+  echo "-I include all modules except incubator : $ALL_EXCEPT_INCUBATOR"
+  echo "-K include all modules except kroviz    : $ALL_EXCEPT_KROVIZ"
+  echo "-n serve up timeline                    : $TIMELINE"
+  echo "-d use mvnd rather than mvn             : $USE_MVND"
+  echo "-F skip search for failures             : $SKIP_SEARCH_FOR_FAILURES"
+  echo "-S skip summary                         : $SKIP_SUMMARY"
+  echo "-w what-if                              : $WHATIF"
+  echo "-v verbose                              : $VERBOSE"
   echo ""
 fi
 
@@ -179,10 +179,6 @@ if [ "$SKIP_TESTS" = "true" ]; then
   OPTS="$OPTS -DskipTests=true"
 fi
 
-if [ "$TIMELINE" = "true" ]; then
-  OPTS="$OPTS -Dmaven-timeline.version=1.8-SNAPSHOT"
-fi
-
 if [ "$ALL" = "true" ]; then
   OPTS="$OPTS -Dmodule-all"
 fi
@@ -213,6 +209,12 @@ else
   fi
 fi
 
+if [ "$USE_MVND" = "true" ]; then
+  CMD="mvnd"
+else
+  CMD="mvn"
+fi
+
 if [ "$WHATIF" = "true" ]; then
 
   if [ "$GIT_PULL" = "true" ]; then
@@ -220,10 +222,10 @@ if [ "$WHATIF" = "true" ]; then
   fi
 
   if [ "$VERBOSE" = "true" ]; then
-    echo "mvn $OPTS $* 2>&1 | tee $MVN_LOG "
+    echo "$CMD $OPTS $* 2>&1 | tee $MVN_LOG "
   else
     OPTS="$OPTS --log-file $MVN_LOG"
-    echo mvn $OPTS "$@"
+    echo $CMD $OPTS "$@"
   fi
 
 
@@ -233,6 +235,10 @@ if [ "$WHATIF" = "true" ]; then
 
   if [ "$SKIP_SUMMARY" = "false" ]; then
     echo "... print summary"
+  fi
+
+  if [ "$TIMELINE" = "true" ]; then
+    echo "serve -d target/timeline"
   fi
 
 
@@ -248,12 +254,12 @@ else
   fi
 
   if [ "$VERBOSE" = "true" ]; then
-    echo "mvn $OPTS $* 2>&1 | tee $MVN_LOG"
-    mvn $OPTS "$@" 2>&1 | tee $MVN_LOG
+    echo "$CMD $OPTS $* 2>&1 | tee $MVN_LOG"
+    $CMD $OPTS "$@" 2>&1 | tee $MVN_LOG
   else
     OPTS="$OPTS --log-file $MVN_LOG"
-    echo "mvn $OPTS $*"
-    mvn $OPTS "$@"
+    echo "$CMD $OPTS $*"
+    $CMD $OPTS "$@"
   fi
 
   if [ "$SKIP_SEARCH_FOR_FAILURES" = "false" ]; then
@@ -292,7 +298,15 @@ else
   if [ "$EDIT" = "true" ]; then
     vi $MVN_LOG
   fi
-fi
 
+  if [ "$TIMELINE" = "true" ]; then
+
+    ## when we eventually target only jdk18 and above, then can replace with:
+    ## jwebserver -d $(pwd)/target/timeline -b ::
+
+    serve -d target/timeline
+  fi
+
+fi
 
 

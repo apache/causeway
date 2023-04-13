@@ -21,11 +21,17 @@ package org.apache.causeway.viewer.restfulobjects.applib.dtos;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import org.apache.causeway.applib.value.semantics.ValueDecomposition;
+import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
+import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.schema.common.v2.ValueType;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.val;
 
 /**
  * Represents a nullable scalar value,
@@ -37,20 +43,57 @@ import lombok.NonNull;
 @Data @NoArgsConstructor @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ScalarValueDtoV2 {
 
-   public static ScalarValueDtoV2 forNull(@NonNull Class<?> type) {
-       return new ScalarValueDtoV2(type.getSimpleName(), null);
-   }
+    public static ScalarValueDtoV2 forNull(final @NonNull Class<?> type) {
+        return new ScalarValueDtoV2(typeName(type), null);
+    }
 
-   public static ScalarValueDtoV2 forValue(@NonNull Object value) {
-       return new ScalarValueDtoV2(value.getClass().getSimpleName(), value);
-   }
+    public static ScalarValueDtoV2 forValue(final @NonNull Object value) {
+        return new ScalarValueDtoV2(typeName(value.getClass()), value);
+    }
 
-   private String type;
-   private Object value;
+    public static <T> ScalarValueDtoV2 forValue(final @NonNull T value, final @NonNull ValueSemanticsProvider<T> valueSemantics) {
+        val valDecomp = valueSemantics.decompose(value);
+        return new ScalarValueDtoV2(VALUE_DECOMPOSITION_TYPE_NAME, valDecomp.stringify());
+    }
 
-   @JsonIgnore
-   public boolean isNull() {
-       return value == null;
-   }
+    private String type;
+    private Object value;
+
+
+    @JsonIgnore
+    public boolean isNull() {
+        return value == null;
+    }
+
+    @JsonIgnore
+    public boolean isValueDecomposition() {
+        return VALUE_DECOMPOSITION_TYPE_NAME.equals(getType());
+    }
+
+    @JsonIgnore
+    public <T> T getValueAs(final Class<T> entityType) {
+        if(isValueDecomposition()
+                && (value instanceof String)) {
+            try {
+                val stringifiedComposite = (String)getValue();
+                this.value = ValueDecomposition.destringify(ValueType.COMPOSITE, stringifiedComposite);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+        return _Casts.uncheckedCast(getValue());
+    }
+
+    // -- HELPER
+
+    private static String VALUE_DECOMPOSITION_TYPE_NAME = "ValueDecomposition[base64/zlib]";
+
+    private static String typeName(final @NonNull Class<?> cls) {
+        return cls.isPrimitive()
+                || cls.getPackageName().startsWith("java.")
+                ? cls.getSimpleName()
+                        : cls.getName();
+    }
 
 }

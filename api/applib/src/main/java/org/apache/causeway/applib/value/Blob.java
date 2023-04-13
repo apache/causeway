@@ -19,38 +19,37 @@
 package org.apache.causeway.applib.value;
 
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
-import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
-import javax.inject.Named;
-import javax.xml.bind.annotation.adapters.XmlAdapter;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import jakarta.activation.MimeType;
+import jakarta.activation.MimeTypeParseException;
+import jakarta.inject.Named;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.applib.jaxb.PrimitiveJaxbAdapters;
-import org.apache.causeway.applib.util.ZipReader;
-import org.apache.causeway.applib.util.ZipWriter;
 import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.commons.internal.base._Bytes;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.image._Images;
+import org.apache.causeway.commons.io.DataSource;
+import org.apache.causeway.commons.io.HashUtils;
+import org.apache.causeway.commons.io.HashUtils.HashAlgorithm;
+import org.apache.causeway.commons.io.ZipUtils;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -85,25 +84,14 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public final class Blob implements NamedWithMimeType {
 
-    /**
-     * Computed for state:
-     *
-     * <p>
-     * <pre>
-     * private final MimeType mimeType;
-     * private final byte[] bytes;
-     * private final String name;
-     * </pre>
-     * </p>
-     */
-    private static final long serialVersionUID = 5659679806709601263L;
+    private static final long serialVersionUID = SerializationProxy.serialVersionUID;
 
     // -- FACTORIES
 
     /**
      * Returns a new {@link Blob} of given {@code name}, {@code mimeType} and {@code content}.
      * <p>
-     * {@code name} may or may not include the desired filename extension, it
+     * {@code name} may or may not include the desired filename extension, as it
      * is guaranteed, that the resulting {@link Blob} has the appropriate extension
      * as constraint by the given {@code mimeType}.
      * <p>
@@ -120,25 +108,30 @@ public final class Blob implements NamedWithMimeType {
     }
 
     /**
-     * Returns a new {@link Blob} of given {@code name}, {@code mimeType} and content from {@code file},
+     * Returns a new {@link Blob} of given {@code name}, {@code mimeType} and content from {@code dataSource},
      * wrapped with a {@link Try}.
      * <p>
-     * {@code name} may or may not include the desired filename extension, it
+     * {@code name} may or may not include the desired filename extension, as it
      * is guaranteed, that the resulting {@link Blob} has the appropriate extension
      * as constraint by the given {@code mimeType}.
      * <p>
-     * For more fine-grained control use one of the {@link Blob} constructors directly.
+     * For more fine-grained control use one of the {@link Blob} factories directly.
      * @param name - may or may not include the desired filename extension
      * @param mimeType
-     * @param file - the file to be opened for reading
+     * @param dataSource - the {@link DataSource} to be opened for reading
      * @return new {@link Blob}
      */
+    public static Try<Blob> tryRead(final String name, final CommonMimeType mimeType, final DataSource dataSource) {
+        return dataSource.tryReadAsBytes()
+                .mapSuccess(bytes->Blob.of(name, mimeType, bytes.orElse(null)));
+    }
+
+    /**
+     * Shortcut for {@code tryRead(name, mimeType, DataSource.ofFile(file))}
+     * @see #tryRead(String, org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType, DataSource)
+     */
     public static Try<Blob> tryRead(final String name, final CommonMimeType mimeType, final File file) {
-        return Try.call(()->{
-            try(val fis = new FileInputStream(file)){
-                return Blob.of(name, mimeType, _Bytes.ofKeepOpen(fis));
-            }
-        });
+        return tryRead(name, mimeType, DataSource.ofFile(file));
     }
 
      // --
@@ -232,60 +225,58 @@ public final class Blob implements NamedWithMimeType {
     }
 
     /**
-     * The {@link InputStream} involved is closed after consumption.
-     * @param consumer
-     * @throws IOException
+     * Returns a new {@link DataSource} for underlying byte array.
+     * @see DataSource
      */
-    public void consume(final @NonNull Consumer<InputStream> consumer) throws IOException {
-     // null to empty
-        val bytes = Optional.ofNullable(getBytes())
-                .orElse(new byte[0]);
-        try(val bis = new ByteArrayInputStream(bytes)) {
-            consumer.accept(bis);
-        }
+    public DataSource asDataSource() {
+        return DataSource.ofBytes(_NullSafe.toNonNull(getBytes()));
     }
 
     /**
-     * The {@link InputStream} involved is closed after digestion.
-     * @param <R>
-     * @param digester
-     * @throws IOException
+     * Returns a new {@link Blob} that has this Blob's underlying byte array
+     * zipped into a zip-entry using this Blob's name.
      */
-    public <R> R digest(final @NonNull Function<InputStream, R> digester) throws IOException {
-        // null to empty
-        val bytes = Optional.ofNullable(getBytes())
-                .orElse(new byte[0]);
-        try(val bis = new ByteArrayInputStream(bytes)) {
-            return digester.apply(bis);
-        }
-    }
-
     public Blob zip() {
-        val zipWriter = ZipWriter.newInstance();
-        zipWriter.nextEntry(getName(), outputStream->outputStream.writeBytes(getBytes()));
-        return Blob.of(getName()+".zip", CommonMimeType.ZIP, zipWriter.toBytes());
+        return zip(getName());
     }
 
-    @SneakyThrows
+    /**
+     * Returns a new {@link Blob} that has this Blob's underlying byte array
+     * zipped into a zip-entry with given zip-entry name.
+     * @param zipEntryNameIfAny - if null or empty this Blob's name is used
+     */
+    public Blob zip(final @Nullable String zipEntryNameIfAny) {
+        val zipEntryName = _Strings.nonEmpty(zipEntryNameIfAny)
+            .orElseGet(this::getName);
+        val zipBuilder = ZipUtils.zipEntryBuilder();
+        zipBuilder.add(zipEntryName, getBytes());
+        return Blob.of(getName()+".zip", CommonMimeType.ZIP, zipBuilder.toBytes());
+    }
+
     public Blob unZip(final @NonNull CommonMimeType resultingMimeType) {
+        return ZipUtils.firstZipEntry(asDataSource()) // assuming first entry is the one we want
+                .map(zipEntryDataSource->Blob.of(
+                        zipEntryDataSource.zipEntry().getName(),
+                        resultingMimeType,
+                        zipEntryDataSource.bytes()))
+                .orElseThrow(()->_Exceptions
+                      .unrecoverable("failed to unzip blob, no entry found %s", getName()));
+    }
 
-        return digest(is->
-            ZipReader.digest(is, (zipEntry, zipInputStream)->{
-                if(zipEntry.isDirectory()) {
-                    return (Blob)null; // continue
-                }
-                final byte[] unzippedBytes;
-                try {
-                    unzippedBytes = _Bytes.of(zipInputStream);
-                } catch (IOException e) {
-                    throw _Exceptions
-                        .unrecoverable(e, "failed to read zip entry %s", zipEntry.getName());
-                }
-                return Blob.of(zipEntry.getName(), resultingMimeType, unzippedBytes);
-            })
+    // -- HASHING
 
-        )
-        .orElse(Blob.of("blob_unzip_failed", resultingMimeType, new byte[0]));
+    public Try<HashUtils.Hash> tryHash(final @NonNull HashAlgorithm hashAlgorithm) {
+        return HashUtils.tryDigest(hashAlgorithm, bytes, 4*1024); // 4k default
+    }
+
+    public Try<HashUtils.Hash> tryMd5() {
+        return tryHash(HashAlgorithm.MD5);
+    }
+
+    public String md5Hex() {
+        return tryMd5()
+                .valueAsNonNullElseFail()
+                .asHexString();
     }
 
     // -- OBJECT CONTRACT
@@ -377,6 +368,37 @@ public final class Blob implements NamedWithMimeType {
         } catch (Exception e) {
             log.error("failed to read image data", e);
             return Optional.empty();
+        }
+
+    }
+
+    // -- SERIALIZATION PROXY
+
+    private Object writeReplace() {
+        return new SerializationProxy(this);
+    }
+
+    private void readObject(final ObjectInputStream stream) throws InvalidObjectException {
+        throw new InvalidObjectException("Proxy required");
+    }
+
+    private static class SerializationProxy implements Serializable {
+        /**
+         * Generated, based on String, String, bytes[]
+         */
+        private static final long serialVersionUID = -950845631214162726L;
+        private final String name;
+        private final String mimeTypeBase;
+        private final byte[] bytes;
+
+        private SerializationProxy(final Blob blob) {
+            this.name = blob.getName();
+            this.mimeTypeBase = blob.getMimeType().getBaseType();
+            this.bytes = blob.getBytes();
+        }
+
+        private Object readResolve() {
+            return new Blob(name, mimeTypeBase, bytes);
         }
 
     }

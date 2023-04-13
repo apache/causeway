@@ -10,9 +10,9 @@ Provides a mechanism to execute a xref:refguide:applib:index/services/command/Co
 ----
 interface CommandExecutorService {
   Try<Bookmark> executeCommand(InteractionContextPolicy interactionContextPolicy, Command command)     // <.>
-  Try<Bookmark> executeCommand(InteractionContextPolicy interactionContextPolicy, CommandDto commandDto, CommandOutcomeHandler outcomeHandler)     // <.>
+  Try<Bookmark> executeCommand(InteractionContextPolicy interactionContextPolicy, CommandDto commandDto)     // <.>
   Try<Bookmark> executeCommand(Command command)     // <.>
-  Try<Bookmark> executeCommand(CommandDto commandDto, CommandOutcomeHandler outcomeHandler)     // <.>
+  Try<Bookmark> executeCommand(CommandDto commandDto)     // <.>
 }
 ----
 
@@ -21,7 +21,7 @@ interface CommandExecutorService {
 --
 Executes the specified xref:refguide:applib:index/services/command/Command.adoc[Command] using the required _InteractionContextPolicy_ , updating the Command (or its persistent equivalent) afterwards (for example, setting its _Command#getCommandDto() commandDto_ field.
 --
-<.> xref:#executeCommand_InteractionContextPolicy_CommandDto_CommandOutcomeHandler[executeCommand(InteractionContextPolicy, CommandDto, CommandOutcomeHandler)]
+<.> xref:#executeCommand_InteractionContextPolicy_CommandDto[executeCommand(InteractionContextPolicy, CommandDto)]
 +
 --
 Executes the specified command (represented as a _CommandDto_ using the required _InteractionContextPolicy_ .
@@ -31,10 +31,10 @@ Executes the specified command (represented as a _CommandDto_ using the required
 --
 As per _#executeCommand(InteractionContextPolicy, Command)_ , with a policy of _InteractionContextPolicy#NO_SWITCH no switch_ .
 --
-<.> xref:#executeCommand_CommandDto_CommandOutcomeHandler[executeCommand(CommandDto, CommandOutcomeHandler)]
+<.> xref:#executeCommand_CommandDto[executeCommand(CommandDto)]
 +
 --
-As per _#executeCommand(InteractionContextPolicy, CommandDto, CommandOutcomeHandler)_ , with a policy of _InteractionContextPolicy#NO_SWITCH no switch_ .
+As per _#executeCommand(InteractionContextPolicy, CommandDto)_ , with a policy of _InteractionContextPolicy#NO_SWITCH no switch_ .
 --
 
 == Members
@@ -44,14 +44,12 @@ As per _#executeCommand(InteractionContextPolicy, CommandDto, CommandOutcomeHand
 
 Executes the specified xref:refguide:applib:index/services/command/Command.adoc[Command] using the required _InteractionContextPolicy_ , updating the Command (or its persistent equivalent) afterwards (for example, setting its _Command#getCommandDto() commandDto_ field.
 
-[#executeCommand_InteractionContextPolicy_CommandDto_CommandOutcomeHandler]
-=== executeCommand(InteractionContextPolicy, CommandDto, CommandOutcomeHandler)
+[#executeCommand_InteractionContextPolicy_CommandDto]
+=== executeCommand(InteractionContextPolicy, CommandDto)
 
 Executes the specified command (represented as a _CommandDto_ using the required _InteractionContextPolicy_ .
 
 IMPORTANT: THIS METHOD HAS SIGNIFICANT SIDE-EFFECTS. Specifically, the xref:refguide:applib:index/services/command/Command.adoc[Command] of the executing thread (obtained using _org.apache.causeway.applib.services.iactn.InteractionProvider_ to obtain the xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] , and then _Interaction#getCommand()_ to obtain the xref:refguide:applib:index/services/command/Command.adoc[Command] ) will be UPDATED to hold the _CommandDto_ passed in.
-
-Optionally an xref:refguide:applib:index/services/command/CommandOutcomeHandler.adoc[CommandOutcomeHandler] can be provided to process the result. This is used by the persistent implementations to update their respective persistent equivalents of xref:refguide:applib:index/services/command/Command.adoc[Command] .
 
 [#executeCommand_Command]
 === executeCommand(Command)
@@ -60,12 +58,12 @@ As per _#executeCommand(InteractionContextPolicy, Command)_ , with a policy of _
 
 Note that this method updates the Command as a side-effect.
 
-[#executeCommand_CommandDto_CommandOutcomeHandler]
-=== executeCommand(CommandDto, CommandOutcomeHandler)
+[#executeCommand_CommandDto]
+=== executeCommand(CommandDto)
 
-As per _#executeCommand(InteractionContextPolicy, CommandDto, CommandOutcomeHandler)_ , with a policy of _InteractionContextPolicy#NO_SWITCH no switch_ .
+As per _#executeCommand(InteractionContextPolicy, CommandDto)_ , with a policy of _InteractionContextPolicy#NO_SWITCH no switch_ .
 
-Note that this method has significant side-effects.
+IMPORTANT: THIS METHOD HAS SIGNIFICANT SIDE-EFFECTS. Specifically, the xref:refguide:applib:index/services/command/Command.adoc[Command] of the executing thread (obtained using _org.apache.causeway.applib.services.iactn.InteractionProvider_ to obtain the xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] , and then _Interaction#getCommand()_ to obtain the xref:refguide:applib:index/services/command/Command.adoc[Command] ) will be UPDATED to hold the _CommandDto_ passed in.
 
 include::hooks/CommandExecutorService_010-implementation.adoc[]
 

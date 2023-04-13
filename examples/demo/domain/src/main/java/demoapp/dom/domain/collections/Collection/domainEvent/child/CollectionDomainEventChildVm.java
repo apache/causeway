@@ -18,12 +18,12 @@
  */
 package demoapp.dom.domain.collections.Collection.domainEvent.child;
 
-import javax.inject.Named;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import jakarta.inject.Named;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
@@ -37,12 +37,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 //tag::class[]
-@XmlRootElement(name = "child")
+@XmlRootElement(name = "demo.CollectionDomainEventChildVm")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.CollectionDomainEventChildVm")
-@DomainObject(
-        nature=Nature.VIEW_MODEL)
+@DomainObject(nature=Nature.VIEW_MODEL)
 @NoArgsConstructor
 public class CollectionDomainEventChildVm implements HasAsciiDocDescription {
 
@@ -54,7 +53,6 @@ public class CollectionDomainEventChildVm implements HasAsciiDocDescription {
 //tag::class[]
     @Title
     @Property()
-    @PropertyLayout(fieldSetId = "properties", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String value;

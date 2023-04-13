@@ -25,10 +25,10 @@ import org.springframework.context.annotation.Import;
 import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault;
+import org.apache.causeway.extensions.secman.jpa.CausewayModuleExtSecmanPersistenceJpa;
 import org.apache.causeway.incubator.viewer.javafx.model.events.JavaFxViewerConfig;
 import org.apache.causeway.incubator.viewer.javafx.model.util._fx;
 import org.apache.causeway.incubator.viewer.javafx.viewer.CausewayModuleIncViewerJavaFxViewer;
-import org.apache.causeway.incubator.viewer.javafx.viewer.JavafxViewer;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 
 import demoapp.dom.DemoModuleJpa;
@@ -42,6 +42,8 @@ import demoapp.dom.DemoModuleJpa;
 
     // INCUBATING
     CausewayModuleSecurityBypass.class,
+    // Security Manager Extension (secman)
+    CausewayModuleExtSecmanPersistenceJpa.class,
     CausewayModuleIncViewerJavaFxViewer.class,
 
 })
@@ -65,7 +67,7 @@ public class DemoAppJavaFx {
         CausewayPresets.prototyping(); // use prototyping mode as default, unless explicitly overridden (INCUBATING)
         System.setProperty("spring.profiles.active", "demo-jpa");
 
-        JavafxViewer.launch(DemoAppJavaFx.class, args);
+        CausewayModuleIncViewerJavaFxViewer.launch(DemoAppJavaFx.class, args);
     }
 
 }

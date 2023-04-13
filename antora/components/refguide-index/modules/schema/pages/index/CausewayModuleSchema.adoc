@@ -7,6 +7,7 @@
 .CausewayModuleSchema.java
 ----
 class CausewayModuleSchema {
+  public static final String NAMESPACE;
 }
 ----
 

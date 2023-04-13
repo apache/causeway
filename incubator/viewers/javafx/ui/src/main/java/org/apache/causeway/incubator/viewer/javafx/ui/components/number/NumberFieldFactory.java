@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.incubator.viewer.javafx.ui.components.number;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.springframework.util.ClassUtils;
 
@@ -35,7 +35,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @org.springframework.stereotype.Component
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 //@Log4j2
 public class NumberFieldFactory implements UiComponentHandlerFx {

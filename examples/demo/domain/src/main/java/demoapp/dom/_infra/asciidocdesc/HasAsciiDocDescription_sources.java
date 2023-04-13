@@ -18,7 +18,7 @@
  */
 package demoapp.dom._infra.asciidocdesc;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.applib.annotation.Property;

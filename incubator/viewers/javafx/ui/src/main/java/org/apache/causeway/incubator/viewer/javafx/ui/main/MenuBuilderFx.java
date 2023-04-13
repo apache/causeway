@@ -22,8 +22,9 @@ import java.util.function.Consumer;
 
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.incubator.viewer.javafx.model.context.UiContextFx;
-import org.apache.causeway.viewer.commons.applib.services.menu.MenuItemDto;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuVisitor;
+import org.apache.causeway.viewer.commons.applib.services.menu.model.MenuAction;
+import org.apache.causeway.viewer.commons.applib.services.menu.model.MenuDropdown;
 
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -44,18 +45,18 @@ public class MenuBuilderFx implements MenuVisitor {
     private Menu currentTopLevelMenu = null;
 
     @Override
-    public void addTopLevel(MenuItemDto menuDto) {
-        log.debug("top level menu {}", menuDto.getName());
+    public void onTopLevel(final MenuDropdown menuDto) {
+        log.debug("top level menu {}", menuDto.name());
 
         menuBar.getMenus()
-        .add(currentTopLevelMenu = new Menu(menuDto.getName()));
+        .add(currentTopLevelMenu = new Menu(menuDto.name()));
     }
 
     @Override
-    public void addSubMenu(MenuItemDto menuDto) {
-        val managedAction = menuDto.getManagedAction();
+    public void onMenuAction(final MenuAction menuDto) {
+        val managedAction = menuDto.managedAction();
 
-        log.debug("sub menu {}", menuDto.getName());
+        log.debug("sub menu {}", menuDto.name());
 
         val actionUiModel = uiContext.getActionUiModelFactory().newActionUiModel(uiContext, managedAction);
         val menuItem = actionUiModel.createMenuUiComponent();
@@ -64,13 +65,13 @@ public class MenuBuilderFx implements MenuVisitor {
     }
 
     @Override
-    public void addSectionSpacer() {
+    public void onSectionSpacer() {
         log.debug("menu spacer");
         currentTopLevelMenu.getItems().add(new SeparatorMenuItem());
     }
 
     @Override
-    public void addSectionLabel(String named) {
+    public void onSectionLabel(final String named) {
         log.debug("section label  {}", named);
         val menuItem = new MenuItem(named);
         currentTopLevelMenu.getItems().add(menuItem);

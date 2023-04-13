@@ -24,8 +24,10 @@ import java.io.PrintStream;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -37,8 +39,9 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collector;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -50,13 +53,12 @@ import org.apache.causeway.commons.internal.functions._Predicates;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.size;
 import static org.apache.causeway.commons.internal.base._Strings_SplitIterator.splitIterator;
-import static org.apache.causeway.commons.internal.base._With.mapIfPresentElse;
-import static org.apache.causeway.commons.internal.base._With.requiresNotEmpty;
 import static org.apache.causeway.commons.internal.functions._Predicates.not;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
+import lombok.experimental.UtilityClass;
 
 /**
  * <h1>- internal use only -</h1>
@@ -73,9 +75,8 @@ import lombok.val;
  *
  * @since 2.0
  */
+@UtilityClass
 public final class _Strings {
-
-    private _Strings() {}
 
     // -- CONSTANTS
 
@@ -252,7 +253,7 @@ public final class _Strings {
      * @return null if the {@code input} is null
      */
     public static String trim(final @Nullable String input) {
-        return mapIfPresentElse(input, String::trim, null);
+        return mapIfPresentElseNull(input, String::trim);
     }
 
     /**
@@ -261,7 +262,7 @@ public final class _Strings {
      * @return null if {@code input} is null
      */
     public static String lower(final @Nullable String input) {
-        return mapIfPresentElse(input, String::toLowerCase, null);
+        return mapIfPresentElseNull(input, String::toLowerCase);
     }
 
     /**
@@ -270,7 +271,7 @@ public final class _Strings {
      * @return null if {@code input} is null
      */
     public static String upper(final @Nullable String input) {
-        return mapIfPresentElse(input, String::toUpperCase, null);
+        return mapIfPresentElseNull(input, String::toUpperCase);
     }
 
     /**
@@ -311,6 +312,23 @@ public final class _Strings {
 
     // -- SPECIAL UNARY OPERATORS
 
+    /**
+     * String not-empty (nor null) guard.
+     * @param str target for the non-empty-check
+     * @param identifier to use for the exception message, when the non-empty-check fails
+     * @throws NullPointerException if {@code str} is {@code null}
+     * @throws IllegalArgumentException if {@code str} is 'empty'
+     */
+    public static String requireNonEmpty(final @Nullable String str, final String identifier) {
+        if (str == null) {
+            throw new NullPointerException(String.format("'%s' is required to be present (not null).", identifier));
+        }
+        if (str.length()==0) {
+            throw new IllegalArgumentException(String.format("'%s' is required to be present and not empty.", identifier));
+        }
+        return str;
+    }
+
     public static @Nullable String htmlEscape(final @Nullable String source) {
         return _Strings_HtmlEscaper.htmlEscape(source);
     }
@@ -332,6 +350,31 @@ public final class _Strings {
             // ignore
         }
         return false;
+    }
+
+    // -- INTERPOLATION
+
+    /**
+     * String interpolation based on named parameters of pattern <pre>${key} -> value</pre>
+     * @see "https://www.baeldung.com/java-string-formatting-named-placeholders#2-creating-the-method"
+     */
+    public static String format(final String template, final Map<String, Object> parameters) {
+        final StringBuilder newTemplate = new StringBuilder(template);
+        final List<Object> valueList = new ArrayList<>();
+        final Matcher matcher = Pattern.compile("[$][{](\\w+)}").matcher(template);
+
+        while (matcher.find()) {
+            String key = matcher.group(1);
+
+            String paramName = "${" + key + "}";
+            int index = newTemplate.indexOf(paramName);
+            if (index != -1) {
+                newTemplate.replace(index, index + paramName.length(), "%s");
+                valueList.add(parameters.get(key));
+            }
+        }
+
+        return String.format(newTemplate.toString(), valueList.toArray());
     }
 
     // -- PREFIX/SUFFIX
@@ -384,7 +427,7 @@ public final class _Strings {
     public static String combineWithDelimiter(
             final @Nullable String left, final @Nullable String right, final String delimiter) {
 
-        requiresNotEmpty(delimiter, "pathDelimiter");
+        requireNonEmpty(delimiter, "pathDelimiter");
 
         if (isNullOrEmpty(left) && isNullOrEmpty(right)) {
             return "";
@@ -596,7 +639,7 @@ public final class _Strings {
      * @return null if {@code input} is null
      */
     public static String condenseWhitespaces(final @Nullable String input, final @NonNull String replacement) {
-        return mapIfPresentElse(input, __->input.replaceAll("\\s+", replacement), null);
+        return mapIfPresentElseNull(input, __->input.replaceAll("\\s+", replacement));
     }
 
     /**
@@ -706,7 +749,9 @@ public final class _Strings {
      * @return null if {@code str} is null
      */
     public static final byte[] toBytes(final @Nullable String str, final @NonNull Charset charset) {
-        return mapIfPresentElse(str, __->str.getBytes(charset), null);
+        return Optional.ofNullable(str)
+                .map(s->s.getBytes(charset))
+                .orElse(null);
     }
 
     /**
@@ -716,7 +761,24 @@ public final class _Strings {
      * @return null if {@code bytes} is null
      */
     public static final String ofBytes(final @Nullable byte[] bytes, final @NonNull Charset charset) {
-        return mapIfPresentElse(bytes, __->new String(bytes, charset), null);
+        return Optional.ofNullable(bytes)
+                .map(b->new String(b, charset))
+                .orElse(null);
+    }
+
+    /**
+     * Factory counterpart to {@link String#codePoints()}.
+     * @return null if {@code codePoints} is null
+     */
+    public static final String ofCodePoints(final @Nullable IntStream codePoints) {
+        if(codePoints==null) {
+            return null;
+        }
+        return codePoints.collect(
+                StringBuilder::new,
+                StringBuilder::appendCodePoint,
+                StringBuilder::append)
+            .toString();
     }
 
     /**
@@ -729,7 +791,7 @@ public final class _Strings {
      * @return null if {@code input} is null
      */
     public static final String convert(final @Nullable String input, final @NonNull BytesOperator converter, final @NonNull Charset charset) {
-        return mapIfPresentElse(input, __->ofBytes(converter.apply(toBytes(input, charset)), charset), null);
+        return mapIfPresentElseNull(input, __->ofBytes(converter.apply(toBytes(input, charset)), charset));
     }
 
     // -- UNARY OPERATOR COMPOSITION
@@ -795,13 +857,23 @@ public final class _Strings {
      * isReady             -&gt; Ready
      * </pre>
      */
-    public static final String asPrefixDropped(final @Nullable String name) {
-        return isNotEmpty(name)
-                ? _Strings
-                    .streamCharacters(name)
-                    .dropWhile(c->c != '_' && Character.isLowerCase(c))
-                    .collect(_Strings.joiningCharacters())
-                : name;
+    public static final String asPrefixDropped(final @Nullable CharSequence chars) {
+        return isNotEmpty(chars)
+                ? ofCodePoints(
+                        chars.codePoints()
+                            .dropWhile(c->c != '_' && Character.isLowerCase(c)))
+                : chars!=null ? "" : null;
+    }
+
+    /**
+     * Within given string, converts any special UTF-8 variants of the space ' ' character to the regular one.
+     */
+    public static final String asRegularSpaces(final @Nullable CharSequence chars) {
+        return isNotEmpty(chars)
+                ? ofCodePoints(
+                        chars.codePoints()
+                            .map(_Strings::toRegularSpaceCharacter))
+                : chars!=null ? "" : null;
     }
 
     // -- SHORTCUTS
@@ -836,20 +908,32 @@ public final class _Strings {
         return _Strings.convert(str, _Bytes.asUrlBase64, StandardCharsets.UTF_8);
     }
 
-    // -- CHARACTER PROCESSING
-
-    public static Stream<Character> streamCharacters(final @Nullable String str) {
-        return isNotEmpty(str)
-                ? str.codePoints().mapToObj(c -> (char) c)
-                : Stream.empty();
+    public static String base64UrlDecodeZlibCompressed(final @Nullable String str) {
+        return _Strings.convert(str, _Bytes.ofZlibCompressedUrlBase64, StandardCharsets.UTF_8);
     }
 
-    public static Collector<Character, StringBuilder, String> joiningCharacters() {
-        return Collector.of(
-                StringBuilder::new,
-                StringBuilder::append,
-                StringBuilder::append,
-                StringBuilder::toString);
+    public static String base64UrlEncodeZlibCompressed(final @Nullable String str) {
+        return _Strings.convert(str, _Bytes.asZlibCompressedUrlBase64, StandardCharsets.UTF_8);
+    }
+
+    // -- CHARACTER PROCESSING
+
+    /**
+     * Converts any special UTF-8 variants of the space ' ' character to the regular one.
+     */
+    public static int toRegularSpaceCharacter(final int codePoint) {
+        // NO-BREAK SPACE (UTF-8/160)
+        // THIN SPACE (UTF-8/8201)
+        // NARROW NO-BREAK SPACE (UTF-8/8239)
+        // REGULAR SPACE (UTF-8/32)
+        switch (codePoint) {
+        case 160:
+        case 8201:
+        case 8239:
+            return 32;
+        default:
+            return codePoint;
+        }
     }
 
     // -- TRUNCATION
@@ -871,6 +955,18 @@ public final class _Strings {
         return str == null || str.length() > maxLength
                     ? null
                     : str;
+    }
+
+    // -- HELPER
+
+    /**
+     * Equivalent to {@code Optional.ofNullable(obj).map(mapper).orElse(null);}
+     */
+    private static String mapIfPresentElseNull(
+            final @Nullable String obj, final @NonNull UnaryOperator<String> mapper) {
+        return obj!=null
+                ? mapper.apply(obj)
+                : null;
     }
 
 }

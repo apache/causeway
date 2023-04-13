@@ -25,7 +25,7 @@ import java.lang.annotation.Target;
 import java.util.Collection;
 import java.util.Comparator;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;

@@ -20,32 +20,32 @@ package org.apache.causeway.viewer.wicket.model.models;
 
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.viewer.commons.applib.services.menu.MenuUiModel;
+import org.apache.causeway.viewer.commons.applib.services.menu.model.NavbarSection;
 /**
  * Backing model for actions of application services menu bar (typically, as
  * displayed along the top or side of the page).
  */
-public class ServiceActionsModel extends ModelAbstract<MenuUiModel> {
+public class ServiceActionsModel extends ModelAbstract<NavbarSection> {
 
     private static final long serialVersionUID = 1L;
 
-    private final MenuUiModel menuUiModel;
+    private final NavbarSection navBarSection;
 
     /**
      * @param commonContext
-     * @param menuUiModel - may be null in special case of rendering the tertiary menu on the error page.
+     * @param navBarSection - may be null in special case of rendering the tertiary menu on the error page.
      */
     public ServiceActionsModel(
             final MetaModelContext commonContext,
-            final MenuUiModel menuUiModel) {
+            final NavbarSection navBarSection) {
 
         super(commonContext);
-        this.menuUiModel = menuUiModel;
+        this.navBarSection = navBarSection;
     }
 
     @Override
-    protected MenuUiModel load() {
-        return menuUiModel;
+    protected NavbarSection load() {
+        return navBarSection;
     }
 
 }

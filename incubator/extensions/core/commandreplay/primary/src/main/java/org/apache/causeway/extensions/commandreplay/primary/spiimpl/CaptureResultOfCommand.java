@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.extensions.commandreplay.primary.spiimpl;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Service;
 
@@ -46,7 +46,7 @@ import lombok.val;
 @Named(CausewayModuleExtCommandReplayPrimary.NAMESPACE + ".CaptureResultOfCommand")
 // specify quite a high priority since custom processors will probably want to run after this one
 // (but can choose to run before if they wish)
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 public class CaptureResultOfCommand implements CommandDtoProcessorService {
 
     @Override

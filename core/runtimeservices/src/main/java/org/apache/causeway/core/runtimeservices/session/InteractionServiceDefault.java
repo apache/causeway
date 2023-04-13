@@ -19,7 +19,6 @@
 package org.apache.causeway.core.runtimeservices.session;
 
 import java.io.File;
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -27,11 +26,12 @@ import java.util.Stack;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Provider;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Provider;
 
+import org.apache.causeway.applib.services.command.Command;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Lazy;
@@ -374,13 +374,14 @@ implements
     }
 
     private void preInteractionClosed(final CausewayInteraction interaction) {
+
         completeAndPublishCurrentCommand();
 
         RuntimeException flushException = null;
         try {
             transactionServiceProvider.get().flushTransaction();
         } catch (RuntimeException e) {
-            //[ISIS-3262] if flush fails rethrow later, when interaction was closed ...
+            //[CAUSEWAY-3262] if flush fails rethrow later, when interaction was closed ...
             flushException = e;
         }
 
@@ -438,24 +439,23 @@ implements
         val command = interaction.getCommand();
 
         if(command.getStartedAt() != null && command.getCompletedAt() == null) {
-            // the guard is in case we're here as the result of a redirect following a previous exception;just ignore.
+            // the guard is in case we're here as the result of a redirect following a previous exception; patch up as best we can.
 
             val priorInteractionExecution = interaction.getPriorExecution();
-            final Timestamp completedAt =
+            val completedAt =
                     priorInteractionExecution != null
                     ?
                         // copy over from the most recent (which will be the top-level) interaction
                         priorInteractionExecution.getCompletedAt()
                     :
-                        // this could arise as the result of calling SessionManagementService#nextSession within an action
+                        // this could arise as the result of calling InteractionService#nextInteraction within an action
                         // the best we can do is to use the current time
-
-                        // REVIEW: as for the interaction object, it is left somewhat high-n-dry.
-                         clockService.getClock().nowAsJavaSqlTimestamp();
+                        clockService.getClock().nowAsJavaSqlTimestamp();
 
             command.updater().setCompletedAt(completedAt);
         }
 
+        command.updater().setPublishingPhase(Command.CommandPublishingPhase.COMPLETED);
         commandPublisherProvider.get().complete(command);
 
         interaction.clear();

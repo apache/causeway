@@ -27,7 +27,7 @@ import java.time.ZonedDateTime;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
@@ -61,6 +61,7 @@ import lombok.experimental.Accessors;
 
 @Component
 @Import({
+    // mixins
     CalendarEventSemantics.CalendarEvent_default.class
 })
 public class CalendarEventSemantics
@@ -183,7 +184,7 @@ implements
                 ZonedDateTime.of(2022, 05, 13, 17, 30, 15, 0, ZoneOffset.ofHours(3)),
                 "Business",
                 "Weekly Meetup",
-                "Calendar Notes");
+                "Calendar Notes: <a href=\"https://apache.org\">apache.org</a>"); // should be properly serialized to JSON
 
         val b = CalendarEvent.of(
                 ZonedDateTime.of(2022, 06, 14, 18, 31, 16, 0, ZoneOffset.ofHours(4)),

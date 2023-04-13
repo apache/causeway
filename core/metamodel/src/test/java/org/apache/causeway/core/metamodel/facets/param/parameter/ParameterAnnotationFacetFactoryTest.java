@@ -95,7 +95,7 @@ extends AbstractFacetFactoryJupiterTestCase {
 
             // when
             final FacetFactory.ProcessParameterContext processParameterContext =
-                    new FacetFactory.ProcessParameterContext(
+                    FacetFactory.ProcessParameterContext.forTesting(
                             Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
             facetFactory.processParams(processParameterContext);
 
@@ -142,7 +142,7 @@ extends AbstractFacetFactoryJupiterTestCase {
 
             // when
             final FacetFactory.ProcessParameterContext processParameterContext =
-                    new FacetFactory.ProcessParameterContext(
+                    FacetFactory.ProcessParameterContext.forTesting(
                             Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
             facetFactory.processParams(processParameterContext);
 
@@ -180,7 +180,7 @@ extends AbstractFacetFactoryJupiterTestCase {
 
             // when
             final FacetFactory.ProcessParameterContext processParameterContext =
-                    new FacetFactory.ProcessParameterContext(
+                    FacetFactory.ProcessParameterContext.forTesting(
                             Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
             facetFactory.processParams(processParameterContext);
 
@@ -208,7 +208,7 @@ extends AbstractFacetFactoryJupiterTestCase {
 
             // when
             final FacetFactory.ProcessParameterContext processParameterContext =
-                    new FacetFactory.ProcessParameterContext(
+                    FacetFactory.ProcessParameterContext.forTesting(
                             Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
             facetFactory.processParams(processParameterContext);
 
@@ -236,7 +236,7 @@ extends AbstractFacetFactoryJupiterTestCase {
 
             // when
             final FacetFactory.ProcessParameterContext processParameterContext =
-                    new FacetFactory.ProcessParameterContext(
+                    FacetFactory.ProcessParameterContext.forTesting(
                             Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
             facetFactory.processParams(processParameterContext);
 
@@ -260,7 +260,7 @@ extends AbstractFacetFactoryJupiterTestCase {
 
             // when
             final FacetFactory.ProcessParameterContext processParameterContext =
-                    new FacetFactory.ProcessParameterContext(
+                    FacetFactory.ProcessParameterContext.forTesting(
                             Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
             facetFactory.processParams(processParameterContext);
 
@@ -293,7 +293,7 @@ extends AbstractFacetFactoryJupiterTestCase {
 
             // when
             final FacetFactory.ProcessParameterContext processParameterContext =
-                    new FacetFactory.ProcessParameterContext(
+                    FacetFactory.ProcessParameterContext.forTesting(
                             Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
             facetFactory.processParams(processParameterContext);
 
@@ -323,7 +323,7 @@ extends AbstractFacetFactoryJupiterTestCase {
 
             // when
             final FacetFactory.ProcessParameterContext processParameterContext =
-                    new FacetFactory.ProcessParameterContext(
+                    FacetFactory.ProcessParameterContext.forTesting(
                             Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
             facetFactory.processParams(processParameterContext);
 
@@ -350,7 +350,7 @@ extends AbstractFacetFactoryJupiterTestCase {
 
             // when
             final FacetFactory.ProcessParameterContext processParameterContext =
-                    new FacetFactory.ProcessParameterContext(
+                    FacetFactory.ProcessParameterContext.forTesting(
                             Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
             facetFactory.processParams(processParameterContext);
 
@@ -378,7 +378,7 @@ extends AbstractFacetFactoryJupiterTestCase {
 
             // when
             final FacetFactory.ProcessParameterContext processParameterContext =
-                    new FacetFactory.ProcessParameterContext(
+                    FacetFactory.ProcessParameterContext.forTesting(
                             Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
             facetFactory.processParams(processParameterContext);
 

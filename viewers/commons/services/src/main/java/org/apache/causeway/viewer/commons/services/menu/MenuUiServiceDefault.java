@@ -18,28 +18,26 @@
  */
 package org.apache.causeway.viewer.commons.services.menu;
 
-import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import org.apache.causeway.applib.annotation.DomainServiceLayout;
+import org.apache.causeway.applib.annotation.DomainServiceLayout.MenuBar;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenuBar;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.util.Facets;
-import org.apache.causeway.viewer.commons.applib.services.menu.MenuUiModel;
+import org.apache.causeway.viewer.commons.applib.services.menu.MenuItemDto;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuUiService;
-import org.apache.causeway.viewer.commons.applib.services.menu.MenuVisitor;
+import org.apache.causeway.viewer.commons.applib.services.menu.model.MenuDropdownBuilder;
+import org.apache.causeway.viewer.commons.applib.services.menu.model.NavbarSection;
+import org.apache.causeway.viewer.commons.applib.services.menu.model.NavbarUiModel;
 import org.apache.causeway.viewer.commons.services.CausewayModuleViewerCommonsServices;
 
 import lombok.RequiredArgsConstructor;
@@ -57,41 +55,51 @@ implements MenuUiService {
     private final MenuBarsService menuBarsService;
 
     @Override
-    public MenuUiModel getMenu(final DomainServiceLayout.MenuBar menuBarSelect) {
-        return MenuUiModel.of(menuBarSelect, select(menuBarSelect));
-    }
-
-    @Override
-    public void buildMenuItems(
-            final MenuUiModel menuUiModel,
-            final MenuVisitor menuBuilder) {
-
-        val menuBars = menuBarsService.menuBars();
-        val menuBar = (BSMenuBar) menuBars.menuBarFor(menuUiModel.getMenuBarSelect());
-
-        _MenuItemBuilder.buildMenuItems(
-                metaModelContext,
-                menuBar,
-                menuBuilder);
-
+    public NavbarUiModel getMenu() {
+        return new NavbarUiModel(
+                buildNavBarSection(MenuBar.PRIMARY),
+                buildNavBarSection(MenuBar.SECONDARY),
+                buildNavBarSection(MenuBar.TERTIARY));
     }
 
     // -- HELPER
 
-    private List<String> select(final DomainServiceLayout.MenuBar menuBarSelect) {
-        return metaModelContext.streamServiceAdapters()
-                .filter(with(menuBarSelect))
-                .map(ManagedObject::getSpecification)
-                .map(ObjectSpecification::getLogicalTypeName)
-                .collect(Collectors.toList());
-    }
+    private NavbarSection buildNavBarSection(final MenuBar menuBarSelect) {
 
-    private static Predicate<ManagedObject> with(final DomainServiceLayout.MenuBar menuBarSelect) {
-        return (final ManagedObject adapter) ->
+        val menuBar = (BSMenuBar) menuBarsService.menuBars()
+                .menuBarFor(menuBarSelect);
 
-            Facets.domainServiceLayoutMenuBar(adapter.getSpecification())
-                    .orElse(DomainServiceLayout.MenuBar.PRIMARY)
-                    .equals(menuBarSelect);
+        val topLevelEntries = new ArrayList<MenuDropdownBuilder>();
+
+        _MenuItemBuilder.buildMenuItems(metaModelContext, menuBar, new _MenuItemBuilder.Visitor() {
+
+            private MenuDropdownBuilder currentMenu;
+
+            @Override
+            public void addTopLevel(final MenuItemDto menuDto) {
+                topLevelEntries.add(currentMenu = new MenuDropdownBuilder(menuDto.getName(), new ArrayList<>()));
+            }
+
+            @Override
+            public void addSectionSpacer() {
+                currentMenu.addSectionSpacer();
+            }
+
+            @Override
+            public void addSectionLabel(final String named) {
+                currentMenu.addSectionSpacer(named);
+            }
+
+            @Override
+            public void addMenuAction(final MenuItemDto menuDto) {
+                val action = menuDto.getManagedAction();
+                currentMenu.addAction(action);
+            }
+
+        });
+
+        return new NavbarSection(menuBarSelect, Can.ofCollection(topLevelEntries)
+                .map(MenuDropdownBuilder::build));
     }
 
 }

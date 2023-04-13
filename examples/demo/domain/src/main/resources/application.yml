@@ -22,8 +22,8 @@ causeway:
   applib:
     annotation:
       action:
-        command: ignore_safe
-        publishing: none
+        execution-publishing: none
+        command-publishing: none
       action-layout:
         css-class-fa:
           patterns:
@@ -42,10 +42,11 @@ causeway:
             delete.*:btn-danger
       domain-object:
         editing: false
-        publishing: none
+        entity-change-publishing: none
       property:
         command: all
-        publishing: none
+        command-publishing: none
+        execution-publishing: none
       property-layout:
         label-position: LEFT
       parameter-layout:
@@ -68,6 +69,12 @@ causeway:
         po:
           mode: disabled
 
+  value-types:
+    kroki:
+      # don't use this in production, as you might not want to share sensitive data over the public wire
+      # instead use a private docker instance like eg. yuzutech/kroki
+      backend-url: https://kroki.io
+
   viewer:
     common:
       application:
@@ -81,10 +88,10 @@ causeway:
         version: ${project.version}
         about: This application demonstrates many aspects of the Apache Causeway programming model, as well as some of the most significant domain services and extensions such as the WrapperFactory, security, commands and publishing.
       credit:
-        - url:  http://causeway.apache.org
-          image: images/apache-causeway/logo-48x48.png
+        - url:  https://causeway.apache.org
+          image: images/apache-causeway/causeway-logo-65x48.png
           name: Apache Causeway
-          
+
     wicket:
       css: css/application.css
       js: scripts/application.js

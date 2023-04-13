@@ -26,7 +26,6 @@ import org.apache.wicket.markup.html.link.AbstractLink;
 
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmTitleUtil;
@@ -117,26 +116,31 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
 
             } else {
 
-                val spec = targetAdapter.getSpecification();
-
-                final String iconName = spec.getIconName(targetAdapter);
-                final CssClassFaFactory cssClassFaFactory = spec.getCssClassFaFactory().orElse(null);
-                if (iconName != null || cssClassFaFactory == null) {
-                    Wkt.imageAddCachable(link, ID_ENTITY_ICON,
-                                    getImageResourceCache().resourceReferenceFor(targetAdapter));
-                    WktComponents.permanentlyHide(link, ID_ENTITY_FONT_AWESOME);
-                } else {
-                    Label dummy = Wkt.labelAdd(link, ID_ENTITY_FONT_AWESOME, "");
-                    Wkt.cssAppend(dummy, cssClassFaFactory.asSpaceSeparatedWithAdditional("fa-2x"));
-                    WktComponents.permanentlyHide(link, ID_ENTITY_ICON);
-                }
+                targetAdapter.eitherIconOrFaClass()
+                .accept(
+                        objectIcon->{
+                            Wkt.imageAddCachable(link, ID_ENTITY_ICON,
+                                    getImageResourceCache().resourceReferenceForObjectIcon(targetAdapter.getIcon()));
+                            WktComponents.permanentlyHide(link, ID_ENTITY_FONT_AWESOME);
+                        },
+                        cssClassFaFactory->{
+                            WktComponents.permanentlyHide(link, ID_ENTITY_ICON);
+                            final Label dummyLabel = Wkt.labelAdd(link, ID_ENTITY_FONT_AWESOME, "");
+                            Wkt.cssAppend(dummyLabel, cssClassFaFactory.asSpaceSeparatedWithAdditional("fa-2x"));
+                        });
 
                 final String title = determineTitle();
                 Wkt.labelAdd(link, ID_ENTITY_TITLE, titleAbbreviated(title));
 
-                String entityTypeName = determineFriendlyType() // from actual underlying model
-                        .orElseGet(spec::getSingularName); // not sure if this code path is ever reached
-                WktTooltips.addTooltip(link, entityTypeName, title);
+                final String tooltipTitle = determineFriendlyType() // from actual underlying model
+                        .orElseGet(()->
+                            // not sure if this code path is ever reached
+                            targetAdapter.getSpecification().getSingularName());
+                final String tooltipBody = _Strings.nonEmpty(typeOfSpecification.getDescription())
+                        .orElseGet(()->title);
+
+                WktTooltips.addTooltip(link, tooltipTitle, tooltipBody);
+
             }
         }
 

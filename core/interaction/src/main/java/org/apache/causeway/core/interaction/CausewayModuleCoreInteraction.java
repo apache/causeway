@@ -33,5 +33,6 @@ import org.apache.causeway.core.interaction.scope.InteractionScopeBeanFactoryPos
 })
 public class CausewayModuleCoreInteraction {
 
+    public static final String NAMESPACE = "causeway.interaction";
 
 }

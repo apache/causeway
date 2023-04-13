@@ -31,6 +31,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
 import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
+import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.viewer.commons.model.components.UiString;
 import org.apache.causeway.viewer.wicket.model.models.InlinePromptContext;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
@@ -48,6 +49,7 @@ import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -90,24 +92,35 @@ extends ScalarPanelAbstract {
                         regularFrame,
                         getFormFrame()));
 
-        if(FieldFragement.LINK.isMatching(fieldFrame)) {
 
-            fieldFrame
-                .addOrReplace(inlinePromptLink = createInlinePromptLink());
+        FieldFragement.matching(fieldFrame)
+        .ifPresent(fieldFragement->{
 
-            // needs InlinePromptContext to properly initialize
-            addOnClickBehaviorTo(inlinePromptLink);
+            switch (fieldFragement) {
+            case LINK_TO_PROMT: {
 
-            val additionalButtonContainer = FieldFragement.LINK.createButtonContainer(inlinePromptLink);
+                fieldFrame
+                    .addOrReplace(inlinePromptLink = createInlinePromptLink());
 
-            if(getRenderScenario()!=RenderScenario.CAN_EDIT_INLINE_VIA_ACTION) {
-                addAdditionalClickBehaviorTo(additionalButtonContainer);
+                // needs InlinePromptContext to properly initialize
+                addOnClickBehaviorTo(inlinePromptLink);
+
+                val additionalButtonContainer = fieldFragement.createButtonContainer(inlinePromptLink);
+                addAdditionalButtonsTo(additionalButtonContainer, fieldFragement);
+                return;
             }
+            case NO_LINK_VIEWING:
+            case NO_LINK_EDITING: {
 
-        } else if(FieldFragement.NO_LINK_EDITING.isMatching(fieldFrame)) {
-            val additionalButtonContainer = FieldFragement.NO_LINK_EDITING.createButtonContainer(fieldFrame);
-            addAdditionalClickBehaviorTo(additionalButtonContainer);
-        }
+                val additionalButtonContainer = fieldFragement.createButtonContainer(fieldFrame);
+                addAdditionalButtonsTo(additionalButtonContainer, fieldFragement);
+
+                return;
+            }
+            default:
+                break;
+            }
+        });
 
         //XXX support for legacy panels, remove eventually
         {
@@ -239,28 +252,62 @@ extends ScalarPanelAbstract {
         }
     }
 
-    private void addAdditionalClickBehaviorTo(
-            final @Nullable RepeatingView buttonContainer) {
+    private void addAdditionalButtonsTo(
+            final @NonNull RepeatingView buttonContainer, final FieldFragement fieldFragement) {
 
-        // add clear-field-button (only if feature is not required and not already cleared)
-        val isClearFieldButtonVisible =
-                getWicketViewerSettings().isClearFieldButtonEnabled()
-                    && !scalarModel().isRequired()
-                    && scalarModel().proposedValue().isPresent();
-
-        if(isClearFieldButtonVisible) {
-            val clearFieldButton = Wkt.linkAddWithBody(buttonContainer,
-                    Wkt.faIcon("fa-regular fa-trash-can"), this::onClearFieldButtonClick);
-
-            Wkt.cssAppend(clearFieldButton, "btn-warning");
-            WktTooltips.addTooltip(clearFieldButton, translate("Click to clear the field"));
-
-            if(scalarModel().isParameter()) {
-                // allow the client-side popover cleaner to kick in
-                clearFieldButton.setEventPropagation(EventPropagation.BUBBLE);
-            } // properties otherwise do recreate the entire page anyway
-
+        for(var additionalButton : ScalarPanelAdditionalButton.values()) {
+            if(additionalButton.isVisible(scalarModel(), getRenderScenario(), fieldFragement)) {
+                switch (additionalButton) {
+                case COPY_TO_CLIPBOARD:
+                    //XXX Future extension
+                    break;
+                case DISABLED_REASON:
+                    addDisabledReasonIcon(buttonContainer, "fa-solid fa-ban", "");
+                    break;
+                case DISABLED_REASON_PROTOTYPING:
+                    addDisabledReasonIcon(buttonContainer, "fa-solid fa-text-slash icon-prototyping",
+                            " Note: This icon only appears in prototyping mode.");
+                    break;
+                case CLEAR_FIELD:
+                    addClearFieldButton(buttonContainer);
+                    break;
+                default:
+                    break;
+                }
+            }
         }
+    }
+
+    private void addDisabledReasonIcon(
+            final @NonNull RepeatingView buttonContainer,
+            final @NonNull String faClass,
+            final @NonNull String reasonSuffix) {
+        val disableReasonButton = Wkt.linkAddWithBody(buttonContainer,
+                Wkt.faIcon(faClass), ajaxTarget->{/*no-op*/});
+
+        val disabledReason = scalarModel().disabledReason()
+                .flatMap(InteractionVeto::getReasonAsString)
+                .orElse("framework bug: should provide a reason");
+
+        WktTooltips.addTooltip(disableReasonButton, translate(disabledReason) + translate(reasonSuffix));
+
+        if(scalarModel().isParameter()) {
+            // allow the client-side popover cleaner to kick in
+            disableReasonButton.setEventPropagation(EventPropagation.BUBBLE);
+        } // properties otherwise do recreate the entire page anyway
+    }
+
+    private void addClearFieldButton(final @NonNull RepeatingView buttonContainer) {
+        val clearFieldButton = Wkt.linkAddWithBody(buttonContainer,
+                Wkt.faIcon("fa-regular fa-trash-can"), this::onClearFieldButtonClick);
+
+        Wkt.cssAppend(clearFieldButton, "btn-warning");
+        WktTooltips.addTooltip(clearFieldButton, translate("Click to clear the field"));
+
+        if(scalarModel().isParameter()) {
+            // allow the client-side popover cleaner to kick in
+            clearFieldButton.setEventPropagation(EventPropagation.BUBBLE);
+        } // properties otherwise do recreate the entire page anyway
     }
 
     private WebMarkupContainer createInlinePromptLink() {

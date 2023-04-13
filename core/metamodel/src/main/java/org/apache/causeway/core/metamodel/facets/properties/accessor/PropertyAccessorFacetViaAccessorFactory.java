@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.facets.properties.accessor;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
@@ -50,7 +50,7 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
     }
 
     private void attachPropertyAccessFacetForAccessorMethod(final ProcessMethodContext processMethodContext) {
-        final Method accessorMethod = processMethodContext.getMethod();
+        final Method accessorMethod = processMethodContext.getMethod().asMethodElseFail();
         processMethodContext.removeMethod(accessorMethod);
 
         final Class<?> cls = processMethodContext.getCls();

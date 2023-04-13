@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.viewmodel;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;

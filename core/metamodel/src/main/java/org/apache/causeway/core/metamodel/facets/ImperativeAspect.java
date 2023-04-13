@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet.Intent;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
@@ -32,32 +33,36 @@ import org.apache.causeway.core.metamodel.object.MmInvokeUtil;
 import lombok.Value;
 import lombok.val;
 
-@Value(staticConstructor = "of")
+@Value
 public class ImperativeAspect {
 
-    private final Can<Method> methods;
+    // -- FACTORIES
+
+    public static ImperativeAspect singleRegularMethod(final Method method, final Intent checkIfDisabled) {
+        return new ImperativeAspect(ImperativeFacet.singleRegularMethod(method), checkIfDisabled);
+    }
+
+    // --
+
+    private final Can<MethodFacade> methods;
     private final Intent intent;
 
-    public Intent getIntent(final Method method) {
+    public Intent getIntent(final MethodFacade method) {
         return intent;
     }
 
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         visitor.accept("methods",
                 getMethods().stream()
-                .map(Method::toString)
+                .map(MethodFacade::toString)
                 .collect(Collectors.joining(", ")));
         getMethods().forEach(method->
             visitor.accept(
                     "intent." + method.getName(), getIntent(method)));
     }
 
-    public static ImperativeAspect singleMethod(final Method method, final Intent checkIfDisabled) {
-        return of(ImperativeFacet.singleMethod(method), checkIfDisabled);
-    }
-
     public Object invokeSingleMethod(final ManagedObject domainObject) {
-        val method = methods.getFirstElseFail();
+        val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular, as the factories only creates regular
         final Object returnValue = MmInvokeUtil.invoke(method, domainObject);
         return returnValue;
     }

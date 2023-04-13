@@ -93,7 +93,7 @@ implements FormExecutor, HasCommonContext {
                     Category.CONSTRAINT_VIOLATION,
                     actionOrPropertyModel
                         .fold(
-                                act->act.getValidityConsent().getReason(),
+                                act->act.getValidityConsent().getReasonAsString().orElse(null),
                                 prop->prop.getReasonInvalidIfAny()));
 
             if (invalidReasonIfAny.isPresent()) {

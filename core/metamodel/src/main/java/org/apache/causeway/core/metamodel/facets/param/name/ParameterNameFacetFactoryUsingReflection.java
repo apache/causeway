@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.facets.param.name;
 
 import java.util.regex.Pattern;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.core.metamodel.commons.StringExtensions;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -55,8 +55,7 @@ extends FacetFactoryAbstract {
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
 
-        val parameter = processParameterContext.getParameter();
-        val parameterName = parameter.getName();
+        val parameterName = processParameterContext.getParameterName();
 
         // if not compiled with -parameters flag or synthetic, then ignore
         val argXMatcher = argXPattern.matcher(parameterName);

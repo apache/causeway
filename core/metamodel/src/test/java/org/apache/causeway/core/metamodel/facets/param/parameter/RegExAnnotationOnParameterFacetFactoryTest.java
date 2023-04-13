@@ -20,8 +20,6 @@ package org.apache.causeway.core.metamodel.facets.param.parameter;
 
 import java.lang.reflect.Method;
 
-import javax.validation.constraints.Pattern;
-
 import org.junit.jupiter.api.BeforeEach;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -35,6 +33,8 @@ import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessParameterContext;
 import org.apache.causeway.core.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.causeway.core.metamodel.facets.param.parameter.regex.RegExFacetForPatternAnnotationOnParameter;
+
+import jakarta.validation.constraints.Pattern;
 
 class RegExAnnotationOnParameterFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -57,7 +57,7 @@ class RegExAnnotationOnParameterFacetFactoryTest extends AbstractFacetFactoryTes
         final Method method = findMethod(Customer.class, "someAction", new Class[] { String.class });
 
         facetFactory.processParams(
-                new ProcessParameterContext(
+                ProcessParameterContext.forTesting(
                         Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, method, null, facetedMethodParameter));
 
         final Facet facet = facetedMethodParameter.getFacet(RegExFacet.class);
@@ -78,7 +78,7 @@ class RegExAnnotationOnParameterFacetFactoryTest extends AbstractFacetFactoryTes
         final Method method = findMethod(Customer.class, "someAction", new Class[] { int.class });
 
         facetFactory.processParams(
-                new ProcessParameterContext(
+                ProcessParameterContext.forTesting(
                         Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, method, null, facetedMethodParameter));
 
         assertNull(facetedMethod.getFacet(RegExFacet.class));

@@ -30,19 +30,21 @@ extends TypicalLengthFacetAbstract {
 
     public static Optional<TypicalLengthFacet> create(
             final PropertyLayoutData propertyLayout,
-            final FacetHolder holder) {
+            final FacetHolder holder,
+            final Precedence precedence) {
         if(propertyLayout == null) {
             return Optional.empty();
         }
         final Integer typicalLength = propertyLayout.getTypicalLength();
         return typicalLength != null
                 && typicalLength != -1
-                    ? Optional.of(new TypicalLengthFacetForPropertyLayoutXml(typicalLength, holder))
+                    ? Optional.of(new TypicalLengthFacetForPropertyLayoutXml(typicalLength, holder, precedence))
                     : Optional.empty();
     }
 
-    private TypicalLengthFacetForPropertyLayoutXml(final int typicalLength, final FacetHolder holder) {
-        super(typicalLength, holder);
+    private TypicalLengthFacetForPropertyLayoutXml(
+            final int typicalLength, final FacetHolder holder, final Precedence precedence) {
+        super(typicalLength, holder, precedence);
     }
 
     @Override

@@ -18,9 +18,9 @@
  */
 package org.apache.causeway.testing.archtestsupport.applib.domain.dom;
 
-import javax.inject.Inject;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import jakarta.inject.Inject;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 @XmlRootElement(name = "JaxbViewModel")
 public class JaxbViewModel {

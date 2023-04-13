@@ -22,10 +22,10 @@ import java.io.Serializable;
 import java.util.StringTokenizer;
 import java.util.UUID;
 
-import javax.annotation.Priority;
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Embeddable;
+import jakarta.annotation.Priority;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Embeddable;
 
 import org.springframework.stereotype.Component;
 

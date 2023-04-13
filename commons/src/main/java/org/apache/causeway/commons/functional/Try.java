@@ -22,11 +22,11 @@ import java.io.Serializable;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.concurrent.Callable;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.UnaryOperator;
+import java.util.function.Supplier;
 
 import org.springframework.lang.Nullable;
+import org.springframework.util.function.ThrowingConsumer;
+import org.springframework.util.function.ThrowingFunction;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
@@ -101,13 +101,25 @@ public interface Try<T> {
     // -- PEEKING
 
     /**
-     * Peeks into the {@code value} if this is a {@link Success}.
+     * If this is a {@link Success}, peeks into the {@code value} wrapped in an {@link Optional}.
+     * <p>
+     * If given valueConsumer throws an exception, a failed {@link Try} is returned.
      */
-    Try<T> ifSuccess(final @NonNull Consumer<Optional<T>> valueConsumer);
+    Try<T> ifSuccess(final @NonNull ThrowingConsumer<Optional<T>> valueConsumer);
     /**
-     * Peeks into the {@code failure} if this is a {@link Failure}.
+     * If this is a {@link Success} peeks into the (null-able) {@code value}.
+     * <p>
+     * If given valueConsumer throws an exception, a failed {@link Try} is returned.
+     * @apiNote If preceded with a call to {@link #mapEmptyToFailure()},
+     *      the success value - as passed over to the valueConsumer - is guaranteed non-null.
      */
-    Try<T> ifFailure(final @NonNull Consumer<Throwable> exceptionConsumer);
+    Try<T> ifSuccessAsNullable(final @NonNull ThrowingConsumer<T> valueConsumer);
+    /**
+     * If this is a {@link Failure}, peeks into the {@code failure}.
+     * <p>
+     * If given exceptionConsumer throws an exception, a failed {@link Try} is returned.
+     */
+    Try<T> ifFailure(final @NonNull ThrowingConsumer<Throwable> exceptionConsumer);
 
     // -- FAIL EARLY
 
@@ -119,15 +131,37 @@ public interface Try<T> {
     // -- MAPPING
 
     /**
+     * Maps this {@link Try} to another if this is a {@link Success},
+     * passing the {@code value} wrapped in an {@link Optional}.
+     * Otherwise if this is a {@link Failure} acts as identity operator.
+     * <p>
+     * If given successMapper throws an exception, a failed {@link Try} is returned.
+     */
+    <R> Try<R> mapSuccess(@NonNull ThrowingFunction<Optional<T>, R> successMapper);
+    /**
      * Maps this {@link Try} to another if this is a {@link Success}.
      * Otherwise if this is a {@link Failure} acts as identity operator.
+     * <p>
+     * If given successMapper throws an exception, a failed {@link Try} is returned.
+     * @apiNote If preceded with a call to {@link #mapEmptyToFailure()},
+     *      the success value - as passed over to the successMapper - is guaranteed non-null.
      */
-    <R> Try<R> mapSuccess(final @NonNull Function<T, R> successMapper);
+    <R> Try<R> mapSuccessAsNullable(@NonNull ThrowingFunction<T, R> successMapper);
     /**
-     * Maps this {@link Try} to another if its a {@link Failure}.
+     * Maps this {@link Try} to another if this is a {@link Failure}.
      * Otherwise if this is a {@link Success} acts as identity operator.
+     * <p>
+     * If given failureMapper throws an exception, a failed {@link Try} is returned
+     * (hiding the original failure).
      */
-    Try<T> mapFailure(final @NonNull UnaryOperator<Throwable> failureMapper);
+    Try<T> mapFailure(@NonNull ThrowingFunction<Throwable, Throwable> failureMapper);
+    /**
+     * Recovers from a failed {@link Try} if its a {@link Failure}.
+     * Otherwise if this is a {@link Success} acts as identity operator.
+     * <p>
+     * If given recoveryMapper throws an exception, a failed {@link Try} is returned.
+     */
+    Try<T> mapFailureToSuccess(@NonNull ThrowingFunction<Throwable, T> recoveryMapper);
     /**
      * Maps this {@link Try} to {@link Failure} if this is a {@link Success} with an empty {@code value}.
      * Otherwise acts as identity operator.
@@ -136,45 +170,85 @@ public interface Try<T> {
     /**
      * Maps this {@link Try} to {@link Either}
      * using according mapping function {@code successMapper} or {@code failureMapper}.
+     * <p>
+     * Any exceptions thrown by given failureMapper or successMapper are propagated without catching.
      * @apiNote It is a common functional programming convention, to map the success value <i>right</i>.
      */
-    <L, R> Either<L, R> map(
-            final @NonNull Function<Throwable, L> failureMapper,
-            final @NonNull Function<Optional<T>, R> successMapper);
+    <L, R> Either<L, R> mapToEither(
+            final @NonNull ThrowingFunction<Throwable, L> failureMapper,
+            final @NonNull ThrowingFunction<Optional<T>, R> successMapper);
 
-    // -- TERMINATE
+    // -- ACCEPT
 
     /**
      * Either consumes the success or the failure.
-     * @apiNote Order of arguments conforms to {@link #map(Function, Function)}
+     * <p>
+     * However, if any of given failureConsumer or successConsumer throws an exception, a failed {@link Try} is returned.
+     * @apiNote Order of arguments conforms to {@link #mapToEither(ThrowingFunction, ThrowingFunction)}
      */
-    void accept(
-            final @NonNull Consumer<Throwable> failureConsumer,
-            final @NonNull Consumer<Optional<T>> successConsumer);
+    Try<T> accept(
+            final @NonNull ThrowingConsumer<Throwable> failureConsumer,
+            final @NonNull ThrowingConsumer<Optional<T>> successConsumer);
 
     // -- FOLDING
 
     /**
      * Maps the contained {@code value} or {@code failure} to a new value of type {@code R}
      * using according mapping function {@code successMapper} or {@code failureMapper}.
-     * @apiNote Order of arguments conforms to {@link #map(Function, Function)}
+     * <p>
+     * Any exceptions thrown by given failureMapper or successMapper are propagated without catching.
+     * @apiNote Order of arguments conforms to {@link #mapToEither(ThrowingFunction, ThrowingFunction)}
      */
     <R> R fold(
-            final @NonNull Function<Throwable, R> failureMapper,
-            final @NonNull Function<Optional<T>, R> successMapper);
+            final @NonNull ThrowingFunction<Throwable, R> failureMapper,
+            final @NonNull ThrowingFunction<Optional<T>, R> successMapper);
 
     // -- CONCATENATION
 
     /**
      * If this is a {@link Success}, maps it to a new {@link Try} based on given {@link Callable}.
-     * Otherwise if its a {@link Failure} acts as identity operator.
+     * Otherwise if its a {@link Failure}, acts as identity operator.
      */
     <R> Try<R> thenCall(final @NonNull Callable<R> callable);
     /**
-     * If this is a {@link Success}, maps it to new {@link Try} based on given {@link ThrowingRunnable}.
-     * Otherwise if its a {@link Failure} acts as identity operator.
+     * If this is a {@link Success}, maps it to a new {@link Try} based on given {@link ThrowingRunnable}.
+     * Otherwise if this is a {@link Failure}, acts as identity operator.
      */
     Try<Void> thenRun(final @NonNull ThrowingRunnable runnable);
+    /**
+     * If this is a {@link Success}, maps it to a new {@link Try} based on given {@link Supplier}.
+     * Otherwise if this is a {@link Failure}, acts as identity operator.
+     */
+    <R> Try<R> then(final @NonNull Callable<? extends Try<R>> next);
+
+    /**
+     * If this is a {@link Failure}, maps it to a new {@link Try} based on given {@link Callable}.
+     * Otherwise if this is a {@link Success}, acts as identity operator.
+     */
+    Try<T> orCall(final @NonNull Callable<T> fallback);
+
+    // -- SHORTCUTS
+
+    /**
+     * If this is a {@link Failure} throws the contained failure,
+     * otherwise if this is a {@link Success}, returns the success value as null-able.
+     */
+    @Nullable
+    default T valueAsNullableElseFail() {
+        ifFailureFail();
+        return getValue().orElse(null);
+    }
+
+    /**
+     * If this is a {@link Failure} throws the contained failure,
+     * otherwise if this is a {@link Success},
+     * either returns the success value if it is NOT <code>null</code>
+     * or throws a {@link NoSuchElementException}.
+     */
+    default T valueAsNonNullElseFail() {
+        ifFailureFail();
+        return getValue().orElseThrow();
+    }
 
     // -- SUCCESS
 
@@ -192,13 +266,26 @@ public interface Try<T> {
         @Override public Optional<Throwable> getFailure() { return Optional.empty(); }
 
         @Override
-        public Success<T> ifSuccess(final @NonNull Consumer<Optional<T>> valueConsumer) {
-            valueConsumer.accept(getValue());
-            return this;
+        public Try<T> ifSuccess(final @NonNull ThrowingConsumer<Optional<T>> valueConsumer) {
+            try {
+                valueConsumer.accept(getValue());
+                return this;
+            } catch (Throwable e) {
+                return Try.failure(e);
+            }
+        }
+        @Override
+        public Try<T> ifSuccessAsNullable(final @NonNull ThrowingConsumer<T> valueConsumer) {
+            try {
+                valueConsumer.accept(getValue().orElse(null));
+                return this;
+            } catch (Throwable e) {
+                return Try.failure(e);
+            }
         }
 
         @Override
-        public Success<T> ifFailure(final @NonNull Consumer<Throwable> exceptionConsumer) {
+        public Success<T> ifFailure(final @NonNull ThrowingConsumer<Throwable> exceptionConsumer) {
             return this;
         }
 
@@ -214,12 +301,20 @@ public interface Try<T> {
         }
 
         @Override
-        public <R> Try<R> mapSuccess(final @NonNull Function<T, R> successMapper){
-            return Try.call(()->successMapper.apply(value));
+        public <R> Try<R> mapSuccess(final @NonNull ThrowingFunction<Optional<T>, R> successMapper) {
+            return Try.call(()->successMapper.apply(getValue()));
+        }
+        @Override
+        public <R> Try<R> mapSuccessAsNullable(final @NonNull ThrowingFunction<T, R> successMapper) {
+            return Try.call(()->successMapper.apply(getValue().orElse(null)));
         }
 
         @Override
-        public Success<T> mapFailure(final @NonNull UnaryOperator<Throwable> failureMapper){
+        public Success<T> mapFailure(final @NonNull ThrowingFunction<Throwable, Throwable> failureMapper){
+            return this;
+        }
+        @Override
+        public Try<T> mapFailureToSuccess(final @NonNull ThrowingFunction<Throwable, T> recoveryMapper) {
             return this;
         }
 
@@ -241,23 +336,42 @@ public interface Try<T> {
         }
 
         @Override
-        public void accept(
-                final @NonNull Consumer<Throwable> failureConsumer,
-                final @NonNull Consumer<Optional<T>> successConsumer) {
-            successConsumer.accept(getValue());
+        public <R> Try<R> then(final @NonNull Callable<? extends Try<R>> next) {
+            try {
+                return next.call();
+            } catch (Throwable e) {
+                return Try.failure(e);
+            }
+        }
+
+        @Override
+        public Try<T> orCall(@NonNull final Callable<T> fallback) {
+            return this;
+        }
+
+        @Override
+        public Try<T> accept(
+                final @NonNull ThrowingConsumer<Throwable> failureConsumer,
+                final @NonNull ThrowingConsumer<Optional<T>> successConsumer) {
+            try {
+                successConsumer.accept(getValue());
+                return this;
+            } catch (Throwable e) {
+                return Try.failure(e);
+            }
         }
 
         @Override
         public <R> R fold(
-                final @NonNull Function<Throwable, R> failureMapper,
-                final @NonNull Function<Optional<T>, R> successMapper) {
+                final @NonNull ThrowingFunction<Throwable, R> failureMapper,
+                final @NonNull ThrowingFunction<Optional<T>, R> successMapper) {
             return successMapper.apply(getValue());
         }
 
         @Override
-        public <L, R> Either<L, R> map(
-                final @NonNull Function<Throwable, L> failureMapper,
-                final @NonNull Function<Optional<T>, R> successMapper) {
+        public <L, R> Either<L, R> mapToEither(
+                final @NonNull ThrowingFunction<Throwable, L> failureMapper,
+                final @NonNull ThrowingFunction<Optional<T>, R> successMapper) {
             return Either.right(successMapper.apply(getValue()));
         }
 
@@ -279,14 +393,22 @@ public interface Try<T> {
         @Override public Optional<Throwable> getFailure() { return Optional.of(throwable); }
 
         @Override
-        public Failure<T> ifSuccess(final @NonNull Consumer<Optional<T>> valueConsumer) {
+        public Failure<T> ifSuccess(final @NonNull ThrowingConsumer<Optional<T>> valueConsumer) {
+            return this;
+        }
+        @Override
+        public Failure<T> ifSuccessAsNullable(final @NonNull ThrowingConsumer<T> valueConsumer) {
             return this;
         }
 
         @Override
-        public Failure<T> ifFailure(final @NonNull Consumer<Throwable> exceptionConsumer) {
-            exceptionConsumer.accept(throwable);
-            return this;
+        public Failure<T> ifFailure(final @NonNull ThrowingConsumer<Throwable> exceptionConsumer) {
+            try {
+                exceptionConsumer.accept(throwable);
+                return this;
+            } catch (Throwable e) {
+                return Try.failure(e);
+            }
         }
 
         @Override @SneakyThrows
@@ -300,17 +422,25 @@ public interface Try<T> {
         }
 
         @Override
-        public <R> Failure<R> mapSuccess(final @NonNull Function<T, R> successMapper){
+        public <R> Failure<R> mapSuccess(final @NonNull ThrowingFunction<Optional<T>, R> successMapper) {
+            return new Failure<>(throwable);
+        }
+        @Override
+        public <R> Failure<R> mapSuccessAsNullable(final @NonNull ThrowingFunction<T, R> successMapper) {
             return new Failure<>(throwable);
         }
 
         @Override
-        public Failure<T> mapFailure(final @NonNull UnaryOperator<Throwable> failureMapper){
+        public Failure<T> mapFailure(final @NonNull ThrowingFunction<Throwable, Throwable> failureMapper){
             try {
                 return new Failure<>(failureMapper.apply(throwable));
             } catch (Throwable e) {
                 return failure(e);
             }
+        }
+        @Override
+        public Try<T> mapFailureToSuccess(final @NonNull ThrowingFunction<Throwable, T> recoveryMapper) {
+            return Try.call(()->recoveryMapper.apply(throwable));
         }
 
         @Override
@@ -329,23 +459,38 @@ public interface Try<T> {
         }
 
         @Override
-        public void accept(
-                final @NonNull Consumer<Throwable> failureConsumer,
-                final @NonNull Consumer<Optional<T>> successConsumer) {
-            failureConsumer.accept(throwable);
+        public <R> Try<R> then(final @NonNull Callable<? extends Try<R>> next) {
+            return new Failure<>(throwable);
+        }
+
+        @Override
+        public Try<T> orCall(@NonNull final Callable<T> fallback) {
+            return Try.call(fallback);
+        }
+
+        @Override
+        public Try<T> accept(
+                final @NonNull ThrowingConsumer<Throwable> failureConsumer,
+                final @NonNull ThrowingConsumer<Optional<T>> successConsumer) {
+            try {
+                failureConsumer.accept(throwable);
+                return this;
+            } catch (Throwable e) {
+                return Try.failure(e);
+            }
         }
 
         @Override
         public <R> R fold(
-                final @NonNull Function<Throwable, R> failureMapper,
-                final @NonNull Function<Optional<T>, R> successMapper) {
+                final @NonNull ThrowingFunction<Throwable, R> failureMapper,
+                final @NonNull ThrowingFunction<Optional<T>, R> successMapper) {
             return failureMapper.apply(throwable);
         }
 
         @Override
-        public <L, R> Either<L, R> map(
-                final @NonNull Function<Throwable, L> failureMapper,
-                final @NonNull Function<Optional<T>, R> successMapper) {
+        public <L, R> Either<L, R> mapToEither(
+                final @NonNull ThrowingFunction<Throwable, L> failureMapper,
+                final @NonNull ThrowingFunction<Optional<T>, R> successMapper) {
             return Either.left(failureMapper.apply(throwable));
         }
 

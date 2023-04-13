@@ -24,6 +24,8 @@ import java.util.List;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.commons.internal.reflection._MethodFacades;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.commons.StringExtensions;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -46,43 +48,43 @@ extends TypedHolderAbstract {
     public static FacetedMethod createForProperty(
             final MetaModelContext mmc,
             final Class<?> declaringType,
-            final Method method) {
+            final Method getterMethod) {
+        val methodFacade = _MethodFacades.regular(getterMethod);
         return new FacetedMethod(mmc, FeatureType.PROPERTY,
-                declaringType, method, TypeOfAnyCardinality.forMethodReturn(declaringType, method), Can.empty());
+                declaringType, methodFacade, TypeOfAnyCardinality.forMethodReturn(declaringType, getterMethod), Can.empty());
     }
 
     public static FacetedMethod createForCollection(
             final MetaModelContext mmc,
             final Class<?> declaringType,
-            final Method method) {
+            final Method getterMethod) {
+        val methodFacade = _MethodFacades.regular(getterMethod);
         return new FacetedMethod(mmc, FeatureType.COLLECTION,
-                declaringType, method, TypeOfAnyCardinality.forMethodReturn(declaringType, method), Can.empty());
+                declaringType, methodFacade, TypeOfAnyCardinality.forMethodReturn(declaringType, getterMethod), Can.empty());
     }
 
     public static FacetedMethod createForAction(
             final MetaModelContext mmc,
             final Class<?> declaringType,
-            final Method method) {
+            final MethodFacade methodFacade) {
         return new FacetedMethod(mmc, FeatureType.ACTION,
-                declaringType, method, TypeOfAnyCardinality.forMethodReturn(declaringType, method),
-                getParameters(mmc, declaringType, method));
+                declaringType, methodFacade, TypeOfAnyCardinality.forMethodFacadeReturn(declaringType, methodFacade),
+                getParameters(mmc, declaringType, methodFacade));
     }
 
     private static Can<FacetedMethodParameter> getParameters(
             final MetaModelContext mmc,
             final Class<?> declaringType,
-            final Method actionMethod) {
+            final MethodFacade actionMethod) {
 
         final List<FacetedMethodParameter> actionParams =
                 _Lists.newArrayList(actionMethod.getParameterCount());
 
         int paramIndex = -1;
 
-        for(val param : actionMethod.getParameters()) {
+        for(val parameterType : actionMethod.getParameterTypes()) {
 
             paramIndex++;
-
-            final Class<?> parameterType = param.getType();
 
             final FeatureType featureType =
                     ProgrammingModelConstants.CollectionSemantics.valueOf(parameterType).isPresent()
@@ -169,7 +171,7 @@ extends TypedHolderAbstract {
             final Class<?>... parameterTypes) {
 
         try {
-            final Method method = declaringType.getMethod(actionName, parameterTypes);
+            val method = _MethodFacades.regular(declaringType.getMethod(actionName, parameterTypes));
             return FacetedMethod.createForAction(mmc, declaringType, method);
         } catch (final SecurityException | NoSuchMethodException e) {
             throw new RuntimeException(e);
@@ -195,7 +197,7 @@ extends TypedHolderAbstract {
      * A {@link Method} obtained from the {@link #getOwningType() owning type}
      * using {@link Class#getMethods()}.
      */
-    @Getter private final Method method;
+    @Getter private final MethodFacade method;
 
     @Getter private final Can<FacetedMethodParameter> parameters;
 
@@ -205,7 +207,7 @@ extends TypedHolderAbstract {
             final MetaModelContext mmc,
             final FeatureType featureType,
             final Class<?> declaringType,
-            final Method method,
+            final MethodFacade method,
             final TypeOfAnyCardinality type,
             final Can<FacetedMethodParameter> parameters) {
 
@@ -214,7 +216,8 @@ extends TypedHolderAbstract {
                 type,
                 featureType.identifierFor(LogicalType.lazy(
                         declaringType,
-                        ()->mmc.getSpecificationLoader().specForTypeElseFail(declaringType).getLogicalTypeName()), method));
+                        ()->mmc.getSpecificationLoader().specForTypeElseFail(declaringType).getLogicalTypeName()),
+                    method));
         this.owningType = declaringType;
         this.method = method;
         this.parameters = parameters;

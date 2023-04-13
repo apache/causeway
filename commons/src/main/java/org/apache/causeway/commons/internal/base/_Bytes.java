@@ -23,10 +23,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Base64;
 import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.zip.Deflater;
+import java.util.zip.Inflater;
 
 import org.springframework.lang.Nullable;
 
 import lombok.NonNull;
+import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>
@@ -94,6 +99,97 @@ public final class _Bytes {
             bos.flush();
             return bos.toByteArray();
         }
+    }
+
+    // -- ARRAY TO STREAM AND VICE VERSA
+
+    /**
+     * Converts given byte array into a stream of int values,
+     * while the element wise type conversion is preserving sign.
+     * @apiNote The Java byte type is signed.
+     * @see #ofIntStream(IntStream)
+     */
+    public static IntStream streamAsInts(final @Nullable byte[] bytes) {
+        if(bytes==null
+                || bytes.length==0) {
+            return IntStream.empty();
+        }
+        return IntStream.range(0, bytes.length)
+                .map(index->(int)bytes[index]);
+    }
+
+    /**
+     * Converts given {@link IntStream} into a byte array,
+     * while the element wise type conversion is preserving sign,
+     * but ignoring overflow.
+     * @apiNote The Java byte type is signed.
+     * @implNote certainly not the most sufficient algorithm, as we resort to boxing and temporary list creation
+     * @see #streamAsInts(byte[])
+     */
+    public static byte[] ofIntStream(final @Nullable IntStream intStream) {
+        if(intStream==null) {
+            return new byte[0];
+        }
+        val listOfInts = intStream
+                .boxed()
+                .collect(Collectors.toList());
+        val bytes = new byte[listOfInts.size()];
+        IntStream.range(0, listOfInts.size())
+        .forEach(index->bytes[index]=(byte)(int)listOfInts.get(index));
+        return bytes;
+    }
+
+    // -- TO AND FROM HEX DUMP
+
+    // -- TO AND FROM HEX DUMP
+
+    /**
+     * Converts given byte array into a delimiter separated list of 2 character fixed length hex numbers.
+     * @apiNote future extensions may support pretty printing, but for now the resulting string is just a single line
+     * @see #ofHexDump(String, String)
+     */
+    public static String hexDump(final @Nullable byte[] bytes, final @Nullable String delimiter) {
+        if(bytes==null) {
+            return "";
+        }
+        return _Bytes.streamAsInts(bytes).mapToObj(Integer::toHexString)
+                .collect(Collectors.joining(_Strings.nullToEmpty(delimiter)));
+    }
+
+    /**
+     * Shortcut for {@code hexDump(bytes, " ")} using space as delimiter.
+     * @see #hexDump(byte[], String)
+     */
+    public static String hexDump(final @Nullable byte[] bytes) {
+        return hexDump(bytes, " ");
+    }
+
+    /**
+     * Converts given delimiter separated list of 2 character fixed length hex numbers into a byte array.
+     * @see #hexDump(byte[], String)
+     */
+    public static byte[] ofHexDump(final @Nullable String hexDump, final @Nullable String delimiter) {
+        if(hexDump==null) {
+            return new byte[0];
+        }
+        final int delimLen = _NullSafe.size(delimiter);
+        final int stride = 2 + delimLen;
+
+        final IntStream intStream = IntStream.range(0, (hexDump.length() + delimLen)/stride)
+            .mapToObj(i->{
+                final int start = i * stride;
+                return hexDump.substring(start, start + 2);
+            })
+            .mapToInt(hex->Integer.parseUnsignedInt(hex, 16));
+        return ofIntStream(intStream);
+    }
+
+    /**
+     * Shortcut for {@code ofHexDump(hexDump, " ")} using space as delimiter.
+     * @see #ofHexDump(String, String)
+     */
+    public static byte[] ofHexDump(final @Nullable String hexDump) {
+        return ofHexDump(hexDump, " ");
     }
 
     // -- PREPEND/APPEND
@@ -210,6 +306,49 @@ public final class _Bytes {
         }
     }
 
+
+    /**
+     * Compresses the given byte array, using {@link Deflater} algorithm.<br/>
+     * Symmetry holds: <br/>
+     * {@code x == decompressZlib(compressZlib(x))}
+     * @param input
+     * @return null if {@code input} is null
+     */
+    public static final byte[] compressZlib(final @Nullable byte[] input) {
+        if(input==null) {
+            return null;
+        }
+        if(input.length==0) {
+            return input;
+        }
+        try {
+            return _Bytes_ZLibCompressor.compress(input);
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
+
+    /**
+     * Decompresses the given byte array, using {@link Inflater} algorithm.<br/>
+     * Symmetry holds: <br/>
+     * {@code x == decompressZlib(compressZlib(x))}
+     * @param compressed
+     * @return null if {@code compressed} is null
+     */
+    public static final byte[] decompressZlib(final @Nullable byte[] compressed) {
+        if(compressed==null) {
+            return null;
+        }
+        if(compressed.length==0) {
+            return compressed;
+        }
+        try {
+            return _Bytes_ZLibCompressor.decompress(compressed);
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
+
     // -- UNARY OPERATOR COMPOSITION
 
     /**
@@ -258,6 +397,14 @@ public final class _Bytes {
             .andThen(bytes->decodeBase64(Base64.getUrlDecoder(), bytes))
             .andThen(_Bytes::decompress);
 
+    public static final BytesOperator asZlibCompressedUrlBase64 = operator()
+            .andThen(_Bytes::compressZlib)
+            .andThen(bytes->encodeToBase64(Base64.getUrlEncoder(), bytes));
+
+    public static final BytesOperator ofZlibCompressedUrlBase64 = operator()
+            .andThen(bytes->decodeBase64(Base64.getUrlDecoder(), bytes))
+            .andThen(_Bytes::decompressZlib);
+
     public static final BytesOperator asBase64 = operator()
             .andThen(bytes->encodeToBase64(Base64.getEncoder(), bytes));
 
@@ -271,7 +418,6 @@ public final class _Bytes {
     public static final BytesOperator ofCompressedBase64 = operator()
             .andThen(bytes->decodeBase64(Base64.getDecoder(), bytes))
             .andThen(_Bytes::decompress);
-
 
     // --
 

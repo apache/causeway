@@ -18,9 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.consent;
 
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-
-import static org.apache.causeway.commons.internal.base._With.requiresNotEmpty;
 
 public class Veto extends ConsentAbstract {
 
@@ -37,7 +36,7 @@ public class Veto extends ConsentAbstract {
      *            - must not be empty or <tt>null</tt>
      */
     public Veto(final String reasonVetoed) {
-        super(null, requiresNotEmpty(reasonVetoed, "reasonVetoed"));
+        super(null, VetoReason.explicit(_Strings.requireNonEmpty(reasonVetoed, "Reason Vetoed")));
     }
 
     public Veto(final InteractionResult interactionResult) {

@@ -18,12 +18,13 @@
  */
 package demoapp.dom._infra.values;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.services.repository.RepositoryService;
 
@@ -56,6 +57,11 @@ public abstract class ValueHolderRepository<T, E extends ValueHolder<T>> {
 
     public Optional<E> first() {
         return all().stream().findFirst();
+    }
+
+    public List<E> firstAsList() {
+        List<E> all = all();
+        return all.isEmpty() ? Collections.emptyList() : Collections.singletonList(all.get(0));
     }
 
     public void remove(Object entity) {

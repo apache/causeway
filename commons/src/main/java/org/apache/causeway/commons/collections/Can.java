@@ -37,6 +37,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
@@ -517,9 +518,65 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      * )
      * </pre>
      * (where nulls are being ignored)
+     * <p>
+     * In other words: Out of bounds picking is simply ignored.
      * @param indices - null-able
      */
     Can<T> pickByIndex(@Nullable int ...indices);
+
+    /**
+     * Returns a {@link Can} that is made of the elements from this {@link Can},
+     * picked by index using the given {@link IntStream} (in the order of picking).
+     * <p>
+     * Out of bounds picking is simply ignored.
+     */
+    Can<T> pickByIndex(@Nullable IntStream intStream);
+
+    // -- SUB SETS AND PARTITIONS
+
+    /**
+     * Returns a sub-{@link Can} that is made of elements from this {@link Can},
+     * when selected by those indices,
+     * that result from given range {@code[startInclusive, endExclusive)}.
+     * <p>
+     * Out of bounds picking is simply ignored.
+     *
+     * @param startInclusive the (inclusive) initial index
+     * @param endExclusive the exclusive upper bound index
+     */
+    Can<T> subCan(int startInclusive, int endExclusive);
+
+    /**
+     * Returns consecutive {@link #subCan(int, int) subCan},
+     * each of the same maxInnerSize, while the final sub-{@link Can} may be smaller.
+     * <p>
+     * For example,
+     * partitioning a {@link Can} containing {@code [a, b, c, d, e]} with a partition
+     * size of 3 yields {@code [[a, b, c], [d, e]]} -- an outer {@link Can} containing
+     * two inner {@link Can}s of three and two elements, all in the original order.
+     *
+     * @param maxInnerSize
+     *            the desired size of each sub-{@link Can}s (the last may be smaller)
+     * @return a {@link Can} of consecutive sub-{@link Can}s
+     * @apiNote an alternative approach would be to distribute inner sizes as fair as possible,
+     *      but this method does not
+     */
+    Can<Can<T>> partitionInnerBound(int maxInnerSize);
+
+    /**
+     * Tries to split this {@link Can} into outerSizeYield consecutive {@link #subCan(int, int) subCan},
+     * each of the same calculated max-inner-size, while the final sub-{@link Can} may be smaller.
+     * <p>
+     * An outer cardinality of outerSizeYield is either exactly met or under-represented,
+     * based on how many elements are actually available.
+     *
+     * @param outerSizeYield
+     *            the desired number of sub-{@link Can}s
+     * @return a {@link Can} of consecutive sub-{@link Can}s
+     * @apiNote an alternative approach would be to distribute inner sizes as fair as possible,
+     *      but this method does not
+     */
+    Can<Can<T>> partitionOuterBound(int outerSizeYield);
 
     // -- SEARCH
 

@@ -18,27 +18,53 @@
  */
 package org.apache.causeway.extensions.executionoutbox.applib.spiimpl;
 
-import javax.inject.Inject;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.publishing.spi.ExecutionSubscriber;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.extensions.executionoutbox.applib.CausewayModuleExtExecutionOutboxApplib;
+import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry;
 import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * @since 2.0 {@index}
  */
+
 @Service
-@RequiredArgsConstructor
+@Named(ExecutionSubscriberForExecutionOutbox.LOGICAL_TYPE_NAME)
+@Priority(PriorityPrecedence.MIDPOINT)
+@Qualifier("Outbox")
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
+@Log4j2
+
 public class ExecutionSubscriberForExecutionOutbox implements ExecutionSubscriber {
 
-    final @Inject ExecutionOutboxEntryRepository repository;
+    static final String LOGICAL_TYPE_NAME = CausewayModuleExtExecutionOutboxApplib.NAMESPACE + ".ExecutionSubscriberForExecutionOutbox";
+
+    final ExecutionOutboxEntryRepository<? extends ExecutionOutboxEntry> repository;
+    final CausewayConfiguration causewayConfiguration;
 
     @Override
-    public void onExecution(Execution<?, ?> execution) {
+    public boolean isEnabled() {
+        return causewayConfiguration.getExtensions().getExecutionOutbox().getPersist().isEnabled();
+    }
+
+    @Override
+    public void onExecution(final Execution<?, ?> execution) {
+        if (!isEnabled()) {
+            return;
+        }
+
         repository.createEntryAndPersist(execution);
     }
 

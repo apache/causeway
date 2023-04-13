@@ -20,8 +20,8 @@ package org.apache.causeway.core.metamodel.valuesemantics;
 
 import java.nio.file.InvalidPathException;
 
-import javax.annotation.Priority;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Component;
 
@@ -38,7 +38,7 @@ import org.apache.causeway.schema.common.v2.ValueType;
 import lombok.val;
 
 @Component
-@Named("causeway.val.LocalResourcePathValueSemantics")
+@Named("causeway.metamodel.value.LocalResourcePathValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class LocalResourcePathValueSemantics
 extends ValueSemanticsAbstract<LocalResourcePath>

@@ -22,13 +22,8 @@ package org.apache.causeway.core.runtimeservices.session;
 
 import java.util.UUID;
 
-import org.springframework.stereotype.Component;
+public interface InteractionIdGenerator {
 
-@Component
-public class InteractionIdGenerator {
-
-    public UUID interactionId() {
-        return UUID.randomUUID();
-    }
+    UUID interactionId();
 
 }

@@ -26,12 +26,10 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.panel.Fragment;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.causeway.viewer.commons.applib.services.menu.MenuItemDto;
-import org.apache.causeway.viewer.commons.applib.services.menu.MenuUiModel;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuVisitor;
-import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
+import org.apache.causeway.viewer.commons.applib.services.menu.model.MenuAction;
+import org.apache.causeway.viewer.commons.applib.services.menu.model.MenuDropdown;
+import org.apache.causeway.viewer.commons.applib.services.menu.model.NavbarSection;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktDecorators;
@@ -104,50 +102,37 @@ public final class ServiceActionUtil {
         private CssMenuItem currentTopLevelMenu = null;
 
         @Override
-        public void addTopLevel(final MenuItemDto menuDto) {
-            currentTopLevelMenu = CssMenuItem.newMenuItem(menuDto.getName());
+        public void onTopLevel(final MenuDropdown menuDto) {
+            currentTopLevelMenu = CssMenuItem.newMenuItem(menuDto.name());
             onNewMenuItem.accept(currentTopLevelMenu);
         }
 
         @Override
-        public void addSectionSpacer() {
+        public void onSectionSpacer() {
             val menuSection = CssMenuItem.newSpacer();
             currentTopLevelMenu.addSubMenuItem(menuSection);
         }
 
         @Override
-        public void addSubMenu(final MenuItemDto menuDto) {
-            val managedAction = menuDto.getManagedAction();
-
-            val menuItem = CssMenuItem.newMenuItem(menuDto.getName());
+        public void onMenuAction(final MenuAction menuAction) {
+            val menuItem = CssMenuItem.newMenuItem(menuAction.name());
             currentTopLevelMenu.addSubMenuItem(menuItem);
-
-            menuItem.setLinkAndLabel(newActionLink(managedAction));
+            menuItem.setLinkAndLabel(LinkAndLabelFactory.linkAndLabelForMenu(commonContext, menuAction));
         }
 
         @Override
-        public void addSectionLabel(final String named) {
+        public void onSectionLabel(final String named) {
             val menuSectionLabel = CssMenuItem.newSectionLabel(named);
             currentTopLevelMenu.addSubMenuItem(menuSectionLabel);
         }
-
-        private LinkAndLabel newActionLink(
-                final ManagedAction managedAction) {
-
-            val serviceModel = UiObjectWkt.ofAdapter(commonContext, managedAction.getOwner());
-
-            return LinkAndLabelFactory.forMenu(serviceModel)
-                    .apply(managedAction.getAction());
-        }
-
     }
 
     public static void buildMenu(
             final MetaModelContext commonContext,
-            final MenuUiModel menuUiModel,
+            final NavbarSection navBarSection,
             final Consumer<CssMenuItem> onNewMenuItem) {
 
-        menuUiModel.buildMenuItems(commonContext.getMetaModelContext(),
+        navBarSection.visitMenuItems(
                 MenuBuilderWkt.of(
                         commonContext,
                         onNewMenuItem));

@@ -23,8 +23,8 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum PdfJsVersion {
-    /** <i>Mozilla pdf.js</i> latest version */
-    V2_X("v2", "pdfjs-dist/2.16.105")
+    V2_X("v2plus", "pdfjs-dist/2.16.105"),
+    V3_X("v2plus", "pdfjs-dist/3.4.120")
     ;
     @Getter private final String integrationScriptSuffix;
     @Getter private final String webjarPath;

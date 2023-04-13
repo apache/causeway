@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.applib.mixins.metamodel;
 
-import javax.inject.Inject;
-
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.MemberSupport;
@@ -30,12 +28,13 @@ import org.apache.causeway.applib.layout.LayoutConstants;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
 
+import jakarta.inject.Inject;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
  * Contributes a property exposing the logical object type of the domain
- * object, typically as specified by {@link javax.inject.Named}.
+ * object, typically as specified by {@link jakarta.inject.Named}.
  *
  * <p>
  *     The logical type name is also accessible from the

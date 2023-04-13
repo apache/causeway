@@ -34,6 +34,7 @@ import org.apache.causeway.viewer.wicket.viewer.services.ImageResourceCacheClass
 import org.apache.causeway.viewer.wicket.viewer.services.TranslationsResolverWicket;
 import org.apache.causeway.viewer.wicket.viewer.webmodule.WebModuleWicket;
 import org.apache.causeway.viewer.wicket.viewer.wicketapp.config.BootstrapInitWkt;
+import org.apache.causeway.viewer.wicket.viewer.wicketapp.config.DatatablesNetInitWkt;
 import org.apache.causeway.viewer.wicket.viewer.wicketapp.config.DebugInitWkt;
 import org.apache.causeway.viewer.wicket.viewer.wicketapp.config.JQueryInitWkt;
 import org.apache.causeway.viewer.wicket.viewer.wicketapp.config.Select2InitWkt;
@@ -54,6 +55,7 @@ import org.apache.causeway.viewer.wicket.viewer.wicketapp.config.WicketViewerCss
         Select2InitWkt.class,
         WebjarsInitWkt.class,
         WicketViewerCssBundleInit.class,
+        DatatablesNetInitWkt.class,
         DebugInitWkt.class,
 
         // @Service's

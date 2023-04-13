@@ -20,8 +20,8 @@ package org.apache.causeway.core.metamodel.valuesemantics;
 
 import java.util.function.UnaryOperator;
 
-import javax.annotation.Priority;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Component;
 
@@ -40,7 +40,7 @@ import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
  * due to auto-boxing also handles the primitive variant
  */
 @Component
-@Named("causeway.val.DoubleValueSemantics")
+@Named("causeway.metamodel.value.DoubleValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class DoubleValueSemantics
 extends ValueSemanticsAbstract<Double>

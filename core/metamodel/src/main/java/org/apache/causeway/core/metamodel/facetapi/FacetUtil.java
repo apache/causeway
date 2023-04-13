@@ -27,8 +27,10 @@ import java.util.stream.Stream;
 import org.springframework.lang.Nullable;
 import org.springframework.util.ClassUtils;
 
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.util.snapshot.XmlSchema;
 
 import lombok.NonNull;
@@ -100,34 +102,42 @@ public final class FacetUtil {
     // -- DYNAMIC UPDATE SUPPORT
 
     /**
-     * Removes any facet that matches the facet's java class from its FacetHolder,
-     * then adds the facet to the facetHolder.
+     * Removes any facet from its FacetHolder, that matches the facet's java class
+     * and has no higher precedence than the given one,
+     * then adds given facet to its facetHolder, honoring precedence.
      */
-    public static <F extends Facet> void updateFacet(
-            final @NonNull F facet) {
+    public static void updateFacet(final @Nullable Facet facet) {
+        if(facet==null) {
+            return;
+        }
+        final boolean skip = facet.getFacetHolder().lookupFacet(facet.facetType())
+                .map(Facet::getPrecedence)
+                .map(Facet.Precedence::ordinal)
+                .map(ordinal -> ordinal>facet.getPrecedence().ordinal())
+                .orElse(false);
+        if(skip) {
+            return;
+        }
 
         purgeIf(facet.facetType(), facet.getClass()::isInstance, facet.getFacetHolder());
         addFacet(facet);
     }
 
     /**
-     * Removes any facet of facet-type from facetHolder if it passes the given filter,
-     * then if present adds facetIfAny to the facetHolder.
+     * If facetIfAny is present,
+     * calls {@link #updateFacet(Facet)}, that is,
+     * adds it to its facetHolder, replacing any pre-existing, honoring precedence.
+     * Otherwise acts as a no-op.
      */
-    public static <F extends Facet> void updateFacet(
-            final @NonNull Class<F> facetType,
-            final @NonNull Predicate<? super F> filter,
-            final @NonNull Optional<? extends F> facetIfAny,
-            final @NonNull FacetHolder facetHolder) {
-
-        purgeIf(facetType, filter, facetHolder);
-        addFacetIfPresent(facetIfAny);
+    public static <F extends Facet> void updateFacetIfPresent(
+            final @NonNull Optional<? extends F> facetIfAny) {
+        updateFacet(facetIfAny.orElse(null));
     }
 
     /**
      * Removes any facet of facet-type from facetHolder if it passes the given filter.
      */
-    public static <F extends Facet> void purgeIf(
+    private static <F extends Facet> void purgeIf(
             final Class<F> facetType,
             final Predicate<? super F> filter,
             final FacetHolder facetHolder) {
@@ -159,6 +169,42 @@ public final class FacetUtil {
         return facet.getClass() == facet.facetType()
                 ? String.format("%s[%s]", className, attributesAsString)
                 : String.format("%s[type=%s; %s]", className, ClassUtils.getShortName(facet.facetType()), attributesAsString);
+    }
+
+    // -- FACET LOOKUP
+
+    /** Looks up specified facetType within given {@link FacetHolder}s, honoring Facet {@link Precedence},
+     * while first one found wins over later found if they have the same precedence. */
+    public static <F extends Facet> Optional<F> lookupFacetIn(final @NonNull Class<F> facetType, final FacetHolder ... facetHolders) {
+        if(facetHolders==null) {
+            return Optional.empty();
+        }
+        return Stream.of(facetHolders)
+        .filter(_NullSafe::isPresent)
+        .map(facetHolder->facetHolder.getFacet(facetType))
+        .filter(_NullSafe::isPresent)
+        .reduce((a, b)->b.getPrecedence().ordinal()>a.getPrecedence().ordinal()
+                ? b
+                : a);
+    }
+
+    /** Looks up specified facetType within given {@link FacetHolder}s, honoring Facet {@link Precedence},
+     * while first one found wins over later found if they have the same precedence. */
+    public static <F extends Facet> Optional<F> lookupFacetInButExcluding(
+            final @NonNull Class<F> facetType,
+            final Predicate<Object> excluded,
+            final FacetHolder ... facetHolders) {
+        if(facetHolders==null) {
+            return Optional.empty();
+        }
+        return Stream.of(facetHolders)
+        .filter(_NullSafe::isPresent)
+        .filter(x -> !excluded.test(x))
+        .map(facetHolder->facetHolder.getFacet(facetType))
+        .filter(_NullSafe::isPresent)
+        .reduce((a, b)->b.getPrecedence().ordinal()>a.getPrecedence().ordinal()
+                ? b
+                : a);
     }
 
 }

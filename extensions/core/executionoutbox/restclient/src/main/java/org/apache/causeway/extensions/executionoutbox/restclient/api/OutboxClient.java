@@ -23,8 +23,8 @@ package org.apache.causeway.extensions.executionoutbox.restclient.api;
 import java.util.Collections;
 import java.util.List;
 
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.core.MediaType;
 
 import org.apache.causeway.applib.util.schema.InteractionsDtoUtils;
 import org.apache.causeway.commons.functional.Try;

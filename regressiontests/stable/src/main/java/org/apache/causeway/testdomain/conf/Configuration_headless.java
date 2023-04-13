@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.testdomain.conf;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -58,7 +58,7 @@ import lombok.RequiredArgsConstructor;
 public class Configuration_headless {
 
     @Service
-    @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+    @jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
     @RequiredArgsConstructor(onConstructor_ = {@Inject})
     public static class HeadlessCommandSupport
     implements TransactionBoundaryAware {

@@ -12,7 +12,7 @@
 <xs:schema
         xmlns:xs="http://www.w3.org/2001/XMLSchema"
         elementFormDefault="qualified"
-        targetNamespace="http://isis.apache.org/applib/layout/links"
+        targetNamespace="https://causeway.apache.org/applib/layout/links"
         version="1.0">
 
     <xs:complexType name="link">

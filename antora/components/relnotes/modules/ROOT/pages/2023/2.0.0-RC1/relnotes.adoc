@@ -1,0 +1,220 @@
+[[r2.0.0-RC1]]
+= 2.0.0-RC1
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+
+The big highlight of this release is the rename of the project to its new name, "Causeway".
+But there are also some new features worth mentioning:
+
+* new `PageRenderSubscriber` SPI provides callbacks to track the time taken to render a page (link:https://issues.apache.org/jira/browse/CAUSEWAY-3373[CAUSEWAY-3373])
+* Allow SAFE semantics actions to be invoked with only VIEWING permission (link:https://issues.apache.org/jira/browse/CAUSEWAY-3358[CAUSEWAY-3358])
+* new HTML Documentation Service based on the domain model (link:https://issues.apache.org/jira/browse/CAUSEWAY-3328[CAUSEWAY-3328])
+* ViewModel implementations need Means of using Injection Points during Construction (link:https://issues.apache.org/jira/browse/CAUSEWAY-3293[CAUSEWAY-3293])
+* new `BackgroundService` (link:https://issues.apache.org/jira/browse/CAUSEWAY-3267[CAUSEWAY-3267])
+
+
+Some known issues (in the xref:vw::about.adoc[]) should also be mentioned:
+
+* Date/Time picking not fully supported for temporal value types with zone or offset information.
+* File Upload _Action Parameters_ are forced non-mandatory and also always cleared in case a dependent parameter changes (during parameter negotiation).
+* The extension in support of Server Sent Events (SSE), as used for progress bars,
+is experimental and not recommended for production.
+
+
+== New Feature
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3373[CAUSEWAY-3373] - PageRenderSubscriber
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3358[CAUSEWAY-3358] - Allow SAFE semantics actions to be invoked with only VIEWING permission
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3381[CAUSEWAY-3381] - Spike changing @Scope for @DomainObject to a custom value ; update docs.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3368[CAUSEWAY-3368] - Additional callbacks for CommandPublisher for when created, started ; persist CommandLogEntry at beginning.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3362[CAUSEWAY-3362] - Add query by username to AuditTrailEntryRepository
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3343[CAUSEWAY-3343] - [Value Types] - Add Plantuml Support to AsciiDoc
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3329[CAUSEWAY-3329] - [Applib] Refactor DomainObjectLayout#tableDecoration to allow Customization
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3328[CAUSEWAY-3328] - HTML Documentation Service based on the domain model
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3300[CAUSEWAY-3300] - [Applib] Support File I/O for Blob and Clob (Convenience)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3295[CAUSEWAY-3295] - [Metamodel] Framework should honor PostConstruct on Viewmodels
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3293[CAUSEWAY-3293] - ViewModel implementations need Means of using Injection Points during Construction
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3267[CAUSEWAY-3267] - Add BackgroundService
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3250[CAUSEWAY-3250] - [Wicket Viewer] Config Option for enable/disable clear-field Button
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-1840[CAUSEWAY-1840] - Integration test given/when/then sections
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3366[CAUSEWAY-3366] - Allow @PdfJsViewer to be annotated at class level for mixins.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3361[CAUSEWAY-3361] - Allow each OOTB XxxSubscriber to be disabled via a config property (HasEnabling interface)
+
+
+
+== Improvement
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3388[CAUSEWAY-3388] - Centre logo on login page.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3384[CAUSEWAY-3384] - wkt fullcalendar is missing module defns, and packages slightly inconsistent.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3377[CAUSEWAY-3377] - polish swagger categories/
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3375[CAUSEWAY-3375] - Rationalize/polish "download metamodel" actions
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3363[CAUSEWAY-3363] - Rename HasUsername_open
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3344[CAUSEWAY-3344] - [Extensions] Flesh out the Entity Relation Diagram for Docgen
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3317[CAUSEWAY-3317] - [Wicket Viewer] Navbar Font Color and Link Color need to be distinguished
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3304[CAUSEWAY-3304] - [Commons] Code Quality Improvements for 2.0.0 Release
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3303[CAUSEWAY-3303] - Redefine UserMemento#isSystemUser to instead take into account SudoService#accessAll role
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3302[CAUSEWAY-3302] - [Commons] Text Util to properly handle Files with BOM Signature
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3301[CAUSEWAY-3301] - [Wicket Viewer] Less prominent Collection View Select Dropdown
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3276[CAUSEWAY-3276] - Rename RestEasy Artifact (remove '4' in name)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3330[CAUSEWAY-3330] - [RO] Does not handle Composite Value Types as ActionParameters well
+
+
+
+== Bug
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3387[CAUSEWAY-3387] - Deleting helloworld obj still renders same object (now deleted); stack trace if try to interact with it.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3386[CAUSEWAY-3386] - Invoking an action that returns an empty list causes stack exception
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3385[CAUSEWAY-3385] - primary menu overflow is a scrollbar for the whole page; should be same as secondary menus, where overflows the menu only
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3371[CAUSEWAY-3371] - in Wicket, default impl pdf viewer advisor means that @PdfJsViewer(initialSize, initialScale) are effectively ignored.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3365[CAUSEWAY-3365] - Custom layout not honored via LayoutUiEvent
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3356[CAUSEWAY-3356] - [Wicket Viewer] labelPosition: NONE not honored for BufferedImage Value Type
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3355[CAUSEWAY-3355] - [Wicket Viewer] Collections referenced in layout.xml appear in random Order
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3351[CAUSEWAY-3351] - CssClassFacetOnActionFromConfiguredRegexFactory wrongly matches against Mixin Main Method Name
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3350[CAUSEWAY-3350] - [Wicket Viewer] Custom Bootstrap Button Colors not honored
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3349[CAUSEWAY-3349] - removeAndFlush fails if object was created persistAndFlush in the same interaction.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3336[CAUSEWAY-3336] - [Secman] ApplicationUser.isRunAsAdministrator() false negative if not using Shiro
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3335[CAUSEWAY-3335] - [Wicket Viewer] Collection View throws when navigating back to it
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3334[CAUSEWAY-3334] - [Regression] Layout XML Export has no Pretty Printing
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3327[CAUSEWAY-3327] - [Metamodel] ClassCache - Methods not enumerated correctly when there are override Relations among these
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3325[CAUSEWAY-3325] - IsisToWicketTreeAdapter nodes result in "failed title" when collapsed/re-expanded.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3318[CAUSEWAY-3318] - [Wicket Viewer] Bookmark Panel Code Revision
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3306[CAUSEWAY-3306] - [Schema] Generated DTOs do need a Logical Type Name
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3320[CAUSEWAY-3320] - [Regression] App Starter POM does not include DN Enhancer Infrastructure
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3308[CAUSEWAY-3308] - [Regression Tests] MM approval test is broken
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3297[CAUSEWAY-3297] - Transitive Dependency not honored with causeway-valuetypes-asciidoc-persistence-jdo
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3294[CAUSEWAY-3294] - [Metamodel] NPE in ApplicationFeatureViewModel
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3291[CAUSEWAY-3291] - [Swagger] Produces 401 Unauthorized Responses
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3287[CAUSEWAY-3287] - Hibernate Validator throws on App Startup
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3285[CAUSEWAY-3285] - [Wicket Viewer] Parented Collection only shown based on Chance
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3283[CAUSEWAY-3283] - [Keycloak] Unreachable Code due to wrong Type Check
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3282[CAUSEWAY-3282] - [JPA] Potential NPE in EclipseLink Exception Translation
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3281[CAUSEWAY-3281] - [RO] When Menu Invocation should produce a Viewmodel returns DomainObjectList instead
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3280[CAUSEWAY-3280] - RepositoryService uniqueMatch uses wrong Limit
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3274[CAUSEWAY-3274] - [Wicket Viewer] Potential NPE when switching Tabs
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3270[CAUSEWAY-3270] - Jaxb Viewmodels not recognized by BeanTypeClassifier
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3269[CAUSEWAY-3269] - Selecting the empty item from the choices of an optional parameter throws exception
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3268[CAUSEWAY-3268] - [Wicket Viewer] Action parameter layout LabelPosition might get ignored (based on chance)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3265[CAUSEWAY-3265] - [JPA] Stack Overflow on postLoad event
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3263[CAUSEWAY-3263] - ManagedObjects#isNullOrUnspecifiedOrEmpty(...) throws, if used with deleted entity, that was prev. bookmarked.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3262[CAUSEWAY-3262] - If EntityManagerHolder().getEntityManager().flush() fails, it is retried on next interaction.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3252[CAUSEWAY-3252] - Q classes are not included in the released jars for JDO entities
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3251[CAUSEWAY-3251] - [WicketViewer] Escape String in Table
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3071[CAUSEWAY-3071] - [Wicket Viewer] BootstrapFileInputField (FileUpload) is glitched
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3360[CAUSEWAY-3360] - parsing errors with .layout.xml (perhaps because of namespace changes?)
+
+
+
+== Tasks: Rename project
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3382[CAUSEWAY-3382] - Rename script needs to handle layout schemas correctly, also for their location to "layout-v1"
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3367[CAUSEWAY-3367] - update descriptoin on github repo.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3359[CAUSEWAY-3359] - Update helloworld, simpleapp and demo : docker image, frontpage logo + banner
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3354[CAUSEWAY-3354] - Rename XML namespace identifiers in antora/supplemental-ui/applib/layout XSD files
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3353[CAUSEWAY-3353] - Update projects.xml reference to doap
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3352[CAUSEWAY-3352] - Apply name change in the STATUS file.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3340[CAUSEWAY-3340] - Request INFRA to rename slack channel
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3339[CAUSEWAY-3339] - Request INFRA to update reporter.apache.org
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3338[CAUSEWAY-3338] - Request INFRA to update whimsy.apache.org
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3337[CAUSEWAY-3337] - Request INFRA to rename confluence site
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3260[CAUSEWAY-3260] - Apply name change to docs
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3259[CAUSEWAY-3259] - Request INFRA to rename repo : isis-antora to causeway-antora
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3255[CAUSEWAY-3255] - Update website docs.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3214[CAUSEWAY-3214] - update ASF logo on website, and update trademark footer
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3212[CAUSEWAY-3212] - Ensure logo is on https://apache.org/logos/ 
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3159[CAUSEWAY-3159] - Update committers/board/committee-info.txt
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3155[CAUSEWAY-3155] - Request INFRA to create new dir under dist.apache.org
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3154[CAUSEWAY-3154] - Request INFRA to enable publishing of new groupId to repository.apache.org
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3152[CAUSEWAY-3152] - Deploy config + DNS for simpleapp, helloworld, demoapp
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3151[CAUSEWAY-3151] - Remove Fisheye links from website (since service seems to be discontinued)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3150[CAUSEWAY-3150] - Sonarcloud.io
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3149[CAUSEWAY-3149] - Apply/confirm name change to apache.org navigation
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3148[CAUSEWAY-3148] - Apply name change to project doap file
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3147[CAUSEWAY-3147] - Update binary docs with new name/logo
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3144[CAUSEWAY-3144] - Adapt apache-causeway-committers/causeway-nightly to keep publishing isis nightly builds.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3142[CAUSEWAY-3142] - Apply name change to code
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3141[CAUSEWAY-3141] - Request INFRA to redirect isis.apache.org to causeway.apache.org
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3140[CAUSEWAY-3140] - Request INFRA to create non-ASF "apache/causeway*" namespaces on docker hub
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3139[CAUSEWAY-3139] - Create non-ASF github apache-causeway-committers/causeway-nightly repo
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3138[CAUSEWAY-3138] - Request INFRA to rename ASF git repositories
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3137[CAUSEWAY-3137] - Request INFRA to rename JIRA project
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3136[CAUSEWAY-3136] - Request INFRA to rename mailing lists
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3134[CAUSEWAY-3134] - Board approval for 'Causeway'
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3133[CAUSEWAY-3133] - PMC approval for 'Causeway'
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3132[CAUSEWAY-3132] - Trademark search for 'Causeway'
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3131[CAUSEWAY-3131] - Name choices, discussion, shortlist
+
+
+== Deprecation/Removal of features
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3369[CAUSEWAY-3369] - Remove the causeway.extensions.commandlog.publish-policy (ONLY_IF_SYSTEM_CHANGED)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3380[CAUSEWAY-3380] - [Programming Model] Remove deprecated Value#logicalTypeName
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3379[CAUSEWAY-3379] - [Programming Model] Remove deprecated DomainObject#logicalTypeName
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3378[CAUSEWAY-3378] - [Programming Model] Remove deprecated DomainService#logicalTypeName
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3376[CAUSEWAY-3376] - [Programming Model] Mark ActionLayout#bookmarking deprecated for removal
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3374[CAUSEWAY-3374] - [Programming Model] Mark ActionLayout#redirectPolicy deprecated
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3321[CAUSEWAY-3321] - [Applib] Deprecation of DomainObjectLayout#plural
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3316[CAUSEWAY-3316] - JaxbService: remove potentially ambiguous methods from API
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3279[CAUSEWAY-3279] - [JPA] Convert JPA Artifacts to Java Modules (JPMS)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3278[CAUSEWAY-3278] - [JDO] Convert JDO Artifacts to Java Modules (JPMS)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3277[CAUSEWAY-3277] - [RO] Convert RO Artifacts to Java Modules (JPMS)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3272[CAUSEWAY-3272] - [Applib] LayoutService: allow for additional layout file formats
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3271[CAUSEWAY-3271] - Remove quartz extension - superfluous
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3333[CAUSEWAY-3333] - [Regression] Wicket Viewer - Title Tooltips not rendered if DomainObject has no 'describedAs'
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3332[CAUSEWAY-3332] - [Wicket Viewer] Collection View throws when less than 2 Collection Presentations available
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3322[CAUSEWAY-3322] - JDO Q classes are no longer being created for secman etc.
+
+
+== Docs and Website
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3345[CAUSEWAY-3345] - No link to download project source / remove links to nightly builds from top-level, add warnings.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3254[CAUSEWAY-3254] - is the isis.prototyping.h2-console config property in the docs anywhere?
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3290[CAUSEWAY-3290] - [Javadoc] Annotations HomePage and DomainObject to provide Hints on Visibility
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3222[CAUSEWAY-3222] - [Ongoing] Doc/Site Update
+
+
+== Dependency Upgrades
+
+We use Githb Dependabot to automate dependency upgrades as a matter of routine.
+In addition:
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3292[CAUSEWAY-3292] - [Swagger] Migrate Swagger Model to OpenAPI v3
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3258[CAUSEWAY-3258] - Upgrade Antora to 3.x (from 2.x)
+
+
+== Demo and Starter Apps
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3289[CAUSEWAY-3289] - [Demo] NPE in CalendarEvent Showcase
+
+== Tooling
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3323[CAUSEWAY-3323] - Fix shaId for nightly builds (failed authenticated calls to api.github.com)
+
+
+== Won't Fix / Not a Problem / Duplicates
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3383[CAUSEWAY-3383] - [NOT A PROBLEM] h2 console is not honouring its two config properties
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3357[CAUSEWAY-3357] - [Not a Bug] Layout Cache needs clearing when dynamic Layouts are used - layout()
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3315[CAUSEWAY-3315] - [Duplicate] Apache Isis sorting fails with: Comparison method violates its general contract!
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3307[CAUSEWAY-3307] - [WON'T FIX] Wicket Viewer - Autoconfigure Login Form when using Spring Security Stack
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3286[CAUSEWAY-3286] - [NOT A PROBLEM] Introspection Glitch when using ENCAPSULATION_ENABLED
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3273[CAUSEWAY-3273] - [WON'T DO] obtain xxx.apache.org DNS aliases for our demo apps.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3266[CAUSEWAY-3266] - [NOT A PROBLEM] validateNXxx(...) support method potentially not picked up
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3211[CAUSEWAY-3211] - [DUPLICATE] Ensure listed on https://projects.apache.org/
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3158[CAUSEWAY-3158] - [NOT REQUIRED] Change affiliations.txt
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3157[CAUSEWAY-3157] - [NOT REQUIRED] Change in irs-disclosures.txt
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3153[CAUSEWAY-3153] - [DUPLICATE] Update contents of antora template (in apache/isis-antora repo) and rebuild website
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3146[CAUSEWAY-3146] - [WON'T FIX] Vote for new Logo
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3143[CAUSEWAY-3143] - [DUPLICATE] Update .pptx and other binary docs with name change.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-2886[CAUSEWAY-2886] - [NOT A PROBLEM] @Lazy may be required for AuthenticationManager
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-2885[CAUSEWAY-2885] - [NOT A PROBLEM] wrapMixin and collection parameter
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-2847[CAUSEWAY-2847] - [DUPLICATE] Improve secman's AbstractUsersAndRole so that it is an upsert rather than a simple insert-if-not-present.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-2637[CAUSEWAY-2637] - [WON'T FIX] TitlesAndTranslationsValidator should possibly be implemented as a PostProcessor instead
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-2176[CAUSEWAY-2176] - [Duplicate] Encapsulate Command/Audit/Publishing within an Extension
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-1953[CAUSEWAY-1953] - [WON'T FIX] Migration notes: @NotPersistable has been removed
+
+
+
+

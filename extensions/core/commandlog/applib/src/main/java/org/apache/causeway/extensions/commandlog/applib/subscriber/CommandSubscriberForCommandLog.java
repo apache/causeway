@@ -18,9 +18,14 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.subscriber;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
+import org.apache.causeway.applib.services.clock.ClockService;
+import org.apache.causeway.applib.services.repository.RepositoryService;
+import org.apache.causeway.schema.cmd.v2.CommandDto;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -45,31 +50,40 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0 {@index}
  */
 @Service
-@Named(CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandSubscriberForCommandLog")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT) // after JdoPersistenceLifecycleService
+@Named(CommandSubscriberForCommandLog.LOGICAL_TYPE_NAME)
+@Priority(PriorityPrecedence.MIDPOINT) // after JdoPersistenceLifecycleService
+@Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
 public class CommandSubscriberForCommandLog implements CommandSubscriber {
 
+    static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandSubscriberForCommandLog";
+
     final CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
+    final RepositoryService repositoryService;
     final CausewayConfiguration causewayConfiguration;
+    final ClockService clockService;
 
     @Override
-    public void onCompleted(final Command command) {
+    public boolean isEnabled() {
+        return causewayConfiguration.getExtensions().getCommandLog().getPersist().isEnabled();
+    }
 
-        // skip if no changes AND skipping is allowed
-        if (causewayConfiguration.getExtensions().getCommandLog().getPublishPolicy().isOnlyIfSystemChanged()
-                && !command.isSystemStateChanged()) {
+    @Override
+    public void onReady(Command command) {
+
+        if (!isEnabled()) {
             return;
         }
 
         val existingCommandLogEntryIfAny =
                 commandLogEntryRepository.findByInteractionId(command.getInteractionId());
         if(existingCommandLogEntryIfAny.isPresent()) {
+
             val commandLogEntry = existingCommandLogEntryIfAny.get();
             switch (commandLogEntry.getExecuteIn()) {
                 case FOREGROUND:
-                    // this isn't expected to happen ... we just log the fact if it does
+                    // this isn't really expected to happen ... we just log the fact if it does
                     if(log.isWarnEnabled()) {
                         val existingCommandDto = existingCommandLogEntryIfAny.get().getCommandDto();
 
@@ -83,14 +97,43 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
                     }
                     break;
                 case BACKGROUND:
-                    // this is expected behaviour; the command was already persisted when initially scheduled; we don't
-                    // need to do anything else.
+                    // this is expected behaviour; the command was already persisted by
+                    // BackgroundService.PersistCommandExecutorService when BackgroundService#submit(...) was called;
+                    // so there's no need to do anything else.
                     break;
             }
+
         } else {
-            val parentInteractionId = command.getParentInteractionId();
+            val parentInteractionId = command.getParentInteractionId(); // will be null in most (all?) cases
             commandLogEntryRepository.createEntryAndPersist(command, parentInteractionId, ExecuteIn.FOREGROUND);
         }
+
+    }
+
+    @Override
+    public void onStarted(Command command) {
+
+        if (!isEnabled()) {
+            return;
+        }
+
+        commandLogEntryRepository.findByInteractionId(command.getInteractionId())
+            .ifPresent(commandLogEntry -> {
+                commandLogEntry.sync(command);
+            });
+    }
+
+    @Override
+    public void onCompleted(final Command command) {
+
+        if (!isEnabled()) {
+            return;
+        }
+
+        commandLogEntryRepository.findByInteractionId(command.getInteractionId())
+            .ifPresent(commandLogEntry -> {
+                commandLogEntry.sync(command);
+            });
     }
 
 }

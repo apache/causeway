@@ -20,7 +20,7 @@ package demoapp.dom.types.causewayext.cal.samples;
 
 import java.util.stream.Stream;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.springframework.stereotype.Service;
 

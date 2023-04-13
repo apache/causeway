@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.facets.object.callbacks;
 import java.lang.reflect.Method;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.reflection._Reflect;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -38,27 +38,26 @@ extends FacetAbstract
 implements CallbackFacet {
 
     @Getter(onMethod_ = {@Override})
-    private final Can<Method> methods;
+    private final Can<MethodFacade> methods;
+    private final Can<Method> asRegularMethods;
 
     protected CallbackFacetAbstract(
             final Class<? extends Facet> facetType,
-            final Can<Method> methods,
+            final Can<MethodFacade> methods,
             final FacetHolder holder) {
         super(facetType, holder);
-        this.methods = methods
-                .map(method->_Reflect.lookupRegularMethodForSynthetic(method).orElse(null));
+        this.methods = methods;
+        this.asRegularMethods = methods.map(MethodFacade::asMethodElseFail); // all expected to be regular
     }
 
     @Override
-    public final Intent getIntent(final Method method) {
+    public final Intent getIntent() {
         return Intent.LIFECYCLE;
     }
 
     @Override
     public final void invoke(final ManagedObject adapter) {
-        // as a side effect memoizes the list of methods and locks it so cannot add any more
-        MmInvokeUtil.invokeAll(getMethods(), adapter);
+        MmInvokeUtil.invokeAll(asRegularMethods, adapter);
     }
-
 
 }

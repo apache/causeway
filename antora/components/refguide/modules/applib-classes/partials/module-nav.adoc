@@ -19,7 +19,6 @@
 
 ** xref:applib-classes:utility.adoc[Utility Classes]
 *** xref:applib:index/util/Enums.adoc[Enums]
-*** xref:applib:index/util/JaxbUtil.adoc[JaxbUtil]
 *** xref:applib:index/util/ObjectContracts.adoc[ObjectContracts]
 *** xref:applib:index/util/Reasons.adoc[Reasons]
 *** xref:applib:index/util/ReasonBuffer.adoc[ReasonBuffer]
@@ -28,7 +27,7 @@
 
 ** xref:applib-classes:mixees-and-mixins.adoc[Mixees and Mixins]
 
-*** xref:applib:index/mixins/layout/Object_downloadLayoutXml.adoc[Object_downloadLayoutXml]
+*** xref:applib:index/mixins/layout/Object_downloadLayout.adoc[Object_downloadLayout]
 
 *** xref:refguide:applib:index/mixins/metamodel/Object_downloadMetamodelXml.adoc[Object_downloadMetamodelXml]
 *** xref:applib:index/mixins/metamodel/Object_rebuildMetamodel.adoc[Object_rebuildMetamodel]

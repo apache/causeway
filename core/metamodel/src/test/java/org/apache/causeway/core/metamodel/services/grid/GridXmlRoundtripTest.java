@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.services.grid;
 
 import java.util.Map;
 
-import javax.xml.bind.Marshaller;
+import jakarta.xml.bind.Marshaller;
 
 import org.junit.jupiter.api.Test;
 

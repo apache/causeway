@@ -18,13 +18,9 @@
  */
 package org.apache.causeway.applib;
 
+import org.apache.causeway.applib.services.publishing.log.*;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-
-import org.apache.causeway.applib.services.publishing.log.CommandLogger;
-import org.apache.causeway.applib.services.publishing.log.EntityChangesLogger;
-import org.apache.causeway.applib.services.publishing.log.EntityPropertyChangeLogger;
-import org.apache.causeway.applib.services.publishing.log.ExecutionLogger;
 
 /**
  * Registers logging subscribers for the command/execution/change publishing subsystem.
@@ -36,11 +32,12 @@ import org.apache.causeway.applib.services.publishing.log.ExecutionLogger;
     // Modules
     CausewayModuleApplib.class,
 
-    // Execution/Change Loggers
+    // Execution/Change/Page Loggers
     CommandLogger.class,
     EntityChangesLogger.class,
     EntityPropertyChangeLogger.class,
     ExecutionLogger.class,
+    PageRenderLogger.class,
 })
 public class CausewayModuleApplibChangeAndExecutionLoggers {
 

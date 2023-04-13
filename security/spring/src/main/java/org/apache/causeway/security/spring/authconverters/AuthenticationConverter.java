@@ -53,7 +53,7 @@ import lombok.val;
  *     All known converters are checked one by one, but checking stops once one
  *     converter has successively converted the {@link Authentication} into a
  *     {@link UserMemento} (in other words, chain-of-responsibility pattern).
- *     Use the {@link javax.annotation.Priority} annotation to influence the order
+ *     Use the {@link jakarta.annotation.Priority} annotation to influence the order
  *     in which converter implementations are checked.
  * </p>
  *

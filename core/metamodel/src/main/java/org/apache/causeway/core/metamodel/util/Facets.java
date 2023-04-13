@@ -18,14 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.util;
 
-import java.util.Optional;
-import java.util.OptionalInt;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
-
-import org.springframework.lang.Nullable;
-import org.springframework.util.ClassUtils;
-
+import lombok.experimental.UtilityClass;
+import lombok.val;
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.DomainServiceLayout.MenuBar;
 import org.apache.causeway.applib.annotation.LabelPosition;
@@ -38,7 +32,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.config.metamodel.facets.CollectionLayoutConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.ParameterConfigOptions;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
@@ -47,7 +40,6 @@ import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.causeway.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
-import org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.CollectionLayoutTableDecorationFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
@@ -78,9 +70,13 @@ import org.apache.causeway.core.metamodel.spec.TypeOfAnyCardinality;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
+import org.springframework.lang.Nullable;
+import org.springframework.util.ClassUtils;
 
-import lombok.val;
-import lombok.experimental.UtilityClass;
+import java.util.Optional;
+import java.util.OptionalInt;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  * Facet utility.
@@ -114,10 +110,8 @@ public final class Facets {
         .map(BookmarkPolicyFacet::value);
     }
 
-    public Predicate<FacetHolder> bookmarkPolicyMatches(final Predicate<BookmarkPolicy> matcher) {
-        return facetHolder->Facets.bookmarkPolicy(facetHolder)
-        .map(matcher::test)
-        .orElse(false);
+    public BookmarkPolicy bookmarkPolicyOrElseNotSpecified(final @Nullable FacetHolder facetHolder) {
+        return bookmarkPolicy(facetHolder).orElse(BookmarkPolicy.NOT_SPECIFIED);
     }
 
     public Optional<BSGrid> bootstrapGrid(
@@ -328,12 +322,6 @@ public final class Facets {
             ? fallback
             : promptStyle)
         .orElse(fallback);
-    }
-
-    public Optional<CollectionLayoutConfigOptions.TableDecoration> tableDecoration(
-            final FacetHolder facetHolder) {
-        return facetHolder.lookupFacet(CollectionLayoutTableDecorationFacet.class)
-                .map(CollectionLayoutTableDecorationFacet::value);
     }
 
     public Optional<ObjectSpecification> elementSpec(final FacetHolder facetHolder) {

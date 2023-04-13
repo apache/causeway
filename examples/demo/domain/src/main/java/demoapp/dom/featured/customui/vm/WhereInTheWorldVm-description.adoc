@@ -17,7 +17,7 @@ A `zoom` level, which will be used when retrieving the map, is also prompted for
 [source,java,indent=0]
 .WhereInTheWorldMenu.java
 ----
-include::WhereInTheWorldMenu.java[tags=action]
+include::../../FeaturedMenu.java[tags=whereInTheWorldAction]
 ----
 
 The `WhereInTheWorldVm` view model returned by the menu is defined normally.
@@ -106,7 +106,7 @@ include::../../../../webapp/wicket/ui/custom/WhereInTheWorldPanel.java[tags=crea
 [source,java,indent=0]
 .WhereInTheWorldPanel.java
 ----
-include::../../../../webapp/wicket/ui/custom/WhereInTheWorldPanel.java[tags=createPropertyComponent]
+include::../../../../../webapp/wicket/common/ui/custom/WhereInTheWorldPanel.java[tags=createPropertyComponent]
 ----
 <.> obtains the `ObjectSpecification` (the framework's equivalent of `java.lang.Class`) for the domain object
 <.> obtains the `OneToOneAssociation` (the framework's equivalent of a `java.lang.reflect.Method`) for the specified property

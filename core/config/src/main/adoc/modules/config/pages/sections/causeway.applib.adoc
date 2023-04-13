@@ -165,9 +165,9 @@ This can be overridden on a case-by-case basis using ``CollectionLayout#paged()`
 
 
 |
-[[causeway.applib.annotation.collection-layout.table-decoration]]
+[[causeway.applib.annotation.collection-layout.table-decorator]]
 causeway.applib.annotation. +
-collection-layout.table-decoration
+collection-layout.table-decorator
 
 | 
 | Defines whether the table representation of a collection should be decorated using a client-side Javascript library, eg for client-side paging and filtering.
@@ -260,10 +260,10 @@ This can be overridden on a case-by-case basis using ``DomainObjectLayout#paged(
 
 
 |
-[[causeway.applib.annotation.domain-object-layout.table-decoration]]
+[[causeway.applib.annotation.domain-object-layout.table-decorator]]
 causeway.applib.annotation. +
 domain-object-layout. +
-table-decoration
+table-decorator
 
 | 
 | Defines whether the table representation of a standalone collection of this domain class should be decorated using a client-side Javascript library, eg for client-side paging and filtering.

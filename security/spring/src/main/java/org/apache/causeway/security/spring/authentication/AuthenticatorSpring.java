@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.security.spring.authentication;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -29,15 +29,18 @@ import org.apache.causeway.applib.services.iactn.InteractionProvider;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.core.security.authentication.AuthenticationRequest;
 import org.apache.causeway.core.security.authentication.Authenticator;
+import org.apache.causeway.security.spring.CausewayModuleSecuritySpring;
 
 /**
  * @since 2.0 {@index}
  */
 @Service
-@Named("causeway.security.AuthenticatorSpring")
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@Named(AuthenticatorSpring.LOGICAL_TYPE_NAME)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @Qualifier("Spring")
 public class AuthenticatorSpring implements Authenticator {
+
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleSecuritySpring.NAMESPACE + ".AuthenticatorSpring";
 
     @Inject private InteractionProvider interactionProvider;
 

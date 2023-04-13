@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
@@ -158,7 +159,7 @@ extends AbstractFacetFactoryTest {
         final Method actionMethod = findMethod(CustomerEx.class, "someAction", new Class[] { int.class, long.class });
 
         final FacetedMethod facetHolderWithParms = FacetedMethod
-                .createForAction(metaModelContext, CustomerEx.class, actionMethod);
+                .createForAction(metaModelContext, CustomerEx.class, _MethodFacades.regular(actionMethod));
 
         processInvocation(facetFactory, ProcessMethodContext
                 .forTesting(CustomerEx.class, null, actionMethod, methodRemover, facetHolderWithParms));
@@ -205,7 +206,8 @@ extends AbstractFacetFactoryTest {
         final Method choices1Method = findMethod(CustomerEx.class, "choices1SomeAction", new Class[] {});
         final Method disableMethod = findMethod(CustomerEx.class, "disableSomeAction", new Class[] {});
 
-        final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(metaModelContext, CustomerEx.class, actionMethod);
+        final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(metaModelContext, CustomerEx.class,
+                _MethodFacades.regular(actionMethod));
 
         final ProcessMethodContext processMethodContext = ProcessMethodContext
                 .forTesting(CustomerEx.class, FeatureType.ACTION, actionMethod, methodRemover, facetHolderWithParms);

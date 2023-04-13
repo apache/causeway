@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -116,7 +116,6 @@ public abstract class AuditTrailEntryRepository<E extends AuditTrailEntry> {
             } else {
                 query = Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND_BY_TARGET_AND_TIMESTAMP_AFTER)
                         .withParameter("target", target)
-                        .withParameter("target", target)
                         .withParameter("from", fromTs);
             }
         } else {
@@ -174,6 +173,86 @@ public abstract class AuditTrailEntryRepository<E extends AuditTrailEntry> {
     public List<E> findMostRecent(final int limit) {
         return repositoryService.allMatches(
                 Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND_MOST_RECENT).withLimit(limit));
+    }
+
+    public List<E> findByUsernameAndFromAndTo(
+            final String username,
+            final LocalDate from,
+            final LocalDate to) {
+        val fromTs = toTimestampStartOfDayWithOffset(from, 0);
+        val toTs = toTimestampStartOfDayWithOffset(to, 1);
+
+        final Query<E> query;
+        if(from != null) {
+            if(to != null) {
+                query = Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND_BY_USERNAME_AND_TIMESTAMP_BETWEEN)
+                        .withParameter("username", username)
+                        .withParameter("from", fromTs)
+                        .withParameter("to", toTs);
+            } else {
+                query = Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND_BY_USERNAME_AND_TIMESTAMP_AFTER)
+                        .withParameter("username", username)
+                        .withParameter("from", fromTs);
+            }
+        } else {
+            if(to != null) {
+                query = Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND_BY_USERNAME_AND_TIMESTAMP_BEFORE)
+                        .withParameter("username", username)
+                        .withParameter("to", toTs);
+            } else {
+                query = Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND_BY_USERNAME)
+                        .withParameter("username", username)
+                ;
+            }
+        }
+        return repositoryService.allMatches(query);
+    }
+
+    public List<E> findByUsernameAndTargetAndFromAndTo(
+            final String username,
+            final Bookmark target,
+            final LocalDate from,
+            final LocalDate to) {
+        val fromTs = toTimestampStartOfDayWithOffset(from, 0);
+        val toTs = toTimestampStartOfDayWithOffset(to, 1);
+
+        final Query<E> query;
+        if(from != null) {
+            if(to != null) {
+                query = Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND_BY_USERNAME_AND_TARGET_AND_TIMESTAMP_BETWEEN)
+                        .withParameter("username", username)
+                        .withParameter("target", target)
+                        .withParameter("from", fromTs)
+                        .withParameter("to", toTs);
+            } else {
+                query = Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND_BY_USERNAME_AND_TARGET_AND_TIMESTAMP_AFTER)
+                        .withParameter("username", username)
+                        .withParameter("target", target)
+                        .withParameter("from", fromTs);
+            }
+        } else {
+            if(to != null) {
+                query = Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND_BY_USERNAME_AND_TARGET_AND_TIMESTAMP_BEFORE)
+                        .withParameter("username", username)
+                        .withParameter("target", target)
+                        .withParameter("to", toTs);
+            } else {
+                query = Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND_BY_USERNAME_AND_TARGET)
+                        .withParameter("username", username)
+                        .withParameter("target", target)
+                ;
+            }
+        }
+        return repositoryService.allMatches(query);
+    }
+
+
+    public List<E> findRecentByUsername(final String username) {
+        return repositoryService.allMatches(
+                Query.named(auditTrailEntryClass, AuditTrailEntry.Nq.FIND_RECENT_BY_USERNAME)
+                        .withParameter("username", username)
+                        .withLimit(100)
+        );
     }
 
 

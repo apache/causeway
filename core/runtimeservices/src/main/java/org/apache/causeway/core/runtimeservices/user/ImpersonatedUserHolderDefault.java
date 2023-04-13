@@ -20,8 +20,8 @@ package org.apache.causeway.core.runtimeservices.user;
 
 import java.util.Optional;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Service;
 
@@ -33,7 +33,7 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".ImpersonatedUserHolderDefault")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 public class ImpersonatedUserHolderDefault implements ImpersonatedUserHolder {
 
     private static final String SESSION_KEY_IMPERSONATED_USER =

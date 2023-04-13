@@ -19,7 +19,7 @@
  */
 package demoapp.dom.types.causewayext;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -36,7 +36,7 @@ import demoapp.dom.types.causewayext.cal.CausewayCalendarEvents;
         nature=NatureOfService.VIEW
 )
 @DomainObjectLayout(named="CausewayExtTypes")
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 public class CausewayExtTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)

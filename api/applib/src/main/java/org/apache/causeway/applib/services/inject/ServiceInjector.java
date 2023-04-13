@@ -24,7 +24,7 @@ import org.springframework.lang.Nullable;
  * Resolves injection points using the
  * {@link org.apache.causeway.applib.services.registry.ServiceRegistry} (in other
  * words provides a domain service instance to all fields and setters that are
- * annotated with {@link javax.inject.Inject}).
+ * annotated with {@link jakarta.inject.Inject}).
  *
  * @since 1.x extended in 2.0 {@index}
  */

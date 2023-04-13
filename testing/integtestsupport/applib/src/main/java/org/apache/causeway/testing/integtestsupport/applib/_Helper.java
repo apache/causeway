@@ -36,7 +36,7 @@ class _Helper {
         return extensionContext.getTestInstance()
         .filter(CausewayIntegrationTestAbstract.class::isInstance)
         .map(CausewayIntegrationTestAbstract.class::cast)
-        .map(CausewayIntegrationTestAbstract::getServiceRegistry);
+        .map(causewayIntegrationTestAbstract -> causewayIntegrationTestAbstract.serviceRegistry);
     }
 
     /**
@@ -44,7 +44,7 @@ class _Helper {
      */
     static Optional<InteractionContext> getCustomInteractionContext(final ExtensionContext extensionContext) {
         return extensionContext.getTestMethod()
-        .flatMap(testMethod->_Annotations.synthesize(testMethod, InteractAs.class))
+        .flatMap(testMethod->_Annotations.synthesizeConsideringClass(testMethod, InteractAs.class))
         .map(InteractAsUtils::toInteractionContext);
     }
 

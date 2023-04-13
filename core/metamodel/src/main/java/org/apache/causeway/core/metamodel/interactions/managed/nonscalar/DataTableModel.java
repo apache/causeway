@@ -25,6 +25,7 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 
+import org.apache.causeway.applib.annotation.TableDecorator;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
@@ -162,11 +163,19 @@ implements MultiselectChoices {
             .map(property->new DataColumn(this, property))
             .collect(Can.toCan()));
 
-        //XXX future extension: the tile could dynamically reflect the number of elements selected
+        //XXX future extension: the title could dynamically reflect the number of elements selected
         //eg... 5 Orders selected
         title = _Observables.lazy(()->
             managedMember
             .getFriendlyName());
+    }
+
+    public int getPageSize(final int pageSizeDefault) {
+        return getMetaModel().getPageSize().orElse(pageSizeDefault);
+    }
+
+    public Optional<TableDecorator> getTableDecoratorIfAny() {
+        return getMetaModel().getTableDecorator();
     }
 
     /**

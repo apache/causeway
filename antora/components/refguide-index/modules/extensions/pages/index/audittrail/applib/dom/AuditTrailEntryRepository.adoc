@@ -19,6 +19,9 @@ class AuditTrailEntryRepository<E> {
   List<E> findByFromAndTo(LocalDate from, LocalDate to)
   List<E> findMostRecent()
   List<E> findMostRecent(int limit)
+  List<E> findByUsernameAndFromAndTo(String username, LocalDate from, LocalDate to)
+  List<E> findByUsernameAndTargetAndFromAndTo(String username, Bookmark target, LocalDate from, LocalDate to)
+  List<E> findRecentByUsername(String username)
   List<? extends AuditTrailEntry> findAll()     // <.>
   void removeAll()     // <.>
 }

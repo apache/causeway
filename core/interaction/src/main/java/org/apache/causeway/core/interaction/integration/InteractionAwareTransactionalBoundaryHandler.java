@@ -22,10 +22,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
+import org.apache.causeway.core.interaction.CausewayModuleCoreInteraction;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -47,11 +48,13 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("causeway.interaction.InteractionAwareTransactionalBoundaryHandler")
+@Named(InteractionAwareTransactionalBoundaryHandler.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2
 public class InteractionAwareTransactionalBoundaryHandler {
+
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleCoreInteraction.NAMESPACE + ".InteractionAwareTransactionalBoundaryHandler";
 
     private final Can<PlatformTransactionManager> txManagers;
 

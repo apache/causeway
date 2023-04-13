@@ -18,29 +18,26 @@
  */
 package demoapp.dom.domain._changes;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingVm;
+import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(
     semantics = SemanticsOf.IDEMPOTENT)
 @ActionLayout(
     associateWith = "changes")
+@RequiredArgsConstructor
 public class ExposeCapturedChanges_clear {
     // ...
 //end::class[]
 
     private final DomainObjectEntityChangePublishingVm domainObjectAuditingVm;
-
-    public ExposeCapturedChanges_clear(DomainObjectEntityChangePublishingVm domainObjectAuditingVm) {
-        this.domainObjectAuditingVm = domainObjectAuditingVm;
-    }
-
 
     //tag::class[]
     public DomainObjectEntityChangePublishingVm act() {
@@ -48,7 +45,6 @@ public class ExposeCapturedChanges_clear {
         return domainObjectAuditingVm;
     }
 
-    @Inject
-    EntityChangesSubscriberToCaptureChangesInMemory entityChangesSubscriberToCaptureChangesInMemory;;
+    @Inject EntityChangesSubscriberToCaptureChangesInMemory entityChangesSubscriberToCaptureChangesInMemory;;
 }
 //end::class[]

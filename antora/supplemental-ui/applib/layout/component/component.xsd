@@ -10,14 +10,14 @@
 	OF ANY KIND, either express or implied. See the License for the specific
 	language governing permissions and limitations under the License. -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           xmlns:lnk="http://isis.apache.org/applib/layout/links"
-           xmlns:tns="http://isis.apache.org/applib/layout/component"
+           xmlns:lnk="https://causeway.apache.org/applib/layout/links"
+           xmlns:tns="https://causeway.apache.org/applib/layout/component"
            elementFormDefault="qualified"
-           targetNamespace="http://isis.apache.org/applib/layout/component"
+           targetNamespace="https://causeway.apache.org/applib/layout/component"
            version="1.0">
 
   <xs:import
-          namespace="http://isis.apache.org/applib/layout/links"
+          namespace="https://causeway.apache.org/applib/layout/links"
           schemaLocation="../links/links.xsd"/>
 
   <xs:element name="action" type="tns:action"/>

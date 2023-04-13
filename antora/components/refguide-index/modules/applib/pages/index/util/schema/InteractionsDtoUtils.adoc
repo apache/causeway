@@ -8,12 +8,7 @@
 ----
 class InteractionsDtoUtils {
   void init()
-  JAXBContext getJaxbContext()
-  InteractionsDto fromXml(Reader reader)
-  InteractionsDto fromXml(String xml)
-  InteractionsDto fromXml(Class<?> contextClass, String resourceName, Charset charset)
-  String toXml(InteractionsDto interactionDto)
-  void toXml(InteractionsDto interactionsDto, Writer writer)
+  DtoMapper<InteractionsDto> dtoMapper()
   List<InteractionDto> split(InteractionsDto interactionsDto)
   InteractionsDto join(List<InteractionDto> interactionDtos)
 }

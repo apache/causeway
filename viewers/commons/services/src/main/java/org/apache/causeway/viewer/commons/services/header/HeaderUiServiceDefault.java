@@ -18,14 +18,13 @@
  */
 package org.apache.causeway.viewer.commons.services.header;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import org.apache.causeway.applib.annotation.DomainServiceLayout.MenuBar;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.viewer.commons.applib.services.branding.BrandingUiService;
 import org.apache.causeway.viewer.commons.applib.services.header.HeaderUiModel;
@@ -50,12 +49,10 @@ implements HeaderUiService {
 
     @Override
     public HeaderUiModel getHeader() {
-        return HeaderUiModel.of(
+        return new HeaderUiModel(
                 brandingUiService.getHeaderBranding(),
                 userProfileUiService.userProfile(),
-                menuUiService.getMenu(MenuBar.PRIMARY),
-                menuUiService.getMenu(MenuBar.SECONDARY),
-                menuUiService.getMenu(MenuBar.TERTIARY));
+                menuUiService.getMenu());
     }
 
 }

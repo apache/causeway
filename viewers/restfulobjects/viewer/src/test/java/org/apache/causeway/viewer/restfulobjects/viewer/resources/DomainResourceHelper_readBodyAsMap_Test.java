@@ -26,15 +26,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
-import org.apache.causeway.viewer.restfulobjects.rendering.util.Util;
+import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestParams;
+
+import lombok.val;
 
 class DomainResourceHelper_readBodyAsMap_Test {
 
-    private JsonRepresentation representation;
-
     @Test
     void whenNull() throws Exception {
-        representation = Util.readAsMap(null);
+        val representation = representationFor(null);
 
         assertTrue(representation.isMap());
         assertEquals(0, representation.size());
@@ -42,7 +42,7 @@ class DomainResourceHelper_readBodyAsMap_Test {
 
     @Test
     void whenEmptyString() throws Exception {
-        representation = Util.readAsMap("");
+        val representation = representationFor("");
 
         assertTrue(representation.isMap());
         assertEquals(0, representation.size());
@@ -50,7 +50,7 @@ class DomainResourceHelper_readBodyAsMap_Test {
 
     @Test
     void whenWhitespaceOnlyString() throws Exception {
-        representation = Util.readAsMap(" \t ");
+        val representation = representationFor(" \t ");
 
         assertTrue(representation.isMap());
         assertEquals(0, representation.size());
@@ -58,7 +58,7 @@ class DomainResourceHelper_readBodyAsMap_Test {
 
     @Test
     void emptyMap() throws Exception {
-        representation = Util.readAsMap("{}");
+        val representation = representationFor("{}");
 
         assertTrue(representation.isMap());
         assertEquals(0, representation.size());
@@ -66,7 +66,7 @@ class DomainResourceHelper_readBodyAsMap_Test {
 
     @Test
     void map() throws Exception {
-        representation = Util.readAsMap("{\"foo\":\"bar\"}");
+        val representation = representationFor("{\"foo\":\"bar\"}");
 
         assertTrue(representation.isMap());
         assertEquals(1, representation.size());
@@ -75,8 +75,15 @@ class DomainResourceHelper_readBodyAsMap_Test {
     @Test
     void whenArray() throws Exception {
         assertThrows(RestfulObjectsApplicationException.class, ()->{
-            Util.readAsMap("[]");
+            representationFor("[]");
         });
     }
+
+    // -- HELPER
+
+    private JsonRepresentation representationFor(final String input) {
+        return RequestParams.ofQueryString(input).asMap();
+    }
+
 
 }

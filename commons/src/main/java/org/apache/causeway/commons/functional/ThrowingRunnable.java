@@ -23,13 +23,12 @@ import java.util.concurrent.Callable;
 import lombok.NonNull;
 
 /**
- * Similar to a {@link Runnable}, except that it can also throw exceptions.
+ * Similar to a {@link Runnable}, except that it can also throw a checked {@link Exception}.
  *
- * @since 2.x [@index}
+ * @since 2.x {@index}
  */
 @FunctionalInterface
 public interface ThrowingRunnable {
-
 
     // -- INTERFACE
 

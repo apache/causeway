@@ -20,7 +20,7 @@ package org.apache.causeway.extensions.commandreplay.secondary.mixins;
 
 import java.util.Optional;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;

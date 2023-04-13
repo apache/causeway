@@ -23,14 +23,20 @@ import java.util.function.Consumer;
 
 import org.springframework.lang.Nullable;
 
+import lombok.experimental.UtilityClass;
+
+/**
+ * package private utility for {@link _Strings}
+ */
+@UtilityClass
 class _Strings_FastSplit {
 
-    public static void splitThenAccept(
+    void splitThenAccept(
             final @Nullable String input,
             final String separator,
-            BiConsumer<String, String> onNonEmptySplit,
-            Consumer<String> onNonEmptyLhs,
-            Consumer<String> onNonEmptyRhs) {
+            final BiConsumer<String, String> onNonEmptySplit,
+            final Consumer<String> onNonEmptyLhs,
+            final Consumer<String> onNonEmptyRhs) {
 
         if(_Strings.isEmpty(input)) {
             // skip

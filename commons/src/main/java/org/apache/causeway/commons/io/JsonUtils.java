@@ -26,16 +26,18 @@ import java.util.function.UnaryOperator;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
+import com.fasterxml.jackson.module.jakarta.xmlbind.JakartaXmlBindAnnotationModule;
 
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.context._Context;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
 import lombok.experimental.UtilityClass;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Utilities to convert from and to JSON format.
@@ -43,7 +45,22 @@ import lombok.experimental.UtilityClass;
  * @since 2.0 {@index}
  */
 @UtilityClass
+@Log4j2
 public class JsonUtils {
+
+    /**
+     * Consumers of the framework may choose to use a different provider.
+     */
+    public Optional<Class<?>> getPlatformDefaultJsonProviderForJaxb() {
+        return Try.call(()->_Context.loadClass("org.eclipse.persistence.jaxb.rs.MOXyJsonProvider"))
+                .ifFailure(cause->
+                      log.warn("This implementation of RestfulClient does require the class 'MOXyJsonProvider'"
+                          + " on the class-path."
+                          + " Are you missing a maven dependency?")
+                )
+                .getValue()
+                .map(x->x);
+    }
 
     @FunctionalInterface
     public interface JsonCustomizer extends UnaryOperator<ObjectMapper> {}
@@ -69,7 +86,7 @@ public class JsonUtils {
             final @NonNull Class<T> mappedType,
             final @NonNull DataSource source,
             final JsonUtils.JsonCustomizer ... customizers) {
-        return source.readAll((final InputStream is)->{
+        return source.tryReadAll((final InputStream is)->{
             return Try.call(()->createMapper(customizers).readValue(is, mappedType));
         });
     }
@@ -82,7 +99,7 @@ public class JsonUtils {
             final @NonNull Class<T> elementType,
             final @NonNull DataSource source,
             final JsonUtils.JsonCustomizer ... customizers) {
-        return source.readAll((final InputStream is)->{
+        return source.tryReadAll((final InputStream is)->{
             return Try.call(()->{
                 val mapper = createMapper(customizers);
                 val listFactory = mapper.getTypeFactory().constructCollectionType(List.class, elementType);
@@ -133,7 +150,7 @@ public class JsonUtils {
 
     /** add support for JAXB annotations */
     public ObjectMapper jaxbAnnotationSupport(final ObjectMapper mapper) {
-        return mapper.registerModule(new JaxbAnnotationModule());
+        return mapper.registerModule(new JakartaXmlBindAnnotationModule());
     }
 
     // -- MAPPER FACTORY
@@ -147,5 +164,7 @@ public class JsonUtils {
         }
         return mapper;
     }
+
+
 
 }

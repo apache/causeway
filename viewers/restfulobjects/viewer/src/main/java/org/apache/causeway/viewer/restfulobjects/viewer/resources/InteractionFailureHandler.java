@@ -45,24 +45,24 @@ public class InteractionFailureHandler {
         case HIDDEN:
             return RestfulObjectsApplicationException
                     .createWithMessage(RestfulResponse.HttpStatusCode.NOT_FOUND,
-                            veto.getReason());
+                            veto.getReasonAsString().orElse(null));
 
         case READONLY:
         case INVALID:
             return RestfulObjectsApplicationException
                     .createWithMessage(RestfulResponse.HttpStatusCode.FORBIDDEN,
-                            veto.getReason());
+                            veto.getReasonAsString().orElse(null));
 
         case ACTION_NOT_SAFE:
         case ACTION_NOT_IDEMPOTENT:
             return RestfulObjectsApplicationException
                     .createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED,
-                            veto.getReason());
+                            veto.getReasonAsString().orElse(null));
 
         case ACTION_PARAM_INVALID:
             return RestfulObjectsApplicationException
                     .createWithMessage(RestfulResponse.HttpStatusCode.VALIDATION_FAILED,
-                            veto.getReason());
+                            veto.getReasonAsString().orElse(null));
         }
 
         return RestfulObjectsApplicationException
@@ -76,7 +76,7 @@ public class InteractionFailureHandler {
             final @NonNull JsonRepresentation arguments) {
 
         if(veto!=null) {
-            arguments.mapPutString("x-ro-invalidReason", veto.getReason());
+            arguments.mapPutString("x-ro-invalidReason", veto.getReasonAsString().orElse(null));
         }
         return RestfulObjectsApplicationException
                 .createWithBody(RestfulResponse.HttpStatusCode.VALIDATION_FAILED,
@@ -92,7 +92,7 @@ public class InteractionFailureHandler {
 
         val paramId = paramMeta.getId();
         val argRepr = arguments.getRepresentation(paramId);
-        argRepr.mapPutString("invalidReason", veto.getReason());
+        argRepr.mapPutString("invalidReason", veto.getReasonAsString().orElse(null));
     }
 
 

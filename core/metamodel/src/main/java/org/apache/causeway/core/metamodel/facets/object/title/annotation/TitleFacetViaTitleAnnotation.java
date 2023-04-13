@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.facets.object.title.annotation;
 
 import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Method;
 import java.util.ArrayDeque;
 import java.util.List;
 import java.util.Optional;
@@ -32,6 +31,8 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.compare._Comparators;
 import org.apache.causeway.commons.internal.reflection._Annotations;
+import org.apache.causeway.commons.internal.reflection._MethodFacades;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.commons.internal.reflection._Reflect.InterfacePolicy;
 import org.apache.causeway.commons.internal.reflection._Reflect.TypeHierarchyPolicy;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
@@ -85,7 +86,7 @@ implements ImperativeFacet {
     }
 
     @Getter private final Can<TitleComponent> components;
-    @Getter(onMethod_ = {@Override}) private final @NonNull Can<Method> methods;
+    @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
 
     protected TitleFacetViaTitleAnnotation(final Can<TitleComponent> components, final FacetHolder holder) {
         super(holder);
@@ -102,13 +103,14 @@ implements ImperativeFacet {
                     .map(MethodEvaluator.class::cast)
                     .map(MethodEvaluator::getMethod)
                     .findFirst()
+                    .map(_MethodFacades::regular)
                     .map(ImperativeFacet::singleMethod)
                     .orElse(Can.empty())
                 : Can.empty();
     }
 
     @Override
-    public Intent getIntent(final Method method) {
+    public Intent getIntent() {
         return Intent.UI_HINT;
     }
 

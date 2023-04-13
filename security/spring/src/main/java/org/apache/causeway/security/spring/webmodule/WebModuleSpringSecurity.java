@@ -18,11 +18,11 @@
  */
 package org.apache.causeway.security.spring.webmodule;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextListener;
-import javax.servlet.ServletException;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletContextListener;
+import jakarta.servlet.ServletException;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -31,6 +31,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.webapp.modules.WebModuleAbstract;
+import org.apache.causeway.security.spring.CausewayModuleSecuritySpring;
 
 import lombok.Getter;
 
@@ -40,21 +41,23 @@ import lombok.Getter;
  * @since 2.0 {@index}
  */
 @Service
-@Named("causeway.security.WebModuleSpringSecurity")
-@javax.annotation.Priority(PriorityPrecedence.FIRST + 100)
+@Named(WebModuleSpringSecurity.LOGICAL_TYPE_NAME)
+@jakarta.annotation.Priority(PriorityPrecedence.FIRST + 100)
 @Qualifier("Spring")
 public final class WebModuleSpringSecurity extends WebModuleAbstract {
+
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleSecuritySpring.NAMESPACE + ".WebModuleSpringSecurity";
 
     @Getter
     private final String name = "Spring Security Integration";
 
     @Inject
-    public WebModuleSpringSecurity(ServiceInjector serviceInjector) {
+    public WebModuleSpringSecurity(final ServiceInjector serviceInjector) {
         super(serviceInjector);
     }
 
     @Override
-    public Can<ServletContextListener> init(ServletContext ctx) throws ServletException {
+    public Can<ServletContextListener> init(final ServletContext ctx) throws ServletException {
 
         registerFilter(ctx, "SpringSecurityFilter", SpringSecurityFilter.class)
             .ifPresent(filterReg -> {

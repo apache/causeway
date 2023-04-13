@@ -83,12 +83,6 @@ implements EntityCollectionModel {
     }
 
     @Override
-    public int getPageSize() {
-        return getMetaModel().getPageSize()
-                .orElse(getVariant().getPageSizeDefault());
-    }
-
-    @Override
     public Identifier getIdentifier() {
         return getMetaModel().getFeatureIdentifier();
     }

@@ -20,7 +20,7 @@ package org.apache.causeway.viewer.restfulobjects.viewer.webmodule;
 
 import java.util.List;
 
-import javax.servlet.FilterConfig;
+import jakarta.servlet.FilterConfig;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

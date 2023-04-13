@@ -18,7 +18,7 @@
  */
 package demoapp.dom.types.causeway.localresourcepaths.persistence;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.value.LocalResourcePath;

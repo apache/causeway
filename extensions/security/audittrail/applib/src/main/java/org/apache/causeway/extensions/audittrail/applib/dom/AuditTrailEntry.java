@@ -25,7 +25,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.UUID;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
@@ -86,6 +86,15 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
         public static final String FIND_BY_TIMESTAMP_BEFORE = "findByTimestampBefore";
         public static final String FIND = "find";
         public static final String FIND_MOST_RECENT = LOGICAL_TYPE_NAME + ".findMostRecent";
+        public static final String FIND_BY_USERNAME_AND_TIMESTAMP_BETWEEN = "findByUsernameAndTimestampBetween";
+        public static final String FIND_BY_USERNAME_AND_TIMESTAMP_AFTER = "findByUsernameAndTimestampAfter";
+        public static final String FIND_BY_USERNAME_AND_TIMESTAMP_BEFORE = "findByUsernameAndTimestampBefore";
+        public static final String FIND_BY_USERNAME = "findByUsername";
+        public static final String FIND_BY_USERNAME_AND_TARGET_AND_TIMESTAMP_BETWEEN = "findByUsernameAndTargetAndTimestampBetween";
+        public static final String FIND_BY_USERNAME_AND_TARGET_AND_TIMESTAMP_AFTER = "findByUsernameAndTargetAndTimestampAfter";
+        public static final String FIND_BY_USERNAME_AND_TARGET_AND_TIMESTAMP_BEFORE = "findByUsernameAndTargetAndTimestampBefore";
+        public static final String FIND_BY_USERNAME_AND_TARGET = "findByUsernameAndTarget";
+        public static final String FIND_RECENT_BY_USERNAME = LOGICAL_TYPE_NAME + ".findRecentByUsername";
     }
 
     // -- UI & DOMAIN EVENTS

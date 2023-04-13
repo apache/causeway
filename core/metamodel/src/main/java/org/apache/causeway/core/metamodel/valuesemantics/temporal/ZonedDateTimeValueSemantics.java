@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.valuesemantics.temporal;
 import java.time.Duration;
 import java.time.ZonedDateTime;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Component;
 
@@ -30,7 +30,7 @@ import org.apache.causeway.commons.internal.base._Temporals;
 import org.apache.causeway.schema.common.v2.ValueType;
 
 @Component
-@Named("causeway.val.ZonedDateTimeValueSemantics")
+@Named("causeway.metamodel.value.ZonedDateTimeValueSemantics")
 //@Log4j2
 public class ZonedDateTimeValueSemantics
 extends TemporalValueSemanticsProvider<ZonedDateTime> {

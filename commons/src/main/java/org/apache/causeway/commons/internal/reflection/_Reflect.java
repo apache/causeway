@@ -107,6 +107,30 @@ public final class _Reflect {
                 || b.getReturnType().isAssignableFrom(a.getReturnType());
     }
 
+    /**
+     * If a and b are related, such that one overrides the other,
+     * that one which is overriding the other is returned.
+     * @implNote if both declaring type and return type are the same we (arbitrarily) return b
+     */
+    public static Method methodsWhichIsOverridingTheOther(final Method a, final Method b) {
+        val aType = a.getDeclaringClass();
+        val bType = b.getDeclaringClass();
+        if(aType.equals(bType)) {
+            val aReturn = a.getReturnType();
+            val bReturn = b.getReturnType();
+            if(aReturn.equals(bReturn)) {
+                // if a and b are not equal, this code path is expected unreachable
+                return b;
+            }
+            return aReturn.isAssignableFrom(bReturn)
+                    ? b
+                    : a;
+        }
+        return aType.isAssignableFrom(bType)
+                ? b
+                : a;
+    }
+
     // -- COMPARATORS
 
     /**
@@ -605,6 +629,42 @@ public final class _Reflect {
         }
         public Class<?> resolveFirstGenericTypeArgumentOnParameter(final int paramIndex) {
             return genericTypeArg(ResolvableType.forMethodParameter(method, paramIndex, implementingClass))
+                    .toClass();
+        }
+        // -- HELPER
+        private static ResolvableType genericTypeArg(final ResolvableType nonScalar){
+            val genericTypeArg = nonScalar.isArray()
+                    ? nonScalar.getComponentType()
+                    : nonScalar.getGeneric(0);
+            return genericTypeArg;
+        }
+    }
+
+    @lombok.Value(staticConstructor = "of")
+    public static class ConstructorAndImplementingClass {
+        final @NonNull Constructor<?> constructor;
+        final @NonNull Class<?> implementingClass;
+        /**
+         * [CAUSEWAY-3164] ensures reflection on generic type arguments works in a concurrent introspection setting
+         */
+        public Try<ConstructorAndImplementingClass> adopt(final @NonNull ClassLoader classLoader) {
+            try {
+                val ownerReloaded = Class.forName(implementingClass.getName(), true, classLoader);
+                val methodReloaded = ownerReloaded.getConstructor(constructor.getParameterTypes());
+                return Try.success(ConstructorAndImplementingClass.of(methodReloaded, ownerReloaded));
+            } catch (Throwable e) {
+                return Try.failure(e);
+            }
+        }
+        public Try<ConstructorAndImplementingClass> adoptIntoDefaultClassLoader() {
+            return adopt(_Context.getDefaultClassLoader());
+        }
+//        public Class<?> resolveFirstGenericTypeArgumentOnMethodReturn() {
+//            return genericTypeArg(ResolvableType.forConstructorParameter(executable, implementingClass))
+//                    .toClass();
+//        }
+        public Class<?> resolveFirstGenericTypeArgumentOnParameter(final int paramIndex) {
+            return genericTypeArg(ResolvableType.forConstructorParameter(constructor, paramIndex, implementingClass))
                     .toClass();
         }
         // -- HELPER

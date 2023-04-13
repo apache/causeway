@@ -18,10 +18,10 @@
  */
 package org.apache.causeway.core.metamodel.facets.objectvalue.digits;
 
-import javax.validation.constraints.Digits;
-
 import org.apache.causeway.applib.annotation.ValueSemantics;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
+
+import jakarta.validation.constraints.Digits;
 
 /**
  * Maximum length of digits for this decimal.

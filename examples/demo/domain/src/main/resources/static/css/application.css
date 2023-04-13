@@ -281,7 +281,40 @@ div.listingblock div.title {
 }
 
 /* customized Prism theme COY */
-.listingblock pre[class*="language-"]::after, 
+.listingblock pre[class*="language-"]::after,
 .listingblock pre[class*="language-"]::before {
 	box-shadow: none;
+}
+
+
+div.sectionbody > div.ulist {
+    margin-left: 10px;
+}
+
+tr.even.custom > td,
+tr.odd.custom > td,
+.entityPage.custom .iconAndTitle span
+{
+    font-style: italic;
+    color: orangered;
+}
+
+tr.even.custom1 > td,
+tr.odd.custom1 > td,
+.entityPage.custom1 .iconAndTitle span
+{
+    font-style: italic;
+    color: #00bf00;
+}
+
+tr.even.custom2 > td,
+tr.odd.custom2 > td,
+.entityPage.custom2 .iconAndTitle span
+{
+    font-style: italic;
+    color: blueviolet;
+}
+
+.line-through {
+    text-decoration: line-through;
 }

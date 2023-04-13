@@ -23,8 +23,8 @@ import java.util.Objects;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
-import javax.annotation.Priority;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Component;
 
@@ -48,7 +48,7 @@ import lombok.val;
  * due to auto-boxing also handles the primitive variant
  */
 @Component
-@Named("causeway.val.CharacterValueSemantics")
+@Named("causeway.metamodel.value.CharacterValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class CharacterValueSemantics
 extends ValueSemanticsAbstract<Character>

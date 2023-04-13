@@ -18,16 +18,19 @@
  */
 package org.apache.causeway.commons.io;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlType;
 
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -76,8 +79,11 @@ class JaxbUtilsTest {
         val aXml = JaxbUtils.toStringUtf8(a);
         val bXml = JaxbUtils.toStringUtf8(b);
 
-        val aRecovered = JaxbUtils.tryRead(A.class, aXml).ifFailureFail().ifAbsentFail().getValue().get();
-        val bRecovered = JaxbUtils.tryRead(B.class, bXml).ifFailureFail().ifAbsentFail().getValue().get();
+        assertTrue(_Strings.isNotEmpty(aXml));
+        assertTrue(_Strings.isNotEmpty(bXml));
+
+        val aRecovered = JaxbUtils.tryRead(A.class, aXml).valueAsNonNullElseFail();
+        val bRecovered = JaxbUtils.tryRead(B.class, bXml).valueAsNonNullElseFail();
 
         // then
         assertEquals(a, aRecovered);

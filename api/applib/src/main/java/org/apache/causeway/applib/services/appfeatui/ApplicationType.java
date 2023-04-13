@@ -25,9 +25,6 @@ import java.lang.annotation.Target;
 import java.util.List;
 import java.util.SortedSet;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.Collection;
@@ -35,6 +32,9 @@ import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
+
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 /**
  * @since 2.x  {@index}

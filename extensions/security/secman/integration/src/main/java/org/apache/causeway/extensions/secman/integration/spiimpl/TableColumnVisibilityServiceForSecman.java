@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.extensions.secman.integration.spiimpl;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -39,7 +39,7 @@ import lombok.val;
 
 @Service
 @Named(CausewayModuleExtSecmanApplib.NAMESPACE + ".TableColumnVisibilityServiceForSecman")
-@javax.annotation.Priority(PriorityPrecedence.LATE - 10)
+@jakarta.annotation.Priority(PriorityPrecedence.LATE - 10)
 @Qualifier("Secman")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class TableColumnVisibilityServiceForSecman implements TableColumnVisibilityService {

@@ -22,19 +22,20 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.function.UnaryOperator;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.Request;
-import javax.ws.rs.core.SecurityContext;
-import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.ext.Providers;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.Request;
+import jakarta.ws.rs.core.SecurityContext;
+import jakarta.ws.rs.core.UriInfo;
+import jakarta.ws.rs.ext.Providers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.codec._UrlDecoderUtil;
@@ -48,7 +49,7 @@ import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse.HttpStat
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.causeway.viewer.restfulobjects.rendering.UrlDecoderUtils;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
-import org.apache.causeway.viewer.restfulobjects.rendering.util.Util;
+import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestParams;
 import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
 
 import lombok.Getter;
@@ -85,22 +86,24 @@ implements HasMetaModelContext {
 
     protected ResourceContext createResourceContext(final ResourceDescriptor resourceDescriptor) {
         String queryStringIfAny = getUrlDecodedQueryStringIfAny();
-        return createResourceContext(resourceDescriptor, queryStringIfAny);
+        return createResourceContext(resourceDescriptor, RequestParams.ofQueryString(queryStringIfAny));
     }
 
     protected ResourceContext createResourceContext(
             final ResourceDescriptor resourceDescriptor,
             final InputStream arguments) {
 
-        final String urlDecodedQueryString = Util.asStringUtf8(arguments);
+        val urlDecodedQueryString = RequestParams.ofRequestBody(arguments);
         return createResourceContext(resourceDescriptor, urlDecodedQueryString);
     }
 
     protected ResourceContext createResourceContext(
             final ResourceDescriptor resourceDescriptor,
-            final String urlUnencodedQueryString) {
+            final RequestParams requestParams) {
 
-        if (!getInteractionService().isInInteraction()) {
+        _Assert.assertNotNull(metaModelContext, ()->"injection points not resolved for " + this.getClass());
+
+        if (!metaModelContext.getInteractionService().isInInteraction()) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED);
         }
 
@@ -127,7 +130,7 @@ implements HasMetaModelContext {
                 resourceDescriptor,
                 applicationAbsoluteBase,
                 restfulAbsoluteBase,
-                urlUnencodedQueryString,
+                requestParams,
                 httpServletRequest.getParameterMap());
     }
 
@@ -167,7 +170,7 @@ implements HasMetaModelContext {
             final ResourceDescriptor resourceDescriptor,
             final String applicationAbsoluteBase,
             final String restfulAbsoluteBase,
-            final String urlUnencodedQueryString,
+            final RequestParams urlUnencodedQueryString,
             final Map<String, String[]> requestParams) {
 
         return new ResourceContext(

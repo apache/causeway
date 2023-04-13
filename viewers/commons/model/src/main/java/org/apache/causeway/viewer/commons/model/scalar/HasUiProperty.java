@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.viewer.commons.model.scalar;
 
+import java.util.Optional;
+
+import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.causeway.core.metamodel.interactions.managed.PropertyNegotiationModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -54,8 +57,8 @@ public interface HasUiProperty extends UiProperty {
     }
 
     @Override
-    default String disableReasonIfAny() {
-        return getUiProperty().disableReasonIfAny();
+    default Optional<InteractionVeto> disabledReason() {
+        return getUiProperty().disabledReason();
     }
 
 }

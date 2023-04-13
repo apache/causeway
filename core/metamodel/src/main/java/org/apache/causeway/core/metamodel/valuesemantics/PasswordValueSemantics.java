@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.valuesemantics;
 
-import javax.annotation.Priority;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Component;
 
@@ -36,7 +36,7 @@ import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 
 @Component
-@Named("causeway.val.PasswordValueSemantics")
+@Named("causeway.metamodel.value.PasswordValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class PasswordValueSemantics
 extends ValueSemanticsAbstract<Password>

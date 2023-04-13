@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.Collections;
 import java.util.List;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Collection;
@@ -43,16 +43,14 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepos
  *
  * @since 2.0 {@index}
  */
-@Collection
+@Collection(domainEvent = T_recentBackgroundCommands.CollectionDomainEvent.class)
 @RequiredArgsConstructor
 public abstract class T_recentBackgroundCommands<T> {
 
     private final T domainObject;
 
-    public static class ActionDomainEvent extends CausewayModuleExtCommandLogApplib.ActionDomainEvent<T_recentBackgroundCommands> { }
-    @Action(
-            domainEvent = ActionDomainEvent.class
-    )
+    public static class CollectionDomainEvent extends CausewayModuleExtCommandLogApplib.CollectionDomainEvent<T_recentBackgroundCommands, CommandLogEntry> { }
+
     @MemberSupport public List<? extends CommandLogEntry> coll() {
         return bookmarkService.bookmarkFor(domainObject)
                 .map(bookmark -> queryResultsCache.execute(

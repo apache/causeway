@@ -7,14 +7,13 @@
 .MemberExecutionDtoUtils.java
 ----
 class MemberExecutionDtoUtils {
-  T clone(T dto)
+  void init()
+  DtoMapper<MemberExecutionDto> dtoMapper(Class<T> dtoClass)
   MetricsDto metricsFor(MemberExecutionDto executionDto)
   PeriodDto timingsFor(MetricsDto metricsDto)
   ObjectCountsDto objectCountsFor(MetricsDto metricsDto)
   DifferenceDto numberObjectsLoadedFor(ObjectCountsDto objectCountsDto)
   DifferenceDto numberObjectsDirtiedFor(ObjectCountsDto objectCountsDto)
-  String toXml(T dto)
-  void toXml(T dto, Writer writer)
 }
 ----
 

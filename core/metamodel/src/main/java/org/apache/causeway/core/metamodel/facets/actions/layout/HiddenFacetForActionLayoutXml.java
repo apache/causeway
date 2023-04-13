@@ -32,19 +32,21 @@ extends HiddenFacetAbstract {
 
     public static Optional<HiddenFacet> create(
             final ActionLayoutData actionLayout,
-            final FacetHolder holder) {
+            final FacetHolder holder,
+            final Precedence precedence) {
         if (actionLayout == null) {
             return Optional.empty();
         }
         final Where where = actionLayout.getHidden();
         return where != null
                 && where != Where.NOT_SPECIFIED
-                        ? Optional.of(new HiddenFacetForActionLayoutXml(where, holder))
+                        ? Optional.of(new HiddenFacetForActionLayoutXml(where, holder, precedence))
                         : Optional.empty();
     }
 
-    private HiddenFacetForActionLayoutXml(final Where where, final FacetHolder holder) {
-        super(where, holder);
+    private HiddenFacetForActionLayoutXml(
+            final Where where, final FacetHolder holder, final Precedence precedence) {
+        super(where, holder, precedence);
     }
 
     @Override

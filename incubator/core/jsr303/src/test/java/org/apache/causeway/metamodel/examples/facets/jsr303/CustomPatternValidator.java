@@ -19,7 +19,7 @@
 
 package org.apache.causeway.core.metamodel.examples.facets.jsr303;
 
-import javax.validation.Constraint;
+import jakarta.validation.Constraint;
 
 
 public class CustomPatternValidator implements Constraint<CustomPattern> {

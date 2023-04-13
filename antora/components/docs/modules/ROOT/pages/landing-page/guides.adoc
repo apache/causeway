@@ -10,7 +10,6 @@ The following guide helps you setup your development environment so you can quic
 
 * xref:setupguide:ROOT:about.adoc[Setup Guide]
 
-
 == Core
 
 The core guides describe how to write domain applications:
@@ -30,8 +29,15 @@ How to write unit tests, integration tests and BDD (Cucumber) tests, and how to 
 
 == Security
 
-In addition:
+The xref:security:ROOT:about.adoc[Security Guide] describes the security architecture and explains how to configure each of the various security components that integrate with Apache Causeway.
 
-* *xref:security:ROOT:about.adoc[Security Guide]*
-+
-Describes how to configure each of the various security implementations that integrate with Apache Causeway.
+
+== Value Types
+
+The xref:valuetypes::about.adoc[] guide catalogs a number of rich value types that you can use in your application.
+
+
+== Contributing
+
+If you would like to start contributing back to the framework's development, then the xref:conguide::about.adoc[] explains how to compile the framework and how to use git to commit changes and raise PRs.
+

@@ -21,10 +21,10 @@ package org.apache.causeway.testing.fakedata.applib.services;
 import java.util.Locale;
 import java.util.Random;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import com.github.javafaker.Faker;
 import com.github.javafaker.service.FakeValuesService;
@@ -50,7 +50,7 @@ import org.apache.causeway.applib.services.repository.RepositoryService;
  * @since 2.0 {@index}
  */
 @Service
-@Named("causeway.test.FakeDataService")
+@Named("causeway.testing.FakeDataService")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class FakeDataService {

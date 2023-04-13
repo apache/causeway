@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor
+	license agreements. See the NOTICE file distributed with this work for additional
+	information regarding copyright ownership. The ASF licenses this file to
+	you under the Apache License, Version 2.0 (the "License"); you may not use
+	this file except in compliance with the License. You may obtain a copy of
+	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required
+	by applicable law or agreed to in writing, software distributed under the
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS
+	OF ANY KIND, either express or implied. See the License for the specific
+	language governing permissions and limitations under the License. -->
+<xs:schema
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:cpt="http://isis.apache.org/applib/layout/component"
+        xmlns:tns="http://isis.apache.org/applib/layout/grid/bootstrap3"
+        elementFormDefault="qualified"
+        targetNamespace="http://isis.apache.org/applib/layout/grid/bootstrap3"
+        version="1.0">
+
+    <xs:import
+            namespace="http://isis.apache.org/applib/layout/component"
+            schemaLocation="../../component/component.xsd"/>
+
+    <xs:import
+            namespace="http://isis.apache.org/applib/layout/links"
+            schemaLocation="../../links/links.xsd"/>
+
+    <xs:element name="clearFixHidden" type="tns:clearFixHidden"/>
+
+    <xs:element name="clearFixVisible" type="tns:clearFixVisible"/>
+
+    <xs:element name="col" type="tns:col"/>
+
+    <xs:element name="grid" type="tns:grid"/>
+
+    <xs:complexType name="grid">
+        <xs:sequence>
+            <xs:element maxOccurs="unbounded" name="row" type="tns:row"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="metadataError" type="xs:string"/>
+        </xs:sequence>
+        <xs:attribute name="cssClass" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="row">
+        <xs:complexContent>
+            <xs:extension base="tns:bs3ElementAbstract">
+                <xs:sequence>
+                    <xs:choice maxOccurs="unbounded" minOccurs="0">
+                        <xs:element ref="tns:col"/>
+                        <xs:element ref="tns:clearFixVisible"/>
+                        <xs:element ref="tns:clearFixHidden"/>
+                    </xs:choice>
+                    <xs:element minOccurs="0" name="metadataError" type="xs:string"/>
+                </xs:sequence>
+                <xs:attribute name="id" type="xs:string"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType abstract="true" name="bs3ElementAbstract">
+        <xs:sequence/>
+        <xs:attribute name="cssClass" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="col">
+        <xs:complexContent>
+            <xs:extension base="tns:bs3RowContent">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="sizeSpan" type="tns:sizeSpan"/>
+                    <xs:element minOccurs="0" ref="cpt:domainObject"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" ref="cpt:action"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="row" type="tns:row"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="tabGroup" type="tns:tabGroup"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" ref="cpt:fieldSet"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" ref="cpt:collection"/>
+                    <xs:element minOccurs="0" name="metadataError" type="xs:string"/>
+                </xs:sequence>
+                <xs:attribute name="id" type="xs:string"/>
+                <xs:attribute name="span" type="xs:int" use="required"/>
+                <xs:attribute name="unreferencedActions" type="xs:boolean"/>
+                <xs:attribute name="unreferencedCollections" type="xs:boolean"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType abstract="true" name="bs3RowContent">
+        <xs:complexContent>
+            <xs:extension base="tns:bs3ElementAbstract">
+                <xs:sequence/>
+                <xs:attribute name="size" type="tns:size"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="sizeSpan">
+        <xs:all/>
+        <xs:attribute name="offset" type="xs:boolean"/>
+        <xs:attribute name="size" type="tns:size" use="required"/>
+        <xs:attribute name="span" type="xs:int" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="tabGroup">
+        <xs:complexContent>
+            <xs:extension base="tns:bs3ElementAbstract">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="tab" type="tns:tab"/>
+                    <xs:element minOccurs="0" name="metadataError" type="xs:string"/>
+                </xs:sequence>
+                <xs:attribute name="collapseIfOne" type="xs:boolean"/>
+                <xs:attribute name="unreferencedCollections" type="xs:boolean"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="tab">
+        <xs:complexContent>
+            <xs:extension base="tns:bs3ElementAbstract">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" name="row" type="tns:row"/>
+                </xs:sequence>
+                <xs:attribute name="name" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="clearFixVisible">
+        <xs:complexContent>
+            <xs:extension base="tns:bs3ClearFix">
+                <xs:sequence/>
+                <xs:attribute name="cssDisplay" type="tns:cssDisplay" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType abstract="true" name="bs3ClearFix">
+        <xs:complexContent>
+            <xs:extension base="tns:bs3RowContent">
+                <xs:sequence/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="clearFixHidden">
+        <xs:complexContent>
+            <xs:extension base="tns:bs3ClearFix">
+                <xs:sequence/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:simpleType name="size">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="XS"/>
+            <xs:enumeration value="SM"/>
+            <xs:enumeration value="MD"/>
+            <xs:enumeration value="LG"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="cssDisplay">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="BLOCK"/>
+            <xs:enumeration value="INLINE"/>
+            <xs:enumeration value="INLINE_BLOCK"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

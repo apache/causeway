@@ -113,7 +113,6 @@ public class Customers {
     protected final CustomerRepository customerRepository;      // <.>
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT)
     public List<Customer> findByName(                           // <.>
             @ParameterLayout(named="Name")                      // <.>
             final String name ) {

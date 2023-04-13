@@ -46,6 +46,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
+import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Timing;
 import org.apache.causeway.commons.internal.debug._Debug;
@@ -66,16 +68,12 @@ import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistr
 import org.apache.causeway.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
 import org.apache.causeway.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
 import org.apache.causeway.viewer.wicket.ui.components.actionpromptsb.ActionPromptSidebar;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.image.JavaAwtImagePanelCssResourceReference;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.causeway.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.causeway.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.causeway.viewer.wicket.ui.pages.common.bootstrap.css.BootstrapOverridesCssResourceReference;
-import org.apache.causeway.viewer.wicket.ui.pages.common.datatables.DatatablesCssBootstrap5ReferenceWkt;
-import org.apache.causeway.viewer.wicket.ui.pages.common.datatables.DatatablesCssReferenceWkt;
-import org.apache.causeway.viewer.wicket.ui.pages.common.datatables.DatatablesJavaScriptBootstrap5ReferenceWkt;
-import org.apache.causeway.viewer.wicket.ui.pages.common.datatables.DatatablesJavaScriptReferenceWkt;
-import org.apache.causeway.viewer.wicket.ui.pages.common.datatables.DatatablesJavaScriptResourceReferenceInit;
 import org.apache.causeway.viewer.wicket.ui.pages.common.fontawesome.FontAwesomeCssReferenceWkt;
 import org.apache.causeway.viewer.wicket.ui.pages.common.livequery.js.LiveQueryJsResourceReference;
 import org.apache.causeway.viewer.wicket.ui.pages.common.sidebar.css.SidebarCssResourceReference;
@@ -243,17 +241,12 @@ implements ActionPromptProvider {
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(BootstrapJavaScriptReference.instance())));
         response.render(FontAwesomeCssReferenceWkt.asHeaderItem());
 
-        response.render(DatatablesJavaScriptReferenceWkt.asHeaderItem());
-        response.render(DatatablesJavaScriptBootstrap5ReferenceWkt.asHeaderItem());
-        response.render(DatatablesCssReferenceWkt.asHeaderItem());
-        response.render(DatatablesCssBootstrap5ReferenceWkt.asHeaderItem());
-        response.render(DatatablesJavaScriptResourceReferenceInit.instance(getConfiguration()));
-
         response.render(BootstrapOverridesCssResourceReference.asHeaderItem());
         BootstrapOverridesCssResourceReference
             .contributeThemeSpecificOverrides(getApplication(), response);
 
         response.render(SidebarCssResourceReference.asHeaderItem());
+        response.render(JavaAwtImagePanelCssResourceReference.asHeaderItem());
 
         response.render(LiveQueryJsResourceReference.asHeaderItem());
         response.render(CausewayWicketViewerJsResourceReference.asHeaderItem());
@@ -481,11 +474,20 @@ implements ActionPromptProvider {
         return cfra.getComponentFactoryRegistry();
     }
 
-
     // -- RE-ATTACH ENTITIES
 
     @Override
     public void renderPage() {
+
+        val pageType = Optional.ofNullable(getPageClassRegistry().getPageType(this))
+                .map(PageType::asApplibPageType)
+                .orElse(PageRenderSubscriber.PageType.OTHER);
+
+        val enabledPageRenderSubscribers = enabledPageRenderSubscriber();
+
+        enabledPageRenderSubscribers
+                .forEach(subscriber -> subscriber.onRendering(pageType));
+
         if(XrayUi.isXrayEnabled()){
             _Debug.log("about to render %s ..", this.getClass().getSimpleName());
             val stopWatch = _Timing.now();
@@ -497,6 +499,8 @@ implements ActionPromptProvider {
             onNewRequestCycle();
             super.renderPage();
         }
+
+        onRendered(enabledPageRenderSubscribers);
     }
 
     /**
@@ -506,6 +510,21 @@ implements ActionPromptProvider {
      */
     public void onNewRequestCycle() {
         // implemented only by EntityPage
+    }
+
+    /**
+     * Hook to call {@link PageRenderSubscriber} implementations
+     *
+     * @param enabledObjectRenderSubscribers  - those {@link PageRenderSubscriber}s that are {@link PageRenderSubscriber#isEnabled() enabled}
+     */
+    protected void onRendered(final Can<PageRenderSubscriber> enabledObjectRenderSubscribers) {
+    }
+
+    // -- HELPER
+
+    private Can<PageRenderSubscriber> enabledPageRenderSubscriber() {
+        return getServiceRegistry().select(PageRenderSubscriber.class)
+                .filter(PageRenderSubscriber::isEnabled);
     }
 
 }

@@ -20,14 +20,12 @@ package org.apache.causeway.testing.archtestsupport.applib.classrules;
 
 import java.util.Optional;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import com.tngtech.archunit.core.domain.JavaClass;
 
-import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.commons.internal.base._Strings;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -40,18 +38,12 @@ class _LogicalNaming {
 
     public Optional<String> explicitLogicalNameFor(final JavaClass javaClass) {
 
-        val domainObjectIfAny = javaClass.tryGetAnnotationOfType(DomainObject.class);
-        String logicalTypeName = null;
-        if (domainObjectIfAny.isPresent()) {
-            logicalTypeName = _Strings.emptyToNull(domainObjectIfAny.get().logicalTypeName());
-        }
-        // override on presence
-        val namedIfAny = javaClass.tryGetAnnotationOfType(Named.class);
-        if (namedIfAny.isPresent()) {
-            logicalTypeName = namedIfAny.get().value();
-        }
+        final String nullableLogicalTypeName = javaClass
+                .tryGetAnnotationOfType(Named.class)
+                .map(Named::value)
+                .orElse(null);
 
-        return _Strings.nonEmpty(logicalTypeName);
+        return _Strings.nonEmpty(nullableLogicalTypeName);
 
     }
 

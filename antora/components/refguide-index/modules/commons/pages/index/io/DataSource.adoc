@@ -1,0 +1,248 @@
+= DataSource
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+General purpose readable byte data source.
+
+== API
+
+[source,java]
+.DataSource.java
+----
+interface DataSource {
+  Try<T> tryReadAll(Function<InputStream, Try<T>> consumingMapper)
+  Try<T> tryReadAndApply(ThrowingFunction<InputStream, T> inputStreamMapper)     // <.>
+  Try<Void> tryReadAndAccept(ThrowingConsumer<InputStream> inputStreamConsumer)     // <.>
+  Try<byte[]> tryReadAsBytes()     // <.>
+  byte[] bytes()     // <.>
+  Try<String> tryReadAsString(Charset charset)     // <.>
+  Try<String> tryReadAsStringUtf8()     // <.>
+  Try<Can<String>> tryReadAsLines(Charset charset)     // <.>
+  Try<Can<String>> tryReadAsLinesUtf8()     // <.>
+  Try<BufferedImage> tryReadAsImage()
+  Try<HashUtils.Hash> tryHash(HashAlgorithm hashAlgorithm)
+  Try<HashUtils.Hash> tryMd5()
+  String md5Hex()
+  Try<Void> tryReadAndWrite(DataSink dataSink, int bufferSize)     // <.>
+  void pipe(DataSink dataSink, int bufferSize)     // <.>
+  DataSource empty()     // <.>
+  DataSource ofInputStreamSupplier(ThrowingSupplier<InputStream> inputStreamSupplier)     // <.>
+  DataSource ofInputStreamEagerly(InputStream inputStream)     // <.>
+  DataSource ofResource(Class<?> cls, String resourcePath)     // <.>
+  DataSource ofSpringResource(Resource springResource)     // <.>
+  DataSource ofFile(File file)     // <.>
+  DataSource ofString(String string, Charset charset)     // <.>
+  DataSource ofStringUtf8(String string)     // <.>
+  DataSource ofBytes(byte[] bytes)     // <.>
+}
+----
+
+<.> xref:#tryReadAndApply_ThrowingFunction[tryReadAndApply(ThrowingFunction)]
++
+--
+Passes an _InputStream_ to given _Function_ for application.
+--
+<.> xref:#tryReadAndAccept_ThrowingConsumer[tryReadAndAccept(ThrowingConsumer)]
++
+--
+Passes an _InputStream_ to given _Consumer_ for consumption.
+--
+<.> xref:#tryReadAsBytes_[tryReadAsBytes()]
++
+--
+Reads from this DataSource into a String using given charset encoding.
+--
+<.> xref:#bytes_[bytes()]
++
+--
+Shortcut for _tryReadAsBytes().valueAsNonNullElseFail()_ .
+--
+<.> xref:#tryReadAsString_Charset[tryReadAsString(Charset)]
++
+--
+Reads from this DataSource into a String using given charset encoding.
+--
+<.> xref:#tryReadAsStringUtf8_[tryReadAsStringUtf8()]
++
+--
+Reads from this DataSource into a String using UTF-8 encoding.
+--
+<.> xref:#tryReadAsLines_Charset[tryReadAsLines(Charset)]
++
+--
+Reads from this DataSource all lines using given charset encoding.
+--
+<.> xref:#tryReadAsLinesUtf8_[tryReadAsLinesUtf8()]
++
+--
+Reads from this DataSource all lines using UTF-8 encoding.
+--
+<.> xref:#tryReadAndWrite_DataSink_int[tryReadAndWrite(DataSink, int)]
++
+--
+Acts as a pipe, reading from this xref:refguide:commons:index/io/DataSource.adoc[DataSource] and writing to given xref:refguide:commons:index/io/DataSink.adoc[DataSink] , using given bufferSize for the underlying byte data junks.
+--
+<.> xref:#pipe_DataSink_int[pipe(DataSink, int)]
++
+--
+Acts as a pipe, reading from this xref:refguide:commons:index/io/DataSource.adoc[DataSource] and writing to given xref:refguide:commons:index/io/DataSink.adoc[DataSink] , using given bufferSize for the underlying byte data junks.
+--
+<.> xref:#empty_[empty()]
++
+--
+Acts as a no-op.
+--
+<.> xref:#ofInputStreamSupplier_ThrowingSupplier[ofInputStreamSupplier(ThrowingSupplier)]
++
+--
+Creates a xref:refguide:commons:index/io/DataSource.adoc[DataSource] for given InputStream Supplier.
+--
+<.> xref:#ofInputStreamEagerly_InputStream[ofInputStreamEagerly(InputStream)]
++
+--
+Creates a xref:refguide:commons:index/io/DataSource.adoc[DataSource] for given _InputStream_ eagerly. That is, it reads the InputStream into a byte array, which can be later read from repeatedly.
+--
+<.> xref:#ofResource_Class_String[ofResource(Class, String)]
++
+--
+Creates a xref:refguide:commons:index/io/DataSource.adoc[DataSource] for given resource path relative to _Class_ .
+--
+<.> xref:#ofSpringResource_Resource[ofSpringResource(Resource)]
++
+--
+Creates a xref:refguide:commons:index/io/DataSource.adoc[DataSource] for given Spring _Resource_ .
+--
+<.> xref:#ofFile_File[ofFile(File)]
++
+--
+Creates a xref:refguide:commons:index/io/DataSource.adoc[DataSource] for given _File_ . If `null` , an 'empty' DataSource is returned.
+--
+<.> xref:#ofString_String_Charset[ofString(String, Charset)]
++
+--
+Creates a xref:refguide:commons:index/io/DataSource.adoc[DataSource] for given _String_ . If `null` or empty, an 'empty' DataSource is returned.
+--
+<.> xref:#ofStringUtf8_String[ofStringUtf8(String)]
++
+--
+Creates a xref:refguide:commons:index/io/DataSource.adoc[DataSource] for given _String_ . If `null` or empty, an 'empty' DataSource is returned.
+--
+<.> xref:#ofBytes_byte[ofBytes(byte)]
++
+--
+Creates a xref:refguide:commons:index/io/DataSource.adoc[DataSource] for given byte array. If `null` or empty, an 'empty' DataSource is returned.
+--
+
+== Members
+
+[#tryReadAndApply_ThrowingFunction]
+=== tryReadAndApply(ThrowingFunction)
+
+Passes an _InputStream_ to given _Function_ for application.
+
+[#tryReadAndAccept_ThrowingConsumer]
+=== tryReadAndAccept(ThrowingConsumer)
+
+Passes an _InputStream_ to given _Consumer_ for consumption.
+
+[#tryReadAsBytes_]
+=== tryReadAsBytes()
+
+Reads from this DataSource into a String using given charset encoding.
+
+If the underlying _InputStream_ is null a success xref:refguide:commons:index/functional/Try.adoc[Try] is returned, containing a null value.
+
+[#bytes_]
+=== bytes()
+
+Shortcut for _tryReadAsBytes().valueAsNonNullElseFail()_ .
+
+[#tryReadAsString_Charset]
+=== tryReadAsString(Charset)
+
+Reads from this DataSource into a String using given charset encoding.
+
+If the underlying _InputStream_ is null a success xref:refguide:commons:index/functional/Try.adoc[Try] is returned, containing a null value.
+
+[#tryReadAsStringUtf8_]
+=== tryReadAsStringUtf8()
+
+Reads from this DataSource into a String using UTF-8 encoding.
+
+If the underlying _InputStream_ is null a success xref:refguide:commons:index/functional/Try.adoc[Try] is returned, containing a null value.
+
+[#tryReadAsLines_Charset]
+=== tryReadAsLines(Charset)
+
+Reads from this DataSource all lines using given charset encoding.
+
+If the underlying _InputStream_ is null a success xref:refguide:commons:index/functional/Try.adoc[Try] is returned, containing a null value.
+
+[#tryReadAsLinesUtf8_]
+=== tryReadAsLinesUtf8()
+
+Reads from this DataSource all lines using UTF-8 encoding.
+
+If the underlying _InputStream_ is null a success xref:refguide:commons:index/functional/Try.adoc[Try] is returned, containing a null value.
+
+[#tryReadAndWrite_DataSink_int]
+=== tryReadAndWrite(DataSink, int)
+
+Acts as a pipe, reading from this xref:refguide:commons:index/io/DataSource.adoc[DataSource] and writing to given xref:refguide:commons:index/io/DataSink.adoc[DataSink] , using given bufferSize for the underlying byte data junks.
+
+[#pipe_DataSink_int]
+=== pipe(DataSink, int)
+
+Acts as a pipe, reading from this xref:refguide:commons:index/io/DataSource.adoc[DataSource] and writing to given xref:refguide:commons:index/io/DataSink.adoc[DataSink] , using given bufferSize for the underlying byte data junks.
+
+Throws if the write failed.
+
+[#empty_]
+=== empty()
+
+Acts as a no-op.
+
+[#ofInputStreamSupplier_ThrowingSupplier]
+=== ofInputStreamSupplier(ThrowingSupplier)
+
+Creates a xref:refguide:commons:index/io/DataSource.adoc[DataSource] for given InputStream Supplier.
+
+[#ofInputStreamEagerly_InputStream]
+=== ofInputStreamEagerly(InputStream)
+
+Creates a xref:refguide:commons:index/io/DataSource.adoc[DataSource] for given _InputStream_ eagerly. That is, it reads the InputStream into a byte array, which can be later read from repeatedly.
+
+If reading from given _InputStream_ throws any exception, it is propagated without catching.
+
+[#ofResource_Class_String]
+=== ofResource(Class, String)
+
+Creates a xref:refguide:commons:index/io/DataSource.adoc[DataSource] for given resource path relative to _Class_ .
+
+If any of the args is null (or empty), returns an 'empty' xref:refguide:commons:index/io/DataSource.adoc[DataSource] .
+
+[#ofSpringResource_Resource]
+=== ofSpringResource(Resource)
+
+Creates a xref:refguide:commons:index/io/DataSource.adoc[DataSource] for given Spring _Resource_ .
+
+If the single argument is null, returns an 'empty' xref:refguide:commons:index/io/DataSource.adoc[DataSource] .
+
+[#ofFile_File]
+=== ofFile(File)
+
+Creates a xref:refguide:commons:index/io/DataSource.adoc[DataSource] for given _File_ . If `null` , an 'empty' DataSource is returned.
+
+[#ofString_String_Charset]
+=== ofString(String, Charset)
+
+Creates a xref:refguide:commons:index/io/DataSource.adoc[DataSource] for given _String_ . If `null` or empty, an 'empty' DataSource is returned.
+
+[#ofStringUtf8_String]
+=== ofStringUtf8(String)
+
+Creates a xref:refguide:commons:index/io/DataSource.adoc[DataSource] for given _String_ . If `null` or empty, an 'empty' DataSource is returned.
+
+[#ofBytes_byte]
+=== ofBytes(byte)
+
+Creates a xref:refguide:commons:index/io/DataSource.adoc[DataSource] for given byte array. If `null` or empty, an 'empty' DataSource is returned.

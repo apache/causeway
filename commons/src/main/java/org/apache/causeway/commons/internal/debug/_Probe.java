@@ -24,7 +24,6 @@ import java.util.concurrent.atomic.LongAdder;
 import java.util.stream.Collectors;
 
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.base._With;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.val;
@@ -232,7 +231,7 @@ public class _Probe {
             }
         });
         return _Strings.splitThenStream(name[0], ".")
-                .map(part->_With.mapIfPresentElse(abbreviations.get(part), value->value, part))
+                .map(part->_Strings.nonEmpty(abbreviations.get(part)).orElse(part))
                 .collect(Collectors.joining("."));
     }
 

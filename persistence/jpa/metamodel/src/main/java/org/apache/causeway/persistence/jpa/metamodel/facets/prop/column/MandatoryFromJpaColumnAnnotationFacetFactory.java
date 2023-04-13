@@ -20,9 +20,9 @@ package org.apache.causeway.persistence.jpa.metamodel.facets.prop.column;
 
 import java.util.Optional;
 
-import javax.inject.Inject;
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
+import jakarta.inject.Inject;
+import jakarta.persistence.Column;
+import jakarta.persistence.JoinColumn;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;

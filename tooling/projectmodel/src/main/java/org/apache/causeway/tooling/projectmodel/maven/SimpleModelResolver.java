@@ -37,7 +37,7 @@ import org.apache.maven.model.resolution.InvalidRepositoryException;
 import org.apache.maven.model.resolution.ModelResolver;
 import org.apache.maven.model.resolution.UnresolvableModelException;
 
-import org.apache.causeway.commons.internal.base._Files;
+import org.apache.causeway.commons.io.FileUtils;
 
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -170,7 +170,7 @@ public class SimpleModelResolver implements ModelResolver {
 
         val localRootPath = projectRoot.getCanonicalPath();
 
-        _Files.searchFiles(projectRoot,
+        FileUtils.searchFiles(projectRoot,
                 file->
                     !file.getName().startsWith(".")
                     && !directoriesToIgnore.contains(file.getName()),

@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.facets.collections.collection;
 
 import java.util.Optional;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.SemanticsOf;
@@ -33,7 +33,6 @@ import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet.Contributing;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.collections.collection.hidden.HiddenFacetForCollectionAnnotation;
 import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetDefault;
 import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetForCollectionAnnotation;
@@ -66,7 +65,6 @@ extends FacetFactoryAbstract {
         inferIntentWhenOnTypeLevel(processMethodContext, collectionIfAny);
 
         processModify(processMethodContext, collectionIfAny);
-        processHidden(processMethodContext, collectionIfAny);
         processTypeOf(processMethodContext, collectionIfAny);
     }
 
@@ -144,17 +142,6 @@ extends FacetFactoryAbstract {
         }
         return collectionDomainEventType;
     }
-
-
-    void processHidden(final ProcessMethodContext processMethodContext, final Optional<Collection> collectionIfAny) {
-        val holder = processMethodContext.getFacetHolder();
-
-        // check for @Collection(hidden=...)
-        addFacetIfPresent(
-                HiddenFacetForCollectionAnnotation
-                .create(collectionIfAny, holder));
-    }
-
 
     void processTypeOf(final ProcessMethodContext processMethodContext, final Optional<Collection> collectionIfAny) {
 

@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.extensions.secman.jdo.user.dom;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Repository;
 
