@@ -19,19 +19,14 @@
 package demoapp.dom.domain.actions.ActionLayout.cssClassFa;
 
 import javax.inject.Named;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.*;
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import lombok.Getter;
+import lombok.Setter;
 
 //tag::class[]
 @DomainObject(
@@ -46,15 +41,19 @@ public class ActionLayoutCssClassFaPage implements HasAsciiDocDescription {
         return "@ActionLayout#cssClassFa";
     }
 
+    @Property
+    @XmlElement
+    @Getter
+    @Setter
+    private String name;
+
+
 //tag::actLeftAndRight[]
     @Action
     @ActionLayout(
             cssClassFa = "fa-bus"                         // <.>
-//end::actLeftAndRight[]
-            ,describedAs = "@ActionLayout(cssClassFa = \"fa-bus\")"
-//tag::actLeftAndRight[]
             )
-    public Object actLeft(final String arg) {
+    public Object actionWithFaIconOnTheLeft(final String arg) {
         return this;
     }
 
