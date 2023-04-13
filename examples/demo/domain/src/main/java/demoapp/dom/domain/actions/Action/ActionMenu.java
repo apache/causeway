@@ -18,6 +18,16 @@
  */
 package demoapp.dom.domain.actions.Action;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.DomainService;
+import org.apache.causeway.applib.annotation.NatureOfService;
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.annotation.SemanticsOf;
+
 import demoapp.dom._infra.samples.NameSamples;
 import demoapp.dom.domain.actions.Action.choicesFrom.ActionChoicesFromPage;
 import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingPage;
@@ -30,11 +40,6 @@ import demoapp.dom.domain.actions.Action.typeOf.ActionTypeOfPage;
 import demoapp.dom.domain.actions.Action.typeOf.child.ActionTypeOfChildVm;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.apache.causeway.applib.annotation.*;
 
 @Named("demo.ActionMenu")
 @DomainService(nature=NatureOfService.VIEW)
@@ -95,6 +100,5 @@ public class ActionMenu {
                 .forEach(e -> page.getChildren().add(e));
         return page;
     }
-
 
 }

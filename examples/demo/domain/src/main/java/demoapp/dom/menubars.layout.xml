@@ -45,7 +45,6 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
                 <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="describedAs"/>
                 <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="named"/>
                 <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="paged"/>
-                <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="plural"/>
                 <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="tableDecorator"/>
                 <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="uiEvents"/>
             </mb3:section>
@@ -67,7 +66,6 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
             <mb3:section>
                 <mb3:named>@ActionLayout</mb3:named>
                 <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="associateWith"/>
-                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="bookmarking"/>
                 <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="cssClass"/>
                 <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="cssClassFa"/>
                 <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="describedAs"/>
@@ -279,15 +277,17 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
         <mb3:menu>
             <mb3:named>Featured</mb3:named>
             <mb3:section>
+                <mb3:named>Error</mb3:named>
+                <mb3:serviceAction objectType="demo.FeaturedMenu" id="errorPage" />
+            </mb3:section>
+            <mb3:section>
                 <mb3:named>Layout</mb3:named>
-                <mb3:serviceAction objectType="demo.DescribedAsMenu" id="describedAs">
-                    <mb3:named>Tool Tips</mb3:named>
-                </mb3:serviceAction>
-                <mb3:serviceAction objectType="demo.TabMenu" id="tabDemo" />
+                <mb3:serviceAction objectType="demo.FeaturedMenu" id="toolTips" />
+                <mb3:serviceAction objectType="demo.FeaturedMenu" id="tabDemo" />
             </mb3:section>
             <mb3:section>
                 <mb3:named>Custom UI</mb3:named>
-                <mb3:serviceAction objectType="demo.WhereInTheWorldMenu" id="whereInTheWorld" />
+                <mb3:serviceAction objectType="demo.FeaturedMenu" id="whereInTheWorld" />
             </mb3:section>
         </mb3:menu>
 
