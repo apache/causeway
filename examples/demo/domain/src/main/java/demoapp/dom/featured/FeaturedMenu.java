@@ -32,7 +32,6 @@ import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.factory.FactoryService;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import demoapp.dom.domain.progmodel.actions.assoc.assoc.DemoItem;
 import demoapp.dom.featured.customui.geocoding.GeoapifyClient;
@@ -52,14 +51,6 @@ import lombok.val;
 public class FeaturedMenu {
 
     final FactoryService factoryService;
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(
-            cssClassFa="fa-skull-crossbones",
-            describedAs = "Throws an unrecoverable error for demonstration purposes")
-    public Object errorPage(){
-        throw _Exceptions.unrecoverable("Error for demonstration purposes!");
-    }
 
 //tag::whereInTheWorldAction[]
     @Inject

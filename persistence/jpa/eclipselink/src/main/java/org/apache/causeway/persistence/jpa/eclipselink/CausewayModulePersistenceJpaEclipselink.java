@@ -71,10 +71,10 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
     @Inject private ElSettings elSettings;
 
     protected CausewayModulePersistenceJpaEclipselink(
-            CausewayConfiguration causewayConfiguration,
-            DataSource dataSource,
-            JpaProperties properties,
-            ObjectProvider<JtaTransactionManager> jtaTransactionManager) {
+            final CausewayConfiguration causewayConfiguration,
+            final DataSource dataSource,
+            final JpaProperties properties,
+            final ObjectProvider<JtaTransactionManager> jtaTransactionManager) {
 
         super(
                 autoCreateSchemas(dataSource, causewayConfiguration),
@@ -132,8 +132,8 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
      * integrates with settings from causeway.persistence.schema.*
      */
     protected static JpaProperties addAdditionalOrmFiles(
-            JpaProperties properties,
-            CausewayConfiguration causewayConfiguration) {
+            final JpaProperties properties,
+            final CausewayConfiguration causewayConfiguration) {
 
         val persistenceSchemaConf = causewayConfiguration.getPersistence().getSchema();
 
@@ -158,7 +158,7 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
         return new EclipseLinkJpaDialect() {
 
             @Override
-            public DataAccessException translateExceptionIfPossible(RuntimeException ex) {
+            public DataAccessException translateExceptionIfPossible(final RuntimeException ex) {
 
                 if(ex instanceof DataAccessException) {
                     return (DataAccessException)ex; // has already been translated to Spring's hierarchy
@@ -181,8 +181,14 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
 
                 }
 
-                // (null-able) converts javax.persistence exceptions to Spring's hierarchy
-                val translatedEx = super.translateExceptionIfPossible(ex);
+                /* (null-able) converts javax.persistence exceptions to Spring's hierarchy
+                 * However, don't let
+                 * org.springframework.orm.jpa.EntityManagerFactoryUtils.convertJpaAccessExceptionIfPossible(RuntimeException)
+                 * translate those 2 generic ones ... */
+                val translatedEx = (ex instanceof IllegalStateException
+                        || ex instanceof IllegalArgumentException)
+                        ? null
+                        : super.translateExceptionIfPossible(ex);
 
                 if((translatedEx==null
                         // JpaSystemException is just a generic fallback, try to be smarter
@@ -222,7 +228,7 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
              * @param ex the JDOException, containing a SQLException
              * @return the SQL String, or {@code null} if none found
              */
-            private String extractSqlStringFromException(Throwable ex) {
+            private String extractSqlStringFromException(final Throwable ex) {
                 return null;
             }
 
@@ -244,7 +250,7 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
      * @see org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator
      * @see org.springframework.jdbc.support.SQLStateSQLExceptionTranslator
      */
-    private static SQLExceptionTranslator newJdbcExceptionTranslator(Object connectionFactory) {
+    private static SQLExceptionTranslator newJdbcExceptionTranslator(final Object connectionFactory) {
         // Check for PersistenceManagerFactory's DataSource.
         if (connectionFactory instanceof DataSource) {
             return new SQLErrorCodeSQLExceptionTranslator((DataSource) connectionFactory);
