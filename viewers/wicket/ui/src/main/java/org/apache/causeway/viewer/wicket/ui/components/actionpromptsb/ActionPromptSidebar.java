@@ -25,6 +25,7 @@ import org.apache.wicket.markup.html.panel.GenericPanel;
 
 import org.apache.causeway.viewer.wicket.model.models.ActionPromptWithExtraContent;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
+import org.apache.causeway.viewer.wicket.ui.util.Wkt.EventTopic;
 
 public class ActionPromptSidebar
 extends GenericPanel<Void>
@@ -90,6 +91,7 @@ implements ActionPromptWithExtraContent {
         setVisible(true);
         show(target);
         target.add(this);
+        Wkt.javaScriptAdd(target, EventTopic.FOCUS_FIRST_PARAMETER, getMarkupId());
     }
 
     @Override
