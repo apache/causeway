@@ -100,7 +100,7 @@ This is because it picks up the global configuration property, as described in t
 
 Rather than styling each action individually, it's possible to use a configuration property which defines styles globally.
 
-It works by specifying a set of `regex:CSS` pairs; if the action's identifier matches the regex, then the CSS is applied.
+It works by specifying a set of `regex:cssClass` pairs; if the action's identifier matches the regex, then the CSS class is applied.
 This is a great way to ensure that actions with similar semantics have similar names; they will then pick up the same visual cues.
 
 The following is taken from this demo app:

@@ -48,28 +48,38 @@ public class ActionLayoutCssClassFaPage implements HasAsciiDocDescription {
     private String name;
 
 
-//tag::actLeftAndRight[]
+//tag::updateNameWithFaIconOnTheLeft[]
     @Action
     @ActionLayout(
-            cssClassFa = "fa-bus"                         // <.>
+            cssClassFa = "fa-bus",                           // <.>
+            associateWith = "name",
+            sequence = "1"
             )
-    public Object actionWithFaIconOnTheLeft(final String arg) {
+    public Object updateNameWithFaIconOnTheLeft(final String arg) {
+        setName(arg);
         return this;
     }
+    public String default0UpdateNameWithFaIconOnTheLeft() {
+        return "bus !!!";
+    }
+//end::updateNameWithFaIconOnTheLeft[]
 
+//tag::updateNameWithFaIconOnTheRight[]
     @Action
     @ActionLayout(
-            cssClassFa = "fa-bus",
-            cssClassFaPosition = CssClassFaPosition.RIGHT // <.>
-//end::actLeftAndRight[]
-            ,describedAs = "@ActionLayout(cssClassFa = \"fa-bus\", \n"
-                    + "cssClassFaPosition = CssClassFaPosition.RIGHT)"
-//tag::actLeftAndRight[]
+            cssClassFa = "fa-car",                          // <.>
+            cssClassFaPosition = CssClassFaPosition.RIGHT,  // <.>
+            associateWith = "name",
+            sequence = "2"
             )
-    public Object actRight(final String arg) {
+    public Object updateNameWithFaIconOnTheRight(final String arg) {
+        setName(arg);
         return this;
     }
-//end::actLeftAndRight[]
+    public String default0UpdateNameWithFaIconOnTheRight() {
+        return "car !!!";
+    }
+//end::updateNameWithFaIconOnTheRight[]
 
 }
 //end::class[]
