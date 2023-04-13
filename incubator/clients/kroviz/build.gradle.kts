@@ -34,8 +34,8 @@ kotlin.sourceSets.all {
 }
 
 repositories {
+    maven ("https://repository.int.kn/nexus/content/repositories/thirdparty/")
     mavenCentral()
-    jcenter()
     mavenLocal()
 }
 
@@ -110,6 +110,7 @@ kotlin {
         implementation(npm("vega", "5.22.1", false))
 //        implementation(npm("vega-lite", "5.6.0", true))
         implementation(npm("element-resize-event", "3.0.6", false))
+        implementation(npm("showdown", "2.1.0", false))
     }
     sourceSets["test"].dependencies {
         implementation(kotlin("test-js"))

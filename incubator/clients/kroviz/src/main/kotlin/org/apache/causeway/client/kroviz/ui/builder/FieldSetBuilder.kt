@@ -25,6 +25,7 @@ import org.apache.causeway.client.kroviz.to.ValueType
 import org.apache.causeway.client.kroviz.to.bs.FieldSetBs
 import org.apache.causeway.client.kroviz.ui.core.FormItem
 import org.apache.causeway.client.kroviz.ui.core.FormPanelFactory
+import org.apache.causeway.client.kroviz.utils.js.ShowDown
 
 class FieldSetBuilder {
 
@@ -44,9 +45,12 @@ class FieldSetBuilder {
                 val memberType = TypeMapper().forType(member.type!!)
                 var content = member.value?.content
                 label = p.named
-                if (memberType == ValueType.TEXT_AREA && content is String) {
-                    content = content.replace(":Notice: ", "")
-                    //          label = "Notice"
+                if (memberType == ValueType.HTML && content is String) {
+                    when {
+                        content.startsWith(":Notice:") -> content = ShowDown.convertMarkDown2Html(content)
+                        content.startsWith("link:") -> content = content.replace("link:", "")
+                        else -> {}
+                    }
                 }
                 val size = maxOf(1, p.multiLine)
                 val fi = FormItem(
