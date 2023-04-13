@@ -21,7 +21,6 @@ package demoapp.dom.services.core.errorreportingservice;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.services.error.ErrorDetails;
@@ -39,8 +38,6 @@ public class ErrorReportingServiceDemoImplementation implements ErrorReportingSe
 
     @Override
     public Ticket reportError(final ErrorDetails errorDetails) {
-
-        LocalContainerEntityManagerFactoryBean x;
 
         val reference = "#0";
         val userMessage = errorDetails.getMainMessage();
