@@ -39,8 +39,11 @@ import lombok.val;
  * <p>
  *     Implementation notes:
  *     <ul>
- *         <li>a class has been used here so that additional fields might be added in the future.</li>
- *         <li>the class is {@link Serializable}</li> so that it can be stored by the Wicket viewer as a Wicket model.
+ *         <li>The mailTo link has an arbitrary 1000 character limit for the mailTo body.
+ *         For production, one would implement a more sophisticated error reporting feature,
+ *         that sends e-mails directly from the server.</li>
+ *         <li>A class has been used here so that additional fields might be added in the future.</li>
+ *         <li>The class is {@link Serializable}</li> so that it can be stored by the Wicket viewer as a Wicket model.
  *     </ul>
  * </p>
  */
@@ -62,12 +65,17 @@ public class EmailTicket extends SimpleTicket {
         @Builder.Default
         private String body = "empty body";
 
+        /**
+         * @implNote this is just a demo;
+         *      the body message is truncated at the 1000th character
+         *      due to potential browser limitations
+         */
         public String toHtmlLink() {
 
             val messageProperties = Map.<String, Object>of(
                     "receiver", receiver,
                     "subject", htmlEscape(subject),
-                    "body", htmlEscape(body),
+                    "body", htmlEscape(_Strings.ellipsifyAtEnd(body, 1000, "... truncated")),
                     "linkName", linkName);
 
             return _Strings.format("<a href=\"mailto:${receiver}"
@@ -115,16 +123,19 @@ public class EmailTicket extends SimpleTicket {
 
     @Override
     public String getMarkup() {
-        return
-                "<p>" +
-                ifPresentMap(getDetails(), s->"<h3>" + htmlEscape(s) + "</h3>") +
-                ifPresentMap(getKittenUrl(), s->"<img src=\"" + s + "\"></img>") +
-                "</p>" +
-                ifPresentMap(getReference(), s->
-                "<p><h4>Please report this error: <span>" + mailTo.toHtmlLink() + "</span></h4></p>")
-                ;
+
+        val messageProperties = Map.<String, Object>of(
+                "title", ifPresentMap(getDetails(),
+                        details->"<h3>" + htmlEscape(details) + "</h3>"),
+                "kittenImg", ifPresentMap(getKittenUrl(),
+                        kittenUrl->"<img src=\"" + kittenUrl + "\"></img>"),
+                "mailToParagraph", "<p><h4>Please report this error: <span>"
+                                        + mailTo.toHtmlLink()
+                                        + "</span></h4></p>");
+        return _Strings.format(
+                "<p>${title}${kittenImg}</p>"
+                + "${mailToParagraph}",
+                messageProperties);
     }
-
-
 
 }

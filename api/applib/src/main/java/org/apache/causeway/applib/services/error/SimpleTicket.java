@@ -19,11 +19,14 @@
 package org.apache.causeway.applib.services.error;
 
 import java.io.Serializable;
+import java.util.Map;
 import java.util.function.UnaryOperator;
 
 import org.apache.causeway.commons.internal.base._Strings;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.isEmpty;
+
+import lombok.val;
 
 /**
  * Response from the {@link ErrorReportingService}, containing information to show to the end-user.
@@ -114,14 +117,21 @@ public class SimpleTicket implements Ticket {
 
     @Override
     public String getMarkup() {
-        return
-                "<p>" +
-                ifPresentMap(getDetails(), s->"<h3>" + htmlEscape(s) + "</h3>") +
-                ifPresentMap(getKittenUrl(), s->"<img src=\"" + s + "\"></img>") +
-                "</p>" +
-                ifPresentMap(getReference(), s->
-                "<p><h4>Please quote reference: <span>" + htmlEscape(s) + "</span></h4></p>")
-                ;
+
+        val messageProperties = Map.<String, Object>of(
+                "title", ifPresentMap(getDetails(),
+                        details->"<h3>" + htmlEscape(details) + "</h3>"),
+                "kittenImg", ifPresentMap(getKittenUrl(),
+                        kittenUrl->"<img src=\"" + kittenUrl + "\"></img>"),
+                "referenceParagraph", ifPresentMap(getReference(),
+                        reference->"<p><h4>Please quote reference: <span>"
+                                        + htmlEscape(reference)
+                                        + "</span></h4></p>"));
+
+        return _Strings.format(
+                "<p>${title}${kittenImg}</p>"
+                + "${referenceParagraph}",
+                messageProperties);
     }
 
     protected static String ifPresentMap(final String x, final UnaryOperator<String> operator) {
