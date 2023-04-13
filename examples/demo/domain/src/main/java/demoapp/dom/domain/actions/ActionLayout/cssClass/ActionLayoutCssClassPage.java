@@ -19,18 +19,13 @@
 package demoapp.dom.domain.actions.ActionLayout.cssClass;
 
 import jakarta.inject.Named;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.*;
 
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.*;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import lombok.Getter;
+import lombok.Setter;
 
 //tag::class[]
 @DomainObject(
@@ -45,18 +40,102 @@ public class ActionLayoutCssClassPage implements HasAsciiDocDescription {
         return "@ActionLayout#cssClass";
     }
 
-//tag::act[]
+    @Property
+    @XmlElement
+    @Getter
+    @Setter
+    private String name;
+
+//tag::below-btn-info[]
     @Action
     @ActionLayout(
-            cssClass = "btn-info" // <.>
-//end::act[]
-            ,describedAs = "@ActionLayout(cssClass = \"btn-info\")"
-//tag::act[]
-            )
-    public Object act(final String arg) {
+            cssClass = "btn-info",                  // <.>
+            associateWith = "name",
+            sequence = "1",
+            position = ActionLayout.Position.BELOW  // <.>
+    )
+    public Object updateNameBtnInfo(final String newName) {
+        setName(newName);
         return this;
     }
-//end::act[]
+//end::below-btn-info[]
+
+//tag::below-btn-warning[]
+    @Action
+    @ActionLayout(
+            cssClass = "btn-warning",               // <.>
+            associateWith = "name",
+            sequence = "2",                         // <.>
+            position = ActionLayout.Position.BELOW
+    )
+    public Object updateNameBtnWarning(final String newName) {
+        setName(newName);
+        return this;
+    }
+//end::below-btn-warning[]
+
+//tag::panel-btn-primary[]
+    @Action
+    @ActionLayout(
+            cssClass = "btn-primary",               // <.>
+            associateWith = "name",
+            sequence = "1",
+            position = ActionLayout.Position.PANEL  // <.>
+    )
+    public Object updateNameFromPanelBtnPrimary(final String newName) {
+        setName(newName);
+        return this;
+    }
+//end::panel-btn-primary[]
+
+//tag::panel-btn-secondary[]
+    @Action
+    @ActionLayout(
+            cssClass = "btn-secondary",             // <.>
+            associateWith = "name",
+            sequence = "2",
+            position = ActionLayout.Position.PANEL
+    )
+    public Object updateNameFromPanelBtnSecondary(final String newName) {
+        setName(newName);
+        return this;
+    }
+//end::panel-btn-secondary[]
+
+//tag::panel-dropdown-btn-light[]
+    @Action
+    @ActionLayout(
+            cssClass = "btn-light",                             // <.>
+            associateWith = "name",
+            sequence = "1",
+            position = ActionLayout.Position.PANEL_DROPDOWN     // <.>
+    )
+    public Object updateNameFromPanelDropdownBtnLight(final String newName) {
+        setName(newName);
+        return this;
+    }
+//end::panel-dropdown-btn-light[]
+
+//tag::panel-dropdown-btn-dark[]
+    @Action
+    @ActionLayout(
+            cssClass = "btn-dark",       // <.>
+            associateWith = "name",
+            sequence = "2",
+            position = ActionLayout.Position.PANEL_DROPDOWN
+    )
+    public Object updateNameFromPanelDropdownBtnDark(final String newName) {
+        setName(newName);
+        return this;
+    }
+//end::panel-dropdown-btn-dark[]
+
+//tag::delete[]
+    @Action(semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
+    public Object delete() {
+        return this;
+    }
+//end::delete[]
 
 }
 //end::class[]

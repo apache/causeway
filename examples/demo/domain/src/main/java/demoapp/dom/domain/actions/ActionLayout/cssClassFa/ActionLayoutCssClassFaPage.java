@@ -19,19 +19,14 @@
 package demoapp.dom.domain.actions.ActionLayout.cssClassFa;
 
 import jakarta.inject.Named;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.*;
 
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.*;
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import lombok.Getter;
+import lombok.Setter;
 
 //tag::class[]
 @DomainObject(
@@ -46,31 +41,45 @@ public class ActionLayoutCssClassFaPage implements HasAsciiDocDescription {
         return "@ActionLayout#cssClassFa";
     }
 
-//tag::actLeftAndRight[]
-    @Action
-    @ActionLayout(
-            cssClassFa = "fa-bus"                         // <.>
-//end::actLeftAndRight[]
-            ,describedAs = "@ActionLayout(cssClassFa = \"fa-bus\")"
-//tag::actLeftAndRight[]
-            )
-    public Object actLeft(final String arg) {
-        return this;
-    }
+    @Property
+    @XmlElement
+    @Getter
+    @Setter
+    private String name;
 
+
+//tag::updateNameWithFaIconOnTheLeft[]
     @Action
     @ActionLayout(
-            cssClassFa = "fa-bus",
-            cssClassFaPosition = CssClassFaPosition.RIGHT // <.>
-//end::actLeftAndRight[]
-            ,describedAs = "@ActionLayout(cssClassFa = \"fa-bus\", \n"
-                    + "cssClassFaPosition = CssClassFaPosition.RIGHT)"
-//tag::actLeftAndRight[]
+            cssClassFa = "fa-bus",                           // <.>
+            associateWith = "name",
+            sequence = "1"
             )
-    public Object actRight(final String arg) {
+    public Object updateNameWithFaIconOnTheLeft(final String arg) {
+        setName(arg);
         return this;
     }
-//end::actLeftAndRight[]
+    public String default0UpdateNameWithFaIconOnTheLeft() {
+        return "bus !!!";
+    }
+//end::updateNameWithFaIconOnTheLeft[]
+
+//tag::updateNameWithFaIconOnTheRight[]
+    @Action
+    @ActionLayout(
+            cssClassFa = "fa-car",                          // <.>
+            cssClassFaPosition = CssClassFaPosition.RIGHT,  // <.>
+            associateWith = "name",
+            sequence = "2"
+            )
+    public Object updateNameWithFaIconOnTheRight(final String arg) {
+        setName(arg);
+        return this;
+    }
+    public String default0UpdateNameWithFaIconOnTheRight() {
+        return "car !!!";
+    }
+//end::updateNameWithFaIconOnTheRight[]
 
 }
 //end::class[]

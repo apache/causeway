@@ -44,7 +44,7 @@ import lombok.NoArgsConstructor;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.ActionTypeOfVm")
+@Named("demo.ActionTypeOfPage")
 @DomainObject(
     nature=Nature.VIEW_MODEL)
 @NoArgsConstructor

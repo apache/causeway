@@ -19,54 +19,87 @@
 package demoapp.dom.domain.actions.ActionLayout.associateWith;
 
 import jakarta.inject.Named;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.*;
 
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.*;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.domain.actions.Action.typeOf.child.ActionTypeOfChildVm;
+import demoapp.dom.domain.actions.ActionLayout.associateWith.child.ActionLayoutAssociateWithChildVm;
 import lombok.Getter;
 import lombok.Setter;
 
-//tag::class[]
-@DomainObject(
-        nature=Nature.VIEW_MODEL)
-@Named("demo.ActionLayoutAssociateWithVm")
+import java.util.ArrayList;
+import java.util.List;
+
+@Named("demo.ActionLayoutAssociateWithPage")
+@DomainObject(nature=Nature.VIEW_MODEL)
 @XmlRootElement(name = "root")
-@XmlType
+@XmlType()
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ActionLayoutAssociateWithPage implements HasAsciiDocDescription {
+//tag::class[]
+// ...
+public class ActionLayoutAssociateWithPage
+//end::class[]
+        implements HasAsciiDocDescription
+//tag::class[]
+{
+    @Property
+    @XmlElement
+    @Getter @Setter
+    private String name;
+
+    @Collection()
+    @XmlElement
+    @Getter
+    private List<ActionLayoutAssociateWithChildVm> children = new ArrayList<>();
+
+    // ...
+//end::class[]
 
     @ObjectSupport public String title() {
         return "@ActionLayout#associateWith";
     }
 
-//tag::act_and_prop[]
+
+//tag::associate-with-property[]
     @Action
     @ActionLayout(
-            associateWith = "property"  // <.>
-//end::act_and_prop[]
-            ,describedAs = "@ActionLayout(associateWith = \"property\")"
-//tag::act_and_prop[]
-            )
-    public Object act(final String arg) {
+        associateWith = "name"  // <.>
+    )
+    public Object updateName(final String newValue) {
+        setName(newValue);
+        return this;
+    }
+    public String default0UpdateName() { return getName(); }
+
+//end::associate-with-property[]
+
+//tag::associate-with-collection[]
+    @Action
+    @ActionLayout(
+            associateWith = "children", // <.>
+            sequence = "1"              // <.>
+    )
+    public Object addChild(final String newValue) {
+        getChildren().add(new ActionLayoutAssociateWithChildVm(newValue));
         return this;
     }
 
-    @Property
-    @XmlElement
-    @Getter @Setter
-    private String property = "a property";
-//end::act_and_prop[]
+    @Action
+    @ActionLayout(
+            associateWith = "children", // <1>
+            sequence = "2"              // <2>
+    )
+    public Object removeChild(final ActionLayoutAssociateWithChildVm child) {
+        getChildren().removeIf(x -> x.getValue().equals(child.getValue()));
+        return this;
+    }
+    public List<ActionLayoutAssociateWithChildVm> choices0RemoveChild() {
+        return getChildren();
+    }
+//end::associate-with-collection[]
 
-
+//tag::class[]
 }
 //end::class[]

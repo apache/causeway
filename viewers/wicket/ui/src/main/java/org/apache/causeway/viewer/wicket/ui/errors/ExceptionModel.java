@@ -127,8 +127,8 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
 
 
     private Ticket ticket;
-    public Ticket getTicket() {
-        return ticket;
+    public Optional<Ticket> getTicket() {
+        return Optional.ofNullable(ticket);
     }
 
     /**

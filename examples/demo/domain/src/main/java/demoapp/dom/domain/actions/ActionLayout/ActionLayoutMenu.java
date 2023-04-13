@@ -18,6 +18,7 @@
  */
 package demoapp.dom.domain.actions.ActionLayout;
 
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -27,7 +28,9 @@ import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
+import demoapp.dom._infra.samples.NameSamples;
 import demoapp.dom.domain.actions.ActionLayout.associateWith.ActionLayoutAssociateWithPage;
+import demoapp.dom.domain.actions.ActionLayout.associateWith.child.ActionLayoutAssociateWithChildVm;
 import demoapp.dom.domain.actions.ActionLayout.cssClass.ActionLayoutCssClassPage;
 import demoapp.dom.domain.actions.ActionLayout.cssClassFa.ActionLayoutCssClassFaPage;
 import demoapp.dom.domain.actions.ActionLayout.describedAs.ActionLayoutDescribedAsPage;
@@ -38,18 +41,26 @@ import demoapp.dom.domain.actions.ActionLayout.position.ActionLayoutPositionPage
 import demoapp.dom.domain.actions.ActionLayout.promptStyle.ActionLayoutPromptStylePage;
 import demoapp.dom.domain.actions.ActionLayout.redirectPolicy.ActionLayoutRedirectPolicyPage;
 import demoapp.dom.domain.actions.ActionLayout.sequence.ActionLayoutSequencePage;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @DomainService(nature=NatureOfService.VIEW)
 @Named("demo.ActionLayoutMenu")
 @jakarta.annotation.Priority(PriorityPrecedence.EARLY)
-//@Log4j2
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ActionLayoutMenu {
+
+    final NameSamples samples;
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-solid fa-arrows-left-right",
         describedAs = "Associate an action with a property or collection, specifying its id")
     public ActionLayoutAssociateWithPage associateWith(){
-        return new ActionLayoutAssociateWithPage();
+        val page = new ActionLayoutAssociateWithPage();
+        samples.stream()
+                .map(ActionLayoutAssociateWithChildVm::new)
+                .forEach(e -> page.getChildren().add(e));
+        return page;
     }
 
     @Action(semantics = SemanticsOf.SAFE)

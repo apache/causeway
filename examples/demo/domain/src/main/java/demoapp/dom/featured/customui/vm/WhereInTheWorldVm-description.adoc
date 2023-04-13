@@ -17,7 +17,7 @@ A `zoom` level, which will be used when retrieving the map, is also prompted for
 [source,java,indent=0]
 .WhereInTheWorldMenu.java
 ----
-include::WhereInTheWorldMenu.java[tags=action]
+include::../../FeaturedMenu.java[tags=whereInTheWorldAction]
 ----
 
 The `WhereInTheWorldVm` view model returned by the menu is defined normally.

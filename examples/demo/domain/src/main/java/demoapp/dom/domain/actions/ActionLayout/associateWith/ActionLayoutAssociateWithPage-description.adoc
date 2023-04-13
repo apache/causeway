@@ -1,21 +1,38 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-The `associateWith` attribute associates an action with a property or collection, specifying its id.
+It's quite common for a domain object action to only change one part of a domain object's (visible) state.
+For example, an action might be used to change a name, or a pair of actions be used to add or remove elements from a collection.
+In such cases, it generally makes sense for the action's button to be close to the property or collection to which it relates.
+
+One way to specify this is with the `.layout.xml` files, but another option is to use the link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/ActionLayout.html#associatewith[@ActionLayout#associateWith] element (along with link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/ActionLayout.html#associatewith[@ActionLayout#sequence] if there are several actions associated with the property/collection).
+
+=== How this demo works
+
+This page defines a `name` property, and a `children` collection:
 
 [source,java,indent=0]
 ----
-include::ActionLayoutAssociateWithPage.java[tags=act_and_prop]
+include::ActionLayoutAssociateWithPage.java[tags=class]
 ----
 
-<.> associates this action `'act'` with property `'property'`
+The `updateName` action only updates the `name` property, and so it makes sense to render its button close to this property.
+This is done using `@Action#associateWith`:
 
-To specify the layout order use `ActionLayout#sequence()`.
-
-.for example
+[source,java,indent=0]
 ----
-@ActionLayout(associateWith="items") @ActionLayout(sequence="2.1")
+include::ActionLayoutAssociateWithPage.java[tags=associate-with-property]
 ----
+<.> associates with the `name` property
 
-Note that it is also possible to associate an action with a collection using `Action#choicesFrom`,
+Similarly, the `addChild` and `removeChild` actions both modify the `children` collection:
+
+[source,java,indent=0]
+----
+include::ActionLayoutAssociateWithPage.java[tags=associate-with-collection]
+----
+<.> associates with the `children` collection
+<.> uses `sequence` to specify the order on the page (left to right)
+
+TIP: Note that it is also possible to associate an action with a collection using `Action#choicesFrom`,
 which has the additional semantic of the rows of the element being used as choices for that action’s collection parameter
 of the same type as the elements of the collection.

@@ -20,16 +20,18 @@ package demoapp.dom.services.core.errorreportingservice;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.causeway.applib.services.error.ErrorDetails;
 import org.apache.causeway.applib.services.error.ErrorReportingService;
 import org.apache.causeway.applib.services.error.SimpleTicket;
-import org.apache.causeway.applib.services.error.Ticket.StackTracePolicy;
+import org.apache.causeway.commons.internal.base._Strings;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
 import lombok.Builder;
+import lombok.val;
 
 /**
  * Response from the {@link ErrorReportingService}, containing information to show to the end-user.
@@ -37,8 +39,11 @@ import lombok.Builder;
  * <p>
  *     Implementation notes:
  *     <ul>
- *         <li>a class has been used here so that additional fields might be added in the future.</li>
- *         <li>the class is {@link Serializable}</li> so that it can be stored by the Wicket viewer as a Wicket model.
+ *         <li>The mailTo link has an arbitrary 1000 character limit for the mailTo body.
+ *         For production, one would implement a more sophisticated error reporting feature,
+ *         that sends e-mails directly from the server.</li>
+ *         <li>A class has been used here so that additional fields might be added in the future.</li>
+ *         <li>The class is {@link Serializable}</li> so that it can be stored by the Wicket viewer as a Wicket model.
  *     </ul>
  * </p>
  */
@@ -51,18 +56,32 @@ public class EmailTicket extends SimpleTicket {
 
         private static final long serialVersionUID = -817872853109724987L;
 
+        @Builder.Default
         private String linkName = "Email";
+        @Builder.Default
         private String receiver = "no-one@nowhere";
+        @Builder.Default
         private String subject = "[Module-Name] Unexpected Error (#ref)";
+        @Builder.Default
         private String body = "empty body";
 
+        /**
+         * @implNote this is just a demo;
+         *      the body message is truncated at the 1000th character
+         *      due to potential browser limitations
+         */
         public String toHtmlLink() {
-            return String.format("<a href=\"mailto:%s?subject=%s&body=%s\">%s</a>",
-                    receiver,
-                    htmlEscape(subject),
-                    htmlEscape(body),
-                    linkName
-                    );
+
+            val messageProperties = Map.<String, Object>of(
+                    "receiver", receiver,
+                    "subject", htmlEscape(subject),
+                    "body", htmlEscape(_Strings.ellipsifyAtEnd(body, 1000, "... truncated")),
+                    "linkName", linkName);
+
+            return _Strings.format("<a href=\"mailto:${receiver}"
+                    + "?subject=${subject}"
+                    + "&body=${body}\">${linkName}</a>",
+                    messageProperties);
         }
 
         // -- STACKTRACE FORMATTING
@@ -104,16 +123,19 @@ public class EmailTicket extends SimpleTicket {
 
     @Override
     public String getMarkup() {
-        return
-                "<p>" +
-                ifPresentMap(getDetails(), s->"<h3>" + htmlEscape(s) + "</h3>") +
-                ifPresentMap(getKittenUrl(), s->"<img src=\"" + s + "\"></img>") +
-                "</p>" +
-                ifPresentMap(getReference(), s->
-                "<p><h4>Please report this error: <span>" + mailTo.toHtmlLink() + "</span></h4></p>")
-                ;
+
+        val messageProperties = Map.<String, Object>of(
+                "title", ifPresentMap(getDetails(),
+                        details->"<h3>" + htmlEscape(details) + "</h3>"),
+                "kittenImg", ifPresentMap(getKittenUrl(),
+                        kittenUrl->"<img src=\"" + kittenUrl + "\"></img>"),
+                "mailToParagraph", "<p><h4>Please report this error: <span>"
+                                        + mailTo.toHtmlLink()
+                                        + "</span></h4></p>");
+        return _Strings.format(
+                "<p>${title}${kittenImg}</p>"
+                + "${mailToParagraph}",
+                messageProperties);
     }
-
-
 
 }

@@ -24,8 +24,10 @@ import java.io.PrintStream;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -37,6 +39,7 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -347,6 +350,31 @@ public final class _Strings {
             // ignore
         }
         return false;
+    }
+
+    // -- INTERPOLATION
+
+    /**
+     * String interpolation based on named parameters of pattern <pre>${key} -> value</pre>
+     * @see "https://www.baeldung.com/java-string-formatting-named-placeholders#2-creating-the-method"
+     */
+    public static String format(final String template, final Map<String, Object> parameters) {
+        final StringBuilder newTemplate = new StringBuilder(template);
+        final List<Object> valueList = new ArrayList<>();
+        final Matcher matcher = Pattern.compile("[$][{](\\w+)}").matcher(template);
+
+        while (matcher.find()) {
+            String key = matcher.group(1);
+
+            String paramName = "${" + key + "}";
+            int index = newTemplate.indexOf(paramName);
+            if (index != -1) {
+                newTemplate.replace(index, index + paramName.length(), "%s");
+                valueList.add(parameters.get(key));
+            }
+        }
+
+        return String.format(newTemplate.toString(), valueList.toArray());
     }
 
     // -- PREFIX/SUFFIX

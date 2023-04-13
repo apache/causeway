@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.featured.customui.vm;
+package demoapp.dom.featured;
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,19 +31,37 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.services.factory.FactoryService;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
+import demoapp.dom.domain.progmodel.actions.assoc.assoc.DemoItem;
 import demoapp.dom.featured.customui.geocoding.GeoapifyClient;
 import demoapp.dom.featured.customui.latlng.Zoom;
+import demoapp.dom.featured.customui.vm.WhereInTheWorldVm;
+import demoapp.dom.featured.layout.describedAs.DescribedAsVm;
+import demoapp.dom.featured.layout.tabs.TabDemo;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@Named("demo.WhereInTheWorldMenu")
+@Named("demo.FeaturedMenu")
 @DomainService(
         nature=NatureOfService.VIEW
 )
 @jakarta.annotation.Priority(PriorityPrecedence.EARLY)
-public class WhereInTheWorldMenu {
+@RequiredArgsConstructor(onConstructor_ = { @Inject })
+public class FeaturedMenu {
 
-//tag::action[]
+    final FactoryService factoryService;
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(
+            cssClassFa="fa-skull-crossbones",
+            describedAs = "Throws an unrecoverable error for demonstration purposes")
+    public Object errorPage(){
+        throw _Exceptions.unrecoverable("Error for demonstration purposes!");
+    }
+
+//tag::whereInTheWorldAction[]
     @Inject
     private GeoapifyClient geoapifyClient;
 
@@ -65,17 +83,36 @@ public class WhereInTheWorldMenu {
 
         return vm;
     }
-//end::action[]
+//end::whereInTheWorldAction[]
     @MemberSupport public List<String> choices0WhereInTheWorld() {
         return Arrays.asList("Malvern, UK", "Vienna, Austria", "Leeuwarden, Netherlands", "Dublin, Ireland");
     }
-
     @MemberSupport public String default0WhereInTheWorld() {
         return "Malvern, UK";
     }
-
     @MemberSupport public int default1WhereInTheWorld() {
         return 14;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-comment", describedAs="Opens the Tooltip-Demo page.")
+    public DescribedAsVm toolTips(){
+        val demo = factoryService.viewModel(new DescribedAsVm());
+
+        demo.getCollection().add(DemoItem.of("first"));
+        demo.getCollection().add(DemoItem.of("second"));
+        demo.getCollection().add(DemoItem.of("third"));
+
+        return demo;
+    }
+
+    @Action
+    @ActionLayout(
+            cssClassFa="fa-bolt",
+            describedAs="Opens the Tabs-Demo page."
+    )
+    public TabDemo tabDemo(){
+        return factoryService.viewModel(new TabDemo());
     }
 
 }

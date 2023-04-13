@@ -101,5 +101,4 @@ public class ActionMenu {
         return page;
     }
 
-
 }
