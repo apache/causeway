@@ -41,13 +41,15 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 public class ErrorReportingServiceDemoVm implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "Error Reporting Service demo";
+        return "Error Reporting Service Demo";
     }
 
     @Action
-    @ActionLayout(cssClassFa="fa-bolt")
+    @ActionLayout(
+            cssClassFa="fa-skull-crossbones",
+            describedAs = "Throws an unrecoverable error for demonstration purposes.")
     public Object triggerAnError(){
-        throw new IllegalArgumentException("This is a demo Exception.");
+        throw new IllegalArgumentException("Error for demonstration purposes!");
     }
 
 }

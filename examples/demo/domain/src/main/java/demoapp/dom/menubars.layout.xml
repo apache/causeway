@@ -277,10 +277,6 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
         <mb3:menu>
             <mb3:named>Featured</mb3:named>
             <mb3:section>
-                <mb3:named>Error</mb3:named>
-                <mb3:serviceAction objectType="demo.FeaturedMenu" id="errorPage" />
-            </mb3:section>
-            <mb3:section>
                 <mb3:named>Layout</mb3:named>
                 <mb3:serviceAction objectType="demo.FeaturedMenu" id="toolTips" />
                 <mb3:serviceAction objectType="demo.FeaturedMenu" id="tabDemo" />

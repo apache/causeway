@@ -308,7 +308,7 @@ implements
         if(ex instanceof RuntimeException) {
 
             val translatedEx = persistenceExceptionTranslators.stream()
-            //.peek(translator->System.out.printf("%s", translator.getClass().getName()))
+            //debug .peek(translator->System.out.printf("%s%n", translator.getClass().getName()))
             .map(translator->translator.translateExceptionIfPossible((RuntimeException)ex))
             .filter(_NullSafe::isPresent)
             .findFirst()

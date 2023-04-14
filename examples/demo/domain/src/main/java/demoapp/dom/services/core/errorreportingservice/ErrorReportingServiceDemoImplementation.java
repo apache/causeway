@@ -37,7 +37,7 @@ import lombok.val;
 public class ErrorReportingServiceDemoImplementation implements ErrorReportingService {
 
     @Override
-    public Ticket reportError(ErrorDetails errorDetails) {
+    public Ticket reportError(final ErrorDetails errorDetails) {
 
         val reference = "#0";
         val userMessage = errorDetails.getMainMessage();
