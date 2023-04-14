@@ -132,6 +132,7 @@ public class ActionLayoutCssClassPage implements HasAsciiDocDescription {
 
 //tag::delete[]
     @Action(semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
+    @ActionLayout()     // <.>
     public Object delete() {
         return this;
     }

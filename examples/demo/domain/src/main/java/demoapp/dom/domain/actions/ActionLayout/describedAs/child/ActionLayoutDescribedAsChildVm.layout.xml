@@ -15,6 +15,7 @@
         xmlns:cpt="https://causeway.apache.org/applib/layout/component"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
+
 	<bs3:row>
 		<bs3:col span="10" unreferencedActions="true">
 			<cpt:domainObject />
@@ -26,19 +27,8 @@
 
 	<bs3:row>
 		<bs3:col span="6">
-			<bs3:row>
-				<bs3:col span="12">
-			<cpt:fieldSet name="General" id="general">
-				<cpt:property id="name"/>
-			</cpt:fieldSet>
+			<cpt:fieldSet name="Annotation" id="variants"/>
 			<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
-				</bs3:col>
-			</bs3:row>
-			<bs3:row>
-				<bs3:col span="12">
-					<cpt:collection id="children"/>
-				</bs3:col>
-			</bs3:row>
 		</bs3:col>
 		<bs3:col span="6">
 			<cpt:fieldSet name="Description" id="description" >

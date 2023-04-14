@@ -78,12 +78,14 @@ public class ActionLayoutMenu {
         return new ActionLayoutCssClassFaPage();
     }
 
+//tag::menu-item-described-as[]
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-comment",
         describedAs = "Description of the action, shown as a tooltip")
     public ActionLayoutDescribedAsPage describedAs(){
         return new ActionLayoutDescribedAsPage();
     }
+//end::menu-item-described-as[]
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-solid fa-vector-square",

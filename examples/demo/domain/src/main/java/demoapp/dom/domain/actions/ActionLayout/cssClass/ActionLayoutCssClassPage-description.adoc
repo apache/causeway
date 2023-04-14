@@ -91,6 +91,7 @@ One action:
 ----
 include::ActionLayoutCssClassPage.java[tags=delete]
 ----
+<.> not explicitly positioned
 
 Yhis last example has no `@ActionLayout#cssClass` defined, but it nevertheless will be rendered with the _Bootstrap_ "btn-danger" class.
 This is because it picks up the global configuration property, as described in the next section.
