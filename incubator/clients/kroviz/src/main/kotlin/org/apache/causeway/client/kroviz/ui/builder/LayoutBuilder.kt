@@ -20,11 +20,11 @@ package org.apache.causeway.client.kroviz.ui.builder
 
 import io.kvision.panel.VPanel
 import org.apache.causeway.client.kroviz.to.TObject
-import org.apache.causeway.client.kroviz.to.bs3.Grid
+import org.apache.causeway.client.kroviz.to.bs.GridBs
 
 class LayoutBuilder {
 
-    fun create(grid: Grid, tObject: TObject, dsp: RoDisplay): VPanel {
+    fun create(grid: GridBs, tObject: TObject, dsp: RoDisplay): VPanel {
         val panel = VPanel()
         for (rl in grid.rows) {
             val cpt = RowBuilder().create(rl, tObject, dsp)

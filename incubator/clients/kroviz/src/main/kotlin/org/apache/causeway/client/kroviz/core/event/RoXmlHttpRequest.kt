@@ -34,16 +34,17 @@ import org.w3c.xhr.XMLHttpRequest
 import org.w3c.xhr.XMLHttpRequestResponseType
 
 /**
- * The name is somewhat misleading, see: https://en.wikipedia.org/wiki/XMLHttpRequest
+ * Class name is somewhat misleading, see: https://en.wikipedia.org/wiki/XMLHttpRequest
  */
 class RoXmlHttpRequest(val aggregator: BaseAggregator?) {
 
     private val xhr = XMLHttpRequest()
 
+    private val AUTHORIZATION = "Authorization"
     private val CONTENT_TYPE = "Content-Type"
     private val ACCEPT = "Accept"
 
-    internal fun process(link: Link, subType: String) {
+    internal fun process(link: Link, subType: String?) {
         val method = link.method
         var url = link.href
         if (method != Method.POST.operation) {
@@ -83,7 +84,7 @@ class RoXmlHttpRequest(val aggregator: BaseAggregator?) {
         }
     }
 
-    internal fun processNonREST(link: Link, subType: String) {
+    internal fun processNonREST(link: Link, subType: String?) {
         val method = link.method
         val url = link.href
 
@@ -95,7 +96,7 @@ class RoXmlHttpRequest(val aggregator: BaseAggregator?) {
         xhr.send(body)
         val rs = buildResourceSpecificationAndSetupHandler(url, subType, body)
 
-        SessionManager.getEventStore().start(rs, method, body, aggregator)
+        eventStore().start(rs, method, body, aggregator)
     }
 
     internal fun invokeKroki(pumlCode: String) {
@@ -109,12 +110,12 @@ class RoXmlHttpRequest(val aggregator: BaseAggregator?) {
         val rs = buildResourceSpecificationAndSetupHandler(url, Constants.subTypeJson, pumlCode)
 
         xhr.send(pumlCode)
-        SessionManager.getEventStore().start(rs, method, pumlCode, aggregator)
+        eventStore().start(rs, method, pumlCode, aggregator)
     }
 
     private fun buildResourceSpecificationAndSetupHandler(
         url: String,
-        subType: String,
+        subType: String?,
         body: String
     ): ResourceSpecification {
         val rs = ResourceSpecification(url, subType)
@@ -126,7 +127,7 @@ class RoXmlHttpRequest(val aggregator: BaseAggregator?) {
 
     private fun handleResult(rs: ResourceSpecification, body: String) {
         val response: Any? = xhr.response
-        val le: LogEntry? = SessionManager.getEventStore().end(rs, body, response)
+        val le: LogEntry? = eventStore().end(rs, body, response)
         if (le != null) {
             when {
                 aggregator == null -> ResponseHandler.handle(le)
@@ -143,7 +144,11 @@ class RoXmlHttpRequest(val aggregator: BaseAggregator?) {
             XMLHttpRequestResponseType.TEXT -> xhr.responseText
             else -> "neither text nor blob"
         }
-        SessionManager.getEventStore().fault(rs, error)
+        eventStore().fault(rs, error)
+    }
+
+    private fun eventStore() : EventStore {
+        return SessionManager.getEventStore()
     }
 
 }

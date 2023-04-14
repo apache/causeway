@@ -16,7 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 package org.apache.causeway.client.kroviz.ui.menu
 
 import io.kvision.utils.obj
@@ -30,8 +29,9 @@ import org.apache.causeway.client.kroviz.ui.panel.EventLogTable
 import org.apache.causeway.client.kroviz.utils.IconManager
 import org.apache.causeway.client.kroviz.utils.StringUtils
 
-object DynamicMenuBuilder {
+class DynamicMenuBuilder : MenuBuilder() {
 
+    // static analysis is wrong: buildObjectMenu is used in ColumnFactory
     fun buildObjectMenu(tObject: TObject): dynamic {
         val menu = mutableListOf<dynamic>()
         val actions = tObject.getActions()

@@ -22,17 +22,16 @@ import io.kvision.core.*
 import io.kvision.panel.FlexPanel
 import io.kvision.panel.SimplePanel
 import org.apache.causeway.client.kroviz.to.TObject
-import org.apache.causeway.client.kroviz.to.bs3.Row
+import org.apache.causeway.client.kroviz.to.bs.RowBs
 import org.apache.causeway.client.kroviz.ui.core.Constants
 
 class RowBuilder : UiBuilder() {
 
-    fun create(row: Row, tObject: TObject, dsp: RoDisplay): SimplePanel {
+    fun create(row: RowBs, tObject: TObject, dsp: RoDisplay): SimplePanel {
         val panel = buildPanel()
-        panel.justifyContent = JustifyContent.SPACEBETWEEN
 
         for (c in row.colList) {
-            val cpt = ColBuilder().create(c, tObject, dsp)
+            val cpt = ColBuilder(c, tObject, dsp).panel
             panel.add(cpt)
         }
         return panel
@@ -40,12 +39,13 @@ class RowBuilder : UiBuilder() {
 
     private fun buildPanel(): FlexPanel {
         return FlexPanel(
-                FlexDirection.ROW,
-                FlexWrap.NOWRAP,
-                JustifyContent.FLEXSTART,
-                AlignItems.FLEXSTART,
-                AlignContent.STRETCH,
-                spacing = Constants.spacing)
+            FlexDirection.ROW,
+            FlexWrap.NOWRAP,
+            JustifyContent.FLEXSTART,
+            AlignItems.FLEXSTART,
+            AlignContent.FLEXSTART,
+            spacing = Constants.spacing
+        )
     }
 
 }

@@ -83,8 +83,8 @@ class RoMenuBar : SimplePanel() {
 
     private fun findEntryBy(baseUrl: String): Link? {
         mainEntry.getChildren().forEach {
-            if (it is Link) {
-                if (it.label == baseUrl) return it
+            if (it is Link && it.label == baseUrl) {
+                return it
             }
         }
         return null
@@ -216,11 +216,11 @@ class RoMenuBar : SimplePanel() {
     fun amendMenu(menuBars: Menubars) {
         resetMenuBar()
         menuBars.primary.menu.forEach { m ->
-            val dd = DropDownMenuBuilder.buildForMenu(m)
+            val dd = DropDownMenuBuilder().buildForMenu(m)
             if (dd.getChildren().isNotEmpty()) nav.add(dd)
         }
-        nav.add(DropDownMenuBuilder.buildForMenu(menuBars.secondary.menu.first()))
-        nav.add(DropDownMenuBuilder.buildForMenu(menuBars.tertiary.menu.first()))
+        nav.add(DropDownMenuBuilder().buildForMenu(menuBars.secondary.menu.first()))
+        nav.add(DropDownMenuBuilder().buildForMenu(menuBars.tertiary.menu.first()))
     }
 
     // this empties out any existing menuItems (non-system)
@@ -232,7 +232,7 @@ class RoMenuBar : SimplePanel() {
     fun executeAllMenuBarActions() {
         val menuBars = SessionManager.getEventStore().findMenuBars()!!.obj as Menubars
         menuBars.primary.menu.forEach { m ->
-            m.section.forEachIndexed { index, section ->
+            m.section.forEachIndexed { _, section ->
                 section.serviceAction.forEach { sa ->
                     ResourceProxy().fetch(sa.link!!, ActionDispatcher())
                 }

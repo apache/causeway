@@ -24,7 +24,7 @@ import org.apache.causeway.client.kroviz.ui.core.ViewManager
 
 class NavigationDispatcher() : BaseAggregator() {
 
-    override fun update(logEntry: LogEntry, subType: String) {
+    override fun update(logEntry: LogEntry, subType: String?) {
         val obj = logEntry.getTransferObject()
         val result = obj as Menubars
         ViewManager.amendMenu(result)

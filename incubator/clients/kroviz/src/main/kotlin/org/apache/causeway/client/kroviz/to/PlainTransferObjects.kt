@@ -111,21 +111,6 @@ enum class Position(val type: String) {
 }
 
 @Serializable
-data class Property(
-    val id: String = "",
-    val memberType: String = "",
-    override val links: List<Link> = emptyList(),
-    val optional: Boolean? = null,
-    val title: String? = null,
-    val value: Value? = null,
-    val extensions: Extensions? = null,
-    val format: String? = null,
-    val disabledReason: String? = null,
-    val parameters: List<Parameter> = emptyList(),
-    val maxLength: Int = 0
-) : TransferObject, WithLinks
-
-@Serializable
 data class Restful(
     val userName: String? = null,
     val roles: List<String>? = emptyList(),

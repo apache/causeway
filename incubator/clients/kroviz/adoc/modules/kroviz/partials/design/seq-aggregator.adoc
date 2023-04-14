@@ -51,7 +51,7 @@ AGGT -> LNK : invokeWith(this)
 LNK -> XHR: invoke(this, aggt)
 deactivate AGGT
 
-AGGT -> DM : canBeDisplayed()
+AGGT -> DM : readyToRender()
 AGGT -> UI : openView()
 deactivate AGGT
 

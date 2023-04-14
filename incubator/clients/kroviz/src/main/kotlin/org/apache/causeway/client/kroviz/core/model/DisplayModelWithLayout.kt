@@ -18,66 +18,19 @@
  */
 package org.apache.causeway.client.kroviz.core.model
 
-import org.apache.causeway.client.kroviz.layout.Layout
-import org.apache.causeway.client.kroviz.layout.RowLt
 import org.apache.causeway.client.kroviz.to.Icon
-import org.apache.causeway.client.kroviz.to.Property
 import org.apache.causeway.client.kroviz.to.TransferObject
-import org.apache.causeway.client.kroviz.to.bs3.Grid
+import org.apache.causeway.client.kroviz.to.bs.GridBs
 
 abstract class DisplayModelWithLayout : BaseDisplayModel() {
 
-    var layout: Layout? = null
-    var grid: Grid? = null
-    val properties = CollectionProperties()
+    var layout: BaseLayout? = null
     var icon: Icon? = null
-
-    override fun canBeDisplayed(): Boolean {
-        return when {
-            isRendered -> false
-            layout == null -> false
-            grid == null -> false
-            else -> properties.readyForDisplay()
-        }
-    }
-
-    fun addLayout(layout: Layout) {
-        this.layout = layout
-        initPropertyLayoutList(layout)
-    }
 
     fun addIcon(obj: TransferObject?) {
         icon = obj as Icon
     }
 
-    private fun initPropertyLayoutList(layout: Layout) {
-        layout.row.forEach { r ->
-            initLayout4Row(r)
-        }
-    }
-
-    private fun initLayout4Row(r: RowLt) {
-        r.cols.forEach { cs ->
-            val c = cs.getCol()
-            c.fieldSet.forEach { fs ->
-                properties.addAllPropertyLayout(fs.property)
-            }
-            c.tabGroup.forEach { tg ->
-                tg.tab.forEach { t ->
-                    t.row.forEach { r2 ->
-                        initLayout4Row(r2)
-                    }
-                }
-            }
-        }
-    }
-
-    fun addPropertyDescription(p: Property) {
-        properties.addPropertyDescription(p)
-    }
-
-    fun addProperty(property: Property) {
-        properties.addProperty(property)
-    }
+    open fun addLayout(grid: GridBs, referrer: String?) {}
 
 }

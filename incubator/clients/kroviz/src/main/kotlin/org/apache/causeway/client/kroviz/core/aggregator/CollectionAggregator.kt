@@ -20,12 +20,10 @@ package org.apache.causeway.client.kroviz.core.aggregator
 
 import org.apache.causeway.client.kroviz.core.event.EventState
 import org.apache.causeway.client.kroviz.core.event.LogEntry
-import org.apache.causeway.client.kroviz.core.event.ResourceProxy
 import org.apache.causeway.client.kroviz.core.event.ResourceSpecification
 import org.apache.causeway.client.kroviz.core.model.CollectionDM
-import org.apache.causeway.client.kroviz.layout.Layout
 import org.apache.causeway.client.kroviz.to.*
-import org.apache.causeway.client.kroviz.to.bs3.Grid
+import org.apache.causeway.client.kroviz.to.bs.GridBs
 import org.apache.causeway.client.kroviz.ui.core.ViewManager
 
 /** sequence of operations:
@@ -35,44 +33,59 @@ import org.apache.causeway.client.kroviz.ui.core.ViewManager
  * (3) FR_OBJECT_PROPERTY       PropertyHandler -> invoke()
  * (4) FR_PROPERTY_DESCRIPTION  <PropertyDescriptionHandler>
  */
-class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = null) : AggregatorWithLayout() {
+class CollectionAggregator(actionTitle: String, private val parent: ObjectAggregator? = null) : AggregatorWithLayout() {
 
     init {
-        dpm = CollectionDM(actionTitle)
+        displayModel = CollectionDM(actionTitle)
     }
 
-    override fun update(logEntry: LogEntry, subType: String) {
+    var referrer = ""
+
+    override fun update(logEntry: LogEntry, subType: String?) {
         super.update(logEntry, subType)
         if (logEntry.state == EventState.DUPLICATE) {
-            console.log("[CollectionAggregator.update] TODO duplicates should not be propagated to handlers")
+            throw IllegalStateException("duplicates should not be propagated to handlers")
             //TODO this may not hold true for changed and deleted objects - object version required to deal with it?
         } else {
-            val referrer = logEntry.url
+            referrer = logEntry.url
             when (val obj = logEntry.getTransferObject()) {
                 null -> log(logEntry)
-                is ResultList -> handleList(obj, referrer)
-                is TObject -> handleObject(obj, referrer)
-                is DomainType -> handleDomainType(obj, referrer)
-                is Layout -> handleLayout(obj, dpm as CollectionDM, referrer)
-                is Grid -> handleGrid(obj)
+                is ResultList -> handleList(obj)
+                is TObject -> handleObject(obj)
+                is DomainType -> handleDomainType(obj)
+                is GridBs -> handleLayout(obj)
                 is Property -> handleProperty(obj, referrer)
-                is Collection -> handleCollection(obj, referrer)
+                is Collection -> handleCollection(obj)
                 is Icon -> handleIcon(obj)
                 else -> log(logEntry)
             }
 
-            if (parent == null) {
-                if (dpm.canBeDisplayed()) {
+            when {
+                isStandAloneCollection() && readyToRender() -> {
                     ViewManager.openCollectionView(this)
                 }
-            } else {
-                val le = LogEntry(ResourceSpecification(""))
-                parent.update(le, subType)
+
+                isParentedCollection() -> {
+                    // A LogEntry with an empty url is passed on to the parent AGGT
+                    // in order to decide, if the whole tree is ready to be rendered.
+                    val le = LogEntry(ResourceSpecification(""))
+                    parent!!.update(le, subType)
+                }
+
+                else -> Unit
             }
         }
     }
 
-    private fun handleList(resultList: ResultList, referrer: String) {
+    private fun readyToRender(): Boolean {
+        return getDisplayModel().readyToRender()
+    }
+
+    private fun getDisplayModel(): CollectionDM {
+        return displayModel as CollectionDM
+    }
+
+    private fun handleList(resultList: ResultList) {
         if (resultList.resulttype != ResultType.VOID.type) {
             val result = resultList.result!!
             result.value.forEach {
@@ -81,17 +94,46 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
         }
     }
 
-    private fun handleObject(obj: TObject, referrer: String) {
-        dpm.addData(obj)
-        invokeLayoutLink(obj, this, referrer = referrer)
-        invokeIconLink(obj, this, referrer = referrer)
+    private fun handleLayout(grid: GridBs) {
+        getDisplayModel().setProtoTypeLayout(grid)
+    }
+
+    private fun handleObject(tObj: TObject) {
+        val dm = getDisplayModel()
+        dm.addData(tObj)
+        if (!dm.hasProtoType()) {
+            // collection layout needs only to be initialized once with an object (pars pro toto, prototype)
+            // obj acts as a kind prototype - we assume all elements in the collection have the same structure
+            dm.setProtoType(tObj)
+            invokeLayoutLink(tObj, this, referrer = referrer)
+        }
+
+        val propertySpecificationHolder = getDisplayModel().collectionLayout
+        if (!propertySpecificationHolder.isInitialized()) {
+            val members = tObj.getProperties()
+            members.forEach { m ->
+                propertySpecificationHolder.addMember(m)
+                val l = m.getInvokeLink()!!
+                invoke(l, this, referrer = referrer)
+            }
+        }
+
+        invokeIconLink(tObj, this, referrer = referrer)
+    }
+
+    private fun isStandAloneCollection(): Boolean {
+        return parent == null
+    }
+
+    private fun isParentedCollection(): Boolean {
+        return parent != null
     }
 
     private fun handleIcon(obj: TransferObject?) {
-        (dpm as CollectionDM).addIcon(obj)
+        getDisplayModel().addIcon(obj)
     }
 
-    private fun handleDomainType(obj: DomainType, referrer: String) {
+    private fun handleDomainType(obj: DomainType) {
         obj.links.forEach {
             if (it.relation() == Relation.LAYOUT) {
                 invoke(it, this, referrer = referrer)
@@ -105,50 +147,48 @@ class CollectionAggregator(actionTitle: String, val parent: ObjectAggregator? = 
         }
     }
 
-    private fun handleGrid(grid: Grid) {
-        (dpm as CollectionDM).grid = grid
-    }
+    private fun handleProperty(property: Property, referrer: String) {
+        when {
+            property.isObjectProperty() -> {
+                val op = ObjectProperty(property)
+                val pdLink = op.getDescriptionLink()!!
+                invoke(pdLink, this, referrer = referrer)
+            }
 
-    private fun handleProperty(p: Property, referrer: String) {
-        val dm = dpm as CollectionDM
-        if (p.isPropertyDescription()) {
-            dm.addPropertyDescription(p)
-        } else {
-            dm.addProperty(p)
-            val pdl = p.descriptionLink()
-            if (pdl != null) {
-                invoke(pdl, this, referrer = referrer)
+            property.isPropertyDescription() -> {
+                val pd = PropertyDescription(property)
+                getDisplayModel().addPropertyDescription(pd)
+            }
+
+            else -> {
+                TODO("handle 3rd type of property")
             }
         }
     }
 
-    private fun handleCollection(collection: Collection, referrer: String) {
+    private fun handleCollection(collection: Collection) {
+        if (parent != null) {
+            val cdm = getDisplayModel()
+            cdm.id = collection.id
+            parent.getDisplayModel().addCollectionModel(cdm)
+        }
         collection.links.forEach {
             if (it.relation() == Relation.DESCRIBED_BY) {
-                ResourceProxy().fetch(it, this, referrer = referrer)
+                invoke(it, this, referrer = referrer)
             }
         }
+        if (collection.isCollectionDescription()) {
+            val title = collection.extensions.getFriendlyName()
+            getDisplayModel().title = title
+        }
         collection.value.forEach {
-            ResourceProxy().fetch(it, this, referrer = referrer)
+            invoke(it, this, referrer = referrer)
         }
     }
 
     override fun reset(): CollectionAggregator {
-        dpm.reset()
+        displayModel.reset()
         return this
-    }
-
-    private fun Property.descriptionLink(): Link? {
-        return links.find {
-            it.relation() == Relation.ELEMENT_TYPE
-        }
-    }
-
-    private fun Property.isPropertyDescription(): Boolean {
-        val selfLink = this.links.find {
-            it.relation() == Relation.SELF
-        }
-        return selfLink!!.representation() == Represention.PROPERTY_DESCRIPTION
     }
 
 }

@@ -43,7 +43,6 @@ object ResponseHandler {
     private var _11 = ResultListHandler()
     private var _12 = ResultObjectHandler()
     private var _13 = ResultValueHandler()
-    private var _14 = LayoutHandler()
     private var _15 = PropertyHandler()
     private var _16 = MemberHandler()
     private var _17 = Http401ErrorHandler()
@@ -67,8 +66,7 @@ object ResponseHandler {
         _10.successor = _11
         _11.successor = _12
         _12.successor = _13
-        _13.successor = _14
-        _14.successor = _15
+        _13.successor = _15
         _15.successor = _16
         _16.successor = _17
         _17.successor = _18

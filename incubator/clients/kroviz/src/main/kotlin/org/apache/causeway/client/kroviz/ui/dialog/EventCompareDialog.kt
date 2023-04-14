@@ -31,7 +31,7 @@ class EventCompareDialog(val data: List<LogEntryComparison>) : Controller() {
     private var table: EventComparisonTable
 
     private val panel = VPanel(spacing = 3) {
-        width = CssSize(100, UNIT.perc)
+        width = CssSize(100, UNIT.vw)
     }
 
     init {

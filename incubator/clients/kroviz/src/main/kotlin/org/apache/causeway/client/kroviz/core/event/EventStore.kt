@@ -24,7 +24,6 @@ import org.apache.causeway.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.causeway.client.kroviz.core.aggregator.SvgDispatcher
 import org.apache.causeway.client.kroviz.to.TObject
 import org.apache.causeway.client.kroviz.to.mb.Menubars
-import org.apache.causeway.client.kroviz.ui.core.SessionManager
 import org.apache.causeway.client.kroviz.ui.core.ViewManager
 import org.apache.causeway.client.kroviz.utils.StringUtils
 import org.apache.causeway.client.kroviz.utils.UUID
@@ -66,21 +65,21 @@ class EventStore {
         }
         entry.runningAtStart = countRunning()
         log(entry)
-        updateStatus(entry)
+        updateStatus()
         return entry
     }
 
     fun add(reSpec: ResourceSpecification) {
         val entry = LogEntry(reSpec)
         log(entry)
-        updateStatus(entry)
+        updateStatus()
     }
 
     fun addView(title: String, aggregator: BaseAggregator, panel: SimplePanel) {
         val entry = LogEntry(title = title, aggregator = aggregator)
         entry.panel = panel
         log(entry)
-        updateStatus(entry)
+        updateStatus()
     }
 
     fun closeView(title: String) {
@@ -88,7 +87,7 @@ class EventStore {
         if (null != logEntry) {
             logEntry.setClose()
             logEntry.getAggregator()?.reset()
-            updateStatus(logEntry)
+            updateStatus()
         }
     }
 
@@ -105,30 +104,18 @@ class EventStore {
             entry.response = response
             entry.setSuccess()
             entry.runningAtEnd = countRunning()
-            updateStatus(entry)
+            updateStatus()
         }
         return entry
     }
 
     fun end(reSpec: ResourceSpecification, pumlCode: String, response: Any?): LogEntry? {
         val entry: LogEntry? = findBy(reSpec, pumlCode)
-        val credentials: String = SessionManager.getCredentials()!!
 
         if (entry != null) {
             when (response) {
                 is String -> {
-                    if (response.isEmpty()) {
-                        console.log("[ES.end]")
-                        console.log(reSpec)
-                        val rebound = CorsHttpRequest().invoke(reSpec.url, credentials)
-                        if (rebound.isEmpty()) {
-                            throw IllegalStateException("CORS issue while accessing layout xml")
-                        } else {
-                            entry.response = rebound
-                        }
-                    } else {
-                        entry.response = response
-                    }
+                    entry.response = response
                 }
                 is Blob -> entry.blob = response
                 else -> {
@@ -136,7 +123,7 @@ class EventStore {
             }
             entry.setSuccess()
             entry.runningAtEnd = countRunning()
-            updateStatus(entry)
+            updateStatus()
         }
         return entry
     }
@@ -145,10 +132,10 @@ class EventStore {
         val entry: LogEntry? = findBy(reSpec)
         entry!!.setError(fault)
         entry.runningAtEnd = countRunning()
-        updateStatus(entry)
+        updateStatus()
     }
 
-    internal fun updateStatus(entry: LogEntry) {
+    internal fun updateStatus() {
         val successCnt = log.count { le -> le.isSuccess() }
         val runningCnt = countRunning()
         val errorCnt = log.count { le -> le.isError() }
@@ -173,7 +160,7 @@ class EventStore {
     }
 
     fun findBy(rs: ResourceSpecification, body: String): LogEntry? {
-        return log.firstOrNull() {
+        return log.firstOrNull {
             it.url == rs.url
                     && it.subType == rs.subType
                     && it.request == body
@@ -181,7 +168,7 @@ class EventStore {
     }
 
     fun findBy(tObject: TObject): LogEntry? {
-        return log.firstOrNull() {
+        return log.firstOrNull {
             it.obj is TObject && (it.obj as TObject).instanceId == tObject.instanceId
         }
     }
@@ -207,13 +194,13 @@ class EventStore {
     }
 
     fun findMenuBars(): LogEntry? {
-        return log.firstOrNull() {
+        return log.firstOrNull {
             it.obj is Menubars
         }
     }
 
     fun findMenuBarsBy(baseUrl: String): LogEntry? {
-        return log.firstOrNull() {
+        return log.firstOrNull {
             it.obj is Menubars && it.url.startsWith(baseUrl)
         }
     }

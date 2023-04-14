@@ -42,12 +42,11 @@ open class IntegrationTest {
         val app = App()
         app.start()
         ViewManager.app = app
-console.log("[IT.isAppAvailable]")
-        console.log(ViewManager.getRoApp())
 
         val user = "sven"
         val pw = "pass"
-        val url = "http://${user}:${pw}@localhost:8080/restful/"
+        val port = "9090"
+        val url = "http://${user}:${pw}@localhost:${port}/restful/"
         SessionManager.login(url, user, pw)
         val credentials: String = SessionManager.getCredentials()!!
         val xhr = XMLHttpRequest()

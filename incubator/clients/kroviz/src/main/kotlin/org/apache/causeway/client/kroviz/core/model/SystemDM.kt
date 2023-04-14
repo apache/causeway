@@ -27,7 +27,7 @@ class SystemDM(override val title: String) : BaseDisplayModel() {
     var logoSmall: Icon? = null
     var logoLarge: Icon? = null
 
-    override fun canBeDisplayed(): Boolean {
+    override fun readyToRender(): Boolean {
         return !isRendered
     }
 

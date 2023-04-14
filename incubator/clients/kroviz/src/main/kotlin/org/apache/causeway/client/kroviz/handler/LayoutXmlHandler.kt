@@ -19,7 +19,7 @@
 package org.apache.causeway.client.kroviz.handler
 
 import org.apache.causeway.client.kroviz.to.TransferObject
-import org.apache.causeway.client.kroviz.to.bs3.Grid
+import org.apache.causeway.client.kroviz.to.bs.GridBs
 import org.apache.causeway.client.kroviz.utils.UrlUtils
 import org.apache.causeway.client.kroviz.utils.XmlHelper
 
@@ -36,7 +36,7 @@ class LayoutXmlHandler : BaseHandler() {
 
     override fun parse(response: String): TransferObject {
         val doc = XmlHelper.parseXml(response)
-        return Grid(doc)
+        return GridBs(doc)
     }
 
 }

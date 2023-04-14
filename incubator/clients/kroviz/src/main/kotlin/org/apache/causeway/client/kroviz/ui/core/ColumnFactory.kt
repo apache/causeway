@@ -57,16 +57,17 @@ class ColumnFactory {
             hozAlign = Align.CENTER,
             width = "40",
             headerSort = false,
-            clickMenu = { component: dynamic, _: dynamic ->
-                buildObjectMenu(component)
+            clickMenu = { _: dynamic, cellComponent: dynamic ->
+                buildObjectMenu(cellComponent.unsafeCast<Tabulator.CellComponent>())
             }
         )
     }
 
     private fun buildObjectMenu(cell: Tabulator.CellComponent): dynamic {
-        val exposer = cell.getData() as Exposer
+        val row = cell.getRow()
+        val exposer = row.getData() as Exposer
         val tObject = exposer.delegate
-        return DynamicMenuBuilder.buildObjectMenu(tObject)
+        return DynamicMenuBuilder().buildObjectMenu(tObject)
     }
 
     private fun addColumnForObjectIcon(
@@ -100,22 +101,26 @@ class ColumnFactory {
     }
 
     private fun addColumnsForProperties(
-        displayCollection: CollectionDM,
+        collectionModel: CollectionDM,
         columns: MutableList<ColumnDefinition<Exposer>>,
     ) {
-        val propertyLabels = displayCollection.properties.list
-        for (pl in propertyLabels) {
-            if (!pl.hidden) {
-                val id = pl.key
-                val friendlyName = pl.friendlyName
-                var cd = ColumnDefinition<dynamic>(
-                    title = friendlyName,
-                    field = id,
+        val clo = collectionModel.collectionLayout
+        val propSpecList = clo.propertyDetailsList
+        if (propSpecList.size == 0) {
+            // without this, propSpecList is empty? problem with mutable list?
+            throw IllegalStateException()
+        }
+        propSpecList.forEach {
+            if (!it.hidden) {
+                var colDef = ColumnDefinition<dynamic>(
+                    title = it.name,
+                    field = it.id,
+                    width = (it.typicalLength * 8).toString(),
                     headerFilter = Editor.INPUT)
-                if (id == "object") {
-                    cd = buildLink()
+                if (it.id == "object") {
+                    colDef = buildLink()
                 }
-                columns.add(cd)
+                columns.add(colDef)
             }
         }
     }

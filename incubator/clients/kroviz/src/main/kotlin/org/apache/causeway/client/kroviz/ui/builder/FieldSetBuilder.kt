@@ -21,35 +21,47 @@ package org.apache.causeway.client.kroviz.ui.builder
 import io.kvision.form.FormPanel
 import org.apache.causeway.client.kroviz.to.TObject
 import org.apache.causeway.client.kroviz.to.TypeMapper
-import org.apache.causeway.client.kroviz.to.bs3.FieldSet
+import org.apache.causeway.client.kroviz.to.ValueType
+import org.apache.causeway.client.kroviz.to.bs.FieldSetBs
 import org.apache.causeway.client.kroviz.ui.core.FormItem
 import org.apache.causeway.client.kroviz.ui.core.FormPanelFactory
+import org.apache.causeway.client.kroviz.utils.js.ShowDown
 
 class FieldSetBuilder {
 
     fun create(
-            fieldSetLayout: FieldSet,
-            tObject: TObject,
-            tab: RoDisplay
+        fieldSetLayout: FieldSetBs,
+        tObject: TObject,
+        tab: RoDisplay
     ): FormPanel<String>? {
 
         val members = tObject.getProperties()
         val items = mutableListOf<FormItem>()
 
         for (p in fieldSetLayout.propertyList) {
-            val label = p.id
+            var label = p.id
             val member = members.firstOrNull() { it.id == label }
             if (member != null) {
                 val memberType = TypeMapper().forType(member.type!!)
+                var content = member.value?.content
+                label = p.named
+                if (memberType == ValueType.HTML && content is String) {
+                    when {
+                        content.startsWith(":Notice:") -> content = ShowDown.convertMarkDown2Html(content)
+                        content.startsWith("link:") -> content = content.replace("link:", "")
+                        else -> {}
+                    }
+                }
                 val size = maxOf(1, p.multiLine)
                 val fi = FormItem(
-                        label = p.named,
-                        type = memberType,
-                        content = member.value?.content,
-                        size = size,
-                        description = p.describedAs,
-                        member = member,
-                        dspl = tab)
+                    label = label,
+                    type = memberType,
+                    content = content,
+                    size = size,
+                    description = p.describedAs,
+                    member = member,
+                    dspl = tab
+                )
                 items.add(fi)
             }
         }

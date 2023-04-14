@@ -55,13 +55,14 @@ class ResourceProxy {
         }
     }
 
-    fun fetch(link: Link,
-              aggregator: BaseAggregator? = null,
-              subType: String = Constants.subTypeJson,
-              isRest: Boolean = true,
-              referrer: String = "") {
+    fun fetch(
+        link: Link,
+        aggregator: BaseAggregator? = null,
+        subType: String? = Constants.subTypeJson,
+        isRest: Boolean = true,
+        referrer: String = "") {
         val rs = ResourceSpecification(link.href, subType = subType, referrerUrl = referrer)
-        val le = findAndSetupLogEntry(rs)
+        val le = findAndSetupLogEntry(rs) //easier to read if outside 'when'
         val isCached = when (le) {
             null -> false
             else -> le.isCached(rs, link.method)
@@ -95,7 +96,7 @@ class ResourceProxy {
         return first
     }
 
-    private fun process(aggregator: BaseAggregator?, link: Link, subType: String, referrer: String) {
+    private fun process(aggregator: BaseAggregator?, link: Link, subType: String?, referrer: String) {
         if (aggregator is AggregatorWithLayout) {
             if (aggregator.tree == null) {
                 val root = Node(referrer, null)
@@ -117,7 +118,7 @@ class ResourceProxy {
             aggregator.update(le, le.subType)
         }
         le.setCached()
-        es.updateStatus(le)
+        es.updateStatus()
     }
 
     fun invokeKroki(pumlCode: String, aggregator: SvgDispatcher) {

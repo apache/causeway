@@ -73,7 +73,7 @@ IHDR�w=�sBIT|d�	pHYs��~�tEXtSoftwareAdobe Fireworks 
 """
         val ba = ByteArray(str.length)
         str.forEachIndexed { index, char ->
-            ba.set(index, char.toByte())
+            ba.set(index, char.code.toByte())
         }
         console.log(ba.toString())
         val options = BlobPropertyBag()

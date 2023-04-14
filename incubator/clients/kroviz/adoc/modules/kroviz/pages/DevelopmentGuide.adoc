@@ -125,7 +125,7 @@ The event source acts as a Proxy and thereby saves time and bandwidth.
 ==== Aggregator (EAI)
 
 Various aggregators are responsible to collect or assemble displayable objects.
-Once all layout information is there, the UI will be rendered, even if not all elements of a list
+Once all layout information is there, the UI will be rendered, even if not all data elements of a list
 have arrived. Those elements will be added as they arrive. This is done with the help of
 mutable lists.
 
@@ -161,7 +161,7 @@ The Restful Objects API.
 
 Thanks to Kotlin, code is very compact and readable.
 And, since Kotlin is a typed language and IDE's can infer a lot about the code, there are only few surprises.
-Nevertheless Kotlin/JS allows to use JavaScript features alongside the typed part, what effectively makes it a dynamic language.
+Nevertheless, Kotlin/JS allows to use JavaScript features alongside the typed part, what effectively makes it a dynamic language.
 
 === Hot Spots
 
@@ -172,16 +172,18 @@ Look out for places where typing is escaped and the DOM is manipulated directly:
 * stopPropagation()
 * getElementById()
 
+=== Layout Aggregation
+
 
 == Trouble Shooting
 
 === Corporate Firewall with SSL 'inspection'
 
-There are some questionable setups in coporate settings that are based on SSL replacement.
+There are some questionable setups in corporate settings that are based on SSL replacement.
 In order to cope with it, you may try to import the Certificate into cacerts,
 see https://intellij-support.jetbrains.com/hc/en-us/community/posts/115000094584-IDEA-Ultimate-2016-3-4-throwing-unable-to-find-valid-certification-path-to-requested-target-when-trying-to-refresh-gradle
 
-== Network Proxy
+=== Network Proxy
 
  Depending on the network you are in, you may need to configure the proxy settings. Among the relevant files are:
  `bash
@@ -243,7 +245,7 @@ Host ssh.github.com
 ----
 
 
-== Karma-Tests do not respond to code changes
+=== Karma-Tests do not respond to code changes
 
 Windows:
 

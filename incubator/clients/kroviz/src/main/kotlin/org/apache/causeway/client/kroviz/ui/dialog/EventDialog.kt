@@ -45,7 +45,6 @@ class EventDialog(filterState: EventState? = null) : Controller() {
     private val REP: String = "rep"
 
     init {
-        //FIXME actions Pin Export Replay Close
         val customButtons = mutableListOf<FormItem>()
         customButtons.add(FormItem("Export", ValueType.BUTTON, null, callBack = this, callBackAction = EXP))
         customButtons.add(FormItem("Import", ValueType.BUTTON, null, callBack = this, callBackAction = IMP))
@@ -66,6 +65,7 @@ class EventDialog(filterState: EventState? = null) : Controller() {
 
         val mainPanel = VPanel()
         mainPanel.addCssClass("dialog-content")
+        mainPanel.width = CssSize(100, UNIT.vw)
         mainPanel.flexDirection = FlexDirection.ROW
         mainPanel.add(eventTable)
         dialog.formPanel!!.add(mainPanel)

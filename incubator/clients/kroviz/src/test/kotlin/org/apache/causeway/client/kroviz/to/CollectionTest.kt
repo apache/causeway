@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.client.kroviz.to
 
+import org.apache.causeway.client.causeway.snapshots.demo2_0_0.OBJECT_COLLECTION2
 import org.apache.causeway.client.kroviz.IntegrationTest
 import org.apache.causeway.client.kroviz.handler.CollectionHandler
 import org.apache.causeway.client.kroviz.snapshots.demo2_0_0.OBJECT_COLLECTION
@@ -25,6 +26,25 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class CollectionTest : IntegrationTest() {
+
+    @Test
+    fun testParse2() {
+        //given
+        val jsonStr = OBJECT_COLLECTION2.str
+        //when
+        val collection = CollectionHandler().parse(jsonStr) as Collection
+        //then
+        assertEquals("objects", collection.id)
+        assertEquals("collection", collection.memberType)
+
+        val linkList = collection.links
+        assertEquals(3, linkList.size)
+
+        assertEquals("list", collection.extensions.collectionSemantics)
+
+        val valueList = collection.value
+        assertEquals(0, valueList.size)
+    }
 
     @Test
     fun testParse() {

@@ -89,7 +89,7 @@ class DiagramDialog(
     }
 
     private fun buildPinAction(): io.kvision.html.Link {
-        val action = DropDownMenuBuilder.buildActionLink(
+        val action = DropDownMenuBuilder().buildActionLink(
             label = "Pin",
             menuTitle = "Pin")
         action.onClick {
@@ -99,7 +99,7 @@ class DiagramDialog(
     }
 
     private fun buildDownloadAction(): io.kvision.html.Link {
-        val action = DropDownMenuBuilder.buildActionLink(
+        val action = DropDownMenuBuilder().buildActionLink(
             label = "Download",
             menuTitle = "Download")
         action.onClick {

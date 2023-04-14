@@ -19,19 +19,62 @@
 package org.apache.causeway.client.kroviz.core.model
 
 import io.kvision.state.observableListOf
+import org.apache.causeway.client.kroviz.to.PropertyDescription
 import org.apache.causeway.client.kroviz.to.TObject
 import org.apache.causeway.client.kroviz.to.TransferObject
+import org.apache.causeway.client.kroviz.to.bs.GridBs
+import org.apache.causeway.client.kroviz.to.bs.PropertyBs
 
-class CollectionDM(override val title: String) : DisplayModelWithLayout() {
+class CollectionDM(override var title: String) : DisplayModelWithLayout() {
+    val collectionLayout = CollectionLayout()
+
+    var id = ""
     var data = observableListOf<Exposer>()
     private var rawData = observableListOf<TransferObject>()
+    private var protoType: TObject? = null
+    private var protoTypeLayout: GridBs? = null
+
+    fun getTitle(): String {
+        return title
+    }
+
+    fun setProtoTypeLayout(grid: GridBs) {
+        protoTypeLayout = grid
+        val propertyList = grid.getPropertyList()
+        propertyList.forEach {
+            addPropertyDetails(it)
+        }
+    }
+
+    private fun addPropertyDetails(propertyBs: PropertyBs) {
+        val id = propertyBs.id
+        val ps = collectionLayout.getPropertySpecification(id)
+        ps.amendWith(propertyBs)
+    }
+
+    fun addPropertyDescription(propertyDescription: PropertyDescription) {
+        val id = propertyDescription.id
+        val ps = collectionLayout.getPropertySpecification(id)
+        ps.amendWith(propertyDescription)
+    }
+
+    fun hasProtoType(): Boolean {
+        return protoType != null
+    }
+
+    fun setProtoType(to: TransferObject) {
+        protoType = to as TObject
+    }
+
+    override fun readyToRender(): Boolean {
+        return collectionLayout.readyToRender()
+    }
 
     override fun addData(obj: TransferObject) {
-        if (!rawData.contains(obj)) {
-            rawData.add(obj)
-            val exo = Exposer(obj as TObject)
-            data.add(exo.dynamise())  //if exposer is not dynamised, data access in Tabulator tables won't work
-        }
+        rawData.add(obj)
+        val exo = Exposer(obj as TObject)
+        //if exposer is not dynamised, data access in Tabulator tables won't work
+        data.add(exo.dynamise() as Exposer)
     }
 
     override fun reset() {

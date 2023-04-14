@@ -26,7 +26,7 @@ import org.apache.causeway.client.kroviz.ui.dialog.ErrorDialog
 
 class ErrorDispatcher : BaseAggregator() {
 
-    override fun update(logEntry: LogEntry, subType: String) {
+    override fun update(logEntry: LogEntry, subType: String?) {
         val error = logEntry.getTransferObject() as HttpErrorResponse
         val url = logEntry.url
         val message = error.getMessage()

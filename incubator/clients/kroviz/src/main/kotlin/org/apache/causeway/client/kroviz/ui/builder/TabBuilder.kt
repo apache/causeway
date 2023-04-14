@@ -18,14 +18,14 @@
  */
 package org.apache.causeway.client.kroviz.ui.builder
 
-import org.apache.causeway.client.kroviz.to.TObject
-import org.apache.causeway.client.kroviz.to.bs3.Tab
 import io.kvision.core.Component
 import io.kvision.panel.SimplePanel
+import org.apache.causeway.client.kroviz.to.TObject
+import org.apache.causeway.client.kroviz.to.bs.TabBs
 
 class TabBuilder : UiBuilder() {
 
-    fun create(tabLayout: Tab, tObject: TObject, tab: RoDisplay): Component {
+    fun create(tabLayout: TabBs, tObject: TObject, tab: RoDisplay): Component {
         val panel = SimplePanel()
         style(panel)
 

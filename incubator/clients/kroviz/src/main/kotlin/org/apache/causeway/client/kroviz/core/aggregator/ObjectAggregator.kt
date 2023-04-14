@@ -19,14 +19,13 @@
 package org.apache.causeway.client.kroviz.core.aggregator
 
 import org.apache.causeway.client.kroviz.core.event.LogEntry
-import org.apache.causeway.client.kroviz.core.event.ResourceProxy
-import org.apache.causeway.client.kroviz.core.model.CollectionDM
 import org.apache.causeway.client.kroviz.core.model.ObjectDM
-import org.apache.causeway.client.kroviz.layout.Layout
 import org.apache.causeway.client.kroviz.to.*
-import org.apache.causeway.client.kroviz.to.bs3.Grid
+import org.apache.causeway.client.kroviz.to.bs.GridBs
+import org.apache.causeway.client.kroviz.ui.core.Constants
 import org.apache.causeway.client.kroviz.ui.core.ViewManager
 import org.apache.causeway.client.kroviz.ui.dialog.ErrorDialog
+import org.apache.causeway.client.kroviz.utils.StringUtils
 
 /** sequence of operations:
  * (0) Menu Action              User clicks BasicTypes.String -> handled by ActionDispatcher
@@ -35,55 +34,42 @@ import org.apache.causeway.client.kroviz.ui.dialog.ErrorDialog
  * (3) ???_OBJECT_PROPERTY       PropertyHandler -> invoke()
  * (4) ???_PROPERTY_DESCRIPTION  <PropertyDescriptionHandler>
  */
-class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
-    var collectionMap = mutableMapOf<String, CollectionAggregator>()
+class ObjectAggregator(private val actionTitle: String) : AggregatorWithLayout() {
+    private var isContainedInParentCollection = false
 
     init {
-        dpm = ObjectDM(actionTitle)
+        displayModel = ObjectDM(actionTitle)
     }
 
-    override fun update(logEntry: LogEntry, subType: String) {
+    override fun update(logEntry: LogEntry, subType: String?) {
         super.update(logEntry, subType)
-        if (!logEntry.isUpdatedFromParentedCollection()) {
+        if (logEntry.isUpdatedFromParentedCollection()) {
+            isContainedInParentCollection = true
+        } else {
             val referrer = logEntry.url
             when (val obj = logEntry.getTransferObject()) {
                 is TObject -> handleObject(obj, referrer)
                 is ResultObject -> handleResultObject(obj)
                 is ResultValue -> handleResultValue(obj)
-                is Property -> handleProperty(obj)
-                is Layout -> handleLayout(obj, dpm as ObjectDM, referrer)
-                is Grid -> handleGrid(obj)
+                is Property -> handleProperty(obj, referrer)
+                is GridBs -> handleGrid(obj, referrer)
                 is HttpError -> ErrorDialog(logEntry).open()
                 else -> log(logEntry)
             }
         }
 
-        if (dpm.canBeDisplayed() && collectionsCanBeDisplayed()) {
-            collectionMap.forEach {
-                (dpm as ObjectDM).addCollection(it.key, it.value.dpm as CollectionDM)
-            }
+        if (getDisplayModel().readyToRender()) {
             ViewManager.openObjectView(this)
         }
     }
 
-    private fun collectionsCanBeDisplayed(): Boolean {
-        if (collectionMap.isEmpty()) return true
-        return collectionMap.all {
-            val cdm = it.value.dpm as CollectionDM
-            cdm.canBeDisplayed()
-        }
-    }
-
-    fun handleObject(obj: TObject, referrer : String) {
+    private fun handleObject(obj: TObject, referrer: String) {
         // After ~/action/invoke is called, the actual object instance (containing properties) needs to be invoked as well.
         // Note that rel.self/href is identical and both are of type TObject. logEntry.url is different, though.
         if (obj.getProperties().size == 0) {
             invokeInstance(obj, referrer)
         } else {
-            dpm.addData(obj)
-        }
-        if (collectionMap.isEmpty()) {
-            handleCollections(obj, referrer)
+            displayModel.addData(obj)
         }
         invokeLayoutLink(obj, this, referrer = referrer)
     }
@@ -95,47 +81,52 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
         invoke(selfLink!!, this, referrer = referrer)
     }
 
-    fun handleResultObject(resultObject: ResultObject) {
-        (dpm as ObjectDM).addResult(resultObject)
+    fun getDisplayModel(): ObjectDM {
+        return displayModel as ObjectDM
     }
 
-    fun handleResultValue(resultValue: ResultValue) {
-// TODO       (dpm as ObjectDM).addResult(resultObject)
-        console.log("[OA.handleResultValue]")
-        console.log(resultValue)
+    private fun handleResultObject(resultObject: ResultObject) {
+        getDisplayModel().addResult(resultObject)
+    }
+
+    private fun handleResultValue(resultValue: ResultValue) {
+        throw NotImplementedError("$resultValue to be handled")
     }
 
     override fun getObject(): TObject? {
-        return dpm.getObject()
+        return displayModel.getObject()
     }
 
-    private fun handleCollections(obj: TObject, referrer: String) {
-        obj.getCollections().forEach {
-            val key = it.id
-            val aggregator = CollectionAggregator(key, this)
-            collectionMap.put(key, aggregator)
-            val link = it.links.first()
-            ResourceProxy().fetch(link, aggregator, referrer = referrer)
+    private fun handleProperty(p: Property, referrer: String) {
+        if (!p.isPropertyDescription()) {
+            val pdl = p.getDescriptionLink() ?: return
+            invoke(pdl, this, referrer = referrer)
         }
     }
 
-    private fun handleProperty(property: Property) {
-        console.log("[OA.handleProperty]")
-        console.log(property)
-//        throw Throwable("[ObjectAggregator.handleProperty] not implemented yet")
+    private fun handleGrid(grid: GridBs, referrer: String) {
+        getDisplayModel().addLayout(grid, this, referrer)
+        grid.getPropertyList().forEach {
+            val link = it.link!!
+            invoke(link, this, subType = Constants.subTypeJson, referrer = referrer)
+        }
     }
 
-    private fun handleGrid(grid: Grid) {
-        (dpm as ObjectDM).grid = grid
+    fun getTitle(): String {
+        var title: String = StringUtils.extractTitle(getDisplayModel().title)
+        if (title.isEmpty()) {
+            title = actionTitle
+        }
+        return title
     }
 
     override fun reset(): ObjectAggregator {
-        dpm.isRendered = false
+        displayModel.reset()
         return this
     }
 
     /**
-     * This is done in order to have the parent check, if it and it's children can be displayed
+     * This is done in order to have the parent check, if itself and it's children can be displayed
      */
     private fun LogEntry.isUpdatedFromParentedCollection(): Boolean {
         return this.url == ""

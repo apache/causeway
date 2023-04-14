@@ -31,10 +31,10 @@ package "to" {
     TransferObject <|-- TObject
     TransferObject <|-- Icon
 
-    package "bs3" {
-        class Grid{}
+    package "bs" {
+        class GridBs{}
     }
-    TransferObject <|- Grid
+    TransferObject <|- GridBs
 }
 
 package "aggregator" {
@@ -93,22 +93,22 @@ package "model" {
     abstract class BaseDisplayModel {
         isRendered:Boolean
         title:String
-        {abstract} canBeDisplayed():Boolean
+        {abstract} readyToRender():Boolean
     }
 
     abstract class DisplayModelWithLayout {
         layout: Layout
-        grid: Grid
-        properties: CollectionProperties
+        grid: GridBs
+        collectionProperties: CollectionProperties
         icon: Icon
-        + canBeDisplayed()
+        + readyToRender()
     }
 
     class ObjectDM {
         + data:Exposer
         + collections:Map<String,CollectionDM>
         - dirty:Boolean
-        + canBeDisplayed()
+        + readyToRender()
     }
     note left of ObjectDM::dirty
     Used in

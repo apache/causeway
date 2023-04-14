@@ -27,7 +27,7 @@ abstract class BaseDisplayModel {
 
     abstract val title: String
 
-    abstract fun canBeDisplayed(): Boolean
+    abstract fun readyToRender(): Boolean
 
     abstract fun addData(obj: TransferObject)
 

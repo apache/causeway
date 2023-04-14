@@ -23,7 +23,7 @@ import org.apache.causeway.client.kroviz.ui.dialog.FileDialog
 
 class DownloadDispatcher(val actionTitle: String) : BaseAggregator() {
 
-    override fun update(logEntry: LogEntry, subType: String) {
+    override fun update(logEntry: LogEntry, subType: String?) {
         FileDialog(logEntry).open()
     }
 

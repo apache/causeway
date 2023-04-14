@@ -18,12 +18,12 @@
  */
 package org.apache.causeway.client.kroviz.ui.menu
 
-import io.kvision.core.Component
 import io.kvision.core.CssSize
 import io.kvision.core.UNIT
 import io.kvision.dropdown.DropDown
 import io.kvision.dropdown.separator
 import io.kvision.html.ButtonStyle
+import io.kvision.utils.auto
 import org.apache.causeway.client.kroviz.core.event.ResourceProxy
 import org.apache.causeway.client.kroviz.to.Link
 import org.apache.causeway.client.kroviz.to.TObject
@@ -36,7 +36,7 @@ import org.apache.causeway.client.kroviz.utils.IconManager
 import org.apache.causeway.client.kroviz.utils.StringUtils
 import io.kvision.html.Link as KvisionHtmlLink
 
-object DropDownMenuBuilder {
+class DropDownMenuBuilder : MenuBuilder() {
 
     fun buildForObjectWithSaveAndUndo(tObject: TObject): DropDown {
         val dd = buildForObject(tObject)
@@ -44,7 +44,7 @@ object DropDownMenuBuilder {
         disableSaveUndo(dd)
         dd.marginTop = CssSize(Constants.spacing, UNIT.px)
         dd.marginBottom = CssSize(Constants.spacing, UNIT.px)
-        dd.width = CssSize(100, UNIT.perc)
+        dd.width = auto
         return dd
     }
 
@@ -234,11 +234,6 @@ object DropDownMenuBuilder {
 
         val undoItem = menuItems[menuItems.size - 1]
         switchCssClass(undoItem, IconManager.DISABLED, IconManager.WARN)
-    }
-
-    private fun switchCssClass(menuItem: Component, from: String, to: String) {
-        menuItem.removeCssClass(from)
-        menuItem.addCssClass(to)
     }
 
 }

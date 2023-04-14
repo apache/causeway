@@ -95,7 +95,7 @@ class RoDialog(
         contentWidth = CssSize(widthPerc, UNIT.perc)
         contentHeight = CssSize(heightPerc, UNIT.perc)
 
-        vPanel() {
+        vPanel {
             height = CssSize(heightPerc, UNIT.vh)
             this.addCssClass("dialog")
 

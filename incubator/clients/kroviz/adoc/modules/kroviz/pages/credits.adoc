@@ -23,7 +23,7 @@ convert.exe WheatFieldWithCrows.jpg -channel all causeway_clut.png -clut WheatFi
 convert.exe WheatFieldWithCrows.jpg -separate -normalize -combine causeway_clut.png -clut WheatFieldWithCrows.png
 ----
 
-== Apache Causeway colors
+== Apache Isis colors
 
 In the icon: green, orange, red, blue
 
@@ -33,6 +33,12 @@ In the icon: green, orange, red, blue
 * Green #9BBB59
 * Orange #F79646
 * Red #C0504D
+
+== Apache Colors
+https://coloropedia.com/apache-colors-logo-codes/
+
+== Irish Flag
+https://www.flagcolorcodes.com/ireland
 
 == Components Colors
 

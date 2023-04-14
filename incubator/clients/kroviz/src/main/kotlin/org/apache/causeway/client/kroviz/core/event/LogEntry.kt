@@ -25,7 +25,7 @@ import kotlinx.serialization.Serializable
 import org.apache.causeway.client.kroviz.core.aggregator.ActionDispatcher
 import org.apache.causeway.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.causeway.client.kroviz.to.*
-import org.apache.causeway.client.kroviz.to.bs3.Grid
+import org.apache.causeway.client.kroviz.to.bs.GridBs
 import org.apache.causeway.client.kroviz.to.mb.Menubars
 import org.apache.causeway.client.kroviz.ui.core.Constants
 import org.apache.causeway.client.kroviz.ui.core.ViewManager
@@ -58,7 +58,7 @@ data class LogEntry(
     val request: String = "",
     @Contextual val createdAt: Date = Date(),
 ) {
-    val url: String = rs?.url
+    val url: String = rs.url //rs?.url
 
     //?. is required, otherwise Tabulator.js/EventLogTable shows no entries
     val subType = rs?.subType
@@ -107,7 +107,7 @@ data class LogEntry(
     var runningAtStart = 0
     var runningAtEnd = 0
 
-    // alternative constructor for UI events (eg. from user interaction)
+    // alternative constructor for UI events (e.g. from user interaction)
     @JsName("secondaryConstructor")
     constructor(title: String, aggregator: BaseAggregator) : this(ResourceSpecification(""), "", "") {
         this.title = title
@@ -163,6 +163,7 @@ data class LogEntry(
             hasResponse()
                     && this.method == method
                     && subType == rs.subType -> true
+
             isView() -> true
             else -> false
         }
@@ -180,37 +181,39 @@ data class LogEntry(
     }
 
     fun setTransferObject(to: TransferObject) {
-        console.log("[LE.setTransferObject]")
         this.obj = to
         when (to) {
             is WithLinks -> {
                 this.type = extractType(to)
             }
-            is Grid -> {
+
+            is GridBs -> {
                 this.type = Relation.LAYOUT.type
             }
+
             is Icon -> {
                 this.type = Relation.OBJECT_ICON.type
             }
+
             is Blob -> {
                 this.type = Represention.IMAGE_PNG.type
             }
+
             is Menubars -> {
                 this.type = Represention.LAYOUT_MENUBARS.type
             }
+
             is HttpError -> {
                 this.type = Represention.ERROR.type
             }
+
             is TObject -> {
-                when {
-                    to == null -> {
-                        this.state = EventState.MISSING
-                        this.type = Represention.ERROR.type
-                        console.log("to == null for response:")
-                        console.log(response)
-                    }
-                }
+                this.state = EventState.MISSING
+                this.type = Represention.ERROR.type
+                console.log("to == null for response:")
+                console.log(response)
             }
+
             else -> {
                 console.log(to)
             }
@@ -221,7 +224,7 @@ data class LogEntry(
     private fun extractType(wl: WithLinks): String {
         val firstLink = wl.getLinks().firstOrNull()!!
         val result = firstLink.simpleType()
-        if (result.trim().length == 0) {
+        if (result.isEmpty()) {
             console.log("[LE.extractType]")
             console.log(obj)
             console.log(result)
@@ -282,14 +285,14 @@ data class LogEntry(
     }
 
     fun getAggregator(): BaseAggregator? {
-        //TODO the last aggt is not always the right one
+        //TODO the last aggregator is not always the right one
         // callers need to filter  !!!
-        if (aggregators.size == 0) {
+        return if (aggregators.size == 0) {
             console.log("[LE.getAggregator] no Aggregator(s) yet")
             console.log(this)
-            return null
+            null
         } else {
-            return aggregators.last()
+            aggregators.last()
         }
     }
 

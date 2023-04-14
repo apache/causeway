@@ -96,7 +96,7 @@ class ActionPrompt(val action: Action) : Controller() {
                 is SimpleSelect -> {
                     key = i.label!!
                     value = i.getValue()!!
-                    val p: Parameter = action.findParameterByName(key.toLowerCase())!!
+                    val p: Parameter = action.findParameterByName(key.lowercase())!!
                     val href = p.getHrefByTitle(value)!!
                     value = href
                 }

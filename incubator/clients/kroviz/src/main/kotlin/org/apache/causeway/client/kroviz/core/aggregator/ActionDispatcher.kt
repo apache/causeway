@@ -27,7 +27,7 @@ import org.apache.causeway.client.kroviz.utils.StringUtils
 
 class ActionDispatcher(private val at: Point = Point(100, 100)) : BaseAggregator() {
 
-    override fun update(logEntry: LogEntry, subType: String) {
+    override fun update(logEntry: LogEntry, subType: String?) {
         val to = logEntry.getTransferObject()
         val referrer = logEntry.url
         when {
@@ -50,7 +50,7 @@ class ActionDispatcher(private val at: Point = Point(100, 100)) : BaseAggregator
             }
             to is Restful -> {}
             else -> {
-                console.log(to)
+//                console.log(to)
 //                throw Throwable("[ActionDispatcher.update] ${to!!::class.simpleName}")
             }
         }

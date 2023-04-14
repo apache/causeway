@@ -24,87 +24,135 @@ import io.kvision.panel.FlexPanel
 import io.kvision.panel.HPanel
 import io.kvision.panel.SimplePanel
 import org.apache.causeway.client.kroviz.to.TObject
-import org.apache.causeway.client.kroviz.to.bs3.Col
+import org.apache.causeway.client.kroviz.to.bs.ColBs
+import org.apache.causeway.client.kroviz.to.bs.CollectionBs
+import org.apache.causeway.client.kroviz.to.bs.FieldSetBs
 import org.apache.causeway.client.kroviz.ui.core.Constants
 import org.apache.causeway.client.kroviz.ui.core.RoTable
 import org.apache.causeway.client.kroviz.ui.menu.DropDownMenuBuilder
 import org.apache.causeway.client.kroviz.utils.StringUtils
 import kotlin.math.round
 
-class ColBuilder : UiBuilder() {
+class ColBuilder(
+    val col: ColBs,
+    val tObject: TObject,
+    private val dsp: RoDisplay
+) : UiBuilder() {
 
-    fun create(col: Col, tObject: TObject, dsp: RoDisplay): FlexPanel {
-        val panel = buildPanel()
+    var panel: FlexPanel
 
+    init {
+        panel = buildPanel()
+        addMenu()
+        addTabgroups()
+        addFieldSets()
+        addRows()
+        addCollections()
+    }
+
+    private fun addMenu() {
         if ((col.actionList.size > 0) && (col.domainObject != null)) {
             val menu = createMenu(tObject, dsp)
             assignWidth(menu, col)
             panel.add(menu)
         }
+    }
 
-        for (tg in col.tabGroupList) {
+    private fun addTabgroups() {
+        col.tabGroupList.forEach { tg ->
             val tgCpt = TabGroupBuilder().create(tg, tObject, dsp)
             panel.add(tgCpt)
         }
-        for (fs in col.fieldSetList) {
+    }
+
+    private fun addFieldSets() {
+        col.fieldSetList.forEach { fs ->
             if (fs.propertyList.size > 0) {
-                val fsCpt = FieldSetBuilder().create(fs, tObject, dsp)!!
-                var legend = fs.name
-                if (legend.trim().isEmpty()) {
-                    legend = fs.id
-                }
-                legend = StringUtils.capitalize(legend)
-                val fsPanel = FieldsetPanel(legend = legend).add(fsCpt)
-                val tto = TooltipOptions(title = fs.id)
-                fsPanel.enableTooltip(tto)
+                val fsPanel = buildFieldSetPanel(fs)
                 assignWidth(fsPanel, col)
                 panel.add(fsPanel)
             }
         }
-        for (row in col.rowList) {
+    }
+
+    private fun addRows() {
+        col.rowList.forEach { row ->
             val rowCpt = RowBuilder().create(row, tObject, dsp)
             panel.add(rowCpt)
         }
-        for (c in col.collectionList) {
-            val key = c.id  // entities
-            val objectDM = dsp.displayModel
-            val collectionDM = objectDM.collections[key]
-            if (collectionDM != null) {
-                val tblCpt = RoTable(collectionDM)
-                val fsPanel = FieldsetPanel(legend = StringUtils.capitalize(key)).add(tblCpt)
-                panel.add(fsPanel)
-                collectionDM.isRendered = true
-            }
+    }
+
+    private fun addCollections() {
+        col.collectionList.forEach {
+            buildTableAndWrapInFsPanel(it)
         }
-        return panel
+    }
+
+    private fun buildTableAndWrapInFsPanel(it: CollectionBs) {
+        val id = it.id
+        val objectDM = dsp.displayModel
+        try {
+            // objectDM is sometimes null
+            val cdm = objectDM.getCollectionDisplayModelFor(id)!!
+            val fsPanel = FieldsetPanel(legend = cdm.getTitle())
+            fsPanel.add(RoTable(cdm))
+            panel.add(fsPanel)
+            cdm.isRendered = true
+            console.log("[CB_buildTableAndWrapInFsPanel] succeeded")
+        } catch (npe: NullPointerException) {
+            console.log("[CB_buildTableAndWrapInFsPanel] failed with NPE")
+            throw npe
+        }
+    }
+
+    private fun buildFieldSetPanel(fs: FieldSetBs): SimplePanel {
+        console.log("[CB_buildFieldSetPanel]")
+        val fsCpt = FieldSetBuilder().create(fs, tObject, dsp)!!
+        val legend = extractLegend(fs)
+        val fsPanel = FieldsetPanel(legend = legend).add(fsCpt)
+        val tto = TooltipOptions(title = fs.id)
+        fsPanel.enableTooltip(tto)
+//        fsPanel.flexDirection = FlexDirection.ROW
+        return fsPanel
+    }
+
+    private fun extractLegend(fs: FieldSetBs): String {
+        var legend = fs.name.trim()
+        if (legend.isEmpty()) {
+            legend = fs.id
+        }
+        return StringUtils.capitalize(legend)
     }
 
     private fun buildPanel(): FlexPanel {
-        return FlexPanel(
+        val panel = FlexPanel(
             FlexDirection.COLUMN,
             FlexWrap.NOWRAP,
-            JustifyContent.SPACEBETWEEN,
-            AlignItems.CENTER,
-            AlignContent.STRETCH,
+            JustifyContent.FLEXSTART,
+            AlignItems.FLEXSTART,
+            AlignContent.FLEXSTART,
             spacing = Constants.spacing
         )
+        panel.padding = CssSize(10, UNIT.px)
+        return panel
     }
 
     private fun createMenu(tObject: TObject, dsp: RoDisplay): HPanel {
         val panel = HPanel()
         style(panel)
-
-        val dd = DropDownMenuBuilder.buildForObjectWithSaveAndUndo(tObject)
+        val dd = DropDownMenuBuilder().buildForObjectWithSaveAndUndo(tObject)
         dsp.menu = dd
         panel.add(dd)
-
         return panel
     }
 
-    private fun assignWidth(panel: SimplePanel, col: Col) {
+    private fun assignWidth(panel: SimplePanel, col: ColBs) {
         val proportion = col.span.toDouble().div(12)
         val percent = proportion * 100
         val rounded = round(percent)
+        console.log("[CB_assignWidth]")
+        console.log(col.span)
+        console.log(rounded)
         val cssWidth = CssSize(rounded, UNIT.perc)
         panel.flexBasis = cssWidth
         panel.flexGrow = 1

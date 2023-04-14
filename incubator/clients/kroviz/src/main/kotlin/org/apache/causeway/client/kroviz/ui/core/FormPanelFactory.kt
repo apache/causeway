@@ -39,8 +39,8 @@ import io.kvision.html.Image
 import io.kvision.panel.VPanel
 import io.kvision.panel.vPanel
 import io.kvision.utils.auto
-import io.kvision.utils.perc
 import io.kvision.utils.px
+import io.kvision.utils.vh
 import org.apache.causeway.client.kroviz.to.ValueType
 import org.apache.causeway.client.kroviz.ui.dialog.Controller
 import org.apache.causeway.client.kroviz.ui.panel.SvgPanel
@@ -74,13 +74,17 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
                     ValueType.SVG_INLINE -> add(createInline(fi))
                     ValueType.SVG_MAPPED -> add(createSvgMap(fi))
                     ValueType.BUTTON -> add(createButton(fi))
+                    ValueType.VEGA -> {
+                        TODO("implement VEGA")
+                    }
                 }
             }
         }
     }
 
     private fun createButton(fi: FormItem): Button {
-        val item = Button(text = fi.label, icon = IconManager.find(fi.label))
+        val icon = IconManager.find(fi.label)
+        val item = Button(text = fi.label, icon = icon)
         val obj = fi.callBack!! as Controller
         val action = fi.callBackAction
         item.onClick {
@@ -92,8 +96,8 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
     private fun createBoolean(fi: FormItem): Component {
         val value = fi.content
         val bools = arrayOf("true", "false")
-        return when {
-            value in bools -> CheckBox(label = fi.label, value = (value == "true"))
+        return when (value) {
+            in bools -> CheckBox(label = fi.label, value = (value == "true"))
             else -> createText(fi)
         }
     }
@@ -137,6 +141,8 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
     }
 
     private fun createTextArea(fi: FormItem): TextArea {
+        console.log("[FPF_createTextArea]")
+        console.log(fi)
         val rows = fi.size
         val item: TextArea = if (rows != null) {
             val rowCnt = maxOf(3, rows)
@@ -151,7 +157,7 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
                 it.stopPropagation()
             }
         }
-        item.height = 100.perc
+        item.height = 100.vh
         return item
     }
 
@@ -168,27 +174,29 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
     private fun createImage(fi: FormItem): VPanel {
         val panel = VPanel {
             when (val fc = fi.content) {
-                fc is Image -> fc
-                fc is String -> {
+                (fc is Image) -> {
+                    console.log(fc)
+                }
+                (fc is String) -> {
                     // interpret as (file) URL and load locally
                     console.log("[FPF.createImage]")
                     console.log(fc)
                     // TODO passing url as string does not work:
-                    // require resolves string to url and `compiles` it into the binary
-                    // working with remote resources allows to me more dynamic
+                    // require resolves string to url and `compiles` it into the binary.
+                    // Working with remote resources allows to be more dynamic
                     //image(require("img/kroviz-logo.svg"))
                 }
                 else -> {
+                    TODO("implement")
                 }
             }
         }
-        //TODO
         panel.add(fi.content as Image)
-        panel.addCssClass("form-panel")
+        panel.addCssClass(FORM_PANEL)
         return panel
     }
 
-    // used eg. for SVG placement
+    // used e.g. for SVG placement
     private fun createInline(fi: FormItem): VPanel {
         val panel = VPanel {
             when (val fcb = fi.callBack) {
@@ -202,13 +210,13 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
                 }
             }
         }
-        panel.addCssClass("form-panel")
+        panel.addCssClass(FORM_PANEL)
         return panel
     }
 
     private fun createSvgMap(fi: FormItem): SvgPanel {
         val panel = SvgPanel()
-        panel.addCssClass("form-panel")
+        panel.addCssClass(FORM_PANEL)
         fi.callBack = panel
         return panel
     }
@@ -235,6 +243,10 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
         }
         item.addCssClass("container")
         return item
+    }
+
+    companion object {
+        private const val FORM_PANEL = "form-panel"
     }
 
 }

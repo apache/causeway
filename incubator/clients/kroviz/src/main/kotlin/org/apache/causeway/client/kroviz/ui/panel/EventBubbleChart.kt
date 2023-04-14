@@ -44,7 +44,7 @@ class EventBubbleChart : SimplePanel() {
     private var chart: Chart
 
     init {
-        width = CssSize(90, UNIT.vw)
+        width = CssSize(100, UNIT.vw)
         chart = chart(
             configuration = buildConfiguration()
         )

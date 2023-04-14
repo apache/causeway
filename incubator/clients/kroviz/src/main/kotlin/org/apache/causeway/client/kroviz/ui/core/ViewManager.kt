@@ -29,6 +29,7 @@ import kotlinx.browser.window
 import org.apache.causeway.client.kroviz.App
 import org.apache.causeway.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.causeway.client.kroviz.core.aggregator.ObjectAggregator
+import org.apache.causeway.client.kroviz.core.aggregator.SystemAggregator
 import org.apache.causeway.client.kroviz.core.aggregator.UndefinedDispatcher
 import org.apache.causeway.client.kroviz.core.event.EventStore
 import org.apache.causeway.client.kroviz.core.event.StatusPo
@@ -101,7 +102,7 @@ object ViewManager {
         val tObject = aggregator.getObject()
         var menu: ContextMenu? = null
         if (tObject != null) {
-            menu = ContextMenuBuilder.buildForObjectWithSaveAndUndo(tObject)
+            menu = ContextMenuBuilder().buildForObjectWithSaveAndUndo(tObject)
         }
         getRoView().addTab(title, panel, menu)
         getEventStore().addView(title, aggregator, panel)
@@ -164,7 +165,7 @@ object ViewManager {
     }
 
     fun openCollectionView(aggregator: BaseAggregator) {
-        val displayable = aggregator.dpm
+        val displayable = aggregator.displayModel
         val title: String = StringUtils.extractTitle(displayable.title)
         val panel = RoTable(displayable as CollectionDM)
         add(title, panel, aggregator)
@@ -172,14 +173,16 @@ object ViewManager {
         setNormalCursor()
     }
 
+    fun openObjectView(aggregator: SystemAggregator) {
+        console.log("[VM_openObjectView]")
+        val dm = aggregator.displayModel
+        dm.isRendered = true
+        setNormalCursor()
+    }
     fun openObjectView(aggregator: ObjectAggregator) {
-        val dm = aggregator.dpm as ObjectDM
-        var title: String = StringUtils.extractTitle(dm.title)
-        if (title.isEmpty()) {
-            title = aggregator.actionTitle
-        }
+        val dm = aggregator.getDisplayModel()
         val panel = RoDisplay(dm)
-        add(title, panel, aggregator)
+        add(aggregator.getTitle(), panel, aggregator)
         dm.isRendered = true
         setNormalCursor()
     }
@@ -237,7 +240,7 @@ object ViewManager {
         return SessionManager.getEventStore()
     }
 
-    fun countDialogs(): Int {
+    private fun countDialogs(): Int {
         return popups.size + 1
     }
 

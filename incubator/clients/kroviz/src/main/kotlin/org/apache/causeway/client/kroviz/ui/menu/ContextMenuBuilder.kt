@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.client.kroviz.ui.menu
 
-import io.kvision.core.Component
 import io.kvision.core.CssSize
 import io.kvision.core.UNIT
 import io.kvision.dropdown.ContextMenu
@@ -31,7 +30,7 @@ import org.apache.causeway.client.kroviz.utils.IconManager
 import org.apache.causeway.client.kroviz.utils.StringUtils
 import io.kvision.html.Link as KvisionHtmlLink
 
-object ContextMenuBuilder {
+class ContextMenuBuilder : MenuBuilder() {
 
     fun buildForObjectWithSaveAndUndo(tObject: TObject): ContextMenu {
         val cm = buildForObject(tObject)
@@ -46,17 +45,11 @@ object ContextMenuBuilder {
     fun buildForObject(
         tObject: TObject,
         withText: Boolean = true,
-//        iconName: String = "Actions",
     )
             : ContextMenu {
         val type = tObject.domainType
         val text = if (withText) "Actions for $type" else ""
-//        val icon = IconManager.find(iconName)
-        val cm = ContextMenu(
-//            text = text,
-//            icon = icon,
-//            style = ButtonStyle.LINK
-        )
+        val cm = ContextMenu()
         val actions = tObject.getActions()
         actions.forEach {
             val link = buildActionLink(it.id, text)
@@ -69,7 +62,7 @@ object ContextMenuBuilder {
         return cm
     }
 
-    fun buildActionLink(
+    private fun buildActionLink(
         label: String,
         menuTitle: String,
     ): KvisionHtmlLink {
@@ -136,7 +129,7 @@ object ContextMenuBuilder {
 
     // disabled when tObject.isClean
     // IMPROVE use tr("Dropdowns (disabled)") to DD.DISABLED.option,
-    fun disableSaveUndo(cm: ContextMenu) {
+    private fun disableSaveUndo(cm: ContextMenu) {
         val menuItems = cm.getChildren()
 
         val saveItem = menuItems[menuItems.size - 2]
@@ -154,11 +147,6 @@ object ContextMenuBuilder {
 
         val undoItem = menuItems[menuItems.size - 1]
         switchCssClass(undoItem, IconManager.DISABLED, IconManager.WARN)
-    }
-
-    private fun switchCssClass(menuItem: Component, from: String, to: String) {
-        menuItem.removeCssClass(from)
-        menuItem.addCssClass(to)
     }
 
 }

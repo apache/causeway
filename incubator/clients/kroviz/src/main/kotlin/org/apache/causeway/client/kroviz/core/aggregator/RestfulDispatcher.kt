@@ -18,16 +18,14 @@
  */
 package org.apache.causeway.client.kroviz.core.aggregator
 
-import org.apache.causeway.client.kroviz.core.event.CorsHttpRequest
 import org.apache.causeway.client.kroviz.core.event.LogEntry
 import org.apache.causeway.client.kroviz.to.Link
 import org.apache.causeway.client.kroviz.to.Relation
 import org.apache.causeway.client.kroviz.to.Restful
-import org.apache.causeway.client.kroviz.ui.core.SessionManager
 
-class RestfulDispatcher() : BaseAggregator() {
+class RestfulDispatcher : BaseAggregator() {
 
-    override fun update(logEntry: LogEntry, subType: String) {
+    override fun update(logEntry: LogEntry, subType: String?) {
         val restful = logEntry.getTransferObject() as Restful
         restful.links.forEach {
             val rel = it.rel
@@ -36,8 +34,8 @@ class RestfulDispatcher() : BaseAggregator() {
                 rel.endsWith("/menuBars") -> invokeNavigation(it)
                 rel.endsWith("/services") -> {}
                 rel.endsWith("/logout") -> {}
-                rel.endsWith("/brand-logo-signin") -> invokeDisgustingCorsWorkaround(it)
-                rel.endsWith("/brand-logo-header") -> invokeDisgustingCorsWorkaround(it)
+//                rel.endsWith("/brand-logo-signin") -> invokeDisgustingCorsWorkaround(it)
+//                rel.endsWith("/brand-logo-header") -> invokeDisgustingCorsWorkaround(it)
                 else -> invokeSystem(it)
             }
         }
@@ -49,11 +47,6 @@ class RestfulDispatcher() : BaseAggregator() {
 
     private fun invokeSystem(link: Link) {
         invoke(link, SystemAggregator(), referrer = "")
-    }
-
-    private fun invokeDisgustingCorsWorkaround(link: Link) {
-        val credentials = SessionManager.getCredentials()!!
-        CorsHttpRequest().invoke(link.href, credentials)
     }
 
 }

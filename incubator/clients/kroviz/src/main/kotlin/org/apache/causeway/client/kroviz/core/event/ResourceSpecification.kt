@@ -23,9 +23,9 @@ import org.apache.causeway.client.kroviz.utils.StringUtils
 import org.apache.causeway.client.kroviz.utils.UrlUtils
 
 class ResourceSpecification(
-        val url: String,
-        val subType: String = Constants.subTypeJson,
-        val referrerUrl: String = "") {
+    val url: String,
+    val subType: String? = Constants.subTypeJson,
+    val referrerUrl: String = "") {
 
     fun isRedundant(): Boolean {
         return when {

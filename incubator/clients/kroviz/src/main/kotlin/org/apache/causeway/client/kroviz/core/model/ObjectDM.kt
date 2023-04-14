@@ -18,65 +18,65 @@
  */
 package org.apache.causeway.client.kroviz.core.model
 
+import org.apache.causeway.client.kroviz.core.aggregator.ObjectAggregator
 import org.apache.causeway.client.kroviz.core.event.ResourceProxy
 import org.apache.causeway.client.kroviz.core.event.ResourceSpecification
 import org.apache.causeway.client.kroviz.to.*
+import org.apache.causeway.client.kroviz.to.bs.GridBs
 import org.apache.causeway.client.kroviz.ui.core.SessionManager
 
 class ObjectDM(override val title: String) : DisplayModelWithLayout() {
+    private val collectionModelList = mutableListOf<CollectionDM>()
     var data: Exposer? = null
-    val collections = mutableMapOf<String, CollectionDM>()
     private var dirty: Boolean = false
-
-    override fun canBeDisplayed(): Boolean {
-        //       debug()
-        return when {
-            isRendered -> false
-            (layout == null) && (grid == null) -> false
-            else -> true
-        }
-    }
-
-    private fun debug() {
-        console.log("[]")
-        console.log("[ODM.debug] data / collections / layout / grid / properties / icon / aggregator / logEntries")
-        console.log(data)
-        console.log(collections)
-        console.log(layout)
-        console.log(grid)
-        console.log(properties)
-        console.log(icon)
-        if (data != null) {
-            val delegate = (data as Exposer).delegate
-            val selfLink = delegate.getSelfLink()
-            val rs = ResourceSpecification(selfLink.href)
-            val es = SessionManager.getEventStore()
-            val le = es.findBy(rs)!!
-            val aggt = le.getAggregator()
-            console.log(aggt)
-            val logEntries = es.findAllBy(aggt!!)
-            logEntries.forEach {
-                console.log(it)
-            }
-        }
-    }
 
     fun setDirty(value: Boolean) {
         dirty = value
     }
 
-    fun addCollection(key: String, value: CollectionDM) {
-        collections.put(key, value)
+    fun addCollectionModel(collectionModel: CollectionDM) {
+        val id = collectionModel.id
+        val foundModel = collectionModelList.firstOrNull {
+            it.id == id
+        }
+        if (foundModel == null) {
+            collectionModelList.add(collectionModel)
+        }
+    }
+
+    fun hasCollectionModels(): Boolean {
+        return collectionModelList.isNotEmpty()
+    }
+
+    fun addLayout(grid: GridBs, aggregator: ObjectAggregator, referrer: String?) {
+        layout = ObjectLayout(grid, aggregator, referrer!!)
+    }
+
+    fun getCollectionDisplayModelFor(id: String): CollectionDM? {
+        return collectionModelList.firstOrNull { it.id == id }
+    }
+
+    override fun readyToRender(): Boolean {
+        return when {
+            data == null -> false
+            isRendered -> false
+            layout == null -> false
+            else -> areCollectionsReadyToRender()
+        }
+    }
+
+    private fun areCollectionsReadyToRender(): Boolean {
+        collectionModelList.forEach {
+            if (!it.readyToRender())
+                return false
+        }
+        return true
     }
 
     override fun addData(obj: TransferObject) {
         (obj as TObject)
         val exo = Exposer(obj)
         data = exo.dynamise() as? Exposer
-        obj.getProperties().forEach { m ->
-            val p = createPropertyFrom(m)
-            addProperty(p)
-        }
     }
 
     fun addResult(resultObject: ResultObject) {
@@ -95,7 +95,7 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
             val href = getLink.href
             val reSpec = ResourceSpecification(href)
             val es = SessionManager.getEventStore()
-            //WATCHOUT this is sequence dependent: GET and PUT share the same URL - if called after PUTting, it may fail
+            //WATCH OUT this is sequence dependent: GET and PUT share the same URL - if called after PUTing, it may fail
             val getLogEntry = es.findBy(reSpec)!!
             getLogEntry.setReload()
 
@@ -114,20 +114,6 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
         if (dirty) {
             reset()
         }
-    }
-
-    private fun createPropertyFrom(m: Member): Property {
-        return Property(
-            id = m.id,
-            memberType = m.memberType,
-            links = m.links,
-            optional = m.optional,
-            title = m.id,
-            value = m.value,
-            extensions = m.extensions,
-            format = m.format,
-            disabledReason = m.disabledReason
-        )
     }
 
     private fun createObjectFrom(resultObject: ResultObject): TObject {

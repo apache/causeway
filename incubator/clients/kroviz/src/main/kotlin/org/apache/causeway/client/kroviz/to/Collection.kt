@@ -27,4 +27,19 @@ data class Collection(val id: String,
                       val extensions: Extensions,
                       val value: List<Link> = emptyList(),
                       val disabledReason: String = ""
-) : TransferObject, WithLinks
+) : TransferObject, WithLinks {
+
+    fun isCollectionDescription(): Boolean {
+        return getType() == Represention.COLLECTION_DESCRIPTION
+    }
+
+    private fun getType(): Represention {
+        return getSelfLink().representation()
+    }
+
+    private fun getSelfLink(): Link {
+        return links.first {
+            it.relation() == Relation.SELF
+        }
+    }
+}

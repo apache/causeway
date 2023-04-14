@@ -25,13 +25,15 @@ import org.apache.causeway.client.kroviz.snapshots.simpleapp1_16_0.*
 import org.apache.causeway.client.kroviz.to.Property
 import org.apache.causeway.client.kroviz.to.Relation
 import org.apache.causeway.client.kroviz.ui.core.SessionManager
+import kotlin.test.Ignore
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
 
 class CollectionAggregatorTest : IntegrationTest() {
 
-    //@Test
+    @Ignore //see TODO how to fix
+    @Test
     // sometimes fails with:
     // Error: Timeout of 2000ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves.
     fun testFixtureResult() {
@@ -39,22 +41,23 @@ class CollectionAggregatorTest : IntegrationTest() {
             // given
             val es = SessionManager.getEventStore()
             es.reset()
-            val obs = CollectionAggregator("test")
+            val aggt = CollectionAggregator("test")
             // when
-            mockResponse(FR_OBJECT, obs)
-            mockResponse(FR_OBJECT_LAYOUT, obs)
-            mockResponse(FR_OBJECT_PROPERTY, obs)
+            mockResponse(FR_OBJECT, aggt)
+            mockResponse(FR_OBJECT_LAYOUT, aggt)
+            mockResponse(FR_OBJECT_PROPERTY, aggt)
+            //TODO add icon to EventStore via mockResponse(ICON:SOMETHING, aggt)
             val reSpec = ResourceSpecification(FR_OBJECT_PROPERTY.url)
             val pLe = es.findBy(reSpec)!!
-            val pdLe = mockResponse(FR_PROPERTY_DESCRIPTION, obs)
-            val layoutLe = mockResponse(FR_OBJECT_LAYOUT, obs)
+            val pdLe = mockResponse(FR_PROPERTY_DESCRIPTION, aggt)
+            val layoutLe = mockResponse(FR_OBJECT_LAYOUT, aggt)
 
             // then
             val actObs = pLe.getAggregator() as CollectionAggregator
-            assertEquals(obs, actObs)  // 1
+            assertEquals(aggt, actObs)  // 1
             assertEquals(pdLe.getAggregator(), layoutLe.getAggregator()) // 2 - trivial?
-            // seems they are equal but not identical - changes on obs are not reflected in actObs !!!
-            // assertNotNull(obs.dsp.layout)  // 3  // does not work - due to async?
+            // seems they are equal but not identical - changes on aggt are not reflected in actObs !!!
+            // assertNotNull(aggt.dsp.layout)  // 3  // does not work - due to async?
 
             //then
             val p = pLe.getTransferObject() as Property
@@ -64,15 +67,6 @@ class CollectionAggregatorTest : IntegrationTest() {
                 it.rel == Relation.DESCRIBED_BY.type
             }
             assertNotNull(descLink)  // 4
-
-            // then
-            val dl = obs.dpm as CollectionDM
-            val propertyLabels = dl.properties.propertyDescriptionList
-            val property = pdLe.getTransferObject() as Property
-            assertTrue(propertyLabels.size > 0)  // 5
-            val lbl = dl.properties.find(property.id)!!.friendlyName
-            val expected = "ResultListResult class"
-            assertEquals(expected, lbl)  // 6
         }
     }
 
@@ -83,12 +77,12 @@ class CollectionAggregatorTest : IntegrationTest() {
         if (isAppAvailable()) {
             // given
             SessionManager.getEventStore().reset()
-            val obs = CollectionAggregator("test")
+            val aggt = CollectionAggregator("test")
             // when
-            mockResponse(SO_LIST_ALL, obs)
-            mockResponse(SO_0, obs)
+            mockResponse(SO_LIST_ALL, aggt)
+            mockResponse(SO_0, aggt)
             // then
-            val ol = obs.dpm
+            val ol = aggt.displayModel
             assertNotNull(ol)
             assertEquals(1, (ol as CollectionDM).data.size)
         }

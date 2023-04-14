@@ -23,6 +23,7 @@ import io.kvision.core.Component
 import io.kvision.core.addBsBorder
 import io.kvision.dropdown.ContextMenu
 import io.kvision.panel.SimplePanel
+import io.kvision.utils.auto
 import org.apache.causeway.client.kroviz.ui.kv.override.RoTab
 import org.apache.causeway.client.kroviz.ui.kv.override.RoTabPanel
 import org.apache.causeway.client.kroviz.utils.IconManager
@@ -62,8 +63,8 @@ class RoView {
         )
         tab.addAfterInsertHook {
             tab.getElement()?.unsafeCast<Element>()?.querySelector("i")?.addEventListener("click", {
-                console.log("icon clicked")
                 it.stopPropagation()
+                contextMenu?.width = auto
                 contextMenu?.positionMenu(it.unsafeCast<MouseEvent>())
             })
         }
