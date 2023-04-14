@@ -25,7 +25,7 @@ import org.apache.causeway.client.kroviz.to.ValueType
 import org.apache.causeway.client.kroviz.to.bs.FieldSetBs
 import org.apache.causeway.client.kroviz.ui.core.FormItem
 import org.apache.causeway.client.kroviz.ui.core.FormPanelFactory
-import org.apache.causeway.client.kroviz.utils.js.ShowDown
+import org.apache.causeway.client.kroviz.utils.js.AsciiDoctor
 
 class FieldSetBuilder {
 
@@ -47,7 +47,7 @@ class FieldSetBuilder {
                 label = p.named
                 if (memberType == ValueType.HTML && content is String) {
                     when {
-                        content.startsWith(":Notice:") -> content = ShowDown.convertMarkDown2Html(content)
+                        content.startsWith(":Notice:") -> content = AsciiDoctor.convert(content)
                         content.startsWith("link:") -> content = content.replace("link:", "")
                         else -> {}
                     }
