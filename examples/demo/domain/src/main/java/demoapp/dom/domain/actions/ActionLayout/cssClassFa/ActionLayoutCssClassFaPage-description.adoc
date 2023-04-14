@@ -8,7 +8,7 @@ This is used for whether the action is rendered as a button or as a menu item.
 === How this demo works
 
 This page has a `name` property and two actions, both of which can be used to update that property.
-The two actions have different fa icons
+The two actions have different fa icons.
 
 * `updateNameWithFaIconOnTheLeft`
 +
