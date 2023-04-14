@@ -36,3 +36,67 @@ include::ActionLayoutAssociateWithPage.java[tags=associate-with-collection]
 TIP: Note that it is also possible to associate an action with a collection using `Action#choicesFrom`,
 which has the additional semantic of the rows of the element being used as choices for that action’s collection parameter
 of the same type as the elements of the collection.
+
+
+=== .layout.xml
+
+Instead of using `@ActionLayout#associateWith`, it is also possible to associate actions with objects using the `<action id="..." cssClass="...">` in the link:https://causeway.apache.org/userguide/2.0.0-RC1/fun/ui.html#by-example[.layout.xml] file.
+
+The general idea is that an action is associated with a property or collection by being nested inside the corresponding element:
+
+* associating an action with (below) a property:
++
+[source,xml]
+.Xxx.layout.xml
+----
+...
+<cpt:property id="...">
+    <cpt:action id="..."/>
+</cpt:property>
+...
+----
+
+* associating an action with the panel of a property:
++
+[source,xml]
+.Xxx.layout.xml
+----
+...
+<cpt:fieldSet id="...">
+    <cpt:action id="..."/>
+    <cpt:property id="..."/>
+</cpt:fieldSet>
+...
+----
++
+The terms "fieldSet" and "panel" are synonymous.
+
+* associating an action with a collection:
++
+[source,xml]
+.Xxx.layout.xml
+----
+...
+<cpt:collection id="...">
+    <cpt:action id="..."/>
+</cpt:collection>
+...
+----
+
+* not associated with any member:
++
+[source,xml]
+.Xxx.layout.xml
+----
+...
+<bs3:col span="12" unreferencedActions="true">
+    <cpt:domainObject/>
+    <cpt:action id="..."/>
+</bs3:col>
+...
+----
+
+
+
+
+One advantage of using the `.layout.xml` file is that changes can be picked up without having to restart the application.
