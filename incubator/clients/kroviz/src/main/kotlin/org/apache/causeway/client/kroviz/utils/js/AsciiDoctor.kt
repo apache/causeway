@@ -18,16 +18,13 @@
  */
 package org.apache.causeway.client.kroviz.utils.js
 
-object ShowDown {
-    fun convertMarkDown2Html(text: String): dynamic {
-        //TODO content.replace(":Notice:", "")
-        return js(
-            """
-                  var showdown  = require('showdown'),
-                  converter = new showdown.Converter(),
-                  html = converter.makeHtml(text);
-                  return html;
-               """
+object AsciiDoctor {
+    fun convert(content: String): dynamic {
+        return js(code = """
+                      var asciidoctor = require('asciidoctor')();
+                      var html = asciidoctor.convert(content);
+                      return html;
+                   """
         )
     }
 }
