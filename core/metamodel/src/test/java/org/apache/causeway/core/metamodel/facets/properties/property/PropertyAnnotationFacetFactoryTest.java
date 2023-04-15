@@ -279,7 +279,7 @@ class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJupiterTest
             assertNotNull(domainEventFacet);
             assertTrue(domainEventFacet instanceof PropertyDomainEventFacetForPropertyAnnotation);
             final PropertyDomainEventFacetForPropertyAnnotation domainEventFacetImpl = (PropertyDomainEventFacetForPropertyAnnotation) domainEventFacet;
-            assertThat(domainEventFacetImpl.value(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
+            assertThat(domainEventFacetImpl.getEventType(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
 
             // then
             final Facet setterFacet = facetedMethod.getFacet(PropertySetterFacet.class);
@@ -326,7 +326,7 @@ class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJupiterTest
             assertNotNull(domainEventFacet);
             assertTrue(domainEventFacet instanceof PropertyDomainEventFacetForPropertyAnnotation);
             final PropertyDomainEventFacetForPropertyAnnotation domainEventFacetImpl = (PropertyDomainEventFacetForPropertyAnnotation) domainEventFacet;
-            MatcherAssert.assertThat(domainEventFacetImpl.value(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
+            MatcherAssert.assertThat(domainEventFacetImpl.getEventType(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
 
             // then
             final Facet setterFacet = facetedMethod.getFacet(PropertySetterFacet.class);
@@ -373,7 +373,7 @@ class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJupiterTest
             assertNotNull(domainEventFacet);
             assertTrue(domainEventFacet instanceof PropertyDomainEventFacetDefault);
             final PropertyDomainEventFacetDefault domainEventFacetImpl = (PropertyDomainEventFacetDefault) domainEventFacet;
-            assertThat(domainEventFacetImpl.value(), CausewayMatchers.classEqualTo(PropertyDomainEvent.Default.class));
+            assertThat(domainEventFacetImpl.getEventType(), CausewayMatchers.classEqualTo(PropertyDomainEvent.Default.class));
 
             // then
             final Facet setterFacet = facetedMethod.getFacet(PropertySetterFacet.class);

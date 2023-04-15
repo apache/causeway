@@ -140,12 +140,6 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     private List<Class<?>> parameterTypes;
 
     /**
-     * Populated only for mixins; holds the underlying domain object that the mixin contributes to.
-     */
-    @Getter
-    private Object mixedIn;
-
-    /**
      * The arguments being used to invoke the action.
      *
      * <p>
@@ -208,14 +202,6 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     public void setParameterTypes(final List<Class<?>> parameterTypes) {
         this.parameterTypes = parameterTypes;
     }
-    /**
-     * @apiNote : NOT API, set by the framework
-     */
-    @Override
-    public void setMixedIn(final Object mixedIn) {
-        this.mixedIn = mixedIn;
-    }
-
 
     private static final ToString<ActionDomainEvent<?>> toString = ObjectContracts.<ActionDomainEvent<?>>
     toString("source", ActionDomainEvent::getSource)

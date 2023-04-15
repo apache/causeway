@@ -29,8 +29,8 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.DomainEventHelper;
-import org.apache.causeway.core.metamodel.facets.SingleClassValueFacetAbstract;
 import org.apache.causeway.core.metamodel.interactions.ActionInteractionContext;
 import org.apache.causeway.core.metamodel.interactions.ActionValidityContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionContext;
@@ -39,34 +39,24 @@ import org.apache.causeway.core.metamodel.interactions.ValidityContext;
 import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
-import lombok.Getter;
-import lombok.Setter;
-
 public abstract class ActionDomainEventFacetAbstract
-extends SingleClassValueFacetAbstract
+extends DomainEventFacetAbstract<ActionDomainEvent<?>>
 implements ActionDomainEventFacet {
 
-    @Getter @Setter private Class<? extends ActionDomainEvent<?>> eventType;
     private final TranslationService translationService;
     private final TranslationContext translationContext;
     private final DomainEventHelper domainEventHelper;
 
-    public ActionDomainEventFacetAbstract(
+    protected ActionDomainEventFacetAbstract(
             final Class<? extends ActionDomainEvent<?>> eventType,
             final FacetHolder holder) {
 
         super(ActionDomainEventFacet.class, holder, eventType);
-        setEventType(eventType);
 
         this.translationService = getTranslationService();
         this.translationContext = holder.getTranslationContext();
 
         domainEventHelper = DomainEventHelper.ofServiceRegistry(getServiceRegistry());
-    }
-
-    @Override
-    public Class<?> value() {
-        return eventType;
     }
 
     @Override

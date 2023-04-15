@@ -25,6 +25,7 @@ import javax.inject.Inject;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.events.domain.ActionDomainEvent;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -112,6 +113,9 @@ extends FacetFactoryAbstract {
             val cls = processMethodContext.getCls();
             val typeSpec = getSpecificationLoader().loadSpecification(cls);
             val holder = processMethodContext.getFacetHolder();
+
+            //FIXME[CAUSEWAY-3409]
+            _Assert.assertFalse(typeSpec.isMixin(), ()->"we need the mixee instead");
 
             //
             // Set up ActionDomainEventFacet, which will act as the hiding/disabling/validating advisor

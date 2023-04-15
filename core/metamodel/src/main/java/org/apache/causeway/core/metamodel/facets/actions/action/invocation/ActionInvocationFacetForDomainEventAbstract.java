@@ -65,7 +65,7 @@ implements ImperativeFacet {
     private final ServiceRegistry serviceRegistry;
     private final DomainEventHelper domainEventHelper;
 
-    public ActionInvocationFacetForDomainEventAbstract(
+    protected ActionInvocationFacetForDomainEventAbstract(
             final Class<? extends ActionDomainEvent<?>> eventType,
             final MethodFacade method,
             final ObjectSpecification declaringType,

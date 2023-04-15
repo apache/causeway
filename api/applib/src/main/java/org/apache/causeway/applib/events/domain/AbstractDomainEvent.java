@@ -119,24 +119,26 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
      * </p>
      */
     @Getter
-    private Object mixedIn;
+    private Object mixee;
 
     /**
      * Not API - set by the framework.
      */
-    public void setMixedIn(final Object mixedIn) {
-        this.mixedIn = mixedIn;
+    public final void setMixee(final Object mixee) {
+        this.mixee = mixee;
     }
 
 
     /**
      * The subject of the event, which will be either the
      * {@link #getSource() source} for a regular action, or the
-     * {@link #getMixedIn() mixed-in} domain object for a mixin.
+     * {@link #getMixee() mixed-in} domain object for a mixin.
      */
     public <T> T getSubject() {
-        val mixedIn = getMixedIn();
-        val mixedInElseSource = mixedIn != null ? mixedIn : getSource();
+        val mixee = getMixee();
+        val mixedInElseSource = mixee != null
+                ? mixee
+                : getSource();
         return _Casts.uncheckedCast(mixedInElseSource);
     }
 
@@ -194,7 +196,7 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
     /**
      * Not API, set by the framework.
      */
-    public void setEventPhase(final Phase phase) {
+    public final void setEventPhase(final Phase phase) {
         this.eventPhase = phase;
     }
 
@@ -208,7 +210,7 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
     /**
      * Not API, set by the framework if the no-arg constructor is used.
      */
-    public void setIdentifier(final Identifier identifier) {
+    public final void setIdentifier(final Identifier identifier) {
         this.identifier = identifier;
     }
 
@@ -226,7 +228,7 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
      *
      * @see #veto(String, Object...)
      */
-    public void hide() {
+    public final void hide() {
         this.hidden = true;
     }
 
@@ -275,7 +277,7 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
      * @see #disable(org.apache.causeway.applib.services.i18n.TranslatableString)
      * @see #veto(String, Object...)
      */
-    public void disable(final String reason) {
+    public final void disable(final String reason) {
         this.disabledReason = reason;
     }
 
@@ -286,7 +288,7 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
      * @see #disable(java.lang.String)
      * @see #veto(org.apache.causeway.applib.services.i18n.TranslatableString)
      */
-    public void disable(final TranslatableString reason) {
+    public final void disable(final TranslatableString reason) {
         this.disabledReasonTranslatable = reason;
     }
 
@@ -478,7 +480,7 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
      *
      * Set user-data, for the use of a subsequent {@link #getEventPhase() phase}.
      */
-    public void put(final Object key, final Object value) {
+    public final void put(final Object key, final Object value) {
         userData.put(key, value);
     }
 

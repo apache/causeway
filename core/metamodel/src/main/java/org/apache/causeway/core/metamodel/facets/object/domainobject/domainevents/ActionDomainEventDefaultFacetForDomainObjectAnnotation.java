@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.facets.object.domainobject.domaineven
 import org.apache.causeway.applib.events.domain.ActionDomainEvent;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.SingleClassValueFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
 
 /**
@@ -29,13 +29,7 @@ import org.apache.causeway.core.metamodel.facets.actions.action.invocation.Actio
  * for any actions as a fallback/default.
  */
 public class ActionDomainEventDefaultFacetForDomainObjectAnnotation
-extends SingleClassValueFacetAbstract {
-
-
-    private final Class<? extends ActionDomainEvent<?>> eventType;
-    public Class<? extends ActionDomainEvent<?>> getEventType() {
-        return eventType;
-    }
+extends DomainEventFacetAbstract<ActionDomainEvent<?>> {
 
     private static Class<? extends Facet> type() {
         return ActionDomainEventDefaultFacetForDomainObjectAnnotation.class;
@@ -45,7 +39,6 @@ extends SingleClassValueFacetAbstract {
             final FacetHolder holder,
             final Class<? extends ActionDomainEvent<?>> value) {
         super(type(), holder, value);
-        this.eventType = value;
     }
 
 }

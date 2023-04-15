@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.facets.properties.property.modify;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.events.domain.AbstractDomainEvent;
 import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
 import org.apache.causeway.applib.services.i18n.TranslatableString;
@@ -30,8 +29,8 @@ import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.DomainEventHelper;
-import org.apache.causeway.core.metamodel.facets.SingleClassValueFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.causeway.core.metamodel.interactions.ProposedHolder;
 import org.apache.causeway.core.metamodel.interactions.UsabilityContext;
@@ -41,7 +40,8 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.specloader.specimpl.OneToOneAssociationMixedIn;
 
 public abstract class PropertyDomainEventFacetAbstract
-extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
+extends DomainEventFacetAbstract<PropertyDomainEvent<?, ?>>
+implements PropertyDomainEventFacet {
 
     private final DomainEventHelper domainEventHelper;
 
@@ -54,11 +54,10 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
      */
     public PropertyDomainEventFacetAbstract(
             final Class<? extends PropertyDomainEvent<?, ?>> eventType,
-                    final PropertyOrCollectionAccessorFacet getterFacetIfAny,
-                    final FacetHolder holder ) {
+            final PropertyOrCollectionAccessorFacet getterFacetIfAny,
+            final FacetHolder holder ) {
 
         super(PropertyDomainEventFacet.class, holder, eventType);
-        this.eventType = eventType;
         this.getterFacetIfAny = getterFacetIfAny;
 
         this.translationService = getTranslationService();
@@ -67,24 +66,15 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
         domainEventHelper = DomainEventHelper.ofServiceRegistry(getServiceRegistry());
     }
 
-    private Class<? extends PropertyDomainEvent<?, ?>> eventType;
-
-    @Override
-    public Class<?> value() {
-        return eventType;
-    }
-
-    public <S, T> Class<? extends PropertyDomainEvent<S, T>> getEventType() {
-        return _Casts.uncheckedCast(eventType);
-    }
-
-    /**
-     * Can be overwritten if this facet is on a mixin where the subject (mixedInType) is annotated with
-     * {@link DomainObject#propertyDomainEvent()}.
-     */
-    public void setEventType(final Class<? extends PropertyDomainEvent<?, ?>> eventType) {
-        this.eventType = eventType;
-    }
+//    private Class<? extends PropertyDomainEvent<?, ?>> eventType;
+//
+//    /**
+//     * Can be overwritten if this facet is on a mixin where the subject (mixedInType) is annotated with
+//     * {@link DomainObject#propertyDomainEvent()}.
+//     */
+//    public void setEventType(final Class<? extends PropertyDomainEvent<?, ?>> eventType) {
+//        this.eventType = eventType;
+//    }
 
     @Override
     public String hides(final VisibilityContext ic) {
@@ -92,7 +82,7 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
         final PropertyDomainEvent<?, ?> event =
                 domainEventHelper.postEventForProperty(
                         AbstractDomainEvent.Phase.HIDE,
-                        getEventType(), null,
+                        _Casts.uncheckedCast(getEventType()), null,
                         getFacetHolder(), ic.getHead(),
                         null, null);
         if (event != null && event.isHidden()) {
@@ -107,7 +97,7 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
         final PropertyDomainEvent<?, ?> event =
                 domainEventHelper.postEventForProperty(
                         AbstractDomainEvent.Phase.DISABLE,
-                        getEventType(), null,
+                        _Casts.uncheckedCast(getEventType()), null,
                         getFacetHolder(), ic.getHead(),
                         null, null);
         if (event != null
@@ -144,7 +134,7 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
         final PropertyDomainEvent<?, ?> event =
                 domainEventHelper.postEventForProperty(
                         AbstractDomainEvent.Phase.VALIDATE,
-                        getEventType(), null,
+                        _Casts.uncheckedCast(getEventType()), null,
                         getFacetHolder(), ic.getHead(),
                         oldValue, proposedValue);
         if (event != null && event.isInvalid()) {

@@ -28,5 +28,4 @@ public class ActionDomainEventFacetDefault extends ActionDomainEventFacetAbstrac
         super(eventType, holder);
     }
 
-
 }

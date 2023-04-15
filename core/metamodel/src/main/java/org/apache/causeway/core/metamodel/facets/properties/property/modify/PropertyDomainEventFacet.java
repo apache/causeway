@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.property.modify;
 
-import org.apache.causeway.core.metamodel.facets.SingleClassValueFacet;
 import org.apache.causeway.core.metamodel.interactions.DisablingInteractionAdvisor;
 import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
 import org.apache.causeway.core.metamodel.interactions.ValidatingInteractionAdvisor;
@@ -27,6 +26,6 @@ import org.apache.causeway.core.metamodel.interactions.ValidatingInteractionAdvi
  * Corresponds to <tt>@Property(domainEvent=...)</tt> annotation in the Causeway programming model.
  */
 public interface PropertyDomainEventFacet
-extends SingleClassValueFacet, HidingInteractionAdvisor, DisablingInteractionAdvisor, ValidatingInteractionAdvisor {
+extends HidingInteractionAdvisor, DisablingInteractionAdvisor, ValidatingInteractionAdvisor {
 
 }

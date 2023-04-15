@@ -27,6 +27,7 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.events.domain.ActionDomainEvent;
 import org.apache.causeway.applib.events.domain.CollectionDomainEvent;
 import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
@@ -50,7 +51,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.causeway.core.metamodel.specloader.specimpl.OneToManyAssociationMixedIn;
 import org.apache.causeway.core.metamodel.specloader.specimpl.OneToOneAssociationMixedIn;
 
@@ -65,23 +65,22 @@ extends ObjectSpecificationPostProcessorAbstract {
     @Override
     public void postProcessAction(final ObjectSpecification objectSpecification, final ObjectAction objectAction) {
 
-        if(objectAction instanceof ObjectActionMixedIn) {
+        if(objectAction.isMixedIn()) {
             // unlike collection and property mixins, there is no need to create the DomainEventFacet, it will
             // have been created in the ActionAnnotationFacetFactory
-            final ActionDomainEventDefaultFacetForDomainObjectAnnotation actionDomainEventDefaultFacet =
-                    objectSpecification.getFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class);
 
-            if(actionDomainEventDefaultFacet != null) {
-                final ObjectActionMixedIn actionMixedIn = (ObjectActionMixedIn) objectAction;
-                final ActionDomainEventFacet actionFacet = actionMixedIn.getFacet(ActionDomainEventFacet.class);
-                if (actionFacet instanceof ActionDomainEventFacetAbstract) {
-                    final ActionDomainEventFacetAbstract facetAbstract = (ActionDomainEventFacetAbstract) actionFacet;
-                    if (facetAbstract.getEventType() == ActionDomainEvent.Default.class) {
-                        final ActionDomainEventFacetAbstract existing = (ActionDomainEventFacetAbstract) actionFacet;
-                        existing.setEventType(actionDomainEventDefaultFacet.getEventType());
-                    }
-                }
-            }
+            objectSpecification.lookupFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class)
+            .ifPresent(actionDomainEventDefaultFacet->{
+                _Casts.castTo(
+                        ActionDomainEventFacetAbstract.class,
+                        objectAction.getFacet(ActionDomainEventFacet.class))
+                .filter(actionDomainEventFacetAbstract->
+                    actionDomainEventFacetAbstract.getEventType() == ActionDomainEvent.Default.class)
+                .ifPresent(actionDomainEventFacetAbstract->{
+                    //FIXME[CAUSEWAY-3409]
+                    //actionDomainEventFacetAbstract.setEventType(actionDomainEventDefaultFacet.getEventType());
+                });
+            });
         }
     }
 
@@ -119,7 +118,8 @@ extends ObjectSpecificationPostProcessorAbstract {
                     final PropertyDomainEventFacetAbstract facetAbstract = (PropertyDomainEventFacetAbstract) propertyFacet;
                     if (facetAbstract.getEventType() == PropertyDomainEvent.Default.class) {
                         final PropertyDomainEventFacetAbstract existing = (PropertyDomainEventFacetAbstract) propertyFacet;
-                        existing.setEventType(propertyDomainEventDefaultFacet.getEventType());
+                        //FIXME[CAUSEWAY-3409]
+                        //existing.setEventType(propertyDomainEventDefaultFacet.getEventType());
                     }
                 }
             }
@@ -159,7 +159,8 @@ extends ObjectSpecificationPostProcessorAbstract {
                         final CollectionDomainEventFacetAbstract facetAbstract = (CollectionDomainEventFacetAbstract) collectionFacet;
                         if (facetAbstract.getEventType() == CollectionDomainEvent.Default.class) {
                             final CollectionDomainEventFacetAbstract existing = (CollectionDomainEventFacetAbstract) collectionFacet;
-                            existing.setEventType(collectionDomainEventDefaultFacet.getEventType());
+                            //FIXME[CAUSEWAY-3409]
+                            //existing.setEventType(collectionDomainEventDefaultFacet.getEventType());
                         }
                     }
                 }

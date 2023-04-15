@@ -23,48 +23,45 @@ import java.util.function.BiConsumer;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
 
-public abstract class SingleClassValueFacetAbstract
-extends FacetAbstract
-implements SingleClassValueFacet {
+public abstract class DomainEventFacetAbstract<T>
+extends FacetAbstract {
 
-    private final Class<?> value;
+    private final Class<? extends T> eventType;
 
-    protected SingleClassValueFacetAbstract(
+    protected DomainEventFacetAbstract(
             final Class<? extends Facet> facetType,
             final FacetHolder holder,
-            final Class<?> value) {
+            final Class<? extends T> eventType) {
         super(facetType, holder);
-        this.value = value;
+        this.eventType = eventType;
     }
 
-    @Override
-    public Class<?> value() {
-        return value;
+    public final Class<? extends T> getEventType() {
+        return eventType;
     }
 
-    /**
-     * The {@link ObjectSpecification} of the {@link #value()}.
-     */
-    @Override
-    public ObjectSpecification valueSpec() {
-        final Class<?> valueType = value();
-        return valueType != null ? getSpecificationLoader().loadSpecification(valueType) : null;
-    }
+//    /**
+//     * The {@link ObjectSpecification} of the {@link #value()}.
+//     */
+//    @Override
+//    public ObjectSpecification valueSpec() {
+//        final Class<?> valueType = value();
+//        return valueType != null ? getSpecificationLoader().loadSpecification(valueType) : null;
+//    }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("value", value());
+        visitor.accept("eventType", getEventType());
     }
 
     @Override
     public boolean semanticEquals(final @NonNull Facet other) {
-        return other instanceof SingleClassValueFacet
-                ? this.value() == ((SingleClassValueFacet)other).value()
+        return other instanceof DomainEventFacetAbstract
+                ? this.getEventType() == ((DomainEventFacetAbstract<?>)other).getEventType()
                 : false;
     }
 

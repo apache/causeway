@@ -22,39 +22,22 @@ import org.apache.causeway.applib.events.domain.AbstractDomainEvent;
 import org.apache.causeway.applib.events.domain.CollectionDomainEvent;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.DomainEventHelper;
-import org.apache.causeway.core.metamodel.facets.SingleClassValueFacetAbstract;
 import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
 
 public abstract class CollectionDomainEventFacetAbstract
-        extends SingleClassValueFacetAbstract
-        implements CollectionDomainEventFacet {
+extends DomainEventFacetAbstract<CollectionDomainEvent<?, ?>>
+implements CollectionDomainEventFacet {
 
     private final DomainEventHelper domainEventHelper;
 
     public CollectionDomainEventFacetAbstract(
             final Class<? extends CollectionDomainEvent<?, ?>> eventType,
-                    final FacetHolder holder) {
+            final FacetHolder holder) {
 
         super(CollectionDomainEventFacet.class, holder, eventType);
-        this.eventType = eventType;
-
         domainEventHelper = DomainEventHelper.ofServiceRegistry(getServiceRegistry());
-    }
-
-    private Class<? extends CollectionDomainEvent<?, ?>> eventType;
-
-    @Override
-    public Class<?> value() {
-        return eventType;
-    }
-
-    public <S, T> Class<? extends CollectionDomainEvent<S, T>> getEventType() {
-        return _Casts.uncheckedCast(eventType);
-    }
-
-    public void setEventType(final Class<? extends CollectionDomainEvent<?, ?>> eventType) {
-        this.eventType = eventType;
     }
 
     @Override
@@ -63,7 +46,7 @@ public abstract class CollectionDomainEventFacetAbstract
         final CollectionDomainEvent<?, ?> event =
                 domainEventHelper.postEventForCollection(
                         AbstractDomainEvent.Phase.HIDE,
-                        getEventType(),
+                        _Casts.uncheckedCast(getEventType()),
                         getFacetHolder(), ic.getHead()
                 );
         if (event != null && event.isHidden()) {
