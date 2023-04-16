@@ -108,12 +108,11 @@
     <mml:properties>
       <mml:prop id="pdf" mixedIn="true">
         <mml:facets>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet">
-            <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.ActionDomainEvent.Default"/>
-            <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-            <mml:attr name="facet" value="ActionDomainEventFacet"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetDefault">
+            <mml:attr name="facet" value="ActionDomainEventFacetDefault"/>
             <mml:attr name="interactionAdvisors" value="Validating, HidingOrShowing, DisablingOrEnabling"/>
             <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:attr name="value" value="org.apache.causeway.applib.events.domain.ActionDomainEvent.Default"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromDefault">
             <mml:attr name="declaringType" value="org.apache.causeway.extensions.pdfjs.metamodel.domains.mixin.SomeViewModel_pdf"/>
@@ -190,6 +189,13 @@
             <mml:attr name="interactionAdvisors" value="HidingOrShowing, DisablingOrEnabling"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
+          <mml:facet id="org.apache.causeway.extensions.pdfjs.metamodel.facet.PdfJsViewerFacet" fqcn="org.apache.causeway.extensions.pdfjs.metamodel.facet.PdfJsViewerFacetFromAnnotation">
+            <mml:attr name="facet" value="PdfJsViewerFacetFromAnnotation"/>
+            <mml:attr name="initialHeight" value="1000"/>
+            <mml:attr name="initialPage" value="2"/>
+            <mml:attr name="initialScale" value="_0_75"/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+          </mml:facet>
         </mml:facets>
         <mml:type>org.apache.causeway.applib.value.Blob</mml:type>
       </mml:prop>
@@ -202,12 +208,11 @@
             <mml:attr name="facet" value="ActionExplicitFacetForActionAnnotation"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet">
-            <mml:attr name="eventType" value="org.apache.causeway.applib.mixins.layout.Object_downloadLayout.ActionDomainEvent"/>
-            <mml:attr name="eventTypeOrigin" value="ANNOTATED_MEMBER"/>
-            <mml:attr name="facet" value="ActionDomainEventFacet"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetForActionAnnotation">
+            <mml:attr name="facet" value="ActionDomainEventFacetForActionAnnotation"/>
             <mml:attr name="interactionAdvisors" value="Validating, HidingOrShowing, DisablingOrEnabling"/>
             <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:attr name="value" value="org.apache.causeway.applib.mixins.layout.Object_downloadLayout.ActionDomainEvent"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromActionAnnotation">
             <mml:attr name="declaringType" value="org.apache.causeway.applib.mixins.layout.Object_downloadLayout"/>
@@ -456,12 +461,11 @@
             <mml:attr name="facet" value="ActionExplicitFacetForActionAnnotation"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet">
-            <mml:attr name="eventType" value="org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml.ActionDomainEvent"/>
-            <mml:attr name="eventTypeOrigin" value="ANNOTATED_MEMBER"/>
-            <mml:attr name="facet" value="ActionDomainEventFacet"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetForActionAnnotation">
+            <mml:attr name="facet" value="ActionDomainEventFacetForActionAnnotation"/>
             <mml:attr name="interactionAdvisors" value="Validating, HidingOrShowing, DisablingOrEnabling"/>
             <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:attr name="value" value="org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml.ActionDomainEvent"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromActionAnnotation">
             <mml:attr name="declaringType" value="org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml"/>
@@ -613,12 +617,11 @@
             <mml:attr name="facet" value="ActionExplicitFacetForActionAnnotation"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet">
-            <mml:attr name="eventType" value="org.apache.causeway.core.metamodel.inspect.Object_inspectMetamodel.ActionDomainEvent"/>
-            <mml:attr name="eventTypeOrigin" value="ANNOTATED_MEMBER"/>
-            <mml:attr name="facet" value="ActionDomainEventFacet"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetForActionAnnotation">
+            <mml:attr name="facet" value="ActionDomainEventFacetForActionAnnotation"/>
             <mml:attr name="interactionAdvisors" value="Validating, HidingOrShowing, DisablingOrEnabling"/>
             <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:attr name="value" value="org.apache.causeway.core.metamodel.inspect.Object_inspectMetamodel.ActionDomainEvent"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromActionAnnotation">
             <mml:attr name="declaringType" value="org.apache.causeway.core.metamodel.inspect.Object_inspectMetamodel"/>
@@ -717,12 +720,11 @@
             <mml:attr name="facet" value="ActionExplicitFacetForActionAnnotation"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet">
-            <mml:attr name="eventType" value="org.apache.causeway.applib.mixins.rest.Object_openRestApi.ActionDomainEvent"/>
-            <mml:attr name="eventTypeOrigin" value="ANNOTATED_MEMBER"/>
-            <mml:attr name="facet" value="ActionDomainEventFacet"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetForActionAnnotation">
+            <mml:attr name="facet" value="ActionDomainEventFacetForActionAnnotation"/>
             <mml:attr name="interactionAdvisors" value="Validating, HidingOrShowing, DisablingOrEnabling"/>
             <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:attr name="value" value="org.apache.causeway.applib.mixins.rest.Object_openRestApi.ActionDomainEvent"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromActionAnnotation">
             <mml:attr name="declaringType" value="org.apache.causeway.applib.mixins.rest.Object_openRestApi"/>
@@ -821,12 +823,11 @@
             <mml:attr name="facet" value="ActionExplicitFacetForActionAnnotation"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet">
-            <mml:attr name="eventType" value="org.apache.causeway.applib.mixins.metamodel.Object_rebuildMetamodel.ActionDomainEvent"/>
-            <mml:attr name="eventTypeOrigin" value="ANNOTATED_MEMBER"/>
-            <mml:attr name="facet" value="ActionDomainEventFacet"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetForActionAnnotation">
+            <mml:attr name="facet" value="ActionDomainEventFacetForActionAnnotation"/>
             <mml:attr name="interactionAdvisors" value="Validating, HidingOrShowing, DisablingOrEnabling"/>
             <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:attr name="value" value="org.apache.causeway.applib.mixins.metamodel.Object_rebuildMetamodel.ActionDomainEvent"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromActionAnnotation">
             <mml:attr name="declaringType" value="org.apache.causeway.applib.mixins.metamodel.Object_rebuildMetamodel"/>
@@ -1027,12 +1028,11 @@
     <mml:actions>
       <mml:act id="prop" mixedIn="false">
         <mml:facets>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet">
-            <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.ActionDomainEvent.Default"/>
-            <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-            <mml:attr name="facet" value="ActionDomainEventFacet"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetDefault">
+            <mml:attr name="facet" value="ActionDomainEventFacetDefault"/>
             <mml:attr name="interactionAdvisors" value="Validating, HidingOrShowing, DisablingOrEnabling"/>
             <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:attr name="value" value="org.apache.causeway.applib.events.domain.ActionDomainEvent.Default"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromDefault">
             <mml:attr name="declaringType" value="org.apache.causeway.extensions.pdfjs.metamodel.domains.mixin.SomeViewModel_pdf"/>
@@ -1107,6 +1107,13 @@
           <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
             <mml:attr name="facet" value="AuthorizationFacetImpl"/>
             <mml:attr name="interactionAdvisors" value="HidingOrShowing, DisablingOrEnabling"/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+          </mml:facet>
+          <mml:facet id="org.apache.causeway.extensions.pdfjs.metamodel.facet.PdfJsViewerFacet" fqcn="org.apache.causeway.extensions.pdfjs.metamodel.facet.PdfJsViewerFacetFromAnnotation">
+            <mml:attr name="facet" value="PdfJsViewerFacetFromAnnotation"/>
+            <mml:attr name="initialHeight" value="1000"/>
+            <mml:attr name="initialPage" value="2"/>
+            <mml:attr name="initialScale" value="_0_75"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
         </mml:facets>
