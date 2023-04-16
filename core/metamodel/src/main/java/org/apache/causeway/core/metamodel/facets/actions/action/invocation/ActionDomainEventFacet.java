@@ -28,9 +28,11 @@ import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.DomainEventHelper;
+import org.apache.causeway.core.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.causeway.core.metamodel.interactions.ActionInteractionContext;
 import org.apache.causeway.core.metamodel.interactions.ActionValidityContext;
 import org.apache.causeway.core.metamodel.interactions.DisablingInteractionAdvisor;
@@ -40,6 +42,7 @@ import org.apache.causeway.core.metamodel.interactions.UsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.causeway.core.metamodel.interactions.ValidityContext;
 import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
 public class ActionDomainEventFacet
@@ -48,6 +51,10 @@ implements
     HidingInteractionAdvisor,
     DisablingInteractionAdvisor,
     ValidatingInteractionAdvisor {
+
+    private static Class<? extends Facet> type() {
+        return ActionDomainEventFacet.class;
+    }
 
     private final TranslationService translationService;
     private final TranslationContext translationContext;
@@ -58,12 +65,27 @@ implements
             final EventTypeOrigin eventTypeOrigin,
             final FacetHolder holder) {
 
-        super(ActionDomainEventFacet.class, eventType, eventTypeOrigin, holder);
+        super(type(), eventType, eventTypeOrigin, holder);
 
         this.translationService = getTranslationService();
         this.translationContext = holder.getTranslationContext();
 
         domainEventHelper = DomainEventHelper.ofServiceRegistry(getServiceRegistry());
+    }
+
+    /**
+     * Called by meta-model post-processors, to honor domain object annotations on mixees.
+     * (required only, if this facet belongs to a mixed-in member)
+     */
+    public void initWithMixee(final ObjectSpecification mixeeSpec) {
+        mixeeSpec
+        .lookupFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class)
+        .ifPresent(facetOnMixee->{
+            if(facetOnMixee.getEventType() != ActionDomainEvent.Default.class
+                    && getEventTypeOrigin().isDefault()) {
+                super.updateEventType(facetOnMixee.getEventType(), EventTypeOrigin.ANNOTATED_OBJECT);
+            }
+        });
     }
 
     @Override

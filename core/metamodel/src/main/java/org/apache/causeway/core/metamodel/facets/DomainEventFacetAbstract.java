@@ -62,8 +62,8 @@ extends FacetAbstract {
         return eventTypeOrigin;
     }
 
-    /** called by meta-model post-processors only */
-    public final void updateEventType(
+    /** called during meta-model post-processing only */
+    protected final void updateEventType(
             final Class<? extends T> eventType,
             final EventTypeOrigin eventTypeOrigin) {
         this.eventType = eventType;

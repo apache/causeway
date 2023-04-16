@@ -24,10 +24,8 @@ import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.events.domain.ActionDomainEvent;
 import org.apache.causeway.applib.events.domain.CollectionDomainEvent;
 import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
-import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
@@ -36,9 +34,6 @@ import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
 import org.apache.causeway.core.metamodel.facets.collections.collection.CollectionAnnotationFacetFactory;
 import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacet;
-import org.apache.causeway.core.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
-import org.apache.causeway.core.metamodel.facets.object.domainobject.domainevents.CollectionDomainEventDefaultFacetForDomainObjectAnnotation;
-import org.apache.causeway.core.metamodel.facets.object.domainobject.domainevents.PropertyDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.causeway.core.metamodel.facets.properties.property.PropertyAnnotationFacetFactory;
 import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet;
@@ -60,23 +55,13 @@ extends ObjectSpecificationPostProcessorAbstract {
 
     @Override
     public void postProcessAction(final ObjectSpecification objectSpecification, final ObjectAction objectAction) {
-
         if(objectAction.isMixedIn()) {
             // unlike collection and property mixins, there is no need to create the DomainEventFacet, it will
             // have been created in the ActionAnnotationFacetFactory
-
-            objectSpecification.lookupFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class)
-            .ifPresent(actionDomainEventDefaultFacet->{
-                _Casts.castTo(
-                        ActionDomainEventFacet.class,
-                        objectAction.getFacet(ActionDomainEventFacet.class))
-                .filter(actionDomainEventFacetAbstract->
-                    actionDomainEventFacetAbstract.getEventType() != ActionDomainEvent.Default.class)
-                .ifPresent(existing->{
-                    //FIXME[CAUSEWAY-3409] code smell
-                    existing.updateEventType(actionDomainEventDefaultFacet.getEventType(), EventTypeOrigin.ANNOTATED_OBJECT);
-                });
-            });
+            objectAction
+                .lookupFacet(ActionDomainEventFacet.class)
+                .ifPresent(actionDomainEventFacet->
+                    actionDomainEventFacet.initWithMixee(objectSpecification));
         }
     }
 
@@ -106,19 +91,11 @@ extends ObjectSpecificationPostProcessorAbstract {
                                     propertyDomainEventType, EventTypeOrigin.ANNOTATED_MEMBER, getterFacetIfAny, property));
                 }
             }
-            final PropertyDomainEventDefaultFacetForDomainObjectAnnotation propertyDomainEventDefaultFacet =
-                    objectSpecification.getFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class);
-            if(propertyDomainEventDefaultFacet != null) {
-                final PropertyDomainEventFacet propertyFacet = property.getFacet(PropertyDomainEventFacet.class);
-                if (propertyFacet instanceof PropertyDomainEventFacet) {
-                    final PropertyDomainEventFacet facetAbstract = propertyFacet;
-                    if (facetAbstract.getEventType() == PropertyDomainEvent.Default.class) {
-                        final PropertyDomainEventFacet existing = propertyFacet;
-                        //FIXME[CAUSEWAY-3409] code smell
-                        existing.updateEventType(propertyDomainEventDefaultFacet.getEventType(), EventTypeOrigin.ANNOTATED_OBJECT);
-                    }
-                }
-            }
+
+            property
+                .lookupFacet(PropertyDomainEventFacet.class)
+                .ifPresent(propertyDomainEventFacet->
+                    propertyDomainEventFacet.initWithMixee(objectSpecification));
         }
     }
 
@@ -146,21 +123,13 @@ extends ObjectSpecificationPostProcessorAbstract {
                             new CollectionDomainEventFacet(
                                     collectionDomainEventType, EventTypeOrigin.ANNOTATED_MEMBER, collection));
                 }
-
-                final CollectionDomainEventDefaultFacetForDomainObjectAnnotation collectionDomainEventDefaultFacet =
-                        objectSpecification.getFacet(CollectionDomainEventDefaultFacetForDomainObjectAnnotation.class);
-                if(collectionDomainEventDefaultFacet != null) {
-                    final CollectionDomainEventFacet collectionFacet = collection.getFacet(CollectionDomainEventFacet.class);
-                    if (collectionFacet instanceof CollectionDomainEventFacet) {
-                        final CollectionDomainEventFacet facetAbstract = collectionFacet;
-                        if (facetAbstract.getEventType() == CollectionDomainEvent.Default.class) {
-                            final CollectionDomainEventFacet existing = collectionFacet;
-                            //FIXME[CAUSEWAY-3409] code smell
-                            existing.updateEventType(collectionDomainEventDefaultFacet.getEventType(), EventTypeOrigin.ANNOTATED_OBJECT);
-                        }
-                    }
-                }
             }
+
+            collection
+                .lookupFacet(CollectionDomainEventFacet.class)
+                .ifPresent(collectionDomainEventFacet->
+                    collectionDomainEventFacet.initWithMixee(objectSpecification));
+
         }
     }
 

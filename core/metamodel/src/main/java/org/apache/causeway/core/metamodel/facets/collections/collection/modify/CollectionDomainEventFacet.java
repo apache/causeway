@@ -21,15 +21,22 @@ package org.apache.causeway.core.metamodel.facets.collections.collection.modify;
 import org.apache.causeway.applib.events.domain.AbstractDomainEvent;
 import org.apache.causeway.applib.events.domain.CollectionDomainEvent;
 import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.DomainEventHelper;
+import org.apache.causeway.core.metamodel.facets.object.domainobject.domainevents.CollectionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
 import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 public class CollectionDomainEventFacet
 extends DomainEventFacetAbstract<CollectionDomainEvent<?, ?>>
 implements HidingInteractionAdvisor {
+
+    private static Class<? extends Facet> type() {
+        return CollectionDomainEventFacet.class;
+    }
 
     private final DomainEventHelper domainEventHelper;
 
@@ -37,9 +44,23 @@ implements HidingInteractionAdvisor {
             final Class<? extends CollectionDomainEvent<?, ?>> eventType,
             final EventTypeOrigin eventTypeOrigin,
             final FacetHolder holder) {
-
-        super(CollectionDomainEventFacet.class, eventType, eventTypeOrigin, holder);
+        super(type(), eventType, eventTypeOrigin, holder);
         domainEventHelper = DomainEventHelper.ofServiceRegistry(getServiceRegistry());
+    }
+
+    /**
+     * Called by meta-model post-processors, to honor domain object annotations on mixees.
+     * (required only, if this facet belongs to a mixed-in member)
+     */
+    public void initWithMixee(final ObjectSpecification mixeeSpec) {
+        mixeeSpec
+        .lookupFacet(CollectionDomainEventDefaultFacetForDomainObjectAnnotation.class)
+        .ifPresent(facetOnMixee->{
+            if(facetOnMixee.getEventType() != CollectionDomainEvent.Default.class
+                    && getEventTypeOrigin().isDefault()) {
+                super.updateEventType(facetOnMixee.getEventType(), EventTypeOrigin.ANNOTATED_OBJECT);
+            }
+        });
     }
 
     @Override
