@@ -36,7 +36,6 @@ import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
 import org.apache.causeway.core.metamodel.facets.collections.collection.CollectionAnnotationFacetFactory;
 import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacet;
-import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetForCollectionAnnotation;
 import org.apache.causeway.core.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.causeway.core.metamodel.facets.object.domainobject.domainevents.CollectionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.causeway.core.metamodel.facets.object.domainobject.domainevents.PropertyDomainEventDefaultFacetForDomainObjectAnnotation;
@@ -144,8 +143,8 @@ extends ObjectSpecificationPostProcessorAbstract {
                             CollectionAnnotationFacetFactory.defaultFromDomainObjectIfRequired(
                                     objectSpecification, collectionAnnot.domainEvent());
                     FacetUtil.addFacet(
-                            new CollectionDomainEventFacetForCollectionAnnotation(
-                                    collectionDomainEventType, collection));
+                            new CollectionDomainEventFacet(
+                                    collectionDomainEventType, EventTypeOrigin.ANNOTATED_MEMBER, collection));
                 }
 
                 final CollectionDomainEventDefaultFacetForDomainObjectAnnotation collectionDomainEventDefaultFacet =

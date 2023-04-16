@@ -28,6 +28,7 @@ import org.apache.causeway.applib.events.domain.CollectionDomainEvent;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
+import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract.EventTypeOrigin;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet.Contributing;
@@ -35,8 +36,6 @@ import org.apache.causeway.core.metamodel.facets.actions.contributing.Contributi
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.collections.collection.hidden.HiddenFacetForCollectionAnnotation;
 import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacet;
-import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetDefault;
-import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetForCollectionAnnotation;
 import org.apache.causeway.core.metamodel.facets.collections.collection.typeof.TypeOfFacetForCollectionAnnotation;
 import org.apache.causeway.core.metamodel.facets.object.domainobject.domainevents.CollectionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
@@ -111,12 +110,13 @@ extends FacetFactoryAbstract {
         .map(Collection::domainEvent)
         .filter(domainEvent -> domainEvent != CollectionDomainEvent.Default.class)
         .map(domainEvent ->
-                (CollectionDomainEventFacet)
-                new CollectionDomainEventFacetForCollectionAnnotation(
-                        defaultFromDomainObjectIfRequired(typeSpec, domainEvent), holder))
+                new CollectionDomainEventFacet(
+                        defaultFromDomainObjectIfRequired(typeSpec, domainEvent),
+                        EventTypeOrigin.ANNOTATED_MEMBER, holder))
         .orElse(
-                new CollectionDomainEventFacetDefault(
-                        defaultFromDomainObjectIfRequired(typeSpec, CollectionDomainEvent.Default.class), holder));
+                new CollectionDomainEventFacet(
+                        defaultFromDomainObjectIfRequired(typeSpec, CollectionDomainEvent.Default.class),
+                        EventTypeOrigin.DEFAULT, holder));
         if(!CollectionDomainEvent.Noop.class.isAssignableFrom(collectionDomainEventFacet.getEventType())) {
             addFacet(collectionDomainEventFacet);
         }
