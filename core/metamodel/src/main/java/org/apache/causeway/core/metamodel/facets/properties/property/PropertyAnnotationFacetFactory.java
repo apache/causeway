@@ -29,6 +29,7 @@ import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
+import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract.EventTypeOrigin;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet.Contributing;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacetAbstract;
@@ -47,9 +48,7 @@ import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.M
 import org.apache.causeway.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromDefault;
 import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromPropertyAnnotation;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetDefault;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetForPropertyAnnotation;
+import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet;
 import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromDefault;
 import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.mustsatisfy.MustSatisfySpecificationFacetForPropertyAnnotation;
@@ -139,11 +138,12 @@ extends FacetFactoryAbstract {
         val propertyDomainEventFacet = propertyIfAny
                 .map(Property::domainEvent)
                 .filter(domainEvent -> domainEvent != PropertyDomainEvent.Default.class)
-                .map(domainEvent -> (PropertyDomainEventFacetAbstract) new PropertyDomainEventFacetForPropertyAnnotation(
-                        defaultFromDomainObjectIfRequired(typeSpec, domainEvent), getterFacet, holder))
-                .orElse(new PropertyDomainEventFacetDefault(
-                        defaultFromDomainObjectIfRequired(typeSpec, PropertyDomainEvent.Default.class), getterFacet,
-                        holder));
+                .map(domainEvent -> new PropertyDomainEventFacet(
+                        defaultFromDomainObjectIfRequired(typeSpec, domainEvent),
+                        EventTypeOrigin.ANNOTATED_MEMBER, getterFacet, holder))
+                .orElse(new PropertyDomainEventFacet(
+                        defaultFromDomainObjectIfRequired(typeSpec, PropertyDomainEvent.Default.class),
+                        EventTypeOrigin.DEFAULT, getterFacet, holder));
 
         if(EventUtil.eventTypeIsPostable(
                 propertyDomainEventFacet.getEventType(),
@@ -165,7 +165,7 @@ extends FacetFactoryAbstract {
             // the current setter facet will end up as the underlying facet
             final PropertySetterFacet replacementFacet;
 
-            if(propertyDomainEventFacet instanceof PropertyDomainEventFacetForPropertyAnnotation) {
+            if(propertyDomainEventFacet.getEventTypeOrigin().isAnnotatedMember()) {
                 replacementFacet = new PropertySetterFacetForDomainEventFromPropertyAnnotation(
                         propertyDomainEventFacet.getEventType(), getterFacet, setterFacet, propertyDomainEventFacet, holder);
             } else
@@ -182,7 +182,7 @@ extends FacetFactoryAbstract {
             // the current clear facet will end up as the underlying facet
             final PropertyClearFacet replacementFacet;
 
-            if(propertyDomainEventFacet instanceof PropertyDomainEventFacetForPropertyAnnotation) {
+            if(propertyDomainEventFacet.getEventTypeOrigin().isAnnotatedMember()) {
                 replacementFacet = new PropertyClearFacetForDomainEventFromPropertyAnnotation(
                         propertyDomainEventFacet.getEventType(), getterFacet, clearFacet, propertyDomainEventFacet, holder);
             } else

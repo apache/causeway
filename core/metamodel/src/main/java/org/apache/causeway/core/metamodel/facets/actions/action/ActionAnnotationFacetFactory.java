@@ -25,18 +25,16 @@ import javax.inject.Inject;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.events.domain.ActionDomainEvent;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
-import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
+import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract.EventTypeOrigin;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.actions.action.choicesfrom.ChoicesFromFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.actions.action.explicit.ActionExplicitFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.actions.action.hidden.HiddenFacetForActionAnnotation;
-import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetDefault;
-import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetForActionAnnotation;
+import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromDefault;
 import org.apache.causeway.core.metamodel.facets.actions.action.prototype.PrototypeFacetForActionAnnotation;
@@ -115,7 +113,7 @@ extends FacetFactoryAbstract {
             val holder = processMethodContext.getFacetHolder();
 
             //FIXME[CAUSEWAY-3409]
-            _Assert.assertFalse(typeSpec.isMixin(), ()->"we need the mixee instead");
+            //_Assert.assertFalse(typeSpec.isMixin(), ()->"we need the mixee instead");
 
             //
             // Set up ActionDomainEventFacet, which will act as the hiding/disabling/validating advisor
@@ -128,12 +126,11 @@ extends FacetFactoryAbstract {
                     .map(Action::domainEvent)
                     .filter(domainEvent -> domainEvent != ActionDomainEvent.Default.class)
                     .map(domainEvent ->
-                            (ActionDomainEventFacetAbstract)
-                            new ActionDomainEventFacetForActionAnnotation(
-                                    defaultFromDomainObjectIfRequired(typeSpec, domainEvent), holder))
+                            new ActionDomainEventFacet(
+                                    defaultFromDomainObjectIfRequired(typeSpec, domainEvent), EventTypeOrigin.ANNOTATED_MEMBER, holder))
                     .orElse(
-                            new ActionDomainEventFacetDefault(
-                                    defaultFromDomainObjectIfRequired(typeSpec, ActionDomainEvent.Default.class), holder)
+                            new ActionDomainEventFacet(
+                                    defaultFromDomainObjectIfRequired(typeSpec, ActionDomainEvent.Default.class), EventTypeOrigin.DEFAULT, holder)
                             );
 
             if(EventUtil.eventTypeIsPostable(
@@ -147,7 +144,7 @@ extends FacetFactoryAbstract {
             // replace the current actionInvocationFacet with one that will
             // emit the appropriate domain event and then delegate onto the underlying
 
-            addFacet(actionDomainEventFacet instanceof ActionDomainEventFacetForActionAnnotation
+            addFacet(actionDomainEventFacet.getEventTypeOrigin().isAnnotatedMember()
                     ? new ActionInvocationFacetForDomainEventFromActionAnnotation(
                             actionDomainEventFacet.getEventType(), actionMethod, typeSpec, returnSpec, holder)
                     : new ActionInvocationFacetForDomainEventFromDefault(

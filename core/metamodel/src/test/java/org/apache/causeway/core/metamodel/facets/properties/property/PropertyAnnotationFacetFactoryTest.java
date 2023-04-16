@@ -68,8 +68,6 @@ import org.apache.causeway.core.metamodel.facets.properties.property.maxlength.M
 import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromDefault;
 import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetDefault;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromDefault;
 import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.mustsatisfy.MustSatisfySpecificationFacetForPropertyAnnotation;
@@ -230,9 +228,10 @@ class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJupiterTest
             // then
             final PropertyDomainEventFacet domainEventFacet = facetedMethod.getFacet(PropertyDomainEventFacet.class);
             assertNotNull(domainEventFacet);
-            assertTrue(domainEventFacet instanceof PropertyDomainEventFacetForPropertyAnnotation);
-            final PropertyDomainEventFacetForPropertyAnnotation domainEventFacetDefault = (PropertyDomainEventFacetForPropertyAnnotation) domainEventFacet;
-            assertThat(domainEventFacetDefault.getEventType(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
+            assertTrue(domainEventFacet instanceof PropertyDomainEventFacet);
+            final PropertyDomainEventFacet domainEventFacetImpl = domainEventFacet;
+            assertTrue(domainEventFacetImpl.getEventTypeOrigin().isAnnotatedMember());
+            assertThat(domainEventFacetImpl.getEventType(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
 
             // then
             final Facet setterFacet = facetedMethod.getFacet(PropertySetterFacet.class);
@@ -277,8 +276,9 @@ class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJupiterTest
             // then
             final Facet domainEventFacet = facetedMethod.getFacet(PropertyDomainEventFacet.class);
             assertNotNull(domainEventFacet);
-            assertTrue(domainEventFacet instanceof PropertyDomainEventFacetForPropertyAnnotation);
-            final PropertyDomainEventFacetForPropertyAnnotation domainEventFacetImpl = (PropertyDomainEventFacetForPropertyAnnotation) domainEventFacet;
+            assertTrue(domainEventFacet instanceof PropertyDomainEventFacet);
+            final PropertyDomainEventFacet domainEventFacetImpl = (PropertyDomainEventFacet) domainEventFacet;
+            assertTrue(domainEventFacetImpl.getEventTypeOrigin().isAnnotatedMember());
             assertThat(domainEventFacetImpl.getEventType(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
 
             // then
@@ -324,8 +324,9 @@ class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJupiterTest
             // then
             final Facet domainEventFacet = facetedMethod.getFacet(PropertyDomainEventFacet.class);
             assertNotNull(domainEventFacet);
-            assertTrue(domainEventFacet instanceof PropertyDomainEventFacetForPropertyAnnotation);
-            final PropertyDomainEventFacetForPropertyAnnotation domainEventFacetImpl = (PropertyDomainEventFacetForPropertyAnnotation) domainEventFacet;
+            assertTrue(domainEventFacet instanceof PropertyDomainEventFacet);
+            final PropertyDomainEventFacet domainEventFacetImpl = (PropertyDomainEventFacet) domainEventFacet;
+            assertTrue(domainEventFacetImpl.getEventTypeOrigin().isAnnotatedMember());
             MatcherAssert.assertThat(domainEventFacetImpl.getEventType(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
 
             // then
@@ -371,8 +372,9 @@ class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJupiterTest
             // then
             final Facet domainEventFacet = facetedMethod.getFacet(PropertyDomainEventFacet.class);
             assertNotNull(domainEventFacet);
-            assertTrue(domainEventFacet instanceof PropertyDomainEventFacetDefault);
-            final PropertyDomainEventFacetDefault domainEventFacetImpl = (PropertyDomainEventFacetDefault) domainEventFacet;
+            assertTrue(domainEventFacet instanceof PropertyDomainEventFacet);
+            final PropertyDomainEventFacet domainEventFacetImpl = (PropertyDomainEventFacet) domainEventFacet;
+            assertTrue(domainEventFacetImpl.getEventTypeOrigin().isDefault());
             assertThat(domainEventFacetImpl.getEventType(), CausewayMatchers.classEqualTo(PropertyDomainEvent.Default.class));
 
             // then

@@ -32,7 +32,7 @@ implements PropertySetterFacet {
             final Class<? extends PropertyDomainEvent<?, ?>> eventType,
                     final PropertyOrCollectionAccessorFacet getterFacet,
                     final PropertySetterFacet setterFacet,
-                    final PropertyDomainEventFacetAbstract propertyInteractionFacet,
+                    final PropertyDomainEventFacet propertyInteractionFacet,
                     final FacetHolder holder) {
 
         super(PropertySetterFacet.class, eventType, getterFacet, setterFacet, null, propertyInteractionFacet, holder);

@@ -29,33 +29,52 @@ import lombok.NonNull;
 public abstract class DomainEventFacetAbstract<T>
 extends FacetAbstract {
 
-    private final Class<? extends T> eventType;
+    public static enum EventTypeOrigin {
+        /** {@link #eventType} originates from configured defaults */
+        DEFAULT,
+        /** {@link #eventType} originates from domain object annotation */
+        ANNOTATED_OBJECT,
+        /** {@link #eventType} originates from member annotation */
+        ANNOTATED_MEMBER;
+        public boolean isDefault() { return this==DEFAULT; }
+        public boolean isAnnotatedObject() { return this==ANNOTATED_OBJECT; }
+        public boolean isAnnotatedMember() { return this==ANNOTATED_MEMBER; }
+    }
+
+    private Class<? extends T> eventType;
+    private EventTypeOrigin eventTypeOrigin;
 
     protected DomainEventFacetAbstract(
             final Class<? extends Facet> facetType,
-            final FacetHolder holder,
-            final Class<? extends T> eventType) {
+            final Class<? extends T> eventType,
+            final EventTypeOrigin eventTypeOrigin,
+            final FacetHolder holder) {
         super(facetType, holder);
         this.eventType = eventType;
+        this.eventTypeOrigin = eventTypeOrigin;
     }
 
     public final Class<? extends T> getEventType() {
         return eventType;
     }
 
-//    /**
-//     * The {@link ObjectSpecification} of the {@link #value()}.
-//     */
-//    @Override
-//    public ObjectSpecification valueSpec() {
-//        final Class<?> valueType = value();
-//        return valueType != null ? getSpecificationLoader().loadSpecification(valueType) : null;
-//    }
+    public final EventTypeOrigin getEventTypeOrigin() {
+        return eventTypeOrigin;
+    }
+
+    /** called by meta-model post-processors only */
+    public final void updateEventType(
+            final Class<? extends T> eventType,
+            final EventTypeOrigin eventTypeOrigin) {
+        this.eventType = eventType;
+        this.eventTypeOrigin = eventTypeOrigin;
+    }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("eventType", getEventType());
+        visitor.accept("eventTypeOrigin", getEventTypeOrigin().name());
     }
 
     @Override

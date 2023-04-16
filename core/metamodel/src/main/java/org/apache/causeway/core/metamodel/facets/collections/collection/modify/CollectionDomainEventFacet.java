@@ -18,13 +18,43 @@
  */
 package org.apache.causeway.core.metamodel.facets.collections.collection.modify;
 
+import org.apache.causeway.applib.events.domain.AbstractDomainEvent;
+import org.apache.causeway.applib.events.domain.CollectionDomainEvent;
+import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.DomainEventHelper;
 import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
+import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
 
-/**
- * Corresponds to <tt>@Collection(domainEvent=...)</tt> annotation in the Causeway programming model.
- */
-public interface CollectionDomainEventFacet
-extends HidingInteractionAdvisor {
+public class CollectionDomainEventFacet
+extends DomainEventFacetAbstract<CollectionDomainEvent<?, ?>>
+implements HidingInteractionAdvisor {
+
+    private final DomainEventHelper domainEventHelper;
+
+    public CollectionDomainEventFacet(
+            final Class<? extends CollectionDomainEvent<?, ?>> eventType,
+            final EventTypeOrigin eventTypeOrigin,
+            final FacetHolder holder) {
+
+        super(CollectionDomainEventFacet.class, eventType, eventTypeOrigin, holder);
+        domainEventHelper = DomainEventHelper.ofServiceRegistry(getServiceRegistry());
+    }
+
+    @Override
+    public String hides(final VisibilityContext ic) {
+
+        final CollectionDomainEvent<?, ?> event =
+                domainEventHelper.postEventForCollection(
+                        AbstractDomainEvent.Phase.HIDE,
+                        _Casts.uncheckedCast(getEventType()),
+                        getFacetHolder(), ic.getHead()
+                );
+        if (event != null && event.isHidden()) {
+            return "Hidden by subscriber";
+        }
+        return null;
+    }
 
 }
-

@@ -24,7 +24,8 @@ import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
-public class CollectionDomainEventFacetForCollectionAnnotation extends CollectionDomainEventFacetAbstract {
+public class CollectionDomainEventFacetForCollectionAnnotation
+extends CollectionDomainEventFacet {
 
     static CollectionDomainEventFacet create(
             final Collection collection,
@@ -38,7 +39,7 @@ public class CollectionDomainEventFacetForCollectionAnnotation extends Collectio
 
     public CollectionDomainEventFacetForCollectionAnnotation(
             final Class<? extends CollectionDomainEvent<?, ?>> eventType, final FacetHolder holder) {
-        super(eventType, holder);
+        super(eventType, EventTypeOrigin.ANNOTATED_MEMBER, holder);
     }
 
 }

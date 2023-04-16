@@ -31,12 +31,11 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
+import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract.EventTypeOrigin;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
-import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.collections.collection.CollectionAnnotationFacetFactory;
 import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacet;
-import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetForCollectionAnnotation;
 import org.apache.causeway.core.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.causeway.core.metamodel.facets.object.domainobject.domainevents.CollectionDomainEventDefaultFacetForDomainObjectAnnotation;
@@ -44,8 +43,6 @@ import org.apache.causeway.core.metamodel.facets.object.domainobject.domainevent
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.causeway.core.metamodel.facets.properties.property.PropertyAnnotationFacetFactory;
 import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -72,13 +69,13 @@ extends ObjectSpecificationPostProcessorAbstract {
             objectSpecification.lookupFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class)
             .ifPresent(actionDomainEventDefaultFacet->{
                 _Casts.castTo(
-                        ActionDomainEventFacetAbstract.class,
+                        ActionDomainEventFacet.class,
                         objectAction.getFacet(ActionDomainEventFacet.class))
                 .filter(actionDomainEventFacetAbstract->
-                    actionDomainEventFacetAbstract.getEventType() == ActionDomainEvent.Default.class)
-                .ifPresent(actionDomainEventFacetAbstract->{
-                    //FIXME[CAUSEWAY-3409]
-                    //actionDomainEventFacetAbstract.setEventType(actionDomainEventDefaultFacet.getEventType());
+                    actionDomainEventFacetAbstract.getEventType() != ActionDomainEvent.Default.class)
+                .ifPresent(existing->{
+                    //FIXME[CAUSEWAY-3409] code smell
+                    existing.updateEventType(actionDomainEventDefaultFacet.getEventType(), EventTypeOrigin.ANNOTATED_OBJECT);
                 });
             });
         }
@@ -106,20 +103,20 @@ extends ObjectSpecificationPostProcessorAbstract {
                                     objectSpecification, propertyAnnot.domainEvent());
                     final PropertyOrCollectionAccessorFacet getterFacetIfAny = null;
                     FacetUtil.addFacet(
-                            new PropertyDomainEventFacetForPropertyAnnotation(
-                                    propertyDomainEventType, getterFacetIfAny, property));
+                            new PropertyDomainEventFacet(
+                                    propertyDomainEventType, EventTypeOrigin.ANNOTATED_MEMBER, getterFacetIfAny, property));
                 }
             }
             final PropertyDomainEventDefaultFacetForDomainObjectAnnotation propertyDomainEventDefaultFacet =
                     objectSpecification.getFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class);
             if(propertyDomainEventDefaultFacet != null) {
                 final PropertyDomainEventFacet propertyFacet = property.getFacet(PropertyDomainEventFacet.class);
-                if (propertyFacet instanceof PropertyDomainEventFacetAbstract) {
-                    final PropertyDomainEventFacetAbstract facetAbstract = (PropertyDomainEventFacetAbstract) propertyFacet;
+                if (propertyFacet instanceof PropertyDomainEventFacet) {
+                    final PropertyDomainEventFacet facetAbstract = propertyFacet;
                     if (facetAbstract.getEventType() == PropertyDomainEvent.Default.class) {
-                        final PropertyDomainEventFacetAbstract existing = (PropertyDomainEventFacetAbstract) propertyFacet;
-                        //FIXME[CAUSEWAY-3409]
-                        //existing.setEventType(propertyDomainEventDefaultFacet.getEventType());
+                        final PropertyDomainEventFacet existing = propertyFacet;
+                        //FIXME[CAUSEWAY-3409] code smell
+                        existing.updateEventType(propertyDomainEventDefaultFacet.getEventType(), EventTypeOrigin.ANNOTATED_OBJECT);
                     }
                 }
             }
@@ -155,12 +152,12 @@ extends ObjectSpecificationPostProcessorAbstract {
                         objectSpecification.getFacet(CollectionDomainEventDefaultFacetForDomainObjectAnnotation.class);
                 if(collectionDomainEventDefaultFacet != null) {
                     final CollectionDomainEventFacet collectionFacet = collection.getFacet(CollectionDomainEventFacet.class);
-                    if (collectionFacet instanceof CollectionDomainEventFacetAbstract) {
-                        final CollectionDomainEventFacetAbstract facetAbstract = (CollectionDomainEventFacetAbstract) collectionFacet;
+                    if (collectionFacet instanceof CollectionDomainEventFacet) {
+                        final CollectionDomainEventFacet facetAbstract = collectionFacet;
                         if (facetAbstract.getEventType() == CollectionDomainEvent.Default.class) {
-                            final CollectionDomainEventFacetAbstract existing = (CollectionDomainEventFacetAbstract) collectionFacet;
-                            //FIXME[CAUSEWAY-3409]
-                            //existing.setEventType(collectionDomainEventDefaultFacet.getEventType());
+                            final CollectionDomainEventFacet existing = collectionFacet;
+                            //FIXME[CAUSEWAY-3409] code smell
+                            existing.updateEventType(collectionDomainEventDefaultFacet.getEventType(), EventTypeOrigin.ANNOTATED_OBJECT);
                         }
                     }
                 }

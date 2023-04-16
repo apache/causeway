@@ -21,11 +21,11 @@ package org.apache.causeway.core.metamodel.facets.collections.collection.modify;
 import org.apache.causeway.applib.events.domain.CollectionDomainEvent;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
-public class CollectionDomainEventFacetDefault extends CollectionDomainEventFacetAbstract {
+public class CollectionDomainEventFacetDefault extends CollectionDomainEventFacet {
 
     public CollectionDomainEventFacetDefault(
             final Class<? extends CollectionDomainEvent<?, ?>> eventType, final FacetHolder holder) {
-        super(eventType, holder);
+        super(eventType, EventTypeOrigin.DEFAULT, holder);
     }
 
 }

@@ -34,7 +34,7 @@ import org.apache.causeway.core.metamodel.facets.actions.contributing.Contributi
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.collections.collection.hidden.HiddenFacetForCollectionAnnotation;
-import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacet;
 import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetDefault;
 import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetForCollectionAnnotation;
 import org.apache.causeway.core.metamodel.facets.collections.collection.typeof.TypeOfFacetForCollectionAnnotation;
@@ -111,7 +111,7 @@ extends FacetFactoryAbstract {
         .map(Collection::domainEvent)
         .filter(domainEvent -> domainEvent != CollectionDomainEvent.Default.class)
         .map(domainEvent ->
-                (CollectionDomainEventFacetAbstract)
+                (CollectionDomainEventFacet)
                 new CollectionDomainEventFacetForCollectionAnnotation(
                         defaultFromDomainObjectIfRequired(typeSpec, domainEvent), holder))
         .orElse(

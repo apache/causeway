@@ -38,7 +38,7 @@ extends DomainEventFacetAbstract<PropertyDomainEvent<?, ?>> {
     public PropertyDomainEventDefaultFacetForDomainObjectAnnotation(
             final FacetHolder holder,
             final Class<? extends PropertyDomainEvent<?,?>> value) {
-        super(type(), holder, value);
+        super(type(), value, EventTypeOrigin.ANNOTATED_OBJECT, holder);
     }
 
 }
