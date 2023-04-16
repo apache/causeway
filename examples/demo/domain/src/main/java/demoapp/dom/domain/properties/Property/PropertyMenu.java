@@ -42,7 +42,6 @@ import demoapp.dom.domain.properties.Property.editing.PropertyEditingPage;
 import demoapp.dom.domain.properties.Property.editingReasonDisabled.PropertyEditingReasonDisabledPage;
 import demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingPage;
 import demoapp.dom.domain.properties.Property.fileAccept.PropertyFileAcceptPage;
-import demoapp.dom.domain.properties.Property.hidden.PropertyHiddenPage;
 import demoapp.dom.domain.properties.Property.maxLength.PropertyMaxLengthPage;
 import demoapp.dom.domain.properties.Property.mustSatisfy.PropertyMustSatisfyPage;
 import demoapp.dom.domain.properties.Property.optionality.PropertyOptionalityPage;
@@ -116,12 +115,6 @@ public class PropertyMenu {
         setSampleClob(".txt", vm::setTxtPropertyUsingAnnotation);
 
         return vm;
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of properties in different contexts")
-    public PropertyHiddenPage hidden() {
-        return new PropertyHiddenPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
