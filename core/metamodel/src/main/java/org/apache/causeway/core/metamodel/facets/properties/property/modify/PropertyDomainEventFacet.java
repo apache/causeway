@@ -82,14 +82,11 @@ implements
 
     @Override
     public void initWithMixee(final ObjectSpecification mixeeSpec) {
+        if(!getEventTypeOrigin().isDefault()) return; // skip if already set explicitly
         mixeeSpec
         .lookupFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class)
-        .ifPresent(facetOnMixee->{
-            if(facetOnMixee.getEventType() != PropertyDomainEvent.Default.class
-                    && getEventTypeOrigin().isDefault()) {
-                super.updateEventType(facetOnMixee.getEventType(), EventTypeOrigin.ANNOTATED_OBJECT);
-            }
-        });
+        .ifPresent(facetOnMixee->
+                super.updateEventType(facetOnMixee.getEventType(), EventTypeOrigin.ANNOTATED_OBJECT));
     }
 
     @Override

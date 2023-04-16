@@ -50,14 +50,11 @@ implements HidingInteractionAdvisor {
 
     @Override
     public void initWithMixee(final ObjectSpecification mixeeSpec) {
+        if(!getEventTypeOrigin().isDefault()) return; // skip if already set explicitly
         mixeeSpec
         .lookupFacet(CollectionDomainEventDefaultFacetForDomainObjectAnnotation.class)
-        .ifPresent(facetOnMixee->{
-            if(facetOnMixee.getEventType() != CollectionDomainEvent.Default.class
-                    && getEventTypeOrigin().isDefault()) {
-                super.updateEventType(facetOnMixee.getEventType(), EventTypeOrigin.ANNOTATED_OBJECT);
-            }
-        });
+        .ifPresent(facetOnMixee->
+            super.updateEventType(facetOnMixee.getEventType(), EventTypeOrigin.ANNOTATED_OBJECT));
     }
 
     @Override

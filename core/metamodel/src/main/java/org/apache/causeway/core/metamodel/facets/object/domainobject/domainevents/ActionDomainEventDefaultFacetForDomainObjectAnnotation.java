@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainobject.domainevents;
 
+import java.util.Optional;
+
 import org.apache.causeway.applib.events.domain.ActionDomainEvent;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -31,13 +33,21 @@ import org.apache.causeway.core.metamodel.facets.actions.action.invocation.Actio
 public class ActionDomainEventDefaultFacetForDomainObjectAnnotation
 extends DomainEventFacetAbstract<ActionDomainEvent<?>> {
 
+    public static Optional<ActionDomainEventDefaultFacetForDomainObjectAnnotation> create(
+            final Class<? extends ActionDomainEvent<?>> domainEvent,
+            final FacetHolder holder) {
+        return domainEvent != ActionDomainEvent.Default.class
+                ? Optional.of(new ActionDomainEventDefaultFacetForDomainObjectAnnotation(domainEvent, holder))
+                : Optional.empty();
+    }
+
     private static Class<? extends Facet> type() {
         return ActionDomainEventDefaultFacetForDomainObjectAnnotation.class;
     }
 
-    public ActionDomainEventDefaultFacetForDomainObjectAnnotation(
-            final FacetHolder holder,
-            final Class<? extends ActionDomainEvent<?>> value) {
+    private ActionDomainEventDefaultFacetForDomainObjectAnnotation(
+            final Class<? extends ActionDomainEvent<?>> value,
+            final FacetHolder holder) {
         super(type(), value, EventTypeOrigin.ANNOTATED_OBJECT, holder);
     }
 
