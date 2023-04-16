@@ -59,8 +59,7 @@ public class ActionLayoutDescribedAsPage
 {
     @Property
     @XmlElement
-    @Getter
-    @Setter
+    @Getter @Setter
     private String name;
 
     @Collection()

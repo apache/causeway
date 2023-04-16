@@ -21,6 +21,7 @@ package demoapp.dom.domain.actions.ActionLayout.named;
 import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -29,34 +30,70 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
-//tag::class[]
+import lombok.Getter;
+import lombok.Setter;
+
 @DomainObject(
         nature=Nature.VIEW_MODEL)
 @Named("demo.ActionLayoutNamedVm")
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ActionLayoutNamedPage implements HasAsciiDocDescription {
+//tag::class[]
+//...
+public class ActionLayoutNamedPage
+//end::class[]
+        implements HasAsciiDocDescription
+//tag::class[]
+{
+    @Property
+    @XmlElement
+    @Getter @Setter
+    private String name;
+
+    @Property
+    @XmlElement
+    @Getter @Setter
+    private String notes;
+
+    // ...
+//end::class[]
 
     @ObjectSupport public String title() {
         return "@ActionLayout#named";
     }
 
-//tag::act[]
-    @Action
+//tag::reset[]
+    @Action(semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
     @ActionLayout(
-            named = "xxx" // <.>
-//end::act[]
-            ,describedAs = "@ActionLayout(named = \"xxx\")"
-//tag::act[]
-            )
-    public Object act(final String arg) {
+            named = "default",                                  // <.>
+            describedAs = "Resets the name back to a default"
+    )
+    public Object reset() {
+        setName("Fred");
         return this;
     }
-//end::act[]
+//end::reset[]
 
+//tag::updateNotes[]
+    @Action(semantics = SemanticsOf.IDEMPOTENT)
+    @ActionLayout(
+            named = "Updates (changes) the notes property"      // <.>
+    )
+    public Object updateNotes(String newNotes) {
+        setNotes(newNotes);
+        return this;
+    }
+    public String default0UpdateNotes() {
+        return getNotes();
+    }
+//end::updateNotes[]
+
+//tag::class[]
 }
 //end::class[]
