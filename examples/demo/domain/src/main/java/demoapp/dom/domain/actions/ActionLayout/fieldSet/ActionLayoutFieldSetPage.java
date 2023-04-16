@@ -21,6 +21,7 @@ package demoapp.dom.domain.actions.ActionLayout.fieldSet;
 import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -29,29 +30,80 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.ParameterLayout;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
+
+import org.springframework.data.repository.query.Param;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
-//tag::class[]
 @DomainObject(
         nature=Nature.VIEW_MODEL)
 @Named("demo.ActionLayoutFieldSetVm")
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ActionLayoutFieldSetPage implements HasAsciiDocDescription {
+//tag::class[]
+//...
+public class ActionLayoutFieldSetPage
+//end::class[]
+        implements HasAsciiDocDescription
+//tag::class[]
+{
+    @Property()
+    @XmlElement
+    @Getter @Setter
+    private String name;
+
+    @Property()
+    @PropertyLayout(multiLine = 5)
+    @XmlElement
+    @Getter @Setter
+    private String notes;
+
+    // ...
+//end::class[]
 
     @ObjectSupport public String title() {
         return "@ActionLayout#fieldSet...";
     }
 
+//tag::fieldsetId[]
     @Action
     @ActionLayout(
-            fieldSetId = "xxx",
-            fieldSetName = "xxx")
-    public Object act(final String arg) {
+            fieldSetId = "id",                          // <.>
+            position = ActionLayout.Position.PANEL      // <.>
+    )
+    public Object updateName(final String newName) {
+        setName(newName);
         return this;
     }
+    public String default0UpdateName() {
+        return getName();
+    }
+//end::fieldsetId[]
 
+//tag::fieldsetName[]
+    @Action
+    @ActionLayout(
+            fieldSetName = "Detail"                     // <.>
+                                                        // <.>
+    )
+    public Object updateNotes(
+            @ParameterLayout(multiLine = 5)
+            final String newNotes) {
+        setNotes(newNotes);
+        return this;
+    }
+    public String default0UpdateNotes() {
+        return getNotes();
+    }
+//end::fieldsetName[]
+
+//tag::class[]
 }
 //end::class[]
