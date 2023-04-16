@@ -48,10 +48,7 @@ implements HidingInteractionAdvisor {
         domainEventHelper = DomainEventHelper.ofServiceRegistry(getServiceRegistry());
     }
 
-    /**
-     * Called by meta-model post-processors, to honor domain object annotations on mixees.
-     * (required only, if this facet belongs to a mixed-in member)
-     */
+    @Override
     public void initWithMixee(final ObjectSpecification mixeeSpec) {
         mixeeSpec
         .lookupFacet(CollectionDomainEventDefaultFacetForDomainObjectAnnotation.class)

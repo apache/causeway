@@ -23,6 +23,7 @@ import java.util.function.BiConsumer;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
 
@@ -69,6 +70,13 @@ extends FacetAbstract {
         this.eventType = eventType;
         this.eventTypeOrigin = eventTypeOrigin;
     }
+
+    /**
+     * Called by meta-model post-processors, to honor domain object annotations on mixees.
+     * (required only, if this facet belongs to a mixed-in member)
+     */
+    public void initWithMixee(final ObjectSpecification mixeeSpec) {}
+
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
