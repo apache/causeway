@@ -37,10 +37,11 @@ import org.apache.causeway.applib.annotation.Title;
 import org.apache.causeway.applib.value.Password;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
-import demoapp.dom.types.causeway.passwords.persistence.CausewayPasswordEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import demoapp.dom.types.causeway.passwords.persistence.CausewayPasswordEntity;
 
 @Profile("demo-jpa")
 //tag::class[]

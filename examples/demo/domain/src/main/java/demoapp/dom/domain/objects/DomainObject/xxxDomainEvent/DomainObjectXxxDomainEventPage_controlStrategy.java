@@ -18,12 +18,12 @@
  */
 package demoapp.dom.domain.objects.DomainObject.xxxDomainEvent;
 
-import lombok.RequiredArgsConstructor;
-
 import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
+
+import lombok.RequiredArgsConstructor;
 
 
 //tag::class[]

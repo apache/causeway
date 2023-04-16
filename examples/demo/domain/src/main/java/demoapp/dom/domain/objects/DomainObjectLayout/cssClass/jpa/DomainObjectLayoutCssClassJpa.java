@@ -18,24 +18,24 @@
  */
 package demoapp.dom.domain.objects.DomainObjectLayout.cssClass.jpa;
 
-import demoapp.dom.domain.objects.DomainObjectLayout.bookmarking.jpa.DomainObjectLayoutBookmarkingChildJpa;
-import demoapp.dom.domain.objects.DomainObjectLayout.cssClass.DomainObjectLayoutCssClass;
+import javax.inject.Named;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.springframework.context.annotation.Profile;
+
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Set;
-import java.util.TreeSet;
-
-import javax.inject.Named;
-import javax.persistence.*;
-
-import org.apache.causeway.applib.annotation.Collection;
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.DomainObjectLayout;
-import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
-import org.springframework.context.annotation.Profile;
+import demoapp.dom.domain.objects.DomainObjectLayout.cssClass.DomainObjectLayoutCssClass;
 
 @Profile("demo-jpa")
 @Entity

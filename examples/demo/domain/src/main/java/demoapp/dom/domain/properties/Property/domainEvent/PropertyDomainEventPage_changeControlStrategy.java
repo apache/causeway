@@ -18,11 +18,15 @@
  */
 package demoapp.dom.domain.properties.Property.domainEvent;
 
-import lombok.RequiredArgsConstructor;
-
 import javax.inject.Inject;
 
-import org.apache.causeway.applib.annotation.*;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.Redirect;
+import org.apache.causeway.applib.annotation.SemanticsOf;
+
+import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(semantics = SemanticsOf.IDEMPOTENT)

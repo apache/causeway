@@ -18,11 +18,11 @@
  */
 package demoapp.dom.domain.objects.DomainObjectLayout.tabledec;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom._infra.values.ValueHolder;
-
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.TableDecorator;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolder;
 
 //tag::class[]
 @DomainObjectLayout(

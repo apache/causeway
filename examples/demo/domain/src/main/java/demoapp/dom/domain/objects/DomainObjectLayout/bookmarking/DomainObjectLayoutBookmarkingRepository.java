@@ -18,8 +18,6 @@
  */
 package demoapp.dom.domain.objects.DomainObjectLayout.bookmarking;
 
-import demoapp.dom.domain.objects.DomainObject.aliased.DomainObjectAliased;
-
 import java.util.List;
 
 public interface DomainObjectLayoutBookmarkingRepository {

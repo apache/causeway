@@ -1,16 +1,15 @@
 package demoapp.dom.domain.actions.Action.hidden;
 
-import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishing;
-import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingPage;
-import lombok.RequiredArgsConstructor;
-
 import java.util.List;
 
 import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.MemberSupport;
+
+import lombok.RequiredArgsConstructor;
+
+import demoapp.dom._infra.values.ValueHolderRepository;
 
 //tag::class[]
 @Collection()

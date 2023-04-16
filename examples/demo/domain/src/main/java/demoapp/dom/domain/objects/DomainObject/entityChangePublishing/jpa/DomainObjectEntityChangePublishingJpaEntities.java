@@ -18,10 +18,10 @@
  */
 package demoapp.dom.domain.objects.DomainObject.entityChangePublishing.jpa;
 
-import demoapp.dom._infra.values.ValueHolderRepository;
-
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+
+import demoapp.dom._infra.values.ValueHolderRepository;
 
 @Profile("demo-jpa")
 @Service

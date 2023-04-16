@@ -18,14 +18,14 @@
  */
 package demoapp.dom.domain.properties.Property.commandPublishing.jpa;
 
-import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandPublishing;
-import demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandPublishingRepository;
-
 import java.util.List;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+
+import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandPublishing;
+import demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandPublishingRepository;
 
 @Profile("demo-jpa")
 @Service

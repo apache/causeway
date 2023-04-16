@@ -18,11 +18,15 @@
  */
 package demoapp.dom.domain.progmodel.objects.mixins.mixins;
 
-import lombok.val;
-
 import javax.inject.Named;
 
-import org.apache.causeway.applib.annotation.*;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.DomainService;
+import org.apache.causeway.applib.annotation.NatureOfService;
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+
+import lombok.val;
 
 @Named("demo.MixinMenu")
 @DomainService(

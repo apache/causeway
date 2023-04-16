@@ -25,11 +25,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.apache.causeway.core.config.CausewayConfiguration;
-import org.springframework.core.env.Environment;
-import org.springframework.core.env.Profiles;
-import org.springframework.core.env.StandardEnvironment;
 import org.springframework.mock.env.MockEnvironment;
+
+import org.apache.causeway.core.config.CausewayConfiguration;
 
 import lombok.val;
 

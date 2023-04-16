@@ -34,10 +34,11 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Title;
 import org.apache.causeway.applib.value.Clob;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.causeway.clobs.holder.CausewayClobHolder2;
 import lombok.Getter;
 import lombok.Setter;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.types.causeway.clobs.holder.CausewayClobHolder2;
 
 //tag::class[]
 @XmlRootElement(name = "root")

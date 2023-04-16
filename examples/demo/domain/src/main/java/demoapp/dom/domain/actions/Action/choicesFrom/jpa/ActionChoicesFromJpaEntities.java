@@ -18,14 +18,14 @@
  */
 package demoapp.dom.domain.actions.Action.choicesFrom.jpa;
 
-import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.actions.Action.choicesFrom.ActionChoicesFrom;
-import demoapp.dom.domain.actions.Action.choicesFrom.ActionChoicesFromRepository;
-
 import java.util.List;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+
+import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.domain.actions.Action.choicesFrom.ActionChoicesFrom;
+import demoapp.dom.domain.actions.Action.choicesFrom.ActionChoicesFromRepository;
 
 @Profile("demo-jpa")
 @Service

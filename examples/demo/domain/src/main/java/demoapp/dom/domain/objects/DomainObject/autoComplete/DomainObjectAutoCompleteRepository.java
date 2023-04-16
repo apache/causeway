@@ -24,9 +24,10 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.springframework.stereotype.Repository;
+
 import org.apache.causeway.applib.annotation.MinLength;
 import org.apache.causeway.applib.services.repository.RepositoryService;
-import org.springframework.stereotype.Repository;
 
 @Named("demo.DomainObjectAutoCompleteRepository")
 //tag::class[]

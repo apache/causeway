@@ -18,13 +18,14 @@
  */
 package demoapp.dom.domain.objects.DomainObject.xxxDomainEvent;
 
-import lombok.RequiredArgsConstructor;
-
 import javax.inject.Inject;
 
-import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
+
+import org.apache.causeway.applib.services.registry.ServiceRegistry;
+
+import lombok.RequiredArgsConstructor;
 
 // tag::class[]
 @Service

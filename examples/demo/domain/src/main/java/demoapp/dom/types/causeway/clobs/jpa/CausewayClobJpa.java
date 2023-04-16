@@ -41,8 +41,9 @@ import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 import org.apache.causeway.persistence.jpa.applib.types.ClobJpaEmbeddable;
 
-import demoapp.dom.types.causeway.clobs.persistence.CausewayClobEntity;
 import lombok.NoArgsConstructor;
+
+import demoapp.dom.types.causeway.clobs.persistence.CausewayClobEntity;
 
 @Profile("demo-jpa")
 //tag::class[]

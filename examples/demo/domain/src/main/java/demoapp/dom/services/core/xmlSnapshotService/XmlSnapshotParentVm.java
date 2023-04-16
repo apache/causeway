@@ -37,13 +37,14 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.services.core.xmlSnapshotService.child.XmlSnapshotChildVm;
-import demoapp.dom.services.core.xmlSnapshotService.peer.XmlSnapshotPeerVm;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.val;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.services.core.xmlSnapshotService.child.XmlSnapshotChildVm;
+import demoapp.dom.services.core.xmlSnapshotService.peer.XmlSnapshotPeerVm;
 
 @XmlRootElement(name = "root")
 @XmlType

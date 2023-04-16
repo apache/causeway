@@ -18,22 +18,36 @@
  */
 package demoapp.dom.domain.objects.DomainObject.xxxDomainEvent;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.domain.objects.DomainObject.xxxDomainEvent.child.DomainObjectXxxDomainEventChildVm;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Named;
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-import org.apache.causeway.applib.annotation.*;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Editing;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.events.domain.ActionDomainEvent;
 import org.apache.causeway.applib.events.domain.CollectionDomainEvent;
 import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.domain.objects.DomainObject.xxxDomainEvent.child.DomainObjectXxxDomainEventChildVm;
 
 @XmlRootElement(name = "root")
 @XmlType

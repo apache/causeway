@@ -43,12 +43,13 @@ import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.wrapper.control.AsyncControl;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
-import demoapp.dom.services.core.wrapperFactory.WrapperFactoryEntity;
-import demoapp.dom.services.core.wrapperFactory.WrapperFactoryEntity_updatePropertyAsyncMixin;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.val;
+
+import demoapp.dom.services.core.wrapperFactory.WrapperFactoryEntity;
+import demoapp.dom.services.core.wrapperFactory.WrapperFactoryEntity_updatePropertyAsyncMixin;
 
 @Profile("demo-jpa")
 //tag::class[]

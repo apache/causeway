@@ -1,9 +1,5 @@
 package demoapp.dom.domain.objects.DomainObjectLayout.cssClassFa;
 
-import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.objects.DomainObjectLayout.cssClass.DomainObjectLayoutCssClassPage;
-import lombok.RequiredArgsConstructor;
-
 import java.util.List;
 
 import javax.inject.Inject;
@@ -11,6 +7,10 @@ import javax.inject.Inject;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
+
+import lombok.RequiredArgsConstructor;
+
+import demoapp.dom._infra.values.ValueHolderRepository;
 
 @Collection()
 @CollectionLayout()

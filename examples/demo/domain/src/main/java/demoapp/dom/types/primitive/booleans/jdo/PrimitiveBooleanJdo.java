@@ -59,7 +59,7 @@ public class PrimitiveBooleanJdo                                          // <.>
     @Getter @Setter
     private boolean readOnlyProperty;                             // <.>
 
-    @Property(editing = Editing.ENABLED)                                        
+    @Property(editing = Editing.ENABLED)
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @Getter @Setter
     private boolean readWriteProperty;

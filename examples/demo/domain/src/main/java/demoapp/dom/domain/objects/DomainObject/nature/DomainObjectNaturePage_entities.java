@@ -1,14 +1,15 @@
 package demoapp.dom.domain.objects.DomainObject.nature;
 
-import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.objects.DomainObject.nature.entity.DomainObjectNatureEntity;
-import lombok.RequiredArgsConstructor;
-
 import java.util.List;
 
 import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Collection;
+
+import lombok.RequiredArgsConstructor;
+
+import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.domain.objects.DomainObject.nature.entity.DomainObjectNatureEntity;
 
 @Collection()
 @RequiredArgsConstructor

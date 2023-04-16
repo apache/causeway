@@ -36,10 +36,11 @@ import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.domain.actions.Action.typeOf.child.ActionTypeOfChildVm;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.domain.actions.Action.typeOf.child.ActionTypeOfChildVm;
 
 @XmlRootElement(name = "root")
 @XmlType

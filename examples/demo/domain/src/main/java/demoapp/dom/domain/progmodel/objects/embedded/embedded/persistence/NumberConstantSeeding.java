@@ -20,13 +20,13 @@
 
 package demoapp.dom.domain.progmodel.objects.embedded.embedded.persistence;
 
-import demoapp.dom._infra.seed.SeedServiceAbstract;
-import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.progmodel.objects.embedded.embedded.ComplexNumber;
-
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
+
+import demoapp.dom._infra.seed.SeedServiceAbstract;
+import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.domain.progmodel.objects.embedded.embedded.ComplexNumber;
 
 @Service
 public class NumberConstantSeeding

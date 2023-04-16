@@ -1,10 +1,10 @@
 package demoapp.dom.domain.objects.DomainObject.autoComplete;
 
-import lombok.RequiredArgsConstructor;
-
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+
+import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(semantics = SemanticsOf.SAFE)

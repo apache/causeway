@@ -36,9 +36,10 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.Title;
 
-import demoapp.dom.services.extensions.secman.apptenancy.persistence.TenantedEntity;
 import lombok.Getter;
 import lombok.Setter;
+
+import demoapp.dom.services.extensions.secman.apptenancy.persistence.TenantedEntity;
 
 @Profile("demo-jdo")
 //tag::class[]

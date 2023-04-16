@@ -34,9 +34,10 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Title;
 
-import demoapp.dom.types.jodatime.jodalocaltime.persistence.JodaLocalTimeEntity;
 import lombok.Getter;
 import lombok.Setter;
+
+import demoapp.dom.types.jodatime.jodalocaltime.persistence.JodaLocalTimeEntity;
 
 @Profile("demo-jdo")
 //tag::class[]

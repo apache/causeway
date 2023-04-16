@@ -36,10 +36,11 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Title;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
-import demoapp.dom.types.javatime.javatimelocaldatetime.persistence.JavaTimeLocalDateTimeEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import demoapp.dom.types.javatime.javatimelocaldatetime.persistence.JavaTimeLocalDateTimeEntity;
 
 @Profile("demo-jpa")
 //tag::class[]

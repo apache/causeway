@@ -19,13 +19,13 @@
  */
 package demoapp.dom.domain.actions.Action.executionPublishing;
 
-import lombok.RequiredArgsConstructor;
-
 import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Publishing;
+
+import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(executionPublishing = Publishing.DISABLED)                    // <.>

@@ -18,19 +18,25 @@
  */
 package demoapp.dom.domain.objects.DomainObject.bounded.jpa;
 
-import demoapp.dom.domain.objects.DomainObject.bounded.DomainObjectBounding;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import javax.inject.Named;
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.springframework.context.annotation.Profile;
 
 import org.apache.causeway.applib.annotation.Bounding;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
-import org.springframework.context.annotation.Profile;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import demoapp.dom.domain.objects.DomainObject.bounded.DomainObjectBounding;
 
 @Profile("demo-jpa")
 @Entity

@@ -18,12 +18,12 @@
  */
 package demoapp.dom.domain.actions.Action.choicesFrom;
 
-import demoapp.dom._infra.seed.SeedServiceAbstract;
-import demoapp.dom._infra.values.ValueHolderRepository;
-
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
+
+import demoapp.dom._infra.seed.SeedServiceAbstract;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
 @Service
 public class ActionChoicesFromSeeding

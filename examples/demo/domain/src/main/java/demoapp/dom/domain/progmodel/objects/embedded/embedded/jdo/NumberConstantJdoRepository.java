@@ -18,12 +18,13 @@
  */
 package demoapp.dom.domain.progmodel.objects.embedded.embedded.jdo;
 
-import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.progmodel.objects.embedded.embedded.ComplexNumber;
-import lombok.val;
-
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+
+import lombok.val;
+
+import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.domain.progmodel.objects.embedded.embedded.ComplexNumber;
 
 @Profile("demo-jdo")
 @Service

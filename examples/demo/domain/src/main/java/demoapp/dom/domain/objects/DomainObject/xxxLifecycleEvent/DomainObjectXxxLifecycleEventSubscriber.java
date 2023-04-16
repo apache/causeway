@@ -18,20 +18,19 @@
  */
 package demoapp.dom.domain.objects.DomainObject.xxxLifecycleEvent;
 
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
+
+import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.bookmark.BookmarkService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 // tag::class[]
 @Service

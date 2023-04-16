@@ -1,14 +1,15 @@
 package demoapp.dom.domain.objects.DomainObjectLayout.tabledec;
 
-import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.objects.DomainObjectLayout.paged.DomainObjectLayoutPaged;
-import demoapp.dom.domain.objects.DomainObjectLayout.paged.DomainObjectLayoutPagedPage;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
+import javax.inject.Inject;
+
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.MemberSupport;
 
-import javax.inject.Inject;
-import java.util.List;
+import lombok.RequiredArgsConstructor;
+
+import demoapp.dom._infra.values.ValueHolderRepository;
 
 @Action()
 @RequiredArgsConstructor

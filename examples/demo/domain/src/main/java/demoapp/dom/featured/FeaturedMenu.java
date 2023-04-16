@@ -33,14 +33,15 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.factory.FactoryService;
 
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+
 import demoapp.dom.domain.progmodel.actions.assoc.assoc.DemoItem;
 import demoapp.dom.featured.customui.geocoding.GeoapifyClient;
 import demoapp.dom.featured.customui.latlng.Zoom;
 import demoapp.dom.featured.customui.vm.WhereInTheWorldVm;
 import demoapp.dom.featured.layout.describedAs.DescribedAsVm;
 import demoapp.dom.featured.layout.tabs.TabDemo;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @Named("demo.FeaturedMenu")
 @DomainService(

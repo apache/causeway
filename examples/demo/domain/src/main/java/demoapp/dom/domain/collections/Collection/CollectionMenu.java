@@ -29,11 +29,12 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.factory.FactoryService;
 
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+
 import demoapp.dom.domain.collections.Collection.domainEvent.CollectionDomainEventPage;
 import demoapp.dom.domain.collections.Collection.hidden.CollectionHiddenPage;
 import demoapp.dom.domain.collections.Collection.typeOf.CollectionTypeOfPage;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @Named("demo.CollectionMenu")
 @DomainService(

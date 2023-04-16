@@ -34,13 +34,14 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Title;
 import org.apache.causeway.applib.annotation.Where;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.domain.properties.Property.projecting.jdo.PropertyProjectingChildJdo;
 import demoapp.dom.domain.properties.Property.projecting.jpa.PropertyProjectingChildJpa;
 import demoapp.dom.domain.properties.Property.projecting.persistence.PropertyProjectingChildEntity;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 //tag::class[]
 @XmlRootElement(name = "child")

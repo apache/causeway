@@ -18,14 +18,14 @@
  */
 package demoapp.dom.domain.objects.DomainObjectLayout.xxxUiEvent;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom._infra.values.ValueHolder;
-
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.events.ui.CssClassUiEvent;
 import org.apache.causeway.applib.events.ui.IconUiEvent;
 import org.apache.causeway.applib.events.ui.LayoutUiEvent;
 import org.apache.causeway.applib.events.ui.TitleUiEvent;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolder;
 
 //tag::class[]
 @DomainObjectLayout(

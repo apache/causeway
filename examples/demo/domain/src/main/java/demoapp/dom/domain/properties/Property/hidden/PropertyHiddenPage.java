@@ -18,9 +18,6 @@
  */
 package demoapp.dom.domain.properties.Property.hidden;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import lombok.NoArgsConstructor;
-
 import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -30,6 +27,10 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
+
+import lombok.NoArgsConstructor;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @XmlRootElement(name = "root")
 @XmlType

@@ -18,20 +18,31 @@
  */
 package demoapp.dom.domain.actions.ActionLayout.describedAs;
 
-import javax.inject.Named;
-import javax.xml.bind.annotation.*;
-
-import org.apache.causeway.applib.annotation.*;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.domain.actions.ActionLayout.associateWith.child.ActionLayoutAssociateWithChildVm;
-import demoapp.dom.domain.actions.ActionLayout.describedAs.child.ActionLayoutDescribedAsChildVm;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import javax.inject.Named;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.SemanticsOf;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.domain.actions.ActionLayout.describedAs.child.ActionLayoutDescribedAsChildVm;
 
 @Named("demo.ActionLayoutDescribedAsPage")
 @DomainObject(

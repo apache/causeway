@@ -20,12 +20,12 @@
 
 package demoapp.dom.domain.progmodel.objects.embedded.embedded.samples;
 
-import demoapp.dom.domain.progmodel.objects.embedded.embedded.ComplexNumber;
-import demoapp.dom.types.Samples;
-
 import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
+
+import demoapp.dom.domain.progmodel.objects.embedded.embedded.ComplexNumber;
+import demoapp.dom.types.Samples;
 
 @Service
 public class ComplexNumberSamples implements Samples<ComplexNumber> {

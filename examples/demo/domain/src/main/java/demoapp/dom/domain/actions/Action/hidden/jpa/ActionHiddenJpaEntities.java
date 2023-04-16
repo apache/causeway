@@ -18,14 +18,14 @@
  */
 package demoapp.dom.domain.actions.Action.hidden.jpa;
 
-import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.actions.Action.hidden.ActionHidden;
-import demoapp.dom.domain.actions.Action.hidden.ActionHiddenRepository;
-
 import java.util.List;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+
+import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.domain.actions.Action.hidden.ActionHidden;
+import demoapp.dom.domain.actions.Action.hidden.ActionHiddenRepository;
 
 @Profile("demo-jpa")
 @Service

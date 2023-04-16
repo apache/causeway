@@ -27,9 +27,10 @@ import org.apache.causeway.applib.annotation.Snapshot;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 
-import demoapp.dom._infra.resources.MarkupVariableResolverService;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+
+import demoapp.dom._infra.resources.MarkupVariableResolverService;
 
 @Property(snapshot = Snapshot.EXCLUDED)
 @RequiredArgsConstructor

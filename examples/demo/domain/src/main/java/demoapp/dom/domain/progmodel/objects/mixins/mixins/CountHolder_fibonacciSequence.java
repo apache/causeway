@@ -18,14 +18,14 @@
  */
 package demoapp.dom.domain.progmodel.objects.mixins.mixins;
 
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
+
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 // tag::class[]
 @Collection                                 // <.>

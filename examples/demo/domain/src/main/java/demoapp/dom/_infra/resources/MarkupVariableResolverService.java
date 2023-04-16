@@ -18,21 +18,23 @@
  */
 package demoapp.dom._infra.resources;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.commons.internal.base._Refs;
+import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.config.CausewayConfiguration;
 
 import lombok.val;
-
-import static org.apache.causeway.commons.internal.collections._Maps.newLinkedHashMap;
 
 @Service
 @Named("demo.MarkupVariableResolverService")

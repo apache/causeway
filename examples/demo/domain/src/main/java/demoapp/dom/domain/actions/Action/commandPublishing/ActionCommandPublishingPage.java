@@ -18,8 +18,6 @@
  */
 package demoapp.dom.domain.actions.Action.commandPublishing;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-
 import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -29,6 +27,8 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
 @XmlRootElement(name = "root")

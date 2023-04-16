@@ -18,7 +18,14 @@
  */
 package demoapp.dom;
 
-import demoapp.dom._infra.values.ValueHolder;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Profile;
+
+import org.apache.causeway.extensions.commandlog.jpa.CausewayModuleExtCommandLogPersistenceJpa;
+import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistenceJpaEclipselink;
+
 import demoapp.dom.domain.actions.Action.choicesFrom.jpa.ActionChoicesFromJpa;
 import demoapp.dom.domain.actions.Action.commandPublishing.jpa.ActionCommandPublishingJpa;
 import demoapp.dom.domain.actions.Action.executionPublishing.jpa.ActionExecutionPublishingJpa;
@@ -49,7 +56,6 @@ import demoapp.dom.domain.properties.Property.commandPublishing.jpa.PropertyComm
 import demoapp.dom.domain.properties.Property.executionPublishing.jpa.PropertyExecutionPublishingJpa;
 import demoapp.dom.domain.properties.Property.hidden.jpa.PropertyHiddenJpa;
 import demoapp.dom.domain.properties.Property.projecting.jpa.PropertyProjectingChildJpa;
-import demoapp.dom.domain.properties.PropertyLayout.hidden.PropertyLayoutHidden;
 import demoapp.dom.domain.properties.PropertyLayout.hidden.jpa.PropertyLayoutHiddenJpa;
 import demoapp.dom.services.core.eventbusservice.EventLogEntryJpa;
 import demoapp.dom.services.core.wrapperFactory.jpa.WrapperFactoryJpa;
@@ -95,13 +101,6 @@ import demoapp.dom.types.primitive.floats.jpa.PrimitiveFloatJpa;
 import demoapp.dom.types.primitive.ints.jpa.PrimitiveIntJpa;
 import demoapp.dom.types.primitive.longs.jpa.PrimitiveLongJpa;
 import demoapp.dom.types.primitive.shorts.jpa.PrimitiveShortJpa;
-
-import org.apache.causeway.extensions.commandlog.jpa.CausewayModuleExtCommandLogPersistenceJpa;
-import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistenceJpaEclipselink;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Profile;
 
 @Configuration
 @Profile("demo-jpa")
