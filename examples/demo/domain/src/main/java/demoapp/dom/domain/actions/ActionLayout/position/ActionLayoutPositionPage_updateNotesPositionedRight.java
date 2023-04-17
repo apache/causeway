@@ -19,7 +19,6 @@
 package demoapp.dom.domain.actions.ActionLayout.position;
 
 import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
@@ -27,27 +26,21 @@ import lombok.RequiredArgsConstructor;
 
 
 //tag::class[]
-@Action(
-        semantics = SemanticsOf.IDEMPOTENT
-)
-@ActionLayout(
-        position = ActionLayout.Position.RIGHT,
-        named = "Positioned right",
-        describedAs = "position = RIGHT",
-        associateWith = "readOnlyProperty1",
-        sequence = "4")
+@Action(semantics = SemanticsOf.IDEMPOTENT)
 @RequiredArgsConstructor
-public class ActionLayoutPositionPage_annotatedRight {
-
+public class ActionLayoutPositionPage_updateNotesPositionedRight {
+    // ...
+//end::class[]
     private final ActionLayoutPositionPage page;
 
     @MemberSupport public ActionLayoutPositionPage act(final String newValue) {
-        page.setReadOnlyProperty1(newValue);
+        page.setNotes(newValue);
         return page;
     }
     @MemberSupport public String default0Act() {
-        return page.getReadOnlyProperty1();
+        return page.getNotes();
     }
 
+//tag::class[]
 }
 //end::class[]

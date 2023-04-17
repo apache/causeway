@@ -25,28 +25,26 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
-//tag::class[]
-@Action(
-        semantics = SemanticsOf.IDEMPOTENT
-)
-@ActionLayout(
-        position = ActionLayout.Position.BELOW,
-        named = "Positioned below",
-        describedAs = "position = BELOW",
-        associateWith = "readOnlyProperty1",
-        sequence = "1")
-@RequiredArgsConstructor
-public class ActionLayoutPositionPage_annotatedBelow {
 
+//tag::class[]
+@Action(semantics = SemanticsOf.IDEMPOTENT)
+@ActionLayout(
+        position = ActionLayout.Position.PANEL,
+        associateWith = "name")
+@RequiredArgsConstructor
+public class ActionLayoutPositionPage_updateNamePositionedPanel {
+    // ...
+//end::class[]
     private final ActionLayoutPositionPage page;
 
     @MemberSupport public ActionLayoutPositionPage act(final String newValue) {
-        page.setReadOnlyProperty1(newValue);
+        page.setName(newValue);
         return page;
     }
     @MemberSupport public String default0Act() {
-        return page.getReadOnlyProperty1();
+        return page.getName();
     }
 
+//tag::class[]
 }
 //end::class[]

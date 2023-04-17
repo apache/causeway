@@ -27,26 +27,24 @@ import lombok.RequiredArgsConstructor;
 
 
 //tag::class[]
-@Action(
-        semantics = SemanticsOf.IDEMPOTENT
-)
+@Action(semantics = SemanticsOf.IDEMPOTENT)
 @ActionLayout(
-        named = "Positioned right",
-        describedAs = "<cpt:property id=\"...\"><cpt:action id=\"...\" position=RIGHT/></cpt:property>",
-        associateWith = "readOnlyProperty2",
-        sequence = "4")
+        position = ActionLayout.Position.PANEL_DROPDOWN,
+        associateWith = "name")
 @RequiredArgsConstructor
-public class ActionLayoutPositionPage_layoutRight {
-
+public class ActionLayoutPositionPage_updateNamePositionedPanelDropDown {
+    // ...
+//end::class[]
     private final ActionLayoutPositionPage page;
 
     @MemberSupport public ActionLayoutPositionPage act(final String newValue) {
-        page.setReadOnlyProperty2(newValue);
+        page.setName(newValue);
         return page;
     }
     @MemberSupport public String default0Act() {
-        return page.getReadOnlyProperty2();
+        return page.getName();
     }
 
+//tag::class[]
 }
 //end::class[]
