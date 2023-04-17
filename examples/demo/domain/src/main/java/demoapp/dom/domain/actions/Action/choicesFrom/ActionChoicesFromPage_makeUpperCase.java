@@ -18,12 +18,12 @@
  */
 package demoapp.dom.domain.actions.Action.choicesFrom;
 
-import lombok.RequiredArgsConstructor;
-
 import java.util.List;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.MemberSupport;
+
+import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(choicesFrom = "objects")                    // <.>

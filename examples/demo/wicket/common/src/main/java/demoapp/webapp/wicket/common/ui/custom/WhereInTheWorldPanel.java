@@ -31,10 +31,11 @@ import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 
-import demoapp.dom.featured.customui.geocoding.GeoapifyClient;
-import demoapp.dom.featured.customui.vm.WhereInTheWorldVm;
 import lombok.SneakyThrows;
 import lombok.val;
+
+import demoapp.dom.featured.customui.geocoding.GeoapifyClient;
+import demoapp.dom.featured.customui.vm.WhereInTheWorldVm;
 
 //tag::class[]
 public class WhereInTheWorldPanel

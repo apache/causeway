@@ -35,9 +35,10 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Title;
 import org.apache.causeway.applib.value.Password;
 
-import demoapp.dom.types.causeway.passwords.persistence.CausewayPasswordEntity;
 import lombok.Getter;
 import lombok.Setter;
+
+import demoapp.dom.types.causeway.passwords.persistence.CausewayPasswordEntity;
 
 @Profile("demo-jdo")
 //tag::class[]

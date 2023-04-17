@@ -34,10 +34,11 @@ import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
-import demoapp.dom.domain.objects.DomainObjectLayout.bookmarking.DomainObjectLayoutBookmarkingChild;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import demoapp.dom.domain.objects.DomainObjectLayout.bookmarking.DomainObjectLayoutBookmarkingChild;
 
 @Profile("demo-jpa")
 @Entity
@@ -55,7 +56,7 @@ public class DomainObjectLayoutBookmarkingChildJpa extends DomainObjectLayoutBoo
     // ...
 //end::class[]
 
-    public DomainObjectLayoutBookmarkingChildJpa(final DomainObjectLayoutBookmarkingJpa parent, final String value) {
+    public DomainObjectLayoutBookmarkingChildJpa(DomainObjectLayoutBookmarkingJpa parent, String value) {
         setParent(parent);
         setName(value);
     }

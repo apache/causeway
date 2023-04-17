@@ -1,8 +1,5 @@
 package demoapp.dom.domain.objects.DomainObject.aliased;
 
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +10,9 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 //tag::class[]
 @Action(semantics = SemanticsOf.SAFE)

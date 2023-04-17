@@ -18,9 +18,6 @@
  */
 package demoapp.dom.domain.objects.DomainObject.entityChangePublishing;
 
-import demoapp.dom._infra.samples.NameSamples;
-import demoapp.dom._infra.values.ValueHolderRepository;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -31,6 +28,9 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.repository.RepositoryService;
+
+import demoapp.dom._infra.samples.NameSamples;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
 //tag::class[]
 @Action(semantics = SemanticsOf.NON_IDEMPOTENT)

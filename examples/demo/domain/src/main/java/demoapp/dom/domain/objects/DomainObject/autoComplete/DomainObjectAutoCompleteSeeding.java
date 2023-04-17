@@ -31,7 +31,7 @@ extends SeedServiceAbstract {
 
     @Inject
     public DomainObjectAutoCompleteSeeding(
-            final ValueHolderRepository<String, ? extends DomainObjectAutoComplete> entities) {
+            ValueHolderRepository<String, ? extends DomainObjectAutoComplete> entities) {
         super(entities);
     }
 

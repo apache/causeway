@@ -34,10 +34,11 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
-import demoapp.dom.domain.properties.PropertyLayout.hidden.PropertyLayoutHidden;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import demoapp.dom.domain.properties.PropertyLayout.hidden.PropertyLayoutHidden;
 
 @Profile("demo-jpa")
 @Entity

@@ -18,11 +18,17 @@
  */
 package demoapp.dom;
 
-import demoapp.dom._infra.values.ValueHolder;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Profile;
+
+import org.apache.causeway.extensions.commandlog.jpa.CausewayModuleExtCommandLogPersistenceJpa;
+import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistenceJpaEclipselink;
+
 import demoapp.dom.domain.actions.Action.choicesFrom.jpa.ActionChoicesFromJpa;
 import demoapp.dom.domain.actions.Action.commandPublishing.jpa.ActionCommandPublishingJpa;
 import demoapp.dom.domain.actions.Action.executionPublishing.jpa.ActionExecutionPublishingJpa;
-import demoapp.dom.domain.actions.Action.hidden.jpa.ActionHiddenJpa;
 import demoapp.dom.domain.actions.ActionLayout.hidden.jpa.ActionLayoutHiddenJpa;
 import demoapp.dom.domain.objects.DomainObject.aliased.jpa.DomainObjectAliasedJpa;
 import demoapp.dom.domain.objects.DomainObject.autoComplete.jpa.DomainObjectAutoCompleteJpa;
@@ -47,9 +53,7 @@ import demoapp.dom.domain.objects.DomainObjectLayout.xxxUiEvent.jpa.DomainObject
 import demoapp.dom.domain.progmodel.objects.embedded.embedded.jpa.NumberConstantJpa;
 import demoapp.dom.domain.properties.Property.commandPublishing.jpa.PropertyCommandPublishingJpa;
 import demoapp.dom.domain.properties.Property.executionPublishing.jpa.PropertyExecutionPublishingJpa;
-import demoapp.dom.domain.properties.Property.hidden.jpa.PropertyHiddenJpa;
 import demoapp.dom.domain.properties.Property.projecting.jpa.PropertyProjectingChildJpa;
-import demoapp.dom.domain.properties.PropertyLayout.hidden.PropertyLayoutHidden;
 import demoapp.dom.domain.properties.PropertyLayout.hidden.jpa.PropertyLayoutHiddenJpa;
 import demoapp.dom.services.core.eventbusservice.EventLogEntryJpa;
 import demoapp.dom.services.core.wrapperFactory.jpa.WrapperFactoryJpa;
@@ -96,13 +100,6 @@ import demoapp.dom.types.primitive.ints.jpa.PrimitiveIntJpa;
 import demoapp.dom.types.primitive.longs.jpa.PrimitiveLongJpa;
 import demoapp.dom.types.primitive.shorts.jpa.PrimitiveShortJpa;
 
-import org.apache.causeway.extensions.commandlog.jpa.CausewayModuleExtCommandLogPersistenceJpa;
-import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistenceJpaEclipselink;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Profile;
-
 @Configuration
 @Profile("demo-jpa")
 @Import({
@@ -136,14 +133,12 @@ import org.springframework.context.annotation.Profile;
         ActionChoicesFromJpa.class,
         ActionCommandPublishingJpa.class,
         ActionExecutionPublishingJpa.class,
-        ActionHiddenJpa.class,
 
         ActionLayoutHiddenJpa.class,
 
         PropertyCommandPublishingJpa.class,
         PropertyExecutionPublishingJpa.class,
         PropertyProjectingChildJpa.class,
-        PropertyHiddenJpa.class,
 
         PropertyLayoutHiddenJpa.class,
 

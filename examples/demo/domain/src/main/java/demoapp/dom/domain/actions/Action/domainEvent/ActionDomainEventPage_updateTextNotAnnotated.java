@@ -18,10 +18,10 @@
  */
 package demoapp.dom.domain.actions.Action.domainEvent;
 
-import lombok.RequiredArgsConstructor;
-
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.MemberSupport;
+
+import lombok.RequiredArgsConstructor;
 
 
 //tag::class[]

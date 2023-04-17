@@ -18,10 +18,10 @@
  */
 package demoapp.dom.domain.objects.DomainObject.mixinMethod;
 
+import org.apache.causeway.applib.annotation.ObjectSupport;
+
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
-
-import org.apache.causeway.applib.annotation.ObjectSupport;
 
 @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 public abstract class DomainObjectMixinMethod

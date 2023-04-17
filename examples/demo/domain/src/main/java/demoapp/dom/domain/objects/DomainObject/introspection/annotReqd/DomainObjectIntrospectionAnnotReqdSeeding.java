@@ -31,7 +31,7 @@ extends SeedServiceAbstract {
 
     @Inject
     public DomainObjectIntrospectionAnnotReqdSeeding(
-            final ValueHolderRepository<String, ? extends DomainObjectIntrospectionAnnotReqd> entities) {
+            ValueHolderRepository<String, ? extends DomainObjectIntrospectionAnnotReqd> entities) {
         super(entities);
     }
 

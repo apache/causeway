@@ -28,8 +28,9 @@ import org.apache.causeway.applib.annotation.ValueSemantics;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 
-import demoapp.dom._infra.resources.AsciiDocReaderService;
 import lombok.RequiredArgsConstructor;
+
+import demoapp.dom._infra.resources.AsciiDocReaderService;
 
 @Property(snapshot = Snapshot.EXCLUDED)
 @ValueSemantics(provider = "demo-adoc-pre-processor")

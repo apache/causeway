@@ -18,14 +18,14 @@
  */
 package demoapp.dom.domain.objects.DomainObjectLayout.tabledec.jpa;
 
-import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.objects.DomainObjectLayout.tabledec.DomainObjectLayoutTableDecorator;
-import demoapp.dom.domain.objects.DomainObjectLayout.tabledec.DomainObjectLayoutTableDecoratorRepository;
-
 import java.util.List;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+
+import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.domain.objects.DomainObjectLayout.tabledec.DomainObjectLayoutTableDecorator;
+import demoapp.dom.domain.objects.DomainObjectLayout.tabledec.DomainObjectLayoutTableDecoratorRepository;
 
 @Profile("demo-jpa")
 @Service

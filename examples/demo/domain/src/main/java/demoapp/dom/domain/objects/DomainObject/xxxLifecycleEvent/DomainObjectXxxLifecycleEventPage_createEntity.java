@@ -18,21 +18,17 @@
  */
 package demoapp.dom.domain.objects.DomainObject.xxxLifecycleEvent;
 
-import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.objects.DomainObject.aliased.DomainObjectAliased;
-import demoapp.dom.domain.objects.DomainObject.xxxDomainEvent.DomainObjectXxxDomainEventPage;
-import demoapp.dom.types.Samples;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-
 import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.util.ReasonBuffer;
-import org.apache.causeway.applib.util.ReasonBuffer2;
-import org.apache.causeway.applib.util.Reasons;
+
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+
+import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.types.Samples;
 
 
 //tag::class[]

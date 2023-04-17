@@ -31,10 +31,11 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
-import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishing;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishing;
 
 @Profile("demo-jpa")
 @Entity
@@ -52,7 +53,7 @@ public class ActionCommandPublishingJpa extends ActionCommandPublishing {
     // ...
 //end::class[]
 
-    public ActionCommandPublishingJpa(final String value) {
+    public ActionCommandPublishingJpa(String value) {
         setName(value);
     }
 

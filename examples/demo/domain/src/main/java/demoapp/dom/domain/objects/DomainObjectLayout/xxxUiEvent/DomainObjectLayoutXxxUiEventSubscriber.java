@@ -18,17 +18,16 @@
  */
 package demoapp.dom.domain.objects.DomainObjectLayout.xxxUiEvent;
 
-import lombok.extern.log4j.Log4j2;
-import lombok.val;
-
-import java.util.Locale;
-
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
-import org.apache.causeway.applib.services.title.TitleService;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
+
+import org.apache.causeway.applib.services.title.TitleService;
+
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 //tag::class[]
 @Service

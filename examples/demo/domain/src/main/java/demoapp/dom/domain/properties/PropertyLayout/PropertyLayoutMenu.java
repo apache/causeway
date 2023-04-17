@@ -33,6 +33,9 @@ import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+
 import demoapp.dom.domain.properties.PropertyLayout.cssClass.PropertyLayoutCssClassPage;
 import demoapp.dom.domain.properties.PropertyLayout.describedAs.PropertyLayoutDescribedAsPage;
 import demoapp.dom.domain.properties.PropertyLayout.hidden.PropertyLayoutHiddenPage;
@@ -44,8 +47,6 @@ import demoapp.dom.domain.properties.PropertyLayout.renderDay.PropertyLayoutRend
 import demoapp.dom.domain.properties.PropertyLayout.repainting.PropertyLayoutRepaintingPage;
 import demoapp.dom.domain.properties.PropertyLayout.typicalLength.PropertyLayoutTypicalLengthPage;
 import demoapp.dom.types.Samples;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @Named("demo.PropertyLayoutMenu")
 @DomainService(

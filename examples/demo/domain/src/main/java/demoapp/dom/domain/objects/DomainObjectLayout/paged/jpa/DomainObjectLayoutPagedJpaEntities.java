@@ -18,14 +18,14 @@
  */
 package demoapp.dom.domain.objects.DomainObjectLayout.paged.jpa;
 
-import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.objects.DomainObjectLayout.paged.DomainObjectLayoutPaged;
-import demoapp.dom.domain.objects.DomainObjectLayout.paged.DomainObjectLayoutPagedRepository;
-
 import java.util.List;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+
+import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.domain.objects.DomainObjectLayout.paged.DomainObjectLayoutPaged;
+import demoapp.dom.domain.objects.DomainObjectLayout.paged.DomainObjectLayoutPagedRepository;
 
 @Profile("demo-jpa")
 @Service

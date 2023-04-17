@@ -21,8 +21,6 @@ package demoapp.dom.domain.actions.Action.choicesFrom;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 
-import org.apache.causeway.applib.annotation.DomainObjectLayout;
-
 //tag::class[]
 public abstract class ActionChoicesFrom
 //end::class[]

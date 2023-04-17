@@ -18,14 +18,14 @@
  */
 package demoapp.dom.domain.objects.DomainObject.aliased.jpa;
 
-import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.objects.DomainObject.aliased.DomainObjectAliased;
-import demoapp.dom.domain.objects.DomainObject.aliased.DomainObjectAliasedRepository;
-
 import java.util.List;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+
+import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.domain.objects.DomainObject.aliased.DomainObjectAliased;
+import demoapp.dom.domain.objects.DomainObject.aliased.DomainObjectAliasedRepository;
 
 @Profile("demo-jpa")
 @Service

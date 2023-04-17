@@ -18,20 +18,26 @@
  */
 package demoapp.dom.domain.objects.DomainObjectLayout.tabledec.jpa;
 
-import demoapp.dom.domain.objects.DomainObjectLayout.tabledec.DomainObjectLayoutTableDecorator;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import jakarta.inject.Named;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+import org.springframework.context.annotation.Profile;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
-import org.springframework.context.annotation.Profile;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import demoapp.dom.domain.objects.DomainObjectLayout.tabledec.DomainObjectLayoutTableDecorator;
 
 @Profile("demo-jpa")
 @Entity

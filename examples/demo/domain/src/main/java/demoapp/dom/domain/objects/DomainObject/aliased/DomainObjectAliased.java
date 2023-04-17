@@ -18,13 +18,13 @@
  */
 package demoapp.dom.domain.objects.DomainObject.aliased;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom._infra.values.ValueHolder;
-
 import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolder;
 
 public abstract class DomainObjectAliased
         implements

@@ -18,11 +18,11 @@
  */
 package demoapp.dom.domain.objects.DomainObject.editing;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom._infra.values.ValueHolder;
-
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Property;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolder;
 
 @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 public abstract class DomainObjectEditing

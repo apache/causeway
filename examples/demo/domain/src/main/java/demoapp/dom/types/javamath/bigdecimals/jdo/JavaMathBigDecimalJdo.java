@@ -35,9 +35,10 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Title;
 import org.apache.causeway.applib.annotation.ValueSemantics;
 
-import demoapp.dom.types.javamath.bigdecimals.persistence.JavaMathBigDecimalEntity;
 import lombok.Getter;
 import lombok.Setter;
+
+import demoapp.dom.types.javamath.bigdecimals.persistence.JavaMathBigDecimalEntity;
 
 @Profile("demo-jdo")
 //tag::class[]

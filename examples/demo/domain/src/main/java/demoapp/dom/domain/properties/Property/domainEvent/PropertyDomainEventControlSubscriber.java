@@ -18,13 +18,11 @@
  */
 package demoapp.dom.domain.properties.Property.domainEvent;
 
-import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 
 import lombok.RequiredArgsConstructor;

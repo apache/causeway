@@ -34,9 +34,10 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Title;
 
-import demoapp.dom.types.javatime.javatimeoffsetdatetime.persistence.JavaTimeOffsetDateTimeEntity;
 import lombok.Getter;
 import lombok.Setter;
+
+import demoapp.dom.types.javatime.javatimeoffsetdatetime.persistence.JavaTimeOffsetDateTimeEntity;
 
 @Profile("demo-jdo")
 //tag::class[]
