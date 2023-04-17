@@ -255,7 +255,7 @@ Note that this also includes the Restful Objects and GraphQL viewers.
 | The JavaFX Viewer (version 3+ only)
 
 | module-incubator-kroviz
-| The Kroviz Client (standalone viewer)
+| The Kroviz Client (standalone viewer, version 3+ only)
 
 | module-incubator-vaadin
 | The Vaadin Viewer (version 3+ only)
