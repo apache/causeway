@@ -106,6 +106,7 @@
 
 		<!-- ALL MODULES -->
 
+		<!--
 		<profile>
 			<id>module-all</id>
 			<activation>
@@ -117,6 +118,29 @@
 				<module>antora</module>
 				<module>examples/demo</module>
 				<module>incubator</module>
+				<module>regressiontests</module>
+				<module>tooling</module>
+			</modules>
+		</profile> -->
+		
+		<profile>
+		    <id>module-all</id>
+			<activation>
+				<property>
+					<name>module-all</name>
+				</property>
+			</activation>
+			<modules>
+				<module>antora</module>
+				<module>examples/demo</module>
+
+				<!-- incubator, without kroviz -->
+				<module>incubator/viewers/graphql</module>
+				<module>incubator/viewers/javafx</module>
+				<module>incubator/viewers/vaadin</module>
+				<module>valuetypes/asciidoc/ui/vaadin</module>
+				<module>incubator/extensions/core/commandreplay</module>
+
 				<module>regressiontests</module>
 				<module>tooling</module>
 			</modules>
