@@ -18,15 +18,18 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.property.modify;
 
+import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
+import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.events.domain.AbstractDomainEvent;
 import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
 import org.apache.causeway.applib.services.i18n.TranslatableString;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -44,6 +47,10 @@ import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.specimpl.OneToOneAssociationMixedIn;
+import org.apache.causeway.core.metamodel.util.EventUtil;
+
+import lombok.NonNull;
+import lombok.val;
 
 public class PropertyDomainEventFacet
 extends DomainEventFacetAbstract<PropertyDomainEvent<?, ?>>
@@ -52,8 +59,85 @@ implements
     DisablingInteractionAdvisor,
     ValidatingInteractionAdvisor {
 
+    // -- FACTORIES
+
+    /**
+     * For regular (non mixed-in) members only.
+     * <p>
+     * @return empty, if event is not post-able
+     */
+    public static Optional<PropertyDomainEventFacet> createRegular(
+            final Optional<Property> propertyIfAny,
+            final ObjectSpecification typeSpec,
+            final PropertyOrCollectionAccessorFacet getterFacet,
+            final FacetHolder facetHolder) {
+
+        val propertyDomainEventFacet = propertyIfAny
+                .map(Property::domainEvent)
+                .filter(domainEvent -> domainEvent != PropertyDomainEvent.Default.class)
+                .map(domainEvent -> new PropertyDomainEventFacet(
+                        defaultFromDomainObjectIfRequired(typeSpec, domainEvent),
+                        EventTypeOrigin.ANNOTATED_MEMBER, getterFacet, facetHolder))
+                .orElse(new PropertyDomainEventFacet(
+                        defaultFromDomainObjectIfRequired(typeSpec, PropertyDomainEvent.Default.class),
+                        EventTypeOrigin.DEFAULT, getterFacet, facetHolder));
+
+        return EventUtil.eventTypeIsPostable(
+                propertyDomainEventFacet.getEventType(),
+                PropertyDomainEvent.Noop.class,
+                PropertyDomainEvent.Default.class,
+                facetHolder.getConfiguration().getApplib().getAnnotation().getProperty().getDomainEvent().isPostForDefault())
+            ? Optional.of(propertyDomainEventFacet)
+            : Optional.empty();
+    }
+
+    /**
+     * For mixed-in members.
+     */
+    public static Optional<PropertyDomainEventFacet> createMixedIn(
+            final @NonNull ObjectSpecification mixeeSpecification,
+            final @NonNull OneToOneAssociationMixedIn mixedInProperty) {
+
+        val facetedMethod = mixedInProperty.getFacetedMethod();
+        final Method method = facetedMethod.getMethod().asMethodElseFail(); // no-arg method, should have a regular facade
+
+        //TODO[CAUSEWAY-3409] what if the @Property annotation is not on the method but on the (mixin) type
+        final Property propertyAnnot =
+                _Annotations.synthesize(method, Property.class)
+                .orElse(null);
+
+        if(propertyAnnot != null) {
+            final Class<? extends PropertyDomainEvent<?, ?>> propertyDomainEventType =
+                    defaultFromDomainObjectIfRequired(
+                            mixeeSpecification, propertyAnnot.domainEvent());
+            val getterFacet = (PropertyOrCollectionAccessorFacet)null;
+
+            return Optional.of(
+                    new PropertyDomainEventFacet(
+                            propertyDomainEventType, EventTypeOrigin.ANNOTATED_MEMBER, getterFacet, mixedInProperty));
+        }
+
+        return Optional.empty();
+
+    }
+
+    // --
+
     private static Class<? extends Facet> type() {
         return PropertyDomainEventFacet.class;
+    }
+
+    private static Class<? extends PropertyDomainEvent<?,?>> defaultFromDomainObjectIfRequired(
+            final ObjectSpecification typeSpec,
+            final Class<? extends PropertyDomainEvent<?,?>> propertyDomainEventType) {
+        if (propertyDomainEventType == PropertyDomainEvent.Default.class) {
+            final PropertyDomainEventDefaultFacetForDomainObjectAnnotation typeFromDomainObject =
+                    typeSpec.getFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class);
+            if (typeFromDomainObject != null) {
+                return typeFromDomainObject.getEventType();
+            }
+        }
+        return propertyDomainEventType;
     }
 
     private final DomainEventHelper domainEventHelper;
@@ -65,11 +149,11 @@ implements
     /**
      * @param getterFacetIfAny - will be null if this is for a mixin {@link OneToOneAssociationMixedIn}.
      */
-    public PropertyDomainEventFacet(
+    protected PropertyDomainEventFacet(
             final Class<? extends PropertyDomainEvent<?, ?>> eventType,
             final EventTypeOrigin eventTypeOrigin,
             final PropertyOrCollectionAccessorFacet getterFacetIfAny,
-            final FacetHolder holder ) {
+            final FacetHolder holder) {
 
         super(type(), eventType, eventTypeOrigin, holder);
         this.getterFacetIfAny = getterFacetIfAny;
@@ -167,5 +251,7 @@ implements
         super.visitAttributes(visitor);
         visitor.accept("getterFacet", getterFacetIfAny);
     }
+
+
 
 }

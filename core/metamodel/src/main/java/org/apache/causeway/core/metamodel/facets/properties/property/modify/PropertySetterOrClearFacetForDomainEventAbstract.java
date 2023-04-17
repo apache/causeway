@@ -65,7 +65,6 @@ implements
                     final PropertyOrCollectionAccessorFacet getterFacet,
                     final PropertySetterFacet setterFacet,
                     final PropertyClearFacet clearFacet,
-                    final PropertyDomainEventFacet propertyDomainEventFacet,
                     final FacetHolder holder) {
 
         super(facetType, eventType, holder);

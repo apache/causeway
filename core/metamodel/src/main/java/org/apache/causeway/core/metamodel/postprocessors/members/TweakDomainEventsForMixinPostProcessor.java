@@ -18,24 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.postprocessors.members;
 
-import java.lang.reflect.Method;
-
 import javax.inject.Inject;
 
-import org.apache.causeway.applib.annotation.Collection;
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.events.domain.CollectionDomainEvent;
-import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
-import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
-import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract.EventTypeOrigin;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
-import org.apache.causeway.core.metamodel.facets.collections.collection.CollectionAnnotationFacetFactory;
 import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacet;
-import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.causeway.core.metamodel.facets.properties.property.PropertyAnnotationFacetFactory;
 import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet;
 import org.apache.causeway.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -69,29 +57,10 @@ extends ObjectSpecificationPostProcessorAbstract {
     public void postProcessProperty(final ObjectSpecification objectSpecification, final OneToOneAssociation property) {
 
         if(property instanceof OneToOneAssociationMixedIn) {
-            final OneToOneAssociationMixedIn propertyMixin = (OneToOneAssociationMixedIn) property;
-            final FacetedMethod facetedMethod = propertyMixin.getFacetedMethod();
-            final Method method = facetedMethod.getMethod().asMethodElseFail(); // no-arg method, should have a regular facade
 
-            {
-                // this is basically a subset of the code that is in CollectionAnnotationFacetFactory,
-                // ignoring stuff which is deprecated for Causeway v2
-
-                final Property propertyAnnot =
-                        _Annotations.synthesize(method, Property.class)
-                        .orElse(null);
-
-                if(propertyAnnot != null) {
-                    final Class<? extends PropertyDomainEvent<?, ?>> propertyDomainEventType =
-                            PropertyAnnotationFacetFactory.defaultFromDomainObjectIfRequired(
-                                    objectSpecification, propertyAnnot.domainEvent());
-                    final PropertyOrCollectionAccessorFacet getterFacetIfAny = null;
-                    FacetUtil.addFacet(
-                            new PropertyDomainEventFacet(
-                                    propertyDomainEventType, EventTypeOrigin.ANNOTATED_MEMBER, getterFacetIfAny, property));
-                }
-            }
-
+            FacetUtil.addFacetIfPresent(
+                    PropertyDomainEventFacet.createMixedIn(objectSpecification, (OneToOneAssociationMixedIn)property));
+//TODO[CAUSEWAY-3409] even when this lookup returns empty, we still might need an event-type holding facet
             property
                 .lookupFacet(PropertyDomainEventFacet.class)
                 .ifPresent(propertyDomainEventFacet->
@@ -103,28 +72,10 @@ extends ObjectSpecificationPostProcessorAbstract {
     public void postProcessCollection(final ObjectSpecification objectSpecification, final OneToManyAssociation collection) {
 
         if(collection instanceof OneToManyAssociationMixedIn) {
-            final OneToManyAssociationMixedIn collectionMixin = (OneToManyAssociationMixedIn) collection;
-            final FacetedMethod facetedMethod = collectionMixin.getFacetedMethod();
-            final Method method = facetedMethod.getMethod().asMethodElseFail(); // no-arg method, should have a regular facade
 
-            {
-                // this is basically a subset of the code that is in CollectionAnnotationFacetFactory,
-                // ignoring stuff which is deprecated for Causeway v2
-
-                final Collection collectionAnnot =
-                        _Annotations.synthesize(method, Collection.class)
-                                .orElse(null);
-
-                if(collectionAnnot != null) {
-                    final Class<? extends CollectionDomainEvent<?, ?>> collectionDomainEventType =
-                            CollectionAnnotationFacetFactory.defaultFromDomainObjectIfRequired(
-                                    objectSpecification, collectionAnnot.domainEvent());
-                    FacetUtil.addFacet(
-                            new CollectionDomainEventFacet(
-                                    collectionDomainEventType, EventTypeOrigin.ANNOTATED_MEMBER, collection));
-                }
-            }
-
+            FacetUtil.addFacetIfPresent(
+                    CollectionDomainEventFacet.createMixedIn(objectSpecification, (OneToManyAssociationMixedIn)collection));
+//TODO[CAUSEWAY-3409] even when this lookup returns empty, we still might need an event-type holding facet
             collection
                 .lookupFacet(CollectionDomainEventFacet.class)
                 .ifPresent(collectionDomainEventFacet->

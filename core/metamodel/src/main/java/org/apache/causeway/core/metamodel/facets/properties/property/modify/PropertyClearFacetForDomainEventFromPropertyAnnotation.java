@@ -27,14 +27,12 @@ public class PropertyClearFacetForDomainEventFromPropertyAnnotation
 extends PropertySetterOrClearFacetForDomainEventAbstract
 implements PropertyClearFacet {
 
-
     public PropertyClearFacetForDomainEventFromPropertyAnnotation(
             final Class<? extends PropertyDomainEvent<?, ?>> eventType,
                     final PropertyOrCollectionAccessorFacet getterFacet,
                     final PropertyClearFacet clearFacet,
-                    final PropertyDomainEventFacet propertyInteractionFacet,
                     final FacetHolder holder) {
 
-        super(PropertyClearFacet.class, eventType, getterFacet, null, clearFacet, propertyInteractionFacet, holder);
+        super(PropertyClearFacet.class, eventType, getterFacet, null, clearFacet, holder);
     }
 }
