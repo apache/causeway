@@ -318,3 +318,9 @@ tr.odd.custom2 > td,
 .line-through {
     text-decoration: line-through;
 }
+
+.navbar-nav.primary ul.dropdown-menu,
+.navbar-nav.secondary ul.dropdown-menu,
+.navbar-nav.tertiary ul.dropdown-menu {
+    max-height: 800px;
+}
