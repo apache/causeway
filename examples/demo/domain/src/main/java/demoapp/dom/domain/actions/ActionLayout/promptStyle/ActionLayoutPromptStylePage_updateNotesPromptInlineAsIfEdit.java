@@ -28,27 +28,26 @@ import lombok.RequiredArgsConstructor;
 
 
 //tag::class[]
-@Action(
-        semantics = SemanticsOf.IDEMPOTENT
-)
+@Action(semantics = SemanticsOf.IDEMPOTENT)
 @ActionLayout(
-        promptStyle = PromptStyle.DIALOG_MODAL,
-        named = "Modal",
-        describedAs = "promptStyle = MODAL",
-        associateWith = "readOnlyProperty1",
-        sequence = "2")
+        promptStyle = PromptStyle.INLINE_AS_IF_EDIT,
+        associateWith = "notes",
+        sequence = "1")
 @RequiredArgsConstructor
-public class ActionLayoutPromptStylePage_annotatedModal {
+public class ActionLayoutPromptStylePage_updateNotesPromptInlineAsIfEdit {
+    // ...
+//end::class[]
 
-    private final ActionLayoutPromptStylePage stringViewModel;
+    private final ActionLayoutPromptStylePage page;
 
     @MemberSupport public ActionLayoutPromptStylePage act(final String newValue) {
-        stringViewModel.setReadOnlyProperty1(newValue);
-        return stringViewModel;
+        page.setNotes(newValue);
+        return page;
     }
     @MemberSupport public String default0Act() {
-        return stringViewModel.getReadOnlyProperty1();
+        return page.getNotes();
     }
 
+//tag::class[]
 }
 //end::class[]

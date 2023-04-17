@@ -21,31 +21,33 @@ package demoapp.dom.domain.actions.ActionLayout.promptStyle;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
 
 //tag::class[]
-@Action(
-        semantics = SemanticsOf.IDEMPOTENT
-)
+@Action(semantics = SemanticsOf.IDEMPOTENT)
 @ActionLayout(
-        describedAs = "<cpt:property id=\"...\"><cpt:action id=\"...\" promptStyle = INLINE/></cpt:property>",
-        associateWith = "readOnlyProperty3",
-        sequence = "1")
+        promptStyle = PromptStyle.DIALOG_SIDEBAR,
+        associateWith = "name",
+        sequence = "2")
 @RequiredArgsConstructor
-public class ActionLayoutPromptStylePage_layoutInline {
+public class ActionLayoutPromptStylePage_updateNamePromptSidebar {
+    // ...
+//end::class[]
 
-    private final ActionLayoutPromptStylePage stringViewModel;
+    private final ActionLayoutPromptStylePage page;
 
     @MemberSupport public ActionLayoutPromptStylePage act(final String newValue) {
-        stringViewModel.setReadOnlyProperty3(newValue);
-        return stringViewModel;
+        page.setName(newValue);
+        return page;
     }
     @MemberSupport public String default0Act() {
-        return stringViewModel.getReadOnlyProperty3();
+        return page.getName();
     }
 
+//tag::class[]
 }
 //end::class[]

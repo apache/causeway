@@ -28,27 +28,25 @@ import lombok.RequiredArgsConstructor;
 
 
 //tag::class[]
-@Action(
-        semantics = SemanticsOf.IDEMPOTENT
-)
+@Action(semantics = SemanticsOf.IDEMPOTENT)
 @ActionLayout(
-        promptStyle = PromptStyle.INLINE,
-        named = "Inline",
-        describedAs = "promptStyle = INLINE",
-        associateWith = "readOnlyProperty1",
-        sequence = "1")
+        promptStyle = PromptStyle.DIALOG_MODAL,
+        associateWith = "name",
+        sequence = "3")
 @RequiredArgsConstructor
-public class ActionLayoutPromptStylePage_annotatedInline {
-
-    private final ActionLayoutPromptStylePage stringViewModel;
+public class ActionLayoutPromptStylePage_updateNamePromptModal {
+    // ...
+//end::class[]
+    private final ActionLayoutPromptStylePage page;
 
     @MemberSupport public ActionLayoutPromptStylePage act(final String newValue) {
-        stringViewModel.setReadOnlyProperty1(newValue);
-        return stringViewModel;
+        page.setName(newValue);
+        return page;
     }
     @MemberSupport public String default0Act() {
-        return stringViewModel.getReadOnlyProperty1();
+        return page.getName();
     }
 
+//tag::class[]
 }
 //end::class[]
