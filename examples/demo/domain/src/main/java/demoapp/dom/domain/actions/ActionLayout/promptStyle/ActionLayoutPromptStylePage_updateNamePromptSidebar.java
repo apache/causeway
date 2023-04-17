@@ -16,38 +16,38 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.ActionLayout.position;
+package demoapp.dom.domain.actions.ActionLayout.promptStyle;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
 
 //tag::class[]
-@Action(
-        semantics = SemanticsOf.IDEMPOTENT
-)
+@Action(semantics = SemanticsOf.IDEMPOTENT)
 @ActionLayout(
-        position = ActionLayout.Position.PANEL_DROPDOWN,
-        named = "Positioned on panel in dropdown",
-        describedAs = "position = PANEL_DROPDOWN",
-        associateWith = "readOnlyProperty1",
-        sequence = "3")
+        promptStyle = PromptStyle.DIALOG_SIDEBAR,
+        associateWith = "name",
+        sequence = "2")
 @RequiredArgsConstructor
-public class ActionLayoutPositionPage_annotatedPanelDropDown {
+public class ActionLayoutPromptStylePage_updateNamePromptSidebar {
+    // ...
+//end::class[]
 
-    private final ActionLayoutPositionPage page;
+    private final ActionLayoutPromptStylePage page;
 
-    @MemberSupport public ActionLayoutPositionPage act(final String newValue) {
-        page.setReadOnlyProperty1(newValue);
+    @MemberSupport public ActionLayoutPromptStylePage act(final String newValue) {
+        page.setName(newValue);
         return page;
     }
     @MemberSupport public String default0Act() {
-        return page.getReadOnlyProperty1();
+        return page.getName();
     }
 
+//tag::class[]
 }
 //end::class[]

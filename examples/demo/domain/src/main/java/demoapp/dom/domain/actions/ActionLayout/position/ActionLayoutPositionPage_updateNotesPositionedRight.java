@@ -19,7 +19,6 @@
 package demoapp.dom.domain.actions.ActionLayout.position;
 
 import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
@@ -27,26 +26,21 @@ import lombok.RequiredArgsConstructor;
 
 
 //tag::class[]
-@Action(
-        semantics = SemanticsOf.IDEMPOTENT
-)
-@ActionLayout(
-        named = "Positioned on panel dropdown",
-        describedAs = "<cpt:property id=\"...\"><cpt:action id=\"...\" position=PANEL_DROPDOWN/></cpt:property>",
-        associateWith = "readOnlyProperty2",
-        sequence = "3")
+@Action(semantics = SemanticsOf.IDEMPOTENT)
 @RequiredArgsConstructor
-public class ActionLayoutPositionPage_layoutPanelDropDown {
-
+public class ActionLayoutPositionPage_updateNotesPositionedRight {
+    // ...
+//end::class[]
     private final ActionLayoutPositionPage page;
 
     @MemberSupport public ActionLayoutPositionPage act(final String newValue) {
-        page.setReadOnlyProperty2(newValue);
+        page.setNotes(newValue);
         return page;
     }
     @MemberSupport public String default0Act() {
-        return page.getReadOnlyProperty2();
+        return page.getNotes();
     }
 
+//tag::class[]
 }
 //end::class[]

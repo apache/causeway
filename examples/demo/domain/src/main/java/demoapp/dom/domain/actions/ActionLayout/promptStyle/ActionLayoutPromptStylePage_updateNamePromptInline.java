@@ -16,37 +16,37 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.ActionLayout.position;
+package demoapp.dom.domain.actions.ActionLayout.promptStyle;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
 
 //tag::class[]
-@Action(
-        semantics = SemanticsOf.IDEMPOTENT
-)
+@Action(semantics = SemanticsOf.IDEMPOTENT)
 @ActionLayout(
-        named = "Positioned right",
-        describedAs = "<cpt:property id=\"...\"><cpt:action id=\"...\" position=RIGHT/></cpt:property>",
-        associateWith = "readOnlyProperty2",
-        sequence = "4")
+        promptStyle = PromptStyle.INLINE,
+        associateWith = "name",
+        sequence = "1")
 @RequiredArgsConstructor
-public class ActionLayoutPositionPage_layoutRight {
+public class ActionLayoutPromptStylePage_updateNamePromptInline {
+    // ...
+//end::class[]
+    private final ActionLayoutPromptStylePage page;
 
-    private final ActionLayoutPositionPage page;
-
-    @MemberSupport public ActionLayoutPositionPage act(final String newValue) {
-        page.setReadOnlyProperty2(newValue);
+    @MemberSupport public ActionLayoutPromptStylePage act(final String newValue) {
+        page.setName(newValue);
         return page;
     }
     @MemberSupport public String default0Act() {
-        return page.getReadOnlyProperty2();
+        return page.getName();
     }
 
+//tag::class[]
 }
 //end::class[]

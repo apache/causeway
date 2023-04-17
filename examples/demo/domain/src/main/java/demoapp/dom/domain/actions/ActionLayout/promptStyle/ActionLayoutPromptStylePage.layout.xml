@@ -26,20 +26,12 @@
 
 	<bs3:row>
 		<bs3:col span="6">
-			<cpt:fieldSet name="Annotated" id="annotated"/>
-			<cpt:fieldSet name="Layout" id="layout">
-				<cpt:property id="readOnlyProperty3">
-					<cpt:action id="layoutInline" promptStyle="INLINE">
-						<cpt:named>Inline</cpt:named>
-					</cpt:action>
-					<cpt:action id="layoutDialog" promptStyle="DIALOG">
-						<cpt:named>Dialog</cpt:named>
-					</cpt:action>
-				</cpt:property>
-				<cpt:property id="readOnlyProperty4">
-					<cpt:action id="layoutInlineAsIfEdit" promptStyle="INLINE_AS_IF_EDIT"/>
-				</cpt:property>
-			</cpt:fieldSet>
+			<cpt:fieldSet name="Identity" id="identity">
+                <cpt:property id="name"/>
+            </cpt:fieldSet>
+			<cpt:fieldSet name="Details" id="details">
+                <cpt:property id="notes"/>
+            </cpt:fieldSet>
 			<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
 		</bs3:col>
 		<bs3:col span="6">

@@ -27,26 +27,24 @@ import lombok.RequiredArgsConstructor;
 
 
 //tag::class[]
-@Action(
-        semantics = SemanticsOf.IDEMPOTENT
-)
+@Action(semantics = SemanticsOf.IDEMPOTENT)
 @ActionLayout(
-        named = "Positioned on panel",
-        describedAs = "<cpt:property id=\"...\"><cpt:action id=\"...\" position=PANEL/></cpt:property>",
-        associateWith = "readOnlyProperty2",
-        sequence = "2")
+        position = ActionLayout.Position.PANEL,
+        associateWith = "name")
 @RequiredArgsConstructor
-public class ActionLayoutPositionPage_layoutPanel {
-
+public class ActionLayoutPositionPage_updateNamePositionedPanel {
+    // ...
+//end::class[]
     private final ActionLayoutPositionPage page;
 
     @MemberSupport public ActionLayoutPositionPage act(final String newValue) {
-        page.setReadOnlyProperty2(newValue);
+        page.setName(newValue);
         return page;
     }
     @MemberSupport public String default0Act() {
-        return page.getReadOnlyProperty2();
+        return page.getName();
     }
 
+//tag::class[]
 }
 //end::class[]

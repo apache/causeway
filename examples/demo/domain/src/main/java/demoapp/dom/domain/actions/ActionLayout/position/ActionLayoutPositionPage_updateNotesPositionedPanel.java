@@ -16,39 +16,31 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.ActionLayout.promptStyle;
+package demoapp.dom.domain.actions.ActionLayout.position;
 
 import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
 
 //tag::class[]
-@Action(
-        semantics = SemanticsOf.IDEMPOTENT
-)
-@ActionLayout(
-        promptStyle = PromptStyle.INLINE,
-        named = "Inline",
-        describedAs = "promptStyle = INLINE",
-        associateWith = "readOnlyProperty1",
-        sequence = "1")
+@Action(semantics = SemanticsOf.IDEMPOTENT)
 @RequiredArgsConstructor
-public class ActionLayoutPromptStylePage_annotatedInline {
+public class ActionLayoutPositionPage_updateNotesPositionedPanel {
+    // ...
+//end::class[]
+    private final ActionLayoutPositionPage page;
 
-    private final ActionLayoutPromptStylePage stringViewModel;
-
-    @MemberSupport public ActionLayoutPromptStylePage act(final String newValue) {
-        stringViewModel.setReadOnlyProperty1(newValue);
-        return stringViewModel;
+    @MemberSupport public ActionLayoutPositionPage act(final String newValue) {
+        page.setNotes(newValue);
+        return page;
     }
     @MemberSupport public String default0Act() {
-        return stringViewModel.getReadOnlyProperty1();
+        return page.getNotes();
     }
 
+//tag::class[]
 }
 //end::class[]

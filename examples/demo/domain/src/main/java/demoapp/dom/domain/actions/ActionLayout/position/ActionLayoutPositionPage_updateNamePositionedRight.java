@@ -16,39 +16,35 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.ActionLayout.promptStyle;
+package demoapp.dom.domain.actions.ActionLayout.position;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
 
 //tag::class[]
-@Action(
-        semantics = SemanticsOf.IDEMPOTENT
-        )
+@Action(semantics = SemanticsOf.IDEMPOTENT)
 @ActionLayout(
-        promptStyle = PromptStyle.INLINE_AS_IF_EDIT,
-        named = "Inline as if edit",
-        describedAs = "promptStyle = INLINE_AS_IF_EDIT",
-        associateWith = "readOnlyProperty2",
-        sequence = "1")
+        position = ActionLayout.Position.RIGHT,
+        associateWith = "name")
 @RequiredArgsConstructor
-public class ActionLayoutPromptStylePage_annotatedInlineAsIfEdit {
+public class ActionLayoutPositionPage_updateNamePositionedRight {
+    // ...
+//end::class[]
+    private final ActionLayoutPositionPage page;
 
-    private final ActionLayoutPromptStylePage stringViewModel;
-
-    @MemberSupport public ActionLayoutPromptStylePage act(final String newValue) {
-        stringViewModel.setReadOnlyProperty2(newValue);
-        return stringViewModel;
+    @MemberSupport public ActionLayoutPositionPage act(final String newValue) {
+        page.setName(newValue);
+        return page;
     }
     @MemberSupport public String default0Act() {
-        return stringViewModel.getReadOnlyProperty2();
+        return page.getName();
     }
 
+//tag::class[]
 }
 //end::class[]

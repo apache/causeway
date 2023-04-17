@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.ActionLayout.promptStyle;
+package demoapp.dom.domain.actions.ActionLayout.position;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -27,25 +27,24 @@ import lombok.RequiredArgsConstructor;
 
 
 //tag::class[]
-@Action(
-        semantics = SemanticsOf.IDEMPOTENT
-)
+@Action(semantics = SemanticsOf.IDEMPOTENT)
 @ActionLayout(
-        describedAs = "<cpt:property id=\"...\"><cpt:action id=\"...\" promptStyle = INLINE_AS_IF_EDIT/></cpt:property>",
-        associateWith = "readOnlyProperty4",
-        sequence = "1")
+        position = ActionLayout.Position.PANEL_DROPDOWN,
+        associateWith = "name")
 @RequiredArgsConstructor
-public class ActionLayoutPromptStylePage_layoutInlineAsIfEdit {
+public class ActionLayoutPositionPage_updateNamePositionedPanelDropDown {
+    // ...
+//end::class[]
+    private final ActionLayoutPositionPage page;
 
-    private final ActionLayoutPromptStylePage stringViewModel;
-
-    @MemberSupport public ActionLayoutPromptStylePage act(final String newValue) {
-        stringViewModel.setReadOnlyProperty4(newValue);
-        return stringViewModel;
+    @MemberSupport public ActionLayoutPositionPage act(final String newValue) {
+        page.setName(newValue);
+        return page;
     }
     @MemberSupport public String default0Act() {
-        return stringViewModel.getReadOnlyProperty4();
+        return page.getName();
     }
 
+//tag::class[]
 }
 //end::class[]
