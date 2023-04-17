@@ -32,6 +32,7 @@ jobs:
         language: [ 'java', 'javascript' ]
     env:
       # to be shared among all steps of this job
+      BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
       BASELINE: 2.0.0-RC1
       PROJECT_ROOT_PATH: ${{ github.workspace }}
       CI_SCRIPTS_PATH: ${{ github.workspace }}/scripts/ci
@@ -50,11 +51,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-
-    - name: Extract branch name
-      shell: bash
-      run: echo "branch=$(echo ${GITHUB_REF#refs/heads/})" >>$GITHUB_OUTPUT
-      id: extract_branch
 
     - name: Set up JDK 18
       if: matrix.language == 'java'
@@ -88,6 +84,7 @@ jobs:
       shell: bash
       run: |
         echo ==============  ENV  =================
+        echo BRANCH_NAME      \: $BRANCH_NAME
         echo BASELINE         \: $BASELINE
         echo TIMESTAMP        \: $TIMESTAMP
         echo PROJECT_ROOT_PATH\: $PROJECT_ROOT_PATH
@@ -103,7 +100,7 @@ jobs:
         languages: ${{ matrix.language }}
 
     - name: Build Artifacts (Main)
-      if: matrix.language == 'java' && steps.extract_branch.outputs.branch == 'master'
+      if: matrix.language == 'java' && env.BRANCH_NAME == 'master'
       shell: bash
       run: bash $CI_SCRIPTS_PATH/build-artifacts.sh
       env:
@@ -121,7 +118,7 @@ jobs:
           -e
           
     - name: Build Artifacts (Edge)
-      if: matrix.language == 'java' && steps.extract_branch.outputs.branch == 'spring6'
+      if: matrix.language == 'java' && env.BRANCH_NAME == 'spring6'
       shell: bash
       run: bash $CI_SCRIPTS_PATH/build-artifacts.sh
       env:
