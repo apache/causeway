@@ -175,7 +175,6 @@
 	</dependencyManagement>
 
 	<modules>
- 		<module>clients/kroviz</module>
  		<module>extensions/core/commandreplay</module>
 		<module>viewers/graphql</module>
 	</modules>
