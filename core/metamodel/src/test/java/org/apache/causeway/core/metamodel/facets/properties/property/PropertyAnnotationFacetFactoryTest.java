@@ -30,6 +30,7 @@ import org.mockito.Mockito;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -50,6 +51,7 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
+import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract.EventTypeOrigin;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
@@ -65,11 +67,9 @@ import org.apache.causeway.core.metamodel.facets.properties.property.entitychang
 import org.apache.causeway.core.metamodel.facets.properties.property.hidden.HiddenFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForPropertyAnnotation;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromDefault;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromPropertyAnnotation;
+import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEvent;
 import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromDefault;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromPropertyAnnotation;
+import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEvent;
 import org.apache.causeway.core.metamodel.facets.properties.property.mustsatisfy.MustSatisfySpecificationFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.regex.RegExFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.snapshot.SnapshotExcludeFacetForPropertyAnnotation;
@@ -236,17 +236,18 @@ class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJupiterTest
             // then
             final Facet setterFacet = facetedMethod.getFacet(PropertySetterFacet.class);
             assertNotNull(setterFacet);
-            assertTrue(setterFacet instanceof PropertySetterFacetForDomainEventFromPropertyAnnotation,
-                    "unexpected facet: " + setterFacet);
-            final PropertySetterFacetForDomainEventFromPropertyAnnotation setterFacetImpl = (PropertySetterFacetForDomainEventFromPropertyAnnotation) setterFacet;
-            assertThat(setterFacetImpl.value(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
+            assertTrue(setterFacet instanceof PropertySetterFacetForDomainEvent, "unexpected facet: " + setterFacet);
+            final PropertySetterFacetForDomainEvent setterFacetImpl = (PropertySetterFacetForDomainEvent) setterFacet;
+            assertEquals(EventTypeOrigin.ANNOTATED_MEMBER, setterFacetImpl.getEventTypeOrigin());
+            assertThat(setterFacetImpl.getEventType(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
 
             // then
             final Facet clearFacet = facetedMethod.getFacet(PropertyClearFacet.class);
             assertNotNull(clearFacet);
-            assertTrue(clearFacet instanceof PropertyClearFacetForDomainEventFromPropertyAnnotation);
-            final PropertyClearFacetForDomainEventFromPropertyAnnotation clearFacetImpl = (PropertyClearFacetForDomainEventFromPropertyAnnotation) clearFacet;
-            assertThat(clearFacetImpl.value(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
+            assertTrue(clearFacet instanceof PropertyClearFacetForDomainEvent);
+            final PropertyClearFacetForDomainEvent clearFacetImpl = (PropertyClearFacetForDomainEvent) clearFacet;
+            assertEquals(EventTypeOrigin.ANNOTATED_MEMBER, setterFacetImpl.getEventTypeOrigin());
+            assertThat(clearFacetImpl.getEventType(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
         }
 
 
@@ -284,17 +285,18 @@ class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJupiterTest
             // then
             final Facet setterFacet = facetedMethod.getFacet(PropertySetterFacet.class);
             assertNotNull(setterFacet);
-            assertTrue(setterFacet instanceof PropertySetterFacetForDomainEventFromPropertyAnnotation,
-                    "unexpected facet: " + setterFacet);
-            final PropertySetterFacetForDomainEventFromPropertyAnnotation setterFacetImpl = (PropertySetterFacetForDomainEventFromPropertyAnnotation) setterFacet;
-            assertThat(setterFacetImpl.value(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
+            assertTrue(setterFacet instanceof PropertySetterFacetForDomainEvent, "unexpected facet: " + setterFacet);
+            final PropertySetterFacetForDomainEvent setterFacetImpl = (PropertySetterFacetForDomainEvent) setterFacet;
+            assertEquals(EventTypeOrigin.ANNOTATED_MEMBER, setterFacetImpl.getEventTypeOrigin());
+            assertThat(setterFacetImpl.getEventType(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
 
             // then
             final Facet clearFacet = facetedMethod.getFacet(PropertyClearFacet.class);
             assertNotNull(clearFacet);
-            assertTrue(clearFacet instanceof PropertyClearFacetForDomainEventFromPropertyAnnotation);
-            final PropertyClearFacetForDomainEventFromPropertyAnnotation clearFacetImpl = (PropertyClearFacetForDomainEventFromPropertyAnnotation) clearFacet;
-            assertThat(clearFacetImpl.value(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
+            assertTrue(clearFacet instanceof PropertyClearFacetForDomainEvent);
+            final PropertyClearFacetForDomainEvent clearFacetImpl = (PropertyClearFacetForDomainEvent) clearFacet;
+            assertEquals(EventTypeOrigin.ANNOTATED_MEMBER, clearFacetImpl.getEventTypeOrigin());
+            assertThat(clearFacetImpl.getEventType(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
         }
 
         @Test
@@ -332,17 +334,18 @@ class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJupiterTest
             // then
             final Facet setterFacet = facetedMethod.getFacet(PropertySetterFacet.class);
             assertNotNull(setterFacet);
-            assertTrue(setterFacet instanceof PropertySetterFacetForDomainEventFromPropertyAnnotation,
-                    "unexpected facet: " + setterFacet);
-            final PropertySetterFacetForDomainEventFromPropertyAnnotation setterFacetImpl = (PropertySetterFacetForDomainEventFromPropertyAnnotation) setterFacet;
-            assertThat(setterFacetImpl.value(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
+            assertTrue(setterFacet instanceof PropertySetterFacetForDomainEvent, "unexpected facet: " + setterFacet);
+            final PropertySetterFacetForDomainEvent setterFacetImpl = (PropertySetterFacetForDomainEvent) setterFacet;
+            assertEquals(EventTypeOrigin.ANNOTATED_MEMBER, setterFacetImpl.getEventTypeOrigin());
+            assertThat(setterFacetImpl.getEventType(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
 
             // then
             final Facet clearFacet = facetedMethod.getFacet(PropertyClearFacet.class);
             assertNotNull(clearFacet);
-            assertTrue(clearFacet instanceof PropertyClearFacetForDomainEventFromPropertyAnnotation);
-            final PropertyClearFacetForDomainEventFromPropertyAnnotation clearFacetImpl = (PropertyClearFacetForDomainEventFromPropertyAnnotation) clearFacet;
-            assertThat(clearFacetImpl.value(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
+            assertTrue(clearFacet instanceof PropertyClearFacetForDomainEvent);
+            final PropertyClearFacetForDomainEvent clearFacetImpl = (PropertyClearFacetForDomainEvent) clearFacet;
+            assertEquals(EventTypeOrigin.ANNOTATED_MEMBER, clearFacetImpl.getEventTypeOrigin());
+            assertThat(clearFacetImpl.getEventType(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
         }
 
         @Test
@@ -380,17 +383,17 @@ class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJupiterTest
             // then
             final Facet setterFacet = facetedMethod.getFacet(PropertySetterFacet.class);
             assertNotNull(setterFacet);
-            assertTrue(setterFacet instanceof PropertySetterFacetForDomainEventFromDefault,
+            assertTrue(setterFacet instanceof PropertySetterFacetForDomainEvent,
                     "unexpected facet: " + setterFacet);
-            final PropertySetterFacetForDomainEventFromDefault setterFacetImpl = (PropertySetterFacetForDomainEventFromDefault) setterFacet;
-            assertThat(setterFacetImpl.value(), CausewayMatchers.classEqualTo(PropertyDomainEvent.Default.class));
+            final PropertySetterFacetForDomainEvent setterFacetImpl = (PropertySetterFacetForDomainEvent) setterFacet;
+            assertThat(setterFacetImpl.getEventType(), CausewayMatchers.classEqualTo(PropertyDomainEvent.Default.class));
 
             // then
             final Facet clearFacet = facetedMethod.getFacet(PropertyClearFacet.class);
             assertNotNull(clearFacet);
-            assertTrue(clearFacet instanceof PropertyClearFacetForDomainEventFromDefault);
-            final PropertyClearFacetForDomainEventFromDefault clearFacetImpl = (PropertyClearFacetForDomainEventFromDefault) clearFacet;
-            assertThat(clearFacetImpl.value(), CausewayMatchers.classEqualTo(PropertyDomainEvent.Default.class));
+            assertTrue(clearFacet instanceof PropertyClearFacetForDomainEvent);
+            final PropertyClearFacetForDomainEvent clearFacetImpl = (PropertyClearFacetForDomainEvent) clearFacet;
+            assertThat(clearFacetImpl.getEventType(), CausewayMatchers.classEqualTo(PropertyDomainEvent.Default.class));
         }
     }
 

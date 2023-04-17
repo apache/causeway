@@ -23,17 +23,18 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 
-public class PropertySetterFacetForDomainEventFromPropertyAnnotation
+public class PropertySetterFacetForDomainEvent
 extends PropertySetterOrClearFacetForDomainEventAbstract
 implements PropertySetterFacet {
 
-
-    public PropertySetterFacetForDomainEventFromPropertyAnnotation(
+    public PropertySetterFacetForDomainEvent(
             final Class<? extends PropertyDomainEvent<?, ?>> eventType,
-                    final PropertyOrCollectionAccessorFacet getterFacet,
-                    final PropertySetterFacet setterFacet,
-                    final FacetHolder holder) {
+            final EventTypeOrigin eventTypeOrigin,
+            final PropertyOrCollectionAccessorFacet getterFacet,
+            final PropertySetterFacet setterFacet,
+            final FacetHolder holder) {
 
-        super(PropertySetterFacet.class, eventType, getterFacet, setterFacet, null,  holder);
+        super(PropertySetterFacet.class, eventType, eventTypeOrigin, getterFacet, setterFacet, null, holder);
     }
+
 }

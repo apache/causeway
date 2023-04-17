@@ -43,11 +43,9 @@ import org.apache.causeway.core.metamodel.facets.properties.property.hidden.Hidd
 import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.MandatoryFacetInvertedByNullableAnnotationOnProperty;
 import org.apache.causeway.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForPropertyAnnotation;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromDefault;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromPropertyAnnotation;
+import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEvent;
 import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromDefault;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromPropertyAnnotation;
+import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEvent;
 import org.apache.causeway.core.metamodel.facets.properties.property.mustsatisfy.MustSatisfySpecificationFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.regex.RegExFacetForPatternAnnotationOnProperty;
 import org.apache.causeway.core.metamodel.facets.properties.property.regex.RegExFacetForPropertyAnnotation;
@@ -144,38 +142,18 @@ extends FacetFactoryAbstract {
             // emit the appropriate domain event and then delegate onto the underlying
             //
 
-            final PropertySetterFacet setterFacet = holder.getFacet(PropertySetterFacet.class);
-            if(setterFacet != null) {
-                // the current setter facet will end up as the underlying facet
-                final PropertySetterFacet replacementFacet;
+            holder.lookupFacet(PropertySetterFacet.class)
+            .ifPresent(setterFacet->
+                    // the current setter facet will end up as the underlying facet
+                    addFacet(new PropertySetterFacetForDomainEvent(
+                            eventType, eventTypeOrigin, getterFacet, setterFacet, holder)));
 
-                if(eventTypeOrigin.isAnnotatedMember()) {
-                    replacementFacet = new PropertySetterFacetForDomainEventFromPropertyAnnotation(
-                            eventType, getterFacet, setterFacet, holder);
-                } else {
-                    // default
-                    replacementFacet = new PropertySetterFacetForDomainEventFromDefault(
-                            eventType, getterFacet, setterFacet, holder);
-                }
-                addFacet(replacementFacet);
-            }
 
-            final PropertyClearFacet clearFacet = holder.getFacet(PropertyClearFacet.class);
-            if(clearFacet != null) {
-                // the current clear facet will end up as the underlying facet
-                final PropertyClearFacet replacementFacet;
-
-                if(eventTypeOrigin.isAnnotatedMember()) {
-                    replacementFacet = new PropertyClearFacetForDomainEventFromPropertyAnnotation(
-                            eventType, getterFacet, clearFacet, holder);
-                } else {
-                    // default
-                    replacementFacet = new PropertyClearFacetForDomainEventFromDefault(
-                            eventType, getterFacet, clearFacet, holder);
-                }
-                addFacet(replacementFacet);
-            }
-
+            holder.lookupFacet(PropertyClearFacet.class)
+            .ifPresent(clearFacet->
+                    // the current clear facet will end up as the underlying facet
+                    addFacet(new PropertyClearFacetForDomainEvent(
+                            eventType, eventTypeOrigin, getterFacet, clearFacet, holder)));
         });
     }
 

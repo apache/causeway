@@ -28,8 +28,8 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.execution.InteractionInternal;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.DomainEventHelper;
-import org.apache.causeway.core.metamodel.facets.SingleValueFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearingAccessor;
@@ -48,7 +48,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 public abstract class PropertySetterOrClearFacetForDomainEventAbstract
-extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>>
+extends DomainEventFacetAbstract<PropertyDomainEvent<?, ?>>
 implements
     PropertyClearingAccessor,
     PropertySettingAccessor {
@@ -62,12 +62,13 @@ implements
     protected PropertySetterOrClearFacetForDomainEventAbstract(
             final Class<? extends Facet> facetType,
             final Class<? extends PropertyDomainEvent<?, ?>> eventType,
-                    final PropertyOrCollectionAccessorFacet getterFacet,
-                    final PropertySetterFacet setterFacet,
-                    final PropertyClearFacet clearFacet,
-                    final FacetHolder holder) {
+            final EventTypeOrigin eventTypeOrigin,
+            final PropertyOrCollectionAccessorFacet getterFacet,
+            final PropertySetterFacet setterFacet,
+            final PropertyClearFacet clearFacet,
+            final FacetHolder holder) {
 
-        super(facetType, eventType, holder);
+        super(facetType, eventType, eventTypeOrigin, holder);
         this.getterFacet = getterFacet;
         this.setterFacet = setterFacet;
         this.clearFacet = clearFacet;
@@ -198,7 +199,7 @@ implements
                 val propertyDomainEvent =
                         domainEventHelper.postEventForProperty(
                                 AbstractDomainEvent.Phase.EXECUTING,
-                                PropertySetterOrClearFacetForDomainEventAbstract.this.getEventType(), null,
+                                uncheckedCast(PropertySetterOrClearFacetForDomainEventAbstract.this.getEventType()), null,
                                 PropertySetterOrClearFacetForDomainEventAbstract.this.getFacetHolder(), head,
                                 oldValuePojo, newValuePojo);
 
@@ -224,7 +225,8 @@ implements
                     // ... post the executed event
                     domainEventHelper.postEventForProperty(
                             AbstractDomainEvent.Phase.EXECUTED,
-                            PropertySetterOrClearFacetForDomainEventAbstract.this.getEventType(), uncheckedCast(propertyDomainEvent),
+                            uncheckedCast(PropertySetterOrClearFacetForDomainEventAbstract.this.getEventType()),
+                            uncheckedCast(propertyDomainEvent),
                             PropertySetterOrClearFacetForDomainEventAbstract.this.getFacetHolder(), head,
                             oldValuePojo, actualNewValue);
                 }
@@ -276,10 +278,6 @@ implements
                 getFacetHolder(),
                 editingVariant
                 );
-    }
-
-    public <S, T> Class<? extends PropertyDomainEvent<S, T>> getEventType() {
-        return uncheckedCast(value());
     }
 
     private InteractionDtoFactory getInteractionDtoServiceInternal() {
