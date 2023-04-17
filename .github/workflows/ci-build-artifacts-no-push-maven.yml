@@ -109,7 +109,7 @@ jobs:
         # -Dmaven.source.skip=true ... no need for the CI build to pull sources
         # -T 1C ... 1 build thread per core
         MVN_ADDITIONAL_OPTS: >-
-          -Dmodule-all-except-kroviz
+          -Dmodule-all
           -Dproject.build.outputTimestamp=1
           -Dmaven.source.skip=true
           -Denforcer.failFast=true
