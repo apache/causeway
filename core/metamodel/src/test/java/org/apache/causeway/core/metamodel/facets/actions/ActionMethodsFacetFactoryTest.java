@@ -63,7 +63,7 @@ extends FacetFactoryTestAbstract {
             public String validateSomeAction() { return null;}
         }
 
-        final Method validateMethod = findMethod(Customer.class, "validateSomeAction");
+        final Method validateMethod = findMethodExactOrFail(Customer.class, "validateSomeAction");
 
         actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
             //when
@@ -91,7 +91,7 @@ extends FacetFactoryTestAbstract {
             public String validateSomeAction(final int x, final int y) { return null;}
         }
 
-        final Method validateMethod = findMethod(Customer.class, "validateSomeAction", new Class[] { int.class, int.class });
+        final Method validateMethod = findMethodExactOrFail(Customer.class, "validateSomeAction", new Class[] { int.class, int.class });
 
         actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
             //when
@@ -119,9 +119,9 @@ extends FacetFactoryTestAbstract {
             public long default1SomeAction() { return 0; }
         }
 
-        final Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class, long.class });
-        final Method default0Method = findMethod(Customer.class, "default0SomeAction", new Class[] {});
-        final Method default1Method = findMethod(Customer.class, "default1SomeAction", new Class[]{});
+        final Method actionMethod = findMethodExactOrFail(Customer.class, "someAction", new Class[] { int.class, long.class });
+        final Method default0Method = findMethodExactOrFail(Customer.class, "default0SomeAction", new Class[] {});
+        final Method default1Method = findMethodExactOrFail(Customer.class, "default1SomeAction", new Class[]{});
 
         final FacetedMethod facetHolderWithParms = FacetedMethod
                 .createForAction(getMetaModelContext(), Customer.class, _MethodFacades.regular(actionMethod));
@@ -160,10 +160,10 @@ extends FacetFactoryTestAbstract {
             public Set<Long> choices2SomeAction() { return Collections.emptySet(); }
         }
 
-        final Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class, long.class, long.class });
-        final Method choices0Method = findMethod(Customer.class, "choices0SomeAction", new Class[] {});
-        final Method choices1Method = findMethod(Customer.class, "choices1SomeAction", new Class[] {});
-        final Method choices2Method = findMethod(Customer.class, "choices2SomeAction", new Class[] {});
+        final Method actionMethod = findMethodExactOrFail(Customer.class, "someAction", new Class[] { int.class, long.class, long.class });
+        final Method choices0Method = findMethodExactOrFail(Customer.class, "choices0SomeAction", new Class[] {});
+        final Method choices1Method = findMethodExactOrFail(Customer.class, "choices1SomeAction", new Class[] {});
+        final Method choices2Method = findMethodExactOrFail(Customer.class, "choices2SomeAction", new Class[] {});
 
         final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(
                 getMetaModelContext(), Customer.class, _MethodFacades.regular(actionMethod));
@@ -213,8 +213,8 @@ extends FacetFactoryTestAbstract {
             }
         }
 
-        final Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class, long.class });
-        final Method autoComplete0Method = findMethod(Customer.class, "autoComplete0SomeAction", new Class[] {String.class});
+        final Method actionMethod = findMethodExactOrFail(Customer.class, "someAction", new Class[] { int.class, long.class });
+        final Method autoComplete0Method = findMethodExactOrFail(Customer.class, "autoComplete0SomeAction", new Class[] {String.class});
 
         final FacetedMethod facetHolderWithParms = FacetedMethod
                 .createForAction(getMetaModelContext(), Customer.class, _MethodFacades.regular(actionMethod));

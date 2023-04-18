@@ -234,12 +234,16 @@ implements HasMetaModelContext {
         return _Utils.contains(featureTypes, featureType);
     }
 
-    protected Method findMethod(final Class<?> type, final String methodName, final Class<?>[] methodTypes) {
+    protected Method findMethodExactOrFail(final Class<?> type, final String methodName, final Class<?>[] methodTypes) {
         return _Utils.findMethodExactOrFail(type, methodName, methodTypes);
     }
 
-    protected Method findMethod(final Class<?> type, final String methodName) {
+    protected Method findMethodExactOrFail(final Class<?> type, final String methodName) {
         return _Utils.findMethodExactOrFail(type, methodName);
+    }
+
+    protected Optional<Method> findMethodExact(final Class<?> type, final String methodName) {
+        return _Utils.findMethodExact(type, methodName);
     }
 
     // -- EXPECTATIONS

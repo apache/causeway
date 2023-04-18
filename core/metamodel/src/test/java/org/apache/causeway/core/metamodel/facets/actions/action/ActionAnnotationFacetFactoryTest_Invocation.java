@@ -65,7 +65,7 @@ extends ActionAnnotationFacetFactoryTest {
             processInvocation(facetFactory, processMethodContext);
 
             // expect
-            assertMethodWasRemoved(findMethod(Customer.class, "someAction"));
+            assertMethodWasRemoved(findMethodExactOrFail(Customer.class, "someAction"));
 
             // then
             final ActionDomainEventFacet domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);
@@ -98,7 +98,7 @@ extends ActionAnnotationFacetFactoryTest {
             processInvocation(facetFactory, processMethodContext);
 
             // expect
-            assertMethodWasRemoved(findMethod(Customer.class, "someAction"));
+            assertMethodWasRemoved(findMethodExactOrFail(Customer.class, "someAction"));
 
             // then
             final Facet domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);
@@ -133,7 +133,7 @@ extends ActionAnnotationFacetFactoryTest {
             processInvocation(facetFactory, processMethodContext);
 
             // expect
-            assertMethodWasRemoved(findMethod(Customer.class, "someAction"));
+            assertMethodWasRemoved(findMethodExactOrFail(Customer.class, "someAction"));
 
             // then
             final Facet domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);
@@ -169,7 +169,7 @@ extends ActionAnnotationFacetFactoryTest {
             processInvocation(facetFactory, processMethodContext);
 
             // expect
-            assertMethodWasRemoved(findMethod(Customer.class, "someAction"));
+            assertMethodWasRemoved(findMethodExactOrFail(Customer.class, "someAction"));
 
             // then
             final Facet domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);

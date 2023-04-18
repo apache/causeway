@@ -63,7 +63,7 @@ extends FacetFactoryTestAbstract2 {
             public void someAction() {
             }
         }
-        final Method actionMethod = findMethod(Customer.class, "someAction");
+        final Method actionMethod = findMethodExactOrFail(Customer.class, "someAction");
 
         processRestrictTo(facetFactory, ProcessMethodContext
                 .forTesting(Customer.class, null, actionMethod, methodRemover, facetedMethod));

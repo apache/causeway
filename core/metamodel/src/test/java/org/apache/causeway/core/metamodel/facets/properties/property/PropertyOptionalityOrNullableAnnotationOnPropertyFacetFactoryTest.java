@@ -63,7 +63,7 @@ extends FacetFactoryTestAbstract2 {
                 return null;
             }
         }
-        final Method method = findMethod(Customer.class, "getFirstName");
+        final Method method = findMethodExactOrFail(Customer.class, "getFirstName");
 
         processOptional(facetFactory, ProcessMethodContext
                 .forTesting(Customer.class, null, method, methodRemover, facetedMethod));
@@ -81,7 +81,7 @@ extends FacetFactoryTestAbstract2 {
                 return 0;
             }
         }
-        final Method method = findMethod(Customer.class, "getNumberOfOrders");
+        final Method method = findMethodExactOrFail(Customer.class, "getNumberOfOrders");
 
         processOptional(facetFactory, ProcessMethodContext
                 .forTesting(Customer.class, null, method, methodRemover, facetedMethod));
@@ -97,7 +97,7 @@ extends FacetFactoryTestAbstract2 {
                 return null;
             }
         }
-        final Method method = findMethod(Customer.class, "getFirstName");
+        final Method method = findMethodExactOrFail(Customer.class, "getFirstName");
 
         processOptional(facetFactory, ProcessMethodContext
                 .forTesting(Customer.class, null, method, methodRemover, facetedMethod));
@@ -115,7 +115,7 @@ extends FacetFactoryTestAbstract2 {
                 return 0;
             }
         }
-        final Method method = findMethod(Customer.class, "getNumberOfOrders");
+        final Method method = findMethodExactOrFail(Customer.class, "getNumberOfOrders");
 
         processOptional(facetFactory, ProcessMethodContext
                 .forTesting(Customer.class, null, method, methodRemover, facetedMethod));

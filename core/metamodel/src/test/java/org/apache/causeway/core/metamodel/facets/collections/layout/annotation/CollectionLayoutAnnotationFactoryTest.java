@@ -60,7 +60,7 @@ extends FacetFactoryTestAbstract2 {
                 return _Sets.newTreeSet();
             }
         }
-        final Method method = findMethod(Customer.class, "getFirstNames");
+        final Method method = findMethodExactOrFail(Customer.class, "getFirstNames");
 
         facetFactory.process(ProcessMethodContext
                 .forTesting(Customer.class, null, method, methodRemover, facetedMethod));
@@ -81,7 +81,7 @@ extends FacetFactoryTestAbstract2 {
                 return _Sets.newTreeSet();
             }
         }
-        final Method method = findMethod(Customer.class, "getFirstNames");
+        final Method method = findMethodExactOrFail(Customer.class, "getFirstNames");
 
         facetFactory.process(ProcessMethodContext
                 .forTesting(Customer.class, null, method, methodRemover, facetedMethod));

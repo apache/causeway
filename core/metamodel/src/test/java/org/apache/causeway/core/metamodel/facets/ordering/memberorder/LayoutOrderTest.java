@@ -72,7 +72,7 @@ extends FacetFactoryTestAbstract2 {
                 return null;
             }
         }
-        final Method method = findMethod(Customer.class, "getFirstName");
+        final Method method = findMethodExactOrFail(Customer.class, "getFirstName");
 
         val facetFactory = new PropertyLayoutFacetFactory(getMetaModelContext());
         facetFactory.process(ProcessMethodContext
@@ -99,7 +99,7 @@ extends FacetFactoryTestAbstract2 {
             public void addToOrders(final Order o) {
             }
         }
-        final Method method = findMethod(Customer.class, "getOrders");
+        final Method method = findMethodExactOrFail(Customer.class, "getOrders");
 
         val facetFactory = new CollectionLayoutFacetFactory(getMetaModelContext());
         facetFactory.process(ProcessMethodContext
@@ -119,7 +119,7 @@ extends FacetFactoryTestAbstract2 {
             public void someAction() {
             }
         }
-        final Method method = findMethod(Customer.class, "someAction");
+        final Method method = findMethodExactOrFail(Customer.class, "someAction");
 
         val facetFactory = new ActionLayoutFacetFactory(getMetaModelContext());
         facetFactory.process(ProcessMethodContext

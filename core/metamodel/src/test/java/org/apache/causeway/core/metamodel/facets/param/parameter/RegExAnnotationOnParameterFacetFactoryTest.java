@@ -53,7 +53,7 @@ extends FacetFactoryTestAbstract2 {
             public void someAction(@Pattern(regexp = "^A.*", flags = { Pattern.Flag.CASE_INSENSITIVE }) final String foo) {
             }
         }
-        final Method method = findMethod(Customer.class, "someAction", new Class[] { String.class });
+        final Method method = findMethodExactOrFail(Customer.class, "someAction", new Class[] { String.class });
 
         facetFactory.processParams(
                 ProcessParameterContext.forTesting(
@@ -74,7 +74,7 @@ extends FacetFactoryTestAbstract2 {
             public void someAction(final int foo) {
             }
         }
-        final Method method = findMethod(Customer.class, "someAction", new Class[] { int.class });
+        final Method method = findMethodExactOrFail(Customer.class, "someAction", new Class[] { int.class });
 
         facetFactory.processParams(
                 ProcessParameterContext.forTesting(

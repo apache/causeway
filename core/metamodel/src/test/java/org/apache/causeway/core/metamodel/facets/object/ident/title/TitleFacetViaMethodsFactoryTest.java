@@ -57,7 +57,7 @@ extends ObjectSupportFacetFactoryTestAbstract {
             public String toString() { return "Some title via toString"; }
         }
 
-        final Method toStringMethod = findMethod(Customer.class, "toString");
+        final Method toStringMethod = findMethodExactOrFail(Customer.class, "toString");
 
         objectScenario(Customer.class, (processClassContext, facetHolder) -> {
             //when

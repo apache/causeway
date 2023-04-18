@@ -67,7 +67,7 @@ extends FacetFactoryTestAbstract2 {
                 return 0;
             }
         }
-        final Method actionMethod = findMethod(Customer.class, "getNumberOfOrders");
+        final Method actionMethod = findMethodExactOrFail(Customer.class, "getNumberOfOrders");
 
         processEditing(facetFactory, ProcessMethodContext
                 .forTesting(Customer.class, null, actionMethod, methodRemover, facetedMethod));
@@ -89,7 +89,7 @@ extends FacetFactoryTestAbstract2 {
                 return 0;
             }
         }
-        final Method actionMethod = findMethod(Customer.class, "getNumberOfOrders");
+        final Method actionMethod = findMethodExactOrFail(Customer.class, "getNumberOfOrders");
 
         processEditing(facetFactory, ProcessMethodContext
                 .forTesting(Customer.class, null, actionMethod, methodRemover, facetedMethod));

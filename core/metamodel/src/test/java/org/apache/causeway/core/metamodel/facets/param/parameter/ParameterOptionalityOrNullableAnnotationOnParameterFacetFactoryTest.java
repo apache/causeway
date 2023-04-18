@@ -54,7 +54,7 @@ extends FacetFactoryTestAbstract2 {
             public void someAction(@Parameter(optionality = Optionality.OPTIONAL) final String foo) {
             }
         }
-        final Method method = findMethod(Customer.class, "someAction", new Class[] { String.class });
+        final Method method = findMethodExactOrFail(Customer.class, "someAction", new Class[] { String.class });
 
         facetFactory.processParamsOptional(
                 ProcessParameterContext.forTesting(
@@ -72,7 +72,7 @@ extends FacetFactoryTestAbstract2 {
             public void someAction(@Parameter(optionality = Optionality.OPTIONAL) final int foo) {
             }
         }
-        final Method method = findMethod(Customer.class, "someAction", new Class[] { int.class });
+        final Method method = findMethodExactOrFail(Customer.class, "someAction", new Class[] { int.class });
 
         facetFactory.processParamsOptional(
                 ProcessParameterContext.forTesting(
@@ -88,7 +88,7 @@ extends FacetFactoryTestAbstract2 {
             public void someAction(final @Nullable String foo) {
             }
         }
-        final Method method = findMethod(Customer.class, "someAction", new Class[] { String.class });
+        final Method method = findMethodExactOrFail(Customer.class, "someAction", new Class[] { String.class });
 
         facetFactory.processParamsOptional(
                 ProcessParameterContext.forTesting(
@@ -106,7 +106,7 @@ extends FacetFactoryTestAbstract2 {
             public void someAction(final @Nullable int foo) {
             }
         }
-        final Method method = findMethod(Customer.class, "someAction", new Class[] { int.class });
+        final Method method = findMethodExactOrFail(Customer.class, "someAction", new Class[] { int.class });
 
         facetFactory.processParamsOptional(
                 ProcessParameterContext.forTesting(

@@ -60,7 +60,7 @@ extends FacetFactoryTestAbstract2 {
                 return null;
             }
         }
-        final Method method = findMethod(Customer.class, "getFirstName");
+        final Method method = findMethodExactOrFail(Customer.class, "getFirstName");
 
         processOptional(facetFactory, ProcessMethodContext
                 .forTesting(Customer.class, null, method, methodRemover, facetedMethod));

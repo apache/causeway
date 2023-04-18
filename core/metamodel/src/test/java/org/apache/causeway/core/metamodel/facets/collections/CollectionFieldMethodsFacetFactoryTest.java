@@ -48,7 +48,7 @@ extends FacetFactoryTestAbstract2 {
                 return null;
             }
         }
-        final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
+        final Method collectionAccessorMethod = findMethodExactOrFail(Customer.class, "getOrders");
 
         facetFactory.process(ProcessMethodContext
                 .forTesting(Customer.class, null, collectionAccessorMethod, methodRemover, facetedMethod));
@@ -72,7 +72,7 @@ extends FacetFactoryTestAbstract2 {
                 return null;
             }
         }
-        final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
+        final Method collectionAccessorMethod = findMethodExactOrFail(Customer.class, "getOrders");
 
 
         facetFactory.process(ProcessMethodContext
@@ -96,7 +96,7 @@ extends FacetFactoryTestAbstract2 {
                 return null;
             }
         }
-        final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
+        final Method collectionAccessorMethod = findMethodExactOrFail(Customer.class, "getOrders");
 
         facetFactory.process(ProcessMethodContext
                 .forTesting(Customer.class, null, collectionAccessorMethod, methodRemover, facetedMethod));
@@ -119,7 +119,7 @@ extends FacetFactoryTestAbstract2 {
                 return null;
             }
         }
-        final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
+        final Method collectionAccessorMethod = findMethodExactOrFail(Customer.class, "getOrders");
 
         facetFactory.process(ProcessMethodContext
                 .forTesting(Customer.class, null, collectionAccessorMethod, methodRemover, facetedMethod));
@@ -145,7 +145,7 @@ extends FacetFactoryTestAbstract2 {
                 return null;
             }
         }
-        final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
+        final Method collectionAccessorMethod = findMethodExactOrFail(Customer.class, "getOrders");
 
         facetFactory.process(ProcessMethodContext
                 .forTesting(Customer.class, null, collectionAccessorMethod, methodRemover, facetedMethod));
@@ -175,7 +175,7 @@ extends FacetFactoryTestAbstract2 {
         class CustomerEx extends Customer {
         }
 
-        final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
+        final Method collectionAccessorMethod = findMethodExactOrFail(Customer.class, "getOrders");
 
         facetFactory.process(ProcessMethodContext
                 .forTesting(CustomerEx.class, null, collectionAccessorMethod, methodRemover, facetedMethod));

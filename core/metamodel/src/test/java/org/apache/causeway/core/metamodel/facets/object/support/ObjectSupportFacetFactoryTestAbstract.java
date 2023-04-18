@@ -50,6 +50,9 @@ extends FacetFactoryTestAbstract {
         facetFactory = null;
     }
 
+    /**
+     * see also CallbackFacetFactoryTestAbstract#assertPicksUp
+     */
     protected void assertPicksUp(
             final int expectedSupportMethodCount,
             final FacetFactory facetFactory,
@@ -62,7 +65,7 @@ extends FacetFactoryTestAbstract {
             facetFactory.process(processClassContext);
             //then
             val supportMethods = supportMethodEnum.getMethodNames()
-                    .map(methodName->findMethod(type, methodName))
+                    .map(methodName->findMethodExactOrFail(type, methodName))
                     .map(_MethodFacades::regular)
                     .map(MethodFacade::asMethodElseFail);
 

@@ -65,7 +65,7 @@ extends FacetFactoryTestAbstract2 {
                 return null;
             }
         }
-        final Method method = findMethod(Customer.class, "getFirstName");
+        final Method method = findMethodExactOrFail(Customer.class, "getFirstName");
 
         // when
         final FacetFactory.ProcessMethodContext processMethodContext =
@@ -90,7 +90,7 @@ extends FacetFactoryTestAbstract2 {
                 return null;
             }
         }
-        final Method method = findMethod(Customer.class, "getFirstName");
+        final Method method = findMethodExactOrFail(Customer.class, "getFirstName");
 
         final FacetFactory.ProcessMethodContext processMethodContext =
                 ProcessMethodContext
@@ -116,7 +116,7 @@ extends FacetFactoryTestAbstract2 {
                 return null;
             }
         }
-        final Method method = findMethod(Customer.class, "getFirstName");
+        final Method method = findMethodExactOrFail(Customer.class, "getFirstName");
 
         final FacetFactory.ProcessMethodContext processMethodContext =
                 ProcessMethodContext

@@ -18,17 +18,19 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.callback;
 
+import org.junit.jupiter.api.Test;
+
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.CallbackMethod;
 import org.apache.causeway.core.metamodel.facets.object.callbacks.UpdatedCallbackFacet;
 
-public class UpdatedCallbackFacetFactoryTest
+class UpdatedCallbackFacetFactoryTest
 extends CallbackFacetFactoryTestAbstract {
 
-    public void testUpdatedLifecycleMethodPickedUpOn() {
+    @Test
+    void updatedLifecycleMethodPickedUpOn() {
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
-            public void updated() {
-            }
+            public void updated() {}
         }
         assertPicksUp(1, facetFactory, Customer.class, CallbackMethod.UPDATED, UpdatedCallbackFacet.class);
     }

@@ -71,7 +71,7 @@ extends FacetFactoryTestAbstract2 {
             @SuppressWarnings("unused")
             public String getFirstName() { return null; }
         }
-        final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
+        final Method propertyAccessorMethod = findMethodExactOrFail(Customer.class, "getFirstName");
 
         facetFactory.process(ProcessMethodContext
                 .forTesting(Customer.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
@@ -98,8 +98,8 @@ extends FacetFactoryTestAbstract2 {
             public void setFirstName(final String firstName) {
             }
         }
-        final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
-        final Method propertySetterMethod = findMethod(Customer.class, "setFirstName", new Class[] { String.class });
+        final Method propertyAccessorMethod = findMethodExactOrFail(Customer.class, "getFirstName");
+        final Method propertySetterMethod = findMethodExactOrFail(Customer.class, "setFirstName", new Class[] { String.class });
 
         facetFactory.process(ProcessMethodContext
                 .forTesting(Customer.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
@@ -126,8 +126,8 @@ extends FacetFactoryTestAbstract2 {
             public void setFirstName(final String firstName) {
             }
         }
-        final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
-        final Method propertySetterMethod = findMethod(Customer.class, "setFirstName", new Class[] { String.class });
+        final Method propertyAccessorMethod = findMethodExactOrFail(Customer.class, "getFirstName");
+        final Method propertySetterMethod = findMethodExactOrFail(Customer.class, "setFirstName", new Class[] { String.class });
 
         facetFactory.process(ProcessMethodContext
                 .forTesting(Customer.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
@@ -154,7 +154,7 @@ extends FacetFactoryTestAbstract2 {
             public void setFirstName(final String firstName) {
             }
         }
-        final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
+        final Method propertyAccessorMethod = findMethodExactOrFail(Customer.class, "getFirstName");
 
         facetFactory.process(ProcessMethodContext
                 .forTesting(Customer.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
@@ -176,8 +176,8 @@ extends FacetFactoryTestAbstract2 {
             public void setFirstName(final String firstName) {
             }
         }
-        final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
-        final Method propertySetterMethod = findMethod(Customer.class, "setFirstName", new Class[] { String.class });
+        final Method propertyAccessorMethod = findMethodExactOrFail(Customer.class, "getFirstName");
+        final Method propertySetterMethod = findMethodExactOrFail(Customer.class, "setFirstName", new Class[] { String.class });
 
         facetFactory.process(ProcessMethodContext
                 .forTesting(Customer.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
@@ -203,8 +203,8 @@ extends FacetFactoryTestAbstract2 {
                 return null;
             }
         }
-        final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
-        final Method propertyChoicesMethod = findMethod(Customer.class, "choicesFirstName");
+        final Method propertyAccessorMethod = findMethodExactOrFail(Customer.class, "getFirstName");
+        final Method propertyChoicesMethod = findMethodExactOrFail(Customer.class, "choicesFirstName");
 
         facetFactory.process(ProcessMethodContext
                 .forTesting(Customer.class, FeatureType.PROPERTY, propertyAccessorMethod, methodRemover, facetedMethod));
@@ -233,8 +233,8 @@ extends FacetFactoryTestAbstract2 {
                 return null;
             }
         }
-        final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
-        final Method propertyAutoCompleteMethod = findMethod(Customer.class, "autoCompleteFirstName", new Class[]{String.class});
+        final Method propertyAccessorMethod = findMethodExactOrFail(Customer.class, "getFirstName");
+        final Method propertyAutoCompleteMethod = findMethodExactOrFail(Customer.class, "autoCompleteFirstName", new Class[]{String.class});
 
         facetFactory.process(ProcessMethodContext
                 .forTesting(Customer.class, FeatureType.PROPERTY, propertyAccessorMethod, methodRemover, facetedMethod));
@@ -262,8 +262,8 @@ extends FacetFactoryTestAbstract2 {
                 return null;
             }
         }
-        final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
-        final Method propertyDefaultMethod = findMethod(Customer.class, "defaultFirstName");
+        final Method propertyAccessorMethod = findMethodExactOrFail(Customer.class, "getFirstName");
+        final Method propertyDefaultMethod = findMethodExactOrFail(Customer.class, "defaultFirstName");
 
         facetFactory.process(ProcessMethodContext
                 .forTesting(Customer.class, FeatureType.PROPERTY, propertyAccessorMethod, methodRemover, facetedMethod));
@@ -291,8 +291,8 @@ extends FacetFactoryTestAbstract2 {
                 return null;
             }
         }
-        final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
-        final Method propertyValidateMethod = findMethod(Customer.class, "validateFirstName", new Class[] { String.class });
+        final Method propertyAccessorMethod = findMethodExactOrFail(Customer.class, "getFirstName");
+        final Method propertyValidateMethod = findMethodExactOrFail(Customer.class, "validateFirstName", new Class[] { String.class });
 
         facetFactory.process(ProcessMethodContext
                 .forTesting(Customer.class, FeatureType.PROPERTY, propertyAccessorMethod, methodRemover, facetedMethod));
@@ -320,8 +320,8 @@ extends FacetFactoryTestAbstract2 {
                 return "disabled";
             }
         }
-        final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
-        final Method propertyDisableMethod = findMethod(Customer.class, "disableFirstName", new Class[] {});
+        final Method propertyAccessorMethod = findMethodExactOrFail(Customer.class, "getFirstName");
+        final Method propertyDisableMethod = findMethodExactOrFail(Customer.class, "disableFirstName", new Class[] {});
 
         facetFactory.process(ProcessMethodContext
                 .forTesting(Customer.class, FeatureType.PROPERTY, propertyAccessorMethod, methodRemover, facetedMethod));
@@ -350,8 +350,8 @@ extends FacetFactoryTestAbstract2 {
                 return "disabled";
             }
         }
-        final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
-        final Method propertyDisableMethod = findMethod(Customer.class, "disableFirstName");
+        final Method propertyAccessorMethod = findMethodExactOrFail(Customer.class, "getFirstName");
+        final Method propertyDisableMethod = findMethodExactOrFail(Customer.class, "disableFirstName");
 
         facetFactory.process(ProcessMethodContext
                 .forTesting(Customer.class, FeatureType.PROPERTY, propertyAccessorMethod, methodRemover, facetedMethod));
@@ -379,8 +379,8 @@ extends FacetFactoryTestAbstract2 {
                 return true;
             }
         }
-        final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
-        final Method propertyHideMethod = findMethod(Customer.class, "hideFirstName", new Class[] {});
+        final Method propertyAccessorMethod = findMethodExactOrFail(Customer.class, "getFirstName");
+        final Method propertyHideMethod = findMethodExactOrFail(Customer.class, "hideFirstName", new Class[] {});
 
         facetFactory.process(ProcessMethodContext
                 .forTesting(Customer.class, FeatureType.PROPERTY, propertyAccessorMethod, methodRemover, facetedMethod));
@@ -408,8 +408,8 @@ extends FacetFactoryTestAbstract2 {
                 return true;
             }
         }
-        final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
-        final Method propertyHideMethod = findMethod(Customer.class, "hideFirstName");
+        final Method propertyAccessorMethod = findMethodExactOrFail(Customer.class, "getFirstName");
+        final Method propertyHideMethod = findMethodExactOrFail(Customer.class, "hideFirstName");
 
         facetFactory.process(ProcessMethodContext
                 .forTesting(Customer.class, FeatureType.PROPERTY, propertyAccessorMethod, methodRemover, facetedMethod));
@@ -436,7 +436,7 @@ extends FacetFactoryTestAbstract2 {
         class CustomerEx extends Customer {
         }
 
-        final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
+        final Method propertyAccessorMethod = findMethodExactOrFail(Customer.class, "getFirstName");
 
         facetFactory.process(ProcessMethodContext
                 .forTesting(CustomerEx.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
@@ -472,9 +472,9 @@ extends FacetFactoryTestAbstract2 {
             }
         }
 
-        final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
-        final Method propertyHideMethod = findMethod(CustomerEx.class, "hideFirstName");
-        final Method propertyDisableMethod = findMethod(CustomerEx.class, "disableFirstName");
+        final Method propertyAccessorMethod = findMethodExactOrFail(Customer.class, "getFirstName");
+        final Method propertyHideMethod = findMethodExactOrFail(CustomerEx.class, "hideFirstName");
+        final Method propertyDisableMethod = findMethodExactOrFail(CustomerEx.class, "disableFirstName");
 
         final ProcessMethodContext processMethodContext = ProcessMethodContext
                 .forTesting(CustomerEx.class, FeatureType.PROPERTY,

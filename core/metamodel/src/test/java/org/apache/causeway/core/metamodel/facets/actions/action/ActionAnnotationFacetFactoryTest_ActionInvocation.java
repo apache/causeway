@@ -76,7 +76,7 @@ extends FacetFactoryTestAbstract {
             public void someAction() {}
         }
 
-        final Method actionMethod = findMethod(Customer.class, "someAction");
+        final Method actionMethod = findMethodExactOrFail(Customer.class, "someAction");
 
         actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
             //when
@@ -157,7 +157,7 @@ extends FacetFactoryTestAbstract {
         class CustomerEx extends Customer {
         }
 
-        final Method actionMethod = findMethod(CustomerEx.class, "someAction", new Class[] { int.class, long.class });
+        final Method actionMethod = findMethodExactOrFail(CustomerEx.class, "someAction", new Class[] { int.class, long.class });
 
         final FacetedMethod facetHolderWithParms = FacetedMethod
                 .createForAction(getMetaModelContext(), CustomerEx.class, _MethodFacades.regular(actionMethod));
@@ -192,10 +192,10 @@ extends FacetFactoryTestAbstract {
             }
         }
 
-        final Method actionMethod = findMethod(CustomerEx.class, "someAction", new Class[] { int.class, long.class });
-        final Method choices0Method = findMethod(CustomerEx.class, "choices0SomeAction", new Class[] {});
-        final Method choices1Method = findMethod(CustomerEx.class, "choices1SomeAction", new Class[] {});
-        final Method disableMethod = findMethod(CustomerEx.class, "disableSomeAction", new Class[] {});
+        final Method actionMethod = findMethodExactOrFail(CustomerEx.class, "someAction", new Class[] { int.class, long.class });
+        final Method choices0Method = findMethodExactOrFail(CustomerEx.class, "choices0SomeAction", new Class[] {});
+        final Method choices1Method = findMethodExactOrFail(CustomerEx.class, "choices1SomeAction", new Class[] {});
+        final Method disableMethod = findMethodExactOrFail(CustomerEx.class, "disableSomeAction", new Class[] {});
 
         final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(getMetaModelContext(), CustomerEx.class,
                 _MethodFacades.regular(actionMethod));

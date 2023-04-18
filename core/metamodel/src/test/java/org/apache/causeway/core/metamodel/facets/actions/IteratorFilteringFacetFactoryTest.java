@@ -68,7 +68,7 @@ extends FacetFactoryTestAbstract {
             @SuppressWarnings("unused")
             public void someAction() {}
         }
-        final Method actionMethod = findMethod(Customer.class, "someAction");
+        final Method actionMethod = findMethodExactOrFail(Customer.class, "someAction");
         assertFalse(facetFactory.recognizes(actionMethod));
     }
 
@@ -80,7 +80,7 @@ extends FacetFactoryTestAbstract {
             @Override
             public Iterator<Customer> iterator() { return null; }
         }
-        final Method iteratorMethod = findMethod(Customer.class, "iterator");
+        final Method iteratorMethod = findMethodExactOrFail(Customer.class, "iterator");
         assertTrue(facetFactory.recognizes(iteratorMethod));
     }
 

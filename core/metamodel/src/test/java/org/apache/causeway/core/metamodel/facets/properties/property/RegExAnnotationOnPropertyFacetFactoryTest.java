@@ -63,7 +63,7 @@ extends FacetFactoryTestAbstract2 {
             @Pattern(regexp = "^A.*", flags = { Pattern.Flag.CASE_INSENSITIVE })
             public String getFirstName() { return null; }
         }
-        final Method method = findMethod(Customer.class, "getFirstName");
+        final Method method = findMethodExactOrFail(Customer.class, "getFirstName");
 
         processRegEx(facetFactory, ProcessMethodContext
                 .forTesting(Customer.class, null, method, methodRemover, facetedMethod));
@@ -83,7 +83,7 @@ extends FacetFactoryTestAbstract2 {
         class Customer {
             public int getNumberOfOrders() { return 0; }
         }
-        final Method method = findMethod(Customer.class, "getNumberOfOrders");
+        final Method method = findMethodExactOrFail(Customer.class, "getNumberOfOrders");
 
         processRegEx(facetFactory, ProcessMethodContext
                 .forTesting(Customer.class, null, method, methodRemover, facetedMethod));
