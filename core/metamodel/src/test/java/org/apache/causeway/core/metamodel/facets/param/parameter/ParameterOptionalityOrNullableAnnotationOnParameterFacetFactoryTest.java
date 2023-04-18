@@ -18,27 +18,24 @@
  */
 package org.apache.causeway.core.metamodel.facets.param.parameter;
 
-import java.lang.reflect.Method;
-
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.lang.Nullable;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessParameterContext;
-import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract2;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.causeway.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetForParameterAnnotation;
 import org.apache.causeway.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetInvertedByNullableAnnotationOnParameter;
 
 class ParameterOptionalityOrNullableAnnotationOnParameterFacetFactoryTest
-extends FacetFactoryTestAbstract2 {
+extends FacetFactoryTestAbstract {
 
     private ParameterAnnotationFacetFactory facetFactory;
 
@@ -47,72 +44,70 @@ extends FacetFactoryTestAbstract2 {
         facetFactory = new ParameterAnnotationFacetFactory(getMetaModelContext());
     }
 
-    public void testParameterAnnotationWithOptionalityPickedUpOnActionParameter() {
-
+    @Test
+    void parameterAnnotationWithOptionalityPickedUpOnActionParameter() {
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
-            public void someAction(@Parameter(optionality = Optionality.OPTIONAL) final String foo) {
-            }
+            public void someAction(
+                    @Parameter(optionality = Optionality.OPTIONAL)
+                    final String foo) {}
         }
-        final Method method = findMethodExactOrFail(Customer.class, "someAction", new Class[] { String.class });
+        parameterScenario(Customer.class, "someAction", 0, (processParameterContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+            //when
+            facetFactory.processParamsOptional(processParameterContext);
+            //then
+            final Facet facet = facetedMethodParameter.getFacet(MandatoryFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof MandatoryFacetForParameterAnnotation.Optional);
+        });
+            }
 
-        facetFactory.processParamsOptional(
-                ProcessParameterContext.forTesting(
-                        Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, method, null, facetedMethodParameter));
-
-        final Facet facet = facetedMethodParameter.getFacet(MandatoryFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof MandatoryFacetForParameterAnnotation.Optional);
+    @Test
+    void parameterAnnotationWithOptionalityIgnoredForPrimitiveOnActionParameter() {
+        @SuppressWarnings("unused")
+        class Customer {
+            public void someAction(
+                    @Parameter(optionality = Optionality.OPTIONAL)
+                    final int foo) {}
+        }
+        parameterScenario(Customer.class, "someAction", 0, (processParameterContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+            //when
+            facetFactory.processParamsOptional(processParameterContext);
+            //then
+            assertNull(facetedMethod.getFacet(MandatoryFacet.class));
+        });
     }
 
-    public void testParameterAnnotationWithOptionalityIgnoredForPrimitiveOnActionParameter() {
-
+    @Test
+    void nullableAnnotationPickedUpOnActionParameter() {
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
-            public void someAction(@Parameter(optionality = Optionality.OPTIONAL) final int foo) {
-            }
+            public void someAction(
+                    final @Nullable String foo) {}
         }
-        final Method method = findMethodExactOrFail(Customer.class, "someAction", new Class[] { int.class });
-
-        facetFactory.processParamsOptional(
-                ProcessParameterContext.forTesting(
-                        Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, method, null, facetedMethodParameter));
-
-        assertNull(facetedMethod.getFacet(MandatoryFacet.class));
+        parameterScenario(Customer.class, "someAction", 0, (processParameterContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+            //when
+            facetFactory.processParamsOptional(processParameterContext);
+            //then
+            final Facet facet = facetedMethodParameter.getFacet(MandatoryFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof MandatoryFacetInvertedByNullableAnnotationOnParameter);
+        });
     }
 
-    public void testNullableAnnotationPickedUpOnActionParameter() {
-
+    @Test
+    void nullableAnnotationIgnoredForPrimitiveOnActionParameter() {
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
-            public void someAction(final @Nullable String foo) {
-            }
+            public void someAction(
+                    final @Nullable int foo) {}
         }
-        final Method method = findMethodExactOrFail(Customer.class, "someAction", new Class[] { String.class });
-
-        facetFactory.processParamsOptional(
-                ProcessParameterContext.forTesting(
-                        Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, method, null, facetedMethodParameter));
-
-        final Facet facet = facetedMethodParameter.getFacet(MandatoryFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof MandatoryFacetInvertedByNullableAnnotationOnParameter);
-    }
-
-    public void testNullableAnnotationIgnoredForPrimitiveOnActionParameter() {
-
-        class Customer {
-            @SuppressWarnings("unused")
-            public void someAction(final @Nullable int foo) {
-            }
-        }
-        final Method method = findMethodExactOrFail(Customer.class, "someAction", new Class[] { int.class });
-
-        facetFactory.processParamsOptional(
-                ProcessParameterContext.forTesting(
-                        Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, method, null, facetedMethodParameter));
-
-        assertNull(facetedMethod.getFacet(MandatoryFacet.class));
+        parameterScenario(Customer.class, "someAction", 0, (processParameterContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+            //when
+            facetFactory.processParamsOptional(processParameterContext);
+            //then
+            assertNull(facetedMethod.getFacet(MandatoryFacet.class));
+        });
     }
 
 }

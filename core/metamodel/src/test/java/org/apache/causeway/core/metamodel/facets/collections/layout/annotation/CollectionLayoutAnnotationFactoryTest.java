@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.collections.layout.annotation;
 
-import java.lang.reflect.Method;
 import java.util.SortedSet;
 
 import org.junit.jupiter.api.Test;
@@ -36,8 +35,7 @@ import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract2;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
@@ -48,50 +46,43 @@ import org.apache.causeway.core.metamodel.facets.collections.layout.MemberNamedF
 import lombok.val;
 
 class CollectionLayoutAnnotationFactoryTest
-extends FacetFactoryTestAbstract2 {
+extends FacetFactoryTestAbstract {
 
     @Test
-    public void testCollectionLayoutAnnotation_named() {
+    void collectionLayoutAnnotation_named() {
         val facetFactory = new CollectionLayoutFacetFactory(getMetaModelContext());
-
         class Customer {
             @CollectionLayout(named = "1st names")
-            public SortedSet<String> getFirstNames() {
-                return _Sets.newTreeSet();
-            }
+            public SortedSet<String> getFirstNames() { return _Sets.newTreeSet(); }
         }
-        final Method method = findMethodExactOrFail(Customer.class, "getFirstNames");
-
-        facetFactory.process(ProcessMethodContext
-                .forTesting(Customer.class, null, method, methodRemover, facetedMethod));
-
-        val facet = facetedMethod.getFacet(MemberNamedFacet.class);
-        assertThat(facet, is(notNullValue()));
-        assertThat(facet, is(instanceOf(MemberNamedFacetForCollectionLayoutAnnotation.class)));
-        assertThat(((HasStaticText)facet).text(), is(equalTo("1st names")));
+        collectionScenario(Customer.class, "firstNames", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            facetFactory.process(processMethodContext);
+            // then
+            val facet = facetedMethod.getFacet(MemberNamedFacet.class);
+            assertThat(facet, is(notNullValue()));
+            assertThat(facet, is(instanceOf(MemberNamedFacetForCollectionLayoutAnnotation.class)));
+            assertThat(((HasStaticText)facet).text(), is(equalTo("1st names")));
+        });
     }
 
     @Test
-    void testCollectionLayoutAnnotation_hidden() {
+    void collectionLayoutAnnotation_hidden() {
         val facetFactory = new CollectionLayoutFacetFactory(getMetaModelContext());
-
         class Customer {
             @CollectionLayout(hidden = Where.OBJECT_FORMS)
-            public SortedSet<String> getFirstNames() {
-                return _Sets.newTreeSet();
-            }
+            public SortedSet<String> getFirstNames() { return _Sets.newTreeSet(); }
         }
-        final Method method = findMethodExactOrFail(Customer.class, "getFirstNames");
-
-        facetFactory.process(ProcessMethodContext
-                .forTesting(Customer.class, null, method, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof HiddenFacetForCollectionLayoutAnnotation);
-        final HiddenFacetForCollectionLayoutAnnotation collLayoutFacetAnnotation = (HiddenFacetForCollectionLayoutAnnotation) facet;
-        assertEquals(Where.OBJECT_FORMS, collLayoutFacetAnnotation.where());
-
+        collectionScenario(Customer.class, "firstNames", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            facetFactory.process(processMethodContext);
+            // then
+            final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof HiddenFacetForCollectionLayoutAnnotation);
+            final HiddenFacetForCollectionLayoutAnnotation collLayoutFacetAnnotation = (HiddenFacetForCollectionLayoutAnnotation) facet;
+            assertEquals(Where.OBJECT_FORMS, collLayoutFacetAnnotation.where());
+        });
     }
 
 }
