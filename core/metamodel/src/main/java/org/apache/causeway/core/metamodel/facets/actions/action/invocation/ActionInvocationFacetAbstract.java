@@ -18,20 +18,46 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.action.invocation;
 
+import java.util.function.BiConsumer;
+
+import org.apache.causeway.applib.events.domain.ActionDomainEvent;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
+
+import lombok.NonNull;
 
 public abstract class ActionInvocationFacetAbstract
-extends FacetAbstract
-implements ActionInvocationFacet {
+extends DomainEventFacetAbstract<ActionDomainEvent<?>>
+implements ActionInvocationFacet, ImperativeFacet {
 
     private static final Class<? extends Facet> type() {
         return ActionInvocationFacet.class;
     }
 
-    public ActionInvocationFacetAbstract(final FacetHolder holder) {
-        super(type(), holder);
+    protected ActionInvocationFacetAbstract(
+            final Class<? extends ActionDomainEvent<?>> eventType,
+            final EventTypeOrigin eventTypeOrigin,
+            final FacetHolder holder) {
+        super(type(), eventType, eventTypeOrigin, holder);
+    }
+
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        ImperativeFacet.visitAttributes(this, visitor);
+        visitor.accept("declaringType", getDeclaringType());
+        visitor.accept("returnType", getReturnType());
+        //visitor.accept("eventType", getEventType()); done already in super
+        //visitor.accept("eventTypeOrigin", getEventTypeOrigin()); done already in super
+    }
+
+    @Override
+    public boolean semanticEquals(final @NonNull Facet other) {
+        return other instanceof ActionInvocationFacetAbstract
+                ? this.getEventType() == ((ActionInvocationFacetAbstract)other).getEventType()
+                : false;
     }
 
 }

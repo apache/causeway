@@ -27,10 +27,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.id.LogicalType;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 
 class NamedAnnotationFacetFactoryTest
-extends AbstractFacetFactoryJupiterTestCase {
+extends FacetFactoryTestAbstract {
 
     @Test
     void logicalTypeNameAnnotationPickedUpOnClass() {

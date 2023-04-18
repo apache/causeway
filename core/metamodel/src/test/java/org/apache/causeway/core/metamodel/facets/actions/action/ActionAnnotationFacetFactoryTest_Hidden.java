@@ -53,22 +53,22 @@ extends ActionAnnotationFacetFactoryTest {
         }
 
         // given
-        val cls = Customer.class;
-        actionMethod = findMethod(cls, "someAction");
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
 
-        // when
-        val processMethodContext = ProcessMethodContext
-                .forTesting(cls, null, actionMethod, mockMethodRemover, facetedMethod);
-        processHidden(facetFactory, processMethodContext);
+            // when
+            processHidden(facetFactory, processMethodContext);
 
-        // then
-        val hiddenFacet = facetedMethod.getFacet(HiddenFacet.class);
-        assertNotNull(hiddenFacet);
-        assertThat(hiddenFacet.where(), is(Where.REFERENCES_PARENT));
+            // then
+            val hiddenFacet = facetedMethod.getFacet(HiddenFacet.class);
+            assertNotNull(hiddenFacet);
+            assertThat(hiddenFacet.where(), is(Where.REFERENCES_PARENT));
 
-        val hiddenFacetImpl = facetedMethod.getFacet(HiddenFacet.class);
-        assertNotNull(hiddenFacetImpl);
-        assertTrue(hiddenFacet == hiddenFacetImpl);
+            val hiddenFacetImpl = facetedMethod.getFacet(HiddenFacet.class);
+            assertNotNull(hiddenFacetImpl);
+            assertTrue(hiddenFacet == hiddenFacetImpl);
+
+        });
+
     }
 
 }

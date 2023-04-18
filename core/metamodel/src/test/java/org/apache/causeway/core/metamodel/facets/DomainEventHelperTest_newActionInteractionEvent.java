@@ -44,7 +44,7 @@ class DomainEventHelperTest_newActionInteractionEvent {
         final SomeDomainObject sdo = new SomeDomainObject();
         final Identifier identifier = Identifier.actionIdentifier(LogicalType.fqcn(SomeDomainObject.class), "foo", new Class[]{int.class, String.class});
 
-        Utils.domainEventHelper();
+        _Utils.domainEventHelper();
         final ActionDomainEvent<Object> ev = DomainEventHelper.newActionDomainEvent(
                 ActionDomainEvent.Default.class, identifier, sdo, new Object[]{1, "bar"});
         assertSame(ev.getSource(), sdo);
@@ -59,7 +59,7 @@ class DomainEventHelperTest_newActionInteractionEvent {
         final SomeDomainObject sdo = new SomeDomainObject();
         final Identifier identifier = Identifier.actionIdentifier(LogicalType.fqcn(SomeDomainObject.class), "foo", new Class[]{int.class, String.class});
 
-        Utils.domainEventHelper();
+        _Utils.domainEventHelper();
         final ActionDomainEvent<Object> ev = DomainEventHelper.newActionDomainEvent(
                 ActionDomainEvent.Default.class, identifier, sdo, new Object[]{1, "bar"});
         assertSame(ev.getSource(), sdo);
@@ -74,7 +74,7 @@ class DomainEventHelperTest_newActionInteractionEvent {
         final SomeDomainObject sdo = new SomeDomainObject();
         final Identifier identifier = Identifier.actionIdentifier(LogicalType.fqcn(SomeDomainObject.class), "foo", new Class[]{int.class, String.class});
 
-        Utils.domainEventHelper();
+        _Utils.domainEventHelper();
         final ActionDomainEvent<SomeDomainObject> ev = DomainEventHelper.newActionDomainEvent(
                 SomeDomainObjectFooInvokedDomainEvent.class, identifier, sdo, new Object[]{1, "bar"});
         assertSame(ev.getSource(), sdo);

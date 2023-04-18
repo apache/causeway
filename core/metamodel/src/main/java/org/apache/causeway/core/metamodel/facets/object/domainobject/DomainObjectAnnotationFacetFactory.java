@@ -34,9 +34,6 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.Value;
-import org.apache.causeway.applib.events.domain.ActionDomainEvent;
-import org.apache.causeway.applib.events.domain.CollectionDomainEvent;
-import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
 import org.apache.causeway.applib.events.lifecycle.ObjectCreatedEvent;
 import org.apache.causeway.applib.events.lifecycle.ObjectLoadedEvent;
 import org.apache.causeway.applib.events.lifecycle.ObjectPersistedEvent;
@@ -528,9 +525,8 @@ implements
 
         domainObjectIfAny
         .map(DomainObject::actionDomainEvent)
-        .filter(domainEvent -> domainEvent != ActionDomainEvent.Default.class)
-        .map(domainEvent -> new ActionDomainEventDefaultFacetForDomainObjectAnnotation(
-                holder, domainEvent))
+        .flatMap(domainEvent -> ActionDomainEventDefaultFacetForDomainObjectAnnotation
+                .create(domainEvent, holder))
         .ifPresent(super::addFacet);
 
     }
@@ -541,9 +537,8 @@ implements
 
         domainObjectIfAny
         .map(DomainObject::propertyDomainEvent)
-        .filter(domainEvent -> domainEvent != PropertyDomainEvent.Default.class)
-        .map(domainEvent -> new PropertyDomainEventDefaultFacetForDomainObjectAnnotation(
-                holder, domainEvent))
+        .flatMap(domainEvent -> PropertyDomainEventDefaultFacetForDomainObjectAnnotation
+                .create(domainEvent, holder))
         .ifPresent(super::addFacet);
     }
 
@@ -553,9 +548,8 @@ implements
 
         domainObjectIfAny
         .map(DomainObject::collectionDomainEvent)
-        .filter(domainEvent -> domainEvent != CollectionDomainEvent.Default.class)
-        .map(domainEvent -> new CollectionDomainEventDefaultFacetForDomainObjectAnnotation(
-                holder, domainEvent))
+        .flatMap(domainEvent -> CollectionDomainEventDefaultFacetForDomainObjectAnnotation
+                .create(domainEvent, holder))
         .ifPresent(super::addFacet);
     }
 

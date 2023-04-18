@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.action;
 
-import java.lang.reflect.Method;
-
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -51,15 +49,11 @@ extends ActionAnnotationFacetFactoryTest {
 
     @Test
     void given_HasInteractionId_thenIgnored() {
-
-        final Method actionMethod = findMethod(SomeHasInteractionId.class, "someAction");
-
-        processExecutionPublishing(facetFactory, ProcessMethodContext
-                .forTesting(SomeHasInteractionId.class, null, actionMethod, mockMethodRemover, facetedMethod));
-
-        assertFalse(ExecutionPublishingFacet.isPublishingEnabled(facetedMethod));
-
-        expectNoMethodsRemoved();
+        actionScenario(SomeHasInteractionId.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            processExecutionPublishing(facetFactory, processMethodContext);
+            assertFalse(ExecutionPublishingFacet.isPublishingEnabled(facetedMethod));
+            assertNoMethodsRemoved();
+        });
     }
 
     @Test
@@ -67,17 +61,13 @@ extends ActionAnnotationFacetFactoryTest {
 
         // given
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.IGNORE_QUERY_ONLY);
-        final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
-
-        facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
-
-        // when
-        processExecutionPublishing(facetFactory, ProcessMethodContext
-                .forTesting(ActionAnnotationFacetFactoryTest.Customer.class, null,
-                actionMethod, mockMethodRemover, facetedMethod));
-
-        // then
-        assertFalse(ExecutionPublishingFacet.isPublishingEnabled(facetedMethod));
+        actionScenario(ActionAnnotationFacetFactoryTest.Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
+            // when
+            processExecutionPublishing(facetFactory, processMethodContext);
+            // then
+            assertFalse(ExecutionPublishingFacet.isPublishingEnabled(facetedMethod));
+        });
     }
 
     @Test
@@ -85,20 +75,15 @@ extends ActionAnnotationFacetFactoryTest {
 
         // given
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.IGNORE_QUERY_ONLY);
-        final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
-
-        facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.IDEMPOTENT, facetedMethod) {});
-
-        // when
-        processExecutionPublishing(facetFactory, ProcessMethodContext
-                .forTesting(ActionAnnotationFacetFactoryTest.Customer.class, null,
-                actionMethod, mockMethodRemover, facetedMethod));
-
-        // then
-        final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
-        assertNotNull(facet);
-        final ExecutionPublishingActionFacetFromConfiguration facetImpl = (ExecutionPublishingActionFacetFromConfiguration) facet;
-        _Blackhole.consume(facetImpl);
+        actionScenario(ActionAnnotationFacetFactoryTest.Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.IDEMPOTENT, facetedMethod) {});
+            // when
+            processExecutionPublishing(facetFactory, processMethodContext);
+            // then
+            final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof ExecutionPublishingActionFacetFromConfiguration);
+        });
     }
 
     @Test
@@ -106,14 +91,11 @@ extends ActionAnnotationFacetFactoryTest {
 
         // given
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.IGNORE_QUERY_ONLY);
-        final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
-
-        // when
-        assertThrows(IllegalStateException.class, ()->
-        processExecutionPublishing(facetFactory, ProcessMethodContext
-                .forTesting(ActionAnnotationFacetFactoryTest.Customer.class, null,
-                actionMethod, mockMethodRemover, facetedMethod)));
-
+        actionScenario(ActionAnnotationFacetFactoryTest.Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            assertThrows(IllegalStateException.class, ()->
+                processExecutionPublishing(facetFactory, processMethodContext));
+        });
     }
 
     @Test
@@ -121,37 +103,28 @@ extends ActionAnnotationFacetFactoryTest {
 
         // given
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.NONE);
-        final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
-
-        // when
-        processExecutionPublishing(facetFactory, ProcessMethodContext
-                .forTesting(ActionAnnotationFacetFactoryTest.Customer.class, null,
-                actionMethod, mockMethodRemover, facetedMethod));
-
-        // then
-        assertFalse(ExecutionPublishingFacet.isPublishingEnabled(facetedMethod));
-
-        expectNoMethodsRemoved();
-
+        actionScenario(ActionAnnotationFacetFactoryTest.Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            processExecutionPublishing(facetFactory, processMethodContext);
+            // then
+            assertFalse(ExecutionPublishingFacet.isPublishingEnabled(facetedMethod));
+            assertNoMethodsRemoved();
+        });
     }
 
     @Test
     void given_noAnnotation_and_configurationSetToAll_thenFacetAdded() {
 
         // given
-        final Method actionMethod = findMethod(ActionAnnotationFacetFactoryTest.Customer.class, "someAction");
-
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.ALL);
-
-        // when
-        processExecutionPublishing(facetFactory, ProcessMethodContext
-                .forTesting(ActionAnnotationFacetFactoryTest.Customer.class, null,
-                actionMethod, mockMethodRemover, facetedMethod));
-
-        // then
-        final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof ExecutionPublishingActionFacetFromConfiguration);
+        actionScenario(ActionAnnotationFacetFactoryTest.Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            processExecutionPublishing(facetFactory, processMethodContext);
+            // then
+            final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof ExecutionPublishingActionFacetFromConfiguration);
+        });
     }
 
     @Test
@@ -159,21 +132,18 @@ extends ActionAnnotationFacetFactoryTest {
 
         class Customer {
             @Action(executionPublishing = org.apache.causeway.applib.annotation.Publishing.AS_CONFIGURED)
-            public void someAction() {
-            }
+            public void someAction() {}
         }
 
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.IGNORE_QUERY_ONLY);
-        final Method actionMethod = findMethod(Customer.class, "someAction");
-
-        facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
-
-        processExecutionPublishing(facetFactory, ProcessMethodContext
-                .forTesting(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
-
-        assertFalse(ExecutionPublishingFacet.isPublishingEnabled(facetedMethod));
-
-        expectNoMethodsRemoved();
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
+            // when
+            processExecutionPublishing(facetFactory, processMethodContext);
+            // then
+            assertFalse(ExecutionPublishingFacet.isPublishingEnabled(facetedMethod));
+            assertNoMethodsRemoved();
+        });
     }
 
     @Test
@@ -181,29 +151,22 @@ extends ActionAnnotationFacetFactoryTest {
 
         // given
         class Customer {
-            @Action(
-                    executionPublishing = org.apache.causeway.applib.annotation.Publishing.AS_CONFIGURED
-                    )
-            public void someAction() {
-            }
+            @Action(executionPublishing = org.apache.causeway.applib.annotation.Publishing.AS_CONFIGURED)
+            public void someAction() {}
         }
 
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.IGNORE_QUERY_ONLY);
-        final Method actionMethod = findMethod(Customer.class, "someAction");
-
-        facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.IDEMPOTENT, facetedMethod) {});
-
-        // when
-        processExecutionPublishing(facetFactory, ProcessMethodContext
-                .forTesting(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
-
-        // then
-        final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
-        assertNotNull(facet);
-        final ExecutionPublishingActionFacetForActionAnnotation facetImpl = (ExecutionPublishingActionFacetForActionAnnotation) facet;
-        _Blackhole.consume(facetImpl);
-
-        expectNoMethodsRemoved();
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.IDEMPOTENT, facetedMethod) {});
+            // when
+            processExecutionPublishing(facetFactory, processMethodContext);
+            // then
+            final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
+            assertNotNull(facet);
+            final ExecutionPublishingActionFacetForActionAnnotation facetImpl = (ExecutionPublishingActionFacetForActionAnnotation) facet;
+            _Blackhole.consume(facetImpl);
+            assertNoMethodsRemoved();
+        });
     }
 
     @Test
@@ -211,16 +174,15 @@ extends ActionAnnotationFacetFactoryTest {
 
         class Customer {
             @Action(executionPublishing = org.apache.causeway.applib.annotation.Publishing.AS_CONFIGURED)
-            public void someAction() {
-            }
+            public void someAction() { }
         }
 
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.IGNORE_QUERY_ONLY);
-        final Method actionMethod = findMethod(Customer.class, "someAction");
-
-        assertThrows(IllegalStateException.class, ()->
-            processExecutionPublishing(facetFactory, ProcessMethodContext
-                    .forTesting(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod)));
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            assertThrows(IllegalStateException.class, ()->
+                processExecutionPublishing(facetFactory, processMethodContext));
+        });
     }
 
     @Test
@@ -228,20 +190,17 @@ extends ActionAnnotationFacetFactoryTest {
 
         class Customer {
             @Action(executionPublishing = org.apache.causeway.applib.annotation.Publishing.AS_CONFIGURED)
-            public void someAction() {
-            }
+            public void someAction() {}
         }
 
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.NONE);
-        final Method actionMethod = findMethod(Customer.class, "someAction");
-
-        processExecutionPublishing(facetFactory, ProcessMethodContext
-                .forTesting(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
-
-        assertFalse(ExecutionPublishingFacet.isPublishingEnabled(facetedMethod));
-
-        expectNoMethodsRemoved();
-
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            processExecutionPublishing(facetFactory, processMethodContext);
+            // then
+            assertFalse(ExecutionPublishingFacet.isPublishingEnabled(facetedMethod));
+            assertNoMethodsRemoved();
+        });
     }
 
     @Test
@@ -249,26 +208,19 @@ extends ActionAnnotationFacetFactoryTest {
 
         // given
         class Customer {
-            @Action(
-                    executionPublishing = org.apache.causeway.applib.annotation.Publishing.AS_CONFIGURED
-                    )
-            public void someAction() {
-            }
+            @Action(executionPublishing = org.apache.causeway.applib.annotation.Publishing.AS_CONFIGURED)
+            public void someAction() {}
         }
-        final Method actionMethod = findMethod(Customer.class, "someAction");
-
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.ALL);
-
-        // when
-        processExecutionPublishing(facetFactory, ProcessMethodContext
-                .forTesting(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
-
-        // then
-        final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof ExecutionPublishingActionFacetForActionAnnotation);
-
-        expectNoMethodsRemoved();
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            processExecutionPublishing(facetFactory, processMethodContext);
+            // then
+            final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof ExecutionPublishingActionFacetForActionAnnotation);
+            assertNoMethodsRemoved();
+        });
     }
 
     @Test
@@ -276,25 +228,19 @@ extends ActionAnnotationFacetFactoryTest {
 
         // given
         class Customer {
-            @Action(
-                    executionPublishing = org.apache.causeway.applib.annotation.Publishing.ENABLED
-                    )
-            public void someAction() {
-            }
+            @Action(executionPublishing = org.apache.causeway.applib.annotation.Publishing.ENABLED)
+            public void someAction() {}
         }
-        final Method actionMethod = findMethod(Customer.class, "someAction");
-
         // even though configuration is disabled
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.NONE);
-
-        // when
-        processExecutionPublishing(facetFactory, ProcessMethodContext
-                .forTesting(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
-
-        // then
-        final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof ExecutionPublishingActionFacetForActionAnnotation);
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            processExecutionPublishing(facetFactory, processMethodContext);
+            // then
+            final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof ExecutionPublishingActionFacetForActionAnnotation);
+        });
     }
 
     @Test
@@ -302,23 +248,17 @@ extends ActionAnnotationFacetFactoryTest {
 
         // given
         class Customer {
-            @Action(
-                    executionPublishing = org.apache.causeway.applib.annotation.Publishing.DISABLED
-                    )
-            public void someAction() {
-            }
+            @Action(executionPublishing = org.apache.causeway.applib.annotation.Publishing.DISABLED)
+            public void someAction() {}
         }
-        final Method actionMethod = findMethod(Customer.class, "someAction");
-
         // even though configuration is disabled
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.NONE);
-
-        // when
-        processExecutionPublishing(facetFactory, ProcessMethodContext
-                .forTesting(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
-
-        // then
-        assertFalse(ExecutionPublishingFacet.isPublishingEnabled(facetedMethod));
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            processExecutionPublishing(facetFactory, processMethodContext);
+            // then
+            assertFalse(ExecutionPublishingFacet.isPublishingEnabled(facetedMethod));
+        });
     }
 
 }

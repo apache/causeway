@@ -18,22 +18,24 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.action;
 
-import java.lang.reflect.Method;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetFallbackToNonIdempotent;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 
 import lombok.val;
 
 class ActionSemanticsFacetFallbackToNonIdempotentFactoryTest
-extends AbstractFacetFactoryTest {
+extends FacetFactoryTestAbstract {
 
     private ActionAnnotationFacetFactory facetFactory;
 
@@ -43,35 +45,32 @@ extends AbstractFacetFactoryTest {
         facetFactory.processSemantics(processMethodContext, actionIfAny);
     }
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        facetFactory = new ActionAnnotationFacetFactory(metaModelContext);
+    @BeforeEach
+    protected void setUp() {
+        facetFactory = new ActionAnnotationFacetFactory(getMetaModelContext());
     }
 
-    @Override
-    protected void tearDown() throws Exception {
+    @AfterEach
+    protected void tearDown() {
         facetFactory = null;
-        super.tearDown();
     }
 
-    public void testNoAnnotationPickedUp() {
+    @Test
+    void noAnnotationPickedUp() {
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
-            public void someAction() {
-            }
+            public void someAction() {}
         }
-        final Method actionMethod = findMethod(Customer.class, "someAction");
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+            //when
+            processSemantics(facetFactory, processMethodContext);
+            //then
+            final Facet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof ActionSemanticsFacetFallbackToNonIdempotent);
 
-        processSemantics(facetFactory, ProcessMethodContext
-                .forTesting(Customer.class, null, actionMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof ActionSemanticsFacetFallbackToNonIdempotent);
-
-        assertNoMethodsRemoved();
+            assertNoMethodsRemoved();
+        });
     }
 
 }

@@ -25,7 +25,6 @@ import javax.validation.constraints.Pattern;
 
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -35,7 +34,6 @@ import org.apache.causeway.core.metamodel.facets.actions.contributing.Contributi
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingPropertyFacetForPropertyAnnotation;
-import org.apache.causeway.core.metamodel.facets.object.domainobject.domainevents.PropertyDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.causeway.core.metamodel.facets.properties.projection.ProjectingFacetFromPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.disabled.DisabledFacetForPropertyAnnotation;
@@ -45,23 +43,17 @@ import org.apache.causeway.core.metamodel.facets.properties.property.hidden.Hidd
 import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.MandatoryFacetInvertedByNullableAnnotationOnProperty;
 import org.apache.causeway.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForPropertyAnnotation;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromDefault;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromPropertyAnnotation;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetDefault;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetForPropertyAnnotation;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromDefault;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromPropertyAnnotation;
+import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEvent;
+import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet;
+import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEvent;
 import org.apache.causeway.core.metamodel.facets.properties.property.mustsatisfy.MustSatisfySpecificationFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.regex.RegExFacetForPatternAnnotationOnProperty;
 import org.apache.causeway.core.metamodel.facets.properties.property.regex.RegExFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.snapshot.SnapshotExcludeFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorForAmbiguousMixinAnnotations;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorForConflictingOptionality;
-import org.apache.causeway.core.metamodel.util.EventUtil;
 
 import lombok.val;
 
@@ -136,76 +128,35 @@ extends FacetFactoryAbstract {
         //
 
         // search for @Property(domainEvent=...), else use default event type
-        val propertyDomainEventFacet = propertyIfAny
-                .map(Property::domainEvent)
-                .filter(domainEvent -> domainEvent != PropertyDomainEvent.Default.class)
-                .map(domainEvent -> (PropertyDomainEventFacetAbstract) new PropertyDomainEventFacetForPropertyAnnotation(
-                        defaultFromDomainObjectIfRequired(typeSpec, domainEvent), getterFacet, holder))
-                .orElse(new PropertyDomainEventFacetDefault(
-                        defaultFromDomainObjectIfRequired(typeSpec, PropertyDomainEvent.Default.class), getterFacet,
-                        holder));
+        PropertyDomainEventFacet
+        .createRegular(propertyIfAny, typeSpec, getterFacet, holder)
+        .ifPresent(propertyDomainEventFacet->{
 
-        if(EventUtil.eventTypeIsPostable(
-                propertyDomainEventFacet.getEventType(),
-                PropertyDomainEvent.Noop.class,
-                PropertyDomainEvent.Default.class,
-                getConfiguration().getApplib().getAnnotation().getProperty().getDomainEvent().isPostForDefault()
-                )) {
             addFacet(propertyDomainEventFacet);
-        }
+
+            var eventType = propertyDomainEventFacet.getEventType();
+            var eventTypeOrigin = propertyDomainEventFacet.getEventTypeOrigin();
+
+            //
+            // if the property is mutable, then replace the current setter and clear facets with equivalents that
+            // emit the appropriate domain event and then delegate onto the underlying
+            //
+
+            holder.lookupFacet(PropertySetterFacet.class)
+            .ifPresent(setterFacet->
+                    //TODO[CAUSEWAY-3409] we don't install those for the mixin case
+                    // the current setter facet will end up as the underlying facet
+                    addFacet(new PropertySetterFacetForDomainEvent(
+                            eventType, eventTypeOrigin, getterFacet, setterFacet, holder)));
 
 
-        //
-        // if the property is mutable, then replace the current setter and clear facets with equivalents that
-        // emit the appropriate domain event and then delegate onto the underlying
-        //
-
-        final PropertySetterFacet setterFacet = holder.getFacet(PropertySetterFacet.class);
-        if(setterFacet != null) {
-            // the current setter facet will end up as the underlying facet
-            final PropertySetterFacet replacementFacet;
-
-            if(propertyDomainEventFacet instanceof PropertyDomainEventFacetForPropertyAnnotation) {
-                replacementFacet = new PropertySetterFacetForDomainEventFromPropertyAnnotation(
-                        propertyDomainEventFacet.getEventType(), getterFacet, setterFacet, propertyDomainEventFacet, holder);
-            } else
-                // default
-            {
-                replacementFacet = new PropertySetterFacetForDomainEventFromDefault(
-                        propertyDomainEventFacet.getEventType(), getterFacet, setterFacet, propertyDomainEventFacet, holder);
-            }
-            addFacet(replacementFacet);
-        }
-
-        final PropertyClearFacet clearFacet = holder.getFacet(PropertyClearFacet.class);
-        if(clearFacet != null) {
-            // the current clear facet will end up as the underlying facet
-            final PropertyClearFacet replacementFacet;
-
-            if(propertyDomainEventFacet instanceof PropertyDomainEventFacetForPropertyAnnotation) {
-                replacementFacet = new PropertyClearFacetForDomainEventFromPropertyAnnotation(
-                        propertyDomainEventFacet.getEventType(), getterFacet, clearFacet, propertyDomainEventFacet, holder);
-            } else
-                // default
-            {
-                replacementFacet = new PropertyClearFacetForDomainEventFromDefault(
-                        propertyDomainEventFacet.getEventType(), getterFacet, clearFacet, propertyDomainEventFacet, holder);
-            }
-            addFacet(replacementFacet);
-        }
-    }
-
-    public static Class<? extends PropertyDomainEvent<?,?>> defaultFromDomainObjectIfRequired(
-            final ObjectSpecification typeSpec,
-            final Class<? extends PropertyDomainEvent<?,?>> propertyDomainEventType) {
-        if (propertyDomainEventType == PropertyDomainEvent.Default.class) {
-            final PropertyDomainEventDefaultFacetForDomainObjectAnnotation typeFromDomainObject =
-                    typeSpec.getFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class);
-            if (typeFromDomainObject != null) {
-                return typeFromDomainObject.getEventType();
-            }
-        }
-        return propertyDomainEventType;
+            holder.lookupFacet(PropertyClearFacet.class)
+            .ifPresent(clearFacet->
+                    //TODO[CAUSEWAY-3409] we don't install those for the mixin case
+                    // the current clear facet will end up as the underlying facet
+                    addFacet(new PropertyClearFacetForDomainEvent(
+                            eventType, eventTypeOrigin, getterFacet, clearFacet, holder)));
+        });
     }
 
     void processHidden(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {

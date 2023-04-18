@@ -18,42 +18,40 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.callback;
 
+import org.junit.jupiter.api.Test;
+
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.CallbackMethod;
 import org.apache.causeway.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
 
-public class PersistedCallbackFacetFactoryTest
+class PersistedCallbackFacetFactoryTest
 extends CallbackFacetFactoryTestAbstract {
 
-    public void testPersistedLifecycleMethodPickedUpOn() {
+    @Test
+    void persistedLifecycleMethodPickedUpOn() {
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
-            public void persisted() {
-            }
+            public void persisted() {}
         }
         assertPicksUp(1, facetFactory, Customer.class, CallbackMethod.PERSISTED, PersistedCallbackFacet.class);
     }
 
-    public void testSavedLifecycleMethodPickedUpOn() {
+    @Test
+    void savedLifecycleMethodPickedUpOn() {
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
-            public void saved() {
-            }
+            public void saved() {}
         }
         assertPicksUp(1, facetFactory, Customer.class, CallbackMethod.PERSISTED, PersistedCallbackFacet.class);
     }
 
-    public void testSavedAndPersistedLifecycleMethodPickedUpOn() {
+    @Test
+    void savedAndPersistedLifecycleMethodPickedUpOn() {
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
-            public void saved() {
-            }
-
-            @SuppressWarnings("unused")
-            public void persisted() {
-            }
+            public void saved() {}
+            public void persisted() {}
         }
         assertPicksUp(2, facetFactory, Customer.class, CallbackMethod.PERSISTED, PersistedCallbackFacet.class);
     }
-
 
 }

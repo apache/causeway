@@ -18,39 +18,18 @@
  */
 package org.apache.causeway.core.metamodel.postprocessors.members;
 
-import java.lang.reflect.Method;
-
 import javax.inject.Inject;
 
-import org.apache.causeway.applib.annotation.Collection;
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.events.domain.ActionDomainEvent;
-import org.apache.causeway.applib.events.domain.CollectionDomainEvent;
-import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
-import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
-import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.collections.collection.CollectionAnnotationFacetFactory;
 import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacet;
-import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetForCollectionAnnotation;
-import org.apache.causeway.core.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
-import org.apache.causeway.core.metamodel.facets.object.domainobject.domainevents.CollectionDomainEventDefaultFacetForDomainObjectAnnotation;
-import org.apache.causeway.core.metamodel.facets.object.domainobject.domainevents.PropertyDomainEventDefaultFacetForDomainObjectAnnotation;
-import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.causeway.core.metamodel.facets.properties.property.PropertyAnnotationFacetFactory;
 import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.causeway.core.metamodel.specloader.specimpl.OneToManyAssociationMixedIn;
 import org.apache.causeway.core.metamodel.specloader.specimpl.OneToOneAssociationMixedIn;
 
@@ -64,106 +43,47 @@ extends ObjectSpecificationPostProcessorAbstract {
 
     @Override
     public void postProcessAction(final ObjectSpecification objectSpecification, final ObjectAction objectAction) {
+        if(objectAction.isMixedIn()) {
 
-        if(objectAction instanceof ObjectActionMixedIn) {
-            // unlike collection and property mixins, there is no need to create the DomainEventFacet, it will
-            // have been created in the ActionAnnotationFacetFactory
-            final ActionDomainEventDefaultFacetForDomainObjectAnnotation actionDomainEventDefaultFacet =
-                    objectSpecification.getFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class);
-
-            if(actionDomainEventDefaultFacet != null) {
-                final ObjectActionMixedIn actionMixedIn = (ObjectActionMixedIn) objectAction;
-                final ActionDomainEventFacet actionFacet = actionMixedIn.getFacet(ActionDomainEventFacet.class);
-                if (actionFacet instanceof ActionDomainEventFacetAbstract) {
-                    final ActionDomainEventFacetAbstract facetAbstract = (ActionDomainEventFacetAbstract) actionFacet;
-                    if (facetAbstract.getEventType() == ActionDomainEvent.Default.class) {
-                        final ActionDomainEventFacetAbstract existing = (ActionDomainEventFacetAbstract) actionFacet;
-                        existing.setEventType(actionDomainEventDefaultFacet.getEventType());
-                    }
-                }
-            }
+ //TODO[CAUSEWAY-3409] yet already created in ActionAnnotationFacetFactory
+            //FacetUtil.addFacetIfPresent(
+                    //ActionDomainEventFacet.createMixedIn(objectSpecification, (ObjectActionMixedIn)objectAction));
+ //TODO[CAUSEWAY-3409] even when this lookup returns empty, we still might need an event-type holding facet
+            objectAction
+                .lookupFacet(ActionDomainEventFacet.class)
+                .ifPresent(actionDomainEventFacet->
+                    actionDomainEventFacet.initWithMixee(objectSpecification));
         }
     }
 
     @Override
     public void postProcessProperty(final ObjectSpecification objectSpecification, final OneToOneAssociation property) {
 
-        if(property instanceof OneToOneAssociationMixedIn) {
-            final OneToOneAssociationMixedIn propertyMixin = (OneToOneAssociationMixedIn) property;
-            final FacetedMethod facetedMethod = propertyMixin.getFacetedMethod();
-            final Method method = facetedMethod.getMethod().asMethodElseFail(); // no-arg method, should have a regular facade
+        if(property.isMixedIn()) {
 
-            {
-                // this is basically a subset of the code that is in CollectionAnnotationFacetFactory,
-                // ignoring stuff which is deprecated for Causeway v2
-
-                final Property propertyAnnot =
-                        _Annotations.synthesize(method, Property.class)
-                        .orElse(null);
-
-                if(propertyAnnot != null) {
-                    final Class<? extends PropertyDomainEvent<?, ?>> propertyDomainEventType =
-                            PropertyAnnotationFacetFactory.defaultFromDomainObjectIfRequired(
-                                    objectSpecification, propertyAnnot.domainEvent());
-                    final PropertyOrCollectionAccessorFacet getterFacetIfAny = null;
-                    FacetUtil.addFacet(
-                            new PropertyDomainEventFacetForPropertyAnnotation(
-                                    propertyDomainEventType, getterFacetIfAny, property));
-                }
-            }
-            final PropertyDomainEventDefaultFacetForDomainObjectAnnotation propertyDomainEventDefaultFacet =
-                    objectSpecification.getFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class);
-            if(propertyDomainEventDefaultFacet != null) {
-                final PropertyDomainEventFacet propertyFacet = property.getFacet(PropertyDomainEventFacet.class);
-                if (propertyFacet instanceof PropertyDomainEventFacetAbstract) {
-                    final PropertyDomainEventFacetAbstract facetAbstract = (PropertyDomainEventFacetAbstract) propertyFacet;
-                    if (facetAbstract.getEventType() == PropertyDomainEvent.Default.class) {
-                        final PropertyDomainEventFacetAbstract existing = (PropertyDomainEventFacetAbstract) propertyFacet;
-                        existing.setEventType(propertyDomainEventDefaultFacet.getEventType());
-                    }
-                }
-            }
+            FacetUtil.addFacetIfPresent(
+                    PropertyDomainEventFacet.createMixedIn(objectSpecification, (OneToOneAssociationMixedIn)property));
+//TODO[CAUSEWAY-3409] even when this lookup returns empty, we still might need an event-type holding facet
+            property
+                .lookupFacet(PropertyDomainEventFacet.class)
+                .ifPresent(propertyDomainEventFacet->
+                    propertyDomainEventFacet.initWithMixee(objectSpecification));
         }
     }
 
     @Override
     public void postProcessCollection(final ObjectSpecification objectSpecification, final OneToManyAssociation collection) {
 
-        if(collection instanceof OneToManyAssociationMixedIn) {
-            final OneToManyAssociationMixedIn collectionMixin = (OneToManyAssociationMixedIn) collection;
-            final FacetedMethod facetedMethod = collectionMixin.getFacetedMethod();
-            final Method method = facetedMethod.getMethod().asMethodElseFail(); // no-arg method, should have a regular facade
+        if(collection.isMixedIn()) {
 
-            {
-                // this is basically a subset of the code that is in CollectionAnnotationFacetFactory,
-                // ignoring stuff which is deprecated for Causeway v2
+            FacetUtil.addFacetIfPresent(
+                    CollectionDomainEventFacet.createMixedIn(objectSpecification, (OneToManyAssociationMixedIn)collection));
+//TODO[CAUSEWAY-3409] even when this lookup returns empty, we still might need an event-type holding facet
+            collection
+                .lookupFacet(CollectionDomainEventFacet.class)
+                .ifPresent(collectionDomainEventFacet->
+                    collectionDomainEventFacet.initWithMixee(objectSpecification));
 
-                final Collection collectionAnnot =
-                        _Annotations.synthesize(method, Collection.class)
-                                .orElse(null);
-
-                if(collectionAnnot != null) {
-                    final Class<? extends CollectionDomainEvent<?, ?>> collectionDomainEventType =
-                            CollectionAnnotationFacetFactory.defaultFromDomainObjectIfRequired(
-                                    objectSpecification, collectionAnnot.domainEvent());
-                    FacetUtil.addFacet(
-                            new CollectionDomainEventFacetForCollectionAnnotation(
-                                    collectionDomainEventType, collection));
-                }
-
-                final CollectionDomainEventDefaultFacetForDomainObjectAnnotation collectionDomainEventDefaultFacet =
-                        objectSpecification.getFacet(CollectionDomainEventDefaultFacetForDomainObjectAnnotation.class);
-                if(collectionDomainEventDefaultFacet != null) {
-                    final CollectionDomainEventFacet collectionFacet = collection.getFacet(CollectionDomainEventFacet.class);
-                    if (collectionFacet instanceof CollectionDomainEventFacetAbstract) {
-                        final CollectionDomainEventFacetAbstract facetAbstract = (CollectionDomainEventFacetAbstract) collectionFacet;
-                        if (facetAbstract.getEventType() == CollectionDomainEvent.Default.class) {
-                            final CollectionDomainEventFacetAbstract existing = (CollectionDomainEventFacetAbstract) collectionFacet;
-                            existing.setEventType(collectionDomainEventDefaultFacet.getEventType());
-                        }
-                    }
-                }
-            }
         }
     }
 

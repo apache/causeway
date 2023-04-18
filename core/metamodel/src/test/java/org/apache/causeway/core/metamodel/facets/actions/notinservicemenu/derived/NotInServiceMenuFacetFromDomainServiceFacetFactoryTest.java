@@ -18,9 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.notinservicemenu.derived;
 
-
-
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -33,20 +30,17 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
-import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
 
-@SuppressWarnings("unused")
-public class NotInServiceMenuFacetFromDomainServiceFacetFactoryTest
-extends AbstractFacetFactoryJupiterTestCase {
+class NotInServiceMenuFacetFromDomainServiceFacetFactoryTest
+extends FacetFactoryTestAbstract {
 
     private NotInServiceMenuFacetFromDomainServiceFacetFactory facetFactory;
 
     @BeforeEach
     public void setUp() throws Exception {
-        facetFactory = new NotInServiceMenuFacetFromDomainServiceFacetFactory(metaModelContext);
+        facetFactory = new NotInServiceMenuFacetFromDomainServiceFacetFactory(getMetaModelContext());
     }
 
     @Test
@@ -55,27 +49,22 @@ extends AbstractFacetFactoryJupiterTestCase {
         // given
         @DomainService(nature = NatureOfService.REST)
         class CustomerService {
-
-            public String name() {
-                return "Joe";
-            }
+            @SuppressWarnings("unused")
+            public String name() { return "Joe"; }
         }
 
-        expectNoMethodsRemoved();
+        actionScenario(CustomerService.class, "name", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+            // when
+            facetFactory.process(processMethodContext);
+            // then
+            final Facet facet = facetedMethod.lookupNonFallbackFacet(NotInServiceMenuFacet.class).orElse(null);
+            assertNotNull(facet);
+            assertThat(facet instanceof NotInServiceMenuFacetFromDomainServiceFacet, is(true));
+            final NotInServiceMenuFacetFromDomainServiceFacet facetDerivedFromDomainServiceFacet = (NotInServiceMenuFacetFromDomainServiceFacet) facet;
+            assertEquals(NatureOfService.REST, facetDerivedFromDomainServiceFacet.getNatureOfService());
+            assertNoMethodsRemoved();
+        });
 
-        facetedMethod = FacetedMethod
-                .createForAction(metaModelContext, CustomerService.class, "name");
-
-        // when
-        facetFactory.process(ProcessMethodContext
-                .forTesting(CustomerService.class, null, facetedMethod.getMethod().asMethod().orElseThrow(), mockMethodRemover, facetedMethod));
-
-        // then
-        final Facet facet = facetedMethod.lookupNonFallbackFacet(NotInServiceMenuFacet.class).orElse(null);
-        assertNotNull(facet);
-        assertThat(facet instanceof NotInServiceMenuFacetFromDomainServiceFacet, is(true));
-        final NotInServiceMenuFacetFromDomainServiceFacet facetDerivedFromDomainServiceFacet = (NotInServiceMenuFacetFromDomainServiceFacet) facet;
-        assertEquals(NatureOfService.REST, facetDerivedFromDomainServiceFacet.getNatureOfService());
     }
 
     @Test
@@ -84,24 +73,18 @@ extends AbstractFacetFactoryJupiterTestCase {
         // given
         @DomainService()
         class CustomerService {
-
-            public String name() {
-                return "Joe";
-            }
+            @SuppressWarnings("unused")
+            public String name() { return "Joe"; }
         }
 
-        expectNoMethodsRemoved();
-
-        facetedMethod = FacetedMethod
-                .createForAction(metaModelContext, CustomerService.class, "name");
-
-        // when
-        facetFactory.process(ProcessMethodContext
-                .forTesting(CustomerService.class, null, facetedMethod.getMethod().asMethod().orElseThrow(), mockMethodRemover, facetedMethod));
-
-        // then
-        final Facet facet = facetedMethod.lookupNonFallbackFacet(NotInServiceMenuFacet.class).orElse(null);
-        assertThat(facet, is(nullValue()));
+        actionScenario(CustomerService.class, "name", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+            // when
+            facetFactory.process(processMethodContext);
+            // then
+            final Facet facet = facetedMethod.lookupNonFallbackFacet(NotInServiceMenuFacet.class).orElse(null);
+            assertThat(facet, is(nullValue()));
+            assertNoMethodsRemoved();
+        });
     }
 
     @Test
@@ -110,24 +93,18 @@ extends AbstractFacetFactoryJupiterTestCase {
         // given
         @DomainService()
         class CustomerService {
-
-            public String name() {
-                return "Joe";
-            }
+            @SuppressWarnings("unused")
+            public String name() { return "Joe"; }
         }
 
-        expectNoMethodsRemoved();
-
-        facetedMethod = FacetedMethod
-                .createForAction(metaModelContext, CustomerService.class, "name");
-
-        // when
-        facetFactory.process(ProcessMethodContext
-                .forTesting(CustomerService.class, null, facetedMethod.getMethod().asMethod().orElseThrow(), mockMethodRemover, facetedMethod));
-
-        // then
-        final Facet facet = facetedMethod.lookupNonFallbackFacet(NotInServiceMenuFacet.class).orElse(null);
-        assertThat(facet, is(nullValue()));
+        actionScenario(CustomerService.class, "name", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+            // when
+            facetFactory.process(processMethodContext);
+            // then
+            final Facet facet = facetedMethod.lookupNonFallbackFacet(NotInServiceMenuFacet.class).orElse(null);
+            assertThat(facet, is(nullValue()));
+            assertNoMethodsRemoved();
+        });
     }
 
     @Test
@@ -135,24 +112,18 @@ extends AbstractFacetFactoryJupiterTestCase {
 
         // given
         class CustomerService {
-
-            public String name() {
-                return "Joe";
-            }
+            @SuppressWarnings("unused")
+            public String name() { return "Joe"; }
         }
 
-        expectNoMethodsRemoved();
-
-        facetedMethod = FacetedMethod
-                .createForAction(metaModelContext, CustomerService.class, "name");
-
-        // when
-        facetFactory.process(ProcessMethodContext
-                .forTesting(CustomerService.class, null, facetedMethod.getMethod().asMethod().orElseThrow(), mockMethodRemover, facetedMethod));
-
-        // then
-        final Facet facet = facetedMethod.lookupNonFallbackFacet(NotInServiceMenuFacet.class).orElse(null);
-        assertThat(facet, is(nullValue()));
+        actionScenario(CustomerService.class, "name", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+            // when
+            facetFactory.process(processMethodContext);
+            // then
+            final Facet facet = facetedMethod.lookupNonFallbackFacet(NotInServiceMenuFacet.class).orElse(null);
+            assertThat(facet, is(nullValue()));
+            assertNoMethodsRemoved();
+        });
     }
 
 }

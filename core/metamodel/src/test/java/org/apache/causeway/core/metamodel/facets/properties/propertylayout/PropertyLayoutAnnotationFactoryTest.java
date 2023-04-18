@@ -18,8 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.propertylayout;
 
-import java.lang.reflect.Method;
-
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -35,9 +34,7 @@ import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.causeway.core.metamodel.facets.FacetFactory;
-import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
@@ -46,87 +43,69 @@ import org.apache.causeway.core.metamodel.facets.objectvalue.labelat.LabelAtFace
 import lombok.val;
 
 class PropertyLayoutAnnotationFactoryTest
-extends AbstractFacetFactoryTest {
+extends FacetFactoryTestAbstract {
+
+    private PropertyLayoutFacetFactory facetFactory;
+
+    @BeforeEach
+    protected void setUp() {
+        facetFactory = new PropertyLayoutFacetFactory(getMetaModelContext());
+    }
 
     @Test
-    void testPropertyLayoutAnnotation_named() {
-        val facetFactory = createPropertyLayoutFacetFactory(metaModelContext);
+    void propertyLayoutAnnotation_named() {
 
         class Customer {
             @PropertyLayout(named = "1st name")
-            public String getFirstName() {
-                return null;
-            }
+            public String getFirstName() { return null; }
         }
-        final Method method = findMethod(Customer.class, "getFirstName");
-
-        // when
-        final FacetFactory.ProcessMethodContext processMethodContext =
-                ProcessMethodContext
-                .forTesting(Customer.class, null, method, methodRemover, facetedMethod);
-
-        facetFactory.process(processMethodContext);
-
-        // then
-        val facet = facetedMethod.getFacet(MemberNamedFacet.class);
-        assertThat(facet, is(notNullValue()));
-        assertThat(facet, is(instanceOf(NamedFacetForPropertyLayoutAnnotation.class)));
-        assertThat(((HasStaticText)facet).text(), is(equalTo("1st name")));
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            //when
+            facetFactory.process(processMethodContext);
+            //then
+            val facet = facetedMethod.getFacet(MemberNamedFacet.class);
+            assertThat(facet, is(notNullValue()));
+            assertThat(facet, is(instanceOf(NamedFacetForPropertyLayoutAnnotation.class)));
+            assertThat(((HasStaticText)facet).text(), is(equalTo("1st name")));
+        });
     }
 
     @Test
-    void testPropertyLayoutAnnotation_hidden() {
-        final PropertyLayoutFacetFactory facetFactory = createPropertyLayoutFacetFactory(metaModelContext);
+    void propertyLayoutAnnotation_hidden() {
 
         class Customer {
             @PropertyLayout(hidden = Where.OBJECT_FORMS)
-            public String getFirstName() {
-                return null;
-            }
+            public String getFirstName() { return null; }
         }
-        final Method method = findMethod(Customer.class, "getFirstName");
-
-        final FacetFactory.ProcessMethodContext processMethodContext =
-                ProcessMethodContext
-                .forTesting(Customer.class, null, method, methodRemover, facetedMethod);
-
-        // when
-        facetFactory.process(processMethodContext);
-
-        // then
-        final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof HiddenFacetForPropertyLayoutAnnotation);
-        val propLayoutFacetAnnotation = (HiddenFacetForPropertyLayoutAnnotation) facet;
-        assertEquals(Where.OBJECT_FORMS, propLayoutFacetAnnotation.where());
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            //when
+            facetFactory.process(processMethodContext);
+            //then
+            final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof HiddenFacetForPropertyLayoutAnnotation);
+            val propLayoutFacetAnnotation = (HiddenFacetForPropertyLayoutAnnotation) facet;
+            assertEquals(Where.OBJECT_FORMS, propLayoutFacetAnnotation.where());
+        });
     }
 
     @Test
-    void testPropertyLayoutAnnotation_labelPosition() {
-        final PropertyLayoutFacetFactory facetFactory = createPropertyLayoutFacetFactory(metaModelContext);
+    void propertyLayoutAnnotation_labelPosition() {
 
         class Customer {
             @PropertyLayout(labelPosition = LabelPosition.LEFT)
-            public String getFirstName() {
-                return null;
-            }
+            public String getFirstName() { return null; }
         }
-        final Method method = findMethod(Customer.class, "getFirstName");
-
-        final FacetFactory.ProcessMethodContext processMethodContext =
-                ProcessMethodContext
-                .forTesting(Customer.class, null, method, methodRemover, facetedMethod);
-
-        // when
-        facetFactory.process(processMethodContext);
-
-        // then
-        final Facet facet = facetedMethod.getFacet(LabelAtFacet.class);
-        assertThat(facet, is(notNullValue()));
-        assertThat(facet, is(instanceOf(LabelAtFacetForPropertyLayoutAnnotation.class)));
-        val layoutAnnotation = (LabelAtFacetForPropertyLayoutAnnotation) facet;
-        assertThat(layoutAnnotation.label(), is(equalTo(LabelPosition.LEFT)));
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            //when
+            facetFactory.process(processMethodContext);
+            //then
+            final Facet facet = facetedMethod.getFacet(LabelAtFacet.class);
+            assertThat(facet, is(notNullValue()));
+            assertThat(facet, is(instanceOf(LabelAtFacetForPropertyLayoutAnnotation.class)));
+            val layoutAnnotation = (LabelAtFacetForPropertyLayoutAnnotation) facet;
+            assertThat(layoutAnnotation.label(), is(equalTo(LabelPosition.LEFT)));
+        });
     }
-
 
 }

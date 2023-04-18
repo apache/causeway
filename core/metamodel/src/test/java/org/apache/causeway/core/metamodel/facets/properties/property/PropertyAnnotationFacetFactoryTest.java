@@ -18,23 +18,21 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.property;
 
-import java.lang.reflect.Method;
 import java.util.regex.Pattern;
 
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.calls;
 
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
@@ -49,9 +47,9 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
+import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract.EventTypeOrigin;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
-import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
@@ -65,13 +63,9 @@ import org.apache.causeway.core.metamodel.facets.properties.property.entitychang
 import org.apache.causeway.core.metamodel.facets.properties.property.hidden.HiddenFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForPropertyAnnotation;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromDefault;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromPropertyAnnotation;
+import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEvent;
 import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetDefault;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetForPropertyAnnotation;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromDefault;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromPropertyAnnotation;
+import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEvent;
 import org.apache.causeway.core.metamodel.facets.properties.property.mustsatisfy.MustSatisfySpecificationFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.regex.RegExFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.snapshot.SnapshotExcludeFacetForPropertyAnnotation;
@@ -87,17 +81,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
 
-class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJupiterTestCase {
+class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
 
     PropertyAnnotationFacetFactory facetFactory;
-    Method propertyMethod;
-
-    @Mock ObjectSpecification mockTypeSpec;
-    @Mock ObjectSpecification mockReturnTypeSpec;
-
-    void expectRemoveMethod(final Method actionMethod) {
-        Mockito.verify(mockMethodRemover, calls(1)).removeMethod(actionMethod);
-    }
 
     private static void processModify(
             final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
@@ -156,10 +142,9 @@ class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJupiterTest
 
     @BeforeEach
     public void setUp() throws Exception {
-        facetFactory = new PropertyAnnotationFacetFactory(metaModelContext);
+        facetFactory = new PropertyAnnotationFacetFactory(getMetaModelContext());
     }
 
-    @Override
     @AfterEach
     public void tearDown() throws Exception {
         facetFactory = null;
@@ -168,6 +153,7 @@ class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJupiterTest
     public static class Modify extends PropertyAnnotationFacetFactoryTest {
 
         private void addGetterFacet(final FacetHolder holder) {
+            val mockOnType = Mockito.mock(ObjectSpecification.class);
             FacetUtil.addFacet(new PropertyOrCollectionAccessorFacetAbstract(mockOnType, holder) {
                 @Override
                 public Object getProperty(
@@ -214,40 +200,39 @@ class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJupiterTest
             }
 
             // given
-            final Class<?> cls = Customer.class;
-            propertyMethod = findMethod(Customer.class, "getName");
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
 
-            addGetterFacet(facetedMethod);
-            addSetterFacet(facetedMethod);
-            addClearFacet(facetedMethod);
+                addGetterFacet(facetedMethod);
+                addSetterFacet(facetedMethod);
+                addClearFacet(facetedMethod);
 
-            // when
-            val processMethodContext = ProcessMethodContext
-                    .forTesting(cls, null,
-                    propertyMethod, mockMethodRemover, facetedMethod);
-            processModify(facetFactory, processMethodContext);
+                // when
+                processModify(facetFactory, processMethodContext);
 
-            // then
-            final PropertyDomainEventFacet domainEventFacet = facetedMethod.getFacet(PropertyDomainEventFacet.class);
-            assertNotNull(domainEventFacet);
-            assertTrue(domainEventFacet instanceof PropertyDomainEventFacetForPropertyAnnotation);
-            final PropertyDomainEventFacetForPropertyAnnotation domainEventFacetDefault = (PropertyDomainEventFacetForPropertyAnnotation) domainEventFacet;
-            assertThat(domainEventFacetDefault.getEventType(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
+                // then
+                final PropertyDomainEventFacet domainEventFacet = facetedMethod.getFacet(PropertyDomainEventFacet.class);
+                assertNotNull(domainEventFacet);
+                assertTrue(domainEventFacet instanceof PropertyDomainEventFacet);
+                final PropertyDomainEventFacet domainEventFacetImpl = domainEventFacet;
+                assertTrue(domainEventFacetImpl.getEventTypeOrigin().isAnnotatedMember());
+                assertThat(domainEventFacetImpl.getEventType(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
 
-            // then
-            final Facet setterFacet = facetedMethod.getFacet(PropertySetterFacet.class);
-            assertNotNull(setterFacet);
-            assertTrue(setterFacet instanceof PropertySetterFacetForDomainEventFromPropertyAnnotation,
-                    "unexpected facet: " + setterFacet);
-            final PropertySetterFacetForDomainEventFromPropertyAnnotation setterFacetImpl = (PropertySetterFacetForDomainEventFromPropertyAnnotation) setterFacet;
-            assertThat(setterFacetImpl.value(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
+                // then
+                final Facet setterFacet = facetedMethod.getFacet(PropertySetterFacet.class);
+                assertNotNull(setterFacet);
+                assertTrue(setterFacet instanceof PropertySetterFacetForDomainEvent, "unexpected facet: " + setterFacet);
+                final PropertySetterFacetForDomainEvent setterFacetImpl = (PropertySetterFacetForDomainEvent) setterFacet;
+                assertEquals(EventTypeOrigin.ANNOTATED_MEMBER, setterFacetImpl.getEventTypeOrigin());
+                assertThat(setterFacetImpl.getEventType(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
 
-            // then
-            final Facet clearFacet = facetedMethod.getFacet(PropertyClearFacet.class);
-            assertNotNull(clearFacet);
-            assertTrue(clearFacet instanceof PropertyClearFacetForDomainEventFromPropertyAnnotation);
-            final PropertyClearFacetForDomainEventFromPropertyAnnotation clearFacetImpl = (PropertyClearFacetForDomainEventFromPropertyAnnotation) clearFacet;
-            assertThat(clearFacetImpl.value(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
+                // then
+                final Facet clearFacet = facetedMethod.getFacet(PropertyClearFacet.class);
+                assertNotNull(clearFacet);
+                assertTrue(clearFacet instanceof PropertyClearFacetForDomainEvent);
+                final PropertyClearFacetForDomainEvent clearFacetImpl = (PropertyClearFacetForDomainEvent) clearFacet;
+                assertEquals(EventTypeOrigin.ANNOTATED_MEMBER, setterFacetImpl.getEventTypeOrigin());
+                assertThat(clearFacetImpl.getEventType(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
+            });
         }
 
 
@@ -261,40 +246,38 @@ class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJupiterTest
             }
 
             // given
-            final Class<?> cls = Customer.class;
-            propertyMethod = findMethod(Customer.class, "getName");
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+                addGetterFacet(facetedMethod);
+                addSetterFacet(facetedMethod);
+                addClearFacet(facetedMethod);
 
-            addGetterFacet(facetedMethod);
-            addSetterFacet(facetedMethod);
-            addClearFacet(facetedMethod);
+                // when
+                processModify(facetFactory, processMethodContext);
 
-            // when
-            val processMethodContext = ProcessMethodContext
-                    .forTesting(cls, null,
-                    propertyMethod, mockMethodRemover, facetedMethod);
-            processModify(facetFactory, processMethodContext);
+                // then
+                final Facet domainEventFacet = facetedMethod.getFacet(PropertyDomainEventFacet.class);
+                assertNotNull(domainEventFacet);
+                assertTrue(domainEventFacet instanceof PropertyDomainEventFacet);
+                final PropertyDomainEventFacet domainEventFacetImpl = (PropertyDomainEventFacet) domainEventFacet;
+                assertTrue(domainEventFacetImpl.getEventTypeOrigin().isAnnotatedMember());
+                assertThat(domainEventFacetImpl.getEventType(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
 
-            // then
-            final Facet domainEventFacet = facetedMethod.getFacet(PropertyDomainEventFacet.class);
-            assertNotNull(domainEventFacet);
-            assertTrue(domainEventFacet instanceof PropertyDomainEventFacetForPropertyAnnotation);
-            final PropertyDomainEventFacetForPropertyAnnotation domainEventFacetImpl = (PropertyDomainEventFacetForPropertyAnnotation) domainEventFacet;
-            assertThat(domainEventFacetImpl.value(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
+                // then
+                final Facet setterFacet = facetedMethod.getFacet(PropertySetterFacet.class);
+                assertNotNull(setterFacet);
+                assertTrue(setterFacet instanceof PropertySetterFacetForDomainEvent, "unexpected facet: " + setterFacet);
+                final PropertySetterFacetForDomainEvent setterFacetImpl = (PropertySetterFacetForDomainEvent) setterFacet;
+                assertEquals(EventTypeOrigin.ANNOTATED_MEMBER, setterFacetImpl.getEventTypeOrigin());
+                assertThat(setterFacetImpl.getEventType(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
 
-            // then
-            final Facet setterFacet = facetedMethod.getFacet(PropertySetterFacet.class);
-            assertNotNull(setterFacet);
-            assertTrue(setterFacet instanceof PropertySetterFacetForDomainEventFromPropertyAnnotation,
-                    "unexpected facet: " + setterFacet);
-            final PropertySetterFacetForDomainEventFromPropertyAnnotation setterFacetImpl = (PropertySetterFacetForDomainEventFromPropertyAnnotation) setterFacet;
-            assertThat(setterFacetImpl.value(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
-
-            // then
-            final Facet clearFacet = facetedMethod.getFacet(PropertyClearFacet.class);
-            assertNotNull(clearFacet);
-            assertTrue(clearFacet instanceof PropertyClearFacetForDomainEventFromPropertyAnnotation);
-            final PropertyClearFacetForDomainEventFromPropertyAnnotation clearFacetImpl = (PropertyClearFacetForDomainEventFromPropertyAnnotation) clearFacet;
-            assertThat(clearFacetImpl.value(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
+                // then
+                final Facet clearFacet = facetedMethod.getFacet(PropertyClearFacet.class);
+                assertNotNull(clearFacet);
+                assertTrue(clearFacet instanceof PropertyClearFacetForDomainEvent);
+                final PropertyClearFacetForDomainEvent clearFacetImpl = (PropertyClearFacetForDomainEvent) clearFacet;
+                assertEquals(EventTypeOrigin.ANNOTATED_MEMBER, clearFacetImpl.getEventTypeOrigin());
+                assertThat(clearFacetImpl.getEventType(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
+            });
         }
 
         @Test
@@ -308,40 +291,38 @@ class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJupiterTest
             }
 
             // given
-            final Class<?> cls = Customer.class;
-            propertyMethod = findMethod(Customer.class, "getName");
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+                addGetterFacet(facetedMethod);
+                addSetterFacet(facetedMethod);
+                addClearFacet(facetedMethod);
 
-            addGetterFacet(facetedMethod);
-            addSetterFacet(facetedMethod);
-            addClearFacet(facetedMethod);
+                // when
+                processModify(facetFactory, processMethodContext);
 
-            // when
-            val processMethodContext = ProcessMethodContext
-                    .forTesting(cls, null,
-                    propertyMethod, mockMethodRemover, facetedMethod);
-            processModify(facetFactory, processMethodContext);
+                // then
+                final Facet domainEventFacet = facetedMethod.getFacet(PropertyDomainEventFacet.class);
+                assertNotNull(domainEventFacet);
+                assertTrue(domainEventFacet instanceof PropertyDomainEventFacet);
+                final PropertyDomainEventFacet domainEventFacetImpl = (PropertyDomainEventFacet) domainEventFacet;
+                assertTrue(domainEventFacetImpl.getEventTypeOrigin().isAnnotatedMember());
+                MatcherAssert.assertThat(domainEventFacetImpl.getEventType(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
 
-            // then
-            final Facet domainEventFacet = facetedMethod.getFacet(PropertyDomainEventFacet.class);
-            assertNotNull(domainEventFacet);
-            assertTrue(domainEventFacet instanceof PropertyDomainEventFacetForPropertyAnnotation);
-            final PropertyDomainEventFacetForPropertyAnnotation domainEventFacetImpl = (PropertyDomainEventFacetForPropertyAnnotation) domainEventFacet;
-            MatcherAssert.assertThat(domainEventFacetImpl.value(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
+                // then
+                final Facet setterFacet = facetedMethod.getFacet(PropertySetterFacet.class);
+                assertNotNull(setterFacet);
+                assertTrue(setterFacet instanceof PropertySetterFacetForDomainEvent, "unexpected facet: " + setterFacet);
+                final PropertySetterFacetForDomainEvent setterFacetImpl = (PropertySetterFacetForDomainEvent) setterFacet;
+                assertEquals(EventTypeOrigin.ANNOTATED_MEMBER, setterFacetImpl.getEventTypeOrigin());
+                assertThat(setterFacetImpl.getEventType(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
 
-            // then
-            final Facet setterFacet = facetedMethod.getFacet(PropertySetterFacet.class);
-            assertNotNull(setterFacet);
-            assertTrue(setterFacet instanceof PropertySetterFacetForDomainEventFromPropertyAnnotation,
-                    "unexpected facet: " + setterFacet);
-            final PropertySetterFacetForDomainEventFromPropertyAnnotation setterFacetImpl = (PropertySetterFacetForDomainEventFromPropertyAnnotation) setterFacet;
-            assertThat(setterFacetImpl.value(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
-
-            // then
-            final Facet clearFacet = facetedMethod.getFacet(PropertyClearFacet.class);
-            assertNotNull(clearFacet);
-            assertTrue(clearFacet instanceof PropertyClearFacetForDomainEventFromPropertyAnnotation);
-            final PropertyClearFacetForDomainEventFromPropertyAnnotation clearFacetImpl = (PropertyClearFacetForDomainEventFromPropertyAnnotation) clearFacet;
-            assertThat(clearFacetImpl.value(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
+                // then
+                final Facet clearFacet = facetedMethod.getFacet(PropertyClearFacet.class);
+                assertNotNull(clearFacet);
+                assertTrue(clearFacet instanceof PropertyClearFacetForDomainEvent);
+                final PropertyClearFacetForDomainEvent clearFacetImpl = (PropertyClearFacetForDomainEvent) clearFacet;
+                assertEquals(EventTypeOrigin.ANNOTATED_MEMBER, clearFacetImpl.getEventTypeOrigin());
+                assertThat(clearFacetImpl.getEventType(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
+            });
         }
 
         @Test
@@ -352,43 +333,40 @@ class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJupiterTest
             }
 
             // given
-            assertTrue(metaModelContext.getConfiguration()
+            assertTrue(getConfiguration()
                     .getApplib().getAnnotation().getDomainObject().getCreatedLifecycleEvent().isPostForDefault());
 
-            final Class<?> cls = Customer.class;
-            propertyMethod = findMethod(Customer.class, "getName");
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+                addGetterFacet(facetedMethod);
+                addSetterFacet(facetedMethod);
+                addClearFacet(facetedMethod);
 
-            addGetterFacet(facetedMethod);
-            addSetterFacet(facetedMethod);
-            addClearFacet(facetedMethod);
+                // when
+                processModify(facetFactory, processMethodContext);
 
-            // when
-            val processMethodContext = ProcessMethodContext
-                    .forTesting(cls, null,
-                    propertyMethod, mockMethodRemover, facetedMethod);
-            processModify(facetFactory, processMethodContext);
+                // then
+                final Facet domainEventFacet = facetedMethod.getFacet(PropertyDomainEventFacet.class);
+                assertNotNull(domainEventFacet);
+                assertTrue(domainEventFacet instanceof PropertyDomainEventFacet);
+                final PropertyDomainEventFacet domainEventFacetImpl = (PropertyDomainEventFacet) domainEventFacet;
+                assertTrue(domainEventFacetImpl.getEventTypeOrigin().isDefault());
+                assertThat(domainEventFacetImpl.getEventType(), CausewayMatchers.classEqualTo(PropertyDomainEvent.Default.class));
 
-            // then
-            final Facet domainEventFacet = facetedMethod.getFacet(PropertyDomainEventFacet.class);
-            assertNotNull(domainEventFacet);
-            assertTrue(domainEventFacet instanceof PropertyDomainEventFacetDefault);
-            final PropertyDomainEventFacetDefault domainEventFacetImpl = (PropertyDomainEventFacetDefault) domainEventFacet;
-            assertThat(domainEventFacetImpl.value(), CausewayMatchers.classEqualTo(PropertyDomainEvent.Default.class));
+                // then
+                final Facet setterFacet = facetedMethod.getFacet(PropertySetterFacet.class);
+                assertNotNull(setterFacet);
+                assertTrue(setterFacet instanceof PropertySetterFacetForDomainEvent,
+                        "unexpected facet: " + setterFacet);
+                final PropertySetterFacetForDomainEvent setterFacetImpl = (PropertySetterFacetForDomainEvent) setterFacet;
+                assertThat(setterFacetImpl.getEventType(), CausewayMatchers.classEqualTo(PropertyDomainEvent.Default.class));
 
-            // then
-            final Facet setterFacet = facetedMethod.getFacet(PropertySetterFacet.class);
-            assertNotNull(setterFacet);
-            assertTrue(setterFacet instanceof PropertySetterFacetForDomainEventFromDefault,
-                    "unexpected facet: " + setterFacet);
-            final PropertySetterFacetForDomainEventFromDefault setterFacetImpl = (PropertySetterFacetForDomainEventFromDefault) setterFacet;
-            assertThat(setterFacetImpl.value(), CausewayMatchers.classEqualTo(PropertyDomainEvent.Default.class));
-
-            // then
-            final Facet clearFacet = facetedMethod.getFacet(PropertyClearFacet.class);
-            assertNotNull(clearFacet);
-            assertTrue(clearFacet instanceof PropertyClearFacetForDomainEventFromDefault);
-            final PropertyClearFacetForDomainEventFromDefault clearFacetImpl = (PropertyClearFacetForDomainEventFromDefault) clearFacet;
-            assertThat(clearFacetImpl.value(), CausewayMatchers.classEqualTo(PropertyDomainEvent.Default.class));
+                // then
+                final Facet clearFacet = facetedMethod.getFacet(PropertyClearFacet.class);
+                assertNotNull(clearFacet);
+                assertTrue(clearFacet instanceof PropertyClearFacetForDomainEvent);
+                final PropertyClearFacetForDomainEvent clearFacetImpl = (PropertyClearFacetForDomainEvent) clearFacet;
+                assertThat(clearFacetImpl.getEventType(), CausewayMatchers.classEqualTo(PropertyDomainEvent.Default.class));
+            });
         }
     }
 
@@ -405,25 +383,21 @@ class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJupiterTest
             }
 
             // given
-            final Class<?> cls = Customer.class;
-            propertyMethod = findMethod(Customer.class, "getName");
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+                // when
+                processHidden(facetFactory, processMethodContext);
 
-            // when
-            val processMethodContext = ProcessMethodContext
-                    .forTesting(cls, null,
-                    propertyMethod, mockMethodRemover, facetedMethod);
-            processHidden(facetFactory, processMethodContext);
+                // then
+                final HiddenFacet hiddenFacet = facetedMethod.getFacet(HiddenFacet.class);
+                assertNotNull(hiddenFacet);
+                assertTrue(hiddenFacet instanceof HiddenFacetForPropertyAnnotation);
+                final HiddenFacetForPropertyAnnotation hiddenFacetImpl = (HiddenFacetForPropertyAnnotation) hiddenFacet;
+                assertThat(hiddenFacetImpl.where(), is(Where.REFERENCES_PARENT));
 
-            // then
-            final HiddenFacet hiddenFacet = facetedMethod.getFacet(HiddenFacet.class);
-            assertNotNull(hiddenFacet);
-            assertTrue(hiddenFacet instanceof HiddenFacetForPropertyAnnotation);
-            final HiddenFacetForPropertyAnnotation hiddenFacetImpl = (HiddenFacetForPropertyAnnotation) hiddenFacet;
-            assertThat(hiddenFacetImpl.where(), is(Where.REFERENCES_PARENT));
-
-            final Facet hiddenFacetForProp = facetedMethod.getFacet(HiddenFacet.class);
-            assertNotNull(hiddenFacetForProp);
-            assertTrue(hiddenFacet == hiddenFacetForProp);
+                final Facet hiddenFacetForProp = facetedMethod.getFacet(HiddenFacet.class);
+                assertNotNull(hiddenFacetForProp);
+                assertTrue(hiddenFacet == hiddenFacetForProp);
+            });
         }
 
     }
@@ -437,13 +411,12 @@ class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJupiterTest
             class Customer {
                 @Property(
                         editing = org.apache.causeway.applib.annotation.Editing.DISABLED,
-                        editingDisabledReason = "you cannot edit the name property"
-                        )
+                        editingDisabledReason = "you cannot edit the name property")
                 public String getName() { return null; }
                 public void setName(final String name) {}
             }
 
-            assertDisabledFacetOn(findMethod(Customer.class, "getName"),
+            assertDisabledFacetOn(Customer.class, "name",
                     "you cannot edit the name property");
         }
 
@@ -453,13 +426,12 @@ class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJupiterTest
             class Customer {
                 @Property(
                         editing = org.apache.causeway.applib.annotation.Editing.DISABLED,
-                        editingDisabledReason = "you cannot edit the name property"
-                        )
+                        editingDisabledReason = "you cannot edit the name property")
                 @Getter @Setter
                 private String name;
             }
 
-            assertDisabledFacetOn(findMethod(Customer.class, "getName"),
+            assertDisabledFacetOn(Customer.class, "name",
                     "you cannot edit the name property");
         }
 
@@ -476,7 +448,7 @@ class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJupiterTest
                 public void setSubscribed(final boolean b) {}
             }
 
-            assertDisabledFacetOn(findMethod(Customer.class, "isSubscribed"),
+            assertDisabledFacetOn(Customer.class, "subscribed",
                     "you cannot edit the subscribed property");
         }
 
@@ -492,7 +464,7 @@ class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJupiterTest
                 private boolean subscribed;
             }
 
-            assertDisabledFacetOn(findMethod(Customer.class, "isSubscribed"),
+            assertDisabledFacetOn(Customer.class, "subscribed",
                     "you cannot edit the subscribed property");
         }
 
@@ -516,31 +488,25 @@ class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJupiterTest
 
         @Test //FIXME[CAUSEWAY-2963] test fails - no facet is generated
         public void causeway2963() {
-            assertDisabledFacetOn(findMethod(PrimitiveBooleanEntity.class, "isReadWriteProperty"),
-                    "b");
+            assertDisabledFacetOn(PrimitiveBooleanEntity.class, "readWriteProperty", "b");
         }
 
         // -- HELPER
 
-        private void assertDisabledFacetOn(final Method getter, final String expectedDisabledReason) {
+        private void assertDisabledFacetOn(final Class<?> declaringClass, final String propertyName, final String expectedDisabledReason) {
 
             // given
-            final Class<?> cls = getter.getDeclaringClass();
-            propertyMethod = getter;
-
-            // when
-            val processMethodContext = ProcessMethodContext
-                    .forTesting(cls, null,
-                    propertyMethod, mockMethodRemover, facetedMethod);
-            processEditing(facetFactory, processMethodContext);
-
-            // then
-            val disabledFacet = facetedMethod.getFacet(DisabledFacet.class);
-            assertNotNull(disabledFacet);
-            assertTrue(disabledFacet instanceof DisabledFacetForPropertyAnnotation);
-            val disabledFacet2 = (DisabledFacetForPropertyAnnotation) disabledFacet;
-            assertThat(disabledFacet.where(), is(Where.EVERYWHERE));
-            assertThat(disabledFacet2.disabledReason(null).map(VetoReason::string).orElse(null), is(expectedDisabledReason));
+            propertyScenario(declaringClass, propertyName, (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+                // when
+                processEditing(facetFactory, processMethodContext);
+                // then
+                val disabledFacet = facetedMethod.getFacet(DisabledFacet.class);
+                assertNotNull(disabledFacet);
+                assertTrue(disabledFacet instanceof DisabledFacetForPropertyAnnotation);
+                val disabledFacet2 = (DisabledFacetForPropertyAnnotation) disabledFacet;
+                assertThat(disabledFacet.where(), is(Where.EVERYWHERE));
+                assertThat(disabledFacet2.disabledReason(null).map(VetoReason::string).orElse(null), is(expectedDisabledReason));
+            });
         }
 
     }
@@ -551,27 +517,21 @@ class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJupiterTest
         public void withAnnotation() {
 
             class Customer {
-                @Property(
-                        maxLength = 30
-                        )
+                @Property(maxLength = 30)
                 @Getter @Setter private String name;
             }
 
             // given
-            final Class<?> cls = Customer.class;
-            propertyMethod = findMethod(Customer.class, "getName");
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+                // when
+                processMaxLength(facetFactory, processMethodContext);
 
-            // when
-            val processMethodContext = ProcessMethodContext
-                    .forTesting(cls, null,
-                    propertyMethod, mockMethodRemover, facetedMethod);
-            processMaxLength(facetFactory, processMethodContext);
-
-            // then
-            final MaxLengthFacet maxLengthFacet = facetedMethod.getFacet(MaxLengthFacet.class);
-            assertNotNull(maxLengthFacet);
-            assertTrue(maxLengthFacet instanceof MaxLengthFacetForPropertyAnnotation);
-            assertThat(maxLengthFacet.value(), is(30));
+                // then
+                final MaxLengthFacet maxLengthFacet = facetedMethod.getFacet(MaxLengthFacet.class);
+                assertNotNull(maxLengthFacet);
+                assertTrue(maxLengthFacet instanceof MaxLengthFacetForPropertyAnnotation);
+                assertThat(maxLengthFacet.value(), is(30));
+            });
         }
     }
 
@@ -603,25 +563,21 @@ class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJupiterTest
             }
 
             // given
-            final Class<?> cls = Customer.class;
-            propertyMethod = findMethod(Customer.class, "getName");
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+                // when
+                processMustSatisfy(facetFactory, processMethodContext);
 
-            // when
-            val processMethodContext = ProcessMethodContext
-                    .forTesting(cls, null,
-                    propertyMethod, mockMethodRemover, facetedMethod);
-            processMustSatisfy(facetFactory, processMethodContext);
+                // then
+                final MustSatisfySpecificationFacet mustSatisfySpecificationFacet = facetedMethod.getFacet(MustSatisfySpecificationFacet.class);
+                assertNotNull(mustSatisfySpecificationFacet);
+                assertTrue(mustSatisfySpecificationFacet instanceof MustSatisfySpecificationFacetForPropertyAnnotation);
+                final MustSatisfySpecificationFacetForPropertyAnnotation mustSatisfySpecificationFacetImpl = (MustSatisfySpecificationFacetForPropertyAnnotation) mustSatisfySpecificationFacet;
+                val specifications = mustSatisfySpecificationFacetImpl.getSpecifications();
+                assertThat(specifications.size(), is(2));
 
-            // then
-            final MustSatisfySpecificationFacet mustSatisfySpecificationFacet = facetedMethod.getFacet(MustSatisfySpecificationFacet.class);
-            assertNotNull(mustSatisfySpecificationFacet);
-            assertTrue(mustSatisfySpecificationFacet instanceof MustSatisfySpecificationFacetForPropertyAnnotation);
-            final MustSatisfySpecificationFacetForPropertyAnnotation mustSatisfySpecificationFacetImpl = (MustSatisfySpecificationFacetForPropertyAnnotation) mustSatisfySpecificationFacet;
-            val specifications = mustSatisfySpecificationFacetImpl.getSpecifications();
-            assertThat(specifications.size(), is(2));
-
-            assertTrue(specifications.getElseFail(0) instanceof NotTooHot);
-            assertTrue(specifications.getElseFail(1) instanceof NotTooCold);
+                assertTrue(specifications.getElseFail(0) instanceof NotTooHot);
+                assertTrue(specifications.getElseFail(1) instanceof NotTooCold);
+            });
         }
 
     }
@@ -637,20 +593,15 @@ class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJupiterTest
             }
 
             // given
-            val cls = Customer.class;
-            propertyMethod = findMethod(Customer.class, "getName");
-
-            // when
-            val processMethodContext = ProcessMethodContext
-                    .forTesting(cls, null,
-                    propertyMethod, mockMethodRemover, facetedMethod);
-            processEntityPropertyChangePublishing(facetFactory, processMethodContext);
-
-            // then
-            val changePolicyFacet = facetedMethod.getFacet(EntityPropertyChangePublishingPolicyFacet.class);
-            assertNotNull(changePolicyFacet);
-            assertTrue(changePolicyFacet.isPublishingVetoed());
-            assertFalse(changePolicyFacet.isPublishingAllowed());
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+                // when
+                processEntityPropertyChangePublishing(facetFactory, processMethodContext);
+                // then
+                val changePolicyFacet = facetedMethod.getFacet(EntityPropertyChangePublishingPolicyFacet.class);
+                assertNotNull(changePolicyFacet);
+                assertTrue(changePolicyFacet.isPublishingVetoed());
+                assertFalse(changePolicyFacet.isPublishingAllowed());
+            });
         }
 
         @Test
@@ -662,18 +613,13 @@ class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJupiterTest
             }
 
             // given
-            val cls = Customer.class;
-            propertyMethod = findMethod(Customer.class, "getName");
-
-            // when
-            val processMethodContext = ProcessMethodContext
-                    .forTesting(cls, null,
-                    propertyMethod, mockMethodRemover, facetedMethod);
-            processEntityPropertyChangePublishing(facetFactory, processMethodContext);
-
-            // then
-            val changePolicyFacet = facetedMethod.getFacet(EntityPropertyChangePublishingPolicyFacet.class);
-            assertNull(changePolicyFacet);
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+                // when
+                processEntityPropertyChangePublishing(facetFactory, processMethodContext);
+                // then
+                val changePolicyFacet = facetedMethod.getFacet(EntityPropertyChangePublishingPolicyFacet.class);
+                assertNull(changePolicyFacet);
+            });
         }
 
     }
@@ -689,21 +635,15 @@ class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJupiterTest
             }
 
             // given
-            final Class<?> cls = Customer.class;
-            propertyMethod = findMethod(Customer.class, "getName");
-
-            // when
-            val processMethodContext = ProcessMethodContext
-                    .forTesting(cls, null,
-                    propertyMethod, mockMethodRemover, facetedMethod);
-            processSnapshot(facetFactory, processMethodContext);
-
-            // then
-            final SnapshotExcludeFacet snapshotExcludeFacet = facetedMethod.getFacet(SnapshotExcludeFacet.class);
-            assertNotNull(snapshotExcludeFacet);
-            assertTrue(snapshotExcludeFacet instanceof SnapshotExcludeFacetForPropertyAnnotation);
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+                // when
+                processSnapshot(facetFactory, processMethodContext);
+                // then
+                final SnapshotExcludeFacet snapshotExcludeFacet = facetedMethod.getFacet(SnapshotExcludeFacet.class);
+                assertNotNull(snapshotExcludeFacet);
+                assertTrue(snapshotExcludeFacet instanceof SnapshotExcludeFacetForPropertyAnnotation);
+            });
         }
-
     }
 
     public static class Mandatory extends PropertyAnnotationFacetFactoryTest {
@@ -712,101 +652,74 @@ class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJupiterTest
         public void whenOptionalityIsTrue() {
 
             class Customer {
-                @Property(
-                        optionality = Optionality.OPTIONAL
-                        )
+                @Property(optionality = Optionality.OPTIONAL)
                 @Getter @Setter private String name;
             }
 
             // given
-            final Class<?> cls = Customer.class;
-            propertyMethod = findMethod(Customer.class, "getName");
-
-            // when
-            val processMethodContext = ProcessMethodContext
-                    .forTesting(cls, null,
-                    propertyMethod, mockMethodRemover, facetedMethod);
-            processOptional(facetFactory, processMethodContext);
-
-            // then
-            final MandatoryFacet mandatoryFacet = facetedMethod.getFacet(MandatoryFacet.class);
-            assertNotNull(mandatoryFacet);
-            assertTrue(mandatoryFacet instanceof MandatoryFacetForPropertyAnnotation.Optional);
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+                // when
+                processOptional(facetFactory, processMethodContext);
+                // then
+                final MandatoryFacet mandatoryFacet = facetedMethod.getFacet(MandatoryFacet.class);
+                assertNotNull(mandatoryFacet);
+                assertTrue(mandatoryFacet instanceof MandatoryFacetForPropertyAnnotation.Optional);
+            });
         }
 
         @Test
         public void whenOptionalityIsFalse() {
 
             class Customer {
-                @Property(
-                        optionality = Optionality.MANDATORY
-                        )
+                @Property(optionality = Optionality.MANDATORY)
                 @Getter @Setter private String name;
             }
 
             // given
-            final Class<?> cls = Customer.class;
-            propertyMethod = findMethod(Customer.class, "getName");
-
-            // when
-            val processMethodContext = ProcessMethodContext
-                    .forTesting(cls, null,
-                    propertyMethod, mockMethodRemover, facetedMethod);
-            processOptional(facetFactory, processMethodContext);
-
-            // then
-            final MandatoryFacet mandatoryFacet = facetedMethod.getFacet(MandatoryFacet.class);
-            assertNotNull(mandatoryFacet);
-            assertTrue(mandatoryFacet instanceof MandatoryFacetForPropertyAnnotation.Required);
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+                // when
+                processOptional(facetFactory, processMethodContext);
+                // then
+                final MandatoryFacet mandatoryFacet = facetedMethod.getFacet(MandatoryFacet.class);
+                assertNotNull(mandatoryFacet);
+                assertTrue(mandatoryFacet instanceof MandatoryFacetForPropertyAnnotation.Required);
+            });
         }
 
         @Test
         public void whenOptionalityIsDefault() {
 
             class Customer {
-                @Property(
-                        optionality = Optionality.DEFAULT
-                        )
+                @Property(optionality = Optionality.DEFAULT)
                 @Getter @Setter private String name;
             }
 
             // given
-            final Class<?> cls = Customer.class;
-            propertyMethod = findMethod(Customer.class, "getName");
-
-            // when
-            val processMethodContext = ProcessMethodContext
-                    .forTesting(cls, null,
-                    propertyMethod, mockMethodRemover, facetedMethod);
-            processOptional(facetFactory, processMethodContext);
-
-            // then
-            final MandatoryFacet mandatoryFacet = facetedMethod.getFacet(MandatoryFacet.class);
-            assertNull(mandatoryFacet);
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+                // when
+                processOptional(facetFactory, processMethodContext);
+                // then
+                final MandatoryFacet mandatoryFacet = facetedMethod.getFacet(MandatoryFacet.class);
+                assertNull(mandatoryFacet);
+            });
         }
 
         @Test
         public void whenNone() {
 
             class Customer {
-                @Property(
-                        )
+                @Property()
                 @Getter @Setter private String name;
             }
 
             // given
-            final Class<?> cls = Customer.class;
-            propertyMethod = findMethod(Customer.class, "getName");
-
-            // when
-            val processMethodContext = ProcessMethodContext
-                    .forTesting(cls, null,
-                    propertyMethod, mockMethodRemover, facetedMethod);
-            processOptional(facetFactory, processMethodContext);
-
-            // then
-            final MandatoryFacet mandatoryFacet = facetedMethod.getFacet(MandatoryFacet.class);
-            assertNull(mandatoryFacet);
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+                // when
+                processOptional(facetFactory, processMethodContext);
+                // then
+                final MandatoryFacet mandatoryFacet = facetedMethod.getFacet(MandatoryFacet.class);
+                assertNull(mandatoryFacet);
+            });
         }
 
     }
@@ -818,102 +731,78 @@ class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJupiterTest
             class Customer {
                 @Property(
                         regexPattern = "[123].*",
-                        regexPatternFlags = Pattern.CASE_INSENSITIVE | Pattern.MULTILINE
-                        )
+                        regexPatternFlags = Pattern.CASE_INSENSITIVE | Pattern.MULTILINE)
                 @Getter @Setter private String name;
             }
 
             // given
-            final Class<?> cls = Customer.class;
-            propertyMethod = findMethod(Customer.class, "getName");
-
-            // when
-            val processMethodContext = ProcessMethodContext
-                    .forTesting(cls, null,
-                    propertyMethod, mockMethodRemover, facetedMethod);
-            processRegEx(facetFactory, processMethodContext);
-
-            // then
-            final RegExFacet regExFacet = facetedMethod.getFacet(RegExFacet.class);
-            assertNotNull(regExFacet);
-            assertTrue(regExFacet instanceof RegExFacetForPropertyAnnotation);
-            assertThat(regExFacet.patternFlags(), is(10));
-            assertThat(regExFacet.regexp(), is("[123].*"));
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+                // when
+                processRegEx(facetFactory, processMethodContext);
+                // then
+                final RegExFacet regExFacet = facetedMethod.getFacet(RegExFacet.class);
+                assertNotNull(regExFacet);
+                assertTrue(regExFacet instanceof RegExFacetForPropertyAnnotation);
+                assertThat(regExFacet.patternFlags(), is(10));
+                assertThat(regExFacet.regexp(), is("[123].*"));
+            });
         }
 
         @Test
         public void whenNone() {
 
             class Customer {
-                @Property(
-                        )
+                @Property()
                 @Getter @Setter private String name;
             }
 
             // given
-            final Class<?> cls = Customer.class;
-            propertyMethod = findMethod(Customer.class, "getName");
-
-            // when
-            val processMethodContext = ProcessMethodContext
-                    .forTesting(cls, null,
-                    propertyMethod, mockMethodRemover, facetedMethod);
-            processRegEx(facetFactory, processMethodContext);
-
-            // then
-            final RegExFacet regExFacet = facetedMethod.getFacet(RegExFacet.class);
-            assertNull(regExFacet);
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+                // when
+                processRegEx(facetFactory, processMethodContext);
+                // then
+                final RegExFacet regExFacet = facetedMethod.getFacet(RegExFacet.class);
+                assertNull(regExFacet);
+            });
         }
 
         @Test
         public void whenEmptyString() {
 
             class Customer {
-                @Property(
-                        regexPattern = ""
-                        )
+                @Property(regexPattern = "")
                 @Getter @Setter private String name;
             }
 
             // given
-            final Class<?> cls = Customer.class;
-            propertyMethod = findMethod(Customer.class, "getName");
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+                // when
+                processRegEx(facetFactory, processMethodContext);
 
-            // when
-            val processMethodContext = ProcessMethodContext
-                    .forTesting(cls, null,
-                    propertyMethod, mockMethodRemover, facetedMethod);
-            processRegEx(facetFactory, processMethodContext);
-
-            // then
-            final RegExFacet regExFacet = facetedMethod.getFacet(RegExFacet.class);
-            assertNull(regExFacet);
+                // then
+                final RegExFacet regExFacet = facetedMethod.getFacet(RegExFacet.class);
+                assertNull(regExFacet);
+            });
         }
 
         @Test
         public void whenNotAnnotatedOnStringProperty() {
 
             class Customer {
-                @Property(
-                        regexPattern = "[abc].*"
-                        )
+                @Property(regexPattern = "[abc].*")
                 public int getName() {return 0; }
                 @SuppressWarnings("unused") public void setName(final int name) { }
             }
 
             // given
-            final Class<?> cls = Customer.class;
-            propertyMethod = findMethod(Customer.class, "getName");
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+                // when
+                processRegEx(facetFactory, processMethodContext);
 
-            // when
-            val processMethodContext = ProcessMethodContext
-                    .forTesting(cls, null,
-                    propertyMethod, mockMethodRemover, facetedMethod);
-            processRegEx(facetFactory, processMethodContext);
-
-            // then
-            final RegExFacet regExFacet = facetedMethod.getFacet(RegExFacet.class);
-            assertNull(regExFacet);
+                // then
+                final RegExFacet regExFacet = facetedMethod.getFacet(RegExFacet.class);
+                assertNull(regExFacet);
+            });
         }
 
     }

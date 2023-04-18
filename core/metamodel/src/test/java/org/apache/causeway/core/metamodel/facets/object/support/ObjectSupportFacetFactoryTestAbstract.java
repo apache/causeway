@@ -18,37 +18,41 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.support;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.commons.internal.reflection._MethodFacades;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
-import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 
 import lombok.val;
 
 public abstract class ObjectSupportFacetFactoryTestAbstract
-extends AbstractFacetFactoryTest {
+extends FacetFactoryTestAbstract {
 
     protected ObjectSupportFacetFactory facetFactory;
 
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-        facetFactory = new ObjectSupportFacetFactory(metaModelContext);
+    @BeforeEach
+    protected void setUp() {
+        facetFactory = new ObjectSupportFacetFactory(getMetaModelContext());
     }
 
-    @Override
-    protected void tearDown() throws Exception {
+    @AfterEach
+    protected void tearDown() {
         facetFactory = null;
-        super.tearDown();
     }
 
+    /**
+     * see also CallbackFacetFactoryTestAbstract#assertPicksUp
+     */
     protected void assertPicksUp(
             final int expectedSupportMethodCount,
             final FacetFactory facetFactory,
@@ -56,24 +60,28 @@ extends AbstractFacetFactoryTest {
             final ProgrammingModelConstants.ObjectSupportMethod supportMethodEnum,
             final Class<? extends Facet> facetType) {
 
-        // when
-        facetFactory.process(ProcessClassContext
-                .forTesting(type, methodRemover, facetedMethod));
+        objectScenario(type, (processClassContext, facetHolder) -> {
+            //when
+            facetFactory.process(processClassContext);
+            //then
+            val supportMethods = supportMethodEnum.getMethodNames()
+                    .map(methodName->findMethodExactOrFail(type, methodName))
+                    .map(_MethodFacades::regular)
+                    .map(MethodFacade::asMethodElseFail);
 
-        val supportMethods = supportMethodEnum.getMethodNames()
-                .map(methodName->findMethod(type, methodName))
-                .map(_MethodFacades::regular);
+            assertEquals(expectedSupportMethodCount, supportMethods.size());
 
-        assertEquals(expectedSupportMethodCount, supportMethods.size());
+            val facet = facetHolder.getFacet(facetType);
+            assertNotNull(facet);
+            assertTrue(facet instanceof ImperativeFacet);
+            val imperativeFacet = (ImperativeFacet)facet;
 
-        val facet = facetedMethod.getFacet(facetType);
-        assertNotNull(facet);
-        assertTrue(facet instanceof ImperativeFacet);
-        val imperativeFacet = (ImperativeFacet)facet;
+            supportMethods.forEach(method->{
+                assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
+                assertTrue(imperativeFacet.getMethods()
+                        .map(MethodFacade::asMethodElseFail).contains(method));
+            });
 
-        supportMethods.forEach(method->{
-            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
-            assertTrue(imperativeFacet.getMethods().contains(method));
         });
 
     }

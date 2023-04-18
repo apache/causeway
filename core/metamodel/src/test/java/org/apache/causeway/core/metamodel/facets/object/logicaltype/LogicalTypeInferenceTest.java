@@ -27,10 +27,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.applib.id.LogicalType;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 
 public class LogicalTypeInferenceTest
-extends AbstractFacetFactoryJupiterTestCase {
+extends FacetFactoryTestAbstract {
 
     public static class Customer {
     }

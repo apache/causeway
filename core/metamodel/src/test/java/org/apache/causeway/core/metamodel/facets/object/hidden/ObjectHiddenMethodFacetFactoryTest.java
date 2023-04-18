@@ -18,13 +18,16 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.hidden;
 
+import org.junit.jupiter.api.Test;
+
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
 import org.apache.causeway.core.metamodel.facets.object.support.ObjectSupportFacetFactoryTestAbstract;
 
-public class ObjectHiddenMethodFacetFactoryTest
+class ObjectHiddenMethodFacetFactoryTest
 extends ObjectSupportFacetFactoryTestAbstract {
 
-    public void testDisabledMethodPickedUpAndMethodRemovedBooleanType() {
+    @Test
+    void disabledMethodPickedUpAndMethodRemovedBooleanType() {
         class Customer {
             @SuppressWarnings("unused")
             public boolean hidden() {

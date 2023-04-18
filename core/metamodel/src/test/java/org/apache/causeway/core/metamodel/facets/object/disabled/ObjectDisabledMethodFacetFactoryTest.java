@@ -18,13 +18,16 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.disabled;
 
+import org.junit.jupiter.api.Test;
+
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
 import org.apache.causeway.core.metamodel.facets.object.support.ObjectSupportFacetFactoryTestAbstract;
 
 public class ObjectDisabledMethodFacetFactoryTest
 extends ObjectSupportFacetFactoryTestAbstract {
 
-    public void testDisabledMethodPickedUpAndMethodRemoved() {
+    @Test
+    void disabledMethodPickedUpAndMethodRemoved() {
         class Customer {
             @SuppressWarnings("unused")
             public String disabled() {

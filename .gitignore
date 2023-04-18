@@ -66,6 +66,9 @@ component/objectstore/xml/tmp/objects/
 component/objectstore/xml/xml/objects/
 component/objectstore/xml/tmp/tests/
 
+# backup files
+*.bak
+
 # log files
 *.log
 

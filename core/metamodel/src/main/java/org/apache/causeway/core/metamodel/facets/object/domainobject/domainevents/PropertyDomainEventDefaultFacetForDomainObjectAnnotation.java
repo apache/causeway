@@ -18,10 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainobject.domainevents;
 
+import java.util.Optional;
+
 import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.SingleClassValueFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
 
 /**
@@ -29,22 +31,24 @@ import org.apache.causeway.core.metamodel.facets.actions.action.invocation.Actio
  * for any actions as a fallback/default.
  */
 public class PropertyDomainEventDefaultFacetForDomainObjectAnnotation
-extends SingleClassValueFacetAbstract {
+extends DomainEventFacetAbstract<PropertyDomainEvent<?, ?>> {
 
-    private final Class<? extends PropertyDomainEvent<?, ?>> eventType;
-    public Class<? extends PropertyDomainEvent<?, ?>> getEventType() {
-        return eventType;
+    public static Optional<PropertyDomainEventDefaultFacetForDomainObjectAnnotation> create(
+            final Class<? extends PropertyDomainEvent<?,?>> domainEvent,
+            final FacetHolder holder) {
+        return domainEvent != PropertyDomainEvent.Default.class
+                ? Optional.of(new PropertyDomainEventDefaultFacetForDomainObjectAnnotation(domainEvent, holder))
+                : Optional.empty();
     }
 
     private static Class<? extends Facet> type() {
         return PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class;
     }
 
-    public PropertyDomainEventDefaultFacetForDomainObjectAnnotation(
-            final FacetHolder holder,
-            final Class<? extends PropertyDomainEvent<?,?>> value) {
-        super(type(), holder, value);
-        this.eventType = value;
+    private PropertyDomainEventDefaultFacetForDomainObjectAnnotation(
+            final Class<? extends PropertyDomainEvent<?,?>> value,
+            final FacetHolder holder) {
+        super(type(), value, EventTypeOrigin.ANNOTATED_OBJECT, holder);
     }
 
 }

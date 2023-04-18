@@ -21,8 +21,6 @@ package org.apache.causeway.core.metamodel.facets.object.navparent.annotation;
 import java.lang.reflect.Method;
 import java.util.stream.Stream;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -34,8 +32,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.commons.internal._Constants;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.object.navparent.NavigableParentFacet;
 import org.apache.causeway.core.metamodel.facets.object.navparent.annotation.NavigableParentTestSamples.DomainObjectInvalidParentAnnot;
 import org.apache.causeway.core.metamodel.facets.object.navparent.annotation.NavigableParentTestSamples.DomainObjectProperAnnot;
@@ -44,23 +42,7 @@ import org.apache.causeway.core.metamodel.facets.object.navparent.method.Navigab
 import lombok.val;
 
 class NavigableParentAnnotationFacetFactoryTest
-extends AbstractFacetFactoryJupiterTestCase {
-
-    private NavigableParentAnnotationFacetFactory facetFactory;
-
-    @BeforeEach
-    void setUp() throws Exception {
-        super.setUpMmc();
-        super.setUpFacetedMethodAndParameter();
-    }
-
-    @AfterEach
-    @Override
-    protected void tearDown() throws Exception {
-        facetFactory = null;
-        super.tearDown();
-    }
-
+extends FacetFactoryTestAbstract {
 
     static Stream<Arguments> navigableTypeArgs() {
         return Stream.of(
@@ -79,7 +61,7 @@ extends AbstractFacetFactoryJupiterTestCase {
         val domainClass = domainObject.getClass();
         val facetedMethod = facetedAction(domainClass, parentMethodName);
 
-        facetFactory = new NavigableParentAnnotationFacetFactory(getMetaModelContext());
+        val facetFactory = new NavigableParentAnnotationFacetFactory(getMetaModelContext());
         facetFactory.process(ProcessClassContext
                 .forTesting(domainClass, defaultMethodRemover(), facetedMethod));
 

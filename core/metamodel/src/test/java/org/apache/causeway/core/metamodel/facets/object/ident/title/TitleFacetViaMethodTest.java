@@ -30,12 +30,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.object.title.methods.TitleFacetViaTitleMethod;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
+import lombok.val;
+
 class TitleFacetViaMethodTest
-extends AbstractFacetFactoryJupiterTestCase {
+extends FacetFactoryTestAbstract {
 
     private TitleFacetViaTitleMethod facet;
 
@@ -55,7 +57,7 @@ extends AbstractFacetFactoryJupiterTestCase {
         metaModelContext = MetaModelContext_forTesting.builder()
                 .build();
 
-        mockFacetHolder = Mockito.mock(FacetHolder.class);
+        val mockFacetHolder = Mockito.mock(FacetHolder.class);
         Mockito.when(mockFacetHolder.getMetaModelContext()).thenReturn(metaModelContext);
 
         pojo = new DomainObjectWithProblemInItsTitleMethod();

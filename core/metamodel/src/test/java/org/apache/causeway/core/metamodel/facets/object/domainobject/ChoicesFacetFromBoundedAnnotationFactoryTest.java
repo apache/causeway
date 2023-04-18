@@ -18,50 +18,50 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainobject;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.Bounding;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.object.choices.ChoicesFacetFromBoundedAbstract;
 import org.apache.causeway.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 
-import lombok.val;
-
 class ChoicesFacetFromBoundedAnnotationFactoryTest
-extends AbstractFacetFactoryTest {
+extends FacetFactoryTestAbstract {
 
     private DomainObjectAnnotationFacetFactory facetFactory;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        facetFactory = new DomainObjectAnnotationFacetFactory(metaModelContext);
+    @BeforeEach
+    protected void setUp() {
+        facetFactory = new DomainObjectAnnotationFacetFactory(getMetaModelContext());
     }
 
-    @Override
-    protected void tearDown() throws Exception {
+    @AfterEach
+    protected void tearDown() {
         facetFactory = null;
-        super.tearDown();
     }
 
-    public void testBoundedAnnotationPickedUpOnClass() {
+    @Test
+    void boundedAnnotationPickedUpOnClass() {
         @DomainObject(bounding = Bounding.BOUNDED)
         class Customer {
         }
+        objectScenario(Customer.class, (processClassContext, facetHolder) -> {
+            //when
+            facetFactory.processBounded(processClassContext.synthesizeOnType(DomainObject.class), processClassContext);
+            //then
+            final Facet facet = facetHolder.getFacet(ChoicesFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof ChoicesFacetFromBoundedAbstract);
 
-        val context = ProcessClassContext
-                .forTesting(Customer.class, methodRemover, facetedMethod);
-        facetFactory.processBounded(context.synthesizeOnType(DomainObject.class), context);
+            assertNoMethodsRemoved();
+        });
 
-        final Facet facet = facetedMethod.getFacet(ChoicesFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof ChoicesFacetFromBoundedAbstract);
-
-        assertNoMethodsRemoved();
     }
 }

@@ -18,19 +18,21 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.ident.icon;
 
+import org.junit.jupiter.api.Test;
+
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.facets.object.support.ObjectSupportFacetFactoryTestAbstract;
 
-public class IconFacetMethodFactoryTest
+class IconFacetMethodFactoryTest
 extends ObjectSupportFacetFactoryTestAbstract {
 
-    public void testIconNameMethodPickedUpOnClassAndMethodRemoved() {
+    @Test
+    void iconNameMethodPickedUpOnClassAndMethodRemoved() {
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
-            public String iconName() {
-                return null;
-            }
+            public String iconName() { return null; }
+
         }
         assertPicksUp(1, facetFactory, Customer.class, ObjectSupportMethod.ICON_NAME, IconFacet.class);
     }
