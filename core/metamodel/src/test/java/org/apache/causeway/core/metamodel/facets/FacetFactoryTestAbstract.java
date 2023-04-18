@@ -212,8 +212,6 @@ implements HasMetaModelContext {
         consumer.accept(processMethodContext, scenario.facetHolder, scenario.facetedMethod, scenario.facetedMethodParameter);
     }
 
-
-
     /**
      * DomainObject scenario.
      */
