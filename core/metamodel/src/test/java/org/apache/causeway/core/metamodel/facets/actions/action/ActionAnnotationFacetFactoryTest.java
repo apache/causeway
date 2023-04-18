@@ -27,17 +27,16 @@ import org.mockito.Mockito;
 
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 
 class ActionAnnotationFacetFactoryTest
-extends AbstractFacetFactoryJupiterTestCase {
+extends FacetFactoryTestAbstract {
 
     ActionAnnotationFacetFactory facetFactory;
-    Method actionMethod;
 
     ObjectSpecification mockTypeSpec;
     ObjectSpecification mockReturnTypeSpec;
@@ -57,10 +56,8 @@ extends AbstractFacetFactoryJupiterTestCase {
         Mockito.when(mockTypeSpec.getFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class))
         .thenReturn(null);
 
-        actionMethod = findMethod(Customer.class, "someAction");
     }
 
-    @Override
     @AfterEach
     public void tearDown() throws Exception {
         facetFactory = null;

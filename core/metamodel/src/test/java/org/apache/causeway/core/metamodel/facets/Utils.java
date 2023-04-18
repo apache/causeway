@@ -20,8 +20,10 @@ package org.apache.causeway.core.metamodel.facets;
 
 import java.lang.reflect.Method;
 
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal._Constants;
+import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 
 class Utils {
@@ -39,7 +41,7 @@ class Utils {
         return false;
     }
 
-    protected static boolean contains(ImmutableEnumSet<FeatureType> featureTypes, final FeatureType featureType) {
+    protected static boolean contains(final ImmutableEnumSet<FeatureType> featureTypes, final FeatureType featureType) {
         if(featureTypes==null || featureType==null) {
             return false;
         }
@@ -58,6 +60,16 @@ class Utils {
 
     protected static Method findMethod(final Class<?> type, final String methodName) {
         return findMethod(type, methodName, _Constants.emptyClasses);
+    }
+
+    protected static Can<Method> findMethodsByName(final Class<?> type, final String methodName) {
+        return _ClassCache.getInstance().streamPublicOrDeclaredMethods(type)
+                .filter(method->method.getName().equals(methodName))
+                .collect(Can.toCan());
+    }
+
+    protected static Method findMethodByNameOrFail(final Class<?> type, final String methodName) {
+        return findMethodsByName(type, methodName).getSingletonOrFail();
     }
 
 }

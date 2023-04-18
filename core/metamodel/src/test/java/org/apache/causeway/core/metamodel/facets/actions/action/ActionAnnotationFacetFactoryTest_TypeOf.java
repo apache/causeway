@@ -55,22 +55,17 @@ extends ActionAnnotationFacetFactoryTest {
 
         class Customer {
             @SuppressWarnings("unused")
-            public Customer someAction() {
-                return null;
-            }
+            public Customer someAction() { return null; }
         }
 
         // given
-        final Class<?> cls = Customer.class;
-        actionMethod = findMethod(cls, "someAction");
-
-        // when
-        final ProcessMethodContext processMethodContext = ProcessMethodContext.forTesting(cls, null, actionMethod, mockMethodRemover, facetedMethod);
-        processTypeOf(facetFactory, processMethodContext);
-
-        // then
-        final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
-        assertNull(facet);
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            processTypeOf(facetFactory, processMethodContext);
+            // then
+            final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
+            assertNull(facet);
+        });
     }
 
     @Test
@@ -81,24 +76,19 @@ extends ActionAnnotationFacetFactoryTest {
         class Customer {
             @SuppressWarnings("rawtypes")
             @Action(typeOf = Order.class)
-            public Collection someAction() {
-                return null;
-            }
+            public Collection someAction() { return null; }
         }
 
         // given
-        final Class<?> cls = Customer.class;
-        actionMethod = findMethod(cls, "someAction");
-
-        // when
-        final ProcessMethodContext processMethodContext = ProcessMethodContext.forTesting(cls, null, actionMethod, mockMethodRemover, facetedMethod);
-        processTypeOf(facetFactory, processMethodContext);
-
-        // then
-        final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof TypeOfFacetForActionAnnotation);
-        assertThat(facet.value().getElementType(), classEqualTo(Order.class));
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            processTypeOf(facetFactory, processMethodContext);
+            // then
+            final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof TypeOfFacetForActionAnnotation);
+            assertThat(facet.value().getElementType(), classEqualTo(Order.class));
+        });
     }
 
     @Test
@@ -108,23 +98,17 @@ extends ActionAnnotationFacetFactoryTest {
         }
         class Customer {
             @Action(typeOf = Order.class)
-            public Customer someAction() {
-                return null;
-            }
+            public Customer someAction() { return null; }
         }
 
         // given
-        final Class<?> cls = Customer.class;
-        actionMethod = findMethod(cls, "someAction");
-
-        // when
-        final ProcessMethodContext processMethodContext = ProcessMethodContext
-                .forTesting(cls, null, actionMethod, mockMethodRemover, facetedMethod);
-        processTypeOf(facetFactory, processMethodContext);
-
-        // then
-        final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
-        assertNull(facet);
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            processTypeOf(facetFactory, processMethodContext);
+            // then
+            final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
+            assertNull(facet);
+        });
     }
 
     @Test
@@ -134,26 +118,20 @@ extends ActionAnnotationFacetFactoryTest {
         }
         class Customer {
             @SuppressWarnings("unused")
-            public Order[] someAction() {
-                return null;
-            }
+            public Order[] someAction() { return null; }
         }
 
         // given
-        final Class<?> cls = Customer.class;
-        actionMethod = findMethod(cls, "someAction");
-
-        // when
-        final ProcessMethodContext processMethodContext = ProcessMethodContext
-                .forTesting(cls, null, actionMethod, mockMethodRemover, facetedMethod);
-        processTypeOf(facetFactory, processMethodContext);
-
-        // then
-        final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof TypeOfFacet);
-        assertThat(facet.value().getElementType(), classEqualTo(Order.class));
-        assertThat(facet.value().getCollectionSemantics(), Matchers.is(Optional.of(CollectionSemantics.ARRAY)));
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            processTypeOf(facetFactory, processMethodContext);
+            // then
+            final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof TypeOfFacet);
+            assertThat(facet.value().getElementType(), classEqualTo(Order.class));
+            assertThat(facet.value().getCollectionSemantics(), Matchers.is(Optional.of(CollectionSemantics.ARRAY)));
+        });
     }
 
     @Test
@@ -163,25 +141,18 @@ extends ActionAnnotationFacetFactoryTest {
         }
         class Customer {
             @SuppressWarnings("unused")
-            public Collection<Order> someAction() {
-                return null;
-            }
+            public Collection<Order> someAction() { return null; }
         }
 
         // given
-        final Class<?> cls = Customer.class;
-        actionMethod = findMethod(cls, "someAction");
-
-        // when
-        final ProcessMethodContext processMethodContext = ProcessMethodContext
-                .forTesting(cls, null, actionMethod, mockMethodRemover, facetedMethod);
-        processTypeOf(facetFactory, processMethodContext);
-
-        // then
-        final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
-        assertNotNull(facet);
-        assertEquals(TypeOfFacetFromFeature.class, facet.getClass());
-        assertThat(facet.value().getElementType(), classEqualTo(Order.class));
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            processTypeOf(facetFactory, processMethodContext);
+            // then
+            final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
+            assertNotNull(facet);
+            assertEquals(TypeOfFacetFromFeature.class, facet.getClass());
+            assertThat(facet.value().getElementType(), classEqualTo(Order.class));
+        });
     }
-
 }

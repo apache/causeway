@@ -34,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.commons.internal._Constants;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.causeway.core.metamodel.facets.object.navparent.NavigableParentFacet;
 import org.apache.causeway.core.metamodel.facets.object.navparent.annotation.NavigableParentTestSamples.DomainObjectInvalidParentAnnot;
@@ -44,7 +44,7 @@ import org.apache.causeway.core.metamodel.facets.object.navparent.method.Navigab
 import lombok.val;
 
 class NavigableParentAnnotationFacetFactoryTest
-extends AbstractFacetFactoryJupiterTestCase {
+extends FacetFactoryTestAbstract {
 
     private NavigableParentAnnotationFacetFactory facetFactory;
 
@@ -55,12 +55,9 @@ extends AbstractFacetFactoryJupiterTestCase {
     }
 
     @AfterEach
-    @Override
     protected void tearDown() throws Exception {
         facetFactory = null;
-        super.tearDown();
     }
-
 
     static Stream<Arguments> navigableTypeArgs() {
         return Stream.of(

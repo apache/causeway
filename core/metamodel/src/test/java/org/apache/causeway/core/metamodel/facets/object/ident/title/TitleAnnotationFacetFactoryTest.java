@@ -40,9 +40,8 @@ import org.apache.causeway.applib.annotation.Title;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
 import org.apache.causeway.core.metamodel.facets.Evaluators;
-import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.causeway.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
 import org.apache.causeway.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation;
@@ -52,7 +51,7 @@ import org.apache.causeway.core.metamodel.valuesemantics.IntValueSemantics;
 import lombok.val;
 
 class TitleAnnotationFacetFactoryTest
-extends AbstractFacetFactoryJupiterTestCase {
+extends FacetFactoryTestAbstract {
 
     private TitleAnnotationFacetFactory facetFactory;
 
@@ -72,10 +71,8 @@ extends AbstractFacetFactoryJupiterTestCase {
     }
 
     @AfterEach
-    @Override
     public void tearDown() throws Exception {
         facetFactory = null;
-        super.tearDown();
     }
 
     // -- SCENARIO 1
@@ -90,25 +87,30 @@ extends AbstractFacetFactoryJupiterTestCase {
 
     @Test
     public void testTitleAnnotatedMethodPickedUpOnClassRemoved() throws Exception {
-        facetFactory.process(ProcessClassContext
-                .forTesting(Customer1.class, mockMethodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(TitleFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof TitleFacetViaTitleAnnotation);
-        final TitleFacetViaTitleAnnotation titleFacetViaTitleAnnotation =
-                (TitleFacetViaTitleAnnotation) facet;
+        val someTitleMethod = Customer1.class.getMethod("someTitle");
 
-        final List<Method> titleMethods = Arrays.asList(Customer1.class.getMethod("someTitle"));
-        for (int i = 0; i < titleMethods.size(); i++) {
-            final Evaluators.MethodEvaluator titleEvaluator =
-                    (Evaluators.MethodEvaluator) titleFacetViaTitleAnnotation.getComponents()
-                    .getElseFail(i)
-                    .getTitleEvaluator();
+        objectScenario(Customer1.class, (processClassContext, facetHolder)->{
+            facetFactory.process(processClassContext);
 
-            assertEquals(titleMethods.get(i),
-                    titleEvaluator.getMethod());
-        }
+            final Facet facet = facetHolder.getFacet(TitleFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof TitleFacetViaTitleAnnotation);
+            final TitleFacetViaTitleAnnotation titleFacetViaTitleAnnotation =
+                    (TitleFacetViaTitleAnnotation) facet;
+
+            final List<Method> titleMethods = Arrays.asList(someTitleMethod);
+            for (int i = 0; i < titleMethods.size(); i++) {
+                final Evaluators.MethodEvaluator titleEvaluator =
+                        (Evaluators.MethodEvaluator) titleFacetViaTitleAnnotation.getComponents()
+                        .getElseFail(i)
+                        .getTitleEvaluator();
+
+                assertEquals(titleMethods.get(i),
+                        titleEvaluator.getMethod());
+            }
+        });
+
     }
 
     // -- SCENARIO 2
@@ -135,35 +137,38 @@ extends AbstractFacetFactoryJupiterTestCase {
     @Test
     public void testTitleAnnotatedMethodsPickedUpOnClass() throws Exception {
 
-        facetFactory.process(ProcessClassContext
-                .forTesting(Customer2.class, mockMethodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(TitleFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof TitleFacetViaTitleAnnotation);
-        final TitleFacetViaTitleAnnotation titleFacetViaTitleAnnotation =
-                (TitleFacetViaTitleAnnotation) facet;
-
         final List<Method> titleMethods = Arrays.asList(
                 Customer2.class.getMethod("titleElement1"),
                 Customer2.class.getMethod("titleElement3"),
                 Customer2.class.getMethod("titleElement2"));
 
-        for (int i = 0; i < titleMethods.size(); i++) {
-            final Evaluators.MethodEvaluator titleEvaluator =
-                    (Evaluators.MethodEvaluator) titleFacetViaTitleAnnotation.getComponents()
-                    .getElseFail(i)
-                    .getTitleEvaluator();
+        objectScenario(Customer2.class, (processClassContext, facetHolder)->{
+            facetFactory.process(processClassContext);
 
-            assertEquals(titleMethods.get(i),
-                    titleEvaluator.getMethod());
-        }
+            final Facet facet = facetHolder.getFacet(TitleFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof TitleFacetViaTitleAnnotation);
+            final TitleFacetViaTitleAnnotation titleFacetViaTitleAnnotation =
+                    (TitleFacetViaTitleAnnotation) facet;
 
-        final Customer2 customer = new Customer2();
-        val objectAdapter = ManagedObject.adaptSingular(getSpecificationLoader(), customer);
+            for (int i = 0; i < titleMethods.size(); i++) {
+                final Evaluators.MethodEvaluator titleEvaluator =
+                        (Evaluators.MethodEvaluator) titleFacetViaTitleAnnotation.getComponents()
+                        .getElseFail(i)
+                        .getTitleEvaluator();
 
-        final String title = titleFacetViaTitleAnnotation.title(objectAdapter);
-        assertThat(title, is("titleElement1. titleElement3,titleElement2"));
+                assertEquals(titleMethods.get(i),
+                        titleEvaluator.getMethod());
+            }
+
+            final Customer2 customer = new Customer2();
+            val objectAdapter = ManagedObject.adaptSingular(getSpecificationLoader(), customer);
+
+            final String title = titleFacetViaTitleAnnotation.title(objectAdapter);
+            assertThat(title, is("titleElement1. titleElement3,titleElement2"));
+
+        });
+
     }
 
     // -- SCENARIO 3
@@ -174,10 +179,10 @@ extends AbstractFacetFactoryJupiterTestCase {
     @Test
     public void testNoExplicitTitleAnnotations() {
 
-        facetFactory.process(ProcessClassContext
-                .forTesting(Customer3.class, mockMethodRemover, facetedMethod));
-
-        assertNull(facetedMethod.getFacet(TitleFacet.class));
+        objectScenario(Customer3.class, (processClassContext, facetHolder)->{
+            facetFactory.process(processClassContext);
+            assertNull(facetHolder.getFacet(TitleFacet.class));
+        });
     }
 
     // -- SCENARIO 4
@@ -237,13 +242,15 @@ extends AbstractFacetFactoryJupiterTestCase {
             assertEquals("3", pThree.getTitle());
         }
 
-        facetFactory.process(ProcessClassContext
-                .forTesting(Customer4.class, mockMethodRemover, facetedMethod));
+        objectScenario(Customer4.class, (processClassContext, facetHolder)->{
+            facetFactory.process(processClassContext);
 
-        val objectAdapter = getObjectManager().adapt(new Customer4());
+            val objectAdapter = getObjectManager().adapt(new Customer4());
 
-        assertThat(objectAdapter.getTitle(),
-                is("titleElement1 titleElement3 titleElement5 3 this needs to be trimmed"));
+            assertThat(objectAdapter.getTitle(),
+                    is("titleElement1 titleElement3 titleElement5 3 this needs to be trimmed"));
+        });
+
     }
 
 

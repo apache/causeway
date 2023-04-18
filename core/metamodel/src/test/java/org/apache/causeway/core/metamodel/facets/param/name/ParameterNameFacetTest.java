@@ -27,12 +27,10 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
-import org.apache.causeway.core.metamodel.facets.FacetFactory;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.all.named.ParamNamedFacet;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 
@@ -42,7 +40,7 @@ import lombok.val;
  * needs the javac -parameter flag set when compiling this test
  */
 class ParameterNameFacetTest
-extends AbstractFacetFactoryJupiterTestCase {
+extends FacetFactoryTestAbstract {
 
     ProgrammingModel programmingModel;
     Method actionMethod;
@@ -58,10 +56,8 @@ extends AbstractFacetFactoryJupiterTestCase {
         programmingModel = metaModelContext.getProgrammingModel();
     }
 
-    @Override
     @AfterEach
     public void tearDown() throws Exception {
-        super.tearDown();
         programmingModel = null;
     }
 
@@ -95,21 +91,14 @@ extends AbstractFacetFactoryJupiterTestCase {
         }
 
         // given
-        actionMethod = findMethod(Customer.class, "someAction", new Class[]{String.class} );
-
-        // when
-        val processParameterContext =
-                FacetFactory.ProcessParameterContext.forTesting(
-                        Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
-
-        programmingModel.streamFactories()
-        .forEach(facetFactory->facetFactory.processParams(processParameterContext));
-
-        // then
-        val namedFacet = facetedMethodParameter.getFacet(ParamNamedFacet.class);
-
-        assertEquals("An Awesome Name", namedFacet.text());
-
+        parameterScenario(Customer.class, "someAction", 0, (processParameterContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            programmingModel.streamFactories()
+            .forEach(facetFactory->facetFactory.processParams(processParameterContext));
+            // then
+            val namedFacet = facetedMethodParameter.getFacet(ParamNamedFacet.class);
+            assertEquals("An Awesome Name", namedFacet.text());
+        });
     }
 
     @Test
@@ -118,27 +107,19 @@ extends AbstractFacetFactoryJupiterTestCase {
         class Customer {
             @SuppressWarnings("unused")
             public void someAction(
-                    @ParameterLayout(
-                            named = "Even Better Name"
-                            )
+                    @ParameterLayout(named = "Even Better Name")
                     final String anAwesomeName) { }
         }
 
-
-
         // given
-        actionMethod = findMethod(Customer.class, "someAction", new Class[]{String.class} );
-
-        // when
-        val processParameterContext =
-                FacetFactory.ProcessParameterContext.forTesting(
-                        Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
-        programmingModel.streamFactories().forEach(facetFactory->facetFactory.processParams(processParameterContext));
-
-        // then
-        val namedFacet = facetedMethodParameter.getFacet(ParamNamedFacet.class);
-        assertNotNull(namedFacet);
-        assertEquals("Even Better Name", namedFacet.text());
+        parameterScenario(Customer.class, "someAction", 0, (processParameterContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            programmingModel.streamFactories().forEach(facetFactory->facetFactory.processParams(processParameterContext));
+            // then
+            val namedFacet = facetedMethodParameter.getFacet(ParamNamedFacet.class);
+            assertNotNull(namedFacet);
+            assertEquals("Even Better Name", namedFacet.text());
+        });
 
     }
 

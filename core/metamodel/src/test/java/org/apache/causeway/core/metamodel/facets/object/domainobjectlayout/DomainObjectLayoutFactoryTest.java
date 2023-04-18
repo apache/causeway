@@ -37,8 +37,7 @@ import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
-import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
@@ -51,7 +50,7 @@ import lombok.val;
 
 @ExtendWith(MockitoExtension.class)
 class DomainObjectLayoutFactoryTest
-extends AbstractFacetFactoryJupiterTestCase {
+extends FacetFactoryTestAbstract {
 
     DomainObjectLayoutFacetFactory facetFactory;
 
@@ -62,11 +61,9 @@ extends AbstractFacetFactoryJupiterTestCase {
         facetFactory = new DomainObjectLayoutFacetFactory(metaModelContext);
     }
 
-    @Override
     @AfterEach
     public void tearDown() throws Exception {
         facetFactory = null;
-        super.tearDown();
     }
 
     // -- DOMAIN OBJECTS FOR TESTING
@@ -98,36 +95,33 @@ extends AbstractFacetFactoryJupiterTestCase {
 
             @Test
             public void whenSpecified() {
+                objectScenario(DomainObjectLayoutFactoryTest.Customer.class, (processClassContext, facetHolder)->{
+                    facetFactory.process(processClassContext);
 
-                final Class<?> cls = DomainObjectLayoutFactoryTest.Customer.class;
+                    final Facet facet = facetHolder.getFacet(BookmarkPolicyFacet.class);
+                    assertNotNull(facet);
+                    assertTrue(facet instanceof BookmarkPolicyFacetForDomainObjectLayoutAnnotation);
 
-                facetFactory.process(ProcessClassContext
-                        .forTesting(cls, mockMethodRemover, facetHolder));
+                    final BookmarkPolicyFacetForDomainObjectLayoutAnnotation facetImpl =
+                            (BookmarkPolicyFacetForDomainObjectLayoutAnnotation) facet;
 
-                final Facet facet = facetHolder.getFacet(BookmarkPolicyFacet.class);
-                assertNotNull(facet);
-                assertTrue(facet instanceof BookmarkPolicyFacetForDomainObjectLayoutAnnotation);
+                    assertThat(facetImpl.value(), is(BookmarkPolicy.AS_ROOT));
 
-                final BookmarkPolicyFacetForDomainObjectLayoutAnnotation facetImpl =
-                        (BookmarkPolicyFacetForDomainObjectLayoutAnnotation) facet;
+                    expectNoMethodsRemoved();
 
-                assertThat(facetImpl.value(), is(BookmarkPolicy.AS_ROOT));
-
-                expectNoMethodsRemoved();
+                });
             }
 
             @Test
             public void whenDefaults() {
+                objectScenario(CustomerWithDefaults.class, (processClassContext, facetHolder)->{
+                    facetFactory.process(processClassContext);
 
-                final Class<?> cls = CustomerWithDefaults.class;
+                    final BookmarkPolicyFacet facet = facetHolder.getFacet(BookmarkPolicyFacet.class);
+                    assertThat(facet.value(), is(BookmarkPolicy.NOT_SPECIFIED));
 
-                facetFactory.process(ProcessClassContext
-                        .forTesting(cls, mockMethodRemover, facetHolder));
-
-                final BookmarkPolicyFacet facet = facetHolder.getFacet(BookmarkPolicyFacet.class);
-                assertThat(facet.value(), is(BookmarkPolicy.NOT_SPECIFIED));
-
-                expectNoMethodsRemoved();
+                    expectNoMethodsRemoved();
+                });
             }
         }
 
@@ -148,35 +142,31 @@ extends AbstractFacetFactoryJupiterTestCase {
 
             @Test
             public void whenSpecified() {
+                objectScenario(DomainObjectLayoutFactoryTest.Customer.class, (processClassContext, facetHolder)->{
+                    facetFactory.process(processClassContext);
 
-                final Class<?> cls = DomainObjectLayoutFactoryTest.Customer.class;
+                    final Facet facet = facetHolder.getFacet(CssClassFacet.class);
+                    assertNotNull(facet);
+                    assertTrue(facet instanceof CssClassFacetForDomainObjectLayoutAnnotation);
 
-                facetFactory.process(ProcessClassContext
-                        .forTesting(cls, mockMethodRemover, facetHolder));
+                    final CssClassFacetForDomainObjectLayoutAnnotation facetImpl =
+                            (CssClassFacetForDomainObjectLayoutAnnotation) facet;
+                    assertThat(facetImpl.cssClass(mockAdapter), is("foobar"));
 
-                final Facet facet = facetHolder.getFacet(CssClassFacet.class);
-                assertNotNull(facet);
-                assertTrue(facet instanceof CssClassFacetForDomainObjectLayoutAnnotation);
-
-                final CssClassFacetForDomainObjectLayoutAnnotation facetImpl =
-                        (CssClassFacetForDomainObjectLayoutAnnotation) facet;
-                assertThat(facetImpl.cssClass(mockAdapter), is("foobar"));
-
-                expectNoMethodsRemoved();
+                    expectNoMethodsRemoved();
+                });
             }
 
             @Test
             public void whenDefaults() {
+                objectScenario(CustomerWithDefaults.class, (processClassContext, facetHolder)->{
+                    facetFactory.process(processClassContext);
 
-                final Class<?> cls = CustomerWithDefaults.class;
+                    final Facet facet = facetHolder.getFacet(CssClassFacet.class);
+                    assertNull(facet);
 
-                facetFactory.process(ProcessClassContext
-                        .forTesting(cls, mockMethodRemover, facetHolder));
-
-                final Facet facet = facetHolder.getFacet(CssClassFacet.class);
-                assertNull(facet);
-
-                expectNoMethodsRemoved();
+                    expectNoMethodsRemoved();
+                });
             }
         }
 
@@ -192,38 +182,34 @@ extends AbstractFacetFactoryJupiterTestCase {
             public void setUp2() throws Exception {
             }
 
-
             @Test
             public void whenSpecified() {
+                objectScenario(DomainObjectLayoutFactoryTest.Customer.class, (processClassContext, facetHolder)->{
+                    facetFactory.process(processClassContext);
 
-                final Class<?> cls = DomainObjectLayoutFactoryTest.Customer.class;
+                    final Facet facet = facetHolder.getFacet(CssClassFaFacet.class);
+                    assertNotNull(facet);
+                    assertTrue(facet instanceof CssClassFaFacetForDomainObjectLayoutAnnotation);
 
-                facetFactory.process(ProcessClassContext
-                        .forTesting(cls, mockMethodRemover, facetHolder));
+                    final CssClassFaFacetForDomainObjectLayoutAnnotation facetImpl = (CssClassFaFacetForDomainObjectLayoutAnnotation) facet;
+                    assertThat(facetImpl.asSpaceSeparated(), equalTo("fa fa-fw fa-foo"));
+                    assertThat(facetImpl.getPosition(), is(CssClassFaPosition.RIGHT));
 
-                final Facet facet = facetHolder.getFacet(CssClassFaFacet.class);
-                assertNotNull(facet);
-                assertTrue(facet instanceof CssClassFaFacetForDomainObjectLayoutAnnotation);
+                    expectNoMethodsRemoved();
 
-                final CssClassFaFacetForDomainObjectLayoutAnnotation facetImpl = (CssClassFaFacetForDomainObjectLayoutAnnotation) facet;
-                assertThat(facetImpl.asSpaceSeparated(), equalTo("fa fa-fw fa-foo"));
-                assertThat(facetImpl.getPosition(), is(CssClassFaPosition.RIGHT));
-
-                expectNoMethodsRemoved();
+                });
             }
 
             @Test
             public void whenDefaults() {
+                objectScenario(CustomerWithDefaults.class, (processClassContext, facetHolder)->{
+                    facetFactory.process(processClassContext);
 
-                final Class<?> cls = CustomerWithDefaults.class;
+                    final Facet facet = facetHolder.getFacet(CssClassFaFacet.class);
+                    assertNull(facet);
 
-                facetFactory.process(ProcessClassContext
-                        .forTesting(cls, mockMethodRemover, facetHolder));
-
-                final Facet facet = facetHolder.getFacet(CssClassFaFacet.class);
-                assertNull(facet);
-
-                expectNoMethodsRemoved();
+                    expectNoMethodsRemoved();
+                });
             }
         }
 
@@ -242,37 +228,33 @@ extends AbstractFacetFactoryJupiterTestCase {
 
             @Test
             public void whenSpecified() {
+                objectScenario(DomainObjectLayoutFactoryTest.Customer.class, (processClassContext, facetHolder)->{
+                    facetFactory.process(processClassContext);
 
-                final Class<?> cls = DomainObjectLayoutFactoryTest.Customer.class;
+                    final Facet facet = facetHolder.getFacet(ObjectDescribedFacet.class);
+                    assertNotNull(facet);
+                    assertTrue(facet instanceof ObjectDescribedFacetForDomainObjectLayoutAnnotation);
 
-                facetFactory.process(ProcessClassContext
-                        .forTesting(cls, mockMethodRemover, facetHolder));
+                    final ObjectDescribedFacetForDomainObjectLayoutAnnotation facetImpl = (ObjectDescribedFacetForDomainObjectLayoutAnnotation) facet;
+                    assertThat(facetImpl.text(), is("This is a description"));
 
-                final Facet facet = facetHolder.getFacet(ObjectDescribedFacet.class);
-                assertNotNull(facet);
-                assertTrue(facet instanceof ObjectDescribedFacetForDomainObjectLayoutAnnotation);
+                    expectNoMethodsRemoved();
 
-                final ObjectDescribedFacetForDomainObjectLayoutAnnotation facetImpl = (ObjectDescribedFacetForDomainObjectLayoutAnnotation) facet;
-                assertThat(facetImpl.text(), is("This is a description"));
-
-                expectNoMethodsRemoved();
+                });
             }
 
             @Test
             public void whenDefaults() {
+                objectScenario(CustomerWithDefaults.class, (processClassContext, facetHolder)->{
+                    facetFactory.process(processClassContext);
 
-                final Class<?> cls = CustomerWithDefaults.class;
+                    final Facet facet = facetHolder.getFacet(ObjectDescribedFacet.class);
+                    assertNull(facet);
 
-                facetFactory.process(ProcessClassContext
-                        .forTesting(cls, mockMethodRemover, facetHolder));
-
-                final Facet facet = facetHolder.getFacet(ObjectDescribedFacet.class);
-                assertNull(facet);
-
-                expectNoMethodsRemoved();
+                    expectNoMethodsRemoved();
+                });
             }
         }
-
 
     }
 
@@ -288,36 +270,31 @@ extends AbstractFacetFactoryJupiterTestCase {
 
             @Test
             public void whenSpecified() {
+                objectScenario(DomainObjectLayoutFactoryTest.Customer.class, (processClassContext, facetHolder)->{
+                    facetFactory.process(processClassContext);
 
-                final Class<?> cls = DomainObjectLayoutFactoryTest.Customer.class;
+                    val namedFacet = facetHolder.getFacet(ObjectNamedFacet.class);
+                    assertNotNull(namedFacet);
+                    assertTrue(namedFacet instanceof ObjectNamedFacetForDomainObjectLayoutAnnotation);
 
-                facetFactory.process(ProcessClassContext
-                        .forTesting(cls, mockMethodRemover, facetHolder));
+                    assertEquals("Name override", namedFacet.singular());
 
-                val namedFacet = facetHolder.getFacet(ObjectNamedFacet.class);
-                assertNotNull(namedFacet);
-                assertTrue(namedFacet instanceof ObjectNamedFacetForDomainObjectLayoutAnnotation);
-
-                assertEquals("Name override", namedFacet.singular());
-
-                expectNoMethodsRemoved();
+                    expectNoMethodsRemoved();
+                });
             }
 
             @Test
             public void whenDefaults() {
+                objectScenario(CustomerWithDefaults.class, (processClassContext, facetHolder)->{
+                    facetFactory.process(processClassContext);
 
-                final Class<?> cls = CustomerWithDefaults.class;
+                    val facet = facetHolder.getFacet(ObjectNamedFacet.class);
+                    assertNull(facet);
 
-                facetFactory.process(ProcessClassContext
-                        .forTesting(cls, mockMethodRemover, facetHolder));
-
-                val facet = facetHolder.getFacet(ObjectNamedFacet.class);
-                assertNull(facet);
-
-                expectNoMethodsRemoved();
+                    expectNoMethodsRemoved();
+                });
             }
         }
-
 
     }
 
@@ -333,37 +310,32 @@ extends AbstractFacetFactoryJupiterTestCase {
 
             @Test
             public void whenSpecified() {
+                objectScenario(DomainObjectLayoutFactoryTest.Customer.class, (processClassContext, facetHolder)->{
+                    facetFactory.process(processClassContext);
 
-                final Class<?> cls = DomainObjectLayoutFactoryTest.Customer.class;
+                    final Facet facet = facetHolder.getFacet(PagedFacet.class);
+                    assertNotNull(facet);
+                    assertTrue(facet instanceof PagedFacetForDomainObjectLayoutAnnotation);
 
-                facetFactory.process(ProcessClassContext
-                        .forTesting(cls, mockMethodRemover, facetHolder));
+                    final PagedFacetForDomainObjectLayoutAnnotation facetImpl = (PagedFacetForDomainObjectLayoutAnnotation) facet;
+                    assertThat(facetImpl.value(), is(20));
 
-                final Facet facet = facetHolder.getFacet(PagedFacet.class);
-                assertNotNull(facet);
-                assertTrue(facet instanceof PagedFacetForDomainObjectLayoutAnnotation);
+                    expectNoMethodsRemoved();
 
-                final PagedFacetForDomainObjectLayoutAnnotation facetImpl = (PagedFacetForDomainObjectLayoutAnnotation) facet;
-                assertThat(facetImpl.value(), is(20));
-
-                expectNoMethodsRemoved();
+                });
             }
 
             @Test
             public void whenDefaults() {
+                objectScenario(CustomerWithDefaults.class, (processClassContext, facetHolder)->{
+                    facetFactory.process(processClassContext);
 
-                final Class<?> cls = CustomerWithDefaults.class;
+                    final Facet facet = facetHolder.getFacet(PagedFacet.class);
+                    assertNull(facet);
 
-                facetFactory.process(ProcessClassContext
-                        .forTesting(cls,mockMethodRemover, facetHolder));
-
-                final Facet facet = facetHolder.getFacet(PagedFacet.class);
-                assertNull(facet);
-
-                expectNoMethodsRemoved();
+                    expectNoMethodsRemoved();
+                });
             }
         }
-
     }
-
 }

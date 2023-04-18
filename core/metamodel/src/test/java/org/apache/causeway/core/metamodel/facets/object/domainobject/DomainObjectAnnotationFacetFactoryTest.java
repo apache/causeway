@@ -41,8 +41,7 @@ import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.metamodel.facets.DomainObjectConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
-import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.causeway.core.metamodel.facets.object.domainobject.autocomplete.AutoCompleteFacetForDomainObjectAnnotation;
 import org.apache.causeway.core.metamodel.facets.object.domainobject.choices.ChoicesFacetForDomainObjectAnnotation;
@@ -62,7 +61,7 @@ import org.apache.causeway.core.metamodel.facets.objectvalue.choices.ChoicesFace
 import lombok.val;
 
 class DomainObjectAnnotationFacetFactoryTest
-extends AbstractFacetFactoryJupiterTestCase {
+extends FacetFactoryTestAbstract {
 
     DomainObjectAnnotationFacetFactory facetFactory;
 
@@ -72,7 +71,6 @@ extends AbstractFacetFactoryJupiterTestCase {
     }
 
     @AfterEach
-    @Override
     protected void tearDown() throws Exception {
         facetFactory = null;
     }
@@ -127,31 +125,31 @@ extends AbstractFacetFactoryJupiterTestCase {
             @Test
             void configured_value_set_to_all() {
                 allowingEntityChangePublishingToReturn(DomainObjectConfigOptions.EntityChangePublishingPolicy.ALL);
+                objectScenario(DomainObjectAnnotationFacetFactoryTest.Customer.class, (processClassContext, facetHolder)->{
+                    facetFactory.processEntityChangePublishing(
+                            processClassContext.synthesizeOnType(DomainObject.class), processClassContext);
 
-                val context = ProcessClassContext
-                        .forTesting(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder);
-                facetFactory.processEntityChangePublishing(context.synthesizeOnType(DomainObject.class), context);
+                    final EntityChangePublishingFacet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
+                    assertThat(facet, is(notNullValue()));
+                    assertTrue(facet instanceof EntityChangePublishingFacetFromConfiguration);
+                    assertThat(facet.isEnabled(), is(true));
 
-                final EntityChangePublishingFacet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
-                assertThat(facet, is(notNullValue()));
-                assertTrue(facet instanceof EntityChangePublishingFacetFromConfiguration);
-                assertThat(facet.isEnabled(), is(true));
-
-                expectNoMethodsRemoved();
+                    expectNoMethodsRemoved();
+                });
             }
 
             @Test
             void configured_value_set_to_none() {
                 allowingEntityChangePublishingToReturn(DomainObjectConfigOptions.EntityChangePublishingPolicy.NONE);
+                objectScenario(DomainObjectAnnotationFacetFactoryTest.Customer.class, (processClassContext, facetHolder)->{
+                    facetFactory.process(processClassContext);
 
-                facetFactory.process(ProcessClassContext
-                        .forTesting(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
+                    final EntityChangePublishingFacet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
+                    assertNotNull(facet);
+                    assertThat(facet.isEnabled(), is(false));
 
-                final EntityChangePublishingFacet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
-                assertNotNull(facet);
-                assertThat(facet.isEnabled(), is(false));
-
-                expectNoMethodsRemoved();
+                    expectNoMethodsRemoved();
+                });
             }
 
         }
@@ -161,30 +159,30 @@ extends AbstractFacetFactoryJupiterTestCase {
             @Test
             public void configured_value_set_to_all() {
                 allowingEntityChangePublishingToReturn(DomainObjectConfigOptions.EntityChangePublishingPolicy.ALL);
+                objectScenario(CustomerWithDomainObjectAndAuditingSetToAsConfigured.class, (processClassContext, facetHolder)->{
+                    facetFactory.process(processClassContext);
 
-                facetFactory.process(ProcessClassContext
-                        .forTesting(CustomerWithDomainObjectAndAuditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
+                    final EntityChangePublishingFacet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
+                    assertNotNull(facet);
+                    assertTrue(facet instanceof EntityChangePublishingFacetForDomainObjectAnnotationAsConfigured);
+                    assertThat(facet.isEnabled(), is(true));
 
-                final EntityChangePublishingFacet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
-                assertNotNull(facet);
-                assertTrue(facet instanceof EntityChangePublishingFacetForDomainObjectAnnotationAsConfigured);
-                assertThat(facet.isEnabled(), is(true));
-
-                expectNoMethodsRemoved();
+                    expectNoMethodsRemoved();
+                });
             }
 
             @Test
             public void configured_value_set_to_none() {
                 allowingEntityChangePublishingToReturn(DomainObjectConfigOptions.EntityChangePublishingPolicy.NONE);
+                objectScenario(CustomerWithDomainObjectAndAuditingSetToAsConfigured.class, (processClassContext, facetHolder)->{
+                    facetFactory.process(processClassContext);
 
-                facetFactory.process(ProcessClassContext
-                        .forTesting(CustomerWithDomainObjectAndAuditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
+                    final EntityChangePublishingFacet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
+                    assertNotNull(facet);
+                    assertThat(facet.isEnabled(), is(false));
 
-                final EntityChangePublishingFacet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
-                assertNotNull(facet);
-                assertThat(facet.isEnabled(), is(false));
-
-                expectNoMethodsRemoved();
+                    expectNoMethodsRemoved();
+                });
             }
 
         }
@@ -194,15 +192,15 @@ extends AbstractFacetFactoryJupiterTestCase {
             @Test
             public void irrespective_of_configured_value() {
                 allowingEntityChangePublishingToReturn(null);
+                objectScenario(CustomerWithDomainObjectAndAuditingSetToEnabled.class, (processClassContext, facetHolder)->{
+                    facetFactory.process(processClassContext);
 
-                facetFactory.process(ProcessClassContext
-                        .forTesting(CustomerWithDomainObjectAndAuditingSetToEnabled.class, mockMethodRemover, facetHolder));
+                    final Facet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
+                    assertNotNull(facet);
+                    assertTrue(facet instanceof EntityChangePublishingFacetForDomainObjectAnnotation);
 
-                final Facet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
-                assertNotNull(facet);
-                assertTrue(facet instanceof EntityChangePublishingFacetForDomainObjectAnnotation);
-
-                expectNoMethodsRemoved();
+                    expectNoMethodsRemoved();
+                });
             }
 
         }
@@ -212,13 +210,13 @@ extends AbstractFacetFactoryJupiterTestCase {
             @Test
             public void irrespective_of_configured_value() {
                 allowingEntityChangePublishingToReturn(DomainObjectConfigOptions.EntityChangePublishingPolicy.ALL);
+                objectScenario(CustomerWithDomainObjectAndAuditingSetToDisabled.class, (processClassContext, facetHolder)->{
+                    facetFactory.process(processClassContext);
 
-                facetFactory.process(ProcessClassContext
-                        .forTesting(CustomerWithDomainObjectAndAuditingSetToDisabled.class, mockMethodRemover, facetHolder));
+                    assertFalse(EntityChangePublishingFacet.isPublishingEnabled(facetHolder));
 
-                assertFalse(EntityChangePublishingFacet.isPublishingEnabled(facetHolder));
-
-                expectNoMethodsRemoved();
+                    expectNoMethodsRemoved();
+                });
             }
 
         }
@@ -250,67 +248,68 @@ extends AbstractFacetFactoryJupiterTestCase {
         @Test
         public void whenDomainObjectAndAutoCompleteRepositoryAndAction() {
 
-            facetFactory.process(ProcessClassContext
-                    .forTesting(
-                    CustomerWithDomainObjectAndAutoCompleteRepositoryAndAction.class, mockMethodRemover, facetHolder));
+            objectScenario(CustomerWithDomainObjectAndAutoCompleteRepositoryAndAction.class, (processClassContext, facetHolder)->{
+                facetFactory.process(processClassContext);
 
-            final Facet facet = facetHolder.getFacet(AutoCompleteFacet.class);
-            assertNotNull(facet);
+                final Facet facet = facetHolder.getFacet(AutoCompleteFacet.class);
+                assertNotNull(facet);
 
-            assertTrue(facet instanceof AutoCompleteFacetForDomainObjectAnnotation);
+                assertTrue(facet instanceof AutoCompleteFacetForDomainObjectAnnotation);
 
-            final AutoCompleteFacetForDomainObjectAnnotation autoCompleteFacet = (AutoCompleteFacetForDomainObjectAnnotation) facet;
+                final AutoCompleteFacetForDomainObjectAnnotation autoCompleteFacet = (AutoCompleteFacetForDomainObjectAnnotation) facet;
 
-            assertThat(CustomerRepository.class.isAssignableFrom(autoCompleteFacet.getRepositoryClass()), is(true));
-            assertThat(autoCompleteFacet.getActionName(), is("lookup"));
+                assertThat(CustomerRepository.class.isAssignableFrom(autoCompleteFacet.getRepositoryClass()), is(true));
+                assertThat(autoCompleteFacet.getActionName(), is("lookup"));
 
-            expectNoMethodsRemoved();
+                expectNoMethodsRemoved();
+            });
+
         }
 
         @Test
         public void whenDomainObjectAndAutoCompleteRepository() {
 
-            facetFactory.process(ProcessClassContext
-                    .forTesting(
-                    CustomerWithDomainObjectAndAutoCompleteRepository.class, mockMethodRemover, facetHolder));
+            objectScenario(CustomerWithDomainObjectAndAutoCompleteRepository.class, (processClassContext, facetHolder)->{
+                facetFactory.process(processClassContext);
 
-            final Facet facet = facetHolder.getFacet(AutoCompleteFacet.class);
-            assertNotNull(facet);
+                final Facet facet = facetHolder.getFacet(AutoCompleteFacet.class);
+                assertNotNull(facet);
 
-            assertTrue(facet instanceof AutoCompleteFacetForDomainObjectAnnotation);
+                assertTrue(facet instanceof AutoCompleteFacetForDomainObjectAnnotation);
 
-            final AutoCompleteFacetForDomainObjectAnnotation autoCompleteFacet = (AutoCompleteFacetForDomainObjectAnnotation) facet;
+                final AutoCompleteFacetForDomainObjectAnnotation autoCompleteFacet = (AutoCompleteFacetForDomainObjectAnnotation) facet;
 
-            assertThat(CustomerRepositoryWithDefaultMethodName.class.isAssignableFrom(autoCompleteFacet.getRepositoryClass()), is(true));
-            assertThat(autoCompleteFacet.getActionName(), is("autoComplete"));
+                assertThat(CustomerRepositoryWithDefaultMethodName.class.isAssignableFrom(autoCompleteFacet.getRepositoryClass()), is(true));
+                assertThat(autoCompleteFacet.getActionName(), is("autoComplete"));
 
-            expectNoMethodsRemoved();
+                expectNoMethodsRemoved();
+            });
         }
 
         @Test
         public void whenDomainObjectAnnotationButNoAutoComplete() {
 
-            facetFactory.process(ProcessClassContext
-                    .forTesting(
-                    CustomerWithDomainObjectButNoAutoCompleteRepository.class, mockMethodRemover, facetHolder));
+            objectScenario(CustomerWithDomainObjectButNoAutoCompleteRepository.class, (processClassContext, facetHolder)->{
+                facetFactory.process(processClassContext);
 
-            final Facet facet = facetHolder.getFacet(AutoCompleteFacet.class);
-            assertNull(facet);
+                final Facet facet = facetHolder.getFacet(AutoCompleteFacet.class);
+                assertNull(facet);
 
-            expectNoMethodsRemoved();
+                expectNoMethodsRemoved();
+            });
         }
 
         @Test
         public void whenNoDomainObjectAnnotation() {
 
-            facetFactory.process(ProcessClassContext
-                    .forTesting(
-                    DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
+            objectScenario(DomainObjectAnnotationFacetFactoryTest.Customer.class, (processClassContext, facetHolder)->{
+                facetFactory.process(processClassContext);
 
-            final Facet facet = facetHolder.getFacet(AutoCompleteFacet.class);
-            assertNull(facet);
+                final Facet facet = facetHolder.getFacet(AutoCompleteFacet.class);
+                assertNull(facet);
 
-            expectNoMethodsRemoved();
+                expectNoMethodsRemoved();
+            });
         }
 
     }
@@ -339,39 +338,43 @@ extends AbstractFacetFactoryJupiterTestCase {
         @Test
         public void whenDomainObjectAndBoundedSetToTrue() {
 
-            facetFactory.process(ProcessClassContext
-                    .forTesting(CustomerWithDomainObjectAndBoundedSetToTrue.class, mockMethodRemover, facetHolder));
+            objectScenario(CustomerWithDomainObjectAndBoundedSetToTrue.class, (processClassContext, facetHolder)->{
+                facetFactory.process(processClassContext);
 
-            final Facet facet = facetHolder.getFacet(ChoicesFacet.class);
-            assertNotNull(facet);
+                final Facet facet = facetHolder.getFacet(ChoicesFacet.class);
+                assertNotNull(facet);
 
-            assertTrue(facet instanceof ChoicesFacetForDomainObjectAnnotation);
+                assertTrue(facet instanceof ChoicesFacetForDomainObjectAnnotation);
 
-            expectNoMethodsRemoved();
+                expectNoMethodsRemoved();
+
+            });
         }
 
         @Test
         public void whenDomainObjectAndAutoCompleteRepository() {
 
-            facetFactory.process(ProcessClassContext
-                    .forTesting(CustomerWithDomainObjectAndBoundedSetToFalse.class, mockMethodRemover, facetHolder));
+            objectScenario(CustomerWithDomainObjectAndBoundedSetToFalse.class, (processClassContext, facetHolder)->{
+                facetFactory.process(processClassContext);
 
-            final Facet facet = facetHolder.getFacet(ChoicesFacet.class);
-            assertNull(facet);
+                final Facet facet = facetHolder.getFacet(ChoicesFacet.class);
+                assertNull(facet);
 
-            expectNoMethodsRemoved();
+                expectNoMethodsRemoved();
+            });
         }
 
         @Test
         public void whenNoDomainObjectAnnotation() {
 
-            facetFactory.process(ProcessClassContext
-                    .forTesting(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
+            objectScenario(DomainObjectAnnotationFacetFactoryTest.Customer.class, (processClassContext, facetHolder)->{
+                facetFactory.process(processClassContext);
 
-            final Facet facet = facetHolder.getFacet(ChoicesFacet.class);
-            assertNull(facet);
+                final Facet facet = facetHolder.getFacet(ChoicesFacet.class);
+                assertNull(facet);
 
-            expectNoMethodsRemoved();
+                expectNoMethodsRemoved();
+            });
         }
 
     }
@@ -400,42 +403,45 @@ extends AbstractFacetFactoryJupiterTestCase {
             public void configured_value_set_to_true() {
                 allowingObjectsEditingToReturn(DomainObjectConfigOptions.EditingObjectsConfiguration.TRUE);
 
-                facetFactory.process(ProcessClassContext
-                        .forTesting(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
+                objectScenario(DomainObjectAnnotationFacetFactoryTest.Customer.class, (processClassContext, facetHolder)->{
+                    facetFactory.process(processClassContext);
 
-                final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
-                assertNull(facet);
+                    final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
+                    assertNull(facet);
 
-                expectNoMethodsRemoved();
+                    expectNoMethodsRemoved();
+
+                });
             }
 
             @Test
             public void configured_value_set_to_false() {
                 allowingObjectsEditingToReturn(DomainObjectConfigOptions.EditingObjectsConfiguration.FALSE);
 
-                facetFactory.process(ProcessClassContext
-                        .forTesting(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
+                objectScenario(DomainObjectAnnotationFacetFactoryTest.Customer.class, (processClassContext, facetHolder)->{
+                    facetFactory.process(processClassContext);
 
-                final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
-                assertNotNull(facet);
-                assertTrue(facet instanceof ImmutableFacetFromConfiguration);
+                    final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
+                    assertNotNull(facet);
+                    assertTrue(facet instanceof ImmutableFacetFromConfiguration);
 
-                expectNoMethodsRemoved();
+                    expectNoMethodsRemoved();
+                });
             }
 
             @Test
             public void configured_value_set_to_defaults() {
                 //allowingConfigurationToReturn("causeway.objects.editing", "foobar");
+                objectScenario(DomainObjectAnnotationFacetFactoryTest.Customer.class, (processClassContext, facetHolder)->{
+                    facetFactory.process(processClassContext);
 
-                facetFactory.process(ProcessClassContext
-                        .forTesting(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
-
-                final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
-                assertNotNull(facet); // default is now non-editable
-                assertTrue(facet instanceof ImmutableFacetFromConfiguration);
+                    final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
+                    assertNotNull(facet); // default is now non-editable
+                    assertTrue(facet instanceof ImmutableFacetFromConfiguration);
 
 
-                expectNoMethodsRemoved();
+                    expectNoMethodsRemoved();
+                });
             }
         }
 
@@ -445,42 +451,42 @@ extends AbstractFacetFactoryJupiterTestCase {
             @Test
             public void configured_value_set_to_true() {
                 allowingObjectsEditingToReturn(DomainObjectConfigOptions.EditingObjectsConfiguration.TRUE);
+                objectScenario(CustomerWithDomainObjectAndEditingSetToAsConfigured.class, (processClassContext, facetHolder)->{
+                    facetFactory.process(processClassContext);
 
-                facetFactory.process(ProcessClassContext
-                        .forTesting(CustomerWithDomainObjectAndEditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
+                    final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
+                    assertNull(facet);
 
-                final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
-                assertNull(facet);
-
-                expectNoMethodsRemoved();
+                    expectNoMethodsRemoved();
+                });
             }
 
             @Test
             public void configured_value_set_to_false() {
                 allowingObjectsEditingToReturn(DomainObjectConfigOptions.EditingObjectsConfiguration.FALSE);
+                objectScenario(CustomerWithDomainObjectAndEditingSetToAsConfigured.class, (processClassContext, facetHolder)->{
+                    facetFactory.process(processClassContext);
 
-                facetFactory.process(ProcessClassContext
-                        .forTesting(CustomerWithDomainObjectAndEditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
+                    final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
+                    assertNotNull(facet);
+                    assertTrue(facet instanceof ImmutableFacetForDomainObjectAnnotation);
 
-                final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
-                assertNotNull(facet);
-                assertTrue(facet instanceof ImmutableFacetForDomainObjectAnnotation);
-
-                expectNoMethodsRemoved();
+                    expectNoMethodsRemoved();
+                });
             }
 
             @Test
             public void configured_value_set_to_defaults() {
                 //allowingConfigurationToReturn("causeway.objects.editing", "foobar");
+                objectScenario(CustomerWithDomainObjectAndEditingSetToAsConfigured.class, (processClassContext, facetHolder)->{
+                    facetFactory.process(processClassContext);
 
-                facetFactory.process(ProcessClassContext
-                        .forTesting(CustomerWithDomainObjectAndEditingSetToAsConfigured.class, mockMethodRemover, facetHolder));
+                    final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
+                    assertNotNull(facet); // default is now non-editable
+                    assertTrue(facet instanceof ImmutableFacetForDomainObjectAnnotationAsConfigured);
 
-                final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
-                assertNotNull(facet); // default is now non-editable
-                assertTrue(facet instanceof ImmutableFacetForDomainObjectAnnotationAsConfigured);
-
-                expectNoMethodsRemoved();
+                    expectNoMethodsRemoved();
+                });
             }
         }
 
@@ -489,17 +495,15 @@ extends AbstractFacetFactoryJupiterTestCase {
             @Test
             public void irrespective_of_configured_value() {
                 allowingObjectsEditingToReturn(DomainObjectConfigOptions.EditingObjectsConfiguration.FALSE);
+                objectScenario(CustomerWithDomainObjectAndEditingSetToEnabled.class, (processClassContext, facetHolder)->{
+                    facetFactory.process(processClassContext);
 
-                facetFactory.process(ProcessClassContext
-                        .forTesting(
-                        CustomerWithDomainObjectAndEditingSetToEnabled.class, mockMethodRemover, facetHolder));
+                    final ImmutableFacet facet = facetHolder.getFacet(ImmutableFacet.class);
+                    assertNull(facet);
 
-                final ImmutableFacet facet = facetHolder.getFacet(ImmutableFacet.class);
-                assertNull(facet);
-
-                expectNoMethodsRemoved();
+                    expectNoMethodsRemoved();
+                });
             }
-
         }
 
         public static class WithDomainObjectAnnotationWithEditingSetToDisabled extends Editing {
@@ -507,20 +511,17 @@ extends AbstractFacetFactoryJupiterTestCase {
             @Test
             public void irrespective_of_configured_value() {
                 allowingObjectsEditingToReturn(DomainObjectConfigOptions.EditingObjectsConfiguration.TRUE);
+                objectScenario(CustomerWithDomainObjectAndEditingSetToDisabled.class, (processClassContext, facetHolder)->{
+                    facetFactory.process(processClassContext);
 
-                facetFactory.process(ProcessClassContext
-                        .forTesting(
-                        CustomerWithDomainObjectAndEditingSetToDisabled.class, mockMethodRemover, facetHolder));
+                    final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
+                    assertNotNull(facet);
+                    assertTrue(facet instanceof ImmutableFacetForDomainObjectAnnotation);
 
-                final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
-                assertNotNull(facet);
-                assertTrue(facet instanceof ImmutableFacetForDomainObjectAnnotation);
-
-                expectNoMethodsRemoved();
+                    expectNoMethodsRemoved();
+                });
             }
-
         }
-
     }
 
     public static class LogicalTypeName extends DomainObjectAnnotationFacetFactoryTest {
@@ -551,25 +552,27 @@ extends AbstractFacetFactoryJupiterTestCase {
         @Test
         public void whenDomainObjectAndObjectTypeNotSet() {
 
-            facetFactory.process(ProcessClassContext
-                    .forTesting(CustomerWithDomainObjectButNoObjectType.class, mockMethodRemover, facetHolder));
+            objectScenario(CustomerWithDomainObjectButNoObjectType.class, (processClassContext, facetHolder)->{
+                facetFactory.process(processClassContext);
 
-            final Facet facet = facetHolder.getFacet(AliasedFacet.class);
-            assertNull(facet);
+                final Facet facet = facetHolder.getFacet(AliasedFacet.class);
+                assertNull(facet);
 
-            expectNoMethodsRemoved();
+                expectNoMethodsRemoved();
+            });
         }
 
         @Test
         public void whenNoDomainObjectAnnotation() {
 
-            facetFactory.process(ProcessClassContext
-                    .forTesting(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
+            objectScenario(DomainObjectAnnotationFacetFactoryTest.Customer.class, (processClassContext, facetHolder)->{
+                facetFactory.process(processClassContext);
 
-            final Facet facet = facetHolder.getFacet(AliasedFacet.class);
-            assertNull(facet);
+                final Facet facet = facetHolder.getFacet(AliasedFacet.class);
+                assertNull(facet);
 
-            expectNoMethodsRemoved();
+                expectNoMethodsRemoved();
+            });
         }
 
     }
@@ -602,51 +605,57 @@ extends AbstractFacetFactoryJupiterTestCase {
         @Test
         public void whenDomainObjectAndNatureSetToJdoEntity() {
 
-            facetFactory.process(ProcessClassContext
-                    .forTesting(CustomerWithDomainObjectAndNatureSetToJdoEntity.class, mockMethodRemover, facetHolder));
+            objectScenario(CustomerWithDomainObjectAndNatureSetToJdoEntity.class, (processClassContext, facetHolder)->{
+                facetFactory.process(processClassContext);
 
-            final Facet facet = facetHolder.getFacet(ViewModelFacet.class);
-            assertNull(facet);
+                final Facet facet = facetHolder.getFacet(ViewModelFacet.class);
+                assertNull(facet);
 
-            expectNoMethodsRemoved();
+                expectNoMethodsRemoved();
+            });
         }
 
         @Test
         public void whenDomainObjectAndNatureSetToNotSpecified() {
 
-            facetFactory.process(ProcessClassContext
-                    .forTesting(CustomerWithDomainObjectAndNatureSetToNotSpecified.class, mockMethodRemover, facetHolder));
+            objectScenario(CustomerWithDomainObjectAndNatureSetToNotSpecified.class, (processClassContext, facetHolder)->{
+                facetFactory.process(processClassContext);
 
-            final Facet facet = facetHolder.getFacet(ViewModelFacet.class);
-            assertNull(facet);
+                final Facet facet = facetHolder.getFacet(ViewModelFacet.class);
+                assertNull(facet);
 
-            expectNoMethodsRemoved();
+                expectNoMethodsRemoved();
+            });
         }
 
         @Test
         public void whenDomainObjectAndNatureSetToViewModel() {
 
-            facetFactory.process(ProcessClassContext
-                    .forTesting(CustomerWithDomainObjectAndNatureSetToViewModel.class, mockMethodRemover, facetHolder));
+            objectScenario(CustomerWithDomainObjectAndNatureSetToViewModel.class, (processClassContext, facetHolder)->{
+                facetFactory.process(processClassContext);
 
-            final Facet facet = facetHolder.getFacet(ViewModelFacet.class);
-            assertNotNull(facet);
+                final Facet facet = facetHolder.getFacet(ViewModelFacet.class);
+                assertNotNull(facet);
 
-            assertTrue(facet instanceof ViewModelFacetForDomainObjectAnnotation);
+                assertTrue(facet instanceof ViewModelFacetForDomainObjectAnnotation);
 
-            expectNoMethodsRemoved();
+                expectNoMethodsRemoved();
+            });
+
         }
 
         @Test
         public void whenNoDomainObjectAnnotation() {
 
-            facetFactory.process(ProcessClassContext
-                    .forTesting(DomainObjectAnnotationFacetFactoryTest.Customer.class, mockMethodRemover, facetHolder));
+            objectScenario(DomainObjectAnnotationFacetFactoryTest.Customer.class, (processClassContext, facetHolder)->{
+                facetFactory.process(processClassContext);
 
-            final Facet facet = facetHolder.getFacet(ViewModelFacet.class);
-            assertNull(facet);
+                final Facet facet = facetHolder.getFacet(ViewModelFacet.class);
+                assertNull(facet);
 
-            expectNoMethodsRemoved();
+                expectNoMethodsRemoved();
+            });
+
         }
 
     }

@@ -37,9 +37,8 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
 import org.apache.causeway.core.metamodel.commons.matchers.CausewayMatchers;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
-import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
@@ -51,7 +50,7 @@ import lombok.val;
 
 @SuppressWarnings("unused")
 class CollectionAnnotationFacetFactoryTest
-extends AbstractFacetFactoryJupiterTestCase {
+extends FacetFactoryTestAbstract {
 
     CollectionAnnotationFacetFactory facetFactory;
     Method collectionMethod;
@@ -92,7 +91,6 @@ extends AbstractFacetFactoryJupiterTestCase {
         facetFactory = new CollectionAnnotationFacetFactory(metaModelContext);
     }
 
-    @Override
     @AfterEach
     public void tearDown() throws Exception {
         facetFactory = null;
@@ -109,33 +107,28 @@ extends AbstractFacetFactoryJupiterTestCase {
             }
             class Customer {
                 @Collection(hidden = Where.REFERENCES_PARENT)
-                public List<Order> getOrders() {
-                    return null;
-                }
-
-                public void setOrders(final List<Order> orders) {
-                }
+                public List<Order> getOrders() { return null; }
+                public void setOrders(final List<Order> orders) {}
             }
 
             // given
-            final Class<?> cls = Customer.class;
-            collectionMethod = findMethod(Customer.class, "getOrders");
+            propertyScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
 
-            // when
-            final FacetFactory.ProcessMethodContext processMethodContext = ProcessMethodContext
-                    .forTesting(cls, null, collectionMethod, mockMethodRemover, facetedMethod);
-            processHidden(facetFactory, processMethodContext);
+                // when
+                processHidden(facetFactory, processMethodContext);
 
-            // then
-            final HiddenFacet hiddenFacet = facetedMethod.getFacet(HiddenFacet.class);
-            assertNotNull(hiddenFacet);
-            assertTrue(hiddenFacet instanceof HiddenFacetForCollectionAnnotation);
-            final HiddenFacetForCollectionAnnotation hiddenFacetImpl = (HiddenFacetForCollectionAnnotation) hiddenFacet;
-            assertThat(hiddenFacetImpl.where(), is(Where.REFERENCES_PARENT));
+                // then
+                final HiddenFacet hiddenFacet = facetedMethod.getFacet(HiddenFacet.class);
+                assertNotNull(hiddenFacet);
+                assertTrue(hiddenFacet instanceof HiddenFacetForCollectionAnnotation);
+                final HiddenFacetForCollectionAnnotation hiddenFacetImpl = (HiddenFacetForCollectionAnnotation) hiddenFacet;
+                assertThat(hiddenFacetImpl.where(), is(Where.REFERENCES_PARENT));
 
-            final Facet hiddenFacetForColl = facetedMethod.getFacet(HiddenFacet.class);
-            assertNotNull(hiddenFacetForColl);
-            assertTrue(hiddenFacet == hiddenFacetForColl);
+                final Facet hiddenFacetForColl = facetedMethod.getFacet(HiddenFacet.class);
+                assertNotNull(hiddenFacetForColl);
+                assertTrue(hiddenFacet == hiddenFacetForColl);
+
+            });
         }
 
     }
@@ -150,28 +143,20 @@ extends AbstractFacetFactoryJupiterTestCase {
             }
             class Customer {
                 @Collection(typeOf = Order.class)
-                public List<Order> getOrders() {
-                    return null;
-                }
-
-                public void setOrders(final List<Order> orders) {
-                }
+                public List<Order> getOrders() { return null; }
+                public void setOrders(final List<Order> orders) {}
             }
 
             // given
-            final Class<?> cls = Customer.class;
-            collectionMethod = findMethod(Customer.class, "getOrders");
-
-            // when
-            final FacetFactory.ProcessMethodContext processMethodContext = ProcessMethodContext
-                    .forTesting(cls, null, collectionMethod, mockMethodRemover, facetedMethod);
-            processTypeOf(facetFactory, processMethodContext);
-
-            // then
-            final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
-            assertNotNull(facet);
-            assertTrue(facet instanceof TypeOfFacetForCollectionAnnotation);
-            assertThat(facet.value().getElementType(), CausewayMatchers.classEqualTo(Order.class));
+            propertyScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+                // when
+                processTypeOf(facetFactory, processMethodContext);
+                // then
+                final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
+                assertNotNull(facet);
+                assertTrue(facet instanceof TypeOfFacetForCollectionAnnotation);
+                assertThat(facet.value().getElementType(), CausewayMatchers.classEqualTo(Order.class));
+            });
         }
 
         @Test
@@ -180,29 +165,22 @@ extends AbstractFacetFactoryJupiterTestCase {
             class Order {
             }
             class Customer {
-                public Order[] getOrders() {
-                    return null;
-                }
-
-                public void setOrders(final Order[] orders) {
-                }
+                public Order[] getOrders() { return null; }
+                public void setOrders(final Order[] orders) {}
             }
 
             // given
-            final Class<?> cls = Customer.class;
-            collectionMethod = findMethod(Customer.class, "getOrders");
+            propertyScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+                // when
+                processTypeOf(facetFactory, processMethodContext);
 
-            // when
-            final FacetFactory.ProcessMethodContext processMethodContext = ProcessMethodContext
-                    .forTesting(cls, null, collectionMethod, mockMethodRemover, facetedMethod);
-            processTypeOf(facetFactory, processMethodContext);
-
-            // then
-            final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
-            assertNotNull(facet);
-            assertTrue(facet instanceof TypeOfFacet);
-            assertThat(facet.value().getElementType(), CausewayMatchers.classEqualTo(Order.class));
-            assertThat(facet.value().getCollectionSemantics(), Matchers.is(Optional.of(CollectionSemantics.ARRAY)));
+                // then
+                final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
+                assertNotNull(facet);
+                assertTrue(facet instanceof TypeOfFacet);
+                assertThat(facet.value().getElementType(), CausewayMatchers.classEqualTo(Order.class));
+                assertThat(facet.value().getCollectionSemantics(), Matchers.is(Optional.of(CollectionSemantics.ARRAY)));
+            });
         }
 
         @Test
@@ -211,28 +189,21 @@ extends AbstractFacetFactoryJupiterTestCase {
             class Order {
             }
             class Customer {
-                public java.util.Collection<Order> getOrders() {
-                    return null;
-                }
-
-                public void setOrders(final java.util.Collection<Order> orders) {
-                }
+                public java.util.Collection<Order> getOrders() { return null; }
+                public void setOrders(final java.util.Collection<Order> orders) {}
             }
 
             // given
-            final Class<?> cls = Customer.class;
-            collectionMethod = findMethod(Customer.class, "getOrders");
+            propertyScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+                // when
+                processTypeOf(facetFactory, processMethodContext);
 
-            // when
-            final FacetFactory.ProcessMethodContext processMethodContext = ProcessMethodContext
-                    .forTesting(cls, null, collectionMethod, mockMethodRemover, facetedMethod);
-            processTypeOf(facetFactory, processMethodContext);
-
-            // then
-            final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
-            assertNotNull(facet);
-            assertTrue(facet instanceof TypeOfFacetFromFeature);
-            assertThat(facet.value().getElementType(), CausewayMatchers.classEqualTo(Order.class));
+                // then
+                final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
+                assertNotNull(facet);
+                assertTrue(facet instanceof TypeOfFacetFromFeature);
+                assertThat(facet.value().getElementType(), CausewayMatchers.classEqualTo(Order.class));
+            });
         }
 
     }

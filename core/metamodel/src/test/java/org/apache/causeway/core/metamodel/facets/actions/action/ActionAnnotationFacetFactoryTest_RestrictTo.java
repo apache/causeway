@@ -43,22 +43,17 @@ extends ActionAnnotationFacetFactoryTest {
 
         class Customer {
             @Action(restrictTo = org.apache.causeway.applib.annotation.RestrictTo.PROTOTYPING)
-            public void someAction() {
-            }
+            public void someAction() {}
         }
 
         // given
-        final Class<?> cls = Customer.class;
-        actionMethod = findMethod(cls, "someAction");
-
-        // when
-        final ProcessMethodContext processMethodContext = ProcessMethodContext
-                .forTesting(cls, null, actionMethod, mockMethodRemover, facetedMethod);
-        processRestrictTo(facetFactory, processMethodContext);
-
-        // then
-        final PrototypeFacet facet = facetedMethod.getFacet(PrototypeFacet.class);
-        assertNotNull(facet);
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            processRestrictTo(facetFactory, processMethodContext);
+            // then
+            final PrototypeFacet facet = facetedMethod.getFacet(PrototypeFacet.class);
+            assertNotNull(facet);
+        });
     }
 
     @Test
@@ -66,22 +61,17 @@ extends ActionAnnotationFacetFactoryTest {
 
         class Customer {
             @Action(restrictTo = org.apache.causeway.applib.annotation.RestrictTo.NO_RESTRICTIONS)
-            public void someAction() {
-            }
+            public void someAction() {}
         }
 
         // given
-        final Class<?> cls = Customer.class;
-        actionMethod = findMethod(cls, "someAction");
-
-        // when
-        final ProcessMethodContext processMethodContext = ProcessMethodContext
-                .forTesting(cls, null, actionMethod, mockMethodRemover, facetedMethod);
-        processRestrictTo(facetFactory, processMethodContext);
-
-        // then
-        final PrototypeFacet facet = facetedMethod.getFacet(PrototypeFacet.class);
-        assertNull(facet);
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            processRestrictTo(facetFactory, processMethodContext);
+            // then
+            final PrototypeFacet facet = facetedMethod.getFacet(PrototypeFacet.class);
+            assertNull(facet);
+        });
     }
 
     @Test
@@ -89,22 +79,17 @@ extends ActionAnnotationFacetFactoryTest {
 
         class Customer {
             @SuppressWarnings("unused")
-            public void someAction() {
-            }
+            public void someAction() {}
         }
 
         // given
-        final Class<?> cls = Customer.class;
-        actionMethod = findMethod(cls, "someAction");
-
-        // when
-        final ProcessMethodContext processMethodContext = ProcessMethodContext
-                .forTesting(cls, null, actionMethod, mockMethodRemover, facetedMethod);
-        processRestrictTo(facetFactory, processMethodContext);
-
-        // then
-        final PrototypeFacet facet = facetedMethod.getFacet(PrototypeFacet.class);
-        assertNull(facet);
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            processRestrictTo(facetFactory, processMethodContext);
+            // then
+            final PrototypeFacet facet = facetedMethod.getFacet(PrototypeFacet.class);
+            assertNull(facet);
+        });
     }
 
 }

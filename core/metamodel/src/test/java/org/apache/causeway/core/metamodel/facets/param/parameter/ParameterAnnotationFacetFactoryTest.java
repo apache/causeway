@@ -34,12 +34,10 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.calls;
 
-import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.spec.Specification;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
-import org.apache.causeway.core.metamodel.facets.FacetFactory;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mustsatisfyspec.MustSatisfySpecificationFacet;
@@ -54,9 +52,10 @@ import lombok.val;
 
 @SuppressWarnings("unused")
 class ParameterAnnotationFacetFactoryTest
-extends AbstractFacetFactoryJupiterTestCase {
+extends FacetFactoryTestAbstract {
 
     ParameterAnnotationFacetFactory facetFactory;
+    @Deprecated
     Method actionMethod;
 
     @Mock ObjectSpecification mockTypeSpec;
@@ -71,7 +70,6 @@ extends AbstractFacetFactoryJupiterTestCase {
         facetFactory = new ParameterAnnotationFacetFactory(metaModelContext);
     }
 
-    @Override
     @AfterEach
     public void tearDown() throws Exception {
         facetFactory = null;
@@ -84,26 +82,20 @@ extends AbstractFacetFactoryJupiterTestCase {
 
             class Customer {
                 public void someAction(
-                        @Parameter(
-                                maxLength = 30
-                                )
+                        @Parameter(maxLength = 30)
                         final String name) { }
             }
 
             // given
-            actionMethod = findMethod(Customer.class, "someAction", new Class[]{String.class} );
-
-            // when
-            final FacetFactory.ProcessParameterContext processParameterContext =
-                    FacetFactory.ProcessParameterContext.forTesting(
-                            Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
-            facetFactory.processParams(processParameterContext);
-
-            // then
-            final MaxLengthFacet maxLengthFacet = facetedMethodParameter.getFacet(MaxLengthFacet.class);
-            assertNotNull(maxLengthFacet);
-            assertTrue(maxLengthFacet instanceof MaxLengthFacetForParameterAnnotation);
-            assertThat(maxLengthFacet.value(), is(30));
+            parameterScenario(Customer.class, "someAction", 0, (processParameterContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+                // when
+                facetFactory.processParams(processParameterContext);
+                // then
+                final MaxLengthFacet maxLengthFacet = facetedMethodParameter.getFacet(MaxLengthFacet.class);
+                assertNotNull(maxLengthFacet);
+                assertTrue(maxLengthFacet instanceof MaxLengthFacetForParameterAnnotation);
+                assertThat(maxLengthFacet.value(), is(30));
+            });
         }
     }
 
@@ -123,41 +115,32 @@ extends AbstractFacetFactoryJupiterTestCase {
             }
         }
 
-
         @Test
         public void withAnnotation() {
 
             class Customer {
                 public void someAction(
-                        @Parameter(
-                                mustSatisfy = {NotTooHot.class, NotTooCold.class}
-                                )
-                        final String name
-                        ) {
-                }
+                        @Parameter(mustSatisfy = {NotTooHot.class, NotTooCold.class})
+                        final String name) {}
             }
 
             // given
-            actionMethod = findMethod(Customer.class, "someAction", new Class[]{String.class} );
+            parameterScenario(Customer.class, "someAction", 0, (processParameterContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+                // when
+                facetFactory.processParams(processParameterContext);
 
-            // when
-            final FacetFactory.ProcessParameterContext processParameterContext =
-                    FacetFactory.ProcessParameterContext.forTesting(
-                            Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
-            facetFactory.processParams(processParameterContext);
+                // then
+                final MustSatisfySpecificationFacet mustSatisfySpecificationFacet = facetedMethodParameter.getFacet(MustSatisfySpecificationFacet.class);
+                assertNotNull(mustSatisfySpecificationFacet);
+                assertTrue(mustSatisfySpecificationFacet instanceof MustSatisfySpecificationFacetForParameterAnnotation);
+                MustSatisfySpecificationFacetForParameterAnnotation mustSatisfySpecificationFacetImpl = (MustSatisfySpecificationFacetForParameterAnnotation) mustSatisfySpecificationFacet;
+                val specifications = mustSatisfySpecificationFacetImpl.getSpecifications();
+                assertThat(specifications.size(), is(2));
 
-            // then
-            final MustSatisfySpecificationFacet mustSatisfySpecificationFacet = facetedMethodParameter.getFacet(MustSatisfySpecificationFacet.class);
-            assertNotNull(mustSatisfySpecificationFacet);
-            assertTrue(mustSatisfySpecificationFacet instanceof MustSatisfySpecificationFacetForParameterAnnotation);
-            MustSatisfySpecificationFacetForParameterAnnotation mustSatisfySpecificationFacetImpl = (MustSatisfySpecificationFacetForParameterAnnotation) mustSatisfySpecificationFacet;
-            val specifications = mustSatisfySpecificationFacetImpl.getSpecifications();
-            assertThat(specifications.size(), is(2));
-
-            assertTrue(specifications.getElseFail(0) instanceof NotTooHot);
-            assertTrue(specifications.getElseFail(1) instanceof NotTooCold);
+                assertTrue(specifications.getElseFail(0) instanceof NotTooHot);
+                assertTrue(specifications.getElseFail(1) instanceof NotTooCold);
+            });
         }
-
     }
 
     public static class Mandatory extends ParameterAnnotationFacetFactoryTest {
@@ -167,27 +150,19 @@ extends AbstractFacetFactoryJupiterTestCase {
 
             class Customer {
                 public void someAction(
-                        @Parameter(
-                                optionality = Optionality.OPTIONAL
-                                )
-                        final String name
-                        ) {
-                }
+                        @Parameter(optionality = Optionality.OPTIONAL)
+                        final String name) {}
             }
 
             // given
-            actionMethod = findMethod(Customer.class, "someAction", new Class[]{String.class} );
-
-            // when
-            final FacetFactory.ProcessParameterContext processParameterContext =
-                    FacetFactory.ProcessParameterContext.forTesting(
-                            Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
-            facetFactory.processParams(processParameterContext);
-
-            // then
-            final MandatoryFacet mandatoryFacet = facetedMethodParameter.getFacet(MandatoryFacet.class);
-            assertNotNull(mandatoryFacet);
-            assertTrue(mandatoryFacet instanceof MandatoryFacetForParameterAnnotation.Optional);
+            parameterScenario(Customer.class, "someAction", 0, (processParameterContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+                // when
+                facetFactory.processParams(processParameterContext);
+                // then
+                final MandatoryFacet mandatoryFacet = facetedMethodParameter.getFacet(MandatoryFacet.class);
+                assertNotNull(mandatoryFacet);
+                assertTrue(mandatoryFacet instanceof MandatoryFacetForParameterAnnotation.Optional);
+            });
         }
 
         @Test
@@ -195,27 +170,19 @@ extends AbstractFacetFactoryJupiterTestCase {
 
             class Customer {
                 public void someAction(
-                        @Parameter(
-                                optionality = Optionality.MANDATORY
-                                )
-                        final String name
-                        ) {
-                }
+                        @Parameter(optionality = Optionality.MANDATORY)
+                        final String name) {}
             }
 
             // given
-            actionMethod = findMethod(Customer.class, "someAction", new Class[]{String.class} );
-
-            // when
-            final FacetFactory.ProcessParameterContext processParameterContext =
-                    FacetFactory.ProcessParameterContext.forTesting(
-                            Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
-            facetFactory.processParams(processParameterContext);
-
-            // then
-            final MandatoryFacet mandatoryFacet = facetedMethodParameter.getFacet(MandatoryFacet.class);
-            assertNotNull(mandatoryFacet);
-            assertTrue(mandatoryFacet instanceof MandatoryFacetForParameterAnnotation.Required);
+            parameterScenario(Customer.class, "someAction", 0, (processParameterContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+                // when
+                facetFactory.processParams(processParameterContext);
+                // then
+                final MandatoryFacet mandatoryFacet = facetedMethodParameter.getFacet(MandatoryFacet.class);
+                assertNotNull(mandatoryFacet);
+                assertTrue(mandatoryFacet instanceof MandatoryFacetForParameterAnnotation.Required);
+            });
         }
 
         @Test
@@ -223,26 +190,18 @@ extends AbstractFacetFactoryJupiterTestCase {
 
             class Customer {
                 public void someAction(
-                        @Parameter(
-                                optionality = Optionality.DEFAULT
-                                )
-                        final String name
-                        ) {
-                }
+                        @Parameter(optionality = Optionality.DEFAULT)
+                        final String name) {}
             }
 
             // given
-            actionMethod = findMethod(Customer.class, "someAction", new Class[]{String.class} );
-
-            // when
-            final FacetFactory.ProcessParameterContext processParameterContext =
-                    FacetFactory.ProcessParameterContext.forTesting(
-                            Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
-            facetFactory.processParams(processParameterContext);
-
-            // then
-            final MandatoryFacet mandatoryFacet = facetedMethodParameter.getFacet(MandatoryFacet.class);
-            assertNull(mandatoryFacet);
+            parameterScenario(Customer.class, "someAction", 0, (processParameterContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+                // when
+                facetFactory.processParams(processParameterContext);
+                // then
+                final MandatoryFacet mandatoryFacet = facetedMethodParameter.getFacet(MandatoryFacet.class);
+                assertNull(mandatoryFacet);
+            });
         }
 
         @Test
@@ -250,24 +209,17 @@ extends AbstractFacetFactoryJupiterTestCase {
 
             class Customer {
                 public void someAction(
-                        final String name
-                        ) {
-                }
+                        final String name) {}
             }
 
             // given
-            actionMethod = findMethod(Customer.class, "someAction", new Class[]{String.class} );
-
-            // when
-            final FacetFactory.ProcessParameterContext processParameterContext =
-                    FacetFactory.ProcessParameterContext.forTesting(
-                            Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
-            facetFactory.processParams(processParameterContext);
-
-
-            // then
-            final MandatoryFacet mandatoryFacet = facetedMethodParameter.getFacet(MandatoryFacet.class);
-            assertNull(mandatoryFacet);
+            parameterScenario(Customer.class, "someAction", 0, (processParameterContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+                // when
+                facetFactory.processParams(processParameterContext);
+                // then
+                final MandatoryFacet mandatoryFacet = facetedMethodParameter.getFacet(MandatoryFacet.class);
+                assertNull(mandatoryFacet);
+            });
         }
 
     }
@@ -281,29 +233,22 @@ extends AbstractFacetFactoryJupiterTestCase {
                 public void someAction(
                         @Parameter(
                                 regexPattern = "[123].*",
-                                regexPatternFlags = Pattern.CASE_INSENSITIVE | Pattern.MULTILINE
-                                )
-                        final String name
-                        ) {
-                }
+                                regexPatternFlags = Pattern.CASE_INSENSITIVE | Pattern.MULTILINE)
+                        final String name) {}
             }
 
             // given
-            actionMethod = findMethod(Customer.class, "someAction", new Class[]{String.class} );
+            parameterScenario(Customer.class, "someAction", 0, (processParameterContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+                // when
+                facetFactory.processParams(processParameterContext);
+                // then
+                final RegExFacet regExFacet = facetedMethodParameter.getFacet(RegExFacet.class);
+                assertNotNull(regExFacet);
+                assertTrue(regExFacet instanceof RegExFacetForParameterAnnotation);
+                assertThat(regExFacet.patternFlags(), is(10));
+                assertThat(regExFacet.regexp(), is("[123].*"));
 
-            // when
-            final FacetFactory.ProcessParameterContext processParameterContext =
-                    FacetFactory.ProcessParameterContext.forTesting(
-                            Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
-            facetFactory.processParams(processParameterContext);
-
-
-            // then
-            final RegExFacet regExFacet = facetedMethodParameter.getFacet(RegExFacet.class);
-            assertNotNull(regExFacet);
-            assertTrue(regExFacet instanceof RegExFacetForParameterAnnotation);
-            assertThat(regExFacet.patternFlags(), is(10));
-            assertThat(regExFacet.regexp(), is("[123].*"));
+            });
         }
 
         @Test
@@ -311,25 +256,19 @@ extends AbstractFacetFactoryJupiterTestCase {
 
             class Customer {
                 public void someAction(
-                        @Parameter(
-                                )
-                        final String name
-                        ) {
-                }
+                        @Parameter()
+                        final String name) {}
             }
 
             // given
-            actionMethod = findMethod(Customer.class, "someAction", new Class[]{String.class} );
+            parameterScenario(Customer.class, "someAction", 0, (processParameterContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+                // when
+                facetFactory.processParams(processParameterContext);
+                // then
+                final RegExFacet regExFacet = facetedMethodParameter.getFacet(RegExFacet.class);
+                assertNull(regExFacet);
 
-            // when
-            final FacetFactory.ProcessParameterContext processParameterContext =
-                    FacetFactory.ProcessParameterContext.forTesting(
-                            Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
-            facetFactory.processParams(processParameterContext);
-
-            // then
-            final RegExFacet regExFacet = facetedMethodParameter.getFacet(RegExFacet.class);
-            assertNull(regExFacet);
+            });
         }
 
         @Test
@@ -337,27 +276,18 @@ extends AbstractFacetFactoryJupiterTestCase {
 
             class Customer {
                 public void someAction(
-                        @Parameter(
-                                regexPattern = ""
-                                )
-                        final String name
-                        ) {
-                }
+                        @Parameter(regexPattern = "")
+                        final String name) {}
             }
 
             // given
-            actionMethod = findMethod(Customer.class, "someAction", new Class[]{String.class} );
-
-            // when
-            final FacetFactory.ProcessParameterContext processParameterContext =
-                    FacetFactory.ProcessParameterContext.forTesting(
-                            Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
-            facetFactory.processParams(processParameterContext);
-
-
-            // then
-            final RegExFacet regExFacet = facetedMethodParameter.getFacet(RegExFacet.class);
-            assertNull(regExFacet);
+            parameterScenario(Customer.class, "someAction", 0, (processParameterContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+                // when
+                facetFactory.processParams(processParameterContext);
+                // then
+                final RegExFacet regExFacet = facetedMethodParameter.getFacet(RegExFacet.class);
+                assertNull(regExFacet);
+            });
         }
 
         @Test
@@ -365,30 +295,19 @@ extends AbstractFacetFactoryJupiterTestCase {
 
             class Customer {
                 public void someAction(
-                        @Parameter(
-                                regexPattern = "[123].*"
-                                )
-                        final int name
-                        ) {
-                }
+                        @Parameter(regexPattern = "[123].*")
+                        final int name) {}
             }
 
             // given
-            actionMethod = findMethod(Customer.class, "someAction", new Class[]{int.class} );
+            parameterScenario(Customer.class, "someAction", 0, (processParameterContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+                // when
+                facetFactory.processParams(processParameterContext);
+                // then
+                final RegExFacet regExFacet = facetedMethodParameter.getFacet(RegExFacet.class);
+                assertNotNull(regExFacet);
 
-            // when
-            final FacetFactory.ProcessParameterContext processParameterContext =
-                    FacetFactory.ProcessParameterContext.forTesting(
-                            Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
-            facetFactory.processParams(processParameterContext);
-
-
-            // then
-            final RegExFacet regExFacet = facetedMethodParameter.getFacet(RegExFacet.class);
-            assertNotNull(regExFacet);
-
+            });
         }
-
     }
-
 }

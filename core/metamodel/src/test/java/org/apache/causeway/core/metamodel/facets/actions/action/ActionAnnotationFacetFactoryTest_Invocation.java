@@ -51,123 +51,105 @@ extends ActionAnnotationFacetFactoryTest {
     void withPostsActionInvokedEvent() {
 
         class Customer {
-
             class SomeActionInvokedDomainEvent extends ActionDomainEvent<Customer> {}
-
             @Action(domainEvent = SomeActionInvokedDomainEvent.class)
-            public void someAction() {
-            }
+            public void someAction() {}
         }
 
         // given
-        final Class<?> cls = Customer.class;
-        actionMethod = findMethod(cls, "someAction");
-
         super.metaModelContext.getConfiguration()
-        .getApplib().getAnnotation().getAction().getDomainEvent().setPostForDefault(true);
+            .getApplib().getAnnotation().getAction().getDomainEvent().setPostForDefault(true);
 
-        // when
-        final ProcessMethodContext processMethodContext = ProcessMethodContext
-                .forTesting(cls, null, actionMethod, mockMethodRemover, facetedMethod);
-        processInvocation(facetFactory, processMethodContext);
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            processInvocation(facetFactory, processMethodContext);
 
-        // expect
-        expectRemoveMethod(actionMethod);
+            // expect
+            expectRemoveMethod(findMethod(Customer.class, "someAction"));
 
-        // then
-        final ActionDomainEventFacet domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);
-        assertNotNull(domainEventFacet);
-        assertTrue(domainEventFacet instanceof ActionDomainEventFacet);
-        final ActionDomainEventFacet domainEventFacetImpl = domainEventFacet;
-        assertThat(domainEventFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvokedDomainEvent.class));
+            // then
+            final ActionDomainEventFacet domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);
+            assertNotNull(domainEventFacet);
+            assertTrue(domainEventFacet instanceof ActionDomainEventFacet);
+            final ActionDomainEventFacet domainEventFacetImpl = domainEventFacet;
+            assertThat(domainEventFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvokedDomainEvent.class));
 
-        final Facet invocationFacet = facetedMethod.getFacet(ActionInvocationFacet.class);
-        assertNotNull(invocationFacet);
-        assertTrue(invocationFacet instanceof ActionInvocationFacetForDomainEvent);
-        final ActionInvocationFacetForDomainEvent invocationFacetImpl = (ActionInvocationFacetForDomainEvent) invocationFacet;
-        assertEquals(EventTypeOrigin.ANNOTATED_MEMBER, invocationFacetImpl.getEventTypeOrigin());
-        assertThat(invocationFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvokedDomainEvent.class));
+            final Facet invocationFacet = facetedMethod.getFacet(ActionInvocationFacet.class);
+            assertNotNull(invocationFacet);
+            assertTrue(invocationFacet instanceof ActionInvocationFacetForDomainEvent);
+            final ActionInvocationFacetForDomainEvent invocationFacetImpl = (ActionInvocationFacetForDomainEvent) invocationFacet;
+            assertEquals(EventTypeOrigin.ANNOTATED_MEMBER, invocationFacetImpl.getEventTypeOrigin());
+            assertThat(invocationFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvokedDomainEvent.class));
+        });
     }
 
     @Test
     void withActionInteractionEvent() {
 
         class Customer {
-
             class SomeActionInvokedDomainEvent extends ActionDomainEvent<Customer> {}
-
             @Action(domainEvent = SomeActionInvokedDomainEvent.class)
-            public void someAction() {
-            }
+            public void someAction() {}
         }
 
         // given
-        final Class<?> cls = Customer.class;
-        actionMethod = findMethod(cls, "someAction");
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            processInvocation(facetFactory, processMethodContext);
 
-        // when
-        final ProcessMethodContext processMethodContext = ProcessMethodContext
-                .forTesting(cls, null, actionMethod, mockMethodRemover, facetedMethod);
-        processInvocation(facetFactory, processMethodContext);
+            // expect
+            expectRemoveMethod(findMethod(Customer.class, "someAction"));
 
-        // expect
-        expectRemoveMethod(actionMethod);
+            // then
+            final Facet domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);
+            assertNotNull(domainEventFacet);
+            assertTrue(domainEventFacet instanceof ActionDomainEventFacet);
+            final ActionDomainEventFacet domainEventFacetImpl = (ActionDomainEventFacet) domainEventFacet;
+            assertTrue(domainEventFacetImpl.getEventTypeOrigin().isAnnotatedMember());
+            assertThat(domainEventFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvokedDomainEvent.class));
 
-        // then
-        final Facet domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);
-        assertNotNull(domainEventFacet);
-        assertTrue(domainEventFacet instanceof ActionDomainEventFacet);
-        final ActionDomainEventFacet domainEventFacetImpl = (ActionDomainEventFacet) domainEventFacet;
-        assertTrue(domainEventFacetImpl.getEventTypeOrigin().isAnnotatedMember());
-        assertThat(domainEventFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvokedDomainEvent.class));
+            final Facet invocationFacet = facetedMethod.getFacet(ActionInvocationFacet.class);
+            assertNotNull(invocationFacet);
 
-        final Facet invocationFacet = facetedMethod.getFacet(ActionInvocationFacet.class);
-        assertNotNull(invocationFacet);
-
-        assertTrue(invocationFacet instanceof ActionInvocationFacetForDomainEvent);
-        final ActionInvocationFacetForDomainEvent invocationFacetImpl = (ActionInvocationFacetForDomainEvent) invocationFacet;
-        assertEquals(EventTypeOrigin.ANNOTATED_MEMBER, invocationFacetImpl.getEventTypeOrigin());
-        assertThat(invocationFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvokedDomainEvent.class));
+            assertTrue(invocationFacet instanceof ActionInvocationFacetForDomainEvent);
+            final ActionInvocationFacetForDomainEvent invocationFacetImpl = (ActionInvocationFacetForDomainEvent) invocationFacet;
+            assertEquals(EventTypeOrigin.ANNOTATED_MEMBER, invocationFacetImpl.getEventTypeOrigin());
+            assertThat(invocationFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvokedDomainEvent.class));
+        });
     }
 
     @Test
     void withActionDomainEvent() {
 
         class Customer {
-
             class SomeActionInvokedDomainEvent extends ActionDomainEvent<Customer> {}
-
             @Action(domainEvent= SomeActionInvokedDomainEvent.class)
-            public void someAction() {
-            }
+            public void someAction() {}
         }
 
         // given
-        final Class<?> cls = Customer.class;
-        actionMethod = findMethod(cls, "someAction");
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            processInvocation(facetFactory, processMethodContext);
 
-        // when
-        final ProcessMethodContext processMethodContext = ProcessMethodContext
-                .forTesting(cls, null, actionMethod, mockMethodRemover, facetedMethod);
-        processInvocation(facetFactory, processMethodContext);
+            // expect
+            expectRemoveMethod(findMethod(Customer.class, "someAction"));
 
-        // expect
-        expectRemoveMethod(actionMethod);
+            // then
+            final Facet domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);
+            assertNotNull(domainEventFacet);
+            assertTrue(domainEventFacet instanceof ActionDomainEventFacet);
+            final ActionDomainEventFacet domainEventFacetImpl = (ActionDomainEventFacet) domainEventFacet;
+            assertTrue(domainEventFacetImpl.getEventTypeOrigin().isAnnotatedMember());
+            assertThat(domainEventFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvokedDomainEvent.class));
 
-        // then
-        final Facet domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);
-        assertNotNull(domainEventFacet);
-        assertTrue(domainEventFacet instanceof ActionDomainEventFacet);
-        final ActionDomainEventFacet domainEventFacetImpl = (ActionDomainEventFacet) domainEventFacet;
-        assertTrue(domainEventFacetImpl.getEventTypeOrigin().isAnnotatedMember());
-        assertThat(domainEventFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvokedDomainEvent.class));
-
-        final Facet invocationFacet = facetedMethod.getFacet(ActionInvocationFacet.class);
-        assertNotNull(invocationFacet);
-        assertTrue(invocationFacet instanceof ActionInvocationFacetForDomainEvent);
-        final ActionInvocationFacetForDomainEvent invocationFacetImpl = (ActionInvocationFacetForDomainEvent) invocationFacet;
-        assertEquals(EventTypeOrigin.ANNOTATED_MEMBER, invocationFacetImpl.getEventTypeOrigin());
-        assertThat(invocationFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvokedDomainEvent.class));
+            final Facet invocationFacet = facetedMethod.getFacet(ActionInvocationFacet.class);
+            assertNotNull(invocationFacet);
+            assertTrue(invocationFacet instanceof ActionInvocationFacetForDomainEvent);
+            final ActionInvocationFacetForDomainEvent invocationFacetImpl = (ActionInvocationFacetForDomainEvent) invocationFacet;
+            assertEquals(EventTypeOrigin.ANNOTATED_MEMBER, invocationFacetImpl.getEventTypeOrigin());
+            assertThat(invocationFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvokedDomainEvent.class));
+        });
     }
 
     @Test
@@ -175,37 +157,33 @@ extends ActionAnnotationFacetFactoryTest {
 
         class Customer {
             @SuppressWarnings("unused")
-            public void someAction() {
-            }
+            public void someAction() {}
         }
 
         // given
-        final Class<?> cls = Customer.class;
-        actionMethod = findMethod(cls, "someAction");
-
         super.metaModelContext.getConfiguration()
-                .getApplib().getAnnotation().getAction().getDomainEvent().setPostForDefault(true);
+            .getApplib().getAnnotation().getAction().getDomainEvent().setPostForDefault(true);
 
-        // when
-        final ProcessMethodContext processMethodContext = ProcessMethodContext
-                .forTesting(cls, null, actionMethod, mockMethodRemover, facetedMethod);
-        processInvocation(facetFactory, processMethodContext);
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            processInvocation(facetFactory, processMethodContext);
 
-        // expect
-        expectRemoveMethod(actionMethod);
+            // expect
+            expectRemoveMethod(findMethod(Customer.class, "someAction"));
 
-        // then
-        final Facet domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);
-        assertNotNull(domainEventFacet);
-        assertTrue(domainEventFacet instanceof ActionDomainEventFacet);
-        final ActionDomainEventFacet domainEventFacetImpl = (ActionDomainEventFacet) domainEventFacet;
-        assertTrue(domainEventFacetImpl.getEventTypeOrigin().isDefault());
-        assertThat(domainEventFacetImpl.getEventType(), classEqualTo(ActionDomainEvent.Default.class));
+            // then
+            final Facet domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);
+            assertNotNull(domainEventFacet);
+            assertTrue(domainEventFacet instanceof ActionDomainEventFacet);
+            final ActionDomainEventFacet domainEventFacetImpl = (ActionDomainEventFacet) domainEventFacet;
+            assertTrue(domainEventFacetImpl.getEventTypeOrigin().isDefault());
+            assertThat(domainEventFacetImpl.getEventType(), classEqualTo(ActionDomainEvent.Default.class));
 
-        final Facet invocationFacet = facetedMethod.getFacet(ActionInvocationFacet.class);
-        assertNotNull(invocationFacet);
-        assertTrue(invocationFacet instanceof ActionInvocationFacetForDomainEvent);
-        final ActionInvocationFacetForDomainEvent invocationFacetImpl = (ActionInvocationFacetForDomainEvent) invocationFacet;
-        assertThat(invocationFacetImpl.getEventType(), classEqualTo(ActionDomainEvent.Default.class));
+            final Facet invocationFacet = facetedMethod.getFacet(ActionInvocationFacet.class);
+            assertNotNull(invocationFacet);
+            assertTrue(invocationFacet instanceof ActionInvocationFacetForDomainEvent);
+            final ActionInvocationFacetForDomainEvent invocationFacetImpl = (ActionInvocationFacetForDomainEvent) invocationFacet;
+            assertThat(invocationFacetImpl.getEventType(), classEqualTo(ActionDomainEvent.Default.class));
+        });
     }
 }
