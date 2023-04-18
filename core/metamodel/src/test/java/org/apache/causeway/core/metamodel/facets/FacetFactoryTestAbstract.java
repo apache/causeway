@@ -41,10 +41,6 @@ import org.apache.causeway.core.metamodel.facetapi.MethodRemover;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessParameterContext;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneActionParameter;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.valuesemantics.IntValueSemantics;
 
 import lombok.Getter;
@@ -55,16 +51,7 @@ import lombok.experimental.Accessors;
 public abstract class FacetFactoryTestAbstract
 implements HasMetaModelContext {
 
-    @Getter(onMethod_ = {@Override})
-    protected MetaModelContext metaModelContext;
-
-    private MethodRemover mockMethodRemover;
-
-    protected ObjectSpecification mockOnType;
-    protected ObjectSpecification mockObjSpec;
-    protected OneToOneAssociation mockOneToOneAssociation;
-    protected OneToManyAssociation mockOneToManyAssociation;
-    protected OneToOneActionParameter mockOneToOneActionParameter;
+    // -- SCENARIO HELPER
 
     @lombok.Value
     @Getter @Accessors(fluent=true)
@@ -113,23 +100,25 @@ implements HasMetaModelContext {
 
     }
 
-    protected void setUpMmc() {
-        metaModelContext = MetaModelContext_forTesting.builder()
-                .valueSemantic(new IntValueSemantics())
-                .build();
+    // --
+
+    @Getter(onMethod_ = {@Override})
+    private MetaModelContext metaModelContext;
+    private MethodRemover mockMethodRemover;
+
+    /**
+     * Override, if a custom {@link MetaModelContext_forTesting} is required for certain tests.
+     */
+    protected MetaModelContext_forTesting setUpMmc(
+            final MetaModelContext_forTesting.MetaModelContext_forTestingBuilder builder) {
+        return builder.build();
     }
 
     @BeforeEach
     protected void setUpAll() throws Exception {
-
-        setUpMmc();
-
+        metaModelContext = setUpMmc(MetaModelContext_forTesting.builder()
+                .valueSemantic(new IntValueSemantics()));
         mockMethodRemover = Mockito.mock(MethodRemover.class);
-        mockOnType = Mockito.mock(ObjectSpecification.class);
-        mockObjSpec = Mockito.mock(ObjectSpecification.class);
-        mockOneToOneAssociation = Mockito.mock(OneToOneAssociation.class);
-        mockOneToManyAssociation = Mockito.mock(OneToManyAssociation.class);
-        mockOneToOneActionParameter = Mockito.mock(OneToOneActionParameter.class);
     }
 
 

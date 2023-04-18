@@ -38,7 +38,6 @@ import org.apache.causeway.applib.annotation.Bounding;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
-import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.metamodel.facets.DomainObjectConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
@@ -58,8 +57,6 @@ import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForDomainObjectAnnotation;
 import org.apache.causeway.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 
-import lombok.val;
-
 class DomainObjectAnnotationFacetFactoryTest
 extends FacetFactoryTestAbstract {
 
@@ -67,7 +64,7 @@ extends FacetFactoryTestAbstract {
 
     @BeforeEach
     void setUp() throws Exception {
-        facetFactory = new DomainObjectAnnotationFacetFactory(metaModelContext);
+        facetFactory = new DomainObjectAnnotationFacetFactory(getMetaModelContext());
     }
 
     @AfterEach
@@ -89,15 +86,15 @@ extends FacetFactoryTestAbstract {
 
     void allowingEntityChangePublishingToReturn(final DomainObjectConfigOptions.EntityChangePublishingPolicy value) {
         if(value!=null) {
-            val config = super.metaModelContext.getConfiguration();
-            config.getApplib().getAnnotation().getDomainObject().setEntityChangePublishing(value);
+            getConfiguration()
+                .getApplib().getAnnotation().getDomainObject().setEntityChangePublishing(value);
         }
     }
 
     void allowingObjectsEditingToReturn(final DomainObjectConfigOptions.EditingObjectsConfiguration value) {
         if(value!=null) {
-            final CausewayConfiguration config = super.metaModelContext.getConfiguration();
-            config.getApplib().getAnnotation().getDomainObject().setEditing(value);
+            getConfiguration()
+                .getApplib().getAnnotation().getDomainObject().setEditing(value);
         }
     }
 

@@ -46,7 +46,6 @@ import org.apache.causeway.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.causeway.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
 import org.apache.causeway.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.valuesemantics.IntValueSemantics;
 
 import lombok.val;
 
@@ -55,19 +54,18 @@ extends FacetFactoryTestAbstract {
 
     private TitleAnnotationFacetFactory facetFactory;
 
+    @Override
+    protected MetaModelContext_forTesting setUpMmc(final MetaModelContext_forTesting.MetaModelContext_forTestingBuilder builder) {
+        val mockInteractionService = Mockito.mock(InteractionService.class);
+        return builder
+                .interactionService(mockInteractionService)
+                .build();
+    }
+
     @BeforeEach
     public void setUp() throws Exception {
-
-        val mockInteractionService = Mockito.mock(InteractionService.class);
-
-        metaModelContext = MetaModelContext_forTesting.builder()
-                .interactionService(mockInteractionService)
-                .valueSemantic(new IntValueSemantics())
-                .build();
-
-
         assertNotNull(getInteractionService());
-        facetFactory = new TitleAnnotationFacetFactory(metaModelContext);
+        facetFactory = new TitleAnnotationFacetFactory(getMetaModelContext());
     }
 
     @AfterEach

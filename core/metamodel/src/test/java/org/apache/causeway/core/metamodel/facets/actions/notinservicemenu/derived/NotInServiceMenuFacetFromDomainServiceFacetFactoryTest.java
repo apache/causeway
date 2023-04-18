@@ -40,7 +40,7 @@ extends FacetFactoryTestAbstract {
 
     @BeforeEach
     public void setUp() throws Exception {
-        facetFactory = new NotInServiceMenuFacetFromDomainServiceFacetFactory(metaModelContext);
+        facetFactory = new NotInServiceMenuFacetFromDomainServiceFacetFactory(getMetaModelContext());
     }
 
     @Test

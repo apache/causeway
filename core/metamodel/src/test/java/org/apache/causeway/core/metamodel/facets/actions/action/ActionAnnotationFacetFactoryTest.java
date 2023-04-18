@@ -30,23 +30,19 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import lombok.val;
-
 class ActionAnnotationFacetFactoryTest
 extends FacetFactoryTestAbstract {
 
     ActionAnnotationFacetFactory facetFactory;
 
-    ObjectSpecification mockTypeSpec;
-    ObjectSpecification mockReturnTypeSpec;
+    private ObjectSpecification mockTypeSpec;
 
     @BeforeEach
     public void setUp() throws Exception {
 
         mockTypeSpec = Mockito.mock(ObjectSpecification.class);
-        mockReturnTypeSpec = Mockito.mock(ObjectSpecification.class);
 
-        facetFactory = new ActionAnnotationFacetFactory(metaModelContext);
+        facetFactory = new ActionAnnotationFacetFactory(getMetaModelContext());
 
         Mockito.when(mockTypeSpec.getFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class))
         .thenReturn(null);
@@ -59,14 +55,11 @@ extends FacetFactoryTestAbstract {
     }
 
     class Customer {
-        public void someAction() {
-        }
+        public void someAction() {}
     }
 
     class SomeHasInteractionId implements HasInteractionId {
-        public void someAction() {
-        }
-
+        public void someAction() {}
         @Override
         public UUID getInteractionId() {
             return null;
@@ -74,8 +67,7 @@ extends FacetFactoryTestAbstract {
     }
 
     void allowingPublishingConfigurationToReturn(final ActionConfigOptions.PublishingPolicy value) {
-        val config = metaModelContext.getConfiguration();
-        config.getApplib().getAnnotation().getAction().setExecutionPublishing(value);
+        getConfiguration().getApplib().getAnnotation().getAction().setExecutionPublishing(value);
     }
 
 }

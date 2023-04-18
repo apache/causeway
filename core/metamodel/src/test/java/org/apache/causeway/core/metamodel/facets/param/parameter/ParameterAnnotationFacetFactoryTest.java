@@ -53,7 +53,7 @@ extends FacetFactoryTestAbstract {
 
     @BeforeEach
     public void setUp() throws Exception {
-        facetFactory = new ParameterAnnotationFacetFactory(metaModelContext);
+        facetFactory = new ParameterAnnotationFacetFactory(getMetaModelContext());
     }
 
     @AfterEach

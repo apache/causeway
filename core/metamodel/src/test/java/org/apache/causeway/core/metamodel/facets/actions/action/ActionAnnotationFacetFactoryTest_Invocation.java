@@ -57,7 +57,7 @@ extends ActionAnnotationFacetFactoryTest {
         }
 
         // given
-        super.metaModelContext.getConfiguration()
+        getConfiguration()
             .getApplib().getAnnotation().getAction().getDomainEvent().setPostForDefault(true);
 
         actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
@@ -161,7 +161,7 @@ extends ActionAnnotationFacetFactoryTest {
         }
 
         // given
-        super.metaModelContext.getConfiguration()
+        getConfiguration()
             .getApplib().getAnnotation().getAction().getDomainEvent().setPostForDefault(true);
 
         actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{

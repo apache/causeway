@@ -24,6 +24,7 @@ import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -73,6 +74,7 @@ import org.apache.causeway.core.metamodel.facets.properties.update.clear.Propert
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.Getter;
@@ -140,7 +142,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
 
     @BeforeEach
     public void setUp() throws Exception {
-        facetFactory = new PropertyAnnotationFacetFactory(metaModelContext);
+        facetFactory = new PropertyAnnotationFacetFactory(getMetaModelContext());
     }
 
     @AfterEach
@@ -151,6 +153,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
     public static class Modify extends PropertyAnnotationFacetFactoryTest {
 
         private void addGetterFacet(final FacetHolder holder) {
+            val mockOnType = Mockito.mock(ObjectSpecification.class);
             FacetUtil.addFacet(new PropertyOrCollectionAccessorFacetAbstract(mockOnType, holder) {
                 @Override
                 public Object getProperty(
@@ -330,7 +333,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
             }
 
             // given
-            assertTrue(metaModelContext.getConfiguration()
+            assertTrue(getConfiguration()
                     .getApplib().getAnnotation().getDomainObject().getCreatedLifecycleEvent().isPostForDefault());
 
             propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{

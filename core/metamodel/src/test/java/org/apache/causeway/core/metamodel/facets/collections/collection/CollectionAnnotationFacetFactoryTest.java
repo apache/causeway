@@ -70,7 +70,7 @@ extends FacetFactoryTestAbstract {
 
     @BeforeEach
     public void setUp() throws Exception {
-        facetFactory = new CollectionAnnotationFacetFactory(metaModelContext);
+        facetFactory = new CollectionAnnotationFacetFactory(getMetaModelContext());
     }
 
     @AfterEach

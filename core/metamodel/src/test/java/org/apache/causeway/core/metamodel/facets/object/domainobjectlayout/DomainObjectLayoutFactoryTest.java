@@ -58,7 +58,7 @@ extends FacetFactoryTestAbstract {
 
     @BeforeEach
     public void setUp() throws Exception {
-        facetFactory = new DomainObjectLayoutFacetFactory(metaModelContext);
+        facetFactory = new DomainObjectLayoutFacetFactory(getMetaModelContext());
     }
 
     @AfterEach

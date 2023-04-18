@@ -47,7 +47,7 @@ extends FacetFactoryTestAbstract {
 
     @BeforeEach
     void setUp() throws Exception {
-        facetFactory = new ActionLayoutFacetFactory(metaModelContext);
+        facetFactory = new ActionLayoutFacetFactory(getMetaModelContext());
     }
 
     @Test
