@@ -32,7 +32,7 @@ import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
-import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventAbstract;
+import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEvent;
 import org.apache.causeway.core.metamodel.facets.members.disabled.method.DisableForContextFacet;
 import org.apache.causeway.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethod;
 import org.apache.causeway.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethodFactory;
@@ -83,8 +83,8 @@ extends AbstractFacetFactoryTest {
 
         final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof ActionInvocationFacetForDomainEventAbstract);
-        final ActionInvocationFacetForDomainEventAbstract actionInvocationFacetViaMethod = (ActionInvocationFacetForDomainEventAbstract) facet;
+        assertTrue(facet instanceof ActionInvocationFacetForDomainEvent);
+        final ActionInvocationFacetForDomainEvent actionInvocationFacetViaMethod = (ActionInvocationFacetForDomainEvent) facet;
         assertEquals(actionMethod, actionInvocationFacetViaMethod.getMethods().getFirstElseFail());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(actionMethod));
@@ -102,7 +102,7 @@ extends AbstractFacetFactoryTest {
                 .forTesting(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
-        final ActionInvocationFacetForDomainEventAbstract actionInvocationFacetViaMethod = (ActionInvocationFacetForDomainEventAbstract) facet;
+        final ActionInvocationFacetForDomainEvent actionInvocationFacetViaMethod = (ActionInvocationFacetForDomainEvent) facet;
         assertEquals(voidSpec, actionInvocationFacetViaMethod.getReturnType());
     }
 
@@ -119,7 +119,7 @@ extends AbstractFacetFactoryTest {
                 .forTesting(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
-        final ActionInvocationFacetForDomainEventAbstract actionInvocationFacetViaMethod = (ActionInvocationFacetForDomainEventAbstract) facet;
+        final ActionInvocationFacetForDomainEvent actionInvocationFacetViaMethod = (ActionInvocationFacetForDomainEvent) facet;
         assertEquals(stringSpec, actionInvocationFacetViaMethod.getReturnType());
     }
 
@@ -139,8 +139,8 @@ extends AbstractFacetFactoryTest {
                 .forTesting(LocalCustomer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
-        final ActionInvocationFacetForDomainEventAbstract actionInvocationFacetViaMethod =
-                (ActionInvocationFacetForDomainEventAbstract) facet;
+        final ActionInvocationFacetForDomainEvent actionInvocationFacetViaMethod =
+                (ActionInvocationFacetForDomainEvent) facet;
         assertEquals(
                 customerSpec,
                 actionInvocationFacetViaMethod.getDeclaringType());

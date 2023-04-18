@@ -115,10 +115,11 @@
             <mml:attr name="interactionAdvisors" value="Validating, HidingOrShowing, DisablingOrEnabling"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromDefault">
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEvent">
             <mml:attr name="declaringType" value="org.apache.causeway.extensions.pdfjs.metamodel.domains.mixin.SomeViewModel_pdf"/>
             <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.ActionDomainEvent.Default"/>
-            <mml:attr name="facet" value="ActionInvocationFacetForDomainEventFromDefault"/>
+            <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
+            <mml:attr name="facet" value="ActionInvocationFacetForDomainEvent"/>
             <mml:attr name="intent.prop" value="EXECUTE"/>
             <mml:attr name="methods" value="public org.apache.causeway.applib.value.Blob org.apache.causeway.extensions.pdfjs.metamodel.domains.mixin.SomeViewModel_pdf.prop()"/>
             <mml:attr name="precedence" value="DEFAULT"/>
@@ -209,10 +210,11 @@
             <mml:attr name="interactionAdvisors" value="Validating, HidingOrShowing, DisablingOrEnabling"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromActionAnnotation">
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEvent">
             <mml:attr name="declaringType" value="org.apache.causeway.applib.mixins.layout.Object_downloadLayout"/>
             <mml:attr name="eventType" value="org.apache.causeway.applib.mixins.layout.Object_downloadLayout.ActionDomainEvent"/>
-            <mml:attr name="facet" value="ActionInvocationFacetForDomainEventFromActionAnnotation"/>
+            <mml:attr name="eventTypeOrigin" value="ANNOTATED_MEMBER"/>
+            <mml:attr name="facet" value="ActionInvocationFacetForDomainEvent"/>
             <mml:attr name="intent.act" value="EXECUTE"/>
             <mml:attr name="methods" value="public java.lang.Object org.apache.causeway.applib.mixins.layout.Object_downloadLayout.act(java.lang.String,org.apache.causeway.applib.services.layout.LayoutExportStyle,org.apache.causeway.applib.value.NamedWithMimeType$CommonMimeType)"/>
             <mml:attr name="precedence" value="DEFAULT"/>
@@ -463,10 +465,11 @@
             <mml:attr name="interactionAdvisors" value="Validating, HidingOrShowing, DisablingOrEnabling"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromActionAnnotation">
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEvent">
             <mml:attr name="declaringType" value="org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml"/>
             <mml:attr name="eventType" value="org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml.ActionDomainEvent"/>
-            <mml:attr name="facet" value="ActionInvocationFacetForDomainEventFromActionAnnotation"/>
+            <mml:attr name="eventTypeOrigin" value="ANNOTATED_MEMBER"/>
+            <mml:attr name="facet" value="ActionInvocationFacetForDomainEvent"/>
             <mml:attr name="intent.act" value="EXECUTE"/>
             <mml:attr name="methods" value="public java.lang.Object org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml.act(java.lang.String)"/>
             <mml:attr name="precedence" value="DEFAULT"/>
@@ -620,10 +623,11 @@
             <mml:attr name="interactionAdvisors" value="Validating, HidingOrShowing, DisablingOrEnabling"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromActionAnnotation">
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEvent">
             <mml:attr name="declaringType" value="org.apache.causeway.core.metamodel.inspect.Object_inspectMetamodel"/>
             <mml:attr name="eventType" value="org.apache.causeway.core.metamodel.inspect.Object_inspectMetamodel.ActionDomainEvent"/>
-            <mml:attr name="facet" value="ActionInvocationFacetForDomainEventFromActionAnnotation"/>
+            <mml:attr name="eventTypeOrigin" value="ANNOTATED_MEMBER"/>
+            <mml:attr name="facet" value="ActionInvocationFacetForDomainEvent"/>
             <mml:attr name="intent.act" value="EXECUTE"/>
             <mml:attr name="methods" value="public java.lang.Object org.apache.causeway.core.metamodel.inspect.Object_inspectMetamodel.act()"/>
             <mml:attr name="precedence" value="DEFAULT"/>
@@ -724,10 +728,11 @@
             <mml:attr name="interactionAdvisors" value="Validating, HidingOrShowing, DisablingOrEnabling"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromActionAnnotation">
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEvent">
             <mml:attr name="declaringType" value="org.apache.causeway.applib.mixins.rest.Object_openRestApi"/>
             <mml:attr name="eventType" value="org.apache.causeway.applib.mixins.rest.Object_openRestApi.ActionDomainEvent"/>
-            <mml:attr name="facet" value="ActionInvocationFacetForDomainEventFromActionAnnotation"/>
+            <mml:attr name="eventTypeOrigin" value="ANNOTATED_MEMBER"/>
+            <mml:attr name="facet" value="ActionInvocationFacetForDomainEvent"/>
             <mml:attr name="intent.act" value="EXECUTE"/>
             <mml:attr name="methods" value="public org.apache.causeway.applib.value.LocalResourcePath org.apache.causeway.applib.mixins.rest.Object_openRestApi.act()"/>
             <mml:attr name="precedence" value="DEFAULT"/>
@@ -828,10 +833,11 @@
             <mml:attr name="interactionAdvisors" value="Validating, HidingOrShowing, DisablingOrEnabling"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromActionAnnotation">
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEvent">
             <mml:attr name="declaringType" value="org.apache.causeway.applib.mixins.metamodel.Object_rebuildMetamodel"/>
             <mml:attr name="eventType" value="org.apache.causeway.applib.mixins.metamodel.Object_rebuildMetamodel.ActionDomainEvent"/>
-            <mml:attr name="facet" value="ActionInvocationFacetForDomainEventFromActionAnnotation"/>
+            <mml:attr name="eventTypeOrigin" value="ANNOTATED_MEMBER"/>
+            <mml:attr name="facet" value="ActionInvocationFacetForDomainEvent"/>
             <mml:attr name="intent.act" value="EXECUTE"/>
             <mml:attr name="methods" value="public java.lang.Object org.apache.causeway.applib.mixins.metamodel.Object_rebuildMetamodel.act()"/>
             <mml:attr name="precedence" value="DEFAULT"/>
@@ -1034,10 +1040,11 @@
             <mml:attr name="interactionAdvisors" value="Validating, HidingOrShowing, DisablingOrEnabling"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromDefault">
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEvent">
             <mml:attr name="declaringType" value="org.apache.causeway.extensions.pdfjs.metamodel.domains.mixin.SomeViewModel_pdf"/>
             <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.ActionDomainEvent.Default"/>
-            <mml:attr name="facet" value="ActionInvocationFacetForDomainEventFromDefault"/>
+            <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
+            <mml:attr name="facet" value="ActionInvocationFacetForDomainEvent"/>
             <mml:attr name="intent.prop" value="EXECUTE"/>
             <mml:attr name="methods" value="public org.apache.causeway.applib.value.Blob org.apache.causeway.extensions.pdfjs.metamodel.domains.mixin.SomeViewModel_pdf.prop()"/>
             <mml:attr name="precedence" value="DEFAULT"/>

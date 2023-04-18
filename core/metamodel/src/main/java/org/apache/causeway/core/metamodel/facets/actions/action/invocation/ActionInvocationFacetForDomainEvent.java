@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.facets.actions.action.invocation;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.BiConsumer;
 
 import org.apache.causeway.applib.events.domain.AbstractDomainEvent;
 import org.apache.causeway.applib.events.domain.ActionDomainEvent;
@@ -54,26 +53,24 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
 
-public abstract class ActionInvocationFacetForDomainEventAbstract
-extends ActionInvocationFacetAbstract
-implements ImperativeFacet {
+public class ActionInvocationFacetForDomainEvent
+extends ActionInvocationFacetAbstract {
 
-    @Getter private final Class<? extends ActionDomainEvent<?>> eventType;
     @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
-    @Getter(onMethod = @__(@Override)) private final ObjectSpecification declaringType;
-    @Getter(onMethod = @__(@Override)) private final ObjectSpecification returnType;
+    @Getter(onMethod_ = {@Override}) private final ObjectSpecification declaringType;
+    @Getter(onMethod_ = {@Override}) private final ObjectSpecification returnType;
     private final ServiceRegistry serviceRegistry;
     private final DomainEventHelper domainEventHelper;
 
-    protected ActionInvocationFacetForDomainEventAbstract(
+    public ActionInvocationFacetForDomainEvent(
             final Class<? extends ActionDomainEvent<?>> eventType,
+            final EventTypeOrigin eventTypeOrigin,
             final MethodFacade method,
             final ObjectSpecification declaringType,
             final ObjectSpecification returnType,
             final FacetHolder holder) {
 
-        super(holder);
-        this.eventType = eventType;
+        super(eventType, eventTypeOrigin, holder);
         this.methods = ImperativeFacet.singleMethod(method);
         this.declaringType = declaringType;
         this.returnType = returnType;
@@ -104,15 +101,6 @@ implements ImperativeFacet {
         return executionResult
                 .ifFailureFail()
                 .getValue().orElse(null);
-    }
-
-    @Override
-    public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
-        ImperativeFacet.visitAttributes(this, visitor);
-        visitor.accept("declaringType", declaringType);
-        visitor.accept("returnType", returnType);
-        visitor.accept("eventType", eventType);
     }
 
     // -- HELPER

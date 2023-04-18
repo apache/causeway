@@ -144,6 +144,7 @@ extends FacetFactoryAbstract {
 
             holder.lookupFacet(PropertySetterFacet.class)
             .ifPresent(setterFacet->
+                    //TODO[CAUSEWAY-3409] we don't install those for the mixin case
                     // the current setter facet will end up as the underlying facet
                     addFacet(new PropertySetterFacetForDomainEvent(
                             eventType, eventTypeOrigin, getterFacet, setterFacet, holder)));
@@ -151,6 +152,7 @@ extends FacetFactoryAbstract {
 
             holder.lookupFacet(PropertyClearFacet.class)
             .ifPresent(clearFacet->
+                    //TODO[CAUSEWAY-3409] we don't install those for the mixin case
                     // the current clear facet will end up as the underlying facet
                     addFacet(new PropertyClearFacetForDomainEvent(
                             eventType, eventTypeOrigin, getterFacet, clearFacet, holder)));

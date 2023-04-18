@@ -44,8 +44,11 @@ extends ObjectSpecificationPostProcessorAbstract {
     @Override
     public void postProcessAction(final ObjectSpecification objectSpecification, final ObjectAction objectAction) {
         if(objectAction.isMixedIn()) {
-            // unlike collection and property mixins, there is no need to create the DomainEventFacet, it will
-            // have been created in the ActionAnnotationFacetFactory
+
+ //TODO[CAUSEWAY-3409] yet already created in ActionAnnotationFacetFactory
+            //FacetUtil.addFacetIfPresent(
+                    //ActionDomainEventFacet.createMixedIn(objectSpecification, (ObjectActionMixedIn)objectAction));
+ //TODO[CAUSEWAY-3409] even when this lookup returns empty, we still might need an event-type holding facet
             objectAction
                 .lookupFacet(ActionDomainEventFacet.class)
                 .ifPresent(actionDomainEventFacet->
@@ -56,7 +59,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     @Override
     public void postProcessProperty(final ObjectSpecification objectSpecification, final OneToOneAssociation property) {
 
-        if(property instanceof OneToOneAssociationMixedIn) {
+        if(property.isMixedIn()) {
 
             FacetUtil.addFacetIfPresent(
                     PropertyDomainEventFacet.createMixedIn(objectSpecification, (OneToOneAssociationMixedIn)property));
@@ -71,7 +74,7 @@ extends ObjectSpecificationPostProcessorAbstract {
     @Override
     public void postProcessCollection(final ObjectSpecification objectSpecification, final OneToManyAssociation collection) {
 
-        if(collection instanceof OneToManyAssociationMixedIn) {
+        if(collection.isMixedIn()) {
 
             FacetUtil.addFacetIfPresent(
                     CollectionDomainEventFacet.createMixedIn(objectSpecification, (OneToManyAssociationMixedIn)collection));

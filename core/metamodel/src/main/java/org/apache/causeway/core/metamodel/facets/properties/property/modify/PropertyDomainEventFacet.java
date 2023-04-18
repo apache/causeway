@@ -59,6 +59,12 @@ implements
     DisablingInteractionAdvisor,
     ValidatingInteractionAdvisor {
 
+    // -- FACET TYPE
+
+    private static Class<? extends Facet> type() {
+        return PropertyDomainEventFacet.class;
+    }
+
     // -- FACTORIES
 
     /**
@@ -67,10 +73,10 @@ implements
      * @return empty, if event is not post-able
      */
     public static Optional<PropertyDomainEventFacet> createRegular(
-            final Optional<Property> propertyIfAny,
-            final ObjectSpecification typeSpec,
-            final PropertyOrCollectionAccessorFacet getterFacet,
-            final FacetHolder facetHolder) {
+            final @NonNull Optional<Property> propertyIfAny,
+            final @NonNull ObjectSpecification typeSpec,
+            final @NonNull PropertyOrCollectionAccessorFacet getterFacet,
+            final @NonNull FacetHolder facetHolder) {
 
         val propertyDomainEventFacet = propertyIfAny
                 .map(Property::domainEvent)
@@ -118,27 +124,9 @@ implements
         }
 
         return Optional.empty();
-
     }
 
-    // --
-
-    private static Class<? extends Facet> type() {
-        return PropertyDomainEventFacet.class;
-    }
-
-    private static Class<? extends PropertyDomainEvent<?,?>> defaultFromDomainObjectIfRequired(
-            final ObjectSpecification typeSpec,
-            final Class<? extends PropertyDomainEvent<?,?>> propertyDomainEventType) {
-        if (propertyDomainEventType == PropertyDomainEvent.Default.class) {
-            final PropertyDomainEventDefaultFacetForDomainObjectAnnotation typeFromDomainObject =
-                    typeSpec.getFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class);
-            if (typeFromDomainObject != null) {
-                return typeFromDomainObject.getEventType();
-            }
-        }
-        return propertyDomainEventType;
-    }
+    // -- CONSTRUCTION
 
     private final DomainEventHelper domainEventHelper;
 
@@ -252,6 +240,19 @@ implements
         visitor.accept("getterFacet", getterFacetIfAny);
     }
 
+    // -- HELPER
 
+    private static Class<? extends PropertyDomainEvent<?,?>> defaultFromDomainObjectIfRequired(
+            final ObjectSpecification typeSpec,
+            final Class<? extends PropertyDomainEvent<?,?>> propertyDomainEventType) {
+        if (propertyDomainEventType == PropertyDomainEvent.Default.class) {
+            final PropertyDomainEventDefaultFacetForDomainObjectAnnotation typeFromDomainObject =
+                    typeSpec.getFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class);
+            if (typeFromDomainObject != null) {
+                return typeFromDomainObject.getEventType();
+            }
+        }
+        return propertyDomainEventType;
+    }
 
 }

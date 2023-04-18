@@ -45,6 +45,12 @@ public class CollectionDomainEventFacet
 extends DomainEventFacetAbstract<CollectionDomainEvent<?, ?>>
 implements HidingInteractionAdvisor {
 
+    // -- FACET TYPE
+
+    private static Class<? extends Facet> type() {
+        return CollectionDomainEventFacet.class;
+    }
+
     // -- FACTORIES
 
     /**
@@ -105,24 +111,7 @@ implements HidingInteractionAdvisor {
         return Optional.empty();
     }
 
-    // --
-
-    private static Class<? extends Facet> type() {
-        return CollectionDomainEventFacet.class;
-    }
-
-    private static Class<? extends CollectionDomainEvent<?,?>> defaultFromDomainObjectIfRequired(
-            final ObjectSpecification typeSpec,
-            final Class<? extends CollectionDomainEvent<?,?>> collectionDomainEventType) {
-        if (collectionDomainEventType == CollectionDomainEvent.Default.class) {
-            final CollectionDomainEventDefaultFacetForDomainObjectAnnotation typeFromDomainObject =
-                    typeSpec.getFacet(CollectionDomainEventDefaultFacetForDomainObjectAnnotation.class);
-            if (typeFromDomainObject != null) {
-                return typeFromDomainObject.getEventType();
-            }
-        }
-        return collectionDomainEventType;
-    }
+    // -- CONSTRUCTION
 
     private final DomainEventHelper domainEventHelper;
 
@@ -157,5 +146,21 @@ implements HidingInteractionAdvisor {
         }
         return null;
     }
+
+    // -- HELPER
+
+    private static Class<? extends CollectionDomainEvent<?,?>> defaultFromDomainObjectIfRequired(
+            final ObjectSpecification typeSpec,
+            final Class<? extends CollectionDomainEvent<?,?>> collectionDomainEventType) {
+        if (collectionDomainEventType == CollectionDomainEvent.Default.class) {
+            final CollectionDomainEventDefaultFacetForDomainObjectAnnotation typeFromDomainObject =
+                    typeSpec.getFacet(CollectionDomainEventDefaultFacetForDomainObjectAnnotation.class);
+            if (typeFromDomainObject != null) {
+                return typeFromDomainObject.getEventType();
+            }
+        }
+        return collectionDomainEventType;
+    }
+
 
 }

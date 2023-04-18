@@ -27,6 +27,10 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
 
+/**
+ * Base for any event-type holding facets,
+ * while defining the facet-type is up to implementors.
+ */
 public abstract class DomainEventFacetAbstract<T>
 extends FacetAbstract {
 

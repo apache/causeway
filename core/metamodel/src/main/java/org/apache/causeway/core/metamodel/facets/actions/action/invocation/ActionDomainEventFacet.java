@@ -18,8 +18,10 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.action.invocation;
 
+import java.lang.reflect.Method;
 import java.util.Optional;
 
+import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.events.domain.AbstractDomainEvent;
 import org.apache.causeway.applib.events.domain.ActionDomainEvent;
 import org.apache.causeway.applib.services.i18n.TranslatableString;
@@ -27,6 +29,7 @@ import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -44,6 +47,11 @@ import org.apache.causeway.core.metamodel.interactions.ValidityContext;
 import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
+import org.apache.causeway.core.metamodel.util.EventUtil;
+
+import lombok.NonNull;
+import lombok.val;
 
 public class ActionDomainEventFacet
 extends DomainEventFacetAbstract<ActionDomainEvent<?>>
@@ -52,15 +60,82 @@ implements
     DisablingInteractionAdvisor,
     ValidatingInteractionAdvisor {
 
+    // -- FACET TYPE
+
     private static Class<? extends Facet> type() {
         return ActionDomainEventFacet.class;
     }
+
+    // -- FACTORIES
+
+    /**
+     * For regular (non mixed-in) members only.
+     * <p>
+     * @return empty, if event is not post-able
+     */
+    public static Optional<ActionDomainEventFacet> createRegular(
+            final @NonNull Optional<Action> actionIfAny,
+            final @NonNull ObjectSpecification typeSpec,
+            final @NonNull FacetHolder facetHolder){
+
+        val actionDomainEventFacet =
+                actionIfAny
+                .map(Action::domainEvent)
+                .filter(domainEvent -> domainEvent != ActionDomainEvent.Default.class)
+                .map(domainEvent ->
+                        new ActionDomainEventFacet(
+                                defaultFromDomainObjectIfRequired(typeSpec, domainEvent), EventTypeOrigin.ANNOTATED_MEMBER, facetHolder))
+                .orElse(
+                        new ActionDomainEventFacet(
+                                defaultFromDomainObjectIfRequired(typeSpec, ActionDomainEvent.Default.class), EventTypeOrigin.DEFAULT, facetHolder)
+                        );
+
+        return EventUtil.eventTypeIsPostable(
+                actionDomainEventFacet.getEventType(),
+                ActionDomainEvent.Noop.class,
+                ActionDomainEvent.Default.class,
+                facetHolder.getConfiguration().getApplib().getAnnotation().getAction().getDomainEvent().isPostForDefault())
+            ? Optional.of(actionDomainEventFacet)
+            : Optional.empty();
+    }
+
+    /**
+     * For mixed-in members.
+     */
+    public static Optional<ActionDomainEventFacet> createMixedIn(
+            final @NonNull ObjectSpecification mixeeSpecification,
+            final @NonNull ObjectActionMixedIn mixedInAction) {
+
+
+        val facetedMethod = mixedInAction.getFacetedMethod();
+        final Method method = facetedMethod.getMethod().asMethodElseFail(); // no-arg method, should have a regular facade
+
+        //TODO[CAUSEWAY-3409] what if the @Action annotation is not on the method but on the (mixin) type
+        final Action actionAnnot =
+                _Annotations.synthesize(method, Action.class)
+                .orElse(null);
+
+        if(actionAnnot != null) {
+            final Class<? extends ActionDomainEvent<?>> actionDomainEventType =
+                    defaultFromDomainObjectIfRequired(
+                            mixeeSpecification, actionAnnot.domainEvent());
+
+            return Optional.of(
+                    new ActionDomainEventFacet(
+                            actionDomainEventType, EventTypeOrigin.ANNOTATED_MEMBER, mixedInAction));
+        }
+
+        return Optional.empty();
+
+    }
+
+    // -- CONSTRUCTION
 
     private final TranslationService translationService;
     private final TranslationContext translationContext;
     private final DomainEventHelper domainEventHelper;
 
-    public ActionDomainEventFacet(
+    protected ActionDomainEventFacet(
             final Class<? extends ActionDomainEvent<?>> eventType,
             final EventTypeOrigin eventTypeOrigin,
             final FacetHolder holder) {
@@ -162,6 +237,20 @@ implements
                     "Expecting ic to be of type ActionInteractionContext, instead was: " + ic);
         }
         return ((ActionInteractionContext) ic).getObjectAction();
+    }
+
+    private static Class<? extends ActionDomainEvent<?>> defaultFromDomainObjectIfRequired(
+            final ObjectSpecification typeSpec,
+            final Class<? extends ActionDomainEvent<?>> actionDomainEventType) {
+
+        if (actionDomainEventType == ActionDomainEvent.Default.class) {
+            val typeFromDomainObject =
+                    typeSpec.getFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class);
+            if (typeFromDomainObject != null) {
+                return typeFromDomainObject.getEventType();
+            }
+        }
+        return actionDomainEventType;
     }
 
 }
