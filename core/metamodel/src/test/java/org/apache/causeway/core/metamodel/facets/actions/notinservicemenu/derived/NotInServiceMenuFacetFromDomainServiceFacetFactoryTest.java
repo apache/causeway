@@ -62,7 +62,7 @@ extends FacetFactoryTestAbstract {
             assertThat(facet instanceof NotInServiceMenuFacetFromDomainServiceFacet, is(true));
             final NotInServiceMenuFacetFromDomainServiceFacet facetDerivedFromDomainServiceFacet = (NotInServiceMenuFacetFromDomainServiceFacet) facet;
             assertEquals(NatureOfService.REST, facetDerivedFromDomainServiceFacet.getNatureOfService());
-            expectNoMethodsRemoved();
+            assertNoMethodsRemoved();
         });
 
     }
@@ -83,7 +83,7 @@ extends FacetFactoryTestAbstract {
             // then
             final Facet facet = facetedMethod.lookupNonFallbackFacet(NotInServiceMenuFacet.class).orElse(null);
             assertThat(facet, is(nullValue()));
-            expectNoMethodsRemoved();
+            assertNoMethodsRemoved();
         });
     }
 
@@ -103,7 +103,7 @@ extends FacetFactoryTestAbstract {
             // then
             final Facet facet = facetedMethod.lookupNonFallbackFacet(NotInServiceMenuFacet.class).orElse(null);
             assertThat(facet, is(nullValue()));
-            expectNoMethodsRemoved();
+            assertNoMethodsRemoved();
         });
     }
 
@@ -122,7 +122,7 @@ extends FacetFactoryTestAbstract {
             // then
             final Facet facet = facetedMethod.lookupNonFallbackFacet(NotInServiceMenuFacet.class).orElse(null);
             assertThat(facet, is(nullValue()));
-            expectNoMethodsRemoved();
+            assertNoMethodsRemoved();
         });
     }
 

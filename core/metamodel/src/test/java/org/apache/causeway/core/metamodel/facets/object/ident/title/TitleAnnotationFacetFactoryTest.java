@@ -25,7 +25,6 @@ import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -37,8 +36,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Title;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.Evaluators;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
@@ -54,14 +51,6 @@ extends FacetFactoryTestAbstract {
 
     private TitleAnnotationFacetFactory facetFactory;
 
-    @Override
-    protected MetaModelContext_forTesting setUpMmc(final MetaModelContext_forTesting.MetaModelContext_forTestingBuilder builder) {
-        val mockInteractionService = Mockito.mock(InteractionService.class);
-        return builder
-                .interactionService(mockInteractionService)
-                .build();
-    }
-
     @BeforeEach
     public void setUp() throws Exception {
         assertNotNull(getInteractionService());
@@ -76,7 +65,6 @@ extends FacetFactoryTestAbstract {
     // -- SCENARIO 1
 
     public static class Customer1 {
-
         @Title
         public String someTitle() {
             return "Some Title";

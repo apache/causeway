@@ -131,7 +131,7 @@ extends FacetFactoryTestAbstract {
                     assertTrue(facet instanceof EntityChangePublishingFacetFromConfiguration);
                     assertThat(facet.isEnabled(), is(true));
 
-                    expectNoMethodsRemoved();
+                    assertNoMethodsRemoved();
                 });
             }
 
@@ -145,7 +145,7 @@ extends FacetFactoryTestAbstract {
                     assertNotNull(facet);
                     assertThat(facet.isEnabled(), is(false));
 
-                    expectNoMethodsRemoved();
+                    assertNoMethodsRemoved();
                 });
             }
 
@@ -164,7 +164,7 @@ extends FacetFactoryTestAbstract {
                     assertTrue(facet instanceof EntityChangePublishingFacetForDomainObjectAnnotationAsConfigured);
                     assertThat(facet.isEnabled(), is(true));
 
-                    expectNoMethodsRemoved();
+                    assertNoMethodsRemoved();
                 });
             }
 
@@ -178,7 +178,7 @@ extends FacetFactoryTestAbstract {
                     assertNotNull(facet);
                     assertThat(facet.isEnabled(), is(false));
 
-                    expectNoMethodsRemoved();
+                    assertNoMethodsRemoved();
                 });
             }
 
@@ -196,7 +196,7 @@ extends FacetFactoryTestAbstract {
                     assertNotNull(facet);
                     assertTrue(facet instanceof EntityChangePublishingFacetForDomainObjectAnnotation);
 
-                    expectNoMethodsRemoved();
+                    assertNoMethodsRemoved();
                 });
             }
 
@@ -212,7 +212,7 @@ extends FacetFactoryTestAbstract {
 
                     assertFalse(EntityChangePublishingFacet.isPublishingEnabled(facetHolder));
 
-                    expectNoMethodsRemoved();
+                    assertNoMethodsRemoved();
                 });
             }
 
@@ -258,7 +258,7 @@ extends FacetFactoryTestAbstract {
                 assertThat(CustomerRepository.class.isAssignableFrom(autoCompleteFacet.getRepositoryClass()), is(true));
                 assertThat(autoCompleteFacet.getActionName(), is("lookup"));
 
-                expectNoMethodsRemoved();
+                assertNoMethodsRemoved();
             });
 
         }
@@ -279,7 +279,7 @@ extends FacetFactoryTestAbstract {
                 assertThat(CustomerRepositoryWithDefaultMethodName.class.isAssignableFrom(autoCompleteFacet.getRepositoryClass()), is(true));
                 assertThat(autoCompleteFacet.getActionName(), is("autoComplete"));
 
-                expectNoMethodsRemoved();
+                assertNoMethodsRemoved();
             });
         }
 
@@ -292,7 +292,7 @@ extends FacetFactoryTestAbstract {
                 final Facet facet = facetHolder.getFacet(AutoCompleteFacet.class);
                 assertNull(facet);
 
-                expectNoMethodsRemoved();
+                assertNoMethodsRemoved();
             });
         }
 
@@ -305,7 +305,7 @@ extends FacetFactoryTestAbstract {
                 final Facet facet = facetHolder.getFacet(AutoCompleteFacet.class);
                 assertNull(facet);
 
-                expectNoMethodsRemoved();
+                assertNoMethodsRemoved();
             });
         }
 
@@ -343,7 +343,7 @@ extends FacetFactoryTestAbstract {
 
                 assertTrue(facet instanceof ChoicesFacetForDomainObjectAnnotation);
 
-                expectNoMethodsRemoved();
+                assertNoMethodsRemoved();
 
             });
         }
@@ -357,7 +357,7 @@ extends FacetFactoryTestAbstract {
                 final Facet facet = facetHolder.getFacet(ChoicesFacet.class);
                 assertNull(facet);
 
-                expectNoMethodsRemoved();
+                assertNoMethodsRemoved();
             });
         }
 
@@ -370,7 +370,7 @@ extends FacetFactoryTestAbstract {
                 final Facet facet = facetHolder.getFacet(ChoicesFacet.class);
                 assertNull(facet);
 
-                expectNoMethodsRemoved();
+                assertNoMethodsRemoved();
             });
         }
 
@@ -406,7 +406,7 @@ extends FacetFactoryTestAbstract {
                     final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
                     assertNull(facet);
 
-                    expectNoMethodsRemoved();
+                    assertNoMethodsRemoved();
 
                 });
             }
@@ -422,7 +422,7 @@ extends FacetFactoryTestAbstract {
                     assertNotNull(facet);
                     assertTrue(facet instanceof ImmutableFacetFromConfiguration);
 
-                    expectNoMethodsRemoved();
+                    assertNoMethodsRemoved();
                 });
             }
 
@@ -437,7 +437,7 @@ extends FacetFactoryTestAbstract {
                     assertTrue(facet instanceof ImmutableFacetFromConfiguration);
 
 
-                    expectNoMethodsRemoved();
+                    assertNoMethodsRemoved();
                 });
             }
         }
@@ -454,7 +454,7 @@ extends FacetFactoryTestAbstract {
                     final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
                     assertNull(facet);
 
-                    expectNoMethodsRemoved();
+                    assertNoMethodsRemoved();
                 });
             }
 
@@ -468,7 +468,7 @@ extends FacetFactoryTestAbstract {
                     assertNotNull(facet);
                     assertTrue(facet instanceof ImmutableFacetForDomainObjectAnnotation);
 
-                    expectNoMethodsRemoved();
+                    assertNoMethodsRemoved();
                 });
             }
 
@@ -482,7 +482,7 @@ extends FacetFactoryTestAbstract {
                     assertNotNull(facet); // default is now non-editable
                     assertTrue(facet instanceof ImmutableFacetForDomainObjectAnnotationAsConfigured);
 
-                    expectNoMethodsRemoved();
+                    assertNoMethodsRemoved();
                 });
             }
         }
@@ -498,7 +498,7 @@ extends FacetFactoryTestAbstract {
                     final ImmutableFacet facet = facetHolder.getFacet(ImmutableFacet.class);
                     assertNull(facet);
 
-                    expectNoMethodsRemoved();
+                    assertNoMethodsRemoved();
                 });
             }
         }
@@ -515,7 +515,7 @@ extends FacetFactoryTestAbstract {
                     assertNotNull(facet);
                     assertTrue(facet instanceof ImmutableFacetForDomainObjectAnnotation);
 
-                    expectNoMethodsRemoved();
+                    assertNoMethodsRemoved();
                 });
             }
         }
@@ -543,7 +543,7 @@ extends FacetFactoryTestAbstract {
         public void whenDomainObjectAndObjectTypeSetToTrue() {
             assertThat(LogicalType.infer(CustomerWithDomainObjectAndObjectTypeSet.class).getLogicalTypeName(),
                     is("CUS"));
-            expectNoMethodsRemoved();
+            assertNoMethodsRemoved();
         }
 
         @Test
@@ -555,7 +555,7 @@ extends FacetFactoryTestAbstract {
                 final Facet facet = facetHolder.getFacet(AliasedFacet.class);
                 assertNull(facet);
 
-                expectNoMethodsRemoved();
+                assertNoMethodsRemoved();
             });
         }
 
@@ -568,7 +568,7 @@ extends FacetFactoryTestAbstract {
                 final Facet facet = facetHolder.getFacet(AliasedFacet.class);
                 assertNull(facet);
 
-                expectNoMethodsRemoved();
+                assertNoMethodsRemoved();
             });
         }
 
@@ -608,7 +608,7 @@ extends FacetFactoryTestAbstract {
                 final Facet facet = facetHolder.getFacet(ViewModelFacet.class);
                 assertNull(facet);
 
-                expectNoMethodsRemoved();
+                assertNoMethodsRemoved();
             });
         }
 
@@ -621,7 +621,7 @@ extends FacetFactoryTestAbstract {
                 final Facet facet = facetHolder.getFacet(ViewModelFacet.class);
                 assertNull(facet);
 
-                expectNoMethodsRemoved();
+                assertNoMethodsRemoved();
             });
         }
 
@@ -636,7 +636,7 @@ extends FacetFactoryTestAbstract {
 
                 assertTrue(facet instanceof ViewModelFacetForDomainObjectAnnotation);
 
-                expectNoMethodsRemoved();
+                assertNoMethodsRemoved();
             });
 
         }
@@ -650,7 +650,7 @@ extends FacetFactoryTestAbstract {
                 final Facet facet = facetHolder.getFacet(ViewModelFacet.class);
                 assertNull(facet);
 
-                expectNoMethodsRemoved();
+                assertNoMethodsRemoved();
             });
 
         }

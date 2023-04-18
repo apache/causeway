@@ -52,7 +52,7 @@ extends ActionAnnotationFacetFactoryTest {
         actionScenario(SomeHasInteractionId.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
             processExecutionPublishing(facetFactory, processMethodContext);
             assertFalse(ExecutionPublishingFacet.isPublishingEnabled(facetedMethod));
-            expectNoMethodsRemoved();
+            assertNoMethodsRemoved();
         });
     }
 
@@ -108,7 +108,7 @@ extends ActionAnnotationFacetFactoryTest {
             processExecutionPublishing(facetFactory, processMethodContext);
             // then
             assertFalse(ExecutionPublishingFacet.isPublishingEnabled(facetedMethod));
-            expectNoMethodsRemoved();
+            assertNoMethodsRemoved();
         });
     }
 
@@ -142,7 +142,7 @@ extends ActionAnnotationFacetFactoryTest {
             processExecutionPublishing(facetFactory, processMethodContext);
             // then
             assertFalse(ExecutionPublishingFacet.isPublishingEnabled(facetedMethod));
-            expectNoMethodsRemoved();
+            assertNoMethodsRemoved();
         });
     }
 
@@ -165,7 +165,7 @@ extends ActionAnnotationFacetFactoryTest {
             assertNotNull(facet);
             final ExecutionPublishingActionFacetForActionAnnotation facetImpl = (ExecutionPublishingActionFacetForActionAnnotation) facet;
             _Blackhole.consume(facetImpl);
-            expectNoMethodsRemoved();
+            assertNoMethodsRemoved();
         });
     }
 
@@ -199,7 +199,7 @@ extends ActionAnnotationFacetFactoryTest {
             processExecutionPublishing(facetFactory, processMethodContext);
             // then
             assertFalse(ExecutionPublishingFacet.isPublishingEnabled(facetedMethod));
-            expectNoMethodsRemoved();
+            assertNoMethodsRemoved();
         });
     }
 
@@ -219,7 +219,7 @@ extends ActionAnnotationFacetFactoryTest {
             final Facet facet = facetedMethod.getFacet(ExecutionPublishingFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof ExecutionPublishingActionFacetForActionAnnotation);
-            expectNoMethodsRemoved();
+            assertNoMethodsRemoved();
         });
     }
 

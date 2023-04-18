@@ -19,16 +19,21 @@
 package org.apache.causeway.core.metamodel.facets;
 
 import java.lang.reflect.Method;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;
 
-import static org.mockito.Mockito.calls;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.applib.services.i18n.TranslationService;
+import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
@@ -42,6 +47,7 @@ import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContex
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessParameterContext;
 import org.apache.causeway.core.metamodel.valuesemantics.IntValueSemantics;
+import org.apache.causeway.core.security.authentication.InteractionContextFactory;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -104,7 +110,11 @@ implements HasMetaModelContext {
 
     @Getter(onMethod_ = {@Override})
     private MetaModelContext metaModelContext;
-    private MethodRemover mockMethodRemover;
+
+    private TranslationService mockTranslationService;
+    private InteractionService mockInteractionService;
+    private final InteractionContext iaContext = InteractionContextFactory.testing();
+    private MethodRemover_forTesting methodRemover;
 
     /**
      * Override, if a custom {@link MetaModelContext_forTesting} is required for certain tests.
@@ -115,12 +125,25 @@ implements HasMetaModelContext {
     }
 
     @BeforeEach
-    protected void setUpAll() throws Exception {
+    protected void setUpAll() {
+
+        mockTranslationService = Mockito.mock(TranslationService.class);
+        mockInteractionService = Mockito.mock(InteractionService.class);
+
+        methodRemover = new MethodRemover_forTesting();
+
         metaModelContext = setUpMmc(MetaModelContext_forTesting.builder()
+                .translationService(mockTranslationService)
+                .interactionService(mockInteractionService)
                 .valueSemantic(new IntValueSemantics()));
-        mockMethodRemover = Mockito.mock(MethodRemover.class);
+
+        Mockito.when(mockInteractionService.currentInteractionContext()).thenReturn(Optional.of(iaContext));
     }
 
+    @AfterEach
+    protected void tearDownAll() {
+        methodRemover = null;
+    }
 
     @FunctionalInterface
     public static interface MemberScenarioConsumer {
@@ -147,7 +170,7 @@ implements HasMetaModelContext {
             final Class<?> declaringClass, final String actionName, final MemberScenarioConsumer consumer) {
         val scenario = Scenario.act(getMetaModelContext(), declaringClass, actionName);
         val processMethodContext = ProcessMethodContext
-                .forTesting(declaringClass, null, scenario.annotatedMethod(), mockMethodRemover, scenario.facetedMethod());
+                .forTesting(declaringClass, null, scenario.annotatedMethod(), methodRemover, scenario.facetedMethod());
         consumer.accept(processMethodContext, scenario.facetHolder, scenario.facetedMethod, scenario.facetedMethodParameter);
     }
 
@@ -172,7 +195,7 @@ implements HasMetaModelContext {
             final Class<?> declaringClass, final String propertyName, final MemberScenarioConsumer consumer) {
         val scenario = Scenario.prop(getMetaModelContext(), declaringClass, propertyName);
         val processMethodContext = ProcessMethodContext
-                .forTesting(declaringClass, null, scenario.annotatedMethod(), mockMethodRemover, scenario.facetedMethod());
+                .forTesting(declaringClass, null, scenario.annotatedMethod(), methodRemover, scenario.facetedMethod());
         consumer.accept(processMethodContext, scenario.facetHolder, scenario.facetedMethod, scenario.facetedMethodParameter);
     }
 
@@ -183,7 +206,7 @@ implements HasMetaModelContext {
         val facetHolder = FacetHolder.simple(getMetaModelContext(),
                 Identifier.classIdentifier(LogicalType.fqcn(declaringClass)));
         val processClassContext = ProcessClassContext
-                .forTesting(declaringClass, mockMethodRemover, facetHolder);
+                .forTesting(declaringClass, methodRemover, facetHolder);
         consumer.accept(processClassContext, facetHolder);
     }
 
@@ -219,17 +242,22 @@ implements HasMetaModelContext {
 
     // -- EXPECTATIONS
 
-    protected void expectNoMethodsRemoved() {
-        Mockito.verifyNoInteractions(mockMethodRemover);
+    protected void assertNoMethodsRemoved() {
+        //Mockito.verifyNoInteractions(methodRemover);
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().isEmpty());
+        assertTrue(methodRemover.getRemoveMethodArgsCalls().isEmpty());
     }
 
-    protected void expectRemoveMethodAtLeastOnce(final Method actionMethod) {
-        Mockito.verify(mockMethodRemover, Mockito.atLeastOnce()).removeMethod(actionMethod);
+    protected void assertMethodWasRemoved(final Method method) {
+        //Mockito.verify(methodRemover, Mockito.atLeastOnce()).removeMethod(actionMethod);
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
+        //assertTrue(methodRemover.getRemoveMethodArgsCalls().isEmpty());
     }
 
+    /*
     protected void expectRemoveMethodOnce(final Method actionMethod) {
-        Mockito.verify(mockMethodRemover, calls(1)).removeMethod(actionMethod);
-    }
+        Mockito.verify(methodRemover, calls(1)).removeMethod(actionMethod);
+    }*/
 
 
 }
