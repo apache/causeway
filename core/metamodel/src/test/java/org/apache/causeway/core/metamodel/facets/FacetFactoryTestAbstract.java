@@ -116,7 +116,7 @@ implements HasMetaModelContext {
     private TranslationService mockTranslationService;
     private InteractionService mockInteractionService;
     private final InteractionContext iaContext = InteractionContextFactory.testing();
-    protected MethodRemover_forTesting methodRemover;
+    protected MethodRemover_forTesting methodRemover; //TODO[CAUSEWAY-3409] make private
 
     /**
      * Override, if a custom {@link MetaModelContext_forTesting} is required for certain tests.
