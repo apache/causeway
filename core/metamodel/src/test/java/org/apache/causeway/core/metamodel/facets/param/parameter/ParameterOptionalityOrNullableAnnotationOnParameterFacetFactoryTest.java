@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.facets.param.parameter;
 
 import java.lang.reflect.Method;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.lang.Nullable;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -30,20 +31,19 @@ import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessParameterContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract2;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.causeway.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetForParameterAnnotation;
 import org.apache.causeway.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetInvertedByNullableAnnotationOnParameter;
 
-class ParameterOptionalityOrNullableAnnotationOnParameterFacetFactoryTest extends AbstractFacetFactoryTest {
+class ParameterOptionalityOrNullableAnnotationOnParameterFacetFactoryTest extends FacetFactoryTestAbstract2 {
 
     private ParameterAnnotationFacetFactory facetFactory;
 
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-        facetFactory = new ParameterAnnotationFacetFactory(metaModelContext);
+    @BeforeEach
+    protected void setUp() {
+        facetFactory = new ParameterAnnotationFacetFactory(getMetaModelContext());
     }
 
     public void testParameterAnnotationWithOptionalityPickedUpOnActionParameter() {

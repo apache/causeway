@@ -20,20 +20,23 @@ package org.apache.causeway.core.metamodel.facets.actions.action;
 
 import java.lang.reflect.Method;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract2;
 import org.apache.causeway.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetFallbackToNonIdempotent;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 
 import lombok.val;
 
 class ActionSemanticsFacetFallbackToNonIdempotentFactoryTest
-extends AbstractFacetFactoryTest {
+extends FacetFactoryTestAbstract2 {
 
     private ActionAnnotationFacetFactory facetFactory;
 
@@ -43,17 +46,14 @@ extends AbstractFacetFactoryTest {
         facetFactory.processSemantics(processMethodContext, actionIfAny);
     }
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        facetFactory = new ActionAnnotationFacetFactory(metaModelContext);
+    @BeforeEach
+    protected void setUp() {
+        facetFactory = new ActionAnnotationFacetFactory(getMetaModelContext());
     }
 
-    @Override
-    protected void tearDown() throws Exception {
+    @AfterEach
+    protected void tearDown() {
         facetFactory = null;
-        super.tearDown();
     }
 
     public void testNoAnnotationPickedUp() {

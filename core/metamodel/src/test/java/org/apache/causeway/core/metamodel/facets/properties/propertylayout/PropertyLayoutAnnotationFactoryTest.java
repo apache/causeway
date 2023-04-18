@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.facets.properties.propertylayout;
 
 import java.lang.reflect.Method;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -35,9 +36,9 @@ import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract2;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
@@ -46,11 +47,17 @@ import org.apache.causeway.core.metamodel.facets.objectvalue.labelat.LabelAtFace
 import lombok.val;
 
 class PropertyLayoutAnnotationFactoryTest
-extends AbstractFacetFactoryTest {
+extends FacetFactoryTestAbstract2 {
+
+    private PropertyLayoutFacetFactory facetFactory;
+
+    @BeforeEach
+    protected void setUp() {
+        facetFactory = new PropertyLayoutFacetFactory(getMetaModelContext());
+    }
 
     @Test
     void testPropertyLayoutAnnotation_named() {
-        val facetFactory = createPropertyLayoutFacetFactory(metaModelContext);
 
         class Customer {
             @PropertyLayout(named = "1st name")
@@ -76,7 +83,6 @@ extends AbstractFacetFactoryTest {
 
     @Test
     void testPropertyLayoutAnnotation_hidden() {
-        final PropertyLayoutFacetFactory facetFactory = createPropertyLayoutFacetFactory(metaModelContext);
 
         class Customer {
             @PropertyLayout(hidden = Where.OBJECT_FORMS)
@@ -103,7 +109,6 @@ extends AbstractFacetFactoryTest {
 
     @Test
     void testPropertyLayoutAnnotation_labelPosition() {
-        final PropertyLayoutFacetFactory facetFactory = createPropertyLayoutFacetFactory(metaModelContext);
 
         class Customer {
             @PropertyLayout(labelPosition = LabelPosition.LEFT)

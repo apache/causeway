@@ -18,33 +18,33 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.recreatable;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract2;
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetFactory;
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForViewModelInterface;
 
 class RecreatableObjectFacetFactoryTest
-extends AbstractFacetFactoryTest {
+extends FacetFactoryTestAbstract2 {
 
     private ViewModelFacetFactory facetFactory;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        facetFactory = new ViewModelFacetFactory(metaModelContext);
+    @BeforeEach
+    protected void setUp() {
+        facetFactory = new ViewModelFacetFactory(getMetaModelContext());
     }
 
-    @Override
-    protected void tearDown() throws Exception {
+    @AfterEach
+    protected void tearDown() {
         facetFactory = null;
-        super.tearDown();
     }
 
     static class Customer implements ViewModel {

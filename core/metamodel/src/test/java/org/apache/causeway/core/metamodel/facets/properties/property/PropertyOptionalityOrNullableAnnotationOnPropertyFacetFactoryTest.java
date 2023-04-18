@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.facets.properties.property;
 
 import java.lang.reflect.Method;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.lang.Nullable;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -29,9 +30,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract2;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.MandatoryFacetInvertedByNullableAnnotationOnProperty;
@@ -39,14 +40,13 @@ import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.M
 import lombok.val;
 
 class PropertyOptionalityOrNullableAnnotationOnPropertyFacetFactoryTest
-extends AbstractFacetFactoryTest {
+extends FacetFactoryTestAbstract2 {
 
     private PropertyAnnotationFacetFactory facetFactory;
 
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-        facetFactory = new PropertyAnnotationFacetFactory(metaModelContext);
+    @BeforeEach
+    protected void setUp() {
+        facetFactory = new PropertyAnnotationFacetFactory(getMetaModelContext());
     }
 
     private void processOptional(

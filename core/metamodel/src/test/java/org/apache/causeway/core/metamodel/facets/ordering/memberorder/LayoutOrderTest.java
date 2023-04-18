@@ -21,6 +21,8 @@ package org.apache.causeway.core.metamodel.facets.ordering.memberorder;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
+import org.junit.jupiter.api.BeforeEach;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -28,21 +30,23 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract2;
+import org.apache.causeway.core.metamodel.facets.actions.layout.ActionLayoutFacetFactory;
+import org.apache.causeway.core.metamodel.facets.collections.layout.CollectionLayoutFacetFactory;
 import org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet;
 import org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromActionLayoutAnnotation;
 import org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromCollectionLayoutAnnotation;
 import org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromPropertyLayoutAnnotation;
+import org.apache.causeway.core.metamodel.facets.properties.propertylayout.PropertyLayoutFacetFactory;
 
 import lombok.val;
 
 class LayoutOrderTest
-extends AbstractFacetFactoryTest {
+extends FacetFactoryTestAbstract2 {
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    @BeforeEach
+    protected void setUp() {
 
 //FIXME
 //        context.checking(new Expectations() {{
@@ -61,11 +65,6 @@ extends AbstractFacetFactoryTest {
 //        }});
     }
 
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
-    }
-
     public void testMemberOrderAnnotationPickedUpOnProperty() {
         class Customer {
             @PropertyLayout(sequence = "1")
@@ -75,7 +74,7 @@ extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Customer.class, "getFirstName");
 
-        val facetFactory = super.createPropertyLayoutFacetFactory(metaModelContext);
+        val facetFactory = new PropertyLayoutFacetFactory(getMetaModelContext());
         facetFactory.process(ProcessMethodContext
                 .forTesting(Customer.class, null, method, methodRemover, facetedMethod));
 
@@ -102,7 +101,7 @@ extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Customer.class, "getOrders");
 
-        val facetFactory = super.createCollectionLayoutFacetFactory(metaModelContext);
+        val facetFactory = new CollectionLayoutFacetFactory(getMetaModelContext());
         facetFactory.process(ProcessMethodContext
                 .forTesting(Customer.class, null, method, methodRemover, facetedMethod));
 
@@ -122,7 +121,7 @@ extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Customer.class, "someAction");
 
-        val facetFactory = super.createActionLayoutFacetFactory(metaModelContext);
+        val facetFactory = new ActionLayoutFacetFactory(getMetaModelContext());
         facetFactory.process(ProcessMethodContext
                 .forTesting(Customer.class, null, method, methodRemover, facetedMethod));
 

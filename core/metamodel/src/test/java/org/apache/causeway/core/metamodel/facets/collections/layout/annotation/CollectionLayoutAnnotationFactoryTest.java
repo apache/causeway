@@ -36,8 +36,8 @@ import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract2;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
@@ -47,11 +47,11 @@ import org.apache.causeway.core.metamodel.facets.collections.layout.MemberNamedF
 
 import lombok.val;
 
-class CollectionLayoutAnnotationFactoryTest extends AbstractFacetFactoryTest {
+class CollectionLayoutAnnotationFactoryTest extends FacetFactoryTestAbstract2 {
 
     @Test
     public void testCollectionLayoutAnnotation_named() {
-        val facetFactory = new CollectionLayoutFacetFactory(metaModelContext);
+        val facetFactory = new CollectionLayoutFacetFactory(getMetaModelContext());
 
         class Customer {
             @CollectionLayout(named = "1st names")
@@ -72,7 +72,7 @@ class CollectionLayoutAnnotationFactoryTest extends AbstractFacetFactoryTest {
 
     @Test
     void testCollectionLayoutAnnotation_hidden() {
-        val facetFactory = new CollectionLayoutFacetFactory(metaModelContext);
+        val facetFactory = new CollectionLayoutFacetFactory(getMetaModelContext());
 
         class Customer {
             @CollectionLayout(hidden = Where.OBJECT_FORMS)

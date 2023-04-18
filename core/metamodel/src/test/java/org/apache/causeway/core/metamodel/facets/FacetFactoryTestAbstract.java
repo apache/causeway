@@ -114,7 +114,7 @@ implements HasMetaModelContext {
     private TranslationService mockTranslationService;
     private InteractionService mockInteractionService;
     private final InteractionContext iaContext = InteractionContextFactory.testing();
-    private MethodRemover_forTesting methodRemover;
+    protected MethodRemover_forTesting methodRemover;
 
     /**
      * Override, if a custom {@link MetaModelContext_forTesting} is required for certain tests.
@@ -242,22 +242,13 @@ implements HasMetaModelContext {
 
     // -- EXPECTATIONS
 
-    protected void assertNoMethodsRemoved() {
-        //Mockito.verifyNoInteractions(methodRemover);
+    protected final void assertNoMethodsRemoved() {
         assertTrue(methodRemover.getRemovedMethodMethodCalls().isEmpty());
         assertTrue(methodRemover.getRemoveMethodArgsCalls().isEmpty());
     }
 
-    protected void assertMethodWasRemoved(final Method method) {
-        //Mockito.verify(methodRemover, Mockito.atLeastOnce()).removeMethod(actionMethod);
+    protected final void assertMethodWasRemoved(final Method method) {
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
-        //assertTrue(methodRemover.getRemoveMethodArgsCalls().isEmpty());
     }
-
-    /*
-    protected void expectRemoveMethodOnce(final Method actionMethod) {
-        Mockito.verify(methodRemover, calls(1)).removeMethod(actionMethod);
-    }*/
-
 
 }

@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.support;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -25,28 +28,26 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract2;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 
 import lombok.val;
 
 public abstract class ObjectSupportFacetFactoryTestAbstract
-extends AbstractFacetFactoryTest {
+extends FacetFactoryTestAbstract2 {
 
     protected ObjectSupportFacetFactory facetFactory;
 
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-        facetFactory = new ObjectSupportFacetFactory(metaModelContext);
+    @BeforeEach
+    protected void setUp() {
+        facetFactory = new ObjectSupportFacetFactory(getMetaModelContext());
     }
 
-    @Override
-    protected void tearDown() throws Exception {
+    @AfterEach
+    protected void tearDown() {
         facetFactory = null;
-        super.tearDown();
     }
 
     protected void assertPicksUp(

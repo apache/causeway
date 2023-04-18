@@ -31,20 +31,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessParameterContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract2;
 import org.apache.causeway.core.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.causeway.core.metamodel.facets.param.parameter.regex.RegExFacetForPatternAnnotationOnParameter;
 
-class RegExAnnotationOnParameterFacetFactoryTest extends AbstractFacetFactoryTest {
+class RegExAnnotationOnParameterFacetFactoryTest extends FacetFactoryTestAbstract2 {
 
     private ParameterAnnotationFacetFactory facetFactory;
 
-    @Override
     @BeforeEach
-    public void setUp() throws Exception {
-        super.setUp();
-        facetFactory = new ParameterAnnotationFacetFactory(metaModelContext);
+    protected void setUp() {
+        facetFactory = new ParameterAnnotationFacetFactory(getMetaModelContext());
     }
 
     public void testRegExAnnotationPickedUpOnActionParameter() {

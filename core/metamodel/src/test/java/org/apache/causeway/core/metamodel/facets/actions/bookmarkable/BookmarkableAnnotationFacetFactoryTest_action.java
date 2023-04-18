@@ -20,32 +20,32 @@ package org.apache.causeway.core.metamodel.facets.actions.bookmarkable;
 
 import java.lang.reflect.Method;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract2;
 import org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetFallbackFactory;
 
 class BookmarkableAnnotationFacetFactoryTest_action
-extends AbstractFacetFactoryTest {
+extends FacetFactoryTestAbstract2 {
 
     private BookmarkPolicyFacetFallbackFactory facetFactory;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        facetFactory = new BookmarkPolicyFacetFallbackFactory(metaModelContext);
+    @BeforeEach
+    protected void setUp() {
+        facetFactory = new BookmarkPolicyFacetFallbackFactory(getMetaModelContext());
     }
 
-    @Override
-    protected void tearDown() throws Exception {
+    @AfterEach
+    protected void tearDown() {
         facetFactory = null;
-        super.tearDown();
     }
 
     public void testBookmarkableAnnotationPickedUpOnClass() {

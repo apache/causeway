@@ -22,10 +22,9 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
-import org.mockito.Mockito;
+import org.junit.jupiter.api.BeforeEach;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -34,8 +33,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract2;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actions.validate.ActionValidationFacet;
 import org.apache.causeway.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethod;
@@ -53,20 +52,16 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 
-class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
+class ActionMethodsFacetFactoryTest extends FacetFactoryTestAbstract2 {
 
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-
-        val specLoader = metaModelContext.getSpecificationLoader();
+    @BeforeEach
+    public void setUp() {
+        val specLoader = getMetaModelContext().getSpecificationLoader();
         ObjectSpecification voidSpec = specLoader.loadSpecification(void.class);
-
-        Mockito.when(mockInteractionService.currentInteractionContext()).thenReturn(Optional.of(iaContext));
     }
 
     public void testInstallsValidateMethodNoArgsFacetAndRemovesMethod() {
-        val facetFactory = new ActionValidationFacetViaMethodFactory(metaModelContext);
+        val facetFactory = new ActionValidationFacetViaMethodFactory(getMetaModelContext());
 
         @SuppressWarnings("unused")
         class Customer {
@@ -94,7 +89,7 @@ class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testInstallsValidateMethodSomeArgsFacetAndRemovesMethod() {
-        val facetFactory = new ActionValidationFacetViaMethodFactory(metaModelContext);
+        val facetFactory = new ActionValidationFacetViaMethodFactory(getMetaModelContext());
 
         class Customer {
             @SuppressWarnings("unused")
@@ -122,7 +117,7 @@ class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testInstallsParameterDefaultsMethodAndRemovesMethod() {
-        val facetFactory = new ActionParameterDefaultsFacetViaMethodFactory(metaModelContext);
+        val facetFactory = new ActionParameterDefaultsFacetViaMethodFactory(getMetaModelContext());
 
         class Customer {
             @SuppressWarnings("unused")
@@ -145,7 +140,7 @@ class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method default1Method = findMethod(Customer.class, "default1SomeAction", new Class[]{});
 
         final FacetedMethod facetHolderWithParms = FacetedMethod
-                .createForAction(metaModelContext, Customer.class, _MethodFacades.regular(actionMethod));
+                .createForAction(getMetaModelContext(), Customer.class, _MethodFacades.regular(actionMethod));
 
         facetFactory.process(ProcessMethodContext
                 .forTesting(Customer.class, FeatureType.ACTION, actionMethod, methodRemover, facetHolderWithParms));
@@ -169,7 +164,7 @@ class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testInstallsParameterChoicesMethodAndRemovesMethod() {
-        val facetFactory = new ActionParameterChoicesFacetViaMethodFactory(metaModelContext);
+        val facetFactory = new ActionParameterChoicesFacetViaMethodFactory(getMetaModelContext());
 
         class Customer {
             @SuppressWarnings("unused")
@@ -198,7 +193,7 @@ class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method choices2Method = findMethod(Customer.class, "choices2SomeAction", new Class[] {});
 
         final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(
-                metaModelContext, Customer.class, _MethodFacades.regular(actionMethod));
+                getMetaModelContext(), Customer.class, _MethodFacades.regular(actionMethod));
 
         facetFactory.process(ProcessMethodContext
                 .forTesting(Customer.class, FeatureType.ACTION, actionMethod, methodRemover, facetHolderWithParms));
@@ -231,7 +226,7 @@ class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testInstallsParameterAutoCompleteMethodAndRemovesMethod() {
-        val facetFactory = new ActionParameterAutoCompleteFacetViaMethodFactory(metaModelContext);
+        val facetFactory = new ActionParameterAutoCompleteFacetViaMethodFactory(getMetaModelContext());
 
         class Customer {
             @SuppressWarnings("unused")
@@ -248,7 +243,7 @@ class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Method autoComplete0Method = findMethod(Customer.class, "autoComplete0SomeAction", new Class[] {String.class});
 
         final FacetedMethod facetHolderWithParms = FacetedMethod
-                .createForAction(metaModelContext, Customer.class, _MethodFacades.regular(actionMethod));
+                .createForAction(getMetaModelContext(), Customer.class, _MethodFacades.regular(actionMethod));
 
         facetFactory.process(ProcessMethodContext
                 .forTesting(Customer.class, FeatureType.ACTION, actionMethod, methodRemover, facetHolderWithParms));

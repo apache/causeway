@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -25,26 +28,23 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract2;
 import org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetFallbackFactory;
 
 class BookmarkableAnnotationFacetFactoryTest_class
-extends AbstractFacetFactoryTest {
+extends FacetFactoryTestAbstract2 {
 
     private BookmarkPolicyFacetFallbackFactory facetFactory;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        facetFactory = new BookmarkPolicyFacetFallbackFactory(metaModelContext);
+    @BeforeEach
+    protected void setUp() {
+        facetFactory = new BookmarkPolicyFacetFallbackFactory(getMetaModelContext());
     }
 
-    @Override
-    protected void tearDown() throws Exception {
+    @AfterEach
+    protected void tearDown() {
         facetFactory = null;
-        super.tearDown();
     }
 
     public void testBookmarkablePolicyInferredPickedUpOnClassAndDefaultsToAlways() {

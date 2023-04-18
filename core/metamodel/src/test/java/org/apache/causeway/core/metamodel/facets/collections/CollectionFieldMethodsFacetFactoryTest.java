@@ -28,8 +28,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract2;
 import org.apache.causeway.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor;
 import org.apache.causeway.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessorFactory;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
@@ -37,15 +37,10 @@ import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCol
 import lombok.val;
 
 class CollectionFieldMethodsFacetFactoryTest
-extends AbstractFacetFactoryTest {
-
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-    }
+extends FacetFactoryTestAbstract2 {
 
     public void testPropertyAccessorFacetIsInstalledForJavaUtilCollectionAndMethodRemoved() {
-        val facetFactory = new CollectionAccessorFacetViaAccessorFactory(metaModelContext);
+        val facetFactory = new CollectionAccessorFacetViaAccessorFactory(getMetaModelContext());
 
         class Customer {
             @SuppressWarnings({ "rawtypes", "unused" })
@@ -69,7 +64,7 @@ extends AbstractFacetFactoryTest {
 
 
     public void testPropertyAccessorFacetIsInstalledForJavaUtilListAndMethodRemoved() {
-        val facetFactory = new CollectionAccessorFacetViaAccessorFactory(metaModelContext);
+        val facetFactory = new CollectionAccessorFacetViaAccessorFactory(getMetaModelContext());
 
         class Customer {
             @SuppressWarnings({ "rawtypes", "unused" })
@@ -93,7 +88,7 @@ extends AbstractFacetFactoryTest {
     }
 
     public void testPropertyAccessorFacetIsInstalledForJavaUtilSetAndMethodRemoved() {
-        val facetFactory = new CollectionAccessorFacetViaAccessorFactory(metaModelContext);
+        val facetFactory = new CollectionAccessorFacetViaAccessorFactory(getMetaModelContext());
 
         class Customer {
             @SuppressWarnings({ "rawtypes", "unused" })
@@ -116,7 +111,7 @@ extends AbstractFacetFactoryTest {
     }
 
     public void testPropertyAccessorFacetIsInstalledForObjectArrayAndMethodRemoved() {
-        val facetFactory = new CollectionAccessorFacetViaAccessorFactory(metaModelContext);
+        val facetFactory = new CollectionAccessorFacetViaAccessorFactory(getMetaModelContext());
 
         class Customer {
             @SuppressWarnings("unused")
@@ -139,7 +134,7 @@ extends AbstractFacetFactoryTest {
     }
 
     public void testPropertyAccessorFacetIsInstalledForOrderArrayAndMethodRemoved() {
-        val facetFactory = new CollectionAccessorFacetViaAccessorFactory(metaModelContext);
+        val facetFactory = new CollectionAccessorFacetViaAccessorFactory(getMetaModelContext());
 
         @SuppressWarnings("hiding")
         class Order {
@@ -165,7 +160,7 @@ extends AbstractFacetFactoryTest {
     }
 
     public void testMethodFoundInSuperclass() {
-        val facetFactory = new CollectionAccessorFacetViaAccessorFactory(metaModelContext);
+        val facetFactory = new CollectionAccessorFacetViaAccessorFactory(getMetaModelContext());
 
         @SuppressWarnings("hiding")
         class Order {

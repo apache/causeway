@@ -20,6 +20,8 @@ package org.apache.causeway.core.metamodel.facets.actions.action;
 
 import java.lang.reflect.Method;
 
+import org.junit.jupiter.api.BeforeEach;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -28,8 +30,8 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract2;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEvent;
@@ -45,7 +47,7 @@ import lombok.val;
 
 @SuppressWarnings("unused")
 class ActionAnnotationFacetFactoryTest_ActionInvocation
-extends AbstractFacetFactoryTest {
+extends FacetFactoryTestAbstract2 {
 
     private ObjectSpecification voidSpec;
     private ObjectSpecification stringSpec;
@@ -59,12 +61,12 @@ extends AbstractFacetFactoryTest {
         facetFactory.processInvocation(processMethodContext, actionIfAny);
     }
 
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-        this.facetFactory =  new ActionAnnotationFacetFactory(metaModelContext);
+    @BeforeEach
+    public void setUp() {
 
-        val specLoader = metaModelContext.getSpecificationLoader();
+        this.facetFactory =  new ActionAnnotationFacetFactory(getMetaModelContext());
+
+        val specLoader = getSpecificationLoader();
         voidSpec = specLoader.loadSpecification(void.class);
         stringSpec = specLoader.loadSpecification(java.lang.String.class);
         customerSpec = specLoader.loadSpecification(Customer.class);
@@ -131,7 +133,7 @@ extends AbstractFacetFactoryTest {
             }
         }
 
-        val customerSpec = metaModelContext.getSpecificationLoader().loadSpecification(LocalCustomer.class);
+        val customerSpec = getSpecificationLoader().loadSpecification(LocalCustomer.class);
 
         final Method actionMethod = findMethod(LocalCustomer.class, "someAction");
 
@@ -159,7 +161,7 @@ extends AbstractFacetFactoryTest {
         final Method actionMethod = findMethod(CustomerEx.class, "someAction", new Class[] { int.class, long.class });
 
         final FacetedMethod facetHolderWithParms = FacetedMethod
-                .createForAction(metaModelContext, CustomerEx.class, _MethodFacades.regular(actionMethod));
+                .createForAction(getMetaModelContext(), CustomerEx.class, _MethodFacades.regular(actionMethod));
 
         processInvocation(facetFactory, ProcessMethodContext
                 .forTesting(CustomerEx.class, null, actionMethod, methodRemover, facetHolderWithParms));
@@ -170,8 +172,8 @@ extends AbstractFacetFactoryTest {
 
     public void testActionsPickedUpFromSuperclassButHelpersFromSubClass() {
 
-        val facetFactoryForChoices = new ActionParameterChoicesFacetViaMethodFactory(metaModelContext);
-        val facetFactoryForDisable = new DisableForContextFacetViaMethodFactory(metaModelContext);
+        val facetFactoryForChoices = new ActionParameterChoicesFacetViaMethodFactory(getMetaModelContext());
+        val facetFactoryForDisable = new DisableForContextFacetViaMethodFactory(getMetaModelContext());
 
         class Customer {
 
@@ -206,7 +208,7 @@ extends AbstractFacetFactoryTest {
         final Method choices1Method = findMethod(CustomerEx.class, "choices1SomeAction", new Class[] {});
         final Method disableMethod = findMethod(CustomerEx.class, "disableSomeAction", new Class[] {});
 
-        final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(metaModelContext, CustomerEx.class,
+        final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(getMetaModelContext(), CustomerEx.class,
                 _MethodFacades.regular(actionMethod));
 
         final ProcessMethodContext processMethodContext = ProcessMethodContext

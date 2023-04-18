@@ -20,29 +20,30 @@ package org.apache.causeway.core.metamodel.facets.properties.property;
 
 import java.lang.reflect.Method;
 
+import org.junit.jupiter.api.BeforeEach;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.Snapshot;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract2;
 import org.apache.causeway.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet;
 import org.apache.causeway.core.metamodel.facets.properties.property.snapshot.SnapshotExcludeFacetForPropertyAnnotation;
 
 import lombok.val;
 
 class PropertyAnnotationWithSnapshotOnPropertyFacetFactoryTest
-extends AbstractFacetFactoryTest {
+extends FacetFactoryTestAbstract2 {
 
     private PropertyAnnotationFacetFactory facetFactory;
 
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-        facetFactory = new PropertyAnnotationFacetFactory(metaModelContext);
+    @BeforeEach
+    protected void setUp() {
+        facetFactory = new PropertyAnnotationFacetFactory(getMetaModelContext());
     }
 
     private void processNotPersisted(

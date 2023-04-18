@@ -31,24 +31,22 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract2;
 import org.apache.causeway.core.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.causeway.core.metamodel.facets.properties.property.regex.RegExFacetForPatternAnnotationOnProperty;
 
 import lombok.val;
 
 class RegExAnnotationOnPropertyFacetFactoryTest
-extends AbstractFacetFactoryTest {
+extends FacetFactoryTestAbstract2 {
 
     private PropertyAnnotationFacetFactory facetFactory;
 
-    @Override
     @BeforeEach
-    public void setUp() throws Exception {
-        super.setUp();
-        facetFactory = new PropertyAnnotationFacetFactory(metaModelContext);
+    protected void setUp() {
+        facetFactory = new PropertyAnnotationFacetFactory(getMetaModelContext());
     }
 
     private void processRegEx(

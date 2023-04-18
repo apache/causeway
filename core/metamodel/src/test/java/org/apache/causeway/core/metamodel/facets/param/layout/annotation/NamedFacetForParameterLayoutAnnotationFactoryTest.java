@@ -28,8 +28,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.annotation.ParameterLayout;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract2;
 import org.apache.causeway.core.metamodel.facets.all.named.ParamNamedFacet;
 import org.apache.causeway.core.metamodel.facets.param.layout.NamedFacetForParameterLayoutAnnotation;
 import org.apache.causeway.core.metamodel.facets.param.layout.ParameterLayoutFacetFactory;
@@ -37,12 +37,12 @@ import org.apache.causeway.core.metamodel.facets.param.layout.ParameterLayoutFac
 import lombok.val;
 
 class NamedFacetForParameterLayoutAnnotationFactoryTest
-extends AbstractFacetFactoryTest {
+extends FacetFactoryTestAbstract2 {
 
     private static final String NAME = "an action";
 
     public void testParameterLayoutAnnotationNamed() {
-        final ParameterLayoutFacetFactory facetFactory = new ParameterLayoutFacetFactory(metaModelContext);
+        final ParameterLayoutFacetFactory facetFactory = new ParameterLayoutFacetFactory(getMetaModelContext());
 
         class Customer {
             @SuppressWarnings("unused")

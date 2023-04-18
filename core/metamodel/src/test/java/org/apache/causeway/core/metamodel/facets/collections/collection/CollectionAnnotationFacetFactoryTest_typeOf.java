@@ -23,6 +23,8 @@ import java.util.Collection;
 import java.util.Optional;
 
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -31,28 +33,25 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract2;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature;
 
 class CollectionAnnotationFacetFactoryTest_typeOf
-extends AbstractFacetFactoryTest {
+extends FacetFactoryTestAbstract2 {
 
     private CollectionAnnotationFacetFactory facetFactory;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        facetFactory = new CollectionAnnotationFacetFactory(metaModelContext);
+    @BeforeEach
+    protected void setUp() {
+        facetFactory = new CollectionAnnotationFacetFactory(getMetaModelContext());
     }
 
-    @Override
-    protected void tearDown() throws Exception {
+    @AfterEach
+    protected void tearDown() {
         facetFactory = null;
-        super.tearDown();
     }
-
 
     public void testTypeOfFacetInferredForActionWithGenericCollectionReturnType() {
         class Order {

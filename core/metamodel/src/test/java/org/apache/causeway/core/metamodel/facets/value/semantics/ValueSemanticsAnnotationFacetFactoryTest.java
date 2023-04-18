@@ -31,7 +31,7 @@ import org.apache.causeway.applib.annotation.TimeZoneTranslation;
 import org.apache.causeway.applib.annotation.ValueSemantics;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract2;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.objectvalue.daterenderedadjust.DateRenderAdjustFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
@@ -44,7 +44,7 @@ import org.apache.causeway.core.metamodel.facets.objectvalue.temporalformat.Time
 
 @SuppressWarnings("unused")
 class ValueSemanticsAnnotationFacetFactoryTest
-extends AbstractFacetFactoryTest {
+extends FacetFactoryTestAbstract2 {
 
     // -- MAX TOTAL DIGITS
 
@@ -312,7 +312,7 @@ extends AbstractFacetFactoryTest {
     // -- HELPER
 
     ValueSemanticsAnnotationFacetFactory newFacetFactory() {
-        return new ValueSemanticsAnnotationFacetFactory(metaModelContext);
+        return new ValueSemanticsAnnotationFacetFactory(getMetaModelContext());
     }
 
     private void assertDefaultMaxTotalDigits(final FacetHolder facetedMethod) {
