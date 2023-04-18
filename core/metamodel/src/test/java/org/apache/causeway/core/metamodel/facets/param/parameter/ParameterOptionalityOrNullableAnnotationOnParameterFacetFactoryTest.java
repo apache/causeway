@@ -60,7 +60,7 @@ extends FacetFactoryTestAbstract {
             assertNotNull(facet);
             assertTrue(facet instanceof MandatoryFacetForParameterAnnotation.Optional);
         });
-            }
+    }
 
     @Test
     void parameterAnnotationWithOptionalityIgnoredForPrimitiveOnActionParameter() {
