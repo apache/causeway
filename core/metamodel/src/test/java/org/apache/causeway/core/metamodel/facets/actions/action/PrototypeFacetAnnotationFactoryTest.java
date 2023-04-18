@@ -18,10 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.action;
 
-import java.lang.reflect.Method;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -30,14 +29,14 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract2;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.causeway.core.metamodel.facets.actions.prototype.PrototypeFacetAbstract;
 
 import lombok.val;
 
 class PrototypeFacetAnnotationFactoryTest
-extends FacetFactoryTestAbstract2 {
+extends FacetFactoryTestAbstract {
 
     private ActionAnnotationFacetFactory facetFactory;
 
@@ -57,22 +56,22 @@ extends FacetFactoryTestAbstract2 {
         facetFactory = null;
     }
 
-    public void testAnnotationPickedUp() {
+    @Test
+    void testAnnotationPickedUp() {
         class Customer {
             @Action(restrictTo = RestrictTo.PROTOTYPING)
-            public void someAction() {
-            }
+            public void someAction() {}
         }
-        final Method actionMethod = findMethodExactOrFail(Customer.class, "someAction");
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+            //when
+            processRestrictTo(facetFactory, processMethodContext);
+            //then
+            final Facet facet = facetedMethod.getFacet(PrototypeFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof PrototypeFacetAbstract);
 
-        processRestrictTo(facetFactory, ProcessMethodContext
-                .forTesting(Customer.class, null, actionMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(PrototypeFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof PrototypeFacetAbstract);
-
-        assertNoMethodsRemoved();
+            assertNoMethodsRemoved();
+        });
     }
 
 }
