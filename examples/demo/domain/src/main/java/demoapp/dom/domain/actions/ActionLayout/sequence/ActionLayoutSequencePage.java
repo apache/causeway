@@ -18,56 +18,60 @@
  */
 package demoapp.dom.domain.actions.ActionLayout.sequence;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.Property;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
-//tag::class[]
-@DomainObject(
-        nature=Nature.VIEW_MODEL)
-@Named("demo.ActionLayoutSequenceVm")
+import demoapp.dom.domain.actions.ActionLayout.sequence.child.ActionLayoutSequenceChildVm;
+
+@Named("demo.ActionLayoutSequencePage")
+@DomainObject(nature=Nature.VIEW_MODEL)
 @XmlRootElement(name = "root")
-@XmlType
+@XmlType()
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ActionLayoutSequencePage implements HasAsciiDocDescription {
+//tag::class[]
+// ...
+public class ActionLayoutSequencePage
+//end::class[]
+        implements HasAsciiDocDescription
+//tag::class[]
+{
+    @Property
+    @XmlElement
+    @Getter @Setter
+    private String name;
+
+    @Collection()
+    @XmlElement
+    @Getter
+    private List<ActionLayoutSequenceChildVm> children = new ArrayList<>();
+
+    // ...
+//end::class[]
 
     @ObjectSupport public String title() {
         return "@ActionLayout#sequence";
     }
 
-//tag::act1and2[]
-    @Action
-    @ActionLayout(
-            sequence = "1.0" // <.>
-//end::act1and2[]
-            ,describedAs = "@ActionLayout(sequence = \"1.0\")"
-//tag::act1and2[]
-            )
-    public Object actFirst(final String arg) {
-        return this;
-    }
-
-    @Action
-    @ActionLayout(
-            sequence = "2.0" // <.>
-//end::act1and2[]
-            ,describedAs = "@ActionLayout(sequence = \"2.0\")"
-//tag::act1and2[]
-            )
-    public Object actSecond(final String arg) {
-        return this;
-    }
-//end::act1and2[]
-
+//tag::class[]
 }
 //end::class[]

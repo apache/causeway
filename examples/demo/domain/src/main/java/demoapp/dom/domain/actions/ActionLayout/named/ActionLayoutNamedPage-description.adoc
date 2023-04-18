@@ -45,8 +45,7 @@ Instead of using `@ActionLayout#named`, it is also possible to specify a name in
 ...
 ----
 
-One advantage of using the `.layout.xml` file is that changes can be picked up without having to restart the application.
-On the other hand, including descriptions can make that file rather large.
+The main advantage of using the `.layout.xml` file is that changes can be picked up without having to restart the application.
 
 
 === Alternatives
