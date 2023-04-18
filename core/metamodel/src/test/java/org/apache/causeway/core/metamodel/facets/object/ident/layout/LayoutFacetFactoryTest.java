@@ -18,14 +18,17 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.ident.layout;
 
+import org.junit.jupiter.api.Test;
+
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
 import org.apache.causeway.core.metamodel.facets.object.layout.LayoutFacet;
 import org.apache.causeway.core.metamodel.facets.object.support.ObjectSupportFacetFactoryTestAbstract;
 
-public class LayoutFacetFactoryTest
+class LayoutFacetFactoryTest
 extends ObjectSupportFacetFactoryTestAbstract {
 
-    public void testLayoutMethodPickedUpOnClassAndMethodRemoved() {
+    @Test
+    void layoutMethodPickedUpOnClassAndMethodRemoved() {
         class Customer {
             @SuppressWarnings("unused")
             public String layout() {

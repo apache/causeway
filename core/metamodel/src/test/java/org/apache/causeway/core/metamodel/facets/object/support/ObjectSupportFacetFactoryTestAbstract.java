@@ -26,17 +26,17 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.commons.internal.reflection._MethodFacades;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
-import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract2;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 
 import lombok.val;
 
 public abstract class ObjectSupportFacetFactoryTestAbstract
-extends FacetFactoryTestAbstract2 {
+extends FacetFactoryTestAbstract {
 
     protected ObjectSupportFacetFactory facetFactory;
 
@@ -57,24 +57,28 @@ extends FacetFactoryTestAbstract2 {
             final ProgrammingModelConstants.ObjectSupportMethod supportMethodEnum,
             final Class<? extends Facet> facetType) {
 
-        // when
-        facetFactory.process(ProcessClassContext
-                .forTesting(type, methodRemover, facetedMethod));
+        objectScenario(type, (processClassContext, facetHolder) -> {
+            //when
+            facetFactory.process(processClassContext);
+            //then
+            val supportMethods = supportMethodEnum.getMethodNames()
+                    .map(methodName->findMethod(type, methodName))
+                    .map(_MethodFacades::regular)
+                    .map(MethodFacade::asMethodElseFail);
 
-        val supportMethods = supportMethodEnum.getMethodNames()
-                .map(methodName->findMethod(type, methodName))
-                .map(_MethodFacades::regular);
+            assertEquals(expectedSupportMethodCount, supportMethods.size());
 
-        assertEquals(expectedSupportMethodCount, supportMethods.size());
+            val facet = facetHolder.getFacet(facetType);
+            assertNotNull(facet);
+            assertTrue(facet instanceof ImperativeFacet);
+            val imperativeFacet = (ImperativeFacet)facet;
 
-        val facet = facetedMethod.getFacet(facetType);
-        assertNotNull(facet);
-        assertTrue(facet instanceof ImperativeFacet);
-        val imperativeFacet = (ImperativeFacet)facet;
+            supportMethods.forEach(method->{
+                assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
+                assertTrue(imperativeFacet.getMethods()
+                        .map(MethodFacade::asMethodElseFail).contains(method));
+            });
 
-        supportMethods.forEach(method->{
-            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
-            assertTrue(imperativeFacet.getMethods().contains(method));
         });
 
     }
