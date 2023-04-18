@@ -202,6 +202,19 @@ implements HasMetaModelContext {
     }
 
     /**
+     * Collection scenario.
+     */
+    protected void collectionScenario(
+            final Class<?> declaringClass, final String propertyName, final MemberScenarioConsumer consumer) {
+        val scenario = Scenario.prop(getMetaModelContext(), declaringClass, propertyName);
+        val processMethodContext = ProcessMethodContext
+                .forTesting(declaringClass, FeatureType.COLLECTION, scenario.annotatedMethod(), methodRemover, scenario.facetedMethod());
+        consumer.accept(processMethodContext, scenario.facetHolder, scenario.facetedMethod, scenario.facetedMethodParameter);
+    }
+
+
+
+    /**
      * DomainObject scenario.
      */
     protected void objectScenario(final Class<?> declaringClass, final BiConsumer<ProcessClassContext, FacetHolder> consumer) {
