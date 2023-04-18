@@ -47,7 +47,8 @@ import org.apache.causeway.core.metamodel.facets.collections.layout.MemberNamedF
 
 import lombok.val;
 
-class CollectionLayoutAnnotationFactoryTest extends FacetFactoryTestAbstract2 {
+class CollectionLayoutAnnotationFactoryTest
+extends FacetFactoryTestAbstract2 {
 
     @Test
     public void testCollectionLayoutAnnotation_named() {

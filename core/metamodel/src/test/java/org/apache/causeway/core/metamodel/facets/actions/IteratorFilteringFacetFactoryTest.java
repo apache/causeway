@@ -29,10 +29,11 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract2;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.object.ignore.javalang.IteratorFilteringFacetFactory;
 
-class IteratorFilteringFacetFactoryTest extends FacetFactoryTestAbstract2 {
+class IteratorFilteringFacetFactoryTest
+extends FacetFactoryTestAbstract {
 
     private IteratorFilteringFacetFactory facetFactory;
 

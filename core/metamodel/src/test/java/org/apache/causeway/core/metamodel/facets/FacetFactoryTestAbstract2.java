@@ -22,11 +22,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
-import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 
 @Deprecated //TODO[CAUSEWAY-3409] use FacetFactoryTestAbstract scenarios instead
 public abstract class FacetFactoryTestAbstract2
@@ -68,27 +66,4 @@ extends FacetFactoryTestAbstract {
         facetedMethod = null;
     }
 
-    protected void processMethod(
-            final FacetFactory facetFactory,
-            final Class<?> type,
-            final String methodName,
-            final Class<?>[] signature) {
-
-        facetFactory.process(ProcessMethodContext
-                .forTesting(type, null,
-                        findMethod(type, methodName, signature),
-                        methodRemover, facetedMethod));
-    }
-
-    protected void processParams(
-            final FacetFactory facetFactory,
-            final Class<?> type,
-            final String methodName,
-            final Class<?>[] signature) {
-
-        facetFactory.processParams(FacetFactory.ProcessParameterContext
-                .forTesting(type, IntrospectionPolicy.ANNOTATION_OPTIONAL,
-                        findMethod(type, methodName, signature),
-                        null, facetedMethodParameter));
-    }
 }

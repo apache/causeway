@@ -32,12 +32,13 @@ import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessParameterContext;
-import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract2;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.causeway.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetForParameterAnnotation;
 import org.apache.causeway.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetInvertedByNullableAnnotationOnParameter;
 
-class ParameterOptionalityOrNullableAnnotationOnParameterFacetFactoryTest extends FacetFactoryTestAbstract2 {
+class ParameterOptionalityOrNullableAnnotationOnParameterFacetFactoryTest
+extends FacetFactoryTestAbstract {
 
     private ParameterAnnotationFacetFactory facetFactory;
 

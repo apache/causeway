@@ -69,7 +69,7 @@ extends FacetFactoryTestAbstract2 {
         val specLoader = getSpecificationLoader();
         voidSpec = specLoader.loadSpecification(void.class);
         stringSpec = specLoader.loadSpecification(java.lang.String.class);
-        customerSpec = specLoader.loadSpecification(Customer.class);
+        customerSpec = specLoader.loadSpecification(FacetFactoryTestAbstract2.Customer.class);
     }
 
     public void testActionInvocationFacetIsInstalledAndMethodRemoved() {

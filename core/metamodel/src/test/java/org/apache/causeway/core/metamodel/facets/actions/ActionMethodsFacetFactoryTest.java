@@ -52,7 +52,8 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 
-class ActionMethodsFacetFactoryTest extends FacetFactoryTestAbstract2 {
+class ActionMethodsFacetFactoryTest
+extends FacetFactoryTestAbstract2 {
 
     @BeforeEach
     public void setUp() {

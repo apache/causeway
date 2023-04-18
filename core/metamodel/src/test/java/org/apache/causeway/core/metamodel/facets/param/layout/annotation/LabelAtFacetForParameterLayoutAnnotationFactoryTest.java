@@ -30,12 +30,13 @@ import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
-import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract2;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.causeway.core.metamodel.facets.param.layout.LabelAtFacetForParameterLayoutAnnotation;
 import org.apache.causeway.core.metamodel.facets.param.layout.ParameterLayoutFacetFactory;
 
-public class LabelAtFacetForParameterLayoutAnnotationFactoryTest extends FacetFactoryTestAbstract2 {
+public class LabelAtFacetForParameterLayoutAnnotationFactoryTest
+extends FacetFactoryTestAbstract {
 
     public void testParameterLayoutAnnotationPickedUp() {
         final ParameterLayoutFacetFactory facetFactory = new ParameterLayoutFacetFactory(getMetaModelContext());

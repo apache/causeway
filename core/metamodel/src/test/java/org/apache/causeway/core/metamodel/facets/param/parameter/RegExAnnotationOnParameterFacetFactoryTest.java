@@ -32,11 +32,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessParameterContext;
-import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract2;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.causeway.core.metamodel.facets.param.parameter.regex.RegExFacetForPatternAnnotationOnParameter;
 
-class RegExAnnotationOnParameterFacetFactoryTest extends FacetFactoryTestAbstract2 {
+class RegExAnnotationOnParameterFacetFactoryTest
+extends FacetFactoryTestAbstract {
 
     private ParameterAnnotationFacetFactory facetFactory;
 
