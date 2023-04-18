@@ -20,15 +20,14 @@ package org.apache.causeway.core.metamodel.facets.properties;
 
 import java.lang.reflect.Method;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facetapi.FeatureType;
-import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract2;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.members.disabled.method.DisableForContextFacet;
 import org.apache.causeway.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethod;
 import org.apache.causeway.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethodFactory;
@@ -62,438 +61,380 @@ import org.apache.causeway.core.metamodel.facets.properties.validating.method.Pr
 import lombok.val;
 
 class PropertyMethodsFacetFactoryTest
-extends FacetFactoryTestAbstract2 {
+extends FacetFactoryTestAbstract {
 
-    public void testPropertyAccessorFacetIsInstalledAndMethodRemoved() {
+    @Test
+    void propertyAccessorFacetIsInstalledAndMethodRemoved() {
         val facetFactory = new PropertyAccessorFacetViaAccessorFactory(getMetaModelContext());
-
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
             public String getFirstName() { return null; }
         }
         final Method propertyAccessorMethod = findMethodExactOrFail(Customer.class, "getFirstName");
 
-        facetFactory.process(ProcessMethodContext
-                .forTesting(Customer.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            facetFactory.process(processMethodContext);
+            // then
+            final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof PropertyAccessorFacetViaAccessor);
+            final PropertyAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (PropertyAccessorFacetViaAccessor) facet;
+            assertMethodEquals(propertyAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().getFirstElseFail().asMethodElseFail());
 
-        final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof PropertyAccessorFacetViaAccessor);
-        final PropertyAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (PropertyAccessorFacetViaAccessor) facet;
-        assertEquals(propertyAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().getFirstElseFail());
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyAccessorMethod));
+            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyAccessorMethod));
+        });
     }
 
-    public void testSetterFacetIsInstalledForSetterMethodAndMethodRemoved() {
+    @Test
+    void setterFacetIsInstalledForSetterMethodAndMethodRemoved() {
         val facetFactory = new PropertySetterFacetFactory(getMetaModelContext());
-
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
-            public String getFirstName() {
-                return null;
-            }
-
-            @SuppressWarnings("unused")
-            public void setFirstName(final String firstName) {
-            }
+            public String getFirstName() { return null; }
+            public void setFirstName(final String firstName) { }
         }
-        final Method propertyAccessorMethod = findMethodExactOrFail(Customer.class, "getFirstName");
         final Method propertySetterMethod = findMethodExactOrFail(Customer.class, "setFirstName", new Class[] { String.class });
 
-        facetFactory.process(ProcessMethodContext
-                .forTesting(Customer.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            facetFactory.process(processMethodContext);
+            // then
+            final Facet facet = facetedMethod.getFacet(PropertySetterFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof PropertySetterFacetViaSetterMethod);
+            final PropertySetterFacetViaSetterMethod propertySetterFacet = (PropertySetterFacetViaSetterMethod) facet;
+            assertMethodEquals(propertySetterMethod, propertySetterFacet.getMethods().getFirstElseFail().asMethodElseFail());
 
-        final Facet facet = facetedMethod.getFacet(PropertySetterFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof PropertySetterFacetViaSetterMethod);
-        final PropertySetterFacetViaSetterMethod propertySetterFacet = (PropertySetterFacetViaSetterMethod) facet;
-        assertEquals(propertySetterMethod, propertySetterFacet.getMethods().getFirstElseFail());
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertySetterMethod));
+            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertySetterMethod));
+        });
     }
 
-    public void testInitializationFacetIsInstalledForSetterMethodAndMethodRemoved() {
+    @Test
+    void initializationFacetIsInstalledForSetterMethodAndMethodRemoved() {
         val facetFactory = new PropertySetterFacetFactory(getMetaModelContext());
-
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
-            public String getFirstName() {
-                return null;
-            }
-
-            @SuppressWarnings("unused")
-            public void setFirstName(final String firstName) {
-            }
+            public String getFirstName() { return null; }
+            public void setFirstName(final String firstName) {}
         }
-        final Method propertyAccessorMethod = findMethodExactOrFail(Customer.class, "getFirstName");
         final Method propertySetterMethod = findMethodExactOrFail(Customer.class, "setFirstName", new Class[] { String.class });
 
-        facetFactory.process(ProcessMethodContext
-                .forTesting(Customer.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            facetFactory.process(processMethodContext);
+            // then
+            final Facet facet = facetedMethod.getFacet(PropertyInitializationFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof PropertyInitializationFacet);
+            final PropertyInitializationFacetViaSetterMethod propertySetterFacet = (PropertyInitializationFacetViaSetterMethod) facet;
+            assertMethodEquals(propertySetterMethod, propertySetterFacet.getMethods().getFirstElseFail().asMethodElseFail());
 
-        final Facet facet = facetedMethod.getFacet(PropertyInitializationFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof PropertyInitializationFacet);
-        final PropertyInitializationFacetViaSetterMethod propertySetterFacet = (PropertyInitializationFacetViaSetterMethod) facet;
-        assertEquals(propertySetterMethod, propertySetterFacet.getMethods().getFirstElseFail());
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertySetterMethod));
+            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertySetterMethod));
+        });
     }
 
-    public void testSetterFacetIsInstalledMeansNoDisabledOrDerivedFacetsInstalled() {
+    @Test
+    void setterFacetIsInstalledMeansNoDisabledOrDerivedFacetsInstalled() {
         val facetFactory = new PropertySetterFacetFactory(getMetaModelContext());
-
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
-            public String getFirstName() {
-                return null;
-            }
-
-            @SuppressWarnings("unused")
-            public void setFirstName(final String firstName) {
-            }
+            public String getFirstName() { return null; }
+            public void setFirstName(final String firstName) {}
         }
-        final Method propertyAccessorMethod = findMethodExactOrFail(Customer.class, "getFirstName");
-
-        facetFactory.process(ProcessMethodContext
-                .forTesting(Customer.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
-
-        assertNull(facetedMethod.getFacet(SnapshotExcludeFacet.class));
-        assertNull(facetedMethod.getFacet(SnapshotExcludeFacet.class));
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            facetFactory.process(processMethodContext);
+            // then
+            assertNull(facetedMethod.getFacet(SnapshotExcludeFacet.class));
+        });
     }
 
-    public void testClearFacetViaSetterIfNoExplicitClearMethod() {
+    @Test
+    void clearFacetViaSetterIfNoExplicitClearMethod() {
         val facetFactory = new PropertySetterFacetFactory(getMetaModelContext());
-
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
-            public String getFirstName() {
-                return null;
-            }
-
-            @SuppressWarnings("unused")
-            public void setFirstName(final String firstName) {
-            }
+            public String getFirstName() { return null; }
+            public void setFirstName(final String firstName) { }
         }
-        final Method propertyAccessorMethod = findMethodExactOrFail(Customer.class, "getFirstName");
         final Method propertySetterMethod = findMethodExactOrFail(Customer.class, "setFirstName", new Class[] { String.class });
 
-        facetFactory.process(ProcessMethodContext
-                .forTesting(Customer.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(PropertyClearFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof PropertyClearFacetViaSetterMethod);
-        final PropertyClearFacetViaSetterMethod propertyClearFacet = (PropertyClearFacetViaSetterMethod) facet;
-        assertEquals(propertySetterMethod, propertyClearFacet.getMethods().getFirstElseFail());
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            facetFactory.process(processMethodContext);
+            // then
+            final Facet facet = facetedMethod.getFacet(PropertyClearFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof PropertyClearFacetViaSetterMethod);
+            final PropertyClearFacetViaSetterMethod propertyClearFacet = (PropertyClearFacetViaSetterMethod) facet;
+            assertMethodEquals(propertySetterMethod, propertyClearFacet.getMethods().getFirstElseFail().asMethodElseFail());
+        });
     }
 
-    public void testChoicesFacetFoundAndMethodRemoved() {
+    @Test
+    void choicesFacetFoundAndMethodRemoved() {
         val facetFactory = new PropertyChoicesFacetViaMethodFactory(getMetaModelContext());
-
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
-            public String getFirstName() {
-                return null;
-            }
-
-            @SuppressWarnings("unused")
-            public String[] choicesFirstName() {
-                return null;
-            }
+            public String getFirstName() { return null; }
+            public String[] choicesFirstName() { return null; }
         }
-        final Method propertyAccessorMethod = findMethodExactOrFail(Customer.class, "getFirstName");
+
         final Method propertyChoicesMethod = findMethodExactOrFail(Customer.class, "choicesFirstName");
 
-        facetFactory.process(ProcessMethodContext
-                .forTesting(Customer.class, FeatureType.PROPERTY, propertyAccessorMethod, methodRemover, facetedMethod));
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            facetFactory.process(processMethodContext);
+            // then
+            final Facet facet = facetedMethod.getFacet(PropertyChoicesFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof PropertyChoicesFacetViaMethod);
+            final PropertyChoicesFacetViaMethod propertyChoicesFacet = (PropertyChoicesFacetViaMethod) facet;
+            assertMethodEquals(propertyChoicesMethod, propertyChoicesFacet.getMethods().getFirstElseFail().asMethodElseFail());
 
-        final Facet facet = facetedMethod.getFacet(PropertyChoicesFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof PropertyChoicesFacetViaMethod);
-        final PropertyChoicesFacetViaMethod propertyChoicesFacet = (PropertyChoicesFacetViaMethod) facet;
-        assertEquals(propertyChoicesMethod, propertyChoicesFacet.getMethods().getFirstElseFail());
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyChoicesMethod));
+            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyChoicesMethod));
+        });
     }
 
-    public void testAutoCompleteFacetFoundAndMethodRemoved() {
-
+    @Test
+    void autoCompleteFacetFoundAndMethodRemoved() {
         val facetFactory = new PropertyAutoCompleteFacetMethodFactory(getMetaModelContext());
-
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
-            public String getFirstName() {
-                return null;
-            }
-
-            @SuppressWarnings("unused")
-            public String[] autoCompleteFirstName(final String searchArg) {
-                return null;
-            }
+            public String getFirstName() { return null; }
+            public String[] autoCompleteFirstName(final String searchArg) { return null; }
         }
-        final Method propertyAccessorMethod = findMethodExactOrFail(Customer.class, "getFirstName");
+
         final Method propertyAutoCompleteMethod = findMethodExactOrFail(Customer.class, "autoCompleteFirstName", new Class[]{String.class});
 
-        facetFactory.process(ProcessMethodContext
-                .forTesting(Customer.class, FeatureType.PROPERTY, propertyAccessorMethod, methodRemover, facetedMethod));
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            facetFactory.process(processMethodContext);
+            // then
+            final Facet facet = facetedMethod.getFacet(PropertyAutoCompleteFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof PropertyAutoCompleteFacetMethod);
+            final PropertyAutoCompleteFacetMethod propertyAutoCompleteFacet = (PropertyAutoCompleteFacetMethod) facet;
+            assertMethodEquals(propertyAutoCompleteMethod, propertyAutoCompleteFacet.getMethods().getFirstElseFail().asMethodElseFail());
 
-        final Facet facet = facetedMethod.getFacet(PropertyAutoCompleteFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof PropertyAutoCompleteFacetMethod);
-        final PropertyAutoCompleteFacetMethod propertyAutoCompleteFacet = (PropertyAutoCompleteFacetMethod) facet;
-        assertEquals(propertyAutoCompleteMethod, propertyAutoCompleteFacet.getMethods().getFirstElseFail());
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyAutoCompleteMethod));
+            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyAutoCompleteMethod));
+        });
     }
 
-    public void testDefaultFacetFoundAndMethodRemoved() {
+    @Test
+    void defaultFacetFoundAndMethodRemoved() {
         val facetFactory = new PropertyDefaultFacetViaMethodFactory(getMetaModelContext());
-
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
-            public String getFirstName() {
-                return null;
-            }
-
-            @SuppressWarnings("unused")
-            public String defaultFirstName() {
-                return null;
-            }
+            public String getFirstName() { return null; }
+            public String defaultFirstName() { return null; }
         }
-        final Method propertyAccessorMethod = findMethodExactOrFail(Customer.class, "getFirstName");
+
         final Method propertyDefaultMethod = findMethodExactOrFail(Customer.class, "defaultFirstName");
 
-        facetFactory.process(ProcessMethodContext
-                .forTesting(Customer.class, FeatureType.PROPERTY, propertyAccessorMethod, methodRemover, facetedMethod));
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            facetFactory.process(processMethodContext);
+            // then
+            final Facet facet = facetedMethod.getFacet(PropertyDefaultFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof PropertyDefaultFacetViaMethod);
+            final PropertyDefaultFacetViaMethod propertyDefaultFacet = (PropertyDefaultFacetViaMethod) facet;
+            assertMethodEquals(propertyDefaultMethod, propertyDefaultFacet.getMethods().getFirstElseFail().asMethodElseFail());
 
-        final Facet facet = facetedMethod.getFacet(PropertyDefaultFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof PropertyDefaultFacetViaMethod);
-        final PropertyDefaultFacetViaMethod propertyDefaultFacet = (PropertyDefaultFacetViaMethod) facet;
-        assertEquals(propertyDefaultMethod, propertyDefaultFacet.getMethods().getFirstElseFail());
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyDefaultMethod));
+            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyDefaultMethod));
+        });
     }
 
-    public void testValidateFacetFoundAndMethodRemoved() {
+    @Test
+    void validateFacetFoundAndMethodRemoved() {
         val facetFactory = new PropertyValidateFacetViaMethodFactory(getMetaModelContext());
-
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
-            public String getFirstName() {
-                return null;
-            }
-
-            @SuppressWarnings("unused")
-            public String validateFirstName(final String firstName) {
-                return null;
-            }
+            public String getFirstName() { return null; }
+            public String validateFirstName(final String firstName) { return null;}
         }
-        final Method propertyAccessorMethod = findMethodExactOrFail(Customer.class, "getFirstName");
+
         final Method propertyValidateMethod = findMethodExactOrFail(Customer.class, "validateFirstName", new Class[] { String.class });
 
-        facetFactory.process(ProcessMethodContext
-                .forTesting(Customer.class, FeatureType.PROPERTY, propertyAccessorMethod, methodRemover, facetedMethod));
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            facetFactory.process(processMethodContext);
+            // then
+            final Facet facet = facetedMethod.getFacet(PropertyValidateFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof PropertyValidateFacetViaMethod);
+            final PropertyValidateFacetViaMethod propertyValidateFacet = (PropertyValidateFacetViaMethod) facet;
+            assertMethodEquals(propertyValidateMethod, propertyValidateFacet.getMethods().getFirstElseFail().asMethodElseFail());
 
-        final Facet facet = facetedMethod.getFacet(PropertyValidateFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof PropertyValidateFacetViaMethod);
-        final PropertyValidateFacetViaMethod propertyValidateFacet = (PropertyValidateFacetViaMethod) facet;
-        assertEquals(propertyValidateMethod, propertyValidateFacet.getMethods().getFirstElseFail());
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyValidateMethod));
+            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyValidateMethod));
+        });
     }
 
-    public void testDisableFacetFoundAndMethodRemoved() {
+    @Test
+    void disableFacetFoundAndMethodRemoved() {
         val facetFactory = new DisableForContextFacetViaMethodFactory(getMetaModelContext());
-
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
-            public String getFirstName() {
-                return null;
-            }
-
-            @SuppressWarnings("unused")
-            public String disableFirstName() {
-                return "disabled";
-            }
+            public String getFirstName() { return null; }
+            public String disableFirstName() { return "disabled"; }
         }
-        final Method propertyAccessorMethod = findMethodExactOrFail(Customer.class, "getFirstName");
+
         final Method propertyDisableMethod = findMethodExactOrFail(Customer.class, "disableFirstName", new Class[] {});
 
-        facetFactory.process(ProcessMethodContext
-                .forTesting(Customer.class, FeatureType.PROPERTY, propertyAccessorMethod, methodRemover, facetedMethod));
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            facetFactory.process(processMethodContext);
+            // then
+            final Facet facet = facetedMethod.getFacet(DisableForContextFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof DisableForContextFacetViaMethod);
+            final DisableForContextFacetViaMethod disableForContextFacet = (DisableForContextFacetViaMethod) facet;
+            assertMethodEquals(propertyDisableMethod, disableForContextFacet.getMethods().getFirstElseFail().asMethodElseFail());
 
-        final Facet facet = facetedMethod.getFacet(DisableForContextFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof DisableForContextFacetViaMethod);
-        final DisableForContextFacetViaMethod disableForContextFacet = (DisableForContextFacetViaMethod) facet;
-        assertEquals(propertyDisableMethod, disableForContextFacet.getMethods().getFirstElseFail());
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyDisableMethod));
+            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyDisableMethod));
+        });
     }
 
-    public void testDisableFacetNoArgsFoundAndMethodRemoved() {
-
+    @Test
+    void disableFacetNoArgsFoundAndMethodRemoved() {
         val facetFactory = new DisableForContextFacetViaMethodFactory(getMetaModelContext());
-
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
-            public String getFirstName() {
-                return null;
-            }
-
-            @SuppressWarnings("unused")
-            public String disableFirstName() {
-                return "disabled";
-            }
+            public String getFirstName() { return null; }
+            public String disableFirstName() { return "disabled"; }
         }
-        final Method propertyAccessorMethod = findMethodExactOrFail(Customer.class, "getFirstName");
+
         final Method propertyDisableMethod = findMethodExactOrFail(Customer.class, "disableFirstName");
 
-        facetFactory.process(ProcessMethodContext
-                .forTesting(Customer.class, FeatureType.PROPERTY, propertyAccessorMethod, methodRemover, facetedMethod));
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            facetFactory.process(processMethodContext);
+            // then
+            final Facet facet = facetedMethod.getFacet(DisableForContextFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof DisableForContextFacetViaMethod);
+            final DisableForContextFacetViaMethod disableForContextFacet = (DisableForContextFacetViaMethod) facet;
+            assertMethodEquals(propertyDisableMethod, disableForContextFacet.getMethods().getFirstElseFail().asMethodElseFail());
 
-        final Facet facet = facetedMethod.getFacet(DisableForContextFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof DisableForContextFacetViaMethod);
-        final DisableForContextFacetViaMethod disableForContextFacet = (DisableForContextFacetViaMethod) facet;
-        assertEquals(propertyDisableMethod, disableForContextFacet.getMethods().getFirstElseFail());
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyDisableMethod));
+            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyDisableMethod));
+        });
     }
 
-    public void testHiddenFacetFoundAndMethodRemoved() {
+    @Test
+    void hiddenFacetFoundAndMethodRemoved() {
         val facetFactory = new HideForContextFacetViaMethodFactory(getMetaModelContext());
-
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
-            public String getFirstName() {
-                return null;
-            }
-
-            @SuppressWarnings("unused")
-            public boolean hideFirstName() {
-                return true;
-            }
+            public String getFirstName() { return null; }
+            public boolean hideFirstName() { return true; }
         }
-        final Method propertyAccessorMethod = findMethodExactOrFail(Customer.class, "getFirstName");
+
         final Method propertyHideMethod = findMethodExactOrFail(Customer.class, "hideFirstName", new Class[] {});
 
-        facetFactory.process(ProcessMethodContext
-                .forTesting(Customer.class, FeatureType.PROPERTY, propertyAccessorMethod, methodRemover, facetedMethod));
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            facetFactory.process(processMethodContext);
+            // then
+            final Facet facet = facetedMethod.getFacet(HideForContextFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof HideForContextFacetViaMethod);
+            final HideForContextFacetViaMethod hideForContextFacet = (HideForContextFacetViaMethod) facet;
+            assertMethodEquals(propertyHideMethod, hideForContextFacet.getMethods().getFirstElseFail().asMethodElseFail());
 
-        final Facet facet = facetedMethod.getFacet(HideForContextFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof HideForContextFacetViaMethod);
-        final HideForContextFacetViaMethod hideForContextFacet = (HideForContextFacetViaMethod) facet;
-        assertEquals(propertyHideMethod, hideForContextFacet.getMethods().getFirstElseFail());
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyHideMethod));
+            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyHideMethod));
+        });
     }
 
-    public void testHiddenFacetWithNoArgFoundAndMethodRemoved() {
+    @Test
+    void hiddenFacetWithNoArgFoundAndMethodRemoved() {
         val facetFactory = new HideForContextFacetViaMethodFactory(getMetaModelContext());
-
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
-            public String getFirstName() {
-                return null;
-            }
-
-            @SuppressWarnings("unused")
-            public boolean hideFirstName() {
-                return true;
-            }
+            public String getFirstName() { return null; }
+            public boolean hideFirstName() { return true; }
         }
-        final Method propertyAccessorMethod = findMethodExactOrFail(Customer.class, "getFirstName");
+
         final Method propertyHideMethod = findMethodExactOrFail(Customer.class, "hideFirstName");
 
-        facetFactory.process(ProcessMethodContext
-                .forTesting(Customer.class, FeatureType.PROPERTY, propertyAccessorMethod, methodRemover, facetedMethod));
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            facetFactory.process(processMethodContext);
+            // then
+            final Facet facet = facetedMethod.getFacet(HideForContextFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof HideForContextFacetViaMethod);
+            final HideForContextFacetViaMethod hideForContextFacet = (HideForContextFacetViaMethod) facet;
+            assertMethodEquals(propertyHideMethod, hideForContextFacet.getMethods().getFirstElseFail().asMethodElseFail());
 
-        final Facet facet = facetedMethod.getFacet(HideForContextFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof HideForContextFacetViaMethod);
-        final HideForContextFacetViaMethod hideForContextFacet = (HideForContextFacetViaMethod) facet;
-        assertEquals(propertyHideMethod, hideForContextFacet.getMethods().getFirstElseFail());
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyHideMethod));
+            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyHideMethod));
+        });
     }
 
-    public void testPropertyFoundOnSuperclass() {
+    @Test
+    void propertyFoundOnSuperclass() {
         val facetFactory = new PropertyAccessorFacetViaAccessorFactory(getMetaModelContext());
-
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
-            public String getFirstName() {
-                return null;
-            }
+            public String getFirstName() { return null; }
         }
-
         class CustomerEx extends Customer {
         }
 
-        final Method propertyAccessorMethod = findMethodExactOrFail(Customer.class, "getFirstName");
+        final Method propertyAccessorMethod = findMethodExactOrFail(CustomerEx.class, "getFirstName");
 
-        facetFactory.process(ProcessMethodContext
-                .forTesting(CustomerEx.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            facetFactory.process(processMethodContext);
+            // then
+            final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof PropertyAccessorFacetViaAccessor);
+            final PropertyAccessorFacetViaAccessor accessorFacet = (PropertyAccessorFacetViaAccessor) facet;
+            assertMethodEquals(propertyAccessorMethod, accessorFacet.getMethods().getFirstElseFail().asMethodElseFail());
+        });
 
-        final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof PropertyAccessorFacetViaAccessor);
-        final PropertyAccessorFacetViaAccessor accessorFacet = (PropertyAccessorFacetViaAccessor) facet;
-        assertEquals(propertyAccessorMethod, accessorFacet.getMethods().getFirstElseFail());
     }
 
-    public void testPropertyFoundOnSuperclassButHelperMethodFoundOnSubclass() {
+    @Test
+    void propertyFoundOnSuperclassButHelperMethodFoundOnSubclass() {
         val facetFactory = new PropertyAccessorFacetViaAccessorFactory(getMetaModelContext());
         val facetFactoryForHide = new HideForContextFacetViaMethodFactory(getMetaModelContext());
         val facetFactoryForDisable = new DisableForContextFacetViaMethodFactory(getMetaModelContext());
-
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
-            public String getFirstName() {
-                return null;
-            }
+            public String getFirstName() { return null; }
         }
-
+        @SuppressWarnings("unused")
         class CustomerEx extends Customer {
-            @SuppressWarnings("unused")
-            public boolean hideFirstName() {
-                return true;
-            }
-
-            @SuppressWarnings("unused")
-            public String disableFirstName() {
-                return "disabled";
-            }
+            public boolean hideFirstName() { return true; }
+            public String disableFirstName() { return "disabled";}
         }
 
-        final Method propertyAccessorMethod = findMethodExactOrFail(Customer.class, "getFirstName");
         final Method propertyHideMethod = findMethodExactOrFail(CustomerEx.class, "hideFirstName");
         final Method propertyDisableMethod = findMethodExactOrFail(CustomerEx.class, "disableFirstName");
 
-        final ProcessMethodContext processMethodContext = ProcessMethodContext
-                .forTesting(CustomerEx.class, FeatureType.PROPERTY,
-                propertyAccessorMethod, methodRemover, facetedMethod);
-        facetFactory.process(processMethodContext);
-        facetFactoryForHide.process(processMethodContext);
-        facetFactoryForDisable.process(processMethodContext);
+        propertyScenario(CustomerEx.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            facetFactory.process(processMethodContext);
+            // then
+            facetFactory.process(processMethodContext);
+            facetFactoryForHide.process(processMethodContext);
+            facetFactoryForDisable.process(processMethodContext);
 
-        final Facet facet = facetedMethod.getFacet(HideForContextFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof HideForContextFacetViaMethod);
-        final HideForContextFacetViaMethod hideForContextFacet = (HideForContextFacetViaMethod) facet;
-        assertEquals(propertyHideMethod, hideForContextFacet.getMethods().getFirstElseFail());
+            final Facet facet = facetedMethod.getFacet(HideForContextFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof HideForContextFacetViaMethod);
+            final HideForContextFacetViaMethod hideForContextFacet = (HideForContextFacetViaMethod) facet;
+            assertMethodEquals(propertyHideMethod, hideForContextFacet.getMethods().getFirstElseFail().asMethodElseFail());
 
-        final Facet facet2 = facetedMethod.getFacet(DisableForContextFacet.class);
-        assertNotNull(facet2);
-        assertTrue(facet2 instanceof DisableForContextFacetViaMethod);
-        final DisableForContextFacetViaMethod disableForContextFacet = (DisableForContextFacetViaMethod) facet2;
-        assertEquals(propertyDisableMethod, disableForContextFacet.getMethods().getFirstElseFail());
+            final Facet facet2 = facetedMethod.getFacet(DisableForContextFacet.class);
+            assertNotNull(facet2);
+            assertTrue(facet2 instanceof DisableForContextFacetViaMethod);
+            final DisableForContextFacetViaMethod disableForContextFacet = (DisableForContextFacetViaMethod) facet2;
+            assertMethodEquals(propertyDisableMethod, disableForContextFacet.getMethods().getFirstElseFail().asMethodElseFail());
+        });
     }
 
 }

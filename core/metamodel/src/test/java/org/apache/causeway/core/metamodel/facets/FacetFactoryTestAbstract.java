@@ -197,7 +197,7 @@ implements HasMetaModelContext {
             final Class<?> declaringClass, final String propertyName, final MemberScenarioConsumer consumer) {
         val scenario = Scenario.prop(getMetaModelContext(), declaringClass, propertyName);
         val processMethodContext = ProcessMethodContext
-                .forTesting(declaringClass, null, scenario.annotatedMethod(), methodRemover, scenario.facetedMethod());
+                .forTesting(declaringClass, FeatureType.PROPERTY, scenario.annotatedMethod(), methodRemover, scenario.facetedMethod());
         consumer.accept(processMethodContext, scenario.facetHolder, scenario.facetedMethod, scenario.facetedMethodParameter);
     }
 
