@@ -18,17 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.facets.param.layout.annotation;
 
-import java.lang.reflect.Method;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.annotation.ParameterLayout;
-import org.apache.causeway.core.metamodel.facets.FacetFactory;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.all.named.ParamNamedFacet;
 import org.apache.causeway.core.metamodel.facets.param.layout.NamedFacetForParameterLayoutAnnotation;
@@ -46,20 +42,21 @@ extends FacetFactoryTestAbstract {
 
         class Customer {
             @SuppressWarnings("unused")
-            public void someAction(@ParameterLayout(named = NAME) final String foo) {
-            }
+            public void someAction(
+                    @ParameterLayout(named = NAME)
+                    final String foo) {}
         }
-        final Method method = findMethod(Customer.class, "someAction", new Class[]{String.class});
 
-        facetFactory.processParams(FacetFactory.ProcessParameterContext.forTesting(
-                Customer.class,
-                IntrospectionPolicy.ANNOTATION_OPTIONAL,
-                method, null, facetedMethodParameter));
+        parameterScenario(Customer.class, "someAction", 0, (processParameterContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+            //when
+            facetFactory.processParams(processParameterContext);
+            //then
+            val facet = facetedMethodParameter.getFacet(ParamNamedFacet.class);
+            assertThat(facet, is(notNullValue()));
+            assertThat(facet, is(instanceOf(NamedFacetForParameterLayoutAnnotation.class)));
+            assertEquals(NAME, facet.text());
+        });
 
-        val facet = facetedMethodParameter.getFacet(ParamNamedFacet.class);
-        assertThat(facet, is(notNullValue()));
-        assertThat(facet, is(instanceOf(NamedFacetForParameterLayoutAnnotation.class)));
-        assertEquals(NAME, facet.text());
     }
 
 }

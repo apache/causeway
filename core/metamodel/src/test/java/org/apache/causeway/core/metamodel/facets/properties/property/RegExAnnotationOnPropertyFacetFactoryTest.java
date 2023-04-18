@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 import javax.validation.constraints.Pattern;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -33,14 +34,14 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract2;
 import org.apache.causeway.core.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.causeway.core.metamodel.facets.properties.property.regex.RegExFacetForPatternAnnotationOnProperty;
 
 import lombok.val;
 
 class RegExAnnotationOnPropertyFacetFactoryTest
-extends FacetFactoryTestAbstract {
+extends FacetFactoryTestAbstract2 {
 
     private PropertyAnnotationFacetFactory facetFactory;
 
@@ -55,13 +56,12 @@ extends FacetFactoryTestAbstract {
         facetFactory.processRegEx(processMethodContext, propertyIfAny);
     }
 
-    public void testRegExAnnotationPickedUpOnProperty() {
+    @Test
+    void testRegExAnnotationPickedUpOnProperty() {
 
         class Customer {
             @Pattern(regexp = "^A.*", flags = { Pattern.Flag.CASE_INSENSITIVE })
-            public String getFirstName() {
-                return null;
-            }
+            public String getFirstName() { return null; }
         }
         final Method method = findMethod(Customer.class, "getFirstName");
 
@@ -76,13 +76,12 @@ extends FacetFactoryTestAbstract {
         assertEquals(2, regExFacet.patternFlags());
     }
 
-    public void testRegExAnnotationIgnoredForNonStringsProperty() {
+    @Test
+    void testRegExAnnotationIgnoredForNonStringsProperty() {
 
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
-            public int getNumberOfOrders() {
-                return 0;
-            }
+            public int getNumberOfOrders() { return 0; }
         }
         final Method method = findMethod(Customer.class, "getNumberOfOrders");
 

@@ -31,7 +31,7 @@ import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract2;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEvent;
@@ -47,11 +47,10 @@ import lombok.val;
 
 @SuppressWarnings("unused")
 class ActionAnnotationFacetFactoryTest_ActionInvocation
-extends FacetFactoryTestAbstract2 {
+extends FacetFactoryTestAbstract {
 
     private ObjectSpecification voidSpec;
     private ObjectSpecification stringSpec;
-    private ObjectSpecification customerSpec;
     private ActionAnnotationFacetFactory facetFactory;
 
     private void processInvocation(
@@ -69,60 +68,60 @@ extends FacetFactoryTestAbstract2 {
         val specLoader = getSpecificationLoader();
         voidSpec = specLoader.loadSpecification(void.class);
         stringSpec = specLoader.loadSpecification(java.lang.String.class);
-        customerSpec = specLoader.loadSpecification(FacetFactoryTestAbstract2.Customer.class);
     }
 
     public void testActionInvocationFacetIsInstalledAndMethodRemoved() {
 
         class Customer {
-            public void someAction() {
-            }
+            public void someAction() {}
         }
+
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        processInvocation(facetFactory, ProcessMethodContext
-                .forTesting(Customer.class, null, actionMethod, methodRemover, facetedMethod));
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+            //when
+            processInvocation(facetFactory, processMethodContext);
 
-        final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof ActionInvocationFacetForDomainEvent);
-        final ActionInvocationFacetForDomainEvent actionInvocationFacetViaMethod = (ActionInvocationFacetForDomainEvent) facet;
-        assertEquals(actionMethod, actionInvocationFacetViaMethod.getMethods().getFirstElseFail());
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(actionMethod));
+            //then
+            final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof ActionInvocationFacetForDomainEvent);
+            final ActionInvocationFacetForDomainEvent actionInvocationFacetViaMethod = (ActionInvocationFacetForDomainEvent) facet;
+            assertEquals(actionMethod, actionInvocationFacetViaMethod.getMethods().getFirstElseFail());
+            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(actionMethod));
+        });
     }
 
     public void testActionReturnTypeWhenVoid() {
 
         class Customer {
-            public void someAction() {
-            }
+            public void someAction() {}
         }
-        final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        processInvocation(facetFactory, ProcessMethodContext
-                .forTesting(Customer.class, null, actionMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
-        final ActionInvocationFacetForDomainEvent actionInvocationFacetViaMethod = (ActionInvocationFacetForDomainEvent) facet;
-        assertEquals(voidSpec, actionInvocationFacetViaMethod.getReturnType());
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+            //when
+            processInvocation(facetFactory, processMethodContext);
+            //then
+            final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
+            final ActionInvocationFacetForDomainEvent actionInvocationFacetViaMethod = (ActionInvocationFacetForDomainEvent) facet;
+            assertEquals(voidSpec, actionInvocationFacetViaMethod.getReturnType());
+        });
     }
 
     public void testActionReturnTypeWhenNotVoid() {
 
         class Customer {
-            public String someAction() {
-                return null;
-            }
+            public String someAction() { return null; }
         }
-        final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        processInvocation(facetFactory, ProcessMethodContext
-                .forTesting(Customer.class, null, actionMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
-        final ActionInvocationFacetForDomainEvent actionInvocationFacetViaMethod = (ActionInvocationFacetForDomainEvent) facet;
-        assertEquals(stringSpec, actionInvocationFacetViaMethod.getReturnType());
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+            //when
+            processInvocation(facetFactory, processMethodContext);
+            //then
+            final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
+            final ActionInvocationFacetForDomainEvent actionInvocationFacetViaMethod = (ActionInvocationFacetForDomainEvent) facet;
+            assertEquals(stringSpec, actionInvocationFacetViaMethod.getReturnType());
+        });
     }
 
     public void testActionOnType() {
@@ -135,17 +134,17 @@ extends FacetFactoryTestAbstract2 {
 
         val customerSpec = getSpecificationLoader().loadSpecification(LocalCustomer.class);
 
-        final Method actionMethod = findMethod(LocalCustomer.class, "someAction");
-
-        processInvocation(facetFactory, ProcessMethodContext
-                .forTesting(LocalCustomer.class, null, actionMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
-        final ActionInvocationFacetForDomainEvent actionInvocationFacetViaMethod =
-                (ActionInvocationFacetForDomainEvent) facet;
-        assertEquals(
-                customerSpec,
-                actionInvocationFacetViaMethod.getDeclaringType());
+        actionScenario(LocalCustomer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+            //when
+            processInvocation(facetFactory, processMethodContext);
+            // then
+            final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
+            final ActionInvocationFacetForDomainEvent actionInvocationFacetViaMethod =
+                    (ActionInvocationFacetForDomainEvent) facet;
+            assertEquals(
+                    customerSpec,
+                    actionInvocationFacetViaMethod.getDeclaringType());
+        });
     }
 
     public void testActionsPickedUpFromSuperclass() {
@@ -176,14 +175,8 @@ extends FacetFactoryTestAbstract2 {
         val facetFactoryForDisable = new DisableForContextFacetViaMethodFactory(getMetaModelContext());
 
         class Customer {
-
-            public void someAction(final int x, final long y) {
-            }
-
-
-            public int[] choices0SomeAction() {
-                return new int[0];
-            }
+            public void someAction(final int x, final long y) { }
+            public int[] choices0SomeAction() { return new int[0]; }
         }
 
         class CustomerEx extends Customer {
@@ -191,13 +184,9 @@ extends FacetFactoryTestAbstract2 {
             public int[] choices0SomeAction() {
                 return new int[0];
             }
-
-
             public long[] choices1SomeAction() {
                 return new long[0];
             }
-
-
             public String disableSomeAction() {
                 return null;
             }

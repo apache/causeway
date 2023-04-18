@@ -26,6 +26,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.Identifier;
@@ -170,7 +172,7 @@ implements HasMetaModelContext {
             final Class<?> declaringClass, final String actionName, final MemberScenarioConsumer consumer) {
         val scenario = Scenario.act(getMetaModelContext(), declaringClass, actionName);
         val processMethodContext = ProcessMethodContext
-                .forTesting(declaringClass, null, scenario.annotatedMethod(), methodRemover, scenario.facetedMethod());
+                .forTesting(declaringClass, FeatureType.ACTION, scenario.annotatedMethod(), methodRemover, scenario.facetedMethod());
         consumer.accept(processMethodContext, scenario.facetHolder, scenario.facetedMethod, scenario.facetedMethodParameter);
     }
 
@@ -249,6 +251,19 @@ implements HasMetaModelContext {
 
     protected final void assertMethodWasRemoved(final Method method) {
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
+    }
+
+    public void assertMethodEquals(final Method a, final Method b) {
+        assertEquals(a.getName(), b.getName());
+        assertEquals(a.getParameterCount(), b.getParameterCount());
+        assertArrayEquals(a.getParameterTypes(), b.getParameterTypes());
+
+        val ownerA = a.getDeclaringClass();
+        val ownerB = b.getDeclaringClass();
+
+        assertTrue(ownerA.isAssignableFrom(ownerB)
+                || ownerB.isAssignableFrom(ownerA));
+
     }
 
 }

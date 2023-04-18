@@ -30,14 +30,14 @@ import org.apache.causeway.applib.annotation.Snapshot;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract2;
 import org.apache.causeway.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet;
 import org.apache.causeway.core.metamodel.facets.properties.property.snapshot.SnapshotExcludeFacetForPropertyAnnotation;
 
 import lombok.val;
 
 class PropertyAnnotationWithSnapshotOnPropertyFacetFactoryTest
-extends FacetFactoryTestAbstract {
+extends FacetFactoryTestAbstract2 {
 
     private PropertyAnnotationFacetFactory facetFactory;
 

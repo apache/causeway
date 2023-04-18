@@ -32,7 +32,7 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract2;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.MandatoryFacetInvertedByNullableAnnotationOnProperty;
@@ -40,7 +40,7 @@ import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.M
 import lombok.val;
 
 class PropertyOptionalityOrNullableAnnotationOnPropertyFacetFactoryTest
-extends FacetFactoryTestAbstract {
+extends FacetFactoryTestAbstract2 {
 
     private PropertyAnnotationFacetFactory facetFactory;
 

@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract2;
 import org.apache.causeway.core.metamodel.facets.members.disabled.method.DisableForContextFacet;
 import org.apache.causeway.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethod;
 import org.apache.causeway.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethodFactory;
@@ -62,16 +62,14 @@ import org.apache.causeway.core.metamodel.facets.properties.validating.method.Pr
 import lombok.val;
 
 class PropertyMethodsFacetFactoryTest
-extends FacetFactoryTestAbstract {
+extends FacetFactoryTestAbstract2 {
 
     public void testPropertyAccessorFacetIsInstalledAndMethodRemoved() {
         val facetFactory = new PropertyAccessorFacetViaAccessorFactory(getMetaModelContext());
 
         class Customer {
             @SuppressWarnings("unused")
-            public String getFirstName() {
-                return null;
-            }
+            public String getFirstName() { return null; }
         }
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
 

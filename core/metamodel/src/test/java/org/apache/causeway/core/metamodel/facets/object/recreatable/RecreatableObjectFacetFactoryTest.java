@@ -27,13 +27,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract2;
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetFactory;
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForViewModelInterface;
 
 class RecreatableObjectFacetFactoryTest
-extends FacetFactoryTestAbstract {
+extends FacetFactoryTestAbstract2 {
 
     private ViewModelFacetFactory facetFactory;
 
@@ -48,14 +48,9 @@ extends FacetFactoryTestAbstract {
     }
 
     static class Customer implements ViewModel {
-
         @Override
-        public String viewModelMemento() {
-            return null;
-        }
-
-        public Customer(final String memento) {
-        }
+        public String viewModelMemento() { return null; }
+        public Customer(final String memento) { }
     }
 
     public void testViewModelInterfacePickedUpOnClassAndDefaultsToAlways() {
