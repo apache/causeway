@@ -18,23 +18,21 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.bookmarkable;
 
-import java.lang.reflect.Method;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract2;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetFallbackFactory;
 
 class BookmarkableAnnotationFacetFactoryTest_action
-extends FacetFactoryTestAbstract2 {
+extends FacetFactoryTestAbstract {
 
     private BookmarkPolicyFacetFallbackFactory facetFactory;
 
@@ -48,21 +46,22 @@ extends FacetFactoryTestAbstract2 {
         facetFactory = null;
     }
 
-    public void testBookmarkableAnnotationPickedUpOnClass() {
+    @Test
+    void bookmarkableAnnotationPickedUpOnClass() {
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
             public void placeOrder(){}
         }
-        final Method actionMethod = findMethod(Customer.class, "placeOrder");
+        actionScenario(Customer.class, "placeOrder", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+            //when
+            facetFactory.process(processMethodContext);
+            //then
+            final Facet facet = facetedMethod.getFacet(BookmarkPolicyFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof BookmarkPolicyFacetAbstract);
 
-        facetFactory.process(ProcessMethodContext
-                .forTesting(Customer.class, null, actionMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(BookmarkPolicyFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof BookmarkPolicyFacetAbstract);
-
-        assertNoMethodsRemoved();
+            assertNoMethodsRemoved();
+        });
     }
 
 }
