@@ -18,9 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.property;
 
-import java.lang.reflect.Method;
-
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -29,15 +28,14 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.Snapshot;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
-import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract2;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet;
 import org.apache.causeway.core.metamodel.facets.properties.property.snapshot.SnapshotExcludeFacetForPropertyAnnotation;
 
 import lombok.val;
 
 class PropertyAnnotationWithSnapshotOnPropertyFacetFactoryTest
-extends FacetFactoryTestAbstract2 {
+extends FacetFactoryTestAbstract {
 
     private PropertyAnnotationFacetFactory facetFactory;
 
@@ -52,25 +50,23 @@ extends FacetFactoryTestAbstract2 {
         facetFactory.processSnapshot(processMethodContext, propertyIfAny);
     }
 
-    public void testAnnotationPickedUpOnProperty() {
+    @Test
+    void annotationPickedUpOnProperty() {
 
         class Customer {
             @Property(snapshot = Snapshot.EXCLUDED)
-            public String getFirstName() {
-                return null;
-            }
+            public String getFirstName() { return null; }
         }
-        final Method method = findMethodExactOrFail(Customer.class, "getFirstName");
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            processNotPersisted(facetFactory, processMethodContext);
+            // then
+            final Facet facet = facetedMethod.getFacet(SnapshotExcludeFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof SnapshotExcludeFacetForPropertyAnnotation);
 
-        processNotPersisted(facetFactory, ProcessMethodContext
-                .forTesting(Customer.class, null, method, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(SnapshotExcludeFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof SnapshotExcludeFacetForPropertyAnnotation);
-
-        assertNoMethodsRemoved();
+            assertNoMethodsRemoved();
+        });
     }
-
 
 }
