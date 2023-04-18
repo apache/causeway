@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.param.name;
 
-import java.lang.reflect.Method;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,18 +40,11 @@ import lombok.val;
 class ParameterNameFacetTest
 extends FacetFactoryTestAbstract {
 
-    ProgrammingModel programmingModel;
-    Method actionMethod;
+    protected ProgrammingModel programmingModel;
 
     @BeforeEach
     public void setUp() throws Exception {
-
-        val metaModelContext = MetaModelContext_forTesting.builder()
-                .build();
-
-        super.setUpFacetedMethodAndParameter();
-
-        programmingModel = metaModelContext.getProgrammingModel();
+        programmingModel = ((MetaModelContext_forTesting)getMetaModelContext()).getProgrammingModel();
     }
 
     @AfterEach

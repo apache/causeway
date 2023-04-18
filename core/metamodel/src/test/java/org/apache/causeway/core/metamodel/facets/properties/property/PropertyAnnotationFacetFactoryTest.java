@@ -18,15 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.property;
 
-import java.lang.reflect.Method;
 import java.util.regex.Pattern;
 
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -35,7 +32,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.calls;
 
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
@@ -77,7 +73,6 @@ import org.apache.causeway.core.metamodel.facets.properties.update.clear.Propert
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.Getter;
@@ -87,14 +82,6 @@ import lombok.val;
 class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
 
     PropertyAnnotationFacetFactory facetFactory;
-    Method propertyMethod;
-
-    @Mock ObjectSpecification mockTypeSpec;
-    @Mock ObjectSpecification mockReturnTypeSpec;
-
-    void expectRemoveMethod(final Method actionMethod) {
-        Mockito.verify(mockMethodRemover, calls(1)).removeMethod(actionMethod);
-    }
 
     private static void processModify(
             final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {

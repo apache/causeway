@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.action;
 
-import java.lang.reflect.Method;
 import java.util.UUID;
 
 import org.junit.jupiter.api.AfterEach;
@@ -40,10 +39,6 @@ extends FacetFactoryTestAbstract {
 
     ObjectSpecification mockTypeSpec;
     ObjectSpecification mockReturnTypeSpec;
-
-    void expectRemoveMethod(final Method actionMethod) {
-        Mockito.verify(mockMethodRemover, Mockito.atLeastOnce()).removeMethod(actionMethod);
-    }
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -76,8 +71,6 @@ extends FacetFactoryTestAbstract {
         public UUID getInteractionId() {
             return null;
         }
-
-
     }
 
     void allowingPublishingConfigurationToReturn(final ActionConfigOptions.PublishingPolicy value) {

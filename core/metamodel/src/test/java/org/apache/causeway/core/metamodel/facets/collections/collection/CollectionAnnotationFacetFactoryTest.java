@@ -16,7 +16,6 @@
  * under the License. */
 package org.apache.causeway.core.metamodel.facets.collections.collection;
 
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,13 +23,11 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.calls;
 
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.Where;
@@ -44,7 +41,6 @@ import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromF
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.collections.collection.hidden.HiddenFacetForCollectionAnnotation;
 import org.apache.causeway.core.metamodel.facets.collections.collection.typeof.TypeOfFacetForCollectionAnnotation;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 
@@ -53,18 +49,6 @@ class CollectionAnnotationFacetFactoryTest
 extends FacetFactoryTestAbstract {
 
     CollectionAnnotationFacetFactory facetFactory;
-    Method collectionMethod;
-
-    ObjectSpecification mockTypeSpec;
-    ObjectSpecification mockReturnTypeSpec;
-
-    void expectRemoveMethod(final Method actionMethod) {
-
-        mockTypeSpec = Mockito.mock(ObjectSpecification.class);
-        mockReturnTypeSpec = Mockito.mock(ObjectSpecification.class);
-
-        Mockito.verify(mockMethodRemover, calls(1)).removeMethod(actionMethod);
-    }
 
     private static void processModify(
             final CollectionAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
@@ -78,13 +62,11 @@ extends FacetFactoryTestAbstract {
         facetFactory.processHidden(processMethodContext, collectionIfAny);
     }
 
-
     private static void processTypeOf(
             final CollectionAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
         val collectionIfAny = processMethodContext.synthesizeOnMethod(Collection.class);
         facetFactory.processTypeOf(processMethodContext, collectionIfAny);
     }
-
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -95,7 +77,6 @@ extends FacetFactoryTestAbstract {
     public void tearDown() throws Exception {
         facetFactory = null;
     }
-
 
     @Deprecated(forRemoval = true, since = "2.0.0-RC2")
     static class Hidden extends CollectionAnnotationFacetFactoryTest {

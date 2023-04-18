@@ -24,6 +24,8 @@ import java.util.function.BiConsumer;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;
 
+import static org.mockito.Mockito.calls;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.id.LogicalType;
@@ -56,8 +58,8 @@ implements HasMetaModelContext {
     @Getter(onMethod_ = {@Override})
     protected MetaModelContext metaModelContext;
 
-    protected MethodRemover mockMethodRemover;
-    protected FacetHolder mockFacetHolder;
+    private MethodRemover mockMethodRemover;
+
     protected ObjectSpecification mockOnType;
     protected ObjectSpecification mockObjSpec;
     protected OneToOneAssociation mockOneToOneAssociation;
@@ -118,19 +120,16 @@ implements HasMetaModelContext {
     }
 
     @BeforeEach
-    protected void setUpFacetedMethodAndParameter() throws Exception {
+    protected void setUpAll() throws Exception {
 
         setUpMmc();
 
         mockMethodRemover = Mockito.mock(MethodRemover.class);
-        mockFacetHolder = Mockito.mock(FacetHolder.class);
         mockOnType = Mockito.mock(ObjectSpecification.class);
         mockObjSpec = Mockito.mock(ObjectSpecification.class);
         mockOneToOneAssociation = Mockito.mock(OneToOneAssociation.class);
         mockOneToManyAssociation = Mockito.mock(OneToManyAssociation.class);
         mockOneToOneActionParameter = Mockito.mock(OneToOneActionParameter.class);
-
-        //scenario = Scenario.prop(getMetaModelContext(), AbstractFacetFactoryTest.Customer.class, "firstName");
     }
 
 
@@ -229,8 +228,19 @@ implements HasMetaModelContext {
         return _Utils.findMethodExactOrFail(type, methodName);
     }
 
+    // -- EXPECTATIONS
+
     protected void expectNoMethodsRemoved() {
         Mockito.verifyNoInteractions(mockMethodRemover);
     }
+
+    protected void expectRemoveMethodAtLeastOnce(final Method actionMethod) {
+        Mockito.verify(mockMethodRemover, Mockito.atLeastOnce()).removeMethod(actionMethod);
+    }
+
+    protected void expectRemoveMethodOnce(final Method actionMethod) {
+        Mockito.verify(mockMethodRemover, calls(1)).removeMethod(actionMethod);
+    }
+
 
 }

@@ -18,21 +18,17 @@
  */
 package org.apache.causeway.core.metamodel.facets.param.parameter;
 
-import java.lang.reflect.Method;
 import java.util.regex.Pattern;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.calls;
 
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
@@ -46,7 +42,6 @@ import org.apache.causeway.core.metamodel.facets.param.parameter.mandatory.Manda
 import org.apache.causeway.core.metamodel.facets.param.parameter.maxlen.MaxLengthFacetForParameterAnnotation;
 import org.apache.causeway.core.metamodel.facets.param.parameter.mustsatisfy.MustSatisfySpecificationFacetForParameterAnnotation;
 import org.apache.causeway.core.metamodel.facets.param.parameter.regex.RegExFacetForParameterAnnotation;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 
@@ -55,15 +50,6 @@ class ParameterAnnotationFacetFactoryTest
 extends FacetFactoryTestAbstract {
 
     ParameterAnnotationFacetFactory facetFactory;
-    @Deprecated
-    Method actionMethod;
-
-    @Mock ObjectSpecification mockTypeSpec;
-    @Mock ObjectSpecification mockReturnTypeSpec;
-
-    void expectRemoveMethod(final Method actionMethod) {
-        Mockito.verify(mockMethodRemover, calls(1)).removeMethod(actionMethod);
-    }
 
     @BeforeEach
     public void setUp() throws Exception {
