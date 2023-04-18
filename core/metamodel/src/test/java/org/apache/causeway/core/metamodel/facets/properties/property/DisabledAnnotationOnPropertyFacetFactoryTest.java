@@ -18,10 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.property;
 
-import java.lang.reflect.Method;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -30,17 +29,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
-import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract2;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
 
 import lombok.val;
 
 class DisabledAnnotationOnPropertyFacetFactoryTest
-extends FacetFactoryTestAbstract2 {
+extends FacetFactoryTestAbstract {
 
     private PropertyAnnotationFacetFactory facetFactory;
 
@@ -60,48 +59,49 @@ extends FacetFactoryTestAbstract2 {
         facetFactory.processEditing(processMethodContext, propertyIfAny);
     }
 
-    public void testDisabledAnnotationPickedUpOnProperty() {
+    @Test
+    void disabledAnnotationPickedUpOnProperty() {
         class Customer {
             @Property(editing = Editing.DISABLED)
-            public int getNumberOfOrders() {
-                return 0;
-            }
+            public int getNumberOfOrders() { return 0; }
         }
-        final Method actionMethod = findMethodExactOrFail(Customer.class, "getNumberOfOrders");
+        propertyScenario(Customer.class, "numberOfOrders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            processEditing(facetFactory, processMethodContext);
 
-        processEditing(facetFactory, ProcessMethodContext
-                .forTesting(Customer.class, null, actionMethod, methodRemover, facetedMethod));
+            // then
+            final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof DisabledFacetAbstract);
 
-        final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof DisabledFacetAbstract);
+            final DisabledFacet disabledFacet = (DisabledFacet) facet;
+            assertThat(disabledFacet.disabledReason(null).map(VetoReason::string).orElse(null), is("Disabled via @Property annotation, reason not given."));
 
-        final DisabledFacet disabledFacet = (DisabledFacet) facet;
-        assertThat(disabledFacet.disabledReason(null), is("Always disabled"));
-
-        assertNoMethodsRemoved();
+            assertNoMethodsRemoved();
+        });
     }
 
-    public void testDisabledAnnotationWithReason() {
+    @Test
+    void disabledAnnotationWithReason() {
         class Customer {
             @Property(editing = Editing.DISABLED, editingDisabledReason = "Oh no you don't!")
-            public int getNumberOfOrders() {
-                return 0;
-            }
+            public int getNumberOfOrders() { return 0;}
         }
-        final Method actionMethod = findMethodExactOrFail(Customer.class, "getNumberOfOrders");
+        propertyScenario(Customer.class, "numberOfOrders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            processEditing(facetFactory, processMethodContext);
+            // then
 
-        processEditing(facetFactory, ProcessMethodContext
-                .forTesting(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof DisabledFacetAbstract);
 
-        final DisabledFacet disabledFacet = (DisabledFacet) facet;
-        assertThat(disabledFacet.disabledReason(null), is("Oh no you don't!"));
+            final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof DisabledFacetAbstract);
 
-        assertNoMethodsRemoved();
+            final DisabledFacet disabledFacet = (DisabledFacet) facet;
+            assertThat(disabledFacet.disabledReason(null).map(VetoReason::string).orElse(null), is("Oh no you don't!"));
+
+            assertNoMethodsRemoved();
+        });
     }
-
 }
