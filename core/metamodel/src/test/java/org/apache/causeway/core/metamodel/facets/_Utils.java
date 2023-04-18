@@ -19,14 +19,19 @@
 package org.apache.causeway.core.metamodel.facets;
 
 import java.lang.reflect.Method;
+import java.util.Optional;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal._Constants;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 
-class Utils {
+import lombok.val;
+
+class _Utils {
 
     static DomainEventHelper domainEventHelper() {
         return DomainEventHelper.ofEventService(null);
@@ -48,18 +53,28 @@ class Utils {
         return featureTypes.contains(featureType);
     }
 
-    protected static Method findMethod(final Class<?> type, final String methodName, final Class<?>[] methodTypes) {
+    protected static Optional<Method> findMethodExact(final Class<?> type, final String methodName, final Class<?>[] methodTypes) {
         try {
-            return type.getMethod(methodName, methodTypes);
+            return Optional.ofNullable(type.getMethod(methodName, methodTypes));
         } catch (final SecurityException e) {
-            return null;
+            return Optional.empty();
         } catch (final NoSuchMethodException e) {
-            return null;
+            return Optional.empty();
         }
     }
 
-    protected static Method findMethod(final Class<?> type, final String methodName) {
-        return findMethod(type, methodName, _Constants.emptyClasses);
+    protected static Optional<Method> findMethodExact(final Class<?> type, final String methodName) {
+        return findMethodExact(type, methodName, _Constants.emptyClasses);
+    }
+
+    protected static Method findMethodExactOrFail(final Class<?> type, final String methodName, final Class<?>[] methodTypes) {
+        return findMethodExact(type, methodName, methodTypes)
+                .orElseThrow(()->
+                _Exceptions.noSuchElement("method '%s' not found in %s", methodName, type));
+    }
+
+    protected static Method findMethodExactOrFail(final Class<?> type, final String methodName) {
+        return findMethodExactOrFail(type, methodName, _Constants.emptyClasses);
     }
 
     protected static Can<Method> findMethodsByName(final Class<?> type, final String methodName) {
@@ -70,6 +85,14 @@ class Utils {
 
     protected static Method findMethodByNameOrFail(final Class<?> type, final String methodName) {
         return findMethodsByName(type, methodName).getSingletonOrFail();
+    }
+
+    protected static Method findGetterOrFail(final Class<?> declaringClass, final String propertyName) {
+        val getter = _Utils.findMethodExact(declaringClass, "get" + _Strings.capitalize(propertyName))
+                    .or(()->_Utils.findMethodExact(declaringClass, "is" + _Strings.capitalize(propertyName)))
+                    .orElseThrow(()->
+                        _Exceptions.noSuchElement("getter '%s' not found in %s", propertyName, declaringClass));
+        return getter;
     }
 
 }

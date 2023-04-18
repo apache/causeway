@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.facets;
 
 import java.lang.reflect.Method;
-import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -30,7 +29,6 @@ import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel._testing.MethodRemover_forTesting;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
@@ -66,10 +64,6 @@ implements HasMetaModelContext {
     protected OneToManyAssociation mockOneToManyAssociation;
     protected OneToOneActionParameter mockOneToOneActionParameter;
 
-    @Deprecated protected FacetHolder facetHolder;
-    @Deprecated protected FacetedMethod facetedMethod;
-    @Deprecated protected FacetedMethodParameter facetedMethodParameter;
-
     @lombok.Value
     @Getter @Accessors(fluent=true)
     public static class Scenario {
@@ -85,7 +79,7 @@ implements HasMetaModelContext {
                 final Class<?> declaringClass, final String memberId) {
 
             val facetHolder = facetHolder(mmc, declaringClass, memberId);
-            val actionMethod = Utils.findMethodByNameOrFail(declaringClass, memberId);
+            val actionMethod = _Utils.findMethodByNameOrFail(declaringClass, memberId);
             val facetedMethod = FacetedMethod.createForAction(mmc, declaringClass, memberId, actionMethod.getParameterTypes());
             val facetedMethodParameter =
                     actionMethod.getParameterCount()==0
@@ -102,9 +96,7 @@ implements HasMetaModelContext {
                 final Class<?> declaringClass, final String memberId) {
 
             val facetHolder = facetHolder(mmc, declaringClass, memberId);
-            val getter = Optional.ofNullable(
-                    Utils.findMethod(declaringClass, "get" + _Strings.capitalize(memberId)))
-                    .orElseGet(()->Utils.findMethod(declaringClass, "is" + _Strings.capitalize(memberId)));
+            val getter = _Utils.findGetterOrFail(declaringClass, memberId);
             val facetedMethod = FacetedMethod.createForProperty(mmc, declaringClass, getter);
             val facetedMethodParameter = (FacetedMethodParameter)null;
             return new Scenario(declaringClass, memberId, getter, facetHolder, facetedMethod, facetedMethodParameter);
@@ -222,19 +214,19 @@ implements HasMetaModelContext {
     }
 
     protected boolean contains(final Class<?>[] types, final Class<?> type) {
-        return Utils.contains(types, type);
+        return _Utils.contains(types, type);
     }
 
     protected static boolean contains(final ImmutableEnumSet<FeatureType> featureTypes, final FeatureType featureType) {
-        return Utils.contains(featureTypes, featureType);
+        return _Utils.contains(featureTypes, featureType);
     }
 
     protected Method findMethod(final Class<?> type, final String methodName, final Class<?>[] methodTypes) {
-        return Utils.findMethod(type, methodName, methodTypes);
+        return _Utils.findMethodExactOrFail(type, methodName, methodTypes);
     }
 
     protected Method findMethod(final Class<?> type, final String methodName) {
-        return Utils.findMethod(type, methodName);
+        return _Utils.findMethodExactOrFail(type, methodName);
     }
 
     protected void expectNoMethodsRemoved() {

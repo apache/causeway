@@ -104,19 +104,19 @@ public abstract class AbstractFacetFactoryTest {
     }
 
     protected static boolean contains(final Class<?>[] types, final Class<?> type) {
-        return Utils.contains(types, type);
+        return _Utils.contains(types, type);
     }
 
     protected static boolean contains(final ImmutableEnumSet<FeatureType> featureTypes, final FeatureType featureType) {
-        return Utils.contains(featureTypes, featureType);
+        return _Utils.contains(featureTypes, featureType);
     }
 
-    protected static Method findMethod(final Class<?> type, final String methodName, final Class<?>[] signature) {
-        return Utils.findMethod(type, methodName, signature);
+    protected final Method findMethod(final Class<?> type, final String methodName, final Class<?>[] signature) {
+        return _Utils.findMethodExactOrFail(type, methodName, signature);
     }
 
-    protected Method findMethod(final Class<?> type, final String methodName) {
-        return Utils.findMethod(type, methodName);
+    protected final Method findMethod(final Class<?> type, final String methodName) {
+        return _Utils.findMethodExactOrFail(type, methodName);
     }
 
     protected void processMethod(
