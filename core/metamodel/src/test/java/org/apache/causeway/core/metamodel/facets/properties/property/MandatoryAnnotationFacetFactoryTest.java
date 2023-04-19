@@ -18,9 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.property;
 
-import java.lang.reflect.Method;
-
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -28,24 +27,21 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
-import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 
 import lombok.val;
 
 class MandatoryAnnotationFacetFactoryTest
-extends AbstractFacetFactoryTest {
+extends FacetFactoryTestAbstract {
 
     private PropertyAnnotationFacetFactory facetFactory;
 
-    @Override
     @BeforeEach
-    public void setUp() throws Exception {
-        super.setUp();
-        facetFactory = new PropertyAnnotationFacetFactory(metaModelContext);
+    protected void setUp() {
+        facetFactory = new PropertyAnnotationFacetFactory(getMetaModelContext());
     }
 
     private void processOptional(
@@ -54,23 +50,21 @@ extends AbstractFacetFactoryTest {
         facetFactory.processOptional(processMethodContext, propertyIfAny);
     }
 
-    public void testMandatoryAnnotationPickedUpOnProperty() {
+    @Test
+    void mandatoryAnnotationPickedUpOnProperty() {
 
         class Customer {
             @Property(optionality = Optionality.MANDATORY)
-            public String getFirstName() {
-                return null;
-            }
+            public String getFirstName() { return null; }
         }
-        final Method method = findMethod(Customer.class, "getFirstName");
-
-        processOptional(facetFactory, ProcessMethodContext
-                .forTesting(Customer.class, null, method, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(MandatoryFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof MandatoryFacetForPropertyAnnotation);
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            processOptional(facetFactory, processMethodContext);
+            // then
+            final Facet facet = facetedMethod.getFacet(MandatoryFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof MandatoryFacetForPropertyAnnotation);
+        });
     }
-
 
 }

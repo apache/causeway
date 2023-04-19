@@ -23,13 +23,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor;
 import org.apache.causeway.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessorFactory;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
@@ -37,163 +37,150 @@ import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCol
 import lombok.val;
 
 class CollectionFieldMethodsFacetFactoryTest
-extends AbstractFacetFactoryTest {
+extends FacetFactoryTestAbstract {
 
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
+    @Test
+    void propertyAccessorFacetIsInstalledForJavaUtilCollectionAndMethodRemoved() {
+        val facetFactory = new CollectionAccessorFacetViaAccessorFactory(getMetaModelContext());
+        @SuppressWarnings({ "rawtypes", "unused" })
+        class Customer {
+            public Collection getOrders() { return null; }
+        }
+
+        final Method collectionAccessorMethod = findMethodExactOrFail(Customer.class, "getOrders");
+
+        collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            facetFactory.process(processMethodContext);
+            // then
+            final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
+            final CollectionAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
+            assertMethodEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().getFirstElseFail().asMethodElseFail());
+
+            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(collectionAccessorMethod));
+        });
     }
 
-    public void testPropertyAccessorFacetIsInstalledForJavaUtilCollectionAndMethodRemoved() {
-        val facetFactory = new CollectionAccessorFacetViaAccessorFactory(metaModelContext);
-
+    @Test
+    void propertyAccessorFacetIsInstalledForJavaUtilListAndMethodRemoved() {
+        val facetFactory = new CollectionAccessorFacetViaAccessorFactory(getMetaModelContext());
+        @SuppressWarnings({ "rawtypes", "unused" })
         class Customer {
-            @SuppressWarnings({ "rawtypes", "unused" })
-            public Collection getOrders() {
-                return null;
-            }
+            public List getOrders() { return null; }
         }
-        final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
 
-        facetFactory.process(ProcessMethodContext
-                .forTesting(Customer.class, null, collectionAccessorMethod, methodRemover, facetedMethod));
+        final Method collectionAccessorMethod = findMethodExactOrFail(Customer.class, "getOrders");
 
-        final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
-        final CollectionAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
-        assertEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().getFirstElseFail());
+        collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            facetFactory.process(processMethodContext);
+            // then
+            final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
+            final CollectionAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
+            assertMethodEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().getFirstElseFail().asMethodElseFail());
 
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(collectionAccessorMethod));
+            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(collectionAccessorMethod));
+        });
     }
 
-
-    public void testPropertyAccessorFacetIsInstalledForJavaUtilListAndMethodRemoved() {
-        val facetFactory = new CollectionAccessorFacetViaAccessorFactory(metaModelContext);
-
+    @Test
+    void propertyAccessorFacetIsInstalledForJavaUtilSetAndMethodRemoved() {
+        val facetFactory = new CollectionAccessorFacetViaAccessorFactory(getMetaModelContext());
+        @SuppressWarnings({ "rawtypes", "unused" })
         class Customer {
-            @SuppressWarnings({ "rawtypes", "unused" })
-            public List getOrders() {
-                return null;
-            }
+            public Set getOrders() { return null; }
         }
-        final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
 
+        final Method collectionAccessorMethod = findMethodExactOrFail(Customer.class, "getOrders");
 
-        facetFactory.process(ProcessMethodContext
-                .forTesting(Customer.class, null, collectionAccessorMethod, methodRemover, facetedMethod));
+        collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            facetFactory.process(processMethodContext);
+            // then
+            final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
+            final CollectionAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
+            assertMethodEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().getFirstElseFail().asMethodElseFail());
 
-        final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
-        final CollectionAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
-        assertEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().getFirstElseFail());
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(collectionAccessorMethod));
+            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(collectionAccessorMethod));
+        });
     }
 
-    public void testPropertyAccessorFacetIsInstalledForJavaUtilSetAndMethodRemoved() {
-        val facetFactory = new CollectionAccessorFacetViaAccessorFactory(metaModelContext);
-
+    @Test
+    void propertyAccessorFacetIsInstalledForObjectArrayAndMethodRemoved() {
+        val facetFactory = new CollectionAccessorFacetViaAccessorFactory(getMetaModelContext());
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings({ "rawtypes", "unused" })
-            public Set getOrders() {
-                return null;
-            }
+            public Object[] getOrders() { return null; }
         }
-        final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
 
-        facetFactory.process(ProcessMethodContext
-                .forTesting(Customer.class, null, collectionAccessorMethod, methodRemover, facetedMethod));
+        final Method collectionAccessorMethod = findMethodExactOrFail(Customer.class, "getOrders");
 
-        final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
-        final CollectionAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
-        assertEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().getFirstElseFail());
+        collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            facetFactory.process(processMethodContext);
+            // then
+            final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
+            final CollectionAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
+            assertMethodEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().getFirstElseFail().asMethodElseFail());
 
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(collectionAccessorMethod));
-    }
-
-    public void testPropertyAccessorFacetIsInstalledForObjectArrayAndMethodRemoved() {
-        val facetFactory = new CollectionAccessorFacetViaAccessorFactory(metaModelContext);
-
-        class Customer {
-            @SuppressWarnings("unused")
-            public Object[] getOrders() {
-                return null;
-            }
-        }
-        final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
-
-        facetFactory.process(ProcessMethodContext
-                .forTesting(Customer.class, null, collectionAccessorMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
-        final CollectionAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
-        assertEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().getFirstElseFail());
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(collectionAccessorMethod));
+            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(collectionAccessorMethod));
+        });
     }
 
     public void testPropertyAccessorFacetIsInstalledForOrderArrayAndMethodRemoved() {
-        val facetFactory = new CollectionAccessorFacetViaAccessorFactory(metaModelContext);
-
-        @SuppressWarnings("hiding")
+        val facetFactory = new CollectionAccessorFacetViaAccessorFactory(getMetaModelContext());
         class Order {
         }
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
-            public Order[] getOrders() {
-                return null;
-            }
+            public Order[] getOrders() { return null; }
         }
-        final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
 
-        facetFactory.process(ProcessMethodContext
-                .forTesting(Customer.class, null, collectionAccessorMethod, methodRemover, facetedMethod));
+        final Method collectionAccessorMethod = findMethodExactOrFail(Customer.class, "getOrders");
 
-        final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
-        final CollectionAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
-        assertEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().getFirstElseFail());
+        collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            facetFactory.process(processMethodContext);
+            // then
+            final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
+            final CollectionAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
+            assertMethodEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().getFirstElseFail().asMethodElseFail());
 
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(collectionAccessorMethod));
+            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(collectionAccessorMethod));
+        });
     }
 
-    public void testMethodFoundInSuperclass() {
-        val facetFactory = new CollectionAccessorFacetViaAccessorFactory(metaModelContext);
-
-        @SuppressWarnings("hiding")
+    @Test
+    void methodFoundInSuperclass() {
+        val facetFactory = new CollectionAccessorFacetViaAccessorFactory(getMetaModelContext());
         class Order {
         }
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
-            public Collection<Order> getOrders() {
-                return null;
-            }
+            public Collection<Order> getOrders() { return null; }
         }
-
         class CustomerEx extends Customer {
         }
-
-        final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
-
-        facetFactory.process(ProcessMethodContext
-                .forTesting(CustomerEx.class, null, collectionAccessorMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
-        final CollectionAccessorFacetViaAccessor collectionAccessorFacetViaMethod = (CollectionAccessorFacetViaAccessor) facet;
-        assertEquals(collectionAccessorMethod, collectionAccessorFacetViaMethod.getMethods().getFirstElseFail());
+        final Method collectionAccessorMethod = findMethodExactOrFail(CustomerEx.class, "getOrders");
+        collectionScenario(CustomerEx.class, "orders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            facetFactory.process(processMethodContext);
+            // then
+            final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
+            val collectionAccessorFacetViaMethod = (CollectionAccessorFacetViaAccessor) facet;
+            assertMethodEquals(collectionAccessorMethod, collectionAccessorFacetViaMethod.getMethods().getFirstElseFail().asMethodElseFail());
+        });
     }
-
-    static class Order {
-    }
-
-
 }

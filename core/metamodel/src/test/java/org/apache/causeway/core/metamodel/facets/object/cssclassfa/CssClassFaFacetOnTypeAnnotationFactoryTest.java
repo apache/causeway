@@ -16,9 +16,9 @@
  * under the License. */
 package org.apache.causeway.core.metamodel.facets.object.cssclassfa;
 
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 
-public class CssClassFaFacetOnTypeAnnotationFactoryTest extends AbstractFacetFactoryJupiterTestCase {
+public class CssClassFaFacetOnTypeAnnotationFactoryTest extends FacetFactoryTestAbstract {
 
     // @Test
     // public void testCssClassFaAnnotationPickedUpOnClass() {

@@ -18,44 +18,41 @@
  */
 package org.apache.causeway.core.metamodel.facets.param.layout.annotation;
 
-import java.lang.reflect.Method;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
-import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.causeway.core.metamodel.facets.FacetFactory;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.causeway.core.metamodel.facets.param.layout.LabelAtFacetForParameterLayoutAnnotation;
 import org.apache.causeway.core.metamodel.facets.param.layout.ParameterLayoutFacetFactory;
 
-public class LabelAtFacetForParameterLayoutAnnotationFactoryTest extends AbstractFacetFactoryTest {
+class LabelAtFacetForParameterLayoutAnnotationFactoryTest
+extends FacetFactoryTestAbstract {
 
-    public void testParameterLayoutAnnotationPickedUp() {
-        final ParameterLayoutFacetFactory facetFactory = new ParameterLayoutFacetFactory(metaModelContext);
+    void testParameterLayoutAnnotationPickedUp() {
+        final ParameterLayoutFacetFactory facetFactory = new ParameterLayoutFacetFactory(getMetaModelContext());
 
         class Customer {
             @SuppressWarnings("unused")
-            public void someAction(@ParameterLayout(labelPosition = LabelPosition.LEFT) final String foo) {
-            }
+            public void someAction(
+                    @ParameterLayout(labelPosition = LabelPosition.LEFT)
+                    final String foo) {}
         }
-        final Method method = findMethod(Customer.class, "someAction", new Class[] { String.class });
 
-        facetFactory.processParams(FacetFactory.ProcessParameterContext.forTesting(
-                Customer.class,
-                IntrospectionPolicy.ANNOTATION_OPTIONAL,
-                method, null, facetedMethodParameter));
-
-        final Facet facet = facetedMethodParameter.getFacet(LabelAtFacet.class);
-        assertThat(facet, is(notNullValue()));
-        assertThat(facet, is(instanceOf(LabelAtFacetForParameterLayoutAnnotation.class)));
-        final LabelAtFacetForParameterLayoutAnnotation layoutAnnotation = (LabelAtFacetForParameterLayoutAnnotation) facet;
-        assertThat(layoutAnnotation.label(), is(LabelPosition.LEFT));
+        parameterScenario(Customer.class, "someAction", 0, (processParameterContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+            //when
+            facetFactory.processParams(processParameterContext);
+            //then
+            final Facet facet = facetedMethodParameter.getFacet(LabelAtFacet.class);
+            assertThat(facet, is(notNullValue()));
+            assertThat(facet, is(instanceOf(LabelAtFacetForParameterLayoutAnnotation.class)));
+            final LabelAtFacetForParameterLayoutAnnotation layoutAnnotation = (LabelAtFacetForParameterLayoutAnnotation) facet;
+            assertThat(layoutAnnotation.label(), is(LabelPosition.LEFT));
+        });
     }
 }

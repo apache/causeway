@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainservicelayout.annotation;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -26,102 +29,106 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet;
 import org.apache.causeway.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacetFactory;
 
 class DomainServiceLayoutFacetFactoryTest
-extends AbstractFacetFactoryTest {
+extends FacetFactoryTestAbstract {
 
     private DomainServiceLayoutFacetFactory facetFactory;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        facetFactory = new DomainServiceLayoutFacetFactory(metaModelContext);
+    @BeforeEach
+    protected void setUp() {
+        facetFactory = new DomainServiceLayoutFacetFactory(getMetaModelContext());
     }
 
-    @Override
-    protected void tearDown() throws Exception {
+    @AfterEach
+    protected void tearDown() {
         facetFactory = null;
-        super.tearDown();
     }
 
-    public void testAnnotationPickedUpOnClass() {
+    void testAnnotationPickedUpOnClass() {
         @DomainService
         @DomainServiceLayout(menuBar = DomainServiceLayout.MenuBar.SECONDARY)
         class Customers {
         }
 
-        facetFactory.process(ProcessClassContext
-                .forTesting(Customers.class, methodRemover, facetHolder));
+        objectScenario(Customers.class, (processClassContext, facetHolder) -> {
+            //when
+            facetFactory.process(processClassContext);
+            //then
+            final Facet facet = facetHolder.getFacet(DomainServiceLayoutFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof DomainServiceLayoutFacetAnnotation);
+            DomainServiceLayoutFacetAnnotation domainServiceLayoutFacet = (DomainServiceLayoutFacetAnnotation) facet;
+            //assertThat(domainServiceLayoutFacet.getMenuOrder(), is("123"));
+            assertThat(domainServiceLayoutFacet.getMenuBar(), is(DomainServiceLayout.MenuBar.SECONDARY));
 
-        final Facet facet = facetHolder.getFacet(DomainServiceLayoutFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof DomainServiceLayoutFacetAnnotation);
-        DomainServiceLayoutFacetAnnotation domainServiceLayoutFacet = (DomainServiceLayoutFacetAnnotation) facet;
-        //assertThat(domainServiceLayoutFacet.getMenuOrder(), is("123"));
-        assertThat(domainServiceLayoutFacet.getMenuBar(), is(DomainServiceLayout.MenuBar.SECONDARY));
-
-        assertNoMethodsRemoved();
+            assertNoMethodsRemoved();
+        });
     }
 
-
-    public void testDomainServiceAnnotationPickedUpOnClass() {
+    void testDomainServiceAnnotationPickedUpOnClass() {
         @DomainService
         class Customers {
         }
 
-        facetFactory.process(ProcessClassContext
-                .forTesting(Customers.class, methodRemover, facetHolder));
+        objectScenario(Customers.class, (processClassContext, facetHolder) -> {
+            //when
+            facetFactory.process(processClassContext);
+            //then
+            final Facet facet = facetHolder.getFacet(DomainServiceLayoutFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof DomainServiceLayoutFacetAnnotation);
+            DomainServiceLayoutFacetAnnotation domainServiceLayoutFacet = (DomainServiceLayoutFacetAnnotation) facet;
+            assertNotNull(domainServiceLayoutFacet);
 
-        final Facet facet = facetHolder.getFacet(DomainServiceLayoutFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof DomainServiceLayoutFacetAnnotation);
-        DomainServiceLayoutFacetAnnotation domainServiceLayoutFacet = (DomainServiceLayoutFacetAnnotation) facet;
-        assertNotNull(domainServiceLayoutFacet);
-
-        assertNoMethodsRemoved();
+            assertNoMethodsRemoved();
+        });
     }
 
-    public void testDomainServiceAndDomainServiceLayoutAnnotationWhenCompatiblePickedUpOnClass() {
+    void testDomainServiceAndDomainServiceLayoutAnnotationWhenCompatiblePickedUpOnClass() {
         @DomainService//(menuOrder = "123")
         @DomainServiceLayout(menuBar = DomainServiceLayout.MenuBar.SECONDARY)
         class Customers {
         }
 
-        facetFactory.process(ProcessClassContext
-                .forTesting(Customers.class, methodRemover, facetHolder));
+        objectScenario(Customers.class, (processClassContext, facetHolder) -> {
+            //when
+            facetFactory.process(processClassContext);
+            //then
+            final Facet facet = facetHolder.getFacet(DomainServiceLayoutFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof DomainServiceLayoutFacetAnnotation);
+            DomainServiceLayoutFacetAnnotation domainServiceLayoutFacet = (DomainServiceLayoutFacetAnnotation) facet;
+            //assertThat(domainServiceLayoutFacet.getMenuOrder(), is("123"));
+            assertThat(domainServiceLayoutFacet.getMenuBar(), is(DomainServiceLayout.MenuBar.SECONDARY));
 
-        final Facet facet = facetHolder.getFacet(DomainServiceLayoutFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof DomainServiceLayoutFacetAnnotation);
-        DomainServiceLayoutFacetAnnotation domainServiceLayoutFacet = (DomainServiceLayoutFacetAnnotation) facet;
-        //assertThat(domainServiceLayoutFacet.getMenuOrder(), is("123"));
-        assertThat(domainServiceLayoutFacet.getMenuBar(), is(DomainServiceLayout.MenuBar.SECONDARY));
-
-        assertNoMethodsRemoved();
+            assertNoMethodsRemoved();
+        });
     }
 
-    public void testDomainServiceAndDomainServiceLayoutAnnotation_takes_the_minimum() {
+    void testDomainServiceAndDomainServiceLayoutAnnotation_takes_the_minimum() {
         @DomainService//(menuOrder = "1")
         @DomainServiceLayout(menuBar = DomainServiceLayout.MenuBar.SECONDARY)
         class Customers {
         }
 
-        facetFactory.process(ProcessClassContext
-                .forTesting(Customers.class, methodRemover, facetHolder));
+        objectScenario(Customers.class, (processClassContext, facetHolder) -> {
+            //when
+            facetFactory.process(processClassContext);
+            //then
+            final Facet facet = facetHolder.getFacet(DomainServiceLayoutFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof DomainServiceLayoutFacetAnnotation);
+            DomainServiceLayoutFacetAnnotation domainServiceLayoutFacet = (DomainServiceLayoutFacetAnnotation) facet;
+            //assertThat(domainServiceLayoutFacet.getMenuOrder(), is("1"));
+            assertThat(domainServiceLayoutFacet.getMenuBar(), is(DomainServiceLayout.MenuBar.SECONDARY));
 
-        final Facet facet = facetHolder.getFacet(DomainServiceLayoutFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof DomainServiceLayoutFacetAnnotation);
-        DomainServiceLayoutFacetAnnotation domainServiceLayoutFacet = (DomainServiceLayoutFacetAnnotation) facet;
-        //assertThat(domainServiceLayoutFacet.getMenuOrder(), is("1"));
-        assertThat(domainServiceLayoutFacet.getMenuBar(), is(DomainServiceLayout.MenuBar.SECONDARY));
+            assertNoMethodsRemoved();
+        });
 
-        assertNoMethodsRemoved();
     }
 
 

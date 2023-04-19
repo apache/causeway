@@ -18,39 +18,44 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.callback;
 
-import org.junit.jupiter.api.Assertions;
+import java.util.Optional;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._MethodFacades;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
-import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.object.callbacks.CallbackFacetFactory;
 
 import lombok.val;
 
 abstract class CallbackFacetFactoryTestAbstract
-extends AbstractFacetFactoryTest {
+extends FacetFactoryTestAbstract {
 
     protected CallbackFacetFactory facetFactory;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        facetFactory = new CallbackFacetFactory(metaModelContext);
+    @BeforeEach
+    protected void setUp() {
+        facetFactory = new CallbackFacetFactory(getMetaModelContext());
     }
 
-    @Override
-    protected void tearDown() throws Exception {
+    @AfterEach
+    protected void tearDown() {
         facetFactory = null;
-        super.tearDown();
     }
 
+    /**
+     * see also ObjectSupportFacetFactoryTestAbstract#assertPicksUp
+     */
     protected void assertPicksUp(
             final int expectedCallbackCount,
             final FacetFactory facetFactory,
@@ -58,24 +63,29 @@ extends AbstractFacetFactoryTest {
             final ProgrammingModelConstants.CallbackMethod callbackMethod,
             final Class<? extends ImperativeFacet> facetType) {
 
-        // when
-        facetFactory.process(ProcessClassContext
-                .forTesting(type, methodRemover, facetedMethod));
+        objectScenario(type, (processClassContext, facetHolder) -> {
+            //when
+            facetFactory.process(processClassContext);
+            //then
+            val callbackMethods = callbackMethod.getMethodNames().stream()
+                    .map(methodName->findMethodExact(type, methodName))
+                    .flatMap(Optional::stream)
+                    .map(_MethodFacades::regular)
+                    .map(MethodFacade::asMethodElseFail)
+                    .collect(Can.toCan());
 
-        val callbackMethods = callbackMethod.getMethodNames()
-                .map(methodName->findMethod(type, methodName))
-                .map(_MethodFacades::regular);
+            assertEquals(expectedCallbackCount, callbackMethods.size());
 
-        Assertions.assertEquals(expectedCallbackCount, callbackMethods.size());
+            val facet = facetHolder.getFacet(facetType);
+            assertNotNull(facet);
+            assertTrue(facet instanceof ImperativeFacet);
+            val imperativeFacet = facet;
 
-        val facet = facetedMethod.getFacet(facetType);
-        assertNotNull(facet);
-        assertTrue(facet instanceof ImperativeFacet);
-        val imperativeFacet = facet;
-
-        callbackMethods.forEach(method->{
-            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
-            assertTrue(imperativeFacet.getMethods().contains(method));
+            callbackMethods.forEach(method->{
+                assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
+                assertTrue(imperativeFacet.getMethods()
+                        .map(MethodFacade::asMethodElseFail).contains(method));
+            });
         });
 
     }

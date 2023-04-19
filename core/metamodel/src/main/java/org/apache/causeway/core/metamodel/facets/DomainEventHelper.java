@@ -125,10 +125,10 @@ public class DomainEventHelper {
                 final Identifier identifier = facetHolder.getFeatureIdentifier();
                 event = newActionDomainEvent(eventType, identifier, source, arguments);
 
-                // copy over if have
-                head.getMixedIn()
+                // copy over if mixee is present
+                head.getMixee()
                 .ifPresent(mixedInAdapter->
-                    event.setMixedIn(mixedInAdapter.getPojo()));
+                    event.setMixee(mixedInAdapter.getPojo()));
 
                 if(objectAction != null) {
                     // should always be the case...
@@ -251,9 +251,9 @@ public class DomainEventHelper {
                 event = newPropertyDomainEvent(eventType, identifier, source, oldValue, newValue);
 
                 // copy over if have
-                head.getMixedIn()
-                .ifPresent(mixedInAdapter->
-                    event.setMixedIn(mixedInAdapter.getPojo()));
+                head.getMixee()
+                .ifPresent(mixeeAdapter->
+                    event.setMixee(mixeeAdapter.getPojo()));
 
             }
 
@@ -343,9 +343,9 @@ public class DomainEventHelper {
             event = newCollectionDomainEvent(eventType, phase, identifier, source);
 
             // copy over if have
-            head.getMixedIn()
-            .ifPresent(mixedInAdapter->
-                event.setMixedIn(mixedInAdapter.getPojo()));
+            head.getMixee()
+            .ifPresent(mixeeAdapter->
+                event.setMixee(mixeeAdapter.getPojo()));
 
             event.setEventPhase(phase);
 

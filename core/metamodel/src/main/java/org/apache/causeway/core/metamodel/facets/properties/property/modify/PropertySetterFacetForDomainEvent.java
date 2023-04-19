@@ -21,19 +21,20 @@ package org.apache.causeway.core.metamodel.facets.properties.property.modify;
 import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.causeway.core.metamodel.specloader.specimpl.OneToOneAssociationMixedIn;
+import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 
-public class PropertyDomainEventFacetForPropertyAnnotation extends PropertyDomainEventFacetAbstract {
+public class PropertySetterFacetForDomainEvent
+extends PropertySetterOrClearFacetForDomainEventAbstract
+implements PropertySetterFacet {
 
-    /**
-     * @param getterFacetIfAny - will be null if this is for a mixin {@link OneToOneAssociationMixedIn}.
-     */
-    public PropertyDomainEventFacetForPropertyAnnotation(
+    public PropertySetterFacetForDomainEvent(
             final Class<? extends PropertyDomainEvent<?, ?>> eventType,
-                    final PropertyOrCollectionAccessorFacet getterFacetIfAny,
-                    final FacetHolder holder) {
-        super(eventType, getterFacetIfAny, holder);
-    }
+            final EventTypeOrigin eventTypeOrigin,
+            final PropertyOrCollectionAccessorFacet getterFacet,
+            final PropertySetterFacet setterFacet,
+            final FacetHolder holder) {
 
+        super(PropertySetterFacet.class, eventType, eventTypeOrigin, getterFacet, setterFacet, null, holder);
+    }
 
 }

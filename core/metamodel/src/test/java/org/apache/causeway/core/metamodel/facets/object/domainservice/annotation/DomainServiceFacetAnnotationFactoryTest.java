@@ -18,31 +18,30 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainservice.annotation;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 
 class DomainServiceFacetAnnotationFactoryTest
-extends AbstractFacetFactoryTest {
+extends FacetFactoryTestAbstract {
 
     private DomainServiceFacetAnnotationFactory facetFactory;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        facetFactory = new DomainServiceFacetAnnotationFactory(metaModelContext);
+    @BeforeEach
+    protected void setUp() {
+        facetFactory = new DomainServiceFacetAnnotationFactory(getMetaModelContext());
     }
 
-    @Override
-    protected void tearDown() throws Exception {
+    @AfterEach
+    protected void tearDown() {
         facetFactory = null;
-        super.tearDown();
     }
 
     public void testAggregatedAnnotationPickedUpOnClass() {
@@ -51,16 +50,19 @@ extends AbstractFacetFactoryTest {
         class Customers {
         }
 
-        facetFactory.process(ProcessClassContext
-                .forTesting(Customers.class, methodRemover, facetHolder));
+        objectScenario(Customers.class, (processClassContext, facetHolder) -> {
+            //when
+            facetFactory.process(processClassContext);
+            //then
+            final Facet facet = facetHolder.getFacet(DomainServiceFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof DomainServiceFacetForAnnotation);
+            DomainServiceFacetForAnnotation domainServiceFacet = (DomainServiceFacetForAnnotation) facet;
+            assertNotNull(domainServiceFacet);
 
-        final Facet facet = facetHolder.getFacet(DomainServiceFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof DomainServiceFacetForAnnotation);
-        DomainServiceFacetForAnnotation domainServiceFacet = (DomainServiceFacetForAnnotation) facet;
-        assertNotNull(domainServiceFacet);
+            assertNoMethodsRemoved();
+        });
 
-        assertNoMethodsRemoved();
     }
 
 }

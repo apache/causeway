@@ -16,23 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.actions.action.invocation;
+package org.apache.causeway.core.metamodel.facets.properties.property.modify;
 
-import org.apache.causeway.applib.events.domain.ActionDomainEvent;
-import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
+import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
+import org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 
-public class ActionInvocationFacetForDomainEventFromDefault
-extends ActionInvocationFacetForDomainEventAbstract {
+public class PropertyClearFacetForDomainEvent
+extends PropertySetterOrClearFacetForDomainEventAbstract
+implements PropertyClearFacet {
 
-    public ActionInvocationFacetForDomainEventFromDefault(
-            final Class<? extends ActionDomainEvent<?>> eventType,
-            final MethodFacade method,
-            final ObjectSpecification onType,
-            final ObjectSpecification returnType,
+    public PropertyClearFacetForDomainEvent(
+            final Class<? extends PropertyDomainEvent<?, ?>> eventType,
+            final EventTypeOrigin eventTypeOrigin,
+            final PropertyOrCollectionAccessorFacet getterFacet,
+            final PropertyClearFacet clearFacet,
             final FacetHolder holder) {
 
-        super(eventType, method, onType, returnType, holder);
+        super(PropertyClearFacet.class, eventType, eventTypeOrigin, getterFacet, null, clearFacet, holder);
     }
 }

@@ -47,7 +47,7 @@ class DomainEventHelperTest_newCollectionDomainEvent_forAdd {
         final Identifier identifier = Identifier.collectionIdentifier(
                 LogicalType.fqcn(SomeDomainObject.class), "references");
 
-        final CollectionDomainEvent<Object, Object> ev = Utils.domainEventHelper().newCollectionDomainEvent(
+        final CollectionDomainEvent<Object, Object> ev = _Utils.domainEventHelper().newCollectionDomainEvent(
                 CollectionDomainEvent.Default.class, null, identifier, sdo);
         assertSame(ev.getSource(), sdo);
         assertThat(ev.getIdentifier(), is(identifier));
@@ -60,7 +60,7 @@ class DomainEventHelperTest_newCollectionDomainEvent_forAdd {
         final Identifier identifier = Identifier.collectionIdentifier(
                 LogicalType.fqcn(SomeDomainObject.class), "references");
 
-        final CollectionDomainEvent<Object, Object> ev = Utils.domainEventHelper().newCollectionDomainEvent(
+        final CollectionDomainEvent<Object, Object> ev = _Utils.domainEventHelper().newCollectionDomainEvent(
                 CollectionDomainEvent.Default.class, AbstractDomainEvent.Phase.EXECUTED, identifier, sdo);
         assertSame(ev.getSource(), sdo);
         assertThat(ev.getIdentifier(), is(identifier));
@@ -73,7 +73,7 @@ class DomainEventHelperTest_newCollectionDomainEvent_forAdd {
         final Identifier identifier = Identifier.collectionIdentifier(
                 LogicalType.fqcn(SomeDomainObject.class), "references");
 
-        final CollectionDomainEvent<SomeDomainObject, SomeReferencedObject> ev = Utils.domainEventHelper().newCollectionDomainEvent(
+        final CollectionDomainEvent<SomeDomainObject, SomeReferencedObject> ev = _Utils.domainEventHelper().newCollectionDomainEvent(
                 SomeDomainObjectCollectionDomainEvent.class, AbstractDomainEvent.Phase.EXECUTED, identifier, sdo);
         assertThat(ev.getSource(), is(sdo));
         assertThat(ev.getIdentifier(), is(identifier));

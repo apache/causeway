@@ -20,7 +20,9 @@ package org.apache.causeway.core.metamodel.facets.object.ident.title;
 
 import java.lang.reflect.Method;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -29,63 +31,75 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.object.support.ObjectSupportFacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.causeway.core.metamodel.facets.object.title.methods.TitleFacetFromToStringMethod;
 
+import lombok.val;
+
 class TitleFacetViaMethodsFactoryTest
 extends ObjectSupportFacetFactoryTestAbstract {
 
-    public void testTitleMethodPickedUpOnClassAndMethodRemoved() {
+    @Test
+    void titleMethodPickedUpOnClassAndMethodRemoved() {
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
-            public String title() {
-                return "Some title";
-            }
+            public String title() { return "Some title"; }
         }
         assertPicksUp(1, facetFactory, Customer.class, ObjectSupportMethod.TITLE, TitleFacet.class);
     }
 
-    public void testToStringMethodPickedUpOnClassAndMethodRemoved() {
+    @Test
+    void toStringMethodPickedUpOnClassAndMethodRemoved() {
         class Customer {
             @Override
-            public String toString() {
-                return "Some title via toString";
-            }
+            public String toString() { return "Some title via toString"; }
         }
-        final Method toStringMethod = findMethod(Customer.class, "toString");
 
-        facetFactory.process(ProcessClassContext
-                .forTesting(Customer.class, methodRemover, facetedMethod));
+        final Method toStringMethod = findMethodExactOrFail(Customer.class, "toString");
 
-        final Facet facet = facetedMethod.getFacet(TitleFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof TitleFacetFromToStringMethod);
-        final TitleFacetFromToStringMethod titleFacetViaTitleMethod = (TitleFacetFromToStringMethod) facet;
-        assertEquals(toStringMethod, titleFacetViaTitleMethod.getMethods().getFirstElseFail());
+        objectScenario(Customer.class, (processClassContext, facetHolder) -> {
+            //when
+            facetFactory.process(processClassContext);
+            //then
+            final Facet facet = facetHolder.getFacet(TitleFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof TitleFacetFromToStringMethod);
+            val titleFacetViaTitleMethod = (TitleFacetFromToStringMethod) facet;
+            assertMethodEquals(toStringMethod, titleFacetViaTitleMethod.getMethods().getFirstElseFail().asMethodElseFail());
 
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(toStringMethod));
+            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(toStringMethod));
+        });
+
     }
 
-    public void testTitleFacetOnJavaObjectToStringIsIgnored() throws NoSuchMethodException, SecurityException {
+    @Test
+    void titleFacetOnJavaObjectToStringIsIgnored() throws NoSuchMethodException, SecurityException {
 
         final Method sampleMethod = Object.class
                 .getMethod("toString", _Constants.emptyClasses);
+
+        val facetedMethod = Mockito.mock(FacetedMethod.class);
+
         assertFalse(TitleFacetFromToStringMethod
                     .create(sampleMethod, facetedMethod)
                     .isPresent());
     }
 
-    public void testNoExplicitTitleOrToStringMethod() {
+    @Test
+    void noExplicitTitleOrToStringMethod() {
         class Customer {
         }
 
-        facetFactory.process(ProcessClassContext
-                .forTesting(Customer.class, methodRemover, facetedMethod));
+        objectScenario(Customer.class, (processClassContext, facetHolder) -> {
+            //when
+            facetFactory.process(processClassContext);
+            //then
+            assertNull(facetHolder.getFacet(TitleFacet.class));
+            assertFalse(methodRemover.getRemovedMethodMethodCalls().isEmpty());
+        });
 
-        assertNull(facetedMethod.getFacet(TitleFacet.class));
-        assertFalse(methodRemover.getRemovedMethodMethodCalls().isEmpty());
     }
 
 }

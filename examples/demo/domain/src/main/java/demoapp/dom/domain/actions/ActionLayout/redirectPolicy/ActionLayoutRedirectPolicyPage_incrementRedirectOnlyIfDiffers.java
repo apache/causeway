@@ -16,16 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.actions.action.invocation;
+package demoapp.dom.domain.actions.ActionLayout.redirectPolicy;
 
-import org.apache.causeway.applib.events.domain.ActionDomainEvent;
-import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import lombok.RequiredArgsConstructor;
 
-public class ActionDomainEventFacetForActionAnnotation extends ActionDomainEventFacetAbstract {
+import org.apache.causeway.applib.annotation.*;
 
-    public ActionDomainEventFacetForActionAnnotation(
-            final Class<? extends ActionDomainEvent<?>> eventType, final FacetHolder holder) {
-        super(eventType, holder);
+
+//tag::class[]
+@Action(semantics = SemanticsOf.IDEMPOTENT)
+@ActionLayout(
+        redirectPolicy = Redirect.ONLY_IF_DIFFERS       // <.>
+)
+@RequiredArgsConstructor
+public class ActionLayoutRedirectPolicyPage_incrementRedirectOnlyIfDiffers {
+    // ...
+//end::class[]
+    private final ActionLayoutRedirectPolicyPage page;
+
+    @MemberSupport public ActionLayoutRedirectPolicyPage act() {
+        Integer count = page.getCount();
+        page.setCount(count == null ? 1 : count + 1);
+        return page;
     }
 
+//tag::class[]
 }
+//end::class[]

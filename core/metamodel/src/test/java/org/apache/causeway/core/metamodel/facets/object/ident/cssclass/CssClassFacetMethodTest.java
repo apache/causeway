@@ -30,8 +30,8 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryJupiterTestCase;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.object.cssclass.method.CssClassFacetViaCssClassMethod;
 import org.apache.causeway.core.metamodel.facets.object.support.ObjectSupportFacetFactory;
@@ -39,7 +39,7 @@ import org.apache.causeway.core.metamodel.facets.object.support.ObjectSupportFac
 import lombok.val;
 
 class CssClassFacetMethodTest
-extends AbstractFacetFactoryJupiterTestCase {
+extends FacetFactoryTestAbstract {
 
     static final String CSS_CLASS = "someCssClass";
 
@@ -54,20 +54,12 @@ extends AbstractFacetFactoryJupiterTestCase {
 
     @BeforeEach
     void setup() {
-        super.setUpMmc();
         facetFactory = new ObjectSupportFacetFactory(getMetaModelContext());
     }
 
     @AfterEach
-    @Override
     protected void tearDown() throws Exception {
         facetFactory = null;
-        super.tearDown();
-    }
-
-    @BeforeEach
-    void setUp() throws Exception {
-        super.setUpMmc();
     }
 
     @Test

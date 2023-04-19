@@ -18,70 +18,64 @@
  */
 package org.apache.causeway.core.metamodel.facets.param.parameter;
 
-import java.lang.reflect.Method;
+import jakarta.validation.constraints.Pattern;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessParameterContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.causeway.core.metamodel.facets.param.parameter.regex.RegExFacetForPatternAnnotationOnParameter;
 
-import jakarta.validation.constraints.Pattern;
-
-class RegExAnnotationOnParameterFacetFactoryTest extends AbstractFacetFactoryTest {
+class RegExAnnotationOnParameterFacetFactoryTest
+extends FacetFactoryTestAbstract {
 
     private ParameterAnnotationFacetFactory facetFactory;
 
-    @Override
     @BeforeEach
-    public void setUp() throws Exception {
-        super.setUp();
-        facetFactory = new ParameterAnnotationFacetFactory(metaModelContext);
+    protected void setUp() {
+        facetFactory = new ParameterAnnotationFacetFactory(getMetaModelContext());
     }
 
-    public void testRegExAnnotationPickedUpOnActionParameter() {
-
+    @Test
+    void regExAnnotationPickedUpOnActionParameter() {
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
-            public void someAction(@Pattern(regexp = "^A.*", flags = { Pattern.Flag.CASE_INSENSITIVE }) final String foo) {
-            }
+            public void someAction(
+                    @Pattern(regexp = "^A.*", flags = { Pattern.Flag.CASE_INSENSITIVE })
+                    final String foo) {}
         }
-        final Method method = findMethod(Customer.class, "someAction", new Class[] { String.class });
-
-        facetFactory.processParams(
-                ProcessParameterContext.forTesting(
-                        Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, method, null, facetedMethodParameter));
-
-        final Facet facet = facetedMethodParameter.getFacet(RegExFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof RegExFacetForPatternAnnotationOnParameter);
-        final RegExFacetForPatternAnnotationOnParameter regExFacet = (RegExFacetForPatternAnnotationOnParameter) facet;
-        assertEquals("^A.*", regExFacet.regexp());
-        assertEquals(2, regExFacet.patternFlags());
+        parameterScenario(Customer.class, "someAction", 0, (processParameterContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+            //when
+            facetFactory.processParams(processParameterContext);
+            //then
+            final Facet facet = facetedMethodParameter.getFacet(RegExFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof RegExFacetForPatternAnnotationOnParameter);
+            final RegExFacetForPatternAnnotationOnParameter regExFacet = (RegExFacetForPatternAnnotationOnParameter) facet;
+            assertEquals("^A.*", regExFacet.regexp());
+            assertEquals(2, regExFacet.patternFlags());
+        });
     }
 
-    public void testRegExAnnotationIgnoredForPrimitiveOnActionParameter() {
-
+    @Test
+    void regExAnnotationIgnoredForPrimitiveOnActionParameter() {
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
-            public void someAction(final int foo) {
-            }
+            public void someAction(final int foo) {}
         }
-        final Method method = findMethod(Customer.class, "someAction", new Class[] { int.class });
-
-        facetFactory.processParams(
-                ProcessParameterContext.forTesting(
-                        Customer.class, IntrospectionPolicy.ANNOTATION_OPTIONAL, method, null, facetedMethodParameter));
-
-        assertNull(facetedMethod.getFacet(RegExFacet.class));
+        parameterScenario(Customer.class, "someAction", 0, (processParameterContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+            //when
+            facetFactory.processParams(processParameterContext);
+            //then
+            assertNull(facetedMethod.getFacet(RegExFacet.class));
+        });
     }
 
 }

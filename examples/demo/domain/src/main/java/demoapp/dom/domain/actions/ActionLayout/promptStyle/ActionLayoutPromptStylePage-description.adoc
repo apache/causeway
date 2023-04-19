@@ -67,3 +67,17 @@ causeway:
 ----
 
 NOTE: For both of these configuration properties, note that the two other variants (`inline` and `inline-as-if-edit`) are not available.
+
+=== .layout.xml
+
+Instead of using `@ActionLayout#promptStyle`, it is also possible to specify a name in the link:https://causeway.apache.org/userguide/2.0.0-RC1/fun/ui.html#by-example[.layout.xml] file:
+
+[source,xml]
+.Xxx.layout.xml
+----
+...
+<action id="updateName" promptStyle="MODAL"/>
+...
+----
+
+The main advantage of using the `.layout.xml` file is that changes can be picked up without having to restart the application.

@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.action;
 
-import java.lang.reflect.Method;
-
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -47,14 +45,12 @@ extends ActionAnnotationFacetFactoryTest {
     @Test
     void given_HasInteractionId_thenIgnored() {
         // given
-        final Method actionMethod = findMethod(SomeHasInteractionId.class, "someAction");
-
-        // when
-        processCommandPublishing(facetFactory, ProcessMethodContext
-                .forTesting(SomeHasInteractionId.class, null, actionMethod, mockMethodRemover, facetedMethod));
-
-        // then
-        assertFalse(CommandPublishingFacet.isPublishingEnabled(facetedMethod));
+        actionScenario(SomeHasInteractionId.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            processCommandPublishing(facetFactory, processMethodContext);
+            // then
+            assertFalse(CommandPublishingFacet.isPublishingEnabled(facetedMethod));
+        });
     }
 
     @Test
@@ -63,17 +59,15 @@ extends ActionAnnotationFacetFactoryTest {
         // given
         class Customer {
             @Action()
-            public void someAction() {
-            }
+            public void someAction() {}
         }
-        final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        // when
-        processCommandPublishing(facetFactory, ProcessMethodContext
-                .forTesting(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
-
-        // then
-        assertFalse(CommandPublishingFacet.isPublishingEnabled(facetedMethod));
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            processCommandPublishing(facetFactory, processMethodContext);
+            // then
+            assertFalse(CommandPublishingFacet.isPublishingEnabled(facetedMethod));
+        });
     }
 
     @Test
@@ -82,19 +76,17 @@ extends ActionAnnotationFacetFactoryTest {
         // given
         class Customer {
             @Action(commandPublishing = Publishing.ENABLED)
-            public void someAction() {
-            }
+            public void someAction() {}
         }
-        final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        // when
-        processCommandPublishing(facetFactory, ProcessMethodContext
-                .forTesting(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
-
-        // then
-        final Facet facet = facetedMethod.getFacet(CommandPublishingFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof CommandPublishingFacetForActionAnnotation);
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            processCommandPublishing(facetFactory, processMethodContext);
+            // then
+            final Facet facet = facetedMethod.getFacet(CommandPublishingFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof CommandPublishingFacetForActionAnnotation);
+        });
     }
 
 
@@ -104,17 +96,15 @@ extends ActionAnnotationFacetFactoryTest {
         // given
         class Customer {
             @Action(commandPublishing = Publishing.DISABLED)
-            public void someAction() {
-            }
+            public void someAction() {}
         }
-        final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        // when
-        processCommandPublishing(facetFactory, ProcessMethodContext
-                .forTesting(Customer.class, null, actionMethod, mockMethodRemover, facetedMethod));
-
-        // then
-        assertFalse(CommandPublishingFacet.isPublishingEnabled(facetedMethod));
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            processCommandPublishing(facetFactory, processMethodContext);
+            // then
+            assertFalse(CommandPublishingFacet.isPublishingEnabled(facetedMethod));
+        });
     }
 
 }
