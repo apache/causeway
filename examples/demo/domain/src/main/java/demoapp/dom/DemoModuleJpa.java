@@ -52,6 +52,7 @@ import demoapp.dom.domain.objects.DomainObjectLayout.tabledec.jpa.DomainObjectLa
 import demoapp.dom.domain.objects.DomainObjectLayout.xxxUiEvent.jpa.DomainObjectLayoutXxxUiEventJpa;
 import demoapp.dom.domain.progmodel.objects.embedded.embedded.jpa.NumberConstantJpa;
 import demoapp.dom.domain.properties.Property.commandPublishing.jpa.PropertyCommandPublishingJpa;
+import demoapp.dom.domain.properties.Property.editing.jpa.PropertyEditingJpa;
 import demoapp.dom.domain.properties.Property.executionPublishing.jpa.PropertyExecutionPublishingJpa;
 import demoapp.dom.domain.properties.Property.projecting.jpa.PropertyProjectingChildJpa;
 import demoapp.dom.domain.properties.PropertyLayout.hidden.jpa.PropertyLayoutHiddenJpa;
@@ -137,6 +138,7 @@ import demoapp.dom.types.primitive.shorts.jpa.PrimitiveShortJpa;
         ActionLayoutHiddenJpa.class,
 
         PropertyCommandPublishingJpa.class,
+        PropertyEditingJpa.class,
         PropertyExecutionPublishingJpa.class,
         PropertyProjectingChildJpa.class,
 

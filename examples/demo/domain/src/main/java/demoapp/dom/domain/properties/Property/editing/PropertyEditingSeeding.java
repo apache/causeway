@@ -16,28 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.Property.editingReasonDisabled;
+package demoapp.dom.domain.properties.Property.editing;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import javax.inject.Inject;
 
-import org.apache.causeway.applib.annotation.Editing;
-import org.apache.causeway.applib.annotation.Property;
+import org.springframework.stereotype.Service;
 
-//tag::class[]
-@Property(
-        editing = Editing.DISABLED,
-        editingDisabledReason = "disabled "
-        + "for demo purposes (meta annot.)")        // <.>
-@Inherited
-@Target({
-        ElementType.METHOD, ElementType.FIELD       // <.>
-})
-@Retention(RetentionPolicy.RUNTIME)
-public @interface EditingReasonDisabledMetaAnnotation {
+import demoapp.dom._infra.seed.SeedServiceAbstract;
+import demoapp.dom._infra.values.ValueHolderRepository;
+
+@Service
+public class PropertyEditingSeeding
+extends SeedServiceAbstract {
+
+    @Inject
+    public PropertyEditingSeeding(
+            ValueHolderRepository<String, ? extends PropertyEditing> entities) {
+        super(entities);
+    }
 
 }
-//end::class[]

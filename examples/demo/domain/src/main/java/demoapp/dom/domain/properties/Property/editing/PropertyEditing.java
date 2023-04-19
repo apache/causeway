@@ -18,23 +18,33 @@
  */
 package demoapp.dom.domain.properties.Property.editing;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Property;
 
-//tag::class[]
-@Property(editing = Editing.ENABLED)                // <.>
-@Inherited
-@Target({
-        ElementType.METHOD, ElementType.FIELD       // <.>
-})
-@Retention(RetentionPolicy.RUNTIME)
-public @interface EditingEnabledMetaAnnotation {
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolder;
 
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
+public abstract class PropertyEditing
+        implements
+        HasAsciiDocDescription,
+        ValueHolder<String> {
+
+    public String title() {
+        return value();
+    }
+
+    @Override
+    public String value() {
+        return getName();
+    }
+
+    public abstract String getName();
+    public abstract void setName(String value);
+
+    @Property(editing = Editing.DISABLED, editingDisabledReason = "This property cannot be edited")
+    public abstract String getOriginalName();
+    public abstract void setOriginalName(String value);
+
+    public abstract Character getInitialCharacter();
 }
-//end::class[]

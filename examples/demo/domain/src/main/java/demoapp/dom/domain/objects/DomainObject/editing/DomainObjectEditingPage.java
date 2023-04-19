@@ -34,7 +34,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.DomainObjectEditingVm")
+@Named("demo.DomainObjectEditingPage")
 @DomainObject(
         editing = Editing.ENABLED)
 public class DomainObjectEditingPage implements HasAsciiDocDescription {

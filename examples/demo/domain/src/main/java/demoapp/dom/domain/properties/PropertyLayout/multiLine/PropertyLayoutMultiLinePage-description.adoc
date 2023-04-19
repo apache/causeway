@@ -24,7 +24,7 @@ include::PropertyLayoutMultiLinePage.java[tags=annotation]
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutMultiLineVm_updateWithParameterLayout.java[tags=annotation]
+include::PropertyLayoutMultiLinePage_updateWithParameterLayout.java[tags=annotation]
 ----
 <.> explicitly specifies that the parameter should use a textbox
 
@@ -59,7 +59,7 @@ The `@PropertyLayout` can also be applied at the class-level to mixin properties
 
 [source,java,indent=0]
 ----
-include::PropertyLayoutMultiLineVm_mixinProperty.java[tags=class]
+include::PropertyLayoutMultiLinePage_mixinProperty.java[tags=class]
 ----
 <.> explicitly specifies that the contributed property should use a textbox
 
@@ -91,7 +91,7 @@ include::PropertyLayoutMultiLinePage.java[tags=meta-annotated]
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutMultiLineVm_updateWithMetaAnnotation.java[tags=meta-annotation]
+include::PropertyLayoutMultiLinePage_updateWithMetaAnnotation.java[tags=meta-annotation]
 ----
 <.> hint is inherited from the meta-annotation
 
@@ -99,7 +99,7 @@ include::PropertyLayoutMultiLineVm_updateWithMetaAnnotation.java[tags=meta-annot
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutMultiLineVm_mixinPropertyWithMetaAnnotation.java[tags=class]
+include::PropertyLayoutMultiLinePage_mixinPropertyWithMetaAnnotation.java[tags=class]
 ----
 <.> hint is inherited from the meta-annotation
 
@@ -120,7 +120,7 @@ include::PropertyLayoutMultiLinePage.java[tags=meta-annotated-overridden]
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutMultiLineVm_updateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
+include::PropertyLayoutMultiLinePage_updateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
 ----
 <.> hint from meta-annotation ...
 <.> \... is overridden by the `@ParameterLayout` annotation
@@ -130,7 +130,7 @@ include::PropertyLayoutMultiLineVm_updateWithMetaAnnotationOverridden.java[tags=
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutMultiLineVm_mixinPropertyWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
+include::PropertyLayoutMultiLinePage_mixinPropertyWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
 ----
 <.> hint from meta-annotation ...
 <.> \... is overridden by the `@PropertyLayout` annotation

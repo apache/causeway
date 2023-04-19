@@ -26,7 +26,7 @@ include::PropertyLayoutLabelPositionPage.java[tags=annotation]
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutLabelPositionVm_updateWithParameterLayout.java[tags=annotation]
+include::PropertyLayoutLabelPositionPage_updateWithParameterLayout.java[tags=annotation]
 ----
 <.> explicitly specifies the label position for the parameter
 
@@ -59,7 +59,7 @@ The `@PropertyLayout` can also be applied at the class-level to mixin properties
 
 [source,java,indent=0]
 ----
-include::PropertyLayoutLabelPositionVm_mixinProperty.java[tags=class]
+include::PropertyLayoutLabelPositionPage_mixinProperty.java[tags=class]
 ----
 <.> explicitly specifies the label position for the contributed property
 
@@ -91,7 +91,7 @@ include::PropertyLayoutLabelPositionPage.java[tags=meta-annotated]
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutLabelPositionVm_updateWithMetaAnnotation.java[tags=meta-annotation]
+include::PropertyLayoutLabelPositionPage_updateWithMetaAnnotation.java[tags=meta-annotation]
 ----
 <.> hint is inherited from the meta-annotation
 
@@ -99,7 +99,7 @@ include::PropertyLayoutLabelPositionVm_updateWithMetaAnnotation.java[tags=meta-a
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutLabelPositionVm_mixinPropertyWithMetaAnnotation.java[tags=class]
+include::PropertyLayoutLabelPositionPage_mixinPropertyWithMetaAnnotation.java[tags=class]
 ----
 <.> hint is inherited from the meta-annotation
 
@@ -120,7 +120,7 @@ include::PropertyLayoutLabelPositionPage.java[tags=meta-annotated-overridden]
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutLabelPositionVm_updateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
+include::PropertyLayoutLabelPositionPage_updateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
 ----
 <.> hint from meta-annotation ...
 <.> \... is overridden by the `@ParameterLayout` annotation
@@ -130,7 +130,7 @@ include::PropertyLayoutLabelPositionVm_updateWithMetaAnnotationOverridden.java[t
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutLabelPositionVm_mixinPropertyWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
+include::PropertyLayoutLabelPositionPage_mixinPropertyWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
 ----
 <.> hint from meta-annotation ...
 <.> \... is overridden by the `@PropertyLayout` annotation
@@ -153,7 +153,7 @@ And for a parameter:
 
 [source,java,indent=0]
 ----
-include::PropertyLayoutLabelPositionVm_updateVariantLeft.java[tags=annotation]
+include::PropertyLayoutLabelPositionPage_updateVariantLeft.java[tags=annotation]
 ----
 
 === Top
@@ -169,7 +169,7 @@ And for a parameter:
 
 [source,java,indent=0]
 ----
-include::PropertyLayoutLabelPositionVm_updateVariantTop.java[tags=annotation]
+include::PropertyLayoutLabelPositionPage_updateVariantTop.java[tags=annotation]
 ----
 
 === Right
@@ -227,7 +227,7 @@ And for a parameter:
 
 [source,java,indent=0]
 ----
-include::PropertyLayoutLabelPositionVm_updateVariantNotSpecified.java[tags=annotation]
+include::PropertyLayoutLabelPositionPage_updateVariantNotSpecified.java[tags=annotation]
 ----
 
 The default position itself can be configured globally, in the `application.yml` or `application.properties` configuration file.
