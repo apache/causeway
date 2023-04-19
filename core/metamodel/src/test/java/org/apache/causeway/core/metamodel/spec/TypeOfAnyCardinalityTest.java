@@ -41,23 +41,17 @@ class TypeOfAnyCardinalityTest {
     static abstract class X {
         public abstract CharSequence[] someStrings();
     }
-
     static class Y extends X {
         @Override
-        public CharSequence[] someStrings() {
-            return new String[]{};
-        }
+        public CharSequence[] someStrings() { return new String[]{}; }
     }
-
     static class Z extends X {
         @Override
-        public String[] someStrings() {
-            return new String[]{};
-        }
+        public String[] someStrings() { return new String[]{}; }
     }
 
     @Test
-    void testArray() {
+    void array() {
 
         val array = new String[]{};
 
@@ -69,7 +63,7 @@ class TypeOfAnyCardinalityTest {
         val arC = new CharSequence[] {};
         val arS = new String[] {};
 
-        test(X.class, Y.class, Z.class,
+        assertTypeDetected(X.class, Y.class, Z.class,
                 CharSequence.class, CharSequence.class, String.class,
                 arC.getClass(), arC.getClass(), arS.getClass());
     }
@@ -95,8 +89,8 @@ class TypeOfAnyCardinalityTest {
     }
 
     @Test
-    void testString() {
-        test(A.class, B.class, C.class,
+    void string() {
+        assertTypeDetected(A.class, B.class, C.class,
                 String.class, String.class, String.class,
                 Set.class, Set.class, SortedSet.class);
     }
@@ -122,8 +116,8 @@ class TypeOfAnyCardinalityTest {
     }
 
     @Test
-    void testUpperBounded() {
-        test(E.class, F.class, G.class,
+    void upperBounded() {
+        assertTypeDetected(E.class, F.class, G.class,
                 CharSequence.class, CharSequence.class, String.class,
                 Set.class, Set.class, SortedSet.class);
     }
@@ -131,7 +125,7 @@ class TypeOfAnyCardinalityTest {
     // -- HELPER
 
     @SneakyThrows
-    void test(final Class<?> a, final Class<?> b, final Class<?> c,
+    void assertTypeDetected(final Class<?> a, final Class<?> b, final Class<?> c,
             final Class<?> genericA, final Class<?> genericB, final Class<?> genericC,
             final Class<?> contA, final Class<?> contB, final Class<?> contC) {
 

@@ -60,7 +60,7 @@ extends MetaModelTestAbstract {
 
 
     @Test
-    void testNameDefaultsToActionsMethodName() {
+    void nameDefaultsToActionsMethodName() {
         final String name = "Reduceheadcount";
 
         doReturn(new MemberNamedFacetWithStaticTextAbstract(name, mockFacetedMethod) {})
@@ -70,7 +70,7 @@ extends MetaModelTestAbstract {
     }
 
     @Test
-    void testId() {
+    void id() {
         assertEquals("reduceheadcount", action.getId());
     }
 

@@ -47,20 +47,20 @@ class SpecificationLoaderTest_nonScalar {
             return specLoader.loadSpecification(ReflectorTestPojo[].class);
         }
 
-        @Test void testType() throws Exception {
+        @Test void type() throws Exception {
             assertTrue(specification.isPlural());
         }
 
-        @Test void testName() throws Exception {
+        @Test void name() throws Exception {
             assertEquals(ReflectorTestPojo[].class.getName(), specification.getFullIdentifier());
         }
 
-        @Test @Override public void testCollectionFacet() throws Exception {
+        @Test @Override void collectionFacet() throws Exception {
             val collectionFacet = specification.getFacet(CollectionFacet.class);
             assertNotNull(collectionFacet);
         }
 
-        @Test @Override public void testTypeOfFacet() throws Exception {
+        @Test @Override void typeOfFacet() throws Exception {
             val typeOfFacet = specification.getFacet(TypeOfFacet.class);
             assertNotNull(typeOfFacet);
             assertEquals(Optional.of(ReflectorTestPojo[].class), typeOfFacet.value().getContainerType());
@@ -77,20 +77,20 @@ class SpecificationLoaderTest_nonScalar {
             return specLoader.loadSpecification(Can.class);
         }
 
-        @Test void testType() throws Exception {
+        @Test void type() throws Exception {
             assertTrue(specification.isPlural());
         }
 
-        @Test void testName() throws Exception {
+        @Test void name() throws Exception {
             assertEquals(Can.class.getName(), specification.getFullIdentifier());
         }
 
-        @Test @Override public void testCollectionFacet() throws Exception {
+        @Test @Override public void collectionFacet() throws Exception {
             final Facet facet = specification.getFacet(CollectionFacet.class);
             assertNotNull(facet);
         }
 
-        @Test @Override public void testTypeOfFacet() throws Exception {
+        @Test @Override public void typeOfFacet() throws Exception {
             final TypeOfFacet facet = specification.getFacet(TypeOfFacet.class);
             assertNotNull(facet);
             assertEquals(Optional.of(Can.class), facet.value().getContainerType());
@@ -107,20 +107,20 @@ class SpecificationLoaderTest_nonScalar {
             return specLoader.loadSpecification(Vector.class);
         }
 
-        @Test void testType() throws Exception {
+        @Test void type() throws Exception {
             assertTrue(specification.isPlural());
         }
 
-        @Test void testName() throws Exception {
+        @Test void name() throws Exception {
             assertEquals(Vector.class.getName(), specification.getFullIdentifier());
         }
 
-        @Test @Override public void testCollectionFacet() throws Exception {
+        @Test @Override public void collectionFacet() throws Exception {
             final Facet facet = specification.getFacet(CollectionFacet.class);
             assertNotNull(facet);
         }
 
-        @Test @Override public void testTypeOfFacet() throws Exception {
+        @Test @Override public void typeOfFacet() throws Exception {
             final TypeOfFacet facet = specification.getFacet(TypeOfFacet.class);
             assertNotNull(facet);
             assertEquals(Optional.of(Vector.class), facet.value().getContainerType());

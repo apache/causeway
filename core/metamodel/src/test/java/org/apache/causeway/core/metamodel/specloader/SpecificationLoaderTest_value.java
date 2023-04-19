@@ -25,7 +25,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-class SpecificationLoaderTest_value extends SpecificationLoaderTestAbstract {
+class SpecificationLoaderTest_value
+extends SpecificationLoaderTestAbstract {
 
     @Override
     protected ObjectSpecification loadSpecification(final SpecificationLoader reflector) {
@@ -33,12 +34,12 @@ class SpecificationLoaderTest_value extends SpecificationLoaderTestAbstract {
     }
 
     @Test
-    public void testType() throws Exception {
+    void type() throws Exception {
         assertTrue(specification.isSingular());
     }
 
     @Test
-    public void testName() throws Exception {
+    void mame() throws Exception {
         assertEquals(String.class.getName(), specification.getFullIdentifier());
     }
 

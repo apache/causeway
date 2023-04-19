@@ -19,10 +19,7 @@
 package org.apache.causeway.core.metamodel.facets;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -30,38 +27,37 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
 
-@ExtendWith(MockitoExtension.class)
 class ObjectAdapterUtilsTest {
 
-    @Mock private ManagedObject mockObjectAdapter;
+    private ManagedObject mockObjectAdapter = Mockito.mock(ManagedObject.class);
     private Object underlyingDomainObject;
 
     @Test
-    public void testUnwrapObjectWhenNull() {
+    void unwrapObjectWhenNull() {
         assertNull(MmUnwrapUtil.single((ManagedObject)null));
     }
 
     @Test
-    public void testUnwrapObjectWhenNotNull() {
+    void unwrapObjectWhenNotNull() {
         underlyingDomainObject = new Object();
         expectAdapterWillReturn(underlyingDomainObject);
         assertEquals(underlyingDomainObject, MmUnwrapUtil.single(mockObjectAdapter));
     }
 
     @Test
-    public void testUnwrapStringWhenNull() {
+    void unwrapStringWhenNull() {
         assertNull(MmUnwrapUtil.singleAsStringOrElse(null, null));
     }
 
     @Test
-    public void testUnwrapStringWhenNotNullButNotString() {
+    void unwrapStringWhenNotNullButNotString() {
         underlyingDomainObject = new Object();
         expectAdapterWillReturn(underlyingDomainObject);
         assertNull(MmUnwrapUtil.singleAsStringOrElse(mockObjectAdapter, null));
     }
 
     @Test
-    public void testUnwrapStringWhenNotNullAndString() {
+    void unwrapStringWhenNotNullAndString() {
         underlyingDomainObject = "huzzah";
         expectAdapterWillReturn(underlyingDomainObject);
         assertEquals("huzzah", MmUnwrapUtil.singleAsStringOrElse(mockObjectAdapter, null));

@@ -47,7 +47,7 @@ abstract class SpecificationLoaderTestAbstract {
     protected ObjectSpecification specification;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() throws Exception {
 
         // PRODUCTION
 
@@ -60,28 +60,28 @@ abstract class SpecificationLoaderTestAbstract {
     }
 
     @AfterEach
-    public void tearDown() throws Exception {
+    void tearDown() throws Exception {
         metaModelContext.getSpecificationLoader().disposeMetaModel();
     }
 
     protected abstract ObjectSpecification loadSpecification(SpecificationLoader reflector);
 
     @Test
-    public void testCollectionFacet() throws Exception {
+    void collectionFacet() throws Exception {
         final Facet facet = specification.getFacet(CollectionFacet.class);
         assertNull(facet);
     }
 
 
     @Test
-    public void testTypeOfFacet() throws Exception {
+    void typeOfFacet() throws Exception {
         final TypeOfFacet facet = specification.getFacet(TypeOfFacet.class);
         assertNull(facet);
     }
 
 
     @Test
-    public void testNamedFaced() throws Exception {
+    void namedFaced() throws Exception {
 
         val facet = specification.lookupFacet(ObjectNamedFacet.class)
                 .map(Facet.class::cast)
@@ -92,7 +92,7 @@ abstract class SpecificationLoaderTestAbstract {
     }
 
     @Test @Disabled("we allow descriptions to be absent - no need to install empty fallbacks")
-    public void testDescriptionFacet() throws Exception {
+    void descriptionFacet() throws Exception {
 
         val facet = specification.lookupFacet(ObjectDescribedFacet.class)
                 .map(Facet.class::cast)

@@ -66,14 +66,14 @@ public class Annotations_synthesizeElseOnClass_Test {
 
 
     @Test
-    public void on_method() throws Exception {
+    void on_method() throws Exception {
 
         class SomeTestCase {
             @InteracAs(usrName = "sven")
-            public void test() {}
+            public void action() {}
         }
 
-        val method = SomeTestCase.class.getMethod("test");
+        val method = SomeTestCase.class.getMethod("action");
         val nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
 
         assertThat(nearest.isPresent(), is(true));
@@ -81,14 +81,14 @@ public class Annotations_synthesizeElseOnClass_Test {
     }
 
     @Test
-    public void meta() throws Exception {
+    void meta() throws Exception {
 
         class SomeTestCase {
             @InteracdAsJoe
-            public void test() {}
+            public void action() {}
         }
 
-        val method = SomeTestCase.class.getMethod("test");
+        val method = SomeTestCase.class.getMethod("action");
         val nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
 
         assertThat(nearest.isPresent(), is(true));
@@ -96,14 +96,14 @@ public class Annotations_synthesizeElseOnClass_Test {
     }
 
     @Test
-    public void metaMeta() throws Exception {
+    void metaMeta() throws Exception {
 
         class SomeTestCase {
             @MetaInteractAsJoe
-            public void test() {}
+            public void action() {}
         }
 
-        val method = SomeTestCase.class.getMethod("test");
+        val method = SomeTestCase.class.getMethod("action");
         val nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
 
         assertThat(nearest.isPresent(), is(true));
@@ -111,15 +111,15 @@ public class Annotations_synthesizeElseOnClass_Test {
     }
 
     @Test
-    public void meta_and_metaMeta() throws Exception {
+    void meta_and_metaMeta() throws Exception {
 
         class SomeTestCase {
             @MetaInteractAsJoe
             @InteracdAsJoe
-            public void test() {}
+            public void action() {}
         }
 
-        val method = SomeTestCase.class.getMethod("test");
+        val method = SomeTestCase.class.getMethod("action");
         val nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
 
         assertThat(nearest.isPresent(), is(true));
@@ -127,15 +127,15 @@ public class Annotations_synthesizeElseOnClass_Test {
     }
 
     @Test
-    public void meta_overrides_metaMeta() throws Exception {
+    void meta_overrides_metaMeta() throws Exception {
 
         class SomeTestCase {
             @MetaInteractAsJoe
             @InteracdAsSven
-            public void test() {}
+            public void action() {}
         }
 
-        val method = SomeTestCase.class.getMethod("test");
+        val method = SomeTestCase.class.getMethod("action");
         val nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
 
         assertThat(nearest.isPresent(), is(true));
@@ -143,16 +143,16 @@ public class Annotations_synthesizeElseOnClass_Test {
     }
 
     @Test
-    public void direct_overrides_metaMeta() throws Exception {
+    void direct_overrides_metaMeta() throws Exception {
 
         class SomeTestCase {
             @MetaInteractAsJoe
             @InteracdAsSven
             @InteracAs(usrName = "bill")
-            public void test() {}
+            public void action() {}
         }
 
-        val method = SomeTestCase.class.getMethod("test");
+        val method = SomeTestCase.class.getMethod("action");
         val nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
 
         assertThat(nearest.isPresent(), is(true));
@@ -161,15 +161,15 @@ public class Annotations_synthesizeElseOnClass_Test {
 
 
     @Test
-    public void from_class() throws Exception {
+    void from_class() throws Exception {
 
         @InteracAs(usrName = "bill")
         @SuppressWarnings("unused")
         class SomeTestCase {
-            public void test() {}
+            public void action() {}
         }
 
-        val method = SomeTestCase.class.getMethod("test");
+        val method = SomeTestCase.class.getMethod("action");
         val nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
 
         assertThat(nearest.isPresent(), is(true));
@@ -177,17 +177,17 @@ public class Annotations_synthesizeElseOnClass_Test {
     }
 
     @Test
-    public void from_superclass() throws Exception {
+    void from_superclass() throws Exception {
 
         @InteracAs(usrName = "bill")
         class SomeSuperTestCase {
         }
         @SuppressWarnings("unused")
         class SomeTestCase extends SomeSuperTestCase {
-            public void test() {}
+            public void action() {}
         }
 
-        val method = SomeTestCase.class.getMethod("test");
+        val method = SomeTestCase.class.getMethod("action");
         val nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
 
         assertThat(nearest.isPresent(), is(true));
@@ -195,7 +195,7 @@ public class Annotations_synthesizeElseOnClass_Test {
     }
 
     @Test
-    public void class_overrides_from_superclass() throws Exception {
+    void class_overrides_from_superclass() throws Exception {
 
         @InteracAs(usrName = "bill")
         class SomeSuperTestCase {
@@ -204,10 +204,10 @@ public class Annotations_synthesizeElseOnClass_Test {
         @InteracAs(usrName = "fred")
         @SuppressWarnings("unused")
         class SomeTestCase extends SomeSuperTestCase {
-            public void test() {}
+            public void action() {}
         }
 
-        val method = SomeTestCase.class.getMethod("test");
+        val method = SomeTestCase.class.getMethod("action");
         val nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
 
         assertThat(nearest.isPresent(), is(true));
@@ -215,15 +215,15 @@ public class Annotations_synthesizeElseOnClass_Test {
     }
 
     @Test
-    public void method_overrides_class() throws Exception {
+    void method_overrides_class() throws Exception {
 
         @InteracAs(usrName = "fred")
         class SomeTestCase  {
             @InteracAs(usrName = "bill")
-            public void test() {}
+            public void action() {}
         }
 
-        val method = SomeTestCase.class.getMethod("test");
+        val method = SomeTestCase.class.getMethod("action");
         val nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
 
         assertThat(nearest.isPresent(), is(true));
@@ -231,15 +231,15 @@ public class Annotations_synthesizeElseOnClass_Test {
     }
 
     @Test
-    public void meta_on_method_overrides_class() throws Exception {
+    void meta_on_method_overrides_class() throws Exception {
 
         @InteracAs(usrName = "fred")
         class SomeTestCase  {
             @InteracdAsJoe
-            public void test() {}
+            public void action() {}
         }
 
-        val method = SomeTestCase.class.getMethod("test");
+        val method = SomeTestCase.class.getMethod("action");
         val nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
 
         assertThat(nearest.isPresent(), is(true));
@@ -247,22 +247,22 @@ public class Annotations_synthesizeElseOnClass_Test {
     }
 
     @Test
-    public void local_class_overrides_method_on_superclass() throws Exception {
+    void local_class_overrides_method_on_superclass() throws Exception {
 
         class SomeSuperClass  {
             @InteracAs(usrName = "bill")
-            public void test() {}
+            public void action() {}
         }
 
         @InteracdAsSven
         class SomeTestCase extends SomeSuperClass {
             @Override
-            public void test() {
-                super.test();
+            public void action() {
+                super.action();
             }
         }
 
-        val method = SomeTestCase.class.getMethod("test");
+        val method = SomeTestCase.class.getMethod("action");
         val nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
 
         assertThat(nearest.isPresent(), is(true));
@@ -270,22 +270,22 @@ public class Annotations_synthesizeElseOnClass_Test {
     }
 
     @Test
-    public void meta_on_local_class_overrides_method_on_superclass() throws Exception {
+    void meta_on_local_class_overrides_method_on_superclass() throws Exception {
 
         class SomeSuperClass  {
             @InteracAs(usrName = "bill")
-            public void test() {}
+            public void action() {}
         }
 
         @MetaInteractAsJoe
         class SomeTestCase extends SomeSuperClass {
             @Override
-            public void test() {
-                super.test();
+            public void action() {
+                super.action();
             }
         }
 
-        val method = SomeTestCase.class.getMethod("test");
+        val method = SomeTestCase.class.getMethod("action");
         val nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
 
         assertThat(nearest.isPresent(), is(true));

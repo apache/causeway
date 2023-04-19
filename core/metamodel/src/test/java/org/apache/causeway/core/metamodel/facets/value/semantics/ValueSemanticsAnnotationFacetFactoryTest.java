@@ -22,6 +22,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.FormatStyle;
 
+import org.junit.jupiter.api.Test;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -41,13 +43,13 @@ import org.apache.causeway.core.metamodel.facets.objectvalue.temporalformat.Date
 import org.apache.causeway.core.metamodel.facets.objectvalue.temporalformat.TimeFormatStyleFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.temporalformat.TimeZoneTranslationFacet;
 
-@SuppressWarnings("unused")
 class ValueSemanticsAnnotationFacetFactoryTest
 extends FacetFactoryTestAbstract {
 
     // -- MAX TOTAL DIGITS
 
-    public void testMaxTotalPickedUpOnProperty() {
+    @Test
+    void maxTotalPickedUpOnProperty() {
         // given
         class Order {
             @ValueSemantics(maxTotalDigits = 5)
@@ -64,8 +66,10 @@ extends FacetFactoryTestAbstract {
         });
     }
 
-    public void testMaxTotalPickedUpOnActionParameter() {
+    @Test
+    void maxTotalPickedUpOnActionParameter() {
         // given
+        @SuppressWarnings("unused")
         class Order {
             public void updateCost(
                     @ValueSemantics(maxTotalDigits = 5)
@@ -84,7 +88,8 @@ extends FacetFactoryTestAbstract {
 
     // -- MIN INTEGER DIGITS
 
-    public void testMinIntegerPickedUpOnProperty() {
+    @Test
+    void minIntegerPickedUpOnProperty() {
         // given
         class Order {
             @ValueSemantics(minIntegerDigits = 5)
@@ -101,8 +106,10 @@ extends FacetFactoryTestAbstract {
         });
     }
 
-    public void testMinIntegerPickedUpOnActionParameter() {
+    @Test
+    void minIntegerPickedUpOnActionParameter() {
         // given
+        @SuppressWarnings("unused")
         class Order {
             public void updateCost(
                     @ValueSemantics(minIntegerDigits = 5)
@@ -121,7 +128,8 @@ extends FacetFactoryTestAbstract {
 
     // -- MAX FRACTIONAL DIGITS
 
-    public void testMaxFracionalPickedUpOnProperty() {
+    @Test
+    void maxFracionalPickedUpOnProperty() {
         // given
         class Order {
             @ValueSemantics(maxFractionalDigits = 5)
@@ -138,8 +146,10 @@ extends FacetFactoryTestAbstract {
         });
     }
 
-    public void testMaxFracionalPickedUpOnActionParameter() {
+    @Test
+    void maxFracionalPickedUpOnActionParameter() {
         // given
+        @SuppressWarnings("unused")
         class Order {
             public void updateCost(
                     @ValueSemantics(maxFractionalDigits = 5)
@@ -158,7 +168,8 @@ extends FacetFactoryTestAbstract {
 
     // -- MIN FRACTIONAL DIGITS
 
-    public void testMinFracionalPickedUpOnProperty() {
+    @Test
+    void minFracionalPickedUpOnProperty() {
         // given
         class Order {
             @ValueSemantics(minFractionalDigits = 5)
@@ -175,8 +186,10 @@ extends FacetFactoryTestAbstract {
         });
     }
 
-    public void testMinFracionalPickedUpOnActionParameter() {
+    @Test
+    void minFracionalPickedUpOnActionParameter() {
         // given
+        @SuppressWarnings("unused")
         class Order {
             public void updateCost(
                     @ValueSemantics(minFractionalDigits = 5)
@@ -195,7 +208,8 @@ extends FacetFactoryTestAbstract {
 
     // -- DIGITS ANNOTATION
 
-    public void testDigitsAnnotationPickedUpOnProperty() {
+    @Test
+    void digitsAnnotationPickedUpOnProperty() {
         // given
         class Order {
             @javax.validation.constraints.Digits(integer=14, fraction=4)
@@ -209,8 +223,10 @@ extends FacetFactoryTestAbstract {
         });
     }
 
-    public void testDigitsAnnotationPickedUpOnActionParameter() {
+    @Test
+    void digitsAnnotationPickedUpOnActionParameter() {
         // given
+        @SuppressWarnings("unused")
         class Order {
             public void updateCost(
                     @javax.validation.constraints.Digits(integer=14, fraction=4)
@@ -226,7 +242,8 @@ extends FacetFactoryTestAbstract {
 
     // -- CONSTRAINT MERGERS
 
-    public void testMultipleAnnotationsMergedOnProperty() {
+    @Test
+    void multipleAnnotationsMergedOnProperty() {
         // given
         class Order {
 
@@ -280,7 +297,8 @@ extends FacetFactoryTestAbstract {
 
     // -- TEMPORAL FORMAT STYLE
 
-    public void testDateAdjustPickedUpOnProperty() {
+    @Test
+    void dateAdjustPickedUpOnProperty() {
         // given
         class Order {
             @ValueSemantics(dateRenderAdjustDays = ValueSemantics.AS_DAY_BEFORE)
@@ -294,7 +312,8 @@ extends FacetFactoryTestAbstract {
         });
     }
 
-    public void testTimeZoneTranslationPickedUpOnProperty() {
+    @Test
+    void timeZoneTranslationPickedUpOnProperty() {
         // given
         class Order {
             @ValueSemantics(timeZoneTranslation = TimeZoneTranslation.NONE)
@@ -318,7 +337,8 @@ extends FacetFactoryTestAbstract {
         });
     }
 
-    public void testDateFormatStylePickedUpOnProperty() {
+    @Test
+    void dateFormatStylePickedUpOnProperty() {
         // given
         class Order {
             @ValueSemantics(dateFormatStyle = FormatStyle.FULL)
@@ -333,7 +353,8 @@ extends FacetFactoryTestAbstract {
         });
     }
 
-    public void testTimeFormatStylePickedUpOnProperty() {
+    @Test
+    void timeFormatStylePickedUpOnProperty() {
         // given
         class Order {
             @ValueSemantics(timeFormatStyle = FormatStyle.FULL)
@@ -441,7 +462,5 @@ extends FacetFactoryTestAbstract {
         assertNotNull(facet);
         assertThat(facet.getTimeZoneTranslation(), is(timeZoneTranslation));
     }
-
-
 
 }
