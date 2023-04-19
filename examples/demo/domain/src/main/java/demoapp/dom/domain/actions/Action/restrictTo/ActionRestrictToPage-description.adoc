@@ -14,7 +14,7 @@ export PROTOTYPING=true
 ----
 
 
-=== How this demo works
+== How this demo works
 
 This page is a view model that defines three actions, each of which defines a different `restrictTo` element:
 

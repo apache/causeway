@@ -43,7 +43,7 @@ The end-user can select the choices using checkboxes rendered with the collectio
 TIP: Such actions are sometimes called "bulk" actions because they (can) act upon many objects at once.
 
 
-=== How this demo works
+== How this demo works
 
 The collection on the left hand side shows a set of domain objects, along with a couple of actions that both accept a collection of said objects as one of their parameters.
 

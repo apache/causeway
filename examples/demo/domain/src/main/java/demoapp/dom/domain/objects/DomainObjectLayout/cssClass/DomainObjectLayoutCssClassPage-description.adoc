@@ -4,7 +4,7 @@ The link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annota
 
 The idea is that corresponding styling is added to the `css/application.css` file that the framework's UI references in every response, so that certain domain classes -- perhaps the most important ones in the domain -- are always rendered with their own specific styling.
 
-=== How this demo works
+== How this demo works
 
 The collection on the left shows a list of entities where the `cssClass` attribute has been set to a value of "custom".
 

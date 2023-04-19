@@ -14,7 +14,7 @@ It is designed for integration scenarios, interacting with downstream systems.
 It is of course also possible to register additional subscribers for your own purposes.
 
 
-=== How this demo works
+== How this demo works
 
 The collection on the left hand side shows a list of entities.
 Those entities have two properties, `name` and `description`.
@@ -25,7 +25,7 @@ Navigate into the entities and edit the properties.
 Editing the published property will result in the execution representing the property edit invocation being persisted; these are listed in the collection at the bottom of the entity's page.
 
 
-=== Related configuration property
+== Related configuration property
 
 To set the global default for `executionPublishing`, use this configuration property:
 

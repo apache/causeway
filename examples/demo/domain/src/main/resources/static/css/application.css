@@ -324,3 +324,17 @@ tr.odd.custom2 > td,
 .navbar-nav.tertiary ul.dropdown-menu {
     max-height: 800px;
 }
+
+div.sect1 > h2 {
+    font-size: 1.5rem;
+    font-weight: bolder;
+}
+div.sect2 > h3 {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+div.sect3 > h4 {
+    font-size: 1.1rem;
+    font-style: italic;
+    font-weight: bold;
+}

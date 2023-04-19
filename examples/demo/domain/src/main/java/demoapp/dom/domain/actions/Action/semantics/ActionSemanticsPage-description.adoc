@@ -22,11 +22,11 @@ Note this does require that the action is invoked "through" the link:https://cau
 
 * `NON_IDEMPOTENT_ARE_YOU_SURE` similarly displays an "are you sure" prompt, but for non-idempotent actions.
 
-=== How this demo works
+== How this demo works
 
 This page provides actions with different semantics.
 
-==== No annotations
+=== No annotations
 
 If the `semantics` element is omitted completely, then the action is assumed to be non-idempotent:
 
@@ -36,7 +36,7 @@ include::ActionSemanticsPage.java[tags=action-no-annotation]
 ----
 <.> does not indicate any `semantic` element, and so non-idempotent is assumed
 
-==== Annotated as Safe
+=== Annotated as Safe
 
 An action with safe semantics means that there are bi side-effects; it does not change the state of the system.
 This is also sometimes called _query-only_.
@@ -55,7 +55,7 @@ The framework does not verify or ensure that the action results in no side-effec
 ====
 
 
-===== Safe and Request Cacheable
+==== Safe and Request Cacheable
 
 Since invoking a safe query-only action will often return the same result (at least for some short period of time), the framework also provides a variant that will automatically cache the result for the duration of the interaction (HTTP request).
 
@@ -83,7 +83,7 @@ include::ActionSemanticsPage.java[tags=action-semantics-safe-and-request-cacheab
 
 In this case the called action should indicate it was only executed once.
 
-==== Annotated as Idempotent
+=== Annotated as Idempotent
 
 Annotating an action as idempotent means that it will change the state of the system, but invoking more than once will not change the state of the system further.
 
@@ -99,7 +99,7 @@ include::ActionSemanticsPage.java[tags=action-semantics-idempotent]
 ----
 <.> idempotent semantics
 
-===== Idempotent, are you sure?
+==== Idempotent, are you sure?
 
 Because an idempotent action will change the state of the system, the framework offers a variant that will cause the viewer to render an "are you sure?" pop-up.
 
@@ -110,7 +110,7 @@ include::ActionSemanticsPage.java[tags=action-semantics-idempotent-are-you-sure]
 <.> idempotent semantics, with "are you sure" prompt
 
 
-==== Annotated as Not Idempotent
+=== Annotated as Not Idempotent
 
 Annotating an action as non-idempotent means that it will change the state of the system, and invoking more than once will change the state of the system further.
 
@@ -123,7 +123,7 @@ include::ActionSemanticsPage.java[tags=action-semantics-non-idempotent]
 <.> non-idempotent semantics
 
 
-===== Not idempotent, are you sure ?
+==== Not idempotent, are you sure ?
 
 Because a non-idempotent action will change the state of the system, the framework offers a variant that will cause the viewer to render an "are you sure?" pop-up.
 

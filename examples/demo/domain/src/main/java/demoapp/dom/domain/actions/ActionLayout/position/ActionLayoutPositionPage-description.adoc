@@ -12,7 +12,7 @@ The link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annota
 
 * as a drop-down of the panel containing the property.
 
-=== How this demo works
+== How this demo works
 
 This demo page defines two properties, each with four corresponding mixin actions that simply update the property.
 However, the actions are positioned in the four different location.

@@ -7,7 +7,7 @@ NOTE: for parented collections, the `tableDecorator` value can be overridden on 
 There is currently just one decorator available, for link:https://datatables.net/[datatables.net].
 If specified, the effect of `@DomainObjectLayout#paged` or `@CollectionLayout#paged` is ignored.
 
-=== How this demo works
+== How this demo works
 
 The collection on the left hand side shows a set of domain objects that have been annotated with `tableDecorator` of "datatables".
 
@@ -24,7 +24,7 @@ include::DomainObjectLayoutTableDecorator.java[tags=class]
 <.> indicates that the "datatables" decoration is used.
 
 
-=== Related configuration property
+== Related configuration property
 
 To set the global default for `tableDecorator`, use this configuration property:
 

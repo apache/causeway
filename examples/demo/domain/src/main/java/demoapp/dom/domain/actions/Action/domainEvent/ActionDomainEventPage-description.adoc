@@ -18,7 +18,7 @@ If no `domainEvent` is specified on the action itself, then the domain event cla
 And if not specified at the class level, then an instance of `o.a.c.applib.events.domain.ActionDomainEvent.Default` is emitted as the fallback.
 
 
-=== How this demo works
+== How this demo works
 
 This page object has a single property, `text` and two (mixin) actions that update it.
 One is annotated with a custom domain event, the other is not.

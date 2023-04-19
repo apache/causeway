@@ -6,7 +6,7 @@ But, for less experienced users, or for new features, the link:https://causeway.
 For an action button, this description is displayed as a tooltip.
 
 
-=== How this demo works
+== How this demo works
 
 This page has a `name` property and a `children` collection.
 It also has with a number of actions, with the actions each having descriptions.
@@ -60,7 +60,7 @@ include::../ActionLayoutMenu.java[tags=menu-item-described-as]
 ----
 
 
-=== .layout.xml
+== .layout.xml
 
 Instead of using `@ActionLayout#describedAs`, it is also possible to specify a tooltip using the `<action id="..." describedAs="...">` in the link:https://causeway.apache.org/userguide/2.0.0-RC1/fun/ui.html#by-example[.layout.xml] file.
 

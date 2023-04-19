@@ -10,7 +10,7 @@ whether to update the page or instead to redirect (forcing a re-rendering of a n
 Not re-rendering can provide a smoother UI experience.
 
 
-=== How this demo works
+== How this demo works
 
 This page has a `count` property with two associated actions.
 These both increment the `count`, but use different redirect policies.

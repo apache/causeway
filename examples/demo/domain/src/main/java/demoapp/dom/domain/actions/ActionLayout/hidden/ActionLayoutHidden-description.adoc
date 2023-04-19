@@ -2,7 +2,7 @@
 
 This domain class is used in the demo of `@ActionLayout#hidden`.
 
-=== How this demo works
+== How this demo works
 
 This entity defines four actions, and depending upon context, they may be visible on an object form or when rendered in a collection.
 

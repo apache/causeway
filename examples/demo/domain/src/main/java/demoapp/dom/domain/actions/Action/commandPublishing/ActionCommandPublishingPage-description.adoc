@@ -11,7 +11,7 @@ This can be invaluable for auditing and performance monitoring.
 It is also possible to register additional subscribers for your own purposes.
 
 
-=== How this demo works
+== How this demo works
 
 The collection on the left hand side shows a list of entities, and two associated actions.
 These actions can be used to change the name of any one of those entities.
@@ -44,7 +44,7 @@ include::ActionCommandPublishingPage_publishedCommands.java[tags=class]
 
 
 
-=== Related configuration property
+== Related configuration property
 
 To set the global default for `commandPublishing`, use this configuration property:
 

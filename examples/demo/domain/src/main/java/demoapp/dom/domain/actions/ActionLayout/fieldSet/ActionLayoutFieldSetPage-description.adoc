@@ -17,7 +17,7 @@ It's even possible to combine the two approaches.
 Some people use the `.layout.xml` file for the large-scale layout (rows, columns, fieldsets), and then use annotations to slot the properties, collections and actions into that larger-scale layout.
 
 
-=== How this demo works
+== How this demo works
 
 This page object has two properties, each of which is in its own fieldset.
 A `.layout.xml` file defines this:

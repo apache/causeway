@@ -5,7 +5,7 @@ The most common way to define the icon is with a `.png` image file with the same
 
 An alternative though is to use a fontawesome icon, specified using link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/DomainObjectLayout.html#cssclassfa[@DomainObjectLayout#cssClassFa].
 
-=== How this demo works
+== How this demo works
 
 The collection on the left shows a list of entities where the `cssClass` attribute has been set to a value of "fa-user".
 

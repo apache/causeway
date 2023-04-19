@@ -9,7 +9,7 @@ This can also be used if you want the name to include characters such as bracket
 
 
 
-=== How this demo works
+== How this demo works
 
 This page object has two properties and an associated action with each.
 Both of these actions use `@ActionLayout#named`, for different reasons:
@@ -31,7 +31,7 @@ include::ActionLayoutNamedPage.java[tags=updateNotes]
 <.> specifies the name to use in the UI.
 
 
-=== .layout.xml
+== .layout.xml
 
 Instead of using `@ActionLayout#named`, it is also possible to specify a name in the link:https://causeway.apache.org/userguide/2.0.0-RC1/fun/ui.html#by-example[.layout.xml] file:
 
@@ -48,7 +48,7 @@ Instead of using `@ActionLayout#named`, it is also possible to specify a name in
 The main advantage of using the `.layout.xml` file is that changes can be picked up without having to restart the application.
 
 
-=== Alternatives
+== Alternatives
 
 Where the `@ActionLayout#named` is being used to avoid a clash with a reserved keyword, an alternative option is to use a mixin action.
 

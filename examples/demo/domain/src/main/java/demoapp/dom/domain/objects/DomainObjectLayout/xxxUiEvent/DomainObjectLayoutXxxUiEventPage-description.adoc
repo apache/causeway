@@ -21,7 +21,7 @@ specifies the UI event class for a subscriber to listen to for changing the CSS 
 specifies the UI event class for a subscriber to listen to for changing the layout
 
 
-=== How this demo works
+== How this demo works
 
 The collection on the left hand side shows a set of domain objects that have been annotated with a UI event class for each of the four presentational elements.
 A subscriber listens to each of these events, and alters the presentation based upon whether the object's name ("Joey", "Monica", "Tom" etc) is in the first- or the second-half of the alphabet.

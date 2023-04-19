@@ -2,7 +2,7 @@
 
 The link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/ActionLayout.html#hidden[@ActionLayout#hidden] element specifies whether an action should be visible in the UI or not.
 
-=== How this demo works
+== How this demo works
 
 The collection on the left hand side shows a set of domain objects.
 That domain object defines four actions, and depending upon context, they may be visible on an object form or when rendered in a collection.

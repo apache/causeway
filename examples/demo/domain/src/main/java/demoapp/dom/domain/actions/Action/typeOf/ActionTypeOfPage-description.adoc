@@ -8,7 +8,7 @@ The framework uses the generic parameter to ensure that the list is rendered app
 In some rare scenarios though it may be necessary to return only a raw (non-parameterized) `List`.
 In these cases the link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/Action.html#typeof[@Action#typeOf] element can be used to indicate the element type of the returned `List`.
 
-=== How this demo works
+== How this demo works
 
 This page object defines a `children` collection:
 
