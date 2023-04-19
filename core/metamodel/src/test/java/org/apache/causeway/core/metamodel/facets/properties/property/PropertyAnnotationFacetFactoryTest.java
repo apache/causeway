@@ -81,6 +81,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
 
+@SuppressWarnings("removal")
 class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
 
     PropertyAnnotationFacetFactory facetFactory;

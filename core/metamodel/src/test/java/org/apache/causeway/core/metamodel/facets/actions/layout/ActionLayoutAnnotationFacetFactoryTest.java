@@ -51,7 +51,7 @@ extends FacetFactoryTestAbstract {
     }
 
     @Test
-    void testActionLayoutAnnotation_position() {
+    void actionLayoutAnnotation_position() {
 
         class Customer {
             @ActionLayout(position = ActionLayout.Position.PANEL)
@@ -70,13 +70,11 @@ extends FacetFactoryTestAbstract {
     }
 
     @Test
-    void testActionLayoutAnnotation_hidden() {
+    void actionLayoutAnnotation_hidden() {
 
         class Customer {
             @ActionLayout(hidden = Where.ALL_TABLES)
-            public String foz() {
-                return null;
-            }
+            public String foz() { return null; }
         }
 
         actionScenario(Customer.class, "foz", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
@@ -91,10 +89,10 @@ extends FacetFactoryTestAbstract {
     }
 
     @Test
-    void testActionLayoutFallbackPickedUp() {
+    void actionLayoutFallbackPickedUp() {
 
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
             // no @ActionLayout
             public String foo() { return null; }
         }
@@ -109,7 +107,7 @@ extends FacetFactoryTestAbstract {
     }
 
     @Test
-    void testCssClassFa_defaultPosition() {
+    void cssClassFa_defaultPosition() {
 
         class Customer {
             @ActionLayout(cssClassFa = "font-awesome")
@@ -130,13 +128,11 @@ extends FacetFactoryTestAbstract {
     }
 
     @Test
-    void testCssClassFa_rightPosition() {
+    void cssClassFa_rightPosition() {
 
         class Customer {
             @ActionLayout(cssClassFa = "font-awesome", cssClassFaPosition = CssClassFaPosition.RIGHT)
-            public String foz() {
-                return null;
-            }
+            public String foz() { return null; }
         }
 
         actionScenario(Customer.class, "foz", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{

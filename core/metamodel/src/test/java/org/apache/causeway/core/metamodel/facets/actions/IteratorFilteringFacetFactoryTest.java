@@ -26,7 +26,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -49,23 +48,23 @@ extends FacetFactoryTestAbstract {
     }
 
     @Test
-    void testRequestsRemoverToRemoveIteratorMethods() {
+    void requestsRemoverToRemoveIteratorMethods() {
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
             public void someAction() {}
         }
         objectScenario(Customer.class, (processClassContext, facetHolder) -> {
             //when
             facetFactory.process(processClassContext);
             //then
-            assertEquals(1, methodRemover.getRemoveMethodArgsCalls().size());
+            assertMethodRemovedCount(1);
         });
     }
 
     @Test
-    void testNoIteratorMethodFiltered() {
+    void noIteratorMethodFiltered() {
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
             public void someAction() {}
         }
         final Method actionMethod = findMethodExactOrFail(Customer.class, "someAction");
@@ -73,9 +72,9 @@ extends FacetFactoryTestAbstract {
     }
 
     @Test @Disabled("seems iterator() is not recognized")
-    void testIterableIteratorMethodFiltered() {
+    void iterableIteratorMethodFiltered() {
+        @SuppressWarnings("unused")
         class Customer implements Iterable<Customer> {
-            @SuppressWarnings("unused")
             public void someAction() {}
             @Override
             public Iterator<Customer> iterator() { return null; }

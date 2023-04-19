@@ -18,15 +18,20 @@
  */
 package org.apache.causeway.core.metamodel.facets;
 
-import lombok.val;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import java.lang.annotation.*;
-
-import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.causeway.commons.internal.reflection._Annotations;
+
+import lombok.val;
 
 public class Annotations_synthesizeElseOnClass_Test {
 
@@ -159,6 +164,7 @@ public class Annotations_synthesizeElseOnClass_Test {
     public void from_class() throws Exception {
 
         @InteracAs(usrName = "bill")
+        @SuppressWarnings("unused")
         class SomeTestCase {
             public void test() {}
         }
@@ -176,7 +182,7 @@ public class Annotations_synthesizeElseOnClass_Test {
         @InteracAs(usrName = "bill")
         class SomeSuperTestCase {
         }
-
+        @SuppressWarnings("unused")
         class SomeTestCase extends SomeSuperTestCase {
             public void test() {}
         }
@@ -196,6 +202,7 @@ public class Annotations_synthesizeElseOnClass_Test {
         }
 
         @InteracAs(usrName = "fred")
+        @SuppressWarnings("unused")
         class SomeTestCase extends SomeSuperTestCase {
             public void test() {}
         }
@@ -249,6 +256,7 @@ public class Annotations_synthesizeElseOnClass_Test {
 
         @InteracdAsSven
         class SomeTestCase extends SomeSuperClass {
+            @Override
             public void test() {
                 super.test();
             }
@@ -271,6 +279,7 @@ public class Annotations_synthesizeElseOnClass_Test {
 
         @MetaInteractAsJoe
         class SomeTestCase extends SomeSuperClass {
+            @Override
             public void test() {
                 super.test();
             }

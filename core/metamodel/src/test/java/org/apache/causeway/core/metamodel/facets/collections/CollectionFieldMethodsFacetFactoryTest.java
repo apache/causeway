@@ -131,7 +131,8 @@ extends FacetFactoryTestAbstract {
         });
     }
 
-    public void testPropertyAccessorFacetIsInstalledForOrderArrayAndMethodRemoved() {
+    @Test
+    void propertyAccessorFacetIsInstalledForOrderArrayAndMethodRemoved() {
         val facetFactory = new CollectionAccessorFacetViaAccessorFactory(getMetaModelContext());
         class Order {
         }

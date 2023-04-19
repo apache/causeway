@@ -26,6 +26,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.Identifier;
@@ -34,7 +35,6 @@ import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel._testing.MethodRemover_forTesting;
@@ -42,7 +42,6 @@ import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
-import org.apache.causeway.core.metamodel.facetapi.MethodRemover;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessParameterContext;
@@ -114,7 +113,7 @@ implements HasMetaModelContext {
     private TranslationService mockTranslationService;
     private InteractionService mockInteractionService;
     private final InteractionContext iaContext = InteractionContextFactory.testing();
-    protected MethodRemover_forTesting methodRemover; //TODO[CAUSEWAY-3409] make private
+    private MethodRemover_forTesting methodRemover;
 
     /**
      * Override, if a custom {@link MetaModelContext_forTesting} is required for certain tests.
@@ -221,37 +220,17 @@ implements HasMetaModelContext {
         consumer.accept(processClassContext, facetHolder);
     }
 
-    protected MethodRemover defaultMethodRemover() {
-        return new MethodRemover_forTesting();
-    }
+    // -- UTILITY
 
-    protected FacetedMethod facetedSetter(final Class<?> declaringClass, final String propertyName) {
-        return FacetedMethod.createSetterForProperty(getMetaModelContext(),
-                declaringClass, propertyName);
-    }
-
-    protected FacetedMethod facetedAction(final Class<?> declaringClass, final String methodName) {
-        return FacetedMethod.createForAction(getMetaModelContext(),
-                declaringClass, methodName);
-    }
-
-    protected boolean contains(final Class<?>[] types, final Class<?> type) {
-        return _Utils.contains(types, type);
-    }
-
-    protected static boolean contains(final ImmutableEnumSet<FeatureType> featureTypes, final FeatureType featureType) {
-        return _Utils.contains(featureTypes, featureType);
-    }
-
-    protected Method findMethodExactOrFail(final Class<?> type, final String methodName, final Class<?>[] methodTypes) {
+    protected static Method findMethodExactOrFail(final Class<?> type, final String methodName, final Class<?>[] methodTypes) {
         return _Utils.findMethodExactOrFail(type, methodName, methodTypes);
     }
 
-    protected Method findMethodExactOrFail(final Class<?> type, final String methodName) {
+    protected static Method findMethodExactOrFail(final Class<?> type, final String methodName) {
         return _Utils.findMethodExactOrFail(type, methodName);
     }
 
-    protected Optional<Method> findMethodExact(final Class<?> type, final String methodName) {
+    protected static Optional<Method> findMethodExact(final Class<?> type, final String methodName) {
         return _Utils.findMethodExact(type, methodName);
     }
 
@@ -260,6 +239,10 @@ implements HasMetaModelContext {
     protected final void assertNoMethodsRemoved() {
         assertTrue(methodRemover.getRemovedMethodMethodCalls().isEmpty());
         assertTrue(methodRemover.getRemoveMethodArgsCalls().isEmpty());
+    }
+
+    protected final void assertMethodRemovedCount(final int i) {
+        assertEquals(1, methodRemover.getRemoveMethodArgsCalls().size());
     }
 
     protected final void assertMethodWasRemoved(final Method method) {

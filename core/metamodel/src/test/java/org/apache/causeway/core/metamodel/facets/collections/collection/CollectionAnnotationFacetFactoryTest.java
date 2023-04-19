@@ -44,17 +44,11 @@ import org.apache.causeway.core.metamodel.facets.collections.collection.typeof.T
 
 import lombok.val;
 
-@SuppressWarnings("unused")
+@SuppressWarnings("removal")
 class CollectionAnnotationFacetFactoryTest
 extends FacetFactoryTestAbstract {
 
     CollectionAnnotationFacetFactory facetFactory;
-
-    private static void processModify(
-            final CollectionAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
-        val collectionIfAny = processMethodContext.synthesizeOnMethod(Collection.class);
-        facetFactory.processModify(processMethodContext, collectionIfAny);
-    }
 
     private static void processHidden(
             final CollectionAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
@@ -86,6 +80,7 @@ extends FacetFactoryTestAbstract {
 
             class Order {
             }
+            @SuppressWarnings("unused")
             class Customer {
                 @Collection(hidden = Where.REFERENCES_PARENT)
                 public List<Order> getOrders() { return null; }
@@ -93,7 +88,7 @@ extends FacetFactoryTestAbstract {
             }
 
             // given
-            propertyScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
 
                 // when
                 processHidden(facetFactory, processMethodContext);
@@ -122,6 +117,7 @@ extends FacetFactoryTestAbstract {
 
             class Order {
             }
+            @SuppressWarnings("unused")
             class Customer {
                 @Collection(typeOf = Order.class)
                 public List<Order> getOrders() { return null; }
@@ -129,7 +125,7 @@ extends FacetFactoryTestAbstract {
             }
 
             // given
-            propertyScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
                 // when
                 processTypeOf(facetFactory, processMethodContext);
                 // then
@@ -145,13 +141,14 @@ extends FacetFactoryTestAbstract {
 
             class Order {
             }
+            @SuppressWarnings("unused")
             class Customer {
                 public Order[] getOrders() { return null; }
                 public void setOrders(final Order[] orders) {}
             }
 
             // given
-            propertyScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
                 // when
                 processTypeOf(facetFactory, processMethodContext);
 
@@ -169,13 +166,14 @@ extends FacetFactoryTestAbstract {
 
             class Order {
             }
+            @SuppressWarnings("unused")
             class Customer {
                 public java.util.Collection<Order> getOrders() { return null; }
                 public void setOrders(final java.util.Collection<Order> orders) {}
             }
 
             // given
-            propertyScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
                 // when
                 processTypeOf(facetFactory, processMethodContext);
 

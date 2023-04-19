@@ -373,7 +373,7 @@ extends FacetFactoryTestAbstract {
 
         final Method propertyAccessorMethod = findMethodExactOrFail(CustomerEx.class, "getFirstName");
 
-        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        propertyScenario(CustomerEx.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
             // when
             facetFactory.process(processMethodContext);
             // then

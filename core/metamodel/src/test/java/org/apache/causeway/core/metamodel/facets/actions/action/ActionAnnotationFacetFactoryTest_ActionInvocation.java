@@ -39,15 +39,12 @@ import org.apache.causeway.core.metamodel.facets.members.disabled.method.Disable
 import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.causeway.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod;
 import org.apache.causeway.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethodFactory;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 
 class ActionAnnotationFacetFactoryTest_ActionInvocation
 extends FacetFactoryTestAbstract {
 
-    private ObjectSpecification voidSpec;
-    private ObjectSpecification stringSpec;
     private ActionAnnotationFacetFactory facetFactory;
 
     private void processInvocation(
@@ -59,10 +56,6 @@ extends FacetFactoryTestAbstract {
     @BeforeEach
     public void setUp() {
         this.facetFactory =  new ActionAnnotationFacetFactory(getMetaModelContext());
-
-        val specLoader = getSpecificationLoader();
-        voidSpec = specLoader.loadSpecification(void.class);
-        stringSpec = specLoader.loadSpecification(java.lang.String.class);
     }
 
     @Test
@@ -82,7 +75,7 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof ActionInvocationFacetForDomainEvent);
-            final ActionInvocationFacetForDomainEvent actionInvocationFacetViaMethod = (ActionInvocationFacetForDomainEvent) facet;
+            val actionInvocationFacetViaMethod = (ActionInvocationFacetForDomainEvent) facet;
             assertMethodEqualsFirstIn(actionMethod, actionInvocationFacetViaMethod);
             assertMethodWasRemoved(actionMethod);
         });
@@ -94,12 +87,15 @@ extends FacetFactoryTestAbstract {
         class Customer {
             public void someAction() {}
         }
+
+        val voidSpec = getSpecificationLoader().loadSpecification(void.class);
+
         actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
             //when
             processInvocation(facetFactory, processMethodContext);
             //then
             final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
-            final ActionInvocationFacetForDomainEvent actionInvocationFacetViaMethod = (ActionInvocationFacetForDomainEvent) facet;
+            val actionInvocationFacetViaMethod = (ActionInvocationFacetForDomainEvent) facet;
             assertEquals(voidSpec, actionInvocationFacetViaMethod.getReturnType());
         });
     }
@@ -110,12 +106,15 @@ extends FacetFactoryTestAbstract {
         class Customer {
             public String someAction() { return null; }
         }
+
+        val stringSpec = getSpecificationLoader().loadSpecification(java.lang.String.class);
+
         actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
             //when
             processInvocation(facetFactory, processMethodContext);
             //then
             final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
-            final ActionInvocationFacetForDomainEvent actionInvocationFacetViaMethod = (ActionInvocationFacetForDomainEvent) facet;
+            val actionInvocationFacetViaMethod = (ActionInvocationFacetForDomainEvent) facet;
             assertEquals(stringSpec, actionInvocationFacetViaMethod.getReturnType());
         });
     }
@@ -134,8 +133,7 @@ extends FacetFactoryTestAbstract {
             processInvocation(facetFactory, processMethodContext);
             //then
             final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
-            final ActionInvocationFacetForDomainEvent actionInvocationFacetViaMethod =
-                    (ActionInvocationFacetForDomainEvent) facet;
+            val actionInvocationFacetViaMethod = (ActionInvocationFacetForDomainEvent) facet;
             assertEquals(
                     customerSpec,
                     actionInvocationFacetViaMethod.getDeclaringType());

@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.facetapi;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -27,17 +28,16 @@ import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 
 class FacetAbstractTest {
 
-    public static interface FooFacet extends Facet {
+    static interface FooFacet extends Facet {
     }
 
-    public static interface BarFacet extends Facet {
+    static interface BarFacet extends Facet {
     }
 
-    public static class ConcreteFacet extends FacetAbstract {
+    static class ConcreteFacet extends FacetAbstract {
         public ConcreteFacet(final Class<? extends Facet> facetType, final FacetHolder holder) {
             super(facetType, holder);
         }
-
     }
 
     private FacetAbstract fooFacet;
@@ -47,7 +47,6 @@ class FacetAbstractTest {
     protected void setUp() throws Exception {
         facetHolder = FacetHolder.forTesting(MetaModelContext_forTesting.buildDefault());
         fooFacet = new ConcreteFacet(FooFacet.class, facetHolder);
-        new ConcreteFacet(BarFacet.class, facetHolder);
         facetHolder.addFacet(fooFacet);
     }
 
@@ -57,15 +56,18 @@ class FacetAbstractTest {
         facetHolder = null;
     }
 
-    public void testFacetType() {
+    @Test
+    void foo_facetType() {
         assertEquals(FooFacet.class, fooFacet.facetType());
     }
 
-    public void testGetFacetHolder() {
+    @Test
+    void foo_getFacetHolder() {
         assertEquals(facetHolder, fooFacet.getFacetHolder());
     }
 
-    public void testToString() {
+    @Test
+    void foo_toString() {
         assertEquals("FacetAbstractTest.ConcreteFacet[type=FacetAbstractTest.FooFacet; precedence=DEFAULT]",
                 fooFacet.toString());
     }

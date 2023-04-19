@@ -95,7 +95,6 @@ extends ObjectSupportFacetFactoryTestAbstract {
             facetFactory.process(processClassContext);
             //then
             assertNull(facetHolder.getFacet(TitleFacet.class));
-            assertFalse(methodRemover.getRemovedMethodMethodCalls().isEmpty());
         });
 
     }

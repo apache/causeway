@@ -57,7 +57,7 @@ extends FacetFactoryTestAbstract {
     }
 
     @Test
-    void testAnnotationPickedUp() {
+    void annotationPickedUp() {
         class Customer {
             @Action(restrictTo = RestrictTo.PROTOTYPING)
             public void someAction() {}
@@ -69,7 +69,6 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(PrototypeFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof PrototypeFacetAbstract);
-
             assertNoMethodsRemoved();
         });
     }

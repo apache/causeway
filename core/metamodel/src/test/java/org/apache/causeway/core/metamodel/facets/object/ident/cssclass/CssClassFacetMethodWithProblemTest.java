@@ -40,7 +40,7 @@ class CssClassFacetMethodWithProblemTest {
 
     private DomainObjectWithProblemInCssClassMethod pojo;
 
-    public static class DomainObjectWithProblemInCssClassMethod {
+    static class DomainObjectWithProblemInCssClassMethod {
         public String cssClass() {
             throw new NullPointerException("for testing purposes");
         }
@@ -66,7 +66,7 @@ class CssClassFacetMethodWithProblemTest {
     }
 
     @Test
-    public void testCssClassThrowsException() {
+    void cssClassThrowsException() {
         //assertThrows(Exception.class, ()->facet.cssClass(mockOwningAdapter));
         final String iconName = facet.cssClass(mockOwningAdapter);
         assertThat(iconName, is(nullValue()));
