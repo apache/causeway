@@ -21,6 +21,10 @@ package org.apache.causeway.core.metamodel.facets;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal._Constants;
@@ -93,6 +97,19 @@ class _Utils {
                     .orElseThrow(()->
                         _Exceptions.noSuchElement("getter '%s' not found in %s", propertyName, declaringClass));
         return getter;
+    }
+
+    protected static void assertMethodEquals(final Method a, final Method b) {
+        assertEquals(a.getName(), b.getName());
+        assertEquals(a.getParameterCount(), b.getParameterCount());
+        assertArrayEquals(a.getParameterTypes(), b.getParameterTypes());
+
+        val ownerA = a.getDeclaringClass();
+        val ownerB = b.getDeclaringClass();
+
+        assertTrue(ownerA.isAssignableFrom(ownerB)
+                || ownerB.isAssignableFrom(ownerA));
+
     }
 
 }

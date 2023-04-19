@@ -79,10 +79,9 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof PropertyAccessorFacetViaAccessor);
-            final PropertyAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (PropertyAccessorFacetViaAccessor) facet;
-            assertMethodEquals(propertyAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().getFirstElseFail().asMethodElseFail());
-
-            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyAccessorMethod));
+            val propertyAccessorFacetViaAccessor = (PropertyAccessorFacetViaAccessor) facet;
+            assertMethodEqualsFirstIn(propertyAccessorMethod, propertyAccessorFacetViaAccessor);
+            assertMethodWasRemoved(propertyAccessorMethod);
         });
     }
 
@@ -103,10 +102,9 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(PropertySetterFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof PropertySetterFacetViaSetterMethod);
-            final PropertySetterFacetViaSetterMethod propertySetterFacet = (PropertySetterFacetViaSetterMethod) facet;
-            assertMethodEquals(propertySetterMethod, propertySetterFacet.getMethods().getFirstElseFail().asMethodElseFail());
-
-            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertySetterMethod));
+            val propertySetterFacet = (PropertySetterFacetViaSetterMethod) facet;
+            assertMethodEqualsFirstIn(propertySetterMethod, propertySetterFacet);
+            assertMethodWasRemoved(propertySetterMethod);
         });
     }
 
@@ -127,10 +125,9 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(PropertyInitializationFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof PropertyInitializationFacet);
-            final PropertyInitializationFacetViaSetterMethod propertySetterFacet = (PropertyInitializationFacetViaSetterMethod) facet;
-            assertMethodEquals(propertySetterMethod, propertySetterFacet.getMethods().getFirstElseFail().asMethodElseFail());
-
-            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertySetterMethod));
+            val propertySetterFacet = (PropertyInitializationFacetViaSetterMethod) facet;
+            assertMethodEqualsFirstIn(propertySetterMethod, propertySetterFacet);
+            assertMethodWasRemoved(propertySetterMethod);
         });
     }
 
@@ -167,8 +164,8 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(PropertyClearFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof PropertyClearFacetViaSetterMethod);
-            final PropertyClearFacetViaSetterMethod propertyClearFacet = (PropertyClearFacetViaSetterMethod) facet;
-            assertMethodEquals(propertySetterMethod, propertyClearFacet.getMethods().getFirstElseFail().asMethodElseFail());
+            val propertyClearFacet = (PropertyClearFacetViaSetterMethod) facet;
+            assertMethodEqualsFirstIn(propertySetterMethod, propertyClearFacet);
         });
     }
 
@@ -190,10 +187,9 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(PropertyChoicesFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof PropertyChoicesFacetViaMethod);
-            final PropertyChoicesFacetViaMethod propertyChoicesFacet = (PropertyChoicesFacetViaMethod) facet;
-            assertMethodEquals(propertyChoicesMethod, propertyChoicesFacet.getMethods().getFirstElseFail().asMethodElseFail());
-
-            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyChoicesMethod));
+            val propertyChoicesFacet = (PropertyChoicesFacetViaMethod) facet;
+            assertMethodEqualsFirstIn(propertyChoicesMethod, propertyChoicesFacet);
+            assertMethodWasRemoved(propertyChoicesMethod);
         });
     }
 
@@ -215,10 +211,9 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(PropertyAutoCompleteFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof PropertyAutoCompleteFacetMethod);
-            final PropertyAutoCompleteFacetMethod propertyAutoCompleteFacet = (PropertyAutoCompleteFacetMethod) facet;
-            assertMethodEquals(propertyAutoCompleteMethod, propertyAutoCompleteFacet.getMethods().getFirstElseFail().asMethodElseFail());
-
-            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyAutoCompleteMethod));
+            val propertyAutoCompleteFacet = (PropertyAutoCompleteFacetMethod) facet;
+            assertMethodEqualsFirstIn(propertyAutoCompleteMethod, propertyAutoCompleteFacet);
+            assertMethodWasRemoved(propertyAutoCompleteMethod);
         });
     }
 
@@ -240,10 +235,9 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(PropertyDefaultFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof PropertyDefaultFacetViaMethod);
-            final PropertyDefaultFacetViaMethod propertyDefaultFacet = (PropertyDefaultFacetViaMethod) facet;
-            assertMethodEquals(propertyDefaultMethod, propertyDefaultFacet.getMethods().getFirstElseFail().asMethodElseFail());
-
-            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyDefaultMethod));
+            val propertyDefaultFacet = (PropertyDefaultFacetViaMethod) facet;
+            assertMethodEqualsFirstIn(propertyDefaultMethod, propertyDefaultFacet);
+            assertMethodWasRemoved(propertyDefaultMethod);
         });
     }
 
@@ -265,10 +259,9 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(PropertyValidateFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof PropertyValidateFacetViaMethod);
-            final PropertyValidateFacetViaMethod propertyValidateFacet = (PropertyValidateFacetViaMethod) facet;
-            assertMethodEquals(propertyValidateMethod, propertyValidateFacet.getMethods().getFirstElseFail().asMethodElseFail());
-
-            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyValidateMethod));
+            val propertyValidateFacet = (PropertyValidateFacetViaMethod) facet;
+            assertMethodEqualsFirstIn(propertyValidateMethod, propertyValidateFacet);
+            assertMethodWasRemoved(propertyValidateMethod);
         });
     }
 
@@ -290,10 +283,9 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(DisableForContextFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof DisableForContextFacetViaMethod);
-            final DisableForContextFacetViaMethod disableForContextFacet = (DisableForContextFacetViaMethod) facet;
-            assertMethodEquals(propertyDisableMethod, disableForContextFacet.getMethods().getFirstElseFail().asMethodElseFail());
-
-            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyDisableMethod));
+            val disableForContextFacet = (DisableForContextFacetViaMethod) facet;
+            assertMethodEqualsFirstIn(propertyDisableMethod, disableForContextFacet);
+            assertMethodWasRemoved(propertyDisableMethod);
         });
     }
 
@@ -315,10 +307,9 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(DisableForContextFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof DisableForContextFacetViaMethod);
-            final DisableForContextFacetViaMethod disableForContextFacet = (DisableForContextFacetViaMethod) facet;
-            assertMethodEquals(propertyDisableMethod, disableForContextFacet.getMethods().getFirstElseFail().asMethodElseFail());
-
-            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyDisableMethod));
+            val disableForContextFacet = (DisableForContextFacetViaMethod) facet;
+            assertMethodEqualsFirstIn(propertyDisableMethod, disableForContextFacet);
+            assertMethodWasRemoved(propertyDisableMethod);
         });
     }
 
@@ -340,10 +331,9 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(HideForContextFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof HideForContextFacetViaMethod);
-            final HideForContextFacetViaMethod hideForContextFacet = (HideForContextFacetViaMethod) facet;
-            assertMethodEquals(propertyHideMethod, hideForContextFacet.getMethods().getFirstElseFail().asMethodElseFail());
-
-            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyHideMethod));
+            val hideForContextFacet = (HideForContextFacetViaMethod) facet;
+            assertMethodEqualsFirstIn(propertyHideMethod, hideForContextFacet);
+            assertMethodWasRemoved(propertyHideMethod);
         });
     }
 
@@ -365,10 +355,9 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(HideForContextFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof HideForContextFacetViaMethod);
-            final HideForContextFacetViaMethod hideForContextFacet = (HideForContextFacetViaMethod) facet;
-            assertMethodEquals(propertyHideMethod, hideForContextFacet.getMethods().getFirstElseFail().asMethodElseFail());
-
-            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyHideMethod));
+            val hideForContextFacet = (HideForContextFacetViaMethod) facet;
+            assertMethodEqualsFirstIn(propertyHideMethod, hideForContextFacet);
+            assertMethodWasRemoved(propertyHideMethod);
         });
     }
 
@@ -391,8 +380,8 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof PropertyAccessorFacetViaAccessor);
-            final PropertyAccessorFacetViaAccessor accessorFacet = (PropertyAccessorFacetViaAccessor) facet;
-            assertMethodEquals(propertyAccessorMethod, accessorFacet.getMethods().getFirstElseFail().asMethodElseFail());
+            val accessorFacet = (PropertyAccessorFacetViaAccessor) facet;
+            assertMethodEqualsFirstIn(propertyAccessorMethod, accessorFacet);
         });
 
     }
@@ -426,14 +415,14 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(HideForContextFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof HideForContextFacetViaMethod);
-            final HideForContextFacetViaMethod hideForContextFacet = (HideForContextFacetViaMethod) facet;
-            assertMethodEquals(propertyHideMethod, hideForContextFacet.getMethods().getFirstElseFail().asMethodElseFail());
+            val hideForContextFacet = (HideForContextFacetViaMethod) facet;
+            assertMethodEqualsFirstIn(propertyHideMethod, hideForContextFacet);
 
             final Facet facet2 = facetedMethod.getFacet(DisableForContextFacet.class);
             assertNotNull(facet2);
             assertTrue(facet2 instanceof DisableForContextFacetViaMethod);
-            final DisableForContextFacetViaMethod disableForContextFacet = (DisableForContextFacetViaMethod) facet2;
-            assertMethodEquals(propertyDisableMethod, disableForContextFacet.getMethods().getFirstElseFail().asMethodElseFail());
+            val disableForContextFacet = (DisableForContextFacetViaMethod) facet2;
+            assertMethodEqualsFirstIn(propertyDisableMethod, disableForContextFacet);
         });
     }
 

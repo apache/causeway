@@ -26,8 +26,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.Identifier;
@@ -265,20 +263,18 @@ implements HasMetaModelContext {
     }
 
     protected final void assertMethodWasRemoved(final Method method) {
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method),
+                ()->String.format("method was not removed in test scenario: %s", method));
     }
 
-    public void assertMethodEquals(final Method a, final Method b) {
-        assertEquals(a.getName(), b.getName());
-        assertEquals(a.getParameterCount(), b.getParameterCount());
-        assertArrayEquals(a.getParameterTypes(), b.getParameterTypes());
+    protected final void assertMethodWasRemoved(final Class<?> type, final String methodName) {
+        assertMethodWasRemoved(findMethodExactOrFail(type, methodName));
+    }
 
-        val ownerA = a.getDeclaringClass();
-        val ownerB = b.getDeclaringClass();
-
-        assertTrue(ownerA.isAssignableFrom(ownerB)
-                || ownerB.isAssignableFrom(ownerA));
-
+    protected final void assertMethodEqualsFirstIn(
+            final @NonNull Method method,
+            final @NonNull ImperativeFacet imperativeFacet) {
+        _Utils.assertMethodEquals(method, imperativeFacet.getMethods().getFirstElseFail().asMethodElseFail());
     }
 
 }

@@ -74,9 +74,8 @@ extends FacetFactoryTestAbstract {
             assertNotNull(facet);
             assertTrue(facet instanceof ActionValidationFacetViaMethod);
             val actionValidationFacetViaMethod = (ActionValidationFacetViaMethod) facet;
-            assertMethodEquals(validateMethod, actionValidationFacetViaMethod.getMethods().getFirstElseFail().asMethodElseFail());
-
-            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(validateMethod));
+            assertMethodEqualsFirstIn(validateMethod, actionValidationFacetViaMethod);
+            assertMethodWasRemoved(validateMethod);
         });
 
     }
@@ -102,9 +101,8 @@ extends FacetFactoryTestAbstract {
             assertNotNull(facet);
             assertTrue(facet instanceof ActionValidationFacetViaMethod);
             val actionValidationFacetViaMethod = (ActionValidationFacetViaMethod) facet;
-            assertMethodEquals(validateMethod, actionValidationFacetViaMethod.getMethods().getFirstElseFail().asMethodElseFail());
-
-            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(validateMethod));
+            assertMethodEqualsFirstIn(validateMethod, actionValidationFacetViaMethod);
+            assertMethodWasRemoved(validateMethod);
         });
     }
 
@@ -133,18 +131,15 @@ extends FacetFactoryTestAbstract {
         assertNotNull(facet0);
         assertTrue(facet0 instanceof ActionParameterDefaultsFacetViaMethod);
         final ActionParameterDefaultsFacetViaMethod actionDefaultFacetViaMethod0 = (ActionParameterDefaultsFacetViaMethod) facet0;
-        assertMethodEquals(default0Method, actionDefaultFacetViaMethod0.getMethods().getFirstElseFail().asMethodElseFail());
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(default0Method));
+        assertMethodEqualsFirstIn(default0Method, actionDefaultFacetViaMethod0);
+        assertMethodWasRemoved(default0Method);
 
         final Facet facet1 = facetHolderWithParms.getParameters().getElseFail(1).getFacet(ActionParameterDefaultsFacet.class);
         assertNotNull(facet1);
         assertTrue(facet1 instanceof ActionParameterDefaultsFacetViaMethod);
         final ActionParameterDefaultsFacetViaMethod actionDefaultFacetViaMethod1 = (ActionParameterDefaultsFacetViaMethod) facet1;
-        assertMethodEquals(default1Method, actionDefaultFacetViaMethod1.getMethods().getFirstElseFail().asMethodElseFail());
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(default1Method));
-
+        assertMethodEqualsFirstIn(default1Method, actionDefaultFacetViaMethod1);
+        assertMethodWasRemoved(default1Method);
     }
 
     @Test
@@ -153,7 +148,6 @@ extends FacetFactoryTestAbstract {
 
         @SuppressWarnings("unused")
         class Customer {
-
             public void someAction(final int x, final long y, final long z) {}
             public Collection<Integer> choices0SomeAction() { return Collections.emptyList(); }
             public List<Long> choices1SomeAction() { return Collections.emptyList(); }
@@ -174,43 +168,33 @@ extends FacetFactoryTestAbstract {
         final Facet facet0 = facetHolderWithParms.getParameters().getElseFail(0).getFacet(ActionParameterChoicesFacet.class);
         assertNotNull(facet0);
         assertTrue(facet0 instanceof ActionParameterChoicesFacetViaMethod);
-        final ActionParameterChoicesFacetViaMethod actionChoicesFacetViaMethod0 = (ActionParameterChoicesFacetViaMethod) facet0;
-        assertMethodEquals(choices0Method, actionChoicesFacetViaMethod0.getMethods().getFirstElseFail().asMethodElseFail());
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(choices0Method));
+        val actionChoicesFacetViaMethod0 = (ActionParameterChoicesFacetViaMethod) facet0;
+        assertMethodEqualsFirstIn(choices0Method, actionChoicesFacetViaMethod0);
+        assertMethodWasRemoved(choices0Method);
 
         final Facet facet1 = facetHolderWithParms.getParameters().getElseFail(1).getFacet(ActionParameterChoicesFacet.class);
         assertNotNull(facet1);
         assertTrue(facet1 instanceof ActionParameterChoicesFacetViaMethod);
-        final ActionParameterChoicesFacetViaMethod actionChoicesFacetViaMethod1 = (ActionParameterChoicesFacetViaMethod) facet1;
-        assertMethodEquals(choices1Method, actionChoicesFacetViaMethod1.getMethods().getFirstElseFail().asMethodElseFail());
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(choices1Method));
+        val actionChoicesFacetViaMethod1 = (ActionParameterChoicesFacetViaMethod) facet1;
+        assertMethodEqualsFirstIn(choices1Method, actionChoicesFacetViaMethod1);
+        assertMethodWasRemoved(choices1Method);
 
         final Facet facet2 = facetHolderWithParms.getParameters().getElseFail(2).getFacet(ActionParameterChoicesFacet.class);
         assertNotNull(facet2);
         assertTrue(facet2 instanceof ActionParameterChoicesFacetViaMethod);
-        final ActionParameterChoicesFacetViaMethod actionChoicesFacetViaMethod2 = (ActionParameterChoicesFacetViaMethod) facet2;
-        assertMethodEquals(choices2Method, actionChoicesFacetViaMethod2.getMethods().getFirstElseFail().asMethodElseFail());
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(choices2Method));
-
-
+        val actionChoicesFacetViaMethod2 = (ActionParameterChoicesFacetViaMethod) facet2;
+        assertMethodEqualsFirstIn(choices2Method, actionChoicesFacetViaMethod2);
+        assertMethodWasRemoved(choices2Method);
     }
 
     @Test
     void installsParameterAutoCompleteMethodAndRemovesMethod() {
         val facetFactory = new ActionParameterAutoCompleteFacetViaMethodFactory(getMetaModelContext());
 
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
-            public void someAction(final int x, final long y) {
-            }
-
-            @SuppressWarnings("unused")
-            public List<Integer> autoComplete0SomeAction(final String searchArg) {
-                return Collections.emptyList();
-            }
+            public void someAction(final int x, final long y) {}
+            public List<Integer> autoComplete0SomeAction(final String searchArg) { return Collections.emptyList();}
         }
 
         final Method actionMethod = findMethodExactOrFail(Customer.class, "someAction", new Class[] { int.class, long.class });
@@ -226,9 +210,8 @@ extends FacetFactoryTestAbstract {
         assertNotNull(facet0);
         assertTrue(facet0 instanceof ActionParameterAutoCompleteFacetViaMethod);
         final ActionParameterAutoCompleteFacetViaMethod actionAutoCompleteFacetViaMethod0 = (ActionParameterAutoCompleteFacetViaMethod) facet0;
-        assertMethodEquals(autoComplete0Method, actionAutoCompleteFacetViaMethod0.getMethods().getFirstElseFail().asMethodElseFail());
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(autoComplete0Method));
+        assertMethodEqualsFirstIn(autoComplete0Method, actionAutoCompleteFacetViaMethod0);
+        assertMethodWasRemoved(autoComplete0Method);
     }
 
 }

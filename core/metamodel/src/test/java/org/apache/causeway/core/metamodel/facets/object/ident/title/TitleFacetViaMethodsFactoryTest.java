@@ -67,11 +67,9 @@ extends ObjectSupportFacetFactoryTestAbstract {
             assertNotNull(facet);
             assertTrue(facet instanceof TitleFacetFromToStringMethod);
             val titleFacetViaTitleMethod = (TitleFacetFromToStringMethod) facet;
-            assertMethodEquals(toStringMethod, titleFacetViaTitleMethod.getMethods().getFirstElseFail().asMethodElseFail());
-
-            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(toStringMethod));
+            assertMethodEqualsFirstIn(toStringMethod, titleFacetViaTitleMethod);
+            assertMethodWasRemoved(toStringMethod);
         });
-
     }
 
     @Test

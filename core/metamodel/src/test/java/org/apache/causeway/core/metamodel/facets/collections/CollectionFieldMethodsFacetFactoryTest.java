@@ -56,10 +56,9 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
-            final CollectionAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
-            assertMethodEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().getFirstElseFail().asMethodElseFail());
-
-            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(collectionAccessorMethod));
+            val propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
+            assertMethodEqualsFirstIn(collectionAccessorMethod, propertyAccessorFacetViaAccessor);
+            assertMethodWasRemoved(collectionAccessorMethod);
         });
     }
 
@@ -80,10 +79,9 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
-            final CollectionAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
-            assertMethodEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().getFirstElseFail().asMethodElseFail());
-
-            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(collectionAccessorMethod));
+            val propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
+            assertMethodEqualsFirstIn(collectionAccessorMethod, propertyAccessorFacetViaAccessor);
+            assertMethodWasRemoved(collectionAccessorMethod);
         });
     }
 
@@ -104,10 +102,9 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
-            final CollectionAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
-            assertMethodEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().getFirstElseFail().asMethodElseFail());
-
-            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(collectionAccessorMethod));
+            val propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
+            assertMethodEqualsFirstIn(collectionAccessorMethod, propertyAccessorFacetViaAccessor);
+            assertMethodWasRemoved(collectionAccessorMethod);
         });
     }
 
@@ -128,10 +125,9 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
-            final CollectionAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
-            assertMethodEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().getFirstElseFail().asMethodElseFail());
-
-            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(collectionAccessorMethod));
+            val propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
+            assertMethodEqualsFirstIn(collectionAccessorMethod, propertyAccessorFacetViaAccessor);
+            assertMethodWasRemoved(collectionAccessorMethod);
         });
     }
 
@@ -153,10 +149,9 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
-            final CollectionAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
-            assertMethodEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().getFirstElseFail().asMethodElseFail());
-
-            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(collectionAccessorMethod));
+            val propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
+            assertMethodEqualsFirstIn(collectionAccessorMethod, propertyAccessorFacetViaAccessor);
+            assertMethodWasRemoved(collectionAccessorMethod);
         });
     }
 
@@ -180,7 +175,7 @@ extends FacetFactoryTestAbstract {
             assertNotNull(facet);
             assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
             val collectionAccessorFacetViaMethod = (CollectionAccessorFacetViaAccessor) facet;
-            assertMethodEquals(collectionAccessorMethod, collectionAccessorFacetViaMethod.getMethods().getFirstElseFail().asMethodElseFail());
+            assertMethodEqualsFirstIn(collectionAccessorMethod, collectionAccessorFacetViaMethod);
         });
     }
 }
