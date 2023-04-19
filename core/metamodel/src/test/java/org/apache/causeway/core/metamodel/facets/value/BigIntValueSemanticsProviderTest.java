@@ -35,23 +35,21 @@ extends ValueSemanticsProviderAbstractTestCase<BigInteger> {
     private BigIntegerValueSemantics value;
     private BigInteger bigInt;
 
-    @Override
     @BeforeEach
-    public void setUp() throws Exception {
-        super.setUp();
+    void setUpObjects() throws Exception {
         bigInt = new BigInteger("132199");
         allowMockAdapterToReturn(bigInt);
         setSemantics(value = new BigIntegerValueSemantics());
     }
 
     @Test
-    public void testParseValidString() throws Exception {
+    void parseValidString() throws Exception {
         final Object newValue = value.parseTextRepresentation(null, "2142342334");
         assertEquals(new BigInteger("2142342334"), newValue);
     }
 
     @Test
-    public void testParseInvalidString() throws Exception {
+    void parseInvalidString() throws Exception {
         try {
             value.parseTextRepresentation(null, "214xxx2342334");
             fail();
@@ -60,7 +58,7 @@ extends ValueSemanticsProviderAbstractTestCase<BigInteger> {
     }
 
     @Test
-    public void testTitle() throws Exception {
+    void title() throws Exception {
         assertEquals("132,199", value.titlePresentation(null, bigInt));
     }
 

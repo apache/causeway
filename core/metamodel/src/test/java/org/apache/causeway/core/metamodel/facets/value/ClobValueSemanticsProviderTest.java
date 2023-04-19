@@ -33,7 +33,7 @@ extends ValueSemanticsProviderAbstractTestCase<Clob> {
     private Clob clob;
 
     @BeforeEach
-    public void setUpObjects() throws Exception {
+    void setUpObjects() throws Exception {
         clob = new Clob("myfile1.xml", "application", "xml", "abcdef");
         allowMockAdapterToReturn(clob);
 
@@ -41,20 +41,8 @@ extends ValueSemanticsProviderAbstractTestCase<Clob> {
     }
 
     @Test
-    public void testTitleOf() {
+    void titleOf() {
         assertEquals("myfile1.xml", value.titlePresentation(null, clob));
-    }
-
-    @Test
-    @Override
-    public void testParseNull() throws Exception {
-        // disabled, clob has no parser
-    }
-
-    @Test
-    @Override
-    public void testParseEmptyString() throws Exception {
-        // disabled, clob has no parser
     }
 
     @Override

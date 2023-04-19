@@ -35,20 +35,20 @@ extends ValueSemanticsProviderAbstractTestCase<Byte> {
     private Byte byteObj;
 
     @BeforeEach
-    public void setUpObjects() throws Exception {
+    void setUpObjects() throws Exception {
         byteObj = Byte.valueOf((byte) 102);
         allowMockAdapterToReturn(byteObj);
         setSemantics(value = new ByteValueSemantics());
     }
 
     @Test
-    public void testParseValidString() throws Exception {
+    void parseValidString() throws Exception {
         final Object parsed = value.parseTextRepresentation(null, "21");
         assertEquals(Byte.valueOf((byte) 21), parsed);
     }
 
     @Test
-    public void testParseInvalidString() throws Exception {
+    void parseInvalidString() throws Exception {
         try {
             value.parseTextRepresentation(null, "xs21z4xxx23");
             fail();
@@ -57,7 +57,7 @@ extends ValueSemanticsProviderAbstractTestCase<Byte> {
     }
 
     @Test
-    public void testTitleOf() throws Exception {
+    void titleOf() throws Exception {
         assertEquals("102", value.titlePresentation(null, byteObj));
     }
 
