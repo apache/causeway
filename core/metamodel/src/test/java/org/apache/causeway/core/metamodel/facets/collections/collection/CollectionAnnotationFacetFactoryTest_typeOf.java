@@ -60,7 +60,7 @@ extends FacetFactoryTestAbstract {
         class Customer {
             public Collection<Order> someAction() { return null;}
         }
-        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod) -> {
             //when
             facetFactory.process(processMethodContext);
             //then
@@ -80,7 +80,7 @@ extends FacetFactoryTestAbstract {
         class Customer {
             public Collection<Order> getOrders() { return null; }
         }
-        collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             facetFactory.process(processMethodContext);
             // then
@@ -100,7 +100,7 @@ extends FacetFactoryTestAbstract {
         class Customer {
             public Order[] getOrders() { return null;}
         }
-        collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             facetFactory.process(processMethodContext);
             // then

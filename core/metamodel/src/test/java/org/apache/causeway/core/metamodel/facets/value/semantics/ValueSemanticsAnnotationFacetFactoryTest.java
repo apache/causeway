@@ -55,7 +55,7 @@ extends FacetFactoryTestAbstract {
             @ValueSemantics(maxTotalDigits = 5)
             public BigDecimal getCost() { return null; }
         }
-        propertyScenario(Order.class, "cost", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+        propertyScenario(Order.class, "cost", (processMethodContext, facetHolder, facetedMethod) -> {
             // when
             newFacetFactory().process(processMethodContext);
             // then
@@ -95,7 +95,7 @@ extends FacetFactoryTestAbstract {
             @ValueSemantics(minIntegerDigits = 5)
             public BigDecimal getCost() { return null; }
         }
-        propertyScenario(Order.class, "cost", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+        propertyScenario(Order.class, "cost", (processMethodContext, facetHolder, facetedMethod) -> {
             // when
             newFacetFactory().process(processMethodContext);
             // then
@@ -135,7 +135,7 @@ extends FacetFactoryTestAbstract {
             @ValueSemantics(maxFractionalDigits = 5)
             public BigDecimal getCost() { return null; }
         }
-        propertyScenario(Order.class, "cost", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+        propertyScenario(Order.class, "cost", (processMethodContext, facetHolder, facetedMethod) -> {
             // when
             newFacetFactory().process(processMethodContext);
             // then
@@ -175,7 +175,7 @@ extends FacetFactoryTestAbstract {
             @ValueSemantics(minFractionalDigits = 5)
             public BigDecimal getCost() { return null; }
         }
-        propertyScenario(Order.class, "cost", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+        propertyScenario(Order.class, "cost", (processMethodContext, facetHolder, facetedMethod) -> {
             // when
             newFacetFactory().process(processMethodContext);
             // then
@@ -215,7 +215,7 @@ extends FacetFactoryTestAbstract {
             @javax.validation.constraints.Digits(integer=14, fraction=4)
             public BigDecimal getCost() { return null; }
         }
-        propertyScenario(Order.class, "cost", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+        propertyScenario(Order.class, "cost", (processMethodContext, facetHolder, facetedMethod) -> {
             // when
             newFacetFactory().process(processMethodContext);
             // then
@@ -266,28 +266,28 @@ extends FacetFactoryTestAbstract {
         }
 
 
-        actionScenario(Order.class, "maxTotalA", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+        actionScenario(Order.class, "maxTotalA", (processMethodContext, facetHolder, facetedMethod) -> {
             // when
             newFacetFactory().process(processMethodContext);
             // then - lowest bound wins
             assertMaxTotalDigits(facetedMethod, 18);
         });
 
-        actionScenario(Order.class, "maxTotalB", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+        actionScenario(Order.class, "maxTotalB", (processMethodContext, facetHolder, facetedMethod) -> {
             // when
             newFacetFactory().process(processMethodContext);
             // then - lowest bound wins
             assertMaxTotalDigits(facetedMethod, 17);
         });
 
-        actionScenario(Order.class, "maxFracA", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+        actionScenario(Order.class, "maxFracA", (processMethodContext, facetHolder, facetedMethod) -> {
             // when
             newFacetFactory().process(processMethodContext);
             // then - lowest bound wins
             assertMaxFractionalDigits(facetedMethod, 4);
         });
 
-        actionScenario(Order.class, "maxFracB", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+        actionScenario(Order.class, "maxFracB", (processMethodContext, facetHolder, facetedMethod) -> {
             // when
             newFacetFactory().process(processMethodContext);
             // then - lowest bound wins
@@ -304,7 +304,7 @@ extends FacetFactoryTestAbstract {
             @ValueSemantics(dateRenderAdjustDays = ValueSemantics.AS_DAY_BEFORE)
             public LocalDateTime getDateTime() { return null; }
         }
-        propertyScenario(Order.class, "dateTime", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+        propertyScenario(Order.class, "dateTime", (processMethodContext, facetHolder, facetedMethod) -> {
             // when
             newFacetFactory().process(processMethodContext);
             // then
@@ -323,13 +323,13 @@ extends FacetFactoryTestAbstract {
             public LocalDateTime getDateTimeB() { return null; }
 
         }
-        propertyScenario(Order.class, "dateTimeA", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+        propertyScenario(Order.class, "dateTimeA", (processMethodContext, facetHolder, facetedMethod) -> {
             // when
             newFacetFactory().process(processMethodContext);
             // then
             assertTimeZoneTranslation(facetedMethod, TimeZoneTranslation.NONE);
         });
-        propertyScenario(Order.class, "dateTimeB", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+        propertyScenario(Order.class, "dateTimeB", (processMethodContext, facetHolder, facetedMethod) -> {
             // when
             newFacetFactory().process(processMethodContext);
             // then
@@ -345,7 +345,7 @@ extends FacetFactoryTestAbstract {
             public LocalDateTime getDateTime() { return null; }
         }
         // when
-        propertyScenario(Order.class, "dateTime", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+        propertyScenario(Order.class, "dateTime", (processMethodContext, facetHolder, facetedMethod) -> {
             // when
             newFacetFactory().process(processMethodContext);
             // then
@@ -360,7 +360,7 @@ extends FacetFactoryTestAbstract {
             @ValueSemantics(timeFormatStyle = FormatStyle.FULL)
             public LocalDateTime getDateTime() { return null; }
         }
-        propertyScenario(Order.class, "dateTime", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+        propertyScenario(Order.class, "dateTime", (processMethodContext, facetHolder, facetedMethod) -> {
             // when
             newFacetFactory().process(processMethodContext);
             // then

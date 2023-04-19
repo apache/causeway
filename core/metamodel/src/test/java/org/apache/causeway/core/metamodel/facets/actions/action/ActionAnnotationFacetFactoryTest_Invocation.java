@@ -60,7 +60,7 @@ extends ActionAnnotationFacetFactoryTest {
         getConfiguration()
             .getApplib().getAnnotation().getAction().getDomainEvent().setPostForDefault(true);
 
-        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             processInvocation(facetFactory, processMethodContext);
 
@@ -93,7 +93,7 @@ extends ActionAnnotationFacetFactoryTest {
         }
 
         // given
-        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             processInvocation(facetFactory, processMethodContext);
 
@@ -128,7 +128,7 @@ extends ActionAnnotationFacetFactoryTest {
         }
 
         // given
-        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             processInvocation(facetFactory, processMethodContext);
 
@@ -164,7 +164,7 @@ extends ActionAnnotationFacetFactoryTest {
         getConfiguration()
             .getApplib().getAnnotation().getAction().getDomainEvent().setPostForDefault(true);
 
-        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             processInvocation(facetFactory, processMethodContext);
 

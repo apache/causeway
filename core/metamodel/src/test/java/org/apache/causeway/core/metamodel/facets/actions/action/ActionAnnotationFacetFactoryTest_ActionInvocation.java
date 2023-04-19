@@ -67,7 +67,7 @@ extends FacetFactoryTestAbstract {
 
         final Method actionMethod = findMethodExactOrFail(Customer.class, "someAction");
 
-        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod) -> {
             //when
             processInvocation(facetFactory, processMethodContext);
 
@@ -90,7 +90,7 @@ extends FacetFactoryTestAbstract {
 
         val voidSpec = getSpecificationLoader().loadSpecification(void.class);
 
-        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod) -> {
             //when
             processInvocation(facetFactory, processMethodContext);
             //then
@@ -109,7 +109,7 @@ extends FacetFactoryTestAbstract {
 
         val stringSpec = getSpecificationLoader().loadSpecification(java.lang.String.class);
 
-        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod) -> {
             //when
             processInvocation(facetFactory, processMethodContext);
             //then
@@ -128,7 +128,7 @@ extends FacetFactoryTestAbstract {
 
         val customerSpec = getSpecificationLoader().loadSpecification(LocalCustomer.class);
 
-        actionScenario(LocalCustomer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+        actionScenario(LocalCustomer.class, "someAction", (processMethodContext, facetHolder, facetedMethod) -> {
             //when
             processInvocation(facetFactory, processMethodContext);
             //then
@@ -148,7 +148,7 @@ extends FacetFactoryTestAbstract {
         }
         class CustomerEx extends Customer {
         }
-        actionScenario(CustomerEx.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+        actionScenario(CustomerEx.class, "someAction", (processMethodContext, facetHolder, facetedMethod) -> {
             //when
             processInvocation(facetFactory, processMethodContext);
             //then
@@ -179,7 +179,7 @@ extends FacetFactoryTestAbstract {
         final Method choices1Method = findMethodExactOrFail(CustomerEx.class, "choices1SomeAction", new Class[] {});
         final Method disableMethod = findMethodExactOrFail(CustomerEx.class, "disableSomeAction", new Class[] {});
 
-        actionScenario(CustomerEx.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+        actionScenario(CustomerEx.class, "someAction", (processMethodContext, facetHolder, facetedMethod) -> {
             //when
             processInvocation(facetFactory, processMethodContext);
             facetFactoryForChoices.process(processMethodContext);

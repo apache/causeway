@@ -59,7 +59,7 @@ extends FacetFactoryTestAbstract {
             @PropertyLayout(named = "1st name")
             public String getFirstName() { return null; }
         }
-        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod)->{
             //when
             facetFactory.process(processMethodContext);
             //then
@@ -77,7 +77,7 @@ extends FacetFactoryTestAbstract {
             @PropertyLayout(hidden = Where.OBJECT_FORMS)
             public String getFirstName() { return null; }
         }
-        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod)->{
             //when
             facetFactory.process(processMethodContext);
             //then
@@ -96,7 +96,7 @@ extends FacetFactoryTestAbstract {
             @PropertyLayout(labelPosition = LabelPosition.LEFT)
             public String getFirstName() { return null; }
         }
-        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod)->{
             //when
             facetFactory.process(processMethodContext);
             //then

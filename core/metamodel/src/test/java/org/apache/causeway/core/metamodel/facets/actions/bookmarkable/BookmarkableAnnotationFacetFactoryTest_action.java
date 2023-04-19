@@ -52,7 +52,7 @@ extends FacetFactoryTestAbstract {
         class Customer {
             public void placeOrder(){}
         }
-        actionScenario(Customer.class, "placeOrder", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+        actionScenario(Customer.class, "placeOrder", (processMethodContext, facetHolder, facetedMethod) -> {
             //when
             facetFactory.process(processMethodContext);
             //then

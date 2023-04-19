@@ -88,7 +88,7 @@ extends FacetFactoryTestAbstract {
             }
 
             // given
-            collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod)->{
 
                 // when
                 processHidden(facetFactory, processMethodContext);
@@ -125,7 +125,7 @@ extends FacetFactoryTestAbstract {
             }
 
             // given
-            collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod)->{
                 // when
                 processTypeOf(facetFactory, processMethodContext);
                 // then
@@ -148,7 +148,7 @@ extends FacetFactoryTestAbstract {
             }
 
             // given
-            collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod)->{
                 // when
                 processTypeOf(facetFactory, processMethodContext);
 
@@ -173,7 +173,7 @@ extends FacetFactoryTestAbstract {
             }
 
             // given
-            collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod)->{
                 // when
                 processTypeOf(facetFactory, processMethodContext);
 

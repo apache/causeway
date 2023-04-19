@@ -72,7 +72,7 @@ extends FacetFactoryTestAbstract {
         }
         final Method propertyAccessorMethod = findMethodExactOrFail(Customer.class, "getFirstName");
 
-        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             facetFactory.process(processMethodContext);
             // then
@@ -95,7 +95,7 @@ extends FacetFactoryTestAbstract {
         }
         final Method propertySetterMethod = findMethodExactOrFail(Customer.class, "setFirstName", new Class[] { String.class });
 
-        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             facetFactory.process(processMethodContext);
             // then
@@ -118,7 +118,7 @@ extends FacetFactoryTestAbstract {
         }
         final Method propertySetterMethod = findMethodExactOrFail(Customer.class, "setFirstName", new Class[] { String.class });
 
-        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             facetFactory.process(processMethodContext);
             // then
@@ -139,7 +139,7 @@ extends FacetFactoryTestAbstract {
             public String getFirstName() { return null; }
             public void setFirstName(final String firstName) {}
         }
-        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             facetFactory.process(processMethodContext);
             // then
@@ -157,7 +157,7 @@ extends FacetFactoryTestAbstract {
         }
         final Method propertySetterMethod = findMethodExactOrFail(Customer.class, "setFirstName", new Class[] { String.class });
 
-        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             facetFactory.process(processMethodContext);
             // then
@@ -180,7 +180,7 @@ extends FacetFactoryTestAbstract {
 
         final Method propertyChoicesMethod = findMethodExactOrFail(Customer.class, "choicesFirstName");
 
-        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             facetFactory.process(processMethodContext);
             // then
@@ -204,7 +204,7 @@ extends FacetFactoryTestAbstract {
 
         final Method propertyAutoCompleteMethod = findMethodExactOrFail(Customer.class, "autoCompleteFirstName", new Class[]{String.class});
 
-        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             facetFactory.process(processMethodContext);
             // then
@@ -228,7 +228,7 @@ extends FacetFactoryTestAbstract {
 
         final Method propertyDefaultMethod = findMethodExactOrFail(Customer.class, "defaultFirstName");
 
-        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             facetFactory.process(processMethodContext);
             // then
@@ -252,7 +252,7 @@ extends FacetFactoryTestAbstract {
 
         final Method propertyValidateMethod = findMethodExactOrFail(Customer.class, "validateFirstName", new Class[] { String.class });
 
-        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             facetFactory.process(processMethodContext);
             // then
@@ -276,7 +276,7 @@ extends FacetFactoryTestAbstract {
 
         final Method propertyDisableMethod = findMethodExactOrFail(Customer.class, "disableFirstName", new Class[] {});
 
-        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             facetFactory.process(processMethodContext);
             // then
@@ -300,7 +300,7 @@ extends FacetFactoryTestAbstract {
 
         final Method propertyDisableMethod = findMethodExactOrFail(Customer.class, "disableFirstName");
 
-        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             facetFactory.process(processMethodContext);
             // then
@@ -324,7 +324,7 @@ extends FacetFactoryTestAbstract {
 
         final Method propertyHideMethod = findMethodExactOrFail(Customer.class, "hideFirstName", new Class[] {});
 
-        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             facetFactory.process(processMethodContext);
             // then
@@ -348,7 +348,7 @@ extends FacetFactoryTestAbstract {
 
         final Method propertyHideMethod = findMethodExactOrFail(Customer.class, "hideFirstName");
 
-        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             facetFactory.process(processMethodContext);
             // then
@@ -373,7 +373,7 @@ extends FacetFactoryTestAbstract {
 
         final Method propertyAccessorMethod = findMethodExactOrFail(CustomerEx.class, "getFirstName");
 
-        propertyScenario(CustomerEx.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        propertyScenario(CustomerEx.class, "firstName", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             facetFactory.process(processMethodContext);
             // then
@@ -404,7 +404,7 @@ extends FacetFactoryTestAbstract {
         final Method propertyHideMethod = findMethodExactOrFail(CustomerEx.class, "hideFirstName");
         final Method propertyDisableMethod = findMethodExactOrFail(CustomerEx.class, "disableFirstName");
 
-        propertyScenario(CustomerEx.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        propertyScenario(CustomerEx.class, "firstName", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             facetFactory.process(processMethodContext);
             // then

@@ -53,7 +53,7 @@ extends FacetFactoryTestAbstract {
             public String name() { return "Joe"; }
         }
 
-        actionScenario(CustomerService.class, "name", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+        actionScenario(CustomerService.class, "name", (processMethodContext, facetHolder, facetedMethod) -> {
             // when
             facetFactory.process(processMethodContext);
             // then
@@ -77,7 +77,7 @@ extends FacetFactoryTestAbstract {
             public String name() { return "Joe"; }
         }
 
-        actionScenario(CustomerService.class, "name", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+        actionScenario(CustomerService.class, "name", (processMethodContext, facetHolder, facetedMethod) -> {
             // when
             facetFactory.process(processMethodContext);
             // then
@@ -97,7 +97,7 @@ extends FacetFactoryTestAbstract {
             public String name() { return "Joe"; }
         }
 
-        actionScenario(CustomerService.class, "name", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+        actionScenario(CustomerService.class, "name", (processMethodContext, facetHolder, facetedMethod) -> {
             // when
             facetFactory.process(processMethodContext);
             // then
@@ -116,7 +116,7 @@ extends FacetFactoryTestAbstract {
             public String name() { return "Joe"; }
         }
 
-        actionScenario(CustomerService.class, "name", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+        actionScenario(CustomerService.class, "name", (processMethodContext, facetHolder, facetedMethod) -> {
             // when
             facetFactory.process(processMethodContext);
             // then

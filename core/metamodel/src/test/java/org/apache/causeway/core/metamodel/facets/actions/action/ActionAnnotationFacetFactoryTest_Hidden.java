@@ -53,7 +53,7 @@ extends ActionAnnotationFacetFactoryTest {
         }
 
         // given
-        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
 
             // when
             processHidden(facetFactory, processMethodContext);

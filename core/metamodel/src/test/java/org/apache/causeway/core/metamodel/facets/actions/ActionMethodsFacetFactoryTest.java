@@ -61,7 +61,7 @@ extends FacetFactoryTestAbstract {
 
         final Method validateMethod = findMethodExactOrFail(Customer.class, "validateSomeAction");
 
-        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod) -> {
             //when
             facetFactory.process(processMethodContext);
 
@@ -88,7 +88,7 @@ extends FacetFactoryTestAbstract {
 
         final Method validateMethod = findMethodExactOrFail(Customer.class, "validateSomeAction", new Class[] { int.class, int.class });
 
-        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod) -> {
             //when
             facetFactory.process(processMethodContext);
 
@@ -116,7 +116,7 @@ extends FacetFactoryTestAbstract {
         final Method default0Method = findMethodExactOrFail(Customer.class, "default0SomeAction");
         final Method default1Method = findMethodExactOrFail(Customer.class, "default1SomeAction");
 
-        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod) -> {
             //when
             facetFactory.process(processMethodContext);
             //then
@@ -152,7 +152,7 @@ extends FacetFactoryTestAbstract {
         final Method choices1Method = findMethodExactOrFail(Customer.class, "choices1SomeAction");
         final Method choices2Method = findMethodExactOrFail(Customer.class, "choices2SomeAction");
 
-        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod) -> {
             //when
             facetFactory.process(processMethodContext);
             //then
@@ -191,7 +191,7 @@ extends FacetFactoryTestAbstract {
 
         final Method autoComplete0Method = findMethodExactOrFail(Customer.class, "autoComplete0SomeAction", new Class[] {String.class});
 
-        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod) -> {
             //when
             facetFactory.process(processMethodContext);
             //then

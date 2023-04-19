@@ -58,7 +58,7 @@ extends FacetFactoryTestAbstract {
             public String foz() { return null; }
         }
 
-        actionScenario(Customer.class, "foz", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        actionScenario(Customer.class, "foz", (processMethodContext, facetHolder, facetedMethod)->{
             facetFactory.process(processMethodContext);
 
             final Facet facet = facetedMethod.getFacet(ActionPositionFacet.class);
@@ -77,7 +77,7 @@ extends FacetFactoryTestAbstract {
             public String foz() { return null; }
         }
 
-        actionScenario(Customer.class, "foz", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        actionScenario(Customer.class, "foz", (processMethodContext, facetHolder, facetedMethod)->{
             facetFactory.process(processMethodContext);
 
             final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
@@ -97,7 +97,7 @@ extends FacetFactoryTestAbstract {
             public String foo() { return null; }
         }
 
-        actionScenario(Customer.class, "foo", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        actionScenario(Customer.class, "foo", (processMethodContext, facetHolder, facetedMethod)->{
             facetFactory.process(processMethodContext);
 
             final Facet facet = facetedMethod.getFacet(ActionPositionFacet.class);
@@ -114,7 +114,7 @@ extends FacetFactoryTestAbstract {
             public String foz() { return null; }
         }
 
-        actionScenario(Customer.class, "foz", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        actionScenario(Customer.class, "foz", (processMethodContext, facetHolder, facetedMethod)->{
             facetFactory.process(processMethodContext);
 
             Facet facet = facetedMethod.getFacet(CssClassFaFacet.class);
@@ -135,7 +135,7 @@ extends FacetFactoryTestAbstract {
             public String foz() { return null; }
         }
 
-        actionScenario(Customer.class, "foz", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        actionScenario(Customer.class, "foz", (processMethodContext, facetHolder, facetedMethod)->{
             facetFactory.process(processMethodContext);
 
             Facet facet = facetedMethod.getFacet(CssClassFaFacet.class);

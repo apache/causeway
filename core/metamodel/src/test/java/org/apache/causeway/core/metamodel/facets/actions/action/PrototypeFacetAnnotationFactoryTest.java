@@ -62,7 +62,7 @@ extends FacetFactoryTestAbstract {
             @Action(restrictTo = RestrictTo.PROTOTYPING)
             public void someAction() {}
         }
-        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod) -> {
             //when
             processRestrictTo(facetFactory, processMethodContext);
             //then

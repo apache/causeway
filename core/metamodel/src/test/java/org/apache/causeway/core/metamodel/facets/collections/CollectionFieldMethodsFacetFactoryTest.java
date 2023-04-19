@@ -49,7 +49,7 @@ extends FacetFactoryTestAbstract {
 
         final Method collectionAccessorMethod = findMethodExactOrFail(Customer.class, "getOrders");
 
-        collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             facetFactory.process(processMethodContext);
             // then
@@ -72,7 +72,7 @@ extends FacetFactoryTestAbstract {
 
         final Method collectionAccessorMethod = findMethodExactOrFail(Customer.class, "getOrders");
 
-        collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             facetFactory.process(processMethodContext);
             // then
@@ -95,7 +95,7 @@ extends FacetFactoryTestAbstract {
 
         final Method collectionAccessorMethod = findMethodExactOrFail(Customer.class, "getOrders");
 
-        collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             facetFactory.process(processMethodContext);
             // then
@@ -118,7 +118,7 @@ extends FacetFactoryTestAbstract {
 
         final Method collectionAccessorMethod = findMethodExactOrFail(Customer.class, "getOrders");
 
-        collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             facetFactory.process(processMethodContext);
             // then
@@ -143,7 +143,7 @@ extends FacetFactoryTestAbstract {
 
         final Method collectionAccessorMethod = findMethodExactOrFail(Customer.class, "getOrders");
 
-        collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             facetFactory.process(processMethodContext);
             // then
@@ -168,7 +168,7 @@ extends FacetFactoryTestAbstract {
         class CustomerEx extends Customer {
         }
         final Method collectionAccessorMethod = findMethodExactOrFail(CustomerEx.class, "getOrders");
-        collectionScenario(CustomerEx.class, "orders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        collectionScenario(CustomerEx.class, "orders", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             facetFactory.process(processMethodContext);
             // then

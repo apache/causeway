@@ -57,7 +57,7 @@ extends FacetFactoryTestAbstract {
             @Property(snapshot = Snapshot.EXCLUDED)
             public String getFirstName() { return null; }
         }
-        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             processNotPersisted(facetFactory, processMethodContext);
             // then
