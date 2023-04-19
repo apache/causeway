@@ -26,7 +26,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.Identifier;
@@ -239,10 +238,6 @@ implements HasMetaModelContext {
     protected final void assertNoMethodsRemoved() {
         assertTrue(methodRemover.getRemovedMethodMethodCalls().isEmpty());
         assertTrue(methodRemover.getRemoveMethodArgsCalls().isEmpty());
-    }
-
-    protected final void assertMethodRemovedCount(final int i) {
-        assertEquals(1, methodRemover.getRemoveMethodArgsCalls().size());
     }
 
     protected final void assertMethodWasRemoved(final Method method) {

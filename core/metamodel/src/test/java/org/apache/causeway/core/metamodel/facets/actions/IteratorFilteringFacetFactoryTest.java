@@ -47,31 +47,17 @@ extends FacetFactoryTestAbstract {
     }
 
     @Test
-    void requestsRemoverToRemoveIteratorMethods() {
+    void doesNotRecognizeIterator_ifNotImplementingIterable() {
         @SuppressWarnings("unused")
         class Customer {
-            public void someAction() {}
+            public void iterator() {}
         }
-        objectScenario(Customer.class, (processClassContext, facetHolder) -> {
-            //when
-            facetFactory.process(processClassContext);
-            //then
-            assertMethodRemovedCount(1);
-        });
-    }
-
-    @Test
-    void noIteratorMethodFiltered() {
-        @SuppressWarnings("unused")
-        class Customer {
-            public void someAction() {}
-        }
-        final Method actionMethod = findMethodExactOrFail(Customer.class, "someAction");
+        final Method actionMethod = findMethodExactOrFail(Customer.class, "iterator");
         assertFalse(facetFactory.recognizes(actionMethod));
     }
 
     @Test
-    void iterableIteratorMethodFiltered() {
+    void recognizesIterator() {
         @SuppressWarnings("unused")
         class Customer implements Iterable<Customer> {
             public void someAction() {}
