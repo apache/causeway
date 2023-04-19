@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.specloader;
 
-public class ReflectorTestPojo {
+class TestPojo {
     private static int nextId;
     private final int id = nextId++;
     private final String state = "pojo" + id;
@@ -37,7 +37,7 @@ public class ReflectorTestPojo {
             return true;
         }
         if (other.getClass() == getClass()) {
-            final ReflectorTestPojo otherTestPojo = (ReflectorTestPojo) other;
+            final TestPojo otherTestPojo = (TestPojo) other;
             return otherTestPojo.state.equals(state);
         }
         return false;

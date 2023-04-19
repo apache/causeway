@@ -20,7 +20,6 @@ package org.apache.causeway.core.metamodel.services.grid;
 
 import java.util.EnumSet;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -53,7 +52,7 @@ extends MetaModelTestAbstract {
                 .lookupServiceElseFail(GridLoaderService.class);
     }
 
-    @Test @Disabled("just a blueprint")
+    // test blueprint, for future work
     void blueprint() {
         val domainClassAndLayout = new GridLoaderServiceDefault.LayoutKey(Bar.class, null);
         gridLoaderService.loadLayoutResource(domainClassAndLayout, EnumSet.of(CommonMimeType.XML));
@@ -104,6 +103,5 @@ extends MetaModelTestAbstract {
         assertSame(facetRanking.getWinnerNonEvent(MemberNamedFacet.class).get(), xmlFacetRank.getLastElseFail());
 
     }
-
 
 }
