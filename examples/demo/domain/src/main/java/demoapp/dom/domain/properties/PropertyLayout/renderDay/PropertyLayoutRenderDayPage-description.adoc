@@ -42,7 +42,7 @@ include::PropertyLayoutRenderDayPage.java[tags=render-as-day-before]
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutRenderDayVm_updateEndDateWithParameterLayout.java[tags=annotation]
+include::PropertyLayoutRenderDayPage_updateEndDateWithParameterLayout.java[tags=annotation]
 ----
 <.> explicitly specifies that the parameter should be rendered as the day before.
 
@@ -75,7 +75,7 @@ The `@PropertyLayout` can also be applied at the class-level to mixin properties
 
 [source,java,indent=0]
 ----
-include::PropertyLayoutRenderDayVm_mixinEndDateWithPropertyLayout.java[tags=class]
+include::PropertyLayoutRenderDayPage_mixinEndDateWithPropertyLayout.java[tags=class]
 ----
 <.> explicitly specifies that the contributed property should be rendered as the day before
 
@@ -106,7 +106,7 @@ include::PropertyLayoutRenderDayPage.java[tags=meta-annotation]
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutRenderDayVm_updateEndDateWithMetaAnnotation.java[tags=meta-annotation]
+include::PropertyLayoutRenderDayPage_updateEndDateWithMetaAnnotation.java[tags=meta-annotation]
 ----
 <.> hint is inherited from the meta-annotation
 
@@ -114,7 +114,7 @@ include::PropertyLayoutRenderDayVm_updateEndDateWithMetaAnnotation.java[tags=met
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutRenderDayVm_mixinEndDateWithMetaAnnotation.java[tags=class]
+include::PropertyLayoutRenderDayPage_mixinEndDateWithMetaAnnotation.java[tags=class]
 ----
 <.> hint is inherited from the meta-annotation
 
@@ -135,7 +135,7 @@ include::PropertyLayoutRenderDayPage.java[tags=meta-annotation-overridden]
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutRenderDayVm_updateEndDateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
+include::PropertyLayoutRenderDayPage_updateEndDateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
 ----
 <.> hint from meta-annotation (deliberately incorrectly annotated) ...
 <.> \... is overridden by the `@ParameterLayout` annotation
@@ -145,7 +145,7 @@ include::PropertyLayoutRenderDayVm_updateEndDateWithMetaAnnotationOverridden.jav
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutRenderDayVm_mixinEndDateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
+include::PropertyLayoutRenderDayPage_mixinEndDateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
 ----
 <.> hint from meta-annotation (deliberately incorrectly annotated) ...
 <.> \... is overridden by the `@PropertyLayout` annotation

@@ -28,31 +28,26 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
-@Action(
-    semantics = SemanticsOf.IDEMPOTENT
-)
-@ActionLayout(
-    associateWith = "propertyUsingMetaAnnotation"
-    , sequence = "1")
+@Action(semantics = SemanticsOf.IDEMPOTENT)
+@ActionLayout(associateWith = "mandatoryProperty", sequence = "1")
 @RequiredArgsConstructor
-public class PropertyOptionalityPage_updateWithMetaAnnotation {
+public class PropertyOptionalityPage_updateMandatory {
 
     private final PropertyOptionalityPage page;
 
-//tag::meta-annotation[]
+//tag::annotation[]
     @MemberSupport public PropertyOptionalityPage act(
-            @OptionalityOptionalMetaAnnotation                            // <.>
-            @Parameter(optionality = Optionality.OPTIONAL)
-            @ParameterLayout(
-                describedAs = "@OptionalityOptionalMetaAnnotation"
+            @Parameter(
+                optionality = Optionality.MANDATORY             // <.>
             )
-            final String parameterUsingMetaAnnotation) {
-        page.setPropertyUsingMetaAnnotation(parameterUsingMetaAnnotation);
+            final String mandatoryParameter) {
+        page.setMandatoryProperty(mandatoryParameter);
         return page;
     }
-//end::meta-annotation[]
+//end::annotation[]
+
     @MemberSupport public String default0Act() {
-        return page.getPropertyUsingMetaAnnotation();
+        return page.getMandatoryProperty();
     }
 
 }

@@ -34,7 +34,7 @@ include::PropertyLayoutTypicalLengthPage.java[tags=annotation]
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutTypicalLengthVm_updateWithParameterLayout.java[tags=annotation]
+include::PropertyLayoutTypicalLengthPage_updateWithParameterLayout.java[tags=annotation]
 ----
 <.> explicitly specifies that the parameter should use a textbox
 
@@ -69,7 +69,7 @@ The `@PropertyLayout` can also be applied at the class-level to mixin properties
 
 [source,java,indent=0]
 ----
-include::PropertyLayoutTypicalLengthVm_mixinProperty.java[tags=class]
+include::PropertyLayoutTypicalLengthPage_mixinProperty.java[tags=class]
 ----
 <.> explicitly specifies that the contributed property should use a textbox
 
@@ -101,7 +101,7 @@ include::PropertyLayoutTypicalLengthPage.java[tags=meta-annotated]
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutTypicalLengthVm_updateWithMetaAnnotation.java[tags=meta-annotation]
+include::PropertyLayoutTypicalLengthPage_updateWithMetaAnnotation.java[tags=meta-annotation]
 ----
 <.> hint is inherited from the meta-annotation
 
@@ -109,7 +109,7 @@ include::PropertyLayoutTypicalLengthVm_updateWithMetaAnnotation.java[tags=meta-a
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutTypicalLengthVm_mixinPropertyWithMetaAnnotation.java[tags=class]
+include::PropertyLayoutTypicalLengthPage_mixinPropertyWithMetaAnnotation.java[tags=class]
 ----
 <.> hint is inherited from the meta-annotation
 
@@ -130,7 +130,7 @@ include::PropertyLayoutTypicalLengthPage.java[tags=meta-annotated-overridden]
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutTypicalLengthVm_updateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
+include::PropertyLayoutTypicalLengthPage_updateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
 ----
 <.> hint from meta-annotation ...
 <.> \... is overridden by the `@ParameterLayout` annotation
@@ -140,7 +140,7 @@ include::PropertyLayoutTypicalLengthVm_updateWithMetaAnnotationOverridden.java[t
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutTypicalLengthVm_mixinPropertyWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
+include::PropertyLayoutTypicalLengthPage_mixinPropertyWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
 ----
 <.> hint from meta-annotation ...
 <.> \... is overridden by the `@PropertyLayout` annotation

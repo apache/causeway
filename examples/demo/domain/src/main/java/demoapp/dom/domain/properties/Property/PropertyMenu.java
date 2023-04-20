@@ -118,10 +118,9 @@ public class PropertyMenu {
     @ActionLayout(cssClassFa="fa-infinity", describedAs = "Regular expressions, such as email")
     public PropertyOptionalityPage optionality(){
         val vm = new PropertyOptionalityPage();
-        vm.setPropertyUsingAnnotation(null);
-        vm.setMandatoryPropertyUsingAnnotation("mandatory");
-        vm.setPropertyUsingMetaAnnotation(null);
-        vm.setPropertyUsingMetaAnnotationButOverridden("mandatory");
+        vm.setOptionalProperty(null);
+        vm.setMandatoryProperty("mandatory");
+        vm.setNullableProperty(null);
         return vm;
     }
 

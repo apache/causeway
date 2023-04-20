@@ -18,26 +18,35 @@
  */
 package demoapp.dom.domain.properties.Property.optionality;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
-import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.ParameterLayout;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 
-//tag::class[]
-@Property(optionality = Optionality.OPTIONAL)       // <.>
-@Parameter(optionality = Optionality.OPTIONAL)      // <.>
-@Inherited
-@Target({
-        ElementType.METHOD, ElementType.FIELD,      // <.>
-        ElementType.PARAMETER,                      // <.>
-})
-@Retention(RetentionPolicy.RUNTIME)
-public @interface OptionalityOptionalMetaAnnotation {
+import org.springframework.lang.Nullable;
+
+import lombok.RequiredArgsConstructor;
+
+@Action(semantics = SemanticsOf.IDEMPOTENT)
+@ActionLayout(associateWith = "nullableProperty", sequence = "1")
+@RequiredArgsConstructor
+public class PropertyOptionalityPage_updateNullable {
+
+    private final PropertyOptionalityPage page;
+
+//tag::annotation[]
+    @MemberSupport public PropertyOptionalityPage act(
+            @org.springframework.lang.Nullable      // <.>
+            final String nullableParameter) {
+        page.setNullableProperty(nullableParameter);
+        return page;
+    }
+//end::annotation[]
+    @MemberSupport public String default0Act() {
+        return page.getNullableProperty();
+    }
 
 }
-//end::class[]

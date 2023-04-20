@@ -80,7 +80,7 @@ The `takeSnapshot` mixin action shows how the `XmlSnapshotService` service is us
 
 [source,java,indent=0]
 ----
-include::PropertySnapshotVm_takeXmlSnapshot.java[tags=class]
+include::PropertySnapshotPage_takeXmlSnapshot.java[tags=class]
 ----
 
 The resultant XML snapshot is:

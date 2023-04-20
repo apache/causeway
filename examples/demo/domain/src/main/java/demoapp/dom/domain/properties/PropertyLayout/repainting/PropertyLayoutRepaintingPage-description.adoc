@@ -85,7 +85,7 @@ include::PropertyLayoutRepaintingPage.java[tags=meta-annotated]
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutRepaintingVm_mixinPropertyWithMetaAnnotation.java[tags=class]
+include::PropertyLayoutRepaintingPage_mixinPropertyWithMetaAnnotation.java[tags=class]
 ----
 <.> hint is inherited from the meta-annotation
 
@@ -107,7 +107,7 @@ include::PropertyLayoutRepaintingPage.java[tags=meta-annotated-overridden]
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutRepaintingVm_mixinPropertyWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
+include::PropertyLayoutRepaintingPage_mixinPropertyWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
 ----
 <.> hint from meta-annotation ...
 <.> \... is overridden by the `@PropertyLayout` annotation

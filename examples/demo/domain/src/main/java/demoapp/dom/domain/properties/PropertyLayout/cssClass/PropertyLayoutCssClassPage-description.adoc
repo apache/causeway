@@ -24,7 +24,7 @@ include::PropertyLayoutCssClassPage.java[tags=annotation]
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutCssClassVm_updateWithParameterLayout.java[tags=annotation]
+include::PropertyLayoutCssClassPage_updateWithParameterLayout.java[tags=annotation]
 ----
 <.> explicitly specifies the CSS class to apply to the parameter `<div>`
 
@@ -91,7 +91,7 @@ include::PropertyLayoutCssClassPage.java[tags=meta-annotated]
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutCssClassVm_updateWithMetaAnnotation.java[tags=meta-annotation]
+include::PropertyLayoutCssClassPage_updateWithMetaAnnotation.java[tags=meta-annotation]
 ----
 <.> hint is inherited from the meta-annotation
 
@@ -99,7 +99,7 @@ include::PropertyLayoutCssClassVm_updateWithMetaAnnotation.java[tags=meta-annota
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutCssClassVm_mixinPropertyWithMetaAnnotation.java[tags=class]
+include::PropertyLayoutCssClassPage_mixinPropertyWithMetaAnnotation.java[tags=class]
 ----
 <.> hint is inherited from the meta-annotation
 
@@ -120,7 +120,7 @@ include::PropertyLayoutCssClassPage.java[tags=meta-annotated-overridden]
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutCssClassVm_updateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
+include::PropertyLayoutCssClassPage_updateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
 ----
 <.> hint from meta-annotation ...
 <.> \... is overridden by the `@ParameterLayout` annotation
@@ -130,7 +130,7 @@ include::PropertyLayoutCssClassVm_updateWithMetaAnnotationOverridden.java[tags=m
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutCssClassVm_mixinPropertyWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
+include::PropertyLayoutCssClassPage_mixinPropertyWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
 ----
 <.> hint from meta-annotation ...
 <.> \... is overridden by the `@PropertyLayout` annotation

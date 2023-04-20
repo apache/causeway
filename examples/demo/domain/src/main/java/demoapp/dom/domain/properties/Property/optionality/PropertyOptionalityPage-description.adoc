@@ -37,63 +37,9 @@ include::PropertyOptionalityPage.java[tags=annotation]
 +
 [source,java,indent=0]
 ----
-include::PropertyOptionalityVm_updateWithParameterLayout.java[tags=annotation]
+include::PropertyOptionalityPage_updateMandatory.java[tags=annotation]
 ----
 <.> explicitly specifies that the parameter is optional
 
 The annotation could also be applied to a mixin, but would have little effect because mixin properties are always read-only.
-
-== Meta-annotated
-
-The `optionality` attribute can also be specified using a custom meta-annotation:
-
-* the meta-annotation is defined as:
-+
-[source,java]
-----
-include::OptionalityOptionalMetaAnnotation.java[tags=class]
-----
-<.> annotated for a property ...
-<.> \... and for a parameter.
-<.> annotation can be applied to a property (either its getter or the field directly)
-<.> annotation can be applied to a parameter
-
-* and can be applied to a property:
-+
-[source,java,indent=0]
-----
-include::PropertyOptionalityPage.java[tags=meta-annotated]
-----
-<.> semantic is inherited from the meta-annotation
-
-* or can be applied to a parameter:
-+
-[source,java,indent=0]
-----
-include::PropertyOptionalityVm_updateWithMetaAnnotation.java[tags=meta-annotation]
-----
-<.> semantic is inherited from the meta-annotation
-
-
-=== Meta-annotated Overridden
-
-The meta-annotation can itself be overridden:
-
-* in a property:
-+
-[source,java,indent=0]
-----
-include::PropertyOptionalityPage.java[tags=meta-annotated-overridden]
-----
-<.> semantic from meta-annotation ...
-<.> \... is overridden by the `@Property` annotation
-
-* or a parameter:
-+
-[source,java,indent=0]
-----
-include::PropertyOptionalityVm_updateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
-----
-<.> semantic from meta-annotation ...
-<.> \... is overridden by the `@Parameter` annotation
 

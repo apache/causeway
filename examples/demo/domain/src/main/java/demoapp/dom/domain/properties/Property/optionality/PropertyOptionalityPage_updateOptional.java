@@ -28,35 +28,25 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
-@Action(
-    semantics = SemanticsOf.IDEMPOTENT
-)
-@ActionLayout(
-    associateWith = "propertyUsingMetaAnnotationButOverridden"
-    , sequence = "1")
+@Action(semantics = SemanticsOf.IDEMPOTENT)
+@ActionLayout(associateWith = "optionalProperty", sequence = "1")
 @RequiredArgsConstructor
-public class PropertyOptionalityPage_updateWithMetaAnnotationOverridden {
+public class PropertyOptionalityPage_updateOptional {
 
     private final PropertyOptionalityPage page;
 
-//tag::meta-annotation-overridden[]
+//tag::annotation[]
     @MemberSupport public PropertyOptionalityPage act(
-            @OptionalityOptionalMetaAnnotation                  // <.>
             @Parameter(
-                optionality = Optionality.MANDATORY             // <.>
+                optionality = Optionality.OPTIONAL
             )
-            @ParameterLayout(
-                describedAs =
-                    "@OptionalityOptionalMetaAnnotation " +
-                    "@ParameterLayout(optionality = MANDATORY)"
-            )
-            final String parameterUsingMetaAnnotationButOverridden) {
-        page.setPropertyUsingMetaAnnotationButOverridden(parameterUsingMetaAnnotationButOverridden);
+            final String optionalParameter) {
+        page.setOptionalProperty(optionalParameter);
         return page;
     }
-//end::meta-annotation-overridden[]
+//end::annotation[]
     @MemberSupport public String default0Act() {
-        return page.getPropertyUsingMetaAnnotationButOverridden();
+        return page.getOptionalProperty();
     }
 
 }
