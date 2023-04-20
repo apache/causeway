@@ -80,7 +80,7 @@ import org.apache.causeway.core.metamodel.facets.properties.update.clear.Propert
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.postprocessors.members.TweakDomainEventsForMixinPostProcessor;
+import org.apache.causeway.core.metamodel.postprocessors.members.SynthesizeDomainEventsForMixinPostProcessor;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
@@ -279,8 +279,8 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
         }
 
         @Test
-        void withPropertyInteractionEvent_mixedIn_annatotatedOnMethod() {
-            val postProcessor = new TweakDomainEventsForMixinPostProcessor(getMetaModelContext());
+        void withPropertyInteractionEvent_mixedIn_annotatedOnMethod() {
+            val postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
 
             // given
             class Customer {
@@ -310,8 +310,8 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
         }
 
         @Test @Disabled("surfaces bug, that @Property annot on type not recognized")
-        void withPropertyInteractionEvent_mixedIn_annatotatedOnType() {
-            val postProcessor = new TweakDomainEventsForMixinPostProcessor(getMetaModelContext());
+        void withPropertyInteractionEvent_mixedIn_annotatedOnType() {
+            val postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
 
             // given
             class Customer {

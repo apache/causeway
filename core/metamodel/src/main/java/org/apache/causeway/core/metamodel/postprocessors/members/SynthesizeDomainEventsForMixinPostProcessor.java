@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.postprocessors.members;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
@@ -33,27 +34,32 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.specimpl.OneToManyAssociationMixedIn;
 import org.apache.causeway.core.metamodel.specloader.specimpl.OneToOneAssociationMixedIn;
 
-public class TweakDomainEventsForMixinPostProcessor
+/**
+ * Mixed-in members use the domain-event type as specified with the mixee type,
+ * <pre>@DomainObject()</pre>
+ * unless overwritten by the mixin type.
+ */
+public class SynthesizeDomainEventsForMixinPostProcessor
 extends ObjectSpecificationPostProcessorAbstract {
 
     @Inject
-    public TweakDomainEventsForMixinPostProcessor(final MetaModelContext metaModelContext) {
+    public SynthesizeDomainEventsForMixinPostProcessor(final MetaModelContext metaModelContext) {
         super(metaModelContext);
     }
 
     @Override
     public void postProcessAction(final ObjectSpecification objectSpecification, final ObjectAction objectAction) {
         if(objectAction.isMixedIn()) {
-
- //TODO[CAUSEWAY-3409] yet already created in ActionAnnotationFacetFactory
-            //FacetUtil.addFacetIfPresent(
-                    //ActionDomainEventFacet.createMixedIn(objectSpecification, (ObjectActionMixedIn)objectAction));
- //TODO[CAUSEWAY-3409] even when this lookup returns empty, we still might need an event-type holding facet
             objectAction
                 .lookupFacet(ActionDomainEventFacet.class)
-                .ifPresent(actionDomainEventFacet->
-                    actionDomainEventFacet.initWithMixee(objectSpecification));
+                .orElseThrow(()->_Exceptions
+                        .illegalState("framework bug: "
+                                + "ActionDomainEventFacet for %s should have already been created via "
+                                + "ActionAnnotationFacetFactory, yet was not.",
+                                objectAction.getFeatureIdentifier()))
+                .initWithMixee(objectSpecification);
         }
+        //TODO[CAUSEWAY-3409] now should we remove any ActionInvocationFacet(s) that are not post-able?
     }
 
     @Override

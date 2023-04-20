@@ -24,6 +24,7 @@ import org.apache.causeway.applib.events.domain.ActionDomainEvent;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.DomainEventHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 
 import lombok.NonNull;
@@ -37,10 +38,10 @@ implements ActionInvocationFacet, ImperativeFacet {
     }
 
     protected ActionInvocationFacetAbstract(
-            final Class<? extends ActionDomainEvent<?>> eventType,
-            final EventTypeOrigin eventTypeOrigin,
+            final DomainEventHolder<ActionDomainEvent<?>> domainEventHolder,
             final FacetHolder holder) {
-        super(type(), eventType, eventTypeOrigin, holder);
+        // binds this DomainEventHolder to given DomainEventHolder, updateEventType not allowed
+        super(type(), domainEventHolder, holder);
     }
 
     @Override
