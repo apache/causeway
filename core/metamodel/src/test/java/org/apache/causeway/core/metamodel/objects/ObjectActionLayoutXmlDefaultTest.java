@@ -55,7 +55,7 @@ extends MetaModelTestAbstract {
         when(mockFacetedMethod.getTranslationService())
         .thenReturn(new TranslationService_forTesting());
 
-        action = ObjectActionDefault.forMethod(mockFacetedMethod);
+        action = ObjectActionDefault.forTesting.forMethod(mockFacetedMethod);
     }
 
 

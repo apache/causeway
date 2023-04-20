@@ -61,6 +61,8 @@ public class OneToOneAssociationDefault
 extends ObjectAssociationAbstract
 implements OneToOneAssociation {
 
+    // -- FACTORY
+
     public static OneToOneAssociationDefault forMethod(final FacetedMethod facetedMethod) {
         return new OneToOneAssociationDefault(
                 facetedMethod.getFeatureIdentifier(),
@@ -69,11 +71,12 @@ implements OneToOneAssociation {
                     .loadSpecification(facetedMethod.getType().getElementType()));
     }
 
+    // -- CONSTRUCTION
+
     protected OneToOneAssociationDefault(
             final Identifier featureIdentifier,
             final FacetedMethod facetedMethod,
             final ObjectSpecification objectSpec) {
-
         super(featureIdentifier, facetedMethod, FeatureType.PROPERTY, objectSpec);
     }
 

@@ -36,16 +36,15 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.Snapshot;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
 import org.apache.causeway.applib.spec.Specification;
-import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.commons.matchers.CausewayMatchers;
 import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -79,6 +78,7 @@ import org.apache.causeway.core.metamodel.facets.properties.update.clear.Propert
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.postprocessors.members.TweakDomainEventsForMixinPostProcessor;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
@@ -288,33 +288,29 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
             });
         }
 
-        //@Test  //TODO[CAUSEWAY-3409] WIP
+        @Test
         void withPropertyInteractionEvent_mixedIn() {
+            val postProcessor = new TweakDomainEventsForMixinPostProcessor(getMetaModelContext());
+
+            // given
             class Customer {
                 class NamedChangedDomainEvent extends PropertyDomainEvent<Customer, String> {}
             }
-            @Property(domainEvent = Customer.NamedChangedDomainEvent.class)
-            @PropertyLayout(named = "name")
+            @DomainObject(nature=Nature.MIXIN, mixinMethod = "prop")
             @RequiredArgsConstructor
             @SuppressWarnings("unused")
             class Customer_name {
                 final Customer mixee;
-                @MemberSupport
+                @Property(domainEvent = Customer.NamedChangedDomainEvent.class)
                 public String prop() { return "mixed-in name"; }
             }
 
-            val scenario = PropertyScenario.builder(Customer.class, "name")
-                    .mixinClasses(Can.of(Customer_name.class))
-                    .build();
-
-            // given
-            propertyScenario(scenario, (processMethodContext, facetHolder, facetedMethod)->{
-                addGetterFacet(facetedMethod);
-                addSetterFacet(facetedMethod);
-                addClearFacet(facetedMethod);
+            propertyScenarioMixedIn(Customer.class, Customer_name.class,
+                    (processMethodContext, facetHolder, facetedMethod, mixeeSpec, mixedInProp)->{
 
                 // when
                 processModify(facetFactory, processMethodContext);
+                postProcessor.postProcessProperty(mixeeSpec, mixedInProp);
 
                 // then
                 final Facet domainEventFacet = facetedMethod.getFacet(PropertyDomainEventFacet.class);
@@ -324,21 +320,6 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                 assertTrue(domainEventFacetImpl.getEventTypeOrigin().isAnnotatedMember());
                 assertThat(domainEventFacetImpl.getEventType(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
 
-                // then
-                final Facet setterFacet = facetedMethod.getFacet(PropertySetterFacet.class);
-                assertNotNull(setterFacet);
-                assertTrue(setterFacet instanceof PropertySetterFacetForDomainEvent, "unexpected facet: " + setterFacet);
-                final PropertySetterFacetForDomainEvent setterFacetImpl = (PropertySetterFacetForDomainEvent) setterFacet;
-                assertEquals(EventTypeOrigin.ANNOTATED_MEMBER, setterFacetImpl.getEventTypeOrigin());
-                assertThat(setterFacetImpl.getEventType(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
-
-                // then
-                final Facet clearFacet = facetedMethod.getFacet(PropertyClearFacet.class);
-                assertNotNull(clearFacet);
-                assertTrue(clearFacet instanceof PropertyClearFacetForDomainEvent);
-                final PropertyClearFacetForDomainEvent clearFacetImpl = (PropertyClearFacetForDomainEvent) clearFacet;
-                assertEquals(EventTypeOrigin.ANNOTATED_MEMBER, clearFacetImpl.getEventTypeOrigin());
-                assertThat(clearFacetImpl.getEventType(), CausewayMatchers.classEqualTo(Customer.NamedChangedDomainEvent.class));
             });
         }
 

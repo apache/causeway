@@ -106,7 +106,7 @@ extends
         public final Comparator<ObjectSpecification> BY_BEANSORT_THEN_LOGICALTYPE =
                 Comparator.comparing(ObjectSpecification::getBeanSort)
                     .thenComparing(ObjectSpecification::getLogicalType);
-        
+
         public final Comparator<ObjectSpecification> FULLY_QUALIFIED_CLASS_NAME =
                 Comparator.comparing(ObjectSpecification::getFullIdentifier);
 
@@ -114,12 +114,12 @@ extends
                 (final ObjectSpecification s1, final ObjectSpecification s2) ->
             s1.getShortIdentifier().compareToIgnoreCase(s2.getShortIdentifier());
     }
-    
+
     /**
-     * Natural order, that is, by {@link BeanSort} then by {@link LogicalType}. 
+     * Natural order, that is, by {@link BeanSort} then by {@link LogicalType}.
      */
     @Override
-    default int compareTo(ObjectSpecification o) {
+    default int compareTo(final ObjectSpecification o) {
         return Comparators.BY_BEANSORT_THEN_LOGICALTYPE.compare(this, o);
     }
 
@@ -425,6 +425,13 @@ extends
     default boolean isVoid() {
         return getCorrespondingClass()==void.class
                 || getCorrespondingClass()==Void.class;
+    }
+
+    /**
+     * Whether {@link #getCorrespondingClass()} is {@link Void} or void.
+     */
+    default boolean isVoidPrimitive() {
+        return getCorrespondingClass()==void.class;
     }
 
     /**

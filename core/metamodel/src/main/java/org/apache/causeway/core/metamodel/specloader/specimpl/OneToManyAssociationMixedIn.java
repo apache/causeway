@@ -87,16 +87,12 @@ implements MixedInMember {
     }
 
     public OneToManyAssociationMixedIn(
-            final ObjectActionDefault mixinAction,
             final ObjectSpecification mixeeSpec,
+            final ObjectActionDefault mixinAction,
             final Class<?> mixinType,
             final String mixinMethodName) {
 
-        super(Identifier.collectionIdentifier(
-                    LogicalType.eager(
-                            mixeeSpec.getCorrespondingClass(),
-                            mixeeSpec.getLogicalTypeName()),
-                    _MixedInMemberNamingStrategy.determineIdFrom(mixinAction)),
+        super(identifierForMixedInCollection(mixeeSpec, mixinAction),
                 mixinAction.getFacetedMethod(), typeOfSpec(mixinAction));
 
         this.facetHolder = FacetHolder.layered(
@@ -181,5 +177,14 @@ implements MixedInMember {
         return getServiceRegistry().lookupServiceElseFail(ExecutionPublisher.class);
     }
 
+    private static Identifier identifierForMixedInCollection(
+            final ObjectSpecification mixeeSpec,
+            final ObjectActionDefault mixinAction) {
+        return Identifier.collectionIdentifier(
+                LogicalType.eager(
+                        mixeeSpec.getCorrespondingClass(),
+                        mixeeSpec.getLogicalTypeName()),
+                _MixedInMemberNamingStrategy.determineIdFrom(mixinAction));
+    }
 
 }

@@ -47,11 +47,11 @@ class _MixedInMemberNamingStrategy {
     // -- HELPER
 
     private static String compress(final String suffix) {
-        return suffix.replaceAll(" ","");
+        return suffix.replaceAll(" ", "");
     }
 
     private static String suffix(final ObjectActionDefault mixinActionAsRegular) {
-        return deriveMemberNameFrom(mixinActionAsRegular.getDeclaringType().getFeatureIdentifier().getClassNaturalName());
+        return deriveMemberNameFrom(mixinActionAsRegular.getFeatureIdentifier().getClassNaturalName());
     }
 
     // subject of JUnit testing

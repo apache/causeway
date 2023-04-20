@@ -91,9 +91,13 @@ class _Utils {
         return findMethodsByName(type, methodName).getSingletonOrFail();
     }
 
+    protected static Optional<Method> findGetter(final Class<?> declaringClass, final String propertyName) {
+        return _Utils.findMethodExact(declaringClass, "get" + _Strings.capitalize(propertyName))
+                .or(()->_Utils.findMethodExact(declaringClass, "is" + _Strings.capitalize(propertyName)));
+    }
+
     protected static Method findGetterOrFail(final Class<?> declaringClass, final String propertyName) {
-        val getter = _Utils.findMethodExact(declaringClass, "get" + _Strings.capitalize(propertyName))
-                    .or(()->_Utils.findMethodExact(declaringClass, "is" + _Strings.capitalize(propertyName)))
+        val getter = findGetter(declaringClass, propertyName)
                     .orElseThrow(()->
                         _Exceptions.noSuchElement("getter '%s' not found in %s", propertyName, declaringClass));
         return getter;

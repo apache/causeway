@@ -77,7 +77,7 @@ implements MixedInMember {
                             mixeeSpec.getLogicalTypeName()),
                     _MixedInMemberNamingStrategy.determineIdFrom(mixinAction),
                     mixinAction.getFacetedMethod().getFeatureIdentifier().getMemberParameterClassNames()),
-                mixinAction.getFacetedMethod(), false);
+                mixinAction.getFacetedMethod(), false, false);
 
         this.facetHolder = FacetHolder.layered(
                 super.getFeatureIdentifier(),

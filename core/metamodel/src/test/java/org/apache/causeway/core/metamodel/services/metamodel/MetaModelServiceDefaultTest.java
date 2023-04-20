@@ -77,7 +77,7 @@ public class MetaModelServiceDefaultTest {
         Mockito.when(mockSpec.subclasses(Hierarchical.Depth.DIRECT)).thenReturn(Can.empty());
         Mockito.when(mockSpec.isInjectable()).thenReturn(true);
 
-        action = ObjectActionDefault.forMethod(mockFacetedMethod);
+        action = ObjectActionDefault.forTesting.forMethod(mockFacetedMethod);
 
         mockMetaModelService = Mockito.mock(MetaModelServiceDefault.class);
         Mockito.when(mockMetaModelService.getDomainModel())
