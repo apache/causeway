@@ -23,8 +23,9 @@ import java.util.regex.Pattern;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.mockito.Mockito;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -156,7 +157,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
         facetFactory = null;
     }
 
-    @Nested
+    @TestInstance(Lifecycle.PER_CLASS)
     static class Modify extends PropertyAnnotationFacetFactoryTest {
 
         private void addGetterFacet(final FacetHolder holder) {
@@ -431,7 +432,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
         }
     }
 
-    @Nested @Deprecated(forRemoval = true, since = "2.0.0-RC2")
+    @TestInstance(Lifecycle.PER_CLASS) @Deprecated(forRemoval = true, since = "2.0.0-RC2")
     static class Hidden extends PropertyAnnotationFacetFactoryTest {
 
         @Test
@@ -463,7 +464,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
 
     }
 
-    @Nested
+    @TestInstance(Lifecycle.PER_CLASS)
     static class Editing extends PropertyAnnotationFacetFactoryTest {
 
         @Test
@@ -572,7 +573,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
 
     }
 
-    @Nested
+    @TestInstance(Lifecycle.PER_CLASS)
     static class MaxLength extends PropertyAnnotationFacetFactoryTest {
 
         @Test
@@ -597,7 +598,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
         }
     }
 
-    @Nested
+    @TestInstance(Lifecycle.PER_CLASS)
     static class MustSatisfy extends PropertyAnnotationFacetFactoryTest {
 
         public static class NotTooHot implements Specification {
@@ -645,7 +646,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
 
     }
 
-    @Nested
+    @TestInstance(Lifecycle.PER_CLASS)
     static class EntityPropertyChangePublishingPolicy extends PropertyAnnotationFacetFactoryTest {
 
         @Test
@@ -688,7 +689,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
 
     }
 
-    @Nested
+    @TestInstance(Lifecycle.PER_CLASS)
     static class SnapshotExcluded extends PropertyAnnotationFacetFactoryTest {
 
         @Test
@@ -711,7 +712,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
         }
     }
 
-    @Nested
+    @TestInstance(Lifecycle.PER_CLASS)
     static class Mandatory extends PropertyAnnotationFacetFactoryTest {
 
         @Test
@@ -790,7 +791,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
 
     }
 
-    @Nested
+    @TestInstance(Lifecycle.PER_CLASS)
     static class RegEx extends PropertyAnnotationFacetFactoryTest {
 
         @Test

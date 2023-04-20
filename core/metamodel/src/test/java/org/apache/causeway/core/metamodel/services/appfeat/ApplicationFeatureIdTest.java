@@ -42,7 +42,7 @@ import lombok.val;
 class ApplicationFeatureIdTest {
 
     @Nested
-    static class BasicsTest extends ApplicationFeatureIdTest {
+    class BasicsTest {
 
         @Test
         void title_happyCase() throws Exception {
@@ -76,7 +76,7 @@ class ApplicationFeatureIdTest {
     }
 
     @Nested
-    static class NewMemberTest extends ApplicationFeatureIdTest {
+    class NewMemberTest {
 
         @Test
         void using_fullyQualifiedClassName_and_MemberName() throws Exception {
@@ -102,7 +102,7 @@ class ApplicationFeatureIdTest {
     }
 
     @Nested
-    static class NewFeatureTest extends ApplicationFeatureIdTest {
+    class NewFeatureTest {
 
         @Test
         void aftString_whenPackage() throws Exception {
@@ -154,7 +154,7 @@ class ApplicationFeatureIdTest {
     }
 
     @Nested
-    static class GetParentIdsTest extends ApplicationFeatureIdTest {
+    class GetParentIdsTest {
 
         @Test
         void whenPackageWithNoParent() throws Exception {
@@ -239,7 +239,7 @@ class ApplicationFeatureIdTest {
     }
 
     @Nested
-    static class GetParentPackageIdTest extends ApplicationFeatureIdTest {
+    class GetParentPackageIdTest {
 
         @Test
         void givenPackageWhenParentIsNotRoot() throws Exception {
@@ -307,7 +307,7 @@ class ApplicationFeatureIdTest {
     }
 
     @Nested
-    static class GetParentClassTest extends ApplicationFeatureIdTest {
+    class GetParentClassTest {
 
         @Test
         void givenMember() throws Exception {
@@ -344,7 +344,7 @@ class ApplicationFeatureIdTest {
     }
 
     @Nested
-    static class CompareToTest extends ApplicationFeatureIdTest {
+    class CompareToTest {
 
         ApplicationFeatureId feature1;
 
@@ -375,7 +375,7 @@ class ApplicationFeatureIdTest {
     }
 
     @Nested
-    static class ToStringTest extends ApplicationFeatureIdTest {
+    class ToStringTest {
 
         ApplicationFeatureId feature1;
         ApplicationFeatureId feature2;
@@ -433,7 +433,7 @@ class ApplicationFeatureIdTest {
     }
 
     @Nested
-    static class GetClassNameTest extends ApplicationFeatureIdTest {
+    class GetClassNameTest {
 
         private Function<ApplicationFeatureId, String> func = ApplicationFeatureId::getTypeSimpleName;
 
@@ -461,7 +461,7 @@ class ApplicationFeatureIdTest {
     }
 
     @Nested
-    static class GetMemberNameTest extends ApplicationFeatureIdTest {
+    class GetMemberNameTest {
 
         private Function<ApplicationFeatureId, String> func =
                 ApplicationFeatureId::getLogicalMemberName;
