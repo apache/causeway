@@ -91,14 +91,10 @@ public class PropertyMenu {
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-file-upload", describedAs = "Length of text fields")
     public PropertyFileAcceptPage fileAccept(){
-        val vm = new PropertyFileAcceptPage();
-
-        setSampleBlob(".pdf", vm::setPdfPropertyUsingAnnotation);
-        setSampleBlob(".pdf", vm::setPdfPropertyUsingMetaAnnotation);
-        setSampleBlob(".docx", vm::setDocxPropertyUsingMetaAnnotationButOverridden);
-        setSampleClob(".txt", vm::setTxtPropertyUsingAnnotation);
-
-        return vm;
+        val page = new PropertyFileAcceptPage();
+        setSampleBlob(".pdf", page::setPdfProperty);
+        setSampleClob(".txt", page::setTxtProperty);
+        return page;
     }
 
     @Action(semantics = SemanticsOf.SAFE)

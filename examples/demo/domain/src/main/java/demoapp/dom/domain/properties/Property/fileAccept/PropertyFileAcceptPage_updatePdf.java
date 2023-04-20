@@ -18,25 +18,34 @@
  */
 package demoapp.dom.domain.properties.Property.fileAccept;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Parameter;
-import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.value.Blob;
 
-//tag::class[]
-@Property(fileAccept = "pdf")                       // <.>
-@Parameter(fileAccept = "pdf")                      // <.>
-@Inherited
-@Target({
-        ElementType.METHOD, ElementType.FIELD,      // <.>
-        ElementType.PARAMETER                       // <.>
-})
-@Retention(RetentionPolicy.RUNTIME)
-public @interface FileAcceptPdfMetaAnnotation {
+import lombok.RequiredArgsConstructor;
+
+@Action(semantics = SemanticsOf.IDEMPOTENT)
+@ActionLayout(associateWith = "pdfProperty", sequence = "1")
+@RequiredArgsConstructor
+public class PropertyFileAcceptPage_updatePdf {
+
+    private final PropertyFileAcceptPage page;
+
+//tag::pdf[]
+    @MemberSupport public PropertyFileAcceptPage act(
+            @Parameter(
+                fileAccept = ".pdf"                     // <.>
+            )
+            final Blob pdf) {
+        page.setPdfProperty(pdf);
+        return page;
+    }
+//end::pdf[]
+    @MemberSupport public Blob default0Act() {
+        return page.getPdfProperty();
+    }
 
 }
-//end::class[]

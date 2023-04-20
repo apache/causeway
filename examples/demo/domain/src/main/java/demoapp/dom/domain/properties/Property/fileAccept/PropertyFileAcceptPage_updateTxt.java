@@ -21,42 +21,31 @@ package demoapp.dom.domain.properties.Property.fileAccept;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
-import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.value.Clob;
 
 import lombok.RequiredArgsConstructor;
 
-@Action(
-    semantics = SemanticsOf.IDEMPOTENT
-)
-@ActionLayout(
-        associateWith = "txtPropertyUsingAnnotation"
-        , sequence = "1")
+@Action(semantics = SemanticsOf.IDEMPOTENT)
+@ActionLayout(associateWith = "txtProperty", sequence = "1")
 @RequiredArgsConstructor
-public class PropertyFileAcceptPage_updateClobWithParameterLayout {
+public class PropertyFileAcceptPage_updateTxt {
 
-    private final PropertyFileAcceptPage propertyFileAcceptVm;
+    private final PropertyFileAcceptPage page;
 
-//tag::annotation[]
+//tag::txt[]
     @MemberSupport public PropertyFileAcceptPage act(
             @Parameter(
                 fileAccept = ".txt"                     // <.>
-                , optionality = Optionality.OPTIONAL
             )
-            @ParameterLayout(
-                describedAs =
-                    "@Parameter(fileAccept = \".txt\")"
-            )
-            final Clob parameterUsingAnnotation) {
-        propertyFileAcceptVm.setTxtPropertyUsingAnnotation(parameterUsingAnnotation);
-        return propertyFileAcceptVm;
+            final Clob txt) {
+        page.setTxtProperty(txt);
+        return page;
     }
-//end::annotation[]
+//end::txt[]
     @MemberSupport public Clob default0Act() {
-        return propertyFileAcceptVm.getTxtPropertyUsingAnnotation();
+        return page.getTxtProperty();
     }
 
 }
