@@ -110,9 +110,7 @@ public class PropertyMenu {
     @ActionLayout(cssClassFa="fa-star-half-alt", describedAs = "Regular expressions, such as email")
     public PropertyMustSatisfyPage mustSatisfy(){
         val vm = new PropertyMustSatisfyPage();
-        vm.setCustomerAgePropertyUsingAnnotation(18);
-        vm.setCustomerAgePropertyUsingMetaAnnotation(65);
-        vm.setCustomerAgePropertyUsingMetaAnnotationButOverridden(66);
+        vm.setCustomerAge(18);
         return vm;
     }
 

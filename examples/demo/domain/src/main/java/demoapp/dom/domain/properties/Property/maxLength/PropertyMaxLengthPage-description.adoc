@@ -22,11 +22,11 @@ For domain entities this semantic should be accompanied with `@Column(maxLength=
 == How this demo works
 
 This page object has a single `name` property.
-This can be edited directly, and can also be updated using an action.
+This can be edited directly, or can also be updated using an action.
 Either way, a maximum length for the string is enforced.
 
-To edit the property directly:
-
+* To edit the property directly:
++
 [source,java,indent=0]
 .PropertyMaxLengthPage.java
 ----
@@ -35,9 +35,10 @@ include::PropertyMaxLengthPage.java[tags=name]
 <.> explicitly specifies the maximum length that can be entered for the property
 
 
-To update using an action:
-
+* To update using an action:
++
 [source,java,indent=0]
+.PropertyMaxLengthPage_updateName.java
 ----
 include::PropertyMaxLengthPage_updateName.java[tags=annotation]
 ----

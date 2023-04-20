@@ -21,38 +21,32 @@ package demoapp.dom.domain.properties.Property.mustSatisfy;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
-@Action(
-    semantics = SemanticsOf.IDEMPOTENT
-)
-@ActionLayout(
-    associateWith = "customerAgePropertyUsingMetaAnnotation"
-    , sequence = "1")
+@Action(semantics = SemanticsOf.IDEMPOTENT)
+@ActionLayout(associateWith = "customerAge", sequence = "1")
 @RequiredArgsConstructor
-public class PropertyMustSatisfyPage_updateWithMetaAnnotation {
+public class PropertyMustSatisfyPage_updateCustomerAge {
 
     private final PropertyMustSatisfyPage page;
 
-//tag::meta-annotation[]
+//tag::annotation[]
     @MemberSupport public PropertyMustSatisfyPage act(
-            @MustSatisfyOfWorkingAgeMetaAnnotation                            // <.>
-            @Parameter(optionality = Optionality.OPTIONAL)
-            @ParameterLayout(
-                describedAs = "@MustSatisfyOfWorkingAgeMetaAnnotation"
+            @Parameter(
+                mustSatisfy = OfWorkingAgeSpecification.class   // <.>
             )
-            final Integer customerAgeParameterUsingMetaAnnotation) {
-        page.setCustomerAgePropertyUsingMetaAnnotation(customerAgeParameterUsingMetaAnnotation);
+            final Integer customerAge) {
+        page.setCustomerAge(customerAge);
         return page;
     }
-//end::meta-annotation[]
+//end::annotation[]
+
     @MemberSupport public Integer default0Act() {
-        return page.getCustomerAgePropertyUsingMetaAnnotation();
+        return page.getCustomerAge();
     }
 
 }
