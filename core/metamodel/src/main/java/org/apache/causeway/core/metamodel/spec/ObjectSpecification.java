@@ -420,7 +420,7 @@ extends
     }
 
     /**
-     * Whether {@link #getCorrespondingClass()} is {@link Void} or void.
+     * Whether {@link #getCorrespondingClass()} is {@link Void} or {@code void}.
      */
     default boolean isVoid() {
         return getCorrespondingClass()==void.class
@@ -428,7 +428,7 @@ extends
     }
 
     /**
-     * Whether {@link #getCorrespondingClass()} is {@link Void} or void.
+     * Whether {@link #getCorrespondingClass()} is {@code void} (but not {@link Void}).
      */
     default boolean isVoidPrimitive() {
         return getCorrespondingClass()==void.class;
@@ -436,7 +436,7 @@ extends
 
     /**
      * Whether {@link #getCorrespondingClass()} is a primitive type,
-     * but not {@link Void} or void.
+     * but not {@link Void} or {@code void}.
      */
     default boolean isPrimitive() {
         return !isVoid()

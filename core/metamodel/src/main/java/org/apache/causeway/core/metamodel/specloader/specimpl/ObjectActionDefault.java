@@ -126,11 +126,6 @@ implements ObjectAction {
 
         this.declaredOnMixin = declaredOnMixin;
         this.testing = testing;
-
-        // In support of some JUnit tests, skip
-        if(getActionInvocationFacet().isEmpty()) {
-            return;
-        }
     }
 
     // -- DECLARING TYPE
