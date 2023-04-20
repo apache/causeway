@@ -27,35 +27,25 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
-@Action(
-    semantics = SemanticsOf.IDEMPOTENT
-)
-@ActionLayout(
-    associateWith = "propertyUsingMetaAnnotationButOverridden"
-    , sequence = "1")
+@Action(semantics = SemanticsOf.IDEMPOTENT)
+@ActionLayout(associateWith = "name", sequence = "1")
 @RequiredArgsConstructor
-public class PropertyMaxLengthPage_updateWithMetaAnnotationOverridden {
+public class PropertyMaxLengthPage_updateName {
 
     private final PropertyMaxLengthPage page;
 
-//tag::meta-annotation-overridden[]
+//tag::annotation[]
     @MemberSupport public PropertyMaxLengthPage act(
-            @MaxLength10MetaAnnotation                          // <.>
             @Parameter(
-                maxLength = 3                                   // <.>
+                maxLength = 10          // <.>
             )
-            @ParameterLayout(
-                describedAs =
-                    "@MaxLength10MetaAnnotation " +
-                    "@PropertyLayout(maxLength = 3)"
-            )
-            final String parameterUsingMetaAnnotationButOverridden) {
-        page.setPropertyUsingMetaAnnotationButOverridden(parameterUsingMetaAnnotationButOverridden);
+            final String name) {
+        page.setName(name);
         return page;
     }
-//end::meta-annotation-overridden[]
+//end::annotation[]
     @MemberSupport public String default0Act() {
-        return page.getPropertyUsingMetaAnnotationButOverridden();
+        return page.getName();
     }
 
 }

@@ -1,6 +1,6 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-The link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/Action.html#semantics[@Action#semantics] element specifies whether invoking the action will change the state of the system, and if so, how:
+The link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/Action.html#semantics[@Action#semantics] attribute specifies whether invoking the action will change the state of the system, and if so, how:
 
 * `SAFE` (sometimes also called "query-only") means no side-effects, that is, no permanent change in state of the system
 
@@ -12,7 +12,7 @@ If the action is not annotated, then non-idempotent is assumed.
 
 The REST API interprets these semantics by mapping to different HTTP verbs: GET, PUT and POST, respectively.
 
-Each of these three basic `semantics` element have a variant:
+Each of these three basic `semantics` attribute have a variant:
 
 * `SAFE_AND_REQUEST_CACHEABLE` means that the framework will automatically cache the result of a first invocation and use the link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/services/queryresultscache/QueryResultsCache.html[QueryResultsCache] to return the result subsequently.
 +
@@ -28,13 +28,13 @@ This page provides actions with different semantics.
 
 === No annotations
 
-If the `semantics` element is omitted completely, then the action is assumed to be non-idempotent:
+If the `semantics` attribute is omitted completely, then the action is assumed to be non-idempotent:
 
 [source,java,indent=0]
 ----
 include::ActionSemanticsPage.java[tags=action-no-annotation]
 ----
-<.> does not indicate any `semantic` element, and so non-idempotent is assumed
+<.> does not indicate any `semantic` attribute, and so non-idempotent is assumed
 
 === Annotated as Safe
 

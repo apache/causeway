@@ -63,6 +63,7 @@ public class PropertyMenu {
     final ValueHolderRepository<String, ? extends PropertyProjectingChildEntity> propertyProjectingChildEntities;
     final Samples<Blob> blobSamples;
     final Samples<Clob> clobSamples;
+    final Samples<String> stringSamples;
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-terminal", describedAs = "Action invocation intentions as XML")
@@ -101,9 +102,7 @@ public class PropertyMenu {
     @ActionLayout(cssClassFa="fa-ruler-horizontal", describedAs = "Length of text fields")
     public PropertyMaxLengthPage maxLength(){
         val vm = new PropertyMaxLengthPage();
-        vm.setPropertyUsingAnnotation("abcdefghij");
-        vm.setPropertyUsingMetaAnnotation("abcdefghij");
-        vm.setPropertyUsingMetaAnnotationButOverridden("abc");
+        vm.setName(stringSamples.single());
         return vm;
     }
 

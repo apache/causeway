@@ -2,9 +2,9 @@
 
 The link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/Property.html#fileaccept[@Property#fileAccept] attribute is used to indicate a file extension when browsing for a file to upload:
 
-* for properties, the element can be specified using either the `@Property` annotation, or a meta-annotation
+* for properties, the attribute can be specified using the `@Property` annotation
 
-* for parameters, the element can be specified using either the `@Parameter` annotation, or a meta-annotation.
+* for parameters, the attribute can be specified using the `@Parameter` annotation
 
 This attribute applies only to ``Blob``s and ``Clob``s.
 
@@ -15,6 +15,7 @@ This page object has two properties, `pdfProperty` and `txtProperty`.
 The first is a `Blob` which is intended to hold only PDF files, while the second is a `Clob` that is intended to hold just `.txt` files.
 
 Both properties can be edited directly, and can also be updated using an action.
+Either way, the file extension that is acceptable is specified.
 
 * for the `pdfProperty`:
 

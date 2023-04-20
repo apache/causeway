@@ -36,7 +36,7 @@ Reference type
 
 |===
 
-The `choicesFrom` element specifies an action has a multi-value reference type parameter whose choices should be obtained from the specified collection.
+The `choicesFrom` attribute specifies an action has a multi-value reference type parameter whose choices should be obtained from the specified collection.
 
 The end-user can select the choices using checkboxes rendered with the collection.
 
@@ -75,7 +75,7 @@ include::ActionChoicesFromPage_objects.java[tags=class]
 ----
 include::ActionChoicesFromPage_makeLowerCase.java[tags=class]
 ----
-<.> The `choicesFrom` element causes checkboxes to be rendered for each of the objects in the "objects" collection.
+<.> The `choicesFrom` attribute causes checkboxes to be rendered for each of the objects in the "objects" collection.
 +
 It also means that no `choices0Act()` or `autoComplete0Act()` is required.
 

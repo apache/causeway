@@ -26,7 +26,7 @@ include::ActionLayoutRedirectPolicyPage.java[tags=class]
 
 [NOTE]
 ====
-In this demo we are somewhat misusing the `@PropertyLayout#repainting` element; normally this is used for components that are expensive to render _and_ which are generally unchanging.
+In this demo we are somewhat misusing the `@PropertyLayout#repainting` attribute; normally this is used for components that are expensive to render _and_ which are generally unchanging.
 The most common example of such a property would be a PDF, rendered using the link:https://causeway.apache.org/vw/2.0.0-RC1/pdfjs/about.html[PDF.js] extension (the link:https://causeway.apache.org/refguide/2.0.0-RC1/extensions/index/pdfjs/applib/annotations/PdfJsViewer.html#section-top[@PdfJsViewer] annotation).
 ====
 

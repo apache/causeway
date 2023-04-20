@@ -9,7 +9,7 @@ Domain service subscribers can influence this interaction, either by:
 * performing arbitrary operations before the action has been invoked (including modifying the argument values to be used)
 * performing arbitrary operations after the action has been invoked (including changing the apparent return value of the action)
 
-The link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/Action.html#domainevent[@Action#actionDomainEvent] element specifies the class to be emitted; the class specified must be a subclass of the abstract link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/events/domain/ActionDomainEvent.html[ActionDomainEvent] class.
+The link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/Action.html#domainevent[@Action#actionDomainEvent] attribute specifies the class to be emitted; the class specified must be a subclass of the abstract link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/events/domain/ActionDomainEvent.html[ActionDomainEvent] class.
 
 If no `domainEvent` is specified on the action itself, then the domain event class can be specified at the class level using link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/DomainObject.html#actiondomainevent[@DomainObject#actionDomainEvent].
 And if not specified at the class level, then an instance of `o.a.c.applib.events.domain.ActionDomainEvent.Default` is emitted as the fallback.
