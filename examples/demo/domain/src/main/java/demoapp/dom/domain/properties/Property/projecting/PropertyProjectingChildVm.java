@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.Property.projecting.child;
+package demoapp.dom.domain.properties.Property.projecting;
 
 import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -41,18 +41,16 @@ import lombok.Setter;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.domain.properties.Property.projecting.jdo.PropertyProjectingChildJdo;
 import demoapp.dom.domain.properties.Property.projecting.jpa.PropertyProjectingChildJpa;
-import demoapp.dom.domain.properties.Property.projecting.persistence.PropertyProjectingChildEntity;
 
 //tag::class[]
 @XmlRootElement(name = "child")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.PropertyProjectingChildVm")
-@DomainObject(
-        nature=Nature.VIEW_MODEL)
+@DomainObject(nature=Nature.VIEW_MODEL)
 @NoArgsConstructor
 public class PropertyProjectingChildVm implements HasAsciiDocDescription {
-
+    // ...
 //end::class[]
     public PropertyProjectingChildVm(final PropertyProjectingChildEntity backingEntity) {
         setBackingEntity(backingEntity);
@@ -70,31 +68,9 @@ public class PropertyProjectingChildVm implements HasAsciiDocDescription {
         projecting = Projecting.PROJECTED       // <.>
     )
     @PropertyLayout(hidden = Where.EVERYWHERE)  // <.>
-    public PropertyProjectingChildEntity getBackingEntity() {
-        return backingEntityJpa!=null
-                ? backingEntityJpa
-                : backingEntityJdo;
-    }
-    public void setBackingEntity(final PropertyProjectingChildEntity backingEntity) {
-        this.backingEntityJpa = backingEntity instanceof PropertyProjectingChildJpa
-                ? (PropertyProjectingChildJpa) backingEntity
-                : null;
-        this.backingEntityJdo = backingEntity instanceof PropertyProjectingChildJdo
-                ? (PropertyProjectingChildJdo) backingEntity
-                : null;
-    }
+    @XmlElement(required = true)
+    @Getter @Setter
+    private PropertyProjectingChildEntity backingEntity;
 //end::projecting[]
-//end::class[]
-    @Programmatic
-    @XmlElement(required = false)
-    @Getter @Setter
-    private PropertyProjectingChildJpa backingEntityJpa;
-
-    @Programmatic
-    @XmlElement(required = false)
-    @Getter @Setter
-    private PropertyProjectingChildJdo backingEntityJdo;
-//tag::class[]
-    // ..
 }
 //end::class[]

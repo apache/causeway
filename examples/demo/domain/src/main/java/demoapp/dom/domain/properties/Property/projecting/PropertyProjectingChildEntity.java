@@ -16,16 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.Property.projecting.persistence;
+package demoapp.dom.domain.properties.Property.projecting;
 
 import javax.inject.Named;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 
 @Named("demo.PropertyProjectingChildEntity") // shared permissions with concrete sub class
+@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @DomainObject
 public abstract class PropertyProjectingChildEntity
 implements

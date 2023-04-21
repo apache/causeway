@@ -25,8 +25,6 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
-import demoapp.dom.domain.properties.Property.projecting.child.PropertyProjectingChildVm;
-
 @Action(
     semantics = SemanticsOf.SAFE
 )

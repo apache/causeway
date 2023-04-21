@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.Property.projecting.persistence;
+package demoapp.dom.domain.properties.Property.projecting;
 
 import javax.inject.Inject;
 
@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import demoapp.dom._infra.seed.SeedServiceAbstract;
 import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.domain.properties.Property.projecting.PropertyProjectingChildEntity;
 
 @Service
 public class PropertyProjectingChildSeeding

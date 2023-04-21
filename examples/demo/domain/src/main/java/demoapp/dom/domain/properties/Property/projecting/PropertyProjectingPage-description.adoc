@@ -14,29 +14,15 @@ From the end-user's perspectice, they aren't aware that a view model is in use a
 
 == How this demo works
 
-The diagram below shows how the domain objects of the demo app are related:
+This page contains a collection of view models, and a reference to a single view model.
+The view model in turn has a backing entity.
+The diagram below illustrates this:
 
 // see diag.adoc
-
 image::/demoapp/dom/annotDomain/Property/projecting/uml-class-diag.png[]
 
-The property from `PropertyPublishingChildVm` to `PropertyPublishingChildJdo` is annotated as a projecting property:
 
-[source,java,indent=0]
-----
-include::child/PropertyProjectingChildVm.java[tags=projecting]
-----
-<.> projecting property
-<.> it is _not_ necessary for the property to be visible
-
-The "parent" `PropertyPublishingVm` has both:
-
-* a collection of child view model objects:
-+
-[source,java,indent=0]
-----
-include::PropertyProjectingPage.java[tags=children]
-----
+In code, we see that the `PropertyPublishingPage` has:
 
 * a property referencing a single child view model:
 +
@@ -45,13 +31,31 @@ include::PropertyProjectingPage.java[tags=children]
 include::PropertyProjectingPage.java[tags=property]
 ----
 
-In both cases, following the link to the view model instead navigates to the backing entity.
+* a collection of child view model objects:
++
+[source,java,indent=0]
+----
+include::PropertyProjectingPage.java[tags=children]
+----
+
+
+Meanwhile the property from `PropertyPublishingChildVm` to `PropertyPublishingChildEntity` is annotated as a "projecting" property:
+
+[source,java,indent=0]
+.PropertyProjectingChildVm.java
+----
+include::PropertyProjectingChildVm.java[tags=projecting]
+----
+<.> projecting property
+<.> it is _not_ necessary for the property to be visible.
+Indeed, it probably should not be visible as its presence might confuse the end-user who is interacting with the view model "as if" it is the entity.
+
+Any link to the view model (either the property or the collection) instead navigates the end-user to the backing entity.
 
 [TIP]
 ====
-As it isn't possible to access the projection view model at all, there's little need to define a `layout.xml` file.
+As it isn't possible to access the projecting view model at all, there's little need to define a `layout.xml` file for the view model.
 ====
-
 
 
 == Related Services
