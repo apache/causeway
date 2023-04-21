@@ -97,7 +97,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
     private static void processModify(
             final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
         val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
-        facetFactory.processModify(processMethodContext, propertyIfAny);
+        facetFactory.processDomainEvent(processMethodContext, propertyIfAny);
     }
 
     private static void processHidden(

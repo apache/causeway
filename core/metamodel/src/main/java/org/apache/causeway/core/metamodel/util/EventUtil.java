@@ -18,12 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.util;
 
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 public final class EventUtil {
 
-    private EventUtil() {
-    }
-
-    public static <T> boolean eventTypeIsPostable(
+    public <T> boolean eventTypeIsPostable(
             final Class<? extends T> eventType,
             final Class<? extends T> noopClass,
             final Class<? extends T> defaultClass,
@@ -37,6 +37,5 @@ public final class EventUtil {
         }
         return true;
     }
-
 
 }

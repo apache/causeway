@@ -76,7 +76,7 @@ extends FacetFactoryAbstract {
 
         inferIntentWhenOnTypeLevel(processMethodContext, propertyIfAny);
 
-        processModify(processMethodContext, propertyIfAny);
+        processDomainEvent(processMethodContext, propertyIfAny);
         processHidden(processMethodContext, propertyIfAny);
         processEditing(processMethodContext, propertyIfAny);
         processCommandPublishing(processMethodContext, propertyIfAny);
@@ -108,57 +108,52 @@ extends FacetFactoryAbstract {
         addFacet(new ContributingFacetAbstract(Contributing.AS_ASSOCIATION, facetedMethod) {});
     }
 
-    void processModify(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
+    void processDomainEvent(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
 
         val cls = processMethodContext.getCls();
         val typeSpec = getSpecificationLoader().loadSpecification(cls);
         val holder = processMethodContext.getFacetHolder();
 
-        val getterFacet = holder.getFacet(PropertyOrCollectionAccessorFacet.class);
-        if(getterFacet == null) {
-            return;
-        }
+        /*
+         * immutable properties as well as mixed-in ones have no setter, hence phases:
+         * HIDE modifiable by events
+         * DISABLE always disabled
+         * VALIDATE n/a for events
+         * EXECUTING n/a for events
+         * EXECUTED n/a for events
+         */
 
-        // following only runs for regular properties, not for mixins.
-        // those are tackled in the post-processing, when more of the metamodel is available to us
-
+        val getterFacetIfAny = holder.lookupFacet(PropertyOrCollectionAccessorFacet.class);
 
         //
-        // Set up PropertyDomainEventFacet, which will act as the hiding/disabling/validating advisor
+        // Set up PropertyDomainEventFacet, which will act as the hiding/disabling/validating/.. advisor
         //
 
         // search for @Property(domainEvent=...), else use default event type
-        PropertyDomainEventFacet
-        .createRegular(propertyIfAny, typeSpec, getterFacet, holder)
-        .ifPresent(propertyDomainEventFacet->{
+        val propertyDomainEventFacet = PropertyDomainEventFacet
+                .create(propertyIfAny, typeSpec, getterFacetIfAny, holder);
 
-            addFacet(propertyDomainEventFacet);
+        addFacet(propertyDomainEventFacet);
 
-            var eventType = propertyDomainEventFacet.getEventType();
-            var eventTypeOrigin = propertyDomainEventFacet.getEventTypeOrigin();
-
-            //
-            // if the property is mutable, then replace the current setter and clear facets with equivalents that
-            // emit the appropriate domain event and then delegate onto the underlying
-            //
+        getterFacetIfAny.ifPresent(getterFacet->{
+            /* if the property is mutable (never true for mixed-in props),
+             * then replace the current setter and clear facets with equivalents that
+             * emit the appropriate domain event and then delegate onto the underlying */
 
             holder.lookupFacet(PropertySetterFacet.class)
             .ifPresent(setterFacet->
-                    //TODO[CAUSEWAY-3409] we don't install those for the mixin case
-                    // the current setter facet will end up as the underlying facet
                     addFacet(new PropertySetterFacetForDomainEvent(
-                            eventType, eventTypeOrigin, getterFacet, setterFacet, holder)));
-
+                            propertyDomainEventFacet, getterFacet, setterFacet, holder)));
 
             holder.lookupFacet(PropertyClearFacet.class)
             .ifPresent(clearFacet->
-                    //TODO[CAUSEWAY-3409] we don't install those for the mixin case
-                    // the current clear facet will end up as the underlying facet
                     addFacet(new PropertyClearFacetForDomainEvent(
-                            eventType, eventTypeOrigin, getterFacet, clearFacet, holder)));
+                            propertyDomainEventFacet, getterFacet, clearFacet, holder)));
         });
+
     }
 
+    @SuppressWarnings("removal")
     void processHidden(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
         val facetHolder = processMethodContext.getFacetHolder();
 

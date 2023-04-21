@@ -65,7 +65,7 @@ implements
     // -- FACTORIES
 
     /**
-     * Inspect {@link Action#domainEvent()}, else use the default event type.
+     * Inspect {@link Action#domainEvent()} if present, else use the default event type.
      */
     public static ActionDomainEventFacet create(
             final @NonNull Optional<Action> actionIfAny,
@@ -84,14 +84,6 @@ implements
                                 defaultFromDomainObjectIfRequired(typeSpec, ActionDomainEvent.Default.class), EventTypeOrigin.DEFAULT, facetHolder)
                         );
         return actionDomainEventFacet;
-
-//        return EventUtil.eventTypeIsPostable(
-//                actionDomainEventFacet.getEventType(),
-//                ActionDomainEvent.Noop.class,
-//                ActionDomainEvent.Default.class,
-//                facetHolder.getConfiguration().getApplib().getAnnotation().getAction().getDomainEvent().isPostForDefault())
-//            ? Optional.of(actionDomainEventFacet)
-//            : Optional.empty();
     }
 
     // -- CONSTRUCTION

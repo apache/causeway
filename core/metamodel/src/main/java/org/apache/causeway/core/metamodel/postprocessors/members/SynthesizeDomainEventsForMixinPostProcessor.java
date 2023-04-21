@@ -22,7 +22,6 @@ import javax.inject.Inject;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
 import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacet;
 import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet;
@@ -31,8 +30,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.causeway.core.metamodel.specloader.specimpl.OneToManyAssociationMixedIn;
-import org.apache.causeway.core.metamodel.specloader.specimpl.OneToOneAssociationMixedIn;
 
 /**
  * Mixed-in members use the domain-event type as specified with the mixee type,
@@ -60,37 +57,58 @@ extends ObjectSpecificationPostProcessorAbstract {
                 .initWithMixee(objectSpecification);
         }
         //TODO[CAUSEWAY-3409] now should we remove any ActionInvocationFacet(s) that are not post-able?
+//        EventUtil.eventTypeIsPostable(
+//            actionDomainEventFacet.getEventType(),
+//            ActionDomainEvent.Noop.class,
+//            ActionDomainEvent.Default.class,
+//            facetHolder.getConfiguration().getApplib().getAnnotation().getAction().getDomainEvent().isPostForDefault())
     }
 
     @Override
     public void postProcessProperty(final ObjectSpecification objectSpecification, final OneToOneAssociation property) {
 
         if(property.isMixedIn()) {
-
-            FacetUtil.addFacetIfPresent(
-                    PropertyDomainEventFacet.createMixedIn(objectSpecification, (OneToOneAssociationMixedIn)property));
-//TODO[CAUSEWAY-3409] even when this lookup returns empty, we still might need an event-type holding facet
             property
                 .lookupFacet(PropertyDomainEventFacet.class)
-                .ifPresent(propertyDomainEventFacet->
-                    propertyDomainEventFacet.initWithMixee(objectSpecification));
+                .orElseThrow(()->_Exceptions
+                        .illegalState("framework bug: "
+                                + "PropertyDomainEventFacet for %s should have already been created via "
+                                + "PropertyAnnotationFacetFactory, yet was not.",
+                                property.getFeatureIdentifier()))
+                .initWithMixee(objectSpecification);
         }
+        //TODO[CAUSEWAY-3409] now should we remove any PropertyDomainEventFacet(s) that are not post-able?
+        /*
+         * EventUtil.eventTypeIsPostable(
+                propertyDomainEventFacet.getEventType(),
+                PropertyDomainEvent.Noop.class,
+                PropertyDomainEvent.Default.class,
+                facetHolder.getConfiguration().getApplib().getAnnotation().getProperty().getDomainEvent().isPostForDefault())
+         */
     }
 
     @Override
     public void postProcessCollection(final ObjectSpecification objectSpecification, final OneToManyAssociation collection) {
 
         if(collection.isMixedIn()) {
-
-            FacetUtil.addFacetIfPresent(
-                    CollectionDomainEventFacet.createMixedIn(objectSpecification, (OneToManyAssociationMixedIn)collection));
-//TODO[CAUSEWAY-3409] even when this lookup returns empty, we still might need an event-type holding facet
             collection
                 .lookupFacet(CollectionDomainEventFacet.class)
-                .ifPresent(collectionDomainEventFacet->
-                    collectionDomainEventFacet.initWithMixee(objectSpecification));
+                .orElseThrow(()->_Exceptions
+                        .illegalState("framework bug: "
+                                + "CollectionDomainEventFacet for %s should have already been created via "
+                                + "CollectionAnnotationFacetFactory, yet was not.",
+                                collection.getFeatureIdentifier()))
+                .initWithMixee(objectSpecification);
 
         }
+      //TODO[CAUSEWAY-3409] now should we remove any CollectionDomainEventFacet(s) that are not post-able?
+        /*
+         *         return EventUtil.eventTypeIsPostable(
+                collectionDomainEventFacet.getEventType(),
+                CollectionDomainEvent.Noop.class,
+                CollectionDomainEvent.Default.class,
+                facetHolder.getConfiguration().getApplib().getAnnotation().getCollection().getDomainEvent().isPostForDefault())
+         */
     }
 
 }

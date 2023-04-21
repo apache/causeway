@@ -30,6 +30,7 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.DomainEventHelper;
+import org.apache.causeway.core.metamodel.facets.DomainEventHolder;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearingAccessor;
@@ -61,14 +62,13 @@ implements
 
     protected PropertySetterOrClearFacetForDomainEventAbstract(
             final Class<? extends Facet> facetType,
-            final Class<? extends PropertyDomainEvent<?, ?>> eventType,
-            final EventTypeOrigin eventTypeOrigin,
+            final DomainEventHolder<PropertyDomainEvent<?, ?>> domainEventHolder,
             final PropertyOrCollectionAccessorFacet getterFacet,
             final PropertySetterFacet setterFacet,
             final PropertyClearFacet clearFacet,
             final FacetHolder holder) {
 
-        super(facetType, eventType, eventTypeOrigin, holder);
+        super(facetType, domainEventHolder, holder);
         this.getterFacet = getterFacet;
         this.setterFacet = setterFacet;
         this.clearFacet = clearFacet;
