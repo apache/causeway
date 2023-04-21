@@ -82,6 +82,11 @@ implements DomainEventHolder<T> {
         return domainEventHolder.getEventTypeOrigin();
     }
 
+    @Override
+    public final boolean isPostable() {
+        return domainEventHolder.isPostable();
+    }
+
     /** called during meta-model post-processing only */
     protected final void updateEventType(
             final Class<? extends T> eventType,
@@ -89,7 +94,7 @@ implements DomainEventHolder<T> {
         _Assert.assertTrue(isUpdateEventTypeAllowed, ()->
             "framework bug: this DomainEventHolder is bound to another DomainEventHolder,"
             + "the binding is immutable and cannot be changed");
-        this.domainEventHolder = DomainEventHolder.eager(eventType, eventTypeOrigin);
+        this.domainEventHolder = DomainEventHolder.eager(eventType, eventTypeOrigin, isPostable(eventType));
     }
 
     /**
@@ -98,12 +103,22 @@ implements DomainEventHolder<T> {
      */
     public void initWithMixee(final ObjectSpecification mixeeSpec) {}
 
+    /**
+     * Whether given {@code eventType} is post-able.
+     * <ul>
+     * <li>If the Noop event-type is assignable from {@code eventType} then NO.</li>
+     * <li>If {@code eventType} is the Default event-type and its configured to act as Noop then NO.</li>
+     * <li>Otherwise YES.</li>
+     * </ul>
+     */
+    protected abstract boolean isPostable(final Class<? extends T> eventType);
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("eventType", getEventType());
         visitor.accept("eventTypeOrigin", getEventTypeOrigin().name());
+        visitor.accept("isPostable", isPostable());
     }
 
     @Override

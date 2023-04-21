@@ -56,12 +56,6 @@ extends ObjectSpecificationPostProcessorAbstract {
                                 objectAction.getFeatureIdentifier()))
                 .initWithMixee(objectSpecification);
         }
-        //TODO[CAUSEWAY-3409] now should we remove any ActionInvocationFacet(s) that are not post-able?
-//        EventUtil.eventTypeIsPostable(
-//            actionDomainEventFacet.getEventType(),
-//            ActionDomainEvent.Noop.class,
-//            ActionDomainEvent.Default.class,
-//            facetHolder.getConfiguration().getApplib().getAnnotation().getAction().getDomainEvent().isPostForDefault())
     }
 
     @Override
@@ -101,14 +95,6 @@ extends ObjectSpecificationPostProcessorAbstract {
                 .initWithMixee(objectSpecification);
 
         }
-      //TODO[CAUSEWAY-3409] now should we remove any CollectionDomainEventFacet(s) that are not post-able?
-        /*
-         *         return EventUtil.eventTypeIsPostable(
-                collectionDomainEventFacet.getEventType(),
-                CollectionDomainEvent.Noop.class,
-                CollectionDomainEvent.Default.class,
-                facetHolder.getConfiguration().getApplib().getAnnotation().getCollection().getDomainEvent().isPostForDefault())
-         */
     }
 
 }

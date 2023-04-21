@@ -33,7 +33,7 @@ implements PropertySetterFacet {
             final PropertyOrCollectionAccessorFacet getterFacet,
             final PropertySetterFacet setterFacet,
             final FacetHolder holder) {
-
+        // binds this DomainEventHolder to given DomainEventHolder, updateEventType not allowed
         super(PropertySetterFacet.class, domainEventHolder, getterFacet, setterFacet, null, holder);
     }
 

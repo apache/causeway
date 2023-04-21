@@ -45,6 +45,7 @@ import org.apache.causeway.core.metamodel.interactions.ValidityContext;
 import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.util.EventUtil;
 
 import lombok.NonNull;
 import lombok.val;
@@ -116,6 +117,7 @@ implements
 
     @Override
     public String hides(final VisibilityContext ic) {
+        if(!isPostable()) return null; // bale out
 
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
@@ -136,6 +138,7 @@ implements
 
     @Override
     public Optional<VetoReason> disables(final UsabilityContext ic) {
+        if(!isPostable()) return null; // bale out
 
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
@@ -163,6 +166,7 @@ implements
 
     @Override
     public String invalidates(final ValidityContext ic) {
+        if(!isPostable()) return null; // bale out
 
         _Assert.assertTrue(ic instanceof ActionValidityContext, ()->
             String.format("expecting an action context but got %s", ic.getIdentifier()));
@@ -187,6 +191,15 @@ implements
     }
 
     // -- HELPER
+
+    @Override
+    protected boolean isPostable(final Class<? extends ActionDomainEvent<?>> eventType) {
+        return EventUtil.eventTypeIsPostable(
+                eventType,
+                ActionDomainEvent.Noop.class,
+                ActionDomainEvent.Default.class,
+                getConfiguration().getApplib().getAnnotation().getAction().getDomainEvent().isPostForDefault());
+    }
 
     private static ObjectAction actionFrom(final InteractionContext ic) {
         if(!(ic instanceof ActionInteractionContext)) {

@@ -33,7 +33,8 @@ implements PropertyClearFacet {
             final PropertyOrCollectionAccessorFacet getterFacet,
             final PropertyClearFacet clearFacet,
             final FacetHolder holder) {
-
+        // binds this DomainEventHolder to given DomainEventHolder, updateEventType not allowed
         super(PropertyClearFacet.class, domainEventHolder, getterFacet, null, clearFacet, holder);
     }
+
 }

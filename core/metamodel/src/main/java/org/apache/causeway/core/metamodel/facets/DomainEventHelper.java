@@ -80,6 +80,8 @@ public class DomainEventHelper {
             final Can<ManagedObject> argumentAdapters,
             final @Nullable Object resultPojo) {
 
+        // if eventType is not post-able bale out
+
         return postEventForAction(phase, uncheckedCast(eventType), /*existingEvent*/null,
                 objectAction, facetHolder,
                 head, argumentAdapters, resultPojo);

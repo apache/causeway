@@ -24,20 +24,34 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * Simply a tuple (pair) of {event-type, {@link EventTypeOrigin}}.
+ * Simply a tuple of {event-type, {@link EventTypeOrigin}, post-able-flag}.
  */
 public interface DomainEventHolder<T> {
 
     Class<? extends T> getEventType();
     EventTypeOrigin getEventTypeOrigin();
 
-    static <X> DomainEventHolder<X> eager(final Class<? extends X> eventType, final EventTypeOrigin eventTypeOrigin) {
-        return new DomainEventHolderEager<>(eventType, eventTypeOrigin);
+    /**
+     * Whether {@link #getEventType()} is post-able.
+     * <ul>
+     * <li>If the Noop event-type is assignable from {@link #getEventType()} then NO.</li>
+     * <li>If {@link #getEventType()} is the Default event-type and its configured to act as Noop then NO.</li>
+     * <li>Otherwise YES.</li>
+     * </ul>
+     */
+    boolean isPostable();
+
+    static <X> DomainEventHolder<X> eager(
+            final Class<? extends X> eventType,
+            final EventTypeOrigin eventTypeOrigin,
+            final boolean postable) {
+        return new DomainEventHolderEager<>(eventType, eventTypeOrigin, postable);
     }
 
     @Getter @AllArgsConstructor
     static class DomainEventHolderEager<T> implements DomainEventHolder<T> {
         private final Class<? extends T> eventType;
         private final EventTypeOrigin eventTypeOrigin;
+        private boolean postable;
     }
 }

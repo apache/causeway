@@ -24,6 +24,7 @@ import java.util.function.BiConsumer;
 import org.apache.causeway.applib.events.domain.AbstractDomainEvent;
 import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
 import org.apache.causeway.applib.services.iactn.PropertyEdit;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.execution.InteractionInternal;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
@@ -184,65 +185,70 @@ implements
             // TODO: REVIEW - is this safe to do?
             ManagedObject newValueAdapterMutatable = newValueAdapter;
 
-            try {
+            // update the current execution with the DTO (memento)
+            val propertyEditDto =
+                    PropertySetterOrClearFacetForDomainEventAbstract.this.getInteractionDtoServiceInternal().asPropertyEditDto(
+                            owningProperty, head.getOwner(), newValueAdapterMutatable, head);
+            currentExecution.setDto(propertyEditDto);
 
-                // update the current execution with the DTO (memento)
-                val propertyEditDto =
-                        PropertySetterOrClearFacetForDomainEventAbstract.this.getInteractionDtoServiceInternal().asPropertyEditDto(
-                                owningProperty, head.getOwner(), newValueAdapterMutatable, head);
-                currentExecution.setDto(propertyEditDto);
-
-                // ... post the executing event
-                val oldValuePojo = getterFacet.getProperty(head.getTarget(), interactionInitiatedBy);
-                val newValuePojo = MmUnwrapUtil.single(newValueAdapterMutatable);
-
-                val propertyDomainEvent =
-                        domainEventHelper.postEventForProperty(
-                                AbstractDomainEvent.Phase.EXECUTING,
-                                uncheckedCast(PropertySetterOrClearFacetForDomainEventAbstract.this.getEventType()), null,
-                                PropertySetterOrClearFacetForDomainEventAbstract.this.getFacetHolder(), head,
-                                oldValuePojo, newValuePojo);
-
-                val newValuePojoPossiblyUpdated = propertyDomainEvent.getNewValue();
-                if (!Objects.equals(newValuePojoPossiblyUpdated, newValuePojo)) {
-                    newValueAdapterMutatable = newValuePojoPossiblyUpdated != null
-                            ? PropertySetterOrClearFacetForDomainEventAbstract.this.getObjectManager().adapt(newValuePojoPossiblyUpdated)
-                            : null;
-                }
-
-                // set event onto the execution
-                currentExecution.setEvent(propertyDomainEvent);
-
-                // invoke method
-                style.invoke(PropertySetterOrClearFacetForDomainEventAbstract.this, owningProperty,
-                        head.getTarget(), newValueAdapterMutatable, interactionInitiatedBy);
-
-
-                // reading the actual value from the target object, playing it safe...
-                val actualNewValue = getterFacet.getProperty(head.getTarget(), interactionInitiatedBy);
-                if (!Objects.equals(oldValuePojo, actualNewValue)) {
-
-                    // ... post the executed event
-                    domainEventHelper.postEventForProperty(
-                            AbstractDomainEvent.Phase.EXECUTED,
-                            uncheckedCast(PropertySetterOrClearFacetForDomainEventAbstract.this.getEventType()),
-                            uncheckedCast(propertyDomainEvent),
-                            PropertySetterOrClearFacetForDomainEventAbstract.this.getFacetHolder(), head,
-                            oldValuePojo, actualNewValue);
-                }
-
-                // with action invocations, we inject services in the returned pojo at this point.
-                // for property sets, though, there's no need, as we're just returning the targetPojo itself
-                return head.getTarget().getPojo();
-
-                //
-                // REVIEW: the corresponding action has a whole bunch of error handling here.
-                // we probably should do something similar...
-                //
-
-            } finally {
-
+            if(!isPostable()) {
+                // don't emit domain events
+                return executeWithoutEvents(currentExecution);
             }
+
+            // ... post the executing event
+            val oldValuePojo = getterFacet.getProperty(head.getTarget(), interactionInitiatedBy);
+            val newValuePojo = MmUnwrapUtil.single(newValueAdapterMutatable);
+
+            val propertyDomainEvent =
+                    domainEventHelper.postEventForProperty(
+                            AbstractDomainEvent.Phase.EXECUTING,
+                            uncheckedCast(PropertySetterOrClearFacetForDomainEventAbstract.this.getEventType()), null,
+                            PropertySetterOrClearFacetForDomainEventAbstract.this.getFacetHolder(), head,
+                            oldValuePojo, newValuePojo);
+
+            val newValuePojoPossiblyUpdated = propertyDomainEvent.getNewValue();
+            if (!Objects.equals(newValuePojoPossiblyUpdated, newValuePojo)) {
+                newValueAdapterMutatable = newValuePojoPossiblyUpdated != null
+                        ? PropertySetterOrClearFacetForDomainEventAbstract.this.getObjectManager().adapt(newValuePojoPossiblyUpdated)
+                        : null;
+            }
+
+            // set event onto the execution
+            currentExecution.setEvent(propertyDomainEvent);
+
+            // invoke method
+            style.invoke(PropertySetterOrClearFacetForDomainEventAbstract.this, owningProperty,
+                    head.getTarget(), newValueAdapterMutatable, interactionInitiatedBy);
+
+
+            // reading the actual value from the target object, playing it safe...
+            val actualNewValue = getterFacet.getProperty(head.getTarget(), interactionInitiatedBy);
+            if (!Objects.equals(oldValuePojo, actualNewValue)) {
+
+                // ... post the executed event
+                domainEventHelper.postEventForProperty(
+                        AbstractDomainEvent.Phase.EXECUTED,
+                        uncheckedCast(PropertySetterOrClearFacetForDomainEventAbstract.this.getEventType()),
+                        uncheckedCast(propertyDomainEvent),
+                        PropertySetterOrClearFacetForDomainEventAbstract.this.getFacetHolder(), head,
+                        oldValuePojo, actualNewValue);
+            }
+
+            // with action invocations, we inject services in the returned pojo at this point.
+            // for property sets, though, there's no need, as we're just returning the targetPojo itself
+            return head.getTarget().getPojo();
+
+            //
+            // REVIEW: the corresponding action has a whole bunch of error handling here.
+            // we probably should do something similar...
+            //
+        }
+
+        private Object executeWithoutEvents(final PropertyEdit currentExecution) {
+            style.invoke(PropertySetterOrClearFacetForDomainEventAbstract.this, owningProperty,
+                    head.getTarget(), newValueAdapter, interactionInitiatedBy);
+            return head.getTarget().getPojo();
         }
 
     }
@@ -290,5 +296,10 @@ implements
         visitor.accept("getterFacet", getterFacet);
         visitor.accept("setterFacet", setterFacet);
         visitor.accept("clearFacet", clearFacet);
+    }
+
+    @Override
+    protected final boolean isPostable(final Class<? extends PropertyDomainEvent<?, ?>> eventType) {
+        throw _Exceptions.unexpectedCodeReach(); // we are bound to an underlying DomainEventHolder, let it decide
     }
 }
