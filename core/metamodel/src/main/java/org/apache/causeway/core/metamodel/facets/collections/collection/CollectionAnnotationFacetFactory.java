@@ -35,6 +35,7 @@ import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanti
 import org.apache.causeway.core.metamodel.facets.collections.collection.hidden.HiddenFacetForCollectionAnnotation;
 import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacet;
 import org.apache.causeway.core.metamodel.facets.collections.collection.typeof.TypeOfFacetForCollectionAnnotation;
+import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorForAmbiguousMixinAnnotations;
 
 import lombok.val;
@@ -86,6 +87,14 @@ extends FacetFactoryAbstract {
         val cls = processMethodContext.getCls();
         val typeSpec = getSpecificationLoader().loadSpecification(cls);
         val holder = processMethodContext.getFacetHolder();
+
+        val getterFacetIfAny = holder.lookupFacet(PropertyOrCollectionAccessorFacet.class);
+
+        final boolean isCollection = getterFacetIfAny.isPresent()
+                || processMethodContext.isMixinMain()
+                        && collectionIfAny.isPresent();
+
+        if(!isCollection) return; // bale out if method is not representing a collection (no matter mixed-in or not)
 
         //
         // Set up CollectionDomainEventFacet, which will act as the hiding/disabling/validating/.. advisor

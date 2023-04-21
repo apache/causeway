@@ -125,6 +125,12 @@ extends FacetFactoryAbstract {
 
         val getterFacetIfAny = holder.lookupFacet(PropertyOrCollectionAccessorFacet.class);
 
+        final boolean isProperty = getterFacetIfAny.isPresent()
+                || processMethodContext.isMixinMain()
+                        && propertyIfAny.isPresent();
+
+        if(!isProperty) return; // bale out if method is not representing a property (no matter mixed-in or not)
+
         //
         // Set up PropertyDomainEventFacet, which will act as the hiding/disabling/validating/.. advisor
         //
@@ -142,11 +148,19 @@ extends FacetFactoryAbstract {
 
             holder.lookupFacet(PropertySetterFacet.class)
             .ifPresent(setterFacet->
+                    /* lazily binds the event-type to the propertyDomainEventFacet,
+                     * such that any changes to the latter during post processing
+                     * are reflected here as well
+                     */
                     addFacet(new PropertySetterFacetForDomainEvent(
                             propertyDomainEventFacet, getterFacet, setterFacet, holder)));
 
             holder.lookupFacet(PropertyClearFacet.class)
             .ifPresent(clearFacet->
+                    /* lazily binds the event-type to the propertyDomainEventFacet,
+                     * such that any changes to the latter during post processing
+                     * are reflected here as well
+                     */
                     addFacet(new PropertyClearFacetForDomainEvent(
                             propertyDomainEventFacet, getterFacet, clearFacet, holder)));
         });

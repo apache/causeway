@@ -50,8 +50,12 @@ implements ActionInvocationFacet, ImperativeFacet {
         ImperativeFacet.visitAttributes(this, visitor);
         visitor.accept("declaringType", getDeclaringType());
         visitor.accept("returnType", getReturnType());
-        //visitor.accept("eventType", getEventType()); done already in super
-        //visitor.accept("eventTypeOrigin", getEventTypeOrigin()); done already in super
+        /* done already in super
+         *
+         * visitor.accept("eventType", getEventType());
+         * visitor.accept("eventTypeOrigin", getEventTypeOrigin());
+         * visitor.accept("isPostable", isPostable()); done already in super
+         */
     }
 
     @Override

@@ -182,7 +182,7 @@ implements ObjectAction {
             return getSpecificationLoader().loadSpecification(getFacetedMethod().getMethod().getReturnType());
         }
         return returType.orElseThrow(()->_Exceptions
-                .illegalState("missing ActionInvocationFacet on action %s", getFeatureIdentifier()));
+                .illegalState("framework bug: missing ActionInvocationFacet on action %s", getFeatureIdentifier()));
     }
 
     /**

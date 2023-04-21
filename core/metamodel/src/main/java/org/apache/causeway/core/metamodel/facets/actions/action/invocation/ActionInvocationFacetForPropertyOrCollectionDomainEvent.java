@@ -55,7 +55,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
 
-public class ActionInvocationFacetForDomainEvent
+/**
+ * Handles mixed-in properties and collections.
+ */
+public class ActionInvocationFacetForPropertyOrCollectionDomainEvent
 extends ActionInvocationFacetAbstract {
 
     @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
@@ -64,8 +67,8 @@ extends ActionInvocationFacetAbstract {
     private final ServiceRegistry serviceRegistry;
     private final DomainEventHelper domainEventHelper;
 
-    public ActionInvocationFacetForDomainEvent(
-            final DomainEventHolder<ActionDomainEvent<?>> domainEventHolder,
+    public ActionInvocationFacetForPropertyOrCollectionDomainEvent(
+            final DomainEventHolder<ActionDomainEvent<?>> domainEventHolder, //TODO[CAUSEWAY-3409] not used
             final MethodFacade method,
             final ObjectSpecification declaringType,
             final ObjectSpecification returnType,

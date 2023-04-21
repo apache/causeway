@@ -33,7 +33,8 @@ import org.apache.causeway.core.metamodel.facets.actions.action.choicesfrom.Choi
 import org.apache.causeway.core.metamodel.facets.actions.action.explicit.ActionExplicitFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.actions.action.hidden.HiddenFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
-import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEvent;
+import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForActionDomainEvent;
+import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForPropertyOrCollectionDomainEvent;
 import org.apache.causeway.core.metamodel.facets.actions.action.prototype.PrototypeFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.actions.action.typeof.TypeOfFacetForActionAnnotation;
@@ -63,7 +64,7 @@ extends FacetFactoryAbstract {
                         .addValidationFailure(processMethodContext.getFacetHolder(), Action.class));
 
         processExplicit(processMethodContext, actionIfAny);
-        processInvocation(processMethodContext, actionIfAny);
+        processDomainEvent(processMethodContext, actionIfAny);
         processHidden(processMethodContext, actionIfAny);
         processRestrictTo(processMethodContext, actionIfAny);
         processSemantics(processMethodContext, actionIfAny);
@@ -91,9 +92,12 @@ extends FacetFactoryAbstract {
     }
 
 
-    void processInvocation(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {
+    void processDomainEvent(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {
 
         val actionMethod = processMethodContext.getMethod();
+
+        final boolean isAction = !processMethodContext.isMixinMain()
+                || actionIfAny.isPresent();
 
         try {
             val returnType = actionMethod.getReturnType();
@@ -121,10 +125,14 @@ extends FacetFactoryAbstract {
                  * such that any changes to the latter during post processing
                  * are reflected here as well
                  */
-                new ActionInvocationFacetForDomainEvent(
+                isAction
+                    ? new ActionInvocationFacetForActionDomainEvent(
                         actionDomainEventFacet,
-                        actionMethod, typeSpec, returnSpec, holder));
-
+                        actionMethod, typeSpec, returnSpec, holder)
+                    //TODO[CAUSEWAY-3409] if we are in a mixed-in prop/coll situation, the prop/coll event-type must be used instead
+                    : new ActionInvocationFacetForPropertyOrCollectionDomainEvent(
+                                    actionDomainEventFacet,
+                                    actionMethod, typeSpec, returnSpec, holder));
         } finally {
             processMethodContext.removeMethod(actionMethod.asMethodForIntrospection());
         }

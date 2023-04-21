@@ -60,7 +60,6 @@ extends ObjectSpecificationPostProcessorAbstract {
 
     @Override
     public void postProcessProperty(final ObjectSpecification objectSpecification, final OneToOneAssociation property) {
-
         if(property.isMixedIn()) {
             property
                 .lookupFacet(PropertyDomainEventFacet.class)
@@ -71,19 +70,10 @@ extends ObjectSpecificationPostProcessorAbstract {
                                 property.getFeatureIdentifier()))
                 .initWithMixee(objectSpecification);
         }
-        //TODO[CAUSEWAY-3409] now should we remove any PropertyDomainEventFacet(s) that are not post-able?
-        /*
-         * EventUtil.eventTypeIsPostable(
-                propertyDomainEventFacet.getEventType(),
-                PropertyDomainEvent.Noop.class,
-                PropertyDomainEvent.Default.class,
-                facetHolder.getConfiguration().getApplib().getAnnotation().getProperty().getDomainEvent().isPostForDefault())
-         */
     }
 
     @Override
     public void postProcessCollection(final ObjectSpecification objectSpecification, final OneToManyAssociation collection) {
-
         if(collection.isMixedIn()) {
             collection
                 .lookupFacet(CollectionDomainEventFacet.class)
