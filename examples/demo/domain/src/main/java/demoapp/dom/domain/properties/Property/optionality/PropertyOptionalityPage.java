@@ -45,11 +45,8 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.PropertyOptionalityVm")
-@DomainObject(
-        nature=Nature.VIEW_MODEL,
-        editing = Editing.ENABLED)
-public class PropertyOptionalityPage implements HasAsciiDocDescription {
+@Named("demo.PropertyOptionalityPage")
+@DomainObject(nature=Nature.VIEW_MODEL) public class PropertyOptionalityPage implements HasAsciiDocDescription {
     // ...
 //end::class[]
 
@@ -59,6 +56,7 @@ public class PropertyOptionalityPage implements HasAsciiDocDescription {
 
 //tag::optional[]
     @Property(
+        editing = Editing.ENABLED,
         optionality = Optionality.OPTIONAL              // <.>
     )
     @XmlElement(required = false)
@@ -68,6 +66,7 @@ public class PropertyOptionalityPage implements HasAsciiDocDescription {
 
 //tag::mandatory[]
     @Property(
+        editing = Editing.ENABLED,
         optionality = Optionality.MANDATORY             // <.>
     )
     @XmlElement(required = true)
@@ -77,7 +76,7 @@ public class PropertyOptionalityPage implements HasAsciiDocDescription {
 
 //tag::nullable[]
     // <.>
-    @Property()
+    @Property(editing = Editing.ENABLED)
     @org.springframework.lang.Nullable                  // <.>
     @XmlElement(required = false)
     @Getter @Setter
