@@ -2,58 +2,23 @@
 
 When a collection of entities are rendered by the viewer, the table will by default have one column for every property that is not otherwise universally hidden (eg using `@Property(hidden = Where.ALL_TABLES`).
 
-Sometimes though the columns to be shown will vary depending upon the use case with which the entity is being interacted.
-One way to fine-tune the columns shown is to implement the `TableColumnOrderService` SPI.
-An alternative is to define a view model as a projection of that entity, and return a collection of that view model instead.
-However, this view model requires the end-user to have to click first to the view model, and then to the backing entity instance that it wraps.
-The `projecting` attribute allows this extra hop to be eliminated.
+Sometimes though the columns to be shown will depend upon the context in which the entity is being interacted.
+One common approach is to define a view model as a projection of the entity, and return a collection of that view model instead.
+However, if the user wants to access the entity they must first navigate to the view model, and from their navigate to the backing entity instance that it wraps.
 
-The `projecting` attribute can only be used on a view model, and only on a single property of that view model,  and that property must return a reference to an entity (the backing entity).
+The purpose of the link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/Property.html#projecting[@Property#projecting] attribute is to eliminate this extra hop.
 
-Rather than render links to the view model, the viewer instead renders links directly to the entity.
+The idea is that the `projecting` attribute is placed on the property of the view model that references the backing entity.
+With this hint, the viewer instead renders links to the entity rather than the view model.
+From the end-user's perspectice, they aren't aware that a view model is in use at all.
 
-== Demo Domain
+== How this demo works
 
 The diagram below shows how the domain objects of the demo app are related:
 
-ifndef::dev-mode[]
-image::/demoapp/dom/annotDomain/Property/publishing/uml-class-diag.png[]
-endif::dev-mode[]
+// see diag.adoc
 
-ifdef::dev-mode[]
-[plantuml,property-projecting-uml-class-diag,png]
-----
-@startuml(id=Commons)
-
-hide empty members
-skinparam {
-  shadowing false
-  arrowFontSize 10
-  defaultTextAlignment center
-  wrapWidth 200
-  maxMessageSize 100
-}
-hide stereotype
-skinparam rectangle<<2>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
-
-class PropertyPublishingVm {
-}
-class PropertyPublishingChildVm {
-}
-class PropertyPublishingChildJdo {
-}
-
-PropertyPublishingVm -r-> "1" PropertyPublishingChildVm : firstChild
-PropertyPublishingVm -r-> "1..*" PropertyPublishingChildVm : children
-PropertyPublishingChildVm -d-> PropertyPublishingChildJdo : backingEntity
-
-@enduml
-----
-endif::dev-mode[]
+image::/demoapp/dom/annotDomain/Property/projecting/uml-class-diag.png[]
 
 The property from `PropertyPublishingChildVm` to `PropertyPublishingChildJdo` is annotated as a projecting property:
 
@@ -89,3 +54,6 @@ As it isn't possible to access the projection view model at all, there's little 
 
 
 
+== Related Services
+
+An alternative way to fine-tune the columns shown is to implement the link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/services/tablecol/TableColumnOrderService.html[TableColumnOrderService] or link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/services/tablecol/TableColumnVisibilityService.html[TableColumnVisibilityService] SPIs.
