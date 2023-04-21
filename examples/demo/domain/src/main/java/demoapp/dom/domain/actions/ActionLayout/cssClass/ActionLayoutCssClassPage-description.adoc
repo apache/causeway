@@ -8,12 +8,12 @@ One option is to reference a style that you have defined yourself in the `applic
 Alternatively, you can exploit the fact that the Wicket viewer uses the link:https://getbootstrap.com/[bootstrap] design system, and so just use one of the styles defined there, for example, the link:https://getbootstrap.com/docs/5.0/components/buttons/#button-tags[button tags]
 
 
-=== How this demo works
+== How this demo works
 
 This page defines a single `name` property along with a set of actions, all of which can be used to update that property.
 Those actions are rendered in a number of different positions, all using a different _Bootstrap_ class.
 
-==== Positioned below the property
+=== Positioned below the property
 
 Two actions:
 
@@ -36,7 +36,7 @@ include::ActionLayoutCssClassPage.java[tags=below-btn-warning]
 <.> specifies the order in which associated actions in the same position are rendered
 
 
-==== Positioned on the panel that contains the property
+=== Positioned on the panel that contains the property
 
 Two actions:
 
@@ -60,7 +60,7 @@ include::ActionLayoutCssClassPage.java[tags=panel-btn-secondary]
 <.> specifies the order in which associated actions in the same position are rendered
 
 
-==== Positioned on the drop-down of the panel that contains the property:
+=== Positioned on the drop-down of the panel that contains the property:
 
 WARNING: although the CSS class is applied, the Bootstrap styling does not apply; see link:https://issues.apache.org/jira/browse/CAUSEWAY-3427[CAUSEWAY-3427].
 
@@ -83,7 +83,7 @@ include::ActionLayoutCssClassPage.java[tags=panel-dropdown-btn-dark]
 ----
 <.> appends the `btn-dark` CSS class
 
-==== At the object level
+=== At the object level
 
 One action:
 
@@ -97,7 +97,7 @@ Yhis last example has no `@ActionLayout#cssClass` defined, but it nevertheless w
 This is because it picks up the global configuration property, as described in the next section.
 
 
-=== Related configuration properties
+== Related configuration property
 
 Rather than styling each action individually, it's possible to use a configuration property which defines styles globally.
 
@@ -122,7 +122,7 @@ causeway:
 This is the reason why the "delete" action (shown in the previous section) is rendered using "btn-danger".
 
 
-=== .layout.xml
+== .layout.xml
 
 Instead of using `@ActionLayout#cssClass`, it is also possible to specify the CSS class using the `<action id="..." cssClass="...">` in the link:https://causeway.apache.org/userguide/2.0.0-RC1/fun/ui.html#by-example[.layout.xml] file.
 

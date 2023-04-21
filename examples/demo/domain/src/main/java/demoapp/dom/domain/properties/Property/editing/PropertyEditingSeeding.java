@@ -16,27 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.Property.fileAccept;
+package demoapp.dom.domain.properties.Property.editing;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import jakarta.inject.Inject;
 
-import org.apache.causeway.applib.annotation.Parameter;
-import org.apache.causeway.applib.annotation.Property;
+import org.springframework.stereotype.Service;
 
-//tag::class[]
-@Property(fileAccept = "pdf")                       // <.>
-@Parameter(fileAccept = "pdf")                      // <.>
-@Inherited
-@Target({
-        ElementType.METHOD, ElementType.FIELD,      // <.>
-        ElementType.PARAMETER                       // <.>
-})
-@Retention(RetentionPolicy.RUNTIME)
-public @interface FileAcceptPdfMetaAnnotation {
+import demoapp.dom._infra.seed.SeedServiceAbstract;
+import demoapp.dom._infra.values.ValueHolderRepository;
+
+@Service
+public class PropertyEditingSeeding
+extends SeedServiceAbstract {
+
+    @Inject
+    public PropertyEditingSeeding(
+            ValueHolderRepository<String, ? extends PropertyEditing> entities) {
+        super(entities);
+    }
 
 }
-//end::class[]

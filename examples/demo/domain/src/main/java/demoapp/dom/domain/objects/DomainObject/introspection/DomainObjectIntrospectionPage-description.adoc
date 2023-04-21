@@ -40,7 +40,7 @@ causeway:
 Normally there would be little reason to override this - just adopt the convention that best fits your style, and leave it at that.
 However, it the need arises then it can be overridden on a class by class basis using the link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/DomainObject.html#introspection[@DomainObject#introspection] attribute.
 
-=== How this demo works
+== How this demo works
 
 The collections on the left show three variants of the same entity, each with a property and an action, but each configured to use a different introspection policy.
 

@@ -6,9 +6,9 @@ Sometimes though the columns to be shown will vary depending upon the use case w
 One way to fine-tune the columns shown is to implement the `TableColumnOrderService` SPI.
 An alternative is to define a view model as a projection of that entity, and return a collection of that view model instead.
 However, this view model requires the end-user to have to click first to the view model, and then to the backing entity instance that it wraps.
-The `projecting` element allows this extra hop to be eliminated.
+The `projecting` attribute allows this extra hop to be eliminated.
 
-The `projecting` element can only be used on a view model, and only on a single property of that view model,  and that property must return a reference to an entity (the backing entity).
+The `projecting` attribute can only be used on a view model, and only on a single property of that view model,  and that property must return a reference to an entity (the backing entity).
 
 Rather than render links to the view model, the viewer instead renders links directly to the entity.
 

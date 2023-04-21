@@ -22,7 +22,7 @@ This is actually enough for the framework to infer that this domain object is a 
 <.> Nevertheless, it's generally good practice to specify the nature explicitly.
 
 
-=== How this demo works
+== How this demo works
 
 There are two collections on the left hand side, one of domain entities and the other of view models.
 The entities are obtained by querying a repository, while the view models are created on the fly, each wrapping a corresponding entity:

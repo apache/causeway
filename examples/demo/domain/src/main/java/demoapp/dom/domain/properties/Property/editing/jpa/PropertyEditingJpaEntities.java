@@ -16,25 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.Property.editing;
+package demoapp.dom.domain.properties.Property.editing.jpa;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
 
-import org.apache.causeway.applib.annotation.Editing;
-import org.apache.causeway.applib.annotation.Property;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
-//tag::class[]
-@Property(editing = Editing.ENABLED)                // <.>
-@Inherited
-@Target({
-        ElementType.METHOD, ElementType.FIELD       // <.>
-})
-@Retention(RetentionPolicy.RUNTIME)
-public @interface EditingEnabledMetaAnnotation {
+@Profile("demo-jpa")
+@Service
+public class PropertyEditingJpaEntities
+extends ValueHolderRepository<String, PropertyEditingJpa> {
+
+    protected PropertyEditingJpaEntities() {
+        super(PropertyEditingJpa.class);
+    }
+
+    @Override
+    protected PropertyEditingJpa newDetachedEntity(String value) {
+        return new PropertyEditingJpa(value);
+    }
 
 }
-//end::class[]

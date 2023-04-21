@@ -2,7 +2,7 @@
 
 The purpose of the link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/DomainObjectLayout.html#describedas[@DomainObjectLayout#describedAs] is simply to provide a static description of the domain object.
 
-=== How this demo works
+== How this demo works
 
 The collection on the left hand side shows a set of objects that have been annotated with `describedAs`.
 Hover over the icons of the objects in the collection, and this text will be shown in (the bottom half of) each tooltip.

@@ -2,7 +2,7 @@
 
 This domain class is used in the demo of `@Action#commandPublishing`.
 
-=== How this demo works
+== How this demo works
 
 This entity has two actions, each of which can be used to change its name.
 One of the actions is published, the other is not.

@@ -16,47 +16,36 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.Property.fileAccept;
+package demoapp.dom.domain.properties.Property.maxLength;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.value.Clob;
 
 import lombok.RequiredArgsConstructor;
 
-@Action(
-    semantics = SemanticsOf.IDEMPOTENT
-)
-@ActionLayout(
-        associateWith = "txtPropertyUsingAnnotation"
-        , sequence = "1")
+@Action(semantics = SemanticsOf.IDEMPOTENT)
+@ActionLayout(associateWith = "name", sequence = "1")
 @RequiredArgsConstructor
-public class PropertyFileAcceptPage_updateClobWithParameterLayout {
+public class PropertyMaxLengthPage_updateName {
 
-    private final PropertyFileAcceptPage propertyFileAcceptVm;
+    private final PropertyMaxLengthPage page;
 
 //tag::annotation[]
-    @MemberSupport public PropertyFileAcceptPage act(
+    @MemberSupport public PropertyMaxLengthPage act(
             @Parameter(
-                fileAccept = ".txt"                     // <.>
-                , optionality = Optionality.OPTIONAL
+                maxLength = 10          // <.>
             )
-            @ParameterLayout(
-                describedAs =
-                    "@Parameter(fileAccept = \".txt\")"
-            )
-            final Clob parameterUsingAnnotation) {
-        propertyFileAcceptVm.setTxtPropertyUsingAnnotation(parameterUsingAnnotation);
-        return propertyFileAcceptVm;
+            final String name) {
+        page.setName(name);
+        return page;
     }
 //end::annotation[]
-    @MemberSupport public Clob default0Act() {
-        return propertyFileAcceptVm.getTxtPropertyUsingAnnotation();
+    @MemberSupport public String default0Act() {
+        return page.getName();
     }
 
 }

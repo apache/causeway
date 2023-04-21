@@ -8,7 +8,7 @@ This XML could for example be hashed and digitally signed, to form the basis of 
 
 [TIP]
 ====
-It is possible to explicitly exclude properties from the snapshot using the `@Property(snapshot=...)` element.
+It is possible to explicitly exclude properties from the snapshot using the `@Property(snapshot=...)` attribute.
 ====
 
 In addition to generating XML, the service can also generate an XSD schema that the XML will be conformant with.

@@ -31,7 +31,7 @@ Must be a subclass of https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib
 removingLifecycleEvent] - when an already-persisted entity is about to be DELETEd from the database.
 Must be a subclass of https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/events/lifecycle/ObjectRemovingEvent[ObjectRemovingEvent].
 
-=== How this demo works
+== How this demo works
 
 The page provides actions to allow a single entity to be created, updated and deleted.
 It also shows a list of events that are captured by a subscriber, for each of the corresponding lifecycle events.

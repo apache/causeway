@@ -7,7 +7,7 @@ To make this set of bookmarks more useful, the set of bookmarks can be organised
 An object annotated as a link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/BookmarkPolicy.html#as_root[root] bookmark will always be added.
 However an object annotated as a link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/BookmarkPolicy.html#as_child[child] bookmark will only be added if its parent object is also bookmarked.
 
-=== How this demo works
+== How this demo works
 
 On the left hand side is a collection of objects.
 These are all annotated as root bookmarks.

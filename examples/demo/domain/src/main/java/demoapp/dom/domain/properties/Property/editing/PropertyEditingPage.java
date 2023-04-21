@@ -21,19 +21,12 @@ package demoapp.dom.domain.properties.Property.editing;
 import jakarta.inject.Named;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;
-import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
-
-import lombok.Getter;
-import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
@@ -43,55 +36,12 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.PropertyEditingPage")
 @DomainObject(
-        nature=Nature.VIEW_MODEL,
-        editing = Editing.DISABLED              // <.>
-)
+        editing = Editing.ENABLED)
 public class PropertyEditingPage implements HasAsciiDocDescription {
-    // ...
-//end::class[]
 
     @ObjectSupport public String title() {
         return "@Property#editing";
     }
 
-//tag::annotation[]
-    @Property(
-        editing = Editing.ENABLED               // <.>
-    )
-    @PropertyLayout(
-        describedAs = "@Property(editing = ENABLED)",
-        fieldSetId = "annotation", sequence = "1")
-    @XmlElement(required = true)
-    @Getter @Setter
-    private String propertyUsingAnnotation;
-//end::annotation[]
-
-//tag::meta-annotated[]
-    @Property()
-    @EditingEnabledMetaAnnotation               // <.>
-    @PropertyLayout(
-        describedAs = "@EditingEnabledMetaAnnotation",
-        fieldSetId = "meta-annotated", sequence = "1")
-    @XmlElement(required = true)
-    @Getter @Setter
-    private String propertyUsingMetaAnnotation;
-//end::meta-annotated[]
-
-//tag::meta-annotated-overridden[]
-    @EditingEnabledMetaAnnotation               // <.>
-    @Property(
-        editing = Editing.DISABLED              // <.>
-    )
-    @PropertyLayout(
-        describedAs =
-            "@EditingEnabledMetaAnnotation " +
-            "@Property(editing = DISABLED)",
-            fieldSetId = "meta-annotated-overridden", sequence = "1")
-    @XmlElement(required = false)
-    @Getter @Setter
-    private String propertyUsingMetaAnnotationButOverridden;
-//end::meta-annotated-overridden[]
-
-//tag::class[]
 }
 //end::class[]

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.Property.fileAccept;
+package demoapp.dom.domain.properties.Property.mustSatisfy;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -24,35 +24,29 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.value.Blob;
 
 import lombok.RequiredArgsConstructor;
 
-@Action(
-    semantics = SemanticsOf.IDEMPOTENT
-)
-@ActionLayout(
-        associateWith = "pdfPropertyUsingMetaAnnotation"
-        , sequence = "1")
+@Action(semantics = SemanticsOf.IDEMPOTENT)
+@ActionLayout(associateWith = "customerAge", sequence = "1")
 @RequiredArgsConstructor
-public class PropertyFileAcceptPage_updateWithMetaAnnotation {
+public class PropertyMustSatisfyPage_updateCustomerAge {
 
-    private final PropertyFileAcceptPage propertyFileAcceptVm;
+    private final PropertyMustSatisfyPage page;
 
-//tag::meta-annotation[]
-    @MemberSupport public PropertyFileAcceptPage act(
-            @FileAcceptPdfMetaAnnotation                            // <.>
-            @Parameter()
-            @ParameterLayout(
-                describedAs = "@FileAcceptPdfMetaAnnotation"
+//tag::annotation[]
+    @MemberSupport public PropertyMustSatisfyPage act(
+            @Parameter(
+                mustSatisfy = OfWorkingAgeSpecification.class   // <.>
             )
-            final Blob pdfParameterUsingMetaAnnotation) {
-        propertyFileAcceptVm.setPdfPropertyUsingMetaAnnotation(pdfParameterUsingMetaAnnotation);
-        return propertyFileAcceptVm;
+            final Integer customerAge) {
+        page.setCustomerAge(customerAge);
+        return page;
     }
-//end::meta-annotation[]
-    @MemberSupport public Blob default0Act() {
-        return propertyFileAcceptVm.getPdfPropertyUsingMetaAnnotation();
+//end::annotation[]
+
+    @MemberSupport public Integer default0Act() {
+        return page.getCustomerAge();
     }
 
 }

@@ -32,14 +32,14 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 
+import demoapp.dom.domain.properties.Property.editing.PropertyEditingPage;
+
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandPublishingPage;
 import demoapp.dom.domain.properties.Property.domainEvent.PropertyDomainEventPage;
-import demoapp.dom.domain.properties.Property.editing.PropertyEditingPage;
-import demoapp.dom.domain.properties.Property.editingReasonDisabled.PropertyEditingReasonDisabledPage;
 import demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingPage;
 import demoapp.dom.domain.properties.Property.fileAccept.PropertyFileAcceptPage;
 import demoapp.dom.domain.properties.Property.maxLength.PropertyMaxLengthPage;
@@ -63,6 +63,7 @@ public class PropertyMenu {
     final ValueHolderRepository<String, ? extends PropertyProjectingChildEntity> propertyProjectingChildEntities;
     final Samples<Blob> blobSamples;
     final Samples<Clob> clobSamples;
+    final Samples<String> stringSamples;
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-terminal", describedAs = "Action invocation intentions as XML")
@@ -79,23 +80,7 @@ public class PropertyMenu {
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-pencil-alt", describedAs = "Editable fields")
     public PropertyEditingPage editing(){
-        val vm = new PropertyEditingPage();
-
-        vm.setPropertyUsingAnnotation("this property is editable");
-        vm.setPropertyUsingMetaAnnotation("this property is also editable");
-        vm.setPropertyUsingMetaAnnotationButOverridden("this property is NOT editable");
-        return vm;
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-pencil-alt", describedAs = "Not editable fields")
-    public PropertyEditingReasonDisabledPage editingReasonDisabled(){
-        val vm = new PropertyEditingReasonDisabledPage();
-
-        vm.setPropertyUsingAnnotation("this property NOT is editable");
-        vm.setPropertyUsingMetaAnnotation("this property is also NOT editable");
-        vm.setPropertyUsingMetaAnnotationButOverridden("this property is NOT editable");
-        return vm;
+        return new PropertyEditingPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
@@ -107,23 +92,17 @@ public class PropertyMenu {
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-file-upload", describedAs = "Length of text fields")
     public PropertyFileAcceptPage fileAccept(){
-        val vm = new PropertyFileAcceptPage();
-
-        setSampleBlob(".pdf", vm::setPdfPropertyUsingAnnotation);
-        setSampleBlob(".pdf", vm::setPdfPropertyUsingMetaAnnotation);
-        setSampleBlob(".docx", vm::setDocxPropertyUsingMetaAnnotationButOverridden);
-        setSampleClob(".txt", vm::setTxtPropertyUsingAnnotation);
-
-        return vm;
+        val page = new PropertyFileAcceptPage();
+        setSampleBlob(".pdf", page::setPdfProperty);
+        setSampleClob(".txt", page::setTxtProperty);
+        return page;
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-ruler-horizontal", describedAs = "Length of text fields")
     public PropertyMaxLengthPage maxLength(){
         val vm = new PropertyMaxLengthPage();
-        vm.setPropertyUsingAnnotation("abcdefghij");
-        vm.setPropertyUsingMetaAnnotation("abcdefghij");
-        vm.setPropertyUsingMetaAnnotationButOverridden("abc");
+        vm.setName(stringSamples.single());
         return vm;
     }
 
@@ -131,9 +110,7 @@ public class PropertyMenu {
     @ActionLayout(cssClassFa="fa-star-half-alt", describedAs = "Regular expressions, such as email")
     public PropertyMustSatisfyPage mustSatisfy(){
         val vm = new PropertyMustSatisfyPage();
-        vm.setCustomerAgePropertyUsingAnnotation(18);
-        vm.setCustomerAgePropertyUsingMetaAnnotation(65);
-        vm.setCustomerAgePropertyUsingMetaAnnotationButOverridden(66);
+        vm.setCustomerAge(18);
         return vm;
     }
 

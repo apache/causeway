@@ -27,7 +27,7 @@ Entity change publishing can also be enabled on a case by case basis using the l
 
 
 
-=== How this demo works
+== How this demo works
 
 The collection on the left shows a set of entity instances, which have `@DomainObject#entityChangePublishing` to enable the publishing of any changes to their state.
 

@@ -16,28 +16,35 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.Property.editingReasonDisabled;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+package demoapp.dom.domain.properties.Property.editing;
 
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Property;
 
-//tag::class[]
-@Property(
-        editing = Editing.DISABLED,
-        editingDisabledReason = "disabled "
-        + "for demo purposes (meta annot.)")        // <.>
-@Inherited
-@Target({
-        ElementType.METHOD, ElementType.FIELD       // <.>
-})
-@Retention(RetentionPolicy.RUNTIME)
-public @interface EditingReasonDisabledMetaAnnotation {
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolder;
 
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
+public abstract class PropertyEditing
+        implements
+        HasAsciiDocDescription,
+        ValueHolder<String> {
+
+    public String title() {
+        return value();
+    }
+
+    @Override
+    public String value() {
+        return getName();
+    }
+
+    public abstract String getName();
+    public abstract void setName(String value);
+
+    @Property(editing = Editing.DISABLED, editingDisabledReason = "This property cannot be edited")
+    public abstract String getOriginalName();
+    public abstract void setOriginalName(String value);
+
+    public abstract Character getInitialCharacter();
 }
-//end::class[]

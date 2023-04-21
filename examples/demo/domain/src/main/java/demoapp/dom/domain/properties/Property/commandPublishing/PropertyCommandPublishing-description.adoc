@@ -2,7 +2,7 @@
 
 This domain class is used in the demo of `@Property#commandPublishing`.
 
-=== How this demo works
+== How this demo works
 
 This entity has two editable properties, `name` and `notes`.
 One `name` property has command publishing enabled, while the `notes` property does not.

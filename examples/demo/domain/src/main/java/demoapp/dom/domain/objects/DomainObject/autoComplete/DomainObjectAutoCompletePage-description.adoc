@@ -8,7 +8,7 @@ The link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annota
 
 TIP: In fact, the return type of the `autoComplete` method does not need to exactly match that of the annotated domain type; it is sufficient to return any superclass or indeed an interface.
 
-=== How this demo works
+== How this demo works
 
 The collection on the left shows a set of entity instances, of type `DomainObjectAutoComplete`.
 

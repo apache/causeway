@@ -1,10 +1,10 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-The `labelPosition` element indicates where the label for a property to be rendered: typically to the left or the top, or sometimes none:
+The `labelPosition` attribute indicates where the label for a property to be rendered: typically to the left or the top, or sometimes none:
 
-* for properties, the element can be specified using either the `@PropertyLayout` annotation, or a meta-annotation, or using the `Xxx.layout.xml` layout file.
+* for properties, the attribute can be specified using either the `@PropertyLayout` annotation, or using the `Xxx.layout.xml` layout file.
 
-* for parameters, the element can be specified using either the `@ParameterLayout` annotation, or a meta-annotation.
+* for parameters, the attribute can be specified using the `@ParameterLayout` annotation
 
 Some data types also support the label being rendered to the right (support for this is shown on each of the demo pages for each of the data types).
 
@@ -12,7 +12,7 @@ Some data types also support the label being rendered to the right (support for 
 
 == Annotated
 
-The `labelPosition` element can be specified explicitly using an annotation:
+The `labelPosition` attribute can be specified explicitly using an annotation:
 
 * for properties, using `@PropertyLayout#labelPosition()`:
 +
@@ -26,13 +26,13 @@ include::PropertyLayoutLabelPositionPage.java[tags=annotation]
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutLabelPositionVm_updateWithParameterLayout.java[tags=annotation]
+include::PropertyLayoutLabelPositionPage_updateWithParameterLayout.java[tags=annotation]
 ----
 <.> explicitly specifies the label position for the parameter
 
 == Layout File
 
-For properties (not parameters), the CSS class element can be specified using the `Xxx.layout.xml` file:
+For properties (not parameters), the CSS class can be specified using the `Xxx.layout.xml` file:
 
 * property definition:
 +
@@ -59,7 +59,7 @@ The `@PropertyLayout` can also be applied at the class-level to mixin properties
 
 [source,java,indent=0]
 ----
-include::PropertyLayoutLabelPositionVm_mixinProperty.java[tags=class]
+include::PropertyLayoutLabelPositionPage_mixinProperty.java[tags=class]
 ----
 <.> explicitly specifies the label position for the contributed property
 
@@ -91,7 +91,7 @@ include::PropertyLayoutLabelPositionPage.java[tags=meta-annotated]
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutLabelPositionVm_updateWithMetaAnnotation.java[tags=meta-annotation]
+include::PropertyLayoutLabelPositionPage_updateWithMetaAnnotation.java[tags=meta-annotation]
 ----
 <.> hint is inherited from the meta-annotation
 
@@ -99,7 +99,7 @@ include::PropertyLayoutLabelPositionVm_updateWithMetaAnnotation.java[tags=meta-a
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutLabelPositionVm_mixinPropertyWithMetaAnnotation.java[tags=class]
+include::PropertyLayoutLabelPositionPage_mixinPropertyWithMetaAnnotation.java[tags=class]
 ----
 <.> hint is inherited from the meta-annotation
 
@@ -120,7 +120,7 @@ include::PropertyLayoutLabelPositionPage.java[tags=meta-annotated-overridden]
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutLabelPositionVm_updateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
+include::PropertyLayoutLabelPositionPage_updateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
 ----
 <.> hint from meta-annotation ...
 <.> \... is overridden by the `@ParameterLayout` annotation
@@ -130,7 +130,7 @@ include::PropertyLayoutLabelPositionVm_updateWithMetaAnnotationOverridden.java[t
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutLabelPositionVm_mixinPropertyWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
+include::PropertyLayoutLabelPositionPage_mixinPropertyWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
 ----
 <.> hint from meta-annotation ...
 <.> \... is overridden by the `@PropertyLayout` annotation
@@ -153,7 +153,7 @@ And for a parameter:
 
 [source,java,indent=0]
 ----
-include::PropertyLayoutLabelPositionVm_updateVariantLeft.java[tags=annotation]
+include::PropertyLayoutLabelPositionPage_updateVariantLeft.java[tags=annotation]
 ----
 
 === Top
@@ -169,7 +169,7 @@ And for a parameter:
 
 [source,java,indent=0]
 ----
-include::PropertyLayoutLabelPositionVm_updateVariantTop.java[tags=annotation]
+include::PropertyLayoutLabelPositionPage_updateVariantTop.java[tags=annotation]
 ----
 
 === Right
@@ -227,7 +227,7 @@ And for a parameter:
 
 [source,java,indent=0]
 ----
-include::PropertyLayoutLabelPositionVm_updateVariantNotSpecified.java[tags=annotation]
+include::PropertyLayoutLabelPositionPage_updateVariantNotSpecified.java[tags=annotation]
 ----
 
 The default position itself can be configured globally, in the `application.yml` or `application.properties` configuration file.

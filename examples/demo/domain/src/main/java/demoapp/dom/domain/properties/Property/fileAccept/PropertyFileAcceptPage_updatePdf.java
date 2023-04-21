@@ -16,46 +16,36 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.Property.maxLength;
+package demoapp.dom.domain.properties.Property.fileAccept;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Parameter;
-import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.value.Blob;
 
 import lombok.RequiredArgsConstructor;
 
-@Action(
-    semantics = SemanticsOf.IDEMPOTENT
-)
-@ActionLayout(
-    associateWith = "propertyUsingMetaAnnotationButOverridden"
-    , sequence = "1")
+@Action(semantics = SemanticsOf.IDEMPOTENT)
+@ActionLayout(associateWith = "pdfProperty", sequence = "1")
 @RequiredArgsConstructor
-public class PropertyMaxLengthPage_updateWithMetaAnnotationOverridden {
+public class PropertyFileAcceptPage_updatePdf {
 
-    private final PropertyMaxLengthPage page;
+    private final PropertyFileAcceptPage page;
 
-//tag::meta-annotation-overridden[]
-    @MemberSupport public PropertyMaxLengthPage act(
-            @MaxLength10MetaAnnotation                          // <.>
+//tag::pdf[]
+    @MemberSupport public PropertyFileAcceptPage act(
             @Parameter(
-                maxLength = 3                                   // <.>
+                fileAccept = ".pdf"                     // <.>
             )
-            @ParameterLayout(
-                describedAs =
-                    "@MaxLength10MetaAnnotation " +
-                    "@PropertyLayout(maxLength = 3)"
-            )
-            final String parameterUsingMetaAnnotationButOverridden) {
-        page.setPropertyUsingMetaAnnotationButOverridden(parameterUsingMetaAnnotationButOverridden);
+            final Blob pdf) {
+        page.setPdfProperty(pdf);
         return page;
     }
-//end::meta-annotation-overridden[]
-    @MemberSupport public String default0Act() {
-        return page.getPropertyUsingMetaAnnotationButOverridden();
+//end::pdf[]
+    @MemberSupport public Blob default0Act() {
+        return page.getPdfProperty();
     }
 
 }

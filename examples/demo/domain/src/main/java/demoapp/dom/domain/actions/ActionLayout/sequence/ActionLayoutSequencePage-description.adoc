@@ -1,13 +1,13 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-It's common to lay out a domain objects' members using the `@ActionLayout#associateWith` element, which places an action's button close to a property or collection.
-If there are more than one such action associated with an object, then the link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/ActionLayout.html#sequence[@ActionLayout#sequence] element can additionally be used to specify the order of those action buttons.
+It's common to lay out a domain objects' members using the `@ActionLayout#associateWith` attribute, which places an action's button close to a property or collection.
+If there are more than one such action associated with an object, then the link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/ActionLayout.html#sequence[@ActionLayout#sequence] attribute can additionally be used to specify the order of those action buttons.
 
-The value of the `sequence` element is a string, interpreted as a Dewey-decimal value, meaning:
+The value of the `sequence` attribute is a string, interpreted as a Dewey-decimal value, meaning:
 
     "1" < "1.0" < "1.1" < "1.1.1" < "1.1.2" < "1.2" < "1.3" < "2"
 
-=== How this demo works
+== How this demo works
 
 This page has a `name` property and a `children` collection, and then has a number of actions associated with these members.
 In the case of the `name` property, its associated action are positioned in various locations (using `@ActionLayout#position`).
@@ -15,7 +15,7 @@ In the case of the `name` property, its associated action are positioned in vari
 In all cases, the `@ActionLayout#sequence` is used to specify the order.
 This order is chosen to be the opposite of the alphabetic ordering of the action's identifier (eg `updateNameSeqZ` is ordered before `updateNameSeqY`).
 
-==== Positioned below property
+=== Positioned below property
 
 There are three actions associated with the `name` property and positioned below:
 
@@ -47,7 +47,7 @@ include::ActionLayoutSequencePage_updateNameSeqX.java[tags=class]
 ----
 <.> rendered third; "2" < "3"
 
-==== Positioned to the right of the property
+=== Positioned to the right of the property
 
 There are two actions positioned to the right of the `name` property:
 
@@ -70,7 +70,7 @@ include::ActionLayoutSequencePage_updateNamePositionedRightSeqX.java[tags=class]
 ----
 <.> uses Dewey format; "1.2" < "1.2.1"
 
-==== Positioned on panel
+=== Positioned on panel
 
 Two further actions positioned on the panel:
 
@@ -92,7 +92,7 @@ include::ActionLayoutSequencePage_updateNamePositionedPanelSeqX.java[tags=class]
 ----
 <.> uses Dewey format, "1" < "1.0"
 
-==== Positioned on panel drop-down
+=== Positioned on panel drop-down
 
 Finally there are two actions associated with `name` that are rendered on the panel drop-down:
 
@@ -114,7 +114,7 @@ include::ActionLayoutSequencePage_updateNamePositionedPanelDropDownSeqX.java[tag
 ----
 <.> uses Dewey format; "1.0" < "1.1"
 
-==== For Collection
+=== For Collection
 
 There are also two actions associated with the `children` collection:
 
@@ -135,7 +135,7 @@ include::ActionLayoutSequencePage_addChild.java[tags=class]
 include::ActionLayoutSequencePage_removeChild.java[tags=class]
 ----
 
-==== Top-level actions
+=== Top-level actions
 
 Lastly there are two actions that are not associated with any object members.
 Because of the presence of the "unreferencedActions" attribute in the `.layout.xml`, these are rendered at the top, by the object header:
@@ -160,7 +160,7 @@ The top-level actions are:
 include::ActionLayoutSequencePage_noopSeqY.java[tags=class]
 ----
 +
-Note there is no "associateWith" element
+Note there is no "associateWith" attribute.
 
 * second:
 +
@@ -171,7 +171,7 @@ include::ActionLayoutSequencePage_noopSeqX.java[tags=class]
 ----
 
 
-=== .layout.xml
+== .layout.xml
 
 Instead of using `@ActionLayout#associateWith` and `@ActionLayout#sequence`, it is also possible to specify a all of these semantics using the link:https://causeway.apache.org/userguide/2.0.0-RC1/fun/ui.html#by-example[.layout.xml] file.
 

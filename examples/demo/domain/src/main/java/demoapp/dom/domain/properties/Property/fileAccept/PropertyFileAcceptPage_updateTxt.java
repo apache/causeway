@@ -22,41 +22,30 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Parameter;
-import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.applib.value.Clob;
 
 import lombok.RequiredArgsConstructor;
 
-@Action(
-    semantics = SemanticsOf.IDEMPOTENT
-)
-@ActionLayout(
-        associateWith = "docxPropertyUsingMetaAnnotationButOverridden"
-        , sequence = "1")
+@Action(semantics = SemanticsOf.IDEMPOTENT)
+@ActionLayout(associateWith = "txtProperty", sequence = "1")
 @RequiredArgsConstructor
-public class PropertyFileAcceptPage_updateWithMetaAnnotationOverridden {
+public class PropertyFileAcceptPage_updateTxt {
 
-    private final PropertyFileAcceptPage propertyFileAcceptVm;
+    private final PropertyFileAcceptPage page;
 
-//tag::meta-annotation-overridden[]
+//tag::txt[]
     @MemberSupport public PropertyFileAcceptPage act(
-            @FileAcceptPdfMetaAnnotation                    // <.>
             @Parameter(
-                fileAccept = ".docx"                        // <.>
+                fileAccept = ".txt"                     // <.>
             )
-            @ParameterLayout(
-                describedAs =
-                    "@FileAcceptPdfMetaAnnotation " +
-                    "@ParameterLayout(fileAccept = \".docx\")"
-            )
-            final Blob docxParameterUsingMetaAnnotationButOverridden) {
-        propertyFileAcceptVm.setDocxPropertyUsingMetaAnnotationButOverridden(docxParameterUsingMetaAnnotationButOverridden);
-        return propertyFileAcceptVm;
+            final Clob txt) {
+        page.setTxtProperty(txt);
+        return page;
     }
-//end::meta-annotation-overridden[]
-    @MemberSupport public Blob default0Act() {
-        return propertyFileAcceptVm.getDocxPropertyUsingMetaAnnotationButOverridden();
+//end::txt[]
+    @MemberSupport public Clob default0Act() {
+        return page.getTxtProperty();
     }
 
 }
