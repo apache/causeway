@@ -40,13 +40,11 @@ import lombok.Setter;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
+@Named("demo.PropertyRegexPatternPage")
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.PropertyRegexPatternVm")
-@DomainObject(
-        nature=Nature.VIEW_MODEL,
-        editing = Editing.ENABLED)
+@DomainObject(nature=Nature.VIEW_MODEL)
 public class PropertyRegexPatternPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
@@ -55,46 +53,17 @@ public class PropertyRegexPatternPage implements HasAsciiDocDescription {
 
 //tag::annotation[]
     @Property(
-        regexPattern = "^\\w+@\\w+[.]com$"                          // <.>
-        , regexPatternReplacement = "Must be .com email address"    // <.>
-        , regexPatternFlags = Pattern.CASE_INSENSITIVE              // <.>
+        editing = Editing.ENABLED,
+        regexPattern = "^\\w+@\\w+[.]com$",                     // <.>
+        regexPatternReplacement = "Must be .com email address", // <.>
+        regexPatternFlags = Pattern.CASE_INSENSITIVE            // <.>
     )
-    @PropertyLayout(
-        describedAs =
-            "@Property(regexPattern = \"^\\w+@\\w+[.]com$\"\")",
-        fieldSetId = "annotation", sequence = "1")
+    @PropertyLayout(describedAs =
+            "Must satisfy regex of \"^\\w+@\\w+[.]com$\"\")")   // <.>
     @XmlElement(required = true)
     @Getter @Setter
-    private String emailAddressPropertyUsingAnnotation;
+    private String emailAddress;
 //end::annotation[]
-
-//tag::meta-annotated[]
-    @RegexPatternEmailComMetaAnnotation                             // <.>
-    @Property()
-    @PropertyLayout(
-        describedAs = "@RegexPatternEmailComMetaAnnotation",
-        fieldSetId = "meta-annotated", sequence = "1")
-    @XmlElement(required = false)
-    @Getter @Setter
-    private String emailAddressPropertyUsingMetaAnnotation;
-//end::meta-annotated[]
-
-//tag::meta-annotated-overridden[]
-    @RegexPatternEmailComMetaAnnotation                             // <.>
-    @Property(
-        regexPattern = "^\\w+@\\w+[.]org$"                          // <.>
-        , regexPatternReplacement = "Must be .org email address"
-        , regexPatternFlags = Pattern.COMMENTS
-    )
-    @PropertyLayout(
-        describedAs =
-            "@RegexPatternEmailComMetaAnnotation " +
-            "@Property(regexPattern = \"^\\w+@\\w+[.]org$\"\")",
-        fieldSetId = "meta-annotated-overridden", sequence = "1")
-    @XmlElement(required = true)
-    @Getter @Setter
-    private String emailAddressPropertyUsingMetaAnnotationButOverridden;
-//end::meta-annotated-overridden[]
 
 }
 //end::class[]

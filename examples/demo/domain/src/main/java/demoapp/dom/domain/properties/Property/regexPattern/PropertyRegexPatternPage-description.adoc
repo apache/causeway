@@ -1,6 +1,7 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-The `regexPattern` attribute specifies a regular expression that the value entered into the property must match:
+Regular expressions are a common and powerful way to specify the format or structure of a string.
+The link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/Property.html#regexpattern[@Property#regexPattern] attribute specifies a regular expression that the value entered into the property must match:
 
 * for properties, the attribute can be specified using the `@Property` annotation
 
@@ -8,81 +9,31 @@ The `regexPattern` attribute specifies a regular expression that the value enter
 
 This semantic applies only to strings.
 
-== Annotated
+== How this demo works
 
-The `regexPattern` attribute can be specified explicitly using an annotation:
+This page has an `emailAddress` property that can be edited directly, and also updated using an associated action.
+Both the property and the action's parameter are annotated with the `regexPattern`, to ensure that the entered value meets a regex representing (a simplified definition of) an email address.
 
-* for properties, using `@Property#regexPattern()`:
+* To edit the property directly:
 +
 [source,java,indent=0]
 ----
 include::PropertyRegexPatternPage.java[tags=annotation]
 ----
-<.> explicitly specifies that the property must match the regex pattern
+<.> the regex pattern to be met
+<.> the error message to display if the pattern is not met
+<.> flags that modify how the pattern is matched.
+These flags are as defined by link:https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/regex/Pattern.html#compile(java.lang.String,int)[java.util.regex.Pattern.compile(java.lang.String, int)]
+<.> displayed as a tooltip
 
-* for parameters, using `@Parameter#regexPattern()`:
+* To edit the property using an action::
 +
 [source,java,indent=0]
+.PropertyRegexPatternPage_updateEmailAddress.java
 ----
-include::PropertyRegexPatternPage_updateWithParameterLayout.java[tags=annotation]
+include::PropertyRegexPatternPage_updateEmailAddress.java[tags=annotation]
 ----
 <.> explicitly specifies that the property must match the regex pattern
 
 The annotation could also be applied to a mixin, but would have little effect because mixin properties are always read-only.
-
-== Meta-annotated
-
-The `regexPattern` attribute can also be specified using a custom meta-annotation:
-
-* the meta-annotation is defined as:
-+
-[source,java]
-----
-include::RegexPatternEmailComMetaAnnotation.java[tags=class]
-----
-<.> annotated for a property ...
-<.> \... and for a parameter.
-<.> annotation can be applied to a property (either its getter or the field directly)
-<.> annotation can be applied to a parameter
-
-* and can be applied to a property:
-+
-[source,java,indent=0]
-----
-include::PropertyRegexPatternPage.java[tags=meta-annotated]
-----
-<.> semantic is inherited from the meta-annotation
-
-* or can be applied to a parameter:
-+
-[source,java,indent=0]
-----
-include::PropertyRegexPatternPage_updateWithMetaAnnotation.java[tags=meta-annotation]
-----
-<.> semantic is inherited from the meta-annotation
-
-
-
-=== Meta-annotated Overridden
-
-The meta-annotation can itself be overridden:
-
-* in a property:
-+
-[source,java,indent=0]
-----
-include::PropertyRegexPatternPage.java[tags=meta-annotated-overridden]
-----
-<.> semantic from meta-annotation ...
-<.> \... is overridden by the `@Property` annotation
-
-* or a parameter:
-+
-[source,java,indent=0]
-----
-include::PropertyRegexPatternPage_updateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
-----
-<.> semantic from meta-annotation ...
-<.> \... is overridden by the `@Parameter` annotation
-
 

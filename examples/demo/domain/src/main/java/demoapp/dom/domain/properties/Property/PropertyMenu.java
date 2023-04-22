@@ -140,11 +140,9 @@ public class PropertyMenu {
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-equals", describedAs = "Regular expressions, such as email")
     public PropertyRegexPatternPage regexPattern(){
-        val vm = new PropertyRegexPatternPage();
-        vm.setEmailAddressPropertyUsingAnnotation("joe@bloggs.com");
-        vm.setEmailAddressPropertyUsingMetaAnnotation("flo@bloggs.com");
-        vm.setEmailAddressPropertyUsingMetaAnnotationButOverridden("mo@bloggs.org");
-        return vm;
+        val page = new PropertyRegexPatternPage();
+        page.setEmailAddress("joe@bloggs.com");
+        return page;
     }
 
     @Action(semantics = SemanticsOf.SAFE)

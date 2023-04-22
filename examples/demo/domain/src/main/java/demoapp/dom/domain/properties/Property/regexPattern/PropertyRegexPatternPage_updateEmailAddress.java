@@ -29,35 +29,29 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
-@Action(
-    semantics = SemanticsOf.IDEMPOTENT
-)
-@ActionLayout(
-    associateWith = "emailAddressPropertyUsingAnnotation"
-    , sequence = "1")
+@Action(semantics = SemanticsOf.IDEMPOTENT)
+@ActionLayout(associateWith = "emailAddress", sequence = "1")
 @RequiredArgsConstructor
-public class PropertyRegexPatternPage_updateWithParameterLayout {
+public class PropertyRegexPatternPage_updateEmailAddress {
 
-    private final PropertyRegexPatternPage propertyRegexPatternPage;
+    private final PropertyRegexPatternPage page;
 
 //tag::annotation[]
     @MemberSupport public PropertyRegexPatternPage act(
             @Parameter(
-                regexPattern = "^\\w+@\\w+[.]com$"                  // <.>
-                , regexPatternReplacement = "Must be .com email address"
-                , regexPatternFlags = Pattern.CASE_INSENSITIVE
+                regexPattern = "^\\w+@\\w+[.]com$",                      // <.>
+                regexPatternReplacement = "Must be .com email address",
+                regexPatternFlags = Pattern.CASE_INSENSITIVE
             )
-            @ParameterLayout(
-                describedAs =
-                    "@Parameter(regexPattern = \"^\\w+@\\w+[.]com$\")"
-            )
-            final String emailAddressParameterUsingAnnotation) {
-        propertyRegexPatternPage.setEmailAddressPropertyUsingAnnotation(emailAddressParameterUsingAnnotation);
-        return propertyRegexPatternPage;
+            @ParameterLayout(describedAs =
+                    "Must satisfy regex of \"^\\w+@\\w+[.]com$\"\")")
+            final String emailAddress) {
+        page.setEmailAddress(emailAddress);
+        return page;
     }
 //end::annotation[]
     @MemberSupport public String default0Act() {
-        return propertyRegexPatternPage.getEmailAddressPropertyUsingAnnotation();
+        return page.getEmailAddress();
     }
 
 }
