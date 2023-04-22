@@ -16,25 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.Property.snapshot;
+package demoapp.dom.domain.properties.Property.snapshot.jpa;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
 
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.Snapshot;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
-//tag::class[]
-@Property(snapshot = Snapshot.INCLUDED)
-@Inherited
-@Target({
-        ElementType.METHOD, ElementType.FIELD
-})
-@Retention(RetentionPolicy.RUNTIME)
-public @interface SnapshotIncludedMetaAnnotation {
+@Profile("demo-jpa")
+@Service
+public class PropertySnapshotJpaEntities
+extends ValueHolderRepository<String, PropertySnapshotJpa> {
+
+    protected PropertySnapshotJpaEntities() {
+        super(PropertySnapshotJpa.class);
+    }
+
+    @Override
+    protected PropertySnapshotJpa newDetachedEntity(String value) {
+        return new PropertySnapshotJpa(value);
+    }
 
 }
-//end::class[]

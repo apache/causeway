@@ -55,6 +55,7 @@ import demoapp.dom.domain.properties.Property.commandPublishing.jpa.PropertyComm
 import demoapp.dom.domain.properties.Property.editing.jpa.PropertyEditingJpa;
 import demoapp.dom.domain.properties.Property.executionPublishing.jpa.PropertyExecutionPublishingJpa;
 import demoapp.dom.domain.properties.Property.projecting.jpa.PropertyProjectingChildJpa;
+import demoapp.dom.domain.properties.Property.snapshot.jpa.PropertySnapshotJpa;
 import demoapp.dom.domain.properties.PropertyLayout.hidden.jpa.PropertyLayoutHiddenJpa;
 import demoapp.dom.services.core.eventbusservice.EventLogEntryJpa;
 import demoapp.dom.services.core.wrapperFactory.jpa.WrapperFactoryJpa;
@@ -141,6 +142,7 @@ import demoapp.dom.types.primitive.shorts.jpa.PrimitiveShortJpa;
         PropertyEditingJpa.class,
         PropertyExecutionPublishingJpa.class,
         PropertyProjectingChildJpa.class,
+        PropertySnapshotJpa.class,
 
         PropertyLayoutHiddenJpa.class,
 

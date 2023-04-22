@@ -29,12 +29,16 @@
 		<bs3:col span="6">
 			<bs3:row>
 				<bs3:col span="12">
-					<cpt:fieldSet name="Not annotated" id="no-annotations"/>
-					<cpt:fieldSet name="Annotated" id="annotations"/>
-					<cpt:fieldSet name="Meta-annotated" id="meta-annotations"/>
-					<cpt:fieldSet name="Meta-annotated overridden" id="meta-annotations-overridden"/>
+					<cpt:fieldSet name="Identity" id="identity">
+                        <cpt:property id="familyName"/>
+                        <cpt:property id="givenName"/>
+                        <cpt:property id="middleInitial"/>
+                    </cpt:fieldSet>
+					<cpt:fieldSet name="Details" id="details">
+                        <cpt:property id="notes"/>
+                    </cpt:fieldSet>
 					<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
-					<cpt:collection id="children"/>
+					<cpt:collection id="friends"/>
 				</bs3:col>
 			</bs3:row>
 		</bs3:col>

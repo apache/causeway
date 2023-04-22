@@ -30,7 +30,6 @@ import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Snapshot;
 
 import lombok.Getter;
@@ -39,97 +38,64 @@ import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
+@Named("demo.PropertySnapshotPage")
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.PropertySnapshotVm")
 @DomainObject(
     nature=Nature.VIEW_MODEL,
     editing = Editing.ENABLED)
 @NoArgsConstructor
 public class PropertySnapshotPage implements HasAsciiDocDescription {
 
-    public PropertySnapshotPage(final String text) {
-        this.text = text;
-        this.excludedProperty = text;
-        this.includedProperty = text;
-        this.notSpecifiedProperty = text;
-        this.metaAnnotatedProperty = text;
-        this.metaAnnotatedPropertyOverridden = text;
+    public PropertySnapshotPage(
+            final String givenName,
+            final String familyName,
+            final String middleInitial,
+            final String notes) {
+        this.familyName = familyName;
+        this.givenName = givenName;
+        this.middleInitial = middleInitial;
+        this.notes = notes;
     }
 
     @ObjectSupport public String title() {
-        return "PropertySnapshotVm";
+        return "PropertySnapshotPage";
     }
-
-//tag::no-annotation[]
-    @Property()
-    @PropertyLayout(fieldSetId = "no-annotations", sequence = "1")
-    @XmlElement(required = true)
-    @Getter @Setter
-    private String text;
-//end::no-annotation[]
 
 //tag::annotated-not_specified[]
     @Property(
-        snapshot = Snapshot.NOT_SPECIFIED
+        snapshot = Snapshot.NOT_SPECIFIED   // <.>
     )
-    @PropertyLayout(
-        describedAs = "@Property(snapshot = NOT_SPECIFIED)",
-        fieldSetId = "annotations", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
-    private String notSpecifiedProperty;
+    private String givenName;
 //end::annotated-not_specified[]
-
-//tag::annotated-excluded[]
-    @Property(
-        snapshot = Snapshot.EXCLUDED
-    )
-    @PropertyLayout(
-        describedAs = "@Property(snapshot = EXCLUDED)",
-        fieldSetId = "annotations", sequence = "2")
-    @XmlElement(required = true)
-    @Getter @Setter
-    private String excludedProperty;
-//end::annotated-excluded[]
 
 //tag::annotated-included[]
     @Property(
-        snapshot = Snapshot.INCLUDED
+        snapshot = Snapshot.INCLUDED        // <.>
     )
-    @PropertyLayout(
-        describedAs = "@Property(snapshot = INCLUDED)",
-        fieldSetId = "annotations", sequence = "2")
     @XmlElement(required = true)
     @Getter @Setter
-    private String includedProperty;
+    private String familyName;
 //end::annotated-included[]
 
-//tag::meta-annotated-excluded[]
-    @SnapshotExcludedMetaAnnotation
-    @Property()
-    @PropertyLayout(
-        describedAs = "@SnapshotExcludedMetaAnnotation ",
-        fieldSetId = "meta-annotations", sequence = "1")
-    @XmlElement(required = true)
-    @Getter @Setter
-    private String metaAnnotatedProperty;
-//end::meta-annotated-excluded[]
-
-//tag::meta-annotated-included[]
-    @SnapshotIncludedMetaAnnotation
+//tag::annotated-excluded[]
     @Property(
-        snapshot = Snapshot.EXCLUDED
+        snapshot = Snapshot.EXCLUDED        // <.>
     )
-    @PropertyLayout(
-        describedAs =
-            "@SnapshotIncludedMetaAnnotation "
-            + "@Property(snapshot = EXCLUDED)",
-        fieldSetId = "meta-annotations-overridden", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
-    private String metaAnnotatedPropertyOverridden;
-//end::meta-annotated-included[]
+    private String middleInitial;
+//end::annotated-excluded[]
+
+//tag::no-annotation[]
+    @Property()                             // <.>
+    @XmlElement(required = true)
+    @Getter @Setter
+    private String notes;
+//end::no-annotation[]
+
 
 }

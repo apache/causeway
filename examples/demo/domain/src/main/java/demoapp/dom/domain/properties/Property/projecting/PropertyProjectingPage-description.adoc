@@ -6,7 +6,7 @@ Sometimes though the columns to be shown will depend upon the context in which t
 One common approach is to define a view model as a projection of the entity, and return a collection of that view model instead.
 However, if the user wants to access the entity they must first navigate to the view model, and from their navigate to the backing entity instance that it wraps.
 
-The purpose of the link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/Property.html#projecting[@Property#projecting] attribute is to eliminate this extra hop.
+The purpose of the link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/Property.html#projecting[@Property#projecting] attribute is to eliminate this extra hop.
 
 The idea is that the `projecting` attribute is placed on the property of the view model that references the backing entity.
 With this hint, the viewer instead renders links to the entity rather than the view model.

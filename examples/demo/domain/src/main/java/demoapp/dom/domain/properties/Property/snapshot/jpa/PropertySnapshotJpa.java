@@ -16,47 +16,62 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.services.core.xmlSnapshotService.peer.child;
+package demoapp.dom.domain.properties.Property.snapshot.jpa;
 
 import javax.inject.Named;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.springframework.context.annotation.Profile;
 
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.annotation.Title;
+import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.domain.properties.Property.snapshot.PropertySnapshot;
 
-//tag::class[]
-@XmlRootElement(name = "child")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.XmlSnapshotPeerChildVm")
-@DomainObject(
-        nature=Nature.VIEW_MODEL)
+@Profile("demo-jpa")
+@Entity
+@Table(
+    schema = "demo",
+    name = "PropertySnapshotJpa"
+)
+@EntityListeners(CausewayEntityListener.class)
+@Named("demo.PropertySnapshot")
 @NoArgsConstructor
-public class XmlSnapshotPeerChildVm implements HasAsciiDocDescription {
+//tag::class[]
+// ...
+@DomainObject(nature = Nature.ENTITY)
+public class PropertySnapshotJpa
+                extends PropertySnapshot {
+    // ...
+//end::class[]
 
-    public XmlSnapshotPeerChildVm(final String value) {
-        setValue(value);
+    public PropertySnapshotJpa(String value) {
+        setName(value);
     }
 
-    @Title
-    @Property()
-    @PropertyLayout(fieldSetId = "annotation", sequence = "1")
-    @XmlElement(required = false)
-    @Getter @Setter
-    private String value;
+    @Id
+    @GeneratedValue
+    private Long id;
+//tag::class[]
 
+//tag::name[]
+    @Property()
+    @Getter @Setter
+    private String name;
+//end::name[]
+
+
+//tag::class[]
 }
 //end::class[]

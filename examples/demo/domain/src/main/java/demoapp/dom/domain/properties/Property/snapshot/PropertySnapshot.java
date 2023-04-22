@@ -18,23 +18,28 @@
  */
 package demoapp.dom.domain.properties.Property.snapshot;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
+import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.Snapshot;
 
-//tag::class[]
-@Property(snapshot = Snapshot.EXCLUDED)
-@Inherited
-@Target({
-        ElementType.METHOD, ElementType.FIELD
-})
-@Retention(RetentionPolicy.RUNTIME)
-public @interface SnapshotExcludedMetaAnnotation {
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolder;
+
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
+public abstract class PropertySnapshot
+        implements
+        HasAsciiDocDescription,
+        ValueHolder<String> {
+
+    public String title() {
+        return value();
+    }
+
+    @Override
+    public String value() {
+        return getName();
+    }
+
+    public abstract String getName();
+    public abstract void setName(String value);
 
 }
-//end::class[]

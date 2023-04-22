@@ -148,7 +148,7 @@ public class PropertyMenu {
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-camera", describedAs = "Snapshot inclusion/exclusion")
     public PropertySnapshotPage snapshot(){
-        return new PropertySnapshotPage("value");
+        return new PropertySnapshotPage("Fred", "Bloggs", "K", "These are some notes");
     }
 
     private void setSampleBlob(final String suffix, final Consumer<Blob> blobConsumer) {

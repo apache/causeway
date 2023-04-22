@@ -3,7 +3,7 @@
 Domain objects are identified to the user through a title and an icon.
 The most common way to define the icon is with a `.png` image file with the same name as the class (eg `Customer.png` for a `Customer` class).
 
-An alternative though is to use a fontawesome icon, specified using link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/DomainObjectLayout.html#cssclassfa[@DomainObjectLayout#cssClassFa].
+An alternative though is to use a fontawesome icon, specified using link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/DomainObjectLayout.html#cssclassfa[@DomainObjectLayout#cssClassFa].
 
 == How this demo works
 

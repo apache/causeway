@@ -1,6 +1,6 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-The link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/PropertyLayout.html#hidden[@PropertyLayout#hidden] attribute specifies whether a property should be visible in the UI or not.
+The link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/PropertyLayout.html#hidden[@PropertyLayout#hidden] attribute specifies whether a property should be visible in the UI or not.
 
 == How this demo works
 
@@ -49,9 +49,9 @@ If you navigate into these domain objects then different properties will be visb
 [TIP]
 .What is the difference between a hidden property and one annotated with `@Programmatic` ?
 ====
-Although there is no difference in the UI, a hidden property _is_ part of the metadamodel while a link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/Programmatic.html#hidden[@Programmatic] property is not.
+Although there is no difference in the UI, a hidden property _is_ part of the metadamodel while a link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/Programmatic.html#hidden[@Programmatic] property is not.
 
-A rare (but valid) use case is to invoke such a hidden property using the link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/services/wrapper/WrapperFactory.html#wrap(t,-synccontrol)[WrapperFactory] (skipping rules).
-This can be for example to publish executions to any registered link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/services/publishing/spi/ExecutionSubscriber.html[ExecutionSubscriber]s.
+A rare (but valid) use case is to invoke such a hidden property using the link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/services/wrapper/WrapperFactory.html#wrap(t,-synccontrol)[WrapperFactory] (skipping rules).
+This can be for example to publish executions to any registered link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/services/publishing/spi/ExecutionSubscriber.html[ExecutionSubscriber]s.
 ====
 

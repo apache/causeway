@@ -34,21 +34,19 @@ import lombok.val;
 @Action(semantics = SemanticsOf.SAFE)
 @RequiredArgsConstructor
 public class PropertySnapshotPage_takeXmlSnapshot {
-
-    @Inject XmlSnapshotService xmlSnapshotService;
     // ...
-//end::class[]
-    @Inject XmlService xmlService;
 
+//end::class[]
     private final PropertySnapshotPage page;
+
 //tag::class[]
     @MemberSupport public Clob act(final String fileName) {
         val builder = xmlSnapshotService.builderFor(page);
+        builder.includePath("friends");                                 // <.>
         val snapshot = builder.build();
         val doc = snapshot.getXmlDocument();
         return asClob(fileName, xmlService.asString(doc));
     }
-    // ...
 //end::class[]
     @MemberSupport public String default0Act() {
         return "snapshot.xml";
@@ -57,6 +55,9 @@ public class PropertySnapshotPage_takeXmlSnapshot {
     private static Clob asClob(final String fileName, final String xmlStr) {
         return new Clob(fileName, "application/xml", xmlStr);
     }
+    @Inject XmlService xmlService;
 //tag::class[]
+
+    @Inject XmlSnapshotService xmlSnapshotService;
 }
 //end::class[]
