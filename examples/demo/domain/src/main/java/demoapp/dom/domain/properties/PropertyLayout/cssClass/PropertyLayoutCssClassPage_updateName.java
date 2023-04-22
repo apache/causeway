@@ -18,31 +18,36 @@
  */
 package demoapp.dom.domain.properties.PropertyLayout.cssClass;
 
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.Optionality;
+import org.apache.causeway.applib.annotation.Parameter;
+import org.apache.causeway.applib.annotation.ParameterLayout;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
-//tag::meta-annotation-overridden[]
-@CssClassRedMetaAnnotation                              // <.>
-@Property()
-@PropertyLayout(
-    cssClass = "blue"                                   // <.>
-    , describedAs =
-        "@CssClassRedMetaAnnotation  @ParameterLayout(...)",
-    fieldSetId = "meta-annotated-overridden", sequence = "2"
-)
+@Action(semantics = SemanticsOf.IDEMPOTENT)
+@ActionLayout(associateWith = "name", sequence = "1")
 @RequiredArgsConstructor
-public class PropertyLayoutCssClassPage_mixinPropertyWithMetaAnnotationOverridden {
-    // ...
-//end::meta-annotation-overridden[]
+public class PropertyLayoutCssClassPage_updateName {
 
     private final PropertyLayoutCssClassPage page;
 
-    public String prop() {
-        return page.getPropertyUsingAnnotation();
+//tag::annotation[]
+    @MemberSupport public PropertyLayoutCssClassPage act(
+            @Parameter(optionality = Optionality.OPTIONAL)
+            @ParameterLayout(
+                cssClass = "red"                            // <.>
+            )
+            final String name) {
+        page.setName(name);
+        return page;
+    }
+//end::annotation[]
+    @MemberSupport public String default0Act() {
+        return page.getName();
     }
 
-//tag::meta-annotation-overridden[]
 }
-//end::meta-annotation-overridden[]
