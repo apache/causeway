@@ -2,13 +2,17 @@
 
 The `multiLine` attribute indicates that a textbox of the specified number of lines should be used to render a property or parameter:
 
-* for properties, the attribute can be specified using the `@PropertyLayout` annotation, or using the `Xxx.layout.xml` layout file.
+* for properties, the attribute can be specified using the link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/PropertyLayout.html#multiline[@PropertyLayout#multiLine] attribute, or using the link:https://causeway.apache.org/userguide/2.0.0-RC1/fun/ui.html#by-example[.layout.xml] layout file.
 
-* for parameters, the attribute can be specified using the `@ParameterLayout` annotation.
+* for parameters, the attribute can be specified using the link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/PropertyLayout.html#multiline[@ParameterLayout#multiLine] annotation.
 
 The attribute is currently supported only for properties and parameters of type ``String``s.
 
-== Annotated
+== How this demo works
+
+This page declares several properties, all of which are annotated to be rendered as `multiLine`.
+
+=== Annotated
 
 The `multiline` attribute can be specified explicitly using an annotation:
 
@@ -28,7 +32,7 @@ include::PropertyLayoutMultiLinePage_updateWithParameterLayout.java[tags=annotat
 ----
 <.> explicitly specifies that the parameter should use a textbox
 
-== Layout File
+=== Layout File
 
 For properties (not parameters), the `multiline` attribute can be specified using the `Xxx.layout.xml` file:
 
@@ -50,88 +54,4 @@ include::PropertyLayoutMultiLinePage.java[tags=layout-file]
 //include::PropertyLayoutMultiLinePage.layout.xml[tags=layout-file]
 
 One advantage of the layout file over the annotation is that the layout file is dynamic: it can be modified and the changes reloaded in a running application.
-
-TIP: It is sometimes necessary to invoke the `Rebuild Metamodel` action to see this take effect.
-
-== Contributed
-
-The `@PropertyLayout` can also be applied at the class-level to mixin properties:.
-
-[source,java,indent=0]
-----
-include::PropertyLayoutMultiLinePage_mixinProperty.java[tags=class]
-----
-<.> explicitly specifies that the contributed property should use a textbox
-
-== Meta-annotated
-
-The `multiline` attribute can also be specified using a custom meta-annotation:
-
-* the meta-annotation is defined as:
-+
-[source,java]
-----
-include::MultiLine10MetaAnnotation.java[tags=class]
-----
-<.> annotated for a property ...
-<.> \... and for a parameter.
-<.> annotation can be applied to a property (either its getter or the field directly)
-<.> annotation can be applied to a parameter
-<.> annotation can be applied to a type (ie, meta-meta annotations recursively)
-
-* and can be applied to a property:
-+
-[source,java,indent=0]
-----
-include::PropertyLayoutMultiLinePage.java[tags=meta-annotated]
-----
-<.> hint is inherited from the meta-annotation
-
-* or can be applied to a parameter:
-+
-[source,java,indent=0]
-----
-include::PropertyLayoutMultiLinePage_updateWithMetaAnnotation.java[tags=meta-annotation]
-----
-<.> hint is inherited from the meta-annotation
-
-* or can be applied to mixin:
-+
-[source,java,indent=0]
-----
-include::PropertyLayoutMultiLinePage_mixinPropertyWithMetaAnnotation.java[tags=class]
-----
-<.> hint is inherited from the meta-annotation
-
-=== Meta-annotated Overridden
-
-The meta-annotation can itself be overridden:
-
-* in a property:
-+
-[source,java,indent=0]
-----
-include::PropertyLayoutMultiLinePage.java[tags=meta-annotated-overridden]
-----
-<.> hint from meta-annotation ...
-<.> \... is overridden by the `@PropertyLayout` annotation
-
-* or a parameter:
-+
-[source,java,indent=0]
-----
-include::PropertyLayoutMultiLinePage_updateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
-----
-<.> hint from meta-annotation ...
-<.> \... is overridden by the `@ParameterLayout` annotation
-
-
-* or a mixin:
-+
-[source,java,indent=0]
-----
-include::PropertyLayoutMultiLinePage_mixinPropertyWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
-----
-<.> hint from meta-annotation ...
-<.> \... is overridden by the `@PropertyLayout` annotation
 
