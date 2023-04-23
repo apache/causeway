@@ -16,32 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.PropertyLayout.named;
+package demoapp.dom.domain.properties.PropertyLayout.navigable;
+
+import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.graph.tree.TreeNode;
 
 import lombok.RequiredArgsConstructor;
 
 //tag::class[]
-@Property()
-@NamedMetaAnnotation            // <.>
-@PropertyLayout(
-    describedAs =
-        "@NamedMetaAnnotation",
-    fieldSetId = "meta-annotated", sequence = "2"
-)
+@Property
 @RequiredArgsConstructor
-public class PropertyLayoutNamedPage_mixinPropertyWithMetaAnnotation {
-    // ...
-//end::class[]
+public class FileNodeVm_tree {
 
-    private final PropertyLayoutNamedPage page;
+    private final FileNodeVm fileNodeVm;
 
-    public String prop() {
-        return page.getPropertyUsingAnnotation();
+    public TreeNode<FileNodeVm> prop(){
+        return fileTreeNodeService.sessionTree();
     }
 
-//tag::class[]
+    @Inject
+    FileTreeNodeService fileTreeNodeService;
 }
 //end::class[]

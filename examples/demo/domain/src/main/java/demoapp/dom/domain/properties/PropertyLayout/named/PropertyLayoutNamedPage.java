@@ -42,7 +42,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.PropertyLayoutNamedVm")
+@Named("demo.PropertyLayoutNamedPage")
 @DomainObject(
         nature=Nature.VIEW_MODEL,
         editing = Editing.ENABLED)
@@ -55,10 +55,8 @@ public class PropertyLayoutNamedPage implements HasAsciiDocDescription {
 //tag::annotation[]
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(
-        named = "Named using @PropertyLayout"                // <.>
-        , describedAs =
-            "@PropertyLayout(named= \"...\")",
-        fieldSetId = "annotation", sequence = "1")
+        named = "Named using @PropertyLayout"
+    )
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingAnnotation;
@@ -66,41 +64,12 @@ public class PropertyLayoutNamedPage implements HasAsciiDocDescription {
 
 //tag::layout-file[]
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(                                        // <.>
-        describedAs =
-            "<cpt:property id=\"...\">" +
-                "<cpt:named>...</cpt:named>" +
-            "</cpt:property>",
-        fieldSetId = "layout-file", sequence = "1")
+    @PropertyLayout()                               // <.>
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingLayout;
 //end::layout-file[]
 
-//tag::meta-annotated[]
-    @Property(optionality = Optionality.OPTIONAL)
-    @NamedMetaAnnotation                            // <.>
-    @PropertyLayout(
-        describedAs = "@NamedMetaAnnotation",
-        fieldSetId = "meta-annotated", sequence = "1")
-    @XmlElement(required = false)
-    @Getter @Setter
-    private String propertyUsingMetaAnnotation;
-//end::meta-annotated[]
-
-//tag::meta-annotated-overridden[]
-    @NamedMetaAnnotation                            // <.>
-    @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(
-        named = "@PropertyLayout name " +
-                "overrides meta-annotation"         // <.>
-        , describedAs =
-            "@NamedMetaAnnotation @PropertyLayout(...)",
-        fieldSetId = "meta-annotated-overridden", sequence = "1")
-    @XmlElement(required = false)
-    @Getter @Setter
-    private String propertyUsingMetaAnnotationButOverridden;
-//end::meta-annotated-overridden[]
 
 }
 //end::class[]

@@ -42,8 +42,8 @@ import lombok.val;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
-@XmlRootElement(name="FileNode")
-@Named("demo.FileNode")
+@Named("demo.FileNodeVm")
+@XmlRootElement(name="FileNodeVm")
 @DomainObject(nature=Nature.VIEW_MODEL)
 @ToString
 @NoArgsConstructor
@@ -74,17 +74,12 @@ public class FileNodeVm implements HasAsciiDocDescription {
     }
 //end::iconName[]
 
-//tag::tree[]
-    @Property
-    @PropertyLayout(labelPosition = LabelPosition.NONE, fieldSetId = "tree", sequence = "1")
-    public TreeNode<FileNodeVm> getTree() {
-        return fileTreeNodeService.sessionTree();
-    }
-//end::tree[]
-
 //tag::navigable[]
     @Property
-    @PropertyLayout(navigable=Navigable.PARENT, hidden=Where.EVERYWHERE, fieldSetId = "detail", sequence = "1")
+    @PropertyLayout(
+            navigable=Navigable.PARENT,             // <.>
+            hidden=Where.EVERYWHERE                 // <.>
+    )
     public FileNodeVm getParent() {
         val parentFile = asFile().getParentFile();
         return parentFile != null
@@ -108,6 +103,4 @@ public class FileNodeVm implements HasAsciiDocDescription {
         return new File(path);
     }
 
-    @Inject
-    FileTreeNodeService fileTreeNodeService;
 }
