@@ -1,23 +1,31 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
+WARNING: this functionality is currently *not* supported by the Wicket viewer; see link:https://issues.apache.org/jira/browse/CAUSEWAY-1659[CAUSEWAY-1659].
+
 The `repainting` attribute indicates that the value held by the property never changes over time, even when other properties of the object do change.
 When set to "no repaint", the viewer uses this element to not repaint the property after an AJAX update even if some other property/ies of the object have changed.
 
-* for properties, the attribute can be specified using either the `@PropertyLayout` annotation, or using the `Xxx.layout.xml` layout file.
+* for properties, the attribute can be specified using either the link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/PropertyLayout.html#repainting[@PropertyLayout#repainting] annotation, or using the link:https://causeway.apache.org/userguide/2.0.0-RC1/fun/ui.html#by-example[.layout.xml] layout file.
 
 The attribute does _not_ apply for action parameters.
 
-The primarily use case for performance, eg can improve the user experience when rendering PDFs/blobs.
+The primary use case for performance, for example so that large PDFs/blobs do not need to be re-rendered.
 
 IMPORTANT: if there are multiple blobs or clobs, then _all_ must specify "NO REPAINT".
 Said another way: if only one blob/clob property requires a repaint, then all will be repainted.
 
-== Annotated
+== How this demo works
 
-The (no) repainting hint can be specified explicitly using an annotation:
+This page contains two properties.
 
-* for properties, using `@PropertyLayout#repainting()`:
-+
+* The `editMe` property is to demonstrate a change in state can be made.
+
+* The `blob` property holds a PDF and moreover is annotated with link:https://causeway.apache.org/refguide/2.0.0-RC1/extensions/index/pdfjs/applib/annotations/PdfJsViewer.html[@PdfJsViewer] so that it is rendered using PDF.js.
+
+From a usability perspective, we don't want the page to redraw - in particluar, the `blob` property - if all that has changed is the `editMe` property.
+
+The (no) repainting hint is specified explicitly using `@PropertyLayout#repainting()`:
+
 [source,java,indent=0]
 ----
 include::PropertyLayoutRepaintingPage.java[tags=annotation]
@@ -25,90 +33,6 @@ include::PropertyLayoutRepaintingPage.java[tags=annotation]
 <.> explicitly specifies that the property should not be repainted
 <.> The Wicket pdf.js extension will render this Blob as a PDF
 
-== Layout File
+TIP: this annotation can also be combined with link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/ActionLayout.html#redirectpolicy[@ActionLayout#redirectPolicy].
 
-For properties (not parameters), the `renderDay` attribute can be specified using the `Xxx.layout.xml` file:
-
-* property definition:
-+
-[source,java,indent=0]
-----
-include::PropertyLayoutRepaintingPage.java[tags=layout-file]
-----
-<.> `repainting` hint is _not_ present.
-
-* layout file snippet:
-+
-[source,xml,indent=0,tabsize=4]
-----
-<cpt:property id="propertyUsingLayout" repainting="NO_REPAINT"/>
-----
-
-One advantage of the layout file over the annotation is that the layout file is dynamic: it can be modified and the changes reloaded in a running application.
-
-TIP: It is sometimes necessary to invoke the `Rebuild Metamodel` action to see this take effect.
-
-
-== Contributed
-
-The `@PropertyLayout` can also be applied at the class-level to mixin properties:.
-
-[source,java,indent=0]
-----
-include::PropertyLayoutRepaintingPage_mixinProperty.java[tags=class]
-----
-<.> explicitly specifies that the contributed property should not be repainted.
-
-== Meta-annotated
-
-The (no) repainting element can also be specified using a custom meta-annotation:
-
-* the meta-annotation is defined as:
-+
-[source,java]
-----
-include::RepaintingNoRepaintMetaAnnotation.java[tags=class]
-----
-<.> annotated for a property (there is no equivalent for parameters)
-<.> annotation can be applied to a property (either its getter or the field directly)
-<.> annotation can be applied to a type (ie, meta-meta annotations recursively)
-
-* and can be applied to a property:
-+
-[source,java,indent=0]
-----
-include::PropertyLayoutRepaintingPage.java[tags=meta-annotated]
-----
-<.> hint is inherited from the meta-annotation
-
-* or can be applied to mixin:
-+
-[source,java,indent=0]
-----
-include::PropertyLayoutRepaintingPage_mixinPropertyWithMetaAnnotation.java[tags=class]
-----
-<.> hint is inherited from the meta-annotation
-
-=== Meta-annotated Overridden
-
-The meta-annotation can itself be overridden:
-
-* in a property:
-+
-[source,java,indent=0]
-----
-include::PropertyLayoutRepaintingPage.java[tags=meta-annotated-overridden]
-----
-<.> hint from meta-annotation ...
-<.> \... is overridden by the `@PropertyLayout` annotation
-
-
-* or a mixin:
-+
-[source,java,indent=0]
-----
-include::PropertyLayoutRepaintingPage_mixinPropertyWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
-----
-<.> hint from meta-annotation ...
-<.> \... is overridden by the `@PropertyLayout` annotation
 

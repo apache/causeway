@@ -134,10 +134,7 @@ public class PropertyLayoutMenu {
                 .filter(x -> CommonMimeType.PDF.matches(x.getMimeType()))
                 .findFirst()
                 .ifPresent(pdfBlob -> {
-                    vm.setPropertyUsingAnnotation(pdfBlob);
-                    vm.setPropertyUsingLayout(pdfBlob);
-                    vm.setPropertyUsingMetaAnnotation(pdfBlob);
-                    vm.setPropertyUsingMetaAnnotationButOverridden(pdfBlob);
+                    vm.setBlob(pdfBlob);
                 });
         return vm;
     }

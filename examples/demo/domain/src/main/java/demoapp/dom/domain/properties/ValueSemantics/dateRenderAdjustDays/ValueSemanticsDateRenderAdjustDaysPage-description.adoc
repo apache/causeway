@@ -1,5 +1,8 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
+WARNING: this functionality is currently *not* supported by the Wicket viewer; see link:https://issues.apache.org/jira/browse/CAUSEWAY-3445[CAUSEWAY-3445].
+
+
 When dealing with date ranges, sometimes it can be easier to define ranges that use a combination of inclusive-exclusive limits -- that is `[startDate, endDate)` -- so that the dates within the range meet the constraint `startDate <= date < endDate`.
 
 However, in the user interface your users may prefer inclusive ranges for both the _startDate_ _and_ the `endDate`.
@@ -9,7 +12,6 @@ The link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/
 
 The attribute can be applied to both properties and parameters:
 
-WARNING: this functionality is currently broken; the attribute does nothing; see link:https://issues.apache.org/jira/browse/CAUSEWAY-3445[CAUSEWAY-3445].
 
 
 
