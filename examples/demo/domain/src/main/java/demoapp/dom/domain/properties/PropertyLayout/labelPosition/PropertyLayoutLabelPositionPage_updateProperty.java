@@ -20,7 +20,6 @@ package demoapp.dom.domain.properties.PropertyLayout.labelPosition;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
@@ -29,33 +28,24 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
-@Action(
-    semantics = SemanticsOf.IDEMPOTENT
-)
-@ActionLayout(
-    associateWith = "propertyUsingMetaAnnotationButOverridden"
-    , sequence = "1")
+@Action(semantics = SemanticsOf.IDEMPOTENT)
+@ActionLayout(associateWith = "property", sequence = "1")
 @RequiredArgsConstructor
-public class PropertyLayoutLabelPositionPage_updateWithMetaAnnotationOverridden {
+public class PropertyLayoutLabelPositionPage_updateProperty {
 
     private final PropertyLayoutLabelPositionPage page;
 
-//tag::meta-annotation-overridden[]
+//tag::annotation[]
     @MemberSupport public PropertyLayoutLabelPositionPage act(
-            @LabelPositionTopMetaAnnotation                             // <.>
             @Parameter(optionality = Optionality.OPTIONAL)
-            @ParameterLayout(
-                labelPosition = LabelPosition.LEFT                      // <.>
-                , describedAs =
-                    "@LabelPositionTopMetaAnnotation @ParameterLayout(...)"
-            )
-            final String parameterUsingMetaAnnotationButOverridden) {
-        page.setPropertyUsingMetaAnnotationButOverridden(parameterUsingMetaAnnotationButOverridden);
+            @ParameterLayout()
+            final String newValue) {
+        page.setProperty(newValue);
         return page;
     }
-//end::meta-annotation-overridden[]
+//end::annotation[]
     @MemberSupport public String default0Act() {
-        return page.getPropertyUsingMetaAnnotationButOverridden();
+        return page.getProperty();
     }
 
 }

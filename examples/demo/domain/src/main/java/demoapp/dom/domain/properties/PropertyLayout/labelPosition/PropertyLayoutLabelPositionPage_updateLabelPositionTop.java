@@ -18,32 +18,30 @@
  */
 package demoapp.dom.domain.properties.PropertyLayout.labelPosition;
 
-import org.apache.causeway.applib.annotation.LabelPosition;
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
-
 import lombok.RequiredArgsConstructor;
 
-//tag::meta-annotation-overridden[]
-@LabelPositionTopMetaAnnotation                                 // <.>
-@Property()
-@PropertyLayout(
-    labelPosition = LabelPosition.LEFT                          // <.>
-    , describedAs =
-        "@LabelPositionTopMetaAnnotation @ParameterLayout(...)",
-    fieldSetId = "meta-annotated-overridden", sequence = "2"
-)
+import org.apache.causeway.applib.annotation.*;
+
+@Action(semantics = SemanticsOf.IDEMPOTENT)
+@ActionLayout(associateWith = "propertyLabelPositionTop", sequence = "1")
 @RequiredArgsConstructor
-public class PropertyLayoutLabelPositionPage_mixinPropertyWithMetaAnnotationOverridden {
-    // ...
-//end::meta-annotation-overridden[]
+public class PropertyLayoutLabelPositionPage_updateLabelPositionTop {
 
     private final PropertyLayoutLabelPositionPage page;
 
-    public String prop() {
-        return page.getPropertyUsingAnnotation();
+//tag::annotation[]
+    @MemberSupport public PropertyLayoutLabelPositionPage act(
+            @Parameter(optionality = Optionality.OPTIONAL)
+            @ParameterLayout(
+                    labelPosition = LabelPosition.TOP
+            )
+            final String newValue) {
+        page.setPropertyLabelPositionTop(newValue);
+        return page;
+    }
+//end::annotation[]
+    @MemberSupport public String default0Act() {
+        return page.getPropertyLabelPositionTop();
     }
 
-//tag::meta-annotation-overridden[]
 }
-//end::meta-annotation-overridden[]

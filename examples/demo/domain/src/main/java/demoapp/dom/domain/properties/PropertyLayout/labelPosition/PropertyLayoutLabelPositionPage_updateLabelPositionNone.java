@@ -29,14 +29,10 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
-@Action(
-    semantics = SemanticsOf.IDEMPOTENT
-)
-@ActionLayout(
-    associateWith = "propertyLabelPositionNotSpecified"
-    , sequence = "1")
+@Action(semantics = SemanticsOf.IDEMPOTENT)
+@ActionLayout(associateWith = "propertyLabelPositionNone", sequence = "1")
 @RequiredArgsConstructor
-public class PropertyLayoutLabelPositionPage_updateVariantNotSpecified {
+public class PropertyLayoutLabelPositionPage_updateLabelPositionNone {
 
     private final PropertyLayoutLabelPositionPage page;
 
@@ -44,17 +40,16 @@ public class PropertyLayoutLabelPositionPage_updateVariantNotSpecified {
     @MemberSupport public PropertyLayoutLabelPositionPage act(
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(
-                labelPosition = LabelPosition.NOT_SPECIFIED         // <.>
-                , describedAs =
-                    "@ParameterLayout(labelPosition = NotSpecified)"
+                    labelPosition = LabelPosition.NONE,
+                    multiLine = 3
             )
-            final String parameterLabelPositionNotSpecified) {
-        page.setPropertyLabelPositionNotSpecified(parameterLabelPositionNotSpecified);
+            final String newValue) {
+        page.setPropertyLabelPositionTop(newValue);
         return page;
     }
 //end::annotation[]
     @MemberSupport public String default0Act() {
-        return page.getPropertyLabelPositionNotSpecified();
+        return page.getPropertyLabelPositionNone();
     }
 
 }

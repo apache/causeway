@@ -18,25 +18,14 @@
  */
 package demoapp.dom.domain.properties.PropertyLayout.labelPosition;
 
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.LabelPosition;
-import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.Optionality;
-import org.apache.causeway.applib.annotation.Parameter;
-import org.apache.causeway.applib.annotation.ParameterLayout;
-import org.apache.causeway.applib.annotation.SemanticsOf;
-
 import lombok.RequiredArgsConstructor;
 
-@Action(
-    semantics = SemanticsOf.IDEMPOTENT
-)
-@ActionLayout(
-    associateWith = "propertyUsingAnnotation"
-    , sequence = "1")
+import org.apache.causeway.applib.annotation.*;
+
+@Action(semantics = SemanticsOf.IDEMPOTENT)
+@ActionLayout(associateWith = "propertyLabelPositionLeft", sequence = "1")
 @RequiredArgsConstructor
-public class PropertyLayoutLabelPositionPage_updateWithParameterLayout {
+public class PropertyLayoutLabelPositionPage_updateLabelPositionLeft {
 
     private final PropertyLayoutLabelPositionPage page;
 
@@ -44,17 +33,15 @@ public class PropertyLayoutLabelPositionPage_updateWithParameterLayout {
     @MemberSupport public PropertyLayoutLabelPositionPage act(
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(
-                labelPosition = LabelPosition.TOP           // <.>
-                , describedAs =
-                    "@ParameterLayout(labelPosition = TOP)"
+                    labelPosition = LabelPosition.LEFT
             )
-            final String parameterUsingAnnotation) {
-        page.setPropertyUsingAnnotation(parameterUsingAnnotation);
+            final String newValue) {
+        page.setPropertyLabelPositionLeft(newValue);
         return page;
     }
 //end::annotation[]
     @MemberSupport public String default0Act() {
-        return page.getPropertyUsingAnnotation();
+        return page.getPropertyLabelPositionLeft();
     }
 
 }

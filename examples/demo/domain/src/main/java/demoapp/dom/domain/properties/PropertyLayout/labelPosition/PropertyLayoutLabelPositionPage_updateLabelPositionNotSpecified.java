@@ -18,33 +18,30 @@
  */
 package demoapp.dom.domain.properties.PropertyLayout.labelPosition;
 
-import org.apache.causeway.applib.annotation.LabelPosition;
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.annotation.Where;
-
 import lombok.RequiredArgsConstructor;
 
-//tag::class[]
-@Property()
-@PropertyLayout(
-    labelPosition = LabelPosition.TOP           // <.>
-    , describedAs =
-        "@PropertyLayout(labelPosition = TOP)"
-    , hidden = Where.ALL_TABLES,
-    fieldSetId = "contributed", sequence = "1"
-)
+import org.apache.causeway.applib.annotation.*;
+
+@Action(semantics = SemanticsOf.IDEMPOTENT)
+@ActionLayout(associateWith = "propertyLabelPositionNotSpecified", sequence = "1")
 @RequiredArgsConstructor
-public class PropertyLayoutLabelPositionPage_mixinProperty {
-    // ...
-//end::class[]
+public class PropertyLayoutLabelPositionPage_updateLabelPositionNotSpecified {
 
     private final PropertyLayoutLabelPositionPage page;
 
-    public String prop() {
-        return page.getPropertyUsingAnnotation();
+//tag::annotation[]
+    @MemberSupport public PropertyLayoutLabelPositionPage act(
+            @Parameter(optionality = Optionality.OPTIONAL)
+            @ParameterLayout(
+                    labelPosition = LabelPosition.NOT_SPECIFIED
+            )
+            final String newValue) {
+        page.setPropertyLabelPositionNotSpecified(newValue);
+        return page;
+    }
+//end::annotation[]
+    @MemberSupport public String default0Act() {
+        return page.getPropertyLabelPositionNotSpecified();
     }
 
-//tag::class[]
 }
-//end::class[]

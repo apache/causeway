@@ -1,8 +1,8 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-The `labelPosition` attribute indicates where the label for a property to be rendered: typically to the left or the top, or sometimes none:
+The `labelPosition` attribute indicates where the label for a property or an action parameter should be rendered: typically to the left or the top, or sometimes none:
 
-* for properties, the attribute can be specified using either the `@PropertyLayout` annotation, or using the `Xxx.layout.xml` layout file.
+* for properties, the attribute can be specified using either the link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/PropertyLayout.html#labelposition[@PropertyLayout#labelPosition] `@PropertyLayout` annotation, or using the link:https://causeway.apache.org/userguide/2.0.0-RC1/fun/ui.html#by-example[.layout.xml] layout file.
 
 * for parameters, the attribute can be specified using the `@ParameterLayout` annotation
 
@@ -10,229 +10,202 @@ Some data types also support the label being rendered to the right (support for 
 
 
 
-== Annotated
+== How this demo works
 
-The `labelPosition` attribute can be specified explicitly using an annotation:
+This page has various sets of properties that together illustrate the use of either `@PropertyLayout#labelPosition()` or the `.layout.xml` file to specify the label position.
 
-* for properties, using `@PropertyLayout#labelPosition()`:
+=== Annotated
+
+The first set of properties are annotated with `@PropertyLayout#labelPosition()`.
+They each also have an action whose parameter is annotated with `@ParameterLayout#labelPosition()`.
+
+* no label positioning at all:
+
+** for the property:
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutLabelPositionPage.java[tags=annotation]
+include::PropertyLayoutLabelPositionPage.java[tags=annotated-not-provided]
 ----
-<.> explicitly specifies the label position for the property
 
-* for parameters, using `@ParameterLayout#labelPosition()`:
+** its corresponding action:
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutLabelPositionPage_updateWithParameterLayout.java[tags=annotation]
+include::PropertyLayoutLabelPositionPage_updateProperty.java[tags=annotation]
 ----
-<.> explicitly specifies the label position for the parameter
++
+These will use the default label position as per configuration property (see section below)
 
-== Layout File
+* label positioned explicitly to the left:
 
-For properties (not parameters), the CSS class can be specified using the `Xxx.layout.xml` file:
-
-* property definition:
+** for the property:
 +
 [source,java,indent=0]
 ----
-include::PropertyLayoutLabelPositionPage.java[tags=layout-file]
+include::PropertyLayoutLabelPositionPage.java[tags=annotated-left]
 ----
-<.> `labelPosition` hint is _not_ present.
 
-* layout file snippet:
+** its corresponding action:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutLabelPositionPage_updateLabelPositionLeft.java[tags=annotation]
+----
+
+* label positioned above:
+
+** for the property:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutLabelPositionPage.java[tags=annotated-top]
+----
+
+** its corresponding action:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutLabelPositionPage_updateLabelPositionTop.java[tags=annotation]
+----
+
+* label suppressed:
+
+** for the property:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutLabelPositionPage.java[tags=annotated-none]
+----
+
+** its corresponding action:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutLabelPositionPage_updateLabelPositionTop.java[tags=annotation]
+----
++
+This pattern is common for properties such as notes, or XML or markup text.
+Usually the property is the only one in its containing fieldset, and so the fieldset is given a suitable name.
+
+
+* label explicitly not specified:
+
+** for the property:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutLabelPositionPage.java[tags=annotated-not-specified]
+----
+
+** its corresponding action:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutLabelPositionPage_updateLabelPositionNotSpecified.java[tags=annotation]
+----
++
+This option allows the position label to be specified elsewhere, for example in a meta-annotation.
+The fallback will be the configuration property (see section below).
+
+
+
+=== Boolean properties
+
+Positioning the label to the right is _only_ supported for boolean properties:
+
+* boolean property with label positioned to the right:
++
+WARNING: currently the label is positioned above; see link:https://issues.apache.org/jira/browse/CAUSEWAY-3441[CAUSEWAY-3441]
+
+** for the property:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutLabelPositionPage.java[tags=annotated-right-boolean]
+----
+
+** its corresponding action:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutLabelPositionPage_updateBooleanLabelPositionRight.java[tags=annotation]
+----
+
+* attempting to use for a non-boolean results instead in the label positioned to the top:
++
+[source,java,indent=0]
+----
+include::PropertyLayoutLabelPositionPage.java[tags=annotated-right]
+----
+
+
+=== Using .layout.xml
+
+It's also possible to specify the label position using the `.layout.xml` file.
+
+* the `propertyLayoutLabelPositionLeft` property has its label positioned to the left:
++
+[source,xml,indent=0,tabsize=4]
+----
+<cpt:property id="propertyUsingLayout" labelPosition="LEFT"/>
+----
+
+* the `propertyLayoutLabelPositionTop` property has its label positioned above:
 +
 [source,xml,indent=0,tabsize=4]
 ----
 <cpt:property id="propertyUsingLayout" labelPosition="TOP"/>
 ----
 
+* the `propertyLayoutLabelPositionNone` property has its label suppressed:
++
+[source,xml,indent=0,tabsize=4]
+----
+<cpt:property id="propertyLayoutLabelPositionNone"
+        labelPosition="NONE" multiLine="3"/>
+----
+
+* the `propertyLayoutBooleanLabelPositionRight` _boolean_ property has its label positioned to the right:
++
+[source,xml,indent=0,tabsize=4]
+----
+<cpt:property id="propertyLayoutBooleanLabelPositionRight" labelPosition="RIGHT"/>
+----
++
+WARNING: currently the label is positioned above; see link:https://issues.apache.org/jira/browse/CAUSEWAY-3441[CAUSEWAY-3441]
+
 One advantage of the layout file over the annotation is that the layout file is dynamic: it can be modified and the changes reloaded in a running application.
 
-TIP: It is sometimes necessary to invoke the `Rebuild Metamodel` action to see this take effect.
 
-== Contributed
+== Related Configuration Properties
 
-The `@PropertyLayout` can also be applied at the class-level to mixin properties:.
+If a `labelPosition` has not been explicitly specified by an annotation (or meta-annotation) or in the `.layout.xml`, then a configuration property is used to define a default position.
 
-[source,java,indent=0]
-----
-include::PropertyLayoutLabelPositionPage_mixinProperty.java[tags=class]
-----
-<.> explicitly specifies the label position for the contributed property
-
-== Meta-annotated
-
-The label position element can also be specified using a custom meta-annotation:
-
-* the meta-annotation is defined as:
+* for properties:
 +
-[source,java]
+[source,yaml]
+.application.yml
 ----
-include::LabelPositionTopMetaAnnotation.java[tags=class]
+causeway:
+  applib:
+    annotation:
+      property-layout:
+        label-position: left  # <.>
 ----
-<.> annotated for a property ...
-<.> \... and for a parameter.
-<.> annotation can be applied to a property (either its getter or the field directly)
-<.> annotation can be applied to a parameter
-<.> annotation can be applied to a type (ie, meta-meta annotations recursively)
+<.>  `left` | `top` | `none` | `right`
 
-* and can be applied to a property:
+* for parameters:
 +
-[source,java,indent=0]
+[source,yaml]
+.application.yml
 ----
-include::PropertyLayoutLabelPositionPage.java[tags=meta-annotated]
+causeway:
+  applib:
+    annotation:
+      parameter-layout:
+        label-position: left  # <.>
 ----
-<.> hint is inherited from the meta-annotation
+<.>  `left` | `top` | `none` | `right`
 
-* or can be applied to a parameter:
-+
-[source,java,indent=0]
-----
-include::PropertyLayoutLabelPositionPage_updateWithMetaAnnotation.java[tags=meta-annotation]
-----
-<.> hint is inherited from the meta-annotation
-
-* or can be applied to mixin:
-+
-[source,java,indent=0]
-----
-include::PropertyLayoutLabelPositionPage_mixinPropertyWithMetaAnnotation.java[tags=class]
-----
-<.> hint is inherited from the meta-annotation
-
-=== Meta-annotated Overridden
-
-The meta-annotation can itself be overridden:
-
-* in a property:
-+
-[source,java,indent=0]
-----
-include::PropertyLayoutLabelPositionPage.java[tags=meta-annotated-overridden]
-----
-<.> hint from meta-annotation ...
-<.> \... is overridden by the `@PropertyLayout` annotation
-
-* or a parameter:
-+
-[source,java,indent=0]
-----
-include::PropertyLayoutLabelPositionPage_updateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
-----
-<.> hint from meta-annotation ...
-<.> \... is overridden by the `@ParameterLayout` annotation
-
-
-* or a mixin:
-+
-[source,java,indent=0]
-----
-include::PropertyLayoutLabelPositionPage_mixinPropertyWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
-----
-<.> hint from meta-annotation ...
-<.> \... is overridden by the `@PropertyLayout` annotation
-
-
-== Variants
-
-As mentioned earlier, the label can be positioned to the left, top, none, right or left unspecified.
-
-=== Left
-
-For a property:
-
-[source,java,indent=0]
-----
-include::PropertyLayoutLabelPositionPage.java[tags=variants-left]
-----
-
-And for a parameter:
-
-[source,java,indent=0]
-----
-include::PropertyLayoutLabelPositionPage_updateVariantLeft.java[tags=annotation]
-----
-
-=== Top
-
-For a property:
-
-[source,java,indent=0]
-----
-include::PropertyLayoutLabelPositionPage.java[tags=variants-top]
-----
-
-And for a parameter:
-
-[source,java,indent=0]
-----
-include::PropertyLayoutLabelPositionPage_updateVariantTop.java[tags=annotation]
-----
-
-=== Right
-
-Most data types do not support the right label position, and instead render to the top.
-
-For a string property:
-
-[source,java,indent=0]
-----
-include::PropertyLayoutLabelPositionPage.java[tags=variants-right]
-----
-
-However, the boolean type _does_ support labels position to the right:
-
-[source,java,indent=0]
-----
-include::PropertyLayoutLabelPositionPage.java[tags=variants-right-boolean]
-----
-
-
-=== None
-
-All data types allow the label position to be omitted, although this can create a confusing user interface.
-
-For a string property:
-
-[source,java,indent=0]
-----
-include::PropertyLayoutLabelPositionPage.java[tags=variants-none]
-----
-
-One place where "NONE" is used however is with multiline descriptions:
-
-[source,java,indent=0]
-----
-include::PropertyLayoutLabelPositionPage.java[tags=variants-none-multiline]
-----
-
-TIP: the description text you are reading right now is in fact a contributed `AsciiDoc` property with no label.
-
-=== Not Specified
-
-It's also possible to omit specifying the label position, either implicitly or explicitly.
-In this case a default position will be used:
-
-For a property:
-
-[source,java,indent=0]
-----
-include::PropertyLayoutLabelPositionPage.java[tags=variants-not-specified]
-----
-
-And for a parameter:
-
-[source,java,indent=0]
-----
-include::PropertyLayoutLabelPositionPage_updateVariantNotSpecified.java[tags=annotation]
-----
-
-The default position itself can be configured globally, in the `application.yml` or `application.properties` configuration file.
-This is done using:
-
-* `causeway.applib.annotation.property-layout.label-position` configuration property for properties, and
-* `causeway.applib.annotation.parameter-layout.label-position` configuration property for parameters.
-
+If there is no such configuration property, then the framework defaults to `left`.

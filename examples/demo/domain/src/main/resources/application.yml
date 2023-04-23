@@ -48,9 +48,9 @@ causeway:
         command-publishing: none
         execution-publishing: none
       property-layout:
-        label-position: LEFT
+        label-position: left
       parameter-layout:
-        label-position: LEFT
+        label-position: left
 
   core:
     meta-model:

@@ -29,14 +29,10 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
-@Action(
-    semantics = SemanticsOf.IDEMPOTENT
-)
-@ActionLayout(
-    associateWith = "propertyLabelPositionLeft"
-    , sequence = "1")
+@Action(semantics = SemanticsOf.IDEMPOTENT)
+@ActionLayout(associateWith = "propertyBooleanLabelPositionRight", sequence = "1")
 @RequiredArgsConstructor
-public class PropertyLayoutLabelPositionPage_updateVariantLeft {
+public class PropertyLayoutLabelPositionPage_updateBooleanLabelPositionRight {
 
     private final PropertyLayoutLabelPositionPage page;
 
@@ -44,17 +40,15 @@ public class PropertyLayoutLabelPositionPage_updateVariantLeft {
     @MemberSupport public PropertyLayoutLabelPositionPage act(
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(
-                labelPosition = LabelPosition.LEFT              // <.>
-                , describedAs =
-                    "@ParameterLayout(labelPosition = LEFT)"
+                    labelPosition = LabelPosition.RIGHT
             )
-            final String parameterLabelPositionLeft) {
-        page.setPropertyLabelPositionLeft(parameterLabelPositionLeft);
+            final Boolean newValue) {
+        page.setPropertyBooleanLabelPositionRight(newValue);
         return page;
     }
 //end::annotation[]
-    @MemberSupport public String default0Act() {
-        return page.getPropertyLabelPositionLeft();
+    @MemberSupport public Boolean default0Act() {
+        return page.getPropertyLayoutBooleanLabelPositionRight();
     }
 
 }
