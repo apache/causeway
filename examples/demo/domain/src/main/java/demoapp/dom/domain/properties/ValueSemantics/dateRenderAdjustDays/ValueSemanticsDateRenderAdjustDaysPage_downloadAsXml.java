@@ -16,45 +16,40 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.PropertyLayout.renderDay;
+package demoapp.dom.domain.properties.ValueSemantics.dateRenderAdjustDays;
 
-import java.time.LocalDate;
+import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.Optionality;
-import org.apache.causeway.applib.annotation.Parameter;
-import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.services.jaxb.JaxbService;
+import org.apache.causeway.applib.value.Clob;
+import org.apache.causeway.applib.value.NamedWithMimeType;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
+//tag::class[]
 @Action(
     semantics = SemanticsOf.IDEMPOTENT
 )
-@ActionLayout(
-    associateWith = "endDateUsingMetaAnnotation"
-    , sequence = "1")
 @RequiredArgsConstructor
-public class PropertyLayoutRenderDayPage_updateEndDateWithMetaAnnotation {
+public class ValueSemanticsDateRenderAdjustDaysPage_downloadAsXml {
 
-    private final PropertyLayoutRenderDayPage page;
+    private final ValueSemanticsDateRenderAdjustDaysPage valueSemanticsDateRenderAdjustDaysPage;
 
-//tag::meta-annotation[]
-    @MemberSupport public PropertyLayoutRenderDayPage act(
-            @Parameter(optionality = Optionality.OPTIONAL)
-            @RenderDayMetaAnnotationEndDateExclusive        // <.>
-            @ParameterLayout(
-                describedAs = "@RenderDayAsDayBeforeMetaAnnotation"
-            )
-            final LocalDate endDateExclusive) {
-        page.setEndDateUsingMetaAnnotation(endDateExclusive);
-        return page;
+    @MemberSupport public Clob act(final String fileName) {
+        val xml = jaxbService.toXml(valueSemanticsDateRenderAdjustDaysPage);
+        return Clob.of(fileName, NamedWithMimeType.CommonMimeType.XML, xml);
     }
-//end::meta-annotation[]
-    @MemberSupport public LocalDate default0Act() {
-        return page.getEndDateUsingMetaAnnotation();
+
+    @MemberSupport public String default0Act() {
+        return "ValueSemantics.dateRenderAdjustDaysPage.xml";
     }
+
+    @Inject
+    JaxbService jaxbService;
 
 }
+//end::class[]

@@ -104,9 +104,12 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
                 <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="multiLine"/>
                 <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="named"/>
                 <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="navigable"/>
-                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="renderDay"/>
                 <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="repainting"/>
                 <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="typicalLength"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>@ValueSemantics</mb3:named>
+                <mb3:serviceAction objectType="demo.ValueSemanticsMenu" id="dateRenderAdjustDays"/>
             </mb3:section>
         </mb3:menu>
 

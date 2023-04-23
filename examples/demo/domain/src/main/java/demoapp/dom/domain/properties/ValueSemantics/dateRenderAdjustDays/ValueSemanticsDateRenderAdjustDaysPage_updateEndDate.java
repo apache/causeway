@@ -16,9 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.PropertyLayout.renderDay;
+package demoapp.dom.domain.properties.ValueSemantics.dateRenderAdjustDays;
 
-import java.time.LocalDate;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -29,25 +28,22 @@ import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.ValueSemantics;
 
+import java.time.LocalDate;
+
 import lombok.RequiredArgsConstructor;
 
-@Action(
-    semantics = SemanticsOf.IDEMPOTENT
+@Action(semantics = SemanticsOf.IDEMPOTENT
 )
-@ActionLayout(
-    associateWith = "endDate"
-    , sequence = "1")
+@ActionLayout(associateWith = "endDate", sequence = "1")
 @RequiredArgsConstructor
-public class PropertyLayoutRenderDayPage_updateEndDateWithParameterLayout {
+public class ValueSemanticsDateRenderAdjustDaysPage_updateEndDate {
 
-    private final PropertyLayoutRenderDayPage page;
+    private final ValueSemanticsDateRenderAdjustDaysPage page;
 
 //tag::annotation[]
-    @MemberSupport public PropertyLayoutRenderDayPage act(
+    @MemberSupport public ValueSemanticsDateRenderAdjustDaysPage act(
             @Parameter(optionality = Optionality.OPTIONAL)
             @ValueSemantics(dateRenderAdjustDays = ValueSemantics.AS_DAY_BEFORE)          // <.>
-            @ParameterLayout(describedAs =
-                    "@ValueSemantics(dateRenderAdjustDays = ValueSemantics.AS_DAY_BEFORE)")
             final LocalDate endDate) {
         page.setEndDate(endDate);
         return page;

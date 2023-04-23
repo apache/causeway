@@ -18,8 +18,6 @@
  */
 package demoapp.dom.domain.properties.PropertyLayout;
 
-import java.time.ZoneId;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -29,7 +27,6 @@ import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 
@@ -43,7 +40,6 @@ import demoapp.dom.domain.properties.PropertyLayout.labelPosition.PropertyLayout
 import demoapp.dom.domain.properties.PropertyLayout.multiLine.PropertyLayoutMultiLinePage;
 import demoapp.dom.domain.properties.PropertyLayout.named.PropertyLayoutNamedPage;
 import demoapp.dom.domain.properties.PropertyLayout.navigable.FileNodeVm;
-import demoapp.dom.domain.properties.PropertyLayout.renderDay.PropertyLayoutRenderDayPage;
 import demoapp.dom.domain.properties.PropertyLayout.repainting.PropertyLayoutRepaintingPage;
 import demoapp.dom.domain.properties.PropertyLayout.typicalLength.PropertyLayoutTypicalLengthPage;
 import demoapp.dom.types.Samples;
@@ -57,7 +53,6 @@ import demoapp.dom.types.Samples;
 //@Log4j2
 public class PropertyLayoutMenu {
 
-    final ClockService clockService;
     final Samples<Blob> samples;
 
 
@@ -126,14 +121,6 @@ public class PropertyLayoutMenu {
     @ActionLayout(cssClassFa="fa-sitemap", describedAs = "Breadcrumbs (and trees)")
     public FileNodeVm navigable(){
         return new FileNodeVm();
-    }
-
-
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-step-forward", describedAs = "Inclusive and exclusive date ranges")
-    public PropertyLayoutRenderDayPage renderDay(){
-        return new PropertyLayoutRenderDayPage(clockService.getClock().nowAsLocalDate(ZoneId.systemDefault()));
     }
 
 
