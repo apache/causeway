@@ -35,7 +35,7 @@ import lombok.RequiredArgsConstructor;
     associateWith = "propertyUsingAnnotation"
     , sequence = "1")
 @RequiredArgsConstructor
-public class PropertyLayoutDescribedAsPage_updateWithParameterLayout {
+public class PropertyLayoutDescribedAsPage_updateName {
 
     private final PropertyLayoutDescribedAsPage page;
 
@@ -43,16 +43,15 @@ public class PropertyLayoutDescribedAsPage_updateWithParameterLayout {
     @MemberSupport public PropertyLayoutDescribedAsPage act(
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(
-                describedAs =
-                    "@ParameterLayout(describedAs = \"...\")"   // <.>
+                describedAs = "The proposed new name"   // <.>
             )
-            final String parameterUsingAnnotation) {
-        page.setPropertyUsingAnnotation(parameterUsingAnnotation);
+            final String newName) {
+        page.setName(newName);
         return page;
     }
 //end::annotation[]
     @MemberSupport public String default0Act() {
-        return page.getPropertyUsingAnnotation();
+        return page.getName();
     }
 
 }
