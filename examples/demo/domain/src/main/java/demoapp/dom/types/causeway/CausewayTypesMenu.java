@@ -34,6 +34,7 @@ import demoapp.dom.types.causeway.clobs.CausewayClobs;
 import demoapp.dom.types.causeway.localresourcepaths.CausewayLocalResourcePaths;
 import demoapp.dom.types.causeway.markups.CausewayMarkups;
 import demoapp.dom.types.causeway.passwords.CausewayPasswords;
+import demoapp.dom.types.causeway.treenode.FileNodeVm;
 
 @Named("demo.CausewayTypesMenu")
 @DomainService(
@@ -62,6 +63,7 @@ public class CausewayTypesMenu {
     public CausewayLocalResourcePaths localResourcePaths(){
         return new CausewayLocalResourcePaths();
     }
+
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-code")
     public CausewayMarkups markups(){
@@ -72,6 +74,12 @@ public class CausewayTypesMenu {
     @ActionLayout(cssClassFa="fa-key")
     public CausewayPasswords passwords(){
         return new CausewayPasswords();
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-sitemap")
+    public FileNodeVm treeNodes(){
+        return new FileNodeVm();
     }
 
 

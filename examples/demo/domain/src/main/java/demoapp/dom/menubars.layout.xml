@@ -234,6 +234,7 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
                 <mb3:serviceAction objectType="demo.CausewayTypesMenu" id="localResourcePaths"/>
                 <mb3:serviceAction objectType="demo.CausewayTypesMenu" id="markups"/>
                 <mb3:serviceAction objectType="demo.CausewayTypesMenu" id="passwords"/>
+                <mb3:serviceAction objectType="demo.CausewayTypesMenu" id="treeNodes"/>
             </mb3:section>
             <mb3:section>
                 <mb3:named>Causeway Values</mb3:named>
