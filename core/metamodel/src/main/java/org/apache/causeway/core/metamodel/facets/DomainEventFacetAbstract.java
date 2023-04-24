@@ -20,15 +20,13 @@ package org.apache.causeway.core.metamodel.facets;
 
 import java.util.function.BiConsumer;
 
-import org.apache.causeway.applib.events.domain.ActionDomainEvent;
-import org.apache.causeway.applib.events.domain.CollectionDomainEvent;
-import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
+import org.apache.causeway.applib.events.domain.AbstractDomainEvent;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.util.EventUtil;
+import org.apache.causeway.core.metamodel.util.MMEventUtils;
 
 import lombok.NonNull;
 
@@ -36,7 +34,7 @@ import lombok.NonNull;
  * Base for any event-type holding facets,
  * while defining the facet-type is up to implementors.
  */
-public abstract class DomainEventFacetAbstract<T>
+public abstract class DomainEventFacetAbstract<T extends AbstractDomainEvent<?>>
 extends FacetAbstract
 implements DomainEventHolder<T> {
 
@@ -116,28 +114,7 @@ implements DomainEventHolder<T> {
      * </ul>
      */
     protected final boolean isPostable(final Class<? extends T> eventType) {
-        if(ActionDomainEvent.class.isAssignableFrom(eventType)) {
-            return EventUtil.eventTypeIsPostable(
-                    eventType,
-                    ActionDomainEvent.Noop.class,
-                    ActionDomainEvent.Default.class,
-                    getConfiguration().getApplib().getAnnotation().getAction().getDomainEvent().isPostForDefault());
-        }
-        if(PropertyDomainEvent.class.isAssignableFrom(eventType)) {
-            return EventUtil.eventTypeIsPostable(
-                    eventType,
-                    PropertyDomainEvent.Noop.class,
-                    PropertyDomainEvent.Default.class,
-                    getConfiguration().getApplib().getAnnotation().getProperty().getDomainEvent().isPostForDefault());
-        }
-        if(CollectionDomainEvent.class.isAssignableFrom(eventType)) {
-            return EventUtil.eventTypeIsPostable(
-                    eventType,
-                    CollectionDomainEvent.Noop.class,
-                    CollectionDomainEvent.Default.class,
-                    getConfiguration().getApplib().getAnnotation().getCollection().getDomainEvent().isPostForDefault());
-        }
-        return false;
+        return MMEventUtils.isDomainEventPostable(getConfiguration(), eventType);
     }
 
     @Override

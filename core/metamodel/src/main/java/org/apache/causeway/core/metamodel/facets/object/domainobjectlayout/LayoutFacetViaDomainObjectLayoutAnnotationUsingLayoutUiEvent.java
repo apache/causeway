@@ -30,7 +30,7 @@ import org.apache.causeway.core.metamodel.facets.object.layout.LayoutFacet;
 import org.apache.causeway.core.metamodel.facets.object.layout.LayoutFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
-import org.apache.causeway.core.metamodel.util.EventUtil;
+import org.apache.causeway.core.metamodel.util.MMEventUtils;
 
 public class LayoutFacetViaDomainObjectLayoutAnnotationUsingLayoutUiEvent
 extends LayoutFacetAbstract
@@ -43,7 +43,7 @@ implements LayoutFacet {
 
         return domainObjectLayoutIfAny
                 .map(DomainObjectLayout::layoutUiEvent)
-                .filter(layoutUiEvent -> EventUtil.eventTypeIsPostable(
+                .filter(layoutUiEvent -> MMEventUtils.eventTypeIsPostable(
                         layoutUiEvent,
                         LayoutUiEvent.Noop.class,
                         LayoutUiEvent.Default.class,

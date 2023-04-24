@@ -31,7 +31,7 @@ import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacetA
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
-import org.apache.causeway.core.metamodel.util.EventUtil;
+import org.apache.causeway.core.metamodel.util.MMEventUtils;
 
 public class CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent
 extends CssClassFacetAbstract {
@@ -43,7 +43,7 @@ extends CssClassFacetAbstract {
 
         return domainObjectLayoutIfAny
         .map(DomainObjectLayout::cssClassUiEvent)
-        .filter(cssClassUiEventClass -> EventUtil.eventTypeIsPostable(
+        .filter(cssClassUiEventClass -> MMEventUtils.eventTypeIsPostable(
                 cssClassUiEventClass,
                 CssClassUiEvent.Noop.class,
                 CssClassUiEvent.Default.class,

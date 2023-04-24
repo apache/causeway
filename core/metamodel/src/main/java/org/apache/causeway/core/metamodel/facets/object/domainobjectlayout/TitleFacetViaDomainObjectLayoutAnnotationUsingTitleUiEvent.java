@@ -36,7 +36,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.util.EventUtil;
+import org.apache.causeway.core.metamodel.util.MMEventUtils;
 
 import lombok.val;
 
@@ -57,7 +57,7 @@ extends TitleFacetAbstract {
 
         return domainObjectLayoutIfAny
                 .map(DomainObjectLayout::titleUiEvent)
-                .filter(titleUiEvent -> EventUtil.eventTypeIsPostable(
+                .filter(titleUiEvent -> MMEventUtils.eventTypeIsPostable(
                         titleUiEvent,
                         TitleUiEvent.Noop.class,
                         TitleUiEvent.Default.class,
