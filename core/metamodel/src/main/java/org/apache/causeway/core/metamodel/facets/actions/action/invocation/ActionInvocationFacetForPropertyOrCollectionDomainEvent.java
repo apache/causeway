@@ -31,7 +31,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.collections._Arrays;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -249,11 +248,6 @@ extends ActionInvocationFacetAbstract {
                     ? originalAdapter
                     : ManagedObject.adaptParameter(param, newPojo);
         });
-    }
-
-    @Override
-    protected boolean isPostable(final Class<? extends ActionDomainEvent<?>> eventType) {
-        throw _Exceptions.unexpectedCodeReach(); // we are bound to an underlying DomainEventHolder, let it decide
     }
 
 }

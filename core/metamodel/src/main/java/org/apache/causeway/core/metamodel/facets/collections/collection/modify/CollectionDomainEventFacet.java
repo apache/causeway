@@ -32,7 +32,6 @@ import org.apache.causeway.core.metamodel.facets.object.domainobject.domainevent
 import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
 import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.util.EventUtil;
 
 import lombok.val;
 
@@ -121,15 +120,6 @@ implements HidingInteractionAdvisor {
             }
         }
         return collectionDomainEventType;
-    }
-
-    @Override
-    protected boolean isPostable(final Class<? extends CollectionDomainEvent<?, ?>> eventType) {
-        return EventUtil.eventTypeIsPostable(
-                eventType,
-                CollectionDomainEvent.Noop.class,
-                CollectionDomainEvent.Default.class,
-                getConfiguration().getApplib().getAnnotation().getCollection().getDomainEvent().isPostForDefault());
     }
 
 }

@@ -24,7 +24,6 @@ import java.util.function.BiConsumer;
 import org.apache.causeway.applib.events.domain.AbstractDomainEvent;
 import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
 import org.apache.causeway.applib.services.iactn.PropertyEdit;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.execution.InteractionInternal;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
@@ -298,8 +297,4 @@ implements
         visitor.accept("clearFacet", clearFacet);
     }
 
-    @Override
-    protected final boolean isPostable(final Class<? extends PropertyDomainEvent<?, ?>> eventType) {
-        throw _Exceptions.unexpectedCodeReach(); // we are bound to an underlying DomainEventHolder, let it decide
-    }
 }

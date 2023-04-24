@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.facets.object.domainobject.domaineven
 import java.util.Optional;
 
 import org.apache.causeway.applib.events.domain.ActionDomainEvent;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract;
@@ -50,11 +49,6 @@ extends DomainEventFacetAbstract<ActionDomainEvent<?>> {
             final Class<? extends ActionDomainEvent<?>> value,
             final FacetHolder holder) {
         super(type(), value, EventTypeOrigin.ANNOTATED_OBJECT, holder);
-    }
-
-    @Override
-    protected boolean isPostable(final Class<? extends ActionDomainEvent<?>> eventType) {
-        throw _Exceptions.unexpectedCodeReach(); // this is just a marker facet
     }
 
 }

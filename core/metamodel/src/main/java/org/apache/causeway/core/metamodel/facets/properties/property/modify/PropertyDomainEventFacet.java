@@ -45,7 +45,6 @@ import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.specimpl.OneToOneAssociationMixedIn;
-import org.apache.causeway.core.metamodel.util.EventUtil;
 
 import lombok.NonNull;
 import lombok.val;
@@ -218,15 +217,6 @@ implements
             }
         }
         return propertyDomainEventType;
-    }
-
-    @Override
-    protected boolean isPostable(final Class<? extends PropertyDomainEvent<?, ?>> eventType) {
-        return EventUtil.eventTypeIsPostable(
-                eventType,
-                PropertyDomainEvent.Noop.class,
-                PropertyDomainEvent.Default.class,
-                getConfiguration().getApplib().getAnnotation().getProperty().getDomainEvent().isPostForDefault());
     }
 
 }

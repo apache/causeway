@@ -45,7 +45,6 @@ import org.apache.causeway.core.metamodel.interactions.ValidityContext;
 import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.core.metamodel.util.EventUtil;
 
 import lombok.NonNull;
 import lombok.val;
@@ -191,15 +190,6 @@ implements
     }
 
     // -- HELPER
-
-    @Override
-    protected boolean isPostable(final Class<? extends ActionDomainEvent<?>> eventType) {
-        return EventUtil.eventTypeIsPostable(
-                eventType,
-                ActionDomainEvent.Noop.class,
-                ActionDomainEvent.Default.class,
-                getConfiguration().getApplib().getAnnotation().getAction().getDomainEvent().isPostForDefault());
-    }
 
     private static ObjectAction actionFrom(final InteractionContext ic) {
         if(!(ic instanceof ActionInteractionContext)) {
