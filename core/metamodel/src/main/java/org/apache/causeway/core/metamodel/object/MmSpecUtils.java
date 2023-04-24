@@ -33,7 +33,7 @@ import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public final class MmSpecUtil {
+public final class MmSpecUtils {
 
     /**
      * optimized for the case when a specification that probably matches is known in advance
@@ -47,7 +47,7 @@ public final class MmSpecUtil {
                 // when successful guess
                 ? guess
                 // else lookup
-                : MmAssertionUtil.assertTypeOf(guess)
+                : MmAssertionUtils.assertTypeOf(guess)
                     .apply(guess.getSpecificationLoader().specForTypeElseFail(requiredType));
     }
 

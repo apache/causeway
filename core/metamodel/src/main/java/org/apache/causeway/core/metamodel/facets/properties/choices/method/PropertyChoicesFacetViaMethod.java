@@ -30,7 +30,7 @@ import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.properties.choices.PropertyChoicesFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
-import org.apache.causeway.core.metamodel.object.MmInvokeUtil;
+import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -64,7 +64,7 @@ implements ImperativeFacet {
 
         val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
         val elementSpec = ((FacetedMethod) getFacetHolder()).getElementSpecification();
-        val optionPojos = MmInvokeUtil.invoke(method, owningAdapter);
+        val optionPojos = MmInvokeUtils.invoke(method, owningAdapter);
         val visibleChoices = ManagedObjects
                 .adaptMultipleOfTypeThenFilterByVisibility(
                         elementSpec, optionPojos, interactionInitiatedBy);

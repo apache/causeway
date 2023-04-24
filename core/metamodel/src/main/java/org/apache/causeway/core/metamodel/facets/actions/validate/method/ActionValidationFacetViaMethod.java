@@ -31,7 +31,7 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.actions.validate.ActionValidationFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmInvokeUtil;
+import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -65,7 +65,7 @@ implements ImperativeFacet {
     public String invalidReason(final ManagedObject owningAdapter, final Can<ManagedObject> proposedArgumentAdapters) {
 
         val method = methods.getFirstElseFail();
-        final Object returnValue = MmInvokeUtil.invokeNoAutofit(patConstructor, method, owningAdapter, proposedArgumentAdapters);
+        final Object returnValue = MmInvokeUtils.invokeNoAutofit(patConstructor, method, owningAdapter, proposedArgumentAdapters);
 
         if(returnValue instanceof String) {
             return (String) returnValue;

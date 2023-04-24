@@ -51,7 +51,7 @@ import org.apache.causeway.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.causeway.core.metamodel.interactions.managed.MemberInteraction.AccessIntent;
 import org.apache.causeway.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmEntityUtil;
+import org.apache.causeway.core.metamodel.object.MmEntityUtils;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.Rel;
@@ -141,7 +141,7 @@ implements DomainObjectResource {
                     .createWithBody(HttpStatusCode.BAD_REQUEST, objectRepr, validity.getReasonAsString().orElse(null)));
         }
 
-        MmEntityUtil.persistInCurrentTransaction(adapter);
+        MmEntityUtils.persistInCurrentTransaction(adapter);
 
         val domainResourceHelper = _DomainResourceHelper.ofObjectResource(resourceContext, adapter);
 

@@ -42,7 +42,7 @@ import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
+import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.services.ixn.InteractionDtoFactory;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -138,8 +138,8 @@ extends ActionInvocationFacetAbstract {
 
         val method = methods.getFirstElseFail();
 
-        final Object[] executionParameters = MmUnwrapUtil.multipleAsArray(arguments);
-        final Object targetPojo = MmUnwrapUtil.single(head.getTarget());
+        final Object[] executionParameters = MmUnwrapUtils.multipleAsArray(arguments);
+        final Object targetPojo = MmUnwrapUtils.single(head.getTarget());
 
         final ActionSemanticsFacet semanticsFacet = getFacetHolder().getFacet(ActionSemanticsFacet.class);
         final boolean cacheable = semanticsFacet != null && semanticsFacet.value().isSafeAndRequestCacheable();

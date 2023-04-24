@@ -34,7 +34,7 @@ import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class MmAssertionUtil {
+public class MmAssertionUtils {
 
     public void assertExactType(
             final @Nullable ObjectSpecification requiredSpec,

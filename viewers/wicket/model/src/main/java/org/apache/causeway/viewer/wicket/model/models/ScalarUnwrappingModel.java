@@ -24,7 +24,7 @@ import org.springframework.util.ClassUtils;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
+import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -73,7 +73,7 @@ extends ChainingModel<T> {
     // -- HELPER
 
     private T unwrap(final ManagedObject objectAdapter) {
-        val pojo = MmUnwrapUtil.single(objectAdapter);
+        val pojo = MmUnwrapUtils.single(objectAdapter);
         if(pojo==null
                 || !ClassUtils.resolvePrimitiveIfNecessary(type)
                         .isAssignableFrom(ClassUtils.resolvePrimitiveIfNecessary(pojo.getClass()))) {

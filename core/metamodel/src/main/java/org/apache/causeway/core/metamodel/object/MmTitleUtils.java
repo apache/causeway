@@ -31,7 +31,7 @@ import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class MmTitleUtil {
+public class MmTitleUtils {
 
     public String abbreviatedTitleOf(final ManagedObject adapter, final int maxLength, final String suffix) {
         return _InternalTitleUtil.abbreviated(titleOf(adapter), maxLength, suffix);

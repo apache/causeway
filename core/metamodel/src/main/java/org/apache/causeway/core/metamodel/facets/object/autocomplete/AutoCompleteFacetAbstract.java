@@ -30,7 +30,7 @@ import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.param.autocomplete.MinLengthUtil;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmVisibilityUtil;
+import org.apache.causeway.core.metamodel.object.MmVisibilityUtils;
 import org.apache.causeway.core.metamodel.services.publishing.ExecutionPublisher;
 
 import lombok.val;
@@ -81,7 +81,7 @@ implements AutoCompleteFacet {
                 return getObjectManager().adapt(list);
         });
 
-        return MmVisibilityUtil.streamVisibleAdapters(resultAdapter, interactionInitiatedBy)
+        return MmVisibilityUtils.streamVisibleAdapters(resultAdapter, interactionInitiatedBy)
                 .collect(Can.toCan());
 
     }

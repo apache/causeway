@@ -23,7 +23,7 @@ import org.apache.causeway.applib.services.wrapper.events.ObjectTitleEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
+import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -47,7 +47,7 @@ extends AccessContext {
 
     @Override
     public ObjectTitleEvent createInteractionEvent() {
-        return new ObjectTitleEvent(MmUnwrapUtil.single(getTarget()), getIdentifier(), getTitle());
+        return new ObjectTitleEvent(MmUnwrapUtils.single(getTarget()), getIdentifier(), getTitle());
     }
 
     private String getTitle() {

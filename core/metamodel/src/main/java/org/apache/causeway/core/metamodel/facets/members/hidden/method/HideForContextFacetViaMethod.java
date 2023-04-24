@@ -27,7 +27,7 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmInvokeUtil;
+import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -56,7 +56,7 @@ implements ImperativeFacet {
             return null;
         }
         val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
-        final Boolean isHidden = (Boolean) MmInvokeUtil.invokeAutofit(method, target);
+        final Boolean isHidden = (Boolean) MmInvokeUtils.invokeAutofit(method, target);
         return isHidden.booleanValue() ? "Hidden" : null;
     }
 

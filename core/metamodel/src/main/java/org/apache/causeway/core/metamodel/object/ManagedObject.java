@@ -574,11 +574,11 @@ extends
             final @Nullable Object pojo,
             final @NonNull Optional<Bookmark> bookmarkIfAny) {
 
-        MmAssertionUtil.assertPojoNotWrapped(pojo);
-        MmAssertionUtil.assertPojoIsScalar(pojo);
+        MmAssertionUtils.assertPojoNotWrapped(pojo);
+        MmAssertionUtils.assertPojoIsScalar(pojo);
         val spec = pojo!=null
                 && guess!=null
-                    ? MmSpecUtil.quicklyResolveObjectSpecification(guess, pojo.getClass())
+                    ? MmSpecUtils.quicklyResolveObjectSpecification(guess, pojo.getClass())
                     : guess;
 
         val specialization = spec!=null

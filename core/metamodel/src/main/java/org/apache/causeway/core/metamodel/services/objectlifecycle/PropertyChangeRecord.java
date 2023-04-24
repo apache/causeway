@@ -25,7 +25,7 @@ import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.causeway.applib.services.xactn.TransactionId;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
+import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.EqualsAndHashCode;
@@ -136,7 +136,7 @@ public final class PropertyChangeRecord {
 
     private Object getPropertyValue() {
         val referencedAdapter = getProperty().get(getEntity(), InteractionInitiatedBy.FRAMEWORK);
-        return MmUnwrapUtil.single(referencedAdapter);
+        return MmUnwrapUtils.single(referencedAdapter);
     }
 
 

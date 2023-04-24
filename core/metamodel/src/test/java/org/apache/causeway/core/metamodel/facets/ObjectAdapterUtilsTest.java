@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
+import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 
 class ObjectAdapterUtilsTest {
 
@@ -34,33 +34,33 @@ class ObjectAdapterUtilsTest {
 
     @Test
     void unwrapObjectWhenNull() {
-        assertNull(MmUnwrapUtil.single((ManagedObject)null));
+        assertNull(MmUnwrapUtils.single((ManagedObject)null));
     }
 
     @Test
     void unwrapObjectWhenNotNull() {
         underlyingDomainObject = new Object();
         expectAdapterWillReturn(underlyingDomainObject);
-        assertEquals(underlyingDomainObject, MmUnwrapUtil.single(mockObjectAdapter));
+        assertEquals(underlyingDomainObject, MmUnwrapUtils.single(mockObjectAdapter));
     }
 
     @Test
     void unwrapStringWhenNull() {
-        assertNull(MmUnwrapUtil.singleAsStringOrElse(null, null));
+        assertNull(MmUnwrapUtils.singleAsStringOrElse(null, null));
     }
 
     @Test
     void unwrapStringWhenNotNullButNotString() {
         underlyingDomainObject = new Object();
         expectAdapterWillReturn(underlyingDomainObject);
-        assertNull(MmUnwrapUtil.singleAsStringOrElse(mockObjectAdapter, null));
+        assertNull(MmUnwrapUtils.singleAsStringOrElse(mockObjectAdapter, null));
     }
 
     @Test
     void unwrapStringWhenNotNullAndString() {
         underlyingDomainObject = "huzzah";
         expectAdapterWillReturn(underlyingDomainObject);
-        assertEquals("huzzah", MmUnwrapUtil.singleAsStringOrElse(mockObjectAdapter, null));
+        assertEquals("huzzah", MmUnwrapUtils.singleAsStringOrElse(mockObjectAdapter, null));
     }
 
     private void expectAdapterWillReturn(final Object domainObject) {

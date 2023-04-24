@@ -39,7 +39,7 @@ import org.apache.wicket.request.resource.ByteArrayResource;
 
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.applib.value.Blob;
-import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
+import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.extensions.pdfjs.applib.config.PdfJsConfig;
 import org.apache.causeway.extensions.pdfjs.applib.config.Scale;
 import org.apache.causeway.extensions.pdfjs.applib.spi.PdfJsViewerAdvisor;
@@ -296,7 +296,7 @@ implements IRequestListener {
     // -- HELPER
 
     private Blob getBlob() {
-        return (Blob) MmUnwrapUtil.single(scalarModel().getObject());
+        return (Blob) MmUnwrapUtils.single(scalarModel().getObject());
     }
 
     private static ByteArrayResource asBlobResource(final @NonNull Blob blob) {

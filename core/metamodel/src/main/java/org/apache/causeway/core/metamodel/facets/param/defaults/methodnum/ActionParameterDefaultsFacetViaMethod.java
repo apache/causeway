@@ -31,7 +31,7 @@ import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacetAbstract;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmInvokeUtil;
+import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -78,11 +78,11 @@ implements ImperativeFacet {
 
         val defaultValue = patConstructor.isPresent()
             // PAT programming model
-            ? MmInvokeUtil
+            ? MmInvokeUtils
                     .invokeWithPAT(patConstructor.get(), method.asMethodForIntrospection(),
                             pendingArgs.getActionTarget(), pendingArgs.getParamValues())
             // else support legacy programming model, call any-arg defaultNAct(...)
-            : MmInvokeUtil
+            : MmInvokeUtils
                     .invokeAutofit(method.asMethodElseFail(),
                         pendingArgs.getActionTarget(), pendingArgs.getParamValues());
 

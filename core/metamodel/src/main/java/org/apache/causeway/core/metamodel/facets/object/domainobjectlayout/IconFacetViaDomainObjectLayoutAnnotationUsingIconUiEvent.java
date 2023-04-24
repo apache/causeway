@@ -30,8 +30,8 @@ import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
+import org.apache.causeway.core.metamodel.object.MmEventUtils;
 import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
-import org.apache.causeway.core.metamodel.util.MMEventUtils;
 
 public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent
 extends IconFacetAbstract {
@@ -43,7 +43,7 @@ extends IconFacetAbstract {
 
         return domainObjectLayoutIfAny
                 .map(DomainObjectLayout::iconUiEvent)
-                .filter(iconUiEvent -> MMEventUtils.eventTypeIsPostable(
+                .filter(iconUiEvent -> MmEventUtils.eventTypeIsPostable(
                         iconUiEvent,
                         IconUiEvent.Noop.class,
                         IconUiEvent.Default.class,

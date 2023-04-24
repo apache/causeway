@@ -23,7 +23,7 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.wrapper.events.PropertyUsabilityEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
+import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -42,7 +42,7 @@ extends UsabilityContext {
 
     @Override
     public PropertyUsabilityEvent createInteractionEvent() {
-        return new PropertyUsabilityEvent(MmUnwrapUtil.single(getTarget()), getIdentifier());
+        return new PropertyUsabilityEvent(MmUnwrapUtils.single(getTarget()), getIdentifier());
     }
 
 }

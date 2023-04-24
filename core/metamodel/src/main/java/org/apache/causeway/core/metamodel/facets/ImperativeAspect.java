@@ -28,7 +28,7 @@ import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFaca
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet.Intent;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
-import org.apache.causeway.core.metamodel.object.MmInvokeUtil;
+import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 
 import lombok.Value;
 import lombok.val;
@@ -63,7 +63,7 @@ public class ImperativeAspect {
 
     public Object invokeSingleMethod(final ManagedObject domainObject) {
         val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular, as the factories only creates regular
-        final Object returnValue = MmInvokeUtil.invoke(method, domainObject);
+        final Object returnValue = MmInvokeUtils.invoke(method, domainObject);
         return returnValue;
     }
 

@@ -35,7 +35,7 @@ import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public final class MmUnwrapUtil {
+public final class MmUnwrapUtils {
 
     // -- SINGLE
 
@@ -48,7 +48,7 @@ public final class MmUnwrapUtil {
 
     @Nullable
     public static String singleAsStringOrElse(final @Nullable ManagedObject adapter, final @Nullable String orElse) {
-        final Object obj = MmUnwrapUtil.single(adapter);
+        final Object obj = MmUnwrapUtils.single(adapter);
         if (obj == null) {
             return null;
         }
@@ -62,19 +62,19 @@ public final class MmUnwrapUtil {
 
     @Nullable
     public static Object[] multipleAsArray(final @NonNull Can<ManagedObject> adapters) {
-        val unwrappedObjects = _Arrays.mapCollection(adapters.toList(), MmUnwrapUtil::single);
+        val unwrappedObjects = _Arrays.mapCollection(adapters.toList(), MmUnwrapUtils::single);
         return unwrappedObjects;
     }
 
     @Nullable
     public static Object[] multipleAsArray(final @Nullable Collection<ManagedObject> adapters) {
-        val unwrappedObjects = _Arrays.mapCollection(adapters, MmUnwrapUtil::single);
+        val unwrappedObjects = _Arrays.mapCollection(adapters, MmUnwrapUtils::single);
         return unwrappedObjects;
     }
 
     @Nullable
     public static Object[] multipleAsArray(final @Nullable ManagedObject[] adapters) {
-        val unwrappedObjects = _Arrays.map(adapters, MmUnwrapUtil::single);
+        val unwrappedObjects = _Arrays.map(adapters, MmUnwrapUtils::single);
         return unwrappedObjects;
     }
 
@@ -90,7 +90,7 @@ public final class MmUnwrapUtil {
             return Collections.emptyList();
         }
         return adapters.stream()
-                .map(MmUnwrapUtil::single)
+                .map(MmUnwrapUtils::single)
                 .collect(_Lists.toUnmodifiable());
     }
 
@@ -104,7 +104,7 @@ public final class MmUnwrapUtil {
             return Collections.emptyList();
         }
         return adapters.stream()
-                .map(MmUnwrapUtil::single)
+                .map(MmUnwrapUtils::single)
                 .collect(_Lists.toUnmodifiable());
     }
 
@@ -119,7 +119,7 @@ public final class MmUnwrapUtil {
             return Collections.emptySet();
         }
         return adapters.stream()
-                .map(MmUnwrapUtil::single)
+                .map(MmUnwrapUtils::single)
                 .collect(_Sets.toUnmodifiable());
     }
 

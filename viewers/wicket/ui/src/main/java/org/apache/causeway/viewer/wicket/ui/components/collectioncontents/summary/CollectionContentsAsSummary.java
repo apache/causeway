@@ -34,7 +34,7 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataRow;
 import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
+import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
@@ -142,7 +142,7 @@ implements CollectionCountProvider {
                     values.add(null);
                     continue;
                 }
-                final Object valueObj = MmUnwrapUtil.single(valueAdapter);
+                final Object valueObj = MmUnwrapUtils.single(valueAdapter);
                 if (valueObj == null) {
                     values.add(null);
                     continue;

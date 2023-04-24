@@ -25,8 +25,8 @@ import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.object.MmEventUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.util.MMEventUtils;
 
 import lombok.NonNull;
 
@@ -114,7 +114,7 @@ implements DomainEventHolder<T> {
      * </ul>
      */
     protected final boolean isPostable(final Class<? extends T> eventType) {
-        return MMEventUtils.isDomainEventPostable(getConfiguration(), eventType);
+        return MmEventUtils.isDomainEventPostable(getConfiguration(), eventType);
     }
 
     @Override

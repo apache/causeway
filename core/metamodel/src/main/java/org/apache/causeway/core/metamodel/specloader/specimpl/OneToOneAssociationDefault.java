@@ -50,7 +50,7 @@ import org.apache.causeway.core.metamodel.interactions.ValidityContext;
 import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
-import org.apache.causeway.core.metamodel.object.MmEntityUtil;
+import org.apache.causeway.core.metamodel.object.MmEntityUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
@@ -208,7 +208,7 @@ implements OneToOneAssociation {
             throw _Exceptions.unexpectedCodeReach();
         }
 
-        MmEntityUtil.requiresWhenFirstIsBookmarkableSecondIsAlso(ownerAdapter, newReferencedAdapter);
+        MmEntityUtils.requiresWhenFirstIsBookmarkableSecondIsAlso(ownerAdapter, newReferencedAdapter);
 
         return propertySetterFacet.setProperty(this, ownerAdapter, newReferencedAdapter, interactionInitiatedBy);
     }

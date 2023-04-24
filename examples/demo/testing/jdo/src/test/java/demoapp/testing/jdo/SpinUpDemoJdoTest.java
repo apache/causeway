@@ -31,7 +31,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.object.MmSpecUtil;
+import org.apache.causeway.core.metamodel.object.MmSpecUtils;
 import org.apache.causeway.testing.unittestsupport.applib.util.ApprovalUtils;
 
 import lombok.val;
@@ -59,7 +59,7 @@ class SpinUpDemoJdoTest {
     void verify() {
 
         val specificationsBySortAsYaml =
-                MmSpecUtil.specificationsBySortAsYaml(mmc.getSpecificationLoader());
+                MmSpecUtils.specificationsBySortAsYaml(mmc.getSpecificationLoader());
 
         //debug
         //System.err.printf("%s%n", specificationsBySortAsYaml);

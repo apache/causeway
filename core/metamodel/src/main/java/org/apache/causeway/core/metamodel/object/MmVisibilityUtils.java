@@ -34,10 +34,10 @@ import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public final class MmVisibilityUtil {
+public final class MmVisibilityUtils {
 
     public static Predicate<? super ManagedObject> filterOn(final InteractionInitiatedBy interactionInitiatedBy) {
-        return $->MmVisibilityUtil.isVisible($, interactionInitiatedBy);
+        return $->MmVisibilityUtils.isVisible($, interactionInitiatedBy);
     }
 
     /**
@@ -52,7 +52,7 @@ public final class MmVisibilityUtil {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         return CollectionFacet.streamAdapters(collectionAdapter)
-                .filter(MmVisibilityUtil.filterOn(interactionInitiatedBy));
+                .filter(MmVisibilityUtils.filterOn(interactionInitiatedBy));
     }
 
     private static Stream<Object> streamVisiblePojos(
@@ -60,8 +60,8 @@ public final class MmVisibilityUtil {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         return CollectionFacet.streamAdapters(collectionAdapter)
-                .filter(MmVisibilityUtil.filterOn(interactionInitiatedBy))
-                .map(MmUnwrapUtil::single);
+                .filter(MmVisibilityUtils.filterOn(interactionInitiatedBy))
+                .map(MmUnwrapUtils::single);
     }
 
     public static Object[] visiblePojosAsArray(
@@ -99,7 +99,7 @@ public final class MmVisibilityUtil {
         }
         val spec = adapter.getSpecification();
         if(spec.isEntity()) {
-            if(MmEntityUtil.isDetachedCannotReattach(adapter)) {
+            if(MmEntityUtils.isDetachedCannotReattach(adapter)) {
                 return false;
             }
         }

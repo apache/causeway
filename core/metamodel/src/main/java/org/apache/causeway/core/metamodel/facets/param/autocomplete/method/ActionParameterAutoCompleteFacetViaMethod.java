@@ -33,7 +33,7 @@ import org.apache.causeway.core.metamodel.facets.param.autocomplete.ActionParame
 import org.apache.causeway.core.metamodel.facets.param.autocomplete.MinLengthUtil;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
-import org.apache.causeway.core.metamodel.object.MmInvokeUtil;
+import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.TypeOfAnyCardinality;
 
@@ -82,7 +82,7 @@ implements ImperativeFacet {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         val method = methods.getFirstElseFail();
-        final Object collectionOrArray = MmInvokeUtil
+        final Object collectionOrArray = MmInvokeUtils
                 .invokeWithSearchArg(patConstructor, method, owningAdapter, pendingArgs, searchArg);
         if (collectionOrArray == null) {
             return Can.empty();

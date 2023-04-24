@@ -33,7 +33,7 @@ import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public final class MmEntityUtil {
+public final class MmEntityUtils {
 
     @NonNull
     public static Optional<PersistenceStack> getPersistenceStandard(final @Nullable ManagedObject adapter) {
@@ -119,10 +119,10 @@ public final class MmEntityUtil {
     @NonNull
     public static ManagedObject requiresAttached(final @NonNull ManagedObject managedObject) {
         if(managedObject instanceof PackedManagedObject) {
-            ((PackedManagedObject)managedObject).unpack().forEach(MmEntityUtil::requiresAttached);
+            ((PackedManagedObject)managedObject).unpack().forEach(MmEntityUtils::requiresAttached);
             return managedObject;
         }
-        val entityState = MmEntityUtil.getEntityState(managedObject);
+        val entityState = MmEntityUtils.getEntityState(managedObject);
         if(entityState.isPersistable()) {
             // ensure we have an attached entity
             _Assert.assertEquals(
@@ -146,7 +146,7 @@ public final class MmEntityUtil {
             return;
         }
 
-        if(!MmEntityUtil.hasOid(second)) {
+        if(!MmEntityUtils.hasOid(second)) {
             throw _Exceptions.illegalArgument(
                     "can't set a reference to a transient object [%s] from a persistent one [%s]",
                     second,
@@ -157,16 +157,16 @@ public final class MmEntityUtil {
     // -- SHORTCUTS
 
     public static boolean hasOid(final @Nullable ManagedObject adapter) {
-        return MmEntityUtil.getEntityState(adapter).hasOid();
+        return MmEntityUtils.getEntityState(adapter).hasOid();
     }
 
     public static boolean isDetachedCannotReattach(final @Nullable ManagedObject adapter) {
-        return MmEntityUtil.getEntityState(adapter).isDetachedCannotReattach();
+        return MmEntityUtils.getEntityState(adapter).isDetachedCannotReattach();
     }
 
     /** TODO very strange logic */
     public static boolean isDeleted(final @Nullable ManagedObject entity) {
-        val state = MmEntityUtil.getEntityState(entity);
+        val state = MmEntityUtils.getEntityState(entity);
         return state.isDetached()
                 || state.isRemoved()
                 || state.isJpaSpecificDetachedWithOid();

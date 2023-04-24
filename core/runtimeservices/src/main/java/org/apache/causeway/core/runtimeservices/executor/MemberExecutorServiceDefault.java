@@ -58,9 +58,9 @@ import org.apache.causeway.core.metamodel.facets.properties.property.modify.Prop
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
-import org.apache.causeway.core.metamodel.object.MmEntityUtil;
-import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
-import org.apache.causeway.core.metamodel.object.MmVisibilityUtil;
+import org.apache.causeway.core.metamodel.object.MmEntityUtils;
+import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
+import org.apache.causeway.core.metamodel.object.MmVisibilityUtils;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
@@ -149,10 +149,10 @@ implements MemberExecutorService {
         log.debug("about to invoke action {}", actionId);
 
         val targetAdapter = head.getTarget();
-        val targetPojo = MmUnwrapUtil.single(targetAdapter);
+        val targetPojo = MmUnwrapUtils.single(targetAdapter);
 
         val argumentPojos = argumentAdapters.stream()
-                .map(MmUnwrapUtil::single)
+                .map(MmUnwrapUtils::single)
                 .collect(_Lists.toUnmodifiable());
 
         val actionInvocation = new ActionInvocation(
@@ -174,7 +174,7 @@ implements MemberExecutorService {
         .filter(scalarNonEmpty->!scalarNonEmpty.getSpecialization().isOther()) // don't care
         // if its a transient entity, flush the current transaction, so we get an OID
         .filter(scalarNonEmpty->{
-            MmEntityUtil.ifHasNoOidThenFlush(scalarNonEmpty);
+            MmEntityUtils.ifHasNoOidThenFlush(scalarNonEmpty);
             return true;
         })
         .ifPresent(scalarNonEmpty->{
@@ -223,8 +223,8 @@ implements MemberExecutorService {
         val propertyId = owningProperty.getFeatureIdentifier();
 
         val targetManagedObject = head.getTarget();
-        val target = MmUnwrapUtil.single(targetManagedObject);
-        val argValue = MmUnwrapUtil.single(newValueAdapter);
+        val target = MmUnwrapUtils.single(targetManagedObject);
+        val argValue = MmUnwrapUtils.single(newValueAdapter);
 
         val propertyEdit = new PropertyEdit(interaction, propertyId, target, argValue);
         val executor = propertyExecutorFactory
@@ -266,8 +266,8 @@ implements MemberExecutorService {
             final InteractionHead head,
             final Can<ManagedObject> arguments) {
 
-        final Object[] executionParameters = MmUnwrapUtil.multipleAsArray(arguments);
-        final Object targetPojo = MmUnwrapUtil.single(head.getTarget());
+        final Object[] executionParameters = MmUnwrapUtils.multipleAsArray(arguments);
+        final Object targetPojo = MmUnwrapUtils.single(head.getTarget());
         return CanonicalInvoker.invoke(methodFacade, targetPojo, executionParameters);
     }
 
@@ -313,7 +313,7 @@ implements MemberExecutorService {
             return resultAdapter;
         }
 
-        return MmVisibilityUtil.isVisible(resultAdapter, interactionInitiatedBy)
+        return MmVisibilityUtils.isVisible(resultAdapter, interactionInitiatedBy)
                 ? resultAdapter
                 : null;
     }

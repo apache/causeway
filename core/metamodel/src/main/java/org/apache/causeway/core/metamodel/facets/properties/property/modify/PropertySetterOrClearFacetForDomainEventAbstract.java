@@ -38,7 +38,7 @@ import org.apache.causeway.core.metamodel.facets.properties.update.modify.Proper
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySettingAccessor;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
+import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.services.ixn.InteractionDtoFactory;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
@@ -197,7 +197,7 @@ implements
 
             // ... post the executing event
             val oldValuePojo = getterFacet.getProperty(head.getTarget(), interactionInitiatedBy);
-            val newValuePojo = MmUnwrapUtil.single(newValueAdapterMutatable);
+            val newValuePojo = MmUnwrapUtils.single(newValueAdapterMutatable);
 
             val propertyDomainEvent =
                     domainEventHelper.postEventForProperty(

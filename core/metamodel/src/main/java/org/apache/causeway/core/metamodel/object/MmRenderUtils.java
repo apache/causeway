@@ -27,7 +27,7 @@ import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class MmRenderUtil {
+public class MmRenderUtils {
 
     public String htmlStringForValueType(
             final @Nullable ManagedObject adapter,
