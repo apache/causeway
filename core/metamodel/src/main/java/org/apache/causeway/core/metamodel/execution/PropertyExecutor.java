@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.execution;
 import java.util.Objects;
 
 import org.apache.causeway.applib.events.domain.AbstractDomainEvent;
+import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
 import org.apache.causeway.applib.services.iactn.PropertyEdit;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -57,15 +58,15 @@ implements
             final @NonNull FacetHolder facetHolder,
             final @NonNull InteractionInitiatedBy interactionInitiatedBy,
             final @NonNull InteractionHead head,
-            final @NonNull ManagedObject newValueAdapter,
             // property specifics
             final @NonNull OneToOneAssociation owningProperty,
             final @NonNull PropertyOrCollectionAccessorFacet getterFacet,
             final @NonNull PropertyClearFacet clearFacet,
             final @NonNull PropertySetterOrClearFacetForDomainEventAbstract propertySetterOrClearFacetForDomainEventAbstract) {
+        val emptyValueAdapter = ManagedObject.empty(owningProperty.getElementType());
         return new PropertyExecutor(owningProperty.getMetaModelContext(), facetHolder,
                 ExecutionVariant.CLEAR, interactionInitiatedBy, head,
-                owningProperty, newValueAdapter, getterFacet, null, clearFacet,
+                owningProperty, emptyValueAdapter, getterFacet, null, clearFacet,
                 propertySetterOrClearFacetForDomainEventAbstract);
     }
 
@@ -101,6 +102,7 @@ implements
 
     @Getter
     private final @NonNull OneToOneAssociation owningProperty;
+    @Getter
     private final @NonNull ManagedObject newValueAdapter;
 
     // -- REFACTOR ...
@@ -135,7 +137,7 @@ implements
                         owningProperty, head.getOwner(), newValueAdapterMutatable, head);
         currentExecution.setDto(propertyEditDto);
 
-        //XXX no sure if we the call to currentExecution.setDto(propertyEditDto) above is even required if o post-able
+        //XXX no sure if we the call to currentExecution.setDto(propertyEditDto) above is even required if not post-able
         if(!isPostable()) {
             // don't emit domain events
             executeClearOrSetWithoutEvents();
@@ -149,7 +151,7 @@ implements
         val propertyDomainEvent =
                 getDomainEventHelper().postEventForProperty(
                         AbstractDomainEvent.Phase.EXECUTING,
-                        uncheckedCast(propertySetterOrClearFacetForDomainEventAbstract.getEventType()), null,
+                        getEventType(), null,
                         propertySetterOrClearFacetForDomainEventAbstract.getFacetHolder(), head,
                         oldValuePojo, newValuePojo);
 
@@ -173,7 +175,7 @@ implements
             // ... post the executed event
             getDomainEventHelper().postEventForProperty(
                     AbstractDomainEvent.Phase.EXECUTED,
-                    uncheckedCast(propertySetterOrClearFacetForDomainEventAbstract.getEventType()),
+                    getEventType(),
                     uncheckedCast(propertyDomainEvent),
                     propertySetterOrClearFacetForDomainEventAbstract.getFacetHolder(), head,
                     oldValuePojo, actualNewValue);
@@ -203,6 +205,12 @@ implements
         } else {
             throw _Exceptions.unmatchedCase("framework bug");
         }
+    }
+
+    // -- HELPER
+
+    private final <S, T> Class<? extends PropertyDomainEvent<S, T>> getEventType() {
+        return uncheckedCast(propertySetterOrClearFacetForDomainEventAbstract.getEventType());
     }
 
 }

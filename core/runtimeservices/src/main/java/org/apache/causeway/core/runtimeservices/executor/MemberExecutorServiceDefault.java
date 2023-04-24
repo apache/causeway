@@ -42,11 +42,11 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.execution.ActionExecutor;
 import org.apache.causeway.core.metamodel.execution.InteractionInternal;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 import org.apache.causeway.core.metamodel.execution.PropertyExecutor;
@@ -116,24 +116,32 @@ implements MemberExecutorService {
 
     @Override
     public ManagedObject invokeAction(
-            final @NonNull ObjectAction owningAction,
-            final @NonNull InteractionHead head,
-            final @NonNull Can<ManagedObject> argumentAdapters,
-            final @NonNull InteractionInitiatedBy interactionInitiatedBy,
-            final @NonNull MethodFacade methodFacade,
-            final @NonNull ActionExecutorFactory actionExecutorFactory,
-            final @NonNull FacetHolder facetHolder) {
+            final @NonNull ActionExecutor actionExecutor) {
 
-        _Assert.assertEquals(owningAction.getParameterCount(), argumentAdapters.size(),
-                "action's parameter count and provided argument count must match");
+        val executionResult = actionExecutor.getInteractionInitiatedBy().isPassThrough()
+                ? Try.call(()->
+                    invokeActionInternally(actionExecutor))
+                : getTransactionService().callWithinCurrentTransactionElseCreateNew(()->
+                    invokeActionInternally(actionExecutor));
 
-        // guard against malformed initialArgs
-        argumentAdapters.forEach(arg->{if(!ManagedObjects.isSpecified(arg)) {
-            throw _Exceptions.illegalArgument("arguments must be specified for action %s", owningAction);
-        }});
+        return executionResult
+                .valueAsNullableElseFail();
+    }
+
+    private ManagedObject invokeActionInternally(
+            final ActionExecutor actionExecutor) {
+
+        final ObjectAction owningAction = actionExecutor.getOwningAction();
+        final InteractionHead head = actionExecutor.getHead();
+        final Can<ManagedObject> argumentAdapters = actionExecutor.getArguments();
+        final InteractionInitiatedBy interactionInitiatedBy = actionExecutor.getInteractionInitiatedBy();
+        //            final MethodFacade methodFacade,
+        //            final ActionExecutorFactory actionExecutorFactory,
+        final FacetHolder facetHolder = actionExecutor.getFacetHolder();
+
 
         if(interactionInitiatedBy.isPassThrough()) {
-            val resultPojo = invokeMethodPassThrough(methodFacade, head, argumentAdapters);
+            val resultPojo = invokeMethodPassThrough(actionExecutor.getMethod(), head, argumentAdapters);
             return facetHolder.getObjectManager().adapt(resultPojo);
         }
 
@@ -156,10 +164,9 @@ implements MemberExecutorService {
 
         val actionInvocation = new ActionInvocation(
                         interaction, actionId, targetPojo, argumentPojos);
-        val memberExecutor = actionExecutorFactory.createExecutor(owningAction, head, argumentAdapters);
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
-        interaction.execute(memberExecutor, actionInvocation, clockService, metricsService(), commandPublisherProvider.get(), command);
+        interaction.execute(actionExecutor, actionInvocation, clockService, metricsService(), commandPublisherProvider.get(), command);
 
         // handle any exceptions
         val priorExecution = interaction.getPriorExecutionOrThrowIfAnyException(actionInvocation);
@@ -200,29 +207,26 @@ implements MemberExecutorService {
 
     @Override
     public ManagedObject setOrClearProperty(
-            final @NonNull PropertyExecutor propertyExecutor,
-            final @NonNull ManagedObject newValueAdapter) {
+            final @NonNull PropertyExecutor propertyExecutor) {
 
-        return getTransactionService()
-                .callWithinCurrentTransactionElseCreateNew(() ->
-                    setOrClearPropertyInternally(propertyExecutor, newValueAdapter)
-                )
-                .ifFailureFail()
-                .getValue().orElse(null);
+        val executionResult = propertyExecutor.getInteractionInitiatedBy().isPassThrough()
+                ? Try.call(()->
+                    setOrClearPropertyInternally(propertyExecutor))
+                : getTransactionService()
+                    .callWithinCurrentTransactionElseCreateNew(() ->
+                        setOrClearPropertyInternally(propertyExecutor));
+
+        return executionResult
+                .valueAsNullableElseFail();
     }
 
     private ManagedObject setOrClearPropertyInternally(
-            final @NonNull PropertyExecutor propertyExecutor,
-            final @NonNull ManagedObject newValueAdapter) {
+            final @NonNull PropertyExecutor propertyExecutor) {
 
         final InteractionHead head = propertyExecutor.getHead();
 
         val domainObject = head.getTarget();
 
-//FIXME[CAUSEWAY-3409] still required?
-//        if(!executionVariant.hasCorrespondingFacet(this)) {
-//            return domainObject;
-//        }
         if(propertyExecutor.getInteractionInitiatedBy().isPassThrough()) {
             /* directly access property setter to prevent triggering of domain events
              * or change tracking, eg. when called in the context of serialization */
@@ -240,13 +244,13 @@ implements MemberExecutorService {
 
         prepareCommandForPublishing(command, head, owningProperty, propertyExecutor.getFacetHolder());
 
-        val xrayHandle = _Xray.enterPropertyEdit(interactionLayerTracker, interaction, owningProperty, head, newValueAdapter);
+        val xrayHandle = _Xray.enterPropertyEdit(interactionLayerTracker, interaction, owningProperty, head, propertyExecutor.getNewValueAdapter());
 
         val propertyId = owningProperty.getFeatureIdentifier();
 
         val targetManagedObject = head.getTarget();
         val target = MmUnwrapUtils.single(targetManagedObject);
-        val argValue = MmUnwrapUtils.single(newValueAdapter);
+        val argValue = MmUnwrapUtils.single(propertyExecutor.getNewValueAdapter());
 
         val propertyEdit = new PropertyEdit(interaction, propertyId, target, argValue);
 

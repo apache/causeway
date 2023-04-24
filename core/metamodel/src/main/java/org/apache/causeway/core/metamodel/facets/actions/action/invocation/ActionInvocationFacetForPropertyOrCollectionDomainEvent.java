@@ -82,6 +82,19 @@ extends ActionInvocationFacetAbstract {
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         //TODO[CAUSEWAY-3409] not sure how to report this hybrid kind of facet
+        /*
+         *  <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForPropertyOrCollectionDomainEvent">
+            <mml:attr name="declaringType" value="org.apache.causeway.extensions.pdfjs.metamodel.domains.mixin.SomeViewModel_pdf"/>
+            <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.ActionDomainEvent.Default"/>
+            <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
+            <mml:attr name="facet" value="ActionInvocationFacetForPropertyOrCollectionDomainEvent"/>
+            <mml:attr name="intent.prop" value="EXECUTE"/>
+            <mml:attr name="isPostable" value="true"/>
+            <mml:attr name="methods" value="public org.apache.causeway.applib.value.Blob org.apache.causeway.extensions.pdfjs.metamodel.domains.mixin.SomeViewModel_pdf.prop()"/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:attr name="returnType" value="org.apache.causeway.applib.value.Blob"/>
+          </mml:facet>
+         */
     }
 
 }
