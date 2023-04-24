@@ -144,12 +144,10 @@ public class PropertyLayoutMenu {
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-ruler-horizontal", describedAs = "Length of text fields")
     public PropertyLayoutTypicalLengthPage typicalLength(){
-        val vm = new PropertyLayoutTypicalLengthPage();
-        vm.setPropertyUsingAnnotation("abcdefghij");
-        vm.setPropertyUsingLayout("abcdefghij");
-        vm.setPropertyUsingMetaAnnotation("abcdefghij");
-        vm.setPropertyUsingMetaAnnotationButOverridden("abcdefghij");
-        return vm;
+        val page = new PropertyLayoutTypicalLengthPage();
+        page.setName("abcdefghij");
+        page.setNotes("abcdefghij");
+        return page;
     }
 
 

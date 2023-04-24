@@ -18,30 +18,36 @@
  */
 package demoapp.dom.domain.properties.PropertyLayout.typicalLength;
 
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.Optionality;
+import org.apache.causeway.applib.annotation.Parameter;
+import org.apache.causeway.applib.annotation.ParameterLayout;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
-//tag::class[]
-@Property()
-@TypicalLengthMetaAnnotation            // <.>
-@PropertyLayout(
-    describedAs =
-        "@TypicalLengthMetaAnnotation",
-    fieldSetId = "meta-annotated", sequence = "2"
-)
+@Action(semantics = SemanticsOf.IDEMPOTENT)
+@ActionLayout(associateWith = "name", sequence = "1")
 @RequiredArgsConstructor
-public class PropertyLayoutTypicalLengthPage_mixinPropertyWithMetaAnnotation {
-    // ...
-//end::class[]
+public class PropertyLayoutTypicalLengthPage_updateName {
 
     private final PropertyLayoutTypicalLengthPage page;
 
-    public String prop() {
-        return page.getPropertyUsingAnnotation();
+//tag::annotation[]
+    @MemberSupport public PropertyLayoutTypicalLengthPage act(
+            @Parameter(optionality = Optionality.OPTIONAL)
+            @ParameterLayout(
+                typicalLength = 10                                 // <.>
+            )
+            final String name) {
+        page.setName(name);
+        return page;
+    }
+//end::annotation[]
+    @MemberSupport public String default0Act() {
+        return page.getName();
     }
 
-//tag::class[]
 }
-//end::class[]
