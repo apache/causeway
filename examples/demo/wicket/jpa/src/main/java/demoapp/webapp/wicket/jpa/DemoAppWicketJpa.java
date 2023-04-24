@@ -18,6 +18,7 @@
  */
 package demoapp.webapp.wicket.jpa;
 
+import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.viewer.wicket.applib.CausewayModuleViewerWicketApplibMixins;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -69,6 +70,9 @@ import demoapp.webapp.wicket.common.ui.DemoAppWicketCommon;
 
     // Custom Demo UI (Wicket Viewer)
     DemoAppWicketCommon.class,
+
+    // bypassing sycurity for kroviz development
+    CausewayModuleSecurityBypass.class,
 
     // Persistence/Converters (JPA)
     CausewayModuleValAsciidocPersistenceJpa.class,

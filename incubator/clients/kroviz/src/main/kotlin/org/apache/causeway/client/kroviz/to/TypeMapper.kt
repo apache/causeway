@@ -37,7 +37,7 @@ enum class ValueType(val type: String) {
     SHELL("Shell"),
     SVG_MAPPED("Map"),
     SVG_INLINE("Inline"),
-    VEGA("Vega"),
+    CANVAS("Canvas"),
 }
 
 class TypeMapper {
@@ -68,6 +68,7 @@ class TypeMapper {
             XmlHelper.isXml(contentStr) -> ValueType.HTML.type
             contentStr.startsWith(":Notice:") -> ValueType.HTML.type
             contentStr.startsWith("link:") -> ValueType.HTML.type
+            contentStr.contains("vega.github.io/schema") -> ValueType.CANVAS.type
             else -> ValueType.TEXT.type
         }
     }
@@ -89,7 +90,7 @@ class TypeMapper {
             ValueType.SLIDER.type -> return ValueType.SLIDER
             ValueType.SVG_MAPPED.type -> return ValueType.SVG_MAPPED
             ValueType.SVG_INLINE.type -> return ValueType.SVG_INLINE
-            ValueType.VEGA.type -> return ValueType.VEGA
+            ValueType.CANVAS.type -> return ValueType.CANVAS
             else -> {
                 return ValueType.TEXT
             }

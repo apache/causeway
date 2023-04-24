@@ -18,16 +18,12 @@
  */
 package org.apache.causeway.client.kroviz.utils.js
 
-object ShowDown {
-    fun convertMarkDown2Html(text: String): dynamic {
-        //TODO content.replace(":Notice:", "")
-        return js(
-            """
-                  var showdown  = require('showdown'),
-                  converter = new showdown.Converter(),
-                  html = converter.makeHtml(text);
-                  return html;
-               """
-        )
+@JsModule("vega")
+@JsNonModule
+external object Vega {
+    fun parse(spec: dynamic): dynamic
+    class View(spec: dynamic, options: dynamic) {
+        fun runAsync()
     }
+
 }

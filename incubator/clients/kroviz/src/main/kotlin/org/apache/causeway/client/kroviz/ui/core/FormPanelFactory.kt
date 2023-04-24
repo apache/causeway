@@ -32,10 +32,7 @@ import io.kvision.form.text.Text
 import io.kvision.form.text.TextArea
 import io.kvision.form.time.DateTime
 import io.kvision.form.time.dateTime
-import io.kvision.html.Button
-import io.kvision.html.Div
-import io.kvision.html.Iframe
-import io.kvision.html.Image
+import io.kvision.html.*
 import io.kvision.panel.VPanel
 import io.kvision.panel.vPanel
 import io.kvision.utils.auto
@@ -74,8 +71,8 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
                     ValueType.SVG_INLINE -> add(createInline(fi))
                     ValueType.SVG_MAPPED -> add(createSvgMap(fi))
                     ValueType.BUTTON -> add(createButton(fi))
-                    ValueType.VEGA -> {
-                        TODO("implement VEGA")
+                    ValueType.CANVAS -> add(createCanvas(fi))
+                    else -> {
                     }
                 }
             }
@@ -242,6 +239,16 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
             add(iframe)
         }
         item.addCssClass("container")
+        return item
+    }
+
+    private fun createCanvas(fi: FormItem): VPanel {
+        val item = VPanel {
+            val vega = fi.content as String
+            val canvas = Canvas()
+
+            add(canvas)
+        }
         return item
     }
 
