@@ -14200,17 +14200,7 @@
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForPropertyOrCollectionDomainEvent">
-                        <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport_property1"/>
-                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.ActionDomainEvent.Default"/>
-                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="ActionInvocationFacetForPropertyOrCollectionDomainEvent"/>
-                        <mml:attr name="intent.prop" value="EXECUTE"/>
-                        <mml:attr name="isPostable" value="true"/>
-                        <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperMemberSupport_property1.prop()"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="returnType" value="java.lang.String"/>
-                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForPropertyOrCollectionDomainEvent"/>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet">
                         <mml:attr name="contributing" value="AS_ASSOCIATION"/>
                         <mml:attr name="facet" value="PropertyAnnotationFacetFactory.2"/>
@@ -14340,17 +14330,7 @@
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForPropertyOrCollectionDomainEvent">
-                        <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport_property2"/>
-                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.ActionDomainEvent.Default"/>
-                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="ActionInvocationFacetForPropertyOrCollectionDomainEvent"/>
-                        <mml:attr name="intent.prop" value="EXECUTE"/>
-                        <mml:attr name="isPostable" value="true"/>
-                        <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperMemberSupport_property2.prop()"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="returnType" value="java.lang.String"/>
-                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForPropertyOrCollectionDomainEvent"/>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet">
                         <mml:attr name="contributing" value="AS_ASSOCIATION"/>
                         <mml:attr name="facet" value="PropertyAnnotationFacetFactory.2"/>
@@ -14480,17 +14460,7 @@
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForPropertyOrCollectionDomainEvent">
-                        <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport_property3"/>
-                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.ActionDomainEvent.Default"/>
-                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="ActionInvocationFacetForPropertyOrCollectionDomainEvent"/>
-                        <mml:attr name="intent.prop" value="EXECUTE"/>
-                        <mml:attr name="isPostable" value="true"/>
-                        <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperMemberSupport_property3.prop()"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="returnType" value="java.lang.String"/>
-                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForPropertyOrCollectionDomainEvent"/>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet">
                         <mml:attr name="contributing" value="AS_ASSOCIATION"/>
                         <mml:attr name="facet" value="PropertyAnnotationFacetFactory.2"/>
@@ -14594,17 +14564,7 @@
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForPropertyOrCollectionDomainEvent">
-                        <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport_collection1"/>
-                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.ActionDomainEvent.Default"/>
-                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="ActionInvocationFacetForPropertyOrCollectionDomainEvent"/>
-                        <mml:attr name="intent.coll" value="EXECUTE"/>
-                        <mml:attr name="isPostable" value="true"/>
-                        <mml:attr name="methods" value="public java.util.List org.apache.causeway.testdomain.model.good.ProperMemberSupport_collection1.coll()"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="returnType" value="java.util.List"/>
-                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForPropertyOrCollectionDomainEvent"/>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet">
                         <mml:attr name="contributing" value="AS_ASSOCIATION"/>
                         <mml:attr name="facet" value="CollectionAnnotationFacetFactory.2"/>
@@ -14725,17 +14685,7 @@
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForPropertyOrCollectionDomainEvent">
-                        <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport_collection2"/>
-                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.ActionDomainEvent.Default"/>
-                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="ActionInvocationFacetForPropertyOrCollectionDomainEvent"/>
-                        <mml:attr name="intent.coll" value="EXECUTE"/>
-                        <mml:attr name="isPostable" value="true"/>
-                        <mml:attr name="methods" value="public java.util.List org.apache.causeway.testdomain.model.good.ProperMemberSupport_collection2.coll()"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="returnType" value="java.util.List"/>
-                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForPropertyOrCollectionDomainEvent"/>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet">
                         <mml:attr name="contributing" value="AS_ASSOCIATION"/>
                         <mml:attr name="facet" value="CollectionAnnotationFacetFactory.2"/>
@@ -14856,17 +14806,7 @@
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForPropertyOrCollectionDomainEvent">
-                        <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport_collection3"/>
-                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.ActionDomainEvent.Default"/>
-                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="ActionInvocationFacetForPropertyOrCollectionDomainEvent"/>
-                        <mml:attr name="intent.coll" value="EXECUTE"/>
-                        <mml:attr name="isPostable" value="true"/>
-                        <mml:attr name="methods" value="public java.util.List org.apache.causeway.testdomain.model.good.ProperMemberSupport_collection3.coll()"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="returnType" value="java.util.List"/>
-                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForPropertyOrCollectionDomainEvent"/>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet">
                         <mml:attr name="contributing" value="AS_ASSOCIATION"/>
                         <mml:attr name="facet" value="CollectionAnnotationFacetFactory.2"/>
@@ -22753,17 +22693,7 @@
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForPropertyOrCollectionDomainEvent">
-                        <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport_collection1"/>
-                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.ActionDomainEvent.Default"/>
-                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="ActionInvocationFacetForPropertyOrCollectionDomainEvent"/>
-                        <mml:attr name="intent.coll" value="EXECUTE"/>
-                        <mml:attr name="isPostable" value="true"/>
-                        <mml:attr name="methods" value="public java.util.List org.apache.causeway.testdomain.model.good.ProperMemberSupport_collection1.coll()"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="returnType" value="java.util.List"/>
-                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForPropertyOrCollectionDomainEvent"/>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet">
                         <mml:attr name="contributing" value="AS_ASSOCIATION"/>
                         <mml:attr name="facet" value="CollectionAnnotationFacetFactory.2"/>
@@ -22976,17 +22906,7 @@
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForPropertyOrCollectionDomainEvent">
-                        <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport_collection2"/>
-                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.ActionDomainEvent.Default"/>
-                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="ActionInvocationFacetForPropertyOrCollectionDomainEvent"/>
-                        <mml:attr name="intent.coll" value="EXECUTE"/>
-                        <mml:attr name="isPostable" value="true"/>
-                        <mml:attr name="methods" value="public java.util.List org.apache.causeway.testdomain.model.good.ProperMemberSupport_collection2.coll()"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="returnType" value="java.util.List"/>
-                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForPropertyOrCollectionDomainEvent"/>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet">
                         <mml:attr name="contributing" value="AS_ASSOCIATION"/>
                         <mml:attr name="facet" value="CollectionAnnotationFacetFactory.2"/>
@@ -23199,17 +23119,7 @@
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForPropertyOrCollectionDomainEvent">
-                        <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport_collection3"/>
-                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.ActionDomainEvent.Default"/>
-                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="ActionInvocationFacetForPropertyOrCollectionDomainEvent"/>
-                        <mml:attr name="intent.coll" value="EXECUTE"/>
-                        <mml:attr name="isPostable" value="true"/>
-                        <mml:attr name="methods" value="public java.util.List org.apache.causeway.testdomain.model.good.ProperMemberSupport_collection3.coll()"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="returnType" value="java.util.List"/>
-                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForPropertyOrCollectionDomainEvent"/>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet">
                         <mml:attr name="contributing" value="AS_ASSOCIATION"/>
                         <mml:attr name="facet" value="CollectionAnnotationFacetFactory.2"/>
@@ -23394,17 +23304,7 @@
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForPropertyOrCollectionDomainEvent">
-                        <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport_property1"/>
-                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.ActionDomainEvent.Default"/>
-                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="ActionInvocationFacetForPropertyOrCollectionDomainEvent"/>
-                        <mml:attr name="intent.prop" value="EXECUTE"/>
-                        <mml:attr name="isPostable" value="true"/>
-                        <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperMemberSupport_property1.prop()"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="returnType" value="java.lang.String"/>
-                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForPropertyOrCollectionDomainEvent"/>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet">
                         <mml:attr name="contributing" value="AS_ASSOCIATION"/>
                         <mml:attr name="facet" value="PropertyAnnotationFacetFactory.2"/>
@@ -23626,17 +23526,7 @@
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForPropertyOrCollectionDomainEvent">
-                        <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport_property2"/>
-                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.ActionDomainEvent.Default"/>
-                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="ActionInvocationFacetForPropertyOrCollectionDomainEvent"/>
-                        <mml:attr name="intent.prop" value="EXECUTE"/>
-                        <mml:attr name="isPostable" value="true"/>
-                        <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperMemberSupport_property2.prop()"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="returnType" value="java.lang.String"/>
-                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForPropertyOrCollectionDomainEvent"/>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet">
                         <mml:attr name="contributing" value="AS_ASSOCIATION"/>
                         <mml:attr name="facet" value="PropertyAnnotationFacetFactory.2"/>
@@ -23858,17 +23748,7 @@
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForPropertyOrCollectionDomainEvent">
-                        <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupport_property3"/>
-                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.ActionDomainEvent.Default"/>
-                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="ActionInvocationFacetForPropertyOrCollectionDomainEvent"/>
-                        <mml:attr name="intent.prop" value="EXECUTE"/>
-                        <mml:attr name="isPostable" value="true"/>
-                        <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperMemberSupport_property3.prop()"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="returnType" value="java.lang.String"/>
-                    </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForPropertyOrCollectionDomainEvent"/>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet">
                         <mml:attr name="contributing" value="AS_ASSOCIATION"/>
                         <mml:attr name="facet" value="PropertyAnnotationFacetFactory.2"/>

@@ -127,12 +127,11 @@ extends FacetFactoryAbstract {
                  */
                 isAction
                     ? new ActionInvocationFacetForActionDomainEvent(
-                        actionDomainEventFacet,
-                        actionMethod, typeSpec, returnSpec, holder)
-                    //TODO[CAUSEWAY-3409] if we are in a mixed-in prop/coll situation, the prop/coll event-type must be used instead
+                            actionDomainEventFacet,
+                            actionMethod, typeSpec, returnSpec, holder)
+                    // when in a mixed-in prop/coll situation, the prop/coll event-type must be used instead
                     : new ActionInvocationFacetForPropertyOrCollectionDomainEvent(
-                                    actionDomainEventFacet,
-                                    actionMethod, typeSpec, returnSpec, holder));
+                            actionMethod, typeSpec, returnSpec, holder));
         } finally {
             processMethodContext.removeMethod(actionMethod.asMethodForIntrospection());
         }

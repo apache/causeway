@@ -16,8 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.properties.property.modify;
+package org.apache.causeway.core.metamodel.execution;
 
-class Utils {
-    private Utils(){}
+//TODO[CAUSEWAY-3409] still subject of refactoring
+public enum ExecutionVariant {
+    CLEAR,
+    SET,
+    INVOKE;
+
+    public boolean isClear() { return this == CLEAR; }
+    public boolean isSet() { return this == SET; }
+    public boolean isInvoke() { return this == INVOKE; }
+
 }

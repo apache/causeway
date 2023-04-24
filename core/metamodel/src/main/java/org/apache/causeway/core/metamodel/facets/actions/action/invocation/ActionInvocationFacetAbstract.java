@@ -45,6 +45,11 @@ implements ActionInvocationFacet, ImperativeFacet {
     }
 
     @Override
+    public final Intent getIntent() {
+        return Intent.EXECUTE;
+    }
+
+    @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         ImperativeFacet.visitAttributes(this, visitor);

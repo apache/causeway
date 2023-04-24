@@ -55,7 +55,9 @@ import lombok.SneakyThrows;
 import lombok.val;
 
 /**
- * Handles both, regular and mixed-in actions.
+ * Handles both, regular and mixed-in actions,
+ * but not mix-in properties nor mix-in collections.
+ * (that's for the sibling facet {@link ActionInvocationFacetForPropertyOrCollectionDomainEvent})
  */
 public class ActionInvocationFacetForActionDomainEvent
 extends ActionInvocationFacetAbstract {
@@ -79,11 +81,6 @@ extends ActionInvocationFacetAbstract {
         this.returnType = returnType;
         this.serviceRegistry = getServiceRegistry();
         this.domainEventHelper = DomainEventHelper.ofServiceRegistry(serviceRegistry);
-    }
-
-    @Override
-    public Intent getIntent() {
-        return Intent.EXECUTE;
     }
 
     @Override

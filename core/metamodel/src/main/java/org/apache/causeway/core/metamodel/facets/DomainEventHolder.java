@@ -41,12 +41,20 @@ public interface DomainEventHolder<T> {
      */
     boolean isPostable();
 
+    // -- FACTORIES
+
+    static <X> DomainEventHolder<X> empty() {
+        return new DomainEventHolderEager<>(null, null, false);
+    }
+
     static <X> DomainEventHolder<X> eager(
             final Class<? extends X> eventType,
             final EventTypeOrigin eventTypeOrigin,
             final boolean postable) {
         return new DomainEventHolderEager<>(eventType, eventTypeOrigin, postable);
     }
+
+    // -- IMPLEMENTATIONS
 
     @Getter @AllArgsConstructor
     static class DomainEventHolderEager<T> implements DomainEventHolder<T> {

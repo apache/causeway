@@ -25,9 +25,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
-import org.apache.causeway.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
-import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -52,9 +49,10 @@ import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.execution.InteractionInternal;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
+import org.apache.causeway.core.metamodel.execution.PropertyExecutor;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
 import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertySetterOrClearFacetForDomainEventAbstract.EditingVariant;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
@@ -65,11 +63,14 @@ import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
 import org.apache.causeway.core.metamodel.services.ixn.InteractionDtoFactory;
+import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.causeway.core.metamodel.services.publishing.ExecutionPublisher;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.schema.ixn.v2.ActionInvocationDto;
+
+import static org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet.isPublishingEnabled;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -77,8 +78,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
-
-import static org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet.isPublishingEnabled;
 
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".MemberExecutorServiceDefault")
@@ -199,24 +198,47 @@ implements MemberExecutorService {
         return result;
     }
 
-
     @Override
     public ManagedObject setOrClearProperty(
-            final @NonNull OneToOneAssociation owningProperty,
-            final @NonNull InteractionHead head,
-            final @NonNull ManagedObject newValueAdapter,
-            final @NonNull InteractionInitiatedBy interactionInitiatedBy,
-            final @NonNull PropertyExecutorFactory propertyExecutorFactory,
-            final @NonNull FacetHolder facetHolder,
-            final @NonNull EditingVariant editingVariant) {
+            final @NonNull PropertyExecutor propertyExecutor,
+            final @NonNull ManagedObject newValueAdapter) {
+
+        return getTransactionService()
+                .callWithinCurrentTransactionElseCreateNew(() ->
+                    setOrClearPropertyInternally(propertyExecutor, newValueAdapter)
+                )
+                .ifFailureFail()
+                .getValue().orElse(null);
+    }
+
+    private ManagedObject setOrClearPropertyInternally(
+            final @NonNull PropertyExecutor propertyExecutor,
+            final @NonNull ManagedObject newValueAdapter) {
+
+        final InteractionHead head = propertyExecutor.getHead();
+
+        val domainObject = head.getTarget();
+
+//FIXME[CAUSEWAY-3409] still required?
+//        if(!executionVariant.hasCorrespondingFacet(this)) {
+//            return domainObject;
+//        }
+        if(propertyExecutor.getInteractionInitiatedBy().isPassThrough()) {
+            /* directly access property setter to prevent triggering of domain events
+             * or change tracking, eg. when called in the context of serialization */
+            propertyExecutor.executeClearOrSetWithoutEvents();
+            return domainObject;
+        }
 
         val interaction = getInteractionElseFail();
         val command = interaction.getCommand();
         if( command==null ) {
-            return head.getTarget();
+            return domainObject;
         }
 
-        prepareCommandForPublishing(command, head, owningProperty, facetHolder);
+        val owningProperty = propertyExecutor.getOwningProperty();
+
+        prepareCommandForPublishing(command, head, owningProperty, propertyExecutor.getFacetHolder());
 
         val xrayHandle = _Xray.enterPropertyEdit(interactionLayerTracker, interaction, owningProperty, head, newValueAdapter);
 
@@ -227,12 +249,10 @@ implements MemberExecutorService {
         val argValue = MmUnwrapUtils.single(newValueAdapter);
 
         val propertyEdit = new PropertyEdit(interaction, propertyId, target, argValue);
-        val executor = propertyExecutorFactory
-                .createExecutor(owningProperty, head, newValueAdapter,
-                        interactionInitiatedBy, editingVariant);
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
-        val targetPojo = interaction.execute(executor, propertyEdit, clockService, metricsService(), commandPublisherProvider.get(), command);
+        val targetPojo = interaction.execute(propertyExecutor, propertyEdit, clockService, metricsService(),
+                commandPublisherProvider.get(), command);
 
         // handle any exceptions
         final Execution<?, ?> priorExecution = interaction.getPriorExecution();
@@ -247,7 +267,7 @@ implements MemberExecutorService {
         }
 
         // publish (if not a contributed association, query-only mixin)
-        val publishedPropertyFacet = facetHolder.getFacet(ExecutionPublishingFacet.class);
+        val publishedPropertyFacet = propertyExecutor.getFacetHolder().getFacet(ExecutionPublishingFacet.class);
         if (publishedPropertyFacet != null) {
             executionPublisher().publishPropertyEdit(priorExecution);
         }
@@ -336,7 +356,6 @@ implements MemberExecutorService {
         }
 
         commandPublisherProvider.get().ready(command);
-
     }
 
 }

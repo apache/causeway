@@ -33,7 +33,6 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.i18n.TranslationService;
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
@@ -41,6 +40,7 @@ import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel._testing.MethodRemover_forTesting;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
@@ -125,9 +125,7 @@ implements HasMetaModelContext {
     @Getter(onMethod_ = {@Override})
     private MetaModelContext metaModelContext;
 
-    private TranslationService mockTranslationService;
-    private InteractionService mockInteractionService;
-    private final InteractionContext iaContext = InteractionContextFactory.testing();
+
     private MethodRemover_forTesting methodRemover;
 
     /**
@@ -141,14 +139,18 @@ implements HasMetaModelContext {
     @BeforeEach
     protected void setUpAll() {
 
-        mockTranslationService = Mockito.mock(TranslationService.class);
-        mockInteractionService = Mockito.mock(InteractionService.class);
+        val mockTranslationService = Mockito.mock(TranslationService.class);
+        val mockInteractionService = Mockito.mock(InteractionService.class);
+        val mockMemberExecutorService = Mockito.mock(MemberExecutorService.class);
+
+        val iaContext = InteractionContextFactory.testing();
 
         methodRemover = new MethodRemover_forTesting();
 
         metaModelContext = setUpMmc(MetaModelContext_forTesting.builder()
                 .translationService(mockTranslationService)
                 .interactionService(mockInteractionService)
+                .memberExecutor(mockMemberExecutorService)
                 .valueSemantic(new IntValueSemantics()));
 
         Mockito.when(mockInteractionService.currentInteractionContext()).thenReturn(Optional.of(iaContext));
