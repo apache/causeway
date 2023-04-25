@@ -21,8 +21,9 @@ package demoapp.dom.domain.collections.CollectionLayout.sortedBy;
 import java.util.Comparator;
 import java.util.Objects;
 
-import demoapp.dom.domain._entities.DemoEntity;
 import lombok.val;
+
+import demoapp.dom.domain._entities.DemoEntity;
 
 public class CollectionLayoutSortedByComparator
 implements Comparator<DemoEntity> {

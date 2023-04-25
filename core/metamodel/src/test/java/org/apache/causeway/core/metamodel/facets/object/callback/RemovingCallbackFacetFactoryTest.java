@@ -18,38 +18,38 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.callback;
 
+import org.junit.jupiter.api.Test;
+
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.CallbackMethod;
 import org.apache.causeway.core.metamodel.facets.object.callbacks.RemovingCallbackFacet;
 
-public class RemovingCallbackFacetFactoryTest
+class RemovingCallbackFacetFactoryTest
 extends CallbackFacetFactoryTestAbstract {
 
-    public void testRemovingLifecycleMethodPickedUpOn() {
+    @Test
+    void removingLifecycleMethodPickedUpOn() {
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
-            public void removing() {
-            }
+            public void removing() {}
         }
         assertPicksUp(1, facetFactory, Customer.class, CallbackMethod.REMOVING, RemovingCallbackFacet.class);
     }
 
-    public void testDeletingLifecycleMethodPickedUpOn() {
+    @Test
+    void deletingLifecycleMethodPickedUpOn() {
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
-            public void deleting() {
-            }
+            public void deleting() {}
         }
         assertPicksUp(1, facetFactory, Customer.class, CallbackMethod.REMOVING, RemovingCallbackFacet.class);
     }
 
-    public void testRemovingAndDeletingLifecycleMethodPickedUpOn() {
+    @Test
+    void removingAndDeletingLifecycleMethodPickedUpOn() {
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
-            public void removing() {
-            }
-            @SuppressWarnings("unused")
-            public void deleting() {
-            }
+            public void removing() {}
+            public void deleting() {}
         }
         assertPicksUp(2, facetFactory, Customer.class, CallbackMethod.REMOVING, RemovingCallbackFacet.class);
     }

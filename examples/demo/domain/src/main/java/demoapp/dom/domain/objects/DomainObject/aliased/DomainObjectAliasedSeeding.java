@@ -31,7 +31,7 @@ extends SeedServiceAbstract {
 
     @Inject
     public DomainObjectAliasedSeeding(
-            final ValueHolderRepository<String, ? extends DomainObjectAliased> entities) {
+            ValueHolderRepository<String, ? extends DomainObjectAliased> entities) {
         super(entities);
     }
 

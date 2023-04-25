@@ -18,10 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainobject.domainevents;
 
+import java.util.Optional;
+
 import org.apache.causeway.applib.events.domain.ActionDomainEvent;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.SingleClassValueFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
 
 /**
@@ -29,23 +31,24 @@ import org.apache.causeway.core.metamodel.facets.actions.action.invocation.Actio
  * for any actions as a fallback/default.
  */
 public class ActionDomainEventDefaultFacetForDomainObjectAnnotation
-extends SingleClassValueFacetAbstract {
+extends DomainEventFacetAbstract<ActionDomainEvent<?>> {
 
-
-    private final Class<? extends ActionDomainEvent<?>> eventType;
-    public Class<? extends ActionDomainEvent<?>> getEventType() {
-        return eventType;
+    public static Optional<ActionDomainEventDefaultFacetForDomainObjectAnnotation> create(
+            final Class<? extends ActionDomainEvent<?>> domainEvent,
+            final FacetHolder holder) {
+        return domainEvent != ActionDomainEvent.Default.class
+                ? Optional.of(new ActionDomainEventDefaultFacetForDomainObjectAnnotation(domainEvent, holder))
+                : Optional.empty();
     }
 
     private static Class<? extends Facet> type() {
         return ActionDomainEventDefaultFacetForDomainObjectAnnotation.class;
     }
 
-    public ActionDomainEventDefaultFacetForDomainObjectAnnotation(
-            final FacetHolder holder,
-            final Class<? extends ActionDomainEvent<?>> value) {
-        super(type(), holder, value);
-        this.eventType = value;
+    private ActionDomainEventDefaultFacetForDomainObjectAnnotation(
+            final Class<? extends ActionDomainEvent<?>> value,
+            final FacetHolder holder) {
+        super(type(), value, EventTypeOrigin.ANNOTATED_OBJECT, holder);
     }
 
 }

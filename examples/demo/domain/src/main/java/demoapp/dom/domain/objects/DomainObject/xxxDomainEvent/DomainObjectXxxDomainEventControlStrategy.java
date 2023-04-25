@@ -18,14 +18,13 @@
  */
 package demoapp.dom.domain.objects.DomainObject.xxxDomainEvent;
 
-import lombok.val;
-
 import java.util.List;
 
 import org.apache.causeway.applib.events.domain.AbstractDomainEvent;
-import org.apache.causeway.applib.events.domain.ActionDomainEvent;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
+
+import lombok.val;
 
 // tag::class[]
 enum DomainObjectXxxDomainEventControlStrategy {

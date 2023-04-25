@@ -18,13 +18,14 @@
  */
 package demoapp.dom.domain.progmodel.objects.embedded.embedded.jpa;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.PromptStyle;
-import org.springframework.context.annotation.Profile;
+
+import lombok.RequiredArgsConstructor;
 
 @Profile("demo-jpa")
 // tag::class[]

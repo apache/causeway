@@ -14,7 +14,7 @@ Most commonly the domain event to emit is specified at the member level, using l
 But as a fallback the `domainEvent` can also be at the class level using link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/DomainObject.html#actiondomainevent[@DomainObject#actionDomainEvent].
 
 
-=== How this demo works
+== How this demo works
 
 This page object has a single (editable) property, `text`, an action to update it, and a collection.
 None of these domain members are annotated with a domainEvent directly, but their containing page object _is_ annotated.

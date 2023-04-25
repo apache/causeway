@@ -11,7 +11,7 @@ This can be invaluable for auditing and performance monitoring.
 It is also possible to register additional subscribers for your own purposes.
 
 
-=== How this demo works
+== How this demo works
 
 The collection on the left hand side shows a list of entities.
 Those entities have two properties, `name` and `description`.
@@ -22,7 +22,7 @@ Navigate into the entities and edit the properties.
 Invoking the published property will result in a command representing the property edit invocation from being persisted; these are listed in the collection at the bottom of the entity.
 
 
-=== Related configuration property
+== Related configuration property
 
 To set the global default for `commandPublishing`, use this configuration property:
 

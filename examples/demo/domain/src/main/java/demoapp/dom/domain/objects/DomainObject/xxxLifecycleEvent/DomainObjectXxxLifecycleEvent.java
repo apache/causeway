@@ -18,14 +18,20 @@
  */
 package demoapp.dom.domain.objects.DomainObject.xxxLifecycleEvent;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom._infra.values.ValueHolder;
-import demoapp.dom.domain.objects.DomainObject.xxxLifecycleEvent.jpa.DomainObjectXxxLifecycleEventJpa;
-
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.events.lifecycle.*;
+import org.apache.causeway.applib.events.lifecycle.ObjectCreatedEvent;
+import org.apache.causeway.applib.events.lifecycle.ObjectLoadedEvent;
+import org.apache.causeway.applib.events.lifecycle.ObjectPersistedEvent;
+import org.apache.causeway.applib.events.lifecycle.ObjectPersistingEvent;
+import org.apache.causeway.applib.events.lifecycle.ObjectRemovingEvent;
+import org.apache.causeway.applib.events.lifecycle.ObjectUpdatedEvent;
+import org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolder;
+import demoapp.dom.domain.objects.DomainObject.xxxLifecycleEvent.jpa.DomainObjectXxxLifecycleEventJpa;
 
 @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 //tag::class[]

@@ -18,14 +18,14 @@
  */
 package demoapp.dom.domain.properties.PropertyLayout.hidden.jpa;
 
-import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.properties.PropertyLayout.hidden.PropertyLayoutHidden;
-import demoapp.dom.domain.properties.PropertyLayout.hidden.PropertyLayoutHiddenRepository;
-
 import java.util.List;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+
+import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.domain.properties.PropertyLayout.hidden.PropertyLayoutHidden;
+import demoapp.dom.domain.properties.PropertyLayout.hidden.PropertyLayoutHiddenRepository;
 
 @Profile("demo-jpa")
 @Service

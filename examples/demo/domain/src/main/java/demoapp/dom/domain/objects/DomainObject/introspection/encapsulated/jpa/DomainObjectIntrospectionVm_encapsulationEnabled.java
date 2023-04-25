@@ -18,18 +18,20 @@
  */
 package demoapp.dom.domain.objects.DomainObject.introspection.encapsulated.jpa;
 
-import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.objects.DomainObject.introspection.DomainObjectIntrospectionPage;
-import lombok.RequiredArgsConstructor;
-
 import java.util.List;
 
 import jakarta.inject.Inject;
 
+import org.springframework.context.annotation.Profile;
+
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
-import org.springframework.context.annotation.Profile;
+
+import lombok.RequiredArgsConstructor;
+
+import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.domain.objects.DomainObject.introspection.DomainObjectIntrospectionPage;
 
 @Profile("demo-jpa")
 @Collection()

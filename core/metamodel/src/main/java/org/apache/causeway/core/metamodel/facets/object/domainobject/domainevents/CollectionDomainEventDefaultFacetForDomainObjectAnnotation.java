@@ -18,10 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainobject.domainevents;
 
+import java.util.Optional;
+
 import org.apache.causeway.applib.events.domain.CollectionDomainEvent;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.SingleClassValueFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
 
 /**
@@ -29,22 +31,24 @@ import org.apache.causeway.core.metamodel.facets.actions.action.invocation.Actio
  * for any actions as a fallback/default.
  */
 public class CollectionDomainEventDefaultFacetForDomainObjectAnnotation
-extends SingleClassValueFacetAbstract {
+extends DomainEventFacetAbstract<CollectionDomainEvent<?, ?>> {
 
-    private final Class<? extends CollectionDomainEvent<?, ?>> eventType;
-    public Class<? extends CollectionDomainEvent<?, ?>> getEventType() {
-        return eventType;
+    public static Optional<CollectionDomainEventDefaultFacetForDomainObjectAnnotation> create(
+            final Class<? extends CollectionDomainEvent<?,?>> domainEvent,
+            final FacetHolder holder) {
+        return domainEvent != CollectionDomainEvent.Default.class
+                ? Optional.of(new CollectionDomainEventDefaultFacetForDomainObjectAnnotation(domainEvent, holder))
+                : Optional.empty();
     }
 
     private static Class<? extends Facet> type() {
         return CollectionDomainEventDefaultFacetForDomainObjectAnnotation.class;
     }
 
-    public CollectionDomainEventDefaultFacetForDomainObjectAnnotation(
-            final FacetHolder holder,
-            final Class<? extends CollectionDomainEvent<?,?>> value) {
-        super(type(), holder, value);
-        this.eventType = value;
+    private CollectionDomainEventDefaultFacetForDomainObjectAnnotation(
+            final Class<? extends CollectionDomainEvent<?, ?>> value,
+            final FacetHolder holder) {
+        super(type(), value, EventTypeOrigin.ANNOTATED_OBJECT, holder);
     }
 
 }

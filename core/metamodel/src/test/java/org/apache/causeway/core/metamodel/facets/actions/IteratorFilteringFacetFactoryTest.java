@@ -21,67 +21,66 @@ package org.apache.causeway.core.metamodel.facets.actions;
 import java.lang.reflect.Method;
 import java.util.Iterator;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.object.ignore.javalang.IteratorFilteringFacetFactory;
 
-class IteratorFilteringFacetFactoryTest extends AbstractFacetFactoryTest {
+class IteratorFilteringFacetFactoryTest
+extends FacetFactoryTestAbstract {
 
     private IteratorFilteringFacetFactory facetFactory;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        facetFactory = new IteratorFilteringFacetFactory(metaModelContext);
+    @BeforeEach
+    protected void setUp() {
+        facetFactory = new IteratorFilteringFacetFactory(getMetaModelContext());
     }
 
-    @Override
-    protected void tearDown() throws Exception {
+    @AfterEach
+    protected void tearDown() {
         facetFactory = null;
-        super.tearDown();
     }
 
-    public void testRequestsRemoverToRemoveIteratorMethods() {
+    @Test
+    void testRequestsRemoverToRemoveIteratorMethods() {
         class Customer {
             @SuppressWarnings("unused")
-            public void someAction() {
-            }
+            public void someAction() {}
         }
-        facetFactory.process(ProcessClassContext
-                .forTesting(Customer.class, methodRemover, facetedMethod));
-
-        assertEquals(1, methodRemover.getRemoveMethodArgsCalls().size());
+        objectScenario(Customer.class, (processClassContext, facetHolder) -> {
+            //when
+            facetFactory.process(processClassContext);
+            //then
+            assertEquals(1, methodRemover.getRemoveMethodArgsCalls().size());
+        });
     }
 
-    public void testNoIteratorMethodFiltered() {
+    @Test
+    void testNoIteratorMethodFiltered() {
         class Customer {
             @SuppressWarnings("unused")
-            public void someAction() {
-            }
+            public void someAction() {}
         }
-        final Method actionMethod = findMethod(Customer.class, "someAction");
-
+        final Method actionMethod = findMethodExactOrFail(Customer.class, "someAction");
         assertFalse(facetFactory.recognizes(actionMethod));
     }
 
-    public void xxxtestIterableIteratorMethodFiltered() {
+    @Test @Disabled("seems iterator() is not recognized")
+    void testIterableIteratorMethodFiltered() {
         class Customer implements Iterable<Customer> {
             @SuppressWarnings("unused")
-            public void someAction() {
-            }
-
+            public void someAction() {}
             @Override
-            public Iterator<Customer> iterator() {
-                return null;
-            }
+            public Iterator<Customer> iterator() { return null; }
         }
-        final Method iteratorMethod = findMethod(Customer.class, "iterator");
-
+        final Method iteratorMethod = findMethodExactOrFail(Customer.class, "iterator");
         assertTrue(facetFactory.recognizes(iteratorMethod));
     }
 

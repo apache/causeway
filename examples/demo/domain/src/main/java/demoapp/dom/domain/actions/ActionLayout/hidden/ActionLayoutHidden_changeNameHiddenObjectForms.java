@@ -19,12 +19,11 @@
  */
 package demoapp.dom.domain.actions.ActionLayout.hidden;
 
-import lombok.RequiredArgsConstructor;
-
-import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Where;
+
+import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @ActionLayout(hidden = Where.OBJECT_FORMS)                    // <.>

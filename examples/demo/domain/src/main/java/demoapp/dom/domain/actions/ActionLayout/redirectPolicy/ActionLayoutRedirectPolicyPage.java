@@ -18,10 +18,13 @@
  */
 package demoapp.dom.domain.actions.ActionLayout.redirectPolicy;
 
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -29,41 +32,53 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.Optionality;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Redirect;
+import org.apache.causeway.applib.annotation.Repainting;
+import org.apache.causeway.applib.services.clock.ClockService;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
-//tag::class[]
-@DomainObject(
-        nature=Nature.VIEW_MODEL)
-@Named("demo.ActionLayoutRedirectPolicyVm")
+import lombok.Getter;
+import lombok.Setter;
+import lombok.SneakyThrows;
+
+@DomainObject(nature=Nature.VIEW_MODEL)
+@Named("demo.ActionLayoutRedirectPolicyPage")
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-//tag::act[]
+//tag::class[]
+// ...
 public class ActionLayoutRedirectPolicyPage
-//end::act[]
+//end::class[]
 implements HasAsciiDocDescription
-//tag::act[]
+//tag::class[]
 {
-//end::act[]
+    @Property(optionality = Optionality.OPTIONAL)
+    @XmlElement(required = false)
+    @Getter @Setter
+    private Integer count;
+
+    @SneakyThrows
+    @Property
+    @PropertyLayout(repainting = Repainting.NO_REPAINT) // <.>
+    public String getCurrentTime() {
+        Thread.sleep(1000);
+        return clockService.getClock().nowAsLocalDateTime().toString();
+    }
+
+    // ...
+//end::class[]
 
     @ObjectSupport public String title() {
         return "@ActionLayout#redirectPolicy";
     }
 
-//tag::act[]
-    @Action
-    @ActionLayout(
-            redirectPolicy = Redirect.ONLY_IF_DIFFERS // <.>
-//end::act[]
-            ,describedAs = "@ActionLayout(redirectPolicy = Redirect.ONLY_IF_DIFFERS)"
-//tag::act[]
-            )
-    public ActionLayoutRedirectPolicyPage act(final String arg) {
-        return this;
-    }
+//tag::class[]
 
+    @Inject @XmlTransient private ClockService clockService;
 }
-//end::act[]
 //end::class[]

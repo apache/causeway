@@ -32,18 +32,17 @@ import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.Setter;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.ActionLayoutPositionVm")
-@DomainObject(
-        nature=Nature.VIEW_MODEL
-)
+@Named("demo.ActionLayoutPositionPage")
+@DomainObject(nature=Nature.VIEW_MODEL)
 public class ActionLayoutPositionPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
@@ -52,15 +51,14 @@ public class ActionLayoutPositionPage implements HasAsciiDocDescription {
 
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "annotated", sequence = "1")
-    @XmlElement(required = false)
+    @XmlElement
     @Getter @Setter
-    private String readOnlyProperty1;
+    private String name;
 
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(fieldSetId = "layout", sequence = "1")
-    @XmlElement(required = false)
+    @XmlElement
     @Getter @Setter
-    private String readOnlyProperty2;
+    private String notes;
 
 }
 //end::class[]

@@ -41,11 +41,12 @@ import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.wrapper.control.AsyncControl;
 
-import demoapp.dom.services.core.wrapperFactory.WrapperFactoryEntity;
-import demoapp.dom.services.core.wrapperFactory.WrapperFactoryEntity_updatePropertyAsyncMixin;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
+
+import demoapp.dom.services.core.wrapperFactory.WrapperFactoryEntity;
+import demoapp.dom.services.core.wrapperFactory.WrapperFactoryEntity_updatePropertyAsyncMixin;
 
 @Profile("demo-jdo")
 //tag::class[]

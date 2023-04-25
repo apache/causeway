@@ -24,7 +24,6 @@ import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.events.domain.CollectionDomainEvent;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -33,15 +32,10 @@ import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet.Contributing;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetDefault;
-import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetForCollectionAnnotation;
+import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacet;
 import org.apache.causeway.core.metamodel.facets.collections.collection.typeof.TypeOfFacetForCollectionAnnotation;
-import org.apache.causeway.core.metamodel.facets.object.domainobject.domainevents.CollectionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorForAmbiguousMixinAnnotations;
-import org.apache.causeway.core.metamodel.util.EventUtil;
 
 import lombok.val;
 
@@ -105,42 +99,9 @@ extends FacetFactoryAbstract {
         //
 
         // search for @Collection(domainEvent=...)
-        val collectionDomainEventFacet = collectionIfAny
-        .map(Collection::domainEvent)
-        .filter(domainEvent -> domainEvent != CollectionDomainEvent.Default.class)
-        .map(domainEvent ->
-                (CollectionDomainEventFacetAbstract)
-                new CollectionDomainEventFacetForCollectionAnnotation(
-                        defaultFromDomainObjectIfRequired(typeSpec, domainEvent), holder))
-        .orElse(
-                new CollectionDomainEventFacetDefault(
-                        defaultFromDomainObjectIfRequired(typeSpec, CollectionDomainEvent.Default.class), holder));
-        if(!CollectionDomainEvent.Noop.class.isAssignableFrom(collectionDomainEventFacet.getEventType())) {
-            addFacet(collectionDomainEventFacet);
-        }
-
-        if(EventUtil.eventTypeIsPostable(
-                collectionDomainEventFacet.getEventType(),
-                CollectionDomainEvent.Noop.class,
-                CollectionDomainEvent.Default.class,
-                getConfiguration().getApplib().getAnnotation().getCollection().getDomainEvent().isPostForDefault()
-                )) {
-            addFacet(collectionDomainEventFacet);
-        }
-
-    }
-
-    public static Class<? extends CollectionDomainEvent<?,?>> defaultFromDomainObjectIfRequired(
-            final ObjectSpecification typeSpec,
-            final Class<? extends CollectionDomainEvent<?,?>> collectionDomainEventType) {
-        if (collectionDomainEventType == CollectionDomainEvent.Default.class) {
-            final CollectionDomainEventDefaultFacetForDomainObjectAnnotation typeFromDomainObject =
-                    typeSpec.getFacet(CollectionDomainEventDefaultFacetForDomainObjectAnnotation.class);
-            if (typeFromDomainObject != null) {
-                return typeFromDomainObject.getEventType();
-            }
-        }
-        return collectionDomainEventType;
+        addFacetIfPresent(
+            CollectionDomainEventFacet
+                .createRegular(collectionIfAny, typeSpec, getterFacet, holder));
     }
 
     void processTypeOf(final ProcessMethodContext processMethodContext, final Optional<Collection> collectionIfAny) {
@@ -166,6 +127,5 @@ extends FacetFactoryAbstract {
 
         });
     }
-
 
 }

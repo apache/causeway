@@ -31,8 +31,11 @@
 	<name>Apache Causeway Viewer - RO (Viewer)</name>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.causeway.viewer.restfulobjects.viewer</jar-plugin.automaticModuleName>
+        <jar-plugin.automaticModuleName>org.apache.causeway.viewer.restfulobjects.viewer
+        </jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/causeway/viewer/restfulobjects/viewer</git-plugin.propertiesDir>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
     <dependencies>

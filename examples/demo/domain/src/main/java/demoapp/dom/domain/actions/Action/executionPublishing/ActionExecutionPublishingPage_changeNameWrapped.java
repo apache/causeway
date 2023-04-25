@@ -18,8 +18,6 @@
  */
 package demoapp.dom.domain.actions.Action.executionPublishing;
 
-import lombok.RequiredArgsConstructor;
-
 import java.util.List;
 
 import jakarta.inject.Inject;
@@ -28,6 +26,8 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
+
+import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(executionPublishing = Publishing.ENABLED)                                                             // <.>

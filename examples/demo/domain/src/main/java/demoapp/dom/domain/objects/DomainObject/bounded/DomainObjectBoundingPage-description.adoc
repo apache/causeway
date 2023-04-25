@@ -6,7 +6,7 @@ One means to do that is to write a supporting `choices` or `autoComplete` method
 If the entity is "reference data" with a small, fixed set of instances, then a better option is to declare that the entity is bounded (as in "has a bounded set of instances").
 This is done using link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/DomainObject.html#bounding[@DomainObject#bounding] attribute.
 
-=== How this demo works
+== How this demo works
 
 The collection on the left shows a set of entity instances, of type `DomainObjectBounding`.
 

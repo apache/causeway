@@ -7,7 +7,7 @@ One reason to use this annotation is if the default name (derived from the physi
 Note that this does _not_ affect the bookmark, for example as used in the URL; for that, specify the logical type name using `@javax.inject.Named`.
 
 
-=== How this demo works
+== How this demo works
 
 The collection on the left hand side shows a set of objects that have been annotated with `named`.
 Hover over the icons of the objects in the collection, and the name will be shown in the (top half of) each tooltip.

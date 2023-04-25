@@ -2,13 +2,13 @@
 
 To help the end-user navigate a page, it can sometimes be helpful to decorate individual actions within icons so that their purpose is more obvious.
 
-The link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/ActionLayout.html#cssclassfa[@ActionLayout#cssClassFa] element allows this to be done by specifying the _Font Awesome_ CSS class (or classes) with which to decorate an action.
+The link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/ActionLayout.html#cssclassfa[@ActionLayout#cssClassFa] attribute allows this to be done by specifying the _Font Awesome_ CSS class (or classes) with which to decorate an action.
 This is used for whether the action is rendered as a button or as a menu item.
 
-=== How this demo works
+== How this demo works
 
 This page has a `name` property and two actions, both of which can be used to update that property.
-The two actions have different fa icons
+The two actions have different fa icons.
 
 * `updateNameWithFaIconOnTheLeft`
 +
@@ -31,7 +31,7 @@ include::ActionLayoutCssClassFaPage.java[tags=updateNameWithFaIconOnTheRight]
 in effect the icon is rendered on the _right_ of the action button
 
 
-==== Related configuration property
+== Related configuration property
 
 Rather than styling each action individually, it's possible to use a configuration property which defines styles globally.
 
@@ -64,7 +64,7 @@ causeway:
 ----
 
 
-=== .layout.xml
+== .layout.xml
 
 Instead of using `@ActionLayout#cssClassFa`, it is also possible to specify the fa icon class using the `<action id="..." cssClass="...">` in the link:https://causeway.apache.org/userguide/2.0.0-RC1/fun/ui.html#by-example[.layout.xml] file.
 

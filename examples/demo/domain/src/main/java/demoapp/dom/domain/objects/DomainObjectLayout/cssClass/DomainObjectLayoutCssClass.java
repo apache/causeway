@@ -18,14 +18,10 @@
  */
 package demoapp.dom.domain.objects.DomainObjectLayout.cssClass;
 
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
+
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
-import demoapp.dom.domain.objects.DomainObjectLayout.bookmarking.DomainObjectLayoutBookmarkingChild;
-
-import java.util.Set;
-
-import org.apache.causeway.applib.annotation.BookmarkPolicy;
-import org.apache.causeway.applib.annotation.DomainObjectLayout;
 
 //tag::class[]
 @DomainObjectLayout(

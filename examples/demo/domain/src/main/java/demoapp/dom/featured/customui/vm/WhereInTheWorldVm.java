@@ -30,12 +30,13 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Title;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.featured.customui.latlng.Latitude;
 import demoapp.dom.featured.customui.latlng.Longitude;
 import demoapp.dom.featured.customui.latlng.Zoom;
-import lombok.Getter;
-import lombok.Setter;
 
 //tag::class[]
 @XmlRootElement(name = "demo.CustomUiVm")

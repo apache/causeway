@@ -48,7 +48,7 @@ class DomainEventHelperTest_newPropertyDomainEvent_forClear {
         LocalDate oldValue = LocalDate.of(2013,4,1);
         LocalDate newValue = null;
 
-        Utils.domainEventHelper();
+        _Utils.domainEventHelper();
         final PropertyDomainEvent<Object, Object> ev =
                 DomainEventHelper.newPropertyDomainEvent(PropertyDomainEvent.Default.class, identifier, sdo, oldValue, newValue);
         assertSame(ev.getSource(), sdo);
@@ -67,7 +67,7 @@ class DomainEventHelperTest_newPropertyDomainEvent_forClear {
         LocalDate oldValue = LocalDate.of(2013,4,1);
         LocalDate newValue = null;
 
-        Utils.domainEventHelper();
+        _Utils.domainEventHelper();
         final PropertyDomainEvent<SomeDomainObject, LocalDate> ev =
                 DomainEventHelper.newPropertyDomainEvent(SomeDatePropertyChangedDomainEvent.class, identifier, sdo, oldValue, newValue);
         assertSame(ev.getSource(), sdo);

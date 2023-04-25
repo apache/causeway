@@ -34,7 +34,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.5</version>
+        <version>3.0.6</version>
         <relativePath/>
     </parent>
     <groupId>org.apache.causeway</groupId>
@@ -83,12 +83,12 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 		<maven-surefire-plugin.version>3.0.0</maven-surefire-plugin.version>
 		<maven-surefire-report-plugin.version>3.0.0</maven-surefire-report-plugin.version>
         <!--  for surefire, failsafe and surefire-report  -->
-        <maven.plugin.tools.version>3.8.1</maven.plugin.tools.version>
+        <maven.plugin.tools.version>3.8.2</maven.plugin.tools.version>
 
         <!-- LIBRARY DEPENDENCIES -->
 
         <archunit.version>1.0.1</archunit.version>
-        <asciidoctorj.version>2.5.7</asciidoctorj.version>
+        <asciidoctorj.version>2.5.8</asciidoctorj.version>
         <asm.version>9.5</asm.version> <!-- keep in sync with org.eclipse.persistence:org.eclipse.persistence.asm -->
         <approvaltests.version>18.6.0</approvaltests.version>
 
@@ -181,7 +181,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <simpleslackapi.version>1.4.0</simpleslackapi.version>
         <slf4j-api.version>2.0.7</slf4j-api.version> <!-- also provided by spring-boot-starter-logging, needed to solve convergence issues -->
         <snakeyaml.version>2.0</snakeyaml.version>
-        <spring-boot.version>3.0.5</spring-boot.version>
+        <spring-boot.version>3.0.6</spring-boot.version>
         <summernote.version>0.8.20</summernote.version>
         <surefire-plugin.argLine>-Xmx384m</surefire-plugin.argLine>
         <swagger-core.version>2.2.9</swagger-core.version>
@@ -1478,7 +1478,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>com.fasterxml.woodstox</groupId>
 				<artifactId>woodstox-core</artifactId>
-				<version>6.5.0</version>
+                <version>6.5.1</version>
 			</dependency>
 			<dependency>
 				<groupId>org.codehaus.woodstox</groupId>
@@ -2263,11 +2263,13 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${maven-compiler-plugin.version}</version>
                     <configuration>
-						<showDeprecation>true</showDeprecation>
-						<showWarnings>true</showWarnings>
-						<parameters>true</parameters>
-						<!-- Java compliance level, to be overridden with option maven.compiler.release -->
-					</configuration>
+                        <showDeprecation>true</showDeprecation>
+                        <showWarnings>true</showWarnings>
+                        <parameters>true</parameters>
+                        <!-- Java compliance level, to be overridden with option maven.compiler.release -->
+                        <source>17</source>
+                        <target>17</target>
+                    </configuration>
 					<!-- goal:compile binds to phase:compile -->
 					<!-- goal:testCompile binds to phase:test-compile -->
                 </plugin>
@@ -2373,7 +2375,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-project-info-reports-plugin</artifactId>
-                    <version>3.4.2</version>    <!--bumped-->
+                    <version>3.4.3</version>    <!--bumped-->
                     <configuration>
                         <pluginManagementExcludes>
                             <exclude>org.eclipse.m2e:lifecycle-mapping</exclude>

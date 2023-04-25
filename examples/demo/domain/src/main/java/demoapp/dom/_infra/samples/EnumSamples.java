@@ -22,8 +22,9 @@ import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 
-import demoapp.dom.types.Samples;
 import lombok.SneakyThrows;
+
+import demoapp.dom.types.Samples;
 
 @Service
 public class EnumSamples implements Samples<DemoEnum> {

@@ -18,11 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.facets.collections.collection;
 
-import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Optional;
 
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -31,94 +33,82 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature;
 
 class CollectionAnnotationFacetFactoryTest_typeOf
-extends AbstractFacetFactoryTest {
+extends FacetFactoryTestAbstract {
 
     private CollectionAnnotationFacetFactory facetFactory;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        facetFactory = new CollectionAnnotationFacetFactory(metaModelContext);
+    @BeforeEach
+    protected void setUp() {
+        facetFactory = new CollectionAnnotationFacetFactory(getMetaModelContext());
     }
 
-    @Override
-    protected void tearDown() throws Exception {
+    @AfterEach
+    protected void tearDown() {
         facetFactory = null;
-        super.tearDown();
     }
 
-
-    public void testTypeOfFacetInferredForActionWithGenericCollectionReturnType() {
+    @Test
+    void typeOfFacetInferredForActionWithGenericCollectionReturnType() {
         class Order {
         }
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
-            public Collection<Order> someAction() {
-                return null;
-            }
+            public Collection<Order> someAction() { return null;}
         }
-        final Method actionMethod = findMethod(Customer.class, "someAction");
-
-        facetFactory.process(ProcessMethodContext
-                .forTesting(Customer.class, null, actionMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(TypeOfFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof TypeOfFacetFromFeature);
-        final TypeOfFacetFromFeature typeOfFacetInferredFromGenerics = (TypeOfFacetFromFeature) facet;
-        assertEquals(Order.class, typeOfFacetInferredFromGenerics.value().getElementType());
-
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+            //when
+            facetFactory.process(processMethodContext);
+            //then
+            final Facet facet = facetedMethod.getFacet(TypeOfFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof TypeOfFacetFromFeature);
+            final TypeOfFacetFromFeature typeOfFacetInferredFromGenerics = (TypeOfFacetFromFeature) facet;
+            assertEquals(Order.class, typeOfFacetInferredFromGenerics.value().getElementType());
+        });
     }
 
-    public void testTypeOfFacetInferredForCollectionWithGenericCollectionReturnType() {
+    @Test
+    void typeOfFacetInferredForCollectionWithGenericCollectionReturnType() {
         class Order {
         }
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
-            public Collection<Order> getOrders() {
-                return null;
-            }
+            public Collection<Order> getOrders() { return null; }
         }
-
-        final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
-
-        facetFactory.process(ProcessMethodContext
-                .forTesting(Customer.class, null, collectionAccessorMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(TypeOfFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof TypeOfFacetFromFeature);
-        final TypeOfFacetFromFeature typeOfFacetInferredFromGenerics = (TypeOfFacetFromFeature) facet;
-        assertEquals(Order.class, typeOfFacetInferredFromGenerics.value().getElementType());
-
+        collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            facetFactory.process(processMethodContext);
+            // then
+            final Facet facet = facetedMethod.getFacet(TypeOfFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof TypeOfFacetFromFeature);
+            final TypeOfFacetFromFeature typeOfFacetInferredFromGenerics = (TypeOfFacetFromFeature) facet;
+            assertEquals(Order.class, typeOfFacetInferredFromGenerics.value().getElementType());
+        });
     }
 
-    public void testTypeOfFacetIsInferredForCollectionFromOrderArray() {
+    @Test
+    void typeOfFacetIsInferredForCollectionFromOrderArray() {
         class Order {
         }
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
-            public Order[] getOrders() {
-                return null;
-            }
+            public Order[] getOrders() { return null;}
         }
-        final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
-
-        facetFactory.process(ProcessMethodContext
-                .forTesting(Customer.class, null, collectionAccessorMethod, methodRemover, facetedMethod));
-
-        final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
-        assertNotNull(facet);
-        assertEquals(Order.class, facet.value().getElementType());
-        assertThat(facet.value().getCollectionSemantics(), Matchers.is(Optional.of(CollectionSemantics.ARRAY)));
-
+        collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            facetFactory.process(processMethodContext);
+            // then
+            final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
+            assertNotNull(facet);
+            assertEquals(Order.class, facet.value().getElementType());
+            assertThat(facet.value().getCollectionSemantics(), Matchers.is(Optional.of(CollectionSemantics.ARRAY)));
+        });
     }
-
 
 }

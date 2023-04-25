@@ -19,13 +19,24 @@
 package demoapp.dom.domain.actions.ActionLayout.cssClass;
 
 import jakarta.inject.Named;
-import jakarta.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlType;
 
-import org.apache.causeway.applib.annotation.*;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.Setter;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
 @DomainObject(
@@ -132,6 +143,7 @@ public class ActionLayoutCssClassPage implements HasAsciiDocDescription {
 
 //tag::delete[]
     @Action(semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
+    @ActionLayout()     // <.>
     public Object delete() {
         return this;
     }

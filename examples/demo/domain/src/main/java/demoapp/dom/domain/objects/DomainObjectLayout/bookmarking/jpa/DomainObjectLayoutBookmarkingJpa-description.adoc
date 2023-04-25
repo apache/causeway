@@ -9,7 +9,7 @@ include::../DomainObjectLayoutBookmarking.java[tags=class]
 <.> uses root bookmark policy
 
 
-=== How this demo works
+== How this demo works
 
 Use the "addChildren" action to add some children, and navigate into them.
 

@@ -28,10 +28,11 @@ import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.services.repository.RepositoryService;
 
-import demoapp.dom.types.Samples;
 import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+
+import demoapp.dom.types.Samples;
 
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class ValueHolderRepository<T, E extends ValueHolder<T>> {

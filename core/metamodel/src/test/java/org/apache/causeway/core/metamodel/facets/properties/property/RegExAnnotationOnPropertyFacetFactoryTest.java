@@ -18,11 +18,10 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.property;
 
-import java.lang.reflect.Method;
-
 import jakarta.validation.constraints.Pattern;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -31,24 +30,21 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
-import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.causeway.core.metamodel.facets.properties.property.regex.RegExFacetForPatternAnnotationOnProperty;
 
 import lombok.val;
 
 class RegExAnnotationOnPropertyFacetFactoryTest
-extends AbstractFacetFactoryTest {
+extends FacetFactoryTestAbstract {
 
     private PropertyAnnotationFacetFactory facetFactory;
 
-    @Override
     @BeforeEach
-    public void setUp() throws Exception {
-        super.setUp();
-        facetFactory = new PropertyAnnotationFacetFactory(metaModelContext);
+    protected void setUp() {
+        facetFactory = new PropertyAnnotationFacetFactory(getMetaModelContext());
     }
 
     private void processRegEx(
@@ -57,42 +53,37 @@ extends AbstractFacetFactoryTest {
         facetFactory.processRegEx(processMethodContext, propertyIfAny);
     }
 
-    public void testRegExAnnotationPickedUpOnProperty() {
-
+    @Test
+    void regExAnnotationPickedUpOnProperty() {
         class Customer {
             @Pattern(regexp = "^A.*", flags = { Pattern.Flag.CASE_INSENSITIVE })
-            public String getFirstName() {
-                return null;
-            }
+            public String getFirstName() { return null; }
         }
-        final Method method = findMethod(Customer.class, "getFirstName");
-
-        processRegEx(facetFactory, ProcessMethodContext
-                .forTesting(Customer.class, null, method, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(RegExFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof RegExFacetForPatternAnnotationOnProperty);
-        final RegExFacetForPatternAnnotationOnProperty regExFacet = (RegExFacetForPatternAnnotationOnProperty) facet;
-        assertEquals("^A.*", regExFacet.regexp());
-        assertEquals(2, regExFacet.patternFlags());
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            processRegEx(facetFactory, processMethodContext);
+            // then
+            final Facet facet = facetedMethod.getFacet(RegExFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof RegExFacetForPatternAnnotationOnProperty);
+            final RegExFacetForPatternAnnotationOnProperty regExFacet = (RegExFacetForPatternAnnotationOnProperty) facet;
+            assertEquals("^A.*", regExFacet.regexp());
+            assertEquals(2, regExFacet.patternFlags());
+        });
     }
 
-    public void testRegExAnnotationIgnoredForNonStringsProperty() {
-
+    @Test
+    void regExAnnotationIgnoredForNonStringsProperty() {
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
-            public int getNumberOfOrders() {
-                return 0;
-            }
+            public int getNumberOfOrders() { return 0; }
         }
-        final Method method = findMethod(Customer.class, "getNumberOfOrders");
-
-        processRegEx(facetFactory, ProcessMethodContext
-                .forTesting(Customer.class, null, method, methodRemover, facetedMethod));
-
-        assertNull(facetedMethod.getFacet(RegExFacet.class));
+        propertyScenario(Customer.class, "numberOfOrders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            processRegEx(facetFactory, processMethodContext);
+            // then
+            assertNull(facetedMethod.getFacet(RegExFacet.class));
+        });
     }
-
 
 }

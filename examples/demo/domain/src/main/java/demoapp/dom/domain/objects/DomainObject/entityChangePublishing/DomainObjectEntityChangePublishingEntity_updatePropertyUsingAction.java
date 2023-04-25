@@ -18,13 +18,14 @@
  */
 package demoapp.dom.domain.objects.DomainObject.entityChangePublishing;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import lombok.RequiredArgsConstructor;
-
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+
+import lombok.RequiredArgsConstructor;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
 @Action(

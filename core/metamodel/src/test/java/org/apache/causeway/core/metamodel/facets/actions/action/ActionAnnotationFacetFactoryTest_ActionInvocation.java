@@ -20,6 +20,8 @@ package org.apache.causeway.core.metamodel.facets.actions.action;
 
 import java.lang.reflect.Method;
 
+import org.junit.jupiter.api.BeforeEach;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -28,11 +30,11 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
-import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventAbstract;
+import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEvent;
 import org.apache.causeway.core.metamodel.facets.members.disabled.method.DisableForContextFacet;
 import org.apache.causeway.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethod;
 import org.apache.causeway.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethodFactory;
@@ -45,11 +47,10 @@ import lombok.val;
 
 @SuppressWarnings("unused")
 class ActionAnnotationFacetFactoryTest_ActionInvocation
-extends AbstractFacetFactoryTest {
+extends FacetFactoryTestAbstract {
 
     private ObjectSpecification voidSpec;
     private ObjectSpecification stringSpec;
-    private ObjectSpecification customerSpec;
     private ActionAnnotationFacetFactory facetFactory;
 
     private void processInvocation(
@@ -59,68 +60,68 @@ extends AbstractFacetFactoryTest {
         facetFactory.processInvocation(processMethodContext, actionIfAny);
     }
 
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-        this.facetFactory =  new ActionAnnotationFacetFactory(metaModelContext);
+    @BeforeEach
+    public void setUp() {
 
-        val specLoader = metaModelContext.getSpecificationLoader();
+        this.facetFactory =  new ActionAnnotationFacetFactory(getMetaModelContext());
+
+        val specLoader = getSpecificationLoader();
         voidSpec = specLoader.loadSpecification(void.class);
         stringSpec = specLoader.loadSpecification(java.lang.String.class);
-        customerSpec = specLoader.loadSpecification(Customer.class);
     }
 
     public void testActionInvocationFacetIsInstalledAndMethodRemoved() {
 
         class Customer {
-            public void someAction() {
-            }
+            public void someAction() {}
         }
-        final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        processInvocation(facetFactory, ProcessMethodContext
-                .forTesting(Customer.class, null, actionMethod, methodRemover, facetedMethod));
+        final Method actionMethod = findMethodExactOrFail(Customer.class, "someAction");
 
-        final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof ActionInvocationFacetForDomainEventAbstract);
-        final ActionInvocationFacetForDomainEventAbstract actionInvocationFacetViaMethod = (ActionInvocationFacetForDomainEventAbstract) facet;
-        assertEquals(actionMethod, actionInvocationFacetViaMethod.getMethods().getFirstElseFail());
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+            //when
+            processInvocation(facetFactory, processMethodContext);
 
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(actionMethod));
+            //then
+            final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof ActionInvocationFacetForDomainEvent);
+            final ActionInvocationFacetForDomainEvent actionInvocationFacetViaMethod = (ActionInvocationFacetForDomainEvent) facet;
+            assertEquals(actionMethod, actionInvocationFacetViaMethod.getMethods().getFirstElseFail());
+            assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(actionMethod));
+        });
     }
 
     public void testActionReturnTypeWhenVoid() {
 
         class Customer {
-            public void someAction() {
-            }
+            public void someAction() {}
         }
-        final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        processInvocation(facetFactory, ProcessMethodContext
-                .forTesting(Customer.class, null, actionMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
-        final ActionInvocationFacetForDomainEventAbstract actionInvocationFacetViaMethod = (ActionInvocationFacetForDomainEventAbstract) facet;
-        assertEquals(voidSpec, actionInvocationFacetViaMethod.getReturnType());
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+            //when
+            processInvocation(facetFactory, processMethodContext);
+            //then
+            final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
+            final ActionInvocationFacetForDomainEvent actionInvocationFacetViaMethod = (ActionInvocationFacetForDomainEvent) facet;
+            assertEquals(voidSpec, actionInvocationFacetViaMethod.getReturnType());
+        });
     }
 
     public void testActionReturnTypeWhenNotVoid() {
 
         class Customer {
-            public String someAction() {
-                return null;
-            }
+            public String someAction() { return null; }
         }
-        final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        processInvocation(facetFactory, ProcessMethodContext
-                .forTesting(Customer.class, null, actionMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
-        final ActionInvocationFacetForDomainEventAbstract actionInvocationFacetViaMethod = (ActionInvocationFacetForDomainEventAbstract) facet;
-        assertEquals(stringSpec, actionInvocationFacetViaMethod.getReturnType());
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+            //when
+            processInvocation(facetFactory, processMethodContext);
+            //then
+            final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
+            final ActionInvocationFacetForDomainEvent actionInvocationFacetViaMethod = (ActionInvocationFacetForDomainEvent) facet;
+            assertEquals(stringSpec, actionInvocationFacetViaMethod.getReturnType());
+        });
     }
 
     public void testActionOnType() {
@@ -131,19 +132,19 @@ extends AbstractFacetFactoryTest {
             }
         }
 
-        val customerSpec = metaModelContext.getSpecificationLoader().loadSpecification(LocalCustomer.class);
+        val customerSpec = getSpecificationLoader().loadSpecification(LocalCustomer.class);
 
-        final Method actionMethod = findMethod(LocalCustomer.class, "someAction");
-
-        processInvocation(facetFactory, ProcessMethodContext
-                .forTesting(LocalCustomer.class, null, actionMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
-        final ActionInvocationFacetForDomainEventAbstract actionInvocationFacetViaMethod =
-                (ActionInvocationFacetForDomainEventAbstract) facet;
-        assertEquals(
-                customerSpec,
-                actionInvocationFacetViaMethod.getDeclaringType());
+        actionScenario(LocalCustomer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+            //when
+            processInvocation(facetFactory, processMethodContext);
+            // then
+            final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
+            final ActionInvocationFacetForDomainEvent actionInvocationFacetViaMethod =
+                    (ActionInvocationFacetForDomainEvent) facet;
+            assertEquals(
+                    customerSpec,
+                    actionInvocationFacetViaMethod.getDeclaringType());
+        });
     }
 
     public void testActionsPickedUpFromSuperclass() {
@@ -156,10 +157,10 @@ extends AbstractFacetFactoryTest {
         class CustomerEx extends Customer {
         }
 
-        final Method actionMethod = findMethod(CustomerEx.class, "someAction", new Class[] { int.class, long.class });
+        final Method actionMethod = findMethodExactOrFail(CustomerEx.class, "someAction", new Class[] { int.class, long.class });
 
         final FacetedMethod facetHolderWithParms = FacetedMethod
-                .createForAction(metaModelContext, CustomerEx.class, _MethodFacades.regular(actionMethod));
+                .createForAction(getMetaModelContext(), CustomerEx.class, _MethodFacades.regular(actionMethod));
 
         processInvocation(facetFactory, ProcessMethodContext
                 .forTesting(CustomerEx.class, null, actionMethod, methodRemover, facetHolderWithParms));
@@ -170,18 +171,12 @@ extends AbstractFacetFactoryTest {
 
     public void testActionsPickedUpFromSuperclassButHelpersFromSubClass() {
 
-        val facetFactoryForChoices = new ActionParameterChoicesFacetViaMethodFactory(metaModelContext);
-        val facetFactoryForDisable = new DisableForContextFacetViaMethodFactory(metaModelContext);
+        val facetFactoryForChoices = new ActionParameterChoicesFacetViaMethodFactory(getMetaModelContext());
+        val facetFactoryForDisable = new DisableForContextFacetViaMethodFactory(getMetaModelContext());
 
         class Customer {
-
-            public void someAction(final int x, final long y) {
-            }
-
-
-            public int[] choices0SomeAction() {
-                return new int[0];
-            }
+            public void someAction(final int x, final long y) { }
+            public int[] choices0SomeAction() { return new int[0]; }
         }
 
         class CustomerEx extends Customer {
@@ -189,24 +184,20 @@ extends AbstractFacetFactoryTest {
             public int[] choices0SomeAction() {
                 return new int[0];
             }
-
-
             public long[] choices1SomeAction() {
                 return new long[0];
             }
-
-
             public String disableSomeAction() {
                 return null;
             }
         }
 
-        final Method actionMethod = findMethod(CustomerEx.class, "someAction", new Class[] { int.class, long.class });
-        final Method choices0Method = findMethod(CustomerEx.class, "choices0SomeAction", new Class[] {});
-        final Method choices1Method = findMethod(CustomerEx.class, "choices1SomeAction", new Class[] {});
-        final Method disableMethod = findMethod(CustomerEx.class, "disableSomeAction", new Class[] {});
+        final Method actionMethod = findMethodExactOrFail(CustomerEx.class, "someAction", new Class[] { int.class, long.class });
+        final Method choices0Method = findMethodExactOrFail(CustomerEx.class, "choices0SomeAction", new Class[] {});
+        final Method choices1Method = findMethodExactOrFail(CustomerEx.class, "choices1SomeAction", new Class[] {});
+        final Method disableMethod = findMethodExactOrFail(CustomerEx.class, "disableSomeAction", new Class[] {});
 
-        final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(metaModelContext, CustomerEx.class,
+        final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(getMetaModelContext(), CustomerEx.class,
                 _MethodFacades.regular(actionMethod));
 
         final ProcessMethodContext processMethodContext = ProcessMethodContext

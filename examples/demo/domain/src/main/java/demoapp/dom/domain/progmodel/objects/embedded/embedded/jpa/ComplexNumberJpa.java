@@ -31,7 +31,7 @@ import lombok.val;
 
 // tag::class[]
 //@Entity                                                               // <.>
-@jakarta.persistence.Embeddable                                           // <.>
+@jakarta.persistence.Embeddable                                         // <.>
 @Value                                                                  // <.>
 @lombok.Getter                                                          // <.>
 @lombok.Setter(AccessLevel.PRIVATE)                                     // <.>

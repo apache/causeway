@@ -20,7 +20,7 @@
 #
 #
 
-#
 # requires JDK 18
-#
-jwebserver -d $(pwd)/target/timeline -b ::
+#jwebserver -d $(pwd)/target/timeline -b ::
+
+serve -d target/timeline

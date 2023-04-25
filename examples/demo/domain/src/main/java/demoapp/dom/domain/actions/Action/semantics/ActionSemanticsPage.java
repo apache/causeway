@@ -42,10 +42,11 @@ import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 
 import static org.apache.causeway.applib.services.wrapper.control.SyncControl.control;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @XmlRootElement(name = "root")
 @XmlType

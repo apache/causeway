@@ -19,7 +19,7 @@
 package demoapp.webapp.wicket.jpa;
 
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
-import org.apache.causeway.viewer.wicket.applib.CausewayModuleViewerWicketApplibMixins;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
@@ -40,6 +40,7 @@ import org.apache.causeway.valuetypes.markdown.ui.wkt.CausewayModuleValMarkdownU
 import org.apache.causeway.valuetypes.vega.metamodel.CausewayModuleValVegaMetaModel;
 import org.apache.causeway.valuetypes.vega.persistence.jpa.CausewayModuleValVegaPersistenceJpa;
 import org.apache.causeway.valuetypes.vega.ui.wkt.CausewayModuleValVegaUiWkt;
+import org.apache.causeway.viewer.wicket.applib.CausewayModuleViewerWicketApplibMixins;
 import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 
 import demoapp.web.DemoAppManifestJpa;
@@ -71,7 +72,7 @@ import demoapp.webapp.wicket.common.ui.DemoAppWicketCommon;
     // Custom Demo UI (Wicket Viewer)
     DemoAppWicketCommon.class,
 
-    // bypassing sycurity for kroviz development
+    // bypassing security for kroviz development
     CausewayModuleSecurityBypass.class,
 
     // Persistence/Converters (JPA)

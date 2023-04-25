@@ -32,9 +32,10 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.Setter;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -54,40 +55,10 @@ public class PropertyMustSatisfyPage implements HasAsciiDocDescription {
     @Property(
         mustSatisfy = OfWorkingAgeSpecification.class       // <.>
     )
-    @PropertyLayout(
-        describedAs =
-            "mustSatisfy = OfWorkingAgeSpecification.class",
-        fieldSetId = "annotation", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
-    private Integer customerAgePropertyUsingAnnotation;
+    private Integer customerAge;
 //end::annotation[]
-
-//tag::meta-annotated[]
-    @MustSatisfyOfWorkingAgeMetaAnnotation                     // <.>
-    @Property()
-    @PropertyLayout(
-        describedAs = "@MustSatisfyOfWorkingAgeMetaAnnotation",
-        fieldSetId = "meta-annotated", sequence = "1")
-    @XmlElement(required = true)
-    @Getter @Setter
-    private Integer customerAgePropertyUsingMetaAnnotation;
-//end::meta-annotated[]
-
-//tag::meta-annotated-overridden[]
-    @MustSatisfyOfWorkingAgeMetaAnnotation                     // <.>
-    @Property(
-        mustSatisfy = OfRetirementAgeSpecification.class       // <.>
-    )
-    @PropertyLayout(
-        describedAs =
-            "@MustSatisfyOfWorkingAgeMetaAnnotation " +
-            "@PropertyLayout(mustSatisfy = OfRetirementAgeSpecification.class)",
-        fieldSetId = "meta-annotated-overridden", sequence = "1")
-    @XmlElement(required = true)
-    @Getter @Setter
-    private Integer customerAgePropertyUsingMetaAnnotationButOverridden;
-//end::meta-annotated-overridden[]
 
 }
 //end::class[]

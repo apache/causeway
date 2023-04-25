@@ -18,14 +18,14 @@
  */
 package demoapp.dom.domain.objects.DomainObjectLayout.cssClass.jpa;
 
-import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.objects.DomainObjectLayout.cssClass.DomainObjectLayoutCssClass;
-import demoapp.dom.domain.objects.DomainObjectLayout.cssClass.DomainObjectLayoutCssClassRepository;
-
 import java.util.List;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+
+import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.domain.objects.DomainObjectLayout.cssClass.DomainObjectLayoutCssClass;
+import demoapp.dom.domain.objects.DomainObjectLayout.cssClass.DomainObjectLayoutCssClassRepository;
 
 @Profile("demo-jpa")
 @Service

@@ -34,10 +34,11 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Title;
 import org.apache.causeway.applib.value.LocalResourcePath;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.causeway.localresourcepaths.holder.CausewayLocalResourcePathHolder2;
 import lombok.Getter;
 import lombok.Setter;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.types.causeway.localresourcepaths.holder.CausewayLocalResourcePathHolder2;
 
 //tag::class[]
 @XmlRootElement(name = "root")

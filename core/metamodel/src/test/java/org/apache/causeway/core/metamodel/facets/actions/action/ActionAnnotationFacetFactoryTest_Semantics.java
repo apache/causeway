@@ -45,23 +45,18 @@ extends ActionAnnotationFacetFactoryTest {
 
         class Customer {
             @Action(semantics = SemanticsOf.SAFE)
-            public void someAction() {
-            }
+            public void someAction() {}
         }
 
         // given
-        final Class<?> cls = Customer.class;
-        actionMethod = findMethod(cls, "someAction");
-
-        // when
-        final ProcessMethodContext processMethodContext = ProcessMethodContext
-                .forTesting(cls, null, actionMethod, mockMethodRemover, facetedMethod);
-        processSemantics(facetFactory, processMethodContext);
-
-        // then
-        final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
-        assertNotNull(facet);
-        assertThat(facet.value(), is(SemanticsOf.SAFE));
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            processSemantics(facetFactory, processMethodContext);
+            // then
+            final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
+            assertNotNull(facet);
+            assertThat(facet.value(), is(SemanticsOf.SAFE));
+        });
     }
 
     @Test
@@ -69,23 +64,18 @@ extends ActionAnnotationFacetFactoryTest {
 
         class Customer {
             @Action()
-            public void someAction() {
-            }
+            public void someAction() {}
         }
 
         // given
-        final Class<?> cls = Customer.class;
-        actionMethod = findMethod(cls, "someAction");
-
-        // when
-        final ProcessMethodContext processMethodContext = ProcessMethodContext
-                .forTesting(cls, null, actionMethod, mockMethodRemover, facetedMethod);
-        processSemantics(facetFactory, processMethodContext);
-
-        // then
-        final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
-        assertNotNull(facet);
-        assertThat(facet.value(), is(SemanticsOf.NON_IDEMPOTENT));
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            processSemantics(facetFactory, processMethodContext);
+            // then
+            final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
+            assertNotNull(facet);
+            assertThat(facet.value(), is(SemanticsOf.NON_IDEMPOTENT));
+        });
     }
 
     @Test
@@ -93,23 +83,18 @@ extends ActionAnnotationFacetFactoryTest {
 
         class Customer {
             @SuppressWarnings("unused")
-            public void someAction() {
-            }
+            public void someAction() {}
         }
 
         // given
-        final Class<?> cls = Customer.class;
-        actionMethod = findMethod(cls, "someAction");
-
-        // when
-        final ProcessMethodContext processMethodContext = ProcessMethodContext
-                .forTesting(cls, null, actionMethod, mockMethodRemover, facetedMethod);
-        processSemantics(facetFactory, processMethodContext);
-
-        // then
-        final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
-        assertNotNull(facet);
-        assertThat(facet.value(), is(SemanticsOf.NON_IDEMPOTENT));
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            // when
+            processSemantics(facetFactory, processMethodContext);
+            // then
+            final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
+            assertNotNull(facet);
+            assertThat(facet.value(), is(SemanticsOf.NON_IDEMPOTENT));
+        });
     }
 
 }

@@ -32,9 +32,10 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.Setter;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -50,44 +51,14 @@ public class PropertyMaxLengthPage implements HasAsciiDocDescription {
         return "@Property#maxLength";
     }
 
-//tag::annotation[]
+//tag::name[]
     @Property(
-        maxLength = 10                                  // <.>
+        maxLength = 10                  // <.>
     )
-    @PropertyLayout(
-        describedAs =
-            "@Property(maxLength = 10)",
-        fieldSetId = "annotation", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
-    private String propertyUsingAnnotation;
-//end::annotation[]
-
-//tag::meta-annotated[]
-    @MaxLength10MetaAnnotation                            // <.>
-    @Property()
-    @PropertyLayout(
-        describedAs = "@MaxLength10MetaAnnotation",
-        fieldSetId = "meta-annotated", sequence = "1")
-    @XmlElement(required = true)
-    @Getter @Setter
-    private String propertyUsingMetaAnnotation;
-//end::meta-annotated[]
-
-//tag::meta-annotated-overridden[]
-    @MaxLength10MetaAnnotation                          // <.>
-    @Property(
-        maxLength = 3                                   // <.>
-    )
-    @PropertyLayout(
-        describedAs =
-            "@MaxLength10MetaAnnotation " +
-            "@PropertyLayout(maxLength = 3)",
-        fieldSetId = "meta-annotated-overridden", sequence = "1")
-    @XmlElement(required = true)
-    @Getter @Setter
-    private String propertyUsingMetaAnnotationButOverridden;
-//end::meta-annotated-overridden[]
+    private String name;
+//end::name[]
 
 }
 //end::class[]

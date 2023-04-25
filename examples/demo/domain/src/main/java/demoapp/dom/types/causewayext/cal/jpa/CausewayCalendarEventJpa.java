@@ -37,10 +37,11 @@ import org.apache.causeway.applib.annotation.Title;
 import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
-import demoapp.dom.types.causewayext.cal.persistence.CausewayCalendarEventEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import demoapp.dom.types.causewayext.cal.persistence.CausewayCalendarEventEntity;
 
 @Profile("demo-jpa")
 //tag::class[]

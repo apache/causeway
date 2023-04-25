@@ -18,10 +18,10 @@
  */
 package demoapp.dom.domain.objects.DomainObject.nature.entity;
 
+import org.apache.causeway.applib.annotation.ObjectSupport;
+
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
-
-import org.apache.causeway.applib.annotation.ObjectSupport;
 
 @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 public abstract class DomainObjectNatureEntity

@@ -18,14 +18,17 @@
  */
 package demoapp.dom.domain.objects.DomainObjectLayout.xxxUiEvent;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import lombok.Getter;
-import lombok.Setter;
-
 import jakarta.inject.Named;
-import jakarta.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlType;
 
-import org.apache.causeway.applib.annotation.*;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.ObjectSupport;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
 @XmlRootElement(name = "root")

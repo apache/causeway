@@ -28,9 +28,10 @@ import org.apache.causeway.applib.value.NamedWithMimeType;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.resources._Resources;
 
-import demoapp.dom.types.Samples;
 import lombok.SneakyThrows;
 import lombok.val;
+
+import demoapp.dom.types.Samples;
 
 @Service
 public class CausewayClobsSamples implements Samples<Clob> {

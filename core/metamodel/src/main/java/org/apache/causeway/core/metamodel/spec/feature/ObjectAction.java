@@ -404,7 +404,7 @@ public interface ObjectAction extends ObjectMember {
                 final @NonNull ObjectAction action,
                 final @NonNull InteractionHead head) {
 
-            val mixeeAdapter = head.getMixedIn().orElse(null);
+            val mixeeAdapter = head.getMixee().orElse(null);
 
             if(mixeeAdapter != null) {
                 val mixinSpec = action.getDeclaringType();

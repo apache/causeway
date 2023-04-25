@@ -28,18 +28,18 @@ import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+
 import demoapp.dom._infra.samples.NameSamples;
 import demoapp.dom.domain.actions.Action.choicesFrom.ActionChoicesFromPage;
 import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingPage;
 import demoapp.dom.domain.actions.Action.domainEvent.ActionDomainEventPage;
 import demoapp.dom.domain.actions.Action.executionPublishing.ActionExecutionPublishingPage;
-import demoapp.dom.domain.actions.Action.hidden.ActionHiddenPage;
 import demoapp.dom.domain.actions.Action.restrictTo.ActionRestrictToPage;
 import demoapp.dom.domain.actions.Action.semantics.ActionSemanticsPage;
 import demoapp.dom.domain.actions.Action.typeOf.ActionTypeOfPage;
 import demoapp.dom.domain.actions.Action.typeOf.child.ActionTypeOfChildVm;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @Named("demo.ActionMenu")
 @DomainService(nature=NatureOfService.VIEW)
@@ -71,12 +71,6 @@ public class ActionMenu {
     @ActionLayout(cssClassFa="fa-book", describedAs = "Action invocation events as XML")
     public ActionExecutionPublishingPage executionPublishing(){
         return new ActionExecutionPublishingPage();
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of actions in different contexts")
-    public ActionHiddenPage hidden(){
-        return new ActionHiddenPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)

@@ -1,11 +1,11 @@
 package demoapp.dom.domain.objects.DomainObject.mixinMethod;
 
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Property;
+
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 //tag::class[]
 @DomainObject(mixinMethod = "property")                           // <.>

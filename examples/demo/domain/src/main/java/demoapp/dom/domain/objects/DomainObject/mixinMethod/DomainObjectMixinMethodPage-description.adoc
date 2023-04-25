@@ -13,7 +13,7 @@ In most circumstances there will be little need to use `@DomainObject#mixinMetho
 However, if you prefer some other method names other than the defaults then you can annotate your mixins with this annotation; or define your own annotation (eg `@MyAction`) and meta-annotate it with both `@Action` and `@DomainObject#mixinMethod` as appropriate.
 
 
-=== How this demo works
+== How this demo works
 
 The collection on the left is a mixin to this view model, but (for demonstration purposes) uses `@DomainObject#mixinMethod` to change the default method name from "coll" to "collection":
 

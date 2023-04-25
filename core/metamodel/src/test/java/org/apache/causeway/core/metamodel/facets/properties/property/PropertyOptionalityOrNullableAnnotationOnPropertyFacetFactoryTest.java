@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.property;
 
-import java.lang.reflect.Method;
-
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.lang.Nullable;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -29,9 +29,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
-import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.MandatoryFacetInvertedByNullableAnnotationOnProperty;
@@ -39,14 +38,13 @@ import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.M
 import lombok.val;
 
 class PropertyOptionalityOrNullableAnnotationOnPropertyFacetFactoryTest
-extends AbstractFacetFactoryTest {
+extends FacetFactoryTestAbstract {
 
     private PropertyAnnotationFacetFactory facetFactory;
 
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-        facetFactory = new PropertyAnnotationFacetFactory(metaModelContext);
+    @BeforeEach
+    protected void setUp() {
+        facetFactory = new PropertyAnnotationFacetFactory(getMetaModelContext());
     }
 
     private void processOptional(
@@ -55,72 +53,68 @@ extends AbstractFacetFactoryTest {
         facetFactory.processOptional(processMethodContext, propertyIfAny);
     }
 
-    public void testPropertyAnnotationWithOptionalityPickedUpOnProperty() {
+    @Test
+    void propertyAnnotationWithOptionalityPickedUpOnProperty() {
 
         class Customer {
             @Property(optionality = Optionality.OPTIONAL)
-            public String getFirstName() {
-                return null;
-            }
+            public String getFirstName() { return null;}
         }
-        final Method method = findMethod(Customer.class, "getFirstName");
-
-        processOptional(facetFactory, ProcessMethodContext
-                .forTesting(Customer.class, null, method, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(MandatoryFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof MandatoryFacetForPropertyAnnotation.Optional);
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            //when
+            processOptional(facetFactory, processMethodContext);
+            //then
+            final Facet facet = facetedMethod.getFacet(MandatoryFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof MandatoryFacetForPropertyAnnotation.Optional);
+        });
     }
 
-    public void testPropertyAnnotationIgnoredForPrimitiveOnProperty() {
+    @Test
+    void propertyAnnotationIgnoredForPrimitiveOnProperty() {
 
         class Customer {
             @Property(optionality = Optionality.OPTIONAL)
-            public int getNumberOfOrders() {
-                return 0;
-            }
+            public int getNumberOfOrders() { return 0;}
         }
-        final Method method = findMethod(Customer.class, "getNumberOfOrders");
-
-        processOptional(facetFactory, ProcessMethodContext
-                .forTesting(Customer.class, null, method, methodRemover, facetedMethod));
-
-        assertNotNull(facetedMethod.getFacet(MandatoryFacet.class));
+        propertyScenario(Customer.class, "numberOfOrders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            //when
+            processOptional(facetFactory, processMethodContext);
+            //then
+            assertNotNull(facetedMethod.getFacet(MandatoryFacet.class));
+        });
     }
 
-    public void testNullableAnnotationPickedUpOnProperty() {
+    @Test
+    void nullableAnnotationPickedUpOnProperty() {
 
         class Customer {
             @Nullable
-            public String getFirstName() {
-                return null;
-            }
+            public String getFirstName() { return null; }
         }
-        final Method method = findMethod(Customer.class, "getFirstName");
-
-        processOptional(facetFactory, ProcessMethodContext
-                .forTesting(Customer.class, null, method, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(MandatoryFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof MandatoryFacetInvertedByNullableAnnotationOnProperty);
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            //when
+            processOptional(facetFactory, processMethodContext);
+            //then
+            final Facet facet = facetedMethod.getFacet(MandatoryFacet.class);
+            assertNotNull(facet);
+            assertTrue(facet instanceof MandatoryFacetInvertedByNullableAnnotationOnProperty);
+        });
     }
 
-    public void testNullableAnnotationIgnoredForPrimitiveOnProperty() {
+    @Test
+    void nullableAnnotationIgnoredForPrimitiveOnProperty() {
 
         class Customer {
             @Nullable
-            public int getNumberOfOrders() {
-                return 0;
-            }
+            public int getNumberOfOrders() { return 0; }
         }
-        final Method method = findMethod(Customer.class, "getNumberOfOrders");
-
-        processOptional(facetFactory, ProcessMethodContext
-                .forTesting(Customer.class, null, method, methodRemover, facetedMethod));
-
-        assertNull(facetedMethod.getFacet(MandatoryFacet.class));
+        propertyScenario(Customer.class, "numberOfOrders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+            //when
+            processOptional(facetFactory, processMethodContext);
+            //then
+            assertNull(facetedMethod.getFacet(MandatoryFacet.class));
+        });
     }
 
 }

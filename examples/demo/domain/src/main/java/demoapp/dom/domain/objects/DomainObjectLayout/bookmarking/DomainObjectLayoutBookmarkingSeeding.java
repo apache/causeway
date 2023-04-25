@@ -31,7 +31,7 @@ extends SeedServiceAbstract {
 
     @Inject
     public DomainObjectLayoutBookmarkingSeeding(
-            final ValueHolderRepository<String, ? extends DomainObjectLayoutBookmarking> entities) {
+            ValueHolderRepository<String, ? extends DomainObjectLayoutBookmarking> entities) {
         super(entities);
     }
 

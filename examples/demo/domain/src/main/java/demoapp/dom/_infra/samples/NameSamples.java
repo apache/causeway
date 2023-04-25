@@ -24,8 +24,9 @@ import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 
-import demoapp.dom.types.Samples;
 import lombok.val;
+
+import demoapp.dom.types.Samples;
 
 @Service
 public class NameSamples implements Samples<String> {

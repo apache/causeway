@@ -18,15 +18,26 @@
  */
 package demoapp.dom.domain.objects.DomainObject.introspection.encapsulated.jpa;
 
-import demoapp.dom.domain.objects.DomainObject.introspection.encapsulated.DomainObjectIntrospectionEncapsulated;
+import jakarta.inject.Named;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+import org.springframework.context.annotation.Profile;
+
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Introspection;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
+
 import lombok.NoArgsConstructor;
 
-import jakarta.inject.Named;
-import jakarta.persistence.*;
-
-import org.apache.causeway.applib.annotation.*;
-import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
-import org.springframework.context.annotation.Profile;
+import demoapp.dom.domain.objects.DomainObject.introspection.encapsulated.DomainObjectIntrospectionEncapsulated;
 
 @Profile("demo-jpa")
 @Entity

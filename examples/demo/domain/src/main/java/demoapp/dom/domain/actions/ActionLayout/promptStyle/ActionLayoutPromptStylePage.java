@@ -26,16 +26,16 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.Setter;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -50,41 +50,15 @@ public class ActionLayoutPromptStylePage implements HasAsciiDocDescription {
         return "@ActionLayout#promptStyle";
     }
 
-    @Property(editing = Editing.DISABLED)
-    @PropertyLayout(fieldSetId = "general", sequence = "1")
-    @XmlElement(required = true)
-    @Getter @Setter
-    private String title;
-
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(fieldSetId = "annotated", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
-    private String readOnlyProperty1;
+    private String name;
 
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(
-            describedAs = "has associated action with promptStyle=INLINE_AS_IF_EDIT",
-            fieldSetId = "annotated",
-            sequence = "2")
     @XmlElement(required = false)
     @Getter @Setter
-    private String readOnlyProperty2;
-
-    @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(fieldSetId = "layout", sequence = "1")
-    @XmlElement(required = false)
-    @Getter @Setter
-    private String readOnlyProperty3;
-
-    @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(
-            describedAs = "has associated action with promptStyle=INLINE_AS_IF_EDIT",
-            fieldSetId = "layout",
-            sequence = "2")
-    @XmlElement(required = false)
-    @Getter @Setter
-    private String readOnlyProperty4;
+    private String notes;
 
 }
 //end::class[]

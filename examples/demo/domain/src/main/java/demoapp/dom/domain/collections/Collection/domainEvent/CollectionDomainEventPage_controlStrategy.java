@@ -18,11 +18,11 @@
  */
 package demoapp.dom.domain.collections.Collection.domainEvent;
 
-import lombok.RequiredArgsConstructor;
-
 import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Property;
+
+import lombok.RequiredArgsConstructor;
 
 
 //tag::class[]

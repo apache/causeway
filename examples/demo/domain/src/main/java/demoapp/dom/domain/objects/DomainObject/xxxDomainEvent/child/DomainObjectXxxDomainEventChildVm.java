@@ -18,15 +18,23 @@
  */
 package demoapp.dom.domain.objects.DomainObject.xxxDomainEvent.child;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import jakarta.inject.Named;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlType;
+
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.Title;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import jakarta.inject.Named;
-import jakarta.xml.bind.annotation.*;
-
-import org.apache.causeway.applib.annotation.*;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
 @XmlRootElement(name = "demo.DomainObjectXxxDomainEventChildVm")

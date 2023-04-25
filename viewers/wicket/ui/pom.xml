@@ -24,10 +24,12 @@
 	<artifactId>causeway-viewer-wicket-ui</artifactId>
 	<name>Apache Causeway Viewer - Wicket (UI Components)</name>
 
-	<properties>
-		<jar-plugin.automaticModuleName>org.apache.causeway.viewer.wicket.ui</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/causeway/viewer/wicket/ui</git-plugin.propertiesDir>
-	</properties>
+    <properties>
+        <jar-plugin.automaticModuleName>org.apache.causeway.viewer.wicket.ui</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/causeway/viewer/wicket/ui</git-plugin.propertiesDir>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
 
 	<build>
 		<resources>

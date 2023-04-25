@@ -20,12 +20,11 @@ package org.apache.causeway.client.kroviz.utils.js
 
 object AsciiDoctor {
     fun convert(content: String): dynamic {
-        return js(
-            code = """
-                  var asciidoctor = require('asciidoctor')();
-                  var html = asciidoctor.convert(content);
-                  return html;
-               """
+        return js(code = """
+                      var asciidoctor = require('asciidoctor')();
+                      var html = asciidoctor.convert(content);
+                      return html;
+                   """
         )
     }
 }

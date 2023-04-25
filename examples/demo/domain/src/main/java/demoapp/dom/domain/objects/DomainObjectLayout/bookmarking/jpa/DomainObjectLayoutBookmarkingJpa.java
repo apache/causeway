@@ -37,10 +37,11 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
-import demoapp.dom.domain.objects.DomainObjectLayout.bookmarking.DomainObjectLayoutBookmarking;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import demoapp.dom.domain.objects.DomainObjectLayout.bookmarking.DomainObjectLayoutBookmarking;
 
 @Profile("demo-jpa")
 @Entity
@@ -58,7 +59,7 @@ public class DomainObjectLayoutBookmarkingJpa extends DomainObjectLayoutBookmark
     // ...
 //end::class[]
 
-    public DomainObjectLayoutBookmarkingJpa(final String value) {
+    public DomainObjectLayoutBookmarkingJpa(String value) {
         setName(value);
     }
 
@@ -79,7 +80,7 @@ public class DomainObjectLayoutBookmarkingJpa extends DomainObjectLayoutBookmark
     private Set<DomainObjectLayoutBookmarkingChildJpa> children = new TreeSet<>();
 
     @Override
-    public void addChild(final String value) {
+    public void addChild(String value) {
         getChildren().add(new DomainObjectLayoutBookmarkingChildJpa(this, value));
     }
 

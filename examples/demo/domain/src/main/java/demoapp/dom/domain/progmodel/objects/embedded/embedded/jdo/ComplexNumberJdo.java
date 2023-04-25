@@ -18,16 +18,17 @@
  */
 package demoapp.dom.domain.progmodel.objects.embedded.embedded.jdo;
 
-import demoapp.dom.domain.progmodel.objects.embedded.embedded.ComplexNumber;
-import lombok.AccessLevel;
-import lombok.val;
-
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Value;
+
+import lombok.AccessLevel;
+import lombok.val;
+
+import demoapp.dom.domain.progmodel.objects.embedded.embedded.ComplexNumber;
 
 // tag::class[]
 @javax.jdo.annotations.PersistenceCapable                               // <.>

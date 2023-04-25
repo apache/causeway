@@ -28,6 +28,9 @@ import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+
 import demoapp.dom._infra.samples.NameSamples;
 import demoapp.dom.domain.actions.ActionLayout.associateWith.ActionLayoutAssociateWithPage;
 import demoapp.dom.domain.actions.ActionLayout.associateWith.child.ActionLayoutAssociateWithChildVm;
@@ -41,8 +44,6 @@ import demoapp.dom.domain.actions.ActionLayout.position.ActionLayoutPositionPage
 import demoapp.dom.domain.actions.ActionLayout.promptStyle.ActionLayoutPromptStylePage;
 import demoapp.dom.domain.actions.ActionLayout.redirectPolicy.ActionLayoutRedirectPolicyPage;
 import demoapp.dom.domain.actions.ActionLayout.sequence.ActionLayoutSequencePage;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @DomainService(nature=NatureOfService.VIEW)
 @Named("demo.ActionLayoutMenu")
@@ -77,12 +78,14 @@ public class ActionLayoutMenu {
         return new ActionLayoutCssClassFaPage();
     }
 
+//tag::menu-item-described-as[]
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-comment",
         describedAs = "Description of the action, shown as a tooltip")
     public ActionLayoutDescribedAsPage describedAs(){
         return new ActionLayoutDescribedAsPage();
     }
+//end::menu-item-described-as[]
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-solid fa-vector-square",

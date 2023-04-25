@@ -33,7 +33,7 @@ implements SingleClassValueFacet {
 
     private final Class<?> value;
 
-    public SingleClassValueFacetAbstract(
+    protected SingleClassValueFacetAbstract(
             final Class<? extends Facet> facetType,
             final FacetHolder holder,
             final Class<?> value) {

@@ -32,6 +32,7 @@ jobs:
         language: [ 'java', 'javascript' ]
     env:
       # to be shared among all steps of this job
+      BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
       BASELINE: 2.0.0-RC1
       PROJECT_ROOT_PATH: ${{ github.workspace }}
       CI_SCRIPTS_PATH: ${{ github.workspace }}/scripts/ci
@@ -83,6 +84,7 @@ jobs:
       shell: bash
       run: |
         echo ==============  ENV  =================
+        echo BRANCH_NAME      \: $BRANCH_NAME
         echo BASELINE         \: $BASELINE
         echo TIMESTAMP        \: $TIMESTAMP
         echo PROJECT_ROOT_PATH\: $PROJECT_ROOT_PATH
@@ -109,7 +111,7 @@ jobs:
         # -Dmaven.source.skip=true ... no need for the CI build to pull sources
         # -T 1C ... 1 build thread per core
         MVN_ADDITIONAL_OPTS: >-
-          -Dmodule-all-except-kroviz
+          -Dmodule-all
           -Dproject.build.outputTimestamp=1
           -Dmaven.source.skip=true
           -Denforcer.failFast=true
