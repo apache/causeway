@@ -31,7 +31,7 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
-import org.apache.causeway.core.metamodel.object.MmTitleUtil;
+import org.apache.causeway.core.metamodel.object.MmTitleUtils;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.Getter;
@@ -94,7 +94,7 @@ implements HasLogicalType, Serializable, ObjectMemento {
     private ObjectMementoForScalar(final @NonNull ManagedObject adapter) {
 
         this.logicalType = adapter.getLogicalType();
-        this.title = MmTitleUtil.titleOf(adapter);
+        this.title = MmTitleUtils.titleOf(adapter);
 
         val spec = adapter.getSpecification();
 

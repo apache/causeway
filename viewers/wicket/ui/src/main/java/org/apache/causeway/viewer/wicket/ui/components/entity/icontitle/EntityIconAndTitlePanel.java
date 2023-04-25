@@ -28,7 +28,7 @@ import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
-import org.apache.causeway.core.metamodel.object.MmTitleUtil;
+import org.apache.causeway.core.metamodel.object.MmTitleUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
@@ -178,7 +178,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
 
     private String determineTitle() {
         val managedObject = getModel().getObject();
-        return MmTitleUtil.getTitleHonoringTitlePartSkipping(managedObject, this::isContextAdapter);
+        return MmTitleUtils.getTitleHonoringTitlePartSkipping(managedObject, this::isContextAdapter);
     }
 
     private int abbreviateTo(final ObjectAdapterModel model, final String titleString) {

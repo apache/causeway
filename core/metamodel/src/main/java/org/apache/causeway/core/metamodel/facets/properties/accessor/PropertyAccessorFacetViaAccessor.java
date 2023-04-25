@@ -28,8 +28,8 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmInvokeUtil;
-import org.apache.causeway.core.metamodel.object.MmVisibilityUtil;
+import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
+import org.apache.causeway.core.metamodel.object.MmVisibilityUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
@@ -62,7 +62,7 @@ implements ImperativeFacet {
             final ManagedObject owningAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
-        final Object referencedObject = MmInvokeUtil.invoke(method, owningAdapter);
+        final Object referencedObject = MmInvokeUtils.invoke(method, owningAdapter);
 
         if(referencedObject == null) {
             return null;
@@ -71,7 +71,7 @@ implements ImperativeFacet {
         boolean filterForVisibility = getConfiguration().getCore().getMetaModel().isFilterVisibility();
         if(filterForVisibility) {
             final ManagedObject referencedAdapter = getObjectManager().adapt(referencedObject);
-            final boolean visible = MmVisibilityUtil
+            final boolean visible = MmVisibilityUtils
                     .isVisible(referencedAdapter, interactionInitiatedBy);
             if (!visible) {
                 return null;

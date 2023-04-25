@@ -25,7 +25,7 @@ import org.apache.causeway.applib.services.wrapper.events.PropertyModifyEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
+import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -62,9 +62,9 @@ implements ProposedHolder {
     @Override
     public PropertyModifyEvent createInteractionEvent() {
         return new PropertyModifyEvent(
-                MmUnwrapUtil.single(getTarget()),
+                MmUnwrapUtils.single(getTarget()),
                 getIdentifier(),
-                MmUnwrapUtil.single(getProposed()));
+                MmUnwrapUtils.single(getProposed()));
     }
 
 }

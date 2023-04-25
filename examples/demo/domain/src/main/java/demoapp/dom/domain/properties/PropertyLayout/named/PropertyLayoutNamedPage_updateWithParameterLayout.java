@@ -44,8 +44,6 @@ public class PropertyLayoutNamedPage_updateWithParameterLayout {
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(
                 named = "Named using @ParameterLayout"          // <.>
-                , describedAs =
-                    "@ParameterLayout(named = \"...\")"
             )
             final String parameterUsingAnnotation) {
         page.setPropertyUsingAnnotation(parameterUsingAnnotation);

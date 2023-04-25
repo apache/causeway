@@ -56,9 +56,7 @@ public class PropertyLayoutMultiLinePage implements HasAsciiDocDescription {
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(
         multiLine = 5                           // <.>
-        , describedAs =
-            "@PropertyLayout(multiLine = 5)",
-        fieldSetId = "annotation", sequence = "1")
+    )
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingAnnotation;
@@ -66,14 +64,12 @@ public class PropertyLayoutMultiLinePage implements HasAsciiDocDescription {
 
 //tag::annotation-readonly[]
     @Property(
-        optionality = Optionality.OPTIONAL
-        , editing = Editing.DISABLED                // <.>
+        optionality = Optionality.OPTIONAL,
+        editing = Editing.DISABLED              // <.>
     )
     @PropertyLayout(
         multiLine = 5
-        , describedAs =
-            "@PropertyLayout(multiLine = 5)",
-        fieldSetId = "annotation", sequence = "2")
+    )
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingAnnotationReadOnly;
@@ -81,39 +77,11 @@ public class PropertyLayoutMultiLinePage implements HasAsciiDocDescription {
 
 //tag::layout-file[]
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(                                        // <.>
-        describedAs =
-            "<cpt:property id=\"...\" multiLine=\"5\"/>",
-        fieldSetId = "layout-file", sequence = "1")
+    @PropertyLayout()
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingLayout;
 //end::layout-file[]
-
-//tag::meta-annotated[]
-    @MultiLine10MetaAnnotation                        // <.>
-    @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(
-        describedAs = "@MultiLine10MetaAnnotation",
-        fieldSetId = "meta-annotated", sequence = "1")
-    @XmlElement(required = false)
-    @Getter @Setter
-    private String propertyUsingMetaAnnotation;
-//end::meta-annotated[]
-
-//tag::meta-annotated-overridden[]
-    @MultiLine10MetaAnnotation                            // <.>
-    @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(
-        multiLine = 3                                   // <.>
-        , describedAs =
-            "@MultiLine10MetaAnnotation " +
-            "@PropertyLayout(multiLine = 3)",
-        fieldSetId = "meta-annotated-overridden", sequence = "1")
-    @XmlElement(required = false)
-    @Getter @Setter
-    private String propertyUsingMetaAnnotationButOverridden;
-//end::meta-annotated-overridden[]
 
 }
 //end::class[]

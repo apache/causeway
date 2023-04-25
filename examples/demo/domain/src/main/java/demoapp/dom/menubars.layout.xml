@@ -104,9 +104,12 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
                 <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="multiLine"/>
                 <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="named"/>
                 <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="navigable"/>
-                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="renderDay"/>
                 <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="repainting"/>
                 <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="typicalLength"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>@ValueSemantics</mb3:named>
+                <mb3:serviceAction objectType="demo.ValueSemanticsMenu" id="dateRenderAdjustDays"/>
             </mb3:section>
         </mb3:menu>
 
@@ -234,6 +237,7 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
                 <mb3:serviceAction objectType="demo.CausewayTypesMenu" id="localResourcePaths"/>
                 <mb3:serviceAction objectType="demo.CausewayTypesMenu" id="markups"/>
                 <mb3:serviceAction objectType="demo.CausewayTypesMenu" id="passwords"/>
+                <mb3:serviceAction objectType="demo.CausewayTypesMenu" id="treeNodes"/>
             </mb3:section>
             <mb3:section>
                 <mb3:named>Causeway Values</mb3:named>
@@ -251,7 +255,6 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
                 <mb3:serviceAction objectType="demo.ServicesMenu" id="eventBusService" />
                 <mb3:serviceAction objectType="demo.ServicesMenu" id="messageService" />
                 <mb3:serviceAction objectType="demo.ServicesMenu" id="wrapperFactory"/>
-                <mb3:serviceAction objectType="demo.ServicesMenu" id="xmlSnapshot"/>
             </mb3:section>
         </mb3:menu>
 

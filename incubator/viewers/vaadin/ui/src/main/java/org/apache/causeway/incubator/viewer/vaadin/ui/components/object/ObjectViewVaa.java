@@ -49,7 +49,7 @@ import org.apache.causeway.core.metamodel.interactions.managed.CollectionInterac
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmTitleUtil;
+import org.apache.causeway.core.metamodel.object.MmTitleUtils;
 import org.apache.causeway.incubator.viewer.vaadin.model.context.UiContextVaa;
 import org.apache.causeway.incubator.viewer.vaadin.model.util.Vaa;
 import org.apache.causeway.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa;
@@ -88,7 +88,7 @@ public class ObjectViewVaa extends VerticalLayout {
         log.info("binding object interaction to owner {}", managedObject.getSpecification().getFeatureIdentifier());
         _Assert.assertTrue(uiContext.getInteractionService().isInInteraction(), "requires an active interaction");
 
-        val objectTitle = MmTitleUtil.titleOf(managedObject);
+        val objectTitle = MmTitleUtils.titleOf(managedObject);
 
         val uiGridLayout = UiGridLayout.bind(managedObject);
 

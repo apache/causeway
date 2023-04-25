@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.facets.param.layout.annotation;
 
+import org.junit.jupiter.api.Test;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
@@ -34,16 +36,15 @@ import org.apache.causeway.core.metamodel.facets.param.layout.ParameterLayoutFac
 class LabelAtFacetForParameterLayoutAnnotationFactoryTest
 extends FacetFactoryTestAbstract {
 
-    void testParameterLayoutAnnotationPickedUp() {
+    @Test
+    void parameterLayoutAnnotationPickedUp() {
         final ParameterLayoutFacetFactory facetFactory = new ParameterLayoutFacetFactory(getMetaModelContext());
-
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
             public void someAction(
                     @ParameterLayout(labelPosition = LabelPosition.LEFT)
                     final String foo) {}
         }
-
         parameterScenario(Customer.class, "someAction", 0, (processParameterContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
             //when
             facetFactory.processParams(processParameterContext);

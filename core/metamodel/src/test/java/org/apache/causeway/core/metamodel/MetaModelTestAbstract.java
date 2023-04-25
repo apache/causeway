@@ -20,11 +20,13 @@ package org.apache.causeway.core.metamodel;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.mockito.Mockito;
 
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting.MetaModelContext_forTestingBuilder;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 
 import lombok.Getter;
 import lombok.val;
@@ -45,7 +47,8 @@ implements HasMetaModelContext {
 
     @BeforeEach
     void setUp() throws Exception {
-        val mmcBuilder = MetaModelContext_forTesting.builder();
+        val mmcBuilder = MetaModelContext_forTesting.builder()
+                .memberExecutor(Mockito.mock(MemberExecutorService.class));
         onSetUp(mmcBuilder);
         metaModelContext = mmcBuilder.build();
         afterSetUp();
@@ -58,7 +61,7 @@ implements HasMetaModelContext {
         metaModelContext = null;
     }
 
-    protected void onSetUp(MetaModelContext_forTestingBuilder mmcBuilder) {
+    protected void onSetUp(final MetaModelContext_forTestingBuilder mmcBuilder) {
     }
 
     protected void afterSetUp() {

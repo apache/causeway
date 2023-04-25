@@ -25,51 +25,51 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class NameUtilTest {
 
     @Test
-    public void testNaturalNameAddsSpacesToCamelCaseWords() {
+    void naturalNameAddsSpacesToCamelCaseWords() {
         assertEquals("Camel Case Word", StringExtensions.asNaturalName2("CamelCaseWord"));
     }
 
     @Test
-    public void testNaturalNameAddsSpacesBeforeNumbers() {
+    void naturalNameAddsSpacesBeforeNumbers() {
         assertEquals("One 2 One", StringExtensions.asNaturalName2("One2One"));
         assertEquals("Type 123", StringExtensions.asNaturalName2("Type123"));
         assertEquals("4321 Go", StringExtensions.asNaturalName2("4321Go"));
     }
 
     @Test
-    public void testNaturalNameRecognisesAcronymns() {
+    void naturalNameRecognisesAcronymns() {
         assertEquals("TNT Power", StringExtensions.asNaturalName2("TNTPower"));
         assertEquals("Spam RAM Can", StringExtensions.asNaturalName2("SpamRAMCan"));
         assertEquals("DOB", StringExtensions.asNaturalName2("DOB"));
     }
 
     @Test
-    public void testNaturalNameWithShortNames() {
+    void naturalNameWithShortNames() {
         assertEquals("At", StringExtensions.asNaturalName2("At"));
         assertEquals("I", StringExtensions.asNaturalName2("I"));
     }
 
     @Test
-    public void testNaturalNameNoChange() {
+    void naturalNameNoChange() {
         assertEquals("Camel Case Word", StringExtensions.asNaturalName2("CamelCaseWord"));
         assertEquals("Almost Normal english sentence", StringExtensions.asNaturalName2("Almost Normal english sentence"));
     }
 
     @Test
-    public void testPluralNameAdd_S() {
+    void pluralNameAdd_S() {
         assertEquals("Cans", StringExtensions.asPluralName("Can"));
         assertEquals("Spaces", StringExtensions.asPluralName("Space"));
         assertEquals("Noses", StringExtensions.asPluralName("Nose"));
     }
 
     @Test
-    public void testPluralNameReplace_Y_With_IES() {
+    void pluralNameReplace_Y_With_IES() {
         assertEquals("Babies", StringExtensions.asPluralName("Baby"));
         assertEquals("Cities", StringExtensions.asPluralName("City"));
     }
 
     @Test
-    public void testPluralNameReplaceAdd_ES() {
+    void pluralNameReplaceAdd_ES() {
         assertEquals("Foxes", StringExtensions.asPluralName("Fox"));
         assertEquals("Bosses", StringExtensions.asPluralName("Boss"));
     }

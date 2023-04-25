@@ -50,7 +50,7 @@ import org.apache.causeway.core.metamodel.interactions.ValidityContext;
 import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
-import org.apache.causeway.core.metamodel.object.MmEntityUtil;
+import org.apache.causeway.core.metamodel.object.MmEntityUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
@@ -61,6 +61,8 @@ public class OneToOneAssociationDefault
 extends ObjectAssociationAbstract
 implements OneToOneAssociation {
 
+    // -- FACTORY
+
     public static OneToOneAssociationDefault forMethod(final FacetedMethod facetedMethod) {
         return new OneToOneAssociationDefault(
                 facetedMethod.getFeatureIdentifier(),
@@ -69,11 +71,12 @@ implements OneToOneAssociation {
                     .loadSpecification(facetedMethod.getType().getElementType()));
     }
 
+    // -- CONSTRUCTION
+
     protected OneToOneAssociationDefault(
             final Identifier featureIdentifier,
             final FacetedMethod facetedMethod,
             final ObjectSpecification objectSpec) {
-
         super(featureIdentifier, facetedMethod, FeatureType.PROPERTY, objectSpec);
     }
 
@@ -205,7 +208,7 @@ implements OneToOneAssociation {
             throw _Exceptions.unexpectedCodeReach();
         }
 
-        MmEntityUtil.requiresWhenFirstIsBookmarkableSecondIsAlso(ownerAdapter, newReferencedAdapter);
+        MmEntityUtils.requiresWhenFirstIsBookmarkableSecondIsAlso(ownerAdapter, newReferencedAdapter);
 
         return propertySetterFacet.setProperty(this, ownerAdapter, newReferencedAdapter, interactionInitiatedBy);
     }

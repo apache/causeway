@@ -21,12 +21,12 @@ package org.apache.causeway.core.metamodel.methods;
 import java.lang.reflect.Method;
 
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
+import org.apache.causeway.core.metamodel.specloader.facetprocessor.FacetProcessor;
 
 /**
  * A {@link FacetFactory} which filters out arbitrary {@link Method method}s.
- *
  * <p>
- * Used by Java5 Reflector's <tt>ProgrammingModel#recognizes(Method)</tt>.
+ * Used by {@link FacetProcessor#recognizes(Method)}
  */
 public interface MethodFilteringFacetFactory extends FacetFactory {
 

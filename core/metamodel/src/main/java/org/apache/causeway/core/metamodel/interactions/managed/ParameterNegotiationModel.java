@@ -40,7 +40,7 @@ import org.apache.causeway.core.metamodel.consent.InteractionResult;
 import org.apache.causeway.core.metamodel.interactions.managed._BindingUtil.TargetFormat;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
-import org.apache.causeway.core.metamodel.object.MmAssertionUtil;
+import org.apache.causeway.core.metamodel.object.MmAssertionUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 
@@ -291,7 +291,7 @@ public class ParameterNegotiationModel {
             bindableParamValueDirtyFlag = _Bindables.forBoolean(false);
 
             //bindableParamValue.setValueRefiner(MmEntityUtil::refetch); no longer used
-            bindableParamValue.setValueGuard(MmAssertionUtil.assertInstanceOf(metaModel.getElementType()));
+            bindableParamValue.setValueGuard(MmAssertionUtils.assertInstanceOf(metaModel.getElementType()));
             bindableParamValue.addListener((event, oldValue, newValue)->{
                 if(newValue==null) {
                     // lift null to empty ...

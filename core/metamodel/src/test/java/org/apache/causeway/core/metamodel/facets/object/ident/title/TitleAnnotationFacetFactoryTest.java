@@ -64,7 +64,7 @@ extends FacetFactoryTestAbstract {
 
     // -- SCENARIO 1
 
-    public static class Customer1 {
+    static class Customer1 {
         @Title
         public String someTitle() {
             return "Some Title";
@@ -72,7 +72,7 @@ extends FacetFactoryTestAbstract {
     }
 
     @Test
-    public void testTitleAnnotatedMethodPickedUpOnClassRemoved() throws Exception {
+    void titleAnnotatedMethodPickedUpOnClassRemoved() throws Exception {
 
         val someTitleMethod = Customer1.class.getMethod("someTitle");
 
@@ -101,7 +101,7 @@ extends FacetFactoryTestAbstract {
 
     // -- SCENARIO 2
 
-    public static class Customer2 {
+    public static class Customer2 { //TODO public should not be a requirement
 
         @Title(sequence = "1", append = ".")
         public String titleElement1() {
@@ -121,7 +121,7 @@ extends FacetFactoryTestAbstract {
     }
 
     @Test
-    public void testTitleAnnotatedMethodsPickedUpOnClass() throws Exception {
+    void titleAnnotatedMethodsPickedUpOnClass() throws Exception {
 
         final List<Method> titleMethods = Arrays.asList(
                 Customer2.class.getMethod("titleElement1"),
@@ -159,11 +159,11 @@ extends FacetFactoryTestAbstract {
 
     // -- SCENARIO 3
 
-    public static class Customer3 {
+    static class Customer3 {
     }
 
     @Test
-    public void testNoExplicitTitleAnnotations() {
+    void noExplicitTitleAnnotations() {
 
         objectScenario(Customer3.class, (processClassContext, facetHolder)->{
             facetFactory.process(processClassContext);
@@ -174,7 +174,7 @@ extends FacetFactoryTestAbstract {
     // -- SCENARIO 4
 
     @DomainObject(nature = Nature.VIEW_MODEL)
-    public static class Customer4 {
+    public static class Customer4 { //TODO public should not be a requirement
 
         @Title(sequence = "1")
         public String titleElement1() {
@@ -219,7 +219,7 @@ extends FacetFactoryTestAbstract {
     }
 
     @Test
-    public void titleAnnotatedMethodsSomeOfWhichReturnNulls() throws Exception {
+    void annotatedMethodsSomeOfWhichReturnNulls() throws Exception {
 
         { // check prerequisites
             val wThree = ManagedObject.adaptSingular(getSpecificationLoader(), Integer.valueOf(3));

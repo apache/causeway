@@ -23,6 +23,7 @@ import java.util.function.Supplier;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.primitives._Ints;
@@ -204,6 +205,24 @@ public final class _Assert {
     public static void assertRangeContains(final _Longs.Range range, final long value, final Supplier<String> lazyMessage) {
         if(!range.contains(value)) {
             fail(lazyMessage.get(), range.toString(), value);
+        }
+    }
+
+    // -- STRING CHECKS
+
+    public static void assertNotEmpty(final String s) {
+        assertNotEmpty(s, (String) null);
+    }
+
+    public static void assertNotEmpty(final String s, final String message) {
+        if(_NullSafe.isEmpty(s)) {
+            fail(message, "not empty", "empty");
+        }
+    }
+
+    public static void assertNotEmpty(final String s, final Supplier<String> lazyMessage) {
+        if(_NullSafe.isEmpty(s)) {
+            fail(lazyMessage.get(), "not empty", "empty");
         }
     }
 

@@ -66,7 +66,7 @@ implements ManagedObject {
 
     @Override
     public final <T> T assertCompliance(final @NonNull T pojo) {
-        MmAssertionUtil.assertPojoNotWrapped(pojo);
+        MmAssertionUtils.assertPojoNotWrapped(pojo);
         if(specification.isAbstract()) {
             _Assert.assertFalse(specialization.getTypePolicy().isExactTypeRequired(),
                     ()->String.format("Specialization %s does not allow abstract type %s",
@@ -74,7 +74,7 @@ implements ManagedObject {
                             specification));
         }
         if(specialization.getTypePolicy().isExactTypeRequired()) {
-            MmAssertionUtil.assertExactType(specification, pojo);
+            MmAssertionUtils.assertExactType(specification, pojo);
         }
         if(getSpecialization().getInjectionPolicy().isAlwaysInject()) {
             if(!isInjectionPointsResolved()) {
@@ -104,7 +104,7 @@ implements ManagedObject {
     }
 
     private ObjectMemento mementoForScalar(@Nullable final ManagedObject adapter) {
-        MmAssertionUtil.assertPojoIsScalar(adapter);
+        MmAssertionUtils.assertPojoIsScalar(adapter);
         return ObjectMementoForScalar.create(adapter)
                 .map(ObjectMemento.class::cast)
                 .orElseGet(()->

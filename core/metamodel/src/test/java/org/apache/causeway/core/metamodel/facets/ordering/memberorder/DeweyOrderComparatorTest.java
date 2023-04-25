@@ -38,13 +38,9 @@ import org.apache.causeway.core.metamodel.layout.memberorderfacet.MemberOrderCom
 
 class DeweyOrderComparatorTest  {
 
-//    public static void main(final String[] args) {
-//        junit.textui.TestRunner.run(new TestSuite(DeweyOrderComparatorTest.class));
-//    }
-
     private MemberOrderComparator comparator, laxComparator;
 
-    public static class Customer {
+    static class Customer {
         private String abc;
 
         public String getAbc() {
@@ -62,109 +58,90 @@ class DeweyOrderComparatorTest  {
 
 	@BeforeEach
     protected void setUp() {
-
         _Context.clear();
-
         comparator = new MemberOrderComparator(true);
         laxComparator = new MemberOrderComparator(false);
-
-        //FIXME
-//        context.checking(new Expectations() {{
-//            allowing(mockTranslationService).translate(with(any(TranslationContext.class)), with(any(String.class)));
-//            will(new Action() {
-//                @Override
-//                public Object invoke(final Invocation invocation) throws Throwable {
-//                    return invocation.getParameter(1);
-//                }
-//
-//                @Override
-//                public void describeTo(final Description description) {
-//                    description.appendText("Returns parameter #1");
-//                }
-//            });
-//        }});
-
     }
 
 	@Test
-    public void testDefaultGroupOneComponent() {
+    void defaultGroupOneComponent() {
         setupLayoutFacets("", "1", m1);
         setupLayoutFacets("", "2", m2);
         assertEquals(-1, comparator.compare(m1, m2));
     }
 
 	@Test
-    public void testDefaultGroupOneComponentOtherWay() {
+    void defaultGroupOneComponentOtherWay() {
         setupLayoutFacets("", "2", m1);
         setupLayoutFacets("", "1", m2);
         assertEquals(+1, comparator.compare(m1, m2));
     }
 
 	@Test
-    public void testDefaultGroupOneComponentSame() {
+    void defaultGroupOneComponentSame() {
         setupLayoutFacets("", "1", m1);
         setupLayoutFacets("", "1", m2);
         assertEquals(0, comparator.compare(m1, m2));
     }
 
 	@Test
-    public void testDefaultGroupOneSideRunsOutOfComponentsFirst() {
+    void defaultGroupOneSideRunsOutOfComponentsFirst() {
         setupLayoutFacets("", "1", m1);
         setupLayoutFacets("", "1.1", m2);
         assertEquals(-1, comparator.compare(m1, m2));
     }
 
 	@Test
-    public void testDefaultGroupOneSideRunsOutOfComponentsFirstOtherWay() {
+    void defaultGroupOneSideRunsOutOfComponentsFirstOtherWay() {
         setupLayoutFacets("", "1.1", m1);
         setupLayoutFacets("", "1", m2);
         assertEquals(+1, comparator.compare(m1, m2));
     }
 
 	@Test
-    public void testDefaultGroupOneSideRunsTwoComponents() {
+    void defaultGroupOneSideRunsTwoComponents() {
         setupLayoutFacets("", "1.1", m1);
         setupLayoutFacets("", "1.2", m2);
         assertEquals(-1, comparator.compare(m1, m2));
     }
 
 	@Test
-    public void testDefaultGroupOneSideRunsTwoComponentsOtherWay() {
+    void defaultGroupOneSideRunsTwoComponentsOtherWay() {
         setupLayoutFacets("", "1.2", m1);
         setupLayoutFacets("", "1.1", m2);
         assertEquals(+1, comparator.compare(m1, m2));
     }
 
 	@Test
-    public void testDefaultGroupOneSideRunsLotsOfComponents() {
+    void defaultGroupOneSideRunsLotsOfComponents() {
         setupLayoutFacets("", "1.2.5.8.3.3", m1);
         setupLayoutFacets("", "1.2.5.8.3.4", m2);
         assertEquals(-1, comparator.compare(m1, m2));
     }
 
 	@Test
-    public void testDefaultGroupOneSideRunsLotsOfComponentsOtherWay() {
+    void defaultGroupOneSideRunsLotsOfComponentsOtherWay() {
         setupLayoutFacets("", "1.2.5.8.3.4", m1);
         setupLayoutFacets("", "1.2.5.8.3.3", m2);
         assertEquals(+1, comparator.compare(m1, m2));
     }
 
 	@Test
-    public void testDefaultGroupOneSideRunsLotsOfComponentsSame() {
+    void defaultGroupOneSideRunsLotsOfComponentsSame() {
         setupLayoutFacets("", "1.2.5.8.3.3", m1);
         setupLayoutFacets("", "1.2.5.8.3.3", m2);
         assertEquals(0, comparator.compare(m1, m2));
     }
 
 	@Test
-    public void testNamedGroupOneSideRunsLotsOfComponents() {
+    void namedGroupOneSideRunsLotsOfComponents() {
         setupLayoutFacets("abc", "1.2.5.8.3.3", m1);
         setupLayoutFacets("abc", "1.2.5.8.3.4", m2);
         assertEquals(-1, comparator.compare(m1, m2));
     }
 
 	@Test
-    public void testEnsuresInSameGroup() {
+    void ensuresInSameGroup() {
         setupLayoutFacets("abc", "1", m1);
         setupLayoutFacets("def", "2", m2);
         try {
@@ -176,14 +153,14 @@ class DeweyOrderComparatorTest  {
     }
 
 	@Test
-    public void testEnsuresInSameGroupCanBeDisabled() {
+    void ensuresInSameGroupCanBeDisabled() {
         setupLayoutFacets("abc", "1", m1);
         setupLayoutFacets("def", "2", m2);
         assertEquals(-1, laxComparator.compare(m1, m2));
     }
 
 	@Test
-    public void testNonAnnotatedAfterAnnotated() {
+    void nonAnnotatedAfterAnnotated() {
         // don't annotate m1
         setupLayoutFacets("def", "2", m2);
         assertEquals(+1, comparator.compare(m1, m2));

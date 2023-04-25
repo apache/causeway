@@ -56,48 +56,19 @@ public class PropertyLayoutCssClassPage implements HasAsciiDocDescription {
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(
         cssClass = "red"                                // <.>
-        , describedAs =
-            "@PropertyLayout(cssClass = \"red\")",
-        fieldSetId = "annotation", sequence = "1")
+    )
     @XmlElement(required = false)
     @Getter @Setter
-    private String propertyUsingAnnotation;
+    private String name;
 //end::annotation[]
 
 //tag::layout-file[]
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(                                        // <.>
-        describedAs =
-            "<cpt:property id=\"...\" cssClass=\"red\"/>",
-        fieldSetId = "layout-file", sequence = "1")
+    @PropertyLayout()                                   // <.>
     @XmlElement(required = false)
     @Getter @Setter
-    private String propertyUsingLayout;
+    private String notes;
 //end::layout-file[]
-
-//tag::meta-annotated[]
-    @CssClassRedMetaAnnotation                         // <.>
-    @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(
-        describedAs = "@CssClassRedMetaAnnotation",
-        fieldSetId = "meta-annotated", sequence = "1")
-    @XmlElement(required = false)
-    @Getter @Setter
-    private String propertyUsingMetaAnnotation;
-//end::meta-annotated[]
-
-//tag::meta-annotated-overridden[]
-    @CssClassRedMetaAnnotation                          // <.>
-    @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(
-        cssClass = "blue"                               // <.>
-        , describedAs =
-            "@CssClassRedMetaAnnotation @PropertyLayout(...)",
-        fieldSetId = "meta-annotated-overridden", sequence = "1")
-    @XmlElement(required = false)
-    @Getter @Setter
-    private String propertyUsingMetaAnnotationButOverridden;
-//end::meta-annotated-overridden[]
 
 }
 //end::class[]

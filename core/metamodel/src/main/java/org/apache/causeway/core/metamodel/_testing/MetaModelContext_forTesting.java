@@ -232,6 +232,7 @@ implements MetaModelContext {
                 repositoryService,
                 transactionService,
                 transactionState,
+                getMemberExecutor(),
                 getValueSemanticsResolver(),
                 new BigDecimalValueSemantics(),
                 new URLValueSemantics(),

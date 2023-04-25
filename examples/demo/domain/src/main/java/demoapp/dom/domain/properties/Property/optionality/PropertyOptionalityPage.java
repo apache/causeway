@@ -31,22 +31,17 @@ import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
-
-import lombok.Getter;
-import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import lombok.Getter;
+import lombok.Setter;
 
 //tag::class[]
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.PropertyOptionalityVm")
-@DomainObject(
-        nature=Nature.VIEW_MODEL,
-        editing = Editing.ENABLED)
-public class PropertyOptionalityPage implements HasAsciiDocDescription {
+@Named("demo.PropertyOptionalityPage")
+@DomainObject(nature=Nature.VIEW_MODEL) public class PropertyOptionalityPage implements HasAsciiDocDescription {
     // ...
 //end::class[]
 
@@ -54,57 +49,35 @@ public class PropertyOptionalityPage implements HasAsciiDocDescription {
         return "@Property#optionality";
     }
 
-//tag::annotation[]
+//tag::optional[]
     @Property(
+        editing = Editing.ENABLED,
         optionality = Optionality.OPTIONAL              // <.>
     )
-    @PropertyLayout(
-        describedAs =
-            "@Property(optionality = OPTIONAL)",
-        fieldSetId = "annotation", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
-    private String propertyUsingAnnotation;
-//end::annotation[]
+    private String optionalProperty;
+//end::optional[]
 
-//tag::annotation-mandatory[]
+//tag::mandatory[]
     @Property(
+        editing = Editing.ENABLED,
         optionality = Optionality.MANDATORY             // <.>
     )
-    @PropertyLayout(
-        describedAs =
-            "@Property(optionality = MANDATORY)",
-        fieldSetId = "annotation", sequence = "2")
     @XmlElement(required = true)
     @Getter @Setter
-    private String mandatoryPropertyUsingAnnotation;
-//end::annotation-mandatory[]
+    private String mandatoryProperty;
+//end::mandatory[]
 
-//tag::meta-annotated[]
-    @OptionalityOptionalMetaAnnotation                  // <.>
-    @Property()
-    @PropertyLayout(
-        describedAs = "@OptionalityOptionalMetaAnnotation",
-        fieldSetId = "meta-annotated", sequence = "1")
+//tag::nullable[]
+    // <.>
+    @Property(editing = Editing.ENABLED)
+    @org.springframework.lang.Nullable                  // <.>
     @XmlElement(required = false)
     @Getter @Setter
-    private String propertyUsingMetaAnnotation;
-//end::meta-annotated[]
+    private String nullableProperty;
+//end::nullable[]
 
-//tag::meta-annotated-overridden[]
-    @OptionalityOptionalMetaAnnotation                  // <.>
-    @Property(
-        optionality = Optionality.MANDATORY             // <.>
-    )
-    @PropertyLayout(
-        describedAs =
-            "@OptionalityOptionalMetaAnnotation " +
-            "@PropertyLayout(optionality = MANDATORY)",
-        fieldSetId = "meta-annotated-overridden", sequence = "1")
-    @XmlElement(required = true)
-    @Getter @Setter
-    private String propertyUsingMetaAnnotationButOverridden;
-//end::meta-annotated-overridden[]
 
 //tag::class[]
 }

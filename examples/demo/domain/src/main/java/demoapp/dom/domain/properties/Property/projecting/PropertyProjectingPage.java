@@ -41,7 +41,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.domain.properties.Property.projecting.child.PropertyProjectingChildVm;
 
 //tag::class[]
 @XmlRootElement(name = "root")

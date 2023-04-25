@@ -34,18 +34,18 @@ extends ValueSemanticsProviderAbstractTestCase<Password> {
     private Password password;
 
     @BeforeEach
-    public void setUpObjects() throws Exception {
+    void setUpObjects() throws Exception {
         setSemantics(valueSemantics = new PasswordValueSemantics());
         password = new Password("secret");
     }
 
     @Test
-    public void testEncode() throws Exception {
+    void encode() throws Exception {
         assertEquals("secret", valueSemantics.decompose(password).toJson());
     }
 
     @Test
-    public void testDecode() throws Exception {
+    void decode() throws Exception {
         final Object restore = valueSemantics.compose(
                 ValueDecomposition.fromJson(valueSemantics.getSchemaValueType(), "secret"));
         assertEquals(password, restore);

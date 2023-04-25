@@ -40,7 +40,7 @@ import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmTitleUtil;
+import org.apache.causeway.core.metamodel.object.MmTitleUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
@@ -321,7 +321,7 @@ implements ContentNegotiationService {
             final Collection<ManagedObject> collectionAdapters,
             final ObjectSpecification elementSpec) {
         final String singularName = elementSpec.getSingularName();
-        return MmTitleUtil.formatAnyCardinalityAsTitle(collectionAdapters.size(), singularName, elementSpec.getTranslationService());
+        return MmTitleUtils.formatAnyCardinalityAsTitle(collectionAdapters.size(), singularName, elementSpec.getTranslationService());
     }
 
     /**

@@ -35,37 +35,37 @@ extends ValueSemanticsProviderAbstractTestCase<Boolean> {
     private Boolean booleanObj;
 
     @BeforeEach
-    public void setUpObjects() throws Exception {
+    void setUpObjects() throws Exception {
         booleanObj = Boolean.valueOf(true);
         setSemantics(value = new BooleanValueSemantics());
     }
 
     @Test
-    public void testParseFalseString() throws Exception {
+    void parseFalseString() throws Exception {
         final Object parsed = value.parseTextRepresentation(null, "faLSe");
         assertEquals(Boolean.valueOf(false), parsed);
     }
 
     @Test
-    public void testParseStringWithPrecedingSpace() throws Exception {
+    void parseStringWithPrecedingSpace() throws Exception {
         final Object parsed = value.parseTextRepresentation(null, " false");
         assertEquals(Boolean.valueOf(false), parsed);
     }
 
     @Test
-    public void testParseStringWithTrailingSpace() throws Exception {
+    void parseStringWithTrailingSpace() throws Exception {
         final Object parsed = value.parseTextRepresentation(null, " false");
         assertEquals(Boolean.valueOf(false), parsed);
     }
 
     @Test
-    public void testParseTrueString() throws Exception {
+    void parseTrueString() throws Exception {
         final Object parsed = value.parseTextRepresentation(null, "TRue");
         assertEquals(Boolean.valueOf(true), parsed);
     }
 
     @Test
-    public void testParseInvalidString() throws Exception {
+    void parseInvalidString() throws Exception {
         try {
             value.parseTextRepresentation(null, "yes");
             fail();
@@ -74,12 +74,12 @@ extends ValueSemanticsProviderAbstractTestCase<Boolean> {
     }
 
     @Test
-    public void testTitle() throws Exception {
+    void title() throws Exception {
         assertEquals("True", value.titlePresentation(null, booleanObj));
     }
 
     @Test
-    public void testTitleWhenNotSet() throws Exception {
+    void titleWhenNotSet() throws Exception {
         assertEquals("(none)",
                 value.titlePresentation(null, null));
     }

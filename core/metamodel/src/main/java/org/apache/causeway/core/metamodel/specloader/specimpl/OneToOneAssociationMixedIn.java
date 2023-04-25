@@ -26,6 +26,7 @@ import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
+import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
 import org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacet;
@@ -44,6 +45,24 @@ public class OneToOneAssociationMixedIn
 extends OneToOneAssociationDefault
 implements MixedInMember {
 
+    // -- FACTORIES
+
+    /**
+     * JUnit Support
+     */
+    public static class forTesting {
+        public static OneToOneAssociationMixedIn forMixinMain(
+                final ObjectSpecification mixeeSpec,
+                final Class<?> mixinType,
+                final String mixinMethodName,
+                final FacetedMethod facetedMethod) {
+            final ObjectActionDefault mixinAction = (ObjectActionDefault) ObjectActionDefault.forTesting.forMixinMain(facetedMethod);
+            return new OneToOneAssociationMixedIn(mixeeSpec, mixinAction, mixinType, mixinMethodName);
+        }
+    }
+
+    // -- CONSTRUCTION
+
     /**
      * The type of the mixin (providing the action), eg annotated with {@link org.apache.causeway.applib.annotation.Mixin}.
      */
@@ -61,24 +80,20 @@ implements MixedInMember {
 
 
     /**
-     * Hold facets rather than delegate to the contributed action (different types might
-     * use layout metadata to position the contributee in different ways)
+     * Hold facets rather than delegate to the contributed action.
      */
     @Getter(onMethod = @__(@Override))
     private final FacetHolder facetHolder;
 
     public OneToOneAssociationMixedIn(
-            final ObjectActionDefault mixinAction,
             final ObjectSpecification mixeeSpec,
+            final ObjectActionDefault mixinAction,
             final Class<?> mixinType,
             final String mixinMethodName) {
-
-        super(Identifier.propertyIdentifier(
-                    LogicalType.eager(
-                            mixeeSpec.getCorrespondingClass(),
-                            mixeeSpec.getLogicalTypeName()),
-                    _MixedInMemberNamingStrategy.determineIdFrom(mixinAction)),
-                mixinAction.getFacetedMethod(), mixinAction.getReturnType());
+        super(
+                identifierForMixedInProperty(mixeeSpec, mixinAction),
+                mixinAction.getFacetedMethod(),
+                mixinAction.getReturnType());
 
         this.facetHolder = FacetHolder.layered(
                 super.getFeatureIdentifier(),
@@ -164,5 +179,14 @@ implements MixedInMember {
         return getServiceRegistry().lookupServiceElseFail(ExecutionPublisher.class);
     }
 
+    private static Identifier identifierForMixedInProperty(
+            final ObjectSpecification mixeeSpec,
+            final ObjectActionDefault mixinAction) {
+        return Identifier.propertyIdentifier(
+                    LogicalType.eager(
+                            mixeeSpec.getCorrespondingClass(),
+                            mixeeSpec.getLogicalTypeName()),
+                    _MixedInMemberNamingStrategy.determineIdFrom(mixinAction));
+    }
 
 }

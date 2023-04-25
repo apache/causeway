@@ -24,6 +24,7 @@ import static org.mockito.Mockito.when;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.valuesemantics.BigDecimalValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.IntValueSemantics;
@@ -38,6 +39,7 @@ abstract class ChoiceProviderTestAbstract {
 
     protected void setUp() {
         mmc = MetaModelContext_forTesting.builder()
+                .memberExecutor(mock(MemberExecutorService.class))
                 .build()
                 .withValueSemantics(new BigDecimalValueSemantics())
                 .withValueSemantics(new IntValueSemantics())

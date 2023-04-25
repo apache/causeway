@@ -42,7 +42,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.PropertyLayoutTypicalLengthVm")
+@Named("demo.PropertyLayoutTypicalLengthPage")
 @DomainObject(
         nature=Nature.VIEW_MODEL,
         editing = Editing.ENABLED)
@@ -56,48 +56,20 @@ public class PropertyLayoutTypicalLengthPage implements HasAsciiDocDescription {
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(
         typicalLength = 10                                  // <.>
-        , describedAs =
-            "@PropertyLayout(typicalLength = 10)",
-        fieldSetId = "annotation", sequence = "1")
+    )
     @XmlElement(required = false)
     @Getter @Setter
-    private String propertyUsingAnnotation;
+    private String name;
 //end::annotation[]
 
 //tag::layout-file[]
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(                                        // <.>
-        describedAs =
-            "<cpt:property id=\"...\" typicalLength=\"10\"/>",
-        fieldSetId = "layout-file", sequence = "1")
+    @PropertyLayout(multiLine = 5)                          // <.>
     @XmlElement(required = false)
     @Getter @Setter
-    private String propertyUsingLayout;
+    private String notes;
 //end::layout-file[]
 
-//tag::meta-annotated[]
-    @TypicalLengthMetaAnnotation                            // <.>
-    @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(
-        describedAs = "@TypicalLengthMetaAnnotation",
-        fieldSetId = "meta-annotated", sequence = "1")
-    @XmlElement(required = false)
-    @Getter @Setter
-    private String propertyUsingMetaAnnotation;
-//end::meta-annotated[]
-
-//tag::meta-annotated-overridden[]
-    @TypicalLengthMetaAnnotation                            // <.>
-    @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(
-        typicalLength = 5                                   // <.>
-        , describedAs =
-            "@TypicalLengthMetaAnnotation @PropertyLayout(...)",
-        fieldSetId = "meta-annotated-overridden", sequence = "1")
-    @XmlElement(required = false)
-    @Getter @Setter
-    private String propertyUsingMetaAnnotationButOverridden;
-//end::meta-annotated-overridden[]
 
 }
 //end::class[]

@@ -1,18 +1,26 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-The description of a property or parameter is used as the tooltip of the field in the UI, providing more information to the end-user:
+Often the end-user of your application will be a frequent user and will know by sight the purpose of the various properties, collections and actions that are displayed.
+But, for less experienced users, or for new features, defining a `description` which provides brief additional information for the user may help.
 
-* for properties, the description can be specified using either the `@PropertyLayout` annotation, or a meta-annotation, or using the `Xxx.layout.xml` layout file.
+* for properties, the description can be specified using either the link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/PropertyLayout.html#describedas[@PropertyLayout#describedAs] annotation, or a meta-annotation, or using the `Xxx.layout.xml` layout file.
 
-* for parameters, the description can be specified using either the `@ParameterLayout` annotation, or a meta-annotation.
+* for parameters, the description can be specified using either the link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/ParameterLayout.html#describedas[@ParameterLayout#describedAs] annotation, or a meta-annotation.
+
+In both cases the description of a property or parameter is used as the tooltip of the label in the UI, providing more information to the end-user.
 
 
+NOTE: If the label is suppressed (using link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/PropertyLayout.html#labelposition[@PropertyLayout#labelPosition] set to `NONE`), then the description will not be shown either.
 
-== Annotated
 
-The description can be specified explicitly using an annotation:
+== How this demo works
 
-* for properties, using `@PropertyLayout#describedAs()`:
+This page object has three properties, each of which has a description.
+The first property also has a corresponding action to update it.
+
+For the `name` property:
+
+* its description is specified using `@PropertyLayout#describedAs()`:
 +
 [source,java,indent=0]
 ----
@@ -20,120 +28,34 @@ include::PropertyLayoutDescribedAsPage.java[tags=annotation]
 ----
 <.> explicitly specifies the description of the property
 
-* for parameters, using `@ParameterLayout#describedAs()`:
+* and it can be updated by an action whose (single) parameter is annotated with `@ParameterLayout#describedAs`:
 +
 [source,java,indent=0]
+.PropertyLayoutDescribedAsPage_updateName.java
 ----
-include::PropertyLayoutDescribedAsVm_updateWithParameterLayout.java[tags=annotation]
+include::PropertyLayoutDescribedAsPage_updateName.java[tags=annotation]
 ----
 <.> explicitly specifies the description of the parameter
 
-== Layout File
+For the `notes property, its description is specified using the `.layout.xml` file:
 
-For properties (not parameters), the description can be specified using the `Xxx.layout.xml` file:
-
-* property definition:
-+
-[source,java,indent=0]
-----
-include::PropertyLayoutDescribedAsPage.java[tags=layout-file]
-----
-<.> `describedAs` hint is _not_ present.
-
-* layout file snippet:
-+
 [source,xml,indent=0,tabsize=4]
 ----
-<cpt:property id="propertyUsingLayout">
-    <cpt:describedAs>Described using layout.xml</cpt:describedAs>
+<cpt:property id="notes">
+    <cpt:describedAs>Notes about this object</cpt:describedAs>
 </cpt:property>
 ----
-// TODO: for some reason this doesn't include correctly in the app...
+// for some reason this doesn't include correctly in the app...
 //include::PropertyLayoutDescribedAsPage.layout.xml[tags=layout-file]
 
-One advantage of the layout file over the annotation is that the layout file is dynamic: it can be modified and the changes reloaded in a running application.
+WARNING: currently no tooltip is displayed; see link:https://issues.apache.org/jira/browse/CAUSEWAY-3441[CAUSEWAY-3441].
 
-TIP: It is sometimes necessary to invoke the `Rebuild Metamodel` action to see this take effect.
+For the `address` property, even though it has a description, it will not be rendered because it _also_ has a `labelPosition` which results in the label being suppressed:
 
-== Contributed
+[source,java,indent=0,tabsize=4]
+----
+include::PropertyLayoutDescribedAsPage.java[tags=label-position]
+----
+<.> A labelPosition of `NONE` suppresses the label and therefore also the description tooltip.
 
-The `@PropertyLayout` can also be applied at the class-level to mixin properties:.
-
-[source,java,indent=0]
-----
-include::PropertyLayoutDescribedAsVm_mixinProperty.java[tags=class]
-----
-<.> explicitly specifies the description of the contributed property
-
-== Meta-annotated
-
-The name can also be specified using a custom meta-annotation:
-
-* the meta-annotation is defined as:
-+
-[source,java]
-----
-include::DescribedAsMetaAnnotation.java[tags=class]
-----
-<.> annotated for a property ...
-<.> \... and for a parameter.
-<.> annotation can be applied to a property (either its getter or if using link:https://projectlombok.org/[Lombok] the field directly)
-<.> annotation can be applied to a parameter
-<.> annotation can be applied to a type (ie, meta-meta annotations recursively)
-
-* and can be applied to a property:
-+
-[source,java,indent=0]
-----
-include::PropertyLayoutDescribedAsPage.java[tags=meta-annotated]
-----
-<.> property's description is inherited from the meta-annotation
-
-* or can be applied to a parameter:
-+
-[source,java,indent=0]
-----
-include::PropertyLayoutDescribedAsVm_updateWithMetaAnnotation.java[tags=meta-annotation]
-----
-<.> parameter's description is inherited from the meta-annotation
-
-* or can be applied to mixin:
-+
-[source,java,indent=0]
-----
-include::PropertyLayoutDescribedAsVm_mixinPropertyWithMetaAnnotation.java[tags=class]
-----
-<.> hint is inherited from the meta-annotation
-
-=== Meta-annotated Overridden
-
-The meta-annotation can itself be overridden:
-
-* in a property:
-+
-[source,java,indent=0]
-----
-include::PropertyLayoutDescribedAsPage.java[tags=meta-annotated-overridden]
-----
-<.> description from meta-annotation ...
-<.> \... is overridden by the `@PropertyLayout` annotation
-
-* or a parameter:
-+
-[source,java,indent=0]
-----
-include::PropertyLayoutDescribedAsVm_updateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
-----
-<.> description from meta-annotation ...
-<.> \... is overridden by the `@ParameterLayout` annotation
-
-
-* or a mixin:
-+
-[source,java,indent=0]
-----
-include::PropertyLayoutDescribedAsVm_mixinPropertyWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
-----
-<.> hint from meta-annotation ...
-<.> \... is overridden by the `@PropertyLayout` annotation
 

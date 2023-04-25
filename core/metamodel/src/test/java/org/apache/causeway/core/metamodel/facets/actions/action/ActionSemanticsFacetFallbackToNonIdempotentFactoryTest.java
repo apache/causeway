@@ -61,7 +61,7 @@ extends FacetFactoryTestAbstract {
         class Customer {
             public void someAction() {}
         }
-        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod) -> {
             //when
             processSemantics(facetFactory, processMethodContext);
             //then

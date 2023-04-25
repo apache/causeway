@@ -59,7 +59,7 @@ import org.apache.causeway.core.metamodel.facets.object.publish.entitychange.Ent
 import org.apache.causeway.core.metamodel.facets.properties.property.entitychangepublishing.EntityPropertyChangePublishingPolicyFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
-import org.apache.causeway.core.metamodel.object.MmEntityUtil;
+import org.apache.causeway.core.metamodel.object.MmEntityUtils;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.HasEnlistedEntityPropertyChanges;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyChangeRecord;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyChangeRecordId;
@@ -158,7 +158,7 @@ implements
                 // set post values, which have been left empty up to now
                 .peek(rec -> {
                     // assuming this check correctly detects deleted entities
-                    if(MmEntityUtil.isDeleted(rec.getEntity())) {
+                    if(MmEntityUtils.isDeleted(rec.getEntity())) {
                         rec.withPostValueSetToDeleted();
                     } else {
                         rec.withPostValueSetToCurrent();

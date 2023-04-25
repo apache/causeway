@@ -26,8 +26,12 @@
 
 	<bs3:row>
 		<bs3:col span="6">
-			<cpt:fieldSet name="Edit" id="edit" />
-			<cpt:fieldSet name="Annotated" id="annotation"/>
+			<cpt:fieldSet name="Edit" id="edit" >
+                <cpt:property id="editMe"/>
+            </cpt:fieldSet>
+			<cpt:fieldSet name="Annotated" id="annotation">
+                <cpt:property id="blob"/>
+            </cpt:fieldSet>
 			<cpt:fieldSet name="Layout File" id="layout-file">
 <!-- tag::layout-file[] -->
 				<cpt:property id="propertyUsingLayout" repainting="NO_REPAINT"/>

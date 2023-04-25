@@ -23,7 +23,7 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.wrapper.events.PropertyVisibilityEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
+import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -41,7 +41,7 @@ public class PropertyVisibilityContext extends VisibilityContext {
 
     @Override
     public PropertyVisibilityEvent createInteractionEvent() {
-        return new PropertyVisibilityEvent(MmUnwrapUtil.single(getTarget()), getIdentifier());
+        return new PropertyVisibilityEvent(MmUnwrapUtils.single(getTarget()), getIdentifier());
     }
 
 }

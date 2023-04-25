@@ -8,7 +8,7 @@ There are several annotations that influence the rendering of the various proper
 * if an action is associated with a collection (using either `@CollectionLayout#associateWith` or `@Collection#choicesFrom`), then again it will be rendered close to the collection (as part of the collection's table header).
 
 * alternatively, an action can merely be associated with a fieldset.
-This can be done either by link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/ActionLayout.html#fieldsetid[@ActionLayout#fieldSetId] (using the fieldset's id) and link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/ActionLayout.html#fieldsetname[@ActionLayout#fieldSetName] (using its name)
+This can be done either by link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/ActionLayout.html#fieldsetid[@ActionLayout#fieldSetId] (using the fieldset's id) and link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/ActionLayout.html#fieldsetname[@ActionLayout#fieldSetName] (using its name)
 
 As an alternative to using annotations, you might also use the link:https://causeway.apache.org/userguide/2.0.0-RC1/fun/ui.html#by-example[.layout.xml] file.
 One advantage of using the `.layout.xml` file is that changes can be picked up without having to restart the application.

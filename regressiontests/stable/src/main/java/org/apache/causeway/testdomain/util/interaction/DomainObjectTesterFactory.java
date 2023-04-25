@@ -31,13 +31,11 @@ import org.junit.jupiter.api.function.ThrowingSupplier;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
-import static org.hamcrest.CoreMatchers.either;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.Mockito.when;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
@@ -71,7 +69,7 @@ import org.apache.causeway.core.metamodel.interactions.managed.PropertyInteracti
 import org.apache.causeway.core.metamodel.interactions.managed.PropertyNegotiationModel;
 import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
+import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
@@ -423,7 +421,7 @@ public class DomainObjectTesterFactory {
                         .get(param.getParamNr())
                         .ifPresent(pojoTest->
                             pojoTest.accept(
-                                    MmUnwrapUtil.single(param.getValue().getValue())
+                                    MmUnwrapUtils.single(param.getValue().getValue())
                                     ));
                 });
 
@@ -462,7 +460,7 @@ public class DomainObjectTesterFactory {
         }
 
         private static List<Object> choicesFor(final ManagedValue param) {
-            return MmUnwrapUtil.multipleAsList(param.getChoices().getValue());
+            return MmUnwrapUtils.multipleAsList(param.getChoices().getValue());
         }
 
         @SuppressWarnings("unchecked")
@@ -550,7 +548,7 @@ public class DomainObjectTesterFactory {
                                     objManager
                                     .adapt(
                                         argMapper
-                                        .apply(MmUnwrapUtil.single(param.getValue().getValue())))));
+                                        .apply(MmUnwrapUtils.single(param.getValue().getValue())))));
                     });
 
                 },

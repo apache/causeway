@@ -42,9 +42,9 @@ import org.apache.causeway.core.metamodel.facets.properties.property.fileaccept.
 import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.MandatoryFacetInvertedByNullableAnnotationOnProperty;
 import org.apache.causeway.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForPropertyAnnotation;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEvent;
 import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEvent;
+import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForClearing;
+import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForSetting;
 import org.apache.causeway.core.metamodel.facets.properties.property.mustsatisfy.MustSatisfySpecificationFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.regex.RegExFacetForPatternAnnotationOnProperty;
 import org.apache.causeway.core.metamodel.facets.properties.property.regex.RegExFacetForPropertyAnnotation;
@@ -67,15 +67,11 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        val propertyIfAny = processMethodContext
-                .synthesizeOnMethodOrMixinType(
-                        Property.class,
-                        () -> MetaModelValidatorForAmbiguousMixinAnnotations
-                            .addValidationFailure(processMethodContext.getFacetHolder(), Property.class));
+        val propertyIfAny = propertyIfAny(processMethodContext);
 
         inferIntentWhenOnTypeLevel(processMethodContext, propertyIfAny);
 
-        processModify(processMethodContext, propertyIfAny);
+        processDomainEvent(processMethodContext, propertyIfAny);
         processEditing(processMethodContext, propertyIfAny);
         processCommandPublishing(processMethodContext, propertyIfAny);
         processProjecting(processMethodContext, propertyIfAny);
@@ -87,6 +83,14 @@ extends FacetFactoryAbstract {
         processOptional(processMethodContext, propertyIfAny);
         processRegEx(processMethodContext, propertyIfAny);
         processFileAccept(processMethodContext, propertyIfAny);
+    }
+
+    Optional<Property> propertyIfAny(final ProcessMethodContext processMethodContext) {
+        return processMethodContext
+            .synthesizeOnMethodOrMixinType(
+                    Property.class,
+                    () -> MetaModelValidatorForAmbiguousMixinAnnotations
+                        .addValidationFailure(processMethodContext.getFacetHolder(), Property.class));
     }
 
     void inferIntentWhenOnTypeLevel(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
@@ -106,55 +110,62 @@ extends FacetFactoryAbstract {
         addFacet(new ContributingFacetAbstract(Contributing.AS_ASSOCIATION, facetedMethod) {});
     }
 
-    void processModify(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
+    void processDomainEvent(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
 
         val cls = processMethodContext.getCls();
-        val typeSpec = getSpecificationLoader().loadSpecification(cls);
         val holder = processMethodContext.getFacetHolder();
 
-        val getterFacet = holder.getFacet(PropertyOrCollectionAccessorFacet.class);
-        if(getterFacet == null) {
-            return;
-        }
+        /*
+         * immutable properties as well as mixed-in ones have no setter, hence phases:
+         * HIDE modifiable by events
+         * DISABLE always disabled
+         * VALIDATE n/a for events
+         * EXECUTING n/a for events
+         * EXECUTED n/a for events
+         */
 
-        // following only runs for regular properties, not for mixins.
-        // those are tackled in the post-processing, when more of the metamodel is available to us
+        val getterFacetIfAny = holder.lookupFacet(PropertyOrCollectionAccessorFacet.class);
 
+        final boolean isProperty = getterFacetIfAny.isPresent()
+                || (processMethodContext.isMixinMain()
+                        && propertyIfAny.isPresent());
+
+        if(!isProperty) return; // bale out if method is not representing a property (no matter mixed-in or not)
 
         //
         // Set up PropertyDomainEventFacet, which will act as the hiding/disabling/validating advisor
         //
 
         // search for @Property(domainEvent=...), else use default event type
-        PropertyDomainEventFacet
-        .createRegular(propertyIfAny, typeSpec, getterFacet, holder)
-        .ifPresent(propertyDomainEventFacet->{
+        val propertyDomainEventFacet = PropertyDomainEventFacet
+                .create(propertyIfAny, cls, getterFacetIfAny, holder);
 
-            addFacet(propertyDomainEventFacet);
+        addFacet(propertyDomainEventFacet);
 
-            var eventType = propertyDomainEventFacet.getEventType();
-            var eventTypeOrigin = propertyDomainEventFacet.getEventTypeOrigin();
-
-            //
-            // if the property is mutable, then replace the current setter and clear facets with equivalents that
-            // emit the appropriate domain event and then delegate onto the underlying
-            //
+        getterFacetIfAny.ifPresent(getterFacet->{
+            /* if the property is mutable (never true for mixed-in props),
+             * then replace the current setter and clear facets with equivalents that
+             * emit the appropriate domain event and then delegate onto the underlying */
 
             holder.lookupFacet(PropertySetterFacet.class)
             .ifPresent(setterFacet->
-                    //TODO[CAUSEWAY-3409] we don't install those for the mixin case
-                    // the current setter facet will end up as the underlying facet
-                    addFacet(new PropertySetterFacetForDomainEvent(
-                            eventType, eventTypeOrigin, getterFacet, setterFacet, holder)));
-
+                    /* lazily binds the event-type to the propertyDomainEventFacet,
+                     * such that any changes to the latter during post processing
+                     * are reflected here as well
+                     */
+                    addFacet(new PropertyModifyFacetForSetting(
+                            propertyDomainEventFacet, getterFacet, setterFacet, holder)));
 
             holder.lookupFacet(PropertyClearFacet.class)
             .ifPresent(clearFacet->
-                    //TODO[CAUSEWAY-3409] we don't install those for the mixin case
-                    // the current clear facet will end up as the underlying facet
-                    addFacet(new PropertyClearFacetForDomainEvent(
-                            eventType, eventTypeOrigin, getterFacet, clearFacet, holder)));
+                    /* lazily binds the event-type to the propertyDomainEventFacet,
+                     * such that any changes to the latter during post processing
+                     * are reflected here as well
+                     */
+                    addFacet(new PropertyModifyFacetForClearing(
+                            propertyDomainEventFacet, getterFacet, clearFacet, holder)));
         });
+
     }
 
     void processEditing(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {

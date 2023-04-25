@@ -87,7 +87,7 @@ import org.apache.causeway.core.metamodel.postprocessors.all.DescribedAsFromType
 import org.apache.causeway.core.metamodel.postprocessors.all.i18n.SynthesizeObjectNamingPostProcessor;
 import org.apache.causeway.core.metamodel.postprocessors.all.i18n.TranslationPostProcessor;
 import org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationPostProcessor;
-import org.apache.causeway.core.metamodel.postprocessors.members.TweakDomainEventsForMixinPostProcessor;
+import org.apache.causeway.core.metamodel.postprocessors.members.SynthesizeDomainEventsForMixinPostProcessor;
 import org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenTypePostProcessor;
 import org.apache.causeway.core.metamodel.postprocessors.object.ProjectionFacetsPostProcessor;
 import org.apache.causeway.core.metamodel.postprocessors.param.ChoicesAndDefaultsPostProcessor;
@@ -249,7 +249,7 @@ extends ProgrammingModelAbstract {
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new TypicalLengthFromTypePostProcessor(mmc));
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new ChoicesAndDefaultsPostProcessor(mmc));
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DisabledFromImmutablePostProcessor(mmc));
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new TweakDomainEventsForMixinPostProcessor(mmc));
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new SynthesizeDomainEventsForMixinPostProcessor(mmc));
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new ProjectionFacetsPostProcessor(mmc));
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new NavigationFacetFromHiddenTypePostProcessor(mmc));
 

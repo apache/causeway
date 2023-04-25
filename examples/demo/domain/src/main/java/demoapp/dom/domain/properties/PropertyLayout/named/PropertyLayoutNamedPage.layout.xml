@@ -26,7 +26,9 @@
 
 	<bs3:row>
 		<bs3:col span="6">
-			<cpt:fieldSet name="Annotated" id="annotation"/>
+			<cpt:fieldSet name="Annotated" id="annotation">
+                <cpt:property id="propertyUsingAnnotation"/>
+            </cpt:fieldSet>
 			<cpt:fieldSet name="Layout File" id="layout-file">
 <!-- tag::layout-file[] -->
 				<cpt:property id="propertyUsingLayout">

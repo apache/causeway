@@ -28,8 +28,8 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmInvokeUtil;
-import org.apache.causeway.core.metamodel.object.MmVisibilityUtil;
+import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
+import org.apache.causeway.core.metamodel.object.MmVisibilityUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
@@ -61,7 +61,7 @@ implements ImperativeFacet {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
-        final Object collectionOrArray = MmInvokeUtil.invoke(method, owningAdapter);
+        final Object collectionOrArray = MmInvokeUtils.invoke(method, owningAdapter);
         if(collectionOrArray == null) {
             return null;
         }
@@ -71,7 +71,7 @@ implements ImperativeFacet {
         final boolean filterForVisibility = getConfiguration().getCore().getMetaModel().isFilterVisibility();
         if(filterForVisibility) {
 
-            val autofittedObjectContainer = MmVisibilityUtil
+            val autofittedObjectContainer = MmVisibilityUtils
                     .visiblePojosAutofit(collectionAdapter, interactionInitiatedBy, method.getReturnType());
 
             if (autofittedObjectContainer != null) {

@@ -31,8 +31,6 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
-import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -44,9 +42,7 @@ import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.services.metamodel.DomainMember;
 import org.apache.causeway.applib.services.metamodel.DomainModel;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.id.TypeIdentifierTestFactory;
 import org.apache.causeway.core.metamodel.spec.Hierarchical;
@@ -64,13 +60,11 @@ public class MetaModelServiceDefaultTest {
 
     FacetedMethod mockFacetedMethod;
 
-
     @BeforeEach
+    @SuppressWarnings("unchecked")
     void setUp() throws Exception {
 
         mockFacetedMethod = Mockito.mock(FacetedMethod.class);
-        Matcher<Class<? extends Facet>> facetMatcher = _Casts.uncheckedCast(Matchers.any(Class.class));
-
         Mockito.when(mockFacetedMethod.getMetaModelContext()).thenReturn(MetaModelContext_forTesting.buildDefault());
         Mockito.when(mockFacetedMethod.getFeatureIdentifier()).thenReturn(Identifier.actionIdentifier(
               TypeIdentifierTestFactory.newCustomer(), "reduceheadcount"));
@@ -83,7 +77,7 @@ public class MetaModelServiceDefaultTest {
         Mockito.when(mockSpec.subclasses(Hierarchical.Depth.DIRECT)).thenReturn(Can.empty());
         Mockito.when(mockSpec.isInjectable()).thenReturn(true);
 
-        action = ObjectActionDefault.forMethod(mockFacetedMethod);
+        action = ObjectActionDefault.forTesting.forMethod(mockFacetedMethod);
 
         mockMetaModelService = Mockito.mock(MetaModelServiceDefault.class);
         Mockito.when(mockMetaModelService.getDomainModel())

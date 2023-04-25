@@ -46,8 +46,8 @@ import demoapp.dom.domain.properties.Property.maxLength.PropertyMaxLengthPage;
 import demoapp.dom.domain.properties.Property.mustSatisfy.PropertyMustSatisfyPage;
 import demoapp.dom.domain.properties.Property.optionality.PropertyOptionalityPage;
 import demoapp.dom.domain.properties.Property.projecting.PropertyProjectingPage;
-import demoapp.dom.domain.properties.Property.projecting.child.PropertyProjectingChildVm;
-import demoapp.dom.domain.properties.Property.projecting.persistence.PropertyProjectingChildEntity;
+import demoapp.dom.domain.properties.Property.projecting.PropertyProjectingChildVm;
+import demoapp.dom.domain.properties.Property.projecting.PropertyProjectingChildEntity;
 import demoapp.dom.domain.properties.Property.regexPattern.PropertyRegexPatternPage;
 import demoapp.dom.domain.properties.Property.snapshot.PropertySnapshotPage;
 import demoapp.dom.types.Samples;
@@ -118,10 +118,9 @@ public class PropertyMenu {
     @ActionLayout(cssClassFa="fa-infinity", describedAs = "Regular expressions, such as email")
     public PropertyOptionalityPage optionality(){
         val vm = new PropertyOptionalityPage();
-        vm.setPropertyUsingAnnotation(null);
-        vm.setMandatoryPropertyUsingAnnotation("mandatory");
-        vm.setPropertyUsingMetaAnnotation(null);
-        vm.setPropertyUsingMetaAnnotationButOverridden("mandatory");
+        vm.setOptionalProperty(null);
+        vm.setMandatoryProperty("mandatory");
+        vm.setNullableProperty(null);
         return vm;
     }
 
@@ -141,17 +140,15 @@ public class PropertyMenu {
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-equals", describedAs = "Regular expressions, such as email")
     public PropertyRegexPatternPage regexPattern(){
-        val vm = new PropertyRegexPatternPage();
-        vm.setEmailAddressPropertyUsingAnnotation("joe@bloggs.com");
-        vm.setEmailAddressPropertyUsingMetaAnnotation("flo@bloggs.com");
-        vm.setEmailAddressPropertyUsingMetaAnnotationButOverridden("mo@bloggs.org");
-        return vm;
+        val page = new PropertyRegexPatternPage();
+        page.setEmailAddress("joe@bloggs.com");
+        return page;
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-camera", describedAs = "Snapshot inclusion/exclusion")
     public PropertySnapshotPage snapshot(){
-        return new PropertySnapshotPage("value");
+        return new PropertySnapshotPage("Fred", "Bloggs", "K", "These are some notes");
     }
 
     private void setSampleBlob(final String suffix, final Consumer<Blob> blobConsumer) {

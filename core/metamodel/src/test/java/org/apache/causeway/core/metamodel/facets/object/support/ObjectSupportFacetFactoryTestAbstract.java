@@ -77,7 +77,7 @@ extends FacetFactoryTestAbstract {
             val imperativeFacet = (ImperativeFacet)facet;
 
             supportMethods.forEach(method->{
-                assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
+                assertMethodWasRemoved(method);
                 assertTrue(imperativeFacet.getMethods()
                         .map(MethodFacade::asMethodElseFail).contains(method));
             });

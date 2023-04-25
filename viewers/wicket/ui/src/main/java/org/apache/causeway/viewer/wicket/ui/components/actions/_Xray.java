@@ -22,7 +22,7 @@ package org.apache.causeway.viewer.wicket.ui.components.actions;
 import org.apache.causeway.commons.internal.debug._XrayEvent;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
-import org.apache.causeway.core.metamodel.object.MmDebugUtil;
+import org.apache.causeway.core.metamodel.object.MmDebugUtils;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;
@@ -35,7 +35,7 @@ final class _Xray {
             final ParameterNegotiationModel paramNegotiationModel) {
         if(!XrayUi.isXrayEnabled()) return;
 
-        val data = MmDebugUtil
+        val data = MmDebugUtils
                 .paramUpdateDataFor(paramIndex, paramNegotiationModel);
         _XrayEvent.event("Param Form - about to update: %s", data.formatted());
     }
@@ -45,7 +45,7 @@ final class _Xray {
             final ParameterNegotiationModel paramNegotiationModel) {
         if(!XrayUi.isXrayEnabled()) return;
 
-        val data = MmDebugUtil
+        val data = MmDebugUtils
                 .paramUpdateDataFor(paramIndex, paramNegotiationModel);
         _XrayEvent.event("Param Form - param default[%d] reassessed: %s", paramIndex, data.formatted());
     }
@@ -55,7 +55,7 @@ final class _Xray {
             final ParameterNegotiationModel paramNegotiationModel) {
         if(!XrayUi.isXrayEnabled()) return;
 
-        val data = MmDebugUtil
+        val data = MmDebugUtils
                 .paramUpdateDataFor(paramIndex, paramNegotiationModel);
         _XrayEvent.event("Param Form - updated: %s", data.formatted());
     }

@@ -60,7 +60,7 @@ extends FacetFactoryTestAbstract {
             @Property(optionality = Optionality.OPTIONAL)
             public String getFirstName() { return null;}
         }
-        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod)->{
             //when
             processOptional(facetFactory, processMethodContext);
             //then
@@ -77,7 +77,7 @@ extends FacetFactoryTestAbstract {
             @Property(optionality = Optionality.OPTIONAL)
             public int getNumberOfOrders() { return 0;}
         }
-        propertyScenario(Customer.class, "numberOfOrders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        propertyScenario(Customer.class, "numberOfOrders", (processMethodContext, facetHolder, facetedMethod)->{
             //when
             processOptional(facetFactory, processMethodContext);
             //then
@@ -92,7 +92,7 @@ extends FacetFactoryTestAbstract {
             @Nullable
             public String getFirstName() { return null; }
         }
-        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod)->{
             //when
             processOptional(facetFactory, processMethodContext);
             //then
@@ -109,7 +109,7 @@ extends FacetFactoryTestAbstract {
             @Nullable
             public int getNumberOfOrders() { return 0; }
         }
-        propertyScenario(Customer.class, "numberOfOrders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        propertyScenario(Customer.class, "numberOfOrders", (processMethodContext, facetHolder, facetedMethod)->{
             //when
             processOptional(facetFactory, processMethodContext);
             //then

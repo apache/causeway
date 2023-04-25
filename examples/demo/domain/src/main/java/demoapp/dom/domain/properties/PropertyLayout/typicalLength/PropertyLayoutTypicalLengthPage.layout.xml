@@ -26,15 +26,14 @@
 
 	<bs3:row>
 		<bs3:col span="6">
-			<cpt:fieldSet name="Annotated" id="annotation"/>
-			<cpt:fieldSet name="Layout File" id="layout-file">
+			<cpt:fieldSet name="General" id="general">
+                <cpt:property id="name"/>
+            </cpt:fieldSet>
+			<cpt:fieldSet name="Detail" id="detail">
 <!-- tag::layout-file[] -->
-				<cpt:property id="propertyUsingLayout" typicalLength="10"/>
+				<cpt:property id="notes" typicalLength="10"/>
 <!-- end::layout-file[] -->
 			</cpt:fieldSet>
-			<cpt:fieldSet name="Contributed" id="contributed"/>
-			<cpt:fieldSet name="Meta-annotated" id="meta-annotated"/>
-			<cpt:fieldSet name="Meta-annotated Overridden" id="meta-annotated-overridden"/>
 			<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
 		</bs3:col>
 		<bs3:col span="6">

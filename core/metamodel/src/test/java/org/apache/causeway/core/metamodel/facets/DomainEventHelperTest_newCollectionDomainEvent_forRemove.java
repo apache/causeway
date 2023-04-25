@@ -33,17 +33,16 @@ import org.apache.causeway.applib.id.LogicalType;
 
 class DomainEventHelperTest_newCollectionDomainEvent_forRemove {
 
-    public static class SomeDomainObject {
+    static class SomeDomainObject {
         public Set<SomeReferencedObject> getReferences() { return null; }
     }
-    public static class SomeReferencedObject {}
+    static class SomeReferencedObject {}
 
     public static class SomeDomainObjectCollectionRemovedFromDomainEvent extends CollectionDomainEvent<SomeDomainObject, SomeReferencedObject> { }
 
     @Test
-    public void defaultEventType() throws Exception {
+    void defaultEventType() throws Exception {
         SomeDomainObject sdo = new SomeDomainObject();
-        SomeReferencedObject other = new SomeReferencedObject();
         Identifier identifier = Identifier.collectionIdentifier(
                 LogicalType.fqcn(SomeDomainObject.class), "references");
 
@@ -54,9 +53,8 @@ class DomainEventHelperTest_newCollectionDomainEvent_forRemove {
     }
 
     @Test
-    public void collectionRemovedFromDefaultEventType() throws Exception {
+    void collectionRemovedFromDefaultEventType() throws Exception {
         SomeDomainObject sdo = new SomeDomainObject();
-        SomeReferencedObject other = new SomeReferencedObject();
         Identifier identifier = Identifier.collectionIdentifier(
                 LogicalType.fqcn(SomeDomainObject.class), "references");
 
@@ -67,9 +65,8 @@ class DomainEventHelperTest_newCollectionDomainEvent_forRemove {
     }
 
     @Test
-    public void customEventType() throws Exception {
+    void customEventType() throws Exception {
         SomeDomainObject sdo = new SomeDomainObject();
-        SomeReferencedObject other = new SomeReferencedObject();
         Identifier identifier = Identifier.collectionIdentifier(
                 LogicalType.fqcn(SomeDomainObject.class), "references");
 

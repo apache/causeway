@@ -285,8 +285,8 @@ public final class ManagedObjects {
         @SuppressWarnings({"rawtypes" })
         @Override
         public int compare(final @Nullable ManagedObject a, final @Nullable ManagedObject b) {
-            val aPojo = MmUnwrapUtil.single(a);
-            val bPojo = MmUnwrapUtil.single(b);
+            val aPojo = MmUnwrapUtils.single(a);
+            val bPojo = MmUnwrapUtils.single(b);
             if(Objects.equals(aPojo, bPojo)) {
                 return 0;
             }
@@ -404,7 +404,7 @@ public final class ManagedObjects {
 
         return _NullSafe.streamAutodetect(collectionOrArray)
         .map(pojo->ManagedObject.adaptSingular(elementSpec, pojo)) // pojo is nullable here
-        .filter(MmVisibilityUtil.filterOn(interactionInitiatedBy))
+        .filter(MmVisibilityUtils.filterOn(interactionInitiatedBy))
         .collect(Can.toCan());
     }
 
@@ -422,7 +422,7 @@ public final class ManagedObjects {
         val mmc = object.getSpecification().getMetaModelContext();
 
         val result =  Try.call(()->{
-            final Object returnValue = MmInvokeUtil.invoke(method, object);
+            final Object returnValue = MmInvokeUtils.invoke(method, object);
             if(returnValue instanceof String) {
                 return (String) returnValue;
             }

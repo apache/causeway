@@ -26,9 +26,11 @@ import java.util.StringTokenizer;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.util.Enums;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.resources._Resources;
 
+import lombok.NonNull;
 import lombok.val;
 
 public final class StringExtensions {
@@ -312,9 +314,15 @@ public final class StringExtensions {
      * </pre>
      *
      */
-    public static String asJavaBaseName(final String javaName) {
-        val baseName = _Strings.asPrefixDropped(javaName);
-        return _Strings.capitalize(baseName);
+    public static String asJavaBaseName(final @NonNull String javaName) {
+        val asPrefixDropped = _Strings.asPrefixDropped(javaName);
+        val baseName = asPrefixDropped.isEmpty()
+                ? javaName
+                : asPrefixDropped;
+        val javaBaseName = _Strings.capitalize(baseName.trim());
+        _Assert.assertNotEmpty(javaBaseName,
+                ()->String.format("framework bug: could not create a base name from '%s'", javaName));
+        return javaBaseName;
     }
 
     public static String asPluralName(final String extendee) {

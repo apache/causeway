@@ -33,18 +33,18 @@ extends ValueSemanticsProviderAbstractTestCase<String> {
     private String string;
 
     @BeforeEach
-    public void setUpObjects() throws Exception {
+    void setUpObjects() throws Exception {
         string = "text entry";
         setSemantics(value = new StringValueSemantics());
     }
 
     @Test
-    public void testTitleOf() {
+    void titleOf() {
         assertEquals("text entry", value.titlePresentation(null, string));
     }
 
     @Test
-    public void testParse() throws Exception {
+    void parse() throws Exception {
         final Object parsed = value.parseTextRepresentation(null, "tRUe");
         assertEquals("tRUe", parsed.toString());
     }
@@ -58,28 +58,4 @@ extends ValueSemanticsProviderAbstractTestCase<String> {
     protected void assertValueEncodesToJsonAs(final String a, final String json) {
         assertEquals("text entry", json);
     }
-
-//    @Test
-//    public void testEncodeNormalString() throws Exception {
-//        allowMockAdapterToReturn("/slash");
-//        assertEquals("//slash", getEncodeableFacet().toEncodedString(mockAdapter));
-//    }
-//
-//    @Test
-//    public void testEncodeNULLString() throws Exception {
-//        allowMockAdapterToReturn("NULL");
-//        assertEquals("/NULL", getEncodeableFacet().toEncodedString(mockAdapter));
-//    }
-//
-//    @Test
-//    public void testRestore() throws Exception {
-//        final Object parsed = value.fromEncodedString("//slash");
-//        assertEquals("/slash", parsed.toString());
-//    }
-//
-//    @Test
-//    public void testRestoreNULLString() throws Exception {
-//        final Object parsed = value.fromEncodedString("/NULL");
-//        assertEquals("NULL", parsed.toString());
-//    }
 }

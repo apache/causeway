@@ -23,7 +23,7 @@ import org.apache.causeway.applib.services.wrapper.events.ParseValueEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
+import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -52,8 +52,8 @@ implements ProposedHolder {
 
     @Override
     public ParseValueEvent createInteractionEvent() {
-        final String proposedPojo = (String) MmUnwrapUtil.single(getProposed());
-        return new ParseValueEvent(MmUnwrapUtil.single(getTarget()), getIdentifier(), proposedPojo);
+        final String proposedPojo = (String) MmUnwrapUtils.single(getProposed());
+        return new ParseValueEvent(MmUnwrapUtils.single(getTarget()), getIdentifier(), proposedPojo);
     }
 
 }

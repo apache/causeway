@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.property.modify;
 
-import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
@@ -29,7 +28,6 @@ import org.apache.causeway.applib.services.i18n.TranslatableString;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -47,7 +45,6 @@ import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.specimpl.OneToOneAssociationMixedIn;
-import org.apache.causeway.core.metamodel.util.EventUtil;
 
 import lombok.NonNull;
 import lombok.val;
@@ -68,62 +65,36 @@ implements
     // -- FACTORIES
 
     /**
-     * For regular (non mixed-in) members only.
-     * <p>
-     * @return empty, if event is not post-able
+     * Inspect {@link Property#domainEvent()} if present, else use the default event type.
+     * @param getterFacet - will be empty if this is for a mixed-in property {@link OneToOneAssociationMixedIn}.
      */
-    public static Optional<PropertyDomainEventFacet> createRegular(
+    public static PropertyDomainEventFacet create(
             final @NonNull Optional<Property> propertyIfAny,
-            final @NonNull ObjectSpecification typeSpec,
-            final @NonNull PropertyOrCollectionAccessorFacet getterFacet,
+            final @NonNull Class<?> classBeingIntrospected,
+            final @NonNull Optional<PropertyOrCollectionAccessorFacet> getterFacet,
             final @NonNull FacetHolder facetHolder) {
 
         val propertyDomainEventFacet = propertyIfAny
                 .map(Property::domainEvent)
                 .filter(domainEvent -> domainEvent != PropertyDomainEvent.Default.class)
-                .map(domainEvent -> new PropertyDomainEventFacet(
-                        defaultFromDomainObjectIfRequired(typeSpec, domainEvent),
+                .map(domainEvent -> new PropertyDomainEventFacet(domainEvent,
                         EventTypeOrigin.ANNOTATED_MEMBER, getterFacet, facetHolder))
-                .orElse(new PropertyDomainEventFacet(
-                        defaultFromDomainObjectIfRequired(typeSpec, PropertyDomainEvent.Default.class),
-                        EventTypeOrigin.DEFAULT, getterFacet, facetHolder));
+                .orElseGet(()->{
 
-        return EventUtil.eventTypeIsPostable(
-                propertyDomainEventFacet.getEventType(),
-                PropertyDomainEvent.Noop.class,
-                PropertyDomainEvent.Default.class,
-                facetHolder.getConfiguration().getApplib().getAnnotation().getProperty().getDomainEvent().isPostForDefault())
-            ? Optional.of(propertyDomainEventFacet)
-            : Optional.empty();
-    }
+                    /* only used to lookup {@link PropertyDomainEventDefaultFacetForDomainObjectAnnotation} */
+                    val typeSpec = facetHolder.getSpecificationLoader().loadSpecification(classBeingIntrospected);
+                    val typeFromDomainObject = typeSpec.getFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class);
 
-    /**
-     * For mixed-in members.
-     */
-    public static Optional<PropertyDomainEventFacet> createMixedIn(
-            final @NonNull ObjectSpecification mixeeSpecification,
-            final @NonNull OneToOneAssociationMixedIn mixedInProperty) {
+                    return typeFromDomainObject != null
+                            ? new PropertyDomainEventFacet(
+                                    typeFromDomainObject.getEventType(),
+                                    EventTypeOrigin.ANNOTATED_OBJECT, getterFacet, facetHolder)
+                            : new PropertyDomainEventFacet(
+                                    PropertyDomainEvent.Default.class,
+                                    EventTypeOrigin.DEFAULT, getterFacet, facetHolder);
+                });
 
-        val facetedMethod = mixedInProperty.getFacetedMethod();
-        final Method method = facetedMethod.getMethod().asMethodElseFail(); // no-arg method, should have a regular facade
-
-        //TODO[CAUSEWAY-3409] what if the @Property annotation is not on the method but on the (mixin) type
-        final Property propertyAnnot =
-                _Annotations.synthesize(method, Property.class)
-                .orElse(null);
-
-        if(propertyAnnot != null) {
-            final Class<? extends PropertyDomainEvent<?, ?>> propertyDomainEventType =
-                    defaultFromDomainObjectIfRequired(
-                            mixeeSpecification, propertyAnnot.domainEvent());
-            val getterFacet = (PropertyOrCollectionAccessorFacet)null;
-
-            return Optional.of(
-                    new PropertyDomainEventFacet(
-                            propertyDomainEventType, EventTypeOrigin.ANNOTATED_MEMBER, getterFacet, mixedInProperty));
-        }
-
-        return Optional.empty();
+        return propertyDomainEventFacet;
     }
 
     // -- CONSTRUCTION
@@ -135,16 +106,16 @@ implements
     private final TranslationContext translationContext;
 
     /**
-     * @param getterFacetIfAny - will be null if this is for a mixin {@link OneToOneAssociationMixedIn}.
+     * @param getterFacet - will be empty if this is for a mixed-in property {@link OneToOneAssociationMixedIn}.
      */
     protected PropertyDomainEventFacet(
-            final Class<? extends PropertyDomainEvent<?, ?>> eventType,
-            final EventTypeOrigin eventTypeOrigin,
-            final PropertyOrCollectionAccessorFacet getterFacetIfAny,
-            final FacetHolder holder) {
+            final @NonNull Class<? extends PropertyDomainEvent<?, ?>> eventType,
+            final @NonNull EventTypeOrigin eventTypeOrigin,
+            final @NonNull Optional<PropertyOrCollectionAccessorFacet> getterFacet,
+            final @NonNull FacetHolder holder) {
 
         super(type(), eventType, eventTypeOrigin, holder);
-        this.getterFacetIfAny = getterFacetIfAny;
+        this.getterFacetIfAny = getterFacet.orElse(null);
 
         this.translationService = getTranslationService();
         this.translationContext = holder.getTranslationContext();
@@ -163,6 +134,7 @@ implements
 
     @Override
     public String hides(final VisibilityContext ic) {
+        if(!isPostable()) return null; // bale out
 
         final PropertyDomainEvent<?, ?> event =
                 domainEventHelper.postEventForProperty(
@@ -178,6 +150,7 @@ implements
 
     @Override
     public Optional<VetoReason> disables(final UsabilityContext ic) {
+        if(!isPostable()) return null; // bale out
 
         final PropertyDomainEvent<?, ?> event =
                 domainEventHelper.postEventForProperty(
@@ -201,6 +174,7 @@ implements
 
     @Override
     public String invalidates(final ValidityContext ic) {
+        if(!isPostable()) return null; // bale out
 
         if(getterFacetIfAny == null) {
             return null;
@@ -233,26 +207,10 @@ implements
         return null;
     }
 
-
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("getterFacet", getterFacetIfAny);
-    }
-
-    // -- HELPER
-
-    private static Class<? extends PropertyDomainEvent<?,?>> defaultFromDomainObjectIfRequired(
-            final ObjectSpecification typeSpec,
-            final Class<? extends PropertyDomainEvent<?,?>> propertyDomainEventType) {
-        if (propertyDomainEventType == PropertyDomainEvent.Default.class) {
-            final PropertyDomainEventDefaultFacetForDomainObjectAnnotation typeFromDomainObject =
-                    typeSpec.getFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class);
-            if (typeFromDomainObject != null) {
-                return typeFromDomainObject.getEventType();
-            }
-        }
-        return propertyDomainEventType;
     }
 
 }

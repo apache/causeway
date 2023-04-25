@@ -31,7 +31,7 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.interactions.UsabilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmInvokeUtil;
+import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -67,7 +67,7 @@ implements ImperativeFacet {
             return Optional.empty();
         }
         val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
-        final Object returnValue = MmInvokeUtil.invokeAutofit(method, target);
+        final Object returnValue = MmInvokeUtils.invokeAutofit(method, target);
         final String reasonString = returnValue instanceof String
                 ? (String) returnValue
                 : returnValue instanceof TranslatableString

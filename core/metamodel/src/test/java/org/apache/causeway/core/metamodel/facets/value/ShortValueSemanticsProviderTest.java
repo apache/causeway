@@ -34,7 +34,7 @@ extends ValueSemanticsProviderAbstractTestCase<Short> {
     private Short short1;
 
     @BeforeEach
-    public void setUpObjects() throws Exception {
+    void setUpObjects() throws Exception {
 
         short1 = Short.valueOf((short) 32);
         allowMockAdapterToReturn(short1);
@@ -43,7 +43,7 @@ extends ValueSemanticsProviderAbstractTestCase<Short> {
     }
 
     @Test
-    public void testInvalidParse() throws Exception {
+    void invalidParse() throws Exception {
         try {
             value.parseTextRepresentation(null, "one");
             fail();
@@ -52,23 +52,23 @@ extends ValueSemanticsProviderAbstractTestCase<Short> {
     }
 
     @Test
-    public void testTitleOfForPositiveValue() {
+    void titleOfForPositiveValue() {
         assertEquals("32", value.titlePresentation(null, short1));
     }
 
     @Test
-    public void testTitleOfForLargestNegativeValue() {
+    void titleOfForLargestNegativeValue() {
         assertEquals("-128", value.titlePresentation(null, Short.valueOf((short) -128)));
     }
 
     @Test
-    public void testParse() throws Exception {
+    void parse() throws Exception {
         final Object newValue = value.parseTextRepresentation(null, "120");
         assertEquals(Short.valueOf((short) 120), newValue);
     }
 
     @Test
-    public void testParseOfOddEntry() throws Exception {
+    void parseOfOddEntry() throws Exception {
         final Object newValue = value.parseTextRepresentation(null, "1,20.0");
         assertEquals(Short.valueOf((short) 120), newValue);
     }
