@@ -22,30 +22,20 @@ import org.apache.causeway.applib.events.domain.ActionDomainEvent;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.DomainEventHolder;
-import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
-import lombok.Getter;
-import lombok.NonNull;
-
 /**
  * Handles both, regular and mixed-in actions,
- * but not mix-in properties nor mix-in collections.
- * (that's for the sibling facet {@link ActionInvocationFacetForPropertyOrCollectionDomainEvent})
+ * but not mixed-in properties nor mixed-in collections.
+ * (that's done by the sibling facet {@link ActionInvocationFacetForPropertyOrCollectionDomainEvent})
  */
 public class ActionInvocationFacetForActionDomainEvent
 extends ActionInvocationFacetAbstract {
-
-    @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
-    @Getter(onMethod_ = {@Override}) private final ObjectSpecification declaringType;
-    @Getter(onMethod_ = {@Override}) private final ObjectSpecification returnType;
-    private final MemberExecutorService memberExecutorService;
 
     public ActionInvocationFacetForActionDomainEvent(
             final DomainEventHolder<ActionDomainEvent<?>> domainEventHolder,
@@ -53,12 +43,7 @@ extends ActionInvocationFacetAbstract {
             final ObjectSpecification declaringType,
             final ObjectSpecification returnType,
             final FacetHolder holder) {
-
-        super(domainEventHolder, holder);
-        this.methods = ImperativeFacet.singleMethod(method);
-        this.declaringType = declaringType;
-        this.returnType = returnType;
-        this.memberExecutorService = getServiceRegistry().lookupServiceElseFail(MemberExecutorService.class);
+        super(domainEventHolder, method, declaringType, returnType, holder);
     }
 
     @Override

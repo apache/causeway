@@ -38,7 +38,6 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.DomainEventHelper;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForActionDomainEvent;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -70,7 +69,7 @@ implements
             final @NonNull InteractionHead head,
             final @NonNull Can<ManagedObject> argumentAdapters,
             final @NonNull ObjectAction owningAction,
-            final @NonNull ActionInvocationFacetForActionDomainEvent actionInvocationFacetForActionDomainEvent) {
+            final @NonNull ActionInvocationFacetAbstract actionInvocationFacetAbstract) {
 
         _Assert.assertEquals(owningAction.getParameterCount(), argumentAdapters.size(),
                 "action's parameter count and provided argument count must match");
@@ -80,16 +79,11 @@ implements
             throw _Exceptions.illegalArgument("arguments must be specified for action %s", owningAction);
         }});
 
-        val method = actionInvocationFacetForActionDomainEvent.getMethods().getFirstElseFail();
+        val method = actionInvocationFacetAbstract.getMethods().getFirstElseFail();
 
         return new ActionExecutor(
                 owningAction.getMetaModelContext(), facetHolder,
-                interactionInitiatedBy, owningAction, method, head, argumentAdapters, actionInvocationFacetForActionDomainEvent);
-    }
-
-    public static ActionExecutor forMixedInPropertyOrCollection() {
-        //TODO[CAUSEWAY-3409] implement
-        return null;
+                interactionInitiatedBy, owningAction, method, head, argumentAdapters, actionInvocationFacetAbstract);
     }
 
     // -- CONSTRUCTION

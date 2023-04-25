@@ -20,23 +20,17 @@ package org.apache.causeway.core.metamodel.facets.actions.action.invocation;
 
 import java.util.function.BiConsumer;
 
-import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.DomainEventHelper;
 import org.apache.causeway.core.metamodel.facets.DomainEventHolder;
-import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacet;
 import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-
-import lombok.Getter;
-import lombok.NonNull;
 
 /**
  * Handles mixed-in properties and collections.
@@ -47,26 +41,15 @@ import lombok.NonNull;
 public class ActionInvocationFacetForPropertyOrCollectionDomainEvent
 extends ActionInvocationFacetAbstract {
 
-    @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
-    @Getter(onMethod_ = {@Override}) private final ObjectSpecification declaringType;
-    @Getter(onMethod_ = {@Override}) private final ObjectSpecification returnType;
-    private final ServiceRegistry serviceRegistry;
-    private final DomainEventHelper domainEventHelper;
-
     public ActionInvocationFacetForPropertyOrCollectionDomainEvent(
             final MethodFacade method,
             final ObjectSpecification declaringType,
             final ObjectSpecification returnType,
             final FacetHolder holder) {
 
-        /* DomainEventHolder is empty, because we are using that of the
-         * PropertyDomainEventFacet or CollectionDomainEventFacet instead */
-        super(DomainEventHolder.empty(), holder);
-        this.methods = ImperativeFacet.singleMethod(method);
-        this.declaringType = declaringType;
-        this.returnType = returnType;
-        this.serviceRegistry = getServiceRegistry();
-        this.domainEventHelper = DomainEventHelper.ofServiceRegistry(serviceRegistry);
+        /* DomainEventHolder is empty, because for mixed-in prop/coll there are no execution related events.
+         * However, we are using PropertyDomainEventFacet or CollectionDomainEventFacet for hiding advisory. */
+        super(DomainEventHolder.empty(), method, declaringType, returnType, holder);
     }
 
     @Override
@@ -75,8 +58,9 @@ extends ActionInvocationFacetAbstract {
             final InteractionHead head,
             final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        //FIXME [CAUSEWAY-3409] do the action invocation, but emit property execution events
-        return ManagedObject.empty(owningAction.getReturnType());
+        //FIXME [CAUSEWAY-3409] are there any property execution events that we need to emit?
+        return memberExecutorService.invokeAction(getFacetHolder(), interactionInitiatedBy,
+                head, argumentAdapters, owningAction, this);
     }
 
     @Override

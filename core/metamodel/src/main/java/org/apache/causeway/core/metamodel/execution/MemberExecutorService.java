@@ -20,12 +20,11 @@ package org.apache.causeway.core.metamodel.execution;
 
 import java.util.Optional;
 
-import org.apache.causeway.applib.services.iactn.ActionInvocation;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForActionDomainEvent;
+import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertySetterOrClearFacetForDomainEventAbstract;
 import org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
@@ -46,14 +45,6 @@ import lombok.val;
  * @since 2.0
  */
 public interface MemberExecutorService {
-
-    @FunctionalInterface
-    interface ActionExecutorFactory {
-        InteractionInternal.MemberExecutor<ActionInvocation> createExecutor(
-                ObjectAction owningAction,
-                InteractionHead head,
-                Can<ManagedObject> argumentAdapters);
-    }
 
     /**
      * Optionally, the currently active {@link InteractionInternal} for the calling thread.
@@ -84,14 +75,14 @@ public interface MemberExecutorService {
             // action specifics
             @NonNull final Can<ManagedObject> argumentAdapters,
             @NonNull final ObjectAction owningAction,
-            @NonNull final ActionInvocationFacetForActionDomainEvent actionInvocationFacetForActionDomainEvent) {
+            @NonNull final ActionInvocationFacetAbstract actionInvocationFacetAbstract) {
         val actionExecutor = ActionExecutor.forAction(
                 facetHolder,
                 interactionInitiatedBy,
                 head,
                 argumentAdapters,
                 owningAction,
-                actionInvocationFacetForActionDomainEvent);
+                actionInvocationFacetAbstract);
         return invokeAction(actionExecutor);
     }
 
