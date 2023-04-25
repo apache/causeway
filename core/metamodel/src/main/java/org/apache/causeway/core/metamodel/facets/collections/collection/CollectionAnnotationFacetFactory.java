@@ -100,7 +100,7 @@ extends FacetFactoryAbstract {
         if(!isCollection) return; // bale out if method is not representing a collection (no matter mixed-in or not)
 
         //
-        // Set up CollectionDomainEventFacet, which will act as the hiding/disabling/validating/.. advisor
+        // Set up CollectionDomainEventFacet, which will act as the hiding/disabling/validating advisor
         //
 
         // search for @Collection(domainEvent=...)

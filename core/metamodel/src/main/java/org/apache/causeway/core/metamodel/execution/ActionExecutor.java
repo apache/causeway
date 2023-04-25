@@ -119,7 +119,7 @@ implements
         getServiceRegistry().lookupServiceElseFail(QueryResultsCache.class);
 
     private boolean isPostable() {
-        //TODO[CAUSEWAY-3409] when mixed-in prop/coll we need to ask the prop/coll facet instead
+        // when mixed-in prop/coll always returns false
         return actionInvocationFacetAbstract.isPostable();
     }
 
@@ -134,7 +134,7 @@ implements
 
         currentExecution.setDto(invocationDto);
 
-        //XXX no sure if the call to currentExecution.setDto(propertyEditDto) above is even required if not post-able
+        //XXX not sure if the call to currentExecution.setDto(propertyEditDto) above is even required if not post-able
         if(!isPostable()) {
             // don't emit domain events
             return executeWithoutEvents(arguments);
@@ -179,9 +179,7 @@ implements
     private Object executeWithoutEvents(final Can<ManagedObject> arguments) {
         // invoke method
         val resultPojo = invokeMethodElseFromCache(method, head, arguments);
-        getServiceInjector().injectServicesInto(resultPojo);
-
-        return resultPojo;
+        return getServiceInjector().injectServicesInto(resultPojo);
     }
 
     // -- HELPER

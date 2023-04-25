@@ -135,7 +135,7 @@ extends FacetFactoryAbstract {
         if(!isProperty) return; // bale out if method is not representing a property (no matter mixed-in or not)
 
         //
-        // Set up PropertyDomainEventFacet, which will act as the hiding/disabling/validating/.. advisor
+        // Set up PropertyDomainEventFacet, which will act as the hiding/disabling/validating advisor
         //
 
         // search for @Property(domainEvent=...), else use default event type

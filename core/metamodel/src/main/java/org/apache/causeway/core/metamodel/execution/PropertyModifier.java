@@ -23,7 +23,6 @@ import java.util.Objects;
 import org.apache.causeway.applib.events.domain.AbstractDomainEvent;
 import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
 import org.apache.causeway.applib.services.iactn.PropertyEdit;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -35,6 +34,7 @@ import org.apache.causeway.core.metamodel.facets.properties.update.clear.Propert
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.services.ixn.InteractionDtoFactory;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
@@ -45,8 +45,10 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @RequiredArgsConstructor
+@Log4j2
 public final class PropertyModifier
 implements
     HasMetaModelContext,
@@ -165,11 +167,13 @@ implements
                         oldValuePojo, newValuePojo);
 
         val newValuePojoPossiblyUpdated = propertyDomainEvent.getNewValue();
+        val isValueModifiedByEvent = !Objects.equals(newValuePojoPossiblyUpdated, newValuePojo);
 
         final ManagedObject newValueAfterEventPolling =
-                Objects.equals(newValuePojoPossiblyUpdated, newValuePojo)
-                    ? newValue
-                    : ManagedObject.adaptSingular(newValue.getSpecification(), newValuePojoPossiblyUpdated);
+                isValueModifiedByEvent
+                        // properly handles the pojo==null case
+                        ? ManagedObject.adaptSingular(newValue.getSpecification(), newValuePojoPossiblyUpdated)
+                        : newValue;
 
         // set event onto the execution
         currentExecution.setEvent(propertyDomainEvent);
@@ -202,18 +206,17 @@ implements
 
     /**
      * Executes the change using underlying setter or getter facets, without triggering any events.
-     * @param newValueAdapter
+     * <p>
+     * @implNote Reassesses whether this is a clear or a set operation, based on actual {@code newValue},
+     * which might have been modified during EXECUTING phase (event polling).
      */
-    public void executeClearOrSetWithoutEvents(final @NonNull ManagedObject newValueAdapter) {
-        // invoke method
-        if(executionVariant.isSet()) {
-            setterFacet.setProperty(
-                owningProperty, head.getTarget(), newValueAdapter, interactionInitiatedBy);
-        } else if(executionVariant.isClear()) {
+    public void executeClearOrSetWithoutEvents(final @NonNull ManagedObject newValue) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(newValue)) {
             clearFacet.clearProperty(
                     owningProperty, head.getTarget(), interactionInitiatedBy);
         } else {
-            throw _Exceptions.unmatchedCase("framework bug");
+            setterFacet.setProperty(
+                    owningProperty, head.getTarget(), newValue, interactionInitiatedBy);
         }
     }
 
