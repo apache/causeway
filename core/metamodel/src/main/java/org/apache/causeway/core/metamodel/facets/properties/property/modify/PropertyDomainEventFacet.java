@@ -70,19 +70,29 @@ implements
      */
     public static PropertyDomainEventFacet create(
             final @NonNull Optional<Property> propertyIfAny,
-            final @NonNull ObjectSpecification typeSpec,
+            final @NonNull Class<?> classBeingIntrospected,
             final @NonNull Optional<PropertyOrCollectionAccessorFacet> getterFacet,
             final @NonNull FacetHolder facetHolder) {
 
         val propertyDomainEventFacet = propertyIfAny
                 .map(Property::domainEvent)
                 .filter(domainEvent -> domainEvent != PropertyDomainEvent.Default.class)
-                .map(domainEvent -> new PropertyDomainEventFacet(
-                        defaultFromDomainObjectIfRequired(typeSpec, domainEvent),
+                .map(domainEvent -> new PropertyDomainEventFacet(domainEvent,
                         EventTypeOrigin.ANNOTATED_MEMBER, getterFacet, facetHolder))
-                .orElse(new PropertyDomainEventFacet(
-                        defaultFromDomainObjectIfRequired(typeSpec, PropertyDomainEvent.Default.class),
-                        EventTypeOrigin.DEFAULT, getterFacet, facetHolder));
+                .orElseGet(()->{
+
+                    /* only used to lookup {@link PropertyDomainEventDefaultFacetForDomainObjectAnnotation} */
+                    val typeSpec = facetHolder.getSpecificationLoader().loadSpecification(classBeingIntrospected);
+                    val typeFromDomainObject = typeSpec.getFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class);
+
+                    return typeFromDomainObject != null
+                            ? new PropertyDomainEventFacet(
+                                    typeFromDomainObject.getEventType(),
+                                    EventTypeOrigin.ANNOTATED_OBJECT, getterFacet, facetHolder)
+                            : new PropertyDomainEventFacet(
+                                    PropertyDomainEvent.Default.class,
+                                    EventTypeOrigin.DEFAULT, getterFacet, facetHolder);
+                });
 
         return propertyDomainEventFacet;
     }
@@ -197,26 +207,10 @@ implements
         return null;
     }
 
-
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("getterFacet", getterFacetIfAny);
-    }
-
-    // -- HELPER
-
-    private static Class<? extends PropertyDomainEvent<?,?>> defaultFromDomainObjectIfRequired(
-            final ObjectSpecification typeSpec,
-            final Class<? extends PropertyDomainEvent<?,?>> propertyDomainEventType) {
-        if (propertyDomainEventType == PropertyDomainEvent.Default.class) {
-            final PropertyDomainEventDefaultFacetForDomainObjectAnnotation typeFromDomainObject =
-                    typeSpec.getFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class);
-            if (typeFromDomainObject != null) {
-                return typeFromDomainObject.getEventType();
-            }
-        }
-        return propertyDomainEventType;
     }
 
 }

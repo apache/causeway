@@ -274,7 +274,6 @@ public interface FacetFactory {
                 final @NonNull Class<A> annotationType,
                 final @NonNull Runnable onAmbiguity) {
 
-
             val onMethod = synthesizeOnMethod(annotationType);
             val onType = synthesizeOnType(annotationType);
 
@@ -342,8 +341,8 @@ public interface FacetFactory {
         // -- JUNIT SUPPORT
 
         /**
-         * JUnit support, historically using classic IntrospectionPolicy ANNOTATION_OPTIONAL
-         *  and not using 'isMixinMain'
+         * JUnit support, historically using (classic) {@link IntrospectionPolicy#ANNOTATION_OPTIONAL}
+         * and {@code isMixinMain=false}
          */
         public static ProcessMethodContext forTesting(
                 final Class<?> cls,

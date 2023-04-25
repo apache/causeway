@@ -36,6 +36,7 @@ import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel._testing.MethodRemover_forTesting;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
@@ -172,9 +173,8 @@ implements HasMetaModelContext {
     public static interface MixedInPropertyScenarioConsumer {
         void accept(
                 ProcessMethodContext processMethodContext,
-                FacetHolder facetHolder,
-                FacetedMethod facetedMethod,
                 ObjectSpecification mixeeSpec,
+                FacetedMethod facetedMethod,
                 OneToOneAssociationMixedIn mixedInProp);
     }
 
@@ -292,21 +292,22 @@ implements HasMetaModelContext {
         val mixinClass = scenario.mixinClass().orElseThrow();
         val mixedInMethod = _Utils.findMethodByNameOrFail(mixinClass, "prop");
 
-        val facetHolder = propertyFacetHolder(mixinClass, "prop");
         val annotatedMethod = mixedInMethod;
         val facetedMethod = FacetedMethod.createForProperty(getMetaModelContext(), mixinClass, annotatedMethod);
 
         val id = facetedMethod.getFeatureIdentifier();
         assertNotNull(id.getClassName());
 
-        val processMethodContext = ProcessMethodContext
-                .forTesting(declaringClass, FeatureType.PROPERTY, annotatedMethod, methodRemover, facetedMethod);
+        val processMethodContext = new ProcessMethodContext(
+                mixinClass, IntrospectionPolicy.ENCAPSULATION_ENABLED, FeatureType.PROPERTY,
+                _MethodFacades.regular(annotatedMethod),
+                methodRemover, facetedMethod, true);
 
         final ObjectSpecification mixeeSpec = getSpecificationLoader().loadSpecification(declaringClass);
         final OneToOneAssociationMixedIn mixedInProp =
                 OneToOneAssociationMixedIn.forTesting.forMixinMain(mixeeSpec, mixinClass, "prop", facetedMethod);
 
-        consumer.accept(processMethodContext, facetHolder, facetedMethod, mixeeSpec, mixedInProp);
+        consumer.accept(processMethodContext, mixeeSpec, facetedMethod, mixedInProp);
     }
 
     /**

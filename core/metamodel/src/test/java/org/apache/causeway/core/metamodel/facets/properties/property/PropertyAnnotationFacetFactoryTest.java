@@ -22,7 +22,6 @@ import java.util.regex.Pattern;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -95,55 +94,55 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
 
     private static void processModify(
             final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
-        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
+        val propertyIfAny = facetFactory.propertyIfAny(processMethodContext);
         facetFactory.processDomainEvent(processMethodContext, propertyIfAny);
     }
 
     private static void processHidden(
             final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
-        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
+        val propertyIfAny = facetFactory.propertyIfAny(processMethodContext);
         facetFactory.processHidden(processMethodContext, propertyIfAny);
     }
 
     private static void processOptional(
             final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
-        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
+        val propertyIfAny = facetFactory.propertyIfAny(processMethodContext);
         facetFactory.processOptional(processMethodContext, propertyIfAny);
     }
 
     private static void processRegEx(
             final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
-        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
+        val propertyIfAny = facetFactory.propertyIfAny(processMethodContext);
         facetFactory.processRegEx(processMethodContext, propertyIfAny);
     }
 
     private static void processEditing(
             final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
-        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
+        val propertyIfAny = facetFactory.propertyIfAny(processMethodContext);
         facetFactory.processEditing(processMethodContext, propertyIfAny);
     }
 
     private static void processMaxLength(
             final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
-        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
+        val propertyIfAny = facetFactory.propertyIfAny(processMethodContext);
         facetFactory.processMaxLength(processMethodContext, propertyIfAny);
     }
 
     private static void processMustSatisfy(
             final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
-        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
+        val propertyIfAny = facetFactory.propertyIfAny(processMethodContext);
         facetFactory.processMustSatisfy(processMethodContext, propertyIfAny);
     }
 
     private static void processSnapshot(
             final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
-        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
+        val propertyIfAny = facetFactory.propertyIfAny(processMethodContext);
         facetFactory.processSnapshot(processMethodContext, propertyIfAny);
     }
 
     private static void processEntityPropertyChangePublishing(
             final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
-        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
+        val propertyIfAny = facetFactory.propertyIfAny(processMethodContext);
         facetFactory.processEntityPropertyChangePublishing(processMethodContext, propertyIfAny);
     }
 
@@ -228,146 +227,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
         }
 
         @Test
-        void withDeprecatedPostsPropertyChangedEvent_andGetterFacet_andSetterFacet() {
-
-            class Customer {
-                class NamedChangedDomainEvent extends PropertyDomainEvent<Customer, String> {}
-                @Property(domainEvent = NamedChangedDomainEvent.class)
-                @Getter @Setter private String name;
-            }
-
-            // given
-            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod)->{
-
-                addGetterFacet(facetedMethod);
-                addSetterFacet(facetedMethod);
-                addClearFacet(facetedMethod);
-
-                // when
-                processModify(facetFactory, processMethodContext);
-
-                // then
-                assertHasPropertyDomainEventFacet(facetedMethod,
-                        EventTypeOrigin.ANNOTATED_MEMBER, Customer.NamedChangedDomainEvent.class);
-            });
-        }
-
-
-        @Test
-        void withPropertyInteractionEvent() {
-
-            class Customer {
-                class NamedChangedDomainEvent extends PropertyDomainEvent<Customer, String> {}
-                @Property(domainEvent = NamedChangedDomainEvent.class)
-                @Getter @Setter private String name;
-            }
-
-            // given
-            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod)->{
-                addGetterFacet(facetedMethod);
-                addSetterFacet(facetedMethod);
-                addClearFacet(facetedMethod);
-
-                // when
-                processModify(facetFactory, processMethodContext);
-
-                // then
-                assertHasPropertyDomainEventFacet(facetedMethod,
-                        EventTypeOrigin.ANNOTATED_MEMBER, Customer.NamedChangedDomainEvent.class);
-            });
-        }
-
-        //TODO[CAUSEWAY-3409] also test for actions and collections
-        @Test @Disabled("surfaces bug, that @Property annot on type not recognized") //FIXME
-        void withPropertyInteractionEvent_mixedIn_annotatedOnMethod() {
-            val postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
-
-            // given
-            class Customer {
-                class NamedChangedDomainEvent extends PropertyDomainEvent<Customer, String> {}
-            }
-            @DomainObject(nature=Nature.MIXIN, mixinMethod = "prop")
-            @RequiredArgsConstructor
-            @SuppressWarnings("unused")
-            class Customer_name {
-                final Customer mixee;
-                @Property(domainEvent = Customer.NamedChangedDomainEvent.class)
-                public String prop() { return "mixed-in name"; }
-            }
-
-            propertyScenarioMixedIn(Customer.class, Customer_name.class,
-                    (processMethodContext, facetHolder, facetedMethod, mixeeSpec, mixedInProp)->{
-
-                // when
-                processModify(facetFactory, processMethodContext);
-                postProcessor.postProcessProperty(mixeeSpec, mixedInProp);
-
-                // then
-                assertHasPropertyDomainEventFacet(facetedMethod,
-                        EventTypeOrigin.ANNOTATED_MEMBER, Customer.NamedChangedDomainEvent.class);
-
-            });
-        }
-
-        //TODO[CAUSEWAY-3409] also test for actions and collections
-        @Test @Disabled("surfaces bug, where PropertyDomainEventFacet is not installed") //FIXME
-        void withPropertyInteractionEvent_mixedIn_annotatedOnType() {
-            val postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
-
-            // given
-            class Customer {
-                class NamedChangedDomainEvent extends PropertyDomainEvent<Customer, String> {}
-            }
-            @Property(domainEvent = Customer.NamedChangedDomainEvent.class)
-            @RequiredArgsConstructor
-            @SuppressWarnings("unused")
-            class Customer_name {
-                final Customer mixee;
-                @MemberSupport
-                public String prop() { return "mixed-in name"; }
-            }
-
-            propertyScenarioMixedIn(Customer.class, Customer_name.class,
-                    (processMethodContext, facetHolder, facetedMethod, mixeeSpec, mixedInProp)->{
-
-                // when
-                processModify(facetFactory, processMethodContext);
-                postProcessor.postProcessProperty(mixeeSpec, mixedInProp);
-
-                // then
-                assertHasPropertyDomainEventFacet(facetedMethod,
-                        EventTypeOrigin.ANNOTATED_MEMBER, Customer.NamedChangedDomainEvent.class);
-
-            });
-        }
-
-        @Test
-        void withPropertyDomainEvent() {
-
-            class Customer {
-                class NamedChangedDomainEvent extends PropertyDomainEvent<Customer, String> {
-                }
-                @Property(domainEvent= NamedChangedDomainEvent.class)
-                @Getter @Setter private String name;
-            }
-
-            // given
-            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod)->{
-                addGetterFacet(facetedMethod);
-                addSetterFacet(facetedMethod);
-                addClearFacet(facetedMethod);
-
-                // when
-                processModify(facetFactory, processMethodContext);
-
-                // then
-                assertHasPropertyDomainEventFacet(facetedMethod,
-                        EventTypeOrigin.ANNOTATED_MEMBER, Customer.NamedChangedDomainEvent.class);
-            });
-        }
-
-        @Test
-        void withDefaultEvent() {
+        void withPropertyDomainEvent_fallingBackToDefault() {
 
             class Customer {
                 @Getter @Setter private String name;
@@ -390,6 +250,242 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                         EventTypeOrigin.DEFAULT, PropertyDomainEvent.Default.class);
             });
         }
+
+        @Test
+        void withPropertyDomainEvent_annotatedOnMethod() {
+
+            class Customer {
+                class NamedChangedDomainEvent extends PropertyDomainEvent<Customer, String> {}
+                @Property(domainEvent = NamedChangedDomainEvent.class)
+                @Getter @Setter private String name;
+            }
+
+            // given
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod)->{
+                addGetterFacet(facetedMethod);
+                addSetterFacet(facetedMethod);
+                addClearFacet(facetedMethod);
+
+                // when
+                processModify(facetFactory, processMethodContext);
+
+                // then
+                assertHasPropertyDomainEventFacet(facetedMethod,
+                        EventTypeOrigin.ANNOTATED_MEMBER, Customer.NamedChangedDomainEvent.class);
+            });
+        }
+
+        @Test
+        void withPropertyDomainEvent_annotatedOnType() {
+
+            @DomainObject(propertyDomainEvent = Customer.NamedChangedDomainEvent.class)
+            class Customer {
+                class NamedChangedDomainEvent extends PropertyDomainEvent<Customer, String> {}
+                @Property
+                @Getter @Setter private String name;
+            }
+
+            // given
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod)->{
+                addGetterFacet(facetedMethod);
+                addSetterFacet(facetedMethod);
+                addClearFacet(facetedMethod);
+
+                // when
+                processModify(facetFactory, processMethodContext);
+
+                // then
+                assertHasPropertyDomainEventFacet(facetedMethod,
+                        EventTypeOrigin.ANNOTATED_OBJECT, Customer.NamedChangedDomainEvent.class);
+            });
+        }
+
+        @Test
+        void withPropertyDomainEvent_annotatedOnTypeAndMethod() {
+
+            @DomainObject(propertyDomainEvent = Customer.NamedChangedDomainEvent1.class)
+            class Customer {
+                class NamedChangedDomainEvent1 extends PropertyDomainEvent<Customer, String> {}
+                class NamedChangedDomainEvent2 extends PropertyDomainEvent<Customer, String> {}
+                @Property(domainEvent = NamedChangedDomainEvent2.class)
+                @Getter @Setter private String name;
+            }
+
+            // given
+            propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod)->{
+                addGetterFacet(facetedMethod);
+                addSetterFacet(facetedMethod);
+                addClearFacet(facetedMethod);
+
+                // when
+                processModify(facetFactory, processMethodContext);
+
+                // then - the property annotation should win
+                assertHasPropertyDomainEventFacet(facetedMethod,
+                        EventTypeOrigin.ANNOTATED_MEMBER, Customer.NamedChangedDomainEvent2.class);
+            });
+        }
+
+        @Test
+        void withPropertyDomainEvent_mixedIn_annotatedOnMethod() {
+            val postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
+
+            // given
+            class Customer {
+                class NamedChangedDomainEvent extends PropertyDomainEvent<Customer, String> {}
+            }
+            @DomainObject(nature=Nature.MIXIN, mixinMethod = "prop")
+            @RequiredArgsConstructor
+            @SuppressWarnings("unused")
+            class Customer_name {
+                final Customer mixee;
+                @Property(domainEvent = Customer.NamedChangedDomainEvent.class)
+                public String prop() { return "mixed-in name"; }
+            }
+
+            propertyScenarioMixedIn(Customer.class, Customer_name.class,
+                    (processMethodContext, mixeeSpec, facetedMethod, mixedInProp)->{
+
+                // when
+                processModify(facetFactory, processMethodContext);
+                postProcessor.postProcessProperty(mixeeSpec, mixedInProp);
+
+                // then
+                assertHasPropertyDomainEventFacet(facetedMethod,
+                        EventTypeOrigin.ANNOTATED_MEMBER, Customer.NamedChangedDomainEvent.class);
+
+            });
+        }
+
+        @Test
+        void withPropertyDomainEvent_mixedIn_annotatedOnMixedInType() {
+            val postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
+
+            // given
+            class Customer {
+                class NamedChangedDomainEvent extends PropertyDomainEvent<Customer, String> {}
+            }
+            @Property(domainEvent = Customer.NamedChangedDomainEvent.class)
+            @RequiredArgsConstructor
+            @SuppressWarnings("unused")
+            class Customer_name {
+                final Customer mixee;
+                @MemberSupport
+                public String prop() { return "mixed-in name"; }
+            }
+
+            propertyScenarioMixedIn(Customer.class, Customer_name.class,
+                    (processMethodContext, mixeeSpec, facetedMethod, mixedInProp)->{
+
+                // when
+                processModify(facetFactory, processMethodContext);
+                postProcessor.postProcessProperty(mixeeSpec, mixedInProp);
+
+                // then
+                assertHasPropertyDomainEventFacet(facetedMethod,
+                        EventTypeOrigin.ANNOTATED_MEMBER, Customer.NamedChangedDomainEvent.class);
+
+            });
+        }
+
+        @Test
+        void withPropertyDomainEvent_mixedIn_annotatedOnMixeeType() {
+            val postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
+
+            // given
+            @DomainObject(propertyDomainEvent = Customer.NamedChangedDomainEvent.class)
+            class Customer {
+                class NamedChangedDomainEvent extends PropertyDomainEvent<Customer, String> {}
+            }
+            @Property
+            @RequiredArgsConstructor
+            @SuppressWarnings("unused")
+            class Customer_name {
+                final Customer mixee;
+                @MemberSupport
+                public String prop() { return "mixed-in name"; }
+            }
+
+            propertyScenarioMixedIn(Customer.class, Customer_name.class,
+                    (processMethodContext, mixeeSpec, facetedMethod, mixedInProp)->{
+
+                // when
+                processModify(facetFactory, processMethodContext);
+                postProcessor.postProcessProperty(mixeeSpec, mixedInProp);
+
+                // then
+                assertHasPropertyDomainEventFacet(facetedMethod,
+                        EventTypeOrigin.ANNOTATED_OBJECT, Customer.NamedChangedDomainEvent.class);
+
+            });
+        }
+
+        @Test
+        void withPropertyDomainEvent_mixedIn_annotatedOnMixeeAndMixedInType() {
+            val postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
+
+            // given
+            @DomainObject(propertyDomainEvent = Customer.NamedChangedDomainEvent1.class)
+            class Customer {
+                class NamedChangedDomainEvent1 extends PropertyDomainEvent<Customer, String> {}
+                class NamedChangedDomainEvent2 extends PropertyDomainEvent<Customer, String> {}
+            }
+            @Property(domainEvent = Customer.NamedChangedDomainEvent2.class)
+            @RequiredArgsConstructor
+            @SuppressWarnings("unused")
+            class Customer_name {
+                final Customer mixee;
+                @MemberSupport
+                public String prop() { return "mixed-in name"; }
+            }
+
+            propertyScenarioMixedIn(Customer.class, Customer_name.class,
+                    (processMethodContext, mixeeSpec, facetedMethod, mixedInProp)->{
+
+                // when
+                processModify(facetFactory, processMethodContext);
+                postProcessor.postProcessProperty(mixeeSpec, mixedInProp);
+
+                // then - the mixed-in annotation should win
+                assertHasPropertyDomainEventFacet(facetedMethod,
+                        EventTypeOrigin.ANNOTATED_MEMBER, Customer.NamedChangedDomainEvent2.class);
+
+            });
+        }
+
+        @Test
+        void withPropertyDomainEvent_mixedIn_annotatedOnMixeeTypeAndMixedInMethod() {
+            val postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
+
+            // given
+            @DomainObject(propertyDomainEvent = Customer.NamedChangedDomainEvent1.class)
+            class Customer {
+                class NamedChangedDomainEvent1 extends PropertyDomainEvent<Customer, String> {}
+                class NamedChangedDomainEvent2 extends PropertyDomainEvent<Customer, String> {}
+            }
+            @DomainObject(nature=Nature.MIXIN, mixinMethod = "prop")
+            @RequiredArgsConstructor
+            @SuppressWarnings("unused")
+            class Customer_name {
+                final Customer mixee;
+                @Property(domainEvent = Customer.NamedChangedDomainEvent2.class)
+                public String prop() { return "mixed-in name"; }
+            }
+
+            propertyScenarioMixedIn(Customer.class, Customer_name.class,
+                    (processMethodContext, mixeeSpec, facetedMethod, mixedInProp)->{
+
+                // when
+                processModify(facetFactory, processMethodContext);
+                postProcessor.postProcessProperty(mixeeSpec, mixedInProp);
+
+                // then - the mixed-in annotation should win
+                assertHasPropertyDomainEventFacet(facetedMethod,
+                        EventTypeOrigin.ANNOTATED_MEMBER, Customer.NamedChangedDomainEvent2.class);
+
+            });
+        }
+
     }
 
     @TestInstance(Lifecycle.PER_CLASS) @Deprecated(forRemoval = true, since = "2.0.0-RC2")

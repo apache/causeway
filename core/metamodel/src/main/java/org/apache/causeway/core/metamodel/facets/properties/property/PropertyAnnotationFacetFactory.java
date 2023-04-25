@@ -43,8 +43,8 @@ import org.apache.causeway.core.metamodel.facets.properties.property.hidden.Hidd
 import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.MandatoryFacetInvertedByNullableAnnotationOnProperty;
 import org.apache.causeway.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForPropertyAnnotation;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForClearing;
 import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet;
+import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForClearing;
 import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForSetting;
 import org.apache.causeway.core.metamodel.facets.properties.property.mustsatisfy.MustSatisfySpecificationFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.regex.RegExFacetForPatternAnnotationOnProperty;
@@ -68,11 +68,7 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        val propertyIfAny = processMethodContext
-                .synthesizeOnMethodOrMixinType(
-                        Property.class,
-                        () -> MetaModelValidatorForAmbiguousMixinAnnotations
-                            .addValidationFailure(processMethodContext.getFacetHolder(), Property.class));
+        val propertyIfAny = propertyIfAny(processMethodContext);
 
         inferIntentWhenOnTypeLevel(processMethodContext, propertyIfAny);
 
@@ -89,6 +85,14 @@ extends FacetFactoryAbstract {
         processOptional(processMethodContext, propertyIfAny);
         processRegEx(processMethodContext, propertyIfAny);
         processFileAccept(processMethodContext, propertyIfAny);
+    }
+
+    Optional<Property> propertyIfAny(final ProcessMethodContext processMethodContext) {
+        return processMethodContext
+        .synthesizeOnMethodOrMixinType(
+                Property.class,
+                () -> MetaModelValidatorForAmbiguousMixinAnnotations
+                    .addValidationFailure(processMethodContext.getFacetHolder(), Property.class));
     }
 
     void inferIntentWhenOnTypeLevel(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
@@ -111,7 +115,6 @@ extends FacetFactoryAbstract {
     void processDomainEvent(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
 
         val cls = processMethodContext.getCls();
-        val typeSpec = getSpecificationLoader().loadSpecification(cls);
         val holder = processMethodContext.getFacetHolder();
 
         /*
@@ -126,8 +129,8 @@ extends FacetFactoryAbstract {
         val getterFacetIfAny = holder.lookupFacet(PropertyOrCollectionAccessorFacet.class);
 
         final boolean isProperty = getterFacetIfAny.isPresent()
-                || processMethodContext.isMixinMain()
-                        && propertyIfAny.isPresent();
+                || (processMethodContext.isMixinMain()
+                        && propertyIfAny.isPresent());
 
         if(!isProperty) return; // bale out if method is not representing a property (no matter mixed-in or not)
 
@@ -137,7 +140,7 @@ extends FacetFactoryAbstract {
 
         // search for @Property(domainEvent=...), else use default event type
         val propertyDomainEventFacet = PropertyDomainEventFacet
-                .create(propertyIfAny, typeSpec, getterFacetIfAny, holder);
+                .create(propertyIfAny, cls, getterFacetIfAny, holder);
 
         addFacet(propertyDomainEventFacet);
 
