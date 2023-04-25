@@ -57,11 +57,7 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        val actionIfAny = processMethodContext
-                .synthesizeOnMethodOrMixinType(
-                        Action.class,
-                        () -> MetaModelValidatorForAmbiguousMixinAnnotations
-                        .addValidationFailure(processMethodContext.getFacetHolder(), Action.class));
+        val actionIfAny = actionIfAny(processMethodContext);
 
         processExplicit(processMethodContext, actionIfAny);
         processDomainEvent(processMethodContext, actionIfAny);
@@ -80,6 +76,14 @@ extends FacetFactoryAbstract {
         processChoicesFrom(processMethodContext, actionIfAny);
 
         processFileAccept(processMethodContext, actionIfAny);
+    }
+
+    Optional<Action> actionIfAny(final ProcessMethodContext processMethodContext) {
+        return processMethodContext
+                .synthesizeOnMethodOrMixinType(
+                        Action.class,
+                        () -> MetaModelValidatorForAmbiguousMixinAnnotations
+                        .addValidationFailure(processMethodContext.getFacetHolder(), Action.class));
     }
 
     void processExplicit(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {

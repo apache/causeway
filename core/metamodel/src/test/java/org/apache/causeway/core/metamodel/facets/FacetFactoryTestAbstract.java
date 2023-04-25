@@ -34,7 +34,6 @@ import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
@@ -48,6 +47,7 @@ import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContex
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessParameterContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.causeway.core.metamodel.specloader.specimpl.OneToManyAssociationMixedIn;
 import org.apache.causeway.core.metamodel.specloader.specimpl.OneToOneAssociationMixedIn;
 import org.apache.causeway.core.metamodel.valuesemantics.IntValueSemantics;
@@ -70,7 +70,7 @@ implements HasMetaModelContext {
         final Class<?> declaringClass;
         final String actionName;
         @Builder.Default
-        final Can<Class<?>> mixinClasses = Can.empty();
+        final Optional<Class<?>> mixinClass = Optional.empty();
         public static ActionScenarioBuilder builder(final Class<?> declaringClass, final String actionName) {
             return new ActionScenario.ActionScenarioBuilder()
                     .declaringClass(declaringClass)
@@ -171,6 +171,14 @@ implements HasMetaModelContext {
                 FacetedMethod facetedMethod);
     }
     @FunctionalInterface
+    protected static interface MixedInActionScenarioConsumer {
+        void accept(
+                ProcessMethodContext processMethodContext,
+                ObjectSpecification mixeeSpec,
+                FacetedMethod facetedMethod,
+                ObjectActionMixedIn mixedInAct);
+    }
+    @FunctionalInterface
     protected static interface MixedInPropertyScenarioConsumer {
         void accept(
                 ProcessMethodContext processMethodContext,
@@ -188,7 +196,7 @@ implements HasMetaModelContext {
     }
 
     @FunctionalInterface
-    public static interface ParameterScenarioConsumer {
+    protected static interface ParameterScenarioConsumer {
         void accept(
                 ProcessParameterContext processParameterContext,
                 FacetHolder facetHolder,
@@ -218,9 +226,44 @@ implements HasMetaModelContext {
         val processMethodContext = ProcessMethodContext
                 .forTesting(declaringClass, FeatureType.ACTION, actionMethod, methodRemover, facetedMethod);
 
-        scenario.mixinClasses().forEach(mixinClass->getSpecificationLoader().loadSpecification(mixinClass));
-
         consumer.accept(processMethodContext, facetHolder, facetedMethod);
+    }
+    /**
+     * MixedIn Action scenario.
+     */
+    protected void actionScenarioMixedIn(
+            final Class<?> mixeeClass, final Class<?> mixinClass, final MixedInActionScenarioConsumer consumer) {
+        val scenario = ActionScenario.builder(mixeeClass, "unused")
+                .mixinClass(Optional.of(mixinClass))
+                .build();
+        actionScenarioMixedIn(scenario, consumer);
+    }
+    protected void actionScenarioMixedIn(
+            final ActionScenario scenario, final MixedInActionScenarioConsumer consumer) {
+
+        val declaringClass = scenario.declaringClass();
+
+        // get mixin main, assuming 'act'
+        val mixinClass = scenario.mixinClass().orElseThrow();
+        val mixedInMethod = _Utils.findMethodByNameOrFail(mixinClass, "act");
+
+        val annotatedMethod = mixedInMethod;
+        val facetedMethod = FacetedMethod.createForAction(getMetaModelContext(), mixinClass,
+                _MethodFacades.regular(annotatedMethod));
+
+        val id = facetedMethod.getFeatureIdentifier();
+        assertNotNull(id.getClassName());
+
+        val processMethodContext = new ProcessMethodContext(
+                mixinClass, IntrospectionPolicy.ENCAPSULATION_ENABLED, FeatureType.ACTION,
+                _MethodFacades.regular(annotatedMethod),
+                methodRemover, facetedMethod, true);
+
+        final ObjectSpecification mixeeSpec = getSpecificationLoader().loadSpecification(declaringClass);
+        final ObjectActionMixedIn mixedInAct =
+                ObjectActionMixedIn.forTesting.forMixinMain(mixeeSpec, mixinClass, "act", facetedMethod);
+
+        consumer.accept(processMethodContext, mixeeSpec, facetedMethod, mixedInAct);
     }
 
     /**
@@ -298,9 +341,8 @@ implements HasMetaModelContext {
 
         // get mixin main, assuming 'prop'
         val mixinClass = scenario.mixinClass().orElseThrow();
-        val mixedInMethod = _Utils.findMethodByNameOrFail(mixinClass, "prop");
+        val annotatedMethod = _Utils.findMethodByNameOrFail(mixinClass, "prop");
 
-        val annotatedMethod = mixedInMethod;
         val facetedMethod = FacetedMethod.createForProperty(getMetaModelContext(), mixinClass, annotatedMethod);
 
         val id = facetedMethod.getFeatureIdentifier();
@@ -343,7 +385,7 @@ implements HasMetaModelContext {
         consumer.accept(processMethodContext, facetHolder, facetedMethod);
     }
     /**
-     * MixedIn Property scenario.
+     * MixedIn Collection scenario.
      */
     protected void collectionScenarioMixedIn(
             final Class<?> mixeeClass, final Class<?> mixinClass, final MixedInCollectionScenarioConsumer consumer) {
@@ -359,9 +401,8 @@ implements HasMetaModelContext {
 
         // get mixin main, assuming 'coll'
         val mixinClass = scenario.mixinClass().orElseThrow();
-        val mixedInMethod = _Utils.findMethodByNameOrFail(mixinClass, "coll");
+        val annotatedMethod = _Utils.findMethodByNameOrFail(mixinClass, "coll");
 
-        val annotatedMethod = mixedInMethod;
         val facetedMethod = FacetedMethod.createForCollection(getMetaModelContext(), mixinClass, annotatedMethod);
 
         val id = facetedMethod.getFeatureIdentifier();

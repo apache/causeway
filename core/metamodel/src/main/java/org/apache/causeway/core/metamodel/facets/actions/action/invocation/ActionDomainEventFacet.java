@@ -69,6 +69,7 @@ implements
      */
     public static ActionDomainEventFacet create(
             final @NonNull Optional<Action> actionIfAny,
+            /** only used to lookup {@link ActionDomainEventDefaultFacetForDomainObjectAnnotation} */
             final @NonNull ObjectSpecification typeSpec,
             final @NonNull FacetHolder facetHolder){
 
@@ -77,12 +78,20 @@ implements
                 .map(Action::domainEvent)
                 .filter(domainEvent -> domainEvent != ActionDomainEvent.Default.class)
                 .map(domainEvent ->
-                        new ActionDomainEventFacet(
-                                defaultFromDomainObjectIfRequired(typeSpec, domainEvent), EventTypeOrigin.ANNOTATED_MEMBER, facetHolder))
-                .orElse(
-                        new ActionDomainEventFacet(
-                                defaultFromDomainObjectIfRequired(typeSpec, ActionDomainEvent.Default.class), EventTypeOrigin.DEFAULT, facetHolder)
-                        );
+                        new ActionDomainEventFacet(domainEvent, EventTypeOrigin.ANNOTATED_MEMBER, facetHolder))
+                .orElseGet(()->{
+
+                    val typeFromDomainObject = typeSpec
+                            .getFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class);
+
+                    return typeFromDomainObject != null
+                            ? new ActionDomainEventFacet(
+                                    typeFromDomainObject.getEventType(),
+                                    EventTypeOrigin.ANNOTATED_OBJECT, facetHolder)
+                            : new ActionDomainEventFacet(
+                                    ActionDomainEvent.Default.class,
+                                    EventTypeOrigin.DEFAULT, facetHolder);
+                });
         return actionDomainEventFacet;
     }
 
@@ -197,20 +206,6 @@ implements
                     "Expecting ic to be of type ActionInteractionContext, instead was: " + ic);
         }
         return ((ActionInteractionContext) ic).getObjectAction();
-    }
-
-    private static Class<? extends ActionDomainEvent<?>> defaultFromDomainObjectIfRequired(
-            final ObjectSpecification typeSpec,
-            final Class<? extends ActionDomainEvent<?>> actionDomainEventType) {
-
-        if (actionDomainEventType == ActionDomainEvent.Default.class) {
-            val typeFromDomainObject =
-                    typeSpec.getFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class);
-            if (typeFromDomainObject != null) {
-                return typeFromDomainObject.getEventType();
-            }
-        }
-        return actionDomainEventType;
     }
 
 }
