@@ -36,11 +36,11 @@ import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCol
 
 import lombok.val;
 
-class CollectionFieldMethodsFacetFactoryTest
+class CollectionAccessorFacetFactoryTest
 extends FacetFactoryTestAbstract {
 
     @Test
-    void propertyAccessorFacetIsInstalledForJavaUtilCollectionAndMethodRemoved() {
+    void accessorFacetIsInstalledForJavaUtilCollectionAndMethodRemoved() {
         val facetFactory = new CollectionAccessorFacetViaAccessorFactory(getMetaModelContext());
         @SuppressWarnings({ "rawtypes", "unused" })
         class Customer {
@@ -63,7 +63,7 @@ extends FacetFactoryTestAbstract {
     }
 
     @Test
-    void propertyAccessorFacetIsInstalledForJavaUtilListAndMethodRemoved() {
+    void accessorFacetIsInstalledForJavaUtilListAndMethodRemoved() {
         val facetFactory = new CollectionAccessorFacetViaAccessorFactory(getMetaModelContext());
         @SuppressWarnings({ "rawtypes", "unused" })
         class Customer {
@@ -86,7 +86,7 @@ extends FacetFactoryTestAbstract {
     }
 
     @Test
-    void propertyAccessorFacetIsInstalledForJavaUtilSetAndMethodRemoved() {
+    void accessorFacetIsInstalledForJavaUtilSetAndMethodRemoved() {
         val facetFactory = new CollectionAccessorFacetViaAccessorFactory(getMetaModelContext());
         @SuppressWarnings({ "rawtypes", "unused" })
         class Customer {
@@ -109,7 +109,7 @@ extends FacetFactoryTestAbstract {
     }
 
     @Test
-    void propertyAccessorFacetIsInstalledForObjectArrayAndMethodRemoved() {
+    void accessorFacetIsInstalledForObjectArrayAndMethodRemoved() {
         val facetFactory = new CollectionAccessorFacetViaAccessorFactory(getMetaModelContext());
         @SuppressWarnings("unused")
         class Customer {
@@ -132,7 +132,7 @@ extends FacetFactoryTestAbstract {
     }
 
     @Test
-    void propertyAccessorFacetIsInstalledForOrderArrayAndMethodRemoved() {
+    void accessorFacetIsInstalledForOrderArrayAndMethodRemoved() {
         val facetFactory = new CollectionAccessorFacetViaAccessorFactory(getMetaModelContext());
         class Order {
         }
@@ -157,7 +157,7 @@ extends FacetFactoryTestAbstract {
     }
 
     @Test
-    void methodFoundInSuperclass() {
+    void accessorFoundInSuperclass() {
         val facetFactory = new CollectionAccessorFacetViaAccessorFactory(getMetaModelContext());
         class Order {
         }

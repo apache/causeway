@@ -51,17 +51,21 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        val collectionIfAny = processMethodContext
-                .synthesizeOnMethodOrMixinType(
-                        Collection.class,
-                        () -> MetaModelValidatorForAmbiguousMixinAnnotations
-                        .addValidationFailure(processMethodContext.getFacetHolder(), Collection.class));
+        val collectionIfAny = collectionIfAny(processMethodContext);
 
         inferIntentWhenOnTypeLevel(processMethodContext, collectionIfAny);
 
         processDomainEvent(processMethodContext, collectionIfAny);
         processHidden(processMethodContext, collectionIfAny);
         processTypeOf(processMethodContext, collectionIfAny);
+    }
+
+    Optional<Collection> collectionIfAny(final ProcessMethodContext processMethodContext) {
+        return processMethodContext
+            .synthesizeOnMethodOrMixinType(
+                    Collection.class,
+                    () -> MetaModelValidatorForAmbiguousMixinAnnotations
+                    .addValidationFailure(processMethodContext.getFacetHolder(), Collection.class));
     }
 
     void inferIntentWhenOnTypeLevel(final ProcessMethodContext processMethodContext, final Optional<Collection> collectionIfAny) {
@@ -85,14 +89,13 @@ extends FacetFactoryAbstract {
     void processDomainEvent(final ProcessMethodContext processMethodContext, final Optional<Collection> collectionIfAny) {
 
         val cls = processMethodContext.getCls();
-        val typeSpec = getSpecificationLoader().loadSpecification(cls);
         val holder = processMethodContext.getFacetHolder();
 
         val getterFacetIfAny = holder.lookupFacet(PropertyOrCollectionAccessorFacet.class);
 
         final boolean isCollection = getterFacetIfAny.isPresent()
-                || processMethodContext.isMixinMain()
-                        && collectionIfAny.isPresent();
+                || (processMethodContext.isMixinMain()
+                        && collectionIfAny.isPresent());
 
         if(!isCollection) return; // bale out if method is not representing a collection (no matter mixed-in or not)
 
@@ -103,7 +106,7 @@ extends FacetFactoryAbstract {
         // search for @Collection(domainEvent=...)
         addFacet(
             CollectionDomainEventFacet
-                .create(collectionIfAny, typeSpec, holder));
+                .create(collectionIfAny, cls, holder));
     }
 
     @SuppressWarnings("removal")

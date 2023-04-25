@@ -89,10 +89,10 @@ extends FacetFactoryAbstract {
 
     Optional<Property> propertyIfAny(final ProcessMethodContext processMethodContext) {
         return processMethodContext
-        .synthesizeOnMethodOrMixinType(
-                Property.class,
-                () -> MetaModelValidatorForAmbiguousMixinAnnotations
-                    .addValidationFailure(processMethodContext.getFacetHolder(), Property.class));
+            .synthesizeOnMethodOrMixinType(
+                    Property.class,
+                    () -> MetaModelValidatorForAmbiguousMixinAnnotations
+                        .addValidationFailure(processMethodContext.getFacetHolder(), Property.class));
     }
 
     void inferIntentWhenOnTypeLevel(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {

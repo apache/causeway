@@ -33,6 +33,7 @@ import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
 import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
+import lombok.NonNull;
 import lombok.val;
 
 public class CollectionDomainEventFacet
@@ -51,21 +52,30 @@ implements HidingInteractionAdvisor {
      * Inspect {@link Collection#domainEvent()} if present, else use the default event type.
      */
     public static CollectionDomainEventFacet create(
-            final Optional<Collection> collectionIfAny,
-            final ObjectSpecification typeSpec,
-            final FacetHolder facetHolder) {
+            final @NonNull Optional<Collection> collectionIfAny,
+            final @NonNull Class<?> classBeingIntrospected,
+            final @NonNull FacetHolder facetHolder) {
 
         val collectionDomainEventFacet = collectionIfAny
                 .map(Collection::domainEvent)
                 .filter(domainEvent -> domainEvent != CollectionDomainEvent.Default.class)
                 .map(domainEvent ->
-                        new CollectionDomainEventFacet(
-                                defaultFromDomainObjectIfRequired(typeSpec, domainEvent),
+                        new CollectionDomainEventFacet(domainEvent,
                                 EventTypeOrigin.ANNOTATED_MEMBER, facetHolder))
-                .orElse(
-                        new CollectionDomainEventFacet(
-                                defaultFromDomainObjectIfRequired(typeSpec, CollectionDomainEvent.Default.class),
-                                EventTypeOrigin.DEFAULT, facetHolder));
+                .orElseGet(()->{
+
+                    /* only used to lookup {@link CollectionDomainEventDefaultFacetForDomainObjectAnnotation} */
+                    val typeSpec = facetHolder.getSpecificationLoader().loadSpecification(classBeingIntrospected);
+                    val typeFromDomainObject = typeSpec.getFacet(CollectionDomainEventDefaultFacetForDomainObjectAnnotation.class);
+
+                    return typeFromDomainObject != null
+                            ? new CollectionDomainEventFacet(
+                                    typeFromDomainObject.getEventType(),
+                                    EventTypeOrigin.ANNOTATED_OBJECT, facetHolder)
+                            : new CollectionDomainEventFacet(
+                                    CollectionDomainEvent.Default.class,
+                                    EventTypeOrigin.DEFAULT, facetHolder);
+                });
 
         return collectionDomainEventFacet;
     }
@@ -105,21 +115,6 @@ implements HidingInteractionAdvisor {
             return "Hidden by subscriber";
         }
         return null;
-    }
-
-    // -- HELPER
-
-    private static Class<? extends CollectionDomainEvent<?,?>> defaultFromDomainObjectIfRequired(
-            final ObjectSpecification typeSpec,
-            final Class<? extends CollectionDomainEvent<?,?>> collectionDomainEventType) {
-        if (collectionDomainEventType == CollectionDomainEvent.Default.class) {
-            final CollectionDomainEventDefaultFacetForDomainObjectAnnotation typeFromDomainObject =
-                    typeSpec.getFacet(CollectionDomainEventDefaultFacetForDomainObjectAnnotation.class);
-            if (typeFromDomainObject != null) {
-                return typeFromDomainObject.getEventType();
-            }
-        }
-        return collectionDomainEventType;
     }
 
 }

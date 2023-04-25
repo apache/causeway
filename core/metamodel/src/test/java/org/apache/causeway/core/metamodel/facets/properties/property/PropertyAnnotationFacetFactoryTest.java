@@ -92,7 +92,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
 
     PropertyAnnotationFacetFactory facetFactory;
 
-    private static void processModify(
+    private static void processDomainEvent(
             final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
         val propertyIfAny = facetFactory.propertyIfAny(processMethodContext);
         facetFactory.processDomainEvent(processMethodContext, propertyIfAny);
@@ -234,16 +234,13 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
             }
 
             // given
-            assertTrue(getConfiguration()
-                    .getApplib().getAnnotation().getDomainObject().getCreatedLifecycleEvent().isPostForDefault());
-
             propertyScenario(Customer.class, "name", (processMethodContext, facetHolder, facetedMethod)->{
                 addGetterFacet(facetedMethod);
                 addSetterFacet(facetedMethod);
                 addClearFacet(facetedMethod);
 
                 // when
-                processModify(facetFactory, processMethodContext);
+                processDomainEvent(facetFactory, processMethodContext);
 
                 // then
                 assertHasPropertyDomainEventFacet(facetedMethod,
@@ -267,7 +264,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                 addClearFacet(facetedMethod);
 
                 // when
-                processModify(facetFactory, processMethodContext);
+                processDomainEvent(facetFactory, processMethodContext);
 
                 // then
                 assertHasPropertyDomainEventFacet(facetedMethod,
@@ -292,7 +289,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                 addClearFacet(facetedMethod);
 
                 // when
-                processModify(facetFactory, processMethodContext);
+                processDomainEvent(facetFactory, processMethodContext);
 
                 // then
                 assertHasPropertyDomainEventFacet(facetedMethod,
@@ -318,7 +315,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                 addClearFacet(facetedMethod);
 
                 // when
-                processModify(facetFactory, processMethodContext);
+                processDomainEvent(facetFactory, processMethodContext);
 
                 // then - the property annotation should win
                 assertHasPropertyDomainEventFacet(facetedMethod,
@@ -347,7 +344,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                     (processMethodContext, mixeeSpec, facetedMethod, mixedInProp)->{
 
                 // when
-                processModify(facetFactory, processMethodContext);
+                processDomainEvent(facetFactory, processMethodContext);
                 postProcessor.postProcessProperty(mixeeSpec, mixedInProp);
 
                 // then
@@ -378,7 +375,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                     (processMethodContext, mixeeSpec, facetedMethod, mixedInProp)->{
 
                 // when
-                processModify(facetFactory, processMethodContext);
+                processDomainEvent(facetFactory, processMethodContext);
                 postProcessor.postProcessProperty(mixeeSpec, mixedInProp);
 
                 // then
@@ -410,7 +407,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                     (processMethodContext, mixeeSpec, facetedMethod, mixedInProp)->{
 
                 // when
-                processModify(facetFactory, processMethodContext);
+                processDomainEvent(facetFactory, processMethodContext);
                 postProcessor.postProcessProperty(mixeeSpec, mixedInProp);
 
                 // then
@@ -443,7 +440,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                     (processMethodContext, mixeeSpec, facetedMethod, mixedInProp)->{
 
                 // when
-                processModify(facetFactory, processMethodContext);
+                processDomainEvent(facetFactory, processMethodContext);
                 postProcessor.postProcessProperty(mixeeSpec, mixedInProp);
 
                 // then - the mixed-in annotation should win
@@ -476,7 +473,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                     (processMethodContext, mixeeSpec, facetedMethod, mixedInProp)->{
 
                 // when
-                processModify(facetFactory, processMethodContext);
+                processDomainEvent(facetFactory, processMethodContext);
                 postProcessor.postProcessProperty(mixeeSpec, mixedInProp);
 
                 // then - the mixed-in annotation should win
