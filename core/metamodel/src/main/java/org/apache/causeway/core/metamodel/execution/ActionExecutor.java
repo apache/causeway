@@ -134,10 +134,10 @@ implements
 
         currentExecution.setDto(invocationDto);
 
-        //XXX no sure if we the call to currentExecution.setDto(propertyEditDto) above is even required if not post-able
+        //XXX no sure if the call to currentExecution.setDto(propertyEditDto) above is even required if not post-able
         if(!isPostable()) {
             // don't emit domain events
-            return executeWithoutEvents();
+            return executeWithoutEvents(arguments);
         }
 
         // ... post the executing event
@@ -158,7 +158,7 @@ implements
         currentExecution.setEvent(actionDomainEvent);
 
         // invoke method
-        val resultPojo = executeWithoutEvents();
+        val resultPojo = executeWithoutEvents(argsAfterEventPolling);
 
         // ... post the executed event
 
@@ -176,7 +176,7 @@ implements
     }
 
     @SneakyThrows
-    private Object executeWithoutEvents() {
+    private Object executeWithoutEvents(final Can<ManagedObject> arguments) {
         // invoke method
         val resultPojo = invokeMethodElseFromCache(method, head, arguments);
         getServiceInjector().injectServicesInto(resultPojo);

@@ -221,16 +221,16 @@ implements MemberExecutorService {
     }
 
     private ManagedObject setOrClearPropertyInternally(
-            final @NonNull PropertyModifier propertyExecutor) {
+            final @NonNull PropertyModifier propertyModifier) {
 
-        final InteractionHead head = propertyExecutor.getHead();
+        final InteractionHead head = propertyModifier.getHead();
 
         val domainObject = head.getTarget();
 
-        if(propertyExecutor.getInteractionInitiatedBy().isPassThrough()) {
+        if(propertyModifier.getInteractionInitiatedBy().isPassThrough()) {
             /* directly access property setter to prevent triggering of domain events
              * or change tracking, eg. when called in the context of serialization */
-            propertyExecutor.executeClearOrSetWithoutEvents();
+            propertyModifier.executeClearOrSetWithoutEvents(propertyModifier.getNewValue());
             return domainObject;
         }
 
@@ -240,22 +240,22 @@ implements MemberExecutorService {
             return domainObject;
         }
 
-        val owningProperty = propertyExecutor.getOwningProperty();
+        val owningProperty = propertyModifier.getOwningProperty();
 
-        prepareCommandForPublishing(command, head, owningProperty, propertyExecutor.getFacetHolder());
+        prepareCommandForPublishing(command, head, owningProperty, propertyModifier.getFacetHolder());
 
-        val xrayHandle = _Xray.enterPropertyEdit(interactionLayerTracker, interaction, owningProperty, head, propertyExecutor.getNewValueAdapter());
+        val xrayHandle = _Xray.enterPropertyEdit(interactionLayerTracker, interaction, owningProperty, head, propertyModifier.getNewValue());
 
         val propertyId = owningProperty.getFeatureIdentifier();
 
         val targetManagedObject = head.getTarget();
         val target = MmUnwrapUtils.single(targetManagedObject);
-        val argValue = MmUnwrapUtils.single(propertyExecutor.getNewValueAdapter());
+        val argValuePojo = MmUnwrapUtils.single(propertyModifier.getNewValue());
 
-        val propertyEdit = new PropertyEdit(interaction, propertyId, target, argValue);
+        val propertyEdit = new PropertyEdit(interaction, propertyId, target, argValuePojo);
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
-        val targetPojo = interaction.execute(propertyExecutor, propertyEdit, clockService, metricsService(),
+        val targetPojo = interaction.execute(propertyModifier, propertyEdit, clockService, metricsService(),
                 commandPublisherProvider.get(), command);
 
         // handle any exceptions
@@ -271,7 +271,7 @@ implements MemberExecutorService {
         }
 
         // publish (if not a contributed association, query-only mixin)
-        val publishedPropertyFacet = propertyExecutor.getFacetHolder().getFacet(ExecutionPublishingFacet.class);
+        val publishedPropertyFacet = propertyModifier.getFacetHolder().getFacet(ExecutionPublishingFacet.class);
         if (publishedPropertyFacet != null) {
             executionPublisher().publishPropertyEdit(priorExecution);
         }

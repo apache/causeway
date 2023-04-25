@@ -113,8 +113,9 @@ implements
 
     @Getter
     private final @NonNull OneToOneAssociation owningProperty;
+
     @Getter
-    private final @NonNull ManagedObject newValueAdapter;
+    private final @NonNull ManagedObject newValue;
 
     // -- REFACTOR ...
     private final PropertyOrCollectionAccessorFacet getterFacet;
@@ -139,25 +140,22 @@ implements
     @Override
     public Object execute(final PropertyEdit currentExecution) {
 
-        // TODO: REVIEW - is this safe to do?
-        ManagedObject newValueAdapterMutatable = newValueAdapter;
-
         // update the current execution with the DTO (memento)
         val propertyEditDto =
                 getInteractionDtoServiceInternal().asPropertyEditDto(
-                        owningProperty, head.getOwner(), newValueAdapterMutatable, head);
+                        owningProperty, head.getOwner(), newValue, head);
         currentExecution.setDto(propertyEditDto);
 
         //XXX no sure if we the call to currentExecution.setDto(propertyEditDto) above is even required if not post-able
         if(!isPostable()) {
             // don't emit domain events
-            executeClearOrSetWithoutEvents();
+            executeClearOrSetWithoutEvents(newValue);
             return head.getTarget().getPojo();
         }
 
         // ... post the executing event
         val oldValuePojo = getterFacet.getProperty(head.getTarget(), interactionInitiatedBy);
-        val newValuePojo = MmUnwrapUtils.single(newValueAdapterMutatable);
+        val newValuePojo = MmUnwrapUtils.single(newValue);
 
         val propertyDomainEvent =
                 getDomainEventHelper().postEventForProperty(
@@ -167,17 +165,17 @@ implements
                         oldValuePojo, newValuePojo);
 
         val newValuePojoPossiblyUpdated = propertyDomainEvent.getNewValue();
-        if (!Objects.equals(newValuePojoPossiblyUpdated, newValuePojo)) {
-            newValueAdapterMutatable = newValuePojoPossiblyUpdated != null
-                    ? getObjectManager().adapt(newValuePojoPossiblyUpdated)
-                    : null;
-        }
+
+        final ManagedObject newValueAfterEventPolling =
+                Objects.equals(newValuePojoPossiblyUpdated, newValuePojo)
+                    ? newValue
+                    : ManagedObject.adaptSingular(newValue.getSpecification(), newValuePojoPossiblyUpdated);
 
         // set event onto the execution
         currentExecution.setEvent(propertyDomainEvent);
 
         // invoke method
-        executeClearOrSetWithoutEvents();
+        executeClearOrSetWithoutEvents(newValueAfterEventPolling);
 
         // reading the actual value from the target object, playing it safe...
         val actualNewValue = getterFacet.getProperty(head.getTarget(), interactionInitiatedBy);
@@ -204,8 +202,9 @@ implements
 
     /**
      * Executes the change using underlying setter or getter facets, without triggering any events.
+     * @param newValueAdapter
      */
-    public void executeClearOrSetWithoutEvents() {
+    public void executeClearOrSetWithoutEvents(final @NonNull ManagedObject newValueAdapter) {
         // invoke method
         if(executionVariant.isSet()) {
             setterFacet.setProperty(
