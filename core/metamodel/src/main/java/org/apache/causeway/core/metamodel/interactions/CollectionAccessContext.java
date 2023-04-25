@@ -22,7 +22,7 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.services.wrapper.events.CollectionAccessEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
+import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -39,7 +39,7 @@ public class CollectionAccessContext extends AccessContext {
 
     @Override
     public CollectionAccessEvent createInteractionEvent() {
-        return new CollectionAccessEvent(MmUnwrapUtil.single(getTarget()), getIdentifier());
+        return new CollectionAccessEvent(MmUnwrapUtils.single(getTarget()), getIdentifier());
     }
 
 }

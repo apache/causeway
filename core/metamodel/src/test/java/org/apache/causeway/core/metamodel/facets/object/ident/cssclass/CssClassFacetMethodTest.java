@@ -29,8 +29,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.object.cssclass.method.CssClassFacetViaCssClassMethod;
@@ -41,12 +39,12 @@ import lombok.val;
 class CssClassFacetMethodTest
 extends FacetFactoryTestAbstract {
 
-    static final String CSS_CLASS = "someCssClass";
+    static final String SOME_CSS_CLASS = "someCssClass";
 
     @DomainObject(introspection = Introspection.ENCAPSULATION_ENABLED)
     static class DomainObjectInCssClassMethod {
         @MemberSupport public String cssClass() {
-            return CSS_CLASS;
+            return SOME_CSS_CLASS;
         }
     }
 
@@ -63,31 +61,21 @@ extends FacetFactoryTestAbstract {
     }
 
     @Test
-    void test() {
-
-        val domainClass = DomainObjectInCssClassMethod.class;
-        val facetedMethod = facetedAction(DomainObjectInCssClassMethod.class, "cssClass");
-
-        facetFactory.process(ProcessClassContext
-                .forTesting(domainClass, defaultMethodRemover(), facetedMethod));
-
-        val cssClassFacet = assertHasCssClassFacet(facetedMethod);
-        assertTrue(cssClassFacet instanceof CssClassFacetViaCssClassMethod);
-
-        val imperativeCssClassFacet = (CssClassFacetViaCssClassMethod)cssClassFacet;
+    void cssClassFacetViaCssClassMethod() {
 
         val domainObject = getObjectManager().adapt(new DomainObjectInCssClassMethod());
 
-        assertEquals(CSS_CLASS,
-                imperativeCssClassFacet.cssClass(domainObject));
-    }
-
-    // -- HELPER
-
-    CssClassFacet assertHasCssClassFacet(final FacetHolder facetHolder) {
-        val navigableParentFacet = facetHolder.getFacet(CssClassFacet.class);
-        assertNotNull(navigableParentFacet, ()->"CssClassFacet required");
-        return navigableParentFacet;
+        objectScenario(DomainObjectInCssClassMethod.class, (processClassContext, facetHolder) -> {
+            //when
+            facetFactory.process(processClassContext);
+            //then
+            val cssClassFacet = facetHolder.getFacet(CssClassFacet.class);
+            assertNotNull(cssClassFacet, ()->"CssClassFacet required");
+            assertTrue(cssClassFacet instanceof CssClassFacetViaCssClassMethod);
+            val imperativeCssClassFacet = (CssClassFacetViaCssClassMethod)cssClassFacet;
+            assertEquals(SOME_CSS_CLASS,
+                    imperativeCssClassFacet.cssClass(domainObject));
+        });
     }
 
 }

@@ -27,7 +27,7 @@ import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.Veto;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
-import org.apache.causeway.core.metamodel.object.MmTitleUtil;
+import org.apache.causeway.core.metamodel.object.MmTitleUtils;
 import org.apache.causeway.viewer.commons.model.UiModel;
 import org.apache.causeway.viewer.commons.model.mixin.HasTitle;
 import org.apache.causeway.viewer.commons.model.scalar.UiParameter;
@@ -107,7 +107,7 @@ extends
             if(buf.length() > 0) {
                 buf.append(",");
             }
-            buf.append(MmTitleUtil.abbreviatedTitleOf(paramValue, 8, "..."));
+            buf.append(MmTitleUtils.abbreviatedTitleOf(paramValue, 8, "..."));
         });
         return owner.getTitle() + "." + getFriendlyName()
             + (buf.length()>0

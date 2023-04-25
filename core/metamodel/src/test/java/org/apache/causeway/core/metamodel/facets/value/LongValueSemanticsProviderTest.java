@@ -35,7 +35,7 @@ extends ValueSemanticsProviderAbstractTestCase<Long> {
     private Long longObj;
 
     @BeforeEach
-    public void setUpObjects() throws Exception {
+    void setUpObjects() throws Exception {
         longObj = Long.valueOf(367322);
         allowMockAdapterToReturn(longObj);
 
@@ -43,7 +43,7 @@ extends ValueSemanticsProviderAbstractTestCase<Long> {
     }
 
     @Test
-    public void testInvalidParse() throws Exception {
+    void invalidParse() throws Exception {
         try {
             value.parseTextRepresentation(null, "one");
             fail();
@@ -52,18 +52,18 @@ extends ValueSemanticsProviderAbstractTestCase<Long> {
     }
 
     @Test
-    public void testOutputAsString() {
+    void outputAsString() {
         assertEquals("367,322", value.titlePresentation(null, longObj));
     }
 
     @Test
-    public void testParse() throws Exception {
+    void parse() throws Exception {
         final Object parsed = value.parseTextRepresentation(null, "120");
         assertEquals("120", parsed.toString());
     }
 
     @Test
-    public void testParseWithBadlyFormattedEntry() throws Exception {
+    void parseWithBadlyFormattedEntry() throws Exception {
         final Object parsed = value.parseTextRepresentation(null, "1,20.0");
         assertEquals("120", parsed.toString());
     }

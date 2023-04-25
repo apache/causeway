@@ -20,7 +20,6 @@ package org.apache.causeway.core.metamodel.facets.ordering.memberorder;
 
 import java.util.List;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -43,32 +42,17 @@ import org.apache.causeway.core.metamodel.layout.DeweyOrderSet;
 
 class DeweyOrderSetTest {
 
-    public static class Customer {
+    static class Customer {
         private String lastName;
         private String firstName;
         private String houseNumber;
         private String streetName;
         private String postalTown;
-
-        public String getLastName() {
-            return lastName;
-        }
-
-        public String getFirstName() {
-            return firstName;
-        }
-
-        public String getHouseNumber() {
-            return houseNumber;
-        }
-
-        public String getStreetName() {
-            return streetName;
-        }
-
-        public String getPostalTown() {
-            return postalTown;
-        }
+        public String getLastName() { return lastName; }
+        public String getFirstName() { return firstName; }
+        public String getHouseNumber() { return houseNumber; }
+        public String getStreetName() { return streetName; }
+        public String getPostalTown() { return postalTown; }
     }
 
     private final MetaModelContext mmc = MetaModelContext_forTesting.buildDefault();
@@ -87,34 +71,11 @@ class DeweyOrderSetTest {
 
     @BeforeEach
     protected void setUp() {
-
         _Context.clear();
-
-//FIXME
-//        context.checking(new Expectations() {{
-//            allowing(mockTranslationService).translate(with(any(TranslationContext.class)), with(any(String.class)));
-//            will(new Action() {
-//                @Override
-//                public Object invoke(final Invocation invocation) throws Throwable {
-//                    return invocation.getParameter(1);
-//                }
-//
-//                @Override
-//                public void describeTo(final Description description) {
-//                    description.appendText("Returns parameter #1");
-//                }
-//            });
-//        }});
-
-    }
-
-    @AfterEach
-    protected void tearDown() throws Exception {
     }
 
     @Test
-    public void testDefaultGroup() {
-
+    void defaultGroup() {
         setupLayoutFacets("", "1", lastNameMember);
         setupLayoutFacets("", "2", firstNameMember);
 
@@ -125,7 +86,7 @@ class DeweyOrderSetTest {
     }
 
     @Test
-    public void testDefaultGroupSize() {
+    void defaultGroupSize() {
         setupLayoutFacets("", "1", lastNameMember);
         setupLayoutFacets("", "2", firstNameMember);
 
@@ -136,7 +97,7 @@ class DeweyOrderSetTest {
     }
 
     @Test
-    public void testDefaultGroupTwoMembersSorted() {
+    void defaultGroupTwoMembersSorted() {
         setupLayoutFacets("", "1", lastNameMember);
         setupLayoutFacets("", "2", firstNameMember);
 
@@ -146,7 +107,7 @@ class DeweyOrderSetTest {
     }
 
     @Test
-    public void testTwoMembersAtDefaultGroupOtherWay() {
+    void twoMembersAtDefaultGroupOtherWay() {
         setupLayoutFacets("", "2", lastNameMember);
         setupLayoutFacets("", "1", firstNameMember);
 
@@ -156,7 +117,7 @@ class DeweyOrderSetTest {
     }
 
     @Test
-    public void testWithChildGroupDefaultGroupName() {
+    void withChildGroupDefaultGroupName() {
         setupLayoutFacets("", "1", lastNameMember);
         setupLayoutFacets("", "2", firstNameMember);
         setupLayoutFacets("address", "1", houseNumberMember);
@@ -170,7 +131,7 @@ class DeweyOrderSetTest {
     }
 
     @Test
-    public void testWithChildGroupSize() {
+    void withChildGroupSize() {
         setupLayoutFacets("", "1", lastNameMember);
         setupLayoutFacets("", "2", firstNameMember);
         setupLayoutFacets("address", "1", houseNumberMember);
@@ -183,7 +144,7 @@ class DeweyOrderSetTest {
     }
 
     @Test
-    public void testWithChildGroupChildsGroupName() {
+    void withChildGroupChildsGroupName() {
         setupLayoutFacets("", "1", lastNameMember);
         setupLayoutFacets("", "2", firstNameMember);
         setupLayoutFacets("address", "1", houseNumberMember);
@@ -199,7 +160,7 @@ class DeweyOrderSetTest {
     }
 
     @Test
-    public void testWithChildGroupChildsGroupSize() {
+    void withChildGroupChildsGroupSize() {
         setupLayoutFacets("", "1", lastNameMember);
         setupLayoutFacets("", "2", firstNameMember);
         setupLayoutFacets("address", "1", houseNumberMember);
@@ -213,7 +174,7 @@ class DeweyOrderSetTest {
     }
 
     @Test
-    public void testWithChildGroupChildsGroupElementOrdering() {
+    void withChildGroupChildsGroupElementOrdering() {
         setupLayoutFacets("", "1", lastNameMember);
         setupLayoutFacets("", "2", firstNameMember);
         setupLayoutFacets("address", "6", houseNumberMember);
@@ -228,7 +189,7 @@ class DeweyOrderSetTest {
     }
 
     @Test
-    public void testWithChildGroupOrderedAtEnd() {
+    void withChildGroupOrderedAtEnd() {
         setupLayoutFacets("address", "6", houseNumberMember);
         setupLayoutFacets("address", "5", streetNameMember);
         setupLayoutFacets("address", "4", postalTownMember);
@@ -242,20 +203,20 @@ class DeweyOrderSetTest {
     }
 
     @Test
-    public void testDefaultGroupNeitherAnnotatedSize() {
+    void defaultGroupNeitherAnnotatedSize() {
         final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(lastNameAndFirstName);
         assertEquals(2, orderSet.elementList().size());
     }
 
     @Test
-    public void testDefaultGroupNeitherAnnotatedOrderedByName() {
+    void defaultGroupNeitherAnnotatedOrderedByName() {
         final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(lastNameAndFirstName);
         assertEquals(firstNameMember, orderSet.elementList().get(0));
         assertEquals(lastNameMember, orderSet.elementList().get(1));
     }
 
     @Test
-    public void testDefaultGroupMixOfAnnotatedAndNotSize() {
+    void defaultGroupMixOfAnnotatedAndNotSize() {
         setupLayoutFacets("", "1", lastNameMember);
         setupLayoutFacets("address", "2", postalTownMember);
 
@@ -264,7 +225,7 @@ class DeweyOrderSetTest {
     }
 
     @Test
-    public void testDefaultGroupMixOfAnnotatedAndNotOrderedWithAnnotatedFirst() {
+    void defaultGroupMixOfAnnotatedAndNotOrderedWithAnnotatedFirst() {
         setupLayoutFacets("", "1", lastNameMember);
         setupLayoutFacets("", "2", postalTownMember);
 

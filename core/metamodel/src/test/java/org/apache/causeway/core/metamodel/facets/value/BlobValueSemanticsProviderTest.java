@@ -32,29 +32,15 @@ extends ValueSemanticsProviderAbstractTestCase<Blob> {
     private Blob blob;
 
     @BeforeEach
-    public void setUpObjects() throws Exception {
-        super.setUp();
-
+    void setUpObjects() throws Exception {
         blob = new Blob("myfile1.docx", "application", "vnd.ms-word", new byte[]{1,2,3,4});
         allowMockAdapterToReturn(blob);
         setSemantics(new BlobValueSemantics());
     }
 
     @Test
-    public void testTitleOf() {
+    void titleOf() {
         assertEquals("myfile1.docx", getRenderer().titlePresentation(null, blob));
-    }
-
-    @Test
-    @Override
-    public void testParseNull() throws Exception {
-        // disabled, blob has no parser
-    }
-
-    @Test
-    @Override
-    public void testParseEmptyString() throws Exception {
-        // disabled, blob has no parser
     }
 
     @Override

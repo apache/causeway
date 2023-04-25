@@ -30,7 +30,7 @@ import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public final class MmDebugUtil {
+public final class MmDebugUtils {
 
     @Value @Builder
     public static class ParamUpdateData {

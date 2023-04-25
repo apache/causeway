@@ -55,7 +55,7 @@ extends FacetFactoryTestAbstract {
             @CollectionLayout(named = "1st names")
             public SortedSet<String> getFirstNames() { return _Sets.newTreeSet(); }
         }
-        collectionScenario(Customer.class, "firstNames", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        collectionScenario(Customer.class, "firstNames", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             facetFactory.process(processMethodContext);
             // then
@@ -73,7 +73,7 @@ extends FacetFactoryTestAbstract {
             @CollectionLayout(hidden = Where.OBJECT_FORMS)
             public SortedSet<String> getFirstNames() { return _Sets.newTreeSet(); }
         }
-        collectionScenario(Customer.class, "firstNames", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        collectionScenario(Customer.class, "firstNames", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             facetFactory.process(processMethodContext);
             // then

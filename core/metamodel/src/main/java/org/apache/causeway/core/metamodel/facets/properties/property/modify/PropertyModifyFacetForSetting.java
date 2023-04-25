@@ -20,21 +20,21 @@ package org.apache.causeway.core.metamodel.facets.properties.property.modify;
 
 import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.DomainEventHolder;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 
-public class PropertySetterFacetForDomainEvent
-extends PropertySetterOrClearFacetForDomainEventAbstract
+public class PropertyModifyFacetForSetting
+extends PropertyModifyFacetAbstract
 implements PropertySetterFacet {
 
-    public PropertySetterFacetForDomainEvent(
-            final Class<? extends PropertyDomainEvent<?, ?>> eventType,
-            final EventTypeOrigin eventTypeOrigin,
+    public PropertyModifyFacetForSetting(
+            final DomainEventHolder<PropertyDomainEvent<?, ?>> domainEventHolder,
             final PropertyOrCollectionAccessorFacet getterFacet,
             final PropertySetterFacet setterFacet,
             final FacetHolder holder) {
-
-        super(PropertySetterFacet.class, eventType, eventTypeOrigin, getterFacet, setterFacet, null, holder);
+        // binds this DomainEventHolder to given DomainEventHolder, updateEventType not allowed
+        super(PropertySetterFacet.class, domainEventHolder, getterFacet, setterFacet, null, holder);
     }
 
 }

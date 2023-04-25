@@ -34,6 +34,7 @@ import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.proxy._ProxyFactoryService;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
+import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -72,7 +73,9 @@ class WrapperFactoryDefaultTest {
     @BeforeEach
     public void setUp() throws Exception {
 
-        val mmc = MetaModelContext_forTesting.buildDefault();
+        val mmc = MetaModelContext_forTesting.builder()
+                .memberExecutor(Mockito.mock(MemberExecutorService.class))
+                .build();
 
         wrapperFactory = new WrapperFactoryDefault() {
 

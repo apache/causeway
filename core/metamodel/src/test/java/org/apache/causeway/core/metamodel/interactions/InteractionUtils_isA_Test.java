@@ -35,75 +35,67 @@ import lombok.val;
 
 class InteractionUtils_isA_Test {
 
-    public class FooSuperFacet extends FacetAbstract {
+    class FooSuperFacet extends FacetAbstract {
         public FooSuperFacet(final Class<? extends Facet> facetType, final FacetHolder holder) {
             super(facetType, holder);
         }
     }
 
-    public class FooFacet extends FooSuperFacet {
+    class FooFacet extends FooSuperFacet {
         public FooFacet(final FacetHolder holder) {
             super(FooFacet.class, holder);
         }
     }
 
-    public class FooSubFacet extends FooFacet {
+    class FooSubFacet extends FooFacet {
         public FooSubFacet(final FacetHolder holder) {
             super(holder);
         }
     }
 
-    public class BarFacet extends FacetAbstract {
+    class BarFacet extends FacetAbstract {
         public BarFacet(final FacetHolder holder) {
             super(BarFacet.class, holder);
         }
     }
 
     private FacetHolder facetHolder;
-    private FooFacet fooFacet;
-    private FooSubFacet fooSubFacet;
-    private FooSuperFacet fooSuperFacet;
-    private BarFacet barFacet;
 
     @BeforeEach
     protected void setUp() throws Exception {
         facetHolder = FacetHolder.forTesting(MetaModelContext_forTesting.buildDefault());
-        fooSuperFacet = new FooSuperFacet(FooSuperFacet.class, facetHolder);
-        fooFacet = new FooFacet(facetHolder);
-        fooSubFacet = new FooSubFacet(facetHolder);
-        barFacet = new BarFacet(facetHolder);
     }
 
     @AfterEach
     protected void tearDown() throws Exception {
         facetHolder = null;
-        fooSuperFacet = null;
-        fooSubFacet = null;
-        fooFacet = null;
-        barFacet = null;
     }
 
     @Test
-    public void testIsAWhenIs() {
+    void isAWhenIs() {
         val predicate = _Predicates.instanceOf(FooFacet.class);
+        val fooFacet = new FooFacet(facetHolder);
         assertTrue(predicate.test(fooFacet));
     }
 
     @Test
-    public void testIsAWhenIsNot() {
+    void isAWhenIsNot() {
         val predicate = _Predicates.instanceOf(FooFacet.class);
+        val barFacet = new BarFacet(facetHolder);
         assertFalse(predicate.test(barFacet));
     }
 
     @Test
-    public void testIsAWhenIsSubclass() {
+    void isAWhenIsSubclass() {
         val predicate = _Predicates.instanceOf(FooFacet.class);
+        val fooSubFacet = new FooSubFacet(facetHolder);
         assertTrue(predicate.test(fooSubFacet));
     }
 
     @Test
-    public void testIsAWhenIsNotBecauseASuperclass() {
+    void isAWhenIsNotBecauseASuperclass() {
         val predicate = _Predicates.instanceOf(FooFacet.class);
+        val fooSuperFacet = new FooSuperFacet(FooSuperFacet.class, facetHolder);
         assertFalse(predicate.test(fooSuperFacet));
     }
 

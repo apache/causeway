@@ -43,7 +43,7 @@ extends ValueSemanticsProviderAbstractTestCase<Date> {
     private Date date;
 
     @BeforeEach
-    public void setUpObjects() throws Exception {
+    void setUpObjects() throws Exception {
 
         date = new Date(0);
 
@@ -61,7 +61,7 @@ extends ValueSemanticsProviderAbstractTestCase<Date> {
     }
 
     @Test
-    public void testInvalidParse() throws Exception {
+    void invalidParse() throws Exception {
         try {
             value.parseTextRepresentation(null, "date");
             fail();
@@ -70,14 +70,14 @@ extends ValueSemanticsProviderAbstractTestCase<Date> {
     }
 
     @Test
-    public void testTitleOf() {
+    void titleOf() {
         assertEquals(
                 DateFormat.getDateInstance(SimpleDateFormat.MEDIUM).format(new Date(0)),
                 value.titlePresentation(null, date));
     }
 
     @Test
-    public void testParse() throws Exception {
+    void parse() throws Exception {
         val parsedDate = value.parseTextRepresentation(null, "1980-01-01");
         assertEquals("1980-01-01", parsedDate.toString());
     }

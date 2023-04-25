@@ -20,20 +20,23 @@ package org.apache.causeway.core.metamodel.execution;
 
 import java.util.Optional;
 
-import org.apache.causeway.applib.services.iactn.ActionInvocation;
-import org.apache.causeway.applib.services.iactn.PropertyEdit;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.execution.PropertyModifier.ModificationVariant;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertySetterOrClearFacetForDomainEventAbstract.EditingVariant;
+import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
+import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
+import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.NonNull;
+import lombok.val;
 
 /**
  * Used by ActionInvocationFacets and PropertySetterOrClearFacets to submit their executions.
@@ -44,28 +47,16 @@ import lombok.NonNull;
  */
 public interface MemberExecutorService {
 
-    @FunctionalInterface
-    interface ActionExecutorFactory {
-        InteractionInternal.MemberExecutor<ActionInvocation> createExecutor(
-                ObjectAction owningAction,
-                InteractionHead head,
-                Can<ManagedObject> argumentAdapters);
-    }
-
-    @FunctionalInterface
-    interface PropertyExecutorFactory {
-        InteractionInternal.MemberExecutor<PropertyEdit> createExecutor(
-                OneToOneAssociation owningProperty,
-                InteractionHead head,
-                ManagedObject newValueAdapter,
-                InteractionInitiatedBy interactionInitiatedBy,
-                EditingVariant editingVariant);
-    }
-
     /**
      * Optionally, the currently active {@link InteractionInternal} for the calling thread.
      */
     Optional<InteractionInternal> getInteraction();
+
+    ManagedObject invokeAction(
+            @NonNull ActionExecutor actionExecutor);
+
+    ManagedObject setOrClearProperty(
+            @NonNull PropertyModifier propertyExecutor);
 
     // -- SHORTCUTS
 
@@ -78,26 +69,57 @@ public interface MemberExecutorService {
                 .unrecoverable("needs an InteractionSession on current thread"));
     }
 
-    // -- REFACTORING
+    default ManagedObject invokeAction(
+            @NonNull final FacetHolder facetHolder,
+            @NonNull final InteractionInitiatedBy interactionInitiatedBy,
+            @NonNull final InteractionHead head,
+            // action specifics
+            @NonNull final Can<ManagedObject> argumentAdapters,
+            @NonNull final ObjectAction owningAction,
+            @NonNull final ActionInvocationFacetAbstract actionInvocationFacetAbstract) {
+        val actionExecutor = ActionExecutor.forAction(
+                facetHolder,
+                interactionInitiatedBy,
+                head,
+                argumentAdapters,
+                owningAction,
+                actionInvocationFacetAbstract);
+        return invokeAction(actionExecutor);
+    }
 
-    //TODO implementations of this service should also handle domain object events, don't delegate this responsibility to facets
-    ManagedObject invokeAction(
-            @NonNull ObjectAction owningAction,
-            @NonNull InteractionHead head,
-            @NonNull Can<ManagedObject> argumentAdapters,
-            @NonNull InteractionInitiatedBy interactionInitiatedBy,
-            @NonNull MethodFacade method,
-            @NonNull ActionExecutorFactory actionExecutorFactory,
-            @NonNull FacetHolder facetHolder);
+    default ManagedObject clearProperty(
+            final @NonNull FacetHolder facetHolder,
+            final @NonNull InteractionInitiatedBy interactionInitiatedBy,
+            final @NonNull InteractionHead head,
+            // property specifics
+            final @NonNull OneToOneAssociation owningProperty,
+            final @NonNull PropertyOrCollectionAccessorFacet getterFacet,
+            final @NonNull PropertyClearFacet clearFacet,
+            final @NonNull PropertyModifyFacetAbstract propertySetterOrClearFacetForDomainEventAbstract) {
 
-    //TODO implementations of this service should also handle domain object events, don't delegate this responsibility to facets
-    ManagedObject setOrClearProperty(
-            @NonNull OneToOneAssociation owningProperty,
-            @NonNull InteractionHead head,
-            @NonNull ManagedObject newValueAdapter,
-            @NonNull InteractionInitiatedBy interactionInitiatedBy,
-            @NonNull PropertyExecutorFactory propertyExecutorFactory,
-            @NonNull FacetHolder facetHolder,
-            @NonNull EditingVariant editingVariant);
+        val propertyExecutor = PropertyModifier.forPropertyClear(
+                facetHolder, interactionInitiatedBy, head,
+                owningProperty, getterFacet, clearFacet,
+                propertySetterOrClearFacetForDomainEventAbstract);
+        return setOrClearProperty(propertyExecutor);
+    }
+
+    default ManagedObject setProperty(
+            final @NonNull FacetHolder facetHolder,
+            final @NonNull InteractionInitiatedBy interactionInitiatedBy,
+            final @NonNull InteractionHead head,
+            // property specifics
+            final @NonNull ManagedObject newValueAdapter,
+            final @NonNull OneToOneAssociation owningProperty,
+            final @NonNull PropertyOrCollectionAccessorFacet getterFacet,
+            final @NonNull PropertySetterFacet setterFacet,
+            final @NonNull PropertyModifyFacetAbstract propertySetterOrClearFacetForDomainEventAbstract) {
+
+        val propertyExecutor = new PropertyModifier(owningProperty.getMetaModelContext(), facetHolder,
+                ModificationVariant.SET, interactionInitiatedBy, head,
+                owningProperty, newValueAdapter, getterFacet, setterFacet, null,
+                propertySetterOrClearFacetForDomainEventAbstract);
+        return setOrClearProperty(propertyExecutor);
+    }
 
 }

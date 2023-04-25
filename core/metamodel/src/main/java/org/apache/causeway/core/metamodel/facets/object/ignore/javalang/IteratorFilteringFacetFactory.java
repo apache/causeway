@@ -19,25 +19,32 @@
 package org.apache.causeway.core.metamodel.facets.object.ignore.javalang;
 
 import java.lang.reflect.Method;
+import java.util.Iterator;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal._Constants;
+import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.methods.MethodFilteringFacetFactory;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.experimental.Accessors;
+
 /**
  * Designed to simply filter out {@link Iterable#iterator()} method if it
  * exists.
- *
  * <p>
  * Does not add any {@link Facet}s.
  */
 public class IteratorFilteringFacetFactory
 extends FacetFactoryAbstract
-implements MethodFilteringFacetFactory {
+implements MethodFilteringFacetFactory, Iterable<Object> {
 
     @Inject
     public IteratorFilteringFacetFactory(final MetaModelContext mmc) {
@@ -46,15 +53,24 @@ implements MethodFilteringFacetFactory {
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        processClassContext.removeMethod("iterator", java.util.Iterator.class, new Class[] {});
+        processClassContext.removeMethod("iterator", java.util.Iterator.class, _Constants.emptyClasses);
     }
 
     @Override
     public boolean recognizes(final Method method) {
-        if (method.toString().equals("public abstract java.util.Iterator java.lang.Iterable.iterator()")) {
-            return true;
-        }
-        return false;
+        return _Reflect.methodsSame(iteratorMethod(), method);
     }
+
+    // -- HELPER
+
+    // implemented, so we can get a Method reference below
+    @Override
+    public Iterator<Object> iterator() {
+        return null;
+    }
+
+    @Getter(lazy = true, value = AccessLevel.PRIVATE) @Accessors(fluent = true)
+    private final Method iteratorMethod = Try.call(()->getClass().getMethod("iterator"))
+        .valueAsNonNullElseFail();
 
 }

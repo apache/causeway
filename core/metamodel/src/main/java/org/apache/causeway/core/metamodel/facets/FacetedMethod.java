@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.facets;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.collections._Lists;
@@ -33,6 +34,7 @@ import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.spec.TypeOfAnyCardinality;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.Getter;
 import lombok.val;
@@ -214,10 +216,7 @@ extends TypedHolderAbstract {
         super(mmc,
                 featureType,
                 type,
-                featureType.identifierFor(LogicalType.lazy(
-                        declaringType,
-                        ()->mmc.getSpecificationLoader().specForTypeElseFail(declaringType).getLogicalTypeName()),
-                    method));
+                methodIdentifier(mmc.getSpecificationLoader(), featureType, declaringType, method));
         this.owningType = declaringType;
         this.method = method;
         this.parameters = parameters;
@@ -239,5 +238,17 @@ extends TypedHolderAbstract {
         return this;
     }
 
+    // -- HELPER
+
+    private static Identifier methodIdentifier(
+            final SpecificationLoader specificationLoader,
+            final FeatureType featureType,
+            final Class<?> declaringType,
+            final MethodFacade method) {
+        val logicalTypeOfDeclaringType = LogicalType.lazy(
+                declaringType,
+                ()->specificationLoader.specForTypeElseFail(declaringType).getLogicalTypeName());
+        return featureType.identifierFor(logicalTypeOfDeclaringType, method);
+    }
 
 }

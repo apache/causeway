@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.facets.object.domainservicelayout.ann
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -48,7 +49,8 @@ extends FacetFactoryTestAbstract {
         facetFactory = null;
     }
 
-    void testAnnotationPickedUpOnClass() {
+    @Test
+    void annotationPickedUpOnClass() {
         @DomainService
         @DomainServiceLayout(menuBar = DomainServiceLayout.MenuBar.SECONDARY)
         class Customers {
@@ -69,7 +71,8 @@ extends FacetFactoryTestAbstract {
         });
     }
 
-    void testDomainServiceAnnotationPickedUpOnClass() {
+    @Test
+    void domainServiceAnnotationPickedUpOnClass() {
         @DomainService
         class Customers {
         }
@@ -88,7 +91,8 @@ extends FacetFactoryTestAbstract {
         });
     }
 
-    void testDomainServiceAndDomainServiceLayoutAnnotationWhenCompatiblePickedUpOnClass() {
+    @Test
+    void domainServiceAndDomainServiceLayoutAnnotationWhenCompatiblePickedUpOnClass() {
         @DomainService//(menuOrder = "123")
         @DomainServiceLayout(menuBar = DomainServiceLayout.MenuBar.SECONDARY)
         class Customers {
@@ -109,7 +113,8 @@ extends FacetFactoryTestAbstract {
         });
     }
 
-    void testDomainServiceAndDomainServiceLayoutAnnotation_takes_the_minimum() {
+    @Test
+    void domainServiceAndDomainServiceLayoutAnnotation_takes_the_minimum() {
         @DomainService//(menuOrder = "1")
         @DomainServiceLayout(menuBar = DomainServiceLayout.MenuBar.SECONDARY)
         class Customers {

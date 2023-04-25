@@ -49,8 +49,8 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
-import org.apache.causeway.core.metamodel.object.MmEntityUtil;
-import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
+import org.apache.causeway.core.metamodel.object.MmEntityUtils;
+import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectBulkLoader;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
@@ -88,7 +88,7 @@ implements RepositoryService, HasMetaModelContext {
     @Override
     public EntityState getEntityState(final @Nullable Object object) {
         val adapter = getObjectManager().adapt(unwrapped(object));
-        return MmEntityUtil.getEntityState(adapter);
+        return MmEntityUtils.getEntityState(adapter);
     }
 
     @Override
@@ -104,12 +104,12 @@ implements RepositoryService, HasMetaModelContext {
             throw new PersistFailedException("Object not known to framework (unable to create/obtain an adapter)");
         }
         // only persist detached or new entities, otherwise skip
-        val entityState = MmEntityUtil.getEntityState(adapter);
+        val entityState = MmEntityUtils.getEntityState(adapter);
         if(!entityState.isPersistable()
                 || entityState.isAttached()) {
             return domainObject;
         }
-        MmEntityUtil.persistInCurrentTransaction(adapter);
+        MmEntityUtils.persistInCurrentTransaction(adapter);
         return domainObject;
     }
 
@@ -127,8 +127,8 @@ implements RepositoryService, HasMetaModelContext {
             return; // noop
         }
         val adapter = getObjectManager().adapt(unwrapped(domainObject));
-        if(MmEntityUtil.hasOid(adapter)) {
-            MmEntityUtil.destroyInCurrentTransaction(adapter);
+        if(MmEntityUtils.hasOid(adapter)) {
+            MmEntityUtils.destroyInCurrentTransaction(adapter);
         }
     }
 
@@ -184,7 +184,7 @@ implements RepositoryService, HasMetaModelContext {
 
         val queryRequest = ObjectBulkLoader.Request.of(resultTypeSpec, query);
         val allMatching = getObjectManager().queryObjects(queryRequest);
-        final List<T> resultList = _Casts.uncheckedCast(MmUnwrapUtil.multipleAsList(allMatching));
+        final List<T> resultList = _Casts.uncheckedCast(MmUnwrapUtils.multipleAsList(allMatching));
         return resultList;
     }
 

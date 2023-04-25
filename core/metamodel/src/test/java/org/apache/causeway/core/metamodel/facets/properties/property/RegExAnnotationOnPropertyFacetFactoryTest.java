@@ -59,7 +59,7 @@ extends FacetFactoryTestAbstract {
             @Pattern(regexp = "^A.*", flags = { Pattern.Flag.CASE_INSENSITIVE })
             public String getFirstName() { return null; }
         }
-        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             processRegEx(facetFactory, processMethodContext);
             // then
@@ -78,7 +78,7 @@ extends FacetFactoryTestAbstract {
         class Customer {
             public int getNumberOfOrders() { return 0; }
         }
-        propertyScenario(Customer.class, "numberOfOrders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        propertyScenario(Customer.class, "numberOfOrders", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             processRegEx(facetFactory, processMethodContext);
             // then

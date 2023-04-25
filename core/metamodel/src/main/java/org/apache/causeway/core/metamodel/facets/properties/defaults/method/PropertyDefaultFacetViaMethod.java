@@ -28,7 +28,7 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.properties.defaults.PropertyDefaultFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmInvokeUtil;
+import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -55,7 +55,7 @@ implements ImperativeFacet {
     @Override
     public ManagedObject getDefault(final ManagedObject owningAdapter) {
         val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
-        final Object result = MmInvokeUtil.invoke(method, owningAdapter);
+        final Object result = MmInvokeUtils.invoke(method, owningAdapter);
         if (result == null) {
             return null;
         }

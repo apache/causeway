@@ -36,7 +36,7 @@ import org.apache.causeway.core.config.beans.PersistenceStack;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmSpecUtil;
+import org.apache.causeway.core.metamodel.object.MmSpecUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
@@ -122,7 +122,7 @@ public interface EntityFacet extends Facet {
     default Optional<Bookmark> bookmarkFor(final @Nullable Object pojo) {
         return identifierFor(pojo)
                 .map(id->Bookmark.forLogicalTypeAndIdentifier(
-                        MmSpecUtil.quicklyResolveObjectSpecification(
+                        MmSpecUtils.quicklyResolveObjectSpecification(
                                 getEntitySpecification(),
                                 pojo.getClass())
                         .getLogicalType(),

@@ -21,26 +21,54 @@ package org.apache.causeway.core.metamodel.facets.actions.action.invocation;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.applib.events.domain.ActionDomainEvent;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
+import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.DomainEventHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
+import lombok.Getter;
 import lombok.NonNull;
 
 public abstract class ActionInvocationFacetAbstract
 extends DomainEventFacetAbstract<ActionDomainEvent<?>>
 implements ActionInvocationFacet, ImperativeFacet {
 
+    // -- FACET TYPE
+
     private static final Class<? extends Facet> type() {
         return ActionInvocationFacet.class;
     }
 
+    // -- CONSTRUCTION
+
+    @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
+    @Getter(onMethod_ = {@Override}) private final ObjectSpecification declaringType;
+    @Getter(onMethod_ = {@Override}) private final ObjectSpecification returnType;
+
+    protected final MemberExecutorService memberExecutorService;
+
     protected ActionInvocationFacetAbstract(
-            final Class<? extends ActionDomainEvent<?>> eventType,
-            final EventTypeOrigin eventTypeOrigin,
+            final DomainEventHolder<ActionDomainEvent<?>> domainEventHolder,
+            final MethodFacade method,
+            final ObjectSpecification declaringType,
+            final ObjectSpecification returnType,
             final FacetHolder holder) {
-        super(type(), eventType, eventTypeOrigin, holder);
+        // binds this DomainEventHolder to given DomainEventHolder, updateEventType not allowed
+        super(type(), domainEventHolder, holder);
+        this.memberExecutorService = getServiceRegistry().lookupServiceElseFail(MemberExecutorService.class);
+        this.methods = ImperativeFacet.singleMethod(method);
+        this.declaringType = declaringType;
+        this.returnType = returnType;
+    }
+
+    @Override
+    public final Intent getIntent() {
+        return Intent.EXECUTE;
     }
 
     @Override
@@ -49,8 +77,12 @@ implements ActionInvocationFacet, ImperativeFacet {
         ImperativeFacet.visitAttributes(this, visitor);
         visitor.accept("declaringType", getDeclaringType());
         visitor.accept("returnType", getReturnType());
-        //visitor.accept("eventType", getEventType()); done already in super
-        //visitor.accept("eventTypeOrigin", getEventTypeOrigin()); done already in super
+        /* done already in super
+         *
+         * visitor.accept("eventType", getEventType());
+         * visitor.accept("eventTypeOrigin", getEventTypeOrigin());
+         * visitor.accept("isPostable", isPostable()); done already in super
+         */
     }
 
     @Override

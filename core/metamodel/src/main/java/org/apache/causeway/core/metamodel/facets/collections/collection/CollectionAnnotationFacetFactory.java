@@ -51,17 +51,21 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        val collectionIfAny = processMethodContext
-                .synthesizeOnMethodOrMixinType(
-                        Collection.class,
-                        () -> MetaModelValidatorForAmbiguousMixinAnnotations
-                        .addValidationFailure(processMethodContext.getFacetHolder(), Collection.class));
+        val collectionIfAny = collectionIfAny(processMethodContext);
 
         inferIntentWhenOnTypeLevel(processMethodContext, collectionIfAny);
 
-        processModify(processMethodContext, collectionIfAny);
+        processDomainEvent(processMethodContext, collectionIfAny);
         processHidden(processMethodContext, collectionIfAny);
         processTypeOf(processMethodContext, collectionIfAny);
+    }
+
+    Optional<Collection> collectionIfAny(final ProcessMethodContext processMethodContext) {
+        return processMethodContext
+            .synthesizeOnMethodOrMixinType(
+                    Collection.class,
+                    () -> MetaModelValidatorForAmbiguousMixinAnnotations
+                    .addValidationFailure(processMethodContext.getFacetHolder(), Collection.class));
     }
 
     void inferIntentWhenOnTypeLevel(final ProcessMethodContext processMethodContext, final Optional<Collection> collectionIfAny) {
@@ -82,30 +86,30 @@ extends FacetFactoryAbstract {
 
     }
 
-    void processModify(final ProcessMethodContext processMethodContext, final Optional<Collection> collectionIfAny) {
+    void processDomainEvent(final ProcessMethodContext processMethodContext, final Optional<Collection> collectionIfAny) {
 
         val cls = processMethodContext.getCls();
-        val typeSpec = getSpecificationLoader().loadSpecification(cls);
         val holder = processMethodContext.getFacetHolder();
 
-        final PropertyOrCollectionAccessorFacet getterFacet = holder.getFacet(PropertyOrCollectionAccessorFacet.class);
-        if(getterFacet == null) {
-            return;
-        }
+        val getterFacetIfAny = holder.lookupFacet(PropertyOrCollectionAccessorFacet.class);
 
-        // following only runs for regular collections, not for mixins.
-        // those are tackled in the post-processing, when more of the metamodel is available to us
+        final boolean isCollection = getterFacetIfAny.isPresent()
+                || (processMethodContext.isMixinMain()
+                        && collectionIfAny.isPresent());
+
+        if(!isCollection) return; // bale out if method is not representing a collection (no matter mixed-in or not)
 
         //
         // Set up CollectionDomainEventFacet, which will act as the hiding/disabling/validating advisor
         //
 
         // search for @Collection(domainEvent=...)
-        addFacetIfPresent(
+        addFacet(
             CollectionDomainEventFacet
-                .createRegular(collectionIfAny, typeSpec, getterFacet, holder));
+                .create(collectionIfAny, cls, holder));
     }
 
+    @SuppressWarnings("removal")
     void processHidden(final ProcessMethodContext processMethodContext, final Optional<Collection> collectionIfAny) {
         val holder = processMethodContext.getFacetHolder();
 

@@ -36,13 +36,13 @@ extends ValueSemanticsProviderAbstractTestCase<Character> {
     private Character character;
 
     @BeforeEach
-    public void setUpObjects() throws Exception {
+    void setUpObjects() throws Exception {
         character = Character.valueOf('r');
         setSemantics(valueSemantics = new CharacterValueSemantics());
     }
 
     @Test
-    public void testParseLongString() throws Exception {
+    void parseLongString() throws Exception {
         try {
             valueSemantics.parseTextRepresentation(null, "one");
             fail();
@@ -51,23 +51,23 @@ extends ValueSemanticsProviderAbstractTestCase<Character> {
     }
 
     @Test
-    public void testTitleOf() {
+    void titleOf() {
         assertEquals("r", valueSemantics.titlePresentation(null, character));
     }
 
     @Test
-    public void testValidParse() throws Exception {
+    void validParse() throws Exception {
         final Object parse = valueSemantics.parseTextRepresentation(null, "t");
         assertEquals(Character.valueOf('t'), parse);
     }
 
     @Test
-    public void testEncode() throws Exception {
+    void encode() throws Exception {
         assertEquals("r", valueSemantics.decompose(character).toJson());
     }
 
     @Test
-    public void testDecode() throws Exception {
+    void decode() throws Exception {
         final Object restore = valueSemantics.compose(
                 ValueDecomposition.fromJson(valueSemantics.getSchemaValueType(), "Y"));
         assertEquals(Character.valueOf('Y'), restore);

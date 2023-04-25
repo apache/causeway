@@ -26,7 +26,7 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmInvokeUtil;
+import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 
 import lombok.Getter;
 
@@ -57,7 +57,7 @@ implements CallbackFacet {
 
     @Override
     public final void invoke(final ManagedObject adapter) {
-        MmInvokeUtil.invokeAll(asRegularMethods, adapter);
+        MmInvokeUtils.invokeAll(asRegularMethods, adapter);
     }
 
 }

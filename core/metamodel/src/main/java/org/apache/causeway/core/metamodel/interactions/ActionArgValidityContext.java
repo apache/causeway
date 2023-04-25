@@ -24,7 +24,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
+import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.Getter;
@@ -64,9 +64,9 @@ implements ProposedHolder, ActionInteractionContext {
     @Override
     public ActionArgumentEvent createInteractionEvent() {
         return new ActionArgumentEvent(
-                MmUnwrapUtil.single(getTarget()),
+                MmUnwrapUtils.single(getTarget()),
                 getIdentifier(),
-                MmUnwrapUtil.multipleAsArray(getArgs().toList()),
+                MmUnwrapUtils.multipleAsArray(getArgs().toList()),
                 getPosition());
     }
 

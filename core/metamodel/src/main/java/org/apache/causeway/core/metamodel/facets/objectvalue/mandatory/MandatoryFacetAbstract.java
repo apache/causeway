@@ -31,7 +31,7 @@ import org.apache.causeway.core.metamodel.interactions.PropertyModifyContext;
 import org.apache.causeway.core.metamodel.interactions.ProposedHolder;
 import org.apache.causeway.core.metamodel.interactions.ValidityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
+import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -72,7 +72,7 @@ implements MandatoryFacet {
     @Override
     public final boolean isRequiredButNull(final ManagedObject adapter) {
         if(getSemantics().isRequired()) {
-            val pojo = MmUnwrapUtil.single(adapter);
+            val pojo = MmUnwrapUtils.single(adapter);
 
             // special case string handling.
             if(pojo instanceof String) {

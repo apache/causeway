@@ -25,7 +25,7 @@ import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
+import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember.AuthorizationException;
 import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
@@ -78,8 +78,8 @@ public abstract class CompositeValueUpdater {
 
     private ManagedObject simpleExecute(
             final InteractionHead head, final Can<ManagedObject> parameters) {
-        final Object[] executionParameters = MmUnwrapUtil.multipleAsArray(parameters);
-        final Object targetPojo = MmUnwrapUtil.single(head.getTarget());
+        final Object[] executionParameters = MmUnwrapUtils.multipleAsArray(parameters);
+        final Object targetPojo = MmUnwrapUtils.single(head.getTarget());
 
         val methodFacade = delegate.getFacetedMethod().getMethod();
         val method = methodFacade.asMethodForIntrospection();

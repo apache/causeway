@@ -33,7 +33,7 @@ import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterCh
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
-import org.apache.causeway.core.metamodel.object.MmInvokeUtil;
+import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.TypeOfAnyCardinality;
 
@@ -74,7 +74,7 @@ implements ImperativeFacet {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         val method = methods.getFirstElseFail();
-        final Object collectionOrArray = MmInvokeUtil.invokeAutofit(patConstructor, method, head.getTarget(), pendingArgs);
+        final Object collectionOrArray = MmInvokeUtils.invokeAutofit(patConstructor, method, head.getTarget(), pendingArgs);
         if (collectionOrArray == null) {
             return Can.empty();
         }

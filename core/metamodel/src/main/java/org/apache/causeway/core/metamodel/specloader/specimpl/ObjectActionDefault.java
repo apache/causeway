@@ -19,6 +19,7 @@
 package org.apache.causeway.core.metamodel.specloader.specimpl;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
 
@@ -82,48 +83,106 @@ implements ObjectAction {
 
     public static ObjectActionDefault forMethod(
             final FacetedMethod facetedMethod) {
-        return new ObjectActionDefault(facetedMethod.getFeatureIdentifier(), facetedMethod, false);
+        return new ObjectActionDefault(facetedMethod.getFeatureIdentifier(), facetedMethod, false, false);
     }
 
     public static ObjectAction forMixinMain(final FacetedMethod facetedMethod) {
-        return new ObjectActionDefault(facetedMethod.getFeatureIdentifier(), facetedMethod, true);
+        return new ObjectActionDefault(facetedMethod.getFeatureIdentifier(), facetedMethod, true, false);
+    }
+
+    /**
+     * JUnit Support
+     */
+    public static class forTesting {
+        public static ObjectActionDefault forMethod(
+                final FacetedMethod facetedMethod) {
+            return new ObjectActionDefault(facetedMethod.getFeatureIdentifier(), facetedMethod, false, true);
+        }
+        public static ObjectAction forMixinMain(final FacetedMethod facetedMethod) {
+            return new ObjectActionDefault(facetedMethod.getFeatureIdentifier(), facetedMethod, true, true);
+        }
     }
 
     // -- CONSTRUCTION
 
-    @Getter(onMethod_ = @Override)
-    private final ObjectSpecification elementType;
-
+    /**
+     * For convenience, during introspection of mixin types,
+     * the mixin's main is wrapped with an {@link ObjectActionDefault},
+     * to ease further processing.
+     * <p>
+     * However, such an {@link ObjectActionDefault} then is never exposed by the meta-model.
+     */
     @Getter(onMethod_ = @Override)
     private final boolean declaredOnMixin;
+
+    private final boolean testing;
 
     protected ObjectActionDefault(
             final Identifier identifier,
             final FacetedMethod facetedMethod,
-            final boolean declaredOnMixin) {
+            final boolean declaredOnMixin,
+            final boolean testing) {
         super(identifier, facetedMethod, FeatureType.ACTION);
 
         this.declaredOnMixin = declaredOnMixin;
+        this.testing = testing;
+    }
 
-        // In support of some JUnit tests, skip
-        if(getActionInvocationFacet()==null) {
-            elementType = null;
-            return;
+    // -- DECLARING TYPE
+
+    @Getter(onMethod_ = @Override, lazy=true)
+    private final ObjectSpecification declaringType = loadDeclaringType();
+
+    private ObjectSpecification loadDeclaringType() {
+        val declaringType = getActionInvocationFacet()
+                .map(ActionInvocationFacet::getDeclaringType);
+        // JUnit support
+        if(testing
+                && declaringType.isEmpty()) {
+            return getSpecificationLoader().loadSpecification(getFacetedMethod().getMethod().getDeclaringClass());
         }
+        return declaringType.orElseThrow(()->_Exceptions
+                .illegalState("missing ActionInvocationFacet on action %s", getFeatureIdentifier()));
+    }
 
-        elementType = Facets.elementSpec(getFacetedMethod())
+    @Override
+    public SemanticsOf getSemantics() {
+        return lookupFacet(ActionSemanticsFacet.class)
+        .map(ActionSemanticsFacet::value)
+        .orElse(SemanticsOf.NON_IDEMPOTENT);
+    }
+
+    // -- ELEMENT TYPE
+
+    @Getter(onMethod_ = @Override, lazy=true)
+    private final ObjectSpecification elementType = loadElementType();
+
+    private ObjectSpecification loadElementType() {
+        return Facets.elementSpec(getFacetedMethod())
                 .orElseGet(()->{
                     val returnType = getReturnType();
                     if(!returnType.isSingular()) {
-                        log.warn("non-scalar action return type requires a TypeOfFacet: {}", identifier);
+                        log.warn("plural action return type requires a TypeOfFacet: {}", getFeatureIdentifier());
                     }
                     return returnType;
                 });
     }
 
-    @Override
-    public ObjectSpecification getReturnType() {
-        return getActionInvocationFacet().getReturnType();
+    // -- RETURN TYPE
+
+    @Getter(onMethod_ = @Override, lazy=true)
+    private final ObjectSpecification returnType = loadReturnType();
+
+    private ObjectSpecification loadReturnType() {
+        val returType = getActionInvocationFacet()
+                .map(ActionInvocationFacet::getReturnType);
+        // JUnit support
+        if(testing
+                && returType.isEmpty()) {
+            return getSpecificationLoader().loadSpecification(getFacetedMethod().getMethod().getReturnType());
+        }
+        return returType.orElseThrow(()->_Exceptions
+                .illegalState("framework bug: missing ActionInvocationFacet on action %s", getFeatureIdentifier()));
     }
 
     /**
@@ -136,20 +195,7 @@ implements ObjectAction {
             // this shouldn't happen; return Type always defined, even if represents void.class
             return false;
         }
-        return getReturnType() != getSpecificationLoader().loadSpecification(void.class);
-    }
-
-
-    @Override
-    public ObjectSpecification getDeclaringType() {
-        return getActionInvocationFacet().getDeclaringType();
-    }
-
-    @Override
-    public SemanticsOf getSemantics() {
-        return lookupFacet(ActionSemanticsFacet.class)
-        .map(ActionSemanticsFacet::value)
-        .orElse(SemanticsOf.NON_IDEMPOTENT);
+        return !getReturnType().isVoidPrimitive();
     }
 
     // -- TYPE
@@ -420,8 +466,8 @@ implements ObjectAction {
                 .invoke(this, head, argumentAdapters, interactionInitiatedBy);
     }
 
-    protected ActionInvocationFacet getActionInvocationFacet() {
-        return getFacetedMethod().getFacet(ActionInvocationFacet.class);
+    protected Optional<ActionInvocationFacet> getActionInvocationFacet() {
+        return getFacetedMethod().lookupFacet(ActionInvocationFacet.class);
     }
 
     // -- choices

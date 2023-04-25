@@ -44,14 +44,14 @@ class NavigableParentFacetMethodTest {
 
     private DomainObjectWithProblemInNavigableParentMethod pojo;
 
-    public static class DomainObjectWithProblemInNavigableParentMethod {
+    public static class DomainObjectWithProblemInNavigableParentMethod { //TODO public should not be a requirement
         public Object parent() {
             throw new NullPointerException();
         }
     }
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() throws Exception {
 
         val mmc = MetaModelContext_forTesting.buildDefault();
         simpleFacetHolder = FacetHolder.forTesting(mmc);
@@ -67,12 +67,12 @@ class NavigableParentFacetMethodTest {
     }
 
     @AfterEach
-    public void tearDown() throws Exception {
+    void tearDown() throws Exception {
         facet = null;
     }
 
     @Test
-    public void testNavigableParentThrowsException() {
+    void navigableParentThrowsException() {
         final Object parent = facet.navigableParent(mockOwningAdapter.getPojo());
         assertThat(parent, is(nullValue()));
     }

@@ -70,11 +70,11 @@ import org.apache.causeway.core.metamodel.facets.object.domainobject.introspecti
 import org.apache.causeway.core.metamodel.facets.object.mixin.MetaModelValidatorForMixinTypes;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation;
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForDomainObjectAnnotation;
+import org.apache.causeway.core.metamodel.object.MmEventUtils;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelVisitingValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
-import org.apache.causeway.core.metamodel.util.EventUtil;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
@@ -400,7 +400,7 @@ implements
         domainObjectIfAny
         .map(DomainObject::createdLifecycleEvent)
         .filter(lifecycleEvent ->
-        EventUtil.eventTypeIsPostable(
+        MmEventUtils.eventTypeIsPostable(
                 lifecycleEvent,
                 ObjectCreatedEvent.Noop.class,
                 ObjectCreatedEvent.Default.class,
@@ -418,7 +418,7 @@ implements
         domainObjectIfAny
         .map(DomainObject::loadedLifecycleEvent)
         .filter(lifecycleEvent ->
-        EventUtil.eventTypeIsPostable(
+        MmEventUtils.eventTypeIsPostable(
                 lifecycleEvent,
                 ObjectLoadedEvent.Noop.class,
                 ObjectLoadedEvent.Default.class,
@@ -436,7 +436,7 @@ implements
         domainObjectIfAny
         .map(DomainObject::persistingLifecycleEvent)
         .filter(lifecycleEvent ->
-        EventUtil.eventTypeIsPostable(
+        MmEventUtils.eventTypeIsPostable(
                 lifecycleEvent,
                 ObjectPersistingEvent.Noop.class,
                 ObjectPersistingEvent.Default.class,
@@ -454,7 +454,7 @@ implements
         domainObjectIfAny
         .map(DomainObject::persistedLifecycleEvent)
         .filter(lifecycleEvent ->
-        EventUtil.eventTypeIsPostable(
+        MmEventUtils.eventTypeIsPostable(
                 lifecycleEvent,
                 ObjectPersistedEvent.Noop.class,
                 ObjectPersistedEvent.Default.class,
@@ -472,7 +472,7 @@ implements
         domainObjectIfAny
         .map(DomainObject::removingLifecycleEvent)
         .filter(lifecycleEvent ->
-        EventUtil.eventTypeIsPostable(
+        MmEventUtils.eventTypeIsPostable(
                 lifecycleEvent,
                 ObjectRemovingEvent.Noop.class,
                 ObjectRemovingEvent.Default.class,
@@ -490,7 +490,7 @@ implements
         domainObjectIfAny
         .map(DomainObject::updatedLifecycleEvent)
         .filter(lifecycleEvent ->
-        EventUtil.eventTypeIsPostable(
+        MmEventUtils.eventTypeIsPostable(
                 lifecycleEvent,
                 ObjectUpdatedEvent.Noop.class,
                 ObjectUpdatedEvent.Default.class,
@@ -508,7 +508,7 @@ implements
         domainObjectIfAny
         .map(DomainObject::updatingLifecycleEvent)
         .filter(lifecycleEvent ->
-        EventUtil.eventTypeIsPostable(
+        MmEventUtils.eventTypeIsPostable(
                 lifecycleEvent,
                 ObjectUpdatingEvent.Noop.class,
                 ObjectUpdatingEvent.Default.class,

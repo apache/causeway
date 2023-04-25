@@ -22,31 +22,19 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.mockito.Mockito;
 
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
-import org.apache.causeway.core.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 class ActionAnnotationFacetFactoryTest
 extends FacetFactoryTestAbstract {
 
     ActionAnnotationFacetFactory facetFactory;
 
-    private ObjectSpecification mockTypeSpec;
-
     @BeforeEach
     public void setUp() throws Exception {
-
-        mockTypeSpec = Mockito.mock(ObjectSpecification.class);
-
         facetFactory = new ActionAnnotationFacetFactory(getMetaModelContext());
-
-        Mockito.when(mockTypeSpec.getFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class))
-        .thenReturn(null);
-
     }
 
     @AfterEach

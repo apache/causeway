@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.specloader.specimpl;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -28,6 +29,7 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
+import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.val;
@@ -44,7 +46,9 @@ class ObjectActionParameterAbstractTest_getId_and_getName {
 
     @BeforeEach
     public void setUp() {
-        val mmc = MetaModelContext_forTesting.buildDefault();
+        val mmc = MetaModelContext_forTesting.builder()
+                .memberExecutor(Mockito.mock(MemberExecutorService.class))
+                .build();
         val spec = mmc.getSpecificationLoader().loadSpecification(Customer.class);
         action = spec.getAction("aMethod").orElseThrow();
     }

@@ -23,7 +23,7 @@ import org.apache.causeway.applib.services.wrapper.events.PropertyAccessEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
+import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -54,9 +54,9 @@ extends AccessContext {
     @Override
     public PropertyAccessEvent createInteractionEvent() {
         return new PropertyAccessEvent(
-                MmUnwrapUtil.single(getTarget()),
+                MmUnwrapUtils.single(getTarget()),
                 getIdentifier(),
-                MmUnwrapUtil.single(getValue()));
+                MmUnwrapUtils.single(getValue()));
     }
 
 }

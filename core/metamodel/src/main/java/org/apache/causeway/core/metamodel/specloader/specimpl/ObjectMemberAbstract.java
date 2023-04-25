@@ -75,7 +75,6 @@ implements
             final Identifier featureIdentifier,
             final FacetedMethod facetedMethod,
             final FeatureType featureType) {
-
         this.featureIdentifier = featureIdentifier;
         this.facetedMethod = facetedMethod;
         this.featureType = featureType;

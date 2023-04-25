@@ -27,7 +27,7 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmInvokeUtil;
+import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.Getter;
@@ -58,7 +58,7 @@ implements ImperativeFacet {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
-        MmInvokeUtil.invoke(method, targetAdapter, valueAdapter);
+        MmInvokeUtils.invoke(method, targetAdapter, valueAdapter);
         return targetAdapter;
     }
 

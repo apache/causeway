@@ -37,7 +37,7 @@ import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public final class MmInvokeUtil {
+public final class MmInvokeUtils {
 
     /** PAT ... Parameters as Tuple */
     public static Object invokeWithPAT(
@@ -47,9 +47,9 @@ public final class MmInvokeUtil {
             final Can<ManagedObject> pendingArguments,
             final List<Object> additionalArguments) {
 
-        val pat = CanonicalInvoker.construct(patConstructor, MmUnwrapUtil.multipleAsArray(pendingArguments));
+        val pat = CanonicalInvoker.construct(patConstructor, MmUnwrapUtils.multipleAsArray(pendingArguments));
         val paramPojos = _Arrays.combineWithExplicitType(Object.class, pat, additionalArguments.toArray());
-        return CanonicalInvoker.invoke(method, MmUnwrapUtil.single(adapter), paramPojos);
+        return CanonicalInvoker.invoke(method, MmUnwrapUtils.single(adapter), paramPojos);
     }
 
     /** PAT ... Parameters as Tuple */
@@ -62,7 +62,7 @@ public final class MmInvokeUtil {
     }
 
     public static void invokeAll(final Iterable<Method> methods, final ManagedObject adapter) {
-        CanonicalInvoker.invokeAll(methods, MmUnwrapUtil.single(adapter));
+        CanonicalInvoker.invokeAll(methods, MmUnwrapUtils.single(adapter));
     }
 
     public static Object invokeAutofit(
@@ -104,23 +104,23 @@ public final class MmInvokeUtil {
     }
 
     public static Object invoke(final Method method, final ManagedObject adapter) {
-        return CanonicalInvoker.invoke(method, MmUnwrapUtil.single(adapter));
+        return CanonicalInvoker.invoke(method, MmUnwrapUtils.single(adapter));
     }
 
     public static Object invoke(final Method method, final ManagedObject adapter, final Object arg0) {
-        return CanonicalInvoker.invoke(method, MmUnwrapUtil.single(adapter), new Object[] {arg0});
+        return CanonicalInvoker.invoke(method, MmUnwrapUtils.single(adapter), new Object[] {arg0});
     }
 
     public static Object invoke(final Method method, final ManagedObject adapter, final Can<ManagedObject> argumentAdapters) {
-        return CanonicalInvoker.invoke(method, MmUnwrapUtil.single(adapter), MmUnwrapUtil.multipleAsArray(argumentAdapters));
+        return CanonicalInvoker.invoke(method, MmUnwrapUtils.single(adapter), MmUnwrapUtils.multipleAsArray(argumentAdapters));
     }
 
     public static Object invoke(final Method method, final ManagedObject adapter, final ManagedObject arg0Adapter) {
-        return invoke(method, adapter, MmUnwrapUtil.single(arg0Adapter));
+        return invoke(method, adapter, MmUnwrapUtils.single(arg0Adapter));
     }
 
     public static Object invoke(final Method method, final ManagedObject adapter, final ManagedObject[] argumentAdapters) {
-        return CanonicalInvoker.invoke(method, MmUnwrapUtil.single(adapter), MmUnwrapUtil.multipleAsArray(argumentAdapters));
+        return CanonicalInvoker.invoke(method, MmUnwrapUtils.single(adapter), MmUnwrapUtils.multipleAsArray(argumentAdapters));
     }
 
     /**
@@ -153,7 +153,7 @@ public final class MmInvokeUtil {
 
         val argArray = adjust(method, pendingArgs, additionalArgValues);
 
-        return CanonicalInvoker.invoke(method, MmUnwrapUtil.single(target), argArray);
+        return CanonicalInvoker.invoke(method, MmUnwrapUtils.single(target), argArray);
     }
 
     /**
@@ -182,7 +182,7 @@ public final class MmInvokeUtil {
         for(int i=0; i<pendingArgsToConsiderCount; i++) {
 
             val paramType = parameterTypes[i];
-            val arg = argIterator.hasNext() ? MmUnwrapUtil.single(argIterator.next()) : null;
+            val arg = argIterator.hasNext() ? MmUnwrapUtils.single(argIterator.next()) : null;
 
             adjusted[i] = honorPrimitiveDefaults(paramType, arg);
         }

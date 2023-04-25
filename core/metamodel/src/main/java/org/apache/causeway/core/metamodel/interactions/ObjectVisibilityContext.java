@@ -24,7 +24,7 @@ import org.apache.causeway.applib.services.wrapper.events.ObjectVisibilityEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
+import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -47,7 +47,7 @@ implements ProposedHolder {
 
     @Override
     public ObjectVisibilityEvent createInteractionEvent() {
-        return new ObjectVisibilityEvent(MmUnwrapUtil.single(getTarget()), getIdentifier());
+        return new ObjectVisibilityEvent(MmUnwrapUtils.single(getTarget()), getIdentifier());
     }
 
     @Override

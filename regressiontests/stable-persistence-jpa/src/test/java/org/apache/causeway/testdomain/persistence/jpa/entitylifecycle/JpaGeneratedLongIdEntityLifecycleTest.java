@@ -39,7 +39,7 @@ import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmEntityUtil;
+import org.apache.causeway.core.metamodel.object.MmEntityUtils;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.entities.JpaEntityGeneratedLongId;
@@ -78,7 +78,7 @@ class JpaGeneratedLongIdEntityLifecycleTest {
         assertTrue(entity.getSpecification().isEntity());
         assertEquals(
                 EntityState.PERSISTABLE_DETACHED,
-                MmEntityUtil.getEntityState(entity));
+                MmEntityUtils.getEntityState(entity));
 
         setEntityRef(entity);
 
@@ -93,7 +93,7 @@ class JpaGeneratedLongIdEntityLifecycleTest {
 
         assertEquals(
                 EntityState.PERSISTABLE_ATTACHED,
-                MmEntityUtil.getEntityState(entity));
+                MmEntityUtils.getEntityState(entity));
         assertEquals(1, repository.allInstances(JpaEntityGeneratedLongId.class).size());
 
     }
@@ -104,7 +104,7 @@ class JpaGeneratedLongIdEntityLifecycleTest {
         // expected post-condition (after persist, and having entered a new transaction)
         assertEquals(
                 EntityState.PERSISTABLE_DETACHED_WITH_OID,
-                MmEntityUtil.getEntityState(getEntityRef()));
+                MmEntityUtils.getEntityState(getEntityRef()));
 
         val id = ((JpaEntityGeneratedLongId)getEntityRef().getPojo()).getId();
 
@@ -117,12 +117,12 @@ class JpaGeneratedLongIdEntityLifecycleTest {
         // expected pre-condition (before removal)
         assertEquals(
                 EntityState.PERSISTABLE_ATTACHED,
-                MmEntityUtil.getEntityState(entity));
+                MmEntityUtils.getEntityState(entity));
 
         repository.remove(entity.getPojo());
 
         // expected post-condition (after removal)
-        assertTrue(MmEntityUtil.isDeleted(entity));
+        assertTrue(MmEntityUtils.isDeleted(entity));
 
         setEntityRef(entity);
     }
@@ -132,7 +132,7 @@ class JpaGeneratedLongIdEntityLifecycleTest {
 
         val entity = getEntityRef();
 
-        assertTrue(MmEntityUtil.isDeleted(entity));
+        assertTrue(MmEntityUtils.isDeleted(entity));
         assertEquals(0, repository.allInstances(JpaEntityGeneratedLongId.class).size());
 
     }

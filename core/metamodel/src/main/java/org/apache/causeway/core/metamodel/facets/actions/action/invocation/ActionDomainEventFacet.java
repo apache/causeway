@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.action.invocation;
 
-import java.lang.reflect.Method;
 import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -29,7 +28,6 @@ import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -47,8 +45,6 @@ import org.apache.causeway.core.metamodel.interactions.ValidityContext;
 import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
-import org.apache.causeway.core.metamodel.util.EventUtil;
 
 import lombok.NonNull;
 import lombok.val;
@@ -69,12 +65,11 @@ implements
     // -- FACTORIES
 
     /**
-     * For regular (non mixed-in) members only.
-     * <p>
-     * @return empty, if event is not post-able
+     * Inspect {@link Action#domainEvent()} if present, else use the default event type.
      */
-    public static Optional<ActionDomainEventFacet> createRegular(
+    public static ActionDomainEventFacet create(
             final @NonNull Optional<Action> actionIfAny,
+            /** only used to lookup {@link ActionDomainEventDefaultFacetForDomainObjectAnnotation} */
             final @NonNull ObjectSpecification typeSpec,
             final @NonNull FacetHolder facetHolder){
 
@@ -83,50 +78,21 @@ implements
                 .map(Action::domainEvent)
                 .filter(domainEvent -> domainEvent != ActionDomainEvent.Default.class)
                 .map(domainEvent ->
-                        new ActionDomainEventFacet(
-                                defaultFromDomainObjectIfRequired(typeSpec, domainEvent), EventTypeOrigin.ANNOTATED_MEMBER, facetHolder))
-                .orElse(
-                        new ActionDomainEventFacet(
-                                defaultFromDomainObjectIfRequired(typeSpec, ActionDomainEvent.Default.class), EventTypeOrigin.DEFAULT, facetHolder)
-                        );
+                        new ActionDomainEventFacet(domainEvent, EventTypeOrigin.ANNOTATED_MEMBER, facetHolder))
+                .orElseGet(()->{
 
-        return EventUtil.eventTypeIsPostable(
-                actionDomainEventFacet.getEventType(),
-                ActionDomainEvent.Noop.class,
-                ActionDomainEvent.Default.class,
-                facetHolder.getConfiguration().getApplib().getAnnotation().getAction().getDomainEvent().isPostForDefault())
-            ? Optional.of(actionDomainEventFacet)
-            : Optional.empty();
-    }
+                    val typeFromDomainObject = typeSpec
+                            .getFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class);
 
-    /**
-     * For mixed-in members.
-     */
-    public static Optional<ActionDomainEventFacet> createMixedIn(
-            final @NonNull ObjectSpecification mixeeSpecification,
-            final @NonNull ObjectActionMixedIn mixedInAction) {
-
-
-        val facetedMethod = mixedInAction.getFacetedMethod();
-        final Method method = facetedMethod.getMethod().asMethodElseFail(); // no-arg method, should have a regular facade
-
-        //TODO[CAUSEWAY-3409] what if the @Action annotation is not on the method but on the (mixin) type
-        final Action actionAnnot =
-                _Annotations.synthesize(method, Action.class)
-                .orElse(null);
-
-        if(actionAnnot != null) {
-            final Class<? extends ActionDomainEvent<?>> actionDomainEventType =
-                    defaultFromDomainObjectIfRequired(
-                            mixeeSpecification, actionAnnot.domainEvent());
-
-            return Optional.of(
-                    new ActionDomainEventFacet(
-                            actionDomainEventType, EventTypeOrigin.ANNOTATED_MEMBER, mixedInAction));
-        }
-
-        return Optional.empty();
-
+                    return typeFromDomainObject != null
+                            ? new ActionDomainEventFacet(
+                                    typeFromDomainObject.getEventType(),
+                                    EventTypeOrigin.ANNOTATED_OBJECT, facetHolder)
+                            : new ActionDomainEventFacet(
+                                    ActionDomainEvent.Default.class,
+                                    EventTypeOrigin.DEFAULT, facetHolder);
+                });
+        return actionDomainEventFacet;
     }
 
     // -- CONSTRUCTION
@@ -159,6 +125,7 @@ implements
 
     @Override
     public String hides(final VisibilityContext ic) {
+        if(!isPostable()) return null; // bale out
 
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
@@ -179,6 +146,7 @@ implements
 
     @Override
     public Optional<VetoReason> disables(final UsabilityContext ic) {
+        if(!isPostable()) return null; // bale out
 
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
@@ -206,6 +174,7 @@ implements
 
     @Override
     public String invalidates(final ValidityContext ic) {
+        if(!isPostable()) return null; // bale out
 
         _Assert.assertTrue(ic instanceof ActionValidityContext, ()->
             String.format("expecting an action context but got %s", ic.getIdentifier()));
@@ -237,20 +206,6 @@ implements
                     "Expecting ic to be of type ActionInteractionContext, instead was: " + ic);
         }
         return ((ActionInteractionContext) ic).getObjectAction();
-    }
-
-    private static Class<? extends ActionDomainEvent<?>> defaultFromDomainObjectIfRequired(
-            final ObjectSpecification typeSpec,
-            final Class<? extends ActionDomainEvent<?>> actionDomainEventType) {
-
-        if (actionDomainEventType == ActionDomainEvent.Default.class) {
-            val typeFromDomainObject =
-                    typeSpec.getFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class);
-            if (typeFromDomainObject != null) {
-                return typeFromDomainObject.getEventType();
-            }
-        }
-        return actionDomainEventType;
     }
 
 }

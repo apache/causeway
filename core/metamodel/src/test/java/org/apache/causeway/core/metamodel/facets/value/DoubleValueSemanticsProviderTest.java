@@ -34,8 +34,7 @@ extends ValueSemanticsProviderAbstractTestCase<Double> {
     private Double doubleObj;
 
     @BeforeEach
-    public void setUpObjects() throws Exception {
-
+    void setUpObjects() throws Exception {
         setSemantics(value = new DoubleValueSemantics());
 
         doubleObj = Double.valueOf(32.5d);
@@ -43,12 +42,12 @@ extends ValueSemanticsProviderAbstractTestCase<Double> {
     }
 
     @Test
-    public void testValue() {
+    void value() {
         assertEquals("32.5", value.titlePresentation(null, doubleObj));
     }
 
     @Test
-    public void testInvalidParse() throws Exception {
+    void invalidParse() throws Exception {
         try {
             value.parseTextRepresentation(null, "one");
             fail();
@@ -57,18 +56,18 @@ extends ValueSemanticsProviderAbstractTestCase<Double> {
     }
 
     @Test
-    public void testTitleOf() {
+    void titleOf() {
         assertEquals("35,000,000", value.titlePresentation(null, Double.valueOf(35000000.0)));
     }
 
     @Test
-    public void testParse() throws Exception {
+    void parse() throws Exception {
         final Object newValue = value.parseTextRepresentation(null, "120.56");
         assertEquals(120.56, ((Double) newValue).doubleValue(), 0.0);
     }
 
     @Test
-    public void testParse2() throws Exception {
+    void parse2() throws Exception {
         final Object newValue = value.parseTextRepresentation(null, "1,20.0");
         assertEquals(120, ((Double) newValue).doubleValue(), 0.0);
     }

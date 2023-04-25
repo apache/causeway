@@ -34,7 +34,7 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.interactions.managed._BindingUtil.TargetFormat;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
-import org.apache.causeway.core.metamodel.object.MmAssertionUtil;
+import org.apache.causeway.core.metamodel.object.MmAssertionUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
@@ -72,7 +72,7 @@ public class PropertyNegotiationModel implements ManagedValue {
 
         proposedValue = _Bindables.forValue(defaultValue);
         //proposedValue.setValueRefiner(MmEntityUtil::refetch); // no longer used
-        proposedValue.setValueGuard(MmAssertionUtil.assertInstanceOf(propMeta.getElementType()));
+        proposedValue.setValueGuard(MmAssertionUtils.assertInstanceOf(propMeta.getElementType()));
         proposedValue.addListener((e,o,n)->{
             invalidateChoicesAndValidation();
         });

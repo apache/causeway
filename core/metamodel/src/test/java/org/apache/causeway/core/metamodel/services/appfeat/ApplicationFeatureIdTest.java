@@ -18,10 +18,10 @@
  */
 package org.apache.causeway.core.metamodel.services.appfeat;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -36,26 +36,24 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
-import org.apache.causeway.core.internaltestsupport.contract.ValueTypeContractTestAbstract;
 
 import lombok.val;
 
-public class ApplicationFeatureIdTest {
+class ApplicationFeatureIdTest {
 
-    public static class Title extends ApplicationFeatureIdTest {
+    @Nested
+    class BasicsTest {
 
         @Test
-        public void happyCase() throws Exception {
+        void title_happyCase() throws Exception {
+            // when
             val applicationFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar#foo");
-
+            // then
             assertThat(applicationFeatureId.title(), is("com.mycompany.Bar#foo"));
         }
-    }
-
-    public static class NewPackage extends ApplicationFeatureIdTest {
 
         @Test
-        public void testNewPackage() throws Exception {
+        void newPackage() throws Exception {
             // when
             val applicationFeatureId = ApplicationFeatureId.newNamespace("com.mycompany");
             // then
@@ -64,12 +62,9 @@ public class ApplicationFeatureIdTest {
             assertThat(applicationFeatureId.getTypeSimpleName(), is(nullValue()));
             assertThat(applicationFeatureId.getLogicalMemberName(), is(nullValue()));
         }
-    }
-
-    public static class NewClass extends ApplicationFeatureIdTest {
 
         @Test
-        public void testNewClass() throws Exception {
+        void newClass() throws Exception {
             // when
             val applicationFeatureId = ApplicationFeatureId.newType("com.mycompany.Bar");
             // then
@@ -80,10 +75,11 @@ public class ApplicationFeatureIdTest {
         }
     }
 
-    public static class NewMember extends ApplicationFeatureIdTest {
+    @Nested
+    class NewMemberTest {
 
         @Test
-        public void using_fullyQualifiedClassName_and_MemberName() throws Exception {
+        void using_fullyQualifiedClassName_and_MemberName() throws Exception {
             // when
             val applicationFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar", "foo");
             // then
@@ -94,7 +90,7 @@ public class ApplicationFeatureIdTest {
         }
 
         @Test
-        public void using_fullyQualifiedName() throws Exception {
+        void using_fullyQualifiedName() throws Exception {
             // when
             val applicationFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar#foo");
             // then
@@ -103,13 +99,13 @@ public class ApplicationFeatureIdTest {
             assertThat(applicationFeatureId.getTypeSimpleName(), is("Bar"));
             assertThat(applicationFeatureId.getLogicalMemberName(), is("foo"));
         }
-
     }
 
-    public static class NewFeature_AFT_String extends ApplicationFeatureIdTest {
+    @Nested
+    class NewFeatureTest {
 
         @Test
-        public void whenPackage() throws Exception {
+        void aftString_whenPackage() throws Exception {
             // when
             val applicationFeatureId = ApplicationFeatureId.newFeature(ApplicationFeatureSort.NAMESPACE, "com.mycompany");
             // then
@@ -117,7 +113,7 @@ public class ApplicationFeatureIdTest {
         }
 
         @Test
-        public void whenClass() throws Exception {
+        void aftString_whenClass() throws Exception {
             // when
             val applicationFeatureId = ApplicationFeatureId.newFeature(ApplicationFeatureSort.TYPE, "com.mycompany.Bar");
             // then
@@ -125,18 +121,15 @@ public class ApplicationFeatureIdTest {
         }
 
         @Test
-        public void whenMember() throws Exception {
+        void aftString_whenMember() throws Exception {
             // when
             val applicationFeatureId = ApplicationFeatureId.newFeature(ApplicationFeatureSort.MEMBER, "com.mycompany.Bar#foo");
             // then
             assertThat(applicationFeatureId, is(ApplicationFeatureId.newMember("com.mycompany.Bar","foo")));
         }
-    }
-
-    public static class NewFeature_String_String_String extends ApplicationFeatureIdTest {
 
         @Test
-        public void whenPackage() throws Exception {
+        void string3_whenPackage() throws Exception {
             // when
             val applicationFeatureId = ApplicationFeatureId.newFeature("com.mycompany", null, null);
             // then
@@ -144,7 +137,7 @@ public class ApplicationFeatureIdTest {
         }
 
         @Test
-        public void whenClass() throws Exception {
+        void string3_whenClass() throws Exception {
             // when
             val applicationFeatureId = ApplicationFeatureId.newFeature("com.mycompany", "Bar", null);
             // then
@@ -152,7 +145,7 @@ public class ApplicationFeatureIdTest {
         }
 
         @Test
-        public void whenMember() throws Exception {
+        void string3_whenMember() throws Exception {
             // when
             val applicationFeatureId = ApplicationFeatureId.newFeature("com.mycompany", "Bar", "foo");
             // then
@@ -160,10 +153,11 @@ public class ApplicationFeatureIdTest {
         }
     }
 
-    public static class GetParentIds extends ApplicationFeatureIdTest {
+    @Nested
+    class GetParentIdsTest {
 
         @Test
-        public void whenPackageWithNoParent() throws Exception {
+        void whenPackageWithNoParent() throws Exception {
 
             // given
             val applicationFeatureId = ApplicationFeatureId.newNamespace("com");
@@ -177,7 +171,7 @@ public class ApplicationFeatureIdTest {
         }
 
         @Test
-        public void whenPackageWithHasParent() throws Exception {
+        void whenPackageWithHasParent() throws Exception {
 
             // given
             val applicationFeatureId = ApplicationFeatureId.newNamespace("com.mycompany");
@@ -191,7 +185,7 @@ public class ApplicationFeatureIdTest {
         }
 
         @Test
-        public void whenPackageWithHasParents() throws Exception {
+        void whenPackageWithHasParents() throws Exception {
 
             // given
             val applicationFeatureId = ApplicationFeatureId.newNamespace("com.mycompany.bish.bosh");
@@ -209,7 +203,7 @@ public class ApplicationFeatureIdTest {
         }
 
         @Test
-        public void whenClassWithParents() throws Exception {
+        void whenClassWithParents() throws Exception {
 
             // given
             val applicationFeatureId = ApplicationFeatureId.newType("com.mycompany.Bar");
@@ -226,7 +220,7 @@ public class ApplicationFeatureIdTest {
         }
 
         @Test
-        public void whenMember() throws Exception {
+        void whenMember() throws Exception {
 
             // given
             val applicationFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar", "foo");
@@ -242,13 +236,13 @@ public class ApplicationFeatureIdTest {
                     ApplicationFeatureId.newNamespace("com")
                     ));
         }
-
     }
 
-    public static class GetParentPackageId extends ApplicationFeatureIdTest {
+    @Nested
+    class GetParentPackageIdTest {
 
         @Test
-        public void givenPackageWhenParentIsNotRoot() throws Exception {
+        void givenPackageWhenParentIsNotRoot() throws Exception {
             // given
             val applicationFeatureId = ApplicationFeatureId.newNamespace("com.mycompany");
             // when
@@ -261,7 +255,7 @@ public class ApplicationFeatureIdTest {
         }
 
         @Test
-        public void givenPackageWhenParentIsRoot() throws Exception {
+        void givenPackageWhenParentIsRoot() throws Exception {
             // given
             val applicationFeatureId = ApplicationFeatureId.newNamespace("com");
             // when
@@ -271,7 +265,7 @@ public class ApplicationFeatureIdTest {
         }
 
         @Test
-        public void givenRootPackage() throws Exception {
+        void givenRootPackage() throws Exception {
             // given
             val applicationFeatureId = ApplicationFeatureId.newNamespace("");
             // when
@@ -281,7 +275,7 @@ public class ApplicationFeatureIdTest {
         }
 
         @Test
-        public void givenClass() throws Exception {
+        void givenClass() throws Exception {
             // given
             val applicationFeatureId = ApplicationFeatureId.newType("com.mycompany.Bar");
 
@@ -296,27 +290,27 @@ public class ApplicationFeatureIdTest {
         }
 
         @Test
-        public void givenClassInRootPackage() throws Exception {
+        void givenClassInRootPackage() throws Exception {
             // when
             assertThrows(IllegalArgumentException.class, ()->
                 ApplicationFeatureId.newType("Bar"));
         }
 
         @Test
-        public void givenMember() throws Exception {
+        void givenMember() throws Exception {
             // given
             val applicationFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar", "foo");
             // when
             assertThrows(AssertionError.class, ()->
                 applicationFeatureId.getParentNamespaceFeatureId());
         }
-
     }
 
-    public static class GetParentClass extends ApplicationFeatureIdTest {
+    @Nested
+    class GetParentClassTest {
 
         @Test
-        public void givenMember() throws Exception {
+        void givenMember() throws Exception {
             // given
             val applicationFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar", "foo");
 
@@ -331,7 +325,7 @@ public class ApplicationFeatureIdTest {
         }
 
         @Test
-        public void givenPackage() throws Exception {
+        void givenPackage() throws Exception {
             // given
             val applicationFeatureId = ApplicationFeatureId.newNamespace("com");
             // when
@@ -340,7 +334,7 @@ public class ApplicationFeatureIdTest {
         }
 
         @Test
-        public void givenClass() throws Exception {
+        void givenClass() throws Exception {
             // given
             val applicationFeatureId = ApplicationFeatureId.newType("com.mycompany.Bar");
             // when
@@ -349,70 +343,13 @@ public class ApplicationFeatureIdTest {
         }
     }
 
-    public static abstract class ValueTypeContractTest extends ValueTypeContractTestAbstract<ApplicationFeatureId> {
-
-        public static class PackageFeatures extends ValueTypeContractTest {
-
-            @Override
-            protected List<ApplicationFeatureId> getObjectsWithSameValue() {
-                return Arrays.asList(
-                        ApplicationFeatureId.newNamespace("com.mycompany"),
-                        ApplicationFeatureId.newNamespace("com.mycompany"));
-            }
-
-            @Override
-            protected List<ApplicationFeatureId> getObjectsWithDifferentValue() {
-                return Arrays.asList(
-                        ApplicationFeatureId.newNamespace("com.mycompany2"),
-                        ApplicationFeatureId.newType("com.mycompany.Foo"),
-                        ApplicationFeatureId.newMember("com.mycompany.Foo#bar"));
-            }
-        }
-
-        public static class ClassFeatures extends ValueTypeContractTest {
-
-            @Override
-            protected List<ApplicationFeatureId> getObjectsWithSameValue() {
-                return Arrays.asList(
-                        ApplicationFeatureId.newType("com.mycompany.Foo"),
-                        ApplicationFeatureId.newType("com.mycompany.Foo"));
-            }
-
-            @Override
-            protected List<ApplicationFeatureId> getObjectsWithDifferentValue() {
-                return Arrays.asList(
-                        ApplicationFeatureId.newNamespace("com.mycompany"),
-                        ApplicationFeatureId.newType("com.mycompany.Foo2"),
-                        ApplicationFeatureId.newMember("com.mycompany.Foo#bar"));
-            }
-        }
-
-        public static class MemberFeatures extends ValueTypeContractTest {
-
-            @Override
-            protected List<ApplicationFeatureId> getObjectsWithSameValue() {
-                return Arrays.asList(
-                        ApplicationFeatureId.newMember("com.mycompany.Foo#bar"),
-                        ApplicationFeatureId.newMember("com.mycompany.Foo#bar"));
-            }
-
-            @Override
-            protected List<ApplicationFeatureId> getObjectsWithDifferentValue() {
-                return Arrays.asList(
-                        ApplicationFeatureId.newNamespace("com.mycompany"),
-                        ApplicationFeatureId.newType("com.mycompany.Foo"),
-                        ApplicationFeatureId.newMember("com.mycompany.Foo#bar2"));
-            }
-        }
-
-    }
-
-    public static class CompareToTest extends ApplicationFeatureIdTest {
+    @Nested
+    class CompareToTest {
 
         ApplicationFeatureId feature1;
 
         @Test
-        public void members() throws Exception {
+        void members() throws Exception {
             feature1 = ApplicationFeatureId.newMember("com.mycompany.Bar#b");
 
             assertThat(feature1.toString(),
@@ -421,7 +358,7 @@ public class ApplicationFeatureIdTest {
         }
 
         @Test
-        public void classes() throws Exception {
+        void classes() throws Exception {
             feature1 = ApplicationFeatureId.newType("com.mycompany.B");
 
             assertThat(feature1.toString(),
@@ -429,7 +366,7 @@ public class ApplicationFeatureIdTest {
         }
 
         @Test
-        public void packages() throws Exception {
+        void packages() throws Exception {
             feature1 = ApplicationFeatureId.newNamespace("com.b");
 
             assertThat(feature1.toString(),
@@ -437,13 +374,14 @@ public class ApplicationFeatureIdTest {
         }
     }
 
-    public static class ToStringTest extends ApplicationFeatureIdTest {
+    @Nested
+    class ToStringTest {
 
         ApplicationFeatureId feature1;
         ApplicationFeatureId feature2;
 
         @Test
-        public void members() throws Exception {
+        void members() throws Exception {
             feature1 = ApplicationFeatureId.newMember("com.mycompany.Bar#b");
 
             feature2 = ApplicationFeatureId.newMember("com.mycompany.Bar#c");
@@ -463,7 +401,7 @@ public class ApplicationFeatureIdTest {
         }
 
         @Test
-        public void classes() throws Exception {
+        void classes() throws Exception {
             feature1 = ApplicationFeatureId.newType("com.mycompany.B");
 
             feature2 = ApplicationFeatureId.newType("com.mycompany.C");
@@ -480,7 +418,7 @@ public class ApplicationFeatureIdTest {
         }
 
         @Test
-        public void packages() throws Exception {
+        void packages() throws Exception {
             feature1 = ApplicationFeatureId.newNamespace("com.b");
 
             feature2 = ApplicationFeatureId.newNamespace("com.c");
@@ -494,62 +432,59 @@ public class ApplicationFeatureIdTest {
         }
     }
 
+    @Nested
+    class GetClassNameTest {
 
-    public static class FunctionsTest extends ApplicationFeatureIdTest {
+        private Function<ApplicationFeatureId, String> func = ApplicationFeatureId::getTypeSimpleName;
 
-        public static class GET_CLASS_NAME extends FunctionsTest {
-
-            private Function<ApplicationFeatureId, String> func = ApplicationFeatureId::getTypeSimpleName;
-
-            @Test
-            public void whenNull() throws Exception {
-                assertThrows(NullPointerException.class, ()->
-                    func.apply(null));
-            }
-
-            @Test
-            public void whenPackage() throws Exception {
-                assertThat(func.apply(ApplicationFeatureId.newNamespace("com.mycompany")), is(nullValue()));
-            }
-
-            @Test
-            public void whenClass() throws Exception {
-                assertThat(func.apply(ApplicationFeatureId.newType("com.mycompany.Bar")), is("Bar"));
-            }
-
-            @Test
-            public void whenMember() throws Exception {
-                assertThat(func.apply(ApplicationFeatureId.newMember("com.mycompany.Bar#foo")), is("Bar"));
-            }
-
+        @Test
+        void whenNull() throws Exception {
+            assertThrows(NullPointerException.class, ()->
+                func.apply(null));
         }
 
-        public static class GET_MEMBER_NAME extends FunctionsTest {
+        @Test
+        void whenPackage() throws Exception {
+            assertThat(func.apply(ApplicationFeatureId.newNamespace("com.mycompany")), is(nullValue()));
+        }
 
-            private Function<ApplicationFeatureId, String> func =
-                    ApplicationFeatureId::getLogicalMemberName;
+        @Test
+        void whenClass() throws Exception {
+            assertThat(func.apply(ApplicationFeatureId.newType("com.mycompany.Bar")), is("Bar"));
+        }
 
-            @Test
-            public void whenNull() throws Exception {
-                assertThrows(NullPointerException.class, ()->
-                    func.apply(null));
-            }
+        @Test
+        void whenMember() throws Exception {
+            assertThat(func.apply(ApplicationFeatureId.newMember("com.mycompany.Bar#foo")), is("Bar"));
+        }
 
-            @Test
-            public void whenPackage() throws Exception {
-                assertThat(func.apply(ApplicationFeatureId.newNamespace("com.mycompany")), is(nullValue()));
-            }
+    }
 
-            @Test
-            public void whenClass() throws Exception {
-                assertThat(func.apply(ApplicationFeatureId.newType("com.mycompany.Bar")), is(nullValue()));
-            }
+    @Nested
+    class GetMemberNameTest {
 
-            @Test
-            public void whenMember() throws Exception {
-                assertThat(func.apply(ApplicationFeatureId.newMember("com.mycompany.Bar#foo")), is("foo"));
-            }
+        private Function<ApplicationFeatureId, String> func =
+                ApplicationFeatureId::getLogicalMemberName;
 
+        @Test
+        void whenNull() throws Exception {
+            assertThrows(NullPointerException.class, ()->
+            func.apply(null));
+        }
+
+        @Test
+        void whenPackage() throws Exception {
+            assertThat(func.apply(ApplicationFeatureId.newNamespace("com.mycompany")), is(nullValue()));
+        }
+
+        @Test
+        void whenClass() throws Exception {
+            assertThat(func.apply(ApplicationFeatureId.newType("com.mycompany.Bar")), is(nullValue()));
+        }
+
+        @Test
+        void whenMember() throws Exception {
+            assertThat(func.apply(ApplicationFeatureId.newMember("com.mycompany.Bar#foo")), is("foo"));
         }
 
     }

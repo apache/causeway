@@ -28,7 +28,7 @@ import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.core.metamodel.execution.InteractionInternal;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
+import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.security.util.XrayUtil;
@@ -56,7 +56,7 @@ final class _Xray {
                 : String.format("action invocation w/ %d args:\n  %s",
                         argumentAdapters.size(),
                         argumentAdapters.stream()
-                        .map(MmUnwrapUtil::single)
+                        .map(MmUnwrapUtils::single)
                         .map(obj->"" + obj)
                         .collect(Collectors.joining(",\n  ")));
 
@@ -76,7 +76,7 @@ final class _Xray {
 
         val participantLabel = owningProperty.getFeatureIdentifier().getLogicalIdentityString("\n#");
         val enteringLabel = String.format("property edit -> '%s'",
-                MmUnwrapUtil.single(newValueAdapter));
+                MmUnwrapUtils.single(newValueAdapter));
 
         return enterInvocation(iaTracker, interaction, participantLabel, enteringLabel);
     }
