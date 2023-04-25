@@ -45,14 +45,14 @@ extends FacetFactoryTestAbstract {
     private DomainObjectWithProblemInItsTitleMethod pojo;
     private MetaModelContext metaModelContext;
 
-    public static class DomainObjectWithProblemInItsTitleMethod {
+    static class DomainObjectWithProblemInItsTitleMethod {
         public String title() {
             throw new NullPointerException("for testing purposes");
         }
     }
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() throws Exception {
 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .build();
@@ -72,7 +72,7 @@ extends FacetFactoryTestAbstract {
     }
 
     @Test
-    public void testTitleThrowsException() {
+    void titleThrowsException() {
         final String title = facet.title(stubAdapter);
         assertThat(title, is("Failed Title"));
     }

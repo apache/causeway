@@ -65,7 +65,7 @@ extends FacetFactoryTestAbstract {
             @Property(editing = Editing.DISABLED)
             public int getNumberOfOrders() { return 0; }
         }
-        propertyScenario(Customer.class, "numberOfOrders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        propertyScenario(Customer.class, "numberOfOrders", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             processEditing(facetFactory, processMethodContext);
 
@@ -87,7 +87,7 @@ extends FacetFactoryTestAbstract {
             @Property(editing = Editing.DISABLED, editingDisabledReason = "Oh no you don't!")
             public int getNumberOfOrders() { return 0;}
         }
-        propertyScenario(Customer.class, "numberOfOrders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        propertyScenario(Customer.class, "numberOfOrders", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             processEditing(facetFactory, processMethodContext);
             // then

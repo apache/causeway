@@ -35,11 +35,8 @@ extends ValueSemanticsProviderAbstractTestCase<BigDecimal> {
     private BigDecimalValueSemantics value;
     private BigDecimal bigDecimal;
 
-    @Override
     @BeforeEach
-    public void setUp() throws Exception {
-        super.setUp();
-
+    void setUpObjects() throws Exception {
         bigDecimal = new BigDecimal("34132.199");
         allowMockAdapterToReturn(bigDecimal);
 
@@ -47,13 +44,13 @@ extends ValueSemanticsProviderAbstractTestCase<BigDecimal> {
     }
 
     @Test
-    public void testParseValidString() throws Exception {
+    void parseValidString() throws Exception {
         final Object newValue = value.parseTextRepresentation(null, "2142342334");
         assertEquals(new BigDecimal(2142342334L), newValue);
     }
 
     @Test
-    public void testParseInvalidString() throws Exception {
+    void parseInvalidString() throws Exception {
         try {
             value.parseTextRepresentation(null, "214xxx2342334");
             fail();
@@ -62,7 +59,7 @@ extends ValueSemanticsProviderAbstractTestCase<BigDecimal> {
     }
 
     @Test
-    public void testTitleOf() {
+    void titleOf() {
         assertEquals("34,132.199", value.titlePresentation(null, bigDecimal));
     }
 

@@ -23,7 +23,7 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.wrapper.events.ActionVisibilityEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
+import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
 /**
@@ -53,7 +53,7 @@ implements ActionInteractionContext  {
 
     @Override
     public ActionVisibilityEvent createInteractionEvent() {
-        return new ActionVisibilityEvent(MmUnwrapUtil.single(getTarget()), getIdentifier());
+        return new ActionVisibilityEvent(MmUnwrapUtils.single(getTarget()), getIdentifier());
     }
 
 }

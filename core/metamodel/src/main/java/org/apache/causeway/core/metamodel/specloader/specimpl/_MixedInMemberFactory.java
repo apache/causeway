@@ -48,9 +48,9 @@ class _MixedInMemberFactory {
         return mixinAction ->
             mixinAction.getReturnType().isSingular()
                 ? new OneToOneAssociationMixedIn(
-                        mixinAction, mixeeSpec, mixinType, mixinMethodName)
+                        mixeeSpec, mixinAction, mixinType, mixinMethodName)
                 : new OneToManyAssociationMixedIn(
-                        mixinAction, mixeeSpec, mixinType, mixinMethodName);
+                        mixeeSpec, mixinAction, mixinType, mixinMethodName);
     }
 
 }

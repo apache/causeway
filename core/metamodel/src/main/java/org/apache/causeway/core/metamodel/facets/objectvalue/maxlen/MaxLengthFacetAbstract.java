@@ -24,7 +24,7 @@ import org.apache.causeway.core.metamodel.facets.SingleIntValueFacetAbstract;
 import org.apache.causeway.core.metamodel.interactions.ProposedHolder;
 import org.apache.causeway.core.metamodel.interactions.ValidityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
+import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 
 import lombok.val;
 
@@ -55,7 +55,7 @@ implements MaxLengthFacet {
      */
     @Override
     public boolean exceeds(final ManagedObject adapter) {
-        final String str = MmUnwrapUtil.singleAsStringOrElse(adapter, null);
+        final String str = MmUnwrapUtils.singleAsStringOrElse(adapter, null);
         if (str == null) {
             return false;
         }

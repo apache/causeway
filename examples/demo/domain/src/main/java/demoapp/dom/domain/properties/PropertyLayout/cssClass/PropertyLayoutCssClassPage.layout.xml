@@ -26,10 +26,12 @@
 
 	<bs3:row>
 		<bs3:col span="6">
-			<cpt:fieldSet name="Annotated" id="annotation"/>
+			<cpt:fieldSet name="Annotated" id="annotation">
+                <cpt:property id="name"/>
+            </cpt:fieldSet>
 			<cpt:fieldSet name="Layout File" id="layout-file">
 <!-- tag::layout-file[] -->
-				<cpt:property id="propertyUsingLayout" cssClass="red"/>
+				<cpt:property id="notes" cssClass="blue"/>
 <!-- end::layout-file[] -->
 			</cpt:fieldSet>
 			<cpt:fieldSet name="Contributed" id="contributed"/>

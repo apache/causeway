@@ -53,138 +53,116 @@ public class PropertyLayoutLabelPositionPage implements HasAsciiDocDescription {
         return "@PropertyLayout#labelPosition";
     }
 
-//tag::annotation[]
+//tag::annotated-not-provided[]
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(
-        labelPosition = LabelPosition.TOP                   // <.>
-        , describedAs =
-            "@PropertyLayout(labelPosition = TOP)",
-        fieldSetId = "annotation", sequence = "1")
+    @PropertyLayout()
     @XmlElement(required = false)
     @Getter @Setter
-    private String propertyUsingAnnotation;
-//end::annotation[]
+    private String property;
+//end::annotated-not-provided[]
 
-//tag::layout-file[]
-    @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(                                        // <.>
-        describedAs =
-            "<cpt:property id=\"...\" labelPosition=\"TOP\"/>",
-        fieldSetId = "layout-file", sequence = "1")
-    @XmlElement(required = false)
-    @Getter @Setter
-    private String propertyUsingLayout;
-//end::layout-file[]
-
-//tag::meta-annotated[]
-    @Property(optionality = Optionality.OPTIONAL)
-    @LabelPositionTopMetaAnnotation                         // <.>
-    @PropertyLayout(
-        describedAs = "@LabelPositionTopMetaAnnotation",
-        fieldSetId = "meta-annotated", sequence = "1")
-    @XmlElement(required = false)
-    @Getter @Setter
-    private String propertyUsingMetaAnnotation;
-//end::meta-annotated[]
-
-//tag::meta-annotated-overridden[]
-    @LabelPositionTopMetaAnnotation                         // <.>
+//tag::annotated-left[]
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(
-        labelPosition = LabelPosition.LEFT                  // <.>
-        , describedAs =
-            "@LabelPositionTopMetaAnnotation @PropertyLayout(...)",
-        fieldSetId = "meta-annotated-overridden", sequence = "1")
-    @XmlElement(required = false)
-    @Getter @Setter
-    private String propertyUsingMetaAnnotationButOverridden;
-//end::meta-annotated-overridden[]
-
-//tag::variants-top[]
-    @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(
-        labelPosition = LabelPosition.TOP                   // <.>
-        , describedAs =
-        "@PropertyLayout(labelPosition = TOP)",
-        fieldSetId = "variants", sequence = "1")
-    @XmlElement(required = false)
-    @Getter @Setter
-    private String propertyLabelPositionTop;
-//end::variants-top[]
-
-//tag::variants-left[]
-    @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(
-        labelPosition = LabelPosition.LEFT                  // <.>
-        , describedAs =
-        "@PropertyLayout(labelPosition = LEFT)",
-        fieldSetId = "variants", sequence = "2")
+            labelPosition = LabelPosition.LEFT
+    )
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyLabelPositionLeft;
-//end::variants-left[]
+//end::annotated-left[]
 
-//tag::variants-right[]
+//tag::annotated-top[]
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(
-        labelPosition = LabelPosition.RIGHT                 // <.>
-        , describedAs =
-        "@PropertyLayout(labelPosition = RIGHT)",
-        fieldSetId = "variants", sequence = "3")
+            labelPosition = LabelPosition.TOP
+    )
     @XmlElement(required = false)
     @Getter @Setter
-    private String propertyLabelPositionRight;
-//end::variants-right[]
+    private String propertyLabelPositionTop;
+//end::annotated-top[]
 
-//tag::variants-right-boolean[]
+//tag::annotated-none[]
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(
-        labelPosition = LabelPosition.RIGHT                 // <.>
-        , describedAs =
-        "@PropertyLayout(labelPosition = RIGHT)",
-        fieldSetId = "variants", sequence = "3.1")
-    @XmlElement(required = false)
-    @Getter @Setter
-    private Boolean propertyBooleanLabelPositionRight;
-//end::variants-right-boolean[]
-
-//tag::variants-none[]
-    @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(
-        labelPosition = LabelPosition.NONE                  // <.>
-        , describedAs =
-        "@PropertyLayout(labelPosition = NONE)",
-        fieldSetId = "variants", sequence = "4")
+            labelPosition = LabelPosition.NONE,
+            multiLine = 3
+    )
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyLabelPositionNone;
-//end::variants-none[]
+//end::annotated-none[]
 
-//tag::variants-none-multiline[]
+//tag::annotated-not-specified[]
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(
-            labelPosition = LabelPosition.NONE              // <.>
-            , multiLine = 10
-            , describedAs =
-            "@PropertyLayout(labelPosition = NONE, multiLine = 10)",
-            fieldSetId = "variants", sequence = "4.1")
-    @XmlElement(required = false)
-    @Getter @Setter
-    private String propertyLabelPositionNoneMultiline;
-//end::variants-none-multiline[]
-
-//tag::variants-not-specified[]
-    @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(
-        labelPosition = LabelPosition.NOT_SPECIFIED         // <.>
-        , describedAs =
-        "@PropertyLayout(labelPosition = NONE)",
-        fieldSetId = "variants", sequence = "5")
+            labelPosition = LabelPosition.NOT_SPECIFIED
+    )
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyLabelPositionNotSpecified;
-//end::variants-not-specified[]
+//end::annotated-not-specified[]
 
+//tag::annotated-right-boolean[]
+    @Property(optionality = Optionality.OPTIONAL)
+    @PropertyLayout()
+    @XmlElement(required = false)
+    @Getter @Setter
+    private Boolean propertyBoolean;
+//end::annotated-right-boolean[]
+
+//tag::annotated-right-boolean[]
+    @Property(optionality = Optionality.OPTIONAL)
+    @PropertyLayout(
+            labelPosition = LabelPosition.RIGHT
+    )
+    @XmlElement(required = false)
+    @Getter @Setter
+    private Boolean propertyBooleanLabelPositionRight;
+//end::annotated-right-boolean[]
+
+//tag::annotated-right[]
+    @Property(optionality = Optionality.OPTIONAL)
+    @PropertyLayout(
+            labelPosition = LabelPosition.RIGHT
+    )
+    @XmlElement(required = false)
+    @Getter @Setter
+    private String propertyLabelPositionRight;
+//end::annotated-right[]
+
+
+
+//tag::layout-left[]
+    @Property(optionality = Optionality.OPTIONAL)
+    @PropertyLayout()
+    @XmlElement(required = false)
+    @Getter @Setter
+    private String propertyLayoutLabelPositionLeft;
+//end::layout-left[]
+
+//tag::layout-top[]
+    @Property(optionality = Optionality.OPTIONAL)
+    @PropertyLayout()
+    @XmlElement(required = false)
+    @Getter @Setter
+    private String propertyLayoutLabelPositionTop;
+//end::layout-top[]
+
+//tag::layout-none[]
+    @Property(optionality = Optionality.OPTIONAL)
+    @PropertyLayout()
+    @XmlElement(required = false)
+    @Getter @Setter
+    private String propertyLayoutLabelPositionNone;
+//end::layout-none[]
+
+//tag::layout-right-boolean[]
+    @Property(optionality = Optionality.OPTIONAL)
+    @PropertyLayout()
+    @XmlElement(required = false)
+    @Getter @Setter
+    private Boolean propertyLayoutBooleanLabelPositionRight;
+//end::layout-right-boolean[]
 
 }
 //end::class[]

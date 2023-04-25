@@ -33,6 +33,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.semantics.Parser;
 import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
@@ -48,7 +50,7 @@ import org.apache.causeway.core.metamodel.valuesemantics.StringValueSemantics;
 
 import lombok.Getter;
 
-public abstract class ValueSemanticsProviderAbstractTestCase<T> {
+abstract class ValueSemanticsProviderAbstractTestCase<T> {
 
     protected InteractionService mockInteractionService;
     protected ManagedObject mockAdapter;
@@ -59,7 +61,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase<T> {
     @Getter private ValueSerializer<T> valueSerializer;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    final void setUpMmc() throws Exception {
 
         Locale.setDefault(Locale.UK);
 
@@ -94,15 +96,16 @@ public abstract class ValueSemanticsProviderAbstractTestCase<T> {
     }
 
     @Test
-    public void testParseNull() throws Exception {
+    final void parseNull() throws Exception {
         if(!isValueSemanticsProviderSetup()) return;
+        if(isBlobOrClob()) return; // those have no parser
         assertEquals(null, semantics.getParser().parseTextRepresentation(null, null));
     }
 
     @Test
-    public void testParseEmptyString() throws Exception {
+    final void parseEmptyString() throws Exception {
         if(!isValueSemanticsProviderSetup()) return;
-
+        if(isBlobOrClob()) return; // those have no parser
         final Object newValue = semantics.getParser().parseTextRepresentation(null, "");
 
         if(semantics instanceof StringValueSemantics) {
@@ -116,7 +119,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase<T> {
 
     @ParameterizedTest
     @EnumSource(Format.class)
-    public void testValueSerializer(final Format format) {
+    final void valueSerializer(final Format format) {
         if(!isValueSemanticsProviderSetup()) return;
 
         final T value = getSample();
@@ -143,7 +146,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase<T> {
 
     @ParameterizedTest
     @EnumSource(Format.class)
-    public void testDecodeNULL(final Format format) throws Exception {
+    final void decodeNULL(final Format format) throws Exception {
         if(!isValueSemanticsProviderSetup()) return;
 
         final Object newValue = getValueSerializer()
@@ -153,7 +156,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase<T> {
 
     @ParameterizedTest
     @EnumSource(Format.class)
-    public void testEmptyEncoding(final Format format) {
+    final void emptyEncoding(final Format format) {
         if(!isValueSemanticsProviderSetup()) return;
 
         assertEquals(ValueSerializerDefault.ENCODED_NULL, getValueSerializer()
@@ -161,7 +164,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase<T> {
     }
 
     @Test
-    public void testTitleOfForNullObject() {
+    final void titleOfForNullObject() {
         if(!isValueSemanticsProviderSetup()) return;
 
         if(semantics instanceof StringValueSemantics) {
@@ -180,6 +183,9 @@ public abstract class ValueSemanticsProviderAbstractTestCase<T> {
         return semantics!=null;
     }
 
-
+    private boolean isBlobOrClob() {
+        return semantics.getCorrespondingClass().equals(Blob.class)
+                || semantics.getCorrespondingClass().equals(Clob.class);
+    }
 
 }

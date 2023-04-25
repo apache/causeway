@@ -171,7 +171,8 @@ implements
      * Canonical name of the corresponding class.
      */
     public String getClassName() {
-        return getCorrespondingClass().getCanonicalName();
+        return _Strings.nonEmpty(getCorrespondingClass().getCanonicalName())
+                .orElse("inner");
     }
 
     /**

@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
+import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.model.interaction.Configuration_usingInteractionDomain;
 import org.apache.causeway.testdomain.model.interaction.InteractionDemo;
@@ -65,7 +65,7 @@ class CollectionInteractionTest extends InteractionTestAbstract {
         tester.assertUsabilityIsNotVetoed();
 
         val expectedElements = tester.streamCollectionElements()
-                .map(MmUnwrapUtil::single)
+                .map(MmUnwrapUtils::single)
                 .collect(Collectors.toList());
         assertEquals(4, expectedElements.size());
 

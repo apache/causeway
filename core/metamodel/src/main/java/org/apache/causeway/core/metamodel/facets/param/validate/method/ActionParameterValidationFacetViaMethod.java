@@ -31,7 +31,7 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.param.validate.ActionParameterValidationFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmInvokeUtil;
+import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -70,12 +70,12 @@ implements ImperativeFacet {
         val method = methods.getFirstElseFail();
         final Object returnValue = patConstructor.isPresent()
                 // provides all pending args as a tuple (for validation)
-                ? MmInvokeUtil.invokeWithPAT(
+                ? MmInvokeUtils.invokeWithPAT(
                         patConstructor.get(),
                         method.asMethodForIntrospection(),
                         owningAdapter, pendingArgs)
                  // provides only a single pending arg (for validation)
-                : MmInvokeUtil.invoke(
+                : MmInvokeUtils.invoke(
                         method.asMethodElseFail(),
                         owningAdapter,
                         proposedArgument);

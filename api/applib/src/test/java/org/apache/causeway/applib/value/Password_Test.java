@@ -30,7 +30,7 @@ import lombok.val;
 class Password_Test {
 
     @Nested
-    public class checkPassword {
+    class checkPassword {
 
         @Test
         void case_sensitive() {
@@ -68,7 +68,7 @@ class Password_Test {
     }
 
     @Nested
-    public class toString {
+    class toString {
 
         @Test
         void obscures_password() {

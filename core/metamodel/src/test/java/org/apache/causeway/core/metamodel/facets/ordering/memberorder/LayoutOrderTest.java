@@ -50,7 +50,7 @@ extends FacetFactoryTestAbstract {
             @PropertyLayout(sequence = "1")
             public String getFirstName() { return null; }
         }
-        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        propertyScenario(Customer.class, "firstName", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             facetFactory.process(processMethodContext);
             // then
@@ -74,7 +74,7 @@ extends FacetFactoryTestAbstract {
             public Collection<Order> getOrders() { return null;}
             public void addToOrders(final Order o) {}
         }
-        collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             facetFactory.process(processMethodContext);
             // then
@@ -94,7 +94,7 @@ extends FacetFactoryTestAbstract {
             @ActionLayout(sequence = "3")
             public void someAction() {}
         }
-        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod) -> {
             //when
             facetFactory.process(processMethodContext);
             //then

@@ -26,16 +26,27 @@
 
 	<bs3:row>
 		<bs3:col span="6">
-			<cpt:fieldSet name="Annotated" id="annotation"/>
+			<cpt:fieldSet name="Annotated" id="annotation">
+				<cpt:property id="property"/>
+				<cpt:property id="propertyLabelPositionLeft"/>
+				<cpt:property id="propertyLabelPositionTop"/>
+				<cpt:property id="propertyLabelPositionNone"/>
+				<cpt:property id="propertyLabelPositionNotSpecified"/>
+            </cpt:fieldSet>
+			<cpt:fieldSet name="Position Right" id="position-right">
+				<cpt:property id="propertyBoolean"/>
+				<cpt:property id="propertyBooleanLabelPositionRight"/>
+				<cpt:property id="propertyLabelPositionRight"/>
+            </cpt:fieldSet>
 			<cpt:fieldSet name="Layout File" id="layout-file">
 <!-- tag::layout-file[] -->
-				<cpt:property id="propertyUsingLayout" labelPosition="TOP"/>
+                <cpt:property id="propertyLayoutLabelPositionLeft" labelPosition="LEFT"/>
+                <cpt:property id="propertyLayoutLabelPositionTop" labelPosition="TOP"/>
+                <cpt:property id="propertyLayoutLabelPositionNone" labelPosition="NONE" multiLine="3"/>
+                <cpt:property id="propertyLayoutBooleanLabelPositionRight" labelPosition="RIGHT"/>
 <!-- end::layout-file[] -->
 			</cpt:fieldSet>
-			<cpt:fieldSet name="Contributed" id="contributed"/>
-			<cpt:fieldSet name="Meta-annotated" id="meta-annotated"/>
-			<cpt:fieldSet name="Meta-annotated Overridden" id="meta-annotated-overridden"/>
-			<cpt:fieldSet name="Variants" id="variants"/>
+
 			<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
 		</bs3:col>
 		<bs3:col span="6">

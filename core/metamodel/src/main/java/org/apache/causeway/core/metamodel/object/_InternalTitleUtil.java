@@ -83,7 +83,7 @@ final class _InternalTitleUtil {
                 || elementSpec.getFullIdentifier().equals(Object.class.getName()))
                     ? "object"
                     : elementSpec.getSingularName();
-        return MmTitleUtil.formatAnyCardinalityAsTitle(size, noun, objSpec.getTranslationService());
+        return MmTitleUtils.formatAnyCardinalityAsTitle(size, noun, objSpec.getTranslationService());
     }
 
 }

@@ -41,7 +41,7 @@ import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmTitleUtil;
+import org.apache.causeway.core.metamodel.object.MmTitleUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.schema.common.v2.EnumDto;
@@ -143,7 +143,7 @@ implements
 
         val friendlyNameOfEnum = Optional.ofNullable(loadEnumSpec())
             .map(enumSpec->ManagedObject.value(enumSpec, objectAsEnum))
-            .map(MmTitleUtil::titleOf)
+            .map(MmTitleUtils::titleOf)
             .orElseGet(()->Enums.getFriendlyNameOf(objectAsEnum.name()));
 
         return Optional.ofNullable(translationService)

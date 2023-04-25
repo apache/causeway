@@ -34,8 +34,7 @@ extends ValueSemanticsProviderAbstractTestCase<Float> {
     private Float float1;
 
     @BeforeEach
-    public void setUpObjects() throws Exception {
-
+    void setUpObjects() throws Exception {
         float1 = Float.valueOf(32.5f);
         allowMockAdapterToReturn(float1);
 
@@ -43,7 +42,7 @@ extends ValueSemanticsProviderAbstractTestCase<Float> {
     }
 
     @Test
-    public void testInvalidParse() throws Exception {
+    void invalidParse() throws Exception {
         try {
             value.parseTextRepresentation(null, "one");
             fail();
@@ -52,18 +51,18 @@ extends ValueSemanticsProviderAbstractTestCase<Float> {
     }
 
     @Test
-    public void testTitleOf() {
+    void titleOf() {
         assertEquals("32.5", value.titlePresentation(null, float1));
     }
 
     @Test
-    public void testParse() throws Exception {
+    void parse() throws Exception {
         final Object parsed = value.parseTextRepresentation(null, "120.50");
         assertEquals(120.5f, ((Float) parsed).floatValue(), 0.0);
     }
 
     @Test
-    public void testParseBadlyFormatedEntry() throws Exception {
+    void parseBadlyFormatedEntry() throws Exception {
         final Object parsed = value.parseTextRepresentation(null, "1,20.0");
         assertEquals(120.0f, ((Float) parsed).floatValue(), 0.0);
     }

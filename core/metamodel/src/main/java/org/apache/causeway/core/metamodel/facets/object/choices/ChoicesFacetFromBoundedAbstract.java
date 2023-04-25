@@ -34,7 +34,7 @@ import org.apache.causeway.core.metamodel.interactions.UsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.causeway.core.metamodel.interactions.ValidityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmVisibilityUtil;
+import org.apache.causeway.core.metamodel.object.MmVisibilityUtils;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectBulkLoader;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
@@ -117,7 +117,7 @@ implements
         val resultTypeSpec = specForType(resulType).orElse(null);
         val queryRequest = ObjectBulkLoader.Request.of(resultTypeSpec, query);
         val allMatching = getObjectManager().queryObjects(queryRequest)
-                .filter(MmVisibilityUtil.filterOn(interactionInitiatedBy));
+                .filter(MmVisibilityUtils.filterOn(interactionInitiatedBy));
 
         return allMatching;
     }

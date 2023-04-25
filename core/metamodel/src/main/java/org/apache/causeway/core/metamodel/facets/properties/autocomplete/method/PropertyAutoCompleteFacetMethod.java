@@ -29,8 +29,8 @@ import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.param.autocomplete.MinLengthUtil;
 import org.apache.causeway.core.metamodel.facets.properties.autocomplete.PropertyAutoCompleteFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmInvokeUtil;
-import org.apache.causeway.core.metamodel.object.MmVisibilityUtil;
+import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
+import org.apache.causeway.core.metamodel.object.MmVisibilityUtils;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -71,14 +71,14 @@ implements ImperativeFacet {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
-        final Object collectionOrArray = MmInvokeUtil.invoke(method, owningAdapter, searchArg);
+        final Object collectionOrArray = MmInvokeUtils.invoke(method, owningAdapter, searchArg);
         if (collectionOrArray == null) {
             return null;
         }
 
         val collectionAdapter = getObjectManager().adapt(collectionOrArray);
 
-        val visiblePojos = MmVisibilityUtil
+        val visiblePojos = MmVisibilityUtils
                 .visiblePojosAsArray(collectionAdapter, interactionInitiatedBy);
 
         return visiblePojos;

@@ -51,14 +51,14 @@ extends FacetFactoryTestAbstract {
     }
 
     @Test
-    void testActionLayoutAnnotation_position() {
+    void actionLayoutAnnotation_position() {
 
         class Customer {
             @ActionLayout(position = ActionLayout.Position.PANEL)
             public String foz() { return null; }
         }
 
-        actionScenario(Customer.class, "foz", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        actionScenario(Customer.class, "foz", (processMethodContext, facetHolder, facetedMethod)->{
             facetFactory.process(processMethodContext);
 
             final Facet facet = facetedMethod.getFacet(ActionPositionFacet.class);
@@ -70,16 +70,14 @@ extends FacetFactoryTestAbstract {
     }
 
     @Test
-    void testActionLayoutAnnotation_hidden() {
+    void actionLayoutAnnotation_hidden() {
 
         class Customer {
             @ActionLayout(hidden = Where.ALL_TABLES)
-            public String foz() {
-                return null;
-            }
+            public String foz() { return null; }
         }
 
-        actionScenario(Customer.class, "foz", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        actionScenario(Customer.class, "foz", (processMethodContext, facetHolder, facetedMethod)->{
             facetFactory.process(processMethodContext);
 
             final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
@@ -91,15 +89,15 @@ extends FacetFactoryTestAbstract {
     }
 
     @Test
-    void testActionLayoutFallbackPickedUp() {
+    void actionLayoutFallbackPickedUp() {
 
+        @SuppressWarnings("unused")
         class Customer {
-            @SuppressWarnings("unused")
             // no @ActionLayout
             public String foo() { return null; }
         }
 
-        actionScenario(Customer.class, "foo", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        actionScenario(Customer.class, "foo", (processMethodContext, facetHolder, facetedMethod)->{
             facetFactory.process(processMethodContext);
 
             final Facet facet = facetedMethod.getFacet(ActionPositionFacet.class);
@@ -109,14 +107,14 @@ extends FacetFactoryTestAbstract {
     }
 
     @Test
-    void testCssClassFa_defaultPosition() {
+    void cssClassFa_defaultPosition() {
 
         class Customer {
             @ActionLayout(cssClassFa = "font-awesome")
             public String foz() { return null; }
         }
 
-        actionScenario(Customer.class, "foz", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        actionScenario(Customer.class, "foz", (processMethodContext, facetHolder, facetedMethod)->{
             facetFactory.process(processMethodContext);
 
             Facet facet = facetedMethod.getFacet(CssClassFaFacet.class);
@@ -130,16 +128,14 @@ extends FacetFactoryTestAbstract {
     }
 
     @Test
-    void testCssClassFa_rightPosition() {
+    void cssClassFa_rightPosition() {
 
         class Customer {
             @ActionLayout(cssClassFa = "font-awesome", cssClassFaPosition = CssClassFaPosition.RIGHT)
-            public String foz() {
-                return null;
-            }
+            public String foz() { return null; }
         }
 
-        actionScenario(Customer.class, "foz", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        actionScenario(Customer.class, "foz", (processMethodContext, facetHolder, facetedMethod)->{
             facetFactory.process(processMethodContext);
 
             Facet facet = facetedMethod.getFacet(CssClassFaFacet.class);

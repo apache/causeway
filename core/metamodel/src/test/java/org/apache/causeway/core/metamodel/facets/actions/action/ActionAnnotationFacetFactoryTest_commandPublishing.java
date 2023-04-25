@@ -45,7 +45,7 @@ extends ActionAnnotationFacetFactoryTest {
     @Test
     void given_HasInteractionId_thenIgnored() {
         // given
-        actionScenario(SomeHasInteractionId.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        actionScenario(SomeHasInteractionId.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             processCommandPublishing(facetFactory, processMethodContext);
             // then
@@ -62,7 +62,7 @@ extends ActionAnnotationFacetFactoryTest {
             public void someAction() {}
         }
 
-        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             processCommandPublishing(facetFactory, processMethodContext);
             // then
@@ -79,7 +79,7 @@ extends ActionAnnotationFacetFactoryTest {
             public void someAction() {}
         }
 
-        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             processCommandPublishing(facetFactory, processMethodContext);
             // then
@@ -99,7 +99,7 @@ extends ActionAnnotationFacetFactoryTest {
             public void someAction() {}
         }
 
-        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             processCommandPublishing(facetFactory, processMethodContext);
             // then

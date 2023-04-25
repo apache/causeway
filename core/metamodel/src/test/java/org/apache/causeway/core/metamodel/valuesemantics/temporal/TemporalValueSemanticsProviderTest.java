@@ -55,7 +55,7 @@ class TemporalValueSemanticsProviderTest {
 
     @ParameterizedTest
     @EnumSource(TimePrecision.class)
-    void testTimeFormats(final TimePrecision timePrecision) {
+    void timeFormats(final TimePrecision timePrecision) {
 
         target = new TemporalValueSemanticsProvider_forTesting(
                 TemporalCharacteristic.TIME_ONLY, OffsetCharacteristic.LOCAL);

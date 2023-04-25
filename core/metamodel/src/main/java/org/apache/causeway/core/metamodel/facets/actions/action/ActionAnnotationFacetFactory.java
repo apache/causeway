@@ -32,7 +32,8 @@ import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.actions.action.choicesfrom.ChoicesFromFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.actions.action.explicit.ActionExplicitFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
-import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEvent;
+import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForAction;
+import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForMixedInPropertyOrCollection;
 import org.apache.causeway.core.metamodel.facets.actions.action.prototype.PrototypeFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.actions.action.typeof.TypeOfFacetForActionAnnotation;
@@ -55,14 +56,10 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        val actionIfAny = processMethodContext
-                .synthesizeOnMethodOrMixinType(
-                        Action.class,
-                        () -> MetaModelValidatorForAmbiguousMixinAnnotations
-                        .addValidationFailure(processMethodContext.getFacetHolder(), Action.class));
+        val actionIfAny = actionIfAny(processMethodContext);
 
         processExplicit(processMethodContext, actionIfAny);
-        processInvocation(processMethodContext, actionIfAny);
+        processDomainEvent(processMethodContext, actionIfAny);
         processRestrictTo(processMethodContext, actionIfAny);
         processSemantics(processMethodContext, actionIfAny);
 
@@ -79,6 +76,14 @@ extends FacetFactoryAbstract {
         processFileAccept(processMethodContext, actionIfAny);
     }
 
+    Optional<Action> actionIfAny(final ProcessMethodContext processMethodContext) {
+        return processMethodContext
+                .synthesizeOnMethodOrMixinType(
+                        Action.class,
+                        () -> MetaModelValidatorForAmbiguousMixinAnnotations
+                        .addValidationFailure(processMethodContext.getFacetHolder(), Action.class));
+    }
+
     void processExplicit(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {
         val holder = processMethodContext.getFacetHolder();
 
@@ -89,9 +94,12 @@ extends FacetFactoryAbstract {
     }
 
 
-    void processInvocation(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {
+    void processDomainEvent(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {
 
         val actionMethod = processMethodContext.getMethod();
+
+        final boolean isAction = !processMethodContext.isMixinMain()
+                || actionIfAny.isPresent();
 
         try {
             val returnType = actionMethod.getReturnType();
@@ -102,12 +110,6 @@ extends FacetFactoryAbstract {
 
             val cls = processMethodContext.getCls();
             val typeSpec = getSpecificationLoader().loadSpecification(cls);
-            if(typeSpec.isMixin()) {
-                /* don't process mixed in actions, as we would require the actual mixee
-                 * (deferred to post processing) */
-                //TODO[CAUSEWAY-3409] breaks tests ... return;
-            }
-
             val holder = processMethodContext.getFacetHolder();
 
             //
@@ -115,23 +117,23 @@ extends FacetFactoryAbstract {
             //
 
             // search for @Action(domainEvent=...), else use the default event type
-            ActionDomainEventFacet
-            .createRegular(actionIfAny, typeSpec, holder)
-            .ifPresent(actionDomainEventFacet->{
+            val actionDomainEventFacet = ActionDomainEventFacet.create(actionIfAny, typeSpec, holder);
+            addFacet(actionDomainEventFacet);
 
-                addFacet(actionDomainEventFacet);
-
-                // replace the current actionInvocationFacet with one that will
-                // emit the appropriate domain event and then delegate onto the underlying
-
-                addFacet(
-                  //TODO[CAUSEWAY-3409] we don't install those for the mixin case, if bailing out above
-                    new ActionInvocationFacetForDomainEvent(
-                            actionDomainEventFacet.getEventType(), actionDomainEventFacet.getEventTypeOrigin(),
+            // replace the current actionInvocationFacet with one that will
+            // emit the appropriate domain event and then delegate onto the underlying
+            addFacet(
+                /* lazily binds the event-type to the actionDomainEventFacet,
+                 * such that any changes to the latter during post processing
+                 * are reflected here as well
+                 */
+                isAction
+                    ? new ActionInvocationFacetForAction(
+                            actionDomainEventFacet,
+                            actionMethod, typeSpec, returnSpec, holder)
+                    // when in a mixed-in prop/coll situation, the prop/coll event-type must be used instead
+                    : new ActionInvocationFacetForMixedInPropertyOrCollection(
                             actionMethod, typeSpec, returnSpec, holder));
-            });
-
-
         } finally {
             processMethodContext.removeMethod(actionMethod.asMethodForIntrospection());
         }

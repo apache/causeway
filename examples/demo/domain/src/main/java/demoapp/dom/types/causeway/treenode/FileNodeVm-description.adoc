@@ -1,0 +1,97 @@
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+The framework has built-in support for a `TreeNode` value type which represents a hierarchical data structure.
+
+NOTE: This is an Apache Causeway specific data type.
+
+== How this demo works
+
+This demo app uses the filesystem of the host computer to illustrate the idea:
+
+* This page you are viewing is a view model object, called `FileNodeVm`.
+It represents either a directory or a file within that filesystem.
+
+* Every instance of `FileNode` shows the same `TreeNode` instance, on the left hand side.
+This is contributed by a mixin property, and is cached on HTTP session.
+You can use this to navigate into the tree and inspect the individual files, without "losing your place".
+
+
+//
+// THE FOLLOWING DOESN'T ADD MUCHdoesn't add much:
+//
+// === Properties
+//
+// The properties of `FileNodeVm` are defined as:
+//
+// [source,java,indent=0]
+// ----
+// include::FileNodeVm.java[tags=properties]
+// ----
+//
+//
+// === Icon
+//
+// It's common for hierarchical objects to indicate their nature using an icon:
+//
+// [source,java,indent=0]
+// ----
+// include::FileNodeVm.java[tags=iconName]
+// ----
+//
+// where `FileNodeType` is:
+//
+// [source,java,indent=0]
+// ----
+// include::FileNodeType.java[tags=class]
+// ----
+//
+// Note that there are SVG files for each of the instances of this enum, namely `FileNodeVm-FILE_SYSTEM_ROOT.svg`, `FileNodeVm-DIRECTORY.svg` and `FileNodeVm-FILE.svg`.
+
+
+=== Tree
+
+As described above, every `FileNode` renders the same tree.
+This is contributed by a mixin property:
+
+[source,java,indent=0]
+.FileNodeVm_tree.java
+----
+include::FileNodeVm_tree.java[tags=class]
+----
+
+The tree instance itself is cached by a `FileTreeNodeService`, so that there is no need to track the state of the tree (which nodes are expanded etc).
+The `FileTreeNodeService` in turn uses `HttpSession` as the actual in-memory cache:
+
+[source,java,indent=0]
+----
+include::FileTreeNodeService.java[tags=sessionTree]
+----
+
+The `TreeNode` value type itself is created using:
+
+[source,java,indent=0]
+----
+include::FileTreeNodeService.java[tags=newTree]
+----
+
+This requires an implementation of the `TreeAdapter<T>` SPI, discussed next.
+
+==== TreeAdapter SPI
+
+To render a `TreeNode`, the application must provide an implementation of the `TreeAdapter<T>` SPI:
+
+[source,java]
+----
+public interface TreeAdapter<T> {
+    public Optional<T> parentOf(T value);
+    public int childCountOf(T value);
+    public Stream<T> childrenOf(T value);
+}
+----
+
+In the case of the demo app, the implementation is `FileSystemTreeAdapter`, which navigate the host computer's filesystem:
+
+[source,java,indent=0]
+----
+include::FileSystemTreeAdapter.java[tags=class]
+----

@@ -20,7 +20,7 @@ package org.apache.causeway.viewer.commons.model.binding;
 
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
+import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
@@ -39,7 +39,7 @@ implements BindingConverter<ManagedObject, T> {
 
     @Override
     public T toRight(final ManagedObject adapter) {
-        return _Casts.uncheckedCast(MmUnwrapUtil.single(adapter));
+        return _Casts.uncheckedCast(MmUnwrapUtils.single(adapter));
     }
 
 }

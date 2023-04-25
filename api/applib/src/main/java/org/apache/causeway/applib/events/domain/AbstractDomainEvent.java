@@ -147,18 +147,11 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
      * {@index}
      */
     public enum Phase {
-
         HIDE,
-
         DISABLE,
-
         VALIDATE,
-
         EXECUTING,
-
-        EXECUTED
-
-        ;
+        EXECUTED;
 
         /**
          * The significance being that at this point the proposed values/arguments are known, and so the event can be
@@ -183,7 +176,6 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
         public boolean isExecuted() {
             return this == EXECUTED;
         }
-
     }
 
     /**

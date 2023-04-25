@@ -2,7 +2,7 @@
 
 To help the end-user navigate a page, it can sometimes be helpful to decorate individual actions within icons so that their purpose is more obvious.
 
-The link:https://causeway.apache.org/refguide/2.0.0-SNAPSHOT/applib/index/annotation/ActionLayout.html#cssclassfa[@ActionLayout#cssClassFa] attribute allows this to be done by specifying the _Font Awesome_ CSS class (or classes) with which to decorate an action.
+The link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/ActionLayout.html#cssclassfa[@ActionLayout#cssClassFa] attribute allows this to be done by specifying the _Font Awesome_ CSS class (or classes) with which to decorate an action.
 This is used for whether the action is rendered as a button or as a menu item.
 
 == How this demo works

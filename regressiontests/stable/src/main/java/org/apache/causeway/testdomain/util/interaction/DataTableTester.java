@@ -27,7 +27,7 @@ import org.apache.causeway.commons.binding.Observable;
 import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataColumn;
 import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataRow;
 import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
-import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
+import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -41,21 +41,21 @@ public class DataTableTester {
     public void assertUnfilteredDataElements(final List<Object> expectedPojoElements) {
         assertEquals(expectedPojoElements,
                 dataTable.getDataElements().getValue()
-                .map(MmUnwrapUtil::single).toList());
+                .map(MmUnwrapUtils::single).toList());
     }
 
     public void assertFilteredDataElements(final List<Object> expectedPojoElements) {
         assertEquals(expectedPojoElements,
                 dataTable.getDataRowsFiltered().getValue()
                 .map(DataRow::getRowElement)
-                .map(MmUnwrapUtil::single).toList());
+                .map(MmUnwrapUtils::single).toList());
     }
 
     public void assertSelectedDataElements(final List<Object> expectedPojoElements) {
         assertEquals(expectedPojoElements,
                 dataTable.getDataRowsSelected().getValue()
                 .map(DataRow::getRowElement)
-                .map(MmUnwrapUtil::single).toList());
+                .map(MmUnwrapUtils::single).toList());
     }
 
     public void assertDataRowSelectionWhenToggledOn(
@@ -78,10 +78,10 @@ public class DataTableTester {
         assertEquals(
                 dataTable.getDataRowsFiltered().getValue()
                 .map(DataRow::getRowElement)
-                .map(MmUnwrapUtil::single).toList(),
+                .map(MmUnwrapUtils::single).toList(),
                 dataTable.getDataRowsSelected().getValue()
                 .map(DataRow::getRowElement)
-                .map(MmUnwrapUtil::single).toList());
+                .map(MmUnwrapUtils::single).toList());
     }
 
     public void assertDataRowSelectionIsEmpty() {

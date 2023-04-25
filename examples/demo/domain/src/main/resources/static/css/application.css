@@ -25,12 +25,25 @@
     color: red;
 }
 
+.property.red input,
+.property.red div.scalarValueInlinePromptLink {
+    background-color: red;
+    color: white;
+}
+
 /*
- * Demonstrates use of @PropertyLayout(cssClass='red')
+ * Demonstrates use of @PropertyLayout(cssClass='blue')
  */
 .property.blue label {
     color: dodgerblue;
 }
+
+.property.blue input,
+.property.blue div.scalarValueInlinePromptLink {
+    background-color: dodgerblue;
+    color: white;
+}
+
 
 /*
  * admonitionblock styles (ie, NOTE: TIP: CAUTION: IMPORTANT: WARNING:)

@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 import org.apache.causeway.commons.internal.debug._XrayEvent;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
-import org.apache.causeway.core.metamodel.object.MmDebugUtil;
+import org.apache.causeway.core.metamodel.object.MmDebugUtils;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 
 import lombok.val;
@@ -37,7 +37,7 @@ class _Xray {
         scalarPanel.scalarModel().getSpecialization()
         .accept(
             param->{
-                val data = MmDebugUtil
+                val data = MmDebugUtils
                         .paramUpdateDataFor(param.getParameterIndex(), param.getParameterNegotiationModel());
                 _XrayEvent.user("User action param update %s", data.formatted());
             },

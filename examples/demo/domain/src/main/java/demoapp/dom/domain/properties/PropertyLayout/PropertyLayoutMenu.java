@@ -18,8 +18,6 @@
  */
 package demoapp.dom.domain.properties.PropertyLayout;
 
-import java.time.ZoneId;
-
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
@@ -29,12 +27,8 @@ import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
-
-import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 import demoapp.dom.domain.properties.PropertyLayout.cssClass.PropertyLayoutCssClassPage;
 import demoapp.dom.domain.properties.PropertyLayout.describedAs.PropertyLayoutDescribedAsPage;
@@ -43,10 +37,11 @@ import demoapp.dom.domain.properties.PropertyLayout.labelPosition.PropertyLayout
 import demoapp.dom.domain.properties.PropertyLayout.multiLine.PropertyLayoutMultiLinePage;
 import demoapp.dom.domain.properties.PropertyLayout.named.PropertyLayoutNamedPage;
 import demoapp.dom.domain.properties.PropertyLayout.navigable.FileNodeVm;
-import demoapp.dom.domain.properties.PropertyLayout.renderDay.PropertyLayoutRenderDayPage;
 import demoapp.dom.domain.properties.PropertyLayout.repainting.PropertyLayoutRepaintingPage;
 import demoapp.dom.domain.properties.PropertyLayout.typicalLength.PropertyLayoutTypicalLengthPage;
 import demoapp.dom.types.Samples;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Named("demo.PropertyLayoutMenu")
 @DomainService(
@@ -57,7 +52,6 @@ import demoapp.dom.types.Samples;
 //@Log4j2
 public class PropertyLayoutMenu {
 
-    final ClockService clockService;
     final Samples<Blob> samples;
 
 
@@ -131,14 +125,6 @@ public class PropertyLayoutMenu {
 
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-step-forward", describedAs = "Inclusive and exclusive date ranges")
-    public PropertyLayoutRenderDayPage renderDay(){
-        return new PropertyLayoutRenderDayPage(clockService.getClock().nowAsLocalDate(ZoneId.systemDefault()));
-    }
-
-
-
-    @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-paint-brush", describedAs = "Performance hint for properties holding unchanging large objects")
     public PropertyLayoutRepaintingPage repainting(){
         val vm = new PropertyLayoutRepaintingPage();
@@ -147,10 +133,7 @@ public class PropertyLayoutMenu {
                 .filter(x -> CommonMimeType.PDF.matches(x.getMimeType()))
                 .findFirst()
                 .ifPresent(pdfBlob -> {
-                    vm.setPropertyUsingAnnotation(pdfBlob);
-                    vm.setPropertyUsingLayout(pdfBlob);
-                    vm.setPropertyUsingMetaAnnotation(pdfBlob);
-                    vm.setPropertyUsingMetaAnnotationButOverridden(pdfBlob);
+                    vm.setBlob(pdfBlob);
                 });
         return vm;
     }
@@ -160,12 +143,10 @@ public class PropertyLayoutMenu {
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-ruler-horizontal", describedAs = "Length of text fields")
     public PropertyLayoutTypicalLengthPage typicalLength(){
-        val vm = new PropertyLayoutTypicalLengthPage();
-        vm.setPropertyUsingAnnotation("abcdefghij");
-        vm.setPropertyUsingLayout("abcdefghij");
-        vm.setPropertyUsingMetaAnnotation("abcdefghij");
-        vm.setPropertyUsingMetaAnnotationButOverridden("abcdefghij");
-        return vm;
+        val page = new PropertyLayoutTypicalLengthPage();
+        page.setName("abcdefghij");
+        page.setNotes("abcdefghij");
+        return page;
     }
 
 

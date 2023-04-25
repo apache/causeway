@@ -31,8 +31,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal._Constants;
-import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.object.navparent.NavigableParentFacet;
 import org.apache.causeway.core.metamodel.facets.object.navparent.annotation.NavigableParentTestSamples.DomainObjectInvalidParentAnnot;
@@ -58,32 +58,29 @@ extends FacetFactoryTestAbstract {
             final String parentMethodName,
             final @Nullable String expectedValidationMessage) throws Exception {
 
-        val domainClass = domainObject.getClass();
-        val facetedMethod = facetedAction(domainClass, parentMethodName);
-
         val facetFactory = new NavigableParentAnnotationFacetFactory(getMetaModelContext());
-        facetFactory.process(ProcessClassContext
-                .forTesting(domainClass, defaultMethodRemover(), facetedMethod));
+        final Method parentMethod = domainObject.getClass().getMethod(parentMethodName);
 
-        if(expectedValidationMessage==null) {
+        objectScenario(domainObject.getClass(), (processClassContext, facetHolder) -> {
+            //when
+            facetFactory.process(processClassContext);
+            //then
+            if(expectedValidationMessage==null) {
+                val navigableParentFacet = facetHolder.getFacet(NavigableParentFacet.class);
+                assertNotNull(navigableParentFacet, ()->"NavigableParentFacet required");
+                assertTrue(navigableParentFacet instanceof NavigableParentFacetViaMethod);
+                assertEquals(
+                        navigableParentFacet.navigableParent(domainObject),
+                        Try.call(()->parentMethod.invoke(domainObject, _Constants.emptyObjects))
+                            .valueAsNullableElseFail());
+            } else {
+                assertNull(facetHolder.getFacet(NavigableParentFacet.class));
 
-            val navigableParentFacet = facetedMethod.getFacet(NavigableParentFacet.class);
-            assertNotNull(navigableParentFacet, ()->"NavigableParentFacet required");
-            assertTrue(navigableParentFacet instanceof NavigableParentFacetViaMethod);
-
-            final Method parentMethod = domainClass.getMethod(parentMethodName);
-
-            assertEquals(
-                    navigableParentFacet.navigableParent(domainObject),
-                    parentMethod.invoke(domainObject, _Constants.emptyObjects));
-        } else {
-
-            assertNull(facetedMethod.getFacet(NavigableParentFacet.class));
-
-            val validation = getSpecificationLoader().getOrAssessValidationResult();
-            assertTrue(validation.getMessages().stream()
-                    .anyMatch(msg->msg.contains(expectedValidationMessage)));
-        }
+                val validation = getSpecificationLoader().getOrAssessValidationResult();
+                assertTrue(validation.getMessages().stream()
+                        .anyMatch(msg->msg.contains(expectedValidationMessage)));
+            }
+        });
     }
 
 }

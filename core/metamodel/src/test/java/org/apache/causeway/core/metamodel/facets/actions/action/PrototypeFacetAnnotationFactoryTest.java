@@ -57,19 +57,18 @@ extends FacetFactoryTestAbstract {
     }
 
     @Test
-    void testAnnotationPickedUp() {
+    void annotationPickedUp() {
         class Customer {
             @Action(restrictTo = RestrictTo.PROTOTYPING)
             public void someAction() {}
         }
-        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod) -> {
             //when
             processRestrictTo(facetFactory, processMethodContext);
             //then
             final Facet facet = facetedMethod.getFacet(PrototypeFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof PrototypeFacetAbstract);
-
             assertNoMethodsRemoved();
         });
     }

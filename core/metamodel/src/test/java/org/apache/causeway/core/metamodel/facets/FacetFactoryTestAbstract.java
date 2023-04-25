@@ -26,31 +26,34 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.i18n.TranslationService;
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel._testing.MethodRemover_forTesting;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
-import org.apache.causeway.core.metamodel.facetapi.MethodRemover;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessParameterContext;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
+import org.apache.causeway.core.metamodel.specloader.specimpl.OneToManyAssociationMixedIn;
+import org.apache.causeway.core.metamodel.specloader.specimpl.OneToOneAssociationMixedIn;
 import org.apache.causeway.core.metamodel.valuesemantics.IntValueSemantics;
 import org.apache.causeway.core.security.authentication.InteractionContextFactory;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
@@ -59,53 +62,64 @@ import lombok.experimental.Accessors;
 public abstract class FacetFactoryTestAbstract
 implements HasMetaModelContext {
 
-    // -- SCENARIO HELPER
+    // -- SCENARIO BUILDER
 
-    @lombok.Value
+    @lombok.Value @Builder
     @Getter @Accessors(fluent=true)
-    public static class Scenario {
-        private final Class<?> declaringClass;
-        private final String memberId;
-        private final Method annotatedMethod;
-        private final FacetHolder facetHolder;
-        private final FacetedMethod facetedMethod;
-        private final FacetedMethodParameter facetedMethodParameter;
-
-        public static Scenario act(
-                final @NonNull MetaModelContext mmc,
-                final Class<?> declaringClass, final String memberId) {
-
-            val facetHolder = facetHolder(mmc, declaringClass, memberId);
-            val actionMethod = _Utils.findMethodByNameOrFail(declaringClass, memberId);
-            val facetedMethod = FacetedMethod.createForAction(mmc, declaringClass, memberId, actionMethod.getParameterTypes());
-            val facetedMethodParameter =
-                    actionMethod.getParameterCount()==0
-                    ? (FacetedMethodParameter)null
-                    : new FacetedMethodParameter(mmc,
-                        FeatureType.ACTION_PARAMETER_SINGULAR, facetedMethod.getOwningType(),
-                        facetedMethod.getMethod(), 0);
-
-            return new Scenario(declaringClass, memberId, actionMethod, facetHolder, facetedMethod, facetedMethodParameter);
+    public static class ActionScenario {
+        final Class<?> declaringClass;
+        final String actionName;
+        @Builder.Default
+        final Optional<Class<?>> mixinClass = Optional.empty();
+        public static ActionScenarioBuilder builder(final Class<?> declaringClass, final String actionName) {
+            return new ActionScenario.ActionScenarioBuilder()
+                    .declaringClass(declaringClass)
+                    .actionName(actionName);
         }
+    }
 
-        public static Scenario prop(
-                final @NonNull MetaModelContext mmc,
-                final Class<?> declaringClass, final String memberId) {
-
-            val facetHolder = facetHolder(mmc, declaringClass, memberId);
-            val getter = _Utils.findGetterOrFail(declaringClass, memberId);
-            val facetedMethod = FacetedMethod.createForProperty(mmc, declaringClass, getter);
-            val facetedMethodParameter = (FacetedMethodParameter)null;
-            return new Scenario(declaringClass, memberId, getter, facetHolder, facetedMethod, facetedMethodParameter);
+    @lombok.Value @Builder
+    @Getter @Accessors(fluent=true)
+    public static class ParameterScenario {
+        final Class<?> declaringClass;
+        final String actionName;
+        final int paramIndex;
+        @Builder.Default
+        final Optional<Class<?>> mixinClass = Optional.empty();
+        public static ParameterScenarioBuilder builder(final Class<?> declaringClass, final String actionName, final int paramIndex) {
+            return new ParameterScenario.ParameterScenarioBuilder()
+                    .declaringClass(declaringClass)
+                    .actionName(actionName)
+                    .paramIndex(paramIndex);
         }
+    }
 
-        private static FacetHolder facetHolder(
-                final @NonNull MetaModelContext mmc,
-                final Class<?> declaringClass, final String memberId) {
-            return FacetHolder.simple(mmc,
-                    Identifier.propertyIdentifier(LogicalType.fqcn(declaringClass), memberId));
+    @lombok.Value @Builder
+    @Getter @Accessors(fluent=true)
+    public static class PropertyScenario {
+        final Class<?> declaringClass;
+        final String propertyName;
+        @Builder.Default
+        final Optional<Class<?>> mixinClass = Optional.empty();
+        public static PropertyScenarioBuilder builder(final Class<?> declaringClass, final String propertyName) {
+            return new PropertyScenario.PropertyScenarioBuilder()
+                    .declaringClass(declaringClass)
+                    .propertyName(propertyName);
         }
+    }
 
+    @lombok.Value @Builder
+    @Getter @Accessors(fluent=true)
+    public static class CollectionScenario {
+        final Class<?> declaringClass;
+        final String collectionName;
+        @Builder.Default
+        final Optional<Class<?>> mixinClass = Optional.empty();
+        public static CollectionScenarioBuilder builder(final Class<?> declaringClass, final String collectionName) {
+            return new CollectionScenario.CollectionScenarioBuilder()
+                    .declaringClass(declaringClass)
+                    .collectionName(collectionName);
+        }
     }
 
     // --
@@ -113,10 +127,8 @@ implements HasMetaModelContext {
     @Getter(onMethod_ = {@Override})
     private MetaModelContext metaModelContext;
 
-    private TranslationService mockTranslationService;
-    private InteractionService mockInteractionService;
-    private final InteractionContext iaContext = InteractionContextFactory.testing();
-    protected MethodRemover_forTesting methodRemover; //TODO[CAUSEWAY-3409] make private
+
+    private MethodRemover_forTesting methodRemover;
 
     /**
      * Override, if a custom {@link MetaModelContext_forTesting} is required for certain tests.
@@ -129,14 +141,18 @@ implements HasMetaModelContext {
     @BeforeEach
     protected void setUpAll() {
 
-        mockTranslationService = Mockito.mock(TranslationService.class);
-        mockInteractionService = Mockito.mock(InteractionService.class);
+        val mockTranslationService = Mockito.mock(TranslationService.class);
+        val mockInteractionService = Mockito.mock(InteractionService.class);
+        val mockMemberExecutorService = Mockito.mock(MemberExecutorService.class);
+
+        val iaContext = InteractionContextFactory.testing();
 
         methodRemover = new MethodRemover_forTesting();
 
         metaModelContext = setUpMmc(MetaModelContext_forTesting.builder()
                 .translationService(mockTranslationService)
                 .interactionService(mockInteractionService)
+                .memberExecutor(mockMemberExecutorService)
                 .valueSemantic(new IntValueSemantics()));
 
         Mockito.when(mockInteractionService.currentInteractionContext()).thenReturn(Optional.of(iaContext));
@@ -152,12 +168,35 @@ implements HasMetaModelContext {
         void accept(
                 ProcessMethodContext processMethodContext,
                 FacetHolder facetHolder,
+                FacetedMethod facetedMethod);
+    }
+    @FunctionalInterface
+    protected static interface MixedInActionScenarioConsumer {
+        void accept(
+                ProcessMethodContext processMethodContext,
+                ObjectSpecification mixeeSpec,
                 FacetedMethod facetedMethod,
-                FacetedMethodParameter facetedMethodParameter);
+                ObjectActionMixedIn mixedInAct);
+    }
+    @FunctionalInterface
+    protected static interface MixedInPropertyScenarioConsumer {
+        void accept(
+                ProcessMethodContext processMethodContext,
+                ObjectSpecification mixeeSpec,
+                FacetedMethod facetedMethod,
+                OneToOneAssociationMixedIn mixedInProp);
+    }
+    @FunctionalInterface
+    protected static interface MixedInCollectionScenarioConsumer {
+        void accept(
+                ProcessMethodContext processMethodContext,
+                ObjectSpecification mixeeSpec,
+                FacetedMethod facetedMethod,
+                OneToManyAssociationMixedIn mixedInColl);
     }
 
     @FunctionalInterface
-    public static interface ParameterScenarioConsumer {
+    protected static interface ParameterScenarioConsumer {
         void accept(
                 ProcessParameterContext processParameterContext,
                 FacetHolder facetHolder,
@@ -170,24 +209,95 @@ implements HasMetaModelContext {
      */
     protected void actionScenario(
             final Class<?> declaringClass, final String actionName, final MemberScenarioConsumer consumer) {
-        val scenario = Scenario.act(getMetaModelContext(), declaringClass, actionName);
+        actionScenario(ActionScenario.builder(declaringClass, actionName).build(), consumer);
+    }
+    /**
+     * Custom Action scenario.
+     */
+    protected void actionScenario(
+            final ActionScenario scenario, final MemberScenarioConsumer consumer) {
+
+        val declaringClass = scenario.declaringClass();
+        val memberId = scenario.actionName();
+        val actionMethod = _Utils.findMethodByNameOrFail(declaringClass, memberId);
+        val paramTypes = actionMethod.getParameterTypes();
+        val facetHolder = actionFacetHolder(declaringClass, memberId, paramTypes);
+        val facetedMethod = FacetedMethod.createForAction(getMetaModelContext(), declaringClass, memberId, paramTypes);
         val processMethodContext = ProcessMethodContext
-                .forTesting(declaringClass, FeatureType.ACTION, scenario.annotatedMethod(), methodRemover, scenario.facetedMethod());
-        consumer.accept(processMethodContext, scenario.facetHolder, scenario.facetedMethod, scenario.facetedMethodParameter);
+                .forTesting(declaringClass, FeatureType.ACTION, actionMethod, methodRemover, facetedMethod);
+
+        consumer.accept(processMethodContext, facetHolder, facetedMethod);
+    }
+    /**
+     * MixedIn Action scenario.
+     */
+    protected void actionScenarioMixedIn(
+            final Class<?> mixeeClass, final Class<?> mixinClass, final MixedInActionScenarioConsumer consumer) {
+        val scenario = ActionScenario.builder(mixeeClass, "unused")
+                .mixinClass(Optional.of(mixinClass))
+                .build();
+        actionScenarioMixedIn(scenario, consumer);
+    }
+    protected void actionScenarioMixedIn(
+            final ActionScenario scenario, final MixedInActionScenarioConsumer consumer) {
+
+        val declaringClass = scenario.declaringClass();
+
+        // get mixin main, assuming 'act'
+        val mixinClass = scenario.mixinClass().orElseThrow();
+        val mixedInMethod = _Utils.findMethodByNameOrFail(mixinClass, "act");
+
+        val annotatedMethod = mixedInMethod;
+        val facetedMethod = FacetedMethod.createForAction(getMetaModelContext(), mixinClass,
+                _MethodFacades.regular(annotatedMethod));
+
+        val id = facetedMethod.getFeatureIdentifier();
+        assertNotNull(id.getClassName());
+
+        val processMethodContext = new ProcessMethodContext(
+                mixinClass, IntrospectionPolicy.ENCAPSULATION_ENABLED, FeatureType.ACTION,
+                _MethodFacades.regular(annotatedMethod),
+                methodRemover, facetedMethod, true);
+
+        final ObjectSpecification mixeeSpec = getSpecificationLoader().loadSpecification(declaringClass);
+        final ObjectActionMixedIn mixedInAct =
+                ObjectActionMixedIn.forTesting.forMixinMain(mixeeSpec, mixinClass, "act", facetedMethod);
+
+        consumer.accept(processMethodContext, mixeeSpec, facetedMethod, mixedInAct);
     }
 
     /**
-     * Action Parameter scenario.
+     * Parameter scenario.
      */
     protected void parameterScenario(
-            final Class<?> declaringClass, final String actionName, final int paramIndex,
-            final ParameterScenarioConsumer consumer) {
-        _Assert.assertEquals(0, paramIndex, ()->"not yet implemented otherwise");
-        val scenario = Scenario.act(getMetaModelContext(), declaringClass, actionName);
+            final Class<?> declaringClass, final String actionName, final int paramIndex, final ParameterScenarioConsumer consumer) {
+        parameterScenario(ParameterScenario.builder(declaringClass, actionName, paramIndex).build(), consumer);
+    }
+    /**
+     * Custom Parameter scenario.
+     */
+    protected void parameterScenario(
+            final ParameterScenario scenario, final ParameterScenarioConsumer consumer) {
+        _Assert.assertEquals(0, scenario.paramIndex(), ()->"not yet implemented otherwise");
+
+        val declaringClass = scenario.declaringClass();
+        val memberId = scenario.actionName();
+        val actionMethod = _Utils.findMethodByNameOrFail(declaringClass, memberId);
+        val paramTypes = actionMethod.getParameterTypes();
+        val facetHolder = actionFacetHolder(declaringClass, memberId, paramTypes);
+        val facetedMethod = FacetedMethod.createForAction(getMetaModelContext(), declaringClass, memberId, paramTypes);
+        val facetedMethodParameter =
+                actionMethod.getParameterCount()==0
+                ? (FacetedMethodParameter)null
+                : new FacetedMethodParameter(getMetaModelContext(),
+                    FeatureType.ACTION_PARAMETER_SINGULAR, facetedMethod.getOwningType(),
+                    facetedMethod.getMethod(), 0);
+
         val processParameterContext =
                 FacetFactory.ProcessParameterContext.forTesting(
-                        declaringClass, IntrospectionPolicy.ANNOTATION_OPTIONAL, scenario.annotatedMethod(), null, scenario.facetedMethodParameter());
-        consumer.accept(processParameterContext, scenario.facetHolder, scenario.facetedMethod, scenario.facetedMethodParameter);
+                        declaringClass, IntrospectionPolicy.ANNOTATION_OPTIONAL, actionMethod, null, facetedMethodParameter);
+
+        consumer.accept(processParameterContext, facetHolder, facetedMethod, facetedMethodParameter);
     }
 
     /**
@@ -195,21 +305,119 @@ implements HasMetaModelContext {
      */
     protected void propertyScenario(
             final Class<?> declaringClass, final String propertyName, final MemberScenarioConsumer consumer) {
-        val scenario = Scenario.prop(getMetaModelContext(), declaringClass, propertyName);
+        propertyScenario(PropertyScenario.builder(declaringClass, propertyName).build(), consumer);
+    }
+    /**
+     * Custom Property scenario.
+     */
+    protected void propertyScenario(
+            final PropertyScenario scenario, final MemberScenarioConsumer consumer) {
+        val declaringClass = scenario.declaringClass();
+        val memberId = scenario.propertyName();
+
+        val facetHolder = propertyFacetHolder(declaringClass, memberId);
+        val annotatedMethod = _Utils.findGetterOrFail(declaringClass, memberId);
+        val facetedMethod = FacetedMethod.createForProperty(getMetaModelContext(), declaringClass, annotatedMethod);
+
         val processMethodContext = ProcessMethodContext
-                .forTesting(declaringClass, FeatureType.PROPERTY, scenario.annotatedMethod(), methodRemover, scenario.facetedMethod());
-        consumer.accept(processMethodContext, scenario.facetHolder, scenario.facetedMethod, scenario.facetedMethodParameter);
+                .forTesting(declaringClass, FeatureType.PROPERTY, annotatedMethod, methodRemover, facetedMethod);
+
+        consumer.accept(processMethodContext, facetHolder, facetedMethod);
+    }
+    /**
+     * MixedIn Property scenario.
+     */
+    protected void propertyScenarioMixedIn(
+            final Class<?> mixeeClass, final Class<?> mixinClass, final MixedInPropertyScenarioConsumer consumer) {
+        val scenario = PropertyScenario.builder(mixeeClass, "unused")
+                .mixinClass(Optional.of(mixinClass))
+                .build();
+        propertyScenarioMixedIn(scenario, consumer);
+    }
+    protected void propertyScenarioMixedIn(
+            final PropertyScenario scenario, final MixedInPropertyScenarioConsumer consumer) {
+
+        val declaringClass = scenario.declaringClass();
+
+        // get mixin main, assuming 'prop'
+        val mixinClass = scenario.mixinClass().orElseThrow();
+        val annotatedMethod = _Utils.findMethodByNameOrFail(mixinClass, "prop");
+
+        val facetedMethod = FacetedMethod.createForProperty(getMetaModelContext(), mixinClass, annotatedMethod);
+
+        val id = facetedMethod.getFeatureIdentifier();
+        assertNotNull(id.getClassName());
+
+        val processMethodContext = new ProcessMethodContext(
+                mixinClass, IntrospectionPolicy.ENCAPSULATION_ENABLED, FeatureType.PROPERTY,
+                _MethodFacades.regular(annotatedMethod),
+                methodRemover, facetedMethod, true);
+
+        final ObjectSpecification mixeeSpec = getSpecificationLoader().loadSpecification(declaringClass);
+        final OneToOneAssociationMixedIn mixedInProp =
+                OneToOneAssociationMixedIn.forTesting.forMixinMain(mixeeSpec, mixinClass, "prop", facetedMethod);
+
+        consumer.accept(processMethodContext, mixeeSpec, facetedMethod, mixedInProp);
     }
 
     /**
      * Collection scenario.
      */
     protected void collectionScenario(
-            final Class<?> declaringClass, final String propertyName, final MemberScenarioConsumer consumer) {
-        val scenario = Scenario.prop(getMetaModelContext(), declaringClass, propertyName);
+            final Class<?> declaringClass, final String collectionName, final MemberScenarioConsumer consumer) {
+        collectionScenario(CollectionScenario.builder(declaringClass, collectionName).build(), consumer);
+    }
+    /**
+     * Custom Collection scenario.
+     */
+    protected void collectionScenario(
+            final CollectionScenario scenario, final MemberScenarioConsumer consumer) {
+
+        val declaringClass = scenario.declaringClass();
+        val memberId = scenario.collectionName();
+        val facetHolder = collectionFacetHolder(declaringClass, memberId);
+        val annotatedMethod = _Utils.findGetterOrFail(declaringClass, memberId);
+        val facetedMethod = FacetedMethod.createForProperty(getMetaModelContext(), declaringClass, annotatedMethod);
+
         val processMethodContext = ProcessMethodContext
-                .forTesting(declaringClass, FeatureType.COLLECTION, scenario.annotatedMethod(), methodRemover, scenario.facetedMethod());
-        consumer.accept(processMethodContext, scenario.facetHolder, scenario.facetedMethod, scenario.facetedMethodParameter);
+                .forTesting(declaringClass, FeatureType.COLLECTION, annotatedMethod, methodRemover, facetedMethod);
+
+        consumer.accept(processMethodContext, facetHolder, facetedMethod);
+    }
+    /**
+     * MixedIn Collection scenario.
+     */
+    protected void collectionScenarioMixedIn(
+            final Class<?> mixeeClass, final Class<?> mixinClass, final MixedInCollectionScenarioConsumer consumer) {
+        val scenario = CollectionScenario.builder(mixeeClass, "unused")
+                .mixinClass(Optional.of(mixinClass))
+                .build();
+        collectionScenarioMixedIn(scenario, consumer);
+    }
+    protected void collectionScenarioMixedIn(
+            final CollectionScenario scenario, final MixedInCollectionScenarioConsumer consumer) {
+
+        val declaringClass = scenario.declaringClass();
+
+        // get mixin main, assuming 'coll'
+        val mixinClass = scenario.mixinClass().orElseThrow();
+        val annotatedMethod = _Utils.findMethodByNameOrFail(mixinClass, "coll");
+
+        val facetedMethod = FacetedMethod.createForCollection(getMetaModelContext(), mixinClass, annotatedMethod);
+
+        val id = facetedMethod.getFeatureIdentifier();
+        assertNotNull(id.getClassName());
+
+        val processMethodContext = new ProcessMethodContext(
+                mixinClass, IntrospectionPolicy.ENCAPSULATION_ENABLED, FeatureType.COLLECTION,
+                _MethodFacades.regular(annotatedMethod),
+                methodRemover, facetedMethod, true);
+
+        final ObjectSpecification mixeeSpec = getSpecificationLoader().loadSpecification(declaringClass);
+        final OneToManyAssociationMixedIn mixedInColl =
+                OneToManyAssociationMixedIn.forTesting.forMixinMain(mixeeSpec, mixinClass, "coll", facetedMethod);
+
+        consumer.accept(processMethodContext, mixeeSpec, facetedMethod, mixedInColl);
     }
 
     /**
@@ -223,38 +431,33 @@ implements HasMetaModelContext {
         consumer.accept(processClassContext, facetHolder);
     }
 
-    protected MethodRemover defaultMethodRemover() {
-        return new MethodRemover_forTesting();
-    }
+    // -- UTILITY
 
-    protected FacetedMethod facetedSetter(final Class<?> declaringClass, final String propertyName) {
-        return FacetedMethod.createSetterForProperty(getMetaModelContext(),
-                declaringClass, propertyName);
-    }
-
-    protected FacetedMethod facetedAction(final Class<?> declaringClass, final String methodName) {
-        return FacetedMethod.createForAction(getMetaModelContext(),
-                declaringClass, methodName);
-    }
-
-    protected boolean contains(final Class<?>[] types, final Class<?> type) {
-        return _Utils.contains(types, type);
-    }
-
-    protected static boolean contains(final ImmutableEnumSet<FeatureType> featureTypes, final FeatureType featureType) {
-        return _Utils.contains(featureTypes, featureType);
-    }
-
-    protected Method findMethodExactOrFail(final Class<?> type, final String methodName, final Class<?>[] methodTypes) {
+    protected static Method findMethodExactOrFail(final Class<?> type, final String methodName, final Class<?>[] methodTypes) {
         return _Utils.findMethodExactOrFail(type, methodName, methodTypes);
     }
 
-    protected Method findMethodExactOrFail(final Class<?> type, final String methodName) {
+    protected static Method findMethodExactOrFail(final Class<?> type, final String methodName) {
         return _Utils.findMethodExactOrFail(type, methodName);
     }
 
-    protected Optional<Method> findMethodExact(final Class<?> type, final String methodName) {
+    protected static Optional<Method> findMethodExact(final Class<?> type, final String methodName) {
         return _Utils.findMethodExact(type, methodName);
+    }
+
+    private FacetHolder actionFacetHolder(final Class<?> declaringClass, final String memberId, final Class<?>[] paramTypes) {
+        return FacetHolder.simple(getMetaModelContext(),
+                Identifier.actionIdentifier(LogicalType.fqcn(declaringClass), memberId, paramTypes));
+    }
+
+    private FacetHolder propertyFacetHolder(final Class<?> declaringClass, final String memberId) {
+        return FacetHolder.simple(getMetaModelContext(),
+                Identifier.propertyIdentifier(LogicalType.fqcn(declaringClass), memberId));
+    }
+
+    private FacetHolder collectionFacetHolder(final Class<?> declaringClass, final String memberId) {
+        return FacetHolder.simple(getMetaModelContext(),
+                Identifier.collectionIdentifier(LogicalType.fqcn(declaringClass), memberId));
     }
 
     // -- EXPECTATIONS
@@ -265,20 +468,18 @@ implements HasMetaModelContext {
     }
 
     protected final void assertMethodWasRemoved(final Method method) {
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method),
+                ()->String.format("method was not removed in test scenario: %s", method));
     }
 
-    public void assertMethodEquals(final Method a, final Method b) {
-        assertEquals(a.getName(), b.getName());
-        assertEquals(a.getParameterCount(), b.getParameterCount());
-        assertArrayEquals(a.getParameterTypes(), b.getParameterTypes());
+    protected final void assertMethodWasRemoved(final Class<?> type, final String methodName) {
+        assertMethodWasRemoved(findMethodExactOrFail(type, methodName));
+    }
 
-        val ownerA = a.getDeclaringClass();
-        val ownerB = b.getDeclaringClass();
-
-        assertTrue(ownerA.isAssignableFrom(ownerB)
-                || ownerB.isAssignableFrom(ownerA));
-
+    protected final void assertMethodEqualsFirstIn(
+            final @NonNull Method method,
+            final @NonNull ImperativeFacet imperativeFacet) {
+        _Utils.assertMethodEquals(method, imperativeFacet.getMethods().getFirstElseFail().asMethodElseFail());
     }
 
 }

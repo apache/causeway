@@ -46,41 +46,27 @@ class TitleFacetViaTitleAnnotationTest {
     protected MetaModelContext metaModelContext;
 
     protected static class DomainObjectWithProblemInItsAnnotatedTitleMethod {
-
         @Title
-        public String brokenTitle() {
-            throw new NullPointerException();
-        }
-
+        public String brokenTitle() { throw new NullPointerException(); }
     }
 
     protected static class NormalDomainObject {
-
         @Title(sequence = "1.0")
-        public String titleElement1() {
-            return "Normal";
-        }
-
+        public String titleElement1() { return "Normal"; }
         @Title(sequence = "2.0")
-        public String titleElement2() {
-            return "Domain";
-        }
-
+        public String titleElement2() { return "Domain"; }
         @Title(sequence = "3.0")
-        public String titleElement3() {
-            return "Object";
-        }
-
+        public String titleElement3() { return "Object"; }
     }
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         metaModelContext = MetaModelContext_forTesting.builder()
                 .build();
     }
 
     @Test
-    public void testTitle() throws Exception {
+    void title_happyCase() throws Exception {
 
         final TitleFacetViaTitleAnnotation facet =
                 (TitleFacetViaTitleAnnotation) TitleFacetViaTitleAnnotation
@@ -99,7 +85,7 @@ class TitleFacetViaTitleAnnotationTest {
     }
 
     @Test
-    public void titleThrowsException() {
+    void title_throwsException() {
 
         final TitleFacetViaTitleAnnotation facet =
                 (TitleFacetViaTitleAnnotation) TitleFacetViaTitleAnnotation

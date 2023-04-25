@@ -27,6 +27,7 @@ import jakarta.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;
+import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Optionality;
@@ -42,7 +43,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.PropertyLayoutDescribedAsVm")
+@Named("demo.PropertyLayoutDescribedAsPage")
 @DomainObject(
         nature=Nature.VIEW_MODEL,
         editing = Editing.ENABLED)
@@ -55,44 +56,32 @@ public class PropertyLayoutDescribedAsPage implements HasAsciiDocDescription {
 //tag::annotation[]
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(
-        describedAs =                                   // <.>
-            "@PropertyLayout(describedAs= \"...\")",
-        fieldSetId = "annotation", sequence = "1")
+        describedAs = "The name of this object"     // <.>
+        )
     @XmlElement(required = false)
     @Getter @Setter
-    private String propertyUsingAnnotation;
+    private String name;
 //end::annotation[]
+
+//tag::label-position[]
+    @Property(optionality = Optionality.OPTIONAL)
+    @PropertyLayout(
+            describedAs = "The description of this object",
+            labelPosition = LabelPosition.NONE,     // <.>
+            multiLine = 3
+    )
+    @XmlElement(required = false)
+    @Getter @Setter
+    private String address;
+//end::label-position[]
 
 //tag::layout-file[]
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(fieldSetId = "layout-file", sequence = "1") // <.>
+    @PropertyLayout(multiLine = 5)                  // <.>
     @XmlElement(required = false)
     @Getter @Setter
-    private String propertyUsingLayout;
+    private String notes;
 //end::layout-file[]
-
-//tag::meta-annotated[]
-    @Property(optionality = Optionality.OPTIONAL)
-    @DescribedAsMetaAnnotation                            // <.>
-    @PropertyLayout(
-        describedAs = "@DescribedAsMetaAnnotation",
-        fieldSetId = "meta-annotated", sequence = "1")
-    @XmlElement(required = false)
-    @Getter @Setter
-    private String propertyUsingMetaAnnotation;
-//end::meta-annotated[]
-
-//tag::meta-annotated-overridden[]
-    @DescribedAsMetaAnnotation                                  // <.>
-    @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(
-        describedAs =
-            "@DescribedAsMetaAnnotation @PropertyLayout(...)",  // <.>
-        fieldSetId = "meta-annotated-overridden", sequence = "1")
-    @XmlElement(required = false)
-    @Getter @Setter
-    private String propertyUsingMetaAnnotationButOverridden;
-//end::meta-annotated-overridden[]
 
 }
 //end::class[]

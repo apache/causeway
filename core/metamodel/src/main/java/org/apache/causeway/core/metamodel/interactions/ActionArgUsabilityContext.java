@@ -26,7 +26,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
+import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.Getter;
@@ -65,9 +65,9 @@ implements ActionInteractionContext {
     @Override
     public ActionArgumentUsabilityEvent createInteractionEvent() {
         return new ActionArgumentUsabilityEvent(
-                MmUnwrapUtil.single(getTarget()),
+                MmUnwrapUtils.single(getTarget()),
                 getIdentifier(),
-                MmUnwrapUtil.multipleAsArray(getArgs().toList()),
+                MmUnwrapUtils.multipleAsArray(getArgs().toList()),
                 getPosition());
     }
 

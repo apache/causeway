@@ -26,7 +26,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.causeway.applib.value.semantics.Renderer.SyntaxHighlighter;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
+import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.valuetypes.vega.applib.value.Vega;
 import org.apache.causeway.valuetypes.vega.ui.wkt.components.js.VegaEmbedJsReference;
 import org.apache.causeway.valuetypes.vega.ui.wkt.components.js.VegaJsReference;
@@ -77,7 +77,7 @@ public class VegaComponentWkt extends MarkupComponent {
             log.error("framework bug: unexpected type {}", modelObject.getClass().getName());
             return Optional.empty();
         }
-        return _Casts.castTo(Vega.class, MmUnwrapUtil.single((ManagedObject)modelObject))
+        return _Casts.castTo(Vega.class, MmUnwrapUtils.single((ManagedObject)modelObject))
                 .map(Vega::getSchema);
     }
 

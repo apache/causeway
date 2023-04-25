@@ -25,6 +25,7 @@ import java.util.Objects;
 
 import org.apache.wicket.util.convert.ConversionException;
 import org.assertj.core.util.Arrays;
+import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -46,6 +47,7 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 import org.apache.causeway.core.security._testing.InteractionService_forTesting;
 import org.apache.causeway.viewer.wicket.model.value.ConverterBasedOnValueSemantics;
 
@@ -87,6 +89,7 @@ public class ConverterTester<T extends Serializable> {
                 })
                 .singletons(Arrays.asList(additionalSingletons))
                 .interactionService(interactionService = new InteractionService_forTesting())
+                .memberExecutor(Mockito.mock(MemberExecutorService.class))
                 .build();
 
         mmc.getServiceInjector().injectServicesInto(valueSemantics);

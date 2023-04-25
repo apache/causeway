@@ -42,7 +42,7 @@ import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
+import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -120,8 +120,8 @@ public class DomainEventHelper {
                 event = existingEvent;
             } else {
                 // all other phases, create a new event
-                final S source = uncheckedCast(MmUnwrapUtil.single(head.getTarget()));
-                final Object[] arguments = MmUnwrapUtil.multipleAsArray(argumentAdapters);
+                final S source = uncheckedCast(MmUnwrapUtils.single(head.getTarget()));
+                final Object[] arguments = MmUnwrapUtils.multipleAsArray(argumentAdapters);
                 final Identifier identifier = facetHolder.getFeatureIdentifier();
                 event = newActionDomainEvent(eventType, identifier, source, arguments);
 
@@ -245,7 +245,7 @@ public class DomainEventHelper {
             } else {
                 // all other phases, create a new event
 
-                final S source = uncheckedCast(MmUnwrapUtil.single(head.getTarget()));
+                final S source = uncheckedCast(MmUnwrapUtils.single(head.getTarget()));
                 final Identifier identifier = facetHolder.getFeatureIdentifier();
 
                 event = newPropertyDomainEvent(eventType, identifier, source, oldValue, newValue);
@@ -338,7 +338,7 @@ public class DomainEventHelper {
         try {
             final CollectionDomainEvent<S, T> event;
 
-            final S source = uncheckedCast(MmUnwrapUtil.single(head.getTarget()));
+            final S source = uncheckedCast(MmUnwrapUtils.single(head.getTarget()));
             final Identifier identifier = facetHolder.getFeatureIdentifier();
             event = newCollectionDomainEvent(eventType, phase, identifier, source);
 

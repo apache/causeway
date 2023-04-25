@@ -53,9 +53,9 @@ import org.apache.causeway.core.metamodel.facets.ImperativeFacet.Intent;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmAssertionUtil;
-import org.apache.causeway.core.metamodel.object.MmEntityUtil;
-import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
+import org.apache.causeway.core.metamodel.object.MmAssertionUtils;
+import org.apache.causeway.core.metamodel.object.MmEntityUtils;
+import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -154,7 +154,7 @@ extends DelegatingInvocationHandlerDefault<T> {
         final ManagedObject targetAdapter = getObjectManager().adapt(getDelegate());
 
         if(!targetAdapter.getSpecialization().isMixin()) {
-            MmAssertionUtil.assertIsBookmarkSupported(targetAdapter);
+            MmAssertionUtils.assertIsBookmarkSupported(targetAdapter);
         }
 
         if (method.equals(titleMethod)) {
@@ -231,7 +231,7 @@ extends DelegatingInvocationHandlerDefault<T> {
                             "Missing the required mixeeAdapter for action '%s'",
                             objectAction.getId());
                 }
-                MmAssertionUtil.assertIsBookmarkSupported(mixeeAdapter);
+                MmAssertionUtils.assertIsBookmarkSupported(mixeeAdapter);
 
                 final ObjectMember mixinMember = determineMixinMember(mixeeAdapter, objectAction);
 
@@ -319,7 +319,7 @@ extends DelegatingInvocationHandlerDefault<T> {
         val spec = targetAdapter.getSpecification();
         if(spec.isEntity()) {
             return runExecutionTask(()->{
-                MmEntityUtil.persistInCurrentTransaction(targetAdapter);
+                MmEntityUtils.persistInCurrentTransaction(targetAdapter);
                 return null;
             });
         }
@@ -346,7 +346,7 @@ extends DelegatingInvocationHandlerDefault<T> {
             val interactionInitiatedBy = getInteractionInitiatedBy();
             val currentReferencedAdapter = property.get(targetAdapter, interactionInitiatedBy);
 
-            val currentReferencedObj = MmUnwrapUtil.single(currentReferencedAdapter);
+            val currentReferencedObj = MmUnwrapUtils.single(currentReferencedAdapter);
 
 
             val propertyAccessEvent = new PropertyAccessEvent(
@@ -411,7 +411,7 @@ extends DelegatingInvocationHandlerDefault<T> {
             val interactionInitiatedBy = getInteractionInitiatedBy();
             val currentReferencedAdapter = collection.get(targetAdapter, interactionInitiatedBy);
 
-            val currentReferencedObj = MmUnwrapUtil.single(currentReferencedAdapter);
+            val currentReferencedObj = MmUnwrapUtils.single(currentReferencedAdapter);
 
             val collectionAccessEvent = new CollectionAccessEvent(getDelegate(), collection.getFeatureIdentifier());
 
@@ -489,7 +489,7 @@ extends DelegatingInvocationHandlerDefault<T> {
             val returnedAdapter = objectAction.execute(
                     head, argAdapters,
                     interactionInitiatedBy);
-            return MmUnwrapUtil.single(returnedAdapter);
+            return MmUnwrapUtils.single(returnedAdapter);
 
         });
 

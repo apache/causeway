@@ -1,8 +1,6 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-CAUTION: TODO: can also use `@Nullable`, for parameters at least.
-
-The `optionality` attribute specifies that a property or parameter is either optional or mandatory:
+The link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/Property.html#optionality[@Property#optionality]  attribute specifies that a property or parameter is either optional or mandatory:
 
 * for properties, the attribute can be specified using the `@Property` annotation
 
@@ -10,90 +8,86 @@ The `optionality` attribute specifies that a property or parameter is either opt
 
 Without an annotation, the framework assumes that the property or parameter is mandatory, ie required.
 
-[IMPORTANT]
-====
-In addition to specifying optionality at the framework level, it's also important to specify optionality for properties at the persistence layer.
-
-* in the case of entities persisted using JDO/DataNucleus, this can be done using `@Column(allowsNull=...)`.
-* in the case of view models serialized using JAXB, this can be done using `@XmlElement(required=...)`.
-
-Also note that JDO and JAXB assume a property is not required by default, whereas Apache Causeway assumes that properties are required by default.
-====
+The framework also recognises `@org.springframework.lang.Nullable`, and with entities will recognise JPA's `@javax.persistence.Column#nullable` or JDO's `@javax.jdo.annotations.Column#allowsNull`.
 
 
-== Annotated
+== How this demo works
 
-The `optionality` attribute can be specified explicitly using an annotation:
+This page defines three properties, all of which can be edited directly.
+Each also has a corresponding action to update them.
+The three properties are annotated with different optionalities, and the action parameters has a corresponding optionality.
 
-* for properties, using `@Property#optionality()`:
+When editing/modifying, you should be able to leave the two properties that are optional as blank, but the mandatory property will require a value to be set.
+
+* the `optionalProperty` is annotated using `@Property#optionality()`:
 +
 [source,java,indent=0]
+.PropertyOptionalityPage.java
 ----
-include::PropertyOptionalityPage.java[tags=annotation]
+include::PropertyOptionalityPage.java[tags=optional]
 ----
 <.> explicitly specifies that the property is optional
-
-* for parameters, using `@Parameter#optionality()`:
++
+and its corresponding action's parameter uses `@Parameter#optionality()`:
 +
 [source,java,indent=0]
+.PropertyOptionalityPage_updateOptional.java
 ----
-include::PropertyOptionalityVm_updateWithParameterLayout.java[tags=annotation]
+include::PropertyOptionalityPage_updateOptional.java[tags=annotation]
 ----
 <.> explicitly specifies that the parameter is optional
 
-The annotation could also be applied to a mixin, but would have little effect because mixin properties are always read-only.
 
-== Meta-annotated
-
-The `optionality` attribute can also be specified using a custom meta-annotation:
-
-* the meta-annotation is defined as:
-+
-[source,java]
-----
-include::OptionalityOptionalMetaAnnotation.java[tags=class]
-----
-<.> annotated for a property ...
-<.> \... and for a parameter.
-<.> annotation can be applied to a property (either its getter or the field directly)
-<.> annotation can be applied to a parameter
-
-* and can be applied to a property:
+* the `mandatoryProperty` is also annotated using `@Property#optionality()`:
 +
 [source,java,indent=0]
+.PropertyOptionalityPage.java
 ----
-include::PropertyOptionalityPage.java[tags=meta-annotated]
+include::PropertyOptionalityPage.java[tags=mandatory]
 ----
-<.> semantic is inherited from the meta-annotation
-
-* or can be applied to a parameter:
+<.> indicates that the property is mandatory
++
+and its corresponding action's parameter also uses `@Parameter#optionality()`:
 +
 [source,java,indent=0]
+.PropertyOptionalityPage_updateMandatory.java
 ----
-include::PropertyOptionalityVm_updateWithMetaAnnotation.java[tags=meta-annotation]
+include::PropertyOptionalityPage_updateMandatory.java[tags=annotation]
 ----
-<.> semantic is inherited from the meta-annotation
+<.> explicitly specifies that the parameter is optional
 
-
-=== Meta-annotated Overridden
-
-The meta-annotation can itself be overridden:
-
-* in a property:
+* the `nullableProperty` is also annotated using `@Nullable`:
 +
 [source,java,indent=0]
+.PropertyOptionalityPage.java
 ----
-include::PropertyOptionalityPage.java[tags=meta-annotated-overridden]
+include::PropertyOptionalityPage.java[tags=nullable]
 ----
-<.> semantic from meta-annotation ...
-<.> \... is overridden by the `@Property` annotation
-
-* or a parameter:
+<.> indicates that the property is optional
++
+and its corresponding action's parameter also uses `@Nullable`:
 +
 [source,java,indent=0]
+.PropertyOptionalityPage_updateNullable.java
 ----
-include::PropertyOptionalityVm_updateWithMetaAnnotationOverridden.java[tags=meta-annotation-overridden]
+include::PropertyOptionalityPage_updateNullable.java[tags=annotation]
 ----
-<.> semantic from meta-annotation ...
-<.> \... is overridden by the `@Parameter` annotation
+<.> explicitly specifies that the parameter is optional
+
+
+
+
+== Persistence Annotations
+
+In addition to specifying optionality at the framework level, it's also important to specify optionality for properties at the persistence layer.
+
+* for JPA, this is done using `@Column(nullable=...)`.
+* for JDO, this is done using `@Column(allowsNull=...)`.
+* for JAXB view models, this is done using `@XmlElement(required=...)`.
+
+If using JPA or JDO entities, the framework will infer the optionality semantics automatically.
+
+WARNING: link:https://issues.apache.org/jira/browse/CAUSEWAY-3437[CAUSEWAY-3437] is to extend the framework to infer optionality from these JPA/JDO/JAXB equivalents.
+
+Be aware that JPA, JDO and JAXB all assume a property is not required by default, whereas Apache Causeway assumes that properties are required by default.
 

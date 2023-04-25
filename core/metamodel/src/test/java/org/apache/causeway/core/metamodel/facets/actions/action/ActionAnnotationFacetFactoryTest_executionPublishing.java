@@ -49,7 +49,7 @@ extends ActionAnnotationFacetFactoryTest {
 
     @Test
     void given_HasInteractionId_thenIgnored() {
-        actionScenario(SomeHasInteractionId.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        actionScenario(SomeHasInteractionId.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
             processExecutionPublishing(facetFactory, processMethodContext);
             assertFalse(ExecutionPublishingFacet.isPublishingEnabled(facetedMethod));
             assertNoMethodsRemoved();
@@ -61,7 +61,7 @@ extends ActionAnnotationFacetFactoryTest {
 
         // given
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.IGNORE_QUERY_ONLY);
-        actionScenario(ActionAnnotationFacetFactoryTest.Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        actionScenario(ActionAnnotationFacetFactoryTest.Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
             facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
             // when
             processExecutionPublishing(facetFactory, processMethodContext);
@@ -75,7 +75,7 @@ extends ActionAnnotationFacetFactoryTest {
 
         // given
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.IGNORE_QUERY_ONLY);
-        actionScenario(ActionAnnotationFacetFactoryTest.Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        actionScenario(ActionAnnotationFacetFactoryTest.Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
             facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.IDEMPOTENT, facetedMethod) {});
             // when
             processExecutionPublishing(facetFactory, processMethodContext);
@@ -91,7 +91,7 @@ extends ActionAnnotationFacetFactoryTest {
 
         // given
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.IGNORE_QUERY_ONLY);
-        actionScenario(ActionAnnotationFacetFactoryTest.Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        actionScenario(ActionAnnotationFacetFactoryTest.Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             assertThrows(IllegalStateException.class, ()->
                 processExecutionPublishing(facetFactory, processMethodContext));
@@ -103,7 +103,7 @@ extends ActionAnnotationFacetFactoryTest {
 
         // given
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.NONE);
-        actionScenario(ActionAnnotationFacetFactoryTest.Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        actionScenario(ActionAnnotationFacetFactoryTest.Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             processExecutionPublishing(facetFactory, processMethodContext);
             // then
@@ -117,7 +117,7 @@ extends ActionAnnotationFacetFactoryTest {
 
         // given
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.ALL);
-        actionScenario(ActionAnnotationFacetFactoryTest.Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        actionScenario(ActionAnnotationFacetFactoryTest.Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             processExecutionPublishing(facetFactory, processMethodContext);
             // then
@@ -136,7 +136,7 @@ extends ActionAnnotationFacetFactoryTest {
         }
 
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.IGNORE_QUERY_ONLY);
-        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
             facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
             // when
             processExecutionPublishing(facetFactory, processMethodContext);
@@ -156,7 +156,7 @@ extends ActionAnnotationFacetFactoryTest {
         }
 
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.IGNORE_QUERY_ONLY);
-        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
             facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.IDEMPOTENT, facetedMethod) {});
             // when
             processExecutionPublishing(facetFactory, processMethodContext);
@@ -178,7 +178,7 @@ extends ActionAnnotationFacetFactoryTest {
         }
 
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.IGNORE_QUERY_ONLY);
-        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             assertThrows(IllegalStateException.class, ()->
                 processExecutionPublishing(facetFactory, processMethodContext));
@@ -194,7 +194,7 @@ extends ActionAnnotationFacetFactoryTest {
         }
 
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.NONE);
-        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             processExecutionPublishing(facetFactory, processMethodContext);
             // then
@@ -212,7 +212,7 @@ extends ActionAnnotationFacetFactoryTest {
             public void someAction() {}
         }
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.ALL);
-        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             processExecutionPublishing(facetFactory, processMethodContext);
             // then
@@ -233,7 +233,7 @@ extends ActionAnnotationFacetFactoryTest {
         }
         // even though configuration is disabled
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.NONE);
-        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             processExecutionPublishing(facetFactory, processMethodContext);
             // then
@@ -253,7 +253,7 @@ extends ActionAnnotationFacetFactoryTest {
         }
         // even though configuration is disabled
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.NONE);
-        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             processExecutionPublishing(facetFactory, processMethodContext);
             // then

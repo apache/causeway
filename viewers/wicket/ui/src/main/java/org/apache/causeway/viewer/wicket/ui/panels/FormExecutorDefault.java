@@ -31,7 +31,7 @@ import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.debug._Debug;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.object.MmEntityUtil;
+import org.apache.causeway.core.metamodel.object.MmEntityUtils;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.FormExecutor;
 import org.apache.causeway.viewer.wicket.model.models.FormExecutorContext;
@@ -150,7 +150,7 @@ implements FormExecutor, HasCommonContext {
 
             if(log.isDebugEnabled()) {
                 log.debug("about to redirect with {} after execution result {}",
-                        MmEntityUtil.getEntityState(resultAdapter),
+                        MmEntityUtils.getEntityState(resultAdapter),
                         resultAdapter);
             }
 

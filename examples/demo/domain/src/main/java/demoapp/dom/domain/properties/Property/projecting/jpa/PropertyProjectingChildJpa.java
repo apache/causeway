@@ -39,7 +39,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import demoapp.dom.domain.properties.Property.projecting.persistence.PropertyProjectingChildEntity;
+import demoapp.dom.domain.properties.Property.projecting.PropertyProjectingChildEntity;
 
 @Profile("demo-jpa")
 //tag::class[]

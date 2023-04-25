@@ -27,7 +27,7 @@ import org.apache.causeway.applib.graph.tree.TreePath;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
+import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 
@@ -61,7 +61,7 @@ class _TreeNodeMemento implements Serializable {
     }
 
     public @Nullable Object getPojo(final MetaModelContext mmc) {
-        return MmUnwrapUtil.single(asObjectAdapterModel(mmc).getObject());
+        return MmUnwrapUtils.single(asObjectAdapterModel(mmc).getObject());
     }
 
     public ObjectAdapterModel asObjectAdapterModel(final MetaModelContext mmc) {

@@ -59,7 +59,7 @@ extends ActionAnnotationFacetFactoryTest {
         }
 
         // given
-        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             processTypeOf(facetFactory, processMethodContext);
             // then
@@ -80,7 +80,7 @@ extends ActionAnnotationFacetFactoryTest {
         }
 
         // given
-        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             processTypeOf(facetFactory, processMethodContext);
             // then
@@ -102,7 +102,7 @@ extends ActionAnnotationFacetFactoryTest {
         }
 
         // given
-        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             processTypeOf(facetFactory, processMethodContext);
             // then
@@ -122,7 +122,7 @@ extends ActionAnnotationFacetFactoryTest {
         }
 
         // given
-        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             processTypeOf(facetFactory, processMethodContext);
             // then
@@ -145,7 +145,7 @@ extends ActionAnnotationFacetFactoryTest {
         }
 
         // given
-        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod, facetedMethodParameter)->{
+        actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             processTypeOf(facetFactory, processMethodContext);
             // then

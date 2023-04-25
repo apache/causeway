@@ -42,12 +42,11 @@ import lombok.Setter;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
+@Named("demo.PropertyLayoutRepaintingPage")
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.PropertyLayoutRepaintingVm")
-@DomainObject(
-        nature=Nature.VIEW_MODEL)
+@DomainObject(nature=Nature.VIEW_MODEL)
 public class PropertyLayoutRepaintingPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
@@ -57,9 +56,8 @@ public class PropertyLayoutRepaintingPage implements HasAsciiDocDescription {
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @PropertyLayout(
         describedAs =
-            "Editable property " +
-            "(PDFs should not repaint if it changes)",
-        fieldSetId = "edit", sequence = "1")
+            "Editable property (PDF should not repaint if it changes)"
+    )
     @XmlElement(required = false)
     @Getter @Setter
     private String editMe;
@@ -67,53 +65,13 @@ public class PropertyLayoutRepaintingPage implements HasAsciiDocDescription {
 //tag::annotation[]
     @Property()
     @PropertyLayout(
-        repainting = Repainting.NO_REPAINT                  // <.>
-        , describedAs =
-            "@PropertyLayout(repainting = NO_REPAINT)",
-        fieldSetId = "annotation", sequence = "1")
+        repainting = Repainting.NO_REPAINT      // <.>
+    )
     @XmlElement(required = true)
-    @PdfJsViewer                                            // <.>
+    @PdfJsViewer                                // <.>
     @Getter @Setter
-    private Blob propertyUsingAnnotation;
+    private Blob blob;
 //end::annotation[]
-
-//tag::layout-file[]
-    @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(                                        // <.>
-        describedAs =
-            "<cpt:property id=\"...\" repainting = \"NO_REPAINT\"/>",
-        fieldSetId = "layout-file", sequence = "1")
-    @XmlElement(required = false)
-//    @PdfJsViewer
-    @Getter @Setter
-    private Blob propertyUsingLayout;
-//end::layout-file[]
-
-//tag::meta-annotated[]
-    @RepaintingNoRepaintMetaAnnotation                      // <.>
-    @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(
-        describedAs = "@RepaintingNoRepaintMetaAnnotation",
-        fieldSetId = "meta-annotated", sequence = "1")
-    @XmlElement(required = false)
-//    @PdfJsViewer
-    @Getter @Setter
-    private Blob propertyUsingMetaAnnotation;
-//end::meta-annotated[]
-
-//tag::meta-annotated-overridden[]
-    @RepaintingRepaintMetaAnnotation                      // <.>
-    @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(
-        repainting = Repainting.NO_REPAINT                // <.>
-        , describedAs =
-            "@RepaintingRepaintMetaAnnotation @PropertyLayout(...)",
-        fieldSetId = "meta-annotated-overridden", sequence = "1")
-    @XmlElement(required = false)
-//    @PdfJsViewer
-    @Getter @Setter
-    private Blob propertyUsingMetaAnnotationButOverridden;
-//end::meta-annotated-overridden[]
 
 }
 //end::class[]

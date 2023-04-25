@@ -31,7 +31,7 @@ import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
-import org.apache.causeway.core.metamodel.object.MmEntityUtil;
+import org.apache.causeway.core.metamodel.object.MmEntityUtils;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 
 import lombok.RequiredArgsConstructor;
@@ -61,7 +61,7 @@ public class TitleServiceDefault implements TitleService {
             return "[UNSPECIFIED]";
         }
 
-        if(MmEntityUtil.isDetachedCannotReattach(objectAdapter)) {
+        if(MmEntityUtils.isDetachedCannotReattach(objectAdapter)) {
             return "[DETACHED]";
         } else {
             return objectAdapter.getSpecification().getTitle(

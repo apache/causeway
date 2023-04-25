@@ -47,7 +47,7 @@ import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmUnwrapUtil;
+import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
@@ -131,7 +131,7 @@ public interface CollectionFacet extends Facet {
     public static Object[] toArrayOfPojos(@Nullable final ManagedObject container) {
         val elementAdapters = streamAdapters(container)
                 .collect(Collectors.toList());
-        return MmUnwrapUtil.multipleAsArray(elementAdapters);
+        return MmUnwrapUtils.multipleAsArray(elementAdapters);
     }
 
     @UtilityClass
