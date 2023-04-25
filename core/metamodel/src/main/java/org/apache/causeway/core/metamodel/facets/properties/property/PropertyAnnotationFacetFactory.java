@@ -43,9 +43,9 @@ import org.apache.causeway.core.metamodel.facets.properties.property.hidden.Hidd
 import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.MandatoryFacetInvertedByNullableAnnotationOnProperty;
 import org.apache.causeway.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForPropertyAnnotation;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEvent;
+import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForClearing;
 import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEvent;
+import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForSetting;
 import org.apache.causeway.core.metamodel.facets.properties.property.mustsatisfy.MustSatisfySpecificationFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.regex.RegExFacetForPatternAnnotationOnProperty;
 import org.apache.causeway.core.metamodel.facets.properties.property.regex.RegExFacetForPropertyAnnotation;
@@ -152,7 +152,7 @@ extends FacetFactoryAbstract {
                      * such that any changes to the latter during post processing
                      * are reflected here as well
                      */
-                    addFacet(new PropertySetterFacetForDomainEvent(
+                    addFacet(new PropertyModifyFacetForSetting(
                             propertyDomainEventFacet, getterFacet, setterFacet, holder)));
 
             holder.lookupFacet(PropertyClearFacet.class)
@@ -161,7 +161,7 @@ extends FacetFactoryAbstract {
                      * such that any changes to the latter during post processing
                      * are reflected here as well
                      */
-                    addFacet(new PropertyClearFacetForDomainEvent(
+                    addFacet(new PropertyModifyFacetForClearing(
                             propertyDomainEventFacet, getterFacet, clearFacet, holder)));
         });
 

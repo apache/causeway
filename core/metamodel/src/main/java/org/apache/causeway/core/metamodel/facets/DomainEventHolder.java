@@ -18,10 +18,14 @@
  */
 package org.apache.causeway.core.metamodel.facets;
 
+import org.springframework.lang.Nullable;
+
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract.EventTypeOrigin;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NonNull;
 
 /**
  * Simply a tuple of {event-type, {@link EventTypeOrigin}, post-able-flag}.
@@ -41,10 +45,20 @@ public interface DomainEventHolder<T> {
      */
     boolean isPostable();
 
+    /**
+     * Whether this {@link DomainEventHolder} is an empty holder.
+     * That is a holder, that will never participate with the frameworks
+     * event system.
+     */
+    static boolean isEmpty(final @Nullable DomainEventHolder<?> domainEventHolder) {
+        return domainEventHolder==null
+                || domainEventHolder instanceof DomainEventHolderEmpty;
+    }
+
     // -- FACTORIES
 
     static <X> DomainEventHolder<X> empty() {
-        return new DomainEventHolderEager<>(null, null, false);
+        return new DomainEventHolderEmpty<>();
     }
 
     static <X> DomainEventHolder<X> eager(
@@ -56,10 +70,22 @@ public interface DomainEventHolder<T> {
 
     // -- IMPLEMENTATIONS
 
+    static final class DomainEventHolderEmpty<T> implements DomainEventHolder<T> {
+        @Override public Class<? extends T> getEventType() {
+            throw _Exceptions.noSuchElement("the empty DomainEventHolder has no event-type");
+        }
+        @Override public EventTypeOrigin getEventTypeOrigin() {
+            throw _Exceptions.noSuchElement("the empty DomainEventHolder has no event-type-origin");
+        }
+        @Override public boolean isPostable() { return false; }
+    }
+
     @Getter @AllArgsConstructor
-    static class DomainEventHolderEager<T> implements DomainEventHolder<T> {
-        private final Class<? extends T> eventType;
-        private final EventTypeOrigin eventTypeOrigin;
+    static final class DomainEventHolderEager<T> implements DomainEventHolder<T> {
+        private final @NonNull Class<? extends T> eventType;
+        private final @NonNull EventTypeOrigin eventTypeOrigin;
         private boolean postable;
     }
+
+
 }

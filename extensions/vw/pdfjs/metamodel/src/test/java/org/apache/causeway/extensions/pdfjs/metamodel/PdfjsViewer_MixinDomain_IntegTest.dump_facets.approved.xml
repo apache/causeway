@@ -116,7 +116,17 @@
             <mml:attr name="isPostable" value="true"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForPropertyOrCollectionDomainEvent"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForMixedInPropertyOrCollection">
+            <mml:attr name="declaringType" value="org.apache.causeway.extensions.pdfjs.metamodel.domains.mixin.SomeViewModel_pdf"/>
+            <mml:attr name="eventType" value="None (No execution related domain events for mixed-in prop/coll.)"/>
+            <mml:attr name="eventTypeOrigin" value="NONE"/>
+            <mml:attr name="facet" value="ActionInvocationFacetForMixedInPropertyOrCollection"/>
+            <mml:attr name="intent.prop" value="EXECUTE"/>
+            <mml:attr name="isPostable" value="false"/>
+            <mml:attr name="methods" value="public org.apache.causeway.applib.value.Blob org.apache.causeway.extensions.pdfjs.metamodel.domains.mixin.SomeViewModel_pdf.prop()"/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:attr name="returnType" value="org.apache.causeway.applib.value.Blob"/>
+          </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet">
             <mml:attr name="contributing" value="AS_ASSOCIATION"/>
             <mml:attr name="facet" value="PropertyAnnotationFacetFactory.2"/>
@@ -211,11 +221,11 @@
             <mml:attr name="isPostable" value="true"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForActionDomainEvent">
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForAction">
             <mml:attr name="declaringType" value="org.apache.causeway.applib.mixins.layout.Object_downloadLayout"/>
             <mml:attr name="eventType" value="org.apache.causeway.applib.mixins.layout.Object_downloadLayout.ActionDomainEvent"/>
             <mml:attr name="eventTypeOrigin" value="ANNOTATED_MEMBER"/>
-            <mml:attr name="facet" value="ActionInvocationFacetForActionDomainEvent"/>
+            <mml:attr name="facet" value="ActionInvocationFacetForAction"/>
             <mml:attr name="intent.act" value="EXECUTE"/>
             <mml:attr name="isPostable" value="true"/>
             <mml:attr name="methods" value="public java.lang.Object org.apache.causeway.applib.mixins.layout.Object_downloadLayout.act(java.lang.String,org.apache.causeway.applib.services.layout.LayoutExportStyle,org.apache.causeway.applib.value.NamedWithMimeType$CommonMimeType)"/>
@@ -468,11 +478,11 @@
             <mml:attr name="isPostable" value="true"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForActionDomainEvent">
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForAction">
             <mml:attr name="declaringType" value="org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml"/>
             <mml:attr name="eventType" value="org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml.ActionDomainEvent"/>
             <mml:attr name="eventTypeOrigin" value="ANNOTATED_MEMBER"/>
-            <mml:attr name="facet" value="ActionInvocationFacetForActionDomainEvent"/>
+            <mml:attr name="facet" value="ActionInvocationFacetForAction"/>
             <mml:attr name="intent.act" value="EXECUTE"/>
             <mml:attr name="isPostable" value="true"/>
             <mml:attr name="methods" value="public java.lang.Object org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml.act(java.lang.String)"/>
@@ -628,11 +638,11 @@
             <mml:attr name="isPostable" value="true"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForActionDomainEvent">
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForAction">
             <mml:attr name="declaringType" value="org.apache.causeway.core.metamodel.inspect.Object_inspectMetamodel"/>
             <mml:attr name="eventType" value="org.apache.causeway.core.metamodel.inspect.Object_inspectMetamodel.ActionDomainEvent"/>
             <mml:attr name="eventTypeOrigin" value="ANNOTATED_MEMBER"/>
-            <mml:attr name="facet" value="ActionInvocationFacetForActionDomainEvent"/>
+            <mml:attr name="facet" value="ActionInvocationFacetForAction"/>
             <mml:attr name="intent.act" value="EXECUTE"/>
             <mml:attr name="isPostable" value="true"/>
             <mml:attr name="methods" value="public java.lang.Object org.apache.causeway.core.metamodel.inspect.Object_inspectMetamodel.act()"/>
@@ -735,11 +745,11 @@
             <mml:attr name="isPostable" value="true"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForActionDomainEvent">
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForAction">
             <mml:attr name="declaringType" value="org.apache.causeway.applib.mixins.rest.Object_openRestApi"/>
             <mml:attr name="eventType" value="org.apache.causeway.applib.mixins.rest.Object_openRestApi.ActionDomainEvent"/>
             <mml:attr name="eventTypeOrigin" value="ANNOTATED_MEMBER"/>
-            <mml:attr name="facet" value="ActionInvocationFacetForActionDomainEvent"/>
+            <mml:attr name="facet" value="ActionInvocationFacetForAction"/>
             <mml:attr name="intent.act" value="EXECUTE"/>
             <mml:attr name="isPostable" value="true"/>
             <mml:attr name="methods" value="public org.apache.causeway.applib.value.LocalResourcePath org.apache.causeway.applib.mixins.rest.Object_openRestApi.act()"/>
@@ -842,11 +852,11 @@
             <mml:attr name="isPostable" value="true"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForActionDomainEvent">
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForAction">
             <mml:attr name="declaringType" value="org.apache.causeway.applib.mixins.metamodel.Object_rebuildMetamodel"/>
             <mml:attr name="eventType" value="org.apache.causeway.applib.mixins.metamodel.Object_rebuildMetamodel.ActionDomainEvent"/>
             <mml:attr name="eventTypeOrigin" value="ANNOTATED_MEMBER"/>
-            <mml:attr name="facet" value="ActionInvocationFacetForActionDomainEvent"/>
+            <mml:attr name="facet" value="ActionInvocationFacetForAction"/>
             <mml:attr name="intent.act" value="EXECUTE"/>
             <mml:attr name="isPostable" value="true"/>
             <mml:attr name="methods" value="public java.lang.Object org.apache.causeway.applib.mixins.metamodel.Object_rebuildMetamodel.act()"/>
@@ -1051,7 +1061,17 @@
             <mml:attr name="isPostable" value="true"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForPropertyOrCollectionDomainEvent"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForMixedInPropertyOrCollection">
+            <mml:attr name="declaringType" value="org.apache.causeway.extensions.pdfjs.metamodel.domains.mixin.SomeViewModel_pdf"/>
+            <mml:attr name="eventType" value="None (No execution related domain events for mixed-in prop/coll.)"/>
+            <mml:attr name="eventTypeOrigin" value="NONE"/>
+            <mml:attr name="facet" value="ActionInvocationFacetForMixedInPropertyOrCollection"/>
+            <mml:attr name="intent.prop" value="EXECUTE"/>
+            <mml:attr name="isPostable" value="false"/>
+            <mml:attr name="methods" value="public org.apache.causeway.applib.value.Blob org.apache.causeway.extensions.pdfjs.metamodel.domains.mixin.SomeViewModel_pdf.prop()"/>
+            <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:attr name="returnType" value="org.apache.causeway.applib.value.Blob"/>
+          </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet">
             <mml:attr name="contributing" value="AS_ASSOCIATION"/>
             <mml:attr name="facet" value="PropertyAnnotationFacetFactory.2"/>

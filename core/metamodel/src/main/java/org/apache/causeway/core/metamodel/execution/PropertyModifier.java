@@ -30,7 +30,7 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.DomainEventHelper;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertySetterOrClearFacetForDomainEventAbstract;
+import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
@@ -47,14 +47,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @RequiredArgsConstructor
-public final class PropertyExecutor
+public final class PropertyModifier
 implements
     HasMetaModelContext,
     InteractionInternal.MemberExecutor<PropertyEdit> {
 
     // -- FACTORIES
 
-    public static PropertyExecutor forPropertyClear(
+    public static PropertyModifier forPropertyClear(
             final @NonNull FacetHolder facetHolder,
             final @NonNull InteractionInitiatedBy interactionInitiatedBy,
             final @NonNull InteractionHead head,
@@ -62,15 +62,15 @@ implements
             final @NonNull OneToOneAssociation owningProperty,
             final @NonNull PropertyOrCollectionAccessorFacet getterFacet,
             final @NonNull PropertyClearFacet clearFacet,
-            final @NonNull PropertySetterOrClearFacetForDomainEventAbstract propertySetterOrClearFacetForDomainEventAbstract) {
+            final @NonNull PropertyModifyFacetAbstract propertySetterOrClearFacetForDomainEventAbstract) {
         val emptyValueAdapter = ManagedObject.empty(owningProperty.getElementType());
-        return new PropertyExecutor(owningProperty.getMetaModelContext(), facetHolder,
-                ExecutionVariant.CLEAR, interactionInitiatedBy, head,
+        return new PropertyModifier(owningProperty.getMetaModelContext(), facetHolder,
+                ModificationVariant.CLEAR, interactionInitiatedBy, head,
                 owningProperty, emptyValueAdapter, getterFacet, null, clearFacet,
                 propertySetterOrClearFacetForDomainEventAbstract);
     }
 
-    public static PropertyExecutor forPropertySet(
+    public static PropertyModifier forPropertySet(
             final @NonNull FacetHolder facetHolder,
             final @NonNull InteractionInitiatedBy interactionInitiatedBy,
             final @NonNull InteractionHead head,
@@ -79,11 +79,22 @@ implements
             final @NonNull OneToOneAssociation owningProperty,
             final @NonNull PropertyOrCollectionAccessorFacet getterFacet,
             final @NonNull PropertySetterFacet setterFacet,
-            final @NonNull PropertySetterOrClearFacetForDomainEventAbstract propertySetterOrClearFacetForDomainEventAbstract) {
-        return new PropertyExecutor(owningProperty.getMetaModelContext(), facetHolder,
-                ExecutionVariant.SET, interactionInitiatedBy, head,
+            final @NonNull PropertyModifyFacetAbstract propertySetterOrClearFacetForDomainEventAbstract) {
+        return new PropertyModifier(owningProperty.getMetaModelContext(), facetHolder,
+                ModificationVariant.SET, interactionInitiatedBy, head,
                 owningProperty, newValueAdapter, getterFacet, setterFacet, null,
                 propertySetterOrClearFacetForDomainEventAbstract);
+    }
+
+    // -- ENUMS
+
+    public static enum ModificationVariant {
+        /** clearing a property */
+        CLEAR,
+        /** setting a property (to a new value) */
+        SET;
+        public boolean isClear() { return this == CLEAR; }
+        public boolean isSet() { return this == SET; }
     }
 
     // -- CONSTRUCTION
@@ -93,7 +104,7 @@ implements
 
     @Getter
     private final @NonNull FacetHolder facetHolder;
-    private final @NonNull ExecutionVariant executionVariant;
+    private final @NonNull ModificationVariant executionVariant;
     @Getter
     private final @NonNull InteractionInitiatedBy interactionInitiatedBy;
 
@@ -109,7 +120,7 @@ implements
     private final PropertyOrCollectionAccessorFacet getterFacet;
     private final PropertySetterFacet setterFacet; // either this
     private final PropertyClearFacet clearFacet; // or that
-    private final PropertySetterOrClearFacetForDomainEventAbstract propertySetterOrClearFacetForDomainEventAbstract;
+    private final PropertyModifyFacetAbstract propertySetterOrClearFacetForDomainEventAbstract;
 
     @Getter(lazy=true)
     private final InteractionDtoFactory interactionDtoServiceInternal =

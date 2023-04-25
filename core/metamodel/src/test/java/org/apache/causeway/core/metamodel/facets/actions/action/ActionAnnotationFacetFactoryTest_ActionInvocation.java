@@ -32,7 +32,7 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
-import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForActionDomainEvent;
+import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForAction;
 import org.apache.causeway.core.metamodel.facets.members.disabled.method.DisableForContextFacet;
 import org.apache.causeway.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethod;
 import org.apache.causeway.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethodFactory;
@@ -74,8 +74,8 @@ extends FacetFactoryTestAbstract {
             //then
             final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
             assertNotNull(facet);
-            assertTrue(facet instanceof ActionInvocationFacetForActionDomainEvent);
-            val actionInvocationFacetViaMethod = (ActionInvocationFacetForActionDomainEvent) facet;
+            assertTrue(facet instanceof ActionInvocationFacetForAction);
+            val actionInvocationFacetViaMethod = (ActionInvocationFacetForAction) facet;
             assertMethodEqualsFirstIn(actionMethod, actionInvocationFacetViaMethod);
             assertMethodWasRemoved(actionMethod);
         });
@@ -95,7 +95,7 @@ extends FacetFactoryTestAbstract {
             processInvocation(facetFactory, processMethodContext);
             //then
             final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
-            val actionInvocationFacetViaMethod = (ActionInvocationFacetForActionDomainEvent) facet;
+            val actionInvocationFacetViaMethod = (ActionInvocationFacetForAction) facet;
             assertEquals(voidSpec, actionInvocationFacetViaMethod.getReturnType());
         });
     }
@@ -114,7 +114,7 @@ extends FacetFactoryTestAbstract {
             processInvocation(facetFactory, processMethodContext);
             //then
             final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
-            val actionInvocationFacetViaMethod = (ActionInvocationFacetForActionDomainEvent) facet;
+            val actionInvocationFacetViaMethod = (ActionInvocationFacetForAction) facet;
             assertEquals(stringSpec, actionInvocationFacetViaMethod.getReturnType());
         });
     }
@@ -133,7 +133,7 @@ extends FacetFactoryTestAbstract {
             processInvocation(facetFactory, processMethodContext);
             //then
             final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
-            val actionInvocationFacetViaMethod = (ActionInvocationFacetForActionDomainEvent) facet;
+            val actionInvocationFacetViaMethod = (ActionInvocationFacetForAction) facet;
             assertEquals(
                     customerSpec,
                     actionInvocationFacetViaMethod.getDeclaringType());

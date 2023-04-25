@@ -49,7 +49,7 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.execution.ActionExecutor;
 import org.apache.causeway.core.metamodel.execution.InteractionInternal;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
-import org.apache.causeway.core.metamodel.execution.PropertyExecutor;
+import org.apache.causeway.core.metamodel.execution.PropertyModifier;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
 import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
@@ -207,7 +207,7 @@ implements MemberExecutorService {
 
     @Override
     public ManagedObject setOrClearProperty(
-            final @NonNull PropertyExecutor propertyExecutor) {
+            final @NonNull PropertyModifier propertyExecutor) {
 
         val executionResult = propertyExecutor.getInteractionInitiatedBy().isPassThrough()
                 ? Try.call(()->
@@ -221,7 +221,7 @@ implements MemberExecutorService {
     }
 
     private ManagedObject setOrClearPropertyInternally(
-            final @NonNull PropertyExecutor propertyExecutor) {
+            final @NonNull PropertyModifier propertyExecutor) {
 
         final InteractionHead head = propertyExecutor.getHead();
 

@@ -32,12 +32,12 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 /**
  * Handles both, regular and mixed-in actions,
  * but not mixed-in properties nor mixed-in collections.
- * (that's done by the sibling facet {@link ActionInvocationFacetForPropertyOrCollectionDomainEvent})
+ * (that's done by the sibling facet {@link ActionInvocationFacetForMixedInPropertyOrCollection})
  */
-public class ActionInvocationFacetForActionDomainEvent
+public class ActionInvocationFacetForAction
 extends ActionInvocationFacetAbstract {
 
-    public ActionInvocationFacetForActionDomainEvent(
+    public ActionInvocationFacetForAction(
             final DomainEventHolder<ActionDomainEvent<?>> domainEventHolder,
             final MethodFacade method,
             final ObjectSpecification declaringType,

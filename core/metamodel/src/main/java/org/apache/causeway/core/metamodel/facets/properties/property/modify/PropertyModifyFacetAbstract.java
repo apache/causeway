@@ -20,6 +20,8 @@ package org.apache.causeway.core.metamodel.facets.properties.property.modify;
 
 import java.util.function.BiConsumer;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
@@ -36,18 +38,25 @@ import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
-public abstract class PropertySetterOrClearFacetForDomainEventAbstract
+import lombok.NonNull;
+
+/**
+ * Handles modifications for (non-mixed-in) properties and accompanied {@link PropertyDomainEvent}(s).
+ */
+public abstract class PropertyModifyFacetAbstract
 extends DomainEventFacetAbstract<PropertyDomainEvent<?, ?>>
 implements
     PropertyClearingAccessor,
     PropertySettingAccessor {
 
-    private final PropertyOrCollectionAccessorFacet getterFacet;
-    private final PropertySetterFacet setterFacet;
-    private final PropertyClearFacet clearFacet;
-    private final MemberExecutorService memberExecutorService;
+    // -- CONSTRUCTION
 
-    protected PropertySetterOrClearFacetForDomainEventAbstract(
+    private final @NonNull PropertyOrCollectionAccessorFacet getterFacet;
+    private final @Nullable PropertySetterFacet setterFacet; // either this
+    private final @Nullable PropertyClearFacet clearFacet; // or that
+    private final @NonNull MemberExecutorService memberExecutorService;
+
+    protected PropertyModifyFacetAbstract(
             final Class<? extends Facet> facetType,
             final DomainEventHolder<PropertyDomainEvent<?, ?>> domainEventHolder,
             final PropertyOrCollectionAccessorFacet getterFacet,
@@ -91,8 +100,12 @@ implements
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("getterFacet", getterFacet);
-        visitor.accept("setterFacet", setterFacet);
-        visitor.accept("clearFacet", clearFacet);
+        if(setterFacet!=null) {
+            visitor.accept("setterFacet", setterFacet);
+        }
+        if(clearFacet!=null) {
+            visitor.accept("clearFacet", clearFacet);
+        }
     }
 
 }

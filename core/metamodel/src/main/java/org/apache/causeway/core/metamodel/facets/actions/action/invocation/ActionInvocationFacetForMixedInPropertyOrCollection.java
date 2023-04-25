@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.action.invocation;
 
-import java.util.function.BiConsumer;
+import java.lang.reflect.Method;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
@@ -33,15 +33,19 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
 /**
- * Handles mixed-in properties and collections.
+ * Handles execution of the pseudo getter for mixed-in properties and collections,
+ * which triggers NO execution related domain events.
  * <p>
- * This facet is expected to be always installed
- * together with a {@link PropertyDomainEventFacet} or {@link CollectionDomainEventFacet}.
+ * 'Pseudo getter' because the underlying {@link Method} is not a bean-specification-obeying getter,
+ * but rather an arbitrary named no-arg method like {@code prop()} or {@code coll()}.
+ * <p>
+ * Hiding advisory is instead given by {@link PropertyDomainEventFacet} or {@link CollectionDomainEventFacet},
+ * expected to be installed on the same {@link FacetHolder}.
  */
-public class ActionInvocationFacetForPropertyOrCollectionDomainEvent
+public class ActionInvocationFacetForMixedInPropertyOrCollection
 extends ActionInvocationFacetAbstract {
 
-    public ActionInvocationFacetForPropertyOrCollectionDomainEvent(
+    public ActionInvocationFacetForMixedInPropertyOrCollection(
             final MethodFacade method,
             final ObjectSpecification declaringType,
             final ObjectSpecification returnType,
@@ -58,27 +62,8 @@ extends ActionInvocationFacetAbstract {
             final InteractionHead head,
             final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        //FIXME [CAUSEWAY-3409] are there any property execution events that we need to emit?
         return memberExecutorService.invokeAction(getFacetHolder(), interactionInitiatedBy,
                 head, argumentAdapters, owningAction, this);
-    }
-
-    @Override
-    public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        //TODO[CAUSEWAY-3409] not sure how to report this hybrid kind of facet
-        /*
-         *  <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForPropertyOrCollectionDomainEvent">
-            <mml:attr name="declaringType" value="org.apache.causeway.extensions.pdfjs.metamodel.domains.mixin.SomeViewModel_pdf"/>
-            <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.ActionDomainEvent.Default"/>
-            <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-            <mml:attr name="facet" value="ActionInvocationFacetForPropertyOrCollectionDomainEvent"/>
-            <mml:attr name="intent.prop" value="EXECUTE"/>
-            <mml:attr name="isPostable" value="true"/>
-            <mml:attr name="methods" value="public org.apache.causeway.applib.value.Blob org.apache.causeway.extensions.pdfjs.metamodel.domains.mixin.SomeViewModel_pdf.prop()"/>
-            <mml:attr name="precedence" value="DEFAULT"/>
-            <mml:attr name="returnType" value="org.apache.causeway.applib.value.Blob"/>
-          </mml:facet>
-         */
     }
 
 }

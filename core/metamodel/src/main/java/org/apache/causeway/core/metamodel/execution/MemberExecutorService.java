@@ -23,10 +23,11 @@ import java.util.Optional;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.execution.PropertyModifier.ModificationVariant;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertySetterOrClearFacetForDomainEventAbstract;
+import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
@@ -55,7 +56,7 @@ public interface MemberExecutorService {
             @NonNull ActionExecutor actionExecutor);
 
     ManagedObject setOrClearProperty(
-            @NonNull PropertyExecutor propertyExecutor);
+            @NonNull PropertyModifier propertyExecutor);
 
     // -- SHORTCUTS
 
@@ -94,9 +95,9 @@ public interface MemberExecutorService {
             final @NonNull OneToOneAssociation owningProperty,
             final @NonNull PropertyOrCollectionAccessorFacet getterFacet,
             final @NonNull PropertyClearFacet clearFacet,
-            final @NonNull PropertySetterOrClearFacetForDomainEventAbstract propertySetterOrClearFacetForDomainEventAbstract) {
+            final @NonNull PropertyModifyFacetAbstract propertySetterOrClearFacetForDomainEventAbstract) {
 
-        val propertyExecutor = PropertyExecutor.forPropertyClear(
+        val propertyExecutor = PropertyModifier.forPropertyClear(
                 facetHolder, interactionInitiatedBy, head,
                 owningProperty, getterFacet, clearFacet,
                 propertySetterOrClearFacetForDomainEventAbstract);
@@ -112,10 +113,10 @@ public interface MemberExecutorService {
             final @NonNull OneToOneAssociation owningProperty,
             final @NonNull PropertyOrCollectionAccessorFacet getterFacet,
             final @NonNull PropertySetterFacet setterFacet,
-            final @NonNull PropertySetterOrClearFacetForDomainEventAbstract propertySetterOrClearFacetForDomainEventAbstract) {
+            final @NonNull PropertyModifyFacetAbstract propertySetterOrClearFacetForDomainEventAbstract) {
 
-        val propertyExecutor = new PropertyExecutor(owningProperty.getMetaModelContext(), facetHolder,
-                ExecutionVariant.SET, interactionInitiatedBy, head,
+        val propertyExecutor = new PropertyModifier(owningProperty.getMetaModelContext(), facetHolder,
+                ModificationVariant.SET, interactionInitiatedBy, head,
                 owningProperty, newValueAdapter, getterFacet, setterFacet, null,
                 propertySetterOrClearFacetForDomainEventAbstract);
         return setOrClearProperty(propertyExecutor);

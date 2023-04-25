@@ -32,7 +32,7 @@ import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract.EventT
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
-import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForActionDomainEvent;
+import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForAction;
 
 import static org.apache.causeway.core.metamodel.commons.matchers.CausewayMatchers.classEqualTo;
 
@@ -76,8 +76,8 @@ extends ActionAnnotationFacetFactoryTest {
 
             final Facet invocationFacet = facetedMethod.getFacet(ActionInvocationFacet.class);
             assertNotNull(invocationFacet);
-            assertTrue(invocationFacet instanceof ActionInvocationFacetForActionDomainEvent);
-            final ActionInvocationFacetForActionDomainEvent invocationFacetImpl = (ActionInvocationFacetForActionDomainEvent) invocationFacet;
+            assertTrue(invocationFacet instanceof ActionInvocationFacetForAction);
+            final ActionInvocationFacetForAction invocationFacetImpl = (ActionInvocationFacetForAction) invocationFacet;
             assertEquals(EventTypeOrigin.ANNOTATED_MEMBER, invocationFacetImpl.getEventTypeOrigin());
             assertThat(invocationFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvokedDomainEvent.class));
         });
@@ -111,8 +111,8 @@ extends ActionAnnotationFacetFactoryTest {
             final Facet invocationFacet = facetedMethod.getFacet(ActionInvocationFacet.class);
             assertNotNull(invocationFacet);
 
-            assertTrue(invocationFacet instanceof ActionInvocationFacetForActionDomainEvent);
-            final ActionInvocationFacetForActionDomainEvent invocationFacetImpl = (ActionInvocationFacetForActionDomainEvent) invocationFacet;
+            assertTrue(invocationFacet instanceof ActionInvocationFacetForAction);
+            final ActionInvocationFacetForAction invocationFacetImpl = (ActionInvocationFacetForAction) invocationFacet;
             assertEquals(EventTypeOrigin.ANNOTATED_MEMBER, invocationFacetImpl.getEventTypeOrigin());
             assertThat(invocationFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvokedDomainEvent.class));
         });
@@ -145,8 +145,8 @@ extends ActionAnnotationFacetFactoryTest {
 
             final Facet invocationFacet = facetedMethod.getFacet(ActionInvocationFacet.class);
             assertNotNull(invocationFacet);
-            assertTrue(invocationFacet instanceof ActionInvocationFacetForActionDomainEvent);
-            final ActionInvocationFacetForActionDomainEvent invocationFacetImpl = (ActionInvocationFacetForActionDomainEvent) invocationFacet;
+            assertTrue(invocationFacet instanceof ActionInvocationFacetForAction);
+            final ActionInvocationFacetForAction invocationFacetImpl = (ActionInvocationFacetForAction) invocationFacet;
             assertEquals(EventTypeOrigin.ANNOTATED_MEMBER, invocationFacetImpl.getEventTypeOrigin());
             assertThat(invocationFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvokedDomainEvent.class));
         });
@@ -181,8 +181,8 @@ extends ActionAnnotationFacetFactoryTest {
 
             final Facet invocationFacet = facetedMethod.getFacet(ActionInvocationFacet.class);
             assertNotNull(invocationFacet);
-            assertTrue(invocationFacet instanceof ActionInvocationFacetForActionDomainEvent);
-            final ActionInvocationFacetForActionDomainEvent invocationFacetImpl = (ActionInvocationFacetForActionDomainEvent) invocationFacet;
+            assertTrue(invocationFacet instanceof ActionInvocationFacetForAction);
+            final ActionInvocationFacetForAction invocationFacetImpl = (ActionInvocationFacetForAction) invocationFacet;
             assertThat(invocationFacetImpl.getEventType(), classEqualTo(ActionDomainEvent.Default.class));
         });
     }

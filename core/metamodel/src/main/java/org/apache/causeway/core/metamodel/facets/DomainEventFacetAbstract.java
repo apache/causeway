@@ -120,8 +120,14 @@ implements DomainEventHolder<T> {
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("eventType", getEventType());
-        visitor.accept("eventTypeOrigin", getEventTypeOrigin().name());
+        if(DomainEventHolder.isEmpty(domainEventHolder)) {
+            visitor.accept("eventType", "None "
+                    + "(No execution related domain events for mixed-in prop/coll.)");
+            visitor.accept("eventTypeOrigin", "NONE");
+        } else {
+            visitor.accept("eventType", getEventType());
+            visitor.accept("eventTypeOrigin", getEventTypeOrigin().name());
+        }
         visitor.accept("isPostable", isPostable());
     }
 

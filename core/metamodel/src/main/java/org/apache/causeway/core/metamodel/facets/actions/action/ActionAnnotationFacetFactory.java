@@ -33,8 +33,8 @@ import org.apache.causeway.core.metamodel.facets.actions.action.choicesfrom.Choi
 import org.apache.causeway.core.metamodel.facets.actions.action.explicit.ActionExplicitFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.actions.action.hidden.HiddenFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
-import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForActionDomainEvent;
-import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForPropertyOrCollectionDomainEvent;
+import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForAction;
+import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForMixedInPropertyOrCollection;
 import org.apache.causeway.core.metamodel.facets.actions.action.prototype.PrototypeFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.actions.action.typeof.TypeOfFacetForActionAnnotation;
@@ -126,11 +126,11 @@ extends FacetFactoryAbstract {
                  * are reflected here as well
                  */
                 isAction
-                    ? new ActionInvocationFacetForActionDomainEvent(
+                    ? new ActionInvocationFacetForAction(
                             actionDomainEventFacet,
                             actionMethod, typeSpec, returnSpec, holder)
                     // when in a mixed-in prop/coll situation, the prop/coll event-type must be used instead
-                    : new ActionInvocationFacetForPropertyOrCollectionDomainEvent(
+                    : new ActionInvocationFacetForMixedInPropertyOrCollection(
                             actionMethod, typeSpec, returnSpec, holder));
         } finally {
             processMethodContext.removeMethod(actionMethod.asMethodForIntrospection());

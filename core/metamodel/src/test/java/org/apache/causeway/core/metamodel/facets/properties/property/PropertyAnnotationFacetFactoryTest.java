@@ -69,9 +69,8 @@ import org.apache.causeway.core.metamodel.facets.properties.property.entitychang
 import org.apache.causeway.core.metamodel.facets.properties.property.hidden.HiddenFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForPropertyAnnotation;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEvent;
 import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEvent;
+import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.properties.property.mustsatisfy.MustSatisfySpecificationFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.regex.RegExFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.snapshot.SnapshotExcludeFacetForPropertyAnnotation;
@@ -214,16 +213,16 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
             // then
             val setterFacet = facetedMethod.getFacet(PropertySetterFacet.class);
             assertNotNull(setterFacet);
-            assertTrue(setterFacet instanceof PropertySetterFacetForDomainEvent, "unexpected facet: " + setterFacet);
-            final PropertySetterFacetForDomainEvent setterFacetImpl = (PropertySetterFacetForDomainEvent) setterFacet;
+            assertTrue(setterFacet instanceof PropertyModifyFacetAbstract, "unexpected facet: " + setterFacet);
+            final PropertyModifyFacetAbstract setterFacetImpl = (PropertyModifyFacetAbstract) setterFacet;
             assertEquals(eventTypeOrigin, setterFacetImpl.getEventTypeOrigin());
             assertThat(setterFacetImpl.getEventType(), CausewayMatchers.classEqualTo(eventType));
 
             // then
             val clearFacet = facetedMethod.getFacet(PropertyClearFacet.class);
             assertNotNull(clearFacet);
-            assertTrue(clearFacet instanceof PropertyClearFacetForDomainEvent);
-            final PropertyClearFacetForDomainEvent clearFacetImpl = (PropertyClearFacetForDomainEvent) clearFacet;
+            assertTrue(clearFacet instanceof PropertyModifyFacetAbstract);
+            final PropertyModifyFacetAbstract clearFacetImpl = (PropertyModifyFacetAbstract) clearFacet;
             assertEquals(eventTypeOrigin, setterFacetImpl.getEventTypeOrigin());
             assertThat(clearFacetImpl.getEventType(), CausewayMatchers.classEqualTo(eventType));
         }
