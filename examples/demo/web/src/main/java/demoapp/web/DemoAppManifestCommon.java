@@ -29,15 +29,15 @@ import org.springframework.context.annotation.Import;
 import org.apache.causeway.extensions.cors.impl.CausewayModuleExtCors;
 import org.apache.causeway.extensions.secman.encryption.spring.CausewayModuleExtSecmanEncryptionSpring;
 import org.apache.causeway.extensions.secman.integration.CausewayModuleExtSecmanIntegration;
+import org.apache.causeway.extensions.secman.integration.authenticator.AuthenticatorSecmanAutoConfiguration;
 import org.apache.causeway.testing.h2console.ui.CausewayModuleTestingH2ConsoleUi;
 import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.CausewayModuleViewerRestfulObjectsJaxrsResteasy;
 import org.apache.causeway.viewer.restfulobjects.viewer.CausewayModuleViewerRestfulObjectsViewer;
 
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
-
 import demoapp.dom._infra.fixtures.DemoFixtureScript;
 import demoapp.web.security.PrototypeActionsVisibilityAdvisor;
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Makes the integral parts of the 'demo' web application.
@@ -47,6 +47,7 @@ import demoapp.web.security.PrototypeActionsVisibilityAdvisor;
     // Security Manager Extension (secman)
     CausewayModuleExtSecmanIntegration.class,
     CausewayModuleExtSecmanEncryptionSpring.class,
+    AuthenticatorSecmanAutoConfiguration.class,
 
     // REST
     CausewayModuleViewerRestfulObjectsViewer.class,
