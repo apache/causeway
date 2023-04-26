@@ -48,8 +48,7 @@ public abstract class DomainObjectXxxLifecycleEvent                             
 //end::class[]
         implements
         HasAsciiDocDescription,
-        ValueHolder<String>,
-        Comparable<DomainObjectXxxLifecycleEvent>
+        ValueHolder<String>
 //tag::class[]
 {
     public interface LifecycleEvent {                                                       // <.>
@@ -93,12 +92,6 @@ public abstract class DomainObjectXxxLifecycleEvent                             
 
     public abstract String getName();
     public abstract void setName(String value);
-
-    @Override
-    public int compareTo(final DomainObjectXxxLifecycleEvent o) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
 
 //tag::class[]
 }
