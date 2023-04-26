@@ -33,7 +33,6 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.domain.objects.DomainObject.xxxLifecycleEvent.jpa.DomainObjectXxxLifecycleEventJpa;
 
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 //tag::class[]
 @DomainObject(
         nature = Nature.ENTITY,
@@ -49,7 +48,8 @@ public abstract class DomainObjectXxxLifecycleEvent                             
 //end::class[]
         implements
         HasAsciiDocDescription,
-        ValueHolder<String>
+        ValueHolder<String>,
+        Comparable<DomainObjectXxxLifecycleEvent>
 //tag::class[]
 {
     public interface LifecycleEvent {                                                       // <.>
@@ -93,6 +93,12 @@ public abstract class DomainObjectXxxLifecycleEvent                             
 
     public abstract String getName();
     public abstract void setName(String value);
+
+    @Override
+    public int compareTo(final DomainObjectXxxLifecycleEvent o) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
 //tag::class[]
 }
