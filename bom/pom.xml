@@ -188,7 +188,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <togglz.version>3.3.3</togglz.version>
 
-        <vaadin.version>24.0.4</vaadin.version>
+        <vaadin.version>24.0.5</vaadin.version>
 
 		<!--  9.4.0 is last known good, before wicket put jupiter-api on the module graph -->
 		<!--  <wicket.version>936167650a</wicket.version> 28 Nov '22 build -->
@@ -3285,7 +3285,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                     <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>0.8.9</version>
+                        <version>0.8.10</version>
                         <executions>
                             <execution>
                                 <goals>

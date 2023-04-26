@@ -76,6 +76,13 @@
 		    <groupId>jakarta.mail</groupId>
 		    <artifactId>jakarta.mail-api</artifactId>
 		</dependency>
+		
+		<!-- required by EmailServiceDefault on v2, n/a f. v3
+		<dependency>
+    		<groupId>com.sun.mail</groupId>
+    		<artifactId>jakarta.mail</artifactId>
+		</dependency>
+		-->
 	
         <dependency>
             <groupId>org.apache.causeway.core</groupId>
