@@ -28,11 +28,11 @@ import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.services.repository.RepositoryService;
 
+import demoapp.dom.types.Samples;
 import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-
-import demoapp.dom.types.Samples;
+import lombok.val;
 
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class ValueHolderRepository<T, E extends ValueHolder<T>> {
@@ -65,12 +65,15 @@ public abstract class ValueHolderRepository<T, E extends ValueHolder<T>> {
         return all.isEmpty() ? Collections.emptyList() : Collections.singletonList(all.get(0));
     }
 
-    public void remove(Object entity) {
+    public void remove(final Object entity) {
         repositoryService.removeAndFlush(entity);
     }
 
-    public E create(T value) {
-        return repositoryService.persistAndFlush(newDetachedEntity(value));
+    public E create(final T value) {
+        // emits 'created' life-cycle event
+        val detachedEntity = repositoryService.detachedEntity(newDetachedEntity(value));
+        // persist
+        return repositoryService.persistAndFlush(detachedEntity);
     }
 
 
