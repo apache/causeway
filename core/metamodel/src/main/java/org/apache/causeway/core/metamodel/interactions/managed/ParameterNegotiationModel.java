@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.interactions.managed;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.UnaryOperator;
 import java.util.stream.IntStream;
 
 import org.springframework.lang.Nullable;
@@ -233,6 +234,16 @@ public class ParameterNegotiationModel {
     public void clearParamValue(final int paramIndex) {
         val emptyValue = adaptParamValuePojo(paramIndex, null);
         paramModels.getElseFail(paramIndex).getBindableParamValue().setValue(emptyValue);
+    }
+
+    public void updateParamValue(final int paramIndex, final @NonNull UnaryOperator<ManagedObject> updater) {
+        val bindableParamValue = paramModels.getElseFail(paramIndex).getBindableParamValue();
+        val newParamValue = updater.apply(bindableParamValue.getValue());
+        if (ManagedObjects.isNullOrUnspecifiedOrEmpty(newParamValue)) {
+            clearParamValue(paramIndex);
+        } else {
+            bindableParamValue.setValue(newParamValue);
+        }
     }
 
     @NonNull public ManagedObject adaptParamValuePojo(final int paramIndex,

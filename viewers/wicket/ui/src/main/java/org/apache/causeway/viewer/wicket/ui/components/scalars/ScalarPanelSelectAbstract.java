@@ -138,18 +138,8 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
             final @NonNull UiParameter paramModel,
             final @NonNull Optional<AjaxRequestTarget> target) {
 
-        val repaint = super.updateIfNecessary(paramModel, target);
-        final boolean choicesUpdated = updateChoices(this.select2);
-
-        if (repaint == Repaint.NOTHING) {
-            if (choicesUpdated) {
-                return Repaint.PARAM_ONLY;
-            } else {
-                return Repaint.NOTHING;
-            }
-        } else {
-            return repaint;
-        }
+        return super.updateIfNecessary(paramModel, target)
+                .max(Repaint.required(updateChoices(this.select2)));
     }
 
     private boolean updateChoices(final @Nullable Select2 select2) {

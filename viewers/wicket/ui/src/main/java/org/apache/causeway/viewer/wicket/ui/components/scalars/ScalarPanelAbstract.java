@@ -22,7 +22,6 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -47,7 +46,6 @@ import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
 import org.apache.causeway.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.commons.model.decorators.FormLabelDecorator.FormLabelDecorationModel;
@@ -91,17 +89,6 @@ implements ScalarModelChangeListener {
         MARKUP,
         MULTILINE,
         TEXT_ONLY,
-    }
-
-    /**
-     * Order matters: ascending order of precedence, eg. when used in reductions.
-     */
-    public enum Repaint {
-        NOTHING,
-        PARAM_ONLY,
-        ENTIRE_FORM,;
-        public boolean isParamOnly() { return this == PARAM_ONLY; }
-        public boolean isEntireForm() { return this == ENTIRE_FORM; }
     }
 
     public enum RenderScenario {
@@ -158,6 +145,28 @@ implements ScalarModelChangeListener {
                     : READONLY;
         }
 
+    }
+
+    /**
+     * During AJAX requests, first the {@link ScalarModel} gets updated,
+     * then later, changed components get a chance to participate in the partial page update
+     * based on whether their models have changed.
+     * <p>
+     * This enum helps evaluate whether components using this model need repainting.
+     */
+    public enum Repaint {
+        OPTIONAL,
+        REQUIRED;
+        public static Repaint required(final boolean needsRepainting) {
+            return needsRepainting ? Repaint.REQUIRED : Repaint.OPTIONAL;
+        }
+        public boolean isOptional() { return this == OPTIONAL; }
+        public boolean isRequired() { return this == REQUIRED; }
+        public Repaint max(final @NonNull Repaint other) {
+            return this.ordinal()>=other.ordinal()
+                    ? this
+                    : other;
+        }
     }
 
     // -- CONSTRUCTION
@@ -473,7 +482,7 @@ implements ScalarModelChangeListener {
             return Collections.unmodifiableCollection(changeListeners);
         }
 
-        public void addChangeListener(final ScalarModelChangeListener listener) {
+        void addChangeListener(final ScalarModelChangeListener listener) {
             changeListeners.add(listener);
         }
     }
@@ -609,16 +618,13 @@ implements ScalarModelChangeListener {
     * @param target - in case there's more to be repainted...
     *
     * @return - {@link Repaint} as a result of these pending arguments<ul>
-    * <li>{@link Repaint#NOTHING} if nothing changed</li>
-    * <li>{@link Repaint#PARAM_ONLY} if param value changed</li>
-    * <li>{@link Repaint#ENTIRE_FORM} if layout changed</li>
+    * <li>{@link Repaint#OPTIONAL} if nothing changed</li>
+    * <li>{@link Repaint#REQUIRED} if param value changed</li>
     * </ul>
     */
    public Repaint updateIfNecessary(
            final @NonNull UiParameter paramModel,
            final @NonNull Optional<AjaxRequestTarget> target) {
-
-       val scalarModel = scalarModel();
 
        // visibility
        val visibilityBefore = isVisible() && isVisibilityAllowed();
@@ -637,33 +643,16 @@ implements ScalarModelChangeListener {
            onNotEditable(usabilityConsent.getReasonAsString().orElse(null), target);
        }
 
-       val paramValue = paramModel.getValue();
-       val valueChanged = !Objects.equals(scalarModel.getObject(), paramValue);
-
-       if(valueChanged) {
-           if(ManagedObjects.isNullOrUnspecifiedOrEmpty(paramValue)) {
-               scalarModel.setObject(null);
-           } else {
-               scalarModel.setObject(paramValue);
-           }
-       }
-
-       // repaint the entire form if visibility has changed
+       // repaint the param form if visibility has changed
        if (!visibilityBefore || !visibilityAfter) {
-           return Repaint.ENTIRE_FORM;
+           return Repaint.REQUIRED;
        }
-
        // repaint the param if usability has changed
        if (!usabilityAfter || !usabilityBefore) {
-           return Repaint.PARAM_ONLY;
+           return Repaint.REQUIRED;
        }
 
-       // also repaint the param if its pending arg has changed.
-       return valueChanged
-               ? Repaint.PARAM_ONLY
-               : Repaint.NOTHING;
+       return Repaint.OPTIONAL;
    }
-
-
 
 }

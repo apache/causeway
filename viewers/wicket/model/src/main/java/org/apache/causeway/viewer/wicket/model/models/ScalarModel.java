@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.wicket.model.models;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalInt;
 
@@ -36,6 +37,7 @@ import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
+import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.hints.HasRenderingHints;
@@ -133,19 +135,31 @@ implements HasRenderingHints, UiScalar, LinksProvider, FormExecutorContext {
     /**
      * Sets given ManagedObject as new proposed value.
      * (override, so we don't return the target model, we are chained to)
+     * <p>
+     * This happens during Wicket's {@code formComponent.updateModel()},
+     * which updates the models first, before later calling {@code onUpdate(target)}
+     * to repaint those components, that have a changed/dirty model.
+     * <p>
+     * in other words: changed components get a chance to participate in the partial page update
+     * based on whether their models have changed
      */
     @Override
     public final void setObject(final ManagedObject newValue) {
 
-        _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-            _Debug.log("[PENDING MODEL] about to set new value: %s", newValue==null?"null":newValue.getPojo());
+        proposedValue().update(oldValue->{
+
+            _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
+                val oldPojo = MmUnwrapUtils.single(oldValue);
+                val newPojo = MmUnwrapUtils.single(newValue);
+                val changed = !Objects.equals(oldPojo, newPojo);
+                _Debug.log("[PENDING MODEL] about to update %s value: %s -> %s (changed=%b)",
+                        this.isParameter() ? "parameter" : "property",
+                        oldPojo, newPojo, changed);
+            });
+
+            return newValue;
         });
 
-        proposedValue().getValue().setValue(newValue);
-
-        _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-            _Debug.log("[PENDING MODEL] new value set to property");
-        });
     }
 
     @Override

@@ -29,8 +29,6 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.commons.model.decorators.ConfirmDecorator.ConfirmDecorationModel;
 import org.apache.causeway.viewer.commons.model.layout.UiPlacementDirection;
@@ -140,47 +138,27 @@ extends PromptFormAbstract<ActionModel> {
         // only updates subsequent parameter panels starting from (paramNumberUpdated + 1)
         final int skipCount = paramNumberUpdated + 1; // eg. if paramNumberUpdated=0 then skipCount=1
 
-        val paramCount = updatedParamModel.getMetaModel().getAction().getParameterCount();
-        val maxCapacity = paramCount - skipCount; // just an optimization, not strictly required
-        val paramOnlyUpdateRequestsHavingParamIndex = _Lists.<Integer>newArrayList(maxCapacity);
+        actionModel.streamPendingParamUiModels()
+        .skip(skipCount)
+        .forEach(paramModel->{
+            val paramIndexForReassessment = paramModel.getParameterIndex();
+            val paramPanel = paramPanels.get(paramIndexForReassessment);
 
-        val formRepaint = actionModel.streamPendingParamUiModels()
-            .skip(skipCount)
-            .map(paramModel->{
+            var paramRepaint =
+                    // potentially updates the paramNegotiationModel
+                    Repaint.required(paramModel.getMetaModel().reassessDefault(paramNegotiationModel));
 
-                val paramIndexForReassessment = paramModel.getParameterIndex();
-                val paramPanel = paramPanels.get(paramIndexForReassessment);
-                val actionParameter = paramModel.getMetaModel();
+            _Xray.reassessedDefault(paramIndexForReassessment, paramNegotiationModel);
 
-                // updates the paramNegotiationModel
-                actionParameter.reassessDefault(paramNegotiationModel);
-                _Xray.reassessedDefault(paramIndexForReassessment, paramNegotiationModel);
+            /* repaint is required, either because of a changed value during reassessment above
+             * or because visibility or usability have changed */
+            paramRepaint = paramRepaint.max(
+                    paramPanel.updateIfNecessary(paramModel, Optional.of(target)));
 
-                // repaint is calculated based on changes to the
-                val paramRepaint = paramPanel.updateIfNecessary(paramModel, Optional.of(target));
-                if(paramRepaint.isParamOnly()) {
-                    paramOnlyUpdateRequestsHavingParamIndex.add(paramIndexForReassessment);
-                }
-
-                return paramRepaint;
-            })
-            .reduce(Repaint.NOTHING, (a, b)->a.ordinal()>b.ordinal() ? a : b);
-
-        switch (formRepaint) {
-        case ENTIRE_FORM:
-            target.add(this);
-            break;
-        case PARAM_ONLY:
-            paramOnlyUpdateRequestsHavingParamIndex.forEach(paramIndex->{
-                val paramPanel = paramPanels.get(paramIndex);
+            if(paramRepaint.isRequired()) {
                 paramPanel.repaint(target);
-            });
-            break;
-        case NOTHING:
-            break;
-        default:
-            throw _Exceptions.unmatchedCase(formRepaint);
-        }
+            }
+        });
 
         _Xray.afterParamFormUpdate(paramNumberUpdated, paramNegotiationModel);
 
