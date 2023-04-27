@@ -37,10 +37,10 @@ import lombok.Getter;
 
 public class PdfJsDemoObjectWithBlob_createUpTo5_fakeData extends FixtureScript {
 
-    @javax.inject.Inject
+    @import jakarta.inject.Inject
     PdfJsDemoObjectWithBlobMenu demoObjectMenu;
 
-    @javax.inject.Inject
+    @import jakarta.inject.Inject
     FakeDataService fakeDataService;
 
     @Getter

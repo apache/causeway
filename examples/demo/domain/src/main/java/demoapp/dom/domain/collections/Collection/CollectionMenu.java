@@ -29,6 +29,12 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.factory.FactoryService;
 
+import demoapp.dom._infra.samples.NameSamples;
+import demoapp.dom.domain.actions.Action.typeOf.ActionTypeOfPage;
+import demoapp.dom.domain.actions.Action.typeOf.child.ActionTypeOfChildVm;
+
+import demoapp.dom.domain.collections.Collection.typeOf.child.CollectionTypeOfChildVm;
+
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -50,20 +56,26 @@ public class CollectionMenu {
     @ActionLayout(cssClassFa="fa-asterisk", describedAs = "Class of the domain event emitted when interacting with the collection")
     public CollectionDomainEventPage domainEvent(){
         val page = new CollectionDomainEventPage();
-        page.addChild("#1");
-        page.addChild("#2");
-        page.addChild("#3");
-        page.addOtherChild("#1");
-        page.addOtherChild("#2");
-        page.addOtherChild("#3");
+        samples.stream()
+                .forEach(page::addChild);
+        samples.stream()
+                .forEach(page::addOtherChild);
         return page;
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-shapes", describedAs = "Element type of collections")
     public CollectionTypeOfPage typeOf(){
-        return new CollectionTypeOfPage();
+        val page = new CollectionTypeOfPage();
+        samples.stream()
+                .map(CollectionTypeOfChildVm::new)
+                .forEach(e -> page.getChildren().add(e));
+        samples.stream()
+                .map(CollectionTypeOfChildVm::new)
+                .forEach(e -> page.getOtherChildren().add(e));
+        return page;
     }
 
+    final NameSamples samples;
 
 }
