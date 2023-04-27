@@ -34,7 +34,7 @@ include::DomainObjectXxxDomainEventPage.java[tags=class]
 <.> the property domain event class to emit (if not annotated at the member level)
 <.> the collection domain event class to emit (if not annotated at the member level)
 <.> marker interface.
-All the domain event classes implement this interface, and the subscriber (see below) subscribes on this type
+All the domain event classes implement this interface, and the subscriber (see below) subscribes on this type.
 <.> the property can be edited directly
 <.> the property can also be edited by this action.
 The property can also be edited via a mixin action (see next)
