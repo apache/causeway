@@ -201,7 +201,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <wicket-webjars.version>3.0.7</wicket-webjars.version>
         <wicket-viewer-jquery.version>3.6.4</wicket-viewer-jquery.version> <!--  as served by wicket via webjars -->
 
-        <wicketstuff.version>9.12.0</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
+        <wicketstuff.version>9.13.0</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
 
 		<!-- OTHER -->
 
