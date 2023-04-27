@@ -20,6 +20,7 @@ package demoapp.dom.domain.collections.Collection.typeOf;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -28,11 +29,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
+import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.SemanticsOf;
+
+import demoapp.dom.domain.collections.Collection.typeOf.child.CollectionTypeOfChildVm;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,27 +47,37 @@ import lombok.Setter;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.domain._entities.DemoEntity;
 
-//tag::class[]
-@DomainObject(
-        nature=Nature.VIEW_MODEL,
-        editing = Editing.ENABLED)
-@Named("demo.CollectionTypeOfVm")
+@Named("demo.CollectionTypeOfPage")
+@DomainObject(nature=Nature.VIEW_MODEL)
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @NoArgsConstructor
 public class CollectionTypeOfPage implements HasAsciiDocDescription {
 
-    @ObjectSupport public String title() {
+    @ObjectSupport
+    public String title() {
         return "@Collection#typeOf";
     }
 
-//tag::collection[]
-    @Collection(
-            typeOf = DemoEntity.class)
-    @XmlTransient
-    @Getter @Setter
-    private List<DemoEntity> collection = new ArrayList<>();
-//end::collection[]
+//tag::class-collections-children[]
+    private List<CollectionTypeOfChildVm> children = new ArrayList<>();
+
+    @Collection(typeOf = CollectionTypeOfChildVm.class)     // <.>
+    @CollectionLayout()
+    public List getChildren() {                             // <.>
+        return children;
+    }
+//end::class-collections-children[]
+
+//tag::class-collections-other-children[]
+    private List<CollectionTypeOfChildVm> otherChildren = new ArrayList<>();
+
+    @Collection()                                           // <.>
+    @CollectionLayout()
+    public List getOtherChildren() {                        // <.>
+        return otherChildren;
+    }
+//end::class-collections-other-children[]
+
 }
-//end::class[]
