@@ -100,7 +100,7 @@ implements ChoiceTitleHandler {
     }
 
     @Override
-    protected void onNotEditable(final String disableReason, final Optional<AjaxRequestTarget> target) {
+    protected void onNotEditable(final String disableReason, final AjaxRequestTarget target) {
         super.onNotEditable(disableReason, target);
         if(isCompactFormat) return;
         setTitleAttribute(disableReason);
@@ -108,7 +108,7 @@ implements ChoiceTitleHandler {
     }
 
     @Override
-    protected void onEditable(final Optional<AjaxRequestTarget> target) {
+    protected void onEditable(final AjaxRequestTarget target) {
         super.onEditable(target);
         if(isCompactFormat) return;
         clearTitleAttribute();

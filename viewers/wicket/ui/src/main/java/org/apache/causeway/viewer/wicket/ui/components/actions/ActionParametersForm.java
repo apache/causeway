@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.actions;
 
-import java.util.Optional;
 import java.util.function.Consumer;
 
 import org.apache.wicket.Component;
@@ -153,7 +152,7 @@ extends PromptFormAbstract<ActionModel> {
             /* repaint is required, either because of a changed value during reassessment above
              * or because visibility or usability have changed */
             paramRepaint = paramRepaint.max(
-                    paramPanel.updateIfNecessary(paramModel, Optional.of(target)));
+                    paramPanel.updateIfNecessary(paramModel, target));
 
             if(paramRepaint.isRequired()) {
                 paramPanel.repaint(target);

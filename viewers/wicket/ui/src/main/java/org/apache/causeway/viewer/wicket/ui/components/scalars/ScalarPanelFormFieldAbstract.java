@@ -234,17 +234,17 @@ extends ScalarPanelAbstract2 {
     }
 
     @Override
-    protected void onNotEditable(final String disableReason, final Optional<AjaxRequestTarget> target) {
+    protected void onNotEditable(final String disableReason, final AjaxRequestTarget target) {
         formComponentEnable(false);
         setTooltip(disableReason);
-        target.ifPresent(this::formComponentAddTo);
+        formComponentAddTo(target);
     }
 
     @Override
-    protected void onEditable(final Optional<AjaxRequestTarget> target) {
+    protected void onEditable(final AjaxRequestTarget target) {
         formComponentEnable(true);
         clearTooltip();
-        target.ifPresent(this::formComponentAddTo);
+        formComponentAddTo(target);
     }
 
     // -- XRAY

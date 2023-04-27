@@ -19,7 +19,6 @@
 package org.apache.causeway.viewer.wicket.ui.components.scalars;
 
 import java.io.Serializable;
-import java.util.Optional;
 import java.util.function.Function;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -136,18 +135,10 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
     @Override
     public final Repaint updateIfNecessary(
             final @NonNull UiParameter paramModel,
-            final @NonNull Optional<AjaxRequestTarget> target) {
+            final @NonNull AjaxRequestTarget target) {
 
         return super.updateIfNecessary(paramModel, target)
-                .max(Repaint.required(updateChoices(this.select2)));
-    }
-
-    private boolean updateChoices(final @Nullable Select2 select2) {
-        if (select2 == null) {
-            return false;
-        }
-        select2.rebuildChoiceProvider();
-        return true;
+                .max(Repaint.required(this.select2!=null));
     }
 
     /**

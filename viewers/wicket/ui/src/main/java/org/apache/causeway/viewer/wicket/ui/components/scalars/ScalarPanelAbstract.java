@@ -22,7 +22,6 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Supplier;
 
 import org.apache.wicket.Component;
@@ -413,14 +412,14 @@ implements ScalarModelChangeListener {
     /**
      * The widget is no longer editable, but should be possible to activate into edit mode.
      */
-    protected void onNotEditable(final String disableReason, final Optional<AjaxRequestTarget> target) {
+    protected void onNotEditable(final String disableReason, final AjaxRequestTarget target) {
     }
 
     /**
      * The widget should be made editable.
      *
      */
-    protected void onEditable(final @NonNull Optional<AjaxRequestTarget> target) {
+    protected void onEditable(final @NonNull AjaxRequestTarget target) {
     }
 
     private void addCssFromMetaModel() {
@@ -624,7 +623,7 @@ implements ScalarModelChangeListener {
     */
    public Repaint updateIfNecessary(
            final @NonNull UiParameter paramModel,
-           final @NonNull Optional<AjaxRequestTarget> target) {
+           final @NonNull AjaxRequestTarget target) {
 
        // visibility
        val visibilityBefore = isVisible() && isVisibilityAllowed();

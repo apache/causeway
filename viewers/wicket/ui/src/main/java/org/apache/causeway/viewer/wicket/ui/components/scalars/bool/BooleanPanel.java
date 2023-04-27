@@ -106,17 +106,15 @@ extends ScalarPanelFormFieldAbstract<Boolean> {
     }
 
     @Override
-    protected void onNotEditable(final String disableReason, final Optional<AjaxRequestTarget> target) {
+    protected void onNotEditable(final String disableReason, final AjaxRequestTarget target) {
         if(checkBox==null) return;
         checkBox.setEnabled(false);
         Wkt.attributeReplace(checkBox, "title", disableReason);
-        target.ifPresent(ajax->{
-            ajax.add(checkBox);
-        });
+        target.add(checkBox);
     }
 
     @Override
-    protected void onEditable(final Optional<AjaxRequestTarget> target) {
+    protected void onEditable(final AjaxRequestTarget target) {
         if(checkBox==null) return;
         checkBox.setEnabled(true);
     }
