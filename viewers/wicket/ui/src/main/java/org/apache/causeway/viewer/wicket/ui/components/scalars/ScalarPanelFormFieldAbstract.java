@@ -22,7 +22,6 @@ import java.util.Optional;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.Model;
 import org.springframework.lang.Nullable;
@@ -234,17 +233,19 @@ extends ScalarPanelAbstract2 {
     }
 
     @Override
-    protected void onNotEditable(final String disableReason, final AjaxRequestTarget target) {
+    protected void onNotEditable(final String disableReason) {
+        super.onNotEditable(disableReason);
         formComponentEnable(false);
         setTooltip(disableReason);
-        formComponentAddTo(target);
+        //formComponentAddTo(target); //TODO[CAUSEWAY-3425] safe to remove?
     }
 
     @Override
-    protected void onEditable(final AjaxRequestTarget target) {
+    protected void onEditable() {
+        super.onEditable();
         formComponentEnable(true);
         clearTooltip();
-        formComponentAddTo(target);
+        //formComponentAddTo(target); //TODO[CAUSEWAY-3425] safe to remove?
     }
 
     // -- XRAY
@@ -267,14 +268,15 @@ extends ScalarPanelAbstract2 {
         }
     }
 
-    private void formComponentAddTo(final AjaxRequestTarget ajax) {
-        if(getFormComponent()!=null) {
-            ajax.add(getFormComponent());
-        }
-        if(inlinePromptLink!=null) {
-            ajax.add(inlinePromptLink);
-        }
-    }
+  //TODO[CAUSEWAY-3425] safe to remove?
+//    private void formComponentAddTo(final AjaxRequestTarget ajax) {
+//        if(getFormComponent()!=null) {
+//            ajax.add(getFormComponent());
+//        }
+//        if(inlinePromptLink!=null) {
+//            ajax.add(inlinePromptLink);
+//        }
+//    }
 
     private void setTooltip(final String tooltip) {
         WktTooltips.addTooltip(getFormComponent(), tooltip);

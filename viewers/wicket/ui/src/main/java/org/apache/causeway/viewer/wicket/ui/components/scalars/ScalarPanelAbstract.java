@@ -412,14 +412,14 @@ implements ScalarModelChangeListener {
     /**
      * The widget is no longer editable, but should be possible to activate into edit mode.
      */
-    protected void onNotEditable(final String disableReason, final AjaxRequestTarget target) {
+    protected void onNotEditable(final String disableReason) {
     }
 
     /**
      * The widget should be made editable.
      *
      */
-    protected void onEditable(final @NonNull AjaxRequestTarget target) {
+    protected void onEditable() {
     }
 
     private void addCssFromMetaModel() {
@@ -612,18 +612,15 @@ implements ScalarModelChangeListener {
     }
 
     /**
-    *
-    * @param paramModel - the action being invoked
-    * @param target - in case there's more to be repainted...
-    *
-    * @return - {@link Repaint} as a result of these pending arguments<ul>
-    * <li>{@link Repaint#OPTIONAL} if nothing changed</li>
-    * <li>{@link Repaint#REQUIRED} if param value changed</li>
-    * </ul>
-    */
+     * @param paramModel - the action being invoked
+     *
+     * @return - {@link Repaint} as a result of these pending arguments<ul>
+     * <li>{@link Repaint#OPTIONAL} if nothing changed</li>
+     * <li>{@link Repaint#REQUIRED} if param value changed</li>
+     * </ul>
+     */
    public Repaint updateIfNecessary(
-           final @NonNull UiParameter paramModel,
-           final @NonNull AjaxRequestTarget target) {
+           final @NonNull UiParameter paramModel) {
 
        // visibility
        val visibilityBefore = isVisible() && isVisibilityAllowed();
@@ -637,9 +634,9 @@ implements ScalarModelChangeListener {
        val usabilityBefore = isEnabled();
        val usabilityAfter = usabilityConsent.isAllowed();
        if(usabilityAfter) {
-           onEditable(target);
+           onEditable();
        } else {
-           onNotEditable(usabilityConsent.getReasonAsString().orElse(null), target);
+           onNotEditable(usabilityConsent.getReasonAsString().orElse(null));
        }
 
        // repaint the param form if visibility has changed

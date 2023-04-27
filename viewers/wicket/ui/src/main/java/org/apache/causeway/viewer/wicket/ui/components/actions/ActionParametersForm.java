@@ -152,7 +152,7 @@ extends PromptFormAbstract<ActionModel> {
             /* repaint is required, either because of a changed value during reassessment above
              * or because visibility or usability have changed */
             paramRepaint = paramRepaint.max(
-                    paramPanel.updateIfNecessary(paramModel, target));
+                    paramPanel.updateIfNecessary(paramModel));
 
             if(paramRepaint.isRequired()) {
                 paramPanel.repaint(target);

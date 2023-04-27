@@ -223,6 +223,18 @@ extends ScalarPanelAbstract {
         return "form-control form-control-sm";
     }
 
+    @Override
+    protected void onNotEditable(final String disableReason) {
+        super.onNotEditable(disableReason);
+        this.setupInlinePrompt(); // recreate additional buttons
+    }
+
+    @Override
+    protected void onEditable() {
+        super.onEditable();
+        this.setupInlinePrompt(); // recreate additional buttons
+    }
+
     // -- HELPER
 
     private void addOnClickBehaviorTo(

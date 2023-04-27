@@ -133,11 +133,8 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
      * called from onUpdate callback
      */
     @Override
-    public final Repaint updateIfNecessary(
-            final @NonNull UiParameter paramModel,
-            final @NonNull AjaxRequestTarget target) {
-
-        return super.updateIfNecessary(paramModel, target)
+    public final Repaint updateIfNecessary(final @NonNull UiParameter paramModel) {
+        return super.updateIfNecessary(paramModel)
                 .max(Repaint.required(this.select2!=null));
     }
 
