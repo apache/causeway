@@ -155,7 +155,7 @@ extends PromptFormAbstract<ActionModel> {
                     paramPanel.updateIfNecessary(paramModel));
 
             if(paramRepaint.isRequired()) {
-                paramPanel.repaint(target);
+                target.add(paramPanel);
             }
         });
 

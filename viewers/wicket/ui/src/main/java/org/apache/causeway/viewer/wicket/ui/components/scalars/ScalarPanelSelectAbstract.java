@@ -138,14 +138,4 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
                 .max(Repaint.required(this.select2!=null));
     }
 
-    /**
-     * Repaints just the Select2 component
-     *
-     * @param target The Ajax request handler
-     */
-    @Override
-    public final void repaint(final AjaxRequestTarget target) {
-        target.add(this);
-    }
-
 }

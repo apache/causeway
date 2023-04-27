@@ -600,16 +600,7 @@ implements ScalarModelChangeListener {
                     : null;
     }
 
-    // ///////////////////////////////////////////////////////////////////
-
-    /**
-     * Repaints this panel of just some of its children
-     *
-     * @param target The Ajax request handler
-     */
-    public void repaint(final AjaxRequestTarget target) {
-        target.add(this);
-    }
+    // --
 
     /**
      * @param paramModel - the action being invoked
@@ -639,11 +630,11 @@ implements ScalarModelChangeListener {
            onNotEditable(usabilityConsent.getReasonAsString().orElse(null));
        }
 
-       // repaint the param form if visibility has changed
+       // repaint the param panel if visibility has changed
        if (!visibilityBefore || !visibilityAfter) {
            return Repaint.REQUIRED;
        }
-       // repaint the param if usability has changed
+       // repaint the param panel if usability has changed
        if (!usabilityAfter || !usabilityBefore) {
            return Repaint.REQUIRED;
        }
