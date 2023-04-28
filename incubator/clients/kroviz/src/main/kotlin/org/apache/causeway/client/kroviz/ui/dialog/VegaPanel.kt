@@ -18,17 +18,13 @@
  */
 package org.apache.causeway.client.kroviz.ui.dialog
 
-import io.kvision.utils.obj
-import org.apache.causeway.client.kroviz.core.event.ReplayController
-import org.apache.causeway.client.kroviz.to.ValueType
-import org.apache.causeway.client.kroviz.ui.core.FormItem
-import org.apache.causeway.client.kroviz.ui.core.RoDialog
-import org.apache.causeway.client.kroviz.ui.core.ViewManager
 import io.kvision.panel.SimplePanel
+import io.kvision.utils.obj
 import org.apache.causeway.client.kroviz.utils.js.Vega
 
 class VegaPanel : SimplePanel() {
 
+    // https://vega.github.io/vega/examples/
     //Default values
     val spec = obj {
         this["\$schema"] = "https://vega.github.io/schema/vega/v5.json"

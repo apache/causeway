@@ -36,6 +36,8 @@ kotlin.sourceSets.all {
 repositories {
     maven ("https://repository.int.kn/nexus/content/repositories/thirdparty/")
     mavenCentral()
+    jcenter()
+    google()
     mavenLocal()
 }
 
@@ -108,7 +110,7 @@ kotlin {
         implementation(npm("xterm", "4.15.0", false))
         implementation(npm("pdfjs", "2.4.7", false))
         implementation(npm("vega", "5.22.1", false))
-//        implementation(npm("vega-lite", "5.6.0", true))
+        implementation(npm("vega-lite", "5.6.0", true))
         implementation(npm("element-resize-event", "3.0.6", false))
         implementation(npm("asciidoctor", "2.2.6", false))
     }
@@ -123,7 +125,6 @@ afterEvaluate {
     tasks {
         create("jar", Jar::class) {
             dependsOn("browserProductionWebpack")
-//            manifest.writeTo("$buildDir/mymanifest.mf")
             group = "package"
             destinationDirectory.set(file("$buildDir/libs"))
             val distribution =
@@ -143,4 +144,7 @@ afterEvaluate {
         }
     }
 
+}
+dependencies {
+    implementation(kotlin("stdlib-js"))
 }
