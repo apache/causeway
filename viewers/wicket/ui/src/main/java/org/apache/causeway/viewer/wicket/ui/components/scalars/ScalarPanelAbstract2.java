@@ -26,22 +26,17 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.repeater.RepeatingView;
-import org.apache.wicket.model.IModel;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
-import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
 import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.viewer.commons.model.components.UiString;
 import org.apache.causeway.viewer.wicket.model.models.InlinePromptContext;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
-import org.apache.causeway.viewer.wicket.model.value.OptionsBasedOnValueSemantics;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFragement;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.PromptFragment;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent.Options;
 import org.apache.causeway.viewer.wicket.ui.panels.FormExecutorDefault;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
@@ -159,19 +154,6 @@ extends ScalarPanelAbstract {
 
     // -- SEMANTICS
 
-    private OptionsBasedOnValueSemantics getSemantics(final ScalarModel scalarModel) {
-        return new OptionsBasedOnValueSemantics(scalarModel.getMetaModel(), scalarModel.isEditMode()
-                ? ScalarRepresentation.EDITING
-                : ScalarRepresentation.VIEWING);
-    }
-
-    private MarkupComponent markupComponent(final String id, final IModel<String> model) {
-        return new MarkupComponent(id, model,
-                Options.builder()
-                .syntaxHighlighter(getSemantics(scalarModel()).getSyntaxHighlighter())
-                .build());
-    }
-
     private boolean isUsingTextarea() {
         if(getRenderScenario().isCompact()
                 || getFormatModifiers().contains(FormatModifier.MARKUP)
@@ -221,6 +203,16 @@ extends ScalarPanelAbstract {
 
     protected String obtainInlinePromptLinkCssIfAny() {
         return "form-control form-control-sm";
+    }
+
+    @Override
+    protected void onMakeNotEditable(final String disableReason) {
+        this.setupInlinePrompt(); // recreate additional buttons
+    }
+
+    @Override
+    protected void onMakeEditable() {
+        this.setupInlinePrompt(); // recreate additional buttons
     }
 
     // -- HELPER

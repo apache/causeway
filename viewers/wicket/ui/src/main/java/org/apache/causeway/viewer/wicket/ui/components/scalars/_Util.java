@@ -30,6 +30,7 @@ import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -45,9 +46,20 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 class _Util {
 
+    /**
+     * Whether to prevent tabbing into non-editable widgets.
+     */
+    boolean isPropertyWithEnterEditNotAvailable(final ScalarModel scalarModel) {
+        return scalarModel.isProperty()
+                && scalarModel.getMode() == ScalarRepresentation.VIEWING
+                && (scalarModel.getPromptStyle().isDialogAny()
+                        || !canEnterEditMode(scalarModel));
+    }
+
     boolean canPropertyEnterInlineEditDirectly(final ScalarModel scalarModel) {
         return scalarModel.getPromptStyle().isInline()
-                && scalarModel.canEnterEditMode();
+                && scalarModel.isViewMode()
+                && !scalarModel.disabledReason().isPresent();
     }
 
     boolean canParameterEnterNestedEdit(final ScalarModel scalarModel) {
@@ -80,21 +92,6 @@ class _Util {
                 .collect(Can.toCan());
     }
 
-    private Optional<LinkAndLabel> toLinkAndLabelNoRuleChecking(
-            final @Nullable ObjectAction action,
-            final ScalarModel scalarModel) {
-        return Optional.ofNullable(action)
-        .map(LinkAndLabelFactory.forPropertyOrParameter(scalarModel));
-    }
-
-    private Optional<LinkAndLabel> toLinkAndLabelWithRuleChecking(
-            final @Nullable ObjectAction action,
-            final ScalarModel scalarModel) {
-        return toLinkAndLabelNoRuleChecking(action, scalarModel)
-        .filter(LinkAndLabel::isVisible)
-        .filter(LinkAndLabel::isEnabled);
-    }
-
     IValidator<Object> createValidatorFor(final ScalarModel scalarModel) {
         return new IValidator<Object>() {
             private static final long serialVersionUID = 1L;
@@ -108,6 +105,28 @@ class _Util {
                 });
             }
         };
+    }
+
+    // -- HELPER
+
+    private boolean canEnterEditMode(final ScalarModel scalarModel) {
+        return scalarModel.isViewMode()
+                && !scalarModel.disabledReason().isPresent();
+    }
+
+    private Optional<LinkAndLabel> toLinkAndLabelNoRuleChecking(
+            final @Nullable ObjectAction action,
+            final ScalarModel scalarModel) {
+        return Optional.ofNullable(action)
+        .map(LinkAndLabelFactory.forPropertyOrParameter(scalarModel));
+    }
+
+    private Optional<LinkAndLabel> toLinkAndLabelWithRuleChecking(
+            final @Nullable ObjectAction action,
+            final ScalarModel scalarModel) {
+        return toLinkAndLabelNoRuleChecking(action, scalarModel)
+        .filter(LinkAndLabel::isVisible)
+        .filter(LinkAndLabel::isEnabled);
     }
 
     private boolean guardAgainstInvalidCompositeMixinScenarios(final LinkAndLabel linkAndLabel) {
@@ -165,9 +184,6 @@ class _Util {
                         .getObjectManager()
                         .adapt(valueObject));
     }
-
-
-    // -- HELPER
 
     private Optional<ObjectAction> lookupCompositeValueMixinForFeature(final ScalarModel scalarModel) {
         val spec = scalarModel.getScalarTypeSpec();

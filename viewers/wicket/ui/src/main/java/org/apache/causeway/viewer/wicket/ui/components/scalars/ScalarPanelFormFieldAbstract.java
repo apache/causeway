@@ -22,7 +22,6 @@ import java.util.Optional;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.Model;
 import org.springframework.lang.Nullable;
@@ -129,8 +128,8 @@ extends ScalarPanelAbstract2 {
         formGroup.add(fieldFrame = createFieldFrame());
 
         formComponent.setRequired(scalarModel.isRequired());
-        if(scalarModel.isRequired()
-                && scalarModel.isEnabled()) {
+
+        if(scalarModel.isShowMandatoryIndicator()) {
             Wkt.cssAppend(formGroup, "mandatory");
         }
 
@@ -234,17 +233,19 @@ extends ScalarPanelAbstract2 {
     }
 
     @Override
-    protected void onNotEditable(final String disableReason, final Optional<AjaxRequestTarget> target) {
+    protected void onMakeNotEditable(final String disableReason) {
+        super.onMakeNotEditable(disableReason);
         formComponentEnable(false);
         setTooltip(disableReason);
-        target.ifPresent(this::formComponentAddTo);
+        //formComponentAddTo(target); //TODO[CAUSEWAY-3425] safe to remove?
     }
 
     @Override
-    protected void onEditable(final Optional<AjaxRequestTarget> target) {
+    protected void onMakeEditable() {
+        super.onMakeEditable();
         formComponentEnable(true);
         clearTooltip();
-        target.ifPresent(this::formComponentAddTo);
+        //formComponentAddTo(target); //TODO[CAUSEWAY-3425] safe to remove?
     }
 
     // -- XRAY
@@ -267,14 +268,15 @@ extends ScalarPanelAbstract2 {
         }
     }
 
-    private void formComponentAddTo(final AjaxRequestTarget ajax) {
-        if(getFormComponent()!=null) {
-            ajax.add(getFormComponent());
-        }
-        if(inlinePromptLink!=null) {
-            ajax.add(inlinePromptLink);
-        }
-    }
+  //TODO[CAUSEWAY-3425] safe to remove?
+//    private void formComponentAddTo(final AjaxRequestTarget ajax) {
+//        if(getFormComponent()!=null) {
+//            ajax.add(getFormComponent());
+//        }
+//        if(inlinePromptLink!=null) {
+//            ajax.add(inlinePromptLink);
+//        }
+//    }
 
     private void setTooltip(final String tooltip) {
         WktTooltips.addTooltip(getFormComponent(), tooltip);

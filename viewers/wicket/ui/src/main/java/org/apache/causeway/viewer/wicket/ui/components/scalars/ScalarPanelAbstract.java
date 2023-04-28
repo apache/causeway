@@ -22,8 +22,6 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Supplier;
 
 import org.apache.wicket.Component;
@@ -43,11 +41,11 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.debug._Probe.EntryPoint;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
 import org.apache.causeway.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.commons.model.decorators.FormLabelDecorator.FormLabelDecorationModel;
@@ -91,17 +89,6 @@ implements ScalarModelChangeListener {
         MARKUP,
         MULTILINE,
         TEXT_ONLY,
-    }
-
-    /**
-     * Order matters: ascending order of precedence, eg. when used in reductions.
-     */
-    public enum Repaint {
-        NOTHING,
-        PARAM_ONLY,
-        ENTIRE_FORM,;
-        public boolean isParamOnly() { return this == PARAM_ONLY; }
-        public boolean isEntireForm() { return this == ENTIRE_FORM; }
     }
 
     public enum RenderScenario {
@@ -153,11 +140,33 @@ implements ScalarModelChangeListener {
             if(_Util.lookupPropertyActionForInlineEdit(scalarModel).isPresent()) {
                 return CAN_EDIT_INLINE_VIA_ACTION;
             }
-            return scalarModel.isEnabled()
-                    ? CAN_EDIT
-                    : READONLY;
+            return scalarModel.disabledReason().isPresent()
+                    ? READONLY
+                    : CAN_EDIT;
         }
 
+    }
+
+    /**
+     * During AJAX requests, first the {@link ScalarModel} gets updated,
+     * then later, changed components get a chance to participate in the partial page update
+     * based on whether their models have changed.
+     * <p>
+     * This enum helps evaluate whether components using this model need repainting.
+     */
+    public enum Repaint {
+        OPTIONAL,
+        REQUIRED;
+        public static Repaint required(final boolean needsRepainting) {
+            return needsRepainting ? Repaint.REQUIRED : Repaint.OPTIONAL;
+        }
+        public boolean isOptional() { return this == OPTIONAL; }
+        public boolean isRequired() { return this == REQUIRED; }
+        public Repaint max(final @NonNull Repaint other) {
+            return this.ordinal()>=other.ordinal()
+                    ? this
+                    : other;
+        }
     }
 
     // -- CONSTRUCTION
@@ -291,11 +300,7 @@ implements ScalarModelChangeListener {
         }
 
         // prevent from tabbing into non-editable widgets.
-        if(scalarModel.isProperty()
-                && scalarModel.getMode() == ScalarRepresentation.VIEWING
-                && (scalarModel.getPromptStyle().isDialogAny()
-                        || !scalarModel.canEnterEditMode())) {
-
+        if(_Util.isPropertyWithEnterEditNotAvailable(scalarModel)) {
             Wkt.noTabbing(getValidationFeedbackReceiver());
         }
 
@@ -362,17 +367,32 @@ implements ScalarModelChangeListener {
 
     private void callHooks() {
 
-        val scalarModel = scalarModel();
+        var scalarModel = scalarModel();
 
-        final String disableReasonIfAny = scalarModel.disabledReason()
-                .flatMap(InteractionVeto::getReasonAsString)
-                .orElse(null);
-        final boolean mustBeEditable = scalarModel.mustBeEditable();
-        if (disableReasonIfAny != null) {
-            if(mustBeEditable) {
+        if (scalarModel.disabledReason().isPresent()) {
+
+            /*
+             * Whether this model should be surfaced in the UI using a widget rendered such that it is either already in
+             * edit mode (eg for a parameter), or can be switched into edit mode, eg for an editable property or an
+             * associated action of a property with 'inline_as_if_edit'
+             *
+             * <tt>true</tt> if the widget for this model must be editable.
+             */
+            final boolean isOrCanBeSwitchedToEditable =
+                    scalarModel.getMode() == ScalarRepresentation.EDITING
+                        || scalarModel.isParameter()
+                        || scalarModel.hasAssociatedActionWithInlineAsIfEdit();
+
+            if(isOrCanBeSwitchedToEditable) {
                 onInitializeNotEditable();
             } else {
-                onInitializeReadonly(disableReasonIfAny);
+
+                final String disabledReason = scalarModel.disabledReason()
+                        .flatMap(InteractionVeto::getReasonAsString)
+                        .orElseThrow(()->_Exceptions
+                                .unrecoverable("framework bug: ScalarModel indicates it has a disabled-reason, yet its empty"));
+
+                onInitializeReadonly(disabledReason);
             }
         } else {
             if (scalarModel.isViewMode()) {
@@ -384,35 +404,29 @@ implements ScalarModelChangeListener {
     }
 
     /**
-     * The widget starts off in read-only, but should be possible to activate into edit mode.
+     * On rendering a new page, the widget starts off read-only, but should be possible to activate into edit mode.
      */
-    protected void onInitializeNotEditable() {
-    }
+    protected void onInitializeNotEditable() {}
 
     /**
-     * The widget starts off read-only, and CANNOT be activated into edit mode.
+     * On rendering a new page, the widget starts off read-only, and CANNOT be activated into edit mode.
      */
-    protected void onInitializeReadonly(final String disableReason) {
-    }
+    protected void onInitializeReadonly(final String disableReason) {}
 
     /**
-     * The widget starts off immediately editable.
+     * On rendering a new page, the widget starts off immediately editable.
      */
-    protected void onInitializeEditable() {
-    }
+    protected void onInitializeEditable() {}
 
     /**
-     * The widget is no longer editable, but should be possible to activate into edit mode.
+     * Called when a partial page update (AJAX) decides for a model to transition from editable to not-editable.
      */
-    protected void onNotEditable(final String disableReason, final Optional<AjaxRequestTarget> target) {
-    }
+    protected abstract void onMakeNotEditable(final String disableReason);
 
     /**
-     * The widget should be made editable.
-     *
+     * Called when a partial page update (AJAX) decides for a model to transition from not-editable to editable.
      */
-    protected void onEditable(final @NonNull Optional<AjaxRequestTarget> target) {
-    }
+    protected abstract void onMakeEditable();
 
     private void addCssFromMetaModel() {
         val scalarModel = scalarModel();
@@ -423,7 +437,6 @@ implements ScalarModelChangeListener {
         .ifPresent(cssClass->
             Wkt.cssAppend(this, cssClass));
     }
-
 
     // //////////////////////////////////////
 
@@ -473,7 +486,7 @@ implements ScalarModelChangeListener {
             return Collections.unmodifiableCollection(changeListeners);
         }
 
-        public void addChangeListener(final ScalarModelChangeListener listener) {
+        void addChangeListener(final ScalarModelChangeListener listener) {
             changeListeners.add(listener);
         }
     }
@@ -523,8 +536,7 @@ implements ScalarModelChangeListener {
 
         WktDecorators.getFormLabel()
             .decorate(scalarNameLabel, FormLabelDecorationModel
-                    .mandatory(scalarModel.isRequired()
-                            && scalarModel.isEnabled()));
+                    .mandatory(scalarModel.isShowMandatoryIndicator()));
 
         scalarModel.getDescribedAs()
         .ifPresent(describedAs->WktTooltips.addTooltip(scalarNameLabel, describedAs));
@@ -592,33 +604,18 @@ implements ScalarModelChangeListener {
                     : null;
     }
 
-    // ///////////////////////////////////////////////////////////////////
+    // --
 
     /**
-     * Repaints this panel of just some of its children
+     * @param paramModel - the action being invoked
      *
-     * @param target The Ajax request handler
+     * @return - {@link Repaint} as a result of these pending arguments<ul>
+     * <li>{@link Repaint#OPTIONAL} if nothing changed</li>
+     * <li>{@link Repaint#REQUIRED} if param value changed</li>
+     * </ul>
      */
-    public void repaint(final AjaxRequestTarget target) {
-        target.add(this);
-    }
-
-    /**
-    *
-    * @param paramModel - the action being invoked
-    * @param target - in case there's more to be repainted...
-    *
-    * @return - {@link Repaint} as a result of these pending arguments<ul>
-    * <li>{@link Repaint#NOTHING} if nothing changed</li>
-    * <li>{@link Repaint#PARAM_ONLY} if param value changed</li>
-    * <li>{@link Repaint#ENTIRE_FORM} if layout changed</li>
-    * </ul>
-    */
    public Repaint updateIfNecessary(
-           final @NonNull UiParameter paramModel,
-           final @NonNull Optional<AjaxRequestTarget> target) {
-
-       val scalarModel = scalarModel();
+           final @NonNull UiParameter paramModel) {
 
        // visibility
        val visibilityBefore = isVisible() && isVisibilityAllowed();
@@ -632,38 +629,21 @@ implements ScalarModelChangeListener {
        val usabilityBefore = isEnabled();
        val usabilityAfter = usabilityConsent.isAllowed();
        if(usabilityAfter) {
-           onEditable(target);
+           onMakeEditable();
        } else {
-           onNotEditable(usabilityConsent.getReasonAsString().orElse(null), target);
+           onMakeNotEditable(usabilityConsent.getReasonAsString().orElse(null));
        }
 
-       val paramValue = paramModel.getValue();
-       val valueChanged = !Objects.equals(scalarModel.getObject(), paramValue);
-
-       if(valueChanged) {
-           if(ManagedObjects.isNullOrUnspecifiedOrEmpty(paramValue)) {
-               scalarModel.setObject(null);
-           } else {
-               scalarModel.setObject(paramValue);
-           }
-       }
-
-       // repaint the entire form if visibility has changed
+       // repaint the param panel if visibility has changed
        if (!visibilityBefore || !visibilityAfter) {
-           return Repaint.ENTIRE_FORM;
+           return Repaint.REQUIRED;
        }
-
-       // repaint the param if usability has changed
+       // repaint the param panel if usability has changed
        if (!usabilityAfter || !usabilityBefore) {
-           return Repaint.PARAM_ONLY;
+           return Repaint.REQUIRED;
        }
 
-       // also repaint the param if its pending arg has changed.
-       return valueChanged
-               ? Repaint.PARAM_ONLY
-               : Repaint.NOTHING;
+       return Repaint.OPTIONAL;
    }
-
-
 
 }

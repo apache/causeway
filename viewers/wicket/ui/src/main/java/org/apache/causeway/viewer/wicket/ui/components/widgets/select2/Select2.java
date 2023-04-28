@@ -94,22 +94,6 @@ implements
                 Select2MultiChoiceExt::getSettings);
     }
 
-    // not sure if required any more
-//    @SneakyThrows
-    @Deprecated
-    public void rebuildChoiceProvider() {
-//        val oldProvider = (ChoiceProviderAbstractForScalarModel)
-//                select2Choice.fold(
-//                        Select2ChoiceExt::getProvider,
-//                        Select2MultiChoiceExt::getProvider);
-//        val scalarModel = oldProvider.scalarModel();
-//        val constr = oldProvider.getClass().getConstructor(ScalarModel.class);
-//        val newProvider = constr.newInstance(scalarModel);
-//        select2Choice.accept(
-//                single->single.setProvider(newProvider),
-//                multi->multi.setProvider(newProvider));
-    }
-
     public AbstractSelect2Choice<ObjectMemento, ?> asComponent() {
         return select2Choice.fold(
                 single->single,

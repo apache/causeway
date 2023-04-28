@@ -32,7 +32,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.util.Facets;
 
 import lombok.NonNull;
-import lombok.val;
 
 public interface UiParameter extends UiScalar {
 
@@ -56,10 +55,10 @@ public interface UiParameter extends UiScalar {
 
     @Override
     default Optional<InteractionVeto> disabledReason() {
-        val vetoConsent = getParameterNegotiationModel().getUsabilityConsent(getParameterIndex());
-        return vetoConsent.getReason()!=null
-                ? Optional.of(InteractionVeto.readonly(vetoConsent))
-                : Optional.empty();
+        var usabilityConsent = getParameterNegotiationModel().getUsabilityConsent(getParameterIndex());
+        return usabilityConsent.isAllowed()
+                ? Optional.empty()
+                : Optional.of(InteractionVeto.readonly(usabilityConsent));
     }
 
     @Override

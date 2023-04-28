@@ -21,7 +21,6 @@ package org.apache.causeway.viewer.wicket.ui.components.scalars.choices;
 import java.util.Optional;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.FormComponent;
 
 import org.apache.causeway.commons.internal.base._Strings;
@@ -100,16 +99,16 @@ implements ChoiceTitleHandler {
     }
 
     @Override
-    protected void onNotEditable(final String disableReason, final Optional<AjaxRequestTarget> target) {
-        super.onNotEditable(disableReason, target);
+    protected void onMakeNotEditable(final String disableReason) {
+        super.onMakeNotEditable(disableReason);
         if(isCompactFormat) return;
         setTitleAttribute(disableReason);
         select2.setEnabled(false);
     }
 
     @Override
-    protected void onEditable(final Optional<AjaxRequestTarget> target) {
-        super.onEditable(target);
+    protected void onMakeEditable() {
+        super.onMakeEditable();
         if(isCompactFormat) return;
         clearTitleAttribute();
         select2.setEnabled(true);
