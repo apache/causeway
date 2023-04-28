@@ -19,7 +19,6 @@
 package org.apache.causeway.viewer.wicket.model.models;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalInt;
 
@@ -30,13 +29,10 @@ import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.debug._Debug;
-import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
-import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.hints.HasRenderingHints;
@@ -142,21 +138,10 @@ implements HasRenderingHints, UiScalar, FormExecutorContext {
      */
     @Override
     public final void setObject(final ManagedObject newValue) {
-
         proposedValue().update(oldValue->{
-
-            _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-                val oldPojo = MmUnwrapUtils.single(oldValue);
-                val newPojo = MmUnwrapUtils.single(newValue);
-                val changed = !Objects.equals(oldPojo, newPojo);
-                _Debug.log("[PENDING MODEL] about to update %s value: %s -> %s (changed=%b)",
-                        this.isParameter() ? "parameter" : "property",
-                        oldPojo, newPojo, changed);
-            });
-
+            _Xray.onSclarModelUpdate(this, oldValue, newValue);
             return newValue;
         });
-
     }
 
     @Override
