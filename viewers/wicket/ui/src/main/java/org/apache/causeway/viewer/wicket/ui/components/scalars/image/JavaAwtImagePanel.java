@@ -85,8 +85,7 @@ extends PanelAbstract<ManagedObject, ScalarModel> {
 
         WktDecorators.getFormLabel()
             .decorate(scalarNameLabel, FormLabelDecorationModel
-                    .mandatory(scalarModel.isRequired()
-                            && scalarModel.isEnabled()));
+                    .mandatory(scalarModel.isShowMandatoryIndicator()));
 
         scalarModel.getDescribedAs()
             .ifPresent(describedAs->WktTooltips.addTooltip(scalarNameLabel, describedAs));

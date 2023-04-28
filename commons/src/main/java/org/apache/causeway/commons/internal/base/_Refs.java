@@ -196,7 +196,7 @@ public final class _Refs {
             return value++;
         }
 
-        public int gatAndDec() {
+        public int getAndDec() {
             return value--;
         }
     }
