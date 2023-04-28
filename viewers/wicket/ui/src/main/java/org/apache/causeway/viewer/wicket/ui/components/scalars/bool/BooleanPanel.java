@@ -110,7 +110,6 @@ extends ScalarPanelFormFieldAbstract<Boolean> {
         if(checkBox==null) return;
         checkBox.setEnabled(false);
         Wkt.attributeReplace(checkBox, "title", disableReason);
-        //target.add(checkBox); //TODO[CAUSEWAY-3425] safe to remove?
     }
 
     @Override

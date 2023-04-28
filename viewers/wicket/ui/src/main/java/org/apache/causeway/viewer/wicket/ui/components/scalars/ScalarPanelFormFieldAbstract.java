@@ -237,7 +237,6 @@ extends ScalarPanelAbstract2 {
         super.onMakeNotEditable(disableReason);
         formComponentEnable(false);
         setTooltip(disableReason);
-        //formComponentAddTo(target); //TODO[CAUSEWAY-3425] safe to remove?
     }
 
     @Override
@@ -245,7 +244,6 @@ extends ScalarPanelAbstract2 {
         super.onMakeEditable();
         formComponentEnable(true);
         clearTooltip();
-        //formComponentAddTo(target); //TODO[CAUSEWAY-3425] safe to remove?
     }
 
     // -- XRAY
@@ -267,16 +265,6 @@ extends ScalarPanelAbstract2 {
             inlinePromptLink.setEnabled(b);
         }
     }
-
-  //TODO[CAUSEWAY-3425] safe to remove?
-//    private void formComponentAddTo(final AjaxRequestTarget ajax) {
-//        if(getFormComponent()!=null) {
-//            ajax.add(getFormComponent());
-//        }
-//        if(inlinePromptLink!=null) {
-//            ajax.add(inlinePromptLink);
-//        }
-//    }
 
     private void setTooltip(final String tooltip) {
         WktTooltips.addTooltip(getFormComponent(), tooltip);
