@@ -40,12 +40,5 @@ class VegaHandlerTest {
         val vega = VegaHandler().parse(json)
         assertTrue(vega is Vega5)
     }
-    /*
-                val specFromClass = Json.decodeFromString(JsonObject.serializer(), BAR_CHART.str)
-            console.log("[VP_init]")
-            console.log(spec)
-            val spec2 = specFromClass as Json
-            console.log(spec2)
 
-     */
 }
