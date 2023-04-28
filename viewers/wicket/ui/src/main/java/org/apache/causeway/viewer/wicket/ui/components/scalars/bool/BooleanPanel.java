@@ -105,8 +105,8 @@ extends ScalarPanelFormFieldAbstract<Boolean> {
     }
 
     @Override
-    protected void onNotEditable(final String disableReason) {
-        super.onNotEditable(disableReason);
+    protected void onMakeNotEditable(final String disableReason) {
+        super.onMakeNotEditable(disableReason);
         if(checkBox==null) return;
         checkBox.setEnabled(false);
         Wkt.attributeReplace(checkBox, "title", disableReason);
@@ -114,8 +114,8 @@ extends ScalarPanelFormFieldAbstract<Boolean> {
     }
 
     @Override
-    protected void onEditable() {
-        super.onEditable();
+    protected void onMakeEditable() {
+        super.onMakeEditable();
         if(checkBox==null) return;
         checkBox.setEnabled(true);
     }

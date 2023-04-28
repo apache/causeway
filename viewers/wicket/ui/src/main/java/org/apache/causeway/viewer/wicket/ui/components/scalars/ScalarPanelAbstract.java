@@ -139,9 +139,9 @@ implements ScalarModelChangeListener {
             if(_Util.lookupPropertyActionForInlineEdit(scalarModel).isPresent()) {
                 return CAN_EDIT_INLINE_VIA_ACTION;
             }
-            return scalarModel.isEnabled()
-                    ? CAN_EDIT
-                    : READONLY;
+            return scalarModel.disabledReason().isPresent()
+                    ? READONLY
+                    : CAN_EDIT;
         }
 
     }
@@ -370,14 +370,13 @@ implements ScalarModelChangeListener {
 
     private void callHooks() {
 
-        val scalarModel = scalarModel();
+        var scalarModel = scalarModel();
 
         final String disableReasonIfAny = scalarModel.disabledReason()
                 .flatMap(InteractionVeto::getReasonAsString)
                 .orElse(null);
-        final boolean mustBeEditable = scalarModel.mustBeEditable();
         if (disableReasonIfAny != null) {
-            if(mustBeEditable) {
+            if(scalarModel.mustBeEditable()) {
                 onInitializeNotEditable();
             } else {
                 onInitializeReadonly(disableReasonIfAny);
@@ -392,35 +391,29 @@ implements ScalarModelChangeListener {
     }
 
     /**
-     * The widget starts off in read-only, but should be possible to activate into edit mode.
+     * On rendering a new page, the widget starts off read-only, but should be possible to activate into edit mode.
      */
-    protected void onInitializeNotEditable() {
-    }
+    protected void onInitializeNotEditable() {}
 
     /**
-     * The widget starts off read-only, and CANNOT be activated into edit mode.
+     * On rendering a new page, the widget starts off read-only, and CANNOT be activated into edit mode.
      */
-    protected void onInitializeReadonly(final String disableReason) {
-    }
+    protected void onInitializeReadonly(final String disableReason) {}
 
     /**
-     * The widget starts off immediately editable.
+     * On rendering a new page, the widget starts off immediately editable.
      */
-    protected void onInitializeEditable() {
-    }
+    protected void onInitializeEditable() {}
 
     /**
-     * The widget is no longer editable, but should be possible to activate into edit mode.
+     * Called when a partial page update (AJAX) decides for a model to transition from editable to not-editable.
      */
-    protected void onNotEditable(final String disableReason) {
-    }
+    protected abstract void onMakeNotEditable(final String disableReason);
 
     /**
-     * The widget should be made editable.
-     *
+     * Called when a partial page update (AJAX) decides for a model to transition from not-editable to editable.
      */
-    protected void onEditable() {
-    }
+    protected abstract void onMakeEditable();
 
     private void addCssFromMetaModel() {
         val scalarModel = scalarModel();
@@ -431,7 +424,6 @@ implements ScalarModelChangeListener {
         .ifPresent(cssClass->
             Wkt.cssAppend(this, cssClass));
     }
-
 
     // //////////////////////////////////////
 
@@ -531,8 +523,7 @@ implements ScalarModelChangeListener {
 
         WktDecorators.getFormLabel()
             .decorate(scalarNameLabel, FormLabelDecorationModel
-                    .mandatory(scalarModel.isRequired()
-                            && scalarModel.isEnabled()));
+                    .mandatory(scalarModel.isShowMandatoryIndicator()));
 
         scalarModel.getDescribedAs()
         .ifPresent(describedAs->WktTooltips.addTooltip(scalarNameLabel, describedAs));
@@ -625,9 +616,9 @@ implements ScalarModelChangeListener {
        val usabilityBefore = isEnabled();
        val usabilityAfter = usabilityConsent.isAllowed();
        if(usabilityAfter) {
-           onEditable();
+           onMakeEditable();
        } else {
-           onNotEditable(usabilityConsent.getReasonAsString().orElse(null));
+           onMakeNotEditable(usabilityConsent.getReasonAsString().orElse(null));
        }
 
        // repaint the param panel if visibility has changed

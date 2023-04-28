@@ -224,14 +224,12 @@ extends ScalarPanelAbstract {
     }
 
     @Override
-    protected void onNotEditable(final String disableReason) {
-        super.onNotEditable(disableReason);
+    protected void onMakeNotEditable(final String disableReason) {
         this.setupInlinePrompt(); // recreate additional buttons
     }
 
     @Override
-    protected void onEditable() {
-        super.onEditable();
+    protected void onMakeEditable() {
         this.setupInlinePrompt(); // recreate additional buttons
     }
 

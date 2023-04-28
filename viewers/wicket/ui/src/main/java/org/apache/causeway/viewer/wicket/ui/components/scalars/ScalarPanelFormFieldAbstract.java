@@ -128,8 +128,8 @@ extends ScalarPanelAbstract2 {
         formGroup.add(fieldFrame = createFieldFrame());
 
         formComponent.setRequired(scalarModel.isRequired());
-        if(scalarModel.isRequired()
-                && scalarModel.isEnabled()) {
+
+        if(scalarModel.isShowMandatoryIndicator()) {
             Wkt.cssAppend(formGroup, "mandatory");
         }
 
@@ -233,16 +233,16 @@ extends ScalarPanelAbstract2 {
     }
 
     @Override
-    protected void onNotEditable(final String disableReason) {
-        super.onNotEditable(disableReason);
+    protected void onMakeNotEditable(final String disableReason) {
+        super.onMakeNotEditable(disableReason);
         formComponentEnable(false);
         setTooltip(disableReason);
         //formComponentAddTo(target); //TODO[CAUSEWAY-3425] safe to remove?
     }
 
     @Override
-    protected void onEditable() {
-        super.onEditable();
+    protected void onMakeEditable() {
+        super.onMakeEditable();
         formComponentEnable(true);
         clearTooltip();
         //formComponentAddTo(target); //TODO[CAUSEWAY-3425] safe to remove?

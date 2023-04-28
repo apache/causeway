@@ -124,15 +124,15 @@ implements ChoiceTitleHandler {
     }
 
     @Override
-    protected void onNotEditable(final String disableReason) {
-        super.onNotEditable(disableReason);
+    protected void onMakeNotEditable(final String disableReason) {
+        super.onMakeNotEditable(disableReason);
         if(isCompactFormat) return;
         setTitleAttribute(disableReason);
     }
 
     @Override
-    protected void onEditable() {
-        super.onEditable();
+    protected void onMakeEditable() {
+        super.onMakeEditable();
         if(isCompactFormat) return;
         clearTitleAttribute();
     }

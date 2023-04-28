@@ -204,12 +204,8 @@ implements HasRenderingHints, UiScalar, LinksProvider, FormExecutorContext {
     }
 
     public boolean canEnterEditMode() {
-        return isEnabled()
-                && isViewMode();
-    }
-
-    public boolean isEnabled() {
-        return !disabledReason().isPresent();
+        return isViewMode()
+                && !disabledReason().isPresent();
     }
 
     // //////////////////////////////////////
@@ -277,6 +273,20 @@ implements HasRenderingHints, UiScalar, LinksProvider, FormExecutorContext {
     public boolean isInlinePrompt() {
         return (getPromptStyle().isInline() && canEnterEditMode())
                 || hasAssociatedActionWithInlineAsIfEdit();
+    }
+
+    public boolean isInlinePrompt2() {
+        return getPromptStyle().isInlineAny()
+                && !disabledReason().isPresent();
+    }
+
+    /**
+     * Whether or not to display some indication that a form field is mandatory.
+     * Eg. a star in the UI.
+     */
+    public boolean isShowMandatoryIndicator() {
+        return isRequired()
+                && !disabledReason().isPresent();
     }
 
     @Override
