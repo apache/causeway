@@ -367,7 +367,7 @@ implements ScalarModelChangeListener {
 
     private void callHooks() {
 
-        val scalarModel = scalarModel();
+        var scalarModel = scalarModel();
 
         if (scalarModel.disabledReason().isPresent()) {
 
