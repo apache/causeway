@@ -20,12 +20,15 @@ package org.apache.causeway.viewer.wicket.model.models;
 
 import org.apache.wicket.model.ChainingModel;
 
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
+
+import lombok.val;
 
 /**
  * Wraps a {@link ScalarModel} to act as an {@link ObjectAdapterModel}.
@@ -76,6 +79,11 @@ implements ObjectAdapterModel {
 
     @Override
     public boolean isInlinePrompt() {
+        //TODO[CAUSEWAY-3425] remove
+        val legacy = scalarModel().getPromptStyle().isInlineAny()
+                && !scalarModel().disabledReason().isPresent();
+        _Assert.assertEquals(scalarModel().isInlinePrompt(), legacy);
+
         return scalarModel().isInlinePrompt();
     }
 
