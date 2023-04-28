@@ -76,7 +76,7 @@ implements ObjectAdapterModel {
 
     @Override
     public boolean isInlinePrompt() {
-        return scalarModel().isInlinePrompt2();
+        return scalarModel().isInlinePrompt();
     }
 
     @Override

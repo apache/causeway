@@ -41,6 +41,7 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.debug._Probe.EntryPoint;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
 import org.apache.causeway.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
@@ -299,11 +300,7 @@ implements ScalarModelChangeListener {
         }
 
         // prevent from tabbing into non-editable widgets.
-        if(scalarModel.isProperty()
-                && scalarModel.getMode() == ScalarRepresentation.VIEWING
-                && (scalarModel.getPromptStyle().isDialogAny()
-                        || !scalarModel.canEnterEditMode())) {
-
+        if(_Util.isPropertyWithEnterEditNotAvailable(scalarModel)) {
             Wkt.noTabbing(getValidationFeedbackReceiver());
         }
 
@@ -372,14 +369,30 @@ implements ScalarModelChangeListener {
 
         var scalarModel = scalarModel();
 
-        final String disableReasonIfAny = scalarModel.disabledReason()
-                .flatMap(InteractionVeto::getReasonAsString)
-                .orElse(null);
-        if (disableReasonIfAny != null) {
-            if(scalarModel.mustBeEditable()) {
+        if (scalarModel.disabledReason().isPresent()) {
+
+            /*
+             * Whether this model should be surfaced in the UI using a widget rendered such that it is either already in
+             * edit mode (eg for a parameter), or can be switched into edit mode, eg for an editable property or an
+             * associated action of a property with 'inline_as_if_edit'
+             *
+             * <tt>true</tt> if the widget for this model must be editable.
+             */
+            final boolean isOrCanBeSwitchedToEditable =
+                    scalarModel.getMode() == ScalarRepresentation.EDITING
+                        || scalarModel.isParameter()
+                        || scalarModel.hasAssociatedActionWithInlineAsIfEdit();
+
+            if(isOrCanBeSwitchedToEditable) {
                 onInitializeNotEditable();
             } else {
-                onInitializeReadonly(disableReasonIfAny);
+
+                final String disabledReason = scalarModel.disabledReason()
+                        .flatMap(InteractionVeto::getReasonAsString)
+                        .orElseThrow(()->_Exceptions
+                                .unrecoverable("framework bug: ScalarModel indicates it has a disabled-reason, yet its empty"));
+
+                onInitializeReadonly(disabledReason);
             }
         } else {
             if (scalarModel.isViewMode()) {
