@@ -75,7 +75,7 @@ import demoapp.webapp.wicket.common.ui.DemoAppWicketCommon;
     CausewayModuleValMarkdownPersistenceJpa.class,
     CausewayModuleValVegaPersistenceJpa.class,
 
-    //XrayEnable.class // for debugging only
+    // XrayEnable.class // for debugging only
     // WicketViewerXrayEnable.class // for debugging only
 })
 //@Log4j2

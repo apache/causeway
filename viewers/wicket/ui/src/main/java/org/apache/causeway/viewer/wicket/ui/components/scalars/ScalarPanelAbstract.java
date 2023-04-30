@@ -477,7 +477,7 @@ implements ScalarModelChangeListener {
             _Probe.entryPoint(EntryPoint.USER_INTERACTION, "Wicket Ajax Request, "
                     + "originating from User either having changed a Property value during inline editing "
                     + "or having changed a Parameter value within an open ActionPrompt.");
-            _Xray.onUserParamOrPropertyEdit(scalarPanel);
+            _Xray.onParamOrPropertyEdited(scalarPanel);
             ScalarModelChangeDispatcher.super.notifyUpdate(target);
         }
 

@@ -42,16 +42,17 @@ final class _Xray {
         final String updatingWhat = scalarModel.getSpecialization()
                 .fold(
                     param->
-                        String.format("param[index=%d,name=%s]", param.getParameterIndex(), param.getFriendlyName())
+                        String.format("param[index=%d,name=%s,changed=%b]",
+                                param.getParameterIndex(), param.getFriendlyName(), changed)
                     ,
                     prop->
-                        String.format("prop[name=%s]", prop.getFriendlyName())
+                        String.format("prop[name=%s,changed=%b]",
+                                prop.getFriendlyName(), changed)
                     );
 
-        _XrayEvent.event("%s Model - updating %s (changed=%b): %s -> %s",
+        _XrayEvent.user("%s Model - updating %s: %s -> %s",
                 scalarModel.isParameter() ? "Parameter" : "Property",
                 updatingWhat,
-                changed,
                 oldPojo, newPojo);
     }
 
