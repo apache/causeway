@@ -82,7 +82,9 @@ public class CollectionLayoutSequencePage implements HasAsciiDocDescription {
 
 //tag::yet-more-children[]
     @Collection()
-    @CollectionLayout()             // <.>
+    @CollectionLayout(
+            sequence = "1.5"            // <.>
+    )
     @XmlElementWrapper(name = "yetMoreChildren")
     @XmlElement(name = "child")
     @Getter @Setter
