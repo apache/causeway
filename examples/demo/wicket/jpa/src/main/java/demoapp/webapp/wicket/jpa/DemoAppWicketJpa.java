@@ -23,6 +23,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
 
+import org.apache.causeway.commons.internal.debug.xray.XrayEnable;
 import org.apache.causeway.commons.internal.os._OsUtil;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.config.util.SpringProfileUtil;
@@ -75,7 +76,7 @@ import demoapp.webapp.wicket.common.ui.DemoAppWicketCommon;
     CausewayModuleValMarkdownPersistenceJpa.class,
     CausewayModuleValVegaPersistenceJpa.class,
 
-    //XrayEnable.class // for debugging only
+    XrayEnable.class // for debugging only
     // WicketViewerXrayEnable.class // for debugging only
 })
 //@Log4j2
