@@ -51,6 +51,8 @@ causeway:
         label-position: left
       parameter-layout:
         label-position: left
+      collection-layout:
+        paged: 15
 
   core:
     meta-model:

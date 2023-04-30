@@ -140,6 +140,9 @@ public class CollectionLayoutMenu {
         samples.stream()
                 .map(CollectionLayoutPagedChildVm::new)
                 .forEach(e -> page.getChildren().add(e));
+        samples.stream()
+                .map(CollectionLayoutPagedChildVm::new)
+                .forEach(e -> page.getMoreChildren().add(e));
         return page;
     }
 

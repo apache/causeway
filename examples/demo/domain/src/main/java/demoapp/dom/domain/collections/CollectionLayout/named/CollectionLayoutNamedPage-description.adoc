@@ -13,7 +13,7 @@ This page object has two collections, and both has had their name explicitly spe
 
 In terms of code:
 
-* the `children` property has its name specified using the `@CollectionLayout#named()` annotation:
+* the `children` collection has its name specified using the `@CollectionLayout#named()` annotation:
 +
 [source,java,indent=0]
 ----
@@ -21,7 +21,7 @@ include::CollectionLayoutNamedPage.java[tags=children]
 ----
 <.> explicitly specifies the name of the collection
 
-* meanwhile, the `moreChildren` property has its name specified using the `Xxx.layout.xml` file:
+* meanwhile, the `moreChildren` collection has its name specified using the `Xxx.layout.xml` file:
 +
 [source,xml,indent=0,tabsize=4]
 ----
