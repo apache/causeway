@@ -34,6 +34,7 @@ import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.DependentDefaultsPolicy;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
@@ -243,10 +244,20 @@ implements
 
         @MemberSupport
         public CalendarEvent act(
+                @Parameter
                 final LocalDateTime dateTime,
+
+                @Parameter(
+                        dependentDefaultsPolicy = DependentDefaultsPolicy.PRESERVE_CHANGES)
                 final String calendarName,
+
+                @Parameter(
+                        dependentDefaultsPolicy = DependentDefaultsPolicy.PRESERVE_CHANGES)
                 final String title,
-                @Parameter(optionality = Optionality.OPTIONAL)
+
+                @Parameter(
+                        optionality = Optionality.OPTIONAL,
+                        dependentDefaultsPolicy = DependentDefaultsPolicy.PRESERVE_CHANGES)
                 @ParameterLayout(multiLine = 4)
                 final String notes) {
 

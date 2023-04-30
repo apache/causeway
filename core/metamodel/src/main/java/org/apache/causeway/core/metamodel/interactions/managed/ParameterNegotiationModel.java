@@ -253,6 +253,14 @@ public class ParameterNegotiationModel {
     }
 
     /**
+     * Returns whether the pending parameter changed during reassessment.
+     * @see ObjectActionParameter#reassessDefault(ParameterNegotiationModel)
+     */
+    public boolean reassessDefaults(final int paramIndexForReassessment) {
+        return getParamMetamodel(paramIndexForReassessment).reassessDefault(this);
+    }
+
+    /**
      * exposed for testing
      */
     public void activateValidationFeedback() {
