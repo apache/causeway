@@ -46,8 +46,8 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 public class CollectionLayoutSortedByChildVm implements HasAsciiDocDescription {
 
 //end::class[]
-    public CollectionLayoutSortedByChildVm(final String value) {
-        this.value = value;
+    public CollectionLayoutSortedByChildVm(final String name) {
+        this.name = name;
     }
 
 //tag::class[]
@@ -55,7 +55,7 @@ public class CollectionLayoutSortedByChildVm implements HasAsciiDocDescription {
     @Property()
     @XmlElement(required = true)
     @Getter @Setter
-    private String value;
+    private String name;
 
 }
 //end::class[]

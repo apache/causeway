@@ -19,7 +19,6 @@
 package demoapp.dom.domain.collections.CollectionLayout.sortedBy;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import javax.inject.Named;
@@ -35,9 +34,6 @@ import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.util.ObjectContracts;
-
-import demoapp.dom.domain.collections.CollectionLayout.sequence.child.CollectionLayoutSequenceChildVm;
 
 import demoapp.dom.domain.collections.CollectionLayout.sortedBy.child.CollectionLayoutSortedByChildVm;
 
@@ -58,22 +54,12 @@ public class CollectionLayoutSortedByPage implements HasAsciiDocDescription {
         return "@CollectionLayout#sortedBy";
     }
 
-//tag::comparator[]
-    public static class ValueComparator implements Comparator<CollectionLayoutSequenceChildVm> {
-        @Override
-        public int compare(CollectionLayoutSequenceChildVm o1, CollectionLayoutSequenceChildVm o2) {
-            return ObjectContracts.contract(CollectionLayoutSequenceChildVm.class)  // <.>
-                    .thenUse("value", CollectionLayoutSequenceChildVm::getValue)    // <.>
-                    .compare(o1, o2);
-        }
-    }
-//end::comparator[]
 
 
 //tag::children[]
     @Collection()
     @CollectionLayout(
-            sortedBy = ValueComparator.class        // <.>
+            sortedBy = NameComparator.class        // <.>
     )
     @XmlElementWrapper(name = "children")
     @XmlElement(name = "child")
