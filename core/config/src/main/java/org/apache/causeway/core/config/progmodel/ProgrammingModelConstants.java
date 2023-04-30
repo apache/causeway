@@ -531,6 +531,8 @@ public final class ProgrammingModelConstants {
                 + "Can use @ParameterTuple only on parameter of a single arg action."),
         PARAMETER_TUPLE_TYPE_WITH_AMBIGUOUS_CONSTRUCTORS("${type}#${member}: "
                 + "Tuple type ${patType} referenced by @ParameterTuple annotated parameter has no or more than one public constructor."),
+        VETOED_OR_MANAGED_TYPE_NOT_ALLOWED_TO_ENTER_METAMODEL("${type}: has a member with either vetoed or managed "
+                + "element-type ${elementType}, which is not allowed"),
         ;
 
         private final String template;

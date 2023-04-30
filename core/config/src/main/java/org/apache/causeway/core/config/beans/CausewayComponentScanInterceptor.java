@@ -30,7 +30,7 @@ import lombok.NonNull;
  *
  * @since 2.0
  */
-public interface CausewayComponentScanInterceptor {
+interface CausewayComponentScanInterceptor {
 
     /**
      * Allows for the given type-meta to be modified before bean-definition registration
