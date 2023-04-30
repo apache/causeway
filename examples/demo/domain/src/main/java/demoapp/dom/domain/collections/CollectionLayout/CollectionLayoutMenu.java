@@ -18,6 +18,7 @@
  */
 package demoapp.dom.domain.collections.CollectionLayout;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -27,7 +28,10 @@ import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
+import demoapp.dom._infra.samples.NameSamples;
+import demoapp.dom.domain.collections.Collection.typeOf.child.CollectionTypeOfChildVm;
 import demoapp.dom.domain.collections.CollectionLayout.cssClass.CollectionLayoutCssClassPage;
+import demoapp.dom.domain.collections.CollectionLayout.cssClass.child.CollectionLayoutCssClassChildVm;
 import demoapp.dom.domain.collections.CollectionLayout.defaultView.CollectionLayoutDefaultViewPage;
 import demoapp.dom.domain.collections.CollectionLayout.describedAs.CollectionLayoutDescribedAsPage;
 import demoapp.dom.domain.collections.CollectionLayout.hidden.CollectionLayoutHiddenPage;
@@ -37,19 +41,34 @@ import demoapp.dom.domain.collections.CollectionLayout.sequence.CollectionLayout
 import demoapp.dom.domain.collections.CollectionLayout.sortedBy.CollectionLayoutSortedByPage;
 import demoapp.dom.domain.collections.CollectionLayout.tableDecorator.CollectionLayoutTableDecoratorPage;
 
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+
 @Named("demo.CollectionLayoutMenu")
 @DomainService(
         nature=NatureOfService.VIEW
 )
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 //@Log4j2
 public class CollectionLayoutMenu {
+
+    final NameSamples samples;
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-pen-nib",
         describedAs = "CSS class to wrap the UI component representing this collection")
     public CollectionLayoutCssClassPage cssClass(){
-        return new CollectionLayoutCssClassPage();
+        val page = new CollectionLayoutCssClassPage();
+        samples.stream()
+                .map(CollectionLayoutCssClassChildVm::new
+                )
+                .forEach(e -> page.getChildren().add(e));
+        samples.stream()
+                .map(CollectionLayoutCssClassChildVm::new)
+                .forEach(e -> page.getMoreChildren().add(e));
+
+        return page;
     }
 
     @Action(semantics = SemanticsOf.SAFE)
@@ -107,5 +126,6 @@ public class CollectionLayoutMenu {
     public CollectionLayoutTableDecoratorPage tableDecorator(){
         return new CollectionLayoutTableDecoratorPage();
     }
+
 
 }

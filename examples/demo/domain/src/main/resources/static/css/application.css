@@ -19,6 +19,23 @@
  */
 
 /*
+ * Demonstrates use of @CollectionLayout(cssClass='red')
+ */
+.collections .red .card .card-header {
+    background-color: red;
+    color: white;
+}
+
+/*
+ * Demonstrates use of @CollectionLayout(cssClass='blue')
+ */
+.collections .blue .card .card-header {
+    background-color: dodgerblue;
+    color: white;
+}
+
+
+/*
  * Demonstrates use of @PropertyLayout(cssClass='red')
  */
 .property.red label {
