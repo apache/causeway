@@ -9,8 +9,8 @@ The `application.css` file is then be used to apply styling to that CSS class.
 
 == How this demo works
 
-This page contains two properties.
-The `children` property uses `@CollectionLayout#cssClass` to specify a custom CSS class of "red", while the `childrenUsingLayout` collection specifies a custom CSS class using the `layout.xml` file.
+This page contains two collections.
+The `children` collection uses `@CollectionLayout#cssClass` to specify a custom CSS class of "red", while the `moreChildre` collection specifies a custom CSS class using the `layout.xml` file.
 
 In terms of code:
 

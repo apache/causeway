@@ -33,6 +33,7 @@ import demoapp.dom.domain.collections.Collection.typeOf.child.CollectionTypeOfCh
 import demoapp.dom.domain.collections.CollectionLayout.cssClass.CollectionLayoutCssClassPage;
 import demoapp.dom.domain.collections.CollectionLayout.cssClass.child.CollectionLayoutCssClassChildVm;
 import demoapp.dom.domain.collections.CollectionLayout.defaultView.CollectionLayoutDefaultViewPage;
+import demoapp.dom.domain.collections.CollectionLayout.defaultView.child.CollectionLayoutDefaultViewChildVm;
 import demoapp.dom.domain.collections.CollectionLayout.describedAs.CollectionLayoutDescribedAsPage;
 import demoapp.dom.domain.collections.CollectionLayout.hidden.CollectionLayoutHiddenPage;
 import demoapp.dom.domain.collections.CollectionLayout.named.CollectionLayoutNamedPage;
@@ -75,7 +76,17 @@ public class CollectionLayoutMenu {
     @ActionLayout(cssClassFa="fa-atom",
         describedAs = "View collection as a table, or collapsed, or some other representation if available")
     public CollectionLayoutDefaultViewPage defaultView(){
-        return new CollectionLayoutDefaultViewPage();
+        CollectionLayoutDefaultViewPage page = new CollectionLayoutDefaultViewPage();
+        samples.stream()
+                .map(CollectionLayoutDefaultViewChildVm::new)
+                .forEach(e -> page.getChildren().add(e));
+        samples.stream()
+                .map(CollectionLayoutDefaultViewChildVm::new)
+                .forEach(e -> page.getMoreChildren().add(e));
+        samples.stream()
+                .map(CollectionLayoutDefaultViewChildVm::new)
+                .forEach(e -> page.getYetMoreChildren().add(e));
+        return page;
     }
 
     @Action(semantics = SemanticsOf.SAFE)

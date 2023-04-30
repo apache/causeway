@@ -16,60 +16,46 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.collections.CollectionLayout.cssClass;
-
-import java.util.ArrayList;
-import java.util.List;
+package demoapp.dom.domain.collections.CollectionLayout.defaultView.child;
 
 import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.causeway.applib.annotation.Collection;
-import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.Title;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.domain.collections.CollectionLayout.cssClass.child.CollectionLayoutCssClassChildVm;
 
 //tag::class[]
-@Named("demo.CollectionLayoutCssClassPage")
-@DomainObject(nature=Nature.VIEW_MODEL)
-@XmlRootElement(name = "root")
+@Named("demo.CollectionLayoutDefaultViewChildVm")
+@XmlRootElement(name = "demo.CollectionLayoutDefaultViewChildVm")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-public class CollectionLayoutCssClassPage implements HasAsciiDocDescription {
+@DomainObject(nature=Nature.VIEW_MODEL)
+@NoArgsConstructor
+public class CollectionLayoutDefaultViewChildVm implements HasAsciiDocDescription {
 
-    @ObjectSupport public String title() {
-        return "@CollectionLayout#cssClass";
+//end::class[]
+    public CollectionLayoutDefaultViewChildVm(final String value) {
+        this.value = value;
     }
 
-//tag::children[]
-    @Collection()
-    @CollectionLayout(cssClass = "red")             // <.>
-    @XmlElementWrapper(name = "children")
-    @XmlElement(name = "child")
+//tag::class[]
+    @Title
+    @Property()
+    @XmlElement(required = true)
     @Getter @Setter
-    private List<CollectionLayoutCssClassChildVm> children = new ArrayList<>();
-//end::children[]
-
-//tag::more-children[]
-    @Collection()
-    @CollectionLayout()                             // <.>
-    @XmlElementWrapper(name = "moreChildren")
-    @XmlElement(name = "child")
-    @Getter @Setter
-    private List<CollectionLayoutCssClassChildVm> moreChildren = new ArrayList<>();
-//end::more-children[]
+    private String value;
 
 }
 //end::class[]

@@ -37,10 +37,10 @@ import lombok.Setter;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
+@Named("demo.CollectionLayoutCssClassChildVm")
 @XmlRootElement(name = "demo.CollectionLayoutCssClassChildVm")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.CollectionLayoutCssClassChildVm")
 @DomainObject(nature=Nature.VIEW_MODEL)
 @NoArgsConstructor
 public class CollectionLayoutCssClassChildVm implements HasAsciiDocDescription {
