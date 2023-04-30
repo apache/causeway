@@ -24,6 +24,8 @@ import java.util.List;
 import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
@@ -34,6 +36,10 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 
+import demoapp.dom.domain.collections.CollectionLayout.defaultView.child.CollectionLayoutDefaultViewChildVm;
+
+import demoapp.dom.domain.collections.CollectionLayout.describedAs.child.CollectionLayoutDescribedAsChildVm;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -41,9 +47,8 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.domain._entities.DemoEntity;
 
 //tag::class[]
-@DomainObject(
-        nature=Nature.VIEW_MODEL)
-@Named("demo.CollectionLayoutDescribedAsVm")
+@Named("demo.CollectionLayoutDescribedAsPage")
+@DomainObject(nature=Nature.VIEW_MODEL)
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -53,14 +58,26 @@ public class CollectionLayoutDescribedAsPage implements HasAsciiDocDescription {
         return "@CollectionLayout#describedAs";
     }
 
-//tag::collection[]
-    @Collection
+//tag::children[]
+    @Collection()
     @CollectionLayout(
-            describedAs = "Description goes here")
-    @XmlTransient
+            describedAs = "This is a collection of children",          // <.>
+            paged = 5
+    )
+    @XmlElementWrapper(name = "children")
+    @XmlElement(name = "child")
     @Getter @Setter
-    private List<DemoEntity> collection = new ArrayList<>();
-//end::collection[]
+    private List<CollectionLayoutDescribedAsChildVm> children = new ArrayList<>();
+//end::children[]
+
+//tag::more-children[]
+    @Collection()
+    @CollectionLayout(paged = 5)
+    @XmlElementWrapper(name = "moreChildren")
+    @XmlElement(name = "child")
+    @Getter @Setter
+    private List<CollectionLayoutDescribedAsChildVm> moreChildren = new ArrayList<>();
+//end::more-children[]
 
 }
 //end::class[]

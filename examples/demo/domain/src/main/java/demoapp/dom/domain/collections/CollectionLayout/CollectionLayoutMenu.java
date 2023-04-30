@@ -29,18 +29,25 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import demoapp.dom._infra.samples.NameSamples;
-import demoapp.dom.domain.collections.Collection.typeOf.child.CollectionTypeOfChildVm;
 import demoapp.dom.domain.collections.CollectionLayout.cssClass.CollectionLayoutCssClassPage;
 import demoapp.dom.domain.collections.CollectionLayout.cssClass.child.CollectionLayoutCssClassChildVm;
 import demoapp.dom.domain.collections.CollectionLayout.defaultView.CollectionLayoutDefaultViewPage;
 import demoapp.dom.domain.collections.CollectionLayout.defaultView.child.CollectionLayoutDefaultViewChildVm;
 import demoapp.dom.domain.collections.CollectionLayout.describedAs.CollectionLayoutDescribedAsPage;
+import demoapp.dom.domain.collections.CollectionLayout.describedAs.child.CollectionLayoutDescribedAsChildVm;
 import demoapp.dom.domain.collections.CollectionLayout.hidden.CollectionLayoutHiddenPage;
+import demoapp.dom.domain.collections.CollectionLayout.hidden.child.CollectionLayoutHiddenChildVm;
 import demoapp.dom.domain.collections.CollectionLayout.named.CollectionLayoutNamedPage;
+import demoapp.dom.domain.collections.CollectionLayout.named.child.CollectionLayoutNamedChildVm;
 import demoapp.dom.domain.collections.CollectionLayout.paged.CollectionLayoutPagedPage;
+import demoapp.dom.domain.collections.CollectionLayout.paged.child.CollectionLayoutPagedChildVm;
 import demoapp.dom.domain.collections.CollectionLayout.sequence.CollectionLayoutSequencePage;
+import demoapp.dom.domain.collections.CollectionLayout.sequence.child.CollectionLayoutSequenceChildVm;
 import demoapp.dom.domain.collections.CollectionLayout.sortedBy.CollectionLayoutSortedByPage;
+import demoapp.dom.domain.collections.CollectionLayout.sortedBy.child.CollectionLayoutSortedByChildVm;
 import demoapp.dom.domain.collections.CollectionLayout.tableDecorator.CollectionLayoutTableDecoratorPage;
+
+import demoapp.dom.domain.collections.CollectionLayout.tableDecorator.child.CollectionLayoutTableDecoratorChildVm;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -76,7 +83,7 @@ public class CollectionLayoutMenu {
     @ActionLayout(cssClassFa="fa-atom",
         describedAs = "View collection as a table, or collapsed, or some other representation if available")
     public CollectionLayoutDefaultViewPage defaultView(){
-        CollectionLayoutDefaultViewPage page = new CollectionLayoutDefaultViewPage();
+        val page = new CollectionLayoutDefaultViewPage();
         samples.stream()
                 .map(CollectionLayoutDefaultViewChildVm::new)
                 .forEach(e -> page.getChildren().add(e));
@@ -93,49 +100,82 @@ public class CollectionLayoutMenu {
     @ActionLayout(cssClassFa="fa-comment",
         describedAs = "Description of the collection, shown as a tooltip")
     public CollectionLayoutDescribedAsPage describedAs(){
-        return new CollectionLayoutDescribedAsPage();
+        val page = new CollectionLayoutDescribedAsPage();
+        samples.stream()
+                .map(CollectionLayoutDescribedAsChildVm::new)
+                .forEach(e -> page.getChildren().add(e));
+        samples.stream()
+                .map(CollectionLayoutDescribedAsChildVm::new)
+                .forEach(e -> page.getMoreChildren().add(e));
+        return page;
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-glasses",
         describedAs = "Visibility of the collection in different contexts")
     public CollectionLayoutHiddenPage hidden(){
-        return new CollectionLayoutHiddenPage();
+        val page = new CollectionLayoutHiddenPage();
+        samples.stream()
+                .map(CollectionLayoutHiddenChildVm::new)
+                .forEach(e -> page.getChildren().add(e));
+        return page;
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-signature",
         describedAs = "Custom text for the collection's label")
     public CollectionLayoutNamedPage named(){
-        return new CollectionLayoutNamedPage();
+        val page = new CollectionLayoutNamedPage();
+        samples.stream()
+                .map(CollectionLayoutNamedChildVm::new)
+                .forEach(e -> page.getChildren().add(e));
+        return page;
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-fast-forward",
         describedAs = "Number of domain objects per page in this collection")
     public CollectionLayoutPagedPage paged(){
-        return new CollectionLayoutPagedPage();
+        val page = new CollectionLayoutPagedPage();
+        samples.stream()
+                .map(CollectionLayoutPagedChildVm::new)
+                .forEach(e -> page.getChildren().add(e));
+        return page;
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-sharp fa-solid fa-sort",
         describedAs = "Order of this member relative to other members in the same (layout) group.")
     public CollectionLayoutSequencePage sequence(){
-        return new CollectionLayoutSequencePage();
+        val page = new CollectionLayoutSequencePage();
+        samples.stream()
+                .map(CollectionLayoutSequenceChildVm::new)
+                .forEach(e -> page.getChildren().add(e));
+        return page;
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-solid fa-arrow-down-a-z",
         describedAs = "Sort domain objects in this collection, overriding their default comparator")
     public CollectionLayoutSortedByPage sortedBy(){
-        return new CollectionLayoutSortedByPage();
+        val page = new CollectionLayoutSortedByPage();
+        samples.stream()
+                .map(CollectionLayoutSortedByChildVm::new)
+                .forEach(e -> page.getChildren().add(e));
+        return page;
+
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-solid fa-table-columns",
         describedAs = "Allows to specify a custom client side table renderer.")
     public CollectionLayoutTableDecoratorPage tableDecorator(){
-        return new CollectionLayoutTableDecoratorPage();
+        val page = new CollectionLayoutTableDecoratorPage();
+        samples.stream()
+                .map(CollectionLayoutTableDecoratorChildVm::new)
+                .forEach(e -> page.getChildren().add(e));
+        return page;
+
     }
 
 

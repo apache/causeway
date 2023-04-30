@@ -24,6 +24,8 @@ import java.util.List;
 import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
@@ -35,6 +37,11 @@ import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.TableDecorator;
 
+import demoapp.dom.domain.collections.CollectionLayout.sortedBy.CollectionLayoutSortedByPage;
+import demoapp.dom.domain.collections.CollectionLayout.sortedBy.child.CollectionLayoutSortedByChildVm;
+
+import demoapp.dom.domain.collections.CollectionLayout.tableDecorator.child.CollectionLayoutTableDecoratorChildVm;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -42,9 +49,8 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.domain._entities.DemoEntity;
 
 //tag::class[]
-@DomainObject(
-        nature=Nature.VIEW_MODEL)
-@Named("demo.CollectionLayoutTableDecoratorVm")
+@Named("demo.CollectionLayoutTableDecoratorPage")
+@DomainObject(nature=Nature.VIEW_MODEL)
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -54,14 +60,16 @@ public class CollectionLayoutTableDecoratorPage implements HasAsciiDocDescriptio
         return "@CollectionLayout#tableDecorator";
     }
 
-//tag::collection[]
-    @Collection
+//tag::children[]
+    @Collection()
     @CollectionLayout(
-            tableDecorator = TableDecorator.DatatablesNet.class)
-    @XmlTransient
+            tableDecorator = TableDecorator.DatatablesNet.class     // <.>
+    )
+    @XmlElementWrapper(name = "children")
+    @XmlElement(name = "child")
     @Getter @Setter
-    private List<DemoEntity> collection = new ArrayList<>();
-//end::collection[]
+    private List<CollectionLayoutTableDecoratorChildVm> children = new ArrayList<>();
+//end::children[]
 
 }
 //end::class[]

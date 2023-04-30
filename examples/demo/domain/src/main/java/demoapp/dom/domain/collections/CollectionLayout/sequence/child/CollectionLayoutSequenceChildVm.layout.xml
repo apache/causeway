@@ -28,15 +28,11 @@
 		<bs3:col span="6">
 			<bs3:row>
 				<bs3:col span="12">
-					<cpt:collection id="children"/>
-					<cpt:collection id="moreChildren"/>
-					<cpt:collection id="yetMoreChildren"/>
+					<cpt:fieldSet name="Properties" id="properties">
+						<cpt:property id="value"/>
+					</cpt:fieldSet>
+					<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
 				</bs3:col>
-			</bs3:row>
-			<bs3:row>
-				<bs3:col span="12">
-			<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
-		</bs3:col>
 			</bs3:row>
 		</bs3:col>
 		<bs3:col span="6">
@@ -47,9 +43,9 @@
 				<cpt:action id="inspectMetamodel"  position="PANEL_DROPDOWN"/>
 				<cpt:action id="downloadMetamodelXml"  position="PANEL_DROPDOWN"/>
 				<cpt:action id="downloadJdoMetamodel"  position="PANEL_DROPDOWN"/>
-				<cpt:action id="recentCommands"  position="PANEL_DROPDOWN"/>
-				<cpt:action id="recentExecutions"  position="PANEL_DROPDOWN"/>
-				<cpt:action id="recentAuditTrailEntries"  position="PANEL_DROPDOWN"/>
+                <cpt:action id="recentCommands"  position="PANEL_DROPDOWN"/>
+                <cpt:action id="recentExecutions"  position="PANEL_DROPDOWN"/>
+                <cpt:action id="recentAuditTrailEntries"  position="PANEL_DROPDOWN"/>
 				<cpt:action id="impersonateWithRoles"  position="PANEL_DROPDOWN"/>
 				<cpt:action id="openRestApi" position="PANEL_DROPDOWN" />
 				<cpt:property id="description"/>

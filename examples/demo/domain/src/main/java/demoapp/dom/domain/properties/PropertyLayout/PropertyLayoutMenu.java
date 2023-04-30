@@ -67,7 +67,11 @@ public class PropertyLayoutMenu {
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-comment", describedAs = "Description of the property, shown as a tooltip")
     public PropertyLayoutDescribedAsPage describedAs(){
-        return new PropertyLayoutDescribedAsPage();
+        val page = new PropertyLayoutDescribedAsPage();
+        page.setName("Joey");
+        page.setNotes("Favorite Friend");
+        page.setAddress("Apartment over the coffee shop\nNew York\nNew York");
+        return page;
     }
 
 
