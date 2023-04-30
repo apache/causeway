@@ -62,7 +62,7 @@ public class CollectionLayoutNamedPage implements HasAsciiDocDescription {
 //tag::children[]
     @Collection()
     @CollectionLayout(
-            named = "Collection of child objects"   // <.>
+            named = "Named using @CollectionLayout"     // <.>
     )
     @XmlElementWrapper(name = "children")
     @XmlElement(name = "child")
@@ -72,7 +72,7 @@ public class CollectionLayoutNamedPage implements HasAsciiDocDescription {
 
 //tag::more-children[]
     @Collection()
-    @CollectionLayout()                             // <.>
+    @CollectionLayout()                                 // <.>
     @XmlElementWrapper(name = "moreChildren")
     @XmlElement(name = "child")
     @Getter @Setter

@@ -88,7 +88,7 @@ public class CollectionLayoutHiddenPage implements HasAsciiDocDescription {
     @XmlElement(name = "child")
     @Getter @Setter
     private List<CollectionLayoutHiddenChildVm> yetMoreChildren = new ArrayList<>();
-//end::more-children[]
+//end::yet-more-children[]
 
 }
 //end::class[]

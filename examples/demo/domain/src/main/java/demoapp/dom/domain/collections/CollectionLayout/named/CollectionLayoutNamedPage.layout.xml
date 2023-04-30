@@ -29,7 +29,9 @@
 			<bs3:row>
 				<bs3:col span="12">
 					<cpt:collection id="children"/>
-					<cpt:collection id="moreChildren"/>
+					<cpt:collection id="moreChildren">
+                        <cpt:named>Named using layout.xml</cpt:named>
+                    </cpt:collection>
 				</bs3:col>
 			</bs3:row>
 			<bs3:row>

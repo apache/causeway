@@ -55,7 +55,7 @@ public class PropertyLayoutNamedPage implements HasAsciiDocDescription {
 //tag::annotation[]
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(
-        named = "Named using @PropertyLayout"
+        named = "Named using @PropertyLayout"       // <.>
     )
     @XmlElement(required = false)
     @Getter @Setter
