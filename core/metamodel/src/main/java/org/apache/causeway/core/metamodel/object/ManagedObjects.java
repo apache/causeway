@@ -261,6 +261,12 @@ public final class ManagedObjects {
 
     // -- COMPARE UTILITIES
 
+    public static boolean pojoEquals(final @Nullable ManagedObject a, final @Nullable ManagedObject b) {
+        val aPojo = MmUnwrapUtils.single(a);
+        val bPojo = MmUnwrapUtils.single(b);
+        return Objects.equals(aPojo, bPojo);
+    }
+
     public static int compare(final @Nullable ManagedObject p, final @Nullable ManagedObject q) {
         return NATURAL_NULL_FIRST.compare(p, q);
     }

@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.spec.feature;
 
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -35,7 +34,7 @@ import org.apache.causeway.core.metamodel.interactions.ActionArgValidityContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
+import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.memento.ActionParameterMemento;
 import org.apache.causeway.core.metamodel.util.Facets;
@@ -152,7 +151,7 @@ extends ObjectFeature, CurrentHolder {
      * Reassessment can be switch off by means of {@link org.apache.causeway.applib.annotation.Parameter#dependentDefaultsPolicy()}.
      */
     default boolean reassessDefault(final ParameterNegotiationModel pendingArgs) {
-        val changeCount = _Refs.intRef(0); // this is just used as a flag, might as well use eg. AtomicBoolean
+        val changed = _Refs.booleanRef(false);
         val paramIndex = getParameterIndex();
         val bindableParamDirtyFlag = pendingArgs.getBindableParamValueDirtyFlag(paramIndex);
         if(Facets.dependentDefaultsPolicy(this).isUpdateDependent()
@@ -161,16 +160,14 @@ extends ObjectFeature, CurrentHolder {
             // reassess defaults honoring defaults semantics
             val paramDefaultValue = this.getDefault(pendingArgs);
             pendingArgs.updateParamValue(paramIndex, paramOldValue->{
-                val oldPojo = MmUnwrapUtils.single(paramOldValue);
-                val newPojo = MmUnwrapUtils.single(paramDefaultValue);
-                if(!Objects.equals(oldPojo, newPojo)) {
-                    changeCount.getAndInc();
+                if(!ManagedObjects.pojoEquals(paramOldValue, paramDefaultValue)) {
+                    changed.setValue(true);
                 }
                 return paramDefaultValue;
             });
             bindableParamDirtyFlag.setValue(false); // clear dirty flag (signaling not edited by user in the UI)
         }
-        return changeCount.getValue()>0;
+        return changed.isTrue();
     }
 
     @NonNull default ManagedObject getEmpty() {
