@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.collections.CollectionLayout.tableDecorator.child;
+package demoapp.dom.domain.collections.CollectionLayout.tabledec.child;
 
 import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;

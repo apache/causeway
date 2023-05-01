@@ -45,9 +45,8 @@ import demoapp.dom.domain.collections.CollectionLayout.sequence.CollectionLayout
 import demoapp.dom.domain.collections.CollectionLayout.sequence.child.CollectionLayoutSequenceChildVm;
 import demoapp.dom.domain.collections.CollectionLayout.sortedBy.CollectionLayoutSortedByPage;
 import demoapp.dom.domain.collections.CollectionLayout.sortedBy.child.CollectionLayoutSortedByChildVm;
-import demoapp.dom.domain.collections.CollectionLayout.tableDecorator.CollectionLayoutTableDecoratorPage;
-
-import demoapp.dom.domain.collections.CollectionLayout.tableDecorator.child.CollectionLayoutTableDecoratorChildVm;
+import demoapp.dom.domain.collections.CollectionLayout.tabledec.CollectionLayoutTableDecoratorPage;
+import demoapp.dom.domain.collections.CollectionLayout.tabledec.child.CollectionLayoutTableDecoratorChildVm;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

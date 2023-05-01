@@ -14,7 +14,12 @@ Another is to improve the load speed of the page by reducing the amount of data 
 Extensions can provide alternative views:
 
 * "excel" (download as Excel spreadsheet)
-* "calendar" (requires the implementation of an interface to indicate the date)
++
+This demo app _does_ include this extension.
+* "calendar".
++
+This requires that the element type implements a certain interface to expose the appropriate date
+
 //* "map".
 
 Every view is identified by a simple string, all of which must be unique.
