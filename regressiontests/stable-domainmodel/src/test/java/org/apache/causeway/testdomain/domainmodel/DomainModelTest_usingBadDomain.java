@@ -60,6 +60,7 @@ import org.apache.causeway.testdomain.model.bad.Configuration_usingInvalidDomain
 import org.apache.causeway.testdomain.model.bad.InvalidActionOverloading;
 import org.apache.causeway.testdomain.model.bad.InvalidContradictingTypeSemantics;
 import org.apache.causeway.testdomain.model.bad.InvalidDomainObjectOnInterface;
+import org.apache.causeway.testdomain.model.bad.InvalidElementTypes;
 import org.apache.causeway.testdomain.model.bad.InvalidMemberOverloadingWhenInherited;
 import org.apache.causeway.testdomain.model.bad.InvalidObjectWithAlias;
 import org.apache.causeway.testdomain.model.bad.InvalidOrphanedActionSupport;
@@ -360,6 +361,22 @@ class DomainModelTest_usingBadDomain {
         // disableOrders(): String = "my orders disabled"
         validator.assertAnyFailuresContaining(clsIdUnderTest, "disableOrders");
 
+    }
+
+    // -- ELEMENT-TYPE
+
+    @ParameterizedTest
+    @ValueSource(classes = {
+            InvalidElementTypes.Returning.class,
+            InvalidElementTypes.Taking.class,
+            InvalidElementTypes.InvalidProperty.class,
+            InvalidElementTypes.InvalidCollection.class
+            })
+    void invalidElementType(final Class<?> classUnderTest) {
+
+        validator.assertAnyFailuresContaining(
+                classUnderTest,
+                "has a member with either vetoed or managed element-type");
     }
 
     // -- INCUBATING
