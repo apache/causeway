@@ -20,7 +20,6 @@ package org.apache.causeway.core.metamodel.postprocessors.members;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
 import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacet;
@@ -30,6 +29,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
 /**
  * Mixed-in members use the domain-event type as specified with the mixee type,
@@ -49,12 +49,9 @@ extends ObjectSpecificationPostProcessorAbstract {
         if(objectAction.isMixedIn()) {
             objectAction
                 .lookupFacet(ActionDomainEventFacet.class)
-                .orElseThrow(()->_Exceptions
-                        .illegalState("framework bug: "
-                                + "ActionDomainEventFacet for %s should have already been created via "
-                                + "ActionAnnotationFacetFactory, yet was not.",
-                                objectAction.getFeatureIdentifier()))
-                .initWithMixee(objectSpecification);
+                .ifPresentOrElse(
+                        facet->facet.initWithMixee(objectSpecification),
+                        ()->reportMissing(objectAction));
         }
     }
 
@@ -63,12 +60,9 @@ extends ObjectSpecificationPostProcessorAbstract {
         if(property.isMixedIn()) {
             property
                 .lookupFacet(PropertyDomainEventFacet.class)
-                .orElseThrow(()->_Exceptions
-                        .illegalState("framework bug: "
-                                + "PropertyDomainEventFacet for %s should have already been created via "
-                                + "PropertyAnnotationFacetFactory, yet was not.",
-                                property.getFeatureIdentifier()))
-                .initWithMixee(objectSpecification);
+                .ifPresentOrElse(
+                        facet->facet.initWithMixee(objectSpecification),
+                        ()->reportMissing(property));
         }
     }
 
@@ -77,14 +71,31 @@ extends ObjectSpecificationPostProcessorAbstract {
         if(collection.isMixedIn()) {
             collection
                 .lookupFacet(CollectionDomainEventFacet.class)
-                .orElseThrow(()->_Exceptions
-                        .illegalState("framework bug: "
-                                + "CollectionDomainEventFacet for %s should have already been created via "
-                                + "CollectionAnnotationFacetFactory, yet was not.",
-                                collection.getFeatureIdentifier()))
-                .initWithMixee(objectSpecification);
-
+                .ifPresentOrElse(
+                        facet->facet.initWithMixee(objectSpecification),
+                        ()->reportMissing(collection));
         }
+    }
+
+    // -- HELPER
+
+    private void reportMissing(final ObjectAction act) {
+        ValidationFailure.raiseFormatted(act,
+                "ActionDomainEventFacet for %s should have already been created via "
+                + "ActionAnnotationFacetFactory, yet was not. (possible causes: mixin declartion is invalid)",
+                act.getFeatureIdentifier());
+    }
+    private void reportMissing(final OneToOneAssociation prop) {
+        ValidationFailure.raiseFormatted(prop,
+                "PropertyDomainEventFacet for %s should have already been created via "
+                + "PropertyAnnotationFacetFactory, yet was not. (possible causes: mixin declartion is invalid)",
+                prop.getFeatureIdentifier());
+    }
+    private void reportMissing(final OneToManyAssociation coll) {
+        ValidationFailure.raiseFormatted(coll,
+                "CollectionDomainEventFacet for %s should have already been created via "
+                + "CollectionAnnotationFacetFactory, yet was not. (possible causes: mixin declartion is invalid)",
+                coll.getFeatureIdentifier());
     }
 
 }
