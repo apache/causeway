@@ -31,12 +31,12 @@ import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.quer
 
 import lombok.val;
 
-abstract class MetaModelVisitingValidatorForClauseAbstract
+abstract class MetaModelValidatorForJdoqlAbstract
 extends MetaModelValidatorAbstract {
 
     final String clause;
 
-    protected MetaModelVisitingValidatorForClauseAbstract(
+    protected MetaModelValidatorForJdoqlAbstract(
             final MetaModelContext mmc,
             final String clause) {
         super(mmc);

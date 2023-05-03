@@ -56,7 +56,7 @@ implements MetaModelRefiner {
 
     @Override
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
-        programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec->{
+        programmingModel.addValidatorSkipManagedBeans(objectSpec->{
             final Stream<OneToManyAssociation> objectCollections =
                     objectSpec.streamCollections(MixedIn.EXCLUDED);
 

@@ -101,7 +101,7 @@ public class JdoProgrammingModel implements MetaModelRefiner {
 
     private void addValidatorToEnsureIdentityType(final ProgrammingModel pm) {
 
-        pm.addVisitingValidatorSkipManagedBeans(objSpec -> {
+        pm.addValidatorSkipManagedBeans(objSpec -> {
 
             final JdoPersistenceCapableFacet jpcf = objSpec.getFacet(JdoPersistenceCapableFacet.class);
             if(jpcf == null) {
@@ -134,7 +134,7 @@ public class JdoProgrammingModel implements MetaModelRefiner {
 
     private void addValidatorToCheckForUnsupportedAnnotations(final ProgrammingModel pm) {
 
-        pm.addVisitingValidatorSkipManagedBeans(objSpec -> {
+        pm.addValidatorSkipManagedBeans(objSpec -> {
             if (objSpec.containsNonFallbackFacet(ParentedCollectionFacet.class)
                     && !objSpec.containsNonFallbackFacet(CollectionFacet.class)) {
                 ValidationFailure.raiseFormatted(

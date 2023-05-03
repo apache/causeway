@@ -143,19 +143,7 @@ extends HasMetaModelContext {
         addValidator(ValidationOrder.A2_AFTER_BUILTIN, validator, markers);
     }
 
-    default void addVisitingValidator(
-            final @NonNull Consumer<ObjectSpecification> validator,
-            final Marker ... markers) {
-
-        addValidator(new MetaModelValidatorAbstract(getMetaModelContext()) {
-            @Override
-            public void validateObjectEnter(final @NonNull ObjectSpecification spec) {
-                validator.accept(spec);
-            }
-        });
-    }
-
-    default void addVisitingValidatorSkipManagedBeans(
+    default void addValidatorSkipManagedBeans(
             final @NonNull Consumer<ObjectSpecification> validator,
             final Marker ... markers) {
 

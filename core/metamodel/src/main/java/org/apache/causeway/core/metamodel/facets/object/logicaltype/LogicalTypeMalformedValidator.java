@@ -21,8 +21,9 @@ package org.apache.causeway.core.metamodel.facets.object.logicaltype;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
-import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
-import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.val;
@@ -35,40 +36,41 @@ import lombok.val;
  * @since 2.0
  */
 public class LogicalTypeMalformedValidator
-implements MetaModelRefiner {
+extends MetaModelValidatorAbstract {
+
+    public LogicalTypeMalformedValidator(final MetaModelContext metaModelContext) {
+        super(metaModelContext);
+    }
 
     @Override
-    public void refineProgrammingModel(final ProgrammingModel programmingModel) {
+    public void validateObjectEnter(final ObjectSpecification spec) {
 
-        programmingModel.addVisitingValidator(spec->{
+        if(!spec.isEntityOrViewModel()
+                && !spec.isInjectable() ) {
+            return;
+        }
 
-            if(!spec.isEntityOrViewModel()
-                    && !spec.isInjectable() ) {
-                return;
-            }
+        val logicalType = spec.getLogicalType();
+        val logicalTypeName = logicalType.getLogicalTypeName();
 
-            val logicalType = spec.getLogicalType();
-            val logicalTypeName = logicalType.getLogicalTypeName();
+        val nameParts = _Strings.splitThenStream(logicalTypeName, ".")
+                .collect(Can.toCan());
 
-            val nameParts = _Strings.splitThenStream(logicalTypeName, ".")
-                    .collect(Can.toCan());
+        if(!nameParts.getCardinality().isMultiple()
+                || nameParts.stream()
+                    .anyMatch(String::isEmpty)) {
 
-            if(!nameParts.getCardinality().isMultiple()
-                    || nameParts.stream()
-                        .anyMatch(String::isEmpty)) {
+            val validationResponse = spec.isInjectable()
+                    ? ProgrammingModelConstants.Violation.DOMAIN_SERVICE_MISSING_A_NAMESPACE
+                    : ProgrammingModelConstants.Violation.DOMAIN_OBJECT_MISSING_A_NAMESPACE;
 
-                val validationResponse = spec.isInjectable()
-                        ? ProgrammingModelConstants.Violation.DOMAIN_SERVICE_MISSING_A_NAMESPACE
-                        : ProgrammingModelConstants.Violation.DOMAIN_OBJECT_MISSING_A_NAMESPACE;
-
-                ValidationFailure.raiseFormatted(spec,
-                        validationResponse.builder()
-                            .addVariable("type", spec.getFullIdentifier())
-                            .addVariable("logicalTypeName", logicalTypeName)
-                            .buildMessage());
-            }
-
-        });
+            ValidationFailure.raiseFormatted(spec,
+                    validationResponse.builder()
+                        .addVariable("type", spec.getFullIdentifier())
+                        .addVariable("logicalTypeName", logicalTypeName)
+                        .buildMessage());
+        }
 
     }
+
 }

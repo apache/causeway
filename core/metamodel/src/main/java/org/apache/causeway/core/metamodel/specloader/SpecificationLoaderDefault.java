@@ -368,7 +368,7 @@ implements
     public void shutdown() {
         log.debug("shutting down {}", this);
         disposeMetaModel();
-        facetProcessor.shutdown();
+        facetProcessor.close();
         postProcessor.close();
         facetProcessor = null;
     }

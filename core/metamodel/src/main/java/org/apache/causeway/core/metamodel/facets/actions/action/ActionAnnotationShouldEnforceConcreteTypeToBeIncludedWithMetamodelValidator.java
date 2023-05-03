@@ -44,31 +44,33 @@ extends MetaModelValidatorAbstract {
 
     @Override
     public void validateObjectEnter(final ObjectSpecification spec) {
-        if(spec.getBeanSort()==BeanSort.UNKNOWN
-                && !spec.isAbstract()) {
 
-            val actions = spec.streamAnyActions(MixedIn.EXCLUDED).collect(Collectors.toList());
+        val skip = spec.getBeanSort() != BeanSort.UNKNOWN
+                || spec.isAbstract();
 
-            final int numActions = actions.size();
-            if (numActions > 0) {
+        if(skip) return;
 
-                val actionIds = actions.stream()
-                .map(ObjectAction::getFeatureIdentifier)
-                .map(Identifier::toString)
-                .collect(Collectors.joining(", "));
+        val actions = spec.streamAnyActions(MixedIn.EXCLUDED).collect(Collectors.toList());
 
-                ValidationFailure.raiseFormatted(
-                        spec,
-                        ProgrammingModelConstants.Violation.UNKNONW_SORT_WITH_ACTION
-                            .builder()
-                            .addVariable("type", spec.getCorrespondingClass().getName())
-                            .addVariable("actions", actionIds)
-                            .addVariable("actionCount", numActions)
-                            .buildMessage());
+        final int numActions = actions.size();
+        if (numActions > 0) {
 
-            }
+            val actionIds = actions.stream()
+            .map(ObjectAction::getFeatureIdentifier)
+            .map(Identifier::toString)
+            .collect(Collectors.joining(", "));
+
+            ValidationFailure.raiseFormatted(
+                    spec,
+                    ProgrammingModelConstants.Violation.UNKNONW_SORT_WITH_ACTION
+                        .builder()
+                        .addVariable("type", spec.getCorrespondingClass().getName())
+                        .addVariable("actions", actionIds)
+                        .addVariable("actionCount", numActions)
+                        .buildMessage());
 
         }
+
     }
 
 }

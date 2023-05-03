@@ -121,7 +121,7 @@ implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
 
-        programmingModel.addVisitingValidatorSkipManagedBeans(spec->{
+        programmingModel.addValidatorSkipManagedBeans(spec->{
 
             val cls = spec.getCorrespondingClass();
 

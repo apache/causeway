@@ -30,10 +30,10 @@ import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure
 
 import lombok.val;
 
-class MetaModelVisitingValidatorForFromClause
-extends MetaModelVisitingValidatorForClauseAbstract {
+class MetaModelValidatorForJdoqlFromClause
+extends MetaModelValidatorForJdoqlAbstract {
 
-    MetaModelVisitingValidatorForFromClause(final MetaModelContext mmc) {
+    MetaModelValidatorForJdoqlFromClause(final MetaModelContext mmc) {
         super(mmc, "FROM");
     }
 

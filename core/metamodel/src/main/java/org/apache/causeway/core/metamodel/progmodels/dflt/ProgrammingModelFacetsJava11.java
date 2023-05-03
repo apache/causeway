@@ -52,6 +52,7 @@ import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacetFr
 import org.apache.causeway.core.metamodel.facets.object.ignore.annotation.RemoveAnnotatedMethodsFacetFactory;
 import org.apache.causeway.core.metamodel.facets.object.ignore.javalang.IteratorFilteringFacetFactory;
 import org.apache.causeway.core.metamodel.facets.object.ignore.javalang.RemoveMethodsFacetFactory;
+import org.apache.causeway.core.metamodel.facets.object.logicaltype.LogicalTypeMalformedValidator;
 import org.apache.causeway.core.metamodel.facets.object.logicaltype.classname.LogicalTypeFacetFromClassNameFactory;
 import org.apache.causeway.core.metamodel.facets.object.navparent.annotation.NavigableParentAnnotationFacetFactory;
 import org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImplFactory;
@@ -269,6 +270,7 @@ extends ProgrammingModelAbstract {
         addValidator(new TitlesAndTranslationsValidator(mmc));  // should this instead be a post processor, alongside TranslationPostProcessor ?
         addValidator(new ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator(mmc));
         addValidator(new ActionOverloadingValidator(mmc));
+        addValidator(new LogicalTypeMalformedValidator(mmc));
     }
 
 }

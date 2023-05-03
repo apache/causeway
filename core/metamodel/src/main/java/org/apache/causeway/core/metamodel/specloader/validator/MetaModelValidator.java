@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.specloader.validator;
 
+import java.util.function.Predicate;
+
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
@@ -53,5 +55,10 @@ public interface MetaModelValidator {
 
     /** validate collection - mixed-in included */
     default void validateCollection(final ObjectSpecification objSpec, final OneToManyAssociation coll) {}
+
+    // -- PREDEFINED FILTERS
+
+    public final static Predicate<ObjectSpecification> ALL = __->true;
+    public final static Predicate<ObjectSpecification> INJECTABLE = ObjectSpecification::isInjectable;
 
 }
