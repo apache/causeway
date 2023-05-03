@@ -20,7 +20,6 @@ package org.apache.causeway.core.metamodel.postprocessors.all;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Stack;
 
 import javax.inject.Inject;
 
@@ -58,7 +57,7 @@ implements
 
     @Inject
     public SanityChecksValidator(final MetaModelContext mmc) {
-        super(mmc, ALL);
+        super(mmc, SKIP_MIXINS);
     }
 
     @Override
@@ -86,24 +85,20 @@ implements
 
     @Override
     public void validateObjectEnter(final ObjectSpecification objSpec) {
-
-        _Assert.assertTrue(processingStack.isEmpty()); //TODO[CAUSEWAY-3051] simplify
-
-        processingStack.push(memberIds = new HashMap<>());
-        //System.err.printf("START %s %s%n", this.getClass().getSimpleName(), ""+this.hashCode());
+        // guard against recursive call
+        _Assert.assertNull(this.memberIds, ()->"framework bug: "
+                + "validators are not expected to be called recursevely (nested)");
+        this.memberIds = new HashMap<>();
     }
 
     @Override
     public void validateObjectExit(final ObjectSpecification objSpec) {
-        memberIds = processingStack.isEmpty()
-                ? null
-                : processingStack.pop(); // garbage collect
+        memberIds = null; // garbage collect
     }
 
     // -- HELPER
 
     private Map<String, ObjectMember> memberIds;
-    private final Stack<Map<String, ObjectMember>> processingStack = new Stack<>();
 
     private void checkMemberId(
             final ObjectMember objectMember,
@@ -111,7 +106,8 @@ implements
 
         if(declaringType.isAbstract()) return;
 
-        //TODO[CAUSEWAY-3051] debugging tests
+        //TODO[CAUSEWAY-3051] should be 18 but reports only 11
+        //perhaps because we internally assume no clashing during spec-loading, which is wrong
         if(objectMember.getDeclaringType().toString().contains("InvalidMemberIdClash")) {
             System.err.printf("member-id: %s (%s)%n", objectMember.getId(), objectMember.getDeclaringType());
         }

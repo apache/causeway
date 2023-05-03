@@ -38,11 +38,9 @@ implements
     @Getter(onMethod_ = {@Override})
     private final @NonNull Predicate<ObjectSpecification> filter;
 
-    //TODO[CAUSEWAY-3051] don't use internally, but perhaps provide for legacy code?
-//    protected MetaModelValidatorAbstract(final MetaModelContext metaModelContext) {
-//        this.metaModelContext = metaModelContext;
-//        this.filter = ALL;
-//    }
+    protected MetaModelValidatorAbstract(final MetaModelContext metaModelContext) {
+        this(metaModelContext, ALL);
+    }
 
     protected MetaModelValidatorAbstract(
             final MetaModelContext metaModelContext,

@@ -80,6 +80,10 @@ public interface MetaModelValidator {
     public final static Predicate<ObjectSpecification> SKIP_MANAGED_BEANS =
             spec->!spec.isInjectable();
 
+    /** types pass this filter, if not a mixin */
+    public final static Predicate<ObjectSpecification> SKIP_MIXINS =
+            spec->!spec.isMixin();
+
     /** types pass this filter, if either not {@link ObjectSpecificationAbstract} or not member-annotation is required */
     public final static Predicate<ObjectSpecification> SKIP_WHEN_MEMBER_ANNOT_REQUIRED =
             spec->(!(spec instanceof ObjectSpecificationAbstract)

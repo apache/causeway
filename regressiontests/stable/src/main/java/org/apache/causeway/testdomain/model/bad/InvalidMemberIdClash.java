@@ -25,14 +25,11 @@ import java.util.Set;
 import javax.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.Collection;
-import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -68,138 +65,127 @@ public class InvalidMemberIdClash {
     @Getter
     private List<Integer> someCollection = Collections.emptyList();
 
-    // -- MIXINS
+    // -- MIXINS (ACTION)
 
     @Action
-    @ActionLayout(named = "someAction") // member-id clash
     @RequiredArgsConstructor
-    public static class ActionMixin1 {
+    public static class ActionMixin1_someAction { // member-id clash
         @SuppressWarnings("unused")
         private final InvalidMemberIdClash memberIdClash;
         @MemberSupport public String act() { return ""; }
     }
 
     @Action
-    @ActionLayout(named = "someProperty") // member-id clash
     @RequiredArgsConstructor
-    public static class ActionMixin2 {
+    public static class ActionMixin2_someProperty { // member-id clash
         @SuppressWarnings("unused")
         private final InvalidMemberIdClash memberIdClash;
         @MemberSupport public String act() { return ""; }
     }
 
     @Action
-    @ActionLayout(named = "someCollection") // member-id clash
     @RequiredArgsConstructor
-    public static class ActionMixin3 {
+    public static class ActionMixin3_someCollection { // member-id clash
         @SuppressWarnings("unused")
         private final InvalidMemberIdClash memberIdClash;
         @MemberSupport public String act() { return ""; }
     }
 
     @Action
-    @ActionLayout(named = "mixinA") // member-id clash
     @RequiredArgsConstructor
-    public static class ActionMixin4 {
+    public static class ActionMixin4_mixinA { // member-id clash
         @SuppressWarnings("unused")
         private final InvalidMemberIdClash memberIdClash;
         @MemberSupport public String act() { return ""; }
     }
 
     @Action
-    @ActionLayout(named = "mixinB") // member-id clash
     @RequiredArgsConstructor
-    public static class ActionMixin5 {
+    public static class ActionMixin5_mixinB { // member-id clash
         @SuppressWarnings("unused")
         private final InvalidMemberIdClash memberIdClash;
         @MemberSupport public String act() { return ""; }
     }
 
+    // -- MIXINS (PROPERTY)
+
     @Property
-    @PropertyLayout(named = "someAction") // member-id clash
     @RequiredArgsConstructor
-    public static class PropertyMixin1 {
+    public static class PropertyMixin1_someAction { // member-id clash
         @SuppressWarnings("unused")
         private final InvalidMemberIdClash memberIdClash;
         @MemberSupport public String prop() { return ""; }
     }
 
     @Property
-    @PropertyLayout(named = "someProperty") // member-id clash
     @RequiredArgsConstructor
-    public static class PropertyMixin2 {
+    public static class PropertyMixin2_someProperty { // member-id clash
         @SuppressWarnings("unused")
         private final InvalidMemberIdClash memberIdClash;
         @MemberSupport public String prop() { return ""; }
     }
 
     @Property
-    @PropertyLayout(named = "someCollection") // member-id clash
     @RequiredArgsConstructor
-    public static class PropertyMixin3 {
+    public static class PropertyMixin3_someCollection { // member-id clash
         @SuppressWarnings("unused")
         private final InvalidMemberIdClash memberIdClash;
         @MemberSupport public String prop() { return ""; }
     }
 
     @Property
-    @PropertyLayout(named = "mixinA") // member-id clash
     @RequiredArgsConstructor
-    public static class PropertyMixin4 {
+    public static class PropertyMixin_mixinA { // member-id clash
         @SuppressWarnings("unused")
         private final InvalidMemberIdClash memberIdClash;
         @MemberSupport public String prop() { return ""; }
     }
 
     @Property
-    @PropertyLayout(named = "mixinC") // member-id clash
     @RequiredArgsConstructor
-    public static class PropertyMixin5 {
+    public static class PropertyMixin5_mixinC { // member-id clash
         @SuppressWarnings("unused")
         private final InvalidMemberIdClash memberIdClash;
         @MemberSupport public String prop() { return ""; }
     }
+
+    // -- MIXINS (COLLECTION)
 
     @Collection
-    @CollectionLayout(named = "someAction") // member-id clash
     @RequiredArgsConstructor
-    public static class CollectionMixin1 {
+    public static class CollectionMixin1_someAction { // member-id clash
         @SuppressWarnings("unused")
         private final InvalidMemberIdClash memberIdClash;
         @MemberSupport public Set<String> coll() { return null; }
     }
 
     @Collection
-    @CollectionLayout(named = "someProperty") // member-id clash
     @RequiredArgsConstructor
-    public static class CollectionMixin2 {
+    public static class CollectionMixin2_someProperty { // member-id clash
         @SuppressWarnings("unused")
         private final InvalidMemberIdClash memberIdClash;
         @MemberSupport public Set<String> coll() { return null; }
     }
 
     @Collection
-    @CollectionLayout(named = "someCollection") // member-id clash
     @RequiredArgsConstructor
-    public static class CollectionMixin3 {
+    public static class CollectionMixin3_someCollection { // member-id clash
         @SuppressWarnings("unused")
         private final InvalidMemberIdClash memberIdClash;
         @MemberSupport public Set<String> coll() { return null; }
     }
 
     @Collection
-    @CollectionLayout(named = "mixinB") // member-id clash
     @RequiredArgsConstructor
-    public static class CollectionMixin4 {
+    public static class CollectionMixin4_mixinB { // member-id clash
         @SuppressWarnings("unused")
         private final InvalidMemberIdClash memberIdClash;
         @MemberSupport public Set<String> coll() { return null; }
     }
 
     @Collection
-    @CollectionLayout(named = "mixinC") // member-id clash
     @RequiredArgsConstructor
-    public static class CollectionMixin5 {
+    public static class CollectionMixin5_mixinC { // member-id clash
         @SuppressWarnings("unused")
         private final InvalidMemberIdClash memberIdClash;
         @MemberSupport public Set<String> coll() { return null; }
