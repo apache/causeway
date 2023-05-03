@@ -32,13 +32,13 @@ import org.apache.causeway.core.metamodel.facets.object.projection.ident.CssClas
 import org.apache.causeway.core.metamodel.facets.object.projection.ident.IconFacetFromProjectionFacet;
 import org.apache.causeway.core.metamodel.facets.object.projection.ident.TitleFacetFromProjectionFacet;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleFacet;
-import org.apache.causeway.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
+import org.apache.causeway.core.metamodel.postprocessors.MetaModelPostProcessorAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 
 public class ProjectionFacetsPostProcessor
-extends ObjectSpecificationPostProcessorAbstract {
+extends MetaModelPostProcessorAbstract {
 
     @Inject
     public ProjectionFacetsPostProcessor(final MetaModelContext metaModelContext) {

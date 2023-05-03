@@ -23,10 +23,10 @@ import java.util.stream.Stream;
 
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
-import org.apache.causeway.core.metamodel.postprocessors.ObjectSpecificationPostProcessor;
+import org.apache.causeway.core.metamodel.postprocessors.MetaModelPostProcessor;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
-import org.apache.causeway.core.metamodel.specloader.validator.MetaModelVisitingValidatorAbstract;
+import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 
 import lombok.NonNull;
 
@@ -123,7 +123,7 @@ extends HasMetaModelContext {
             T instance,
             Marker ... markers);
 
-    <T extends ObjectSpecificationPostProcessor> void addPostProcessor(
+    <T extends MetaModelPostProcessor> void addPostProcessor(
             PostProcessingOrder order,
             T instance,
             Marker ... markers);
@@ -131,7 +131,7 @@ extends HasMetaModelContext {
 
     Stream<FacetFactory> streamFactories();
     Stream<MetaModelValidator> streamValidators();
-    Stream<ObjectSpecificationPostProcessor> streamPostProcessors();
+    Stream<MetaModelPostProcessor> streamPostProcessors();
 
     // -- SHORTCUTS
 
@@ -147,9 +147,9 @@ extends HasMetaModelContext {
             final @NonNull Consumer<ObjectSpecification> validator,
             final Marker ... markers) {
 
-        addValidator(new MetaModelVisitingValidatorAbstract(getMetaModelContext()) {
+        addValidator(new MetaModelValidatorAbstract(getMetaModelContext()) {
             @Override
-            public void validate(final @NonNull ObjectSpecification spec) {
+            public void validateObjectEnter(final @NonNull ObjectSpecification spec) {
                 validator.accept(spec);
             }
         });
@@ -159,9 +159,9 @@ extends HasMetaModelContext {
             final @NonNull Consumer<ObjectSpecification> validator,
             final Marker ... markers) {
 
-        addValidator(new MetaModelVisitingValidatorAbstract(getMetaModelContext()) {
+        addValidator(new MetaModelValidatorAbstract(getMetaModelContext()) {
             @Override
-            public void validate(final @NonNull ObjectSpecification spec) {
+            public void validateObjectEnter(final @NonNull ObjectSpecification spec) {
                 if(spec.isInjectable()) {
                     return;
                 }

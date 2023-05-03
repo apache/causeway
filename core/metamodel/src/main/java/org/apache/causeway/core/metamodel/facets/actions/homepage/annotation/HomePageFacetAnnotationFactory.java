@@ -40,7 +40,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
-import org.apache.causeway.core.metamodel.specloader.validator.MetaModelVisitingValidatorAbstract;
+import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
 import static org.apache.causeway.commons.internal.functions._Predicates.not;
@@ -78,12 +78,12 @@ implements MetaModelRefiner {
     }
 
     private MetaModelValidator newValidatorVisitor(final MetaModelContext mmc) {
-        return new MetaModelVisitingValidatorAbstract(mmc) {
+        return new MetaModelValidatorAbstract(mmc) {
 
             private final Map<String, ObjectAction> actionsHavingHomePageFacet = _Maps.newHashMap();
 
             @Override
-            public void validate(final @NonNull ObjectSpecification spec) {
+            public void validateObjectEnter(final @NonNull ObjectSpecification spec) {
                 if(spec.isInjectable()) {
                     return;
                 }
@@ -106,7 +106,7 @@ implements MetaModelRefiner {
             }
 
             @Override
-            public void summarize() {
+            public void validateExit() {
                 if(actionsHavingHomePageFacet.size()>1) {
 
                     final Set<String> homepageActionIdSet = actionsHavingHomePageFacet.values().stream()

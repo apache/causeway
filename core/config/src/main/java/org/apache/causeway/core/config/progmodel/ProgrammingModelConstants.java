@@ -533,6 +533,8 @@ public final class ProgrammingModelConstants {
                 + "Tuple type ${patType} referenced by @ParameterTuple annotated parameter has no or more than one public constructor."),
         VETOED_OR_MANAGED_TYPE_NOT_ALLOWED_TO_ENTER_METAMODEL("${type}: has a member with either vetoed or managed "
                 + "element-type ${elementType}, which is not allowed"),
+        MEMBER_ID_CLASH("${type}: has members using the same member-id "
+                + "'${memberId}', which is not allowed; clashes:\n\t[1]${member1}\n\t[2]${member2}"),
         ;
 
         private final String template;

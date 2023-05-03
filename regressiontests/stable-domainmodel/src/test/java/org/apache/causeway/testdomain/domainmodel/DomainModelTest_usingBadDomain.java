@@ -363,6 +363,18 @@ class DomainModelTest_usingBadDomain {
 
     }
 
+    @Test
+    void memberIdClash() {
+
+        //TODO[CAUSEWAY-3051] WIP
+        System.err.println("------------------------------------------------");
+
+        validator.streamFailures(id->id.getFullIdentityString().contains("InvalidMemberIdClash"))
+        .forEach(failure->System.err.printf("!!!%s%n", failure));
+
+        System.err.println("------------------------------------------------");
+    }
+
     // -- ELEMENT-TYPE
 
     @ParameterizedTest

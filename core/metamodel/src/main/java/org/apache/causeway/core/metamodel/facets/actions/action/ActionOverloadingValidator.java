@@ -28,7 +28,7 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
-import org.apache.causeway.core.metamodel.specloader.validator.MetaModelVisitingValidatorAbstract;
+import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.NonNull;
@@ -43,7 +43,7 @@ import lombok.val;
  * @see <a href="https://issues.apache.org/jira/browse/CAUSEWAY-2493">CAUSEWAY-2493</a>
  */
 public class ActionOverloadingValidator
-extends MetaModelVisitingValidatorAbstract {
+extends MetaModelValidatorAbstract {
 
     @Inject
     public ActionOverloadingValidator(final MetaModelContext mmc) {
@@ -51,7 +51,7 @@ extends MetaModelVisitingValidatorAbstract {
     }
 
     @Override
-    public void validate(final @NonNull ObjectSpecification spec) {
+    public void validateObjectEnter(final @NonNull ObjectSpecification spec) {
 
         if(spec.getBeanSort()!=BeanSort.UNKNOWN
                 && !spec.isAbstract()) {

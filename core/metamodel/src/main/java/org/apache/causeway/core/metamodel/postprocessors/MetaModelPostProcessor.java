@@ -25,17 +25,26 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
-public interface ObjectSpecificationPostProcessor
+public interface MetaModelPostProcessor
 extends HasMetaModelContext {
 
     default boolean isEnabled() {
         return true;
     }
 
-    default void postProcessObject(final ObjectSpecification objSpec) {};
-    default void postProcessAction(final ObjectSpecification objSpec, final ObjectAction act) {};
-    default void postProcessParameter(final ObjectSpecification objSpec, final ObjectAction act, final ObjectActionParameter param) {};
-    default void postProcessProperty(final ObjectSpecification objSpec, final OneToOneAssociation prop) {};
-    default void postProcessCollection(final ObjectSpecification objSpec, final OneToManyAssociation coll) {};
+    /** entry to post-processing of specified {@code objSpec} */
+    default void postProcessObject(final ObjectSpecification objSpec) {}
+
+    /** post process action - mixed-in included */
+    default void postProcessAction(final ObjectSpecification objSpec, final ObjectAction act) {}
+
+    /** post process action-parameter - mixed-in included */
+    default void postProcessParameter(final ObjectSpecification objSpec, final ObjectAction act, final ObjectActionParameter param) {}
+
+    /** post process property - mixed-in included */
+    default void postProcessProperty(final ObjectSpecification objSpec, final OneToOneAssociation prop) {}
+
+    /** post process collection - mixed-in included */
+    default void postProcessCollection(final ObjectSpecification objSpec, final OneToManyAssociation coll) {}
 
 }

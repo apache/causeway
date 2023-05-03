@@ -84,7 +84,7 @@ import org.apache.causeway.core.metamodel.facets.value.semantics.ValueSemanticsA
 import org.apache.causeway.core.metamodel.methods.DomainIncludeAnnotationEnforcesMetamodelContributionValidator;
 import org.apache.causeway.core.metamodel.postprocessors.all.CssOnActionFromConfiguredRegexPostProcessor;
 import org.apache.causeway.core.metamodel.postprocessors.all.DescribedAsFromTypePostProcessor;
-import org.apache.causeway.core.metamodel.postprocessors.all.SanityChecksPostProcessor;
+import org.apache.causeway.core.metamodel.postprocessors.all.SanityChecksValidator;
 import org.apache.causeway.core.metamodel.postprocessors.all.i18n.SynthesizeObjectNamingPostProcessor;
 import org.apache.causeway.core.metamodel.postprocessors.all.i18n.TranslationPostProcessor;
 import org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationPostProcessor;
@@ -239,7 +239,6 @@ extends ProgrammingModelAbstract {
     private void addPostProcessors() {
 
         val mmc = getMetaModelContext();
-        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new SanityChecksPostProcessor(mmc));
 
         // must run before Object nouns are used
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new SynthesizeObjectNamingPostProcessor(mmc));
@@ -265,6 +264,7 @@ extends ProgrammingModelAbstract {
 
         val mmc = getMetaModelContext();
 
+        addValidator(new SanityChecksValidator(mmc));
         addValidator(new DomainIncludeAnnotationEnforcesMetamodelContributionValidator(mmc));
         addValidator(new TitlesAndTranslationsValidator(mmc));  // should this instead be a post processor, alongside TranslationPostProcessor ?
         addValidator(new ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator(mmc));

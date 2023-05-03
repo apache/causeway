@@ -18,8 +18,40 @@
  */
 package org.apache.causeway.core.metamodel.specloader.validator;
 
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+
 public interface MetaModelValidator {
 
-    void validate();
+    default boolean isEnabled() {
+        return true;
+    }
+
+    /** entry to meta-model validation */
+    default void validateEnter() {}
+
+    /** exit from meta-model validation */
+    default void validateExit() {}
+
+    /** entry to validation of specified {@code objSpec} */
+    default void validateObjectEnter(final ObjectSpecification objSpec) {}
+
+    /** exit from validation of specified {@code objSpec} */
+    default void validateObjectExit(final ObjectSpecification objSpec) {}
+
+    /** validate action - mixed-in included */
+    default void validateAction(final ObjectSpecification objSpec, final ObjectAction act) {}
+
+    /** validate action-parameter - mixed-in included */
+    default void validateParameter(final ObjectSpecification objSpec, final ObjectAction act, final ObjectActionParameter param) {}
+
+    /** validate property - mixed-in included */
+    default void validateProperty(final ObjectSpecification objSpec, final OneToOneAssociation prop) {}
+
+    /** validate collection - mixed-in included */
+    default void validateCollection(final ObjectSpecification objSpec, final OneToManyAssociation coll) {}
 
 }

@@ -31,8 +31,6 @@ public interface MetaModelVisitingValidator {
 
     void validate(@NonNull ObjectSpecification spec);
 
-    default void summarize() {
-
-    }
+    default void summarize() {}
 
 }

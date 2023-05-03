@@ -29,14 +29,13 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.core.metamodel.specloader.validator.MetaModelVisitingValidatorAbstract;
+import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
-import lombok.NonNull;
 import lombok.val;
 
 public class ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator
-extends MetaModelVisitingValidatorAbstract {
+extends MetaModelValidatorAbstract {
 
     @Inject
     public ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator(final MetaModelContext mmc) {
@@ -44,7 +43,7 @@ extends MetaModelVisitingValidatorAbstract {
     }
 
     @Override
-    public void validate(final @NonNull ObjectSpecification spec) {
+    public void validateObjectEnter(final ObjectSpecification spec) {
         if(spec.getBeanSort()==BeanSort.UNKNOWN
                 && !spec.isAbstract()) {
 

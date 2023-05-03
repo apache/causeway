@@ -29,7 +29,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
-import org.apache.causeway.core.metamodel.specloader.validator.MetaModelVisitingValidatorAbstract;
+import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.Getter;
@@ -71,7 +71,7 @@ implements MethodPrefixBasedFacetFactory {
         }
 
         programmingModel
-        .addValidator(new MetaModelVisitingValidatorAbstract(programmingModel.getMetaModelContext()) {
+        .addValidator(new MetaModelValidatorAbstract(programmingModel.getMetaModelContext()) {
 
             @Override
             public String toString() {
@@ -80,7 +80,7 @@ implements MethodPrefixBasedFacetFactory {
             }
 
             @Override
-            public void validate(final ObjectSpecification spec) {
+            public void validateObjectEnter(final ObjectSpecification spec) {
 
                 if(spec.isInjectable()) {
                     return;

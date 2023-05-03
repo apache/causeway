@@ -25,14 +25,14 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.specloader.validator.MetaModelVisitingValidatorAbstract;
+import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.query.JdoQueryFacet;
 
 import lombok.val;
 
 abstract class MetaModelVisitingValidatorForClauseAbstract
-extends MetaModelVisitingValidatorAbstract {
+extends MetaModelValidatorAbstract {
 
     final String clause;
 
@@ -44,7 +44,7 @@ extends MetaModelVisitingValidatorAbstract {
     }
 
     @Override
-    public void validate(final ObjectSpecification objectSpec) {
+    public void validateObjectEnter(final ObjectSpecification objectSpec) {
 
         if(objectSpec.isInjectable()) {
             return;
