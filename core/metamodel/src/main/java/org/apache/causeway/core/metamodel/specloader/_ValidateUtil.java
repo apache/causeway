@@ -67,6 +67,8 @@ class _ValidateUtil{
     }
 
     private void runValidator(final MetaModelValidator validator, final ObjectSpecification objSpec) {
+        if(!validator.getFilter().test(objSpec)) return;
+
         validator.validateObjectEnter(objSpec);
 
         objSpec.streamRuntimeActions(MixedIn.INCLUDED)

@@ -25,12 +25,17 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 
 public interface MetaModelValidator {
 
+    /** whether this validator should run at all; eg. could be disabled via configuration */
     default boolean isEnabled() {
         return true;
     }
+
+    /** this validator only processes {@link ObjectSpecification}(s) that pass this filter */
+    Predicate<ObjectSpecification> getFilter();
 
     /** entry to meta-model validation */
     default void validateEnter() {}
@@ -59,6 +64,18 @@ public interface MetaModelValidator {
     // -- PREDEFINED FILTERS
 
     public final static Predicate<ObjectSpecification> ALL = __->true;
-    public final static Predicate<ObjectSpecification> INJECTABLE = ObjectSpecification::isInjectable;
+    public final static Predicate<ObjectSpecification> NONE = __->false;
+
+    /** types pass this filter, if not-injectable */
+    public final static Predicate<ObjectSpecification> SKIP_MANAGED_BEANS =
+            spec->!spec.isInjectable();
+
+    /** types pass this filter, if either not {@link ObjectSpecificationAbstract} or not member-annotation is required */
+    public final static Predicate<ObjectSpecification> SKIP_WHEN_MEMBER_ANNOT_REQUIRED =
+            spec->(!(spec instanceof ObjectSpecificationAbstract)
+                    || !((ObjectSpecificationAbstract)spec)
+                    .getIntrospectionPolicy()
+                    .getMemberAnnotationPolicy()
+                    .isMemberAnnotationsRequired());
 
 }

@@ -39,16 +39,12 @@ extends MetaModelValidatorAbstract {
     protected MetaModelValidatorForJdoqlAbstract(
             final MetaModelContext mmc,
             final String clause) {
-        super(mmc);
+        super(mmc, SKIP_MANAGED_BEANS);
         this.clause = clause;
     }
 
     @Override
     public void validateObjectEnter(final ObjectSpecification objectSpec) {
-
-        if(objectSpec.isInjectable()) {
-            return;
-        }
 
         val jdoQueryFacet = objectSpec.getFacet(JdoQueryFacet.class);
         if(jdoQueryFacet == null) {

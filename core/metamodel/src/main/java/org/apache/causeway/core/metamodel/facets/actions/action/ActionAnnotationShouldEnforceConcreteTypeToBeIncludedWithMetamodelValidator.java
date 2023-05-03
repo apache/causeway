@@ -39,16 +39,12 @@ extends MetaModelValidatorAbstract {
 
     @Inject
     public ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator(final MetaModelContext mmc) {
-        super(mmc);
+        super(mmc, spec->spec.getBeanSort() == BeanSort.UNKNOWN
+                && !spec.isAbstract());
     }
 
     @Override
     public void validateObjectEnter(final ObjectSpecification spec) {
-
-        val skip = spec.getBeanSort() != BeanSort.UNKNOWN
-                || spec.isAbstract();
-
-        if(skip) return;
 
         val actions = spec.streamAnyActions(MixedIn.EXCLUDED).collect(Collectors.toList());
 

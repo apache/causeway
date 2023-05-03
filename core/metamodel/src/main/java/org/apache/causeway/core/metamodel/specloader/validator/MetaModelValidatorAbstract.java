@@ -18,8 +18,11 @@
  */
 package org.apache.causeway.core.metamodel.specloader.validator;
 
+import java.util.function.Predicate;
+
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -32,8 +35,20 @@ implements
     @Getter(onMethod_ = {@Override})
     private final @NonNull MetaModelContext metaModelContext;
 
-    protected MetaModelValidatorAbstract(final MetaModelContext metaModelContext) {
+    @Getter(onMethod_ = {@Override})
+    private final @NonNull Predicate<ObjectSpecification> filter;
+
+    //TODO[CAUSEWAY-3051] don't use internally, but perhaps provide for legacy code?
+//    protected MetaModelValidatorAbstract(final MetaModelContext metaModelContext) {
+//        this.metaModelContext = metaModelContext;
+//        this.filter = ALL;
+//    }
+
+    protected MetaModelValidatorAbstract(
+            final MetaModelContext metaModelContext,
+            final Predicate<ObjectSpecification> filter) {
         this.metaModelContext = metaModelContext;
+        this.filter = filter;
     }
 
     @Override

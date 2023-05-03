@@ -28,7 +28,7 @@ import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
-import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
+import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
@@ -71,7 +71,10 @@ implements MethodPrefixBasedFacetFactory {
         }
 
         programmingModel
-        .addValidator(new MetaModelValidatorAbstract(programmingModel.getMetaModelContext()) {
+        .addValidator(new MetaModelValidatorAbstract(getMetaModelContext(),
+                MetaModelValidator.SKIP_MANAGED_BEANS
+                // skip orphaned method validation if annotations are required
+                .and(MetaModelValidator.SKIP_WHEN_MEMBER_ANNOT_REQUIRED)) {
 
             @Override
             public String toString() {
@@ -81,17 +84,6 @@ implements MethodPrefixBasedFacetFactory {
 
             @Override
             public void validateObjectEnter(final ObjectSpecification spec) {
-
-                if(spec.isInjectable()) {
-                    return;
-                }
-
-                if(spec instanceof ObjectSpecificationAbstract
-                        && ((ObjectSpecificationAbstract)spec).getIntrospectionPolicy()
-                            .getMemberAnnotationPolicy().isMemberAnnotationsRequired()) {
-                    return; // skip orphaned method validation if annotations are required
-                }
-
 
                 // as an optimization only checking declared members (skipping inherited ones)
 

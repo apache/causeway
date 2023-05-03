@@ -265,12 +265,13 @@ extends ProgrammingModelAbstract {
 
         val mmc = getMetaModelContext();
 
-        addValidator(new SanityChecksValidator(mmc));
-        addValidator(new DomainIncludeAnnotationEnforcesMetamodelContributionValidator(mmc));
-        addValidator(new TitlesAndTranslationsValidator(mmc));  // should this instead be a post processor, alongside TranslationPostProcessor ?
-        addValidator(new ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator(mmc));
-        addValidator(new ActionOverloadingValidator(mmc));
-        addValidator(new LogicalTypeMalformedValidator(mmc));
+        addValidator(ValidationOrder.A1_BUILTIN, new SanityChecksValidator(mmc));
+        addValidator(ValidationOrder.A1_BUILTIN, new DomainIncludeAnnotationEnforcesMetamodelContributionValidator(mmc));
+        // should this instead be a post processor, alongside TranslationPostProcessor ?
+        addValidator(ValidationOrder.A1_BUILTIN, new TitlesAndTranslationsValidator(mmc));
+        addValidator(ValidationOrder.A1_BUILTIN, new ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator(mmc));
+        addValidator(ValidationOrder.A1_BUILTIN, new ActionOverloadingValidator(mmc));
+        addValidator(ValidationOrder.A1_BUILTIN, new LogicalTypeMalformedValidator(mmc));
     }
 
 }

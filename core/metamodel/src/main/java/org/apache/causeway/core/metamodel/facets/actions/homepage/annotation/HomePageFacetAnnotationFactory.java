@@ -74,20 +74,12 @@ implements MetaModelRefiner {
 
     @Override
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
-        programmingModel.addValidator(newValidatorVisitor(programmingModel.getMetaModelContext()));
-    }
-
-    private MetaModelValidator newValidatorVisitor(final MetaModelContext mmc) {
-        return new MetaModelValidatorAbstract(mmc) {
+        programmingModel.addValidator(new MetaModelValidatorAbstract(getMetaModelContext(), MetaModelValidator.SKIP_MANAGED_BEANS) {
 
             private final Map<String, ObjectAction> actionsHavingHomePageFacet = _Maps.newHashMap();
 
             @Override
             public void validateObjectEnter(final @NonNull ObjectSpecification spec) {
-                if(spec.isInjectable()) {
-                    return;
-                }
-
                 // as an optimization only checking declared members (skipping inherited ones)
                 spec.streamDeclaredActions(MixedIn.EXCLUDED)
                 .filter(objectAction->objectAction.containsFacet(HomePageFacet.class))
@@ -131,7 +123,7 @@ implements MetaModelRefiner {
                 }
             }
 
-        };
-
+        });
     }
+
 }

@@ -62,19 +62,15 @@ extends MetaModelValidatorAbstract {
 
     @Inject
     public DomainIncludeAnnotationEnforcesMetamodelContributionValidator(final MetaModelContext mmc) {
-        super(mmc);
+        super(mmc, spec->!(!(spec instanceof ObjectSpecificationAbstract)
+                || spec.isAbstract()
+                || spec.getBeanSort().isManagedBeanNotContributing()
+                || spec.isValue()));
         this.classCache = _ClassCache.getInstance();
     }
 
     @Override
     public void validateObjectEnter(final ObjectSpecification spec) {
-
-        if(!(spec instanceof ObjectSpecificationAbstract)
-                || spec.isAbstract()
-                || spec.getBeanSort().isManagedBeanNotContributing()
-                || spec.isValue()) {
-            return;
-        }
 
         final Class<?> type = spec.getCorrespondingClass();
 

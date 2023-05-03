@@ -47,36 +47,33 @@ extends MetaModelValidatorAbstract {
 
     @Inject
     public ActionOverloadingValidator(final MetaModelContext mmc) {
-        super(mmc);
+        super(mmc, spec->spec.getBeanSort()!=BeanSort.UNKNOWN
+                && !spec.isAbstract());
     }
 
     @Override
     public void validateObjectEnter(final @NonNull ObjectSpecification spec) {
 
-        if(spec.getBeanSort()!=BeanSort.UNKNOWN
-                && !spec.isAbstract()) {
+        val overloadedNames = _Sets.<String>newHashSet();
 
-            val overloadedNames = _Sets.<String>newHashSet();
-
-            _Blackhole.consume( // not strictly required, just to mark this as call with side-effects
+        _Blackhole.consume( // not strictly required, just to mark this as call with side-effects
                 spec.streamActions(ActionScope.ANY, MixedIn.EXCLUDED, oa->{
                     overloadedNames.add(oa.getFeatureIdentifier().getMemberLogicalName());
                 })
                 .count() // consumes the stream
-            );
+                );
 
-            if(!overloadedNames.isEmpty()) {
+        if(!overloadedNames.isEmpty()) {
 
-                ValidationFailure.raiseFormatted(
-                        spec,
-                        ProgrammingModelConstants.Violation.ACTION_METHOD_OVERLOADING_NOT_ALLOWED
-                            .builder()
-                            .addVariable("type", spec.getCorrespondingClass().getName())
-                            .addVariable("overloadedNames", overloadedNames.toString())
-                            .buildMessage());
-            }
-
+            ValidationFailure.raiseFormatted(
+                    spec,
+                    ProgrammingModelConstants.Violation.ACTION_METHOD_OVERLOADING_NOT_ALLOWED
+                    .builder()
+                    .addVariable("type", spec.getCorrespondingClass().getName())
+                    .addVariable("overloadedNames", overloadedNames.toString())
+                    .buildMessage());
         }
+
     }
 
 }

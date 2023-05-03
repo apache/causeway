@@ -52,7 +52,7 @@ extends MetaModelValidatorAbstract {
 
     @Inject
     public SanityChecksValidator(final MetaModelContext mmc) {
-        super(mmc);
+        super(mmc, ALL);
     }
 
     @Override

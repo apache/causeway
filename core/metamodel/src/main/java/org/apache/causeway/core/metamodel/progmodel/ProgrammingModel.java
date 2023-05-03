@@ -147,12 +147,9 @@ extends HasMetaModelContext {
             final @NonNull Consumer<ObjectSpecification> validator,
             final Marker ... markers) {
 
-        addValidator(new MetaModelValidatorAbstract(getMetaModelContext()) {
+        addValidator(new MetaModelValidatorAbstract(getMetaModelContext(), MetaModelValidator.SKIP_MANAGED_BEANS) {
             @Override
             public void validateObjectEnter(final @NonNull ObjectSpecification spec) {
-                if(spec.isInjectable()) {
-                    return;
-                }
                 validator.accept(spec);
             }
         });

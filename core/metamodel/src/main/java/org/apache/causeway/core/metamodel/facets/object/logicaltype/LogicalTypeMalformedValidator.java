@@ -39,16 +39,12 @@ public class LogicalTypeMalformedValidator
 extends MetaModelValidatorAbstract {
 
     public LogicalTypeMalformedValidator(final MetaModelContext metaModelContext) {
-        super(metaModelContext);
+        super(metaModelContext, spec->spec.isEntityOrViewModel()
+                || spec.isInjectable());
     }
 
     @Override
     public void validateObjectEnter(final ObjectSpecification spec) {
-
-        if(!spec.isEntityOrViewModel()
-                && !spec.isInjectable() ) {
-            return;
-        }
 
         val logicalType = spec.getLogicalType();
         val logicalTypeName = logicalType.getLogicalTypeName();

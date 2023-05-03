@@ -26,6 +26,7 @@ import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.commons.internal.base._Blackhole;
 import org.apache.causeway.core.config.messages.MessageRegistry;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
@@ -41,7 +42,7 @@ extends MetaModelValidatorAbstract {
 
     @Inject
     public TitlesAndTranslationsValidator(final MetaModelContext mmc) {
-        super(mmc);
+        super(mmc, MetaModelValidator.NONE);
     }
 
     @Override

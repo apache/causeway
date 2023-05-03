@@ -562,7 +562,7 @@ implements
 
         programmingModel
         .addValidator(
-            new MetaModelValidatorAbstract(programmingModel.getMetaModelContext()){
+            new MetaModelValidatorAbstract(getMetaModelContext(), spec->!spec.isAbstract()){
 
                 final _Multimaps.ListMultimap<String, ObjectSpecification> specsByLogicalTypeName =
                         _Multimaps.newConcurrentListMultimap();
@@ -578,9 +578,6 @@ implements
                     // This must be guaranteed by MM validation.
                     // - see also LogicalTypeResolver.register(...)
 
-                    if(objSpec.isAbstract()) {
-                        return;
-                    }
                     specsByLogicalTypeName.putElement(objSpec.getLogicalTypeName(), objSpec);
 
                     // also adding aliases to the multi-map
