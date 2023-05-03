@@ -34,6 +34,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
@@ -48,7 +49,12 @@ import lombok.val;
  * </ul>
  */
 public class SanityChecksValidator
-extends MetaModelValidatorAbstract {
+extends MetaModelValidatorAbstract
+implements
+    MetaModelValidator.ActionValidator,
+    MetaModelValidator.ParameterValidator,
+    MetaModelValidator.PropertyValidator,
+    MetaModelValidator.CollectionValidator {
 
     @Inject
     public SanityChecksValidator(final MetaModelContext mmc) {

@@ -18,7 +18,10 @@
  */
 package org.apache.causeway.core.metamodel.specloader;
 
+import java.util.Optional;
+
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -61,30 +64,62 @@ class _ValidateUtil{
     // -- HELPER
 
     private void runValidator(final MetaModelValidator validator, final Can<ObjectSpecification> snapshot) {
+
+        val actionValidator = _Casts.castTo(MetaModelValidator.ActionValidator.class, validator);
+        val parameterValidator = _Casts.castTo(MetaModelValidator.ParameterValidator.class, validator);
+        val propertyValidator = _Casts.castTo(MetaModelValidator.PropertyValidator.class, validator);
+        val collectionValidator = _Casts.castTo(MetaModelValidator.CollectionValidator.class, validator);
+
         validator.validateEnter();
-        snapshot.forEach(objSpec->runValidator(validator, objSpec));
+        snapshot
+            .stream()
+            .filter(validator.getFilter())
+            .forEach(objSpec->runValidator(validator,
+                    actionValidator, parameterValidator, propertyValidator, collectionValidator, objSpec));
         validator.validateExit();
     }
 
-    private void runValidator(final MetaModelValidator validator, final ObjectSpecification objSpec) {
-        if(!validator.getFilter().test(objSpec)) return;
+    private void runValidator(
+            final MetaModelValidator objValidator,
+            final Optional<MetaModelValidator.ActionValidator> actionValidator,
+            final Optional<MetaModelValidator.ParameterValidator> parameterValidator,
+            final Optional<MetaModelValidator.PropertyValidator> propertyValidator,
+            final Optional<MetaModelValidator.CollectionValidator> collectionValidator,
+            final ObjectSpecification objSpec) {
 
-        validator.validateObjectEnter(objSpec);
+        objValidator.validateObjectEnter(objSpec);
 
-        objSpec.streamRuntimeActions(MixedIn.INCLUDED)
-        .forEach(act->{
-            act.streamParameters().forEach(param ->
-                validator.validateParameter(objSpec, act, param));
-            validator.validateAction(objSpec, act);
+        actionValidator
+        .ifPresentOrElse(
+                validator->
+                    objSpec.streamRuntimeActions(MixedIn.INCLUDED)
+                    .forEach(act->{
+                        parameterValidator.ifPresent(paramValidator->
+                            act.streamParameters().forEach(param ->
+                                paramValidator.validateParameter(objSpec, act, param)));
+                        validator.validateAction(objSpec, act);
+                    }),
+                ()->
+                    parameterValidator.ifPresent(paramValidator->
+                        objSpec.streamRuntimeActions(MixedIn.INCLUDED)
+                        .forEach(act->
+                                act.streamParameters().forEach(param ->
+                                    paramValidator.validateParameter(objSpec, act, param))))
+                );
+
+        propertyValidator
+        .ifPresent(validator->{
+            objSpec.streamProperties(MixedIn.INCLUDED)
+            .forEach(prop->validator.validateProperty(objSpec, prop));
         });
 
-        objSpec.streamProperties(MixedIn.INCLUDED)
-        .forEach(prop->validator.validateProperty(objSpec, prop));
+        collectionValidator
+        .ifPresent(validator->{
+            objSpec.streamCollections(MixedIn.INCLUDED)
+            .forEach(coll->validator.validateCollection(objSpec, coll));
+        });
 
-        objSpec.streamCollections(MixedIn.INCLUDED)
-        .forEach(coll->validator.validateCollection(objSpec, coll));
-
-        validator.validateObjectExit(objSpec);
+        objValidator.validateObjectExit(objSpec);
     }
 
 }

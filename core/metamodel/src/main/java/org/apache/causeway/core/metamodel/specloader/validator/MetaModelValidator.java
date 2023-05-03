@@ -49,17 +49,27 @@ public interface MetaModelValidator {
     /** exit from validation of specified {@code objSpec} */
     default void validateObjectExit(final ObjectSpecification objSpec) {}
 
-    /** validate action - mixed-in included */
-    default void validateAction(final ObjectSpecification objSpec, final ObjectAction act) {}
+    // -- MEMBER VALIDATORS
 
-    /** validate action-parameter - mixed-in included */
-    default void validateParameter(final ObjectSpecification objSpec, final ObjectAction act, final ObjectActionParameter param) {}
+    static interface ActionValidator {
+        /** validate action - mixed-in included */
+        void validateAction(final ObjectSpecification objSpec, final ObjectAction act);
+    }
 
-    /** validate property - mixed-in included */
-    default void validateProperty(final ObjectSpecification objSpec, final OneToOneAssociation prop) {}
+    static interface ParameterValidator {
+        /** validate action-parameter - mixed-in included */
+        void validateParameter(final ObjectSpecification objSpec, final ObjectAction act, final ObjectActionParameter param);
+    }
 
-    /** validate collection - mixed-in included */
-    default void validateCollection(final ObjectSpecification objSpec, final OneToManyAssociation coll) {}
+    static interface PropertyValidator {
+        /** validate property - mixed-in included */
+        void validateProperty(final ObjectSpecification objSpec, final OneToOneAssociation prop);
+    }
+
+    static interface CollectionValidator {
+        /** validate collection - mixed-in included */
+        void validateCollection(final ObjectSpecification objSpec, final OneToManyAssociation coll);
+    }
 
     // -- PREDEFINED FILTERS
 
