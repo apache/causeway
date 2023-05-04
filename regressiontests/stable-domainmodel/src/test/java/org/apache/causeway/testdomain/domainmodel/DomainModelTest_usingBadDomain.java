@@ -391,10 +391,9 @@ class DomainModelTest_usingBadDomain {
             InvalidElementTypes.InvalidCollection.class
             })
     void invalidElementType(final Class<?> classUnderTest) {
-
         validator.assertAnyFailuresContaining(
                 classUnderTest,
-                "has a member with either vetoed or managed element-type");
+                "has a member with vetoed, mixin or managed element-type");
     }
 
     // -- INCUBATING

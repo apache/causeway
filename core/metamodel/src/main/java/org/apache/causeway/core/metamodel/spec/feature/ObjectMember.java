@@ -134,6 +134,8 @@ public interface ObjectMember extends ObjectFeature {
      * If so, can be safely downcast to {@link ObjectAssociation}.
      */
     boolean isPropertyOrCollection();
+    default boolean isProperty() { return isOneToOneAssociation(); }
+    default boolean isCollection() { return isOneToManyAssociation(); }
 
     /**
      * Whether this member represents a {@link OneToManyAssociation}.

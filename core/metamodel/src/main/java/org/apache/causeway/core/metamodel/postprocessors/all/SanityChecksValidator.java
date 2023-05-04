@@ -20,10 +20,12 @@ package org.apache.causeway.core.metamodel.postprocessors.all;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.inject.Inject;
 
 import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -37,12 +39,18 @@ import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidato
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
-import lombok.val;
-
 /**
  * Checks various preconditions for a sane meta-model.
  * <ul>
- * <li>Guard against members and mixed-in members that share the same member-id.</li>
+
+ * <li>Guard against members and mixed-in members that share the same member-id.
+ * <ul>
+ *      <li>member-ids for actions within the same type must be unique (including mixed-in ones)</li>
+ *      <li>member-ids for properties within the same type must be unique (including mixed-in ones)</li>
+ *      <li>member-ids for collections within the same type must be unique (including mixed-in ones)</li>
+ * </ul>
+ * </li>
+ *
  * <li>Guard against members that contribute vetoed or managed types.
  * Those are not allowed as member/return/param.</li>
  * </ul>
@@ -86,19 +94,38 @@ implements
     @Override
     public void validateObjectEnter(final ObjectSpecification objSpec) {
         // guard against recursive call
-        _Assert.assertNull(this.memberIds, ()->"framework bug: "
+        _Assert.assertNull(this.memberIdCollector, ()->"framework bug: "
                 + "validators are not expected to be called recursevely (nested)");
-        this.memberIds = new HashMap<>();
+        this.memberIdCollector = new MemberIdCollector();
     }
 
     @Override
     public void validateObjectExit(final ObjectSpecification objSpec) {
-        memberIds = null; // garbage collect
+        memberIdCollector = null; // garbage collect
     }
 
     // -- HELPER
 
-    private Map<String, ObjectMember> memberIds;
+    private static class MemberIdCollector {
+        private Map<String, ObjectMember> actionIds = new HashMap<>();
+        private Map<String, ObjectMember> propertyIds = new HashMap<>();
+        private Map<String, ObjectMember> collectionIds = new HashMap<>();
+        /** Optionally returns a member with the same member-id, based on whether previously collected. */
+        public Optional<ObjectMember> collect(final ObjectMember objectMember) {
+            if(objectMember.isAction()) {
+                return Optional.ofNullable(actionIds.put(objectMember.getId(), objectMember));
+            }
+            if(objectMember.isProperty()) {
+                return Optional.ofNullable(propertyIds.put(objectMember.getId(), objectMember));
+            }
+            if(objectMember.isCollection()) {
+                return Optional.ofNullable(collectionIds.put(objectMember.getId(), objectMember));
+            }
+            throw _Exceptions.unmatchedCase(String.format("framework bug: unmatched feature %s", objectMember));
+        }
+    }
+
+    private MemberIdCollector memberIdCollector;
 
     private void checkMemberId(
             final ObjectMember objectMember,
@@ -112,8 +139,8 @@ implements
             System.err.printf("member-id: %s (%s)%n", objectMember.getId(), objectMember.getDeclaringType());
         }
 
-        val previous = memberIds.put(objectMember.getId(), objectMember);
-        if(previous!=null) {
+        memberIdCollector.collect(objectMember)
+        .ifPresent(previous->{
             ValidationFailure.raiseFormatted(objectMember,
                     ProgrammingModelConstants.Violation.MEMBER_ID_CLASH
                         .builder()
@@ -122,7 +149,7 @@ implements
                         .addVariable("member1", previous.getFeatureIdentifier().getFullIdentityString())
                         .addVariable("member2", objectMember.getFeatureIdentifier().getFullIdentityString())
                         .buildMessage());
-        }
+        });
     }
 
     private void checkElementType(
@@ -136,7 +163,7 @@ implements
                 || elementType.getBeanSort().isVetoed()) {
 
             ValidationFailure.raiseFormatted(facetHolder,
-                    ProgrammingModelConstants.Violation.VETOED_OR_MANAGED_TYPE_NOT_ALLOWED_TO_ENTER_METAMODEL
+                    ProgrammingModelConstants.Violation.INVALID_MEMBER_ELEMENT_TYPE
                         .builder()
                         .addVariable("type", declaringType.fqcn())
                         .addVariable("elementType", ""+elementType)
