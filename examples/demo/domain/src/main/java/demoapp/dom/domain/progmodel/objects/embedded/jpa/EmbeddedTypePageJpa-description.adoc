@@ -5,42 +5,33 @@ These are somewhat similar to value types, in that they have no identity and are
 They can also have custom behaviour.
 
 However, they are not quite true value types as the ORM needs to update their fields directly.
-Ensuring that The mutator method can be made `private`
+To enable that, a mutator method is required, though it can be made `private`
 
 CAUTION: This is still work in progress, see link:https://issues.apache.org/jira/browse/CAUSEWAY-1695[CAUSEWAY-1695].
 
-== View model and collection
+== How this demo works
 
-The page shows the `EmbeddedTypeVm`.
-This simply has a collection of `NumberConstantJdo` entities:
-
-[source,java]
-.EmbeddedTypeVm.java
-----
-include::EmbeddedTypeVm.java[tags=class]
-----
-
-The `NumberConstantJdo` entity in turn declares a `name` property and a `complexNumber` property of type `ComplexNumberJdo`.
-This latter property is an embedded type:
+This page object has a collection `allConstants` that just returns a set of `NumberConstantJpa` entities.
+The `NumberConstantJpa` entity defines a `name` property (of type `String) and a `numberConstant` property (of type `ComplexNumberJpa`).
+It is this second property that we are interested in:
 
 [source,java]
-.NumberConstantJdo.java
+.NumberConstantJpa.java
 ----
-include::NumberConstantJdo.java[tags=class]
+include::NumberConstantJpa.java[tags=class]
 ----
-<.> JDO `@Embedded` annotation inlines the constituent parts of the value type as columns of the owning entity
-<.> maps the 'ComplexNumber.re' property to column `number_re`
-<.> maps the 'ComplexNumber.im' property to column `number_im`
+<.> JPA `@Embedded` annotation indicates that the constituent parts of the embedded type should be stored as columns of the owning entity
 
-== Embedded (value) type
 
-The `ComplexNumberJdo` type must also be annotated as embedded.
+== Embedded type
+
+The `ComplexNumberJpa` type must also be annotated as embedded.
 We also annotate it with `@Value`; this instructs the framework how to interact with the type:
 
 [source,java]
 .ComplexNumberJdo.java
 ----
-include::ComplexNumberJdo.java[tags=class]
+include::ComplexNumberJpa.java[tags=class]
 ----
 <.> Indicates to the ORM that this _is_ persisted data ...
 <.> \... but can only be embedded.
@@ -55,14 +46,14 @@ This class defines some behaviour:
 +
 [source,java,indent=0]
 ----
-include::jdo/ComplexNumberJdo.java[tags=title]
+include::ComplexNumberJpa.java[tags=title]
 ----
 
 * how to parse a string:
 +
 [source,java]
 ----
-include::jdo/ComplexNumberJdo.java[tags=parse,indent=0]
+include::ComplexNumberJpa.java[tags=parse,indent=0]
 ----
 +
 This is used by the "value semantics provider", discussed in the next section.
@@ -73,7 +64,7 @@ The `NumberConstantJdo_updateNumber` mixin allows the value of the complex numbe
 [source,java]
 .NumberConstantJdo_updateNumber.java
 ----
-include::jdo/NumberConstantJdo_updateNumber.java[tags=class]
+include::NumberConstantJpa_updateNumber.java[tags=class]
 ----
 
 
@@ -84,7 +75,7 @@ As mentioned in the previous section, the framework uses an implementation of `V
 [source,java]
 .ComplexNumberJdoValueSemantics.java
 ----
-include::jdo/ComplexNumberJdoValueSemantics.java[tags=class]
+include::ComplexNumberJpaValueSemantics.java[tags=class]
 ----
 
 where:
@@ -93,14 +84,14 @@ where:
 +
 [source,java,indent=0]
 ----
-include::jdo/ComplexNumberJdoValueSemantics.java[tags=getRenderer]
+include::ComplexNumberJpaValueSemantics.java[tags=getRenderer]
 ----
 
 * `getParser()` is responsible for parsing the entered string (for either an editable property or a parameter):
 +
 [source,java,indent=0]
 ----
-include::jdo/ComplexNumberJdoValueSemantics.java[tags=getParser]
+include::ComplexNumberJpaValueSemantics.java[tags=getParser]
 ----
 +
 In this case the implementation just delegates to the `ComplexNumberJdo` class itself.
@@ -109,13 +100,13 @@ In this case the implementation just delegates to the `ComplexNumberJdo` class i
 +
 [source,java,indent=0]
 ----
-include::jdo/ComplexNumberJdoValueSemantics.java[tags=getEncoderDecoder]
+include::ComplexNumberJpaValueSemantics.java[tags=getEncoderDecoder]
 ----
 
 * `getDefaultsProvider()` returns the default value to be used for non-optional parameters and properties:
 +
 [source,java,indent=0]
 ----
-include::jdo/ComplexNumberJdoValueSemantics.java[tags=getDefaultsProvider]
+include::ComplexNumberJpaValueSemantics.java[tags=getDefaultsProvider]
 ----
 

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.progmodel.objects.embedded.embedded;
+package demoapp.dom.domain.progmodel.objects.embedded;
 
 import lombok.Value;
 

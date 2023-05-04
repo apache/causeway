@@ -16,31 +16,35 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.progmodel.objects.embedded.embedded.jpa;
+package demoapp.dom.domain.progmodel.objects.embedded.jpa;
 
 import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Service;
 
-import lombok.val;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.PromptStyle;
 
-import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.progmodel.objects.embedded.embedded.ComplexNumber;
+import lombok.RequiredArgsConstructor;
 
 @Profile("demo-jpa")
-@Service
-public class NumberConstantJpaRepository
-extends ValueHolderRepository<ComplexNumber, NumberConstantJpa> {
+// tag::class[]
+@Action()
+@ActionLayout(
+        promptStyle = PromptStyle.DIALOG_SIDEBAR
+        , associateWith = "number")
+@RequiredArgsConstructor
+public class NumberConstantJpa_updateNumber {
 
-    protected NumberConstantJpaRepository() {
-        super(NumberConstantJpa.class);
+    private final NumberConstantJpa numberConstantJdo;
+
+    @MemberSupport public NumberConstantJpa act(final ComplexNumberJpa complexNumberJdo) {
+        numberConstantJdo.setNumber(complexNumberJdo);
+        return numberConstantJdo;
     }
 
-    @Override
-    protected NumberConstantJpa newDetachedEntity(ComplexNumber value) {
-        val numConst = repositoryService.detachedEntity(new NumberConstantJpa());
-        numConst.setName(((ComplexNumber.SimpleNamedComplexNumber)value).getName());
-        numConst.setNumber(ComplexNumberJpa.of(value.getRe(), value.getIm()));
-        return numConst;
+    @MemberSupport public ComplexNumberJpa default0Act() {
+        return numberConstantJdo.getNumber();
     }
-
 }
+// end::class[]

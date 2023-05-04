@@ -16,10 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.progmodel.objects.embedded.embedded;
+package demoapp.dom.domain.progmodel.objects.embedded.jpa;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.springframework.context.annotation.Profile;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -30,19 +32,20 @@ import org.apache.causeway.applib.services.factory.FactoryService;
 
 import lombok.RequiredArgsConstructor;
 
-@Named("demo.EmbeddedTypeMenu")
-@DomainService(
-        nature=NatureOfService.VIEW
-)
+import demoapp.dom.domain.progmodel.objects.embedded.jdo.EmbeddedTypePageJdo;
+
+@Profile("demo-jpa")
+@Named("demo.EmbeddedTypeMenuJpa")
+@DomainService(nature=NatureOfService.VIEW)
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class EmbeddedTypeMenu {
+public class EmbeddedTypeMenuJpa {
 
     private final FactoryService factoryService;
 
     @Action
     @ActionLayout(cssClassFa="fa-stop-circle", describedAs = "Experimental support for embedded types")
-    public EmbeddedTypeVm embeddedTypes(){
-        return factoryService.viewModel(new EmbeddedTypeVm());
+    public EmbeddedTypePageJpa embeddedTypes(){
+        return factoryService.viewModel(new EmbeddedTypePageJpa());
     }
 }

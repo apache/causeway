@@ -46,7 +46,6 @@ public class CountHolder_fibonacciSequence {
 
         return collection;
     }
-
     private static int fibonacciFor(int n) {
         // ...
 // end::class[]

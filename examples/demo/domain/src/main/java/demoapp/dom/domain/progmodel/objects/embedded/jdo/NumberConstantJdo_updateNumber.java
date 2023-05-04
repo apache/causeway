@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.progmodel.objects.embedded.embedded.jdo;
+package demoapp.dom.domain.progmodel.objects.embedded.jdo;
 
 import org.springframework.context.annotation.Profile;
 

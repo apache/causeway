@@ -4,24 +4,29 @@
 Mixins allow domain object behaviour to be encapsulated as a separate class.
 This behaviour is then contributed to a target object as an action, property or collection.
 
-Mixins only contribute behaviour, not state.
-In the case of a contributed property or collection, these are in effect _derived_.
-Behind the scenes a query is run against the contributing object.
+Mixins contribute only behaviour, not state.
+In the case of a contributed property or collection (that seemingly show state), these are in effect _derived_.
+Behind the scenes a query is run against the contributee (or mixee) object.
 
-The contributee object is injected into the mixin through its (1-arg) constructor.
-Note that any type can be used, including interfaces.
+The framework instantiates the mixin by injecting the contributee/mixee object into the mixin through its (1-arg) constructor.
+All mixins that declare a constructor compatible with the mixee's type contribute to that mixee's metamodel; this includes interfaces.
 
-The examples contribute to the following class, which holds a simple non-editable "count" integer property:
+== How this demo works
+
+This page object shows examples of all three types of mixins: a mixin action, a mixin property and a mixin collection.
+
+=== Mixin action
+
+The page object itself has a single read-only property, `count`:
 
 [source,java]
-.MixinVm.java
+.MixinPage.java
 ----
-include::MixinVm.java[tags=class]
+include::MixinPage.java[tags=class]
 ----
 <.> editing disabled; it will be modified through a mixin
 
-The mixins contribute behaviour to list the first N fibonacci numbers.
-They don't contribute directly to the concrete `MixinVm` class, however; since all they require is a count value, they instead contribute to the `CountHolder` interface that the `MixinVm` class implements:
+It also implements an interface, `CountHolder`.
 
 [source,java]
 .CountHolder.java
@@ -29,9 +34,10 @@ They don't contribute directly to the concrete `MixinVm` class, however; since a
 include::CountHolder.java[tags=class]
 ----
 
-=== Contributed action
+A mixin action allows this to be modified.
+The examples contribute to the following class, which holds a simple non-editable "count" integer property:
 
-The `CountHolder_updateCount` mixin allows the count to be updated within a certain range:
+The `CountHolder_updateCount` mixin action contributes by way of this `CountHolder` interface:
 
 [source,java]
 .CountHolder_updateCount.java
@@ -42,9 +48,13 @@ include::CountHolder_updateCount.java[tags=class]
 <.> useful lombok annotation to generate the 1-arg constructor
 <.> the contributee
 
+The mixin class's name comes in two parts.
+The convention is for the first part (before the "_") to be the type name, while the action id is the second part (after the "_", in other words "updateCount").
+
+
 === Contributed collection
 
-The `CountHolder_fibonacciSequence` mixin dynamically computes the first N number of fibonacci numbers:
+The `CountHolder_fibonacciSequence` mixin collection dynamically computes the first N number of fibonacci numbers:
 
 [source,java]
 .CountHolder_fibonacciSequence.java
@@ -55,9 +65,10 @@ include::CountHolder_fibonacciSequence.java[tags=class]
 <.> useful lombok annotation to generate the 1-arg constructor
 <.> the contributee
 
+
 === Contributed property
 
-The `CountHolder_explanation` mixin simply provides a property that explains what's going on:
+The `CountHolder_explanation` mixin property simply provides an explanat what's going on:
 
 [source,java]
 .CountHolder_explanation.java

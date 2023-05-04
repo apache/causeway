@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.progmodel.objects.embedded.embedded.jdo;
+package demoapp.dom.domain.progmodel.objects.embedded.jdo;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 import lombok.val;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.progmodel.objects.embedded.embedded.ComplexNumber;
+import demoapp.dom.domain.progmodel.objects.embedded.ComplexNumber;
 
 @Profile("demo-jdo")
 @Service

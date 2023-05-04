@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.progmodel.objects.embedded.embedded.jdo;
+package demoapp.dom.domain.progmodel.objects.embedded.jdo;
 
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -28,7 +28,7 @@ import org.apache.causeway.applib.annotation.Value;
 import lombok.AccessLevel;
 import lombok.val;
 
-import demoapp.dom.domain.progmodel.objects.embedded.embedded.ComplexNumber;
+import demoapp.dom.domain.progmodel.objects.embedded.ComplexNumber;
 
 // tag::class[]
 @javax.jdo.annotations.PersistenceCapable                               // <.>

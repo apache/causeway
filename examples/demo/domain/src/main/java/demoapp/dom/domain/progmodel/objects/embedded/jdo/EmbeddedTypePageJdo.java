@@ -16,39 +16,40 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.progmodel.objects.mixins.mixins;
+package demoapp.dom.domain.progmodel.objects.embedded.jdo;
 
+import java.util.List;
+
+import javax.inject.Inject;
 import javax.inject.Named;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
+import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.annotation.Property;
-
-import lombok.Getter;
-import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.domain.progmodel.objects.embedded.ComplexNumber;
+import demoapp.dom.domain.progmodel.objects.embedded.NumberConstantEntity;
 
-//tag::class[]
-@XmlRootElement(name = "Demo")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.MixinVm")
+// tag::class[]
+@Named("demo.EmbeddedTypePageJdo")
 @DomainObject(nature=Nature.VIEW_MODEL)
-public class MixinVm implements HasAsciiDocDescription, CountHolder {
+public class EmbeddedTypePageJdo implements HasAsciiDocDescription {
+
+    // ...
+// end::class[]
+    @Inject private ValueHolderRepository<ComplexNumber, ? extends NumberConstantEntity> numberConstantRepo;
 
     @ObjectSupport public String title() {
-        return "Mixins";
+        return "Embedded Types";
     }
 
-    @Property(editing = Editing.DISABLED)           // <.>
-    @Getter @Setter
-    private int count;
+// tag::class[]
+    @Collection
+    public List<? extends NumberConstantEntity> getAllConstants(){
+        return numberConstantRepo.all();
+    }
 }
-//end::class[]
+// end::class[]

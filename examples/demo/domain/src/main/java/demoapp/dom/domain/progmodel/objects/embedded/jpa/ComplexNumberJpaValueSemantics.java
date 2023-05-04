@@ -16,26 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.progmodel.objects.embedded.embedded.jpa;
+package demoapp.dom.domain.progmodel.objects.embedded.jpa;
 
+import javax.inject.Named;
+
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.util.schema.CommonDtoUtils;
 import org.apache.causeway.applib.value.semantics.DefaultsProvider;
-import org.apache.causeway.applib.value.semantics.Parser;
 import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
-import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.schema.common.v2.ValueType;
 
 @Profile("demo-jpa")
 // tag::class[]
+@Named("demo.ComplexNumberJpaValueSemantics")
 @Component
+@Import({
+        ComplexNumberJpa_default.class      // <.>
+})
 public class ComplexNumberJpaValueSemantics
-        extends ValueSemanticsAbstract<ComplexNumberJpa>{
-
+        extends ValueSemanticsAbstract<ComplexNumberJpa> {
 // end::class[]
 
     @Override
@@ -48,44 +52,14 @@ public class ComplexNumberJpaValueSemantics
         return ValueType.COMPOSITE;
     }
 
-// tag::getRenderer[]
+// tag::getDefaultsProvider[]
     @Override
-    public Renderer<ComplexNumberJpa> getRenderer() {
-// end::getRenderer[]
-        // ...
-// tag::getRenderer[]
-        return new Renderer<ComplexNumberJpa>() {
-            @Override
-            public String titlePresentation(final ValueSemanticsProvider.Context context, final ComplexNumberJpa object) {
-                return object!=null ? object.title() : "NaN";
-            }
-        };
+    public DefaultsProvider<ComplexNumberJpa> getDefaultsProvider() {
+        return ()-> ComplexNumberJpa.of(0, 0);
     }
-// end::getRenderer[]
-// tag::getParser[]
-    @Override
-    public Parser<ComplexNumberJpa> getParser() {
-// end::getParser[]
-        // ...
-// tag::getParser[]
-        return new Parser<ComplexNumberJpa>() {
-            @Override
-            public ComplexNumberJpa parseTextRepresentation(final ValueSemanticsProvider.Context context, final String entry) {
-                return ComplexNumberJpa.parse(entry).orElse(null);
-            }
-            @Override
-            public int typicalLength() {
-                return 30;
-            }
-            @Override
-            public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final ComplexNumberJpa existing) {
-                return existing!=null ? existing.title() : null;
-            }
-        };
-    }
-// end::getParser[]
+// end::getDefaultsProvider[]
 
-// tag::getEncoderDecoder[]
+// tag::compose[]
     @Override
     public ValueDecomposition decompose(final ComplexNumberJpa value) {
         return CommonDtoUtils.typedTupleBuilder(value)
@@ -103,17 +77,25 @@ public class ComplexNumberJpaValueSemantics
                         (Double)map.get("im")))
                 .orElse(null);
     }
-// end::getEncoderDecoder[]
+// end::compose[]
 
-// tag::getDefaultsProvider[]
+// tag::getRenderer[]
     @Override
-    public DefaultsProvider<ComplexNumberJpa> getDefaultsProvider() {
-// end::getDefaultsProvider[]
-        // ...
-// tag::getDefaultsProvider[]
-        return ()-> ComplexNumberJpa.of(0, 0);
+    public Renderer<ComplexNumberJpa> getRenderer() {
+        return (context, object) -> title(object, "NaN");
     }
-// end::getDefaultsProvider[]
+
+    private static String title(ComplexNumberJpa complexNumber, final String fallbackIfNull) {
+        if (complexNumber == null) return fallbackIfNull;
+        return complexNumber.getRe() +
+                (complexNumber.getIm() >= 0
+                        ? (" + " +  complexNumber.getIm())
+                        : (" - " + (-complexNumber.getIm())))
+                + "i";
+    }
+
+// end::getRenderer[]
+
 // tag::class[]
 }
 // end::class[]

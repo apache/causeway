@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.progmodel.objects.embedded.embedded.persistence;
+package demoapp.dom.domain.progmodel.objects.embedded;
 
 import javax.inject.Named;
 
@@ -25,7 +25,6 @@ import org.apache.causeway.applib.annotation.Property;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
-import demoapp.dom.domain.progmodel.objects.embedded.embedded.ComplexNumber;
 
 @Named("demo.NumberConstantEntity") // shared permissions with concrete sub class
 @DomainObject

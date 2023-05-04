@@ -18,23 +18,24 @@
  *
  */
 
-package demoapp.dom.domain.progmodel.objects.embedded.embedded.persistence;
+package demoapp.dom.domain.progmodel.objects.embedded;
 
-import javax.inject.Inject;
+import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 
-import demoapp.dom._infra.seed.SeedServiceAbstract;
-import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.progmodel.objects.embedded.embedded.ComplexNumber;
+import demoapp.dom.types.Samples;
 
 @Service
-public class NumberConstantSeeding
-extends SeedServiceAbstract {
+public class ComplexNumberSamples implements Samples<ComplexNumber> {
 
-    @Inject
-    public NumberConstantSeeding(ValueHolderRepository<ComplexNumber, ? extends NumberConstantEntity> entities) {
-        super(entities);
+    @Override
+    public Stream<ComplexNumber> stream() {
+        return Stream.of(
+                ComplexNumber.named("Pi", Math.PI, 0.),
+                ComplexNumber.named("Euler's Constant", Math.E, 0.),
+                ComplexNumber.named("Imaginary Unit", 0, 1)
+            );
     }
 
 }

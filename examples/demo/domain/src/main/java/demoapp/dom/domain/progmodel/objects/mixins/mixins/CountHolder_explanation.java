@@ -24,12 +24,12 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import lombok.RequiredArgsConstructor;
 
 //tag::class[]
-@Property                                   // <.>
+@Property                                                   // <.>
 @PropertyLayout(fieldSetId = "properties", sequence = "1")
-@RequiredArgsConstructor                    // <.>
+@RequiredArgsConstructor                                    // <.>
 public class CountHolder_explanation {
 
-    private final CountHolder holder;       // <.>
+    private final CountHolder holder;                       // <.>
 
     public String prop() {
         return String.format(

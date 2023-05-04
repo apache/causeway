@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.progmodel.objects.embedded.embedded.jpa;
+package demoapp.dom.domain.progmodel.objects.embedded.jpa;
 
 import javax.inject.Named;
 import javax.persistence.Entity;
@@ -37,8 +37,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import demoapp.dom.domain.progmodel.objects.embedded.embedded.ComplexNumber;
-import demoapp.dom.domain.progmodel.objects.embedded.embedded.persistence.NumberConstantEntity;
+import demoapp.dom.domain.progmodel.objects.embedded.ComplexNumber;
+import demoapp.dom.domain.progmodel.objects.embedded.NumberConstantEntity;
 
 @Profile("demo-jpa")
 //tag::class[]
@@ -48,7 +48,7 @@ import demoapp.dom.domain.progmodel.objects.embedded.embedded.persistence.Number
       name = "NumberConstantJpa"
 )
 @EntityListeners(CausewayEntityListener.class)
-@Named("demo.NumberConstantEntity")
+@Named("demo.NumberConstantEntityJpa")
 @DomainObject
 @NoArgsConstructor
 public class NumberConstantJpa
@@ -76,7 +76,7 @@ public class NumberConstantJpa
     @Getter @Setter
     private String name;
 
-    @javax.persistence.Embedded
+    @javax.persistence.Embedded                 // <.>
     @Property(editing = Editing.ENABLED)
     @Getter @Setter
     private ComplexNumberJpa number;

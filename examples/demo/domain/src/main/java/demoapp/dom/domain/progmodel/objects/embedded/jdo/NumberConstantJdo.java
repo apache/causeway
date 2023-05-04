@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.progmodel.objects.embedded.embedded.jdo;
+package demoapp.dom.domain.progmodel.objects.embedded.jdo;
 
 import javax.inject.Named;
 import javax.jdo.annotations.Column;
@@ -36,14 +36,14 @@ import org.apache.causeway.applib.annotation.Property;
 import lombok.Getter;
 import lombok.Setter;
 
-import demoapp.dom.domain.progmodel.objects.embedded.embedded.ComplexNumber;
-import demoapp.dom.domain.progmodel.objects.embedded.embedded.persistence.NumberConstantEntity;
+import demoapp.dom.domain.progmodel.objects.embedded.ComplexNumber;
+import demoapp.dom.domain.progmodel.objects.embedded.NumberConstantEntity;
 
 @Profile("demo-jdo")
 //tag::class[]
+@Named("demo.NumberConstantEntityJdo")
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo" )
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@Named("demo.NumberConstantEntity")
 @DomainObject
 public class NumberConstantJdo
         extends NumberConstantEntity {

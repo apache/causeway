@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.progmodel.objects.embedded.embedded.jdo;
+package demoapp.dom.domain.progmodel.objects.embedded.jdo;
 
 import org.springframework.stereotype.Component;
 
@@ -49,9 +49,6 @@ public class ComplexNumberJdoValueSemantics
  // tag::getRenderer[]
      @Override
      public Renderer<ComplexNumberJdo> getRenderer() {
- // end::getRenderer[]
-         // ...
- // tag::getRenderer[]
          return new Renderer<ComplexNumberJdo>() {
              @Override
              public String titlePresentation(final ValueSemanticsProvider.Context context, final ComplexNumberJdo object) {
@@ -63,9 +60,6 @@ public class ComplexNumberJdoValueSemantics
 // tag::getParser[]
     @Override
     public Parser<ComplexNumberJdo> getParser() {
-// end::getParser[]
-        // ...
-// tag::getParser[]
         return new Parser<ComplexNumberJdo>() {
             @Override
             public ComplexNumberJdo parseTextRepresentation(final ValueSemanticsProvider.Context context, final String entry) {

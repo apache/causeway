@@ -16,8 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.progmodel.objects.mixins.mixins;
+package demoapp.dom.domain.progmodel.objects.embedded.jdo;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -25,22 +26,24 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.services.factory.FactoryService;
 
-import lombok.val;
+import org.springframework.context.annotation.Profile;
 
-@Named("demo.MixinMenu")
-@DomainService(
-        nature = NatureOfService.VIEW
-)
+import lombok.RequiredArgsConstructor;
+
+@Profile("demo-jdo")
+@Named("demo.EmbeddedTypeMenuJdo")
+@DomainService(nature=NatureOfService.VIEW)
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
-public class MixinMenu {
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
+public class EmbeddedTypeMenuJdo {
+
+    private final FactoryService factoryService;
 
     @Action
-    @ActionLayout(cssClassFa="fa-mortar-pestle", describedAs="Contribute behaviour to domain objects")
-    public MixinPage mixins(){
-        val vm = new MixinPage();
-        vm.setCount(10);
-        return vm;
+    @ActionLayout(cssClassFa="fa-stop-circle", describedAs = "Experimental support for embedded types")
+    public EmbeddedTypePageJdo embeddedTypes(){
+        return factoryService.viewModel(new EmbeddedTypePageJdo());
     }
-
 }

@@ -25,6 +25,7 @@ import javax.inject.Named;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import org.springframework.context.annotation.Profile;
 
@@ -42,6 +43,10 @@ import demoapp.dom.services.core.eventbusservice.EventBusServiceDemoVm.UiButtonE
 
 @Profile("demo-jpa")
 @Entity
+@Table(
+        schema = "demo",
+        name = "EventLogEntryJpa"
+)
 @Named("demo.EventLogEntry")
 @DomainObject
 public class EventLogEntryJpa

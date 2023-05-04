@@ -25,10 +25,8 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import lombok.RequiredArgsConstructor;
 
 //tag::class[]
-@Action
-@ActionLayout(
-        associateWith = "count")        // <.>
-
+@Action                                 // <.>
+@ActionLayout(associateWith = "count")
 @RequiredArgsConstructor                // <.>
 public class CountHolder_updateCount {
 
@@ -38,11 +36,9 @@ public class CountHolder_updateCount {
         holder.setCount(count);
         return holder;
     }
-
     @MemberSupport public int default0Act() {
         return holder.getCount();
     }
-
     @MemberSupport public String validate0Act(final int proposedCount) {
         return proposedCount >= 0 && proposedCount <= 46
                 ? null

@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 
 import lombok.val;
 
-import demoapp.dom.domain.progmodel.objects.embedded.embedded.jdo.ComplexNumberJdo;
+import demoapp.dom.domain.progmodel.objects.embedded.jdo.ComplexNumberJdo;
 
 class ComplexNumberJdo_Test {
 

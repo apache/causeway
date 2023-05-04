@@ -16,7 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.progmodel.objects.embedded.embedded;
+package demoapp.dom.domain.progmodel.objects.embedded.jpa;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.domain.progmodel.objects.embedded.ComplexNumber;
+import demoapp.dom.domain.progmodel.objects.embedded.NumberConstantEntity;
 
 import java.util.List;
 
@@ -28,14 +33,10 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.progmodel.objects.embedded.embedded.persistence.NumberConstantEntity;
-
 // tag::class[]
-@Named("demo.EmbeddedTypeVm")
+@Named("demo.EmbeddedTypePageJpa")
 @DomainObject(nature=Nature.VIEW_MODEL)
-public class EmbeddedTypeVm implements HasAsciiDocDescription {
+public class EmbeddedTypePageJpa implements HasAsciiDocDescription {
 
     // ...
 // end::class[]
