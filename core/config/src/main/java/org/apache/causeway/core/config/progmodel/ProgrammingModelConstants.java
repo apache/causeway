@@ -535,6 +535,8 @@ public final class ProgrammingModelConstants {
                 + "element-type ${elementType}, which is not allowed"),
         MEMBER_ID_CLASH("${type}: has members using the same member-id "
                 + "'${memberId}', which is not allowed; clashes:\n\t[1]${member1}\n\t[2]${member2}"),
+        AMBIGUOUS_MIXIN_ANNOTATIONS("Annotation ${annot} on both method and type level is not allowed, "
+                + "it must be one or the other. Found with mixin: ${mixinType}"),
         ;
 
         private final String template;

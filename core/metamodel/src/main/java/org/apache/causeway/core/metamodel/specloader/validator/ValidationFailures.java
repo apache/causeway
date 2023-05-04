@@ -36,22 +36,22 @@ public final class ValidationFailures implements Iterable<ValidationFailure> {
 
     private final Set<ValidationFailure> failures = _Sets.newConcurrentHashSet();
 
-    public void add(Identifier origin, String pattern, Object... arguments) {
+    public void add(final Identifier origin, final String pattern, final Object... arguments) {
         val message = String.format(pattern, arguments);
         failures.add(ValidationFailure.of(origin, message));
     }
 
-    public void addAll(Iterable<ValidationFailure> failures) {
+    public void addAll(final Iterable<ValidationFailure> failures) {
         for (val failure : failures) {
             this.failures.add(failure);
         }
     }
 
-    public void add(ValidationFailure validationFailure) {
+    public void add(final ValidationFailure validationFailure) {
         failures.add(validationFailure);
     }
 
-    public void add(ValidationFailures validationFailures) {
+    public void add(final ValidationFailures validationFailures) {
         addAll(validationFailures.getFailures());
     }
 
@@ -69,7 +69,7 @@ public final class ValidationFailures implements Iterable<ValidationFailure> {
     /**
      * @param messageFormat to include {@code %d} for the message-index and {@code %s} for the message-string
      */
-    public ArrayList<String> getMessages(String messageFormat) { // <-- ensure serializable result
+    public ArrayList<String> getMessages(final String messageFormat) { // <-- ensure serializable result
         val messages = _Lists.<String>newArrayList();
         failures.stream() // already sorted
         .map(ValidationFailure::getMessage)
@@ -100,7 +100,7 @@ public final class ValidationFailures implements Iterable<ValidationFailure> {
 
     // -- HELPER
 
-    private static String toLineNumberedString(Collection<String> messages) {
+    private static String toLineNumberedString(final Collection<String> messages) {
         val buf = new StringBuilder();
         int i=0;
         for (val message : messages) {
@@ -108,8 +108,5 @@ public final class ValidationFailures implements Iterable<ValidationFailure> {
         }
         return buf.toString();
     }
-
-
-
 
 }

@@ -372,6 +372,12 @@ class DomainModelTest_usingBadDomain {
         validator.streamFailures(id->id.getFullIdentityString().contains("InvalidMemberIdClash"))
         .forEach(failure->System.err.printf("!!!%s%n", failure));
 
+        /*org.apache.causeway.testdomain.model.bad.InvalidMemberIdClash:
+         * has members using the same member-id 'someAction', which is not allowed; clashes:
+         * [1]org.apache.causeway.testdomain.model.bad.InvalidMemberIdClash#someAction()
+         * [2]org.apache.causeway.testdomain.model.bad.InvalidMemberIdClash#someAction)
+         */
+
         System.err.println("------------------------------------------------");
     }
 

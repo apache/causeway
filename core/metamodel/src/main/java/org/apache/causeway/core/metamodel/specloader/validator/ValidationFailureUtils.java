@@ -18,28 +18,45 @@
  */
 package org.apache.causeway.core.metamodel.specloader.validator;
 
+import java.lang.annotation.Annotation;
+
 import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class MetaModelValidatorForConflictingOptionality {
+public final class ValidationFailureUtils {
 
-    // assumes that given mandatoryFacet is one of the top ranking
-    public static void flagIfConflict(final MandatoryFacet mandatoryFacet, final String message) {
+    public <A extends Annotation> void raiseAmbiguousMixinAnnotations(
+            final FacetedMethod holder,
+            final Class<A> annotationType) {
+
+        ValidationFailure.raiseFormatted(holder,
+                ProgrammingModelConstants.Violation.AMBIGUOUS_MIXIN_ANNOTATIONS
+                    .builder()
+                    .addVariable("annot", "@" + annotationType.getSimpleName())
+                    .addVariable("mixinType", holder.getFeatureIdentifier().getFullIdentityString())
+                    .buildMessage());
+    }
+
+    //XXX assumes that given mandatoryFacet is one of the top ranking
+    @Deprecated // marked deprecated, because not implemented
+    public void raiseIfConflictingOptionality(final MandatoryFacet mandatoryFacet, final String message) {
 
         if(false && //FIXME yet has false positives
 
-                conflictingOptionality(mandatoryFacet)) {
+                isConflictingOptionality(mandatoryFacet)) {
             addFailure(mandatoryFacet, message);
         }
     }
 
     // -- HELPER
 
-    private static void addFailure(final MandatoryFacet mandatoryFacet, final String message) {
+    private void addFailure(final MandatoryFacet mandatoryFacet, final String message) {
         if(mandatoryFacet != null) {
             val holder = mandatoryFacet.getFacetHolder();
             ValidationFailure.raiseFormatted(
@@ -50,7 +67,7 @@ public class MetaModelValidatorForConflictingOptionality {
         }
     }
 
-    private static boolean conflictingOptionality(final MandatoryFacet mandatoryFacet) {
+    private boolean isConflictingOptionality(final MandatoryFacet mandatoryFacet) {
         if (mandatoryFacet == null) {
             return false;
         }
@@ -77,8 +94,5 @@ public class MetaModelValidatorForConflictingOptionality {
                 : false; // not conflicting
 
     }
-
-
-
 
 }

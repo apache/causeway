@@ -52,8 +52,7 @@ import org.apache.causeway.core.metamodel.facets.properties.property.regex.RegEx
 import org.apache.causeway.core.metamodel.facets.properties.property.snapshot.SnapshotExcludeFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
-import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorForAmbiguousMixinAnnotations;
-import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorForConflictingOptionality;
+import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 
 import lombok.val;
 
@@ -91,8 +90,8 @@ extends FacetFactoryAbstract {
         return processMethodContext
             .synthesizeOnMethodOrMixinType(
                     Property.class,
-                    () -> MetaModelValidatorForAmbiguousMixinAnnotations
-                        .addValidationFailure(processMethodContext.getFacetHolder(), Property.class));
+                    () -> ValidationFailureUtils
+                        .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), Property.class));
     }
 
     void inferIntentWhenOnTypeLevel(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
@@ -292,8 +291,7 @@ extends FacetFactoryAbstract {
                 MandatoryFacetInvertedByNullableAnnotationOnProperty
                 .create(hasNullable, method, holder))
         .ifPresent(mandatoryFacet->
-                MetaModelValidatorForConflictingOptionality
-                .flagIfConflict(
+                ValidationFailureUtils.raiseIfConflictingOptionality(
                         mandatoryFacet,
                         "Conflicting @Nullable with other optionality annotation"));
 
@@ -302,8 +300,7 @@ extends FacetFactoryAbstract {
                 MandatoryFacetForPropertyAnnotation
                 .create(propertyIfAny, method, holder))
         .ifPresent(mandatoryFacet->
-                MetaModelValidatorForConflictingOptionality
-                .flagIfConflict(
+                ValidationFailureUtils.raiseIfConflictingOptionality(
                         mandatoryFacet,
                         "Conflicting Property#optionality with other optionality annotation"));
     }

@@ -51,21 +51,37 @@ public interface MetaModelValidator {
 
     // -- MEMBER VALIDATORS
 
+    /**
+     * {@link MetaModelValidator}(s) may optionally implement this, to visit all actions.
+     * @apiNote factored out into its own interface to allow for runtime optimizations
+     */
     static interface ActionValidator {
         /** validate action - mixed-in included */
         void validateAction(final ObjectSpecification objSpec, final ObjectAction act);
     }
 
+    /**
+     * {@link MetaModelValidator}(s) may optionally implement this, to visit all action's parameters.
+     * @apiNote factored out into its own interface to allow for runtime optimizations
+     */
     static interface ParameterValidator {
         /** validate action-parameter - mixed-in included */
         void validateParameter(final ObjectSpecification objSpec, final ObjectAction act, final ObjectActionParameter param);
     }
 
+    /**
+     * {@link MetaModelValidator}(s) may optionally implement this, to visit all properties.
+     * @apiNote factored out into its own interface to allow for runtime optimizations
+     */
     static interface PropertyValidator {
         /** validate property - mixed-in included */
         void validateProperty(final ObjectSpecification objSpec, final OneToOneAssociation prop);
     }
 
+    /**
+     * {@link MetaModelValidator}(s) may optionally implement this, to visit all collections.
+     * @apiNote factored out into its own interface to allow for runtime optimizations
+     */
     static interface CollectionValidator {
         /** validate collection - mixed-in included */
         void validateCollection(final ObjectSpecification objSpec, final OneToManyAssociation coll);
@@ -73,10 +89,13 @@ public interface MetaModelValidator {
 
     // -- PREDEFINED FILTERS
 
+    /** all types pass this filter */
     public final static Predicate<ObjectSpecification> ALL = __->true;
+
+    /** no types pass this filter */
     public final static Predicate<ObjectSpecification> NONE = __->false;
 
-    /** types pass this filter, if not-injectable */
+    /** types pass this filter, if not-injectable (aka not managed by Spring) */
     public final static Predicate<ObjectSpecification> SKIP_MANAGED_BEANS =
             spec->!spec.isInjectable();
 
@@ -84,7 +103,7 @@ public interface MetaModelValidator {
     public final static Predicate<ObjectSpecification> SKIP_MIXINS =
             spec->!spec.isMixin();
 
-    /** types pass this filter, if either not {@link ObjectSpecificationAbstract} or not member-annotation is required */
+    /** types pass this filter, if either not {@link ObjectSpecificationAbstract} or member-annotation is not required */
     public final static Predicate<ObjectSpecification> SKIP_WHEN_MEMBER_ANNOT_REQUIRED =
             spec->(!(spec instanceof ObjectSpecificationAbstract)
                     || !((ObjectSpecificationAbstract)spec)
