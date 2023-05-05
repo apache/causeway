@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.specloader.specimpl;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -41,15 +40,22 @@ class _MemberIdClashReporting {
      *      <li>member-ids for actions within the same type must be unique (including mixed-in ones)</li>
      *      <li>member-ids for associations within the same type must be unique (including mixed-in ones)</li>
      * </ul>
-     * Notes: Needs to be called before members have been sorted or duplicates have been discarded.
+     * Notes:
+     * <p>
+     * Either call with associations only or actions only, don't mix.
+     * <p>
+     * Needs to be called before members have been sorted or duplicates have been discarded.
+     * <p>
      * {@link ObjectSpecificationAbstract} has built-in logic to stream members in a unique way,
      * that is, member streams have no member-id duplicates,
      * which in its own right helps with handling of method overriding (Java language terminology).
      */
     void flagAnyMemberIdClashes(
             final ObjectSpecification declaringType,
-            final List<? extends ObjectMember> regularMembers,
-            final List<? extends ObjectMember> mixedInMembers) {
+            final Iterable<? extends ObjectMember> regularMembers,
+            final Iterable<? extends ObjectMember> mixedInMembers) {
+
+        if(declaringType.isAbstract()) return; // skip abstract types
 
         val memberIdCollector = new MemberIdCollector();
 

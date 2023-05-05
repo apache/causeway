@@ -33,6 +33,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -52,6 +53,7 @@ import org.apache.causeway.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.Violation;
+import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.model.bad.AmbiguousMixinAnnotations;
@@ -61,6 +63,7 @@ import org.apache.causeway.testdomain.model.bad.InvalidActionOverloading;
 import org.apache.causeway.testdomain.model.bad.InvalidContradictingTypeSemantics;
 import org.apache.causeway.testdomain.model.bad.InvalidDomainObjectOnInterface;
 import org.apache.causeway.testdomain.model.bad.InvalidElementTypes;
+import org.apache.causeway.testdomain.model.bad.InvalidMemberIdClash;
 import org.apache.causeway.testdomain.model.bad.InvalidMemberOverloadingWhenInherited;
 import org.apache.causeway.testdomain.model.bad.InvalidObjectWithAlias;
 import org.apache.causeway.testdomain.model.bad.InvalidOrphanedActionSupport;
@@ -366,19 +369,25 @@ class DomainModelTest_usingBadDomain {
     @Test
     void memberIdClash() {
 
-        //TODO[CAUSEWAY-3051] WIP
-        System.err.println("------------------------------------------------");
+        var spec = specificationLoader.specForTypeElseFail(InvalidMemberIdClash.class);
 
-        validator.streamFailures(id->id.getFullIdentityString().contains("InvalidMemberIdClash"))
-        .forEach(failure->System.err.printf("!!!%s%n", failure));
+        assertEquals(6L, spec.streamRuntimeActions(MixedIn.INCLUDED).count(),
+                ()->"expected 8 total actions, with 2 shadowed due to member-id collision");
 
-        /*org.apache.causeway.testdomain.model.bad.InvalidMemberIdClash:
-         * has members using the same member-id 'someAction', which is not allowed; clashes:
-         * [1]org.apache.causeway.testdomain.model.bad.InvalidMemberIdClash#someAction()
-         * [2]org.apache.causeway.testdomain.model.bad.InvalidMemberIdClash#someAction)
-         */
+        assertEquals(8L, spec.streamAssociations(MixedIn.INCLUDED).count(),
+                ()->"expected 16 total associations, with 8 shadowed due to member-id collision");
 
-        System.err.println("------------------------------------------------");
+        Stream.of("someAction",
+                "someProperty",
+                "someCollection",
+                "actionClash",
+                "mixinC",
+                "propertyClash",
+                "collectionClash")
+        .map(collidingMemberId->
+            String.format("has members using the same member-id '%s'", collidingMemberId))
+        .forEach(expectedMessageChunk->
+            validator.assertAnyFailuresContaining(InvalidMemberIdClash.class, expectedMessageChunk));
     }
 
     // -- ELEMENT-TYPE
