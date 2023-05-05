@@ -22,8 +22,11 @@ import java.lang.annotation.Annotation;
 
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;
@@ -42,6 +45,35 @@ public final class ValidationFailureUtils {
                     .addVariable("mixinType", holder.getFeatureIdentifier().getFullIdentityString())
                     .buildMessage());
     }
+
+
+    public void raiseMemberIdClash(
+            final ObjectSpecification declaringType,
+            final ObjectMember memberA,
+            final ObjectMember memberB) {
+
+        ValidationFailure.raiseFormatted(memberB,
+                ProgrammingModelConstants.Violation.MEMBER_ID_CLASH
+                    .builder()
+                    .addVariable("type", declaringType.fqcn())
+                    .addVariable("memberId", ""+memberB.getId())
+                    .addVariable("member1", memberA.getFeatureIdentifier().getFullIdentityString())
+                    .addVariable("member2", memberB.getFeatureIdentifier().getFullIdentityString())
+                    .buildMessage());
+    }
+
+    public void raiseInvalidMemberElementType(
+            final FacetHolder facetHolder,
+            final ObjectSpecification declaringType,
+            final ObjectSpecification elementType) {
+        ValidationFailure.raiseFormatted(facetHolder,
+                ProgrammingModelConstants.Violation.INVALID_MEMBER_ELEMENT_TYPE
+                    .builder()
+                    .addVariable("type", declaringType.fqcn())
+                    .addVariable("elementType", ""+elementType)
+                    .buildMessage());
+    }
+
 
     //XXX assumes that given mandatoryFacet is one of the top ranking
     @Deprecated // marked deprecated, because not implemented

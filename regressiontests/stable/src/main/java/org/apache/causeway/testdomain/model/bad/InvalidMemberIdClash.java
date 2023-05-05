@@ -35,32 +35,48 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Collisions between:
+ * Action collisions on:
  * <ul>
- * <li>act<->act1,prop1,coll1</li>
- * <li>prop<->act2,prop2,coll2</li>
- * <li>coll<->act3,prop3,coll3</li>
- * <li>act4<->prop4</li>
- * <li>act5<->coll4</li>
- * <li>prop5<->coll5</li>
+ * <li>someAction: {act0, act1}</li>
+ * <li>someProperty: none</li>
+ * <li>someCollection: none</li>
+ * <li>mixinA: none</li>
+ * <li>mixinB: none</li>
+ * <li>actionClash: {act6, act7}</li>
+ * </ul>
+ * Association collisions on:
+ * <ul>
+ * <li>someAction: {prop1, coll1}</li>
+ * <li>someProperty: {prop0, prop2, coll2}</li>
+ * <li>someCollection: {coll0, prop3, coll3}</li>
+ * <li>mixinA: none</li>
+ * <li>mixinB: none</li>
+ * <li>mixinC: {prop5, coll5}</li>
+ * <li>propertyClash: {prop6, prop7}</li>
+ * <li>collectionClash: {prop6, prop7}</li>
+ * </ul>
+ * Expectations:
+ * <ul>
+ * <li>unique action-ids (total minus number of shadowed by collisions): 8 - 2 = 6</li>
+ * <li>unique association-ids (total minus number of shadowed by collisions): 16 - 8 = 8</li>
  * </ul>
  */
 @DomainObject(nature = Nature.VIEW_MODEL)
 @Named("testdomain.InvalidMemberIdClash")
 public class InvalidMemberIdClash {
 
-    // member-id clash (act)
+    // member-id clash (act0)
     @Action
     public boolean someAction() {
         return false;
     }
 
-    // member-id clash (prop)
+    // member-id clash (prop0)
     @Property
     @Getter
     private int someProperty = 0;
 
-    // member-id clash (coll)
+    // member-id clash (coll0)
     @Collection
     @Getter
     private List<Integer> someCollection = Collections.emptyList();
@@ -69,7 +85,7 @@ public class InvalidMemberIdClash {
 
     @Action
     @RequiredArgsConstructor
-    public static class ActionMixin1_someAction { // member-id clash
+    public static class ActionMixin1_someAction {
         @SuppressWarnings("unused")
         private final InvalidMemberIdClash memberIdClash;
         @MemberSupport public String act() { return ""; }
@@ -77,7 +93,7 @@ public class InvalidMemberIdClash {
 
     @Action
     @RequiredArgsConstructor
-    public static class ActionMixin2_someProperty { // member-id clash
+    public static class ActionMixin2_someProperty {
         @SuppressWarnings("unused")
         private final InvalidMemberIdClash memberIdClash;
         @MemberSupport public String act() { return ""; }
@@ -85,7 +101,7 @@ public class InvalidMemberIdClash {
 
     @Action
     @RequiredArgsConstructor
-    public static class ActionMixin3_someCollection { // member-id clash
+    public static class ActionMixin3_someCollection {
         @SuppressWarnings("unused")
         private final InvalidMemberIdClash memberIdClash;
         @MemberSupport public String act() { return ""; }
@@ -93,7 +109,7 @@ public class InvalidMemberIdClash {
 
     @Action
     @RequiredArgsConstructor
-    public static class ActionMixin4_mixinA { // member-id clash
+    public static class ActionMixin4_mixinA {
         @SuppressWarnings("unused")
         private final InvalidMemberIdClash memberIdClash;
         @MemberSupport public String act() { return ""; }
@@ -101,7 +117,23 @@ public class InvalidMemberIdClash {
 
     @Action
     @RequiredArgsConstructor
-    public static class ActionMixin5_mixinB { // member-id clash
+    public static class ActionMixin5_mixinB {
+        @SuppressWarnings("unused")
+        private final InvalidMemberIdClash memberIdClash;
+        @MemberSupport public String act() { return ""; }
+    }
+
+    @Action
+    @RequiredArgsConstructor
+    public static class ActionMixin6_actionClash {
+        @SuppressWarnings("unused")
+        private final InvalidMemberIdClash memberIdClash;
+        @MemberSupport public String act() { return ""; }
+    }
+
+    @Action
+    @RequiredArgsConstructor
+    public static class ActionMixin7_actionClash {
         @SuppressWarnings("unused")
         private final InvalidMemberIdClash memberIdClash;
         @MemberSupport public String act() { return ""; }
@@ -111,7 +143,7 @@ public class InvalidMemberIdClash {
 
     @Property
     @RequiredArgsConstructor
-    public static class PropertyMixin1_someAction { // member-id clash
+    public static class PropertyMixin1_someAction {
         @SuppressWarnings("unused")
         private final InvalidMemberIdClash memberIdClash;
         @MemberSupport public String prop() { return ""; }
@@ -119,7 +151,7 @@ public class InvalidMemberIdClash {
 
     @Property
     @RequiredArgsConstructor
-    public static class PropertyMixin2_someProperty { // member-id clash
+    public static class PropertyMixin2_someProperty {
         @SuppressWarnings("unused")
         private final InvalidMemberIdClash memberIdClash;
         @MemberSupport public String prop() { return ""; }
@@ -127,7 +159,7 @@ public class InvalidMemberIdClash {
 
     @Property
     @RequiredArgsConstructor
-    public static class PropertyMixin3_someCollection { // member-id clash
+    public static class PropertyMixin3_someCollection {
         @SuppressWarnings("unused")
         private final InvalidMemberIdClash memberIdClash;
         @MemberSupport public String prop() { return ""; }
@@ -135,7 +167,7 @@ public class InvalidMemberIdClash {
 
     @Property
     @RequiredArgsConstructor
-    public static class PropertyMixin_mixinA { // member-id clash
+    public static class PropertyMixin_mixinA {
         @SuppressWarnings("unused")
         private final InvalidMemberIdClash memberIdClash;
         @MemberSupport public String prop() { return ""; }
@@ -143,7 +175,23 @@ public class InvalidMemberIdClash {
 
     @Property
     @RequiredArgsConstructor
-    public static class PropertyMixin5_mixinC { // member-id clash
+    public static class PropertyMixin5_mixinC {
+        @SuppressWarnings("unused")
+        private final InvalidMemberIdClash memberIdClash;
+        @MemberSupport public String prop() { return ""; }
+    }
+
+    @Property
+    @RequiredArgsConstructor
+    public static class PropertyMixin6_propertyClash {
+        @SuppressWarnings("unused")
+        private final InvalidMemberIdClash memberIdClash;
+        @MemberSupport public String prop() { return ""; }
+    }
+
+    @Property
+    @RequiredArgsConstructor
+    public static class PropertyMixin7_propertyClash {
         @SuppressWarnings("unused")
         private final InvalidMemberIdClash memberIdClash;
         @MemberSupport public String prop() { return ""; }
@@ -153,7 +201,7 @@ public class InvalidMemberIdClash {
 
     @Collection
     @RequiredArgsConstructor
-    public static class CollectionMixin1_someAction { // member-id clash
+    public static class CollectionMixin1_someAction {
         @SuppressWarnings("unused")
         private final InvalidMemberIdClash memberIdClash;
         @MemberSupport public Set<String> coll() { return null; }
@@ -161,7 +209,7 @@ public class InvalidMemberIdClash {
 
     @Collection
     @RequiredArgsConstructor
-    public static class CollectionMixin2_someProperty { // member-id clash
+    public static class CollectionMixin2_someProperty {
         @SuppressWarnings("unused")
         private final InvalidMemberIdClash memberIdClash;
         @MemberSupport public Set<String> coll() { return null; }
@@ -169,7 +217,7 @@ public class InvalidMemberIdClash {
 
     @Collection
     @RequiredArgsConstructor
-    public static class CollectionMixin3_someCollection { // member-id clash
+    public static class CollectionMixin3_someCollection {
         @SuppressWarnings("unused")
         private final InvalidMemberIdClash memberIdClash;
         @MemberSupport public Set<String> coll() { return null; }
@@ -177,7 +225,7 @@ public class InvalidMemberIdClash {
 
     @Collection
     @RequiredArgsConstructor
-    public static class CollectionMixin4_mixinB { // member-id clash
+    public static class CollectionMixin4_mixinB {
         @SuppressWarnings("unused")
         private final InvalidMemberIdClash memberIdClash;
         @MemberSupport public Set<String> coll() { return null; }
@@ -185,7 +233,23 @@ public class InvalidMemberIdClash {
 
     @Collection
     @RequiredArgsConstructor
-    public static class CollectionMixin5_mixinC { // member-id clash
+    public static class CollectionMixin5_mixinC {
+        @SuppressWarnings("unused")
+        private final InvalidMemberIdClash memberIdClash;
+        @MemberSupport public Set<String> coll() { return null; }
+    }
+
+    @Collection
+    @RequiredArgsConstructor
+    public static class CollectionMixin6_collectionClash {
+        @SuppressWarnings("unused")
+        private final InvalidMemberIdClash memberIdClash;
+        @MemberSupport public Set<String> coll() { return null; }
+    }
+
+    @Collection
+    @RequiredArgsConstructor
+    public static class CollectionMixin7_collectionClash {
         @SuppressWarnings("unused")
         private final InvalidMemberIdClash memberIdClash;
         @MemberSupport public Set<String> coll() { return null; }

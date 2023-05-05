@@ -26,7 +26,6 @@ import javax.inject.Inject;
 
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -37,7 +36,7 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
-import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
+import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 
 /**
  * Checks various preconditions for a sane meta-model.
@@ -108,18 +107,14 @@ implements
 
     private static class MemberIdCollector {
         private Map<String, ObjectMember> actionIds = new HashMap<>();
-        private Map<String, ObjectMember> propertyIds = new HashMap<>();
-        private Map<String, ObjectMember> collectionIds = new HashMap<>();
+        private Map<String, ObjectMember> associationIds = new HashMap<>();
         /** Optionally returns a member with the same member-id, based on whether previously collected. */
         public Optional<ObjectMember> collect(final ObjectMember objectMember) {
             if(objectMember.isAction()) {
                 return Optional.ofNullable(actionIds.put(objectMember.getId(), objectMember));
             }
-            if(objectMember.isProperty()) {
-                return Optional.ofNullable(propertyIds.put(objectMember.getId(), objectMember));
-            }
-            if(objectMember.isCollection()) {
-                return Optional.ofNullable(collectionIds.put(objectMember.getId(), objectMember));
+            if(objectMember.isPropertyOrCollection()) {
+                return Optional.ofNullable(associationIds.put(objectMember.getId(), objectMember));
             }
             throw _Exceptions.unmatchedCase(String.format("framework bug: unmatched feature %s", objectMember));
         }
@@ -133,23 +128,16 @@ implements
 
         if(declaringType.isAbstract()) return;
 
-        //TODO[CAUSEWAY-3051] should be 18 but reports only 11
-        //perhaps because we internally assume no clashing during spec-loading, which is wrong
+        //TODO[CAUSEWAY-3051] should be 24 minus 10 shadowed by collision (=14)
         if(objectMember.getDeclaringType().toString().contains("InvalidMemberIdClash")) {
-            System.err.printf("member-id: %s (%s)%n", objectMember.getId(), objectMember.getDeclaringType());
+            System.err.printf("member-id: %s (%s%s)%n",
+                    objectMember.getId(), objectMember.getFeatureType(),
+                    (objectMember.isMixedIn()?",mx":""));
         }
 
         memberIdCollector.collect(objectMember)
-        .ifPresent(previous->{
-            ValidationFailure.raiseFormatted(objectMember,
-                    ProgrammingModelConstants.Violation.MEMBER_ID_CLASH
-                        .builder()
-                        .addVariable("type", declaringType.fqcn())
-                        .addVariable("memberId", ""+objectMember.getId())
-                        .addVariable("member1", previous.getFeatureIdentifier().getFullIdentityString())
-                        .addVariable("member2", objectMember.getFeatureIdentifier().getFullIdentityString())
-                        .buildMessage());
-        });
+        .ifPresent(previous->
+            ValidationFailureUtils.raiseMemberIdClash(declaringType, previous, objectMember));
     }
 
     private void checkElementType(
@@ -162,12 +150,7 @@ implements
                 || elementType.getBeanSort().isMixin()
                 || elementType.getBeanSort().isVetoed()) {
 
-            ValidationFailure.raiseFormatted(facetHolder,
-                    ProgrammingModelConstants.Violation.INVALID_MEMBER_ELEMENT_TYPE
-                        .builder()
-                        .addVariable("type", declaringType.fqcn())
-                        .addVariable("elementType", ""+elementType)
-                        .buildMessage());
+            ValidationFailureUtils.raiseInvalidMemberElementType(facetHolder, declaringType, elementType);
         }
     }
 
