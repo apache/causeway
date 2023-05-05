@@ -18,21 +18,14 @@
  */
 package org.apache.causeway.core.metamodel.postprocessors.all;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-
 import javax.inject.Inject;
 
 import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
@@ -42,14 +35,6 @@ import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure
 /**
  * Checks various preconditions for a sane meta-model.
  * <ul>
-
- * <li>Guard against members and mixed-in members that share the same member-id.
- * <ul>
- *      <li>member-ids for actions within the same type must be unique (including mixed-in ones)</li>
- *      <li>member-ids for properties within the same type must be unique (including mixed-in ones)</li>
- *      <li>member-ids for collections within the same type must be unique (including mixed-in ones)</li>
- * </ul>
- * </li>
  *
  * <li>Guard against members that contribute vetoed or managed types.
  * Those are not allowed as member/return/param.</li>
@@ -75,77 +60,35 @@ implements
 
     @Override
     public void validateAction(final ObjectSpecification objectSpecification, final ObjectAction objectAction) {
-        checkMemberId(objectAction, objectSpecification);
         checkElementType(objectAction, objectSpecification, objectAction.getElementType());
     }
 
     @Override
     public void validateProperty(final ObjectSpecification objectSpecification, final OneToOneAssociation prop) {
-        checkMemberId(prop, objectSpecification);
         checkElementType(prop, objectSpecification, prop.getElementType());
     }
 
     @Override
     public void validateCollection(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
-        checkMemberId(coll, objectSpecification);
         checkElementType(coll, objectSpecification, coll.getElementType());
     }
 
     @Override
     public void validateObjectEnter(final ObjectSpecification objSpec) {
         // guard against recursive call
-        _Assert.assertNull(this.memberIdCollector, ()->"framework bug: "
+        _Assert.assertFalse(hasEntered, ()->"framework bug: "
                 + "validators are not expected to be called recursevely (nested)");
-        this.memberIdCollector = new MemberIdCollector();
-
-        //TODO[CAUSEWAY-3051] we need a way to ask the MM for all members,
-        // circumventing built-in member-id duplication prevention,
-        // which in its own right helps with handling of method overriding (Java language terminology)
-        objSpec.streamProperties(MixedIn.INCLUDED);
+        this.hasEntered = true;
     }
 
     @Override
     public void validateObjectExit(final ObjectSpecification objSpec) {
-        memberIdCollector = null; // garbage collect
+        hasEntered = false;
     }
 
     // -- HELPER
 
-    private static class MemberIdCollector {
-        private Map<String, ObjectMember> actionIds = new HashMap<>();
-        private Map<String, ObjectMember> associationIds = new HashMap<>();
-        /** Optionally returns a member with the same member-id, based on whether previously collected. */
-        public Optional<ObjectMember> collect(final ObjectMember objectMember) {
-            if(objectMember.isAction()) {
-                return Optional.ofNullable(actionIds.put(objectMember.getId(), objectMember));
-            }
-            if(objectMember.isPropertyOrCollection()) {
-                return Optional.ofNullable(associationIds.put(objectMember.getId(), objectMember));
-            }
-            throw _Exceptions.unmatchedCase(String.format("framework bug: unmatched feature %s", objectMember));
-        }
-    }
-
-    private MemberIdCollector memberIdCollector;
-
-    private void checkMemberId(
-            final ObjectMember objectMember,
-            final ObjectSpecification declaringType) {
-
-        if(declaringType.isAbstract()) return;
-
-        //FIXME[CAUSEWAY-3051] reports 24 minus 10 shadowed by collision (=14)
-        //instead should detect 2 shadowed actions, 4 shadowed props and 4 shadowed colls - yet none detected
-        if(objectMember.getDeclaringType().toString().contains("InvalidMemberIdClash")) {
-            System.err.printf("member-id: %s (%s%s)%n",
-                    objectMember.getId(), objectMember.getFeatureType(),
-                    (objectMember.isMixedIn()?",mx":""));
-        }
-
-        memberIdCollector.collect(objectMember)
-        .ifPresent(previous->
-            ValidationFailureUtils.raiseMemberIdClash(declaringType, previous, objectMember));
-    }
+    private boolean hasEntered = false; // validator recursive call guard
 
     private void checkElementType(
             final FacetHolder facetHolder,

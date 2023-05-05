@@ -32,7 +32,7 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import lombok.val;
 
 /** package private utility */
-final class MemberSortingUtils {
+final class _MemberSortingUtils {
 
     // -- ASSOCIATION SORTING
 

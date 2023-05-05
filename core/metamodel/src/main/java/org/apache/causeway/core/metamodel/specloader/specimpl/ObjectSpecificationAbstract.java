@@ -24,6 +24,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.util.ClassUtils;
@@ -353,7 +354,7 @@ implements ObjectSpecification {
     }
 
     protected final void replaceAssociations(final Stream<ObjectAssociation> associations) {
-        val orderedAssociations = MemberSortingUtils.sortAssociationsIntoList(associations);
+        val orderedAssociations = _MemberSortingUtils.sortAssociationsIntoList(associations);
         synchronized (unmodifiableAssociations) {
             this.associations.clear();
             this.associations.addAll(orderedAssociations);
@@ -362,7 +363,7 @@ implements ObjectSpecification {
     }
 
     protected final void replaceActions(final Stream<ObjectAction> objectActions) {
-        val orderedActions = MemberSortingUtils.sortActionsIntoList(objectActions);
+        val orderedActions = _MemberSortingUtils.sortActionsIntoList(objectActions);
         synchronized (unmodifiableActions){
             this.objectActions.clear();
             this.objectActions.addAll(orderedActions);
@@ -378,11 +379,6 @@ implements ObjectSpecification {
             }
         }
     }
-
-    protected final void replaceMixedInActions(final Stream<ObjectActionMixedIn> objectActions) {
-
-    }
-
 
     public void invalidateCachedFacets() {
         valueFacet = getFacet(ValueFacet.class);
@@ -864,15 +860,17 @@ implements ObjectSpecification {
         if(!include) {
             return;
         }
-        val mixedInActions = _Lists.<ObjectAction>newArrayList();
-        createMixedInActions().forEach(mixedInActions::add);
+        val mixedInActions = createMixedInActions()
+                .collect(Collectors.toList());
         if(mixedInActions.isEmpty()) {
            return; // nothing to do (this spec has no mixed-in actions, regular actions have already been added)
         }
 
-        //TODO[CAUSEWAY-3051] report member-id clashes
-
         val regularActions = _Lists.newArrayList(objectActions); // defensive copy
+
+        // note: we are doing this before any member sorting
+        _MemberIdClashReporting.flagAnyMemberIdClashes(this, regularActions, mixedInActions);
+
         replaceActions(Stream.concat(
                 regularActions.stream(),
                 mixedInActions.stream()));
@@ -885,15 +883,17 @@ implements ObjectSpecification {
         if(!isEntityOrViewModelOrAbstract()) {
             return;
         }
-        val mixedInAssociations = _Lists.<ObjectAssociation>newArrayList();
-        createMixedInAssociations().forEach(mixedInAssociations::add);
+        val mixedInAssociations = createMixedInAssociations()
+                .collect(Collectors.toList());
         if(mixedInAssociations.isEmpty()) {
            return; // nothing to do (this spec has no mixed-in associations, regular associations have already been added)
         }
 
-        //TODO[CAUSEWAY-3051] report member-id clashes
-
         val regularAssociations = _Lists.newArrayList(associations); // defensive copy
+
+        // note: we are doing this before any member sorting
+        _MemberIdClashReporting.flagAnyMemberIdClashes(this, regularAssociations, mixedInAssociations);
+
         replaceAssociations(Stream.concat(
                 regularAssociations.stream(),
                 mixedInAssociations.stream()));
