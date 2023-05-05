@@ -79,7 +79,7 @@ implements MetaModelRefiner {
 
     @Override
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
-        programmingModel.addVisitingValidatorSkipManagedBeans(spec->{
+        programmingModel.addValidatorSkipManagedBeans(spec->{
 
             // only consider persistent entities
             final JdoPersistenceCapableFacet pcFacet = spec.getFacet(JdoPersistenceCapableFacet.class);

@@ -24,7 +24,7 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
 import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacet;
 import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet;
-import org.apache.causeway.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
+import org.apache.causeway.core.metamodel.postprocessors.MetaModelPostProcessorAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
@@ -37,7 +37,7 @@ import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure
  * unless overwritten by the mixin type.
  */
 public class SynthesizeDomainEventsForMixinPostProcessor
-extends ObjectSpecificationPostProcessorAbstract {
+extends MetaModelPostProcessorAbstract {
 
     @Inject
     public SynthesizeDomainEventsForMixinPostProcessor(final MetaModelContext metaModelContext) {

@@ -72,7 +72,7 @@ implements
             return;
         }
 
-        programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec-> {
+        programmingModel.addValidatorSkipManagedBeans(objectSpec-> {
 
             if(!check(objectSpec)) {
                 return;

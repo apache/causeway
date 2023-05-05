@@ -35,7 +35,7 @@ import org.apache.causeway.core.metamodel.facets.properties.choices.PropertyChoi
 import org.apache.causeway.core.metamodel.facets.properties.choices.enums.PropertyChoicesFacetFromChoicesFacet;
 import org.apache.causeway.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.causeway.core.metamodel.facets.properties.defaults.fromtype.PropertyDefaultFacetFromDefaultedFacet;
-import org.apache.causeway.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
+import org.apache.causeway.core.metamodel.postprocessors.MetaModelPostProcessorAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -53,7 +53,7 @@ import lombok.val;
  *
  */
 public class ChoicesAndDefaultsPostProcessor
-extends ObjectSpecificationPostProcessorAbstract {
+extends MetaModelPostProcessorAbstract {
 
     @Inject
     public ChoicesAndDefaultsPostProcessor(final MetaModelContext metaModelContext) {

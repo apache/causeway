@@ -40,7 +40,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
-import org.apache.causeway.core.metamodel.specloader.validator.MetaModelVisitingValidatorAbstract;
+import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
 import static org.apache.causeway.commons.internal.functions._Predicates.not;
@@ -74,20 +74,12 @@ implements MetaModelRefiner {
 
     @Override
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
-        programmingModel.addValidator(newValidatorVisitor(programmingModel.getMetaModelContext()));
-    }
-
-    private MetaModelValidator newValidatorVisitor(final MetaModelContext mmc) {
-        return new MetaModelVisitingValidatorAbstract(mmc) {
+        programmingModel.addValidator(new MetaModelValidatorAbstract(getMetaModelContext(), MetaModelValidator.SKIP_MANAGED_BEANS) {
 
             private final Map<String, ObjectAction> actionsHavingHomePageFacet = _Maps.newHashMap();
 
             @Override
-            public void validate(final @NonNull ObjectSpecification spec) {
-                if(spec.isInjectable()) {
-                    return;
-                }
-
+            public void validateObjectEnter(final @NonNull ObjectSpecification spec) {
                 // as an optimization only checking declared members (skipping inherited ones)
                 spec.streamDeclaredActions(MixedIn.EXCLUDED)
                 .filter(objectAction->objectAction.containsFacet(HomePageFacet.class))
@@ -106,7 +98,7 @@ implements MetaModelRefiner {
             }
 
             @Override
-            public void summarize() {
+            public void validateExit() {
                 if(actionsHavingHomePageFacet.size()>1) {
 
                     final Set<String> homepageActionIdSet = actionsHavingHomePageFacet.values().stream()
@@ -131,7 +123,7 @@ implements MetaModelRefiner {
                 }
             }
 
-        };
-
+        });
     }
+
 }

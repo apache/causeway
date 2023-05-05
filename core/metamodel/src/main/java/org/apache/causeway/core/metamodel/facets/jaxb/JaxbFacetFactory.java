@@ -152,7 +152,7 @@ implements MetaModelRefiner {
         final List<TypeValidator> typeValidators = getTypeValidators(getConfiguration());
         final List<AssociationValidator> associationValidators = getAssociationValidators(getConfiguration());
 
-        programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec->{
+        programmingModel.addValidatorSkipManagedBeans(objectSpec->{
 
             final boolean viewModel = objectSpec.isViewModel();
             if(!viewModel) {

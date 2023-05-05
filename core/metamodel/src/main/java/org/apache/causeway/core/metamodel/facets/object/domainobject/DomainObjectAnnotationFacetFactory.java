@@ -73,7 +73,7 @@ import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet
 import org.apache.causeway.core.metamodel.object.MmEventUtils;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.specloader.validator.MetaModelVisitingValidatorAbstract;
+import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
@@ -562,13 +562,13 @@ implements
 
         programmingModel
         .addValidator(
-            new MetaModelVisitingValidatorAbstract(programmingModel.getMetaModelContext()){
+            new MetaModelValidatorAbstract(getMetaModelContext(), spec->!spec.isAbstract()){
 
                 final _Multimaps.ListMultimap<String, ObjectSpecification> specsByLogicalTypeName =
                         _Multimaps.newConcurrentListMultimap();
 
                 @Override
-                public void validate(final ObjectSpecification objSpec) {
+                public void validateObjectEnter(final ObjectSpecification objSpec) {
 
                     // @DomainObject(logicalTypeName=...) must be unique among non-abstract types
                     // Eg. having an ApplicationUser interface and a concrete ApplicationUser (JDO)
@@ -578,9 +578,6 @@ implements
                     // This must be guaranteed by MM validation.
                     // - see also LogicalTypeResolver.register(...)
 
-                    if(objSpec.isAbstract()) {
-                        return;
-                    }
                     specsByLogicalTypeName.putElement(objSpec.getLogicalTypeName(), objSpec);
 
                     // also adding aliases to the multi-map
@@ -590,7 +587,7 @@ implements
                 }
 
                 @Override
-                public void summarize() {
+                public void validateExit() {
 
                     specsByLogicalTypeName.forEach((logicalTypeName, collidingSpecs)->{
                         if(isObjectTypeCollision(collidingSpecs)) {

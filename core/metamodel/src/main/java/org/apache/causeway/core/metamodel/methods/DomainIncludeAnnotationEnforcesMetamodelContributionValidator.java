@@ -46,7 +46,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
-import org.apache.causeway.core.metamodel.specloader.validator.MetaModelVisitingValidatorAbstract;
+import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.val;
@@ -56,25 +56,21 @@ import lombok.val;
  * @see org.apache.causeway.applib.annotation.Domain.Include
  */
 public class DomainIncludeAnnotationEnforcesMetamodelContributionValidator
-extends MetaModelVisitingValidatorAbstract {
+extends MetaModelValidatorAbstract {
 
     private final _ClassCache classCache;
 
     @Inject
     public DomainIncludeAnnotationEnforcesMetamodelContributionValidator(final MetaModelContext mmc) {
-        super(mmc);
+        super(mmc, spec->!(!(spec instanceof ObjectSpecificationAbstract)
+                || spec.isAbstract()
+                || spec.getBeanSort().isManagedBeanNotContributing()
+                || spec.isValue()));
         this.classCache = _ClassCache.getInstance();
     }
 
     @Override
-    public void validate(final ObjectSpecification spec) {
-
-        if(!(spec instanceof ObjectSpecificationAbstract)
-                || spec.isAbstract()
-                || spec.getBeanSort().isManagedBeanNotContributing()
-                || spec.isValue()) {
-            return;
-        }
+    public void validateObjectEnter(final ObjectSpecification spec) {
 
         final Class<?> type = spec.getCorrespondingClass();
 

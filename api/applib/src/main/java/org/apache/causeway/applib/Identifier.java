@@ -96,15 +96,15 @@ implements
 
     public static Identifier propertyIdentifier(
             final LogicalType typeIdentifier,
-            final String propertyOrCollectionName) {
-        return new Identifier(typeIdentifier, propertyOrCollectionName, Can.empty(),
+            final String propertyName) {
+        return new Identifier(typeIdentifier, propertyName, Can.empty(),
                 Type.PROPERTY);
     }
 
     public static Identifier collectionIdentifier(
             final LogicalType typeIdentifier,
-            final String propertyOrCollectionName) {
-        return new Identifier(typeIdentifier, propertyOrCollectionName, Can.empty(),
+            final String collectionName) {
+        return new Identifier(typeIdentifier, collectionName, Can.empty(),
                 Type.COLLECTION);
     }
 

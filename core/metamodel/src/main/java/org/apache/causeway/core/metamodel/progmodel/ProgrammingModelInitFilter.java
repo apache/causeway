@@ -25,7 +25,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal.functions._Predicates;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
-import org.apache.causeway.core.metamodel.postprocessors.ObjectSpecificationPostProcessor;
+import org.apache.causeway.core.metamodel.postprocessors.MetaModelPostProcessor;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.isEmpty;
@@ -48,7 +48,7 @@ public interface ProgrammingModelInitFilter {
             ProgrammingModel.Marker[] markersIfAny);
 
     boolean acceptPostProcessor(
-            Class<? extends ObjectSpecificationPostProcessor> postProcessorType,
+            Class<? extends MetaModelPostProcessor> postProcessorType,
             ProgrammingModel.Marker[] markersIfAny);
 
     // -- PREDEFINED PREDICATES

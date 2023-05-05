@@ -42,7 +42,7 @@ import org.apache.causeway.core.metamodel.facets.actions.fileaccept.FileAcceptFa
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingActionFacetForActionAnnotation;
-import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorForAmbiguousMixinAnnotations;
+import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 
 import lombok.val;
 
@@ -82,8 +82,8 @@ extends FacetFactoryAbstract {
         return processMethodContext
                 .synthesizeOnMethodOrMixinType(
                         Action.class,
-                        () -> MetaModelValidatorForAmbiguousMixinAnnotations
-                        .addValidationFailure(processMethodContext.getFacetHolder(), Action.class));
+                        () -> ValidationFailureUtils
+                        .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), Action.class));
     }
 
     void processExplicit(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {

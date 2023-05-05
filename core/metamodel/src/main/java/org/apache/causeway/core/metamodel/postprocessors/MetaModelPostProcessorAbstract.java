@@ -28,13 +28,13 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 
-public abstract class ObjectSpecificationPostProcessorAbstract
-implements ObjectSpecificationPostProcessor {
+public abstract class MetaModelPostProcessorAbstract
+implements MetaModelPostProcessor {
 
     @Getter(onMethod_ = {@Override})
     private final @NonNull MetaModelContext metaModelContext;
 
-    protected ObjectSpecificationPostProcessorAbstract(final MetaModelContext metaModelContext) {
+    protected MetaModelPostProcessorAbstract(final MetaModelContext metaModelContext) {
         super();
         this.metaModelContext = metaModelContext;
     }

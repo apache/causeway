@@ -30,7 +30,7 @@ import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-final class _Util {
+final class _LogUtil {
 
     void logBefore(
             final Logger log,

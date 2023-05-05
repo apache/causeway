@@ -20,53 +20,75 @@ package org.apache.causeway.core.metamodel.postprocessors.all;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
+import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
+import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
+import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 
 /**
  * Checks various preconditions for a sane meta-model.
  * <ul>
+ *
  * <li>Guard against members that contribute vetoed or managed types.
  * Those are not allowed as member/return/param.</li>
  * </ul>
  */
-public class SanityChecksPostProcessor
-extends ObjectSpecificationPostProcessorAbstract {
+public class SanityChecksValidator
+extends MetaModelValidatorAbstract
+implements
+    MetaModelValidator.ActionValidator,
+    MetaModelValidator.ParameterValidator,
+    MetaModelValidator.PropertyValidator,
+    MetaModelValidator.CollectionValidator {
 
     @Inject
-    public SanityChecksPostProcessor(final MetaModelContext mmc) {
-        super(mmc);
+    public SanityChecksValidator(final MetaModelContext mmc) {
+        super(mmc, SKIP_MIXINS);
     }
 
     @Override
-    public void postProcessParameter(final ObjectSpecification objectSpecification, final ObjectAction objectAction, final ObjectActionParameter parameter) {
+    public void validateParameter(final ObjectSpecification objectSpecification, final ObjectAction objectAction, final ObjectActionParameter parameter) {
         checkElementType(parameter, objectSpecification, parameter.getElementType());
     }
 
     @Override
-    public void postProcessAction(final ObjectSpecification objectSpecification, final ObjectAction objectAction) {
+    public void validateAction(final ObjectSpecification objectSpecification, final ObjectAction objectAction) {
         checkElementType(objectAction, objectSpecification, objectAction.getElementType());
     }
 
     @Override
-    public void postProcessProperty(final ObjectSpecification objectSpecification, final OneToOneAssociation prop) {
+    public void validateProperty(final ObjectSpecification objectSpecification, final OneToOneAssociation prop) {
         checkElementType(prop, objectSpecification, prop.getElementType());
     }
 
     @Override
-    public void postProcessCollection(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
+    public void validateCollection(final ObjectSpecification objectSpecification, final OneToManyAssociation coll) {
         checkElementType(coll, objectSpecification, coll.getElementType());
     }
 
+    @Override
+    public void validateObjectEnter(final ObjectSpecification objSpec) {
+        // guard against recursive call
+        _Assert.assertFalse(hasEntered, ()->"framework bug: "
+                + "validators are not expected to be called recursevely (nested)");
+        this.hasEntered = true;
+    }
+
+    @Override
+    public void validateObjectExit(final ObjectSpecification objSpec) {
+        hasEntered = false;
+    }
+
     // -- HELPER
+
+    private boolean hasEntered = false; // validator recursive call guard
 
     private void checkElementType(
             final FacetHolder facetHolder,
@@ -78,12 +100,7 @@ extends ObjectSpecificationPostProcessorAbstract {
                 || elementType.getBeanSort().isMixin()
                 || elementType.getBeanSort().isVetoed()) {
 
-            ValidationFailure.raiseFormatted(facetHolder,
-                    ProgrammingModelConstants.Violation.VETOED_OR_MANAGED_TYPE_NOT_ALLOWED_TO_ENTER_METAMODEL
-                        .builder()
-                        .addVariable("type", declaringType.fqcn())
-                        .addVariable("elementType", ""+elementType)
-                        .buildMessage());
+            ValidationFailureUtils.raiseInvalidMemberElementType(facetHolder, declaringType, elementType);
         }
     }
 

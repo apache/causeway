@@ -79,7 +79,7 @@ class DeweyOrderSetTest {
         setupLayoutFacets("", "1", lastNameMember);
         setupLayoutFacets("", "2", firstNameMember);
 
-        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(lastNameAndFirstName);
+        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(lastNameAndFirstName.stream());
         assertEquals("", orderSet.getGroupName());
         assertEquals("", orderSet.getGroupFullName());
         assertEquals("", orderSet.getGroupPath());
@@ -90,7 +90,7 @@ class DeweyOrderSetTest {
         setupLayoutFacets("", "1", lastNameMember);
         setupLayoutFacets("", "2", firstNameMember);
 
-        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(lastNameAndFirstName);
+        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(lastNameAndFirstName.stream());
         assertEquals(2, orderSet.size());
         assertEquals(2, orderSet.elementList().size());
         assertEquals(0, orderSet.children().size());
@@ -101,7 +101,7 @@ class DeweyOrderSetTest {
         setupLayoutFacets("", "1", lastNameMember);
         setupLayoutFacets("", "2", firstNameMember);
 
-        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(lastNameAndFirstName);
+        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(lastNameAndFirstName.stream());
         assertEquals(lastNameMember, orderSet.elementList().get(0));
         assertEquals(firstNameMember, orderSet.elementList().get(1));
     }
@@ -111,7 +111,7 @@ class DeweyOrderSetTest {
         setupLayoutFacets("", "2", lastNameMember);
         setupLayoutFacets("", "1", firstNameMember);
 
-        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(lastNameAndFirstName);
+        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(lastNameAndFirstName.stream());
         assertEquals(firstNameMember, orderSet.elementList().get(0));
         assertEquals(lastNameMember, orderSet.elementList().get(1));
     }
@@ -124,7 +124,7 @@ class DeweyOrderSetTest {
         setupLayoutFacets("address", "2", streetNameMember);
         setupLayoutFacets("address", "3", postalTownMember);
 
-        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(nameAndAddressMembers);
+        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(nameAndAddressMembers.stream());
         assertEquals("", orderSet.getGroupName());
         assertEquals("", orderSet.getGroupFullName());
         assertEquals("", orderSet.getGroupPath());
@@ -138,7 +138,7 @@ class DeweyOrderSetTest {
         setupLayoutFacets("address", "2", streetNameMember);
         setupLayoutFacets("address", "3", postalTownMember);
 
-        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(nameAndAddressMembers);
+        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(nameAndAddressMembers.stream());
         assertEquals(1, orderSet.children().size());
         assertEquals(3, orderSet.size());
     }
@@ -151,7 +151,7 @@ class DeweyOrderSetTest {
         setupLayoutFacets("address", "2", streetNameMember);
         setupLayoutFacets("address", "3", postalTownMember);
 
-        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(nameAndAddressMembers);
+        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(nameAndAddressMembers.stream());
         final List<?> children = orderSet.children();
         final DeweyOrderSet childOrderSet = (DeweyOrderSet) children.get(0);
         assertEquals("Address", childOrderSet.getGroupName());
@@ -167,7 +167,7 @@ class DeweyOrderSetTest {
         setupLayoutFacets("address", "2", streetNameMember);
         setupLayoutFacets("address", "3", postalTownMember);
 
-        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(nameAndAddressMembers);
+        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(nameAndAddressMembers.stream());
         final DeweyOrderSet childOrderSet = orderSet.children().get(0);
         assertEquals(3, childOrderSet.size());
         assertEquals(0, childOrderSet.children().size());
@@ -181,7 +181,7 @@ class DeweyOrderSetTest {
         setupLayoutFacets("address", "5", streetNameMember);
         setupLayoutFacets("address", "4", postalTownMember);
 
-        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(nameAndAddressMembers);
+        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(nameAndAddressMembers.stream());
         final DeweyOrderSet childOrderSet = orderSet.children().get(0);
         assertEquals(postalTownMember, childOrderSet.elementList().get(0));
         assertEquals(streetNameMember, childOrderSet.elementList().get(1));
@@ -196,7 +196,7 @@ class DeweyOrderSetTest {
         setupLayoutFacets("", "3", lastNameMember);
         setupLayoutFacets("", "2", firstNameMember);
 
-        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(nameAndAddressMembers);
+        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(nameAndAddressMembers.stream());
         assertEquals(firstNameMember, orderSet.elementList().get(0));
         assertEquals(lastNameMember, orderSet.elementList().get(1));
         assertTrue(orderSet.elementList().get(2) instanceof DeweyOrderSet);
@@ -204,13 +204,13 @@ class DeweyOrderSetTest {
 
     @Test
     void defaultGroupNeitherAnnotatedSize() {
-        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(lastNameAndFirstName);
+        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(lastNameAndFirstName.stream());
         assertEquals(2, orderSet.elementList().size());
     }
 
     @Test
     void defaultGroupNeitherAnnotatedOrderedByName() {
-        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(lastNameAndFirstName);
+        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(lastNameAndFirstName.stream());
         assertEquals(firstNameMember, orderSet.elementList().get(0));
         assertEquals(lastNameMember, orderSet.elementList().get(1));
     }
@@ -220,7 +220,7 @@ class DeweyOrderSetTest {
         setupLayoutFacets("", "1", lastNameMember);
         setupLayoutFacets("address", "2", postalTownMember);
 
-        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(lastNameFirstNameAndPostalTown);
+        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(lastNameFirstNameAndPostalTown.stream());
         assertEquals(3, orderSet.elementList().size());
     }
 
@@ -229,7 +229,7 @@ class DeweyOrderSetTest {
         setupLayoutFacets("", "1", lastNameMember);
         setupLayoutFacets("", "2", postalTownMember);
 
-        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(lastNameFirstNameAndPostalTown);
+        final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(lastNameFirstNameAndPostalTown.stream());
 
         assertEquals(lastNameMember, orderSet.elementList().get(0));
         assertEquals(postalTownMember, orderSet.elementList().get(1));

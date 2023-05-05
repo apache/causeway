@@ -28,7 +28,7 @@ import org.apache.causeway.core.metamodel.facets.object.immutable.EditingEnabled
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.causeway.core.metamodel.facets.properties.disabled.fromimmutable.DisabledFacetOnPropertyFromImmutable;
 import org.apache.causeway.core.metamodel.facets.properties.disabled.fromimmutable.DisabledFacetOnPropertyFromImmutableFactory;
-import org.apache.causeway.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
+import org.apache.causeway.core.metamodel.postprocessors.MetaModelPostProcessorAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
@@ -40,7 +40,7 @@ import lombok.val;
  * Replaces {@link DisabledFacetOnPropertyFromImmutableFactory}
  */
 public class DisabledFromImmutablePostProcessor
-extends ObjectSpecificationPostProcessorAbstract {
+extends MetaModelPostProcessorAbstract {
 
     @Inject
     public DisabledFromImmutablePostProcessor(final MetaModelContext metaModelContext) {

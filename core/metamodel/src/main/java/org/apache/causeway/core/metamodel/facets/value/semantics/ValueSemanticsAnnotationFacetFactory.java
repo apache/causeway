@@ -30,7 +30,7 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.TypedHolderAbstract;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacetAbstract;
-import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorForAmbiguousMixinAnnotations;
+import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 
 import lombok.val;
 
@@ -47,15 +47,15 @@ extends FacetFactoryAbstract {
         val valueSemanticsIfAny = processMethodContext
                 .synthesizeOnMethodOrMixinType(
                         ValueSemantics.class,
-                        () -> MetaModelValidatorForAmbiguousMixinAnnotations
-                            .addValidationFailure(processMethodContext.getFacetHolder(), ValueSemantics.class));
+                        () -> ValidationFailureUtils
+                            .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), ValueSemantics.class));
 
         // support for @javax.validation.constraints.Digits
         val digitsIfAny = processMethodContext
                 .synthesizeOnMethodOrMixinType(
                         Digits.class,
-                        () -> MetaModelValidatorForAmbiguousMixinAnnotations
-                            .addValidationFailure(processMethodContext.getFacetHolder(), Digits.class));
+                        () -> ValidationFailureUtils
+                            .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), Digits.class));
 
         processAll(processMethodContext.getFacetHolder(), valueSemanticsIfAny, digitsIfAny);
     }
