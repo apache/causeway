@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.specloader.specimpl;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -59,26 +58,28 @@ class _MemberIdClashReporting {
 
         val memberIdCollector = new MemberIdCollector();
 
-        final Consumer<ObjectMember> doCheckObjectMember = objectMember->
+        // prime member-ids from regular members, without flagging (honor method override)
+        regularMembers.forEach(memberIdCollector::collect);
+
+        mixedInMembers.forEach(objectMember->
             memberIdCollector.collect(objectMember)
             .ifPresent(previous->
-                ValidationFailureUtils.raiseMemberIdClash(declaringType, previous, objectMember));
-
-        regularMembers.forEach(doCheckObjectMember);
-        mixedInMembers.forEach(doCheckObjectMember);
+                ValidationFailureUtils.raiseMemberIdClash(declaringType, previous, objectMember)));
     }
 
     // -- HELPER
 
     private static class MemberIdCollector {
-        private Map<String, ObjectMember> actionIds = new HashMap<>();
-        private Map<String, ObjectMember> associationIds = new HashMap<>();
+        private Map<String, ObjectMember> actionIds;
+        private Map<String, ObjectMember> associationIds;
         /** Optionally returns a member with the same member-id, based on whether previously collected. */
         public Optional<ObjectMember> collect(final ObjectMember objectMember) {
             if(objectMember.isAction()) {
+                if(actionIds==null) this.actionIds = new HashMap<>();
                 return Optional.ofNullable(actionIds.put(objectMember.getId(), objectMember));
             }
             if(objectMember.isPropertyOrCollection()) {
+                if(associationIds==null) this.associationIds = new HashMap<>();
                 return Optional.ofNullable(associationIds.put(objectMember.getId(), objectMember));
             }
             throw _Exceptions.unmatchedCase(String.format("framework bug: unmatched feature %s", objectMember));

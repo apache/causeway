@@ -25,7 +25,6 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @Import({
     InvalidDomainObjectOnInterface.class, // explicitly import interface
-    InvalidMemberIdClash.class,
 })
 @ComponentScan(
         basePackageClasses= {
