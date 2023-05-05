@@ -71,7 +71,8 @@
 				<cpt:action id="openRestApi" position="PANEL_DROPDOWN" />
 				<cpt:property id="description"/>
 			</cpt:fieldSet>
-		</bs3:col>	</bs3:row>
+		</bs3:col>
+    </bs3:row>
 	<bs3:row>
 		<bs3:col span="12" unreferencedCollections="true"/>
 	</bs3:row>

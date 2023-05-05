@@ -18,28 +18,24 @@
  *
  */
 
-package demoapp.dom.domain.objects.other.customvaluetypes;
+package demoapp.dom.domain.objects.progmodel.embeddedvalues;
 
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
+import java.util.stream.Stream;
 
-import lombok.val;
+import org.springframework.stereotype.Service;
 
-import demoapp.dom.domain.objects.progmodel.embeddedvalues.jdo.ComplexNumberJdo;
+import demoapp.dom.types.Samples;
 
-class ComplexNumberJdo_Test {
+@Service
+public class ComplexNumberSamples implements Samples<ComplexNumber> {
 
-    @Test
-    void title() {
-        val cn = ComplexNumberJdo.of(10.0, 5.0);
-        Assertions.assertThat(cn.title()).isEqualTo("10.0 + 5.0i");
+    @Override
+    public Stream<ComplexNumber> stream() {
+        return Stream.of(
+                ComplexNumber.named("Pi", Math.PI, 0.),
+                ComplexNumber.named("Euler's Constant", Math.E, 0.),
+                ComplexNumber.named("Imaginary Unit", 0, 1)
+            );
     }
 
-    @Test
-    void parse() {
-        val cn = ComplexNumberJdo.parse("10.0 + 5.0i");
-
-        Assertions.assertThat(cn).isPresent();
-        Assertions.assertThat(cn.get().title()).isEqualTo("10.0 + 5.0i");
-    }
 }

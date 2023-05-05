@@ -18,28 +18,22 @@
  *
  */
 
-package demoapp.dom.domain.objects.other.customvaluetypes;
+package demoapp.dom.domain.objects.progmodel.embeddedvalues;
 
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
+import javax.inject.Inject;
 
-import lombok.val;
+import org.springframework.stereotype.Service;
 
-import demoapp.dom.domain.objects.progmodel.embeddedvalues.jdo.ComplexNumberJdo;
+import demoapp.dom._infra.seed.SeedServiceAbstract;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
-class ComplexNumberJdo_Test {
+@Service
+public class NumberConstantSeeding
+extends SeedServiceAbstract {
 
-    @Test
-    void title() {
-        val cn = ComplexNumberJdo.of(10.0, 5.0);
-        Assertions.assertThat(cn.title()).isEqualTo("10.0 + 5.0i");
+    @Inject
+    public NumberConstantSeeding(ValueHolderRepository<ComplexNumber, ? extends NumberConstantEntity> entities) {
+        super(entities);
     }
 
-    @Test
-    void parse() {
-        val cn = ComplexNumberJdo.parse("10.0 + 5.0i");
-
-        Assertions.assertThat(cn).isPresent();
-        Assertions.assertThat(cn.get().title()).isEqualTo("10.0 + 5.0i");
-    }
 }
