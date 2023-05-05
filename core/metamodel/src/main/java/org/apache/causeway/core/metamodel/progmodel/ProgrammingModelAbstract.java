@@ -31,7 +31,7 @@ import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
-import org.apache.causeway.core.metamodel.postprocessors.ObjectSpecificationPostProcessor;
+import org.apache.causeway.core.metamodel.postprocessors.MetaModelPostProcessor;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
 
 import lombok.EqualsAndHashCode;
@@ -49,7 +49,7 @@ implements
 
     private List<FacetFactory> unmodifiableFactories;
     private List<MetaModelValidator> unmodifiableValidators;
-    private List<ObjectSpecificationPostProcessor> unmodifiablePostProcessors;
+    private List<MetaModelPostProcessor> unmodifiablePostProcessors;
 
     protected ProgrammingModelAbstract(final MetaModelContext metaModelContext) {
         this.metaModelContext = metaModelContext;
@@ -109,7 +109,7 @@ implements
     }
 
     @Override
-    public <T extends ObjectSpecificationPostProcessor> void addPostProcessor(
+    public <T extends MetaModelPostProcessor> void addPostProcessor(
             final PostProcessingOrder order,
             final T instance,
             final Marker... markers) {
@@ -135,7 +135,7 @@ implements
     }
 
     @Override
-    public Stream<ObjectSpecificationPostProcessor> streamPostProcessors() {
+    public Stream<MetaModelPostProcessor> streamPostProcessors() {
         assertInitialized();
         return unmodifiablePostProcessors.stream();
     }
@@ -194,14 +194,14 @@ implements
         return validators;
     }
 
-    private final SetMultimap<PostProcessingOrder, ProgrammingModelEntry<? extends ObjectSpecificationPostProcessor>>
+    private final SetMultimap<PostProcessingOrder, ProgrammingModelEntry<? extends MetaModelPostProcessor>>
         postProcessorEntriesByOrder = _Multimaps.newSetMultimap(LinkedHashSet::new);
 
-    private List<ObjectSpecificationPostProcessor> snapshotPostProcessors(
+    private List<MetaModelPostProcessor> snapshotPostProcessors(
             final ProgrammingModelInitFilter filter,
             final MetaModelContext metaModelContext) {
 
-        val postProcessors = _Lists.<ObjectSpecificationPostProcessor>newArrayList();
+        val postProcessors = _Lists.<MetaModelPostProcessor>newArrayList();
         for(val order : PostProcessingOrder.values()) {
             val postProcessorEntrySet = postProcessorEntriesByOrder.get(order);
             if(postProcessorEntrySet==null) {

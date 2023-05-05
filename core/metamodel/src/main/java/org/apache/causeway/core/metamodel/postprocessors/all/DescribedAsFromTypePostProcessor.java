@@ -27,7 +27,7 @@ import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFa
 import org.apache.causeway.core.metamodel.facets.all.described.ParamDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.members.described.annotprop.MemberDescribedFacetFromType;
 import org.apache.causeway.core.metamodel.facets.param.described.annotderived.ParamDescribedFacetFromType;
-import org.apache.causeway.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
+import org.apache.causeway.core.metamodel.postprocessors.MetaModelPostProcessorAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
@@ -36,7 +36,7 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 public class DescribedAsFromTypePostProcessor
-extends ObjectSpecificationPostProcessorAbstract {
+extends MetaModelPostProcessorAbstract {
 
     @Inject
     public DescribedAsFromTypePostProcessor(final MetaModelContext mmc) {

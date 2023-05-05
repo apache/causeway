@@ -18,23 +18,22 @@
  */
 package demoapp.dom.domain.collections.CollectionLayout.sortedBy;
 
+import demoapp.dom.domain.collections.CollectionLayout.sortedBy.child.CollectionLayoutSortedByChildVm;
+
 import java.util.Comparator;
-import java.util.Objects;
 
-import lombok.val;
+import org.apache.causeway.applib.util.ObjectContracts;
 
-import demoapp.dom.domain._entities.DemoEntity;
-
-public class CollectionLayoutSortedByComparator
-implements Comparator<DemoEntity> {
-
-    //TODO[CAUSEWAY-3311] perhaps show that we support injection
-
+//tag::comparator[]
+public class NameComparator implements Comparator<CollectionLayoutSortedByChildVm> {
     @Override
-    public int compare(final DemoEntity o1, final DemoEntity o2) {
-        val prop1 = o1.getProperty();
-        val prop2 = o2.getProperty();
-        return Objects.compare(prop1, prop2, Comparator.nullsFirst(Comparator.naturalOrder()));
+    public int compare(
+            CollectionLayoutSortedByChildVm o1,
+            CollectionLayoutSortedByChildVm o2
+    ) {
+        return ObjectContracts.contract(CollectionLayoutSortedByChildVm.class)  // <.>
+                .thenUse("name", CollectionLayoutSortedByChildVm::getName)      // <.>
+                .compare(o1, o2);
     }
-
 }
+//end::comparator[]

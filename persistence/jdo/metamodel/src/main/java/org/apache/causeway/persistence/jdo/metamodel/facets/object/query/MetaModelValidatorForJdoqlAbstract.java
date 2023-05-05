@@ -25,30 +25,26 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.specloader.validator.MetaModelVisitingValidatorAbstract;
+import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.query.JdoQueryFacet;
 
 import lombok.val;
 
-abstract class MetaModelVisitingValidatorForClauseAbstract
-extends MetaModelVisitingValidatorAbstract {
+abstract class MetaModelValidatorForJdoqlAbstract
+extends MetaModelValidatorAbstract {
 
     final String clause;
 
-    protected MetaModelVisitingValidatorForClauseAbstract(
+    protected MetaModelValidatorForJdoqlAbstract(
             final MetaModelContext mmc,
             final String clause) {
-        super(mmc);
+        super(mmc, SKIP_MANAGED_BEANS);
         this.clause = clause;
     }
 
     @Override
-    public void validate(final ObjectSpecification objectSpec) {
-
-        if(objectSpec.isInjectable()) {
-            return;
-        }
+    public void validateObjectEnter(final ObjectSpecification objectSpec) {
 
         val jdoQueryFacet = objectSpec.getFacet(JdoQueryFacet.class);
         if(jdoQueryFacet == null) {

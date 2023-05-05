@@ -8,7 +8,7 @@ The `cssClass` attribute indicates that the `<div>` containing the property or p
 
 * for parameters, the attribute can be specified using the link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/ParameterLayout.html#cssclass[@PropertyLayout#cssClass] annotation
 
-The `application.css` file can then be used to apply styling to that CSS class
+The `application.css` file is then be used to apply styling to that CSS class.
 
 == How this demo works
 
@@ -40,7 +40,7 @@ include::PropertyLayoutCssClassPage_updateName.java[tags=annotation]
 [source,xml,indent=0,tabsize=4]
 .PropertyLayoutCssClassPage.layout.xml
 ----
-<cpt:property id="propertyUsingLayout" cssClass="red"/>
+<cpt:property id="notes" cssClass="blue"/>
 ----
 
 * the `application.css` contains these styles:
@@ -70,8 +70,4 @@ include::PropertyLayoutCssClassPage_updateName.java[tags=annotation]
 ----
 
 One advantage of the layout file over the annotation is that the layout file is dynamic: it can be modified and the changes reloaded in a running application.
-
-
-TIP: It is sometimes necessary to invoke the `Rebuild Metamodel` action to see this take effect.
-
 

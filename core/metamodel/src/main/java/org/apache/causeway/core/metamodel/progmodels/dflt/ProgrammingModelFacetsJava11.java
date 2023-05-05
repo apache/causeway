@@ -52,6 +52,7 @@ import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacetFr
 import org.apache.causeway.core.metamodel.facets.object.ignore.annotation.RemoveAnnotatedMethodsFacetFactory;
 import org.apache.causeway.core.metamodel.facets.object.ignore.javalang.IteratorFilteringFacetFactory;
 import org.apache.causeway.core.metamodel.facets.object.ignore.javalang.RemoveMethodsFacetFactory;
+import org.apache.causeway.core.metamodel.facets.object.logicaltype.LogicalTypeMalformedValidator;
 import org.apache.causeway.core.metamodel.facets.object.logicaltype.classname.LogicalTypeFacetFromClassNameFactory;
 import org.apache.causeway.core.metamodel.facets.object.navparent.annotation.NavigableParentAnnotationFacetFactory;
 import org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImplFactory;
@@ -84,6 +85,7 @@ import org.apache.causeway.core.metamodel.facets.value.semantics.ValueSemanticsA
 import org.apache.causeway.core.metamodel.methods.DomainIncludeAnnotationEnforcesMetamodelContributionValidator;
 import org.apache.causeway.core.metamodel.postprocessors.all.CssOnActionFromConfiguredRegexPostProcessor;
 import org.apache.causeway.core.metamodel.postprocessors.all.DescribedAsFromTypePostProcessor;
+import org.apache.causeway.core.metamodel.postprocessors.all.SanityChecksValidator;
 import org.apache.causeway.core.metamodel.postprocessors.all.i18n.SynthesizeObjectNamingPostProcessor;
 import org.apache.causeway.core.metamodel.postprocessors.all.i18n.TranslationPostProcessor;
 import org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationPostProcessor;
@@ -263,10 +265,13 @@ extends ProgrammingModelAbstract {
 
         val mmc = getMetaModelContext();
 
-        addValidator(new DomainIncludeAnnotationEnforcesMetamodelContributionValidator(mmc));
-        addValidator(new TitlesAndTranslationsValidator(mmc));  // should this instead be a post processor, alongside TranslationPostProcessor ?
-        addValidator(new ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator(mmc));
-        addValidator(new ActionOverloadingValidator(mmc));
+        addValidator(ValidationOrder.A1_BUILTIN, new SanityChecksValidator(mmc));
+        addValidator(ValidationOrder.A1_BUILTIN, new DomainIncludeAnnotationEnforcesMetamodelContributionValidator(mmc));
+        // should this instead be a post processor, alongside TranslationPostProcessor ?
+        addValidator(ValidationOrder.A1_BUILTIN, new TitlesAndTranslationsValidator(mmc));
+        addValidator(ValidationOrder.A1_BUILTIN, new ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator(mmc));
+        addValidator(ValidationOrder.A1_BUILTIN, new ActionOverloadingValidator(mmc));
+        addValidator(ValidationOrder.A1_BUILTIN, new LogicalTypeMalformedValidator(mmc));
     }
 
 }

@@ -51,6 +51,9 @@ causeway:
         label-position: left
       parameter-layout:
         label-position: left
+      collection-layout:
+        paged: 15
+        table-decorator: org.apache.causeway.applib.annotation.TableDecorator.DatatablesNet
 
   core:
     meta-model:

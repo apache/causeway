@@ -61,7 +61,7 @@ import lombok.val;
 
 @RequiredArgsConstructor
 public class FacetProcessor
-implements HasMetaModelContext{
+implements HasMetaModelContext, AutoCloseable{
 
     private final @NonNull ProgrammingModel programmingModel;
 
@@ -129,7 +129,8 @@ implements HasMetaModelContext{
         .forEach(this::registerFactory);
     }
 
-    public void shutdown() {
+    @Override
+    public void close() {
         cleanUp();
     }
 

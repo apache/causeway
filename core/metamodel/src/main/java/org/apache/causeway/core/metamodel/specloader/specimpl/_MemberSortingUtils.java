@@ -19,6 +19,7 @@
 package org.apache.causeway.core.metamodel.specloader.specimpl;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.apache.causeway.applib.exceptions.unrecoverable.UnknownTypeException;
 import org.apache.causeway.commons.internal.collections._Lists;
@@ -31,16 +32,27 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import lombok.val;
 
 /** package private utility */
-final class MemberSortingUtils {
+final class _MemberSortingUtils {
 
     // -- ASSOCIATION SORTING
 
-    static List<ObjectAssociation> sortAssociations(final List<ObjectAssociation> associations) {
+    static List<ObjectAssociation> sortAssociationsIntoList(final Stream<ObjectAssociation> associations) {
         val deweyOrderSet = DeweyOrderSet.createOrderSet(associations);
         val orderedAssociations = _Lists.<ObjectAssociation> newArrayList();
         sortAssociations(deweyOrderSet, orderedAssociations);
         return orderedAssociations;
     }
+
+    // -- ACTION SORTING
+
+    static List<ObjectAction> sortActionsIntoList(final Stream<ObjectAction> actions) {
+        val deweyOrderSet = DeweyOrderSet.createOrderSet(actions);
+        val orderedActions = _Lists.<ObjectAction>newArrayList();
+        sortActions(deweyOrderSet, orderedActions);
+        return orderedActions;
+    }
+
+    // -- HELPER
 
     private static void sortAssociations(final DeweyOrderSet orderSet, final List<ObjectAssociation> associationsToAppendTo) {
         for (final Object element : orderSet) {
@@ -56,15 +68,6 @@ final class MemberSortingUtils {
                 throw new UnknownTypeException(element);
             }
         }
-    }
-
-    // -- ACTION SORTING
-
-    static List<ObjectAction> sortActions(final List<ObjectAction> actions) {
-        val deweyOrderSet = DeweyOrderSet.createOrderSet(actions);
-        val orderedActions = _Lists.<ObjectAction>newArrayList();
-        sortActions(deweyOrderSet, orderedActions);
-        return orderedActions;
     }
 
     private static void sortActions(final DeweyOrderSet orderSet, final List<ObjectAction> actionsToAppendTo) {

@@ -24,6 +24,8 @@ import java.util.List;
 import jakarta.inject.Named;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
@@ -34,6 +36,11 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 
+import demoapp.dom.domain.collections.CollectionLayout.hidden.child.CollectionLayoutHiddenChildVm;
+
+import demoapp.dom.domain.collections.CollectionLayout.named.child.CollectionLayoutNamedChildVm;
+import demoapp.dom.domain.collections.CollectionLayout.paged.child.CollectionLayoutPagedChildVm;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -41,9 +48,8 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.domain._entities.DemoEntity;
 
 //tag::class[]
-@DomainObject(
-        nature=Nature.VIEW_MODEL)
-@Named("demo.CollectionLayoutPagedVm")
+@Named("demo.CollectionLayoutPagedPage")
+@DomainObject(nature=Nature.VIEW_MODEL)
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -53,14 +59,26 @@ public class CollectionLayoutPagedPage implements HasAsciiDocDescription {
         return "@CollectionLayout#paged";
     }
 
-//tag::collection[]
-    @Collection
+//tag::children[]
+    @Collection()
     @CollectionLayout(
-            paged = 2)
-    @XmlTransient
+            paged = 5               // <.>
+    )
+    @XmlElementWrapper(name = "children")
+    @XmlElement(name = "child")
     @Getter @Setter
-    private List<DemoEntity> collection = new ArrayList<>();
-//end::collection[]
+    private List<CollectionLayoutPagedChildVm> children = new ArrayList<>();
+//end::children[]
+
+//tag::more-children[]
+    @Collection()
+    @CollectionLayout()             // <.>
+    @XmlElementWrapper(name = "moreChildren")
+    @XmlElement(name = "child")
+    @Getter @Setter
+    private List<CollectionLayoutPagedChildVm> moreChildren = new ArrayList<>();
+//end::more-children[]
+
 
 }
 //end::class[]

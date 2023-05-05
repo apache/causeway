@@ -66,7 +66,7 @@ implements MetaModelRefiner {
             return;
         }
 
-        programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec->{
+        programmingModel.addValidatorSkipManagedBeans(objectSpec->{
             // as an optimization only checking declared members (skipping inherited ones)
             objectSpec.streamDeclaredActions(MixedIn.INCLUDED)
             .forEach(objectAction->{

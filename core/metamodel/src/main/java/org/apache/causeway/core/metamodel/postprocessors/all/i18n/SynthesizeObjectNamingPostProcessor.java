@@ -28,13 +28,13 @@ import org.apache.causeway.core.metamodel.facets.all.i8n.noun.NounForm;
 import org.apache.causeway.core.metamodel.facets.all.i8n.noun.NounForms;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetSynthesized;
-import org.apache.causeway.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
+import org.apache.causeway.core.metamodel.postprocessors.MetaModelPostProcessorAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 
 public class SynthesizeObjectNamingPostProcessor
-extends ObjectSpecificationPostProcessorAbstract {
+extends MetaModelPostProcessorAbstract {
 
     @Inject
     public SynthesizeObjectNamingPostProcessor(final MetaModelContext metaModelContext) {

@@ -80,7 +80,7 @@ implements MetaModelRefiner {
 
     @Override
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
-        programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec->{
+        programmingModel.addValidatorSkipManagedBeans(objectSpec->{
             final JdoPersistenceCapableFacet pcFacet = objectSpec.getFacet(JdoPersistenceCapableFacet.class);
             if(pcFacet==null || pcFacet.getIdentityType() == IdentityType.NONDURABLE) {
                 return;

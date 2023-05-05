@@ -28,8 +28,8 @@ import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
-import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
-import org.apache.causeway.core.metamodel.specloader.validator.MetaModelVisitingValidatorAbstract;
+import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
+import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.Getter;
@@ -71,7 +71,10 @@ implements MethodPrefixBasedFacetFactory {
         }
 
         programmingModel
-        .addValidator(new MetaModelVisitingValidatorAbstract(programmingModel.getMetaModelContext()) {
+        .addValidator(new MetaModelValidatorAbstract(getMetaModelContext(),
+                MetaModelValidator.SKIP_MANAGED_BEANS
+                // skip orphaned method validation if annotations are required
+                .and(MetaModelValidator.SKIP_WHEN_MEMBER_ANNOT_REQUIRED)) {
 
             @Override
             public String toString() {
@@ -80,18 +83,7 @@ implements MethodPrefixBasedFacetFactory {
             }
 
             @Override
-            public void validate(final ObjectSpecification spec) {
-
-                if(spec.isInjectable()) {
-                    return;
-                }
-
-                if(spec instanceof ObjectSpecificationAbstract
-                        && ((ObjectSpecificationAbstract)spec).getIntrospectionPolicy()
-                            .getMemberAnnotationPolicy().isMemberAnnotationsRequired()) {
-                    return; // skip orphaned method validation if annotations are required
-                }
-
+            public void validateObjectEnter(final ObjectSpecification spec) {
 
                 // as an optimization only checking declared members (skipping inherited ones)
 

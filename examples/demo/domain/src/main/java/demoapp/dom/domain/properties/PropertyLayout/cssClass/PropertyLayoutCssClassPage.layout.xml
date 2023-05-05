@@ -30,9 +30,9 @@
                 <cpt:property id="name"/>
             </cpt:fieldSet>
 			<cpt:fieldSet name="Layout File" id="layout-file">
-<!-- tag::layout-file[] -->
+<!--tag::layout-file[] -->
 				<cpt:property id="notes" cssClass="blue"/>
-<!-- end::layout-file[] -->
+<!--end::layout-file[] -->
 			</cpt:fieldSet>
 			<cpt:fieldSet name="Contributed" id="contributed"/>
 			<cpt:fieldSet name="Meta-annotated" id="meta-annotated"/>

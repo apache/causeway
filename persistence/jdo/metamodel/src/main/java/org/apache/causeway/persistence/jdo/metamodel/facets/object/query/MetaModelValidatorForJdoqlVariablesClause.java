@@ -29,10 +29,10 @@ import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.pers
 
 import lombok.val;
 
-class MetaModelVisitingValidatorForVariablesClause
-extends MetaModelVisitingValidatorForClauseAbstract {
+class MetaModelValidatorForJdoqlVariablesClause
+extends MetaModelValidatorForJdoqlAbstract {
 
-    MetaModelVisitingValidatorForVariablesClause(final MetaModelContext mmc) {
+    MetaModelValidatorForJdoqlVariablesClause(final MetaModelContext mmc) {
         super(mmc, "VARIABLES");
     }
 

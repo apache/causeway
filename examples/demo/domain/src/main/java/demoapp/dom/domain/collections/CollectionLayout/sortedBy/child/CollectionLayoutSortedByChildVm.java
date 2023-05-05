@@ -16,52 +16,46 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.collections.CollectionLayout.tableDecorator;
-
-import java.util.ArrayList;
-import java.util.List;
+package demoapp.dom.domain.collections.CollectionLayout.sortedBy.child;
 
 import jakarta.inject.Named;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 
-import org.apache.causeway.applib.annotation.Collection;
-import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.annotation.TableDecorator;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.Title;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.domain._entities.DemoEntity;
 
 //tag::class[]
-@DomainObject(
-        nature=Nature.VIEW_MODEL)
-@Named("demo.CollectionLayoutTableDecoratorVm")
-@XmlRootElement(name = "root")
+@Named("demo.CollectionLayoutSortedByChildVm")
+@XmlRootElement(name = "demo.CollectionLayoutSortedByChildVm")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-public class CollectionLayoutTableDecoratorPage implements HasAsciiDocDescription {
+@DomainObject(nature=Nature.VIEW_MODEL)
+@NoArgsConstructor
+public class CollectionLayoutSortedByChildVm implements HasAsciiDocDescription {
 
-    @ObjectSupport public String title() {
-        return "@CollectionLayout#tableDecorator";
+//end::class[]
+    public CollectionLayoutSortedByChildVm(final String name) {
+        this.name = name;
     }
 
-//tag::collection[]
-    @Collection
-    @CollectionLayout(
-            tableDecorator = TableDecorator.DatatablesNet.class)
-    @XmlTransient
+//tag::class[]
+    @Title
+    @Property()
+    @XmlElement(required = true)
     @Getter @Setter
-    private List<DemoEntity> collection = new ArrayList<>();
-//end::collection[]
+    private String name;
 
 }
 //end::class[]

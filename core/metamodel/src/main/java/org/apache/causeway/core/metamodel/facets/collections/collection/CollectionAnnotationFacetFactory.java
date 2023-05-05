@@ -35,7 +35,7 @@ import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanti
 import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacet;
 import org.apache.causeway.core.metamodel.facets.collections.collection.typeof.TypeOfFacetForCollectionAnnotation;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorForAmbiguousMixinAnnotations;
+import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 
 import lombok.val;
 
@@ -62,8 +62,8 @@ extends FacetFactoryAbstract {
         return processMethodContext
             .synthesizeOnMethodOrMixinType(
                     Collection.class,
-                    () -> MetaModelValidatorForAmbiguousMixinAnnotations
-                    .addValidationFailure(processMethodContext.getFacetHolder(), Collection.class));
+                    () -> ValidationFailureUtils
+                    .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), Collection.class));
     }
 
     void inferIntentWhenOnTypeLevel(final ProcessMethodContext processMethodContext, final Optional<Collection> collectionIfAny) {

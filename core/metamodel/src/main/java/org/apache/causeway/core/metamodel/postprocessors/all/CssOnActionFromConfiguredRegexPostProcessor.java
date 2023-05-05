@@ -26,12 +26,12 @@ import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.annotprop.CssClassFacetOnActionFromConfiguredRegex;
 import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclassfa.annotprop.CssClassFaFacetOnMemberFromConfiguredRegex;
-import org.apache.causeway.core.metamodel.postprocessors.ObjectSpecificationPostProcessorAbstract;
+import org.apache.causeway.core.metamodel.postprocessors.MetaModelPostProcessorAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
 public class CssOnActionFromConfiguredRegexPostProcessor
-extends ObjectSpecificationPostProcessorAbstract {
+extends MetaModelPostProcessorAbstract {
 
     @Inject
     public CssOnActionFromConfiguredRegexPostProcessor(final MetaModelContext mmc) {

@@ -24,6 +24,8 @@ import java.util.List;
 import jakarta.inject.Named;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
@@ -34,6 +36,10 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 
+import demoapp.dom.domain.collections.CollectionLayout.paged.child.CollectionLayoutPagedChildVm;
+
+import demoapp.dom.domain.collections.CollectionLayout.sequence.child.CollectionLayoutSequenceChildVm;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -41,9 +47,8 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.domain._entities.DemoEntity;
 
 //tag::class[]
-@DomainObject(
-        nature=Nature.VIEW_MODEL)
-@Named("demo.CollectionLayoutSequenceVm")
+@Named("demo.CollectionLayoutSequencePage")
+@DomainObject(nature=Nature.VIEW_MODEL)
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -53,14 +58,39 @@ public class CollectionLayoutSequencePage implements HasAsciiDocDescription {
         return "@CollectionLayout#sequence";
     }
 
-//tag::collection[]
-    @Collection
+//tag::children[]
+    @Collection()
     @CollectionLayout(
-            sequence = "0")
-    @XmlTransient
+            sequence = "2"               // <.>
+    )
+    @XmlElementWrapper(name = "children")
+    @XmlElement(name = "child")
     @Getter @Setter
-    private List<DemoEntity> collection = new ArrayList<>();
-//end::collection[]
+    private List<CollectionLayoutSequenceChildVm> children = new ArrayList<>();
+//end::children[]
+
+//tag::more-children[]
+    @Collection()
+    @CollectionLayout(
+            sequence = "1"              // <.>
+    )
+    @XmlElementWrapper(name = "moreChildren")
+    @XmlElement(name = "child")
+    @Getter @Setter
+    private List<CollectionLayoutSequenceChildVm> moreChildren = new ArrayList<>();
+//end::more-children[]
+
+//tag::yet-more-children[]
+    @Collection()
+    @CollectionLayout(
+            sequence = "1.5"            // <.>
+    )
+    @XmlElementWrapper(name = "yetMoreChildren")
+    @XmlElement(name = "child")
+    @Getter @Setter
+    private List<CollectionLayoutSequenceChildVm> yetMoreChildren = new ArrayList<>();
+//end::yet-more-children[]
+
 
 }
 //end::class[]

@@ -531,6 +531,12 @@ public final class ProgrammingModelConstants {
                 + "Can use @ParameterTuple only on parameter of a single arg action."),
         PARAMETER_TUPLE_TYPE_WITH_AMBIGUOUS_CONSTRUCTORS("${type}#${member}: "
                 + "Tuple type ${patType} referenced by @ParameterTuple annotated parameter has no or more than one public constructor."),
+        INVALID_MEMBER_ELEMENT_TYPE("${type}: has a member with vetoed, mixin or managed "
+                + "element-type ${elementType}, which is not allowed; (allowed types are abstract, value, viewmodel and entity)"),
+        MEMBER_ID_CLASH("${type}: has members using the same member-id "
+                + "'${memberId}', which is not allowed; clashes:\n\t[1]${member1}\n\t[2]${member2}"),
+        AMBIGUOUS_MIXIN_ANNOTATIONS("Annotation ${annot} on both method and type level is not allowed, "
+                + "it must be one or the other. Found with mixin: ${mixinType}"),
         ;
 
         private final String template;

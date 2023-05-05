@@ -33,7 +33,7 @@ import org.apache.causeway.core.metamodel.facets.param.parameter.maxlen.MaxLengt
 import org.apache.causeway.core.metamodel.facets.param.parameter.mustsatisfy.MustSatisfySpecificationFacetForParameterAnnotation;
 import org.apache.causeway.core.metamodel.facets.param.parameter.regex.RegExFacetForParameterAnnotation;
 import org.apache.causeway.core.metamodel.facets.param.parameter.regex.RegExFacetForPatternAnnotationOnParameter;
-import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorForConflictingOptionality;
+import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 
 import jakarta.inject.Inject;
 import jakarta.validation.constraints.Pattern;
@@ -125,14 +125,14 @@ extends FacetFactoryAbstract {
                 MandatoryFacetInvertedByNullableAnnotationOnParameter
                 .create(hasNullable, parameterType, holder))
         .ifPresent(mandatoryFacet->
-            MetaModelValidatorForConflictingOptionality.flagIfConflict(
+                ValidationFailureUtils.raiseIfConflictingOptionality(
                     mandatoryFacet, "Conflicting @Nullable with other optionality annotation"));
 
         addFacetIfPresent(
                 MandatoryFacetForParameterAnnotation
                 .create(parameterIfAny, parameterType, holder))
         .ifPresent(mandatoryFacet->
-            MetaModelValidatorForConflictingOptionality.flagIfConflict(
+                ValidationFailureUtils.raiseIfConflictingOptionality(
                     mandatoryFacet, "Conflicting @Parameter#optionality with other optionality annotation"));
     }
 

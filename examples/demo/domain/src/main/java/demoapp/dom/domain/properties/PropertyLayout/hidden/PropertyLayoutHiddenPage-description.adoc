@@ -44,7 +44,7 @@ include::PropertyLayoutHidden.java[tags=everywhere]
 ----
 <.> property should never be visible for this entity
 
-If you navigate into these domain objects then different properties will be visble due to the changed context.
+If you navigate into these domain objects then different properties will be visible due to the changed context.
 
 [TIP]
 .What is the difference between a hidden property and one annotated with `@Programmatic` ?
