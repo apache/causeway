@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -353,8 +352,8 @@ implements ObjectSpecification {
         this.directSubclasses.addSubclass(subclass);
     }
 
-    protected void sortAndUpdateAssociations(final List<ObjectAssociation> associations) {
-        val orderedAssociations = MemberSortingUtils.sortAssociations(associations);
+    protected final void replaceAssociations(final Stream<ObjectAssociation> associations) {
+        val orderedAssociations = MemberSortingUtils.sortAssociationsIntoList(associations);
         synchronized (unmodifiableAssociations) {
             this.associations.clear();
             this.associations.addAll(orderedAssociations);
@@ -362,8 +361,8 @@ implements ObjectSpecification {
         }
     }
 
-    protected void sortCacheAndUpdateActions(final List<ObjectAction> objectActions) {
-        val orderedActions = MemberSortingUtils.sortActions(objectActions);
+    protected final void replaceActions(final Stream<ObjectAction> objectActions) {
+        val orderedActions = MemberSortingUtils.sortActionsIntoList(objectActions);
         synchronized (unmodifiableActions){
             this.objectActions.clear();
             this.objectActions.addAll(orderedActions);
@@ -373,12 +372,17 @@ implements ObjectSpecification {
             for (val actionType : ActionScope.values()) {
                 val objectActionForType = objectActionsByType.getOrElseNew(actionType);
                 objectActionForType.clear();
-                objectActions.stream()
+                orderedActions.stream()
                 .filter(ObjectAction.Predicates.ofActionType(actionType))
                 .forEach(objectActionForType::add);
             }
         }
     }
+
+    protected final void replaceMixedInActions(final Stream<ObjectActionMixedIn> objectActions) {
+
+    }
+
 
     public void invalidateCachedFacets() {
         valueFacet = getFacet(ValueFacet.class);
@@ -665,7 +669,7 @@ implements ObjectSpecification {
         if(_Strings.isEmpty(memberId)) {
             return Optional.empty();
         }
-        
+
         val objectAction = getAction(memberId);
         if(objectAction.isPresent()) {
             return objectAction;
@@ -680,11 +684,11 @@ implements ObjectSpecification {
     @Override
     public Optional<ObjectAssociation> getDeclaredAssociation(final String id, final MixedIn mixedIn) {
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
-        
+
         if(_Strings.isEmpty(id)) {
             return Optional.empty();
         }
-        
+
         return streamDeclaredAssociations(mixedIn)
                 .filter(objectAssociation->objectAssociation.getId().equals(id))
                 .findFirst();
@@ -710,96 +714,80 @@ implements ObjectSpecification {
     }
 
     // -- mixin associations (properties and collections)
-
-    private void createMixedInAssociations(final Consumer<ObjectAssociation> onNewMixedInAssociation) {
+    /**
+     * Creates all mixed in properties and collections for this spec.
+     */
+    private Stream<ObjectAssociation> createMixedInAssociations() {
         if (isInjectable() || isValue()) {
-            return;
+            return Stream.empty();
         }
-        val mixinTypes = getCausewayBeanTypeRegistry().getMixinTypes();
-        if(_NullSafe.isEmpty(mixinTypes)) {
-            return;
-        }
-        for (val mixinType : mixinTypes.keySet()) {
-            forEachMixedInAssociation(mixinType, onNewMixedInAssociation);
-        }
+        return getCausewayBeanTypeRegistry().streamMixinTypes()
+                .flatMap(this::createMixedInAssociation);
     }
 
-    private void forEachMixedInAssociation(
-            final Class<?> mixinType,
-            final Consumer<ObjectAssociation> onNewMixedInAssociation) {
+    private Stream<ObjectAssociation> createMixedInAssociation(final Class<?> mixinType) {
 
         val specification = getSpecificationLoader().loadSpecification(mixinType,
                 IntrospectionState.FULLY_INTROSPECTED);
         if (specification == this) {
-            return;
+            return Stream.empty();
         }
         val mixinFacet = specification.getFacet(MixinFacet.class);
         if(mixinFacet == null) {
             // this shouldn't happen; perhaps it would be more correct to throw an exception?
-            return;
+            return Stream.empty();
         }
         if(!mixinFacet.isMixinFor(getCorrespondingClass())) {
-            return;
+            return Stream.empty();
         }
         val mixinMethodName = mixinFacet.value();
 
-        specification.streamActions(ActionScope.ANY, MixedIn.INCLUDED)
+        return specification.streamActions(ActionScope.ANY, MixedIn.INCLUDED)
         .filter(_SpecPredicates::isMixedInAssociation)
         .map(ObjectActionDefault.class::cast)
         .map(_MixedInMemberFactory.mixedInAssociation(this, mixinType, mixinMethodName))
-        .peek(facetProcessor::processMemberOrder)
-        .forEach(onNewMixedInAssociation);
-
+        .peek(facetProcessor::processMemberOrder);
     }
-
 
     // -- mixin actions
     /**
      * Creates all mixed in actions for this spec.
      */
-    private void createMixedInActions(final Consumer<ObjectAction> onNewMixedInAction) {
-        val mixinTypes = getCausewayBeanTypeRegistry().getMixinTypes();
-        if(_NullSafe.isEmpty(mixinTypes)) {
-            return;
-        }
-        for (val mixinType : mixinTypes.keySet()) {
-            forEachMixedInAction(mixinType, onNewMixedInAction);
-        }
+    private Stream<ObjectActionMixedIn> createMixedInActions() {
+        return getCausewayBeanTypeRegistry().streamMixinTypes()
+            .flatMap(this::createMixedInAction);
     }
 
-    private void forEachMixedInAction(
-            final Class<?> mixinType,
-            final Consumer<ObjectAction> onNewMixedInAction) {
+    private Stream<ObjectActionMixedIn> createMixedInAction(final Class<?> mixinType) {
 
         val mixinSpec = getSpecificationLoader().loadSpecification(mixinType,
                 IntrospectionState.FULLY_INTROSPECTED);
         if (mixinSpec == this) {
-            return;
+            return Stream.empty();
         }
         val mixinFacet = mixinSpec.getFacet(MixinFacet.class);
         if(mixinFacet == null) {
             // this shouldn't happen; perhaps it would be more correct to throw an exception?
-            return;
+            return Stream.empty();
         }
         if(!mixinFacet.isMixinFor(getCorrespondingClass())) {
-            return;
+            return Stream.empty();
         }
         // don't mixin Object_ mixins to domain services
         if(getBeanSort().isManagedBeanContributing()
                 && mixinFacet.isMixinFor(java.lang.Object.class)) {
-            return;
+            return Stream.empty();
         }
 
         val mixinMethodName = mixinFacet.value();
 
-        mixinSpec.streamActions(ActionScope.ANY, MixedIn.EXCLUDED)
+        return mixinSpec.streamActions(ActionScope.ANY, MixedIn.EXCLUDED)
         // value types only support constructor mixins
         .filter(this::whenIsValueThenIsAlsoConstructorMixin)
         .filter(_SpecPredicates::isMixedInAction)
         .map(ObjectActionDefault.class::cast)
         .map(_MixedInMemberFactory.mixedInAction(this, mixinType, mixinMethodName))
-        .peek(facetProcessor::processMemberOrder)
-        .forEach(onNewMixedInAction);
+        .peek(facetProcessor::processMemberOrder);
     }
 
     /**
@@ -869,25 +857,28 @@ implements ObjectSpecification {
      * one-shot: must be no-op, if already created
      */
     private void createMixedInActionsAndResort() {
-        val newActions = _Lists.newArrayList(objectActions);
-        if (isEntityOrViewModelOrAbstract()
+        val include = isEntityOrViewModelOrAbstract()
                 || getBeanSort().isManagedBeanContributing()
                 // in support of composite value-type constructor mixins
-                || getBeanSort().isValue()) {
-            createMixedInActions(newActions::add);
+                || getBeanSort().isValue();
+        if(!include) {
+            return;
         }
-        sortCacheAndUpdateActions(newActions);
+        val newActions = _Lists.newArrayList(objectActions); // defensive copy
+        createMixedInActions().forEach(newActions::add);
+        replaceActions(newActions.stream());
     }
 
     /**
      * one-shot: must be no-op, if already created
      */
     private void createMixedInAssociationsAndResort() {
-        val newAssociations = _Lists.newArrayList(associations);
-        if(isEntityOrViewModelOrAbstract()) {
-            createMixedInAssociations(newAssociations::add);
+        if(!isEntityOrViewModelOrAbstract()) {
+            return;
         }
-        sortAndUpdateAssociations(newAssociations);
+        val newAssociations = _Lists.newArrayList(associations); // defensive copy
+        createMixedInAssociations().forEach(newAssociations::add);
+        replaceAssociations(newAssociations.stream());
     }
 
     @Getter(lazy = true)

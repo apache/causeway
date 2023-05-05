@@ -29,6 +29,7 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
@@ -96,6 +97,11 @@ implements
         _Assert.assertNull(this.memberIdCollector, ()->"framework bug: "
                 + "validators are not expected to be called recursevely (nested)");
         this.memberIdCollector = new MemberIdCollector();
+
+        //TODO[CAUSEWAY-3051] we need a way to ask the MM for all members,
+        // circumventing built-in member-id duplication prevention,
+        // which in its own right helps with handling of method overriding (Java language terminology)
+        objSpec.streamProperties(MixedIn.INCLUDED);
     }
 
     @Override
@@ -128,7 +134,8 @@ implements
 
         if(declaringType.isAbstract()) return;
 
-        //TODO[CAUSEWAY-3051] should be 24 minus 10 shadowed by collision (=14)
+        //FIXME[CAUSEWAY-3051] reports 24 minus 10 shadowed by collision (=14)
+        //instead should detect 2 shadowed actions, 4 shadowed props and 4 shadowed colls - yet none detected
         if(objectMember.getDeclaringType().toString().contains("InvalidMemberIdClash")) {
             System.err.printf("member-id: %s (%s%s)%n",
                     objectMember.getId(), objectMember.getFeatureType(),

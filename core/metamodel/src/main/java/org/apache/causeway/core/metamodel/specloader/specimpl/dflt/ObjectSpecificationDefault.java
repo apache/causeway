@@ -33,11 +33,12 @@ import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.base._Lazy;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
+import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
 import org.apache.causeway.core.metamodel.commons.StringExtensions;
 import org.apache.causeway.core.metamodel.commons.ToString;
@@ -178,12 +179,9 @@ implements FacetHolder {
             return;
         }
 
-        // associations and actions
-        val associations = createAssociations();
-        sortAndUpdateAssociations(associations);
-
-        val actions = createActions();
-        sortCacheAndUpdateActions(actions);
+        // create associations and actions
+        replaceAssociations(createAssociations());
+        replaceActions(createActions());
 
         postProcess();
     }
@@ -198,17 +196,11 @@ implements FacetHolder {
 
 
     // -- create associations and actions
-    private List<ObjectAssociation> createAssociations() {
-        val associations = _Lists.<ObjectAssociation>newArrayList();
-        val associationFacetedMethods =
-                facetedMethodsBuilder.getAssociationFacetedMethods();
-        for (val facetedMethod : associationFacetedMethods) {
-            val association = createAssociation(facetedMethod);
-            if(association != null) {
-                associations.add(association);
-            }
-        }
-        return associations;
+    private Stream<ObjectAssociation> createAssociations() {
+        return facetedMethodsBuilder.getAssociationFacetedMethods()
+                .stream()
+                .map(this::createAssociation)
+                .filter(_NullSafe::isPresent);
     }
 
     private ObjectAssociation createAssociation(final FacetedMethod facetMethod) {
@@ -221,17 +213,12 @@ implements FacetHolder {
         }
     }
 
-    private List<ObjectAction> createActions() {
-        val actions = _Lists.<ObjectAction>newArrayList();
-        for (val facetedMethod : facetedMethodsBuilder.getActionFacetedMethods()) {
-            val action = createAction(facetedMethod);
-            if(action != null) {
-                actions.add(action);
-            }
-        }
-        return actions;
+    private Stream<ObjectAction> createActions() {
+        return facetedMethodsBuilder.getActionFacetedMethods()
+                .stream()
+                .map(this::createAction)
+                .filter(_NullSafe::isPresent);
     }
-
 
     private ObjectAction createAction(final FacetedMethod facetedMethod) {
         if (facetedMethod.getFeatureType().isAction()) {
@@ -252,7 +239,7 @@ implements FacetHolder {
             final MixedIn mixedIn) {
 
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
-        
+
         return _Strings.isEmpty(id)
             ? Optional.empty()
             : streamDeclaredActions(actionScopes, mixedIn)

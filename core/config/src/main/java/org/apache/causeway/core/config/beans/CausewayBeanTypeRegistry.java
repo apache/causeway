@@ -24,6 +24,8 @@ import java.util.stream.Stream;
 
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 
+import lombok.NonNull;
+
 /**
  * Holds the set of domain services, persistent entities and fixture scripts etc., but not values.
  * @since 2.0
@@ -33,12 +35,18 @@ public interface CausewayBeanTypeRegistry {
     Optional<CausewayBeanMetaData> lookupIntrospectableType(Class<?> type);
     Stream<CausewayBeanMetaData> streamIntrospectableTypes();
 
-    Map<Class<?>, CausewayBeanMetaData> getManagedBeansContributing();
-    Map<Class<?>, CausewayBeanMetaData> getEntityTypes();
-    Map<Class<?>, CausewayBeanMetaData> getMixinTypes();
-    Map<Class<?>, CausewayBeanMetaData> getViewModelTypes();
+    @NonNull Map<Class<?>, CausewayBeanMetaData> getManagedBeansContributing();
+    @NonNull Map<Class<?>, CausewayBeanMetaData> getEntityTypes();
+    @NonNull Map<Class<?>, CausewayBeanMetaData> getMixinTypes();
+    @NonNull Map<Class<?>, CausewayBeanMetaData> getViewModelTypes();
     /** discovered per {@code @Value} annotation (vs. registered using a {@link ValueSemanticsProvider})*/
-    Map<Class<?>, CausewayBeanMetaData> getDiscoveredValueTypes();
+    @NonNull Map<Class<?>, CausewayBeanMetaData> getDiscoveredValueTypes();
+
+    // -- SHORTCUTS
+
+    default Stream<Class<?>> streamMixinTypes() {
+        return getMixinTypes().keySet().stream();
+    }
 
     // -- LOOKUPS
 
