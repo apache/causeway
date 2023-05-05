@@ -864,9 +864,18 @@ implements ObjectSpecification {
         if(!include) {
             return;
         }
-        val newActions = _Lists.newArrayList(objectActions); // defensive copy
-        createMixedInActions().forEach(newActions::add);
-        replaceActions(newActions.stream());
+        val mixedInActions = _Lists.<ObjectAction>newArrayList();
+        createMixedInActions().forEach(mixedInActions::add);
+        if(mixedInActions.isEmpty()) {
+           return; // nothing to do (this spec has no mixed-in actions, regular actions have already been added)
+        }
+
+        //TODO[CAUSEWAY-3051] report member-id clashes
+
+        val regularActions = _Lists.newArrayList(objectActions); // defensive copy
+        replaceActions(Stream.concat(
+                regularActions.stream(),
+                mixedInActions.stream()));
     }
 
     /**
@@ -876,9 +885,18 @@ implements ObjectSpecification {
         if(!isEntityOrViewModelOrAbstract()) {
             return;
         }
-        val newAssociations = _Lists.newArrayList(associations); // defensive copy
-        createMixedInAssociations().forEach(newAssociations::add);
-        replaceAssociations(newAssociations.stream());
+        val mixedInAssociations = _Lists.<ObjectAssociation>newArrayList();
+        createMixedInAssociations().forEach(mixedInAssociations::add);
+        if(mixedInAssociations.isEmpty()) {
+           return; // nothing to do (this spec has no mixed-in associations, regular associations have already been added)
+        }
+
+        //TODO[CAUSEWAY-3051] report member-id clashes
+
+        val regularAssociations = _Lists.newArrayList(associations); // defensive copy
+        replaceAssociations(Stream.concat(
+                regularAssociations.stream(),
+                mixedInAssociations.stream()));
     }
 
     @Getter(lazy = true)
