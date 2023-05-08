@@ -36,7 +36,7 @@ import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._Refs;
+import org.apache.causeway.commons.internal.base._StringCutter;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.io.JaxbUtils;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
@@ -153,9 +153,10 @@ public class ValueSemanticsTester<T> {
                 .formattedOutput(true)))
         .getValue().orElseThrow();
 
-        val xmlRef = _Refs.stringRef(rawXml);
-        xmlRef.cutAtIndexOf("<ValueWithTypeDto");
-        return xmlRef.cutAtLastIndexOf("</ValueWithTypeDto>")
+        return _StringCutter.of(rawXml)
+                .dropBefore("<ValueWithTypeDto")
+                .keepBeforeLast("</ValueWithTypeDto>")
+                .getValue()
                 .replace(" null=\"false\" xmlns:com=\"https://causeway.apache.org/schema/common\" xmlns:cmd=\"https://causeway.apache.org/schema/cmd\"", "")
                 + "</ValueWithTypeDto>";
 

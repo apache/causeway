@@ -33,7 +33,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.base._Refs;
+import org.apache.causeway.commons.internal.base._StringCutter;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 
@@ -440,9 +440,9 @@ public final class _Exceptions {
                     val replacement = entry.getValue();
                     var s = str;
                     s = s.replace(entry.getKey() + ".", replacement.isEmpty() ? "{" : replacement + ".");
-                    val ref = _Refs.stringRef(s);
-                    val left = ref.cutAtIndexOfAndDrop(".");
-                    val right = ref.getValue();
+                    val cutter = _StringCutter.of(s);
+                    val left = cutter.keepBefore(".").getValue();
+                    val right = cutter.keepAfter(".").getValue();
                     s = replacement.isEmpty()
                             ? left + "}." + right
                             : left + "." + right;
