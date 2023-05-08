@@ -24,7 +24,7 @@ import java.util.Comparator;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Refs;
+import org.apache.causeway.commons.internal.base._StringCutter;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 
@@ -51,11 +51,11 @@ implements Comparable<ResourceCoordinates> {
             next = next.getParentFile();
         }
 
-        val nameRef = _Refs.stringRef(file.getName());
+        val cutter = _StringCutter.of(file.getName());
 
         //XXX lombok issue, cannot use val
-        final String simpleName = nameRef.cutAtLastIndexOfAndDrop(".");
-        final String fileNameExtension = nameRef.getValue();
+        final String simpleName = cutter.keepBeforeLast(".").getValue();
+        final String fileNameExtension = cutter.keepAfterLast(".").getValue();
 
         return ResourceCoordinates.builder()
              // could semantically mean the mount-point, but we don't have that info in a file instance

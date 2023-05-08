@@ -38,6 +38,7 @@ import java.util.stream.Stream;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Collection;
@@ -60,7 +61,7 @@ import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.applib.value.Password;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Refs;
+import org.apache.causeway.commons.internal.base._StringCutter;
 import org.apache.causeway.commons.internal.base._Temporals;
 import org.apache.causeway.core.metamodel.valuesemantics.ApplicationFeatureIdValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.MarkupValueSemantics;
@@ -72,7 +73,6 @@ import org.apache.causeway.schema.common.v2.OidDto;
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
 import org.apache.causeway.valuetypes.vega.applib.value.Vega;
 import org.apache.causeway.valuetypes.vega.metamodel.semantics.VegaValueSemantics;
-import org.springframework.context.annotation.Scope;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -163,9 +163,9 @@ public abstract class ValueTypeExample<T> {
         if(!name.contains("_")) {
             return Optional.empty();
         }
-        val ref = _Refs.stringRef(name);
-        ref.cutAtIndexOfAndDrop("_");
-        return Optional.of(ref.getValue());
+        return Optional.of(_StringCutter.of(name)
+                .keepBefore("_")
+                .getValue());
     }
 
     // -- EXAMPLES - BASIC

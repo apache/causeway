@@ -23,7 +23,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.command.Command;
-import org.apache.causeway.commons.internal.base._Refs;
+import org.apache.causeway.commons.internal.base._StringCutter;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.commons.StringExtensions;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
@@ -59,9 +59,13 @@ public class IdentifierUtil {
             final @NonNull Identifier.Type identifierType,
             final @NonNull String logicalMemberIdentifier) {
 
-        val ref = _Refs.stringRef(logicalMemberIdentifier);
-        val logicalTypeName = ref.cutAtIndexOfAndDrop("#");
-        val memberId = ref.getValue();
+        val stringCutter = _StringCutter.of(logicalMemberIdentifier);
+        val logicalTypeName = stringCutter
+                .keepBefore("#")
+                .getValue();
+        val memberId = stringCutter
+                .keepAfter("#")
+                .getValue();
         val typeSpec = specLoader.specForLogicalTypeNameElseFail(logicalTypeName);
         val logicalType = LogicalType.eager(typeSpec.getCorrespondingClass(), logicalTypeName);
 

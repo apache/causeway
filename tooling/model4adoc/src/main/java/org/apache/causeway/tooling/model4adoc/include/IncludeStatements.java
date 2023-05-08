@@ -23,7 +23,7 @@ import java.util.function.BiConsumer;
 import java.util.function.UnaryOperator;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Refs;
+import org.apache.causeway.commons.internal.base._StringCutter;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 
@@ -80,38 +80,44 @@ public final class IncludeStatements {
 
             if(line.startsWith("include::")) {
 
-                val acc = _Refs.stringRef(line);
-
-                acc.cutAtIndex("include::".length());
+                var cutter = _StringCutter.of(line)
+                        .keepAfter("include::");
 
                 val incl = IncludeStatement.builder();
                 incl.matchingLine(line);
                 incl.zeroBasedLineIndex(zeroBasedLineIndex);
 
-                if(acc.contains("@")) {
-                    incl.version(acc.cutAtIndexOfAndDrop("@"));
+                if(cutter.contains("@")) {
+                    incl.version(cutter.keepBefore("@").getValue());
+                    cutter = cutter.keepAfter("@");
                 }
 
-                incl.component(acc.cutAtIndexOfAndDrop(":"));
-                incl.module(acc.cutAtIndexOfAndDrop(":"));
-                incl.type(acc.cutAtIndexOfAndDrop("$"));
+                incl.component(cutter.keepBefore(":").getValue());
+                cutter = cutter.keepAfter(":");
+
+                incl.module(cutter.keepBefore(":").getValue());
+                cutter = cutter.keepAfter(":");
+
+                incl.type(cutter.keepBefore("$").getValue());
+                cutter = cutter.keepAfter(":");
 
                 final String referencePath;
-                if(acc.contains("[")) {
-                    referencePath = acc.cutAtIndexOf("[");
-                    incl.options(acc.getValue());
+                if(cutter.contains("[")) {
+                    referencePath = cutter.keepBefore("[").getValue();
+                    cutter = cutter.keepAfter("[");
+                    incl.options(cutter.getValue());
                 } else {
-                    referencePath = acc.getValue();
+                    referencePath = cutter.getValue();
                 }
 
-                acc.setValue(referencePath);
+                cutter = _StringCutter.of(referencePath);
 
-                val namespaceAsString = acc.cutAtLastIndexOfAndDrop("/");
+                val namespaceAsString = cutter.keepBeforeLast("/").getValue();
 
                 incl.namespace(Can.ofStream(_Strings.splitThenStream(namespaceAsString, "/")));
 
-                incl.canonicalName(acc.cutAtLastIndexOfAndDrop("."));
-                incl.ext(acc.getValue());
+                incl.canonicalName(cutter.keepBeforeLast(".").getValue());
+                incl.ext(cutter.keepAfter(".").getValue());
 
                 onLine.accept(line, Optional.of(incl.build()));
             } else {
