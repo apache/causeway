@@ -14,7 +14,8 @@ Groups together all domain-specific metadata for an invokable action on a domain
   Publishing commandPublishing() default Publishing.NOT_SPECIFIED;     // <.>
   Class<? extends ActionDomainEvent<?>> domainEvent() default ActionDomainEvent.Default.class;     // <.>
   Publishing executionPublishing() default Publishing.NOT_SPECIFIED;     // <.>
-  Where hidden() default Where.NOT_SPECIFIED;     // <.>
+  @Deprecated(forRemoval = true, since = "2.0.0-RC2")
+Where hidden() default Where.NOT_SPECIFIED;     // <.>
   RestrictTo restrictTo() default RestrictTo.NOT_SPECIFIED;     // <.>
   SemanticsOf semantics() default SemanticsOf.NOT_SPECIFIED;     // <.>
   Class<?> typeOf() default // represents unspecified
@@ -51,6 +52,13 @@ Whether xref:refguide:applib:index/services/iactn/Execution.adoc[Execution] s (t
 <.> xref:#hidden[hidden]
 +
 --
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _ActionLayout#hidden()_ instead
+====
+
 Indicates where (in the UI) the action is not visible to the user.
 --
 <.> xref:#restrictTo[restrictTo]
@@ -127,9 +135,14 @@ Whether xref:refguide:applib:index/services/iactn/Execution.adoc[Execution] s (t
 [#hidden]
 === hidden
 
-Indicates where (in the UI) the action is not visible to the user.
+[WARNING]
+====
+[red]#_deprecated:_#
 
-It is also possible to suppress an action's visibility using _ActionLayout#hidden()_ .
+use _ActionLayout#hidden()_ instead
+====
+
+Indicates where (in the UI) the action is not visible to the user.
 
 For xref:refguide:applib:index/annotation/DomainService.adoc[DomainService] actions, the action's visibility is dependent upon its _DomainService#nature() nature_ .
 

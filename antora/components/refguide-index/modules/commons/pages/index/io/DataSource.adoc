@@ -22,6 +22,7 @@ interface DataSource {
   Try<HashUtils.Hash> tryHash(HashAlgorithm hashAlgorithm)
   Try<HashUtils.Hash> tryMd5()
   String md5Hex()
+  DataSource map(ThrowingFunction<InputStream, InputStream> inputStreamMapper)     // <.>
   Try<Void> tryReadAndWrite(DataSink dataSink, int bufferSize)     // <.>
   void pipe(DataSink dataSink, int bufferSize)     // <.>
   DataSource empty()     // <.>
@@ -75,6 +76,11 @@ Reads from this DataSource all lines using given charset encoding.
 +
 --
 Reads from this DataSource all lines using UTF-8 encoding.
+--
+<.> xref:#map_ThrowingFunction[map(ThrowingFunction)]
++
+--
+Returns a new xref:refguide:commons:index/io/DataSource.adoc[DataSource] that maps the _InputStream_ of this xref:refguide:commons:index/io/DataSource.adoc[DataSource] to another through means of applying given unary operator _inputStreamMapper_ . (eg the decode or encode the originating input stream)
 --
 <.> xref:#tryReadAndWrite_DataSink_int[tryReadAndWrite(DataSink, int)]
 +
@@ -183,6 +189,11 @@ If the underlying _InputStream_ is null a success xref:refguide:commons:index/fu
 Reads from this DataSource all lines using UTF-8 encoding.
 
 If the underlying _InputStream_ is null a success xref:refguide:commons:index/functional/Try.adoc[Try] is returned, containing a null value.
+
+[#map_ThrowingFunction]
+=== map(ThrowingFunction)
+
+Returns a new xref:refguide:commons:index/io/DataSource.adoc[DataSource] that maps the _InputStream_ of this xref:refguide:commons:index/io/DataSource.adoc[DataSource] to another through means of applying given unary operator _inputStreamMapper_ . (eg the decode or encode the originating input stream)
 
 [#tryReadAndWrite_DataSink_int]
 === tryReadAndWrite(DataSink, int)

@@ -10,7 +10,8 @@ Domain semantics for domain object collection.
 ----
 @interface Collection {
   Class<? extends CollectionDomainEvent<?, ?>> domainEvent() default CollectionDomainEvent.Default.class;     // <.>
-  Where hidden() default Where.NOT_SPECIFIED;     // <.>
+  @Deprecated(forRemoval = true, since = "2.0.0-RC2")
+Where hidden() default Where.NOT_SPECIFIED;     // <.>
   Class<?> typeOf() default // represents unspecified
 void.class;     // <.>
 }
@@ -24,6 +25,13 @@ Indicates that changes to the collection that should be posted to the _org.apach
 <.> xref:#hidden[hidden]
 +
 --
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use CollectionLayout#hidden() instead
+====
+
 Indicates when the collection is not visible to the user.
 --
 <.> xref:#typeOf[typeOf]
@@ -57,6 +65,13 @@ This subclass must provide a no-arg constructor; the fields are set reflectively
 
 [#hidden]
 === hidden
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use CollectionLayout#hidden() instead
+====
 
 Indicates when the collection is not visible to the user.
 

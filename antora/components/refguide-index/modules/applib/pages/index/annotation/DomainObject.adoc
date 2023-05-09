@@ -16,7 +16,7 @@ If - for the currently logged on user - none of the domain object's members are 
   String autoCompleteMethod() default "autoComplete";     // <.>
   Bounding bounding() default Bounding.NOT_SPECIFIED;     // <.>
   Editing editing() default Editing.NOT_SPECIFIED;     // <.>
-  String editingDisabledReason() default "Disabled";     // <.>
+  String editingDisabledReason() default "";     // <.>
   Publishing entityChangePublishing() default Publishing.NOT_SPECIFIED;     // <.>
   Introspection introspection() default Introspection.NOT_SPECIFIED;     // <.>
   String mixinMethod() default "$$";     // <.>
@@ -176,6 +176,8 @@ Note that non-editable objects can nevertheless have actions invoked upon them.
 === editingDisabledReason
 
 If _#editing()_ is set to _Editing#DISABLED_ , then the reason to provide to the user as to why the object's properties cannot be edited/collections modified.
+
+If left empty (default), no reason is given.
 
 [#entityChangePublishing]
 === entityChangePublishing

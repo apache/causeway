@@ -19,6 +19,7 @@ interface ManagedObject {
   String getTitle()     // <.>
   String getIconName()     // <.>
   ObjectIcon getIcon()
+  Either<ObjectIcon, CssClassFaFactory> eitherIconOrFaClass()     // <.>
   Either<ManagedObject, ManagedObject> asEitherWithOrWithoutMemoizedBookmark()
   ManagedObject unspecified()     // <.>
   ManagedObject empty(ObjectSpecification spec)     // <.>
@@ -67,7 +68,12 @@ The (untranslated) title of the wrapped pojo.
 <.> xref:#getIconName_[getIconName()]
 +
 --
-Returns the name of an icon to use if this object is to be displayed graphically.
+Returns the name of an icon to use for this object.
+--
+<.> xref:#eitherIconOrFaClass_[eitherIconOrFaClass()]
++
+--
+Domain Objects may either have an icon corresponding to an icon resource, or they use a font awesome icon.
 --
 <.> xref:#unspecified_[unspecified()]
 +
@@ -160,9 +166,14 @@ The (untranslated) title of the wrapped pojo.
 [#getIconName_]
 === getIconName()
 
-Returns the name of an icon to use if this object is to be displayed graphically.
+Returns the name of an icon to use for this object.
 
 May return `null` if no icon is specified.
+
+[#eitherIconOrFaClass_]
+=== eitherIconOrFaClass()
+
+Domain Objects may either have an icon corresponding to an icon resource, or they use a font awesome icon.
 
 [#unspecified_]
 === unspecified()

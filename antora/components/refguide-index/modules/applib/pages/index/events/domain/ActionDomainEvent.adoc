@@ -24,7 +24,6 @@ class ActionDomainEvent<S> {
   void setSemantics(SemanticsOf semantics)     // <.>
   void setParameterNames(List<String> parameterNames)     // <.>
   void setParameterTypes(List<Class<?>> parameterTypes)     // <.>
-  void setMixedIn(Object mixedIn)     // <.>
   String toString()
 }
 ----
@@ -47,7 +46,6 @@ Set by the framework.
 <.> xref:#setSemantics_SemanticsOf[setSemantics(SemanticsOf)]
 <.> xref:#setParameterNames_List[setParameterNames(List)]
 <.> xref:#setParameterTypes_List[setParameterTypes(List)]
-<.> xref:#setMixedIn_Object[setMixedIn(Object)]
 
 == Members
 
@@ -78,6 +76,3 @@ Event subscribers can replace the value with some other value if they wish, thou
 
 [#setParameterTypes_List]
 === setParameterTypes(List)
-
-[#setMixedIn_Object]
-=== setMixedIn(Object)
