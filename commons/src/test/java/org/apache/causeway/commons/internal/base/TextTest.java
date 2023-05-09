@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.util.TextUtils;
+import org.apache.causeway.commons.io.TextUtils;
 
 class TextTest {
 

@@ -28,36 +28,37 @@ import org.junit.jupiter.api.Test;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.base._Text;
+import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.tooling.model4adoc.AsciiDocWriter;
 
 import lombok.val;
 
 abstract class AbstractAsciiDocWriterTest {
-    
+
     protected String adocSourceResourceLocation;
     protected boolean debugEnabled;
     protected boolean skipAsciidocjComplianceTest;
-    
+
     protected void assertDocumentIsCorrectlyWritten(final Document documentUnderTest) {
-        
+
         final String sourceUnderTest = AsciiDocWriter.toString(documentUnderTest);
-        
+
         if(debugEnabled) {
             System.out.println("======= Generated Adoc Source =======");
             System.out.println(sourceUnderTest);
             System.out.println("=====================================");
         }
-        
+
         _Text.assertTextEquals(
-                _Text.readLinesFromResource(this.getClass(), adocSourceResourceLocation, StandardCharsets.UTF_8), 
+                TextUtils.readLinesFromResource(this.getClass(), adocSourceResourceLocation, StandardCharsets.UTF_8),
                 sourceUnderTest);
     }
-    
+
     protected void assertReferenceDocumentIsCorrectlyWritten() {
         val adocRef = _Strings.readFromResource(this.getClass(), adocSourceResourceLocation, StandardCharsets.UTF_8);
         val asciidoctor = Asciidoctor.Factory.create();
         val refDoc = asciidoctor.load(adocRef, Options.builder().build());
-        
+
         if(debugEnabled) {
             System.out.println("==========================================");
             System.out.println("==  Adoc AST as read by Ref. Factory    ==");
@@ -65,7 +66,7 @@ abstract class AbstractAsciiDocWriterTest {
             _Debug.debug(refDoc);
             System.out.println("==========================================");
         }
-        
+
         String actualAdoc = AsciiDocWriter.toString(refDoc);
         if(debugEnabled) {
             System.out.println("==========================================");
@@ -74,10 +75,10 @@ abstract class AbstractAsciiDocWriterTest {
             System.out.println(actualAdoc);
             System.out.println("==========================================");
         }
-        
+
         _Text.assertTextEquals(adocRef, actualAdoc);
     }
-    
+
     @Test
     void testReferenceDocumentIsCorrectlyWritten() throws IOException {
         if(!skipAsciidocjComplianceTest) {
@@ -86,6 +87,6 @@ abstract class AbstractAsciiDocWriterTest {
             System.err.printf("warning: skipping asciidocj compliance test for %s%n", this.getClass().getName());
         }
     }
-   
-    
+
+
 }

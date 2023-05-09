@@ -16,8 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.commons.util;
+package org.apache.causeway.commons.io;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.net.URL;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
@@ -31,10 +41,12 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.SneakyThrows;
+import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
- * Utilities for text processing.
+ * Utilities for text processing and text I/O.
  *
  * @since 2.0 {@index}
  */
@@ -50,7 +62,7 @@ public class TextUtils {
      * @return non-null
      * @apiNote Java 11+ provides {@code String.lines()}
      */
-    public static Stream<String> streamLines(final @Nullable String text){
+    public Stream<String> streamLines(final @Nullable String text){
         return _Strings.splitThenStream(text, "\n")
                 .map(s->s.replace("\r", ""));
     }
@@ -61,8 +73,136 @@ public class TextUtils {
      * @param text - nullable
      * @return non-null
      */
-    public static Can<String> readLines(final @Nullable String text){
+    public Can<String> readLines(final @Nullable String text){
         return Can.ofStream(streamLines(text));
+    }
+
+    /**
+     * Reads content from given {@code input} into a {@link Can} of lines,
+     * removing new line characters {@code \n,\r}
+     * and BOM file header (if any) in the process.
+     * @param input - nullable
+     * @return non-null
+     */
+    public Can<String> readLinesFromInputStream(
+            final @Nullable InputStream input,
+            final @NonNull  Charset charset){
+        if(input==null) {
+            return Can.empty();
+        }
+        val lines = new ArrayList<String>();
+        try(Scanner scanner = new Scanner(input, charset.name())){
+            scanner.useDelimiter("\\n");
+            while(scanner.hasNext()) {
+                var line = scanner.next()
+                        .replace("\r", "");
+                if(lines.size()==0) {
+                    line = stripBom(line); // special handling of first line
+                }
+                lines.add(line);
+            }
+        }
+        return Can.ofCollection(lines);
+    }
+
+    /**
+     * Reads content from given resource into a {@link Can} of lines,
+     * removing new line characters {@code \n,\r}
+     * and BOM file header (if any) in the process.
+     * @return non-null
+     * @see #readLinesFromInputStream(InputStream, Charset)
+     */
+    @SneakyThrows
+    public Can<String> readLinesFromResource(
+            final @NonNull Class<?> resourceLocation,
+            final @NonNull String resourceName,
+            final @NonNull Charset charset) {
+        try(val input = resourceLocation.getResourceAsStream(resourceName)){
+            return readLinesFromInputStream(input, charset);
+        }
+    }
+
+    /**
+     * Reads content from given {@link URL} into a {@link Can} of lines,
+     * removing new line characters {@code \n,\r}
+     * and BOM file header (if any) in the process.
+     * @return non-null
+     * @see #readLinesFromInputStream(InputStream, Charset)
+     */
+    @SneakyThrows
+    public Can<String> readLinesFromUrl(
+            final @NonNull URL url,
+            final @NonNull Charset charset) {
+        try(val input = url.openStream()){
+            return readLinesFromInputStream(input, charset);
+        }
+    }
+
+    /**
+     * Reads content from given {@link File} into a {@link Can} of lines,
+     * removing new line characters {@code \n,\r}
+     * and BOM file header (if any) in the process.
+     * @return non-null
+     * @see #readLinesFromInputStream(InputStream, Charset)
+     */
+    @SneakyThrows
+    public Can<String> readLinesFromFile(
+            final @NonNull File file,
+            final @NonNull Charset charset) {
+        try(val input = new FileInputStream(file)){
+            return readLinesFromInputStream(input, charset);
+        }
+    }
+
+    /**
+     * Reads content from given {@link DataSource} into a {@link Can} of lines,
+     * removing new line characters {@code \n,\r}
+     * and BOM file header (if any) in the process.
+     * @return non-null
+     * @see #readLinesFromInputStream(InputStream, Charset)
+     */
+    public Can<String> readLinesFromDataSource(
+            final @NonNull DataSource dataSource,
+            final @NonNull Charset charset) {
+        return dataSource.tryReadAsLines(charset)
+                .valueAsNonNullElseFail();
+    }
+
+    // -- WRITING
+
+    /**
+     * Writes given lines to given {@link File},
+     * using new line character {@code \n}.
+     */
+    @SneakyThrows
+    public void writeLinesToFile(
+            final @NonNull Iterable<String> lines,
+            final @NonNull File file,
+            final @NonNull Charset charset) {
+
+        try(val bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), charset))) {
+            for(val line : lines) {
+                bw.append(line).append("\n");
+            }
+        }
+    }
+
+    /**
+     * Writes given lines to given {@link DataSink},
+     * using new line character {@code \n}.
+     */
+    public void writeLinesToDataSink(
+            final @NonNull Iterable<String> lines,
+            final @NonNull DataSink dataSink,
+            final @NonNull Charset charset) {
+
+        dataSink.writeAll(os->{
+            try(val bw = new BufferedWriter(new OutputStreamWriter(os, charset))) {
+                for(val line : lines) {
+                    bw.append(line).append("\n");
+                }
+            }
+        });
     }
 
     // -- STRING CUTTER
@@ -237,6 +377,21 @@ public class TextUtils {
             return "can only match search and match for non-empty string";
         }
 
+    }
+
+    // -- HELPER
+
+    /**
+     * If line has a BOM 65279 (0xFEFF) leading character, strip it.
+     * <p>
+     * Some UTF-8 formatted files may have a BOM signature at their start.
+     */
+    private String stripBom(final String line) {
+        if(line.length()>0
+                && line.charAt(0)==65279) {
+            return line.substring(1);
+        }
+        return line;
     }
 
 }

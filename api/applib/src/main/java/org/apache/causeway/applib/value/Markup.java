@@ -31,7 +31,7 @@ import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.base._Text;
-import org.apache.causeway.commons.util.TextUtils;
+import org.apache.causeway.commons.io.TextUtils;
 
 import lombok.EqualsAndHashCode;
 

@@ -26,7 +26,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.util.TextUtils;
+import org.apache.causeway.commons.io.TextUtils;
 
 import lombok.Builder;
 import lombok.NonNull;

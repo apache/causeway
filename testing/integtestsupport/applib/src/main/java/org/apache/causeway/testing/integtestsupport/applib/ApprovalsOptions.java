@@ -28,7 +28,7 @@ import org.approvaltests.core.Scrubber;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.commons.util.TextUtils;
+import org.apache.causeway.commons.io.TextUtils;
 
 import lombok.SneakyThrows;
 import lombok.val;

@@ -35,10 +35,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.io.FileUtils;
 import org.apache.causeway.commons.internal.base._Text;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.functions._Predicates;
+import org.apache.causeway.commons.io.FileUtils;
+import org.apache.causeway.commons.io.TextUtils;
 
 import lombok.SneakyThrows;
 import lombok.val;
@@ -144,10 +145,10 @@ class ValueTypeGenTemplateTest {
                 .zipMap(sortedB, (a, b)->{
 
                     var linesA = _Text.normalize(
-                            _Text.readLinesFromFile(a, StandardCharsets.UTF_8))
+                            TextUtils.readLinesFromFile(a, StandardCharsets.UTF_8))
                             .map(this::normalizeForComparision);
                     var linesB = _Text.normalize(
-                            _Text.readLinesFromFile(b, StandardCharsets.UTF_8))
+                            TextUtils.readLinesFromFile(b, StandardCharsets.UTF_8))
                             .map(this::normalizeForComparision);
 
                     return Objects.equals(linesA, linesB)

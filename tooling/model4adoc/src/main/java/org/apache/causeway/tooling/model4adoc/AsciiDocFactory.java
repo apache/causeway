@@ -35,7 +35,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.base._Text;
-import org.apache.causeway.commons.util.TextUtils;
+import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.tooling.model4adoc.ast.SimpleBlock;
 import org.apache.causeway.tooling.model4adoc.ast.SimpleCell;
 import org.apache.causeway.tooling.model4adoc.ast.SimpleColumn;

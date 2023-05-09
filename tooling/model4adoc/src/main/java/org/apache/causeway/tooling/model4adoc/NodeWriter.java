@@ -44,7 +44,7 @@ import org.apache.causeway.commons.internal.base._Text;
 import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Sets;
-import org.apache.causeway.commons.util.TextUtils;
+import org.apache.causeway.commons.io.TextUtils;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

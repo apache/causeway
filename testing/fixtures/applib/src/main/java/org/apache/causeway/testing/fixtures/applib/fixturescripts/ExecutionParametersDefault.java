@@ -33,7 +33,7 @@ import org.joda.time.format.ISODateTimeFormat;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.commons.util.TextUtils;
+import org.apache.causeway.commons.io.TextUtils;
 
 /**
  * Responsible for parsing the string parameter passed when executing

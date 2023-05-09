@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 import org.apache.wicket.util.template.PackageTextTemplate;
 
-import org.apache.causeway.commons.util.TextUtils;
+import org.apache.causeway.commons.io.TextUtils;
 
 import lombok.val;
 
