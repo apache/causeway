@@ -20,21 +20,19 @@ package demoapp.dom.domain.objects.progmodel.compositevalues;
 
 
 // tag::class[]
-@org.apache.causeway.applib.annotation.Value    // <.>
-@lombok.Value                                   // <.>
+@org.apache.causeway.applib.annotation.Value                // <.>
+@lombok.Value                                               // <.>
 @lombok.AllArgsConstructor(staticName = "of")
 public class ComplexNumber {
 
-    double re;
-    double im;
+    double re;                                              // <.>
+    double im;                                              // <3>
 
-    public ComplexNumber add(ComplexNumber other) {
+    public ComplexNumber add(ComplexNumber other) {         // <.>
         return ComplexNumber.of(re + other.re, im + other.im);
     }
-
-    public ComplexNumber subtract(ComplexNumber other) {
+    public ComplexNumber subtract(ComplexNumber other) {    // <4>
         return ComplexNumber.of(re - other.re, im - other.im);
     }
-
 }
 // end::class[]

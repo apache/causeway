@@ -35,7 +35,6 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 @Named("demo.CompositeValuesPage")
 @DomainObject(nature=Nature.VIEW_MODEL)
 public class CompositeValueTypePage implements HasAsciiDocDescription {
-
     // ...
 // end::class[]
     @ObjectSupport public String title() {
@@ -43,10 +42,9 @@ public class CompositeValueTypePage implements HasAsciiDocDescription {
     }
 
 
+// tag::class[]
     @Property
     @Getter @Setter
     private ComplexNumber complexNumber;
-
-// tag::class[]
 }
 // end::class[]

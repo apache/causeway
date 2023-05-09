@@ -35,10 +35,10 @@ import org.apache.causeway.schema.common.v2.ValueType;
 @Named("demo.ComplexNumberValueSemantics")
 @Component
 @Import({
-        ComplexNumber_default.class      // <.>
+        ComplexNumber_default.class                         // <.>
 })
 public class ComplexNumberValueSemantics
-        extends ValueSemanticsAbstract<ComplexNumber> {
+        extends ValueSemanticsAbstract<ComplexNumber> {     // <.>
 // end::class[]
 
     @Override
