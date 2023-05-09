@@ -38,7 +38,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.i18n.TranslationsResolver;
-import org.apache.causeway.commons.internal.base._Text;
+import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.core.config.CausewayConfiguration;
 
 import lombok.RequiredArgsConstructor;
@@ -95,7 +95,7 @@ public class TranslationsResolverWicket implements TranslationsResolver {
             return Collections.emptyList();
         }
 
-        val acceptedLines = _Text.readLinesFromUrl(url, StandardCharsets.UTF_8)
+        val acceptedLines = TextUtils.readLinesFromUrl(url, StandardCharsets.UTF_8)
         .stream()
         .filter(input->input != null && nonEmpty.matcher(input).matches())
         .collect(Collectors.toList());

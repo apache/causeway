@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.commons.resource;
+package org.apache.causeway.tooling.j2adoc.util;
 
 import java.io.File;
 import java.util.Comparator;
@@ -24,19 +24,15 @@ import java.util.Comparator;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._StringCutter;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.commons.io.TextUtils;
 
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 import lombok.val;
 
-/**
- * @deprecated move to tooling
- */
-@Deprecated
 @Value @Builder
 public class ResourceCoordinates
 implements Comparable<ResourceCoordinates> {
@@ -51,7 +47,7 @@ implements Comparable<ResourceCoordinates> {
             next = next.getParentFile();
         }
 
-        val cutter = _StringCutter.of(file.getName());
+        val cutter = TextUtils.cutter(file.getName());
 
         //XXX lombok issue, cannot use val
         final String simpleName = cutter.keepBeforeLast(".").getValue();

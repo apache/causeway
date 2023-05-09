@@ -50,7 +50,7 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._StringInterpolation;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.base._Text;
+import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.schema.common.v2.TypedTupleDto;
 import org.apache.causeway.schema.common.v2.ValueType;
 
@@ -134,7 +134,7 @@ implements
         });
     }
 
-    private final Can<String> htmlTemplate = _Text.readLinesFromResource(this.getClass(),
+    private final Can<String> htmlTemplate = TextUtils.readLinesFromResource(this.getClass(),
             "CalendarEvent.html", StandardCharsets.UTF_8)
             .stream()
             .skip(20)

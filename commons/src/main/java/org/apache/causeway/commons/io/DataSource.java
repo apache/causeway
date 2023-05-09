@@ -41,7 +41,6 @@ import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.base._Text;
 import org.apache.causeway.commons.io.HashUtils.HashAlgorithm;
 
 import lombok.NonNull;
@@ -126,7 +125,7 @@ public interface DataSource {
      * If the underlying {@link InputStream} is null a success {@link Try} is returned, containing a null value.
      */
     default Try<Can<String>> tryReadAsLines(final @NonNull Charset charset) {
-        return tryReadAndApply(inputStream->_Text.readLines(inputStream, charset));
+        return tryReadAndApply(inputStream->TextUtils.readLinesFromInputStream(inputStream, charset));
     }
 
     /**

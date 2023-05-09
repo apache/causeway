@@ -18,20 +18,21 @@
  */
 package org.apache.causeway.testing.integtestsupport.applib;
 
-import lombok.SneakyThrows;
-import lombok.experimental.UtilityClass;
-import lombok.val;
-
 import java.util.stream.Collectors;
 
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.base._Text;
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.collections._Maps;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.approvaltests.core.Options;
 import org.approvaltests.core.Scrubber;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.commons.io.TextUtils;
+
+import lombok.SneakyThrows;
+import lombok.val;
+import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class ApprovalsOptions {
@@ -44,7 +45,7 @@ public class ApprovalsOptions {
     }
 
     private String scrub(final String input) {
-        return _Text.streamLines(input)
+        return TextUtils.streamLines(input)
                 .map(ApprovalsOptions::scrubLine)
                 .filter(line->!_Strings.nullToEmpty(line).isBlank()) // ignore blank lines, just in case
                 .collect(Collectors.joining("\n")); // UNIX line ending convention

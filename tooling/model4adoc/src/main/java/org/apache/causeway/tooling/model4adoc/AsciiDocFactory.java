@@ -35,6 +35,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.base._Text;
+import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.tooling.model4adoc.ast.SimpleBlock;
 import org.apache.causeway.tooling.model4adoc.ast.SimpleCell;
 import org.apache.causeway.tooling.model4adoc.ast.SimpleColumn;
@@ -318,7 +319,7 @@ public class AsciiDocFactory {
             val sourceBlock = AsciiDocFactory.sourceBlock(doc,
                     languageAndOptions,
 
-                    _Text.normalize(_Text.getLines(source))
+                    _Text.normalize(TextUtils.readLines(source))
                     .stream()
                     .collect(Collectors.joining("\n")));
 
@@ -383,7 +384,7 @@ public class AsciiDocFactory {
             val sourceBlock = AsciiDocFactory.diagramBlock(doc,
                     diagramType,
                     diagramOptions,
-                    _Text.normalize(_Text.getLines(source))
+                    _Text.normalize(TextUtils.readLines(source))
                     .stream()
                     .collect(Collectors.joining("\n")));
 

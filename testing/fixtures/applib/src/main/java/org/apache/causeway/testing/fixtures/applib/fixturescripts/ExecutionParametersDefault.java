@@ -32,8 +32,8 @@ import org.joda.time.format.ISODateTimeFormat;
 
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.base._Text;
 import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.commons.io.TextUtils;
 
 /**
  * Responsible for parsing the string parameter passed when executing
@@ -61,7 +61,7 @@ public class ExecutionParametersDefault implements ExecutionParameters {
         final Map<String, String> keyValues = _Maps.newLinkedHashMap();
         if (parameters != null) {
             try {
-                _Text.streamLines(parameters)
+                TextUtils.streamLines(parameters)
                 .forEach(line->{
                     final Matcher matcher = keyEqualsValuePattern.matcher(line);
                     if (matcher.matches()) {

@@ -27,6 +27,7 @@ import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.base._Text;
+import org.apache.causeway.commons.io.TextUtils;
 
 import jakarta.inject.Named;
 import jakarta.xml.bind.annotation.adapters.XmlAdapter;
@@ -72,7 +73,7 @@ public final class Markup implements Serializable {
 
     public static String summarizeHtmlAsTitle(final String html) {
         return _Strings.ellipsifyAtEnd(
-                _Text.normalize(_Text.getLines(html)).stream()
+                _Text.normalize(TextUtils.readLines(html)).stream()
                 .collect(Collectors.joining(" ")),
                 255, "...");
     }

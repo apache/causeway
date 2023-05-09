@@ -10,8 +10,6 @@ Layout hints for actions.
 ----
 @interface ActionLayout {
   String associateWith() default "";     // <.>
-  @Deprecated(forRemoval = true, since = "2.0.0-RC1")
-BookmarkPolicy bookmarking() default BookmarkPolicy.NOT_SPECIFIED;     // <.>
   String cssClass() default "";     // <.>
   String cssClassFa() default "";     // <.>
   CssClassFaPosition cssClassFaPosition() default CssClassFaPosition.LEFT;     // <.>
@@ -32,16 +30,6 @@ Redirect redirectPolicy() default Redirect.AS_CONFIGURED;     // <.>
 +
 --
 Associates this action with a property or collection, specifying its id.
---
-<.> xref:#bookmarking[bookmarking]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-Conflicting semantics with _DomainObjectLayout#bookmarking()_ , that is, if present on this action's return type, hence deprecated for removal.
-====
 --
 <.> xref:#cssClass[cssClass]
 +
@@ -123,16 +111,6 @@ To specify the layout order use _ActionLayout#sequence()_ .
 For example `@ActionLayout(associateWith="items") @ActionLayout(sequence="2.1")` 
 
 Note that it is also possible to associate an action with a collection using _Action#choicesFrom()_ (which has the additional semantic of the rows of the element being used as choices for that action's collection parameter of the same type as the elements of the collection).
-
-[#bookmarking]
-=== bookmarking
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-Conflicting semantics with _DomainObjectLayout#bookmarking()_ , that is, if present on this action's return type, hence deprecated for removal.
-====
 
 [#cssClass]
 === cssClass

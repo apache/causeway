@@ -23,53 +23,54 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.io.TextUtils;
 
 class TextTest {
 
     @Test
     void lineParsingWin() {
-        assertEquals(Can.of("Hallo", "", "World"), _Text.getLines("Hallo\r\n\r\nWorld"));
+        assertEquals(Can.of("Hallo", "", "World"), TextUtils.readLines("Hallo\r\n\r\nWorld"));
     }
 
     @Test
     void lineParsingUx() {
-        assertEquals(Can.of("Hallo", "", "World"), _Text.getLines("Hallo\n\nWorld"));
+        assertEquals(Can.of("Hallo", "", "World"), TextUtils.readLines("Hallo\n\nWorld"));
     }
 
     @Test
     void repeatedEmptyLineRemoval() {
-        
+
         assertEquals(Can.of("Hallo", "", "World"), _Text.removeRepeatedEmptyLines(Can.of("Hallo", "", "World")));
         assertEquals(Can.of("Hallo", "", "World"), _Text.removeRepeatedEmptyLines(Can.of("Hallo", "", "", "World")));
         assertEquals(Can.of("Hallo", "", "World"), _Text.removeRepeatedEmptyLines(Can.of("Hallo", "", " \t ", "World")));
-        
+
         assertEquals(Can.of("", "Hallo", "", "World"), _Text.removeRepeatedEmptyLines(Can.of("", "Hallo", "", "World")));
         assertEquals(Can.of("", "Hallo", "", "World"), _Text.removeRepeatedEmptyLines(Can.of("", "", "Hallo", "", "World")));
-        
+
         assertEquals(Can.of("Hallo", "", "World", ""), _Text.removeRepeatedEmptyLines(Can.of("Hallo", "", "World", "")));
         assertEquals(Can.of("Hallo", "", "World", ""), _Text.removeRepeatedEmptyLines(Can.of("Hallo", "", "World", "", "")));
-        
+
     }
-    
+
     @Test
     void leadingEmptyLineRemoval() {
-        
+
         assertEquals(Can.<String>empty(), _Text.removeLeadingEmptyLines(Can.of("", "", "")));
-        
+
         assertEquals(Can.of("Hallo", "", "World"), _Text.removeLeadingEmptyLines(Can.of("Hallo", "", "World")));
         assertEquals(Can.of("Hallo", "", "World"), _Text.removeLeadingEmptyLines(Can.of("", "Hallo", "", "World")));
         assertEquals(Can.of("Hallo", "", "World"), _Text.removeLeadingEmptyLines(Can.of("", "", "Hallo", "", "World")));
-        
+
     }
-    
+
     @Test
     void trailingEmptyLineRemoval() {
-        
+
         assertEquals(Can.<String>empty(), _Text.removeTrailingEmptyLines(Can.of("", "", "")));
-        
+
         assertEquals(Can.of("Hallo", "", "World"), _Text.removeTrailingEmptyLines(Can.of("Hallo", "", "World")));
         assertEquals(Can.of("Hallo", "", "World"), _Text.removeTrailingEmptyLines(Can.of("Hallo", "", "World", "")));
         assertEquals(Can.of("Hallo", "", "World"), _Text.removeTrailingEmptyLines(Can.of("Hallo", "", "World", "", "")));
     }
-    
+
 }

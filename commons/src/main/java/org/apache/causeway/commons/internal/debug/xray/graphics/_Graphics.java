@@ -33,6 +33,7 @@ import java.util.Optional;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.base._Text;
+import org.apache.causeway.commons.io.TextUtils;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -52,7 +53,7 @@ final class _Graphics {
             new float[] { 2f, 0f, 2f },
             2f);
 
-    static Optional<Font> lookupFont(String fontName, float size) {
+    static Optional<Font> lookupFont(final String fontName, final float size) {
         val ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         for (Font font : ge.getAllFonts()) {
             if(font.getFontName().equals(fontName)) {
@@ -62,7 +63,7 @@ final class _Graphics {
         return Optional.empty();
     }
 
-    static void arrowHorizontal(Graphics2D g, int m0, int m1, int y) {
+    static void arrowHorizontal(final Graphics2D g, final int m0, final int m1, final int y) {
 
         g.drawLine(m0, y, m1, y);
 
@@ -79,7 +80,7 @@ final class _Graphics {
         g.setStroke(origStroke);
     }
 
-    static void enableTextAntialiasing(Graphics2D g) {
+    static void enableTextAntialiasing(final Graphics2D g) {
 
         g.setRenderingHint(
                 RenderingHints.KEY_TEXT_ANTIALIASING,
@@ -116,11 +117,11 @@ final class _Graphics {
         int lineDescent;
         int lineHeight;
 
-        Dimension layout(FontMetrics metrics, int hPadding, int vPadding, int lineGap, int maxCharsPerLine) {
+        Dimension layout(final FontMetrics metrics, final int hPadding, final int vPadding, final int lineGap, final int maxCharsPerLine) {
             this.hPadding = hPadding;
             this.vPadding = vPadding;
             this.lineGap = lineGap;
-            lines = _Text.breakLines(_Text.getLines(label), maxCharsPerLine);
+            lines = _Text.breakLines(TextUtils.readLines(label), maxCharsPerLine);
             if(lines.isEmpty()) {
                 return new Dimension(0, 0);
             }
@@ -137,7 +138,7 @@ final class _Graphics {
             return new Dimension(width, height);
         }
 
-        void render(Graphics2D g) {
+        void render(final Graphics2D g) {
             if(lines==null
                     || lines.isEmpty()) {
                 return;

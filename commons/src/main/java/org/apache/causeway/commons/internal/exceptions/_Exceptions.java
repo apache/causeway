@@ -33,9 +33,9 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.base._StringCutter;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.commons.io.TextUtils;
 
 import lombok.NonNull;
 import lombok.val;
@@ -440,7 +440,7 @@ public final class _Exceptions {
                     val replacement = entry.getValue();
                     var s = str;
                     s = s.replace(entry.getKey() + ".", replacement.isEmpty() ? "{" : replacement + ".");
-                    val cutter = _StringCutter.of(s);
+                    val cutter = TextUtils.cutter(s);
                     val left = cutter.keepBefore(".").getValue();
                     val right = cutter.keepAfter(".").getValue();
                     s = replacement.isEmpty()

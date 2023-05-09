@@ -61,8 +61,8 @@ import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.applib.value.Password;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._StringCutter;
 import org.apache.causeway.commons.internal.base._Temporals;
+import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.core.metamodel.valuesemantics.ApplicationFeatureIdValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.MarkupValueSemantics;
 import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
@@ -163,7 +163,7 @@ public abstract class ValueTypeExample<T> {
         if(!name.contains("_")) {
             return Optional.empty();
         }
-        return Optional.of(_StringCutter.of(name)
+        return Optional.of(TextUtils.cutter(name)
                 .keepBefore("_")
                 .getValue());
     }

@@ -36,9 +36,9 @@ import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._StringCutter;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.io.JaxbUtils;
+import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.causeway.core.metamodel.interactions.managed.PropertyInteraction;
@@ -153,7 +153,7 @@ public class ValueSemanticsTester<T> {
                 .formattedOutput(true)))
         .getValue().orElseThrow();
 
-        return _StringCutter.of(rawXml)
+        return TextUtils.cutter(rawXml)
                 .dropBefore("<ValueWithTypeDto")
                 .keepBeforeLast("</ValueWithTypeDto>")
                 .getValue()

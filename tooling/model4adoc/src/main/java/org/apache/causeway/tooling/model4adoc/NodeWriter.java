@@ -44,6 +44,7 @@ import org.apache.causeway.commons.internal.base._Text;
 import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Sets;
+import org.apache.causeway.commons.io.TextUtils;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -61,7 +62,7 @@ final class NodeWriter implements StructuralNodeVisitor {
             "Notice");
 
     @Override
-    public boolean documentHead(Document doc, int depth) {
+    public boolean documentHead(final Document doc, final int depth) {
 
         _Strings.nonEmpty(doc.getTitle())
         .ifPresent(title->printChapterTitle(title, depth+1));
@@ -132,7 +133,7 @@ final class NodeWriter implements StructuralNodeVisitor {
         UNKNOWN(x->false)
         ;
         private final Predicate<String> matcher;
-        public static Style parse(StructuralNode node) {
+        public static Style parse(final StructuralNode node) {
             val styleAttribute = node.getStyle();
             return Stream.of(Style.values())
                     .filter(style->style.matcher.test(styleAttribute))
@@ -163,7 +164,7 @@ final class NodeWriter implements StructuralNodeVisitor {
     }
 
     @Override
-    public boolean blockHead(Block block, int depth) {
+    public boolean blockHead(final Block block, final int depth) {
 
         val style = Style.parse(block);
 
@@ -227,7 +228,7 @@ final class NodeWriter implements StructuralNodeVisitor {
     }
 
     @Override
-    public void blockTail(Block block, int depth) {
+    public void blockTail(final Block block, final int depth) {
 
         val style = Style.parse(block);
 
@@ -251,7 +252,7 @@ final class NodeWriter implements StructuralNodeVisitor {
     // -_ LIST
 
     @Override
-    public boolean listHead(org.asciidoctor.ast.List list, int depth) {
+    public boolean listHead(final org.asciidoctor.ast.List list, final int depth) {
         if(bulletCount==0) {
             if(newLineCount<=1) {
                 printNewLine();
@@ -266,12 +267,12 @@ final class NodeWriter implements StructuralNodeVisitor {
     }
 
     @Override
-    public void listTail(org.asciidoctor.ast.List list, int depth) {
+    public void listTail(final org.asciidoctor.ast.List list, final int depth) {
         bulletCount--;
     }
 
     @Override
-    public boolean listItemHead(ListItem listItem, int depth) {
+    public boolean listItemHead(final ListItem listItem, final int depth) {
 
         val isCalloutStyle = Style.parse((org.asciidoctor.ast.List)(listItem.getParent()))
                 .isCalloutList();
@@ -317,7 +318,7 @@ final class NodeWriter implements StructuralNodeVisitor {
     }
 
     @Override
-    public void listItemTail(ListItem listItem, int depth) {
+    public void listItemTail(final ListItem listItem, final int depth) {
     }
 
     // -- TABLE
@@ -335,7 +336,7 @@ final class NodeWriter implements StructuralNodeVisitor {
     //  |Cell in column 3, row 2
     //  |===
     @Override
-    public boolean tableHead(Table table, int depth) {
+    public boolean tableHead(final Table table, final int depth) {
 
         _Strings.nonEmpty(table.getTitle())
         .ifPresent(this::printBlockTitle);
@@ -382,7 +383,7 @@ final class NodeWriter implements StructuralNodeVisitor {
         printfln(".%s", title);
     }
 
-    private void printSingleLineMap(String mapFormat, Map<String, String> map, String entryFormat) {
+    private void printSingleLineMap(final String mapFormat, final Map<String, String> map, final String entryFormat) {
         if(map.isEmpty()) {
             return;
         }
@@ -395,7 +396,7 @@ final class NodeWriter implements StructuralNodeVisitor {
 
     // -- HELPER - LOW LEVEL
 
-    private static Map<String, String> formatedAttrMap(Table table) {
+    private static Map<String, String> formatedAttrMap(final Table table) {
         final Map<String, String> formatedAttrMap = new LinkedHashMap<>();
 
         if(table.hasAttribute("cols")) {
@@ -468,7 +469,7 @@ final class NodeWriter implements StructuralNodeVisitor {
     private void print(final @NonNull String line) {
 
         if(line.contains("\n")) {
-            val lineIter = _Text.normalize(_Text.getLines(line)).iterator();
+            val lineIter = _Text.normalize(TextUtils.readLines(line)).iterator();
             while(lineIter.hasNext()) {
                 val nextLine = lineIter.next();
                 currentWriter().append(nextLine);
@@ -508,7 +509,7 @@ final class NodeWriter implements StructuralNodeVisitor {
         printNewLine();
     }
 
-    private Object nullToEmpty(Object x) {
+    private Object nullToEmpty(final Object x) {
         if(x==null) {
             return "";
         }

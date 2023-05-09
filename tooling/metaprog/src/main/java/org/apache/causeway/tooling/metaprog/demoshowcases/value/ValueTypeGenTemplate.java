@@ -29,11 +29,12 @@ import java.util.stream.Stream;
 import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.io.FileUtils;
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.base._Text;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.io.FileUtils;
+import org.apache.causeway.commons.io.TextUtils;
+import org.apache.causeway.tooling.metaprog.demoshowcases.value.ValueTypeGenTemplate.TemplateVariant;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -260,11 +261,11 @@ public class ValueTypeGenTemplate {
 
     private void generateFromTemplate(
             final Map<String, String> templateVars, final File template, final File genTarget) {
-        val templateLines = _Text.readLinesFromFile(template, StandardCharsets.UTF_8);
+        val templateLines = TextUtils.readLinesFromFile(template, StandardCharsets.UTF_8);
 
         FileUtils.makeDir(genTarget.getParentFile());
 
-        _Text.writeLinesToFile(templateLines
+        TextUtils.writeLinesToFile(templateLines
                 .map(line->templateProcessor(templateVars, line)),
                 genTarget, StandardCharsets.UTF_8);
     }

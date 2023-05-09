@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.apache.causeway.commons.internal.base._Text;
+import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.tooling.projectmodel.gradle.GradleSettings;
 import org.apache.causeway.tooling.projectmodel.gradle.GradleSettingsFactory;
 import org.apache.causeway.tooling.projectmodel.gradle.GradleSettingsWriter;
@@ -98,7 +98,7 @@ class GradleSettingsTest extends ProjectModelTestAbstract {
     private void checkBuildFile(final File buildFile, final Set<String> knownBuildArtifactNames) {
         //System.out.println(String.format("checking %s", buildFile.getAbsolutePath()));
 
-        val lines = _Text.readLinesFromFile(buildFile, StandardCharsets.UTF_8);
+        val lines = TextUtils.readLinesFromFile(buildFile, StandardCharsets.UTF_8);
         for(val line : lines) {
             checkBuildFileLine(buildFile, line, knownBuildArtifactNames);
         }

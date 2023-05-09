@@ -23,8 +23,8 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.command.Command;
-import org.apache.causeway.commons.internal.base._StringCutter;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.core.metamodel.commons.StringExtensions;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
@@ -59,7 +59,7 @@ public class IdentifierUtil {
             final @NonNull Identifier.Type identifierType,
             final @NonNull String logicalMemberIdentifier) {
 
-        val stringCutter = _StringCutter.of(logicalMemberIdentifier);
+        val stringCutter = TextUtils.cutter(logicalMemberIdentifier);
         val logicalTypeName = stringCutter
                 .keepBefore("#")
                 .getValue();

@@ -17,7 +17,8 @@ Collects together all the domain semantics for the property of a domain object.
   Publishing entityChangePublishing() default Publishing.NOT_SPECIFIED;     // <.>
   Publishing executionPublishing() default Publishing.NOT_SPECIFIED;     // <.>
   String fileAccept() default "";     // <.>
-  Where hidden() default Where.NOT_SPECIFIED;     // <.>
+  @Deprecated(forRemoval = true, since = "2.0.0-RC2")
+Where hidden() default Where.NOT_SPECIFIED;     // <.>
   int maxLength() default -1;     // <.>
   Snapshot snapshot() default Snapshot.NOT_SPECIFIED;     // <.>
   Class<? extends Specification>[] mustSatisfy() default {};     // <.>
@@ -72,6 +73,13 @@ For uploading xref:refguide:applib:index/value/Blob.adoc[Blob] or xref:refguide:
 <.> xref:#hidden[hidden]
 +
 --
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _PropertyLayout#hidden()_ instead
+====
+
 Indicates where the property is not visible to the user.
 --
 <.> xref:#maxLength[maxLength]
@@ -160,6 +168,8 @@ Note that non-editable objects can nevertheless have actions invoked upon them.
 
 If _#editing()_ is set to _Editing#DISABLED_ , then the reason to provide to the user as to why this property cannot be edited.
 
+If left empty (default), no reason is given.
+
 [#entityChangePublishing]
 === entityChangePublishing
 
@@ -183,6 +193,13 @@ Note that this does not prevent the user from uploading some other file type; ra
 
 [#hidden]
 === hidden
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _PropertyLayout#hidden()_ instead
+====
 
 Indicates where the property is not visible to the user.
 

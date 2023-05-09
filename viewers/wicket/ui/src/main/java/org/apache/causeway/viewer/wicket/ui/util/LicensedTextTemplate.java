@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 import org.apache.wicket.util.template.PackageTextTemplate;
 
-import org.apache.causeway.commons.internal.base._Text;
+import org.apache.causeway.commons.io.TextUtils;
 
 import lombok.val;
 
@@ -50,7 +50,7 @@ extends PackageTextTemplate {
             val raw = super.getString();
 
             // strip first n comment lines
-            this.scriptTemplate = _Text.streamLines(raw)
+            this.scriptTemplate = TextUtils.streamLines(raw)
             .skip(skipLicenseLines)
             .collect(Collectors.joining(" "));
         }
