@@ -39,6 +39,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.commons.util.TextUtils;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -61,28 +62,6 @@ import lombok.val;
 public final class _Text {
 
     private _Text() {}
-
-    /**
-     * Converts given {@code text} into a {@link Stream} of lines,
-     * removing new line characters {@code \n,\r} in the process.
-     * @param text - nullable
-     * @return non-null
-     * @apiNote Java 11+ provides {@code String.lines()}
-     */
-    public static Stream<String> streamLines(final @Nullable String text){
-        return _Strings.splitThenStream(text, "\n")
-                .map(s->s.replace("\r", ""));
-    }
-
-    /**
-     * Converts given {@code text} into a {@link Can} of lines,
-     * removing new line characters {@code \n,\r} in the process.
-     * @param text - nullable
-     * @return non-null
-     */
-    public static Can<String> getLines(final @Nullable String text){
-        return Can.ofStream(streamLines(text));
-    }
 
     public static Can<String> breakLines(final Can<String> lines, final int maxChars) {
         if(lines.isEmpty()) {
@@ -169,7 +148,7 @@ public final class _Text {
         if(text==null) {
             return "";
         }
-        return normalize(getLines(text)).stream().collect(Collectors.joining("\n"));
+        return normalize(TextUtils.readLines(text)).stream().collect(Collectors.joining("\n"));
     }
 
     /**
@@ -308,15 +287,15 @@ public final class _Text {
     // -- TESTING SUPPORT
 
     public static void assertTextEquals(final @Nullable String a, final @Nullable String b) {
-        assertTextEquals(getLines(a), getLines(b));
+        assertTextEquals(TextUtils.readLines(a), TextUtils.readLines(b));
     }
 
     public static void assertTextEquals(final @NonNull Can<String> a, final @Nullable String b) {
-        assertTextEquals(a, getLines(b));
+        assertTextEquals(a, TextUtils.readLines(b));
     }
 
     public static void assertTextEquals(final @Nullable String a, final @NonNull Can<String> b) {
-        assertTextEquals(getLines(a), b);
+        assertTextEquals(TextUtils.readLines(a), b);
     }
 
     public static void assertTextEquals(final @NonNull Can<String> a, final @NonNull Can<String> b) {

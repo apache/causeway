@@ -31,8 +31,8 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.services.tablecol.TableColumnOrderService;
-import org.apache.causeway.commons.internal.base._Text;
 import org.apache.causeway.commons.internal.resources._Resources;
+import org.apache.causeway.commons.util.TextUtils;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
 import lombok.val;
@@ -92,7 +92,7 @@ public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderServ
             return null;
         }
         val s = contentsIfAny.get();
-        return _Text.getLines(s)
+        return TextUtils.readLines(s)
                 .filter(propertyIds::contains)
                 .toList();
     }
@@ -157,7 +157,7 @@ public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderServ
             return null;
         }
         val s = contentsIfAny.get();
-        return _Text.getLines(s)
+        return TextUtils.readLines(s)
                 .filter(propertyIds::contains)
                 .toList();
     }

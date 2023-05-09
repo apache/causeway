@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.commons.internal.base;
+package org.apache.causeway.commons.util;
 
 import org.junit.jupiter.api.Test;
 
@@ -26,7 +26,7 @@ class StringCutterTest {
 
     @Test
     void dropBeforeAndAfter() {
-        assertEquals("(or)", _StringCutter.of("HalloW(or)ld!")
+        assertEquals("(or)", TextUtils.cutter("HalloW(or)ld!")
                 .dropBefore("(")
                 .dropAfter(")")
                 .getValue());
@@ -34,7 +34,7 @@ class StringCutterTest {
 
     @Test
     void keepBeforeAndAfter() {
-        assertEquals("or", _StringCutter.of("HalloW(or)ld!")
+        assertEquals("or", TextUtils.cutter("HalloW(or)ld!")
                 .keepAfter("(")
                 .keepBefore(")")
                 .getValue());

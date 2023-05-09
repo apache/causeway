@@ -35,9 +35,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.commons.internal.base._StringCutter;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.codec._UrlDecoderUtil;
+import org.apache.causeway.commons.util.TextUtils;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
@@ -114,7 +114,7 @@ implements HasMetaModelContext {
         // eg. http://localhost:8080/
         val serverAbsoluteBase =
                 _Strings
-                .suffix(_StringCutter.of(restfulAbsoluteBase)
+                .suffix(TextUtils.cutter(restfulAbsoluteBase)
                         .keepAfterLast(restfulRelativeBase)
                         .getValue(),
                 "/");

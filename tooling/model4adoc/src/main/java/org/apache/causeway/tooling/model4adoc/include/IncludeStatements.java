@@ -23,9 +23,9 @@ import java.util.function.BiConsumer;
 import java.util.function.UnaryOperator;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._StringCutter;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.commons.util.TextUtils;
 
 import lombok.NonNull;
 import lombok.val;
@@ -80,7 +80,7 @@ public final class IncludeStatements {
 
             if(line.startsWith("include::")) {
 
-                var cutter = _StringCutter.of(line)
+                var cutter = TextUtils.cutter(line)
                         .keepAfter("include::");
 
                 val incl = IncludeStatement.builder();
@@ -110,7 +110,7 @@ public final class IncludeStatements {
                     referencePath = cutter.getValue();
                 }
 
-                cutter = _StringCutter.of(referencePath);
+                cutter = TextUtils.cutter(referencePath);
 
                 val namespaceAsString = cutter.keepBeforeLast("/").getValue();
 
