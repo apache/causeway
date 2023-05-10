@@ -20,12 +20,10 @@ package demoapp.dom.domain.objects.progmodel.embeddedvalues.jpa;
 
 import javax.inject.Named;
 
-import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.util.schema.CommonDtoUtils;
-import org.apache.causeway.applib.value.semantics.DefaultsProvider;
 import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
@@ -35,11 +33,9 @@ import org.apache.causeway.schema.common.v2.ValueType;
 // tag::class[]
 @Named("demo.ComplexNumberJpaValueSemantics")
 @Component
-@Import({
-        ComplexNumberJpa_default.class      // <.>
-})
 public class ComplexNumberJpaValueSemantics
         extends ValueSemanticsAbstract<ComplexNumberJpa> {
+    // ...
 // end::class[]
 
     @Override
@@ -51,13 +47,6 @@ public class ComplexNumberJpaValueSemantics
     public ValueType getSchemaValueType() {
         return ValueType.COMPOSITE;
     }
-
-// tag::getDefaultsProvider[]
-    @Override
-    public DefaultsProvider<ComplexNumberJpa> getDefaultsProvider() {
-        return ()-> ComplexNumberJpa.of(0, 0);
-    }
-// end::getDefaultsProvider[]
 
 // tag::compose[]
     @Override
@@ -93,7 +82,6 @@ public class ComplexNumberJpaValueSemantics
                         : (" - " + (-complexNumber.getIm())))
                 + "i";
     }
-
 // end::getRenderer[]
 
 // tag::class[]

@@ -42,7 +42,7 @@ public class EmbeddedTypeMenuJpa {
     private final FactoryService factoryService;
 
     @Action
-    @ActionLayout(cssClassFa="fa-stop-circle", describedAs = "Experimental support for embedded types")
+    @ActionLayout(cssClassFa="fa-stop-circle", describedAs = "Embedded (value) types")
     public EmbeddedTypePageJpa embeddedTypes(){
         return factoryService.viewModel(new EmbeddedTypePageJpa());
     }

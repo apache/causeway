@@ -18,11 +18,6 @@
  */
 package demoapp.dom.domain.objects.progmodel.embeddedvalues.jpa;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.objects.progmodel.embeddedvalues.ComplexNumber;
-import demoapp.dom.domain.objects.progmodel.embeddedvalues.NumberConstantEntity;
-
 import java.util.List;
 
 import javax.inject.Inject;
@@ -32,6 +27,11 @@ import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.domain.objects.progmodel.embeddedvalues.ComplexNumber;
+import demoapp.dom.domain.objects.progmodel.embeddedvalues.NumberConstantEntity;
 
 // tag::class[]
 @Named("demo.EmbeddedTypePageJpa")

@@ -52,10 +52,11 @@ import demoapp.dom.domain.objects.progmodel.embeddedvalues.NumberConstantEntity;
 @DomainObject
 @NoArgsConstructor
 public class NumberConstantJpa
-        extends NumberConstantEntity {
-
+//end::class[]
+        extends NumberConstantEntity
+//tag::class[]
+{
     // ...
-
 //end::class[]
     @ObjectSupport public String title() {
         return getName();
@@ -77,7 +78,7 @@ public class NumberConstantJpa
     private String name;
 
     @javax.persistence.Embedded                 // <.>
-    @Property(editing = Editing.ENABLED)
+    @Property(editing = Editing.DISABLED)
     @Getter @Setter
     private ComplexNumberJpa number;
 }

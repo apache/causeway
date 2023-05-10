@@ -21,14 +21,14 @@ package demoapp.dom.domain.objects.progmodel.embeddedvalues.jdo;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.springframework.context.annotation.Profile;
+
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.factory.FactoryService;
-
-import org.springframework.context.annotation.Profile;
 
 import lombok.RequiredArgsConstructor;
 
@@ -42,7 +42,7 @@ public class EmbeddedTypeMenuJdo {
     private final FactoryService factoryService;
 
     @Action
-    @ActionLayout(cssClassFa="fa-stop-circle", describedAs = "Experimental support for embedded types")
+    @ActionLayout(cssClassFa="fa-stop-circle", describedAs = "Embedded (value) types")
     public EmbeddedTypePageJdo embeddedTypes(){
         return factoryService.viewModel(new EmbeddedTypePageJdo());
     }

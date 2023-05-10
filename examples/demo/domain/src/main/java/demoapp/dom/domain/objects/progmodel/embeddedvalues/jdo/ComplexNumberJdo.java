@@ -18,68 +18,27 @@
  */
 package demoapp.dom.domain.objects.progmodel.embeddedvalues.jdo;
 
-import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Value;
 
 import lombok.AccessLevel;
-import lombok.val;
 
 import demoapp.dom.domain.objects.progmodel.embeddedvalues.ComplexNumber;
 
 // tag::class[]
-@javax.jdo.annotations.PersistenceCapable                               // <.>
-@javax.jdo.annotations.EmbeddedOnly                                     // <.>
-@Value                                                                  // <.>
-@lombok.Getter                                                          // <.>
-@lombok.Setter(AccessLevel.PRIVATE)                                     // <.>
+@javax.jdo.annotations.PersistenceCapable
+@javax.jdo.annotations.EmbeddedOnly                                 // <.>
+@Value                                                              // <.>
+@lombok.Getter                                                      // <.>
+@lombok.Setter(AccessLevel.PRIVATE)                                 // <.>
 @lombok.AllArgsConstructor(staticName = "of")
+@lombok.NoArgsConstructor                                           // <4>
 public class ComplexNumberJdo
         implements ComplexNumber{
 
     @javax.jdo.annotations.Column(allowsNull = "false")
-    private double re;
+    private double re;                                              // <.>
 
     @javax.jdo.annotations.Column(allowsNull = "false")
-    private double im;
-
-// end::class[]
-
-// tag::title[]
-    @ObjectSupport public String title() {
-        return im >= 0
-                ? "" + re + " + " +  im + "i"
-                : "" + re + " - " + (-im) + "i";
-    }
-// end::title[]
-
-// tag::parse[]
-    private static final Pattern PATTERN =
-        Pattern.compile("^(?<re>\\S*)\\W*(?<sign>[+-])\\W*(?<im>\\S+)i$");
-
-    public static Optional<ComplexNumberJdo> parse(final String parse) {
-        val m = PATTERN.matcher(parse);
-        return m.matches() ?
-                Optional.of(ComplexNumberJdo.of(
-                    realFrom(m), signFrom(m) * imaginaryFrom(m)))
-                : Optional.empty();
-    }
-
-    private static double realFrom(final Matcher m) {
-        return Double.parseDouble(m.group("re"));
-    }
-    private static double signFrom(final Matcher m) {
-        return m.group("sign").equals("-") ? -1.0d : +1.0d;
-    }
-    private static double imaginaryFrom(final Matcher m) {
-        return Double.parseDouble(m.group("im"));
-    }
-// end::parse[]
-
-// tag::class[]
-    // ...
+    private double im;                                              // <5>
 }
 // end::class[]

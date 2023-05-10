@@ -46,7 +46,10 @@ import demoapp.dom.domain.objects.progmodel.embeddedvalues.NumberConstantEntity;
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject
 public class NumberConstantJdo
-        extends NumberConstantEntity {
+//end::class[]
+        extends NumberConstantEntity
+//tag::class[]
+{
 
     // ...
 
@@ -67,8 +70,8 @@ public class NumberConstantJdo
     private String name;
 
     @javax.jdo.annotations.Embedded(members={                           // <.>
-            @Persistent(name="re", columns=@Column(name="number_re")),  // <.>
-            @Persistent(name="im", columns=@Column(name="number_im"))   // <.>
+            @Persistent(name="re", columns=@Column(name="number_re")),  // <1>
+            @Persistent(name="im", columns=@Column(name="number_im"))   // <1>
     })
     @Property(editing = Editing.ENABLED)
     @Getter @Setter
