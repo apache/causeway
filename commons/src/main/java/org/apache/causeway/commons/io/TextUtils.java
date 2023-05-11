@@ -27,8 +27,10 @@ import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
@@ -261,8 +263,30 @@ public class TextUtils {
                     : this;
         }
 
+        /**
+         * Number of delimited {@link String} elements this {@link StringDelimiter} is holding.
+         */
         public int elementCount() {
             return elements.length;
+        }
+
+        public String asDelimitedString() {
+            return stream().collect(Collectors.joining(delimiter));
+        }
+
+        @Override
+        public String toString() {
+            return String.format("StringDelimiter[delimiter=%s,elements=%s]",
+                    delimiter,
+                    Arrays.asList(elements));
+        }
+
+        /**
+         * Returns a new {@link StringDelimiter} instance that has all the
+         * delimited {@link String} elements of this but instead uses given {@code newDelimiter}.
+         */
+        public StringDelimiter withDelimiter(final @NonNull String newDelimiter) {
+            return new StringDelimiter(newDelimiter, elements);
         }
 
     }

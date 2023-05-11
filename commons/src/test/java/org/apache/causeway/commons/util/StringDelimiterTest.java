@@ -81,6 +81,27 @@ class StringDelimiterTest {
                     .join(delimiter.parse("d")), "a", "b", "c", "d");
     }
 
+    @Test
+    void asDelimitedString() {
+        val delimiter = TextUtils.delimiter(".");
+        assertEquals("", delimiter.asDelimitedString());
+        assertEquals("a.b", delimiter.parse("a.b").asDelimitedString());
+    }
+
+    @Test
+    void withDelimiter() {
+        val delimiter = TextUtils.delimiter(".");
+        assertEquals("", delimiter.withDelimiter("/").asDelimitedString());
+        assertEquals("a/b", delimiter.parse("a.b").withDelimiter("/").asDelimitedString());
+    }
+
+    @Test
+    void toStringMethod() {
+        val delimiter = TextUtils.delimiter(".");
+        assertEquals("StringDelimiter[delimiter=.,elements=[]]", delimiter.toString());
+        assertEquals("StringDelimiter[delimiter=.,elements=[a, b]]", delimiter.parse("a.b").toString());
+    }
+
     // -- HELPER
 
     private static void assertThatDelimiterEquals(final TextUtils.StringDelimiter delimiter, final String...parts) {
