@@ -40,8 +40,22 @@ public enum ApplicationUserStatus {
         return _Strings.capitalize(name());
     }
 
-    public static boolean isUnlocked(final @Nullable ApplicationUserStatus applicationUserStatus) {
-        return applicationUserStatus == UNLOCKED;
+    public static boolean isUnlocked(final @Nullable ApplicationUserStatus status) {
+        return status == UNLOCKED;
+    }
+
+    public static boolean isLockedOrUnspecified(final @Nullable ApplicationUserStatus status) {
+        return !isUnlocked(status);
+    }
+
+    /** Whether can transition to state LOCKED. That is, YES if not already at that state. */
+    public static boolean canLock(final @Nullable ApplicationUserStatus status) {
+        return status != ApplicationUserStatus.LOCKED;
+    }
+
+    /** Whether can transition to state UNLOCKED. That is, YES if not already at that state. */
+    public static boolean canUnlock(final @Nullable ApplicationUserStatus status) {
+        return status != ApplicationUserStatus.UNLOCKED;
     }
 
 }

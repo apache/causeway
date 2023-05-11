@@ -89,7 +89,7 @@ class PrincipalForApplicationUser implements AuthorizationInfo {
     @Getter(value = AccessLevel.PACKAGE) private final ApplicationPermissionValueSet permissionSet;
 
     public boolean isLocked() {
-        return getStatus() == ApplicationUserStatus.LOCKED;
+        return ApplicationUserStatus.isLockedOrUnspecified(getStatus());
     }
 
     @Override

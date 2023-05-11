@@ -66,7 +66,9 @@ public class ApplicationUser_lock {
         if(applicationUserRepository.isAdminUser(target)) {
             return String.format("Cannot lock the '%s' user.", config.getExtensions().getSecman().getSeed().getAdmin().getUserName());
         }
-        return target.getStatus() == ApplicationUserStatus.LOCKED ? "Status is already set to LOCKED": null;
+        return ApplicationUserStatus.canLock(target.getStatus())
+                ? "Status is already set to LOCKED"
+                : null;
     }
 
 }
