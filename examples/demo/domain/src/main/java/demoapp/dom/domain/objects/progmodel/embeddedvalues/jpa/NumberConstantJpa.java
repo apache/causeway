@@ -16,70 +16,70 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.services.core.eventbusservice;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+package demoapp.dom.domain.objects.progmodel.embeddedvalues.jpa;
 
 import jakarta.inject.Named;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 import org.springframework.context.annotation.Profile;
 
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;
+import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.val;
 
-import demoapp.dom.services.core.eventbusservice.EventBusServiceDemoVm.UiButtonEvent;
+import demoapp.dom.domain.objects.progmodel.embeddedvalues.ComplexNumber;
+import demoapp.dom.domain.objects.progmodel.embeddedvalues.NumberConstantEntity;
 
 @Profile("demo-jpa")
+//tag::class[]
 @Entity
 @Table(
-        schema = "demo",
-        name = "EventLogEntryJpa"
+      schema = "demo",
+      name = "NumberConstantJpa"
 )
-@Named("demo.EventLogEntry")
+@EntityListeners(CausewayEntityListener.class)
+@Named("demo.NumberConstantEntityJpa")
 @DomainObject
-public class EventLogEntryJpa
-extends EventLogEntry {
+@NoArgsConstructor
+public class NumberConstantJpa
+//end::class[]
+        extends NumberConstantEntity
+//tag::class[]
+{
+    // ...
+//end::class[]
+    @ObjectSupport public String title() {
+        return getName();
+    }
 
-    // -- FACTORY
-
-    public static EventLogEntryJpa of(final UiButtonEvent even) {
-        val x = new EventLogEntryJpa();
-        x.setEvent("Button clicked " + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_TIME));
-        return x;
+    @Override
+    public ComplexNumber value() {
+        return getNumber();
     }
 
     @Id
     @GeneratedValue
     private Long id;
 
-    @jakarta.persistence.Column(nullable = true)
+//tag::class[]
+    @javax.jdo.annotations.Column(allowsNull = "false")
+    @Property
+    @Getter @Setter
+    private String name;
+
+    @jakarta.persistence.Embedded                 // <.>
     @Property(editing = Editing.DISABLED)
-    @Getter(onMethod_ = {@Override}) @Setter(onMethod_ = {@Override})
-    private String event;
-
-    @jakarta.persistence.Column(nullable = true)
-    @Property(editing = Editing.ENABLED)
-    @Getter(onMethod_ = {@Override}) @Setter(onMethod_ = {@Override})
-    private Acknowledge acknowledge;
-
-    @Action
-    @ActionLayout(associateWith = "acknowledge")
-    public EventLogEntryJpa acknowledge(final Acknowledge acknowledge) {
-        setAcknowledge(acknowledge);
-        return this;
-    }
-
-
+    @Getter @Setter
+    private ComplexNumberJpa number;
 }
+//end::class[]

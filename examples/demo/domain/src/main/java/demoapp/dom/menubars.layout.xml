@@ -23,7 +23,7 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
     <mb3:primary>
 
         <mb3:menu>
-            <mb3:named>@DomainObject</mb3:named>
+            <mb3:named>Domain Objects</mb3:named>
             <mb3:section>
                 <mb3:named>@DomainObject</mb3:named>
                 <mb3:serviceAction objectType="demo.DomainObjectMenu" id="aliased"/>
@@ -48,10 +48,17 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
                 <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="tableDecorator"/>
                 <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="uiEvents"/>
             </mb3:section>
+            <mb3:section>
+                <mb3:named>Prog Model</mb3:named>
+                <mb3:serviceAction objectType="demo.MixinMenu" id="mixins"/>
+                <mb3:serviceAction objectType="demo.CompositeValueTypeMenu" id="compositeValueTypes"/>
+                <mb3:serviceAction objectType="demo.EmbeddedTypeMenuJpa" id="embeddedTypes"/>
+                <mb3:serviceAction objectType="demo.EmbeddedTypeMenuJdo" id="embeddedTypes"/>
+            </mb3:section>
         </mb3:menu>
 
         <mb3:menu>
-            <mb3:named>@Action</mb3:named>
+            <mb3:named>Actions</mb3:named>
             <mb3:section>
                 <mb3:named>@Action</mb3:named>
                 <mb3:serviceAction objectType="demo.ActionMenu" id="choicesFrom"/>
@@ -76,10 +83,17 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
                 <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="redirectPolicy"/>
                 <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="sequence"/>
             </mb3:section>
+            <mb3:section>
+                <mb3:named>Prog Model</mb3:named>
+                <mb3:serviceAction objectType="demo.AssociatedActionMenu" id="associatedActions"/>
+                <mb3:serviceAction objectType="demo.DependentArgsActionMenu" id="dependentArgsActions">
+                    <cpt:named>Dependent Arguments</cpt:named>
+                </mb3:serviceAction>
+            </mb3:section>
         </mb3:menu>
 
         <mb3:menu>
-            <mb3:named>@Property</mb3:named>
+            <mb3:named>Properties</mb3:named>
             <mb3:section>
                 <mb3:named>@Property</mb3:named>
                 <mb3:serviceAction objectType="demo.PropertyMenu" id="commandPublishing"/>
@@ -114,7 +128,7 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
         </mb3:menu>
 
         <mb3:menu>
-            <mb3:named>@Collection</mb3:named>
+            <mb3:named>Collections</mb3:named>
             <mb3:section>
                 <mb3:named>@Collection</mb3:named>
                 <mb3:serviceAction objectType="demo.CollectionMenu" id="domainEvent"/>
@@ -131,22 +145,6 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
                 <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="sequence"/>
                 <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="sortedBy"/>
                 <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="tableDecorator"/>
-            </mb3:section>
-        </mb3:menu>
-
-        <mb3:menu>
-            <mb3:named>Prog Model</mb3:named>
-            <mb3:section>
-                <mb3:named>Domain Objects</mb3:named>
-                <mb3:serviceAction objectType="demo.MixinMenu" id="mixins"/>
-                <mb3:serviceAction objectType="demo.EmbeddedTypeMenu" id="embeddedTypes"/>
-            </mb3:section>
-            <mb3:section>
-                <mb3:named>Actions</mb3:named>
-                <mb3:serviceAction objectType="demo.AssociatedActionMenu" id="associatedActions"/>
-                <mb3:serviceAction objectType="demo.DependentArgsActionMenu" id="dependentArgsActions">
-                    <cpt:named>Dependent Arguments</cpt:named>
-                </mb3:serviceAction>
             </mb3:section>
         </mb3:menu>
 

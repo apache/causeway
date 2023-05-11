@@ -1,0 +1,109 @@
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+"Value types" represent concepts that have intrinsic value and are immutable.
+They are often used to model concepts such as money, dates, addresses, and other types of measurements or quantities that have a specific value.
+
+Value types are distinct from "entity types," which represent objects with a unique identity that can change over time.
+In contrast, value types have no identity of their own, and two value objects with the same values are considered equal.
+It's also common for value types to define an algebra, where they can be combined through operations to produce new values.
+
+A composite value type has more than one data attribute.
+
+== How this demo works
+
+This page object defines a single property whose type is a value type, `ComplexNumber`, intended to model the mathematical concept of link:https://en.wikipedia.org/wiki/Complex_number[complex numbers].
+This is a composite value type, consisting of two `double` values: the _real_ part, and the _imaginary_ part.
+
+The value held by this page object can be changed using the two actions.
+These simply delegate down to the operations defined by the value type itself.
+
+
+In terms of code:
+
+* The `ComplexNumber` type is defined as:
++
+[source,java]
+.ComplexNumber.java
+----
+include::ComplexNumber.java[tags=class]
+----
+<.> Defines this as a value type to the framework
+<.> Uses lombok to define getters, a `hashCode()`, `equals()`, `toString()` and a constructor.
+<.> The two data attributes
+<.> Operations that define a simple algebra for this type.
+
+* this page object defines this as a single property:
++
+[source,java]
+.CompositeValueTypePage.java
+----
+include::CompositeValueTypePage.java[tags=class]
+----
+
+* the mixin action to add a value is:
++
+[source,java]
+.CompositeValueTypePage_addComplexNumber.java
+----
+include::CompositeValueTypePage_addComplexNumber.java[tags=class]
+----
+<.> presents two parameters; the first is a read-only copy of the value held by the page object
+<.> delegates to the `add` operation on the `ComplexNumber` value type
+<.> defaults the first parameter to that held by the page object
+<.> makes the first parameter disabled; the end-user can only enter a value for the second parameter.
++
+WARNING: the framework currently has a bug in that it doesn't prevent the end-user from editing the first parameter; being tracked with https://issues.apache.org/jira/browse/CAUSEWAY-3455[CAUSEWAY-3455].
++
+The action to subtract is similar.
+
+The framework also needs to know the structure of the value type.
+This is done by providing an implementation of a link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/value/semantics/ValueSemanticsProvider.html[ValueSemanticsProvider].
+
+* the `ValueSemanticsProvider` implementation is:
++
+[source,java]
+.ComplexNumberValueSemantics.java
+----
+include::ComplexNumberValueSemantics.java[tags=class]
+----
+<.> declares a mixin that the framework uses to present an action prompt to set the parts of the value type.
+This is discussed in more detail below.
+<.> inherits from link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/value/semantics/ValueSemanticsAbstract.html[ValueSemanticsAbstract], a convenience adapter.
+
+* its implementation of `getDefaultsProvider()` is:
++
+[source,java]
+.ComplexNumberValueSemantics.java
+----
+include::ComplexNumberValueSemantics.java[tags=getDefaultsProvider]
+----
+
+* its implementation of `compose()` and `decompose()` is:
++
+[source,java]
+.ComplexNumberValueSemantics.java
+----
+include::ComplexNumberValueSemantics.java[tags=compose]
+----
+
+* its implementation of `getRenderer()` is:
++
+[source,java]
+.ComplexNumberValueSemantics.java
+----
+include::ComplexNumberValueSemantics.java[tags=getRenderer]
+----
+
+* As noted above, the "default" mixin defines an action to set the parts of the value type.
++
+The name "default" in this context is in effect a reserved method name.
++
+[source,java]
+.ComplexNumber_default.java
+----
+include::ComplexNumber_default.java[tags=default-mixin]
+----
+<.> should always specify the `INLINE_AS_IF_EDIT` prompt style, because the prompt may be "nested" within an outer action prompt (e.g. the `addComplexNumber` action of the page object iself)
+
+

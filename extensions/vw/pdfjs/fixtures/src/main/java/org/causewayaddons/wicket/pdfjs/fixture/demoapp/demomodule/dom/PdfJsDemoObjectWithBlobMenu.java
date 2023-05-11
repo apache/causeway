@@ -39,7 +39,7 @@ import org.apache.causeway.applib.services.repository.RepositoryService;
         named = "Demo",
         menuOrder = "10.4"
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class PdfJsDemoObjectWithBlobMenu {
 

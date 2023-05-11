@@ -50,7 +50,7 @@ import demoapp.dom.domain.objects.DomainObjectLayout.named.jpa.DomainObjectLayou
 import demoapp.dom.domain.objects.DomainObjectLayout.paged.jpa.DomainObjectLayoutPagedJpa;
 import demoapp.dom.domain.objects.DomainObjectLayout.tabledec.jpa.DomainObjectLayoutTableDecoratorJpa;
 import demoapp.dom.domain.objects.DomainObjectLayout.xxxUiEvent.jpa.DomainObjectLayoutXxxUiEventJpa;
-import demoapp.dom.domain.progmodel.objects.embedded.embedded.jpa.NumberConstantJpa;
+import demoapp.dom.domain.objects.progmodel.embeddedvalues.jpa.NumberConstantJpa;
 import demoapp.dom.domain.properties.Property.commandPublishing.jpa.PropertyCommandPublishingJpa;
 import demoapp.dom.domain.properties.Property.editing.jpa.PropertyEditingJpa;
 import demoapp.dom.domain.properties.Property.executionPublishing.jpa.PropertyExecutionPublishingJpa;
