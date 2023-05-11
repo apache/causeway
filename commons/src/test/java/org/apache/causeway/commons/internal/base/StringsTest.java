@@ -373,4 +373,27 @@ class StringsTest {
         return _Strings.asLowerDashed.apply(string);
     }
 
+    // -- PREFIX/SUFFIX
+
+    @Test
+    void shouldStripIfThereIsOne() {
+        assertThat(stripLeadingSlash("/foobar"), is("foobar"));
+    }
+    @Test
+    void shouldLeaveUnchangedIfThereIsNone() {
+        assertThat(stripLeadingSlash("foobar"), is("foobar"));
+    }
+    @Test
+    void shouldConvertSolitarySlashToEmptyString() {
+        assertThat(stripLeadingSlash("/"), is(""));
+    }
+    @Test
+    void identityOnNull() {
+        assertNull(stripLeadingSlash(null));
+    }
+    private static String stripLeadingSlash(final String input) {
+        return _Strings.removePrefix(input, "/");
+    }
+
+
 }

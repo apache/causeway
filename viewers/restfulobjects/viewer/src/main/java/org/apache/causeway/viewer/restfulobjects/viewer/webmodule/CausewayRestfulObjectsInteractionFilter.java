@@ -47,7 +47,7 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.factory._InstanceUtil;
-import org.apache.causeway.core.metamodel.commons.StringExtensions;
+import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.causeway.core.webapp.modules.templresources.TemplateResourceCachingFilter;
@@ -162,7 +162,7 @@ public class CausewayRestfulObjectsInteractionFilter implements Filter {
     private List<String> passThruList = Collections.emptyList();
 
     static void redirect(final HttpServletRequest httpRequest, final HttpServletResponse httpResponse, final String redirectTo) throws IOException {
-        httpResponse.sendRedirect(StringExtensions.combinePath(httpRequest.getContextPath(), redirectTo));
+        httpResponse.sendRedirect(_Resources.combinePath(httpRequest.getContextPath(), redirectTo));
     }
 
     public enum WhenNoSession {

@@ -39,4 +39,22 @@ class EnumsTest {
         assertThat(Enums.getEnumNameFromFriendly("All Tables"), is("ALL_TABLES"));
     }
 
+    @Test
+    void enumTitle() {
+        assertThat(enumTitle("FOO"), is("Foo"));
+        assertThat(enumTitle("FOO_BAR"), is("Foo Bar"));
+    }
+    private static String enumTitle(final String enumName) {
+        return Enums.getFriendlyNameOf(enumName);
+    }
+
+    @Test
+    void enumDeTitle() {
+        assertThat(enumDeTitle("Foo"), is("FOO"));
+        assertThat(enumDeTitle("Foo Bar"), is("FOO_BAR"));
+    }
+    private static String enumDeTitle(final String enumFriendlyName) {
+        return Enums.getEnumNameFromFriendly(enumFriendlyName);
+    }
+
 }

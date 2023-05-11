@@ -48,6 +48,7 @@ import java.util.stream.StreamSupport;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal._Constants;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Bytes.BytesOperator;
 import org.apache.causeway.commons.internal.functions._Predicates;
 
@@ -409,6 +410,15 @@ public final class _Strings {
             return input;
         }
         return input + suffix;
+    }
+
+    public static @Nullable String removePrefix(final @Nullable String input, final @NonNull String prefix) {
+        if(input==null) {
+            return null;
+        }
+        return input.startsWith(prefix)
+                ? input.substring(prefix.length())
+                : input;
     }
 
     // -- REDUCTION (BINARY OPERATIOR)
@@ -847,26 +857,37 @@ public final class _Strings {
     }
 
     /**
-     * A prefix is defined
+     * Returns the name of a Java entity without any prefix. A prefix is defined
      * as the first set of lower-case letters and the name is characters from,
      * and including, the first upper case letter. If no upper case letter is
      * found then an empty string is returned.
+     *
      * <p>
      * Calling this method with the following Java names will produce these
      * results:
+     *
      * <pre>
-     * getCarRegistration  -&gt; CarRegistration
-     * CityMayor           -&gt; CityMayor
-     * isReady             -&gt; Ready
+     * getCarRegistration -&gt; CarRegistration
+     * CityMayor          -&gt; CityMayor
+     * isReady            -&gt; Ready
      * </pre>
+     *
      */
-    public static final String asPrefixDropped(final @Nullable CharSequence chars) {
-        return isNotEmpty(chars)
+    public static String baseName(final @NonNull String methodName) {
+        val asPrefixDropped = isNotEmpty(methodName)
                 ? ofCodePoints(
-                        chars.codePoints()
+                        methodName.codePoints()
                             .dropWhile(c->c != '_' && Character.isLowerCase(c)))
-                : chars!=null ? "" : null;
+                : methodName!=null ? "" : null;
+        val baseName = asPrefixDropped.isEmpty()
+                ? methodName
+                : asPrefixDropped;
+        val javaBaseName = _Strings.capitalize(baseName.trim());
+        _Assert.assertNotEmpty(javaBaseName,
+                ()->String.format("framework bug: could not create a base name from '%s'", methodName));
+        return javaBaseName;
     }
+
 
     /**
      * Within given string, converts any special UTF-8 variants of the space ' ' character to the regular one.

@@ -22,29 +22,34 @@ import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
+import org.apache.causeway.commons.internal.base._Strings;
 
 class StringUtils_StripLeadingSlashTest {
 
     @Test
-    public void shouldStripIfThereIsOne() {
-        assertThat(StringExtensions.stripLeadingSlash("/foobar"), is("foobar"));
+    void shouldStripIfThereIsOne() {
+        assertThat(stripLeadingSlash("/foobar"), is("foobar"));
     }
 
     @Test
-    public void shouldLeaveUnchangedIfThereIsNone() {
-        assertThat(StringExtensions.stripLeadingSlash("foobar"), is("foobar"));
+    void shouldLeaveUnchangedIfThereIsNone() {
+        assertThat(stripLeadingSlash("foobar"), is("foobar"));
     }
 
     @Test
-    public void shouldConvertSolitarySlashToEmptyString() {
-        assertThat(StringExtensions.stripLeadingSlash("/"), is(""));
+    void shouldConvertSolitarySlashToEmptyString() {
+        assertThat(stripLeadingSlash("/"), is(""));
     }
 
     @Test
-    public void shouldFailOnNull() {
-        assertThrows(NullPointerException.class, ()->
-            StringExtensions.stripLeadingSlash(null));
+    void identityOnNull() {
+        assertNull(stripLeadingSlash(null));
+    }
+
+    private static String stripLeadingSlash(final String input) {
+        return _Strings.removePrefix(input, "/");
     }
 
 }
