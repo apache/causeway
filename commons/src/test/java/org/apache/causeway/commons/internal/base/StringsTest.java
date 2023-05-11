@@ -29,6 +29,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.apache.causeway.commons.internal._Constants;
 
@@ -256,21 +257,21 @@ class StringsTest {
     @Test
     void composeIdentityWithNull() throws Exception {
         assertThat(
-                _Strings.operator().apply(null),
+                _Strings.StringOperator.identity().apply(null),
                 nullValue());
     }
 
     @Test
     void composeIdentity() throws Exception {
         assertThat(
-                _Strings.operator().apply(" 12 aBc"),
+                _Strings.StringOperator.identity().apply(" 12 aBc"),
                 is(" 12 aBc"));
     }
 
     @Test
     void compose2WithNull() throws Exception {
         assertThat(
-                _Strings.operator()
+                _Strings.StringOperator.identity()
                 .andThen(_Strings::lower)
                 .apply(null),
                 nullValue());
@@ -279,7 +280,7 @@ class StringsTest {
     @Test
     void compose2() throws Exception {
         assertThat(
-                _Strings.operator()
+                _Strings.StringOperator.identity()
                 .andThen(_Strings::lower)
                 .apply(" 12 aBc"),
                 is(" 12 abc"));
@@ -288,7 +289,7 @@ class StringsTest {
     @Test
     void composeOperatorSequency_LastShouldWin() throws Exception {
         assertThat(
-                _Strings.operator()
+                _Strings.StringOperator.identity()
                 .andThen(_Strings::lower)
                 .andThen(_Strings::upper)
                 .apply(" 12 aBc"),
@@ -311,14 +312,25 @@ class StringsTest {
 
     @Test
     void asNormalized() throws Exception {
-        assertThat(
-                _Strings.asNormalized
-                .apply(" 12 a B         c"),
-                is(" 12 a B c"));
+        assertNull(asNormalized(null)); // null
+        assertThat(asNormalized(""), is("")); // empty string
+        assertThat(asNormalized("yada Foobar"), is("yada Foobar")); // alreadyNormalized
+        assertThat(asNormalized("Yada\tFoobar"), is("Yada Foobar")); // tab
+        assertThat(asNormalized("Yada\t Foobar"), is("Yada Foobar")); // tab and space
+        assertThat(asNormalized("Yada  foobar"), is("Yada foobar")); // two spaces
+        assertThat(asNormalized("Yada\nfoobar"), is("Yada foobar")); // new line
+        assertThat(asNormalized("Yada\n Foobar"), is("Yada Foobar")); // newline and space
+        assertThat(asNormalized("Yada\r\n Foobar"), is("Yada Foobar")); // windows newline
+        assertThat(asNormalized("Yada\r Foobar"), is("Yada Foobar")); // mac-os newline
+        assertThat(asNormalized("Yada\r \tFoo \n\tbar  Baz"), is("Yada Foo bar Baz")); // multiple
+        assertThat(asNormalized(" 12 a B         c"), is(" 12 a B c"));
+    }
+    private String asNormalized(final String string) {
+        return _Strings.asNormalized.apply(string);
     }
 
     @Test
-    void asNaturalName2() throws Exception {
+    void asNaturalName() throws Exception {
         assertThat(
                 _Strings.asNaturalName
                 .apply("NextAvailableDate"),

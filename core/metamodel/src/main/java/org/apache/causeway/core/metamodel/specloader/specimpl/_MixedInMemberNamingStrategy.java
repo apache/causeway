@@ -33,11 +33,11 @@ class _MixedInMemberNamingStrategy {
      *              for mixin main methods
      */
     String mixinFriendlyName(final @NonNull ObjectActionDefault mixinActionAsRegular) {
-        return mixinFriendlyName(mixinActionAsRegular.getFeatureIdentifier().getClassNaturalName());
+        return mixinFriendlyName(mixinClassSimpleName(mixinActionAsRegular));
     }
 
     String mixinFriendlyName(final @NonNull String mixinClassSimpleName) {
-        return _Strings.capitalize(suffix(mixinClassSimpleName));
+        return _Strings.asCamelCase.andThen(_Strings.asNaturalName).apply(lastWord(mixinClassSimpleName));
     }
 
     /**
@@ -45,32 +45,32 @@ class _MixedInMemberNamingStrategy {
      *              for mixin main methods
      */
     String mixinMemberId(final @NonNull ObjectActionDefault mixinActionAsRegular) {
-        return mixinMemberId(mixinActionAsRegular.getFeatureIdentifier().getClassNaturalName());
+        return mixinMemberId(mixinClassSimpleName(mixinActionAsRegular));
     }
 
     String mixinMemberId(final @NonNull String mixinClassSimpleName) {
-        return _Strings.asCamelCaseDecapitalized.apply(compress(suffix(mixinClassSimpleName)));
+        return _Strings.decapitalize(lastWord(mixinClassSimpleName));
     }
 
     // -- HELPER
 
-    private static String compress(final String suffix) {
-        return suffix.replaceAll(" ", "");
+    private String mixinClassSimpleName(final ObjectActionDefault mixinActionAsRegular) {
+        return mixinActionAsRegular.getFeatureIdentifier().getLogicalType().getCorrespondingClass().getSimpleName();
     }
 
-    private static String suffix(final String mixinClassSimpleName) {
-        final String deriveFromUnderscore = derive(mixinClassSimpleName, "_");
+    private String lastWord(final String mixinClassSimpleName) {
+        final String deriveFromUnderscore = lastToken(mixinClassSimpleName, "_");
         if(!Objects.equals(mixinClassSimpleName, deriveFromUnderscore)) {
             return deriveFromUnderscore;
         }
-        final String deriveFromDollar = derive(mixinClassSimpleName, "$");
+        final String deriveFromDollar = lastToken(mixinClassSimpleName, "$");
         if(!Objects.equals(mixinClassSimpleName, deriveFromDollar)) {
             return deriveFromDollar;
         }
         return mixinClassSimpleName;
     }
 
-    private String derive(final String singularName, final String separator) {
+    private String lastToken(final String singularName, final String separator) {
         final int indexOfSeparator = singularName.lastIndexOf(separator);
         return occursNotAtEnd(singularName, indexOfSeparator)
                 ? singularName.substring(indexOfSeparator + 1)

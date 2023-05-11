@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.commons;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.applib.util.Enums;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -54,15 +52,6 @@ public final class StringExtensions {
             return "";
         }
         return extendee.substring(1);
-    }
-
-    /**
-     * Condenses any whitespace to a single character
-     *
-     * @param extendee
-     */
-    public static String normalized(final @Nullable String extendee) {
-        return _Strings.asNormalized.apply(extendee);
     }
 
     public static String removePrefix(final String extendee, final String prefix) {
@@ -137,26 +126,6 @@ public final class StringExtensions {
         _Assert.assertNotEmpty(javaBaseName,
                 ()->String.format("framework bug: could not create a base name from '%s'", javaName));
         return javaBaseName;
-    }
-
-    public static String toCamelCase(final String extendee) {
-        final String nameLower = extendee.toLowerCase();
-        final StringBuilder buf = new StringBuilder();
-        boolean capitalizeNext = false;
-        for (int i = 0; i < nameLower.length(); i++) {
-            final char ch = nameLower.charAt(i);
-            if (ch == '_') {
-                capitalizeNext = true;
-            } else {
-                if (capitalizeNext) {
-                    buf.append(Character.toUpperCase(ch));
-                } else {
-                    buf.append(ch);
-                }
-                capitalizeNext = false;
-            }
-        }
-        return buf.toString();
     }
 
 }

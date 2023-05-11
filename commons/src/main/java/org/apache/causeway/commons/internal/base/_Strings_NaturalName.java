@@ -36,13 +36,10 @@ class _Strings_NaturalName {
      *
      * @param name
      * @param handleNestedClassNames whether to handle any nested class names, eg 'Foo$Bar'
-     * @return
-     *
      */
     String naturalName(@Nullable String name, final boolean handleNestedClassNames) {
 
-        if(name==null)
-            return null;
+        if(name==null) return null;
 
         if(handleNestedClassNames) {
             // handle any nested class names, eg 'Foo$Bar'

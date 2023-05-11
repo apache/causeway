@@ -797,60 +797,49 @@ public final class _Strings {
     // -- UNARY OPERATOR COMPOSITION
 
     /**
-     * Monadic StringOperator that allows composition of unary string operators.
+     * Helper for composing of {@code UnaryOperator<String>}.
      */
-    public static final class StringOperator {
-
-        private final UnaryOperator<String> operator;
-
-        private StringOperator(final @NonNull UnaryOperator<String> operator) {
-            this.operator = operator;
+    @FunctionalInterface
+    public static interface StringOperator extends UnaryOperator<String> {
+        default StringOperator compose(final UnaryOperator<String> andThen) {
+            return str->this.andThen(andThen).apply(str);
         }
-
-        public String apply(final String input) {
-            return operator.apply(input);
+        /**
+         * Returns a unary operator that always returns its input argument.
+         */
+        static StringOperator identity() {
+            return s -> s;
         }
-
-        public StringOperator andThen(final UnaryOperator<String> andThen) {
-            return new StringOperator(s->andThen.apply(operator.apply(s)));
-        }
-
-    }
-
-    /**
-     * Returns a StringOperator that allows composition of unary string operators
-     */
-    public static StringOperator operator() {
-        return new StringOperator(UnaryOperator.identity());
     }
 
     // -- SPECIAL COMPOSITES
 
     // using naming convention asXxx...
 
-    public static final StringOperator asLowerDashed = operator()
-            .andThen(_Strings::lower)
-            .andThen(s->_Strings.condenseWhitespaces(s, "-"));
+    public static final StringOperator asLowerCase = _Strings::lower;
 
-    public static final StringOperator asNormalized = operator()
-            .andThen(s->_Strings.condenseWhitespaces(s, " "));
+    public static final StringOperator asLowerDashed = asLowerCase
+            .compose(s->_Strings.condenseWhitespaces(s, "-"));
 
-    public static final StringOperator asNaturalName = operator()
-            .andThen(s->_Strings_NaturalName.naturalName(s, true));
+    public static final StringOperator asNormalized =
+            s->_Strings.condenseWhitespaces(s, " ");
+
+    public static final StringOperator asNaturalName =
+            s->_Strings_NaturalName.naturalName(s, true);
 
     /**
      * Camel case is the practice of writing phrases without spaces or punctuation and with capitalized words.
      * The format indicates the first word starting with EITHER case,
      * then the following words having an initial uppercase letter.
      */
-    public static final StringOperator asCamelCase = operator()
-            .andThen(s->_Strings_CamelCase.camelCase(s, firstToken->firstToken));
+    public static final StringOperator asCamelCase =
+            s->_Strings_CamelCase.camelCase(s, firstToken->firstToken);
 
-    public static final StringOperator asCamelCaseDecapitalized = operator()
-            .andThen(s->_Strings_CamelCase.camelCase(s, firstToken->_Strings.decapitalize(firstToken)));
+    public static final StringOperator asCamelCaseDecapitalized =
+            s->_Strings_CamelCase.camelCase(s, firstToken->_Strings.decapitalize(firstToken));
 
-    public static final StringOperator asCamelCaseCapitalized = operator()
-            .andThen(s->_Strings_CamelCase.camelCase(s, firstToken->_Strings.capitalize(firstToken)));
+    public static final StringOperator asCamelCaseCapitalized =
+            s->_Strings_CamelCase.camelCase(s, firstToken->_Strings.capitalize(firstToken));
     public static final StringOperator asPascalCase = asCamelCaseCapitalized; // synonym
 
     public static final String asFileNameWithExtension(final @NonNull String fileName, final @NonNull String fileExtension) {
