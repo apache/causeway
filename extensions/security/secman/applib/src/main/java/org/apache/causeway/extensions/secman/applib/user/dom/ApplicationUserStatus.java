@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.extensions.secman.applib.user.dom;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.commons.internal.base._Strings;
 
 /**
@@ -38,8 +40,8 @@ public enum ApplicationUserStatus {
         return _Strings.capitalize(name());
     }
 
-    public boolean isUnlocked() {
-        return this == UNLOCKED;
+    public static boolean isUnlocked(final @Nullable ApplicationUserStatus applicationUserStatus) {
+        return applicationUserStatus == UNLOCKED;
     }
 
 }
