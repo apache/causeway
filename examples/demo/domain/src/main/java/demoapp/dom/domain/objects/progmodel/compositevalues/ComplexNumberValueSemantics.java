@@ -21,7 +21,6 @@ package demoapp.dom.domain.objects.progmodel.compositevalues;
 import javax.inject.Named;
 
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.util.schema.CommonDtoUtils;
@@ -51,13 +50,6 @@ public class ComplexNumberValueSemantics
         return ValueType.COMPOSITE;
     }
 
-// tag::getDefaultsProvider[]
-    @Override
-    public DefaultsProvider<ComplexNumber> getDefaultsProvider() {
-        return ()-> ComplexNumber.of(0, 0);
-    }
-// end::getDefaultsProvider[]
-
 // tag::compose[]
     @Override
     public ValueDecomposition decompose(final ComplexNumber value) {
@@ -78,21 +70,28 @@ public class ComplexNumberValueSemantics
     }
 // end::compose[]
 
+// tag::getDefaultsProvider[]
+    @Override
+    public DefaultsProvider<ComplexNumber> getDefaultsProvider() {
+        return ()-> ComplexNumber.of(0, 0);
+    }
+// end::getDefaultsProvider[]
+
 // tag::getRenderer[]
     @Override
     public Renderer<ComplexNumber> getRenderer() {
-        return (context, object) -> title(object, "NaN");
+        return new Renderer<>() {
+            @Override
+            public String titlePresentation(Context context, ComplexNumber object) {
+                if (object == null) return "NaN";
+                return object.getRe() +
+                        (object.getIm() >= 0
+                                ? (" + " +  object.getIm())
+                                : (" - " + (-object.getIm())))
+                        + "i";
+            }
+        };
     }
-
-    private static String title(ComplexNumber complexNumber, final String fallbackIfNull) {
-        if (complexNumber == null) return fallbackIfNull;
-        return complexNumber.getRe() +
-                (complexNumber.getIm() >= 0
-                        ? (" + " +  complexNumber.getIm())
-                        : (" - " + (-complexNumber.getIm())))
-                + "i";
-    }
-
 // end::getRenderer[]
 
 // tag::class[]
