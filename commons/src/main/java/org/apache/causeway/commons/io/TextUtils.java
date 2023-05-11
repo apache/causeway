@@ -36,6 +36,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.collections._Arrays;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -203,6 +204,67 @@ public class TextUtils {
                 }
             }
         });
+    }
+
+    // -- STRING DELIMITER
+
+    public StringDelimiter delimiter(final @NonNull String delimiter) {
+        return StringDelimiter.of(delimiter, new String[0]);
+    }
+
+    /**
+     * Holder of immutable {@link String}[] elements, that provides
+     * 'path like' composition and decomposition utilities.
+     * <p>
+     * Null or empty delimited elements are ignored.
+     */
+    @AllArgsConstructor(staticName = "of", access = AccessLevel.PRIVATE)
+    public final static class StringDelimiter {
+
+        @Getter
+        private final @NonNull String delimiter;
+        private final @NonNull String[] elements;
+
+        /**
+         * Returns a new {@link StringDelimiter} instance splitting given {@code string}
+         * into elements using {@link String} {@link #getDelimiter()} as delimiter.
+         * <p>
+         * Null or empty delimited elements are ignored.
+         * @param string - null-able
+         */
+        public StringDelimiter parse(final @Nullable String string) {
+            return new StringDelimiter(delimiter,
+                _Strings.splitThenStream(string, delimiter)
+                    .filter(_Strings::isNotEmpty)
+                    .collect(_Arrays.toArray(String.class)));
+        }
+
+        /**
+         * Streams the delimited {@link String} elements, this {@link StringDelimiter} is holding.
+         */
+        public Stream<String> stream() {
+            return elementCount()>0
+                    ? Stream.of(elements)
+                    : Stream.empty();
+        }
+
+        /**
+         * Returns a new {@link StringDelimiter} instance that has all the
+         * delimited {@link String} elements of this and given {@code other}
+         * {@link StringDelimiter} (in sequence).
+         * @param other - null-able
+         */
+        public StringDelimiter join(final @Nullable StringDelimiter other) {
+            return other!=null
+                    ? new StringDelimiter(delimiter,
+                            _Arrays.combine(this.elements, other.elements))
+                    : this;
+        }
+
+        public int elementCount() {
+            return elements.length;
+        }
+
     }
 
     // -- STRING CUTTER
