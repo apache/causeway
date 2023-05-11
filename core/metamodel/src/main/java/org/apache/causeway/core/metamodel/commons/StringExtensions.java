@@ -112,7 +112,7 @@ public final class StringExtensions {
     public static String asCamelLowerFirst(final String extendee) {
         final StringBuffer b = new StringBuffer(extendee.length());
         final StringTokenizer t = new StringTokenizer(extendee);
-        b.append(asLowerFirst(t.nextToken()));
+        b.append(_Strings.decapitalize(t.nextToken()));
         while (t.hasMoreTokens()) {
             final String token = t.nextToken();
             b.append(token.substring(0, 1).toUpperCase()); // replace spaces
@@ -127,28 +127,7 @@ public final class StringExtensions {
     }
 
     public static String asPascal(final String extendee) {
-        return capitalize(asCamel(extendee));
-    }
-
-    // ////////////////////////////////////////////////////////////
-    // capitalize, lowerFirst, firstWord
-    // ////////////////////////////////////////////////////////////
-
-    public static String capitalize(final String extendee) {
-        return _Strings.capitalize(extendee);
-    }
-
-    /**
-     * Simply forces first char to be lower case.
-     */
-    public static String asLowerFirst(final String extendee) {
-        if (_Strings.isNullOrEmpty(extendee)) {
-            return extendee;
-        }
-        if (extendee.length() == 1) {
-            return extendee.toLowerCase();
-        }
-        return extendee.substring(0, 1).toLowerCase() + extendee.substring(1);
+        return _Strings.capitalize(asCamel(extendee));
     }
 
     // ////////////////////////////////////////////////////////////
@@ -281,8 +260,6 @@ public final class StringExtensions {
     // copied in from Apache Commons
     // //////////////////////////////////////
 
-
-
     public static boolean startsWith(final String extendee, final String prefix) {
         final int length = prefix.length();
         if (length >= extendee.length()) {
@@ -323,18 +300,6 @@ public final class StringExtensions {
         _Assert.assertNotEmpty(javaBaseName,
                 ()->String.format("framework bug: could not create a base name from '%s'", javaName));
         return javaBaseName;
-    }
-
-    public static String asPluralName(final String extendee) {
-        String pluralName;
-        if (extendee.endsWith("y")) {
-            pluralName = extendee.substring(0, extendee.length() - 1) + "ies";
-        } else if (extendee.endsWith("s") || extendee.endsWith("x")) {
-            pluralName = extendee + "es";
-        } else {
-            pluralName = extendee + 's';
-        }
-        return pluralName;
     }
 
     public static String toCamelCase(final String extendee) {

@@ -30,21 +30,26 @@ class MixedInMemberNamingStrategyTest {
 
     @RequiredArgsConstructor
     enum Scenario {
-        SINGLE_UNDERSCORE("Customer_placeOrder", "placeOrder"),
-        SINGLE_DOLLAR("Customer$placeOrder", "placeOrder"),
-        EXACTLY_UNDERSCORE("_", "_"),
-        ENDS_WITH_UNDERSCORE("abc_", "abc_"),
-        HAS_NO_UNDERSCORE("defghij", "defghij"),
-        CONTAINS_MORE_THAN_ONE_UNDERSCORE("abc_def_ghi", "ghi")
+        SINGLE_UNDERSCORE("Customer_placeOrder", "placeOrder", "PlaceOrder"),
+        SINGLE_DOLLAR("Customer$placeOrder", "placeOrder", "PlaceOrder"),
+        EXACTLY_UNDERSCORE("_", "_", "_"),
+        ENDS_WITH_UNDERSCORE("abc_", "abc_", "Abc_"),
+        HAS_NO_UNDERSCORE("lock", "lock", "Lock"),
+        CONTAINS_MORE_THAN_ONE_UNDERSCORE("ApplicationUser_default_lock", "lock", "Lock")
         ;
 
         final String mixinClassSimpleName;
         final String expectedMemberId;
+        final String expectedFriendlyName;
 
         void verify() {
             assertThat(
-                    _MixedInMemberNamingStrategy.deriveMemberNameFrom(mixinClassSimpleName),
+                    _MixedInMemberNamingStrategy.mixinMemberId(mixinClassSimpleName),
                     is(expectedMemberId));
+
+            assertThat(
+                    _MixedInMemberNamingStrategy.mixinFriendlyName(mixinClassSimpleName),
+                    is(expectedFriendlyName));
         }
 
         @Override

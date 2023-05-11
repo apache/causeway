@@ -133,7 +133,7 @@ implements MixedInMember {
                 .isPresent();
 
         if(!isExplicitlyNamed) {
-            String memberName = _MixedInMemberNamingStrategy.determineNameFrom(mixinAction);
+            String memberName = _MixedInMemberNamingStrategy.mixinFriendlyName(mixinAction);
             FacetUtil.addFacet(
                     new MemberNamedFacetForStaticMemberName(memberName, facetHolder));
         }
@@ -203,7 +203,7 @@ implements MixedInMember {
                 LogicalType.eager(
                         mixeeSpec.getCorrespondingClass(),
                         mixeeSpec.getLogicalTypeName()),
-                _MixedInMemberNamingStrategy.determineIdFrom(mixinAction));
+                _MixedInMemberNamingStrategy.mixinMemberId(mixinAction));
     }
 
 }

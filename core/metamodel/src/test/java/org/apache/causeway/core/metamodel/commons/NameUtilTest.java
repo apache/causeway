@@ -55,23 +55,4 @@ class NameUtilTest {
         assertEquals("Almost Normal english sentence", StringExtensions.asNaturalName2("Almost Normal english sentence"));
     }
 
-    @Test
-    void pluralNameAdd_S() {
-        assertEquals("Cans", StringExtensions.asPluralName("Can"));
-        assertEquals("Spaces", StringExtensions.asPluralName("Space"));
-        assertEquals("Noses", StringExtensions.asPluralName("Nose"));
-    }
-
-    @Test
-    void pluralNameReplace_Y_With_IES() {
-        assertEquals("Babies", StringExtensions.asPluralName("Baby"));
-        assertEquals("Cities", StringExtensions.asPluralName("City"));
-    }
-
-    @Test
-    void pluralNameReplaceAdd_ES() {
-        assertEquals("Foxes", StringExtensions.asPluralName("Fox"));
-        assertEquals("Bosses", StringExtensions.asPluralName("Boss"));
-    }
-
 }

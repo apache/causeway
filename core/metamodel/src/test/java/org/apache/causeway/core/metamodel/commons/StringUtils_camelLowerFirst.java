@@ -26,7 +26,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 class StringUtils_camelLowerFirst {
 
     @Test
-    public void asLowerCase() {
+    void camelLowerFirst() {
         assertThat(StringExtensions.asCamelLowerFirst("An Upper Case"), is("anUpperCase"));
         assertThat(StringExtensions.asCamelLowerFirst("a Lower Case"), is("aLowerCase"));
         assertThat(StringExtensions.asCamelLowerFirst("AnUpperCase"), is("anUpperCase"));
