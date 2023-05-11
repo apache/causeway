@@ -32,6 +32,11 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 class _Strings_CamelCase {
 
+    /**
+     * Camel case is the practice of writing phrases without spaces or punctuation and with capitalized words.
+     * The format indicates the first word starting with EITHER case,
+     * then the following words having an initial uppercase letter.
+     */
     @Nullable
     String camelCase(final @Nullable String input, final UnaryOperator<String> firstTokenMapper) {
 
@@ -39,7 +44,7 @@ class _Strings_CamelCase {
         if(input.length()==0) return input;
 
         val sb = new StringBuffer(input.length());
-        val tokenizer = new StringTokenizer(input);
+        val tokenizer = new StringTokenizer(input, " \t\n\r\f._,:;");
         int tokenCount = 0;
 
         while (tokenizer.hasMoreTokens()) {

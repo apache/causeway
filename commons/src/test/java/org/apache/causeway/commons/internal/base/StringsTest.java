@@ -326,6 +326,19 @@ class StringsTest {
     }
 
     @Test
+    void asCamelCase() {
+        assertThat(asCamelCase("An Upper Case"), is("AnUpperCase"));
+        assertThat(asCamelCase("An_Upper.Case"), is("AnUpperCase"));
+        assertThat(asCamelCase("a Lower Case"), is("aLowerCase"));
+        assertThat(asCamelCase("a_Lower.Case"), is("aLowerCase"));
+        // special use-case in org.apache.causeway.viewer.commons.model.components.UiComponentType#getId()
+        assertThat(asCamelCase("OBJECT_EDIT".toLowerCase()), is("objectEdit"));
+    }
+    private String asCamelCase(final String string) {
+        return _Strings.asCamelCase.apply(string);
+    }
+
+    @Test
     void asCamelCaseDecapitalized() {
         assertThat(asCamelCaseDecapitalized("An Upper Case"), is("anUpperCase"));
         assertThat(asCamelCaseDecapitalized("a Lower Case"), is("aLowerCase"));

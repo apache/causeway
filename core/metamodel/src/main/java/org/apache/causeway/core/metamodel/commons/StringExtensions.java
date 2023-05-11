@@ -18,10 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.commons;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.util.Enums;
@@ -33,69 +29,6 @@ import lombok.NonNull;
 import lombok.val;
 
 public final class StringExtensions {
-
-    // ////////////////////////////////////////////////////////////
-    // in, combinePaths, splitOnCommas
-    // ////////////////////////////////////////////////////////////
-
-    public static boolean in(final String extendee, final String[] strings) {
-        for (final String strCandidate : strings) {
-            if (strCandidate.equals(extendee)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static List<String> splitOnCommas(final String commaSeparatedExtendee) {
-        if (commaSeparatedExtendee == null) {
-            return null;
-        }
-        final String removeLeadingWhiteSpace = removeLeadingWhiteSpace(commaSeparatedExtendee);
-        // special handling
-        if (removeLeadingWhiteSpace.length() == 0) {
-            return Collections.emptyList();
-        }
-        final String[] splitAsArray = removeLeadingWhiteSpace.split("\\W*,\\W*");
-        return Arrays.asList(splitAsArray);
-    }
-
-
-    private static final char CARRIAGE_RETURN = '\n';
-    private static final char LINE_FEED = '\r';
-
-    /**
-     * Converts any <tt>\n</tt> to <tt>line.separator</tt>
-     *
-     * @param extendee
-     */
-    public static String lineSeparated(final String extendee) {
-        final StringBuilder buf = new StringBuilder();
-        final String lineSeparator = System.getProperty("line.separator");
-        boolean lastWasLineFeed = false;
-        for (final char c : extendee.toCharArray()) {
-            final boolean isLineFeed = c == LINE_FEED;
-            final boolean isCarriageReturn = c == CARRIAGE_RETURN;
-            if (isCarriageReturn) {
-                buf.append(lineSeparator);
-                lastWasLineFeed = false;
-            } else {
-                if (lastWasLineFeed) {
-                    buf.append(LINE_FEED);
-                }
-                if (isLineFeed) {
-                    lastWasLineFeed = true;
-                } else {
-                    buf.append(c);
-                    lastWasLineFeed = false;
-                }
-            }
-        }
-        if (lastWasLineFeed) {
-            buf.append(LINE_FEED);
-        }
-        return buf.toString();
-    }
 
     // ////////////////////////////////////////////////////////////
     // removeTabs, removeLeadingWhiteSpace, stripLeadingSlash, stripNewLines,
