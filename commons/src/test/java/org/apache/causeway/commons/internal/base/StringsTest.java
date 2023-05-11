@@ -310,14 +310,6 @@ class StringsTest {
     // -- SPECIAL COMPOSITES
 
     @Test
-    void asLowerDashed() throws Exception {
-        assertThat(
-                _Strings.asLowerDashed
-                .apply(" 12    aBc"),
-                is("-12-abc"));
-    }
-
-    @Test
     void asNormalized() throws Exception {
         assertThat(
                 _Strings.asNormalized
@@ -331,6 +323,29 @@ class StringsTest {
                 _Strings.asNaturalName
                 .apply("NextAvailableDate"),
                 is("Next Available Date"));
+    }
+
+    @Test
+    void asCamelCaseDecapitalized() {
+        assertThat(asCamelCaseDecapitalized("An Upper Case"), is("anUpperCase"));
+        assertThat(asCamelCaseDecapitalized("a Lower Case"), is("aLowerCase"));
+        assertThat(asCamelCaseDecapitalized("AnUpperCase"), is("anUpperCase"));
+        assertThat(asCamelCaseDecapitalized("aLowerCase"), is("aLowerCase"));
+        assertThat(asCamelCaseDecapitalized("a  Lower  Case"), is("aLowerCase"));
+    }
+    private String asCamelCaseDecapitalized(final String string) {
+        return _Strings.asCamelCaseDecapitalized.apply(string);
+    }
+
+    @Test
+    void asLowerDashed() {
+        assertThat(asLowerDashed(" 12    aBc"), is("-12-abc"));
+        assertThat(asLowerDashed("An Upper Case"), is("an-upper-case"));
+        assertThat(asLowerDashed("An   Upper   Case"), is("an-upper-case"));
+        assertThat(asLowerDashed("An\nUpper\tCase"), is("an-upper-case"));
+    }
+    private String asLowerDashed(final String string) {
+        return _Strings.asLowerDashed.apply(string);
     }
 
 }

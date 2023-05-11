@@ -26,7 +26,7 @@ import lombok.experimental.UtilityClass;
  * package private utility for {@link _Strings}
  */
 @UtilityClass
-class _Strings_NaturalNames {
+class _Strings_NaturalName {
 
     private static final char SPACE = ' ';
     /**

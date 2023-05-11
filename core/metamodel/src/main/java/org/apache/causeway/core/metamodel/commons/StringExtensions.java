@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.commons;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import org.springframework.lang.Nullable;
 
@@ -34,48 +33,6 @@ import lombok.NonNull;
 import lombok.val;
 
 public final class StringExtensions {
-
-    private StringExtensions() {}
-
-    // ////////////////////////////////////////////////////////////
-    // naturalName, naturalize, simpleName, camel, memberIdFor
-    // ////////////////////////////////////////////////////////////
-
-    public static String asCamel(final String extendee) {
-        final StringBuffer b = new StringBuffer(extendee.length());
-        final StringTokenizer t = new StringTokenizer(extendee);
-        b.append(t.nextToken());
-        while (t.hasMoreTokens()) {
-            final String token = t.nextToken();
-            b.append(token.substring(0, 1).toUpperCase()); // replace spaces
-            // with
-            // camelCase
-            b.append(token.substring(1));
-        }
-        return b.toString();
-    }
-
-    // TODO: combine with camel
-    public static String asCamelLowerFirst(final String extendee) {
-        final StringBuffer b = new StringBuffer(extendee.length());
-        final StringTokenizer t = new StringTokenizer(extendee);
-        b.append(_Strings.decapitalize(t.nextToken()));
-        while (t.hasMoreTokens()) {
-            final String token = t.nextToken();
-            b.append(token.substring(0, 1).toUpperCase()); // replace spaces
-            // with camelCase
-            b.append(token.substring(1).toLowerCase());
-        }
-        return b.toString();
-    }
-
-    public static String asLowerDashed(final String extendee) {
-        return _Strings.asLowerDashed.apply(extendee);
-    }
-
-    public static String asPascal(final String extendee) {
-        return _Strings.capitalize(asCamel(extendee));
-    }
 
     // ////////////////////////////////////////////////////////////
     // in, combinePaths, splitOnCommas

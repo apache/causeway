@@ -24,11 +24,11 @@ import java.util.List;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
-import org.apache.causeway.core.metamodel.commons.StringExtensions;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -129,7 +129,7 @@ extends TypedHolderAbstract {
             final Class<?> declaringType,
             final String propertyName) {
         try {
-            final Method method = declaringType.getMethod("set" + StringExtensions.asPascal(propertyName), String.class);
+            final Method method = declaringType.getMethod("set" + _Strings.asPascalCase.apply(propertyName), String.class);
             return FacetedMethod.createForProperty(mmc, declaringType, method);
         } catch (final SecurityException | NoSuchMethodException e) {
             throw new RuntimeException(e);
@@ -141,7 +141,7 @@ extends TypedHolderAbstract {
             final Class<?> declaringType,
             final String propertyName) {
         try {
-            final Method method = declaringType.getMethod("get" + StringExtensions.asPascal(propertyName));
+            final Method method = declaringType.getMethod("get" + _Strings.asPascalCase.apply(propertyName));
             return FacetedMethod.createForProperty(mmc, declaringType, method);
         } catch (final SecurityException | NoSuchMethodException e) {
             throw new RuntimeException(e);
@@ -156,7 +156,7 @@ extends TypedHolderAbstract {
             final Class<?> declaringType,
             final String collectionName) {
         try {
-            final Method method = declaringType.getMethod("get" + StringExtensions.asPascal(collectionName));
+            final Method method = declaringType.getMethod("get" + _Strings.asPascalCase.apply(collectionName));
             return FacetedMethod.createForCollection(mmc, declaringType, method);
         } catch (final SecurityException | NoSuchMethodException e) {
             throw new RuntimeException(e);

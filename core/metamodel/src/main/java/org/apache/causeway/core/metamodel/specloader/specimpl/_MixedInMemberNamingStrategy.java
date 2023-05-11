@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.specloader.specimpl;
 import java.util.Objects;
 
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.metamodel.commons.StringExtensions;
 
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -50,7 +49,7 @@ class _MixedInMemberNamingStrategy {
     }
 
     String mixinMemberId(final @NonNull String mixinClassSimpleName) {
-        return StringExtensions.asCamelLowerFirst(compress(suffix(mixinClassSimpleName)));
+        return _Strings.asCamelCaseDecapitalized.apply(compress(suffix(mixinClassSimpleName)));
     }
 
     // -- HELPER

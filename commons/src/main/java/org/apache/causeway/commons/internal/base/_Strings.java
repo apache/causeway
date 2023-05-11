@@ -836,8 +836,22 @@ public final class _Strings {
             .andThen(s->_Strings.condenseWhitespaces(s, " "));
 
     public static final StringOperator asNaturalName = operator()
-            .andThen(s->_Strings_NaturalNames.naturalName(s, true));
+            .andThen(s->_Strings_NaturalName.naturalName(s, true));
 
+    /**
+     * Camel case is the practice of writing phrases without spaces or punctuation and with capitalized words.
+     * The format indicates the first word starting with EITHER case,
+     * then the following words having an initial uppercase letter.
+     */
+    public static final StringOperator asCamelCase = operator()
+            .andThen(s->_Strings_CamelCase.camelCase(s, firstToken->firstToken));
+
+    public static final StringOperator asCamelCaseDecapitalized = operator()
+            .andThen(s->_Strings_CamelCase.camelCase(s, firstToken->_Strings.decapitalize(firstToken)));
+
+    public static final StringOperator asCamelCaseCapitalized = operator()
+            .andThen(s->_Strings_CamelCase.camelCase(s, firstToken->_Strings.capitalize(firstToken)));
+    public static final StringOperator asPascalCase = asCamelCaseCapitalized; // synonym
 
     public static final String asFileNameWithExtension(final @NonNull String fileName, final @NonNull String fileExtension) {
         return suffix(fileName, prefix(fileExtension, "."));
