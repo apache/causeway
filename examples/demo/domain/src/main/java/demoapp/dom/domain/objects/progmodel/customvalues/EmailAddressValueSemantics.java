@@ -22,7 +22,7 @@ import lombok.NonNull;
 
 import java.util.regex.Pattern;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.services.bookmark.IdStringifier;
 import org.apache.causeway.applib.value.semantics.Parser;
