@@ -208,6 +208,17 @@ public class TextUtils {
         });
     }
 
+    // -- SPECIAL FORMS
+
+    /**
+     * Returns a word spaced version of the specified name, so there are spaces
+     * between the words, where each word starts with a capital letter. E.g.,
+     * "NextAvailableDate" is returned as "Next Available Date".
+     */
+    public String asNaturalName(final String name) {
+        return _Strings.asNaturalName.apply(name);
+    }
+
     // -- STRING DELIMITER
 
     public StringDelimiter delimiter(final @NonNull String delimiter) {

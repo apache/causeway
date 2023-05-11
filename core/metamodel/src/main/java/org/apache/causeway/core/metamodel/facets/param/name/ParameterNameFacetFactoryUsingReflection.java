@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.core.metamodel.commons.StringExtensions;
+import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -63,7 +63,7 @@ extends FacetFactoryAbstract {
             return;
         }
 
-        val naturalName = StringExtensions.asNaturalName2(parameterName);
+        val naturalName = TextUtils.asNaturalName(parameterName);
         val facetHolder = processParameterContext.getFacetHolder();
 
         FacetUtil.addFacet(

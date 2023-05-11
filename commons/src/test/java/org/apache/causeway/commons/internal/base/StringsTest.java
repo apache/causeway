@@ -328,10 +328,9 @@ class StringsTest {
     @Test
     void asNaturalName2() throws Exception {
         assertThat(
-                _Strings.asNaturalName2
+                _Strings.asNaturalName
                 .apply("NextAvailableDate"),
                 is("Next Available Date"));
     }
-
 
 }

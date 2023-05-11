@@ -39,7 +39,7 @@ class _Strings_NaturalNames {
      * @return
      *
      */
-    String naturalName2(@Nullable String name, final boolean handleNestedClassNames) {
+    String naturalName(@Nullable String name, final boolean handleNestedClassNames) {
 
         if(name==null)
             return null;

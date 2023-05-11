@@ -16,43 +16,45 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.commons;
+package org.apache.causeway.commons.util;
 
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class NameUtilTest {
+import org.apache.causeway.commons.io.TextUtils;
+
+class StringSpecialFormsTest {
 
     @Test
     void naturalNameAddsSpacesToCamelCaseWords() {
-        assertEquals("Camel Case Word", StringExtensions.asNaturalName2("CamelCaseWord"));
+        assertEquals("Camel Case Word", TextUtils.asNaturalName("CamelCaseWord"));
     }
 
     @Test
     void naturalNameAddsSpacesBeforeNumbers() {
-        assertEquals("One 2 One", StringExtensions.asNaturalName2("One2One"));
-        assertEquals("Type 123", StringExtensions.asNaturalName2("Type123"));
-        assertEquals("4321 Go", StringExtensions.asNaturalName2("4321Go"));
+        assertEquals("One 2 One", TextUtils.asNaturalName("One2One"));
+        assertEquals("Type 123", TextUtils.asNaturalName("Type123"));
+        assertEquals("4321 Go", TextUtils.asNaturalName("4321Go"));
     }
 
     @Test
     void naturalNameRecognisesAcronymns() {
-        assertEquals("TNT Power", StringExtensions.asNaturalName2("TNTPower"));
-        assertEquals("Spam RAM Can", StringExtensions.asNaturalName2("SpamRAMCan"));
-        assertEquals("DOB", StringExtensions.asNaturalName2("DOB"));
+        assertEquals("TNT Power", TextUtils.asNaturalName("TNTPower"));
+        assertEquals("Spam RAM Can", TextUtils.asNaturalName("SpamRAMCan"));
+        assertEquals("DOB", TextUtils.asNaturalName("DOB"));
     }
 
     @Test
     void naturalNameWithShortNames() {
-        assertEquals("At", StringExtensions.asNaturalName2("At"));
-        assertEquals("I", StringExtensions.asNaturalName2("I"));
+        assertEquals("At", TextUtils.asNaturalName("At"));
+        assertEquals("I", TextUtils.asNaturalName("I"));
     }
 
     @Test
     void naturalNameNoChange() {
-        assertEquals("Camel Case Word", StringExtensions.asNaturalName2("CamelCaseWord"));
-        assertEquals("Almost Normal english sentence", StringExtensions.asNaturalName2("Almost Normal english sentence"));
+        assertEquals("Camel Case Word", TextUtils.asNaturalName("CamelCaseWord"));
+        assertEquals("Almost Normal english sentence", TextUtils.asNaturalName("Almost Normal english sentence"));
     }
 
 }

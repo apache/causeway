@@ -25,7 +25,6 @@ import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.io.TextUtils;
-import org.apache.causeway.core.metamodel.commons.StringExtensions;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -47,7 +46,7 @@ import lombok.experimental.UtilityClass;
 public class IdentifierUtil {
 
     public String targetClassNameFor(final ObjectSpecification spec) {
-        return StringExtensions.asNaturalName2(spec.getSingularName());
+        return TextUtils.asNaturalName(spec.getSingularName());
     }
 
     /**

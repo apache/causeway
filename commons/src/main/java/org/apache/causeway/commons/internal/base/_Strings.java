@@ -835,8 +835,8 @@ public final class _Strings {
     public static final StringOperator asNormalized = operator()
             .andThen(s->_Strings.condenseWhitespaces(s, " "));
 
-    public static final StringOperator asNaturalName2 = operator()
-            .andThen(s->_Strings_NaturalNames.naturalName2(s, true));
+    public static final StringOperator asNaturalName = operator()
+            .andThen(s->_Strings_NaturalNames.naturalName(s, true));
 
 
     public static final String asFileNameWithExtension(final @NonNull String fileName, final @NonNull String fileExtension) {

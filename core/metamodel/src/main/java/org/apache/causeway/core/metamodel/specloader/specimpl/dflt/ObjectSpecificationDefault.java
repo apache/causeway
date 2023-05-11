@@ -39,8 +39,8 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.commons.internal.reflection._Reflect;
+import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
-import org.apache.causeway.core.metamodel.commons.StringExtensions;
 import org.apache.causeway.core.metamodel.commons.ToString;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -189,7 +189,7 @@ implements FacetHolder {
     private void addNamedFacetIfRequired() {
         if (getFacet(MemberNamedFacet.class) == null) {
             addFacet(new MemberNamedFacetForStaticMemberName(
-                    StringExtensions.asNaturalName2(getShortIdentifier()),
+                    TextUtils.asNaturalName(getShortIdentifier()),
                     this));
         }
     }

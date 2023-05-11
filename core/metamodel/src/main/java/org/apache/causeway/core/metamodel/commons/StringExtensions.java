@@ -41,59 +41,6 @@ public final class StringExtensions {
     // naturalName, naturalize, simpleName, camel, memberIdFor
     // ////////////////////////////////////////////////////////////
 
-    /**
-     * Returns a word spaced version of the specified name, so there are spaces
-     * between the words, where each word starts with a capital letter. E.g.,
-     * "NextAvailableDate" is returned as "Next Available Date".
-     */
-    public static String asNaturalName2(final String name) {
-        return _Strings.asNaturalName2.apply(name);
-    }
-
-    public static String asNaturalName(final String extendee) {
-
-        int pos = 0;
-
-        // find first upper case character
-        while ((pos < extendee.length()) && Character.isLowerCase(extendee.charAt(pos))) {
-            pos++;
-        }
-
-        if (pos == extendee.length()) {
-            return "invalid name";
-        }
-        return naturalized(extendee, pos);
-    }
-
-    public static String asNaturalized(final String extendee) {
-        return naturalized(extendee, 0);
-    }
-
-    private static String naturalized(final String name, final int startingPosition) {
-        if (name.length() <= startingPosition) {
-            throw new IllegalArgumentException("string shorter than starting position provided");
-        }
-        final StringBuffer s = new StringBuffer(name.length() - startingPosition);
-        for (int j = startingPosition; j < name.length(); j++) { // process
-            // english name
-            // - add spaces
-            if ((j > startingPosition) && isStartOfNewWord(name.charAt(j), name.charAt(j - 1))) {
-                s.append(' ');
-            }
-            if (j == startingPosition) {
-                s.append(Character.toUpperCase(name.charAt(j)));
-            } else {
-                s.append(name.charAt(j));
-            }
-        }
-        final String str = s.toString();
-        return str;
-    }
-
-    private static boolean isStartOfNewWord(final char c, final char previousChar) {
-        return Character.isUpperCase(c) || Character.isDigit(c) && !Character.isDigit(previousChar);
-    }
-
     public static String asCamel(final String extendee) {
         final StringBuffer b = new StringBuffer(extendee.length());
         final StringTokenizer t = new StringTokenizer(extendee);
