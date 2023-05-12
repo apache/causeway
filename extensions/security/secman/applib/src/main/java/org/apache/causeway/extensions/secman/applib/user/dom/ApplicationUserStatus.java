@@ -18,7 +18,9 @@
  */
 package org.apache.causeway.extensions.secman.applib.user.dom;
 
-import org.apache.causeway.core.metamodel.commons.StringExtensions;
+import org.springframework.lang.Nullable;
+
+import org.apache.causeway.commons.internal.base._Strings;
 
 /**
  * Whether the user's account is locked or unlocked.
@@ -35,11 +37,25 @@ public enum ApplicationUserStatus {
 
     @Override
     public String toString() {
-        return StringExtensions.capitalize(name());
+        return _Strings.capitalize(name());
     }
 
-    public boolean isUnlocked() {
-        return this == UNLOCKED;
+    public static boolean isUnlocked(final @Nullable ApplicationUserStatus status) {
+        return status == UNLOCKED;
+    }
+
+    public static boolean isLockedOrUnspecified(final @Nullable ApplicationUserStatus status) {
+        return !isUnlocked(status);
+    }
+
+    /** Whether can transition to state LOCKED. That is, YES if not already at that state. */
+    public static boolean canLock(final @Nullable ApplicationUserStatus status) {
+        return status != ApplicationUserStatus.LOCKED;
+    }
+
+    /** Whether can transition to state UNLOCKED. That is, YES if not already at that state. */
+    public static boolean canUnlock(final @Nullable ApplicationUserStatus status) {
+        return status != ApplicationUserStatus.UNLOCKED;
     }
 
 }

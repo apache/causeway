@@ -21,7 +21,7 @@ package org.apache.causeway.viewer.commons.model.components;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Optionality;
-import org.apache.causeway.core.metamodel.commons.StringExtensions;
+import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -169,13 +169,13 @@ public enum UiComponentType {
 
     /**
      * Returns the {@link #name()} formatted as
-     * {@link StringExtensions#toCamelCase(String) case}.
+     * {@link _Strings#asCamelCase case}.
      *
      * <p>
      * For example, <tt>OBJECT_EDIT</tt> becomes <tt>objectEdit</tt>.
      */
     public String getId() {
-        return StringExtensions.toCamelCase(name());
+        return _Strings.asCamelCase.apply(_Strings.lower(name()));
     }
 
     /**

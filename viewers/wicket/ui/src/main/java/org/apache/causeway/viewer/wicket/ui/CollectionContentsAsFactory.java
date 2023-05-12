@@ -20,7 +20,7 @@ package org.apache.causeway.viewer.wicket.ui;
 
 import org.apache.wicket.model.IModel;
 
-import org.apache.causeway.core.metamodel.commons.StringExtensions;
+import org.apache.causeway.commons.internal.base._Strings;
 
 /**
  * <p>
@@ -31,7 +31,7 @@ import org.apache.causeway.core.metamodel.commons.StringExtensions;
  * <p>
  * If the {@link org.apache.causeway.viewer.wicket.ui.ComponentFactory} doesn't implement this interface or the implementation
  * of any of its methods return {@code null} then {@link ComponentFactory#getName()} will be used as title and its
- * {@link StringExtensions#asLowerDashed(java.lang.String) dashed representation}
+ * {@link _Strings#asLowerDashed dashed representation}
  * as CSS class for the optional image.
  * </p>
  */

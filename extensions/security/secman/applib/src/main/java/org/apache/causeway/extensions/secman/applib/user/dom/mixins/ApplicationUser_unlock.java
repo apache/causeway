@@ -56,7 +56,9 @@ public class ApplicationUser_unlock {
     }
 
     @MemberSupport public String disableAct() {
-        return target.getStatus() == ApplicationUserStatus.UNLOCKED ? "Status is already set to UNLOCKED": null;
+        return ApplicationUserStatus.canUnlock(target.getStatus())
+                ? null
+                : "Status is already set to UNLOCKED";
     }
 
 }

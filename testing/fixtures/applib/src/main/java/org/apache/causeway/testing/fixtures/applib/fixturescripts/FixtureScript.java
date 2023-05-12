@@ -101,7 +101,7 @@ public abstract class FixtureScript {
     }
 
     protected String friendlyNameElseDerived(final String str) {
-        return str != null ? str : _Strings.asNaturalName2.apply(getClass().getSimpleName());
+        return str != null ? str : _Strings.asNaturalName.apply(getClass().getSimpleName());
     }
 
 

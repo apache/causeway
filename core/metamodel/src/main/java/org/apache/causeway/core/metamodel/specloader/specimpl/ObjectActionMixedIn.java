@@ -94,7 +94,7 @@ implements MixedInMember {
                     LogicalType.eager(
                             mixeeSpec.getCorrespondingClass(),
                             mixeeSpec.getLogicalTypeName()),
-                    _MixedInMemberNamingStrategy.determineIdFrom(mixinAction),
+                    _MixedInMemberNamingStrategy.mixinMemberId(mixinAction),
                     mixinAction.getFacetedMethod().getFeatureIdentifier().getMemberParameterClassNames()),
                 mixinAction.getFacetedMethod(), false, false);
 
@@ -111,7 +111,7 @@ implements MixedInMember {
                 .isPresent();
 
         if(!isExplicitlyNamed) {
-            val memberName = _MixedInMemberNamingStrategy.determineNameFrom(mixinAction);
+            val memberName = _MixedInMemberNamingStrategy.mixinFriendlyName(mixinAction);
             this.addFacet(
                     new MemberNamedFacetForStaticMemberName(memberName, facetHolder));
         }

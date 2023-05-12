@@ -765,7 +765,7 @@ public final class ProgrammingModelConstants {
                 return _Strings.capitalize(methodName);
             }
             // must be a getter
-            return _Strings.capitalize(_Strings.asPrefixDropped(methodName));
+            return _Strings.baseName(methodName);
         }
         // must be a field then
         return _Strings.capitalize(member.getName());

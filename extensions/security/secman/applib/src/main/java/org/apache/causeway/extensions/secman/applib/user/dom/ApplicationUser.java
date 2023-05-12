@@ -145,7 +145,7 @@ public abstract class ApplicationUser
         return getName();
     }
     @ObjectSupport public String iconName() {
-        return getStatus().isUnlocked() ? "unlocked" : "locked";
+        return ApplicationUserStatus.isUnlocked(getStatus()) ? "unlocked" : "locked";
     }
 
 

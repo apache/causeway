@@ -26,7 +26,7 @@ import lombok.experimental.UtilityClass;
  * package private utility for {@link _Strings}
  */
 @UtilityClass
-class _Strings_NaturalNames {
+class _Strings_NaturalName {
 
     private static final char SPACE = ' ';
     /**
@@ -36,13 +36,10 @@ class _Strings_NaturalNames {
      *
      * @param name
      * @param handleNestedClassNames whether to handle any nested class names, eg 'Foo$Bar'
-     * @return
-     *
      */
-    String naturalName2(@Nullable String name, final boolean handleNestedClassNames) {
+    String naturalName(@Nullable String name, final boolean handleNestedClassNames) {
 
-        if(name==null)
-            return null;
+        if(name==null) return null;
 
         if(handleNestedClassNames) {
             // handle any nested class names, eg 'Foo$Bar'

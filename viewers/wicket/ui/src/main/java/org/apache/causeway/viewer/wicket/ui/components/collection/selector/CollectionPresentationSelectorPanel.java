@@ -28,7 +28,7 @@ import org.apache.wicket.markup.html.link.DownloadLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import org.apache.causeway.core.metamodel.commons.StringExtensions;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.hints.CausewaySelectorEvent;
@@ -183,7 +183,7 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
         }
         if (cssClass == null) {
             String name = componentFactory.getName();
-            cssClass = Model.of(StringExtensions.asLowerDashed(name));
+            cssClass = Model.of(_Strings.asLowerDashed.apply(name));
             // Small hack: if there is no specific CSS class then we assume that background-image is used
             // the span.ViewItemLink should have some content to show it
             // FIX: find a way to do this with CSS (width and height don't seems to help)

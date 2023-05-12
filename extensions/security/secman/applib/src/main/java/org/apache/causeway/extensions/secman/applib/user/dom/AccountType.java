@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.extensions.secman.applib.user.dom;
 
-import org.apache.causeway.core.metamodel.commons.StringExtensions;
+import org.apache.causeway.commons.internal.base._Strings;
 
 /**
  * Whether the user's account is local enabled (user/password) or
@@ -41,7 +41,7 @@ public enum AccountType {
 
     @Override
     public String toString() {
-        return StringExtensions.capitalize(name());
+        return _Strings.capitalize(name());
     }
 
 }

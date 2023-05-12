@@ -24,8 +24,8 @@ import java.lang.reflect.Method;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
-import org.apache.causeway.core.metamodel.commons.StringExtensions;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
 
 /**
@@ -123,7 +123,7 @@ public enum FeatureType {
     private static Identifier propertyIdentifierFor(
             final LogicalType typeIdentifier,
             final Method method) {
-        final String capitalizedName = StringExtensions.asJavaBaseName(method.getName());
+        final String capitalizedName = _Strings.baseName(method.getName());
         final String beanName = Introspector.decapitalize(capitalizedName);
         return Identifier.propertyIdentifier(typeIdentifier, beanName);
     }
@@ -131,7 +131,7 @@ public enum FeatureType {
     private static Identifier collectionIdentifierFor(
             final LogicalType typeIdentifier,
             final Method method) {
-        final String capitalizedName = StringExtensions.asJavaBaseName(method.getName());
+        final String capitalizedName = _Strings.baseName(method.getName());
         final String beanName = Introspector.decapitalize(capitalizedName);
         return Identifier.collectionIdentifier(typeIdentifier, beanName);
     }
