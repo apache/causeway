@@ -23,6 +23,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.command.Command;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
@@ -46,7 +47,7 @@ import lombok.experimental.UtilityClass;
 public class IdentifierUtil {
 
     public String targetClassNameFor(final ObjectSpecification spec) {
-        return TextUtils.asNaturalName(spec.getSingularName());
+        return _Strings.asNaturalName.apply(spec.getSingularName());
     }
 
     /**

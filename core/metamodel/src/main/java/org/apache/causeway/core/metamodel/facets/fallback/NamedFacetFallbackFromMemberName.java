@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.fallback;
 
-import org.apache.causeway.commons.io.TextUtils;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
 
@@ -27,7 +27,7 @@ extends MemberNamedFacetForStaticMemberName {
 
     public NamedFacetFallbackFromMemberName(final FacetHolder holder) {
         super(
-                TextUtils.asNaturalName(holder.getFeatureIdentifier().getMemberLogicalName()),
+                _Strings.asNaturalName.apply(holder.getFeatureIdentifier().getMemberLogicalName()),
                 holder,
                 Precedence.FALLBACK);
     }
