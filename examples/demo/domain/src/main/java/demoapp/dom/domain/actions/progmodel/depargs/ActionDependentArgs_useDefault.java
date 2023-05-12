@@ -18,10 +18,6 @@
  */
 package demoapp.dom.domain.actions.progmodel.depargs;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -29,78 +25,65 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
+import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.PromptStyle;
-import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.message.MessageService;
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.collections._Lists;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.val;
 import lombok.experimental.Accessors;
 
-@Action(semantics = SemanticsOf.SAFE)
-@ActionLayout(
-        named="MultiChoices",
-        promptStyle = PromptStyle.DIALOG_MODAL)
+@ActionLayout(named="Default", promptStyle = PromptStyle.DIALOG_MODAL)
+@Action
 @RequiredArgsConstructor
-public class DependentArgsActionDemo_useChoices2 {
+public class ActionDependentArgs_useDefault {
 
     @Inject MessageService messageService;
 
-    private final DependentArgsActionDemo holder;
+    private final ActionDependentArgsPage mixee;
 
     @Value @Accessors(fluent = true) // fluent so we can replace this with Java(14+) records later
     static class Parameters {
-        List<Parity> parities;
-        List<DemoItem> items;
+        Parity parity;
+        String message;
     }
 
-    @MemberSupport public DependentArgsActionDemo act(
+    public ActionDependentArgsPage act(
 
             // PARAM 0
-            @Parameter(optionality = Optionality.MANDATORY)
-            List<Parity> parities,
+            @Parameter(optionality = Optionality.MANDATORY) final
+            Parity parity,
 
             // PARAM 1
             @Parameter(optionality = Optionality.MANDATORY)
-            List<DemoItem> items
+            @ParameterLayout(named = "Message") final
+            String message
 
             ) {
 
-        _NullSafe.stream(items)
-        .forEach(item->messageService.informUser(item.getName()));
-
-        return holder;
+        messageService.informUser(message);
+        return mixee;
     }
 
-    // -- PARAM 0 (Parities)
+    // -- PARAM 0 (Parity)
 
-    @MemberSupport public List<Parity> defaultParities(Parameters params) {
-        return _Lists.of(holder.getDialogParityDefault());
+    @MemberSupport public Parity defaultParity(final Parameters params) {
+
+        return mixee.getDialogParityDefault();
     }
 
-    // -- PARAM 1 (DemoItem)
+    // -- PARAM 1 (String message)
 
-    @MemberSupport public List<DemoItem> defaultItems(Parameters params) {
+    @MemberSupport public String defaultMessage(final Parameters params) {
 
-        return choicesItems(params); // <-- fill in all that are possible based on the first param from the UI dialog
-    }
+        val parityFromDialog = params.parity(); // <-- the refining parameter from the dialog above
 
-    @MemberSupport public List<DemoItem> choicesItems(Parameters params) {
-
-        val paritiesFromDialog = params.parities(); // <-- the refining parameter from the dialog above
-
-        if(_NullSafe.isEmpty(paritiesFromDialog)) {
-            return Collections.emptyList();
+        if(parityFromDialog == null) {
+            return "no parity selected";
         }
-        return holder.getItems()
-                .stream()
-                .filter(item->paritiesFromDialog.contains(item.getParity()))
-                .collect(Collectors.toList());
+        return parityFromDialog.name();
     }
-
 
 }
 

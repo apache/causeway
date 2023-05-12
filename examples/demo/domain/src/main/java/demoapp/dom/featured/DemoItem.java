@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.progmodel.assoc;
+package demoapp.dom.featured;
 
 import javax.inject.Named;
 

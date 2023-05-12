@@ -18,8 +18,6 @@
  */
 package demoapp.dom.domain.actions.progmodel.depargs;
 
-import java.util.Collection;
-
 import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -27,59 +25,58 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
+import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.services.message.MessageService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+import lombok.Value;
+import lombok.experimental.Accessors;
 
-@ActionLayout(named="Independent Args", promptStyle = PromptStyle.DIALOG_MODAL)
+@ActionLayout(named="Disable", promptStyle = PromptStyle.DIALOG_MODAL)
 @Action
 @RequiredArgsConstructor
-public class DependentArgsActionDemo_useIndependent {
+public class ActionDependentArgs_useDisable {
 
     @Inject MessageService messageService;
 
-    private final DependentArgsActionDemo holder;
+    private final ActionDependentArgsPage holder;
 
-    @MemberSupport public DependentArgsActionDemo act(
+    @Value @Accessors(fluent = true) // fluent so we can replace this with Java(14+) records later
+    static class Parameters {
+        boolean disableMessageField;
+        String message;
+    }
+
+    @MemberSupport public ActionDependentArgsPage act(
 
             // PARAM 0
-            @Parameter(optionality = Optionality.MANDATORY) final
-            Parity parity,
+            @ParameterLayout(named = "Disable Message Field") final
+            boolean disableMessageField,
 
             // PARAM 1
-            @Parameter(optionality = Optionality.MANDATORY) final
-            DemoItem item1,
-
-            // PARAM 2
-            @Parameter(optionality = Optionality.MANDATORY) final
-            DemoItem item2
+            @Parameter(optionality = Optionality.MANDATORY)
+            @ParameterLayout(named = "Message") final
+            String message
 
             ) {
-
-        val message = String.format("got %s %s %s", parity, item1.getParity(), item2.getParity());
 
         messageService.informUser(message);
         return holder;
     }
 
-    // -- PARAM 0 (Parity)
+    // -- PARAM 0 (boolean disableMessageField)
 
-    @MemberSupport public Parity default0Act() {
-        return holder.getDialogParityDefault();
+    @MemberSupport public boolean default0Act() {
+        return holder.isDialogCheckboxDefault();
     }
 
-    // -- PARAM 1 (DemoItem item1)
+    // -- PARAM 1 (String message)
 
-    @MemberSupport public Collection<DemoItem> choices1Act() {
-        return holder.getItems();
-    }
-
-    // -- PARAM 2 (DemoItem item2)
-
-    @MemberSupport public Collection<DemoItem> choices2Act() {
-        return holder.getItems();
+    @MemberSupport public String disable1Act(final boolean disableMessageField) {
+        return disableMessageField
+                ? "disabled by dependent argument"
+                        : null;
     }
 
 

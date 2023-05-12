@@ -18,6 +18,8 @@
  */
 package demoapp.dom.domain.actions.progmodel.depargs;
 
+import java.util.Collection;
+
 import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -25,65 +27,61 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
-import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.services.message.MessageService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import lombok.val;
-import lombok.experimental.Accessors;
 
-@ActionLayout(named="Default", promptStyle = PromptStyle.DIALOG_MODAL)
+@ActionLayout(named="Independent Args", promptStyle = PromptStyle.DIALOG_MODAL)
 @Action
 @RequiredArgsConstructor
-public class DependentArgsActionDemo_useDefault {
+public class ActionDependentArgs_useIndependent {
 
     @Inject MessageService messageService;
 
-    private final DependentArgsActionDemo mixee;
+    private final ActionDependentArgsPage holder;
 
-    @Value @Accessors(fluent = true) // fluent so we can replace this with Java(14+) records later
-    static class Parameters {
-        Parity parity;
-        String message;
-    }
-
-    public DependentArgsActionDemo act(
+    @MemberSupport public ActionDependentArgsPage act(
 
             // PARAM 0
             @Parameter(optionality = Optionality.MANDATORY) final
             Parity parity,
 
             // PARAM 1
-            @Parameter(optionality = Optionality.MANDATORY)
-            @ParameterLayout(named = "Message") final
-            String message
+            @Parameter(optionality = Optionality.MANDATORY) final
+            DemoItem item1,
+
+            // PARAM 2
+            @Parameter(optionality = Optionality.MANDATORY) final
+            DemoItem item2
 
             ) {
 
+        val message = String.format("got %s %s %s", parity, item1.getParity(), item2.getParity());
+
         messageService.informUser(message);
-        return mixee;
+        return holder;
     }
 
     // -- PARAM 0 (Parity)
 
-    @MemberSupport public Parity defaultParity(final Parameters params) {
-
-        return mixee.getDialogParityDefault();
+    @MemberSupport public Parity default0Act() {
+        return holder.getDialogParityDefault();
     }
 
-    // -- PARAM 1 (String message)
+    // -- PARAM 1 (DemoItem item1)
 
-    @MemberSupport public String defaultMessage(final Parameters params) {
-
-        val parityFromDialog = params.parity(); // <-- the refining parameter from the dialog above
-
-        if(parityFromDialog == null) {
-            return "no parity selected";
-        }
-        return parityFromDialog.name();
+    @MemberSupport public Collection<DemoItem> choices1Act() {
+        return holder.getItems();
     }
+
+    // -- PARAM 2 (DemoItem item2)
+
+    @MemberSupport public Collection<DemoItem> choices2Act() {
+        return holder.getItems();
+    }
+
 
 }
 

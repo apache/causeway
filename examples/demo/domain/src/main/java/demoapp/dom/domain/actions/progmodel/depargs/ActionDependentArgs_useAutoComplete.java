@@ -26,25 +26,26 @@ import javax.inject.Inject;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.MinLength;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.PromptStyle;
-import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.message.MessageService;
+import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.val;
 import lombok.experimental.Accessors;
 
-@ActionLayout(named="Choices", promptStyle = PromptStyle.DIALOG_MODAL)
-@Action(semantics = SemanticsOf.SAFE)
+@ActionLayout(named="Auto Complete", promptStyle = PromptStyle.DIALOG_MODAL)
+@Action
 @RequiredArgsConstructor
-public class DependentArgsActionDemo_useChoices {
+public class ActionDependentArgs_useAutoComplete {
 
     @Inject MessageService messageService;
 
-    private final DependentArgsActionDemo holder;
+    private final ActionDependentArgsPage holder;
 
     @Value @Accessors(fluent = true) // fluent so we can replace this with Java(14+) records later
     static class Parameters {
@@ -52,7 +53,7 @@ public class DependentArgsActionDemo_useChoices {
         DemoItem item1;
     }
 
-    @MemberSupport public DependentArgsActionDemo act(
+    @MemberSupport public ActionDependentArgsPage act(
 
             // PARAM 0
             @Parameter(optionality = Optionality.MANDATORY) final
@@ -80,19 +81,29 @@ public class DependentArgsActionDemo_useChoices {
         // fill in first that is possible based on the first param from the UI dialog
         return params.parity()==null
                 ? null
-                : choices1Act(params).stream().findFirst().orElse(null);
+                : autoComplete1Act(params, "")
+                    .stream().findFirst().orElse(null);
     }
 
-    @MemberSupport public Collection<DemoItem> choices1Act(final Parameters params) {
+    @MemberSupport public Collection<DemoItem> autoComplete1Act(
+            final Parameters params,
+            @MinLength(2) final String search) {
 
         val parity = params.parity(); // <-- the refining parameter from the dialog above
 
         if(parity == null) {
-            return holder.getItems();
+            return holder.getItems()
+                    .stream()
+                    .filter(item->item.getName().toLowerCase().contains(search.toLowerCase()))
+                    .collect(Collectors.toList());
         }
+
         return holder.getItems()
                 .stream()
                 .filter(item->parity == item.getParity())
+                .filter(item->_Strings.isNullOrEmpty(search)
+                        ? true
+                        : item.getName().toLowerCase().contains(search.toLowerCase()))
                 .collect(Collectors.toList());
     }
 

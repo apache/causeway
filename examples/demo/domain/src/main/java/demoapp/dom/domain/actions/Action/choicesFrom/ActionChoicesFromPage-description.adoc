@@ -1,40 +1,12 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-Actions parameters can be either value types or reference types (typically entities), and can be either for  single-valued (a scalar) or multi-valued (a list).
-Scalar values can be entered directly, but other combinations require a supporting method or other mechanism to provide a list of candidates for the end-user to select:
+Actions parameters can be either value types or reference types (typically entities), and can be either single-valued (a scalar) or multi-valued (a list).
+Scalar values can be entered directly, but references to entities must be selected by some mechanism or another.
 
-.Parameter types and entry methods
-[cols="1a,2a,2a", options="header"]
-|===
+Most often this selection is enabled using a supporting method for the action parameter in question: `choicesNXxx()`, `autoCompleteNXxx()`.
+Or alternatively it can be enabled by annotating the referenced domain type: `@DomainObject#autoComplete` or `@DomainObject#bounded`.
 
->| Type \ +
-Param Cardinality
-^|
-Value type
-^|
-Reference type
-
-
-<| Single
-| Direct entry
-|
-* `choicesNXxx()` supporting method
-* `autoCompleteNXxx()` supporting method
-* `@DomainObject#autoCompleteXxx`
-* `@DomainObject#bounded`
-
-
-| Multiple
-|
-`choicesNXxx` supporting method
-|
-* `choicesNXxx()` supporting method
-* `autoCompleteNXxx()` supporting method
-* link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/Action.html#choicesfrom[@Action#choicesFrom]
-
-|===
-
-The `choicesFrom` attribute specifies an action has a multi-value reference type parameter whose choices should be obtained from the specified collection.
+In the case of multi-valued parameters, there is a further option, namely to annotate the action using link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/Action.html#choicesfrom[@Action#choicesFrom], where the "choicesFrom" indicates a collection of objects of the appropriate reference type.
 
 The end-user can select the choices using checkboxes rendered with the collection.
 

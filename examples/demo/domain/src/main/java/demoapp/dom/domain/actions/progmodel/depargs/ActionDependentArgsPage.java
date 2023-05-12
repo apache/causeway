@@ -46,12 +46,12 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.DependentArgs")
+@Named("demo.ActionDependentArgs")
 @DomainObject(nature=Nature.VIEW_MODEL, editing=Editing.ENABLED)
-public class DependentArgsActionDemo implements HasAsciiDocDescription {
+public class ActionDependentArgsPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "Dependent Arguments Demo";
+        return "Action Dependent Arguments";
     }
 
     @Property(optionality = Optionality.OPTIONAL)

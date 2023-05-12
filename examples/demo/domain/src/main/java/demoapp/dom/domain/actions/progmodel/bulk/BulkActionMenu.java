@@ -16,14 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.progmodel.depargs;
+package demoapp.dom.domain.actions.progmodel.bulk;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -32,29 +32,34 @@ import org.apache.causeway.applib.services.factory.FactoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@Named("demo.DependentArgsActionMenu")
-@DomainService(
-        nature=NatureOfService.VIEW
-)
-@DomainObjectLayout(named="Associated Action")
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+import java.util.Arrays;
+import java.util.List;
+
+@Named("demo.BulkActionMenu")
+@DomainService(nature=NatureOfService.VIEW)
+@Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
-public class DependentArgsActionMenu {
+public class BulkActionMenu {
+
+    private static final List<String> FRIENDS_NAMES =
+            Arrays.asList("Joey", "Monica", "Rachel", "Phoebe", "Chandler", "Ross");
 
     final FactoryService factoryService;
+    final BulkActionItemRepository repository;
 
     @Action
-    @ActionLayout(cssClassFa="fa-bolt")
-    public DependentArgsActionDemo dependentArgsActions(){
-        val demo = factoryService.viewModel(new DependentArgsActionDemo());
-
-        demo.getItems().clear();
-        demo.getItems().add(DemoItem.of("first", Parity.ODD));
-        demo.getItems().add(DemoItem.of("second", Parity.EVEN));
-        demo.getItems().add(DemoItem.of("third", Parity.ODD));
-        demo.getItems().add(DemoItem.of("last", Parity.EVEN));
-
-        return demo;
+    @ActionLayout(cssClassFa="fa-bolt", describedAs = "Bulk actions")
+    public BulkActionPage bulkActions() {
+        val page = factoryService.viewModel(new BulkActionPage());
+        repository.allInstances()
+                .stream()
+                .filter(x -> FRIENDS_NAMES.contains(x.getName()))
+                .forEach(x -> page.getAmericanCharacters().add(x));
+        repository.allInstances()
+                .stream()
+                .filter(x -> ! FRIENDS_NAMES.contains(x.getName()))
+                .forEach(x -> page.getBritishCharacters().add(x));
+        return page;
     }
 
 }

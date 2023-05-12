@@ -16,8 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.progmodel.assoc;
+package demoapp.dom.domain.actions.progmodel.depargs;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -29,34 +30,30 @@ import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.factory.FactoryService;
 
-@Named("demo.AssociatedActionMenu")
-@DomainService(
-        nature=NatureOfService.VIEW
-)
-@DomainObjectLayout(
-        named="Associated Action"
-)
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
-public class AssociatedActionMenu {
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
-    @Inject private FactoryService factoryService;
+@Named("demo.ActionDependentArgsMenu")
+@DomainService(nature=NatureOfService.VIEW)
+@Priority(PriorityPrecedence.EARLY)
+@RequiredArgsConstructor(onConstructor_ = { @Inject })
+public class ActionDependentArgsMenu {
+
+    final FactoryService factoryService;
 
     @Action
     @ActionLayout(cssClassFa="fa-bolt")
-    public AssociatedActionDemo associatedActions(){
-        return AssociatedActionDemo.createWithDemoData();
+    public ActionDependentArgsPage dependentArgsActions(){
+        val demo = factoryService.viewModel(new ActionDependentArgsPage());
+
+        demo.getItems().clear();
+        demo.getItems().add(DemoItem.of("first", Parity.ODD));
+        demo.getItems().add(DemoItem.of("second", Parity.EVEN));
+        demo.getItems().add(DemoItem.of("third", Parity.ODD));
+        demo.getItems().add(DemoItem.of("last", Parity.EVEN));
+
+        return demo;
     }
 
-//    @Action
-//    @ActionLayout(cssClassFa="fa-bolt")
-//    public AssociatedActionDemo associatedActions(){
-//        val demo = factoryService.viewModel(AssociatedActionDemo.class);
-//        demo.getItems().clear();
-//        demo.getItems().add(DemoItem.of("first"));
-//        demo.getItems().add(DemoItem.of("second"));
-//        demo.getItems().add(DemoItem.of("third"));
-//        demo.getItems().add(DemoItem.of("last"));
-//        return demo;
-//    }
-
 }
+
