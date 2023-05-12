@@ -834,6 +834,11 @@ public final class _Strings {
     public static final StringOperator asNormalized =
             s->_Strings.condenseWhitespaces(s, " ");
 
+    /**
+     * Returns a word spaced version of the specified name, so there are spaces
+     * between the words, where each word starts with a capital letter. E.g.,
+     * "NextAvailableDate" is returned as "Next Available Date".
+     */
     public static final StringOperator asNaturalName =
             s->_Strings_NaturalName.naturalName(s, true);
 

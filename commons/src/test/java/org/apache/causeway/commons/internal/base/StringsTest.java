@@ -29,6 +29,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.apache.causeway.commons.internal._Constants;
@@ -331,11 +332,38 @@ class StringsTest {
 
     @Test
     void asNaturalName() throws Exception {
-        assertThat(
-                _Strings.asNaturalName
-                .apply("NextAvailableDate"),
-                is("Next Available Date"));
+        assertThat(asNaturalName("NextAvailableDate"), is("Next Available Date"));
     }
+    @Test
+    void naturalNameAddsSpacesToCamelCaseWords() {
+        assertEquals("Camel Case Word", asNaturalName("CamelCaseWord"));
+    }
+    @Test
+    void naturalNameAddsSpacesBeforeNumbers() {
+        assertEquals("One 2 One", asNaturalName("One2One"));
+        assertEquals("Type 123", asNaturalName("Type123"));
+        assertEquals("4321 Go", asNaturalName("4321Go"));
+    }
+    @Test
+    void naturalNameRecognisesAcronymns() {
+        assertEquals("TNT Power", asNaturalName("TNTPower"));
+        assertEquals("Spam RAM Can", asNaturalName("SpamRAMCan"));
+        assertEquals("DOB", asNaturalName("DOB"));
+    }
+    @Test
+    void naturalNameWithShortNames() {
+        assertEquals("At", asNaturalName("At"));
+        assertEquals("I", asNaturalName("I"));
+    }
+    @Test
+    void naturalNameNoChange() {
+        assertEquals("Camel Case Word", asNaturalName("CamelCaseWord"));
+        assertEquals("Almost Normal english sentence", asNaturalName("Almost Normal english sentence"));
+    }
+    private static String asNaturalName(final String string) {
+        return _Strings.asNaturalName.apply(string);
+    }
+
 
     @Test
     void asCamelCase() {
