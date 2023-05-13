@@ -86,8 +86,10 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
             </mb3:section>
             <mb3:section>
                 <mb3:named>Prog Model</mb3:named>
-                <mb3:serviceAction objectType="demo.AssociatedActionMenu" id="associatedActions"/>
-                <mb3:serviceAction objectType="demo.DependentArgsActionMenu" id="dependentArgsActions">
+                <mb3:serviceAction objectType="demo.BulkActionMenu" id="bulkActions">
+                    <cpt:named>Bulk Actions</cpt:named>
+                </mb3:serviceAction>
+                <mb3:serviceAction objectType="demo.ActionDependentArgsMenu" id="dependentArgsActions">
                     <cpt:named>Dependent Arguments</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>

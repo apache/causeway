@@ -18,12 +18,12 @@
  */
 package demoapp.dom.domain.actions.progmodel.depargs;
 
+import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -32,21 +32,18 @@ import org.apache.causeway.applib.services.factory.FactoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@Named("demo.DependentArgsActionMenu")
-@DomainService(
-        nature=NatureOfService.VIEW
-)
-@DomainObjectLayout(named="Associated Action")
-@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
+@Named("demo.ActionDependentArgsMenu")
+@DomainService(nature=NatureOfService.VIEW)
+@Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
-public class DependentArgsActionMenu {
+public class ActionDependentArgsMenu {
 
     final FactoryService factoryService;
 
     @Action
     @ActionLayout(cssClassFa="fa-bolt")
-    public DependentArgsActionDemo dependentArgsActions(){
-        val demo = factoryService.viewModel(new DependentArgsActionDemo());
+    public ActionDependentArgsPage dependentArgsActions(){
+        val demo = factoryService.viewModel(new ActionDependentArgsPage());
 
         demo.getItems().clear();
         demo.getItems().add(DemoItem.of("first", Parity.ODD));

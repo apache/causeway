@@ -40,11 +40,11 @@ import lombok.experimental.Accessors;
 @Action(choicesFrom = "items")
 @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
 @RequiredArgsConstructor
-public class DependentArgsActionDemo_bulkAction {
+public class ActionDependentArgs_bulkAction {
 
     @Inject MessageService messageService;
 
-    private final DependentArgsActionDemo holder;
+    private final ActionDependentArgsPage holder;
 
     @Value @Accessors(fluent = true) // fluent so we can replace this with Java(14+) records later
     static class Parameters {
@@ -55,7 +55,7 @@ public class DependentArgsActionDemo_bulkAction {
         int d;
     }
 
-    public DependentArgsActionDemo act(
+    public ActionDependentArgsPage act(
 
             // BULK
             Set<DemoItem> demoItems,

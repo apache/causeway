@@ -31,29 +31,28 @@ import org.apache.causeway.applib.services.message.MessageService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
-import lombok.val;
 import lombok.experimental.Accessors;
 
-@ActionLayout(named="Default", promptStyle = PromptStyle.DIALOG_MODAL)
+@ActionLayout(named="Hide", promptStyle = PromptStyle.DIALOG_MODAL)
 @Action
 @RequiredArgsConstructor
-public class DependentArgsActionDemo_useDefault {
+public class ActionDependentArgs_useHide {
 
     @Inject MessageService messageService;
 
-    private final DependentArgsActionDemo mixee;
+    private final ActionDependentArgsPage holder;
 
     @Value @Accessors(fluent = true) // fluent so we can replace this with Java(14+) records later
     static class Parameters {
-        Parity parity;
+        boolean hideMessageField;
         String message;
     }
 
-    public DependentArgsActionDemo act(
+    @MemberSupport public ActionDependentArgsPage act(
 
             // PARAM 0
-            @Parameter(optionality = Optionality.MANDATORY) final
-            Parity parity,
+            @ParameterLayout(named = "Hide Message Field") final
+            boolean hideMessageField,
 
             // PARAM 1
             @Parameter(optionality = Optionality.MANDATORY)
@@ -63,27 +62,21 @@ public class DependentArgsActionDemo_useDefault {
             ) {
 
         messageService.informUser(message);
-        return mixee;
+        return holder;
     }
 
-    // -- PARAM 0 (Parity)
+    // -- PARAM 0 (boolean hideMessageField)
 
-    @MemberSupport public Parity defaultParity(final Parameters params) {
-
-        return mixee.getDialogParityDefault();
+    @MemberSupport public boolean default0Act(final Parameters params) {
+        return holder.isDialogCheckboxDefault();
     }
 
     // -- PARAM 1 (String message)
 
-    @MemberSupport public String defaultMessage(final Parameters params) {
-
-        val parityFromDialog = params.parity(); // <-- the refining parameter from the dialog above
-
-        if(parityFromDialog == null) {
-            return "no parity selected";
-        }
-        return parityFromDialog.name();
+    @MemberSupport public boolean hide1Act(final Parameters params) {
+        return params.hideMessageField();
     }
+
 
 }
 

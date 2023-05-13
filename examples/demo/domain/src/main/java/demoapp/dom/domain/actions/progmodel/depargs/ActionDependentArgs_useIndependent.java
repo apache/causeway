@@ -19,7 +19,6 @@
 package demoapp.dom.domain.actions.progmodel.depargs;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 import jakarta.inject.Inject;
 
@@ -29,30 +28,21 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.PromptStyle;
-import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.message.MessageService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import lombok.val;
-import lombok.experimental.Accessors;
 
-@ActionLayout(named="Choices", promptStyle = PromptStyle.DIALOG_MODAL)
-@Action(semantics = SemanticsOf.SAFE)
+@ActionLayout(named="Independent Args", promptStyle = PromptStyle.DIALOG_MODAL)
+@Action
 @RequiredArgsConstructor
-public class DependentArgsActionDemo_useChoices {
+public class ActionDependentArgs_useIndependent {
 
     @Inject MessageService messageService;
 
-    private final DependentArgsActionDemo holder;
+    private final ActionDependentArgsPage holder;
 
-    @Value @Accessors(fluent = true) // fluent so we can replace this with Java(14+) records later
-    static class Parameters {
-        Parity parity;
-        DemoItem item1;
-    }
-
-    @MemberSupport public DependentArgsActionDemo act(
+    @MemberSupport public ActionDependentArgsPage act(
 
             // PARAM 0
             @Parameter(optionality = Optionality.MANDATORY) final
@@ -60,11 +50,17 @@ public class DependentArgsActionDemo_useChoices {
 
             // PARAM 1
             @Parameter(optionality = Optionality.MANDATORY) final
-            DemoItem item
+            DemoItem item1,
+
+            // PARAM 2
+            @Parameter(optionality = Optionality.MANDATORY) final
+            DemoItem item2
 
             ) {
 
-        messageService.informUser(item.getName());
+        val message = String.format("got %s %s %s", parity, item1.getParity(), item2.getParity());
+
+        messageService.informUser(message);
         return holder;
     }
 
@@ -74,26 +70,16 @@ public class DependentArgsActionDemo_useChoices {
         return holder.getDialogParityDefault();
     }
 
-    // -- PARAM 1 (DemoItem)
+    // -- PARAM 1 (DemoItem item1)
 
-    @MemberSupport public DemoItem default1Act(final Parameters params) {
-        // fill in first that is possible based on the first param from the UI dialog
-        return params.parity()==null
-                ? null
-                : choices1Act(params).stream().findFirst().orElse(null);
+    @MemberSupport public Collection<DemoItem> choices1Act() {
+        return holder.getItems();
     }
 
-    @MemberSupport public Collection<DemoItem> choices1Act(final Parameters params) {
+    // -- PARAM 2 (DemoItem item2)
 
-        val parity = params.parity(); // <-- the refining parameter from the dialog above
-
-        if(parity == null) {
-            return holder.getItems();
-        }
-        return holder.getItems()
-                .stream()
-                .filter(item->parity == item.getParity())
-                .collect(Collectors.toList());
+    @MemberSupport public Collection<DemoItem> choices2Act() {
+        return holder.getItems();
     }
 
 

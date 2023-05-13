@@ -31,28 +31,29 @@ import org.apache.causeway.applib.services.message.MessageService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
+import lombok.val;
 import lombok.experimental.Accessors;
 
-@ActionLayout(named="Disable", promptStyle = PromptStyle.DIALOG_MODAL)
+@ActionLayout(named="Default", promptStyle = PromptStyle.DIALOG_MODAL)
 @Action
 @RequiredArgsConstructor
-public class DependentArgsActionDemo_useDisable {
+public class ActionDependentArgs_useDefault {
 
     @Inject MessageService messageService;
 
-    private final DependentArgsActionDemo holder;
+    private final ActionDependentArgsPage mixee;
 
     @Value @Accessors(fluent = true) // fluent so we can replace this with Java(14+) records later
     static class Parameters {
-        boolean disableMessageField;
+        Parity parity;
         String message;
     }
 
-    @MemberSupport public DependentArgsActionDemo act(
+    public ActionDependentArgsPage act(
 
             // PARAM 0
-            @ParameterLayout(named = "Disable Message Field") final
-            boolean disableMessageField,
+            @Parameter(optionality = Optionality.MANDATORY) final
+            Parity parity,
 
             // PARAM 1
             @Parameter(optionality = Optionality.MANDATORY)
@@ -62,23 +63,27 @@ public class DependentArgsActionDemo_useDisable {
             ) {
 
         messageService.informUser(message);
-        return holder;
+        return mixee;
     }
 
-    // -- PARAM 0 (boolean disableMessageField)
+    // -- PARAM 0 (Parity)
 
-    @MemberSupport public boolean default0Act() {
-        return holder.isDialogCheckboxDefault();
+    @MemberSupport public Parity defaultParity(final Parameters params) {
+
+        return mixee.getDialogParityDefault();
     }
 
     // -- PARAM 1 (String message)
 
-    @MemberSupport public String disable1Act(final boolean disableMessageField) {
-        return disableMessageField
-                ? "disabled by dependent argument"
-                        : null;
-    }
+    @MemberSupport public String defaultMessage(final Parameters params) {
 
+        val parityFromDialog = params.parity(); // <-- the refining parameter from the dialog above
+
+        if(parityFromDialog == null) {
+            return "no parity selected";
+        }
+        return parityFromDialog.name();
+    }
 
 }
 

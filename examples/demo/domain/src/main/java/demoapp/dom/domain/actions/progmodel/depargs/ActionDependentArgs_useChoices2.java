@@ -18,6 +18,10 @@
  */
 package demoapp.dom.domain.actions.progmodel.depargs;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -25,56 +29,76 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
-import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.PromptStyle;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.message.MessageService;
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.collections._Lists;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
+import lombok.val;
 import lombok.experimental.Accessors;
 
-@ActionLayout(named="Hide", promptStyle = PromptStyle.DIALOG_MODAL)
-@Action
+@Action(semantics = SemanticsOf.SAFE)
+@ActionLayout(
+        named="MultiChoices",
+        promptStyle = PromptStyle.DIALOG_MODAL)
 @RequiredArgsConstructor
-public class DependentArgsActionDemo_useHide {
+public class ActionDependentArgs_useChoices2 {
 
     @Inject MessageService messageService;
 
-    private final DependentArgsActionDemo holder;
+    private final ActionDependentArgsPage holder;
 
     @Value @Accessors(fluent = true) // fluent so we can replace this with Java(14+) records later
     static class Parameters {
-        boolean hideMessageField;
-        String message;
+        List<Parity> parities;
+        List<DemoItem> items;
     }
 
-    @MemberSupport public DependentArgsActionDemo act(
+    @MemberSupport public ActionDependentArgsPage act(
 
             // PARAM 0
-            @ParameterLayout(named = "Hide Message Field") final
-            boolean hideMessageField,
+            @Parameter(optionality = Optionality.MANDATORY)
+            List<Parity> parities,
 
             // PARAM 1
             @Parameter(optionality = Optionality.MANDATORY)
-            @ParameterLayout(named = "Message") final
-            String message
+            List<DemoItem> items
 
             ) {
 
-        messageService.informUser(message);
+        _NullSafe.stream(items)
+        .forEach(item->messageService.informUser(item.getName()));
+
         return holder;
     }
 
-    // -- PARAM 0 (boolean hideMessageField)
+    // -- PARAM 0 (Parities)
 
-    @MemberSupport public boolean default0Act(final Parameters params) {
-        return holder.isDialogCheckboxDefault();
+    @MemberSupport public List<Parity> defaultParities(Parameters params) {
+        return _Lists.of(holder.getDialogParityDefault());
     }
 
-    // -- PARAM 1 (String message)
+    // -- PARAM 1 (DemoItem)
 
-    @MemberSupport public boolean hide1Act(final Parameters params) {
-        return params.hideMessageField();
+    @MemberSupport public List<DemoItem> defaultItems(Parameters params) {
+
+        return choicesItems(params); // <-- fill in all that are possible based on the first param from the UI dialog
+    }
+
+    @MemberSupport public List<DemoItem> choicesItems(Parameters params) {
+
+        val paritiesFromDialog = params.parities(); // <-- the refining parameter from the dialog above
+
+        if(_NullSafe.isEmpty(paritiesFromDialog)) {
+            return Collections.emptyList();
+        }
+        return holder.getItems()
+                .stream()
+                .filter(item->paritiesFromDialog.contains(item.getParity()))
+                .collect(Collectors.toList());
     }
 
 

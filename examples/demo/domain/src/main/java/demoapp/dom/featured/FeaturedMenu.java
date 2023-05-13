@@ -36,7 +36,6 @@ import org.apache.causeway.applib.services.factory.FactoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-import demoapp.dom.domain.actions.progmodel.assoc.DemoItem;
 import demoapp.dom.featured.customui.geocoding.GeoapifyClient;
 import demoapp.dom.featured.customui.latlng.Zoom;
 import demoapp.dom.featured.customui.vm.WhereInTheWorldVm;

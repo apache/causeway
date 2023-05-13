@@ -18,8 +18,7 @@
  */
 package demoapp.dom.domain.actions.progmodel.depargs;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.Collection;
 import java.util.stream.Collectors;
 
 import jakarta.inject.Inject;
@@ -27,77 +26,84 @@ import jakarta.inject.Inject;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.MinLength;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.PromptStyle;
-import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.message.MessageService;
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.val;
 import lombok.experimental.Accessors;
 
-@Action(semantics = SemanticsOf.SAFE)
-@ActionLayout(
-        named="MultiChoices",
-        promptStyle = PromptStyle.DIALOG_MODAL)
+@ActionLayout(named="Auto Complete", promptStyle = PromptStyle.DIALOG_MODAL)
+@Action
 @RequiredArgsConstructor
-public class DependentArgsActionDemo_useChoices2 {
+public class ActionDependentArgs_useAutoComplete {
 
     @Inject MessageService messageService;
 
-    private final DependentArgsActionDemo holder;
+    private final ActionDependentArgsPage holder;
 
     @Value @Accessors(fluent = true) // fluent so we can replace this with Java(14+) records later
     static class Parameters {
-        List<Parity> parities;
-        List<DemoItem> items;
+        Parity parity;
+        DemoItem item1;
     }
 
-    @MemberSupport public DependentArgsActionDemo act(
+    @MemberSupport public ActionDependentArgsPage act(
 
             // PARAM 0
-            @Parameter(optionality = Optionality.MANDATORY)
-            List<Parity> parities,
+            @Parameter(optionality = Optionality.MANDATORY) final
+            Parity parity,
 
             // PARAM 1
-            @Parameter(optionality = Optionality.MANDATORY)
-            List<DemoItem> items
+            @Parameter(optionality = Optionality.MANDATORY) final
+            DemoItem item
 
             ) {
 
-        _NullSafe.stream(items)
-        .forEach(item->messageService.informUser(item.getName()));
-
+        messageService.informUser(item.getName());
         return holder;
     }
 
-    // -- PARAM 0 (Parities)
+    // -- PARAM 0 (Parity)
 
-    @MemberSupport public List<Parity> defaultParities(Parameters params) {
-        return _Lists.of(holder.getDialogParityDefault());
+    @MemberSupport public Parity default0Act() {
+        return holder.getDialogParityDefault();
     }
 
     // -- PARAM 1 (DemoItem)
 
-    @MemberSupport public List<DemoItem> defaultItems(Parameters params) {
-
-        return choicesItems(params); // <-- fill in all that are possible based on the first param from the UI dialog
+    @MemberSupport public DemoItem default1Act(final Parameters params) {
+        // fill in first that is possible based on the first param from the UI dialog
+        return params.parity()==null
+                ? null
+                : autoComplete1Act(params, "")
+                    .stream().findFirst().orElse(null);
     }
 
-    @MemberSupport public List<DemoItem> choicesItems(Parameters params) {
+    @MemberSupport public Collection<DemoItem> autoComplete1Act(
+            final Parameters params,
+            @MinLength(2) final String search) {
 
-        val paritiesFromDialog = params.parities(); // <-- the refining parameter from the dialog above
+        val parity = params.parity(); // <-- the refining parameter from the dialog above
 
-        if(_NullSafe.isEmpty(paritiesFromDialog)) {
-            return Collections.emptyList();
+        if(parity == null) {
+            return holder.getItems()
+                    .stream()
+                    .filter(item->item.getName().toLowerCase().contains(search.toLowerCase()))
+                    .collect(Collectors.toList());
         }
+
         return holder.getItems()
                 .stream()
-                .filter(item->paritiesFromDialog.contains(item.getParity()))
+                .filter(item->parity == item.getParity())
+                .filter(item->_Strings.isNullOrEmpty(search)
+                        ? true
+                        : item.getName().toLowerCase().contains(search.toLowerCase()))
                 .collect(Collectors.toList());
     }
 
