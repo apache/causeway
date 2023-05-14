@@ -45,7 +45,6 @@ public class HasAsciiDocDescription_description {
         return asciiDocReaderService.readFor(hasAsciiDocDescription, "description");
     }
 
-    @Inject
-    AsciiDocReaderService asciiDocReaderService;
+    @Inject AsciiDocReaderService asciiDocReaderService;
 
 }

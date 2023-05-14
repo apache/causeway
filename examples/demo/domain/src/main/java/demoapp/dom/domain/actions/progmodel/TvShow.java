@@ -16,16 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.progmodel.depargs;
+package demoapp.dom.domain.actions.progmodel;
+
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 
 import org.apache.causeway.applib.annotation.ObjectSupport;
 
-public enum Parity {
-    EVEN,
-    ODD;
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+public enum TvShow {
+    THE_GOOD_LIFE("The Good Life"),
+    FRIENDS("Friends"),
+    MMM("Mary, Mungo and Midge");
+
+    private final String title;
+
 
     @ObjectSupport public String title() {
-        return name();
+        return title;
     }
 
 }

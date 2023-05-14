@@ -33,10 +33,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.experimental.Accessors;
 
-@ActionLayout(named="Disable", promptStyle = PromptStyle.DIALOG_MODAL)
+@ActionLayout(named="Hide", promptStyle = PromptStyle.DIALOG_MODAL)
 @Action
 @RequiredArgsConstructor
-public class ActionDependentArgs_useDisable {
+public class ActionDependentArgsPage_useHide {
 
     @Inject MessageService messageService;
 
@@ -44,15 +44,15 @@ public class ActionDependentArgs_useDisable {
 
     @Value @Accessors(fluent = true) // fluent so we can replace this with Java(14+) records later
     static class Parameters {
-        boolean disableMessageField;
+        boolean hideMessageField;
         String message;
     }
 
     @MemberSupport public ActionDependentArgsPage act(
 
             // PARAM 0
-            @ParameterLayout(named = "Disable Message Field") final
-            boolean disableMessageField,
+            @ParameterLayout(named = "Hide Message Field") final
+            boolean hideMessageField,
 
             // PARAM 1
             @Parameter(optionality = Optionality.MANDATORY)
@@ -65,18 +65,16 @@ public class ActionDependentArgs_useDisable {
         return holder;
     }
 
-    // -- PARAM 0 (boolean disableMessageField)
+    // -- PARAM 0 (boolean hideMessageField)
 
-    @MemberSupport public boolean default0Act() {
-        return holder.isDialogCheckboxDefault();
+    @MemberSupport public boolean default0Act(final Parameters params) {
+        return holder.isCheckboxDefault();
     }
 
     // -- PARAM 1 (String message)
 
-    @MemberSupport public String disable1Act(final boolean disableMessageField) {
-        return disableMessageField
-                ? "disabled by dependent argument"
-                        : null;
+    @MemberSupport public boolean hide1Act(final Parameters params) {
+        return params.hideMessageField();
     }
 
 

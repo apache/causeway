@@ -27,34 +27,35 @@
 		<bs3:col span="6">
             <bs3:row>
                 <bs3:col span="12">
-                    <cpt:collection id="items"/>
-                </bs3:col>
-            </bs3:row>
-            <bs3:row>
-                <bs3:col span="12">
-                    <cpt:fieldSet name="Action Parameter Support" id="actions-dep1">
+                    <bs3:row>
+                        <bs3:col span="6">
+                            <cpt:collection id="items"/>
+                        </bs3:col>
+                        <bs3:col span="6">
+                            <cpt:fieldSet name="Action Parameter Support" id="actions-dep1">
 
-                        <cpt:action id="useChoices"/>
-                        <cpt:action id="useChoices2"/>
-                        <cpt:action id="useAutoComplete"/>
-                        <cpt:action id="useAutoComplete2"/>
-                        <cpt:action id="useDefault"/>
-                        <cpt:property id="dependentText1"/>
-                        <cpt:property id="dialogParityDefault" />
-                    </cpt:fieldSet>
+                                <cpt:action id="useChoices"/>
+                                <cpt:action id="useChoicesMulti"/>
+                                <cpt:action id="useAutoComplete"/>
+                                <cpt:action id="useAutoCompleteMulti"/>
+                                <cpt:action id="useDefault"/>
+                                <cpt:property id="dependentText1"/>
+                                <cpt:property id="firstParamDefault" />
+                            </cpt:fieldSet>
 
-                    <cpt:fieldSet name="Action Parameter Support" id="actions-dep2">
-                        <cpt:action id="useHide"/>
-                        <cpt:action id="useDisable"/>
-                        <cpt:property id="dependentText2"/>
-                        <cpt:property id="dialogCheckboxDefault" />
-                    </cpt:fieldSet>
+                            <cpt:fieldSet name="Action Parameter Support" id="actions-dep2">
+                                <cpt:action id="useHide"/>
+                                <cpt:action id="useDisable"/>
+                                <cpt:property id="dependentText2"/>
+                                <cpt:property id="dialogCheckboxDefault" />
+                            </cpt:fieldSet>
 
-                    <cpt:fieldSet name="Action Parameter Support" id="actions-indep">
-                        <cpt:action id="useIndependent"/>
-                        <cpt:property id="independentText"/>
-                    </cpt:fieldSet>
-
+                            <cpt:fieldSet name="Action Parameter Support" id="actions-indep">
+                                <cpt:action id="useIndependent"/>
+                                <cpt:property id="independentText"/>
+                            </cpt:fieldSet>
+                        </bs3:col>
+                    </bs3:row>
                 </bs3:col>
             </bs3:row>
 			<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>

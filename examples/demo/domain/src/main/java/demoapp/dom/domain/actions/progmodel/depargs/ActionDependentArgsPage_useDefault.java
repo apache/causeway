@@ -18,9 +18,6 @@
  */
 package demoapp.dom.domain.actions.progmodel.depargs;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
-
 import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -28,74 +25,67 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
+import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.PromptStyle;
-import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.message.MessageService;
+
+import demoapp.dom.domain.actions.progmodel.TvShow;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.val;
 import lombok.experimental.Accessors;
 
-@ActionLayout(named="Choices", promptStyle = PromptStyle.DIALOG_MODAL)
-@Action(semantics = SemanticsOf.SAFE)
+@ActionLayout(named="Default", promptStyle = PromptStyle.DIALOG_MODAL)
+@Action
 @RequiredArgsConstructor
-public class ActionDependentArgs_useChoices {
+public class ActionDependentArgsPage_useDefault {
 
     @Inject MessageService messageService;
 
-    private final ActionDependentArgsPage holder;
+    private final ActionDependentArgsPage mixee;
 
     @Value @Accessors(fluent = true) // fluent so we can replace this with Java(14+) records later
     static class Parameters {
-        Parity parity;
-        DemoItem item1;
+        TvShow tvShow;
+        String message;
     }
 
-    @MemberSupport public ActionDependentArgsPage act(
+    public ActionDependentArgsPage act(
 
             // PARAM 0
             @Parameter(optionality = Optionality.MANDATORY) final
-            Parity parity,
+            TvShow tvShow,
 
             // PARAM 1
-            @Parameter(optionality = Optionality.MANDATORY) final
-            DemoItem item
+            @Parameter(optionality = Optionality.MANDATORY)
+            @ParameterLayout(named = "Message") final
+            String message
 
             ) {
 
-        messageService.informUser(item.getName());
-        return holder;
+        messageService.informUser(message);
+        return mixee;
     }
 
     // -- PARAM 0 (Parity)
 
-    @MemberSupport public Parity default0Act() {
-        return holder.getDialogParityDefault();
+    @MemberSupport public TvShow defaultTvShow(final Parameters params) {
+
+        return mixee.getFirstParamDefault();
     }
 
-    // -- PARAM 1 (DemoItem)
+    // -- PARAM 1 (String message)
 
-    @MemberSupport public DemoItem default1Act(final Parameters params) {
-        // fill in first that is possible based on the first param from the UI dialog
-        return params.parity()==null
-                ? null
-                : choices1Act(params).stream().findFirst().orElse(null);
-    }
+    @MemberSupport public String defaultMessage(final Parameters params) {
 
-    @MemberSupport public Collection<DemoItem> choices1Act(final Parameters params) {
+        val parityFromDialog = params.tvShow(); // <-- the refining parameter from the dialog above
 
-        val parity = params.parity(); // <-- the refining parameter from the dialog above
-
-        if(parity == null) {
-            return holder.getItems();
+        if(parityFromDialog == null) {
+            return "no parity selected";
         }
-        return holder.getItems()
-                .stream()
-                .filter(item->parity == item.getParity())
-                .collect(Collectors.toList());
+        return parityFromDialog.name();
     }
-
 
 }
 
