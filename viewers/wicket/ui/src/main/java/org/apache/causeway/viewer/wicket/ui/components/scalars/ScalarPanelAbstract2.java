@@ -257,8 +257,10 @@ extends ScalarPanelAbstract {
                     addDisabledReasonIcon(buttonContainer, "fa-solid fa-ban", "");
                     break;
                 case DISABLED_REASON_PROTOTYPING:
-                    addDisabledReasonIcon(buttonContainer, "fa-solid fa-text-slash icon-prototyping",
-                            " Note: This icon only appears in prototyping mode.");
+                    if (getConfiguration().getViewer().getWicket().isDisableReasonExplanationInPrototypingModeEnabled()) {
+                        addDisabledReasonIcon(buttonContainer, "fa-solid fa-text-slash icon-prototyping",
+                                " Note: This icon only appears in prototyping mode.");
+                    }
                     break;
                 case CLEAR_FIELD:
                     addClearFieldButton(buttonContainer);

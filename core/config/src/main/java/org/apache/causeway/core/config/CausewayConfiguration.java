@@ -77,8 +77,6 @@ import org.apache.causeway.applib.services.userui.UserMenu;
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.context._Context;
-import org.apache.causeway.core.config.CausewayConfiguration.Core;
-import org.apache.causeway.core.config.CausewayConfiguration.Viewer;
 import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.CollectionLayoutConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.DomainObjectConfigOptions;
@@ -2172,6 +2170,16 @@ public class CausewayConfiguration {
              * </p>
              */
             private boolean clearFieldButtonEnabled = true;
+
+            /**
+             * In prototyping mode, a text icon is appeneded to any property that is disabled, with its tool-tip explaining why the property is disabled.
+             * This configuration property can be used to suppress the icon, even in prototyping mode, if desired.
+             *
+             * <p>
+             *     The default is to enable (show) the text icon (if in prototyping mode).
+             * </p>
+             */
+            private boolean disableReasonExplanationInPrototypingModeEnabled = true;
 
             /**
              * URL of file to read any custom CSS, relative to <code>static</code> package on the class path.
