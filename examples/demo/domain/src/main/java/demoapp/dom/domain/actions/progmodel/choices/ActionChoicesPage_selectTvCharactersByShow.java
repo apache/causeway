@@ -47,9 +47,9 @@ public class ActionChoicesPage_selectTvCharactersByShow {
 
     @MemberSupport public ActionChoicesPage act(
         @Parameter(optionality = Optionality.MANDATORY)
-        TvShow tvShow,                                              // <.>
+        final TvShow tvShow,                                        // <.>
         @Parameter(optionality = Optionality.MANDATORY)
-        List<TvCharacter> tvCharacters
+        final List<TvCharacter> tvCharacters
     ) {
         page.getSelectedTvCharacters().clear();
         page.getSelectedTvCharacters().addAll(tvCharacters);
@@ -63,7 +63,7 @@ public class ActionChoicesPage_selectTvCharactersByShow {
     }
 
     @MemberSupport public List<TvCharacter> choicesTvCharacters(
-            Parameters params                                       // <2>
+            final Parameters params                                 // <2>
     ) {
         val tvShowSelected = params.tvShow();                       // <.>
         return page.getTvCharacters()

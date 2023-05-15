@@ -40,7 +40,7 @@ public class ActionChoicesPage_selectTvCharacters {
 
     @MemberSupport public ActionChoicesPage act(
         @Parameter(optionality = Optionality.MANDATORY)
-        List<TvCharacter> tvCharacters                                      // <.>
+        final List<TvCharacter> tvCharacters                                // <.>
     ) {
         page.getSelectedTvCharacters().clear();
         page.getSelectedTvCharacters().addAll(tvCharacters);

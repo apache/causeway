@@ -49,9 +49,9 @@ public class ActionChoicesPage_selectTvCharactersByShows {
 
     @MemberSupport public ActionChoicesPage act(
         @Parameter(optionality = Optionality.MANDATORY)
-        List<TvShow> tvShows,
+        final List<TvShow> tvShows,
         @Parameter(optionality = Optionality.MANDATORY)
-        List<TvCharacter> tvCharacters
+        final List<TvCharacter> tvCharacters
     ) {
         page.getSelectedTvCharacters().clear();
         page.getSelectedTvCharacters().addAll(tvCharacters);
@@ -59,7 +59,7 @@ public class ActionChoicesPage_selectTvCharactersByShows {
     }
 
     @MemberSupport public List<TvCharacter> choicesTvCharacters(    // <.>
-            List<TvShow> tvShows                                    // <.>
+        final List<TvShow> tvShows                                  // <.>
     ) {
         return page.getTvCharacters()
                 .stream()

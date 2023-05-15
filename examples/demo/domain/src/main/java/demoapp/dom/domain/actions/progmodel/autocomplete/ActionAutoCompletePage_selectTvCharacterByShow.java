@@ -16,20 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.progmodel.choices;
+package demoapp.dom.domain.actions.progmodel.autocomplete;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.MinLength;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
-import lombok.experimental.Accessors;
 
 import demoapp.dom.domain.actions.progmodel.TvCharacter;
 import demoapp.dom.domain.actions.progmodel.TvShow;
@@ -37,13 +36,13 @@ import demoapp.dom.domain.actions.progmodel.TvShow;
 //tag::class[]
 @Action(semantics = SemanticsOf.IDEMPOTENT)
 @RequiredArgsConstructor
-public class ActionChoicesPage_selectTvCharacterByShow {
+public class ActionAutoCompletePage_selectTvCharacterByShow {
 
-    private final ActionChoicesPage page;
+    private final ActionAutoCompletePage page;
 
-    @MemberSupport public ActionChoicesPage act(
+    @MemberSupport public ActionAutoCompletePage act(
         @Parameter(optionality = Optionality.MANDATORY)
-        final TvShow tvShow,                                    // <.>
+        final TvShow tvShow,                                        // <.>
         @Parameter(optionality = Optionality.MANDATORY)
         final TvCharacter tvCharacter
     ) {
@@ -52,13 +51,16 @@ public class ActionChoicesPage_selectTvCharacterByShow {
         return page;
     }
 
-    @MemberSupport public Collection<TvCharacter> choices1Act(  // <.>
-            final TvShow tvShow                                 // <.>
+    @MemberSupport public Collection<TvCharacter> autoComplete1Act( // <.>
+        final TvShow tvShow,                                        // <.>
+        @MinLength(1)
+        final String search                                         // <.>
     ) {
         return page.getTvCharacters()
                 .stream()
                 .filter(tvCharacter -> tvShow == null ||
                                        tvShow == tvCharacter.getTvShow())
+                .filter(x -> x.getName().contains(search))          // <4>
                 .collect(Collectors.toList());
     }
 }
