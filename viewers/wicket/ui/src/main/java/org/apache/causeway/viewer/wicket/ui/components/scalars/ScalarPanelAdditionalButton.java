@@ -52,6 +52,7 @@ enum ScalarPanelAdditionalButton {
                 final RenderScenario renderScenario,
                 final FieldFragement fieldFragement) {
             return scalarModel.getSystemEnvironment().isPrototyping()
+                    && scalarModel.getConfiguration().getViewer().getWicket().isDisableReasonExplanationInPrototypingModeEnabled()
                     && renderScenario!=RenderScenario.CAN_EDIT_INLINE_VIA_ACTION
                     && scalarModel.disabledReason()
                     .map(InteractionVeto::getVetoConsent)
