@@ -88,7 +88,7 @@ public enum PageParameterNames {
      */
     @Override
     public String toString() {
-        return _Strings.asCamelCase.apply(name());
+        return _Strings.asCamelCase.apply(_Strings.lower(name()));
     }
 
     public String getStringFrom(final PageParameters pageParameters) {
