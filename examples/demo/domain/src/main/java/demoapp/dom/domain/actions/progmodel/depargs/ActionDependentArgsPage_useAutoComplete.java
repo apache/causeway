@@ -33,6 +33,9 @@ import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.commons.internal.base._Strings;
 
+import demoapp.dom.domain.actions.progmodel.TvCharacter;
+import demoapp.dom.domain.actions.progmodel.TvShow;
+
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.val;
@@ -41,7 +44,7 @@ import lombok.experimental.Accessors;
 @ActionLayout(named="Auto Complete", promptStyle = PromptStyle.DIALOG_MODAL)
 @Action
 @RequiredArgsConstructor
-public class ActionDependentArgs_useAutoComplete {
+public class ActionDependentArgsPage_useAutoComplete {
 
     @Inject MessageService messageService;
 
@@ -49,47 +52,34 @@ public class ActionDependentArgs_useAutoComplete {
 
     @Value @Accessors(fluent = true) // fluent so we can replace this with Java(14+) records later
     static class Parameters {
-        Parity parity;
-        DemoItem item1;
+        TvShow tvShow;
+        TvCharacter item1;
     }
 
     @MemberSupport public ActionDependentArgsPage act(
-
-            // PARAM 0
-            @Parameter(optionality = Optionality.MANDATORY) final
-            Parity parity,
-
-            // PARAM 1
-            @Parameter(optionality = Optionality.MANDATORY) final
-            DemoItem item
-
-            ) {
-
+        @Parameter(optionality = Optionality.MANDATORY) final TvShow tvShow,
+        @Parameter(optionality = Optionality.MANDATORY) final TvCharacter item
+    ) {
         messageService.informUser(item.getName());
         return holder;
     }
 
-    // -- PARAM 0 (Parity)
-
-    @MemberSupport public Parity default0Act() {
-        return holder.getDialogParityDefault();
+    @MemberSupport public TvShow default0Act() {
+        return holder.getFirstParamDefault();
     }
-
-    // -- PARAM 1 (DemoItem)
-
-    @MemberSupport public DemoItem default1Act(final Parameters params) {
+    @MemberSupport public TvCharacter default1Act(final Parameters params) {
         // fill in first that is possible based on the first param from the UI dialog
-        return params.parity()==null
+        return params.tvShow()==null
                 ? null
                 : autoComplete1Act(params, "")
                     .stream().findFirst().orElse(null);
     }
 
-    @MemberSupport public Collection<DemoItem> autoComplete1Act(
+    @MemberSupport public Collection<TvCharacter> autoComplete1Act(
             final Parameters params,
             @MinLength(2) final String search) {
 
-        val parity = params.parity(); // <-- the refining parameter from the dialog above
+        val parity = params.tvShow(); // <-- the refining parameter from the dialog above
 
         if(parity == null) {
             return holder.getItems()
@@ -100,7 +90,7 @@ public class ActionDependentArgs_useAutoComplete {
 
         return holder.getItems()
                 .stream()
-                .filter(item->parity == item.getParity())
+                .filter(item->parity == item.getTvShow())
                 .filter(item->_Strings.isNullOrEmpty(search)
                         ? true
                         : item.getName().toLowerCase().contains(search.toLowerCase()))

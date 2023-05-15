@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.progmodel.depargs;
+package demoapp.dom.domain.actions.progmodel;
 
 import jakarta.inject.Named;
 
@@ -25,7 +25,6 @@ import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -38,19 +37,17 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor(staticName="of")
 @EqualsAndHashCode // required for the Dependent Arguments demo to work properly
-public class DemoItem {
+public class TvCharacter {
 
     @ObjectSupport public String title() {
-        return String.format("DemoItem '%s' (%s)", getName(), getParity());
+        return getName();
     }
 
     @Property(editing = Editing.DISABLED)
-    @PropertyLayout(describedAs="The name of this 'DemoItem'.")
     @Getter @Setter private String name;
 
     @Property(editing = Editing.DISABLED)
-    @PropertyLayout(describedAs="The parity of this 'DemoItem'.")
-    @Getter @Setter private Parity parity;
+    @Getter @Setter private TvShow tvShow;
 
     @Override
     public String toString() {

@@ -18,7 +18,8 @@
  */
 package demoapp.dom.domain.actions.progmodel.depargs;
 
-import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import jakarta.inject.Inject;
@@ -31,16 +32,23 @@ import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.message.MessageService;
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.collections._Lists;
+
+import demoapp.dom.domain.actions.progmodel.TvCharacter;
+import demoapp.dom.domain.actions.progmodel.TvShow;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.val;
 import lombok.experimental.Accessors;
 
-@ActionLayout(named="Choices", promptStyle = PromptStyle.DIALOG_MODAL)
 @Action(semantics = SemanticsOf.SAFE)
+@ActionLayout(
+        named="MultiChoices",
+        promptStyle = PromptStyle.DIALOG_MODAL)
 @RequiredArgsConstructor
-public class ActionDependentArgs_useChoices {
+public class ActionDependentArgsPage_useChoicesMulti {
 
     @Inject MessageService messageService;
 
@@ -48,54 +56,36 @@ public class ActionDependentArgs_useChoices {
 
     @Value @Accessors(fluent = true) // fluent so we can replace this with Java(14+) records later
     static class Parameters {
-        Parity parity;
-        DemoItem item1;
+        List<TvShow> tvShows;
+        List<TvCharacter> tvCharacters;
     }
 
     @MemberSupport public ActionDependentArgsPage act(
-
-            // PARAM 0
-            @Parameter(optionality = Optionality.MANDATORY) final
-            Parity parity,
-
-            // PARAM 1
-            @Parameter(optionality = Optionality.MANDATORY) final
-            DemoItem item
-
-            ) {
-
-        messageService.informUser(item.getName());
+        @Parameter(optionality = Optionality.MANDATORY) List<TvShow> tvShows,
+        @Parameter(optionality = Optionality.MANDATORY) List<TvCharacter> tvCharacters
+    ) {
+        _NullSafe.stream(tvCharacters)
+            .forEach(item->messageService.informUser(item.getName()));
         return holder;
     }
 
-    // -- PARAM 0 (Parity)
-
-    @MemberSupport public Parity default0Act() {
-        return holder.getDialogParityDefault();
+    @MemberSupport public List<TvShow> defaultTvShows(Parameters params) {
+        return _Lists.of(holder.getFirstParamDefault());
     }
 
-    // -- PARAM 1 (DemoItem)
-
-    @MemberSupport public DemoItem default1Act(final Parameters params) {
-        // fill in first that is possible based on the first param from the UI dialog
-        return params.parity()==null
-                ? null
-                : choices1Act(params).stream().findFirst().orElse(null);
+    @MemberSupport public List<TvCharacter> defaultTvCharacters(Parameters params) {
+        return choicesTvCharacters(params);         // <.> <.> fill in all that are possible based on the first param from the UI dialog
     }
 
-    @MemberSupport public Collection<DemoItem> choices1Act(final Parameters params) {
-
-        val parity = params.parity(); // <-- the refining parameter from the dialog above
-
-        if(parity == null) {
-            return holder.getItems();
+    @MemberSupport public List<TvCharacter> choicesTvCharacters(Parameters params) {
+        val tvShowsSelected = params.tvShows();     // <.> <.> as selected in first param
+        if(_NullSafe.isEmpty(tvShowsSelected)) {
+            return Collections.emptyList();
         }
         return holder.getItems()
                 .stream()
-                .filter(item->parity == item.getParity())
+                .filter(item->tvShowsSelected.contains(item.getTvShow()))
                 .collect(Collectors.toList());
     }
-
-
 }
 

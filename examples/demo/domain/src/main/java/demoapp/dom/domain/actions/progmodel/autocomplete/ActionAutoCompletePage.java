@@ -16,15 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.progmodel.depargs;
+package demoapp.dom.domain.actions.progmodel.autocomplete;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.Collection;
@@ -34,65 +36,61 @@ import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.value.Markup;
-
-import demoapp.dom.domain.actions.progmodel.TvCharacter;
-import demoapp.dom.domain.actions.progmodel.TvShow;
+import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 import lombok.Getter;
-import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.resources.AsciiDocReaderService;
+import demoapp.dom.domain.actions.progmodel.TvCharacter;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.ActionDependentArgs")
+@Named("demo.ActionAutoComplete")
 @DomainObject(nature=Nature.VIEW_MODEL, editing=Editing.ENABLED)
-public class ActionDependentArgsPage implements HasAsciiDocDescription {
+public class ActionAutoCompletePage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "Action Dependent Arguments";
+        return "Action Auto-complete";
     }
 
-    @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(describedAs = "Default for the first parameter'")
-    @Getter @Setter
-    private TvShow firstParamDefault = null;
-
-    @Property
-    @PropertyLayout(describedAs = "Default for first first parameter")
-    @Getter @Setter
-    private boolean checkboxDefault = false;
 
     @Property
     @PropertyLayout(labelPosition=LabelPosition.NONE)
-    public Markup getDependentText1() {
-        return new Markup("Click one of above actions to see how dependent arguments work. "
-                + "Set defaults for the first dialog parameter here:");
+    public AsciiDoc getSingleAutoCompleteDescription() {
+        return asciiDocReaderService.readFor(this, "singleAutoCompleteDescription");
     }
-
     @Property
     @PropertyLayout(labelPosition=LabelPosition.NONE)
-    public Markup getDependentText2() {
-        return new Markup("Click one of above actions to see how dependent arguments work. "
-                + "Set defaults for the first dialog parameter here:");
+    public AsciiDoc getMultipleAutoCompleteDescription() {
+        return asciiDocReaderService.readFor(this, "multipleAutoCompleteDescription");
     }
-
     @Property
     @PropertyLayout(labelPosition=LabelPosition.NONE)
-    public Markup getIndependentText() {
-        return new Markup("Click this action above to see independent arguments do not clear "
-                + "each other when changing.");
+    public AsciiDoc getDependentAutoCompleteDescription() {
+        return asciiDocReaderService.readFor(this, "dependentAutoCompleteDescription");
     }
+    @Property
+    @PropertyLayout(labelPosition=LabelPosition.NONE)
+    public AsciiDoc getParameterMatchingDescription() {
+        return asciiDocReaderService.readFor(this, "parameterMatchingDescription");
+    }
+
 
     @Collection
     @CollectionLayout
     @Getter
-    private final Set<TvCharacter> items = new LinkedHashSet<>();
+    private final Set<TvCharacter> tvCharacters = new LinkedHashSet<>();
+
+    @Collection
+    @CollectionLayout
+    @Getter
+    private final Set<TvCharacter> selectedTvCharacters = new LinkedHashSet<>();
+
+    @Inject @XmlTransient AsciiDocReaderService asciiDocReaderService;
 
 }
 

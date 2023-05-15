@@ -30,13 +30,15 @@ import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.services.message.MessageService;
 
+import demoapp.dom.domain.actions.progmodel.TvCharacter;
+import demoapp.dom.domain.actions.progmodel.TvShow;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @ActionLayout(named="Independent Args", promptStyle = PromptStyle.DIALOG_MODAL)
 @Action
 @RequiredArgsConstructor
-public class ActionDependentArgs_useIndependent {
+public class ActionDependentArgsPage_useIndependent {
 
     @Inject MessageService messageService;
 
@@ -46,19 +48,19 @@ public class ActionDependentArgs_useIndependent {
 
             // PARAM 0
             @Parameter(optionality = Optionality.MANDATORY) final
-            Parity parity,
+            TvShow tvShow,
 
             // PARAM 1
             @Parameter(optionality = Optionality.MANDATORY) final
-            DemoItem item1,
+            TvCharacter item1,
 
             // PARAM 2
             @Parameter(optionality = Optionality.MANDATORY) final
-            DemoItem item2
+            TvCharacter item2
 
             ) {
 
-        val message = String.format("got %s %s %s", parity, item1.getParity(), item2.getParity());
+        val message = String.format("got %s %s %s", tvShow, item1.getTvShow(), item2.getTvShow());
 
         messageService.informUser(message);
         return holder;
@@ -66,19 +68,19 @@ public class ActionDependentArgs_useIndependent {
 
     // -- PARAM 0 (Parity)
 
-    @MemberSupport public Parity default0Act() {
-        return holder.getDialogParityDefault();
+    @MemberSupport public TvShow default0Act() {
+        return holder.getFirstParamDefault();
     }
 
     // -- PARAM 1 (DemoItem item1)
 
-    @MemberSupport public Collection<DemoItem> choices1Act() {
+    @MemberSupport public Collection<TvCharacter> choices1Act() {
         return holder.getItems();
     }
 
     // -- PARAM 2 (DemoItem item2)
 
-    @MemberSupport public Collection<DemoItem> choices2Act() {
+    @MemberSupport public Collection<TvCharacter> choices2Act() {
         return holder.getItems();
     }
 

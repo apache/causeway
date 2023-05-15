@@ -27,34 +27,31 @@
 		<bs3:col span="6">
             <bs3:row>
                 <bs3:col span="12">
-                    <cpt:collection id="items"/>
-                </bs3:col>
-            </bs3:row>
-            <bs3:row>
-                <bs3:col span="12">
-                    <cpt:fieldSet name="Action Parameter Support" id="actions-dep1">
-
-                        <cpt:action id="useChoices"/>
-                        <cpt:action id="useChoices2"/>
-                        <cpt:action id="useAutoComplete"/>
-                        <cpt:action id="useAutoComplete2"/>
-                        <cpt:action id="useDefault"/>
-                        <cpt:property id="dependentText1"/>
-                        <cpt:property id="dialogParityDefault" />
-                    </cpt:fieldSet>
-
-                    <cpt:fieldSet name="Action Parameter Support" id="actions-dep2">
-                        <cpt:action id="useHide"/>
-                        <cpt:action id="useDisable"/>
-                        <cpt:property id="dependentText2"/>
-                        <cpt:property id="dialogCheckboxDefault" />
-                    </cpt:fieldSet>
-
-                    <cpt:fieldSet name="Action Parameter Support" id="actions-indep">
-                        <cpt:action id="useIndependent"/>
-                        <cpt:property id="independentText"/>
-                    </cpt:fieldSet>
-
+                    <bs3:row>
+                        <bs3:col span="6">
+                            <cpt:collection id="tvCharacters"/>
+                            <cpt:collection id="selectedTvCharacters"/>
+                        </bs3:col>
+                        <bs3:col span="6">
+                            <cpt:fieldSet name="Single Auto-complete" id="single-auto-complete">
+                                <cpt:action id="selectTvCharacter"/>
+                                <cpt:property id="singleAutoCompleteDescription"/>
+                            </cpt:fieldSet>
+                            <cpt:fieldSet name="Multiple Auto-complete" id="multi-auto-complete">
+                                <cpt:action id="selectTvCharacters"/>
+                                <cpt:property id="multipleAutoCompleteDescription"/>
+                            </cpt:fieldSet>
+                            <cpt:fieldSet name="Dependent Auto-complete" id="dependent-auto-complete">
+                                <cpt:action id="selectTvCharacterByShow"/>
+                                <cpt:action id="selectTvCharactersByShows"/>
+                                <cpt:property id="dependentAutoCompleteDescription"/>
+                            </cpt:fieldSet>
+                            <cpt:fieldSet name="Parameter Matching" id="parameter-matching">
+                                <cpt:action id="selectTvCharactersByShow"/>
+                                <cpt:property id="parameterMatchingDescription"/>
+                            </cpt:fieldSet>
+                        </bs3:col>
+                    </bs3:row>
                 </bs3:col>
             </bs3:row>
 			<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>

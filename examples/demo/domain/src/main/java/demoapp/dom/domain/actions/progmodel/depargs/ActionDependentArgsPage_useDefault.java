@@ -29,30 +29,33 @@ import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.services.message.MessageService;
 
+import demoapp.dom.domain.actions.progmodel.TvShow;
+
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
+import lombok.val;
 import lombok.experimental.Accessors;
 
-@ActionLayout(named="Hide", promptStyle = PromptStyle.DIALOG_MODAL)
+@ActionLayout(named="Default", promptStyle = PromptStyle.DIALOG_MODAL)
 @Action
 @RequiredArgsConstructor
-public class ActionDependentArgs_useHide {
+public class ActionDependentArgsPage_useDefault {
 
     @Inject MessageService messageService;
 
-    private final ActionDependentArgsPage holder;
+    private final ActionDependentArgsPage mixee;
 
     @Value @Accessors(fluent = true) // fluent so we can replace this with Java(14+) records later
     static class Parameters {
-        boolean hideMessageField;
+        TvShow tvShow;
         String message;
     }
 
-    @MemberSupport public ActionDependentArgsPage act(
+    public ActionDependentArgsPage act(
 
             // PARAM 0
-            @ParameterLayout(named = "Hide Message Field") final
-            boolean hideMessageField,
+            @Parameter(optionality = Optionality.MANDATORY) final
+            TvShow tvShow,
 
             // PARAM 1
             @Parameter(optionality = Optionality.MANDATORY)
@@ -62,21 +65,27 @@ public class ActionDependentArgs_useHide {
             ) {
 
         messageService.informUser(message);
-        return holder;
+        return mixee;
     }
 
-    // -- PARAM 0 (boolean hideMessageField)
+    // -- PARAM 0 (Parity)
 
-    @MemberSupport public boolean default0Act(final Parameters params) {
-        return holder.isDialogCheckboxDefault();
+    @MemberSupport public TvShow defaultTvShow(final Parameters params) {
+
+        return mixee.getFirstParamDefault();
     }
 
     // -- PARAM 1 (String message)
 
-    @MemberSupport public boolean hide1Act(final Parameters params) {
-        return params.hideMessageField();
-    }
+    @MemberSupport public String defaultMessage(final Parameters params) {
 
+        val parityFromDialog = params.tvShow(); // <-- the refining parameter from the dialog above
+
+        if(parityFromDialog == null) {
+            return "no parity selected";
+        }
+        return parityFromDialog.name();
+    }
 
 }
 

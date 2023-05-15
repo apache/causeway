@@ -31,29 +31,28 @@ import org.apache.causeway.applib.services.message.MessageService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
-import lombok.val;
 import lombok.experimental.Accessors;
 
-@ActionLayout(named="Default", promptStyle = PromptStyle.DIALOG_MODAL)
+@ActionLayout(named="Disable", promptStyle = PromptStyle.DIALOG_MODAL)
 @Action
 @RequiredArgsConstructor
-public class ActionDependentArgs_useDefault {
+public class ActionDependentArgsPage_useDisable {
 
     @Inject MessageService messageService;
 
-    private final ActionDependentArgsPage mixee;
+    private final ActionDependentArgsPage holder;
 
     @Value @Accessors(fluent = true) // fluent so we can replace this with Java(14+) records later
     static class Parameters {
-        Parity parity;
+        boolean disableMessageField;
         String message;
     }
 
-    public ActionDependentArgsPage act(
+    @MemberSupport public ActionDependentArgsPage act(
 
             // PARAM 0
-            @Parameter(optionality = Optionality.MANDATORY) final
-            Parity parity,
+            @ParameterLayout(named = "Disable Message Field") final
+            boolean disableMessageField,
 
             // PARAM 1
             @Parameter(optionality = Optionality.MANDATORY)
@@ -63,27 +62,23 @@ public class ActionDependentArgs_useDefault {
             ) {
 
         messageService.informUser(message);
-        return mixee;
+        return holder;
     }
 
-    // -- PARAM 0 (Parity)
+    // -- PARAM 0 (boolean disableMessageField)
 
-    @MemberSupport public Parity defaultParity(final Parameters params) {
-
-        return mixee.getDialogParityDefault();
+    @MemberSupport public boolean default0Act() {
+        return holder.isCheckboxDefault();
     }
 
     // -- PARAM 1 (String message)
 
-    @MemberSupport public String defaultMessage(final Parameters params) {
-
-        val parityFromDialog = params.parity(); // <-- the refining parameter from the dialog above
-
-        if(parityFromDialog == null) {
-            return "no parity selected";
-        }
-        return parityFromDialog.name();
+    @MemberSupport public String disable1Act(final boolean disableMessageField) {
+        return disableMessageField
+                ? "disabled by dependent argument"
+                        : null;
     }
+
 
 }
 

@@ -18,6 +18,9 @@
  */
 package demoapp.dom.domain.actions.progmodel.depargs;
 
+import java.util.Collection;
+import java.util.stream.Collectors;
+
 import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -25,18 +28,22 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
-import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.PromptStyle;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.message.MessageService;
+
+import demoapp.dom.domain.actions.progmodel.TvCharacter;
+import demoapp.dom.domain.actions.progmodel.TvShow;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
+import lombok.val;
 import lombok.experimental.Accessors;
 
-@ActionLayout(named="Disable", promptStyle = PromptStyle.DIALOG_MODAL)
-@Action
+@ActionLayout(named="Choices", promptStyle = PromptStyle.DIALOG_MODAL)
+@Action(semantics = SemanticsOf.SAFE)
 @RequiredArgsConstructor
-public class ActionDependentArgs_useDisable {
+public class ActionDependentArgsPage_useChoices {
 
     @Inject MessageService messageService;
 
@@ -44,39 +51,44 @@ public class ActionDependentArgs_useDisable {
 
     @Value @Accessors(fluent = true) // fluent so we can replace this with Java(14+) records later
     static class Parameters {
-        boolean disableMessageField;
-        String message;
+        TvShow tvShow;
+        TvCharacter item1;
     }
 
     @MemberSupport public ActionDependentArgsPage act(
-
-            // PARAM 0
-            @ParameterLayout(named = "Disable Message Field") final
-            boolean disableMessageField,
-
-            // PARAM 1
-            @Parameter(optionality = Optionality.MANDATORY)
-            @ParameterLayout(named = "Message") final
-            String message
-
-            ) {
-
-        messageService.informUser(message);
+        @Parameter(optionality = Optionality.MANDATORY) final TvShow tvShow,
+        @Parameter(optionality = Optionality.MANDATORY) final TvCharacter item
+    ) {
+        messageService.informUser(item.getName());
         return holder;
     }
 
-    // -- PARAM 0 (boolean disableMessageField)
+    // -- PARAM 0 (Parity)
 
-    @MemberSupport public boolean default0Act() {
-        return holder.isDialogCheckboxDefault();
+    @MemberSupport public TvShow default0Act() {
+        return holder.getFirstParamDefault();
     }
 
-    // -- PARAM 1 (String message)
+    // -- PARAM 1 (DemoItem)
 
-    @MemberSupport public String disable1Act(final boolean disableMessageField) {
-        return disableMessageField
-                ? "disabled by dependent argument"
-                        : null;
+    @MemberSupport public TvCharacter default1Act(final Parameters params) {
+        // fill in first that is possible based on the first param from the UI dialog
+        return params.tvShow()==null
+                ? null
+                : choices1Act(params).stream().findFirst().orElse(null);
+    }
+
+    @MemberSupport public Collection<TvCharacter> choices1Act(final Parameters params) {
+
+        val parity = params.tvShow(); // <-- the refining parameter from the dialog above
+
+        if(parity == null) {
+            return holder.getItems();
+        }
+        return holder.getItems()
+                .stream()
+                .filter(item->parity == item.getTvShow())
+                .collect(Collectors.toList());
     }
 
 

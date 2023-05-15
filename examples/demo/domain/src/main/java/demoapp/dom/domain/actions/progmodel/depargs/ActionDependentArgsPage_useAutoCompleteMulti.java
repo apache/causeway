@@ -36,6 +36,9 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 
+import demoapp.dom.domain.actions.progmodel.TvCharacter;
+import demoapp.dom.domain.actions.progmodel.TvShow;
+
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.val;
@@ -46,7 +49,7 @@ import lombok.experimental.Accessors;
         promptStyle = PromptStyle.DIALOG_MODAL)
 @Action
 @RequiredArgsConstructor
-public class ActionDependentArgs_useAutoComplete2 {
+public class ActionDependentArgsPage_useAutoCompleteMulti {
 
     @Inject MessageService messageService;
 
@@ -54,46 +57,33 @@ public class ActionDependentArgs_useAutoComplete2 {
 
     @Value @Accessors(fluent = true) // fluent so we can replace this with Java(14+) records later
     static class Parameters {
-        List<Parity> parities;
-        List<DemoItem> items;
+        List<TvShow> parities;
+        List<TvCharacter> items;
     }
 
     @MemberSupport public ActionDependentArgsPage act(
-
-            // PARAM 0
-            @Parameter(optionality = Optionality.MANDATORY) final
-            List<Parity> parities,
-
-            // PARAM 1
-            @Parameter(optionality = Optionality.MANDATORY) final
-            List<DemoItem> items
-
-            ) {
-
+            @Parameter(optionality = Optionality.MANDATORY) final List<TvShow> tvShows,
+            @Parameter(optionality = Optionality.MANDATORY) final List<TvCharacter> items
+    ) {
         _NullSafe.stream(items)
             .forEach(item->messageService.informUser(item.getName()));
         return holder;
     }
 
-    // -- PARAM 0 (Parities)
-
-    @MemberSupport public List<Parity> defaultParities(final Parameters params) {
-        return _Lists.of(holder.getDialogParityDefault());
+    @MemberSupport public List<TvShow> defaultTvShows(final Parameters params) {
+        return _Lists.of(holder.getFirstParamDefault());
     }
-
-    // -- PARAM 1 (DemoItem)
-
-    @MemberSupport public List<DemoItem> defaultItems(final Parameters params) {
+    @MemberSupport public List<TvCharacter> defaultItems(final Parameters params) {
         val paritiesFromDialog = params.parities(); // <-- the refining parameter from the dialog above
         if(_NullSafe.isEmpty(paritiesFromDialog)) {
             return Collections.emptyList();
         }
         return autoCompleteItems(params, "");
     }
-
-    @MemberSupport public List<DemoItem> autoCompleteItems(
+    @MemberSupport public List<TvCharacter> autoCompleteItems(
             final Parameters params,
-            @MinLength(2) final String search) {
+            @MinLength(2) final String search
+    ) {
 
         val paritiesFromDialog = params.parities(); // <-- the refining parameter from the dialog above
 
@@ -102,13 +92,11 @@ public class ActionDependentArgs_useAutoComplete2 {
         }
         return holder.getItems()
                 .stream()
-                .filter(item->paritiesFromDialog.contains(item.getParity()))
+                .filter(item->paritiesFromDialog.contains(item.getTvShow()))
                 .filter(item->_Strings.isNullOrEmpty(search)
                         ? true
                         : item.getName().toLowerCase().contains(search.toLowerCase()))
                 .collect(Collectors.toList());
     }
-
-
 }
 
