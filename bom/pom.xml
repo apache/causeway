@@ -2274,7 +2274,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<plugin>
 					<groupId>org.jvnet.jaxb2.maven2</groupId>
 					<artifactId>maven-jaxb2-plugin</artifactId>
-					<version>0.15.2</version>
+					<version>0.15.3</version>
 					<configuration>
 						<removeOldOutput>true</removeOldOutput>
 						<episode>true</episode>
