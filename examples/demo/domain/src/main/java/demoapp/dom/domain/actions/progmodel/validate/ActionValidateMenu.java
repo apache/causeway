@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.progmodel.defaults;
+package demoapp.dom.domain.actions.progmodel.validate;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -34,19 +34,19 @@ import lombok.val;
 
 import demoapp.dom.domain.actions.progmodel.TvCharacterPopulator;
 
-@Named("demo.ActionDefaultsMenu")
+@Named("demo.ActionValidateMenu")
 @DomainService(nature=NatureOfService.VIEW)
 @Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
-public class ActionDefaultsMenu {
+public class ActionValidateMenu {
 
     final FactoryService factoryService;
     final TvCharacterPopulator tvCharacterPopulator;
 
     @Action
-    @ActionLayout(cssClassFa="fa-heart")
-    public ActionDefaultsPage defaults(){
-        val page = factoryService.viewModel(new ActionDefaultsPage());
+    @ActionLayout(cssClassFa="fa-circle-question")
+    public ActionValidatePage validate(){
+        val page = factoryService.viewModel(new ActionValidatePage());
         tvCharacterPopulator.populate(page.getTvCharacters());
         return page;
     }

@@ -40,7 +40,7 @@ public class ActionAutoCompleteMenu {
     final TvCharacterPopulator tvCharacterPopulator;
 
     @Action
-    @ActionLayout(cssClassFa="fa-bolt")
+    @ActionLayout(cssClassFa="fa-wand-magic-sparkles")
     public ActionAutoCompletePage autoComplete(){
         val page = factoryService.viewModel(new ActionAutoCompletePage());
         tvCharacterPopulator.populate(page.getTvCharacters());

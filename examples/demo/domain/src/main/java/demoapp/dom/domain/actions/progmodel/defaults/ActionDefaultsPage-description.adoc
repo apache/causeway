@@ -8,7 +8,7 @@ There are several variations:
 * the parameter argument being defaulted could be either a scalar or a collection
 * the supporting "default" method can be associated with the parameter by number, or by name
 * the default for a parameter can depend upon the value already selected for an earlier parameter.
-** The preceding N-1 parameters are supplied to the Nth "default" supporting method.
+** The preceding N-1 parameters are supplied to the N^th^ "default" supporting method.
 ** Or a single record-like structure can be defined and this can be passed through to all supporting methods instead.
 
 It's common for "default" supporting method to be paired with a "choices" or "autoComplete" supporting method, but this won't always be the case.
