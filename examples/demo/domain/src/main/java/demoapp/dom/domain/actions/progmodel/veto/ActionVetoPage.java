@@ -16,15 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.progmodel.depargs;
+package demoapp.dom.domain.actions.progmodel.veto;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.Collection;
@@ -37,62 +39,64 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.value.Markup;
-
-import demoapp.dom.domain.actions.progmodel.TvCharacter;
-import demoapp.dom.domain.actions.progmodel.TvShow;
+import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.resources.AsciiDocReaderService;
+import demoapp.dom.domain.actions.progmodel.TvCharacter;
+import demoapp.dom.domain.actions.progmodel.TvShow;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.ActionDependentArgs")
+@Named("demo.ActionVeto")
 @DomainObject(nature=Nature.VIEW_MODEL, editing=Editing.ENABLED)
-public class ActionDependentArgsPage implements HasAsciiDocDescription {
+public class ActionVetoPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "Action Dependent Arguments";
+        return "Action Veto (hide and disable)";
     }
 
-    @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(describedAs = "Default for the first parameter'")
+
+    @Property
+    @PropertyLayout(labelPosition=LabelPosition.NONE)
+    public AsciiDoc getHideActionDescription() {
+        return asciiDocReaderService.readFor(this, "hideActionDescription");
+    }
+    @Property(editing = Editing.ENABLED)
     @Getter @Setter
-    private TvShow firstParamDefault = null;
+    private boolean actionHidden;
 
     @Property
-    @PropertyLayout(describedAs = "Default for first first parameter")
+    @PropertyLayout(labelPosition=LabelPosition.NONE)
+    public AsciiDoc getDisableActionDescription() {
+        return asciiDocReaderService.readFor(this, "disableActionDescription");
+    }
+    @Property(editing = Editing.ENABLED)
     @Getter @Setter
-    private boolean checkboxDefault = false;
+    private boolean actionDisabled;
 
     @Property
     @PropertyLayout(labelPosition=LabelPosition.NONE)
-    public Markup getDependentText1() {
-        return new Markup("Click one of above actions to see how dependent arguments work. "
-                + "Set defaults for the first dialog parameter here:");
+    public AsciiDoc getVetoParamDescription() {
+        return asciiDocReaderService.readFor(this, "vetoParamDescription");
     }
 
-    @Property
-    @PropertyLayout(labelPosition=LabelPosition.NONE)
-    public Markup getDependentText2() {
-        return new Markup("Click one of above actions to see how dependent arguments work. "
-                + "Set defaults for the first dialog parameter here:");
-    }
-
-    @Property
-    @PropertyLayout(labelPosition=LabelPosition.NONE)
-    public Markup getIndependentText() {
-        return new Markup("Click this action above to see independent arguments do not clear "
-                + "each other when changing.");
-    }
 
     @Collection
     @CollectionLayout
     @Getter
-    private final Set<TvCharacter> items = new LinkedHashSet<>();
+    private final Set<TvCharacter> tvCharacters = new LinkedHashSet<>();
+
+    @Collection
+    @CollectionLayout
+    @Getter
+    private final Set<TvCharacter> selectedTvCharacters = new LinkedHashSet<>();
+
+    @Inject @XmlTransient AsciiDocReaderService asciiDocReaderService;
 
 }
 

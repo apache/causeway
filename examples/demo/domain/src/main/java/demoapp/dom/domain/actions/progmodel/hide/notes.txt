@@ -1,3 +1,0 @@
-example of hiding, with depargs
-
-eye-slash
