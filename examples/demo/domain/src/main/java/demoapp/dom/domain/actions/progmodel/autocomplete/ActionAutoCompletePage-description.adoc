@@ -38,8 +38,8 @@ It matches the supporting "autoComplete" method with the parameter by number.
 ----
 include::ActionAutoCompletePage_selectTvCharacter.java[tags=class]
 ----
-<.> defines the 0th-param
-<.> provides the candidate arguments for the 0-th parameter.
+<.> defines the 0^th^ parameter
+<.> provides the candidate arguments for the 0^th^ parameter.
 The collection's element type must match that of the parameter.
 <.> prompts for a search string, which is then used to limit the candidate arguments from an original larger list
 

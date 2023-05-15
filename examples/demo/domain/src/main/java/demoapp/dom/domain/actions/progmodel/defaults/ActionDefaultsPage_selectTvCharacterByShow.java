@@ -40,17 +40,17 @@ public class ActionDefaultsPage_selectTvCharacterByShow {
         @Parameter(optionality = Optionality.MANDATORY)
         final TvShow tvShow,                                    // <.>
         @Parameter(optionality = Optionality.MANDATORY)
-        final TvCharacter tvCharacter
+        final TvCharacter tvCharacter                           // <.>
     ) {
         page.getSelectedTvCharacters().clear();
         page.getSelectedTvCharacters().add(tvCharacter);
         return page;
     }
 
-    @MemberSupport public TvShow default0Act() {                // <.>
+    @MemberSupport public TvShow default0Act() {                // <1>
         return page.getPreselectTvShow();
     }
-    @MemberSupport public TvCharacter default1Act(              // <.>
+    @MemberSupport public TvCharacter default1Act(              // <2>
         final TvShow tvShow
     ) {
         return choices1Act(tvShow).stream().findFirst().orElse(null);
@@ -58,11 +58,14 @@ public class ActionDefaultsPage_selectTvCharacterByShow {
     @MemberSupport public Collection<TvCharacter> choices1Act(
             final TvShow tvShow
     ) {
+        //...
+//end::class[]
         return page.getTvCharacters()
                 .stream()
                 .filter(tvCharacter -> tvShow == null ||
                                        tvShow == tvCharacter.getTvShow())
                 .collect(Collectors.toList());
+//tag::class[]
     }
 }
 //end::class[]

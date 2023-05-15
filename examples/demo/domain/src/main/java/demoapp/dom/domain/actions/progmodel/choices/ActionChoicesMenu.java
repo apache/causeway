@@ -44,7 +44,7 @@ public class ActionChoicesMenu {
     final TvCharacterPopulator tvCharacterPopulator;
 
     @Action
-    @ActionLayout(cssClassFa="fa-bolt")
+    @ActionLayout(cssClassFa="fa-list-ul")
     public ActionChoicesPage choices(){
         val page = factoryService.viewModel(new ActionChoicesPage());
         tvCharacterPopulator.populate(page.getTvCharacters());

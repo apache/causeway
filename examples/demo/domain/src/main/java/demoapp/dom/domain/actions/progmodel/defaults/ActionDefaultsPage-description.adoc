@@ -1,26 +1,18 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-WARNING: TODO - update these works
-
 Before an action can be invoked, the end-user has to provide an argument for each of its parameters.
-If the parameter is a value (String, number, date etc.) then they can just enter the value in a field.
-But if the parameter is a reference type, then some other mechanism is required.
-
-A "choices" supporting method provides a set of candidate arguments for the parameter type, rendered in the UI as a drop-down list.
-The list of candidates is expected to be small; if there is a larger list then instead use an "autoComplete" supporting method instead.
-
-The method should also (if possible) only proffer candidates that would also pass any validation rules, to avoid an otherwise frustrating user experience.
+The purpose of the "default" supporting method is to provide an initial value for the action parameter that it corresponds to.
 
 There are several variations:
 
-* the parameter for which candidates are being supplied can be either a scalar or a collection
-* the supporting "choices" method can be associated with the parameter by number, or by name
-* the list of candidates for a parameter can depend upon the value already selected for an earlier parameter.
-** The preceding N-1 parameters are supplied to the Nth "choices" supporting method.
+* the parameter argument being defaulted could be either a scalar or a collection
+* the supporting "default" method can be associated with the parameter by number, or by name
+* the default for a parameter can depend upon the value already selected for an earlier parameter.
+** The preceding N-1 parameters are supplied to the Nth "default" supporting method.
 ** Or a single record-like structure can be defined and this can be passed through to all supporting methods instead.
 
-As noted above, a supporting method to return a list of candidate arguments is _always_ required for reference types.
-It is also possible to specify choices for value types, though this is much less commonly done.
+It's common for "default" supporting method to be paired with a "choices" or "autoComplete" supporting method, but this won't always be the case.
+For example, a parameter with a date parameter might default it to today's date.
 
 == How this demo works
 
@@ -28,7 +20,7 @@ On the left hand side is a list of objects representing TV characters, also indi
 Below is a list of selected characters, initially empty.
 
 In the middle are a set of actions, each of which can be used to select a TV character or characters.
-These demonstrate the variations listed in the introduction above.
+A property of the main page can be used to pre-select a value, in which case it will be used as the default for the action's parameter(s).
 
 In terms of code:
 
@@ -36,55 +28,36 @@ In terms of code:
 It matches the supporting "choices" method with the parameter by number.
 +
 [source,java]
-.ActionChoicesPage_selectTvCharacter.java
+.ActionDefaultsPage_selectTvCharacterByShow.java
 ----
-include::ActionChoicesPage_selectTvCharacter.java[tags=class]
+include::ActionDefaultsPage_selectTvCharacterByShow.java[tags=class]
 ----
-<.> defines the 0th-param
-<.> provides the candidate arguments for the 0-th parameter.
+<.> 0^th^ parameter is defaulted with the property from the page
+<.> 1^st^ parameter's default depends upon the 0^th^ parameter's value.
 The collection's element type must match that of the parameter.
 
 * this action is similar, but allows multiple TV characters to be selected.
 This time, it matches the supporting "choices" method with the parameter by name.
 +
 [source,java]
-.ActionChoicesPage_selectTvCharacters.java
+.ActionDefaultsPage_selectTvCharacters.java
 ----
-include::ActionChoicesPage_selectTvCharacters.java[tags=class]
+include::ActionDefaultsPage_selectTvCharacters.java[tags=class]
 ----
-<.> provides the candidate arguments for the "tvCharacters" parameter
+<.> provides the default values for the "tvCharacters" parameter ...
+<.> \... filtered according to the pre-selected character's sex
 
-* the next example demonstrates dependent arguments, so that the TV characters are first filtered by the show that they appeared in.
+* the final example also demonstrates dependent defaults, this time using a "Parameters" record.
 +
 [source,java]
-.ActionChoicesPage_selectTvCharacterByShow.java
+.ActionDefaultsPage_selectTvCharactersByShowAndSex.java
 ----
-include::ActionChoicesPage_selectTvCharacterByShow.java[tags=class]
+include::ActionDefaultsPage_selectTvCharactersByShowAndSex.java[tags=class]
 ----
-<.> this parameter is used to filter the TV characters
-<.> the "choices" method is matched by number ...
-<.> \... and has a subset of the parameters of the action itself ("N-1" of them).
-
-* the next example is similar; dependent arguments but with a multiple selection, and using names to match the "choices" method:
-+
-[source,java]
-.ActionChoicesPage_selectTvCharactersByShows.java
-----
-include::ActionChoicesPage_selectTvCharactersByShows.java[tags=class]
-----
-<.> the "choices" method matches a parameter of the action by name ...
-<.> \... and accepts all the parameters defined in the action _up to_ (but not including) the matched parameter.
-
-* the final example also demonstrates dependent arguments, but using a "Parameters" record.
-+
-[source,java]
-.ActionChoicesPage_selectTvCharactersByShow.java
-----
-include::ActionChoicesPage_selectTvCharactersByShow.java[tags=class]
-----
-<.> the set of parameters of the action ...
-<.> \... are also defined as fields of a `Parameters` type
-<.>
+<.> default for first parameter, simply taken from the page
+<.> default for second parameter, again simply taken from the page
+<.> default for last parameter ...
+<.> \...uses the `Parameters` object to access the argument values of the preceding parameters
 <.> the framework will set the fields of `Parameters` object as appropriate
 
 +

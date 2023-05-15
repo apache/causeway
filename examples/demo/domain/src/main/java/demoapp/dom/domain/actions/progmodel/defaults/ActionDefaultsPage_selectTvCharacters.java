@@ -41,7 +41,7 @@ public class ActionDefaultsPage_selectTvCharacters {
 
     @MemberSupport public ActionDefaultsPage act(
         @Parameter(optionality = Optionality.MANDATORY)
-        final List<TvCharacter> tvCharacters                                // <.>
+        final List<TvCharacter> tvCharacters                                        // <.>
     ) {
         page.getSelectedTvCharacters().clear();
         page.getSelectedTvCharacters().addAll(tvCharacters);
@@ -51,8 +51,8 @@ public class ActionDefaultsPage_selectTvCharacters {
     @MemberSupport public Collection<TvCharacter> choicesTvCharacters() {
         return page.getTvCharacters();
     }
-    @MemberSupport public List<TvCharacter> defaultTvCharacters() {   // <1>
-        TvCharacter.Sex preselectCharacterSex = page.getPreselectCharacterSex();
+    @MemberSupport public List<TvCharacter> defaultTvCharacters() {                 // <1>
+        TvCharacter.Sex preselectCharacterSex = page.getPreselectCharacterSex();    // <.>
         return choicesTvCharacters().stream()
                 .filter(tvCharacter -> preselectCharacterSex == null ||
                                        tvCharacter.getSex() == preselectCharacterSex)

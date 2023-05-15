@@ -18,6 +18,7 @@
  */
 package demoapp.dom.domain.actions.progmodel.defaults;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,7 +49,7 @@ public class ActionDefaultsPage_selectTvCharactersByShowAndSex {
         @Parameter(optionality = Optionality.MANDATORY)
         final TvCharacter.Sex sex,                                  // <.>
         @Parameter(optionality = Optionality.MANDATORY)
-        final List<TvCharacter> tvCharacters
+        final List<TvCharacter> tvCharacters                        // <.>
     ) {
         page.getSelectedTvCharacters().clear();
         page.getSelectedTvCharacters().addAll(tvCharacters);
@@ -62,27 +63,25 @@ public class ActionDefaultsPage_selectTvCharactersByShowAndSex {
         List<TvCharacter> tvCharacters;
     }
 
-    @MemberSupport public TvShow defaultTvShow() {                  // <.>
+    @MemberSupport public TvShow defaultTvShow() {                  // <1>
         return page.getPreselectTvShow2();
     }
-    @MemberSupport public TvCharacter.Sex defaultSex() {            // <.>
+    @MemberSupport public TvCharacter.Sex defaultSex() {            // <2>
         return page.getPreselectCharacterSex2();
     }
-    @MemberSupport public List<TvCharacter> defaultTvCharacters(
-            final Parameters params                                 // <2>
-    ) {
-        return choicesTvCharacters(params);
-    }
-    @MemberSupport public List<TvCharacter> choicesTvCharacters(
-            final Parameters params                                 // <2>
+    @MemberSupport public List<TvCharacter> defaultTvCharacters(    // <3>
+            final Parameters params                                 // <4>
     ) {
         val tvShowSelected = params.tvShow();                       // <.>
-        val sexSelected = params.sex;                               // <.>
-        return page.getTvCharacters()
+        val sexSelected = params.sex;                               // <5>
+        return choicesTvCharacters()
                 .stream()
                 .filter(tvCharacter -> tvShowSelected == tvCharacter.getTvShow())
                 .filter(tvCharacter -> sexSelected == tvCharacter.getSex())
                 .collect(Collectors.toList());
+    }
+    @MemberSupport public List<TvCharacter> choicesTvCharacters() {
+        return new ArrayList<>(page.getTvCharacters());
     }
 }
 //end::class[]
