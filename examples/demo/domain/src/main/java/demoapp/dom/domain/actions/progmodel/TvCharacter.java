@@ -25,6 +25,8 @@ import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.Where;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -49,9 +51,17 @@ public class TvCharacter {
     @Property(editing = Editing.DISABLED)
     @Getter @Setter private TvShow tvShow;
 
+    @Property
+    @PropertyLayout(hidden = Where.EVERYWHERE)
+    @Getter @Setter private Sex sex;
+
     @Override
     public String toString() {
         return title();
     }
 
+    public enum Sex {
+        MALE,
+        FEMALE
+    }
 }
