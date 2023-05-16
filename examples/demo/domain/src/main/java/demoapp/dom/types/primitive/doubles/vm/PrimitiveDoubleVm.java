@@ -61,7 +61,7 @@ public class PrimitiveDoubleVm
     @Getter @Setter
     private double readOnlyProperty;                              // <.>
 
-    @Property(editing = Editing.ENABLED)
+    @Property(editing = Editing.ENABLED)                                        
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @Getter @Setter
     private double readWriteProperty;

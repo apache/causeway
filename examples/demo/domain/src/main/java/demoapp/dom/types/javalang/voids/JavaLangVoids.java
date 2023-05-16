@@ -18,22 +18,29 @@
  */
 package demoapp.dom.types.javalang.voids;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;
+import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.PromptStyle;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.resources.AsciiDocReaderService;
 
 @XmlRootElement(name = "demo")
 @XmlType
@@ -43,18 +50,29 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 //@Log4j2
 public class JavaLangVoids implements HasAsciiDocDescription {
 
+
     @ObjectSupport public String title() {
         return "Void data type";
     }
 
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    public void returnsVoid() {}
+    @Property
+    @PropertyLayout(labelPosition= LabelPosition.NONE)
+    public AsciiDoc getSectionDescription() {
+        return asciiDocReaderService.readFor(this, "sectionDescription");
+    }
 
+//tag::returnsVoid[]
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
+    public void returnsVoid() {}
+//end::returnsVoid[]
+
+//tag::returnsJavaLangVoid[]
+    @Action(semantics = SemanticsOf.SAFE)
     public Void returnsJavaLangVoid() {
         return null;
     }
+//end::returnsJavaLangVoid[]
+
+    @Inject @XmlTransient AsciiDocReaderService asciiDocReaderService;
 
 }
