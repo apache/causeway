@@ -184,7 +184,7 @@ public enum ValueShowCase {
         return Config.builder()
                 .jdoTypeSupportNotice(defaults.getJdoTypeSupportNotice()
                         + " see link:https://www.datanucleus.org/products/accessplatform_6_0/jdo/mapping.html#_primitive_and_java_lang_types[DataNucleus]")
-                .jpaTypeSupportNotice(defaults.getJdoTypeSupportNotice()
+                .jpaTypeSupportNotice(defaults.getJpaTypeSupportNotice()
                         + " see link:https://www.objectdb.com/java/jpa/entity/types#simple_java_data_types[ObjectDB]")
                 .jaxbTypeSupportNotice(defaults.getJaxbTypeSupportNotice()
                         + " see link:https://docs.oracle.com/cd/E12840_01/wls/docs103/webserv/data_types.html#wp223908[Oracle]");

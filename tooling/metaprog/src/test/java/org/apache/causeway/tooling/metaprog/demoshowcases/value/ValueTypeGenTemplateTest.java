@@ -92,8 +92,8 @@ class ValueTypeGenTemplateTest {
     @BeforeAll
     static void setup() {
         outputRootDir = PERSIST
-                ? FileUtils.makeDir(new File("D:/tmp/valueTypes"))
-                : FileUtils.tempDir("casueway-tooling-showcases");
+                ? FileUtils.makeDir(new File("C:/tmp/valueTypes"))
+                : FileUtils.tempDir("causeway-tooling-showcases");
 
         log.info("tmp dir created in {}", outputRootDir);
     }
