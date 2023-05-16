@@ -14,7 +14,7 @@ There are several variations:
 * the parameter for which candidates are being supplied can be either a scalar or a collection
 * the supporting "choices" method can be associated with the parameter by number, or by name
 * the list of candidates for a parameter can depend upon the value already selected for an earlier parameter.
-** The preceding N-1 parameters are supplied to the Nth "choices" supporting method.
+** The preceding N-1 parameters are supplied to the N^th^ "choices" supporting method.
 ** Or a single record-like structure can be defined and this can be passed through to all supporting methods instead.
 
 As noted above, a supporting method to return a list of candidate arguments is _always_ required for reference types.
@@ -38,8 +38,8 @@ It matches the supporting "choices" method with the parameter by number.
 ----
 include::ActionChoicesPage_selectTvCharacter.java[tags=class]
 ----
-<.> defines the 0th-param
-<.> provides the candidate arguments for the 0-th parameter.
+<.> defines the 0^th^-param
+<.> provides the candidate arguments for the 0^th^ parameter.
 The collection's element type must match that of the parameter.
 
 * this action is similar, but allows multiple TV characters to be selected.

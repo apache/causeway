@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.progmodel.choices;
+package demoapp.dom.domain.actions.progmodel.validate;
 
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
@@ -29,23 +29,24 @@ import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.factory.FactoryService;
 
-import demoapp.dom.domain.actions.progmodel.TvCharacterPopulator;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@Named("demo.ActionChoicesMenu")
+import demoapp.dom.domain.actions.progmodel.TvCharacterPopulator;
+
+@Named("demo.ActionValidateMenu")
 @DomainService(nature=NatureOfService.VIEW)
 @Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
-public class ActionChoicesMenu {
+public class ActionValidateMenu {
 
     final FactoryService factoryService;
     final TvCharacterPopulator tvCharacterPopulator;
 
     @Action
-    @ActionLayout(cssClassFa="fa-list-ul")
-    public ActionChoicesPage choices(){
-        val page = factoryService.viewModel(new ActionChoicesPage());
+    @ActionLayout(cssClassFa="fa-circle-question")
+    public ActionValidatePage validate(){
+        val page = factoryService.viewModel(new ActionValidatePage());
         tvCharacterPopulator.populate(page.getTvCharacters());
         return page;
     }

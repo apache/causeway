@@ -1,0 +1,70 @@
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Before an action can be invoked, the end-user has to provide an argument for each of its parameters.
+The purpose of the "default" supporting method is to provide an initial value for the action parameter that it corresponds to.
+
+There are several variations:
+
+* the parameter argument being defaulted could be either a scalar or a collection
+* the supporting "default" method can be associated with the parameter by number, or by name
+* the default for a parameter can depend upon the value already selected for an earlier parameter.
+** The preceding N-1 parameters are supplied to the N^th^ "default" supporting method.
+** Or a single record-like structure can be defined and this can be passed through to all supporting methods instead.
+
+It's common for "default" supporting method to be paired with a "choices" or "autoComplete" supporting method, but this won't always be the case.
+For example, a parameter with a date parameter might default it to today's date.
+
+== How this demo works
+
+On the left hand side is a list of objects representing TV characters, also indicating the TV show that they appeared in.
+Below is a list of selected characters, initially empty.
+
+In the middle are a set of actions, each of which can be used to select a TV character or characters.
+A property of the main page can be used to pre-select a value, in which case it will be used as the default for the action's parameter(s).
+
+In terms of code:
+
+* this action allows a single TV character to be selected.
+It matches the supporting "choices" method with the parameter by number.
++
+[source,java]
+.ActionDefaultsPage_selectTvCharacterByShow.java
+----
+include::ActionDefaultsPage_selectTvCharacterByShow.java[tags=class]
+----
+<.> 0^th^ parameter is defaulted with the property from the page
+<.> 1^st^ parameter's default depends upon the 0^th^ parameter's value.
+The collection's element type must match that of the parameter.
+
+* this action is similar, but allows multiple TV characters to be selected.
+This time, it matches the supporting "choices" method with the parameter by name.
++
+[source,java]
+.ActionDefaultsPage_selectTvCharacters.java
+----
+include::ActionDefaultsPage_selectTvCharacters.java[tags=class]
+----
+<.> provides the default values for the "tvCharacters" parameter ...
+<.> \... filtered according to the pre-selected character's sex
+
+* the final example also demonstrates dependent defaults, this time using a "Parameters" record.
++
+[source,java]
+.ActionDefaultsPage_selectTvCharactersByShowAndSex.java
+----
+include::ActionDefaultsPage_selectTvCharactersByShowAndSex.java[tags=class]
+----
+<.> default for first parameter, simply taken from the page
+<.> default for second parameter, again simply taken from the page
+<.> default for last parameter ...
+<.> \...uses the `Parameters` object to access the argument values of the preceding parameters
+<.> the framework will set the fields of `Parameters` object as appropriate
+
++
+In a small action like this, there is little to be gained by introducing a "Parameters" record class.
+But if there were many parameters to the action and many supporting methods, then introducing such a record class can significantly reduce the boilerplate.
++
+[TIP]
+====
+In this example the `Parameters` class uses lombok 'fluent" accessor, but record classes can also be used for Java 14+.
+====

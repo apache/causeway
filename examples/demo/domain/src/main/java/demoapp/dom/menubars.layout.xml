@@ -86,13 +86,15 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
             </mb3:section>
             <mb3:section>
                 <mb3:named>Prog Model</mb3:named>
-                <mb3:serviceAction objectType="demo.BulkActionMenu" id="bulkActions">
-                    <cpt:named>Bulk Actions</cpt:named>
-                </mb3:serviceAction>
                 <mb3:serviceAction objectType="demo.ActionChoicesMenu" id="choices"/>
                 <mb3:serviceAction objectType="demo.ActionAutoCompleteMenu" id="autoComplete"/>
-                <mb3:serviceAction objectType="demo.ActionDependentArgsMenu" id="dependentArgsActions">
-                    <cpt:named>Dependent Arguments</cpt:named>
+                <mb3:serviceAction objectType="demo.ActionDefaultsMenu" id="defaults"/>
+                <mb3:serviceAction objectType="demo.ActionValidateMenu" id="validate"/>
+                <mb3:serviceAction objectType="demo.ActionVetoMenu" id="veto">
+                    <cpt:named>Hide &amp; Disable</cpt:named>
+                </mb3:serviceAction>
+                <mb3:serviceAction objectType="demo.BulkActionMenu" id="bulkActions">
+                    <cpt:named>Bulk Actions</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
         </mb3:menu>

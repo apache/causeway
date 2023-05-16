@@ -29,30 +29,23 @@
                 <bs3:col span="12">
                     <bs3:row>
                         <bs3:col span="6">
-                            <cpt:collection id="items"/>
+                            <cpt:collection id="tvCharacters"/>
+                            <cpt:collection id="selectedTvCharacters"/>
                         </bs3:col>
                         <bs3:col span="6">
-                            <cpt:fieldSet name="Action Parameter Support" id="actions-dep1">
-
-                                <cpt:action id="useChoices"/>
-                                <cpt:action id="useChoicesMulti"/>
-                                <cpt:action id="useAutoComplete"/>
-                                <cpt:action id="useAutoCompleteMulti"/>
-                                <cpt:action id="useDefault"/>
-                                <cpt:property id="dependentText1"/>
-                                <cpt:property id="firstParamDefault" />
+                            <cpt:fieldSet name="Hide Action" id="hide-action">
+                                <cpt:action id="selectTvCharactersIfNotHidden"/>
+                                <cpt:property id="hideActionDescription"/>
+                                <cpt:property id="actionHidden"/>
                             </cpt:fieldSet>
-
-                            <cpt:fieldSet name="Action Parameter Support" id="actions-dep2">
-                                <cpt:action id="useHide"/>
-                                <cpt:action id="useDisable"/>
-                                <cpt:property id="dependentText2"/>
-                                <cpt:property id="dialogCheckboxDefault" />
+                            <cpt:fieldSet name="Disable Action" id="disable-action">
+                                <cpt:action id="selectTvCharactersIfNotDisabled"/>
+                                <cpt:property id="disableActionDescription"/>
+                                <cpt:property id="actionDisabled"/>
                             </cpt:fieldSet>
-
-                            <cpt:fieldSet name="Action Parameter Support" id="actions-indep">
-                                <cpt:action id="useIndependent"/>
-                                <cpt:property id="independentText"/>
+                            <cpt:fieldSet name="Veto Parameters" id="veto-parameter">
+                                <cpt:action id="selectTvCharactersBySex"/>
+                                <cpt:property id="vetoParamDescription"/>
                             </cpt:fieldSet>
                         </bs3:col>
                     </bs3:row>

@@ -25,21 +25,21 @@ import org.springframework.stereotype.Service;
 @Service
 public class TvCharacterPopulator {
 
-    public void populate(Set<TvCharacter> items) {
-        items.clear();
-        items.add(TvCharacter.of("Tom", TvShow.THE_GOOD_LIFE));
-        items.add(TvCharacter.of("Barbara", TvShow.THE_GOOD_LIFE));
-        items.add(TvCharacter.of("Jerry", TvShow.THE_GOOD_LIFE));
-        items.add(TvCharacter.of("Margo", TvShow.THE_GOOD_LIFE));
-        items.add(TvCharacter.of("Joey", TvShow.FRIENDS));
-        items.add(TvCharacter.of("Monica", TvShow.FRIENDS));
-        items.add(TvCharacter.of("Rachel", TvShow.FRIENDS));
-        items.add(TvCharacter.of("Phoebe", TvShow.FRIENDS));
-        items.add(TvCharacter.of("Chandler", TvShow.FRIENDS));
-        items.add(TvCharacter.of("Ross", TvShow.FRIENDS));
-        items.add(TvCharacter.of("Mary", TvShow.MMM));
-        items.add(TvCharacter.of("Mungo", TvShow.MMM));
-        items.add(TvCharacter.of("Midge", TvShow.MMM));
+    public void populate(Set<TvCharacter> tvCharacters) {
+        tvCharacters.clear();
+        tvCharacters.add(TvCharacter.of("Tom", TvShow.THE_GOOD_LIFE, TvCharacter.Sex.MALE));
+        tvCharacters.add(TvCharacter.of("Barbara", TvShow.THE_GOOD_LIFE, TvCharacter.Sex.FEMALE));
+        tvCharacters.add(TvCharacter.of("Jerry", TvShow.THE_GOOD_LIFE, TvCharacter.Sex.MALE));
+        tvCharacters.add(TvCharacter.of("Margo", TvShow.THE_GOOD_LIFE, TvCharacter.Sex.FEMALE));
+        tvCharacters.add(TvCharacter.of("Joey", TvShow.FRIENDS, TvCharacter.Sex.MALE));
+        tvCharacters.add(TvCharacter.of("Monica", TvShow.FRIENDS, TvCharacter.Sex.FEMALE));
+        tvCharacters.add(TvCharacter.of("Rachel", TvShow.FRIENDS, TvCharacter.Sex.FEMALE));
+        tvCharacters.add(TvCharacter.of("Phoebe", TvShow.FRIENDS, TvCharacter.Sex.FEMALE));
+        tvCharacters.add(TvCharacter.of("Chandler", TvShow.FRIENDS, TvCharacter.Sex.MALE));
+        tvCharacters.add(TvCharacter.of("Ross", TvShow.FRIENDS, TvCharacter.Sex.MALE));
+        tvCharacters.add(TvCharacter.of("Mary", TvShow.MMM, TvCharacter.Sex.FEMALE));
+        tvCharacters.add(TvCharacter.of("Mungo", TvShow.MMM, TvCharacter.Sex.MALE));
+        tvCharacters.add(TvCharacter.of("Midge", TvShow.MMM, TvCharacter.Sex.MALE));
     }
 }
 

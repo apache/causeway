@@ -1,0 +1,54 @@
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Sometimes the state of an object means that certain of its actions should not be called.
+For example, there's no point in placing an order if that order has already been placed.
+
+There are two means by which access to an action can be prevented: either by hiding it, or by disabling it.
+This is done using a "hide" or a "disable" supporting method, associated with the _name_ of the action to which they relate.
+
+Hiding and disabling also applies to action parameters, to remove the ability to enter parameters if they aren't required based on the value of earlier parameters.
+ This is done using a "hide" or a "disable" supporting method, associated with the _parameter_ to which they relate either by name, number or using a "Parameters" object.
+
+== How this demo works
+
+On the left hand side is a list of objects representing TV characters, also indicating the TV show that they appeared in.
+Below is a list of selected characters, initially empty.
+
+In the middle are a set of actions.
+The first and second act at the action level, using a checkbox property to hide or disable their respective actions.
+
+The third demonstrates how individual parameters can be hidden or disabled.
+Until a value has been specified for the first parameter, the other two parameters are disabled.
+Thereafter, one will become enabled while the other will be hidden.
+
+In terms of code:
+
+* the action that is hidden based on the checkbox is:
++
+[source,java]
+.ActionVetoPage_selectTvCharactersIfNotHidden.java
+----
+include::ActionVetoPage_selectTvCharactersIfNotHidden.java[tags=class]
+----
+<.> causes the action to be hidden from view if the page's property is set.
+
+* the second action is similar, but is disabled rather than hidden:
++
+[source,java]
+.ActionVetoPage_selectTvCharactersIfNotDisabled.java
+----
+include::ActionVetoPage_selectTvCharactersIfNotDisabled.java[tags=class]
+----
+<.> causes the action to be disabled if the page's property is set.
+
+* the final example uses a "Parameters" record to hide or disable parameters
++
+[source,java]
+.ActionVetoPage_selectTvCharactersBySex.java
+----
+include::ActionVetoPage_selectTvCharactersBySex.java[tags=class]
+----
+<.> defines a "Parameters" object in line with the parameters of the action itself
+<.> both the "maleTvCharacters" and "femaleTvCharacters" are initially disabled until an argument has been set for the "sex" parameter
+<.> if "sex" is set to male, then only the "maleTvCharacters" parameter is shown; and vice versa for female.
+

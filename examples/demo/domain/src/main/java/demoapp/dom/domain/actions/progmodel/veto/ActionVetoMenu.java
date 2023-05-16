@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.progmodel.depargs;
+package demoapp.dom.domain.actions.progmodel.veto;
 
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
@@ -29,27 +29,25 @@ import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.factory.FactoryService;
 
-import demoapp.dom.domain.actions.progmodel.TvCharacter;
-import demoapp.dom.domain.actions.progmodel.TvCharacterPopulator;
-import demoapp.dom.domain.actions.progmodel.TvShow;
-
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@Named("demo.ActionDependentArgsMenu")
+import demoapp.dom.domain.actions.progmodel.TvCharacterPopulator;
+
+@Named("demo.ActionVetoMenu")
 @DomainService(nature=NatureOfService.VIEW)
 @Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
-public class ActionDependentArgsMenu {
+public class ActionVetoMenu {
 
     final FactoryService factoryService;
     final TvCharacterPopulator tvCharacterPopulator;
 
     @Action
-    @ActionLayout(cssClassFa="fa-bolt")
-    public ActionDependentArgsPage dependentArgsActions(){
-        val page = factoryService.viewModel(new ActionDependentArgsPage());
-        tvCharacterPopulator.populate(page.getItems());
+    @ActionLayout(cssClassFa="fa-ban")
+    public ActionVetoPage veto(){
+        val page = factoryService.viewModel(new ActionVetoPage());
+        tvCharacterPopulator.populate(page.getTvCharacters());
         return page;
     }
 

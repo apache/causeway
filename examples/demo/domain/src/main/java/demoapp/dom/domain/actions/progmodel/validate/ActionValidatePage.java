@@ -16,15 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.progmodel.depargs;
+package demoapp.dom.domain.actions.progmodel.validate;
 
+import java.util.Arrays;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.Collection;
@@ -37,62 +42,67 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.value.Markup;
-
-import demoapp.dom.domain.actions.progmodel.TvCharacter;
-import demoapp.dom.domain.actions.progmodel.TvShow;
+import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.resources.AsciiDocReaderService;
+import demoapp.dom.domain.actions.progmodel.TvCharacter;
+import demoapp.dom.domain.actions.progmodel.TvShow;
 
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.ActionDependentArgs")
+@Named("demo.ActionValidate")
 @DomainObject(nature=Nature.VIEW_MODEL, editing=Editing.ENABLED)
-public class ActionDependentArgsPage implements HasAsciiDocDescription {
+public class ActionValidatePage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "Action Dependent Arguments";
+        return "Action Validates";
     }
 
-    @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(describedAs = "Default for the first parameter'")
+
+    @Property
+    @PropertyLayout(labelPosition=LabelPosition.NONE)
+    public AsciiDoc getSingleValidateDescription() {
+        return asciiDocReaderService.readFor(this, "singleValidateDescription");
+    }
+    @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @Getter @Setter
-    private TvShow firstParamDefault = null;
+    private TvShow selectedTvShow;
 
     @Property
-    @PropertyLayout(describedAs = "Default for first first parameter")
+    @PropertyLayout(labelPosition=LabelPosition.NONE)
+    public AsciiDoc getParameterMatchingDescription() {
+        return asciiDocReaderService.readFor(this, "parameterMatchingDescription");
+    }
+    @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @Getter @Setter
-    private boolean checkboxDefault = false;
+    private TvShow preselectTvShow2;
+    @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
+    @Getter @Setter
+    private TvCharacter.Sex preselectCharacterSex2;
 
     @Property
     @PropertyLayout(labelPosition=LabelPosition.NONE)
-    public Markup getDependentText1() {
-        return new Markup("Click one of above actions to see how dependent arguments work. "
-                + "Set defaults for the first dialog parameter here:");
+    public AsciiDoc getAllArgsValidationDescription() {
+        return asciiDocReaderService.readFor(this, "allArgsValidationDescription");
     }
 
-    @Property
-    @PropertyLayout(labelPosition=LabelPosition.NONE)
-    public Markup getDependentText2() {
-        return new Markup("Click one of above actions to see how dependent arguments work. "
-                + "Set defaults for the first dialog parameter here:");
-    }
-
-    @Property
-    @PropertyLayout(labelPosition=LabelPosition.NONE)
-    public Markup getIndependentText() {
-        return new Markup("Click this action above to see independent arguments do not clear "
-                + "each other when changing.");
-    }
 
     @Collection
     @CollectionLayout
     @Getter
-    private final Set<TvCharacter> items = new LinkedHashSet<>();
+    private final Set<TvCharacter> tvCharacters = new LinkedHashSet<>();
+
+    @Collection
+    @CollectionLayout
+    @Getter
+    private final Set<TvCharacter> selectedTvCharacters = new LinkedHashSet<>();
+
+    @Inject @XmlTransient AsciiDocReaderService asciiDocReaderService;
 
 }
 
