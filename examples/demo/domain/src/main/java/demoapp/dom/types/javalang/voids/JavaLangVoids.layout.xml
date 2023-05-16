@@ -26,17 +26,29 @@
 
 	<bs3:row>
 		<bs3:col span="6">
+            <bs3:row>
+                <bs3:col span="12">
+                    <cpt:fieldSet name="Actions" id="section-description">
+                        <cpt:action id="returnsVoid"/>
+                        <cpt:action id="returnsJavaLangVoid"/>
+                        <cpt:property id="sectionDescription"/>
+                    </cpt:fieldSet>
+                </bs3:col>
+            </bs3:row>
 			<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
 		</bs3:col>
 		<bs3:col span="6">
-			<bs3:sizeSpan offset="true" size="MD" span="6"/>
 			<cpt:fieldSet name="Description" id="description">
 				<cpt:action id="clearHints" position="PANEL" />
-				<cpt:action id="downloadLayoutXml"  position="PANEL_DROPDOWN"/>
 				<cpt:action id="rebuildMetamodel"  position="PANEL"/>
-				<cpt:action id="downloadMetamodelXml"  position="PANEL_DROPDOWN"/>
+                <cpt:action id="downloadLayout"  position="PANEL_DROPDOWN"/>
 				<cpt:action id="inspectMetamodel"  position="PANEL_DROPDOWN"/>
+                <cpt:action id="downloadMetamodelXml"  position="PANEL_DROPDOWN"/>
+                <cpt:action id="downloadJdoMetamodel"  position="PANEL_DROPDOWN"/>
                 <cpt:action id="recentCommands"  position="PANEL_DROPDOWN"/>
+                <cpt:action id="recentExecutions"  position="PANEL_DROPDOWN"/>
+                <cpt:action id="recentAuditTrailEntries"  position="PANEL_DROPDOWN"/>
+                <cpt:action id="impersonateWithRoles"  position="PANEL_DROPDOWN"/>
 				<cpt:action id="openRestApi" position="PANEL_DROPDOWN" />
 				<cpt:property id="description"/>
 			</cpt:fieldSet>

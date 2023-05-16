@@ -78,8 +78,8 @@ class ValueTypeGenTemplateTest {
         generator.generate(generatedFiles::add);
 
         // override origin
-        //copyFiles(generatedFiles, config.getOutputRootDir(), demoDomainShowCase);
-        //copyMissingFiles(generatedFiles, config.getOutputRootDir(), demoDomainShowCase);
+        copyFiles(generatedFiles, config.getOutputRootDir(), demoDomainShowCase);
+        copyMissingFiles(generatedFiles, config.getOutputRootDir(), demoDomainShowCase);
 
         assertFileSetEquals(refShowcaseFiles, demoDomainShowCase, generatedFiles, config.getOutputRootDir());
         assertFileContentEquals(refShowcaseFiles, generatedFiles);

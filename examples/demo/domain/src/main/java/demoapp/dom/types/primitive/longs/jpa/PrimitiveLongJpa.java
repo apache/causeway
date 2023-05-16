@@ -71,7 +71,7 @@ public class PrimitiveLongJpa
     @Getter @Setter
     private long readOnlyProperty;                              // <.>
 
-    @Property(editing = Editing.ENABLED)
+    @Property(editing = Editing.ENABLED)                                        
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @Getter @Setter
     private long readWriteProperty;
