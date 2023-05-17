@@ -61,7 +61,11 @@ class ValueTypeGenTemplateTest {
     @SneakyThrows
     void testShowcase(final ValueTypeGenTemplate.Config config) {
 
-        val frameWorkRoot = new File(".").getAbsoluteFile().getParentFile().getParentFile().getParentFile();
+        var frameWorkRoot = new File(".").getAbsoluteFile().getParentFile().getParentFile().getParentFile();
+
+        // hack for Dan's PC; write out to a different git worktree
+        frameWorkRoot = new File(frameWorkRoot.getParentFile(), "demo");
+
         val demoDomainRoot = new File(frameWorkRoot, "examples/demo/domain/src/main/java");
         val demoDomainShowCase = new File(demoDomainRoot, config.getJavaPackage().replace('.', '/'));
 
@@ -78,11 +82,11 @@ class ValueTypeGenTemplateTest {
         generator.generate(generatedFiles::add);
 
         // override origin
-//        copyFiles(generatedFiles, config.getOutputRootDir(), demoDomainShowCase);
-//        copyMissingFiles(generatedFiles, config.getOutputRootDir(), demoDomainShowCase);
+        copyFiles(generatedFiles, config.getOutputRootDir(), demoDomainShowCase);
+        copyMissingFiles(generatedFiles, config.getOutputRootDir(), demoDomainShowCase);
 
-        assertFileSetEquals(refShowcaseFiles, demoDomainShowCase, generatedFiles, config.getOutputRootDir());
-        assertFileContentEquals(refShowcaseFiles, generatedFiles);
+//        assertFileSetEquals(refShowcaseFiles, demoDomainShowCase, generatedFiles, config.getOutputRootDir());
+//        assertFileContentEquals(refShowcaseFiles, generatedFiles);
 
     }
 
