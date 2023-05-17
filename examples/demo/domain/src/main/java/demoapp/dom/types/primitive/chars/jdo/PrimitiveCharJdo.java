@@ -59,7 +59,7 @@ public class PrimitiveCharJdo                                          // <.>
     @Getter @Setter
     private char readOnlyProperty;                             // <.>
 
-    @Property(editing = Editing.ENABLED)
+    @Property(editing = Editing.ENABLED)                                        
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @Getter @Setter
     private char readWriteProperty;

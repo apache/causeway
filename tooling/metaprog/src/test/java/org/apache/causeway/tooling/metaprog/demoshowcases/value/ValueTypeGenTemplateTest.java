@@ -78,8 +78,8 @@ class ValueTypeGenTemplateTest {
         generator.generate(generatedFiles::add);
 
         // override origin
-        //copyFiles(generatedFiles, config.getOutputRootDir(), demoDomainShowCase);
-        //copyMissingFiles(generatedFiles, config.getOutputRootDir(), demoDomainShowCase);
+//        copyFiles(generatedFiles, config.getOutputRootDir(), demoDomainShowCase);
+//        copyMissingFiles(generatedFiles, config.getOutputRootDir(), demoDomainShowCase);
 
         assertFileSetEquals(refShowcaseFiles, demoDomainShowCase, generatedFiles, config.getOutputRootDir());
         assertFileContentEquals(refShowcaseFiles, generatedFiles);
@@ -92,8 +92,8 @@ class ValueTypeGenTemplateTest {
     @BeforeAll
     static void setup() {
         outputRootDir = PERSIST
-                ? FileUtils.makeDir(new File("D:/tmp/valueTypes"))
-                : FileUtils.tempDir("casueway-tooling-showcases");
+                ? FileUtils.makeDir(new File("C:/tmp/valueTypes"))
+                : FileUtils.tempDir("causeway-tooling-showcases");
 
         log.info("tmp dir created in {}", outputRootDir);
     }

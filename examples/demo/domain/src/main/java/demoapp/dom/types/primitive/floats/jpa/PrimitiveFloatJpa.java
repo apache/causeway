@@ -71,7 +71,7 @@ public class PrimitiveFloatJpa
     @Getter @Setter
     private float readOnlyProperty;                              // <.>
 
-    @Property(editing = Editing.ENABLED)
+    @Property(editing = Editing.ENABLED)                                        
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @Getter @Setter
     private float readWriteProperty;
