@@ -74,7 +74,7 @@ public class ValueTypeGenTemplate {
 
         public String getShowcaseValueSimpleType() {
             String fqt = getShowcaseValueFullyQualifiedType();
-            int i = fqt.lastIndexOf(",");
+            int i = fqt.lastIndexOf(".");
             String simpleType = fqt.substring(i + 1);
             return simpleType;
         }
