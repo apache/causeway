@@ -11,7 +11,7 @@ These can be used either in entities or view models.
 On the left hand side is a collection of entities that uses the `int` datatype.
 There is also an action that opens a view model; this view model also uses the `int` datatype.
 
-Navigate into the entity or view model to see the datatype used as a property, an action parameter and as a return type of collections.
+Navigate into the entity or view model to see the datatype used as a property, an action parameter and as a return type of collections, along with code samples.
 
 === Implementation Notes
 

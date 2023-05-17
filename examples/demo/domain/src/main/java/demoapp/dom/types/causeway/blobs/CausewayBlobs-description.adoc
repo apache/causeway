@@ -4,28 +4,24 @@ The framework has built-in support for binary large objects, using the `Blob` da
 
 NOTE: This is an Apache Causeway specific data type.
 
-From here you can:
+== How this demo works
 
-* navigate to an entity that uses the `Blob` datatype
-* open a view model that uses the `Blob` datatype
+On the left hand side is a collection of entities that uses the `Blob` datatype.
+There is also an action that opens a view model; this view model also uses the `Blob` datatype.
 
-Some properties on these domain objects are mandatory, some optional.
+Navigate into the entity or view model to see the datatype used as a property, an action parameter and as a return type of collections, along with code samples.
 
-== Common interfaces
+=== Implementation Notes
 
-The entity and view model types both implement some common interfaces.
+The entity and view model types both implement some common interfaces:
 
-=== CausewayBlobHolder
-
-The `CausewayBlobHolder` interface is used to contribute a number of mixins to both types:
-
+* The `CausewayBlobHolder` interface is used to contribute a number of mixins to both types:
++
 [source,java]
 ----
 include::holder/CausewayBlobHolder.java[tags=class]
 ----
 
-=== CausewayBlobHolder2
-
-The `CausewayBlobHolder2` interface is used to demonstrate support for label positions using `@PropertyLayout(labelPosition=...)`.
+* The `CausewayBlobHolder2` interface is used to demonstrate support for label positions using `@PropertyLayout(labelPosition=...)`.
 
 Further details, along with the effect of this annotation, can be seen on the entity and view model object pages.
