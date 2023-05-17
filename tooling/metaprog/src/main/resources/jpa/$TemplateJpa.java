@@ -36,6 +36,8 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Title;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
+import /*${showcase-fully-qualified-type}*/;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -58,7 +60,7 @@ public class /*${showcase-name}*/Jpa
         extends /*${showcase-name}*/Entity {
 
 //end::class[]
-    public /*${showcase-name}*/Jpa(final /*${showcase-type}*/ initialValue) {
+    public /*${showcase-name}*/Jpa(final /*${showcase-simple-type}*/ initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
@@ -68,29 +70,29 @@ public class /*${showcase-name}*/Jpa
     @GeneratedValue
     private Long id;
 
-    @Title(prepend = "/*${showcase-type}*/ JPA entity: ")
+    @Title(prepend = "/*${showcase-simple-type}*/ JPA entity: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @Column(nullable = false)                                                   // <.>
     @Getter @Setter
-    private /*${showcase-type}*/ readOnlyProperty;
+    private /*${showcase-simple-type}*/ readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @Column(nullable = false)
     @Getter @Setter
-    private /*${showcase-type}*/ readWriteProperty;
+    private /*${showcase-simple-type}*/ readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
     @Column(nullable = true)                                                    // <.>
     @Getter @Setter
-    private /*${showcase-type}*/ readOnlyOptionalProperty;
+    private /*${showcase-simple-type}*/ readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
     @Column(nullable = true)
     @Getter @Setter
-    private /*${showcase-type}*/ readWriteOptionalProperty;
+    private /*${showcase-simple-type}*/ readWriteOptionalProperty;
 
 }
 //end::class[]

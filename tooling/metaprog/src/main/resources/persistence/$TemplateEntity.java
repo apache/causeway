@@ -26,6 +26,8 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 import /*${showcase-java-package}*/.holder./*${showcase-name}*/Holder2;
 
+import /*${showcase-fully-qualified-type}*/;
+
 /*${generated-file-notice}*/
 @Named("demo./*${showcase-name}*/Entity") // shared permissions with concrete sub class
 @DomainObject
@@ -33,10 +35,10 @@ public abstract class /*${showcase-name}*/Entity
 implements
     HasAsciiDocDescription,
     /*${showcase-name}*/Holder2,
-    ValueHolder</*${showcase-type-boxed}*/> {
+    ValueHolder</*${showcase-simple-type-boxed}*/> {
 
     @Override
-    public /*${showcase-type-boxed}*/ value() {
+    public /*${showcase-simple-type-boxed}*/ value() {
         return /*${showcase-type-getter-prefix}*/ReadOnlyProperty();
     }
 

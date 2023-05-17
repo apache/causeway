@@ -24,6 +24,8 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
+import /*${showcase-fully-qualified-type}*/;
+
 import lombok.RequiredArgsConstructor;
 
 /*${generated-file-notice}*/
@@ -41,12 +43,12 @@ public class /*${showcase-name}*/Holder_updateReadOnlyProperty {
 
     private final /*${showcase-name}*/Holder holder;
 
-    @MemberSupport public /*${showcase-name}*/Holder act(final /*${showcase-type}*/ newValue) {
+    @MemberSupport public /*${showcase-name}*/Holder act(final /*${showcase-simple-type}*/ newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport public /*${showcase-type}*/ default0Act() {
+    @MemberSupport public /*${showcase-simple-type}*/ default0Act() {
         return holder./*${showcase-type-getter-prefix}*/ReadOnlyProperty();
     }
 

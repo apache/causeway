@@ -22,6 +22,7 @@ import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
+import /*${showcase-fully-qualified-type}*/;
 
 /*${generated-file-notice}*/
 //tag::class[]
@@ -34,7 +35,7 @@ public interface /*${showcase-name}*/Holder2 extends /*${showcase-name}*/Holder 
             "@PropertyLayout(labelPosition=LEFT)",
         hidden = Where.ALL_TABLES,
         fieldSetId = "label-positions", sequence = "1")     // <.>
-    default /*${showcase-type}*/ /*${showcase-type-getter-prefix}*/ReadOnlyPropertyDerivedLabelPositionLeft() {
+    default /*${showcase-simple-type}*/ /*${showcase-type-getter-prefix}*/ReadOnlyPropertyDerivedLabelPositionLeft() {
         return /*${showcase-type-getter-prefix}*/ReadOnlyProperty();
     }
 
@@ -45,7 +46,7 @@ public interface /*${showcase-name}*/Holder2 extends /*${showcase-name}*/Holder 
             "@PropertyLayout(labelPosition=TOP)",
         hidden = Where.ALL_TABLES,
         fieldSetId = "label-positions", sequence = "2")
-    default /*${showcase-type}*/ /*${showcase-type-getter-prefix}*/ReadOnlyPropertyDerivedLabelPositionTop() {
+    default /*${showcase-simple-type}*/ /*${showcase-type-getter-prefix}*/ReadOnlyPropertyDerivedLabelPositionTop() {
         return /*${showcase-type-getter-prefix}*/ReadOnlyProperty();
     }
 
@@ -56,7 +57,7 @@ public interface /*${showcase-name}*/Holder2 extends /*${showcase-name}*/Holder 
             "@PropertyLayout(labelPosition=RIGHT)",
         hidden = Where.ALL_TABLES,
         fieldSetId = "label-positions", sequence = "3")
-    default /*${showcase-type}*/ /*${showcase-type-getter-prefix}*/ReadOnlyPropertyDerivedLabelPositionRight() {
+    default /*${showcase-simple-type}*/ /*${showcase-type-getter-prefix}*/ReadOnlyPropertyDerivedLabelPositionRight() {
         return /*${showcase-type-getter-prefix}*/ReadOnlyProperty();
     }
 
@@ -67,7 +68,7 @@ public interface /*${showcase-name}*/Holder2 extends /*${showcase-name}*/Holder 
             "@PropertyLayout(labelPosition=NONE)",
         hidden = Where.ALL_TABLES,
         fieldSetId = "label-positions", sequence = "4")
-    default /*${showcase-type}*/ /*${showcase-type-getter-prefix}*/ReadOnlyPropertyDerivedLabelPositionNone() {
+    default /*${showcase-simple-type}*/ /*${showcase-type-getter-prefix}*/ReadOnlyPropertyDerivedLabelPositionNone() {
         return /*${showcase-type-getter-prefix}*/ReadOnlyProperty();
     }
 

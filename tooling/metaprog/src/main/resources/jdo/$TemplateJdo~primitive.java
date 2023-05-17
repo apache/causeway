@@ -32,6 +32,8 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Title;
 
+import /*${showcase-fully-qualified-type}*/;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -48,21 +50,21 @@ public class /*${showcase-name}*/Jdo                                          //
         extends /*${showcase-name}*/Entity {
 
 //end::class[]
-    public /*${showcase-name}*/Jdo(final /*${showcase-type}*/ initialValue) {
+    public /*${showcase-name}*/Jdo(final /*${showcase-simple-type}*/ initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
 
 //tag::class[]
-    @Title(prepend = "/*${showcase-type}*/ (primitive) JDO entity: ")
+    @Title(prepend = "/*${showcase-simple-type}*/ (primitive) JDO entity: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @Getter @Setter
-    private /*${showcase-type}*/ readOnlyProperty;                             // <.>
+    private /*${showcase-simple-type}*/ readOnlyProperty;                             // <.>
 
-    @Property(editing = Editing.ENABLED)                                        
+    @Property(editing = Editing.ENABLED)
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @Getter @Setter
-    private /*${showcase-type}*/ readWriteProperty;
+    private /*${showcase-simple-type}*/ readWriteProperty;
 
 }
 //end::class[]

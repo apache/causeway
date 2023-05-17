@@ -4,7 +4,7 @@
 
 == Mixin actions
 
-A number of mixin actions contribute through the `#{showcase-name}Holder` interface, demonstrate the use of `#{showcase-type}` as a parameter and as a return type.
+A number of mixin actions contribute through the `#{showcase-name}Holder` interface, demonstrate the use of `#{showcase-simple-type}` as a parameter and as a return type.
 For example:
 
 * the `updateReadOnlyProperty` action is:

@@ -22,6 +22,8 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
 
+import /*${showcase-fully-qualified-type}*/;
+
 import lombok.RequiredArgsConstructor;
 
 /*${generated-file-notice}*/
@@ -33,7 +35,7 @@ public class /*${showcase-name}*/Holder_mixinProperty {
 
     private final /*${showcase-name}*/Holder holder;
 
-    public /*${showcase-type}*/ prop() {
+    public /*${showcase-simple-type}*/ prop() {
         return holder./*${showcase-type-getter-prefix}*/ReadOnlyProperty();
     }
 

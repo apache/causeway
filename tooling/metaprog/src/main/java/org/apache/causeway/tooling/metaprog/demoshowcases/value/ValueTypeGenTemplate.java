@@ -34,7 +34,6 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.io.FileUtils;
 import org.apache.causeway.commons.io.TextUtils;
-import org.apache.causeway.tooling.metaprog.demoshowcases.value.ValueTypeGenTemplate.TemplateVariant;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -50,17 +49,17 @@ public class ValueTypeGenTemplate {
     public static class Config {
         final File outputRootDir;
         final String showcaseName;
-        final String showcaseValueType;
+        final String showcaseValueFullyQualifiedType;
         final String showcaseValueSemantics;
         @Builder.Default
         final String jdoTypeSupportNotice =
-            "JDO supports `#{showcase-type}` out-of-the-box, so no special annotations are required.";
+            "JDO supports `#{showcase-simple-type}` out-of-the-box, so no special annotations are required.";
         @Builder.Default
         final String jpaTypeSupportNotice =
-            "JPA supports `#{showcase-type}` out-of-the-box, so no special annotations are required.";
+            "JPA supports `#{showcase-simple-type}` out-of-the-box, so no special annotations are required.";
         @Builder.Default
         final String jaxbTypeSupportNotice =
-            "JAXB supports `#{showcase-type}` out-of-the-box, so no special annotations are required.";
+            "JAXB supports `#{showcase-simple-type}` out-of-the-box, so no special annotations are required.";
         final String javaPackage;
         @Builder.Default
         final String fileNamePlaceholderForShowcaseName = "$Template";
@@ -72,6 +71,12 @@ public class ValueTypeGenTemplate {
         final Can<Template> templates = Template.REGULAR_SET;
         @Builder.Default
         final TemplateVariant templateVariant = TemplateVariant.DEFAULT;
+
+        public String getShowcaseValueSimpleType() {
+            String fqt = getShowcaseValueFullyQualifiedType();
+            int i = fqt.lastIndexOf(",");
+            return fqt.substring(i+1);
+        }
     }
 
     @RequiredArgsConstructor
@@ -221,15 +226,16 @@ public class ValueTypeGenTemplate {
             templateVars.putAll(config.templateVariables);
             templateVars.put("java-package", template.javaPackage(config));
             templateVars.put("showcase-name", config.showcaseName);
-            templateVars.put("showcase-type", config.showcaseValueType);
-            templateVars.put("showcase-type-boxed",
-                    Optional.ofNullable(ClassUtils.resolvePrimitiveClassName(config.showcaseValueType))
+            templateVars.put("showcase-simple-type", config.getShowcaseValueSimpleType());
+            templateVars.put("showcase-fully-qualified-type", config.showcaseValueFullyQualifiedType);
+            templateVars.put("showcase-simple-type-boxed",
+                    Optional.ofNullable(ClassUtils.resolvePrimitiveClassName(config.showcaseValueFullyQualifiedType))
                     .map(ClassUtils::resolvePrimitiveIfNecessary)
                     .map(Class::getName)
-                    .orElse(config.showcaseValueType));
+                    .orElse(config.showcaseValueFullyQualifiedType));
 
-            templateVars.put("showcase-type-getter-prefix",
-                    Optional.ofNullable(ClassUtils.resolvePrimitiveClassName(config.showcaseValueType))
+            templateVars.put("showcase-simple-type-getter-prefix",
+                    Optional.ofNullable(ClassUtils.resolvePrimitiveClassName(config.showcaseValueFullyQualifiedType))
                     .map(cls->boolean.class.equals(cls) ? "is" : "get")
                     .orElse("get"));
 
