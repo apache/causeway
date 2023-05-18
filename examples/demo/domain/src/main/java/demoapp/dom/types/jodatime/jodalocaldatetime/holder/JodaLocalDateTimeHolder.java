@@ -20,21 +20,23 @@ package demoapp.dom.types.jodatime.jodalocaldatetime.holder;
 
 import javax.inject.Named;
 
+import org.joda.time.LocalDateTime;
+
 @Named("demo.JodaLocalDateTimeHolder")
 //tag::class[]
 public interface JodaLocalDateTimeHolder {
 
-    org.joda.time.LocalDateTime getReadOnlyProperty();
-    void setReadOnlyProperty(org.joda.time.LocalDateTime c);
+    LocalDateTime getReadOnlyProperty();
+    void setReadOnlyProperty(LocalDateTime c);
 
-    org.joda.time.LocalDateTime getReadWriteProperty();
-    void setReadWriteProperty(org.joda.time.LocalDateTime c);
+    LocalDateTime getReadWriteProperty();
+    void setReadWriteProperty(LocalDateTime c);
 
-    org.joda.time.LocalDateTime getReadOnlyOptionalProperty();
-    void setReadOnlyOptionalProperty(org.joda.time.LocalDateTime c);
+    LocalDateTime getReadOnlyOptionalProperty();
+    void setReadOnlyOptionalProperty(LocalDateTime c);
 
-    org.joda.time.LocalDateTime getReadWriteOptionalProperty();
-    void setReadWriteOptionalProperty(org.joda.time.LocalDateTime c);
+    LocalDateTime getReadWriteOptionalProperty();
+    void setReadWriteOptionalProperty(LocalDateTime c);
 
 }
 //end::class[]

@@ -20,9 +20,9 @@ package demoapp.dom.types.jodatime.jodalocaldatetime.samples;
 
 import java.util.stream.Stream;
 
-import org.joda.time.LocalDateTime;
-
 import org.springframework.stereotype.Service;
+
+import org.joda.time.LocalDateTime;
 
 import demoapp.dom.types.Samples;
 
@@ -31,9 +31,9 @@ public class JodaLocalDateTimeSamples implements Samples<LocalDateTime> {
 
     @Override
     public Stream<LocalDateTime> stream() {
-        return Stream.of(1,2,3)
-                .map(x -> new org.joda.time.LocalDateTime(2020,1,1,1,1,1,1));
-
+        return new org.apache.causeway.valuetypes.jodatime.integration.valuesemantics.JodaLocalDateTimeValueSemantics()
+                .getExamples()
+                .stream();
     }
 
 }

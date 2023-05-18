@@ -21,19 +21,21 @@ package demoapp.dom.types.jodatime.jodalocaldatetime.jdo;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+import org.joda.time.LocalDateTime;
+
 import demoapp.dom._infra.values.ValueHolderRepository;
 
 @Profile("demo-jdo")
 @Service
 public class JodaLocalDateTimeJdoEntities
-extends ValueHolderRepository<org.joda.time.LocalDateTime, JodaLocalDateTimeJdo> {
+extends ValueHolderRepository<LocalDateTime, JodaLocalDateTimeJdo> {
 
     protected JodaLocalDateTimeJdoEntities() {
         super(JodaLocalDateTimeJdo.class);
     }
 
     @Override
-    protected JodaLocalDateTimeJdo newDetachedEntity(org.joda.time.LocalDateTime value) {
+    protected JodaLocalDateTimeJdo newDetachedEntity(LocalDateTime value) {
         return new JodaLocalDateTimeJdo(value);
     }
 

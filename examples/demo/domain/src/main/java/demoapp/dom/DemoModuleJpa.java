@@ -94,6 +94,10 @@ import demoapp.dom.types.javatime.javatimeoffsettime.jpa.JavaTimeOffsetTimeJpa;
 import demoapp.dom.types.javatime.javatimezoneddatetime.jpa.JavaTimeZonedDateTimeJpa;
 import demoapp.dom.types.javautil.javautildate.jpa.JavaUtilDateJpa;
 import demoapp.dom.types.javautil.uuids.jpa.JavaUtilUuidJpa;
+import demoapp.dom.types.jodatime.jodadatetime.jpa.JodaDateTimeJpa;
+import demoapp.dom.types.jodatime.jodalocaldate.jpa.JodaLocalDateJpa;
+import demoapp.dom.types.jodatime.jodalocaldatetime.jpa.JodaLocalDateTimeJpa;
+import demoapp.dom.types.jodatime.jodalocaltime.jpa.JodaLocalTimeJpa;
 import demoapp.dom.types.primitive.booleans.jpa.PrimitiveBooleanJpa;
 import demoapp.dom.types.primitive.bytes.jpa.PrimitiveByteJpa;
 import demoapp.dom.types.primitive.chars.jpa.PrimitiveCharJpa;
@@ -178,6 +182,10 @@ import demoapp.dom.types.primitive.shorts.jpa.PrimitiveShortJpa;
         JavaTimeZonedDateTimeJpa.class,
         JavaUtilDateJpa.class,
         JavaUtilUuidJpa.class,
+        JodaDateTimeJpa.class,
+        JodaLocalDateJpa.class,
+        JodaLocalDateTimeJpa.class,
+        JodaLocalTimeJpa.class,
 
         PrimitiveBooleanJpa.class,
         PrimitiveDoubleJpa.class,

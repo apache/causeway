@@ -20,21 +20,23 @@ package demoapp.dom.types.jodatime.jodadatetime.holder;
 
 import javax.inject.Named;
 
+import org.joda.time.DateTime;
+
 @Named("demo.JodaDateTimeHolder")
 //tag::class[]
 public interface JodaDateTimeHolder {
 
-    org.joda.time.DateTime getReadOnlyProperty();
-    void setReadOnlyProperty(org.joda.time.DateTime c);
+    DateTime getReadOnlyProperty();
+    void setReadOnlyProperty(DateTime c);
 
-    org.joda.time.DateTime getReadWriteProperty();
-    void setReadWriteProperty(org.joda.time.DateTime c);
+    DateTime getReadWriteProperty();
+    void setReadWriteProperty(DateTime c);
 
-    org.joda.time.DateTime getReadOnlyOptionalProperty();
-    void setReadOnlyOptionalProperty(org.joda.time.DateTime c);
+    DateTime getReadOnlyOptionalProperty();
+    void setReadOnlyOptionalProperty(DateTime c);
 
-    org.joda.time.DateTime getReadWriteOptionalProperty();
-    void setReadWriteOptionalProperty(org.joda.time.DateTime c);
+    DateTime getReadWriteOptionalProperty();
+    void setReadWriteOptionalProperty(DateTime c);
 
 }
 //end::class[]

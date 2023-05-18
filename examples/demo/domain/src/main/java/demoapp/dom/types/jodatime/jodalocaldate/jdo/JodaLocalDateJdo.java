@@ -34,6 +34,8 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Title;
 
+import org.joda.time.LocalDate;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -49,35 +51,35 @@ public class JodaLocalDateJdo                                          // <.>
         extends JodaLocalDateEntity {
 
 //end::class[]
-    public JodaLocalDateJdo(final org.joda.time.LocalDate initialValue) {
+    public JodaLocalDateJdo(final LocalDate initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
 
 //tag::class[]
-    @Title(prepend = "org.joda.time.LocalDate JDO entity: ")
+    @Title(prepend = "LocalDate JDO entity: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @Column(allowsNull = "false")                                               // <.>
     @Getter @Setter
-    private org.joda.time.LocalDate readOnlyProperty;
+    private LocalDate readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @Column(allowsNull = "false")
     @Getter @Setter
-    private org.joda.time.LocalDate readWriteProperty;
+    private LocalDate readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
     @Column(allowsNull = "true")                                                // <.>
     @Getter @Setter
-    private org.joda.time.LocalDate readOnlyOptionalProperty;
+    private LocalDate readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
     @Column(allowsNull = "true")
     @Getter @Setter
-    private org.joda.time.LocalDate readWriteOptionalProperty;
+    private LocalDate readWriteOptionalProperty;
 
 }
 //end::class[]

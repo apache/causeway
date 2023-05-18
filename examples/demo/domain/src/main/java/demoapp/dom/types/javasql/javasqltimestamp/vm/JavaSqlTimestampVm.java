@@ -24,6 +24,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;
@@ -61,23 +62,27 @@ public class JavaSqlTimestampVm
 //tag::class[]
     @Title(prepend = "Timestamp view model: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
+    @XmlJavaTypeAdapter(org.apache.causeway.applib.jaxb.JavaSqlJaxbAdapters.TimestampToStringAdapter.class)
     @XmlElement(required = true)                                                // <.>
     @Getter @Setter
     private Timestamp readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
+    @XmlJavaTypeAdapter(org.apache.causeway.applib.jaxb.JavaSqlJaxbAdapters.TimestampToStringAdapter.class)
     @XmlElement(required = true)
     @Getter @Setter
     private Timestamp readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
+    @XmlJavaTypeAdapter(org.apache.causeway.applib.jaxb.JavaSqlJaxbAdapters.TimestampToStringAdapter.class)
     @Getter @Setter
     private Timestamp readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
+    @XmlJavaTypeAdapter(org.apache.causeway.applib.jaxb.JavaSqlJaxbAdapters.TimestampToStringAdapter.class)
     @Getter @Setter
     private Timestamp readWriteOptionalProperty;
 

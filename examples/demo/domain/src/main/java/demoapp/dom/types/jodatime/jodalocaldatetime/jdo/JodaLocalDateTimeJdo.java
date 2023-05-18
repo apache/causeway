@@ -34,6 +34,8 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Title;
 
+import org.joda.time.LocalDateTime;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -49,35 +51,35 @@ public class JodaLocalDateTimeJdo                                          // <.
         extends JodaLocalDateTimeEntity {
 
 //end::class[]
-    public JodaLocalDateTimeJdo(final org.joda.time.LocalDateTime initialValue) {
+    public JodaLocalDateTimeJdo(final LocalDateTime initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
 
 //tag::class[]
-    @Title(prepend = "org.joda.time.LocalDateTime JDO entity: ")
+    @Title(prepend = "LocalDateTime JDO entity: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @Column(allowsNull = "false")                                               // <.>
     @Getter @Setter
-    private org.joda.time.LocalDateTime readOnlyProperty;
+    private LocalDateTime readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @Column(allowsNull = "false")
     @Getter @Setter
-    private org.joda.time.LocalDateTime readWriteProperty;
+    private LocalDateTime readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
     @Column(allowsNull = "true")                                                // <.>
     @Getter @Setter
-    private org.joda.time.LocalDateTime readOnlyOptionalProperty;
+    private LocalDateTime readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
     @Column(allowsNull = "true")
     @Getter @Setter
-    private org.joda.time.LocalDateTime readWriteOptionalProperty;
+    private LocalDateTime readWriteOptionalProperty;
 
 }
 //end::class[]

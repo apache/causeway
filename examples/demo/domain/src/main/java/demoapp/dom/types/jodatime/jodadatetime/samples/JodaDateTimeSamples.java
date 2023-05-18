@@ -20,9 +20,9 @@ package demoapp.dom.types.jodatime.jodadatetime.samples;
 
 import java.util.stream.Stream;
 
-import org.joda.time.DateTime;
-
 import org.springframework.stereotype.Service;
+
+import org.joda.time.DateTime;
 
 import demoapp.dom.types.Samples;
 
@@ -31,8 +31,9 @@ public class JodaDateTimeSamples implements Samples<DateTime> {
 
     @Override
     public Stream<DateTime> stream() {
-        return Stream.of(1, 2, 3)
-                .map(x -> new org.joda.time.DateTime(2020,x,x,x,x));
+        return new org.apache.causeway.valuetypes.jodatime.integration.valuesemantics.JodaDateTimeValueSemantics()
+                .getExamples()
+                .stream();
     }
 
 }

@@ -48,14 +48,6 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
                 <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="tableDecorator"/>
                 <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="uiEvents"/>
             </mb3:section>
-            <mb3:section>
-                <mb3:named>Prog Model</mb3:named>
-                <mb3:serviceAction objectType="demo.MixinMenu" id="mixins"/>
-                <mb3:serviceAction objectType="demo.CompositeValueTypeMenu" id="compositeValueTypes"/>
-                <mb3:serviceAction objectType="demo.ScalarValueTypeMenu" id="scalarValueTypes"/>
-                <mb3:serviceAction objectType="demo.EmbeddedTypeMenuJpa" id="embeddedTypes"/>
-                <mb3:serviceAction objectType="demo.EmbeddedTypeMenuJdo" id="embeddedTypes"/>
-            </mb3:section>
         </mb3:menu>
 
         <mb3:menu>
@@ -83,19 +75,6 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
                 <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="promptStyle"/>
                 <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="redirectPolicy"/>
                 <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="sequence"/>
-            </mb3:section>
-            <mb3:section>
-                <mb3:named>Prog Model</mb3:named>
-                <mb3:serviceAction objectType="demo.ActionChoicesMenu" id="choices"/>
-                <mb3:serviceAction objectType="demo.ActionAutoCompleteMenu" id="autoComplete"/>
-                <mb3:serviceAction objectType="demo.ActionDefaultsMenu" id="defaults"/>
-                <mb3:serviceAction objectType="demo.ActionValidateMenu" id="validate"/>
-                <mb3:serviceAction objectType="demo.ActionVetoMenu" id="veto">
-                    <cpt:named>Hide &amp; Disable</cpt:named>
-                </mb3:serviceAction>
-                <mb3:serviceAction objectType="demo.BulkActionMenu" id="bulkActions">
-                    <cpt:named>Bulk Actions</cpt:named>
-                </mb3:serviceAction>
             </mb3:section>
         </mb3:menu>
 
@@ -155,71 +134,61 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
         </mb3:menu>
 
         <mb3:menu>
-            <mb3:named>Basic Types</mb3:named>
+            <mb3:named>Prog Model</mb3:named>
+            <mb3:section>
+                <mb3:named>Actions</mb3:named>
+                <mb3:serviceAction objectType="demo.ActionChoicesMenu" id="choices"/>
+                <mb3:serviceAction objectType="demo.ActionAutoCompleteMenu" id="autoComplete"/>
+                <mb3:serviceAction objectType="demo.ActionDefaultsMenu" id="defaults"/>
+                <mb3:serviceAction objectType="demo.ActionValidateMenu" id="validate"/>
+                <mb3:serviceAction objectType="demo.ActionVetoMenu" id="veto">
+                    <cpt:named>Hide &amp; Disable</cpt:named>
+                </mb3:serviceAction>
+                <mb3:serviceAction objectType="demo.BulkActionMenu" id="bulkActions">
+                    <cpt:named>Bulk Actions</cpt:named>
+                </mb3:serviceAction>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Mixins</mb3:named>
+                <mb3:serviceAction objectType="demo.MixinMenu" id="mixins"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Custom Value Types</mb3:named>
+                <mb3:serviceAction objectType="demo.CompositeValueTypeMenu" id="compositeValueTypes"/>
+                <mb3:serviceAction objectType="demo.ScalarValueTypeMenu" id="scalarValueTypes"/>
+                <mb3:serviceAction objectType="demo.EmbeddedTypeMenuJpa" id="embeddedTypes"/>
+                <mb3:serviceAction objectType="demo.EmbeddedTypeMenuJdo" id="embeddedTypes"/>
+            </mb3:section>
+        </mb3:menu>
+
+        <mb3:menu>
+            <mb3:named>Selected Services</mb3:named>
+            <mb3:section>
+                <mb3:named>Core</mb3:named>
+                <mb3:serviceAction objectType="demo.ServicesMenu" id="errorReportingService" />
+                <mb3:serviceAction objectType="demo.ServicesMenu" id="eventBusService" />
+                <mb3:serviceAction objectType="demo.ServicesMenu" id="messageService" />
+                <mb3:serviceAction objectType="demo.ServicesMenu" id="wrapperFactory"/>
+            </mb3:section>
+        </mb3:menu>
+
+        <mb3:menu>
+            <mb3:named>Common Data Types</mb3:named>
             <mb3:section>
                 <mb3:named>Primitives</mb3:named>
-                <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="shorts"/>
                 <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="ints"/>
-                <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="longs"/>
-                <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="bytes"/>
-                <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="floats"/>
-                <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="doubles"/>
-                <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="chars"/>
                 <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="booleans"/>
             </mb3:section>
             <mb3:section>
-                <mb3:named>Wrappers</mb3:named>
-                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="bytes"/>
-                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="shorts"/>
-                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="integers"/>
-                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="longs"/>
-                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="floats"/>
-                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="doubles"/>
-                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="characters"/>
-                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="booleans"/>
-            </mb3:section>
-            <mb3:section>
-                <mb3:named>Common</mb3:named>
-                <mb3:serviceAction objectType="demo.JavaLangTypesMenu" id="enums"/>
+                <mb3:named>java.lang</mb3:named>
                 <mb3:serviceAction objectType="demo.JavaLangTypesMenu" id="strings"/>
-                <mb3:serviceAction objectType="demo.JavaLangTypesMenu" id="voids"/>
-            </mb3:section>
-        </mb3:menu>
-
-        <mb3:menu>
-            <mb3:named>Temporal Types</mb3:named>
-            <mb3:section>
-                <mb3:named>java.sql</mb3:named>
-                <mb3:serviceAction objectType="demo.JavaSqlTypesMenu" id="dates"/>
-                <mb3:serviceAction objectType="demo.JavaSqlTypesMenu" id="timestamps"/>
+                <mb3:serviceAction objectType="demo.JavaLangTypesMenu" id="enums"/>
             </mb3:section>
             <mb3:section>
                 <mb3:named>java.time</mb3:named>
-                <mb3:serviceAction objectType="demo.JavaTimeTypesMenu" id="localTimes"/>
                 <mb3:serviceAction objectType="demo.JavaTimeTypesMenu" id="localDates"/>
-                <mb3:serviceAction objectType="demo.JavaTimeTypesMenu" id="localDateTimes"/>
-                <mb3:serviceAction objectType="demo.JavaTimeTypesMenu" id="offsetDateTimes"/>
-                <mb3:serviceAction objectType="demo.JavaTimeTypesMenu" id="offsetTimes"/>
+                <mb3:serviceAction objectType="demo.JavaTimeTypesMenu" id="localTimes"/>
                 <mb3:serviceAction objectType="demo.JavaTimeTypesMenu" id="zonedDateTimes"/>
-            </mb3:section>
-            <mb3:section>
-                <mb3:named>java.util</mb3:named>
-                <mb3:serviceAction objectType="demo.JavaUtilTypesMenu" id="dates"/>
-            </mb3:section>
-            <mb3:section>
-                <mb3:named>JodaTime</mb3:named>
-                <mb3:serviceAction objectType="demo.JodaTimeTypesMenu" id="localDates"/>
-                <mb3:serviceAction objectType="demo.JodaTimeTypesMenu" id="localDateTimes"/>
-                <mb3:serviceAction objectType="demo.JodaTimeTypesMenu" id="localTimes"/>
-                <mb3:serviceAction objectType="demo.JodaTimeTypesMenu" id="dateTimes"/>
-            </mb3:section>
-        </mb3:menu>
-
-        <mb3:menu>
-            <mb3:named>More Types</mb3:named>
-            <mb3:section>
-                <mb3:named>java.awt</mb3:named>
-                <mb3:serviceAction objectType="demo.JavaAwtTypesMenu" id="bufferedImages"/>
             </mb3:section>
             <mb3:section>
                 <mb3:named>java.math</mb3:named>
@@ -238,6 +207,17 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
                 <mb3:named>Causeway Core</mb3:named>
                 <mb3:serviceAction objectType="demo.CausewayTypesMenu" id="blobs"/>
                 <mb3:serviceAction objectType="demo.CausewayTypesMenu" id="clobs"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Causeway Values</mb3:named>
+                <mb3:serviceAction objectType="demo.CausewayValTypesMenu" id="asciiDocs"/>
+            </mb3:section>
+        </mb3:menu>
+
+        <mb3:menu>
+            <mb3:named>Other Data Types</mb3:named>
+            <mb3:section>
+                <mb3:named>Causeway Core</mb3:named>
                 <mb3:serviceAction objectType="demo.CausewayTypesMenu" id="localResourcePaths"/>
                 <mb3:serviceAction objectType="demo.CausewayTypesMenu" id="markups"/>
                 <mb3:serviceAction objectType="demo.CausewayTypesMenu" id="passwords"/>
@@ -245,20 +225,58 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
             </mb3:section>
             <mb3:section>
                 <mb3:named>Causeway Values</mb3:named>
-                <mb3:serviceAction objectType="demo.CausewayValTypesMenu" id="asciiDocs"/>
                 <mb3:serviceAction objectType="demo.CausewayValTypesMenu" id="markdowns"/>
                 <mb3:serviceAction objectType="demo.CausewayValTypesMenu" id="vegaCharts"/>
             </mb3:section>
-        </mb3:menu>
-
-        <mb3:menu>
-            <mb3:named>Services</mb3:named>
             <mb3:section>
-                <mb3:named>Core</mb3:named>
-                <mb3:serviceAction objectType="demo.ServicesMenu" id="errorReportingService" />
-                <mb3:serviceAction objectType="demo.ServicesMenu" id="eventBusService" />
-                <mb3:serviceAction objectType="demo.ServicesMenu" id="messageService" />
-                <mb3:serviceAction objectType="demo.ServicesMenu" id="wrapperFactory"/>
+                <mb3:named>java.awt</mb3:named>
+                <mb3:serviceAction objectType="demo.JavaAwtTypesMenu" id="bufferedImages"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Primitives</mb3:named>
+                <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="shorts"/>
+                <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="longs"/>
+                <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="bytes"/>
+                <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="floats"/>
+                <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="doubles"/>
+                <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="chars"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>java.lang (Wrappers)</mb3:named>
+                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="bytes"/>
+                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="integers"/>
+                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="shorts"/>
+                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="longs"/>
+                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="floats"/>
+                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="booleans"/>
+                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="doubles"/>
+                <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="characters"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>java.lang</mb3:named>
+                <mb3:serviceAction objectType="demo.JavaLangTypesMenu" id="voids"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>java.time</mb3:named>
+                <mb3:serviceAction objectType="demo.JavaTimeTypesMenu" id="localDateTimes"/>
+                <mb3:serviceAction objectType="demo.JavaTimeTypesMenu" id="offsetDateTimes"/>
+                <mb3:serviceAction objectType="demo.JavaTimeTypesMenu" id="offsetTimes"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>java.util</mb3:named>
+                <mb3:serviceAction objectType="demo.JavaUtilTypesMenu" id="dates"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>java.sql</mb3:named>
+                <mb3:serviceAction objectType="demo.JavaSqlTypesMenu" id="dates"/>
+                <mb3:serviceAction objectType="demo.JavaSqlTypesMenu" id="timestamps"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>JodaTime</mb3:named>
+                <mb3:serviceAction objectType="demo.JodaTimeTypesMenu" id="localDates"/>
+                <mb3:serviceAction objectType="demo.JodaTimeTypesMenu" id="localDateTimes"/>
+                <mb3:serviceAction objectType="demo.JodaTimeTypesMenu" id="localTimes"/>
+                <mb3:serviceAction objectType="demo.JodaTimeTypesMenu" id="dateTimes"/>
             </mb3:section>
         </mb3:menu>
 

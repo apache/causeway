@@ -18,7 +18,6 @@
  */
 package demoapp.dom.types.jodatime.jodalocaldate;
 
-import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -28,10 +27,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
-
-import org.joda.time.LocalDate;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -43,6 +38,8 @@ import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+
+import org.joda.time.LocalDate;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolderRepository;
@@ -59,28 +56,26 @@ import demoapp.dom.types.jodatime.jodalocaldate.vm.JodaLocalDateVm;
 public class JodaLocalDates implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "org.joda.time.LocalDate data type";
+        return "LocalDate data type";
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    public JodaLocalDateVm openViewModel(final org.joda.time.LocalDate initialValue) {
+    public JodaLocalDateVm openViewModel(final LocalDate initialValue) {
         return new JodaLocalDateVm(initialValue);
     }
-    @MemberSupport public org.joda.time.LocalDate default0OpenViewModel() {
+    @MemberSupport public LocalDate default0OpenViewModel() {
         return samples.single();
     }
 
     @Collection
     public List<? extends JodaLocalDateEntity> getEntities() {
-        return entities!=null
-                ? entities.all()
-                : Collections.emptyList();
+        return entities.all();
     }
 
-    @Autowired(required = false)
+    @Inject
     @XmlTransient
-    ValueHolderRepository<org.joda.time.LocalDate, ? extends JodaLocalDateEntity> entities;
+    ValueHolderRepository<LocalDate, ? extends JodaLocalDateEntity> entities;
 
     @Inject
     @XmlTransient

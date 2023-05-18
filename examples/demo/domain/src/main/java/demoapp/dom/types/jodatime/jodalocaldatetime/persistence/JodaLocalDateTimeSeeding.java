@@ -20,19 +20,19 @@ package demoapp.dom.types.jodatime.jodalocaldatetime.persistence;
 
 import javax.inject.Inject;
 
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+
+import org.joda.time.LocalDateTime;
 
 import demoapp.dom._infra.seed.SeedServiceAbstract;
 import demoapp.dom._infra.values.ValueHolderRepository;
 
-@Profile("demo-jdo") // not supported for JPA
 @Service
 public class JodaLocalDateTimeSeeding
 extends SeedServiceAbstract {
 
     @Inject
-    public JodaLocalDateTimeSeeding(ValueHolderRepository<org.joda.time.LocalDateTime, ? extends JodaLocalDateTimeEntity> entities) {
+    public JodaLocalDateTimeSeeding(ValueHolderRepository<LocalDateTime, ? extends JodaLocalDateTimeEntity> entities) {
         super(entities);
     }
 

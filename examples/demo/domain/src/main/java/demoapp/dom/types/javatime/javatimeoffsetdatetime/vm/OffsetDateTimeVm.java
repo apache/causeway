@@ -24,6 +24,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;
@@ -61,23 +62,27 @@ public class OffsetDateTimeVm
 //tag::class[]
     @Title(prepend = "OffsetDateTime view model: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
+    @XmlJavaTypeAdapter(org.apache.causeway.applib.jaxb.JavaTimeJaxbAdapters.OffsetDateTimeToStringAdapter.class)
     @XmlElement(required = true)                                                // <.>
     @Getter @Setter
     private OffsetDateTime readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
+    @XmlJavaTypeAdapter(org.apache.causeway.applib.jaxb.JavaTimeJaxbAdapters.OffsetDateTimeToStringAdapter.class)
     @XmlElement(required = true)
     @Getter @Setter
     private OffsetDateTime readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
+    @XmlJavaTypeAdapter(org.apache.causeway.applib.jaxb.JavaTimeJaxbAdapters.OffsetDateTimeToStringAdapter.class)
     @Getter @Setter
     private OffsetDateTime readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
+    @XmlJavaTypeAdapter(org.apache.causeway.applib.jaxb.JavaTimeJaxbAdapters.OffsetDateTimeToStringAdapter.class)
     @Getter @Setter
     private OffsetDateTime readWriteOptionalProperty;
 

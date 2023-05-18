@@ -33,7 +33,8 @@ import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Title;
-import org.apache.causeway.valuetypes.jodatime.applib.jaxb.JodaTimeJaxbAdapters;
+
+import org.joda.time.LocalTime;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -47,43 +48,43 @@ import demoapp.dom.types.jodatime.jodalocaltime.holder.JodaLocalTimeHolder2;
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.JodaLocalTimeVm")
 @DomainObject(
-      nature=Nature.VIEW_MODEL)
+        nature=Nature.VIEW_MODEL)
 @lombok.NoArgsConstructor                                                       // <.>
 public class JodaLocalTimeVm
-      implements HasAsciiDocDescription, JodaLocalTimeHolder2 {
+        implements HasAsciiDocDescription, JodaLocalTimeHolder2 {
 
 //end::class[]
-  public JodaLocalTimeVm(final org.joda.time.LocalTime initialValue) {
-      this.readOnlyProperty = initialValue;
-      this.readWriteProperty = initialValue;
-  }
+    public JodaLocalTimeVm(final LocalTime initialValue) {
+        this.readOnlyProperty = initialValue;
+        this.readWriteProperty = initialValue;
+    }
 
 //tag::class[]
-  @Title(prepend = "org.joda.time.LocalTime view model: ")
-  @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
-  @XmlElement(required = true)                                                // <.>
-  @XmlJavaTypeAdapter(JodaTimeJaxbAdapters.LocalTimeToStringAdapter.class)    // <.>
-  @Getter @Setter
-  private org.joda.time.LocalTime readOnlyProperty;
+    @Title(prepend = "LocalTime view model: ")
+    @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
+    @XmlJavaTypeAdapter(org.apache.causeway.valuetypes.jodatime.applib.jaxb.JodaTimeJaxbAdapters.LocalTimeToStringAdapter.class)
+    @XmlElement(required = true)                                                // <.>
+    @Getter @Setter
+    private LocalTime readOnlyProperty;
 
-  @Property(editing = Editing.ENABLED)                                        // <.>
-  @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
-  @XmlElement(required = true)
-  @XmlJavaTypeAdapter(JodaTimeJaxbAdapters.LocalTimeToStringAdapter.class)
-  @Getter @Setter
-  private org.joda.time.LocalTime readWriteProperty;
+    @Property(editing = Editing.ENABLED)                                        // <.>
+    @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
+    @XmlJavaTypeAdapter(org.apache.causeway.valuetypes.jodatime.applib.jaxb.JodaTimeJaxbAdapters.LocalTimeToStringAdapter.class)
+    @XmlElement(required = true)
+    @Getter @Setter
+    private LocalTime readWriteProperty;
 
-  @Property(optionality = Optionality.OPTIONAL)                               // <.>
-  @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
-  @XmlJavaTypeAdapter(JodaTimeJaxbAdapters.LocalTimeToStringAdapter.class)
-  @Getter @Setter
-  private org.joda.time.LocalTime readOnlyOptionalProperty;
+    @Property(optionality = Optionality.OPTIONAL)                               // <.>
+    @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
+    @XmlJavaTypeAdapter(org.apache.causeway.valuetypes.jodatime.applib.jaxb.JodaTimeJaxbAdapters.LocalTimeToStringAdapter.class)
+    @Getter @Setter
+    private LocalTime readOnlyOptionalProperty;
 
-  @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
-  @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
-  @XmlJavaTypeAdapter(JodaTimeJaxbAdapters.LocalTimeToStringAdapter.class)
-  @Getter @Setter
-  private org.joda.time.LocalTime readWriteOptionalProperty;
+    @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
+    @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
+    @XmlJavaTypeAdapter(org.apache.causeway.valuetypes.jodatime.applib.jaxb.JodaTimeJaxbAdapters.LocalTimeToStringAdapter.class)
+    @Getter @Setter
+    private LocalTime readWriteOptionalProperty;
 
 }
 //end::class[]

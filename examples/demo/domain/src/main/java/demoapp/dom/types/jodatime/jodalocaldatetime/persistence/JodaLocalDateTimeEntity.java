@@ -24,18 +24,20 @@ import org.apache.causeway.applib.annotation.DomainObject;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
-import demoapp.dom.types.jodatime.jodalocaldatetime.holder.JodaLocalDateTimeHolder3;
+import demoapp.dom.types.jodatime.jodalocaldatetime.holder.JodaLocalDateTimeHolder2;
+
+import org.joda.time.LocalDateTime;
 
 @Named("demo.JodaLocalDateTimeEntity") // shared permissions with concrete sub class
 @DomainObject
 public abstract class JodaLocalDateTimeEntity
 implements
     HasAsciiDocDescription,
-    JodaLocalDateTimeHolder3,
-    ValueHolder<org.joda.time.LocalDateTime> {
+    JodaLocalDateTimeHolder2,
+    ValueHolder<LocalDateTime> {
 
     @Override
-    public org.joda.time.LocalDateTime value() {
+    public LocalDateTime value() {
         return getReadOnlyProperty();
     }
 

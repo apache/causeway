@@ -26,6 +26,8 @@ import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
+import org.joda.time.LocalTime;
+
 import lombok.RequiredArgsConstructor;
 
 //tag::class[]
@@ -44,13 +46,13 @@ public class JodaLocalTimeHolder_updateReadOnlyOptionalProperty {
 
     @MemberSupport public JodaLocalTimeHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
-            final org.joda.time.LocalTime newValue
+            final LocalTime newValue
     ) {
         holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
 
-    @MemberSupport public org.joda.time.LocalTime default0Act() {
+    @MemberSupport public LocalTime default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

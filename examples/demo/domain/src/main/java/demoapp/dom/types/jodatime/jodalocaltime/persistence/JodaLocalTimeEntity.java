@@ -26,16 +26,18 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.jodatime.jodalocaltime.holder.JodaLocalTimeHolder2;
 
+import org.joda.time.LocalTime;
+
 @Named("demo.JodaLocalTimeEntity") // shared permissions with concrete sub class
 @DomainObject
 public abstract class JodaLocalTimeEntity
 implements
     HasAsciiDocDescription,
     JodaLocalTimeHolder2,
-    ValueHolder<org.joda.time.LocalTime> {
+    ValueHolder<LocalTime> {
 
     @Override
-    public org.joda.time.LocalTime value() {
+    public LocalTime value() {
         return getReadOnlyProperty();
     }
 
