@@ -18,34 +18,25 @@
  */
 package /*${java-package}*/;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
+import javax.inject.Named;
 
-import javax.inject.Inject;
+import org.apache.causeway.applib.annotation.DomainObject;
 
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.SemanticsOf;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolder;
+import /*${showcase-java-package}*/.holder./*${showcase-name}*/Holder2;
 
-import /*${showcase-fully-qualified-type}*/;
+@Named("demo./*${showcase-name}*/Entity") // shared permissions with concrete sub class
+@DomainObject
+public abstract class /*${showcase-name}*/Entity
+implements
+    HasAsciiDocDescription,
+    /*${showcase-name}*/Holder2,
+    ValueHolder</*${showcase-simple-type-boxed}*/> {
 
-import lombok.RequiredArgsConstructor;
-
-import demoapp.dom.types.Samples;
-
-//tag::class[]
-@Action(semantics = SemanticsOf.SAFE)
-@RequiredArgsConstructor
-public class /*${showcase-name}*/Holder_actionReturningCollection {
-
-    private final /*${showcase-name}*/Holder holder;
-
-    public Collection</*${showcase-simple-type}*/> act() {
-        return samples.stream()
-                .collect(Collectors.toList());
+    @Override
+    public /*${showcase-simple-type-boxed}*/ value() {
+        return /*${showcase-simple-type-getter-prefix}*/ReadOnlyProperty();
     }
 
-    @Inject
-    Samples</*${showcase-simple-type}*/> samples;
-
 }
-//end::class[]

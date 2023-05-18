@@ -18,34 +18,20 @@
  */
 package /*${java-package}*/;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import javax.inject.Inject;
-
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.SemanticsOf;
-
-import /*${showcase-fully-qualified-type}*/;
-
-import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import demoapp.dom.types.Samples;
 
-//tag::class[]
-@Action(semantics = SemanticsOf.SAFE)
-@RequiredArgsConstructor
-public class /*${showcase-name}*/Holder_actionReturningCollection {
+@Service
+public class /*${showcase-name}*/Samples implements Samples</*${showcase-simple-type}*/> {
 
-    private final /*${showcase-name}*/Holder holder;
-
-    public Collection</*${showcase-simple-type}*/> act() {
-        return samples.stream()
-                .collect(Collectors.toList());
+    @Override
+    public Stream</*${showcase-simple-type}*/> stream() {
+        return new /*${showcase-value-semantics-provider}*/()
+                .getExamples()
+                .stream();
     }
 
-    @Inject
-    Samples</*${showcase-simple-type}*/> samples;
-
 }
-//end::class[]

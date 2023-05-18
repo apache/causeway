@@ -25,7 +25,6 @@ import /*${showcase-fully-qualified-type}*/;
 
 import lombok.RequiredArgsConstructor;
 
-/*${generated-file-notice}*/
 //tag::class[]
 @Action(semantics = SemanticsOf.SAFE)
 @RequiredArgsConstructor
@@ -34,7 +33,7 @@ public class /*${showcase-name}*/Holder_actionReturning {
     private final /*${showcase-name}*/Holder holder;
 
     public /*${showcase-simple-type}*/ act() {
-        return holder./*${showcase-type-getter-prefix}*/ReadOnlyProperty();
+        return holder./*${showcase-simple-type-getter-prefix}*/ReadOnlyProperty();
     }
 
 }

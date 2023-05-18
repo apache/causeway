@@ -31,15 +31,12 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Title;
 
-import /*${showcase-fully-qualified-type}*/;
-
 import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import /*${showcase-java-package}*/.holder./*${showcase-name}*/Holder2;
 
-/*${generated-file-notice}*/
 //tag::class[]
 @XmlRootElement(name = "root")
 @XmlType

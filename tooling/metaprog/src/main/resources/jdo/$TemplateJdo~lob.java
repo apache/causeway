@@ -42,7 +42,6 @@ import lombok.Setter;
 
 import /*${showcase-java-package}*/.persistence./*${showcase-name}*/Entity;
 
-/*${generated-file-notice}*/
 @Profile("demo-jdo")
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")

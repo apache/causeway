@@ -22,7 +22,6 @@ import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
-import /*${showcase-fully-qualified-type}*/;
 
 //tag::class[]
 public interface /*${showcase-name}*/Holder2 extends /*${showcase-name}*/Holder {

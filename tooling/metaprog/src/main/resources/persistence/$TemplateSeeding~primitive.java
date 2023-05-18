@@ -18,34 +18,20 @@
  */
 package /*${java-package}*/;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
-
 import javax.inject.Inject;
 
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.springframework.stereotype.Service;
 
-import /*${showcase-fully-qualified-type}*/;
+import demoapp.dom._infra.seed.SeedServiceAbstract;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
-import lombok.RequiredArgsConstructor;
-
-import demoapp.dom.types.Samples;
-
-//tag::class[]
-@Action(semantics = SemanticsOf.SAFE)
-@RequiredArgsConstructor
-public class /*${showcase-name}*/Holder_actionReturningCollection {
-
-    private final /*${showcase-name}*/Holder holder;
-
-    public Collection</*${showcase-simple-type}*/> act() {
-        return samples.stream()
-                .collect(Collectors.toList());
-    }
+@Service
+public class /*${showcase-name}*/Seeding
+extends SeedServiceAbstract {
 
     @Inject
-    Samples</*${showcase-simple-type}*/> samples;
+    public /*${showcase-name}*/Seeding(ValueHolderRepository</*${showcase-simple-type-boxed}*/, ? extends /*${showcase-name}*/Entity> entities) {
+        super(entities);
+    }
 
 }
-//end::class[]

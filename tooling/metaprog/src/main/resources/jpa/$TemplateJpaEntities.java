@@ -25,7 +25,6 @@ import /*${showcase-fully-qualified-type}*/;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
 
-/*${generated-file-notice}*/
 @Profile("demo-jpa")
 @Service
 public class /*${showcase-name}*/JpaEntities

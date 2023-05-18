@@ -18,8 +18,12 @@
  */
 package org.apache.causeway.commons.io;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.DirectoryStream;
@@ -303,6 +307,19 @@ public class FileUtils {
     @SneakyThrows
     public void copy(final @NonNull File from, final @NonNull File to) {
         Files.copy(from.toPath(), to.toPath(), StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    @SneakyThrows
+    public void copyWithCrlf(final @NonNull File from, final @NonNull File to) {
+        try (final BufferedReader reader = new BufferedReader(new FileReader(from));
+             final BufferedWriter writer = new BufferedWriter(new FileWriter(to))) {
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // Append CRLF line endings to each line
+                writer.write(line + "\r\n");
+            }
+        }
     }
 
 }

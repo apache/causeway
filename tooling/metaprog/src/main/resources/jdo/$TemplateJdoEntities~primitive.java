@@ -18,34 +18,23 @@
  */
 package /*${java-package}*/;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
 
-import javax.inject.Inject;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.SemanticsOf;
+@Profile("demo-jdo")
+@Service
+public class /*${showcase-name}*/JdoEntities
+extends ValueHolderRepository</*${showcase-simple-type-boxed}*/, /*${showcase-name}*/Jdo> {
 
-import /*${showcase-fully-qualified-type}*/;
-
-import lombok.RequiredArgsConstructor;
-
-import demoapp.dom.types.Samples;
-
-//tag::class[]
-@Action(semantics = SemanticsOf.SAFE)
-@RequiredArgsConstructor
-public class /*${showcase-name}*/Holder_actionReturningCollection {
-
-    private final /*${showcase-name}*/Holder holder;
-
-    public Collection</*${showcase-simple-type}*/> act() {
-        return samples.stream()
-                .collect(Collectors.toList());
+    protected /*${showcase-name}*/JdoEntities() {
+        super(/*${showcase-name}*/Jdo.class);
     }
 
-    @Inject
-    Samples</*${showcase-simple-type}*/> samples;
+    @Override
+    protected /*${showcase-name}*/Jdo newDetachedEntity(/*${showcase-simple-type-boxed}*/ value) {
+        return new /*${showcase-name}*/Jdo(value);
+    }
 
 }
-//end::class[]

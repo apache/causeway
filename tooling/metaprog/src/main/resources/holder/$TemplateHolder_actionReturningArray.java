@@ -31,7 +31,6 @@ import lombok.val;
 
 import demoapp.dom.types.Samples;
 
-/*${generated-file-notice}*/
 //tag::class[]
 @Action(semantics = SemanticsOf.SAFE)
 @RequiredArgsConstructor

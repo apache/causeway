@@ -20,17 +20,14 @@ package /*${java-package}*/;
 
 import javax.inject.Named;
 
-import /*${showcase-fully-qualified-type}*/;
-
-/*${generated-file-notice}*/
 @Named("demo./*${showcase-name}*/Holder")
 //tag::class[]
 public interface /*${showcase-name}*/Holder {
 
-    /*${showcase-simple-type}*/ /*${showcase-type-getter-prefix}*/ReadOnlyProperty();
+    /*${showcase-simple-type}*/ /*${showcase-simple-type-getter-prefix}*/ReadOnlyProperty();
     void setReadOnlyProperty(/*${showcase-simple-type}*/ c);
 
-    /*${showcase-simple-type}*/ /*${showcase-type-getter-prefix}*/ReadWriteProperty();
+    /*${showcase-simple-type}*/ /*${showcase-simple-type-getter-prefix}*/ReadWriteProperty();
     void setReadWriteProperty(/*${showcase-simple-type}*/ c);
 
 }

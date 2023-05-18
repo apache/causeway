@@ -48,7 +48,6 @@ import lombok.Setter;
 
 import /*${showcase-java-package}*/.persistence./*${showcase-name}*/Entity;
 
-/*${generated-file-notice}*/
 @Profile("demo-jpa")
 //tag::class[]
 @Entity

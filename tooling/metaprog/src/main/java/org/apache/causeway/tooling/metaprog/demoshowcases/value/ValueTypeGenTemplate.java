@@ -39,6 +39,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Singular;
+import lombok.SneakyThrows;
 import lombok.Value;
 import lombok.val;
 
@@ -49,17 +50,56 @@ public class ValueTypeGenTemplate {
     public static class Config {
         final File outputRootDir;
         final String showcaseName;
+        /**
+         * If set, then the template files in the `jdo` and `jpa` packages are NOT generated.
+         * This is to accommodate data types such as Blob and Clob that need custom treatment.
+         */
+        final boolean excludeJdoJpa;
+        /**
+         * If set, then the template files in the `jaxb` package is NOT generated.
+         * This is to accommodate data types such as Password that need custom treatment.
+         */
+        final boolean excludeJaxb;
+        /**
+         * If present, is used within the first sentence.
+         */
+        final String description;
+        /**
+         * If present, adds a NOTE: ...  and also changes what {@link #getJdoTypeSupportNotice()}, {@link #getJpaTypeSupportNotice()} and {@link #getJaxbTypeSupportNotice()} returns.
+         */
+        final boolean causewaySpecific;
         final String showcaseValueFullyQualifiedType;
         final String showcaseValueSemantics;
         @Builder.Default
         final String jdoTypeSupportNotice =
             "JDO supports `#{showcase-simple-type}` out-of-the-box, so no special annotations are required.";
+
+        public String getJdoTypeSupportNotice() {
+            return causewaySpecific
+                        ? "Apache Causeway provides its own implementation of the relevant JDO extension points for the `" + getShowcaseValueSimpleType() + "` value type, meaning that JDO can persist properties of this value type without further configuration."
+                        : jdoTypeSupportNotice;
+        }
+
         @Builder.Default
         final String jpaTypeSupportNotice =
             "JPA supports `#{showcase-simple-type}` out-of-the-box, so no special annotations are required.";
+
+        public String getJpaTypeSupportNotice() {
+            return causewaySpecific
+                        ? "Apache Causeway provides its own implementation of the relevant JPA extension points for the `" + getShowcaseValueSimpleType() + "` value type, meaning that JPA can persist properties of this value type without further configuration."
+                        : jpaTypeSupportNotice;
+        }
+
         @Builder.Default
         final String jaxbTypeSupportNotice =
             "JAXB supports `#{showcase-simple-type}` out-of-the-box, so no special annotations are required.";
+
+        public String getJaxbTypeSupportNotice() {
+            return causewaySpecific
+                    ? "Apache Causeway provides its own implementation of `@XmlJavaTypeAdapter` for the `" + getShowcaseValueSimpleType() + "` value type, meaning that JAXB can serialize properties of this value type without further configuration."
+                    : jaxbTypeSupportNotice;
+        }
+
         final String javaPackage;
         @Builder.Default
         final String fileNamePlaceholderForShowcaseName = "$Template";
@@ -215,11 +255,21 @@ public class ValueTypeGenTemplate {
 
     final Config config;
 
+    @SneakyThrows
     public void generate(final Consumer<File> onSourceGenerated) {
 
         for(var template: config.getTemplates()) {
 
             val templateFile = template.templateFile(config);
+            String templateFilePath = templateFile.getCanonicalPath();
+            if (config.isExcludeJdoJpa() &&
+               (templateFilePath.contains("jdo") || templateFilePath.contains("jpa"))) {
+                continue;
+            }
+            if (config.isExcludeJaxb() &&
+                templateFilePath.contains("jaxb")) {
+                continue;
+            }
 
             val genTarget = template.outputFile(config);
 
@@ -227,13 +277,15 @@ public class ValueTypeGenTemplate {
             templateVars.putAll(config.templateVariables);
             templateVars.put("java-package", template.javaPackage(config));
             templateVars.put("showcase-name", config.showcaseName);
+            templateVars.put("showcase-description", (config.getDescription() != null ? config.getDescription() + ", using" : ""));
+            templateVars.put("showcase-note-if-causeway-specific", (config.isCausewaySpecific() ? "NOTE: This is an Apache Causeway specific data type.\n\n": ""));
             templateVars.put("showcase-simple-type", config.getShowcaseValueSimpleType());
             templateVars.put("showcase-fully-qualified-type", config.showcaseValueFullyQualifiedType);
             templateVars.put("showcase-simple-type-boxed",
                     Optional.ofNullable(ClassUtils.resolvePrimitiveClassName(config.showcaseValueFullyQualifiedType))
                     .map(ClassUtils::resolvePrimitiveIfNecessary)
                     .map(Class::getName)
-                    .orElse(config.showcaseValueFullyQualifiedType));
+                    .orElse(config.getShowcaseValueSimpleType()));
 
             templateVars.put("showcase-simple-type-getter-prefix",
                     Optional.ofNullable(ClassUtils.resolvePrimitiveClassName(config.showcaseValueFullyQualifiedType))
@@ -244,9 +296,9 @@ public class ValueTypeGenTemplate {
             templateVars.put("showcase-value-semantics-provider", config.showcaseValueSemantics);
             templateVars.put("generated-file-notice", template.generator.formatAsComment(config.generatedFileNotice));
 
-            templateVars.put("jdo-type-support-notice", config.jdoTypeSupportNotice);
-            templateVars.put("jpa-type-support-notice", config.jpaTypeSupportNotice);
-            templateVars.put("jaxb-type-support-notice", config.jaxbTypeSupportNotice);
+            templateVars.put("jdo-type-support-notice", config.getJdoTypeSupportNotice());
+            templateVars.put("jpa-type-support-notice", config.getJpaTypeSupportNotice());
+            templateVars.put("jaxb-type-support-notice", config.getJaxbTypeSupportNotice());
 
 
             // allow for ADOC IDE tools, to properly resolve include statements,

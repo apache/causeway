@@ -26,7 +26,6 @@ import /*${showcase-fully-qualified-type}*/;
 
 import demoapp.dom.types.Samples;
 
-/*${generated-file-notice}*/
 @Service
 public class /*${showcase-name}*/Samples implements Samples</*${showcase-simple-type}*/> {
 

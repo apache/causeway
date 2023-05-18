@@ -30,7 +30,6 @@ import /*${showcase-fully-qualified-type}*/;
 
 import lombok.RequiredArgsConstructor;
 
-/*${generated-file-notice}*/
 //tag::class[]
 @Action(
         semantics = SemanticsOf.IDEMPOTENT

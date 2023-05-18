@@ -124,7 +124,8 @@ class ValueTypeGenTemplateTest {
         generatedFiles.forEach(src->{
             val dest = new File(destinationRoot, FileUtils.realtiveFileName(sourceRoot, src));
             FileUtils.makeDir(dest.getParentFile());
-            FileUtils.copy(src, dest);
+            FileUtils.copyWithCrlf(src, dest);
+//            FileUtils.copy(src, dest);
         });
     }
 
@@ -134,7 +135,8 @@ class ValueTypeGenTemplateTest {
             val dest = new File(destinationRoot, FileUtils.realtiveFileName(sourceRoot, src));
             if(!dest.exists()) {
                 FileUtils.makeDir(dest.getParentFile());
-                FileUtils.copy(src, dest);
+                FileUtils.copyWithCrlf(src, dest);
+//                FileUtils.copy(src, dest);
             }
         });
     }

@@ -22,7 +22,6 @@ import javax.inject.Named;
 
 import /*${showcase-fully-qualified-type}*/;
 
-/*${generated-file-notice}*/
 @Named("demo./*${showcase-name}*/Holder")
 //tag::class[]
 public interface /*${showcase-name}*/Holder {

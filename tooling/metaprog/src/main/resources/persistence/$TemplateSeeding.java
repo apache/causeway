@@ -27,7 +27,6 @@ import /*${showcase-fully-qualified-type}*/;
 import demoapp.dom._infra.seed.SeedServiceAbstract;
 import demoapp.dom._infra.values.ValueHolderRepository;
 
-/*${generated-file-notice}*/
 @Service
 public class /*${showcase-name}*/Seeding
 extends SeedServiceAbstract {

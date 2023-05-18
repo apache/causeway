@@ -26,8 +26,6 @@ import javax.inject.Inject;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
-import /*${showcase-fully-qualified-type}*/;
-
 import lombok.RequiredArgsConstructor;
 
 import demoapp.dom.types.Samples;

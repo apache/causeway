@@ -32,14 +32,11 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Title;
 
-import /*${showcase-fully-qualified-type}*/;
-
 import lombok.Getter;
 import lombok.Setter;
 
 import /*${showcase-java-package}*/.persistence./*${showcase-name}*/Entity;
 
-/*${generated-file-notice}*/
 @Profile("demo-jdo")
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")

@@ -18,34 +18,33 @@
  */
 package /*${java-package}*/;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
-
 import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-
-import /*${showcase-fully-qualified-type}*/;
+import org.apache.causeway.commons.functional.IndexedConsumer;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 import demoapp.dom.types.Samples;
 
 //tag::class[]
 @Action(semantics = SemanticsOf.SAFE)
 @RequiredArgsConstructor
-public class /*${showcase-name}*/Holder_actionReturningCollection {
+public class /*${showcase-name}*/Holder_actionReturningArray {
 
     private final /*${showcase-name}*/Holder holder;
 
-    public Collection</*${showcase-simple-type}*/> act() {
-        return samples.stream()
-                .collect(Collectors.toList());
+    public /*${showcase-simple-type}*/[] act() {
+        val array = new /*${showcase-simple-type}*/[(int)samples.stream().count()];
+        samples.stream()
+            .forEach(IndexedConsumer.zeroBased((index, value)->array[index] = value));
+        return array;
     }
 
     @Inject
-    Samples</*${showcase-simple-type}*/> samples;
+    Samples</*${showcase-simple-type-boxed}*/> samples;
 
 }
 //end::class[]

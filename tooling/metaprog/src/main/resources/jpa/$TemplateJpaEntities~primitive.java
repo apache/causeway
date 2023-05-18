@@ -18,34 +18,23 @@
  */
 package /*${java-package}*/;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
 
-import javax.inject.Inject;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.SemanticsOf;
+@Profile("demo-jpa")
+@Service
+public class /*${showcase-name}*/JpaEntities
+extends ValueHolderRepository</*${showcase-simple-type-boxed}*/, /*${showcase-name}*/Jpa> {
 
-import /*${showcase-fully-qualified-type}*/;
-
-import lombok.RequiredArgsConstructor;
-
-import demoapp.dom.types.Samples;
-
-//tag::class[]
-@Action(semantics = SemanticsOf.SAFE)
-@RequiredArgsConstructor
-public class /*${showcase-name}*/Holder_actionReturningCollection {
-
-    private final /*${showcase-name}*/Holder holder;
-
-    public Collection</*${showcase-simple-type}*/> act() {
-        return samples.stream()
-                .collect(Collectors.toList());
+    protected /*${showcase-name}*/JpaEntities() {
+        super(/*${showcase-name}*/Jpa.class);
     }
 
-    @Inject
-    Samples</*${showcase-simple-type}*/> samples;
+    @Override
+    protected /*${showcase-name}*/Jpa newDetachedEntity(/*${showcase-simple-type-boxed}*/ value) {
+        return new /*${showcase-name}*/Jpa(value);
+    }
 
 }
-//end::class[]

@@ -37,7 +37,6 @@ import lombok.RequiredArgsConstructor;
 
 import demoapp.dom.types.Samples;
 
-/*${generated-file-notice}*/
 //tag::class[]
 @Action(
         semantics = SemanticsOf.IDEMPOTENT

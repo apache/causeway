@@ -35,7 +35,6 @@ import lombok.RequiredArgsConstructor;
 
 import demoapp.dom.types.Samples;
 
-/*${generated-file-notice}*/
 //tag::class[]
 @Action(
         semantics = SemanticsOf.IDEMPOTENT
@@ -56,7 +55,7 @@ public class /*${showcase-name}*/Holder_updateReadOnlyPropertyWithChoices {
     }
 
     @MemberSupport public /*${showcase-simple-type}*/ default0Act() {
-        return holder./*${showcase-type-getter-prefix}*/ReadOnlyProperty();
+        return holder./*${showcase-simple-type-getter-prefix}*/ReadOnlyProperty();
     }
 
     @MemberSupport public List</*${showcase-simple-type-boxed}*/> choices0Act() {

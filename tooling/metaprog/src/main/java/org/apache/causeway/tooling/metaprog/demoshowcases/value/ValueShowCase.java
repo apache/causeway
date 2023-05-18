@@ -35,12 +35,18 @@ public enum ValueShowCase {
             .javaPackage("demoapp.dom.types.causeway.blobs")
             .showcaseValueFullyQualifiedType("org.apache.causeway.applib.value.Blob")
             .showcaseValueSemantics("org.apache.causeway.core.metamodel.valuesemantics.BlobValueSemantics")
+            .description("binary large objects")
+            .causewaySpecific(true)
+            .excludeJdoJpa(true)
             .templateVariant(TemplateVariant.LOB)),
     CLOB(Config.builder()
             .showcaseName("CausewayClob")
             .javaPackage("demoapp.dom.types.causeway.clobs")
             .showcaseValueFullyQualifiedType("org.apache.causeway.applib.value.Clob")
             .showcaseValueSemantics("org.apache.causeway.core.metamodel.valuesemantics.ClobValueSemantics")
+            .description("character large objects")
+            .causewaySpecific(true)
+            .excludeJdoJpa(true)
             .templateVariant(TemplateVariant.LOB)),
     LOCALRESOURCEPATH(Config.builder()
             .showcaseName("CausewayLocalResourcePath")
@@ -53,6 +59,9 @@ public enum ValueShowCase {
             .javaPackage("demoapp.dom.types.causeway.passwords")
             .showcaseValueFullyQualifiedType("org.apache.causeway.applib.value.Password")
             .showcaseValueSemantics("org.apache.causeway.core.metamodel.valuesemantics.PasswordValueSemantics")
+            .description("strings that are automatically masked as passwords")
+            .causewaySpecific(true)
+            .excludeJaxb(true)
             .templateVariant(TemplateVariant.DEFAULT)),
     TREENODE(Config.builder()
             .showcaseName("CausewayTreeNode")
@@ -69,7 +78,7 @@ public enum ValueShowCase {
     JAVAAWTBUFFEREDIMAGE(Config.builder()
             .showcaseName("BufferedImage")
             .javaPackage("demoapp.dom.types.javaawt.images")
-            .showcaseValueFullyQualifiedType("java.awt.BufferedImage")
+            .showcaseValueFullyQualifiedType("java.awt.image.BufferedImage")
             .showcaseValueSemantics("org.apache.causeway.core.metamodel.valuesemantics.BufferedImageValueSemantics")
             .templateVariant(TemplateVariant.DEFAULT)),
     JAVAMATHBIGDECIMAL(Config.builder()
@@ -142,7 +151,7 @@ public enum ValueShowCase {
             .showcaseName("JavaUtilDate")
             .javaPackage("demoapp.dom.types.javautil.javautildate")
             .showcaseValueFullyQualifiedType("java.util.Date")
-            .showcaseValueSemantics("org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEventSemantics")
+            .showcaseValueSemantics("org.apache.causeway.core.metamodel.valuesemantics.temporal.legacy.JavaUtilDateValueSemantics")
             .templateVariant(TemplateVariant.DEFAULT)),
     JODADATETIME(Config.builder()
             .showcaseName("JodaDateTime")
