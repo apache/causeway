@@ -35,7 +35,7 @@ public enum ValueShowCase {
             .showcaseValueSemantics("org.apache.causeway.core.metamodel.valuesemantics.BlobValueSemantics")
             .descriptionIfNoPreamble("binary large objects")
             .causewaySpecific(true)
-            .templates(Template.NO_ORM_SET)
+            .templates(Template.NO_ORM_SET.remove(Template.SAMPLES))
             .templateVariant(TemplateVariant.LOB)
     ),
     CLOB(Config.builder()
@@ -45,7 +45,7 @@ public enum ValueShowCase {
             .showcaseValueSemantics("org.apache.causeway.core.metamodel.valuesemantics.ClobValueSemantics")
             .descriptionIfNoPreamble("character large objects")
             .causewaySpecific(true)
-            .templates(Template.NO_ORM_SET)
+            .templates(Template.NO_ORM_SET.remove(Template.SAMPLES))
             .templateVariant(TemplateVariant.LOB)
     ),
     LOCALRESOURCEPATH(Config.builder()
@@ -58,6 +58,7 @@ public enum ValueShowCase {
                     "When an action returns an instance of this type, then this is rendered as a redirect request to the browser to that resource.\n" +
                     "In this way you could for example return a link to a PDF or image (to be rendered by the web browser itself), or provide access to dynamic content by redirecting to a servlet.\n")
             .causewaySpecific(true)
+            .templates(Template.REGULAR_SET_NO_SAMPLES)
             .templateVariant(TemplateVariant.DEFAULT)
     ),
     PASSWORD(Config.builder()
@@ -99,6 +100,7 @@ public enum ValueShowCase {
             .frameworkSupportForJpa(true)
             .frameworkSupportForJdo(true)
             .frameworkSupportForJaxb(true)
+            .templates(Template.REGULAR_SET_NO_SAMPLES)
             .templateVariant(TemplateVariant.DEFAULT)
     ),
     JAVAMATHBIGDECIMAL(Config.builder()
@@ -138,6 +140,7 @@ public enum ValueShowCase {
             .showcaseValueSemantics("org.apache.causeway.core.metamodel.valuesemantics.temporal.legacy.JavaSqlTimeStampValueSemantics")
             .preamble("The framework has built-in support for a number of temporal types, including `java.sql.Timestamp`.")
             .caveat("Rather than use this data type, consider using a more modern class such as `java.time.OffsetDateTime`")
+            .jaxbAdapter("org.apache.causeway.applib.jaxb.JavaSqlJaxbAdapters.TimestampToStringAdapter")
             .templateVariant(TemplateVariant.DEFAULT)
     ),
     JAVATIMELOCALDATE(Config.builder()
@@ -146,6 +149,7 @@ public enum ValueShowCase {
             .showcaseValueFullyQualifiedType("java.time.LocalDate")
             .showcaseValueSemantics("org.apache.causeway.core.metamodel.valuesemantics.temporal.LocalDateValueSemantics")
             .preamble("The framework has built-in support for a number of temporal types, including `java.time.LocalDate`.")
+            .jaxbAdapter("org.apache.causeway.applib.jaxb.JavaTimeJaxbAdapters.LocalDateToStringAdapter")
             .templateVariant(TemplateVariant.DEFAULT)
     ),
     JAVATIMELOCALDATETIME(Config.builder()
@@ -154,6 +158,7 @@ public enum ValueShowCase {
             .showcaseValueFullyQualifiedType("java.time.LocalDateTime")
             .showcaseValueSemantics("org.apache.causeway.core.metamodel.valuesemantics.temporal.LocalDateTimeValueSemantics")
             .preamble("The framework has built-in support for a number of temporal types, including `java.time.LocalDateTime`.")
+            .jaxbAdapter("org.apache.causeway.applib.jaxb.JavaTimeJaxbAdapters.LocalDateTimeToStringAdapter")
             .templateVariant(TemplateVariant.DEFAULT)
     ),
     JAVATIMELOCALTIME(Config.builder()
@@ -162,6 +167,7 @@ public enum ValueShowCase {
             .showcaseValueFullyQualifiedType("java.time.LocalTime")
             .showcaseValueSemantics("org.apache.causeway.core.metamodel.valuesemantics.temporal.LocalTimeValueSemantics")
             .preamble("The framework has built-in support for a number of temporal types, including `java.time.LocalTime`.")
+            .jaxbAdapter("org.apache.causeway.applib.jaxb.JavaTimeJaxbAdapters.LocalTimeToStringAdapter")
             .templateVariant(TemplateVariant.DEFAULT)
     ),
     JAVATIMEOFFSETDATETIME(Config.builder()
@@ -170,6 +176,7 @@ public enum ValueShowCase {
             .showcaseValueFullyQualifiedType("java.time.OffsetDateTime")
             .showcaseValueSemantics("org.apache.causeway.core.metamodel.valuesemantics.temporal.OffsetDateTimeValueSemantics")
             .preamble("The framework has built-in support for a number of temporal types, including `java.time.OffsetDateTime`.")
+            .jaxbAdapter("org.apache.causeway.applib.jaxb.JavaTimeJaxbAdapters.OffsetDateTimeToStringAdapter")
             .templateVariant(TemplateVariant.DEFAULT)
     ),
     JAVATIMEOFFSETTIME(Config.builder()
@@ -178,6 +185,7 @@ public enum ValueShowCase {
             .showcaseValueFullyQualifiedType("java.time.OffsetTime")
             .showcaseValueSemantics("org.apache.causeway.core.metamodel.valuesemantics.temporal.OffsetTimeValueSemantics")
             .preamble("The framework has built-in support for a number of temporal types, including `java.time.OffsetTime`.")
+            .jaxbAdapter("org.apache.causeway.applib.jaxb.JavaTimeJaxbAdapters.OffsetTimeAdapter")
             .templateVariant(TemplateVariant.DEFAULT)
     ),
     JAVATIMEZONEDDATETIME(Config.builder()
@@ -186,6 +194,7 @@ public enum ValueShowCase {
             .showcaseValueFullyQualifiedType("java.time.ZonedDateTime")
             .showcaseValueSemantics("org.apache.causeway.core.metamodel.valuesemantics.temporal.ZonedDateTimeValueSemantics")
             .preamble("The framework has built-in support for a number of temporal types, including `java.time.ZonedDateTime`.")
+            .jaxbAdapter("org.apache.causeway.applib.jaxb.JavaTimeJaxbAdapters.ZonedDateTimeAdapter")
             .templateVariant(TemplateVariant.DEFAULT)
     ),
     JAVAUTILDATE(Config.builder()
@@ -200,38 +209,42 @@ public enum ValueShowCase {
     ),
     JODADATETIME(Config.builder()
             .showcaseName("JodaDateTime")
-            .javaPackage("demoapp.dom.types.javatime.jodadatetime")
+            .javaPackage("demoapp.dom.types.jodatime.jodadatetime")
             .showcaseValueFullyQualifiedType("org.joda.time.DateTime")
             .showcaseValueSemantics("org.apache.causeway.valuetypes.jodatime.integration.valuesemantics.JodaDateTimeValueSemantics")
             .preamble("The framework has built-in support for a number of temporal types, including `org.joda.time.DateTime`.")
             .caveat("Rather than use this data type, consider using a more modern class such as `java.time.OffsetDateTime`.")
+            .jaxbAdapter("org.apache.causeway.valuetypes.jodatime.applib.jaxb.JodaTimeJaxbAdapters.DateTimeToStringAdapter")
             .templateVariant(TemplateVariant.DEFAULT)
     ),
     JODALOCALDATE(Config.builder()
             .showcaseName("JodaLocalDate")
-            .javaPackage("demoapp.dom.types.javatime.jodalocaldate")
+            .javaPackage("demoapp.dom.types.jodatime.jodalocaldate")
             .showcaseValueFullyQualifiedType("org.joda.time.LocalDate")
             .showcaseValueSemantics("org.apache.causeway.valuetypes.jodatime.integration.valuesemantics.JodaLocalDateValueSemantics")
             .preamble("The framework has built-in support for a number of temporal types, including `org.joda.time.LocalDate`")
             .caveat("Rather than use this data type, consider using a more modern class such as `java.time.LocalDate`.")
+            .jaxbAdapter("org.apache.causeway.valuetypes.jodatime.applib.jaxb.JodaTimeJaxbAdapters.LocalDateToStringAdapter")
             .templateVariant(TemplateVariant.DEFAULT)
     ),
     JODALOCALDATETIME(Config.builder()
             .showcaseName("JodaLocalDateTime")
-            .javaPackage("demoapp.dom.types.javatime.jodalocaldatetime")
+            .javaPackage("demoapp.dom.types.jodatime.jodalocaldatetime")
             .showcaseValueFullyQualifiedType("org.joda.time.LocalDateTime")
             .showcaseValueSemantics("org.apache.causeway.valuetypes.jodatime.integration.valuesemantics.JodaLocalDateTimeValueSemantics")
             .preamble("The framework has built-in support for a number of temporal types, including `org.joda.time.LocalDateTime`.")
             .caveat("Rather than use this data type, consider using a more modern class such as `java.time.LocalDateTime`.")
+            .jaxbAdapter("org.apache.causeway.valuetypes.jodatime.applib.jaxb.JodaTimeJaxbAdapters.LocalDateTimeToStringAdapter")
             .templateVariant(TemplateVariant.DEFAULT)
     ),
     JODALOCALTIME(Config.builder()
             .showcaseName("JodaLocalTime")
-            .javaPackage("demoapp.dom.types.javatime.jodalocaltime")
+            .javaPackage("demoapp.dom.types.jodatime.jodalocaltime")
             .showcaseValueFullyQualifiedType("org.joda.time.LocalTime")
             .showcaseValueSemantics("org.apache.causeway.valuetypes.jodatime.integration.valuesemantics.JodaLocalTimeValueSemantics")
             .preamble("The framework has built-in support for a number of temporal types, including `org.joda.time.LocalTime`.")
             .caveat("Rather than use this data type, consider using a more modern class such as `java.time.LocalTime`.")
+            .jaxbAdapter("org.apache.causeway.valuetypes.jodatime.applib.jaxb.JodaTimeJaxbAdapters.LocalTimeToStringAdapter")
             .templateVariant(TemplateVariant.DEFAULT)
     ),
     MARKUP(Config.builder()

@@ -119,10 +119,10 @@ public class ValueTypeGenTemplate {
 
         final boolean frameworkSupportForJaxb;
         /**
-         * Implied by {@link #isCausewaySpecific()}, if present then indicates that the framework has added support for JAXB serialization for certain data types.
+         * Implied by {@link #isCausewaySpecific()} or a non-null {@link #getJaxbAdapter()}, if present then indicates that the framework has added support for JAXB serialization for certain data types.
          */
         private boolean isFrameworkSupportForJaxb() {
-            return causewaySpecific || frameworkSupportForJaxb;
+            return causewaySpecific || frameworkSupportForJaxb || jaxbAdapter != null;
         }
         public String getJaxbTypeSupportNotice() {
             return isFrameworkSupportForJaxb()
@@ -130,7 +130,10 @@ public class ValueTypeGenTemplate {
                     : "JAXB supports `" + getShowcaseValueSimpleType() + "` out-of-the-box, so no special annotations are required.\nSee link:https://docs.oracle.com/cd/E12840_01/wls/docs103/webserv/data_types.html#wp223908[Oracle]";
         }
 
-
+        /**
+         * If specified, then used to annotate properties of JAXB view models.
+         */
+        final String jaxbAdapter;
         final String javaPackage;
         @Builder.Default
         final String fileNamePlaceholderForShowcaseName = "$Template";
@@ -235,8 +238,7 @@ public class ValueTypeGenTemplate {
                 .remove(VIEWMODEL_DESCRIPTION)
                 .remove(VIEWMODEL_LAYOUT);
 
-        public static Can<Template> REGULAR_SET_NO_SAMPLES = Can.ofArray(Template.values())
-                .remove(HOLDER_ACTION_RETURNING_ARRAY)
+        public static Can<Template> REGULAR_SET_NO_SAMPLES = REGULAR_SET
                 .remove(SAMPLES);
 
         public static Can<Template> PRIMITIVE_SET = Can.ofArray(Template.values())
@@ -326,6 +328,7 @@ public class ValueTypeGenTemplate {
                     .map(cls->boolean.class.equals(cls) ? "is" : "get")
                     .orElse("get"));
 
+            templateVars.put("showcase-jaxb-adapter-type", (config.getJaxbAdapter() != null ? "@XmlJavaTypeAdapter(" + config.getJaxbAdapter() + ".class)\n    " : "" ));
             templateVars.put("showcase-java-package", config.javaPackage);
             templateVars.put("showcase-value-semantics-provider", config.showcaseValueSemantics);
             templateVars.put("generated-file-notice", template.generator.formatAsComment(config.generatedFileNotice));

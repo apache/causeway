@@ -24,6 +24,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;
@@ -61,24 +62,24 @@ public class /*${showcase-name}*/Vm
 //tag::class[]
     @Title(prepend = "/*${showcase-simple-type}*/ view model: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
-    @XmlElement(required = true)                                                // <.>
+    /*${showcase-jaxb-adapter-type}*/@XmlElement(required = true)                                                // <.>
     @Getter @Setter
     private /*${showcase-simple-type}*/ readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
-    @XmlElement(required = true)
+    /*${showcase-jaxb-adapter-type}*/@XmlElement(required = true)
     @Getter @Setter
     private /*${showcase-simple-type}*/ readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
-    @Getter @Setter
+    /*${showcase-jaxb-adapter-type}*/@Getter @Setter
     private /*${showcase-simple-type}*/ readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
-    @Getter @Setter
+    /*${showcase-jaxb-adapter-type}*/@Getter @Setter
     private /*${showcase-simple-type}*/ readWriteOptionalProperty;
 
 }
