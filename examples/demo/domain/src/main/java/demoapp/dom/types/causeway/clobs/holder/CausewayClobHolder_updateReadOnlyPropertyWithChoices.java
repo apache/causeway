@@ -28,6 +28,7 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+
 import org.apache.causeway.applib.value.Clob;
 
 import lombok.RequiredArgsConstructor;
@@ -64,5 +65,6 @@ public class CausewayClobHolder_updateReadOnlyPropertyWithChoices {
 
     @Inject
     Samples<Clob> samples;
+
 }
 //end::class[]

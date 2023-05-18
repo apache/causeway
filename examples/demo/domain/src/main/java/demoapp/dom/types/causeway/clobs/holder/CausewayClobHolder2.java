@@ -33,7 +33,7 @@ public interface CausewayClobHolder2 extends CausewayClobHolder {
         describedAs =
             "@PropertyLayout(labelPosition=LEFT)",
         hidden = Where.ALL_TABLES,
-        fieldSetId = "label-positions", sequence = "1")  // <.>
+        fieldSetId = "label-positions", sequence = "1")     // <.>
     default Clob getReadOnlyPropertyDerivedLabelPositionLeft() {
         return getReadOnlyProperty();
     }

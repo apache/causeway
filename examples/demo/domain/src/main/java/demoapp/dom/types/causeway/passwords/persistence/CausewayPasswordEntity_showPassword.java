@@ -16,40 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.causeway.blobs.holder;
+package demoapp.dom.types.causeway.passwords.persistence;
+
+import lombok.RequiredArgsConstructor;
+
+import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.PromptStyle;
-import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.services.message.MessageService;
 
-import org.apache.causeway.applib.value.Blob;
-
-import lombok.RequiredArgsConstructor;
-
-//tag::class[]
-@Action(
-        semantics = SemanticsOf.IDEMPOTENT
-)
+// This class is NOT generated
+@Action
 @ActionLayout(
-        promptStyle = PromptStyle.INLINE
-        , named = "Update"
-        , associateWith = "readOnlyProperty"
-        , sequence = "1")
+        associateWith = "readWriteProperty"
+        , position = ActionLayout.Position.PANEL
+        , cssClass = "bg-warning"
+)
 @RequiredArgsConstructor
-public class CausewayBlobHolder_updateReadOnlyProperty {
+public class CausewayPasswordEntity_showPassword {
 
-    private final CausewayBlobHolder holder;
+    private final CausewayPasswordEntity entity;
 
-    @MemberSupport public CausewayBlobHolder act(final Blob newValue) {
-        holder.setReadOnlyProperty(newValue);
-        return holder;
+    @MemberSupport public CausewayPasswordEntity act() {
+        messageService.informUser(String
+                .format("password: '%s'", entity.getReadWriteProperty().getPassword()));
+        return entity;
     }
 
-    @MemberSupport public Blob default0Act() {
-        return holder.getReadOnlyProperty();
-    }
-
+    @Inject private transient MessageService messageService;
 }
-//end::class[]

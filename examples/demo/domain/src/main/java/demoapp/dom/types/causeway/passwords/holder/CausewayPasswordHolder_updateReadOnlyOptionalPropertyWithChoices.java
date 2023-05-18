@@ -16,17 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.causeway.blobs.holder;
+package demoapp.dom.types.causeway.passwords.holder;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.Optionality;
+import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
-import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.applib.value.Password;
 
 import lombok.RequiredArgsConstructor;
+
+import demoapp.dom.types.Samples;
 
 //tag::class[]
 @Action(
@@ -34,22 +43,31 @@ import lombok.RequiredArgsConstructor;
 )
 @ActionLayout(
         promptStyle = PromptStyle.INLINE
-        , named = "Update"
-        , associateWith = "readOnlyProperty"
-        , sequence = "1")
+        , named = "Update with choices"
+        , associateWith = "readOnlyOptionalProperty"
+        , sequence = "2")
 @RequiredArgsConstructor
-public class CausewayBlobHolder_updateReadOnlyProperty {
+public class CausewayPasswordHolder_updateReadOnlyOptionalPropertyWithChoices {
 
-    private final CausewayBlobHolder holder;
+    private final CausewayPasswordHolder holder;
 
-    @MemberSupport public CausewayBlobHolder act(final Blob newValue) {
-        holder.setReadOnlyProperty(newValue);
+    @MemberSupport public CausewayPasswordHolder act(
+            @Parameter(optionality = Optionality.OPTIONAL)
+            final Password newValue) {
+        holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
 
-    @MemberSupport public Blob default0Act() {
-        return holder.getReadOnlyProperty();
+    @MemberSupport public Password default0Act() {
+        return holder.getReadOnlyOptionalProperty();
     }
 
+    @MemberSupport public List<Password> choices0Act() {
+        return samples.stream()
+                .collect(Collectors.toList());
+    }
+
+    @Inject
+    Samples<Password> samples;
 }
 //end::class[]

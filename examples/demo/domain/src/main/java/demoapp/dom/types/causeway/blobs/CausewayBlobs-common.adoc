@@ -45,9 +45,10 @@ We also use the interface to contribute a mixin property:
 include::holder/CausewayBlobHolder_mixinProperty.java[tags=class]
 ----
 
+
 == @PropertyLayout(labelPosition=...)
 
-There is also an extended interface, `CausewayBlobHolder2`, with default methods demonstrating the use of label positions:
+To demonstrate support for label positions using `@PropertyLayout(labelPosition=...)`, the entity and view model objects both implement the extended `CausewayBlobHolder2` interface:
 
 [source,java]
 ----
@@ -62,5 +63,4 @@ include::holder/CausewayBlobHolder2.java[tags=class]
 +
 CAUTION: currently not supported
 <.> Hide the label completely.
-
 

@@ -18,20 +18,15 @@
  */
 package demoapp.dom.types.causeway.passwords.persistence;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.ActionLayout.Position;
 import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.PromptStyle;
-import org.apache.causeway.applib.services.message.MessageService;
-import org.apache.causeway.applib.value.Password;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.causeway.passwords.holder.CausewayPasswordHolder2;
+
+import org.apache.causeway.applib.value.Password;
 
 @Named("demo.CausewayPasswordEntity") // shared permissions with concrete sub class
 @DomainObject
@@ -44,33 +39,6 @@ implements
     @Override
     public Password value() {
         return getReadOnlyProperty();
-    }
-
-    // -- PASSWORD CHECKER DEMO
-
-    @Inject private transient MessageService messageService;
-
-    @Action
-    @ActionLayout(associateWith = "readWriteProperty"
-        , position = Position.PANEL
-        , cssClass = "bg-warning")
-    public CausewayPasswordEntity showPassword() {
-        messageService.informUser(String
-                .format("password: '%s'", getReadWriteProperty().getPassword()));
-        return this;
-    }
-
-    @Action
-    @ActionLayout(associateWith = "readWriteProperty"
-        , position = Position.PANEL
-        , promptStyle = PromptStyle.DIALOG_MODAL)
-    public CausewayPasswordEntity checkPassword(final Password confirm) {
-        if(getReadWriteProperty().checkPassword(confirm.getPassword())) {
-            messageService.informUser("passwords did match");
-        } else {
-            messageService.warnUser("passwords did not match");
-        }
-        return this;
     }
 
 }

@@ -21,10 +21,10 @@ package demoapp.dom.types.causeway.passwords.holder;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
+
 import org.apache.causeway.applib.value.Password;
 
 import lombok.RequiredArgsConstructor;
-
 
 //tag::class[]
 @Property()

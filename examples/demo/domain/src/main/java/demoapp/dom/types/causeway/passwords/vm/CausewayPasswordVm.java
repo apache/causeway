@@ -24,6 +24,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;
@@ -62,22 +63,26 @@ public class CausewayPasswordVm
     @Title(prepend = "Password view model: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @XmlElement(required = true)                                                // <.>
+    @XmlJavaTypeAdapter(Password.JaxbToStringAdapter.class)                     // <.>
     @Getter @Setter
     private Password readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @XmlElement(required = true)
+    @XmlJavaTypeAdapter(Password.JaxbToStringAdapter.class)                     // <3>
     @Getter @Setter
     private Password readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
+    @XmlJavaTypeAdapter(Password.JaxbToStringAdapter.class)                     // <3>
     @Getter @Setter
     private Password readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
+    @XmlJavaTypeAdapter(Password.JaxbToStringAdapter.class)                     // <3>
     @Getter @Setter
     private Password readWriteOptionalProperty;
 

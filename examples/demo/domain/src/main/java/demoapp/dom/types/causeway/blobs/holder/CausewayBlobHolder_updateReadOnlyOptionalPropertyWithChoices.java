@@ -18,9 +18,16 @@
  */
 package demoapp.dom.types.causeway.blobs.holder;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.inject.Inject;
+
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.Optionality;
+import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
@@ -28,28 +35,39 @@ import org.apache.causeway.applib.value.Blob;
 
 import lombok.RequiredArgsConstructor;
 
+import demoapp.dom.types.Samples;
+
 //tag::class[]
 @Action(
         semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
         promptStyle = PromptStyle.INLINE
-        , named = "Update"
-        , associateWith = "readOnlyProperty"
-        , sequence = "1")
+        , named = "Update with choices"
+        , associateWith = "readOnlyOptionalProperty"
+        , sequence = "2")
 @RequiredArgsConstructor
-public class CausewayBlobHolder_updateReadOnlyProperty {
+public class CausewayBlobHolder_updateReadOnlyOptionalPropertyWithChoices {
 
     private final CausewayBlobHolder holder;
 
-    @MemberSupport public CausewayBlobHolder act(final Blob newValue) {
-        holder.setReadOnlyProperty(newValue);
+    @MemberSupport public CausewayBlobHolder act(
+            @Parameter(optionality = Optionality.OPTIONAL)
+            final Blob newValue) {
+        holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
 
     @MemberSupport public Blob default0Act() {
-        return holder.getReadOnlyProperty();
+        return holder.getReadOnlyOptionalProperty();
     }
 
+    @MemberSupport public List<Blob> choices0Act() {
+        return samples.stream()
+                .collect(Collectors.toList());
+    }
+
+    @Inject
+    Samples<Blob> samples;
 }
 //end::class[]

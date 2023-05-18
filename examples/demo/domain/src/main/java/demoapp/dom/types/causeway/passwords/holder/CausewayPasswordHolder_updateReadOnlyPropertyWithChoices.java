@@ -28,6 +28,7 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+
 import org.apache.causeway.applib.value.Password;
 
 import lombok.RequiredArgsConstructor;
@@ -37,7 +38,6 @@ import demoapp.dom.types.Samples;
 //tag::class[]
 @Action(
         semantics = SemanticsOf.IDEMPOTENT
-
 )
 @ActionLayout(
         promptStyle = PromptStyle.INLINE
@@ -65,5 +65,6 @@ public class CausewayPasswordHolder_updateReadOnlyPropertyWithChoices {
 
     @Inject
     Samples<Password> samples;
+
 }
 //end::class[]

@@ -16,40 +16,37 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.causeway.blobs.holder;
+package demoapp.dom.types.causeway.passwords.persistence;
+
+import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.PromptStyle;
-import org.apache.causeway.applib.annotation.SemanticsOf;
-
-import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.applib.services.message.MessageService;
+import org.apache.causeway.applib.value.Password;
 
 import lombok.RequiredArgsConstructor;
 
-//tag::class[]
-@Action(
-        semantics = SemanticsOf.IDEMPOTENT
+// This class is NOT generated
+@Action
+@ActionLayout(associateWith = "readWriteProperty"
+        , position = ActionLayout.Position.PANEL
+        , promptStyle = PromptStyle.DIALOG_MODAL
 )
-@ActionLayout(
-        promptStyle = PromptStyle.INLINE
-        , named = "Update"
-        , associateWith = "readOnlyProperty"
-        , sequence = "1")
 @RequiredArgsConstructor
-public class CausewayBlobHolder_updateReadOnlyProperty {
+public class CausewayPasswordEntity_checkPassword {
 
-    private final CausewayBlobHolder holder;
+    private final CausewayPasswordEntity entity;
 
-    @MemberSupport public CausewayBlobHolder act(final Blob newValue) {
-        holder.setReadOnlyProperty(newValue);
-        return holder;
+    public CausewayPasswordEntity act(final Password confirm) {
+        if(entity.getReadWriteProperty().checkPassword(confirm.getPassword())) {
+            messageService.informUser("passwords did match");
+        } else {
+            messageService.warnUser("passwords did not match");
+        }
+        return entity;
     }
-
-    @MemberSupport public Blob default0Act() {
-        return holder.getReadOnlyProperty();
-    }
-
+    @Inject private transient MessageService messageService;
 }
-//end::class[]

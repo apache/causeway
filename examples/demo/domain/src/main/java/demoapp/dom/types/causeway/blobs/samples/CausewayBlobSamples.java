@@ -16,36 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.causeway.clobs.holder;
+package demoapp.dom.types.causeway.blobs.samples;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import javax.inject.Inject;
+import org.springframework.stereotype.Service;
 
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.SemanticsOf;
-
-import org.apache.causeway.applib.value.Clob;
-
-import lombok.RequiredArgsConstructor;
+import org.apache.causeway.applib.value.Blob;
 
 import demoapp.dom.types.Samples;
 
-//tag::class[]
-@Action(semantics = SemanticsOf.SAFE)
-@RequiredArgsConstructor
-public class CausewayClobHolder_actionReturningCollection {
+@Service
+public class CausewayBlobSamples implements Samples<Blob> {
 
-    private final CausewayClobHolder holder;
-
-    public Collection<Clob> act() {
-        return samples.stream()
-                .collect(Collectors.toList());
+    @Override
+    public Stream<Blob> stream() {
+        return new org.apache.causeway.core.metamodel.valuesemantics.BlobValueSemantics()
+                .getExamples()
+                .stream();
     }
 
-    @Inject
-    Samples<Clob> samples;
-
 }
-//end::class[]

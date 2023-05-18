@@ -25,6 +25,7 @@ import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+
 import org.apache.causeway.applib.value.Clob;
 
 import lombok.RequiredArgsConstructor;
@@ -45,13 +46,13 @@ public class CausewayClobHolder_updateReadOnlyOptionalProperty {
 
     @MemberSupport public CausewayClobHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
- final
-            Clob newValue
+            final Clob newValue
     ) {
         holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
-    public Clob default0Act() {
+
+    @MemberSupport public Clob default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 
