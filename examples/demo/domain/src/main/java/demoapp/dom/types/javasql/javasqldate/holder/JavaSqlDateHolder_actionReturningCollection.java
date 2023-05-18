@@ -26,10 +26,11 @@ import javax.inject.Inject;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
+import java.sql.Date;
+
 import lombok.RequiredArgsConstructor;
 
 import demoapp.dom.types.Samples;
-
 
 //tag::class[]
 @Action(semantics = SemanticsOf.SAFE)
@@ -38,12 +39,13 @@ public class JavaSqlDateHolder_actionReturningCollection {
 
     private final JavaSqlDateHolder holder;
 
-    public Collection<java.sql.Date> act() {
+    public Collection<Date> act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }
 
     @Inject
-    Samples<java.sql.Date> samples;
+    Samples<Date> samples;
+
 }
 //end::class[]

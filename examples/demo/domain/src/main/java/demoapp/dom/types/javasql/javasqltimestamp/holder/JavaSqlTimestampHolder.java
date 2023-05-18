@@ -20,21 +20,23 @@ package demoapp.dom.types.javasql.javasqltimestamp.holder;
 
 import javax.inject.Named;
 
+import java.sql.Timestamp;
+
 @Named("demo.JavaSqlTimestampHolder")
 //tag::class[]
 public interface JavaSqlTimestampHolder {
 
-    java.sql.Timestamp getReadOnlyProperty();
-    void setReadOnlyProperty(java.sql.Timestamp c);
+    Timestamp getReadOnlyProperty();
+    void setReadOnlyProperty(Timestamp c);
 
-    java.sql.Timestamp getReadWriteProperty();
-    void setReadWriteProperty(java.sql.Timestamp c);
+    Timestamp getReadWriteProperty();
+    void setReadWriteProperty(Timestamp c);
 
-    java.sql.Timestamp getReadOnlyOptionalProperty();
-    void setReadOnlyOptionalProperty(java.sql.Timestamp c);
+    Timestamp getReadOnlyOptionalProperty();
+    void setReadOnlyOptionalProperty(Timestamp c);
 
-    java.sql.Timestamp getReadWriteOptionalProperty();
-    void setReadWriteOptionalProperty(java.sql.Timestamp c);
+    Timestamp getReadWriteOptionalProperty();
+    void setReadWriteOptionalProperty(Timestamp c);
 
 }
 //end::class[]

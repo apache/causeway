@@ -24,6 +24,8 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
+import java.sql.Date;
+
 import lombok.RequiredArgsConstructor;
 
 //tag::class[]
@@ -40,12 +42,12 @@ public class JavaSqlDateHolder_updateReadOnlyProperty {
 
     private final JavaSqlDateHolder holder;
 
-    @MemberSupport public JavaSqlDateHolder act(final java.sql.Date newValue) {
+    @MemberSupport public JavaSqlDateHolder act(final Date newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport public java.sql.Date default0Act() {
+    @MemberSupport public Date default0Act() {
         return holder.getReadOnlyProperty();
     }
 

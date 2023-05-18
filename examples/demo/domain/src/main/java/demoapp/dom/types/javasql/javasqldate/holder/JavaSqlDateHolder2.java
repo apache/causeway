@@ -22,6 +22,7 @@ import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
+import java.sql.Date;
 
 //tag::class[]
 public interface JavaSqlDateHolder2 extends JavaSqlDateHolder {
@@ -32,8 +33,8 @@ public interface JavaSqlDateHolder2 extends JavaSqlDateHolder {
         describedAs =
             "@PropertyLayout(labelPosition=LEFT)",
         hidden = Where.ALL_TABLES,
-        fieldSetId = "label-positions", sequence = "1")  // <.>
-    default java.sql.Date getReadOnlyPropertyDerivedLabelPositionLeft() {
+        fieldSetId = "label-positions", sequence = "1")     // <.>
+    default Date getReadOnlyPropertyDerivedLabelPositionLeft() {
         return getReadOnlyProperty();
     }
 
@@ -44,7 +45,7 @@ public interface JavaSqlDateHolder2 extends JavaSqlDateHolder {
             "@PropertyLayout(labelPosition=TOP)",
         hidden = Where.ALL_TABLES,
         fieldSetId = "label-positions", sequence = "2")
-    default java.sql.Date getReadOnlyPropertyDerivedLabelPositionTop() {
+    default Date getReadOnlyPropertyDerivedLabelPositionTop() {
         return getReadOnlyProperty();
     }
 
@@ -55,7 +56,7 @@ public interface JavaSqlDateHolder2 extends JavaSqlDateHolder {
             "@PropertyLayout(labelPosition=RIGHT)",
         hidden = Where.ALL_TABLES,
         fieldSetId = "label-positions", sequence = "3")
-    default java.sql.Date getReadOnlyPropertyDerivedLabelPositionRight() {
+    default Date getReadOnlyPropertyDerivedLabelPositionRight() {
         return getReadOnlyProperty();
     }
 
@@ -66,7 +67,7 @@ public interface JavaSqlDateHolder2 extends JavaSqlDateHolder {
             "@PropertyLayout(labelPosition=NONE)",
         hidden = Where.ALL_TABLES,
         fieldSetId = "label-positions", sequence = "4")
-    default java.sql.Date getReadOnlyPropertyDerivedLabelPositionNone() {
+    default Date getReadOnlyPropertyDerivedLabelPositionNone() {
         return getReadOnlyProperty();
     }
 

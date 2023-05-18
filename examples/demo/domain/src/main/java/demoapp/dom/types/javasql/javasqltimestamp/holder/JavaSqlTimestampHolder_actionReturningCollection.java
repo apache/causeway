@@ -18,7 +18,6 @@
  */
 package demoapp.dom.types.javasql.javasqltimestamp.holder;
 
-import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -27,10 +26,11 @@ import javax.inject.Inject;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
+import java.sql.Timestamp;
+
 import lombok.RequiredArgsConstructor;
 
 import demoapp.dom.types.Samples;
-
 
 //tag::class[]
 @Action(semantics = SemanticsOf.SAFE)
@@ -39,12 +39,13 @@ public class JavaSqlTimestampHolder_actionReturningCollection {
 
     private final JavaSqlTimestampHolder holder;
 
-    public Collection<java.sql.Timestamp> act() {
+    public Collection<Timestamp> act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }
 
     @Inject
     Samples<Timestamp> samples;
+
 }
 //end::class[]

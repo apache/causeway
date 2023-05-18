@@ -24,18 +24,20 @@ import org.apache.causeway.applib.annotation.DomainObject;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
-import demoapp.dom.types.javasql.javasqltimestamp.holder.JavaSqlTimestampHolder3;
+import demoapp.dom.types.javasql.javasqltimestamp.holder.JavaSqlTimestampHolder2;
+
+import java.sql.Timestamp;
 
 @Named("demo.JavaSqlTimestampEntity") // shared permissions with concrete sub class
 @DomainObject
 public abstract class JavaSqlTimestampEntity
 implements
     HasAsciiDocDescription,
-    JavaSqlTimestampHolder3,
-    ValueHolder<java.sql.Timestamp> {
+    JavaSqlTimestampHolder2,
+    ValueHolder<Timestamp> {
 
     @Override
-    public java.sql.Timestamp value() {
+    public Timestamp value() {
         return getReadOnlyProperty();
     }
 

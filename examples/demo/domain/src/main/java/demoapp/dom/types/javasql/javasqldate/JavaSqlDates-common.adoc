@@ -2,7 +2,7 @@
 
 == Mixin actions
 
-A number of mixin actions contribute through the common `JavaSqlDateHolder` interface, demonstrate the use of `java.sql.Date` as a parameter and as a return type.
+A number of mixin actions contribute through the `JavaSqlDateHolder` interface, demonstrate the use of `Date` as a parameter and as a return type.
 For example:
 
 * the `updateReadOnlyProperty` action is:
@@ -63,19 +63,4 @@ include::holder/JavaSqlDateHolder2.java[tags=class]
 +
 CAUTION: currently not supported
 <.> Hide the label completely.
-
-
-== @PropertyLayout(renderDay=...)
-
-To demonstrate support for `@PropertyLayout(renderDay=...)` -- to simplify the modelling "[inclusive, exclusive)" date ranges -- the entity and view model objects both implement the extended `JavaSqlDateHolder3` interface.
-All methods have a default implementation:
-
-[source,java]
-----
-include::holder/JavaSqlDateHolder3.java[tags=class]
-----
-
-<.> Render the value as the day before
-<.> Render the value unchanged
-<.> Render the value as the day before
 

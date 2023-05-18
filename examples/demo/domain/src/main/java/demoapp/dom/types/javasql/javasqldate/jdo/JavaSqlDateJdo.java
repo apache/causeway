@@ -34,6 +34,8 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Title;
 
+import java.sql.Date;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -45,38 +47,39 @@ import demoapp.dom.types.javasql.javasqldate.persistence.JavaSqlDateEntity;
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @Named("demo.JavaSqlDateEntity")
 @DomainObject
-public class JavaSqlDateJdo                                             // <.>
+public class JavaSqlDateJdo                                          // <.>
         extends JavaSqlDateEntity {
 
 //end::class[]
-    public JavaSqlDateJdo(final java.sql.Date initialValue) {
+    public JavaSqlDateJdo(final Date initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
 
 //tag::class[]
-    @Title(prepend = "java.sql.Date JDO entity: ")
+    @Title(prepend = "Date JDO entity: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
-    @Column(allowsNull = "false")                                       // <.>
+    @Column(allowsNull = "false")                                               // <.>
     @Getter @Setter
-    private java.sql.Date readOnlyProperty;
+    private Date readOnlyProperty;
 
-    @Property(editing = Editing.ENABLED)                                // <.>
+    @Property(editing = Editing.ENABLED)                                        // <.>
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @Column(allowsNull = "false")
     @Getter @Setter
-    private java.sql.Date readWriteProperty;
+    private Date readWriteProperty;
 
-    @Property(optionality = Optionality.OPTIONAL)                       // <.>
+    @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
-    @Column(allowsNull = "true")                                        // <.>
+    @Column(allowsNull = "true")                                                // <.>
     @Getter @Setter
-    private java.sql.Date readOnlyOptionalProperty;
+    private Date readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
     @Column(allowsNull = "true")
     @Getter @Setter
-    private java.sql.Date readWriteOptionalProperty;
+    private Date readWriteOptionalProperty;
+
 }
 //end::class[]

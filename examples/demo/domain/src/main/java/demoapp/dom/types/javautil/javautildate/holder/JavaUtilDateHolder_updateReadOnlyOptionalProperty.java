@@ -26,6 +26,8 @@ import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
+import java.util.Date;
+
 import lombok.RequiredArgsConstructor;
 
 //tag::class[]
@@ -44,13 +46,13 @@ public class JavaUtilDateHolder_updateReadOnlyOptionalProperty {
 
     @MemberSupport public JavaUtilDateHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
-            final java.util.Date newValue
+            final Date newValue
     ) {
         holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
 
-    @MemberSupport public java.util.Date default0Act() {
+    @MemberSupport public Date default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

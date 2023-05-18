@@ -21,8 +21,9 @@ package demoapp.dom.types.javasql.javasqldate.holder;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
-import lombok.RequiredArgsConstructor;
+import java.sql.Date;
 
+import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(semantics = SemanticsOf.SAFE)
@@ -31,7 +32,7 @@ public class JavaSqlDateHolder_actionReturning {
 
     private final JavaSqlDateHolder holder;
 
-    public java.sql.Date act() {
+    public Date act() {
         return holder.getReadOnlyProperty();
     }
 

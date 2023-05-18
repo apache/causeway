@@ -22,6 +22,8 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+
 import demoapp.dom._infra.seed.SeedServiceAbstract;
 import demoapp.dom._infra.values.ValueHolderRepository;
 
@@ -30,7 +32,7 @@ public class JavaSqlDateSeeding
 extends SeedServiceAbstract {
 
     @Inject
-    public JavaSqlDateSeeding(ValueHolderRepository<java.sql.Date, ? extends JavaSqlDateEntity> entities) {
+    public JavaSqlDateSeeding(ValueHolderRepository<Date, ? extends JavaSqlDateEntity> entities) {
         super(entities);
     }
 

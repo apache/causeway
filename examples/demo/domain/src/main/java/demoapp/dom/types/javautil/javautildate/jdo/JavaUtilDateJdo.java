@@ -34,6 +34,8 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Title;
 
+import java.util.Date;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -49,35 +51,35 @@ public class JavaUtilDateJdo                                          // <.>
         extends JavaUtilDateEntity {
 
 //end::class[]
-    public JavaUtilDateJdo(final java.util.Date initialValue) {
+    public JavaUtilDateJdo(final Date initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
 
 //tag::class[]
-    @Title(prepend = "java.util.Date JDO entity: ")
+    @Title(prepend = "Date JDO entity: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @Column(allowsNull = "false")                                               // <.>
     @Getter @Setter
-    private java.util.Date readOnlyProperty;
+    private Date readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @Column(allowsNull = "false")
     @Getter @Setter
-    private java.util.Date readWriteProperty;
+    private Date readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
     @Column(allowsNull = "true")                                                // <.>
     @Getter @Setter
-    private java.util.Date readOnlyOptionalProperty;
+    private Date readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
     @Column(allowsNull = "true")
     @Getter @Setter
-    private java.util.Date readWriteOptionalProperty;
+    private Date readWriteOptionalProperty;
 
 }
 //end::class[]

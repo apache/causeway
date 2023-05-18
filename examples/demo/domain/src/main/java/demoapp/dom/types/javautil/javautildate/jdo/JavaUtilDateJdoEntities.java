@@ -21,19 +21,21 @@ package demoapp.dom.types.javautil.javautildate.jdo;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 import demoapp.dom._infra.values.ValueHolderRepository;
 
 @Profile("demo-jdo")
 @Service
 public class JavaUtilDateJdoEntities
-extends ValueHolderRepository<java.util.Date, JavaUtilDateJdo> {
+extends ValueHolderRepository<Date, JavaUtilDateJdo> {
 
     protected JavaUtilDateJdoEntities() {
         super(JavaUtilDateJdo.class);
     }
 
     @Override
-    protected JavaUtilDateJdo newDetachedEntity(java.util.Date value) {
+    protected JavaUtilDateJdo newDetachedEntity(Date value) {
         return new JavaUtilDateJdo(value);
     }
 

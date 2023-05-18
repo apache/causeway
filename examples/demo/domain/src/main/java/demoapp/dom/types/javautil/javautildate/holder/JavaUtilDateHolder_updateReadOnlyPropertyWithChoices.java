@@ -18,7 +18,6 @@
  */
 package demoapp.dom.types.javautil.javautildate.holder;
 
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +28,8 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+
+import java.util.Date;
 
 import lombok.RequiredArgsConstructor;
 
@@ -48,21 +49,22 @@ public class JavaUtilDateHolder_updateReadOnlyPropertyWithChoices {
 
     private final JavaUtilDateHolder holder;
 
-    @MemberSupport public JavaUtilDateHolder act(final java.util.Date newValue) {
+    @MemberSupport public JavaUtilDateHolder act(final Date newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport public java.util.Date default0Act() {
+    @MemberSupport public Date default0Act() {
         return holder.getReadOnlyProperty();
     }
 
-    @MemberSupport public List<java.util.Date> choices0Act() {
+    @MemberSupport public List<Date> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }
 
     @Inject
     Samples<Date> samples;
+
 }
 //end::class[]

@@ -20,21 +20,23 @@ package demoapp.dom.types.javautil.javautildate.holder;
 
 import javax.inject.Named;
 
+import java.util.Date;
+
 @Named("demo.JavaUtilDateHolder")
 //tag::class[]
 public interface JavaUtilDateHolder {
 
-    java.util.Date getReadOnlyProperty();
-    void setReadOnlyProperty(java.util.Date c);
+    Date getReadOnlyProperty();
+    void setReadOnlyProperty(Date c);
 
-    java.util.Date getReadWriteProperty();
-    void setReadWriteProperty(java.util.Date c);
+    Date getReadWriteProperty();
+    void setReadWriteProperty(Date c);
 
-    java.util.Date getReadOnlyOptionalProperty();
-    void setReadOnlyOptionalProperty(java.util.Date c);
+    Date getReadOnlyOptionalProperty();
+    void setReadOnlyOptionalProperty(Date c);
 
-    java.util.Date getReadWriteOptionalProperty();
-    void setReadWriteOptionalProperty(java.util.Date c);
+    Date getReadWriteOptionalProperty();
+    void setReadWriteOptionalProperty(Date c);
 
 }
 //end::class[]

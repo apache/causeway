@@ -26,8 +26,9 @@ import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
-import lombok.RequiredArgsConstructor;
+import java.sql.Timestamp;
 
+import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(
@@ -45,13 +46,13 @@ public class JavaSqlTimestampHolder_updateReadOnlyOptionalProperty {
 
     @MemberSupport public JavaSqlTimestampHolder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
-            final java.sql.Timestamp newValue
+            final Timestamp newValue
     ) {
         holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
 
-    @MemberSupport public java.sql.Timestamp default0Act() {
+    @MemberSupport public Timestamp default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

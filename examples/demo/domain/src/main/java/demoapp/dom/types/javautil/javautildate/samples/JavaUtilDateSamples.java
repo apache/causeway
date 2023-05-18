@@ -18,10 +18,11 @@
  */
 package demoapp.dom.types.javautil.javautildate.samples;
 
-import java.util.Date;
 import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 import demoapp.dom.types.Samples;
 
@@ -30,8 +31,9 @@ public class JavaUtilDateSamples implements Samples<Date> {
 
     @Override
     public Stream<Date> stream() {
-        return Stream.of(1, 2, 3)
-                .map(x -> new java.util.Date(120,x,x));  // 1900 is the epoch
+        return new org.apache.causeway.core.metamodel.valuesemantics.temporal.legacy.JavaUtilDateValueSemantics()
+                .getExamples()
+                .stream();
     }
 
 }
