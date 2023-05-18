@@ -16,27 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.causeway.localresourcepaths.holder;
+package demoapp.dom.types.causeway.localresourcepaths.samples;
 
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.annotation.Where;
+import java.util.stream.Stream;
+
+import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.value.LocalResourcePath;
 
-import lombok.RequiredArgsConstructor;
+import demoapp.dom.types.Samples;
 
-//tag::class[]
-@Property()
-@PropertyLayout(hidden = Where.ALL_TABLES, fieldSetId = "contributed", sequence = "1")
-@RequiredArgsConstructor
-public class CausewayLocalResourcePathHolder_mixinProperty {
+@Service
+public class CausewayLocalResourcePathSamples implements Samples<LocalResourcePath> {
 
-    private final CausewayLocalResourcePathHolder holder;
-
-    public LocalResourcePath prop() {
-        return holder.getReadOnlyProperty();
+    @Override
+    public Stream<LocalResourcePath> stream() {
+        return new org.apache.causeway.core.metamodel.valuesemantics.LocalResourcePathValueSemantics()
+                .getExamples()
+                .stream();
     }
 
 }
-//end::class[]

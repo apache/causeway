@@ -38,6 +38,7 @@ import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+
 import org.apache.causeway.applib.value.LocalResourcePath;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
@@ -46,7 +47,7 @@ import demoapp.dom.types.Samples;
 import demoapp.dom.types.causeway.localresourcepaths.persistence.CausewayLocalResourcePathEntity;
 import demoapp.dom.types.causeway.localresourcepaths.vm.CausewayLocalResourcePathVm;
 
-@XmlRootElement(name = "root")
+@XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.CausewayLocalResourcePaths")
@@ -63,7 +64,6 @@ public class CausewayLocalResourcePaths implements HasAsciiDocDescription {
     public CausewayLocalResourcePathVm openViewModel(final LocalResourcePath initialValue) {
         return new CausewayLocalResourcePathVm(initialValue);
     }
-
     @MemberSupport public LocalResourcePath default0OpenViewModel() {
         return samples.single();
     }

@@ -32,6 +32,7 @@ import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Title;
+
 import org.apache.causeway.applib.value.LocalResourcePath;
 
 import lombok.Getter;

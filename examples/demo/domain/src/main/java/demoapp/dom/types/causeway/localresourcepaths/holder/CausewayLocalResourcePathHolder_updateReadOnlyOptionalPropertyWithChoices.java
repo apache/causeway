@@ -26,6 +26,8 @@ import javax.inject.Inject;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.Optionality;
+import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
@@ -42,20 +44,22 @@ import demoapp.dom.types.Samples;
 @ActionLayout(
         promptStyle = PromptStyle.INLINE
         , named = "Update with choices"
-        , associateWith = "readOnlyProperty"
+        , associateWith = "readOnlyOptionalProperty"
         , sequence = "2")
 @RequiredArgsConstructor
-public class CausewayLocalResourcePathHolder_updateReadOnlyPropertyWithChoices {
+public class CausewayLocalResourcePathHolder_updateReadOnlyOptionalPropertyWithChoices {
 
     private final CausewayLocalResourcePathHolder holder;
 
-    @MemberSupport public CausewayLocalResourcePathHolder act(final LocalResourcePath newValue) {
-        holder.setReadOnlyProperty(newValue);
+    @MemberSupport public CausewayLocalResourcePathHolder act(
+            @Parameter(optionality = Optionality.OPTIONAL)
+            final LocalResourcePath newValue) {
+        holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
 
     @MemberSupport public LocalResourcePath default0Act() {
-        return holder.getReadOnlyProperty();
+        return holder.getReadOnlyOptionalProperty();
     }
 
     @MemberSupport public List<LocalResourcePath> choices0Act() {
@@ -65,6 +69,5 @@ public class CausewayLocalResourcePathHolder_updateReadOnlyPropertyWithChoices {
 
     @Inject
     Samples<LocalResourcePath> samples;
-
 }
 //end::class[]

@@ -33,7 +33,7 @@ public interface CausewayLocalResourcePathHolder2 extends CausewayLocalResourceP
         describedAs =
             "@PropertyLayout(labelPosition=LEFT)",
         hidden = Where.ALL_TABLES,
-        fieldSetId = "label-positions", sequence = "1")  // <.>
+        fieldSetId = "label-positions", sequence = "1")     // <.>
     default LocalResourcePath getReadOnlyPropertyDerivedLabelPositionLeft() {
         return getReadOnlyProperty();
     }
