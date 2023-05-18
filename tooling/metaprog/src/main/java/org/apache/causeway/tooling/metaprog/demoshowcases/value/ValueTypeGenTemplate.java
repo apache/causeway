@@ -50,55 +50,86 @@ public class ValueTypeGenTemplate {
     public static class Config {
         final File outputRootDir;
         final String showcaseName;
+
+        final String showcaseValueFullyQualifiedType;
+        final String showcaseValueSemantics;
+
+        public String getShowcaseValueSimpleType() {
+            String fqt = getShowcaseValueFullyQualifiedType();
+            int i = fqt.lastIndexOf(".");
+            String simpleType = fqt.substring(i + 1);
+            return simpleType;
+        }
+
         /**
-         * If set, then the template files in the `jdo` and `jpa` packages are NOT generated.
-         * This is to accommodate data types such as Blob and Clob that need custom treatment.
+         * If present, is used instead the first sentence.
          */
-        final boolean excludeJdoJpa;
+        final String preamble;
+
         /**
-         * If set, then the template files in the `jaxb` package is NOT generated.
-         * This is to accommodate data types such as Password that need custom treatment.
+         * If present, is used after the first sentence.
          */
-        final boolean excludeJaxb;
+        final String caveat;
+
+        public String getPreamble() {
+            return preamble != null
+                    ? preamble
+                    : "The framework has built-in support for " +
+                    (getDescriptionIfNoPreamble() != null
+                        ? getDescriptionIfNoPreamble() + ", using"
+                        : "") +
+                    " the `" + getShowcaseValueSimpleType() + "` data type.";
+        }
+
+
         /**
-         * If present, is used within the first sentence.
+         * If present, is used within the first sentence (unless preamble specified, in which case that overrides
          */
-        final String description;
+        final String descriptionIfNoPreamble;
         /**
          * If present, adds a NOTE: ...  and also changes what {@link #getJdoTypeSupportNotice()}, {@link #getJpaTypeSupportNotice()} and {@link #getJaxbTypeSupportNotice()} returns.
          */
         final boolean causewaySpecific;
-        final String showcaseValueFullyQualifiedType;
-        final String showcaseValueSemantics;
-        @Builder.Default
-        final String jdoTypeSupportNotice =
-            "JDO supports `#{showcase-simple-type}` out-of-the-box, so no special annotations are required.";
 
-        public String getJdoTypeSupportNotice() {
-            return causewaySpecific
-                        ? "Apache Causeway provides its own implementation of the relevant JDO extension points for the `" + getShowcaseValueSimpleType() + "` value type, meaning that JDO can persist properties of this value type without further configuration."
-                        : jdoTypeSupportNotice;
+        final boolean frameworkSupportForJpa;
+        /**
+         * Implied by {@link #isCausewaySpecific()}, if present then indicates that the framework has added support for JPA persistence for certain data types.
+         */
+        private boolean isFrameworkSupportForJpa() {
+            return causewaySpecific || frameworkSupportForJpa;
         }
-
-        @Builder.Default
-        final String jpaTypeSupportNotice =
-            "JPA supports `#{showcase-simple-type}` out-of-the-box, so no special annotations are required.";
-
         public String getJpaTypeSupportNotice() {
-            return causewaySpecific
+            return isFrameworkSupportForJpa()
                         ? "Apache Causeway provides its own implementation of the relevant JPA extension points for the `" + getShowcaseValueSimpleType() + "` value type, meaning that JPA can persist properties of this value type without further configuration."
-                        : jpaTypeSupportNotice;
+                        : "JPA supports `" + getShowcaseValueSimpleType() + "` out-of-the-box, so no special annotations are required.\nSee link:https://www.objectdb.com/java/jpa/entity/types#simple_java_data_types[ObjectDB]";
         }
 
-        @Builder.Default
-        final String jaxbTypeSupportNotice =
-            "JAXB supports `#{showcase-simple-type}` out-of-the-box, so no special annotations are required.";
+        final boolean frameworkSupportForJdo;
+        /**
+         * Implied by {@link #isCausewaySpecific()}, if present then indicates that the framework has added support for JDO persistence for certain data types.
+         */
+        private boolean isFrameworkSupportForJdo() {
+            return causewaySpecific || frameworkSupportForJdo;
+        }
+        public String getJdoTypeSupportNotice() {
+            return isFrameworkSupportForJdo()
+                        ? "Apache Causeway provides its own implementation of the relevant JDO extension points for the `" + getShowcaseValueSimpleType() + "` value type, meaning that JDO can persist properties of this value type without further configuration."
+                        : "JDO supports `" + getShowcaseValueSimpleType() + "` out-of-the-box, so no special annotations are required.\nSee link:https://www.datanucleus.org/products/accessplatform_6_0/jdo/mapping.html#_primitive_and_java_lang_types[DataNucleus]";
+        }
 
+        final boolean frameworkSupportForJaxb;
+        /**
+         * Implied by {@link #isCausewaySpecific()}, if present then indicates that the framework has added support for JAXB serialization for certain data types.
+         */
+        private boolean isFrameworkSupportForJaxb() {
+            return causewaySpecific || frameworkSupportForJaxb;
+        }
         public String getJaxbTypeSupportNotice() {
-            return causewaySpecific
+            return isFrameworkSupportForJaxb()
                     ? "Apache Causeway provides its own implementation of `@XmlJavaTypeAdapter` for the `" + getShowcaseValueSimpleType() + "` value type, meaning that JAXB can serialize properties of this value type without further configuration."
-                    : jaxbTypeSupportNotice;
+                    : "JAXB supports `" + getShowcaseValueSimpleType() + "` out-of-the-box, so no special annotations are required.\nSee link:https://docs.oracle.com/cd/E12840_01/wls/docs103/webserv/data_types.html#wp223908[Oracle]";
         }
+
 
         final String javaPackage;
         @Builder.Default
@@ -112,12 +143,6 @@ public class ValueTypeGenTemplate {
         @Builder.Default
         final TemplateVariant templateVariant = TemplateVariant.DEFAULT;
 
-        public String getShowcaseValueSimpleType() {
-            String fqt = getShowcaseValueFullyQualifiedType();
-            int i = fqt.lastIndexOf(".");
-            String simpleType = fqt.substring(i + 1);
-            return simpleType;
-        }
     }
 
     @RequiredArgsConstructor
@@ -169,29 +194,46 @@ public class ValueTypeGenTemplate {
         HOLDER_UPDATE_ROO_PROPERTY("holder/%sHolder_updateReadOnlyOptionalProperty", Generator.JAVA),
         HOLDER_UPDATE_RO_PROPERTY_WITH_CHOICES("holder/%sHolder_updateReadOnlyPropertyWithChoices", Generator.JAVA),
         HOLDER_UPDATE_ROO_PROPERTY_WITH_CHOICES("holder/%sHolder_updateReadOnlyOptionalPropertyWithChoices", Generator.JAVA),
-        COLLECTION("%ss", Generator.JAVA),
+
         JDO("jdo/%sJdo", Generator.JAVA),
         JDO_ENTITIES("jdo/%sJdoEntities", Generator.JAVA),
+        JDO_DESCRIPTION("jdo/%sJdo-description", Generator.DOC),
+
         JPA("jpa/%sJpa", Generator.JAVA),
         JPA_ENTITIES("jpa/%sJpaEntities", Generator.JAVA),
-        ENTITY("persistence/%sEntity", Generator.JAVA),
-        SEEDING("persistence/%sSeeding", Generator.JAVA),
-        SAMPLES("samples/%sSamples", Generator.JAVA),
-        VIEWMODEL("vm/%sVm", Generator.JAVA),
+        JPA_DESCRIPTION("jpa/%sJpa-description", Generator.DOC),
 
+        ENTITY("persistence/%sEntity", Generator.JAVA),
+        ENTITY_LAYOUT("persistence/%sEntity", Generator.LAYOUT),
+        SEEDING("persistence/%sSeeding", Generator.JAVA),
+
+        SAMPLES("samples/%sSamples", Generator.JAVA),
+
+        VIEWMODEL("vm/%sVm", Generator.JAVA),
+        VIEWMODEL_DESCRIPTION("vm/%sVm-description", Generator.DOC),
+        VIEWMODEL_LAYOUT("vm/%sVm", Generator.LAYOUT),
+
+        COLLECTION("%ss", Generator.JAVA),
         COMMON_DOC("%ss-common", Generator.DOC),
         DESCRIPTION("%ss-description", Generator.DOC),
-        JDO_DESCRIPTION("jdo/%sJdo-description", Generator.DOC),
-        JPA_DESCRIPTION("jpa/%sJpa-description", Generator.DOC),
-        VIEWMODEL_DESCRIPTION("vm/%sVm-description", Generator.DOC),
-
         COLLECTION_LAYOUT("%ss", Generator.LAYOUT),
-        ENTITY_LAYOUT("persistence/%sEntity", Generator.LAYOUT),
-        VIEWMODEL_LAYOUT("vm/%sVm", Generator.LAYOUT)
         ;
 
         public static Can<Template> REGULAR_SET = Can.ofArray(Template.values())
             .remove(HOLDER_ACTION_RETURNING_ARRAY);
+
+        public static Can<Template> NO_ORM_SET = REGULAR_SET
+                .remove(JPA)
+                .remove(JPA_DESCRIPTION)
+                .remove(JPA_ENTITIES)
+                .remove(JDO)
+                .remove(JDO_DESCRIPTION)
+                .remove(JDO_ENTITIES);
+
+        public static Can<Template> NO_VIEWMODEL_SET = REGULAR_SET
+                .remove(VIEWMODEL)
+                .remove(VIEWMODEL_DESCRIPTION)
+                .remove(VIEWMODEL_LAYOUT);
 
         public static Can<Template> REGULAR_SET_NO_SAMPLES = Can.ofArray(Template.values())
                 .remove(HOLDER_ACTION_RETURNING_ARRAY)
@@ -261,15 +303,6 @@ public class ValueTypeGenTemplate {
         for(var template: config.getTemplates()) {
 
             val templateFile = template.templateFile(config);
-            String templateFilePath = templateFile.getCanonicalPath();
-            if (config.isExcludeJdoJpa() &&
-               (templateFilePath.contains("jdo") || templateFilePath.contains("jpa"))) {
-                continue;
-            }
-            if (config.isExcludeJaxb() &&
-                templateFilePath.contains("jaxb")) {
-                continue;
-            }
 
             val genTarget = template.outputFile(config);
 
@@ -277,7 +310,8 @@ public class ValueTypeGenTemplate {
             templateVars.putAll(config.templateVariables);
             templateVars.put("java-package", template.javaPackage(config));
             templateVars.put("showcase-name", config.showcaseName);
-            templateVars.put("showcase-description", (config.getDescription() != null ? config.getDescription() + ", using" : ""));
+            templateVars.put("showcase-preamble", config.getPreamble());
+            templateVars.put("showcase-caveat", (config.getCaveat() != null ? config.getCaveat() + "\n\n" : ""));
             templateVars.put("showcase-note-if-causeway-specific", (config.isCausewaySpecific() ? "NOTE: This is an Apache Causeway specific data type.\n\n": ""));
             templateVars.put("showcase-simple-type", config.getShowcaseValueSimpleType());
             templateVars.put("showcase-fully-qualified-type", config.showcaseValueFullyQualifiedType);
