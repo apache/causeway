@@ -32,6 +32,7 @@ import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Title;
+
 import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 
 import lombok.Getter;
@@ -61,26 +62,22 @@ public class CausewayCalendarEventVm
     @Title(prepend = "CalendarEvent view model: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @XmlElement(required = true)                                                // <.>
-    //@XmlJavaTypeAdapter(CalendarEvent.JaxbAdapter.class) already declared on type
     @Getter @Setter
     private CalendarEvent readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @XmlElement(required = true)
-    //@XmlJavaTypeAdapter(CalendarEvent.JaxbAdapter.class) already declared on type
     @Getter @Setter
     private CalendarEvent readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
-    //@XmlJavaTypeAdapter(CalendarEvent.JaxbAdapter.class) already declared on type
     @Getter @Setter
     private CalendarEvent readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
-    //@XmlJavaTypeAdapter(CalendarEvent.JaxbAdapter.class) already declared on type
     @Getter @Setter
     private CalendarEvent readWriteOptionalProperty;
 

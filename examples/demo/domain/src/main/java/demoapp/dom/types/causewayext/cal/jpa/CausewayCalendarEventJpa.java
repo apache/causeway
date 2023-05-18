@@ -34,8 +34,9 @@ import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Title;
-import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
+
+import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -53,7 +54,7 @@ import demoapp.dom.types.causewayext.cal.persistence.CausewayCalendarEventEntity
 @EntityListeners(CausewayEntityListener.class)
 @Named("demo.CausewayCalendarEventEntity")
 @DomainObject
-@NoArgsConstructor
+@NoArgsConstructor                                                             // <.>
 public class CausewayCalendarEventJpa
         extends CausewayCalendarEventEntity {
 

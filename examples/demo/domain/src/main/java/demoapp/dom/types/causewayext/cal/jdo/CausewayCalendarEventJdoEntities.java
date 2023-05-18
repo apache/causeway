@@ -16,24 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.causewayext.cal.samples;
+package demoapp.dom.types.causewayext.cal.jdo;
 
-import java.util.stream.Stream;
-
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 
-import demoapp.dom.types.Samples;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
+@Profile("demo-jdo")
 @Service
-public class CausewayCalendarEventSamples implements Samples<CalendarEvent> {
+public class CausewayCalendarEventJdoEntities
+extends ValueHolderRepository<CalendarEvent, CausewayCalendarEventJdo> {
+
+    protected CausewayCalendarEventJdoEntities() {
+        super(CausewayCalendarEventJdo.class);
+    }
 
     @Override
-    public Stream<CalendarEvent> stream() {
-        return new org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEventSemantics()
-                .getExamples()
-                .stream();
+    protected CausewayCalendarEventJdo newDetachedEntity(CalendarEvent value) {
+        return new CausewayCalendarEventJdo(value);
     }
 
 }

@@ -18,6 +18,11 @@
  */
 package demoapp.dom.types.causewayext.cal.holder;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.inject.Inject;
+
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
@@ -30,24 +35,25 @@ import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 
 import lombok.RequiredArgsConstructor;
 
+import demoapp.dom.types.Samples;
+
 //tag::class[]
 @Action(
         semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
         promptStyle = PromptStyle.INLINE
-        , named = "Update"
+        , named = "Update with choices"
         , associateWith = "readOnlyOptionalProperty"
-        , sequence = "1")
+        , sequence = "2")
 @RequiredArgsConstructor
-public class CausewayCalendarEventHolder_updateReadOnlyOptionalProperty {
+public class CausewayCalendarEventHolder_updateReadOnlyOptionalPropertyWithChoices {
 
     private final CausewayCalendarEventHolder holder;
 
     @MemberSupport public CausewayCalendarEventHolder act(
-            @Parameter(optionality = Optionality.OPTIONAL)              // <.>
-            final CalendarEvent newValue
-    ) {
+            @Parameter(optionality = Optionality.OPTIONAL)
+            final CalendarEvent newValue) {
         holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
@@ -56,5 +62,12 @@ public class CausewayCalendarEventHolder_updateReadOnlyOptionalProperty {
         return holder.getReadOnlyOptionalProperty();
     }
 
+    @MemberSupport public List<CalendarEvent> choices0Act() {
+        return samples.stream()
+                .collect(Collectors.toList());
+    }
+
+    @Inject
+    Samples<CalendarEvent> samples;
 }
 //end::class[]
