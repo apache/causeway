@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javatime.javatimeoffsetTime.holder;
+package demoapp.dom.types.javatime.javatimeoffsettime.holder;
 
 import java.util.Collection;
 import java.util.stream.Collectors;

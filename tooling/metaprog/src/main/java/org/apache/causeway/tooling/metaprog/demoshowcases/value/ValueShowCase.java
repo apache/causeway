@@ -181,7 +181,7 @@ public enum ValueShowCase {
     ),
     JAVATIMEOFFSETTIME(Config.builder()
             .showcaseName("OffsetTime")
-            .javaPackage("demoapp.dom.types.javatime.javatimeoffsetTime")
+            .javaPackage("demoapp.dom.types.javatime.javatimeoffsettime")
             .showcaseValueFullyQualifiedType("java.time.OffsetTime")
             .showcaseValueSemantics("org.apache.causeway.core.metamodel.valuesemantics.temporal.OffsetTimeValueSemantics")
             .preamble("The framework has built-in support for a number of temporal types, including `java.time.OffsetTime`.")

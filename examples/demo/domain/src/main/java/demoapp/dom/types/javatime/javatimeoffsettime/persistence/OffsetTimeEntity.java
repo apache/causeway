@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javatime.javatimeoffsetTime.persistence;
+package demoapp.dom.types.javatime.javatimeoffsettime.persistence;
 
 import javax.inject.Named;
 
@@ -24,7 +24,7 @@ import org.apache.causeway.applib.annotation.DomainObject;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
-import demoapp.dom.types.javatime.javatimeoffsetTime.holder.OffsetTimeHolder2;
+import demoapp.dom.types.javatime.javatimeoffsettime.holder.OffsetTimeHolder2;
 
 import java.time.OffsetTime;
 

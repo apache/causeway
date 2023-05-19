@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javatime.javatimeoffsetTime.jdo;
+package demoapp.dom.types.javatime.javatimeoffsettime.jdo;
 
 import javax.inject.Named;
 import javax.jdo.annotations.Column;
@@ -39,7 +39,7 @@ import java.time.OffsetTime;
 import lombok.Getter;
 import lombok.Setter;
 
-import demoapp.dom.types.javatime.javatimeoffsetTime.persistence.OffsetTimeEntity;
+import demoapp.dom.types.javatime.javatimeoffsettime.persistence.OffsetTimeEntity;
 
 @Profile("demo-jdo")
 //tag::class[]

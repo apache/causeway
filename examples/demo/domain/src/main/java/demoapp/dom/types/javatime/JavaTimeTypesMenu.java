@@ -71,8 +71,8 @@ public class JavaTimeTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-clock")
-    public demoapp.dom.types.javatime.javatimeoffsetTime.OffsetTimes offsetTimes(){
-        return new demoapp.dom.types.javatime.javatimeoffsetTime.OffsetTimes();
+    public demoapp.dom.types.javatime.javatimeoffsettime.OffsetTimes offsetTimes(){
+        return new demoapp.dom.types.javatime.javatimeoffsettime.OffsetTimes();
     }
 
     @Action(semantics = SemanticsOf.SAFE)

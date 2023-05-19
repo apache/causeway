@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javatime.javatimeoffsetTime.vm;
+package demoapp.dom.types.javatime.javatimeoffsettime.vm;
 
 import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -40,7 +40,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javatime.javatimeoffsetTime.holder.OffsetTimeHolder2;
+import demoapp.dom.types.javatime.javatimeoffsettime.holder.OffsetTimeHolder2;
 
 //tag::class[]
 @XmlRootElement(name = "root")

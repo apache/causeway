@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javatime.javatimeoffsetTime;
+package demoapp.dom.types.javatime.javatimeoffsettime;
 
 import java.util.List;
 
@@ -44,8 +44,8 @@ import java.time.OffsetTime;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.types.Samples;
-import demoapp.dom.types.javatime.javatimeoffsetTime.persistence.OffsetTimeEntity;
-import demoapp.dom.types.javatime.javatimeoffsetTime.vm.OffsetTimeVm;
+import demoapp.dom.types.javatime.javatimeoffsettime.persistence.OffsetTimeEntity;
+import demoapp.dom.types.javatime.javatimeoffsettime.vm.OffsetTimeVm;
 
 @XmlRootElement(name = "Demo")
 @XmlType

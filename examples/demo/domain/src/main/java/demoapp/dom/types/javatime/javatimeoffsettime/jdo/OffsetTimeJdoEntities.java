@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javatime.javatimeoffsetTime.jdo;
+package demoapp.dom.types.javatime.javatimeoffsettime.jdo;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;

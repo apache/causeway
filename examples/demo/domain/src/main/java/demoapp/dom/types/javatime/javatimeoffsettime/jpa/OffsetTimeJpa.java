@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javatime.javatimeoffsetTime.jpa;
+package demoapp.dom.types.javatime.javatimeoffsettime.jpa;
 
 import javax.inject.Named;
 import javax.persistence.Column;
@@ -42,7 +42,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import demoapp.dom.types.javatime.javatimeoffsetTime.persistence.OffsetTimeEntity;
+import demoapp.dom.types.javatime.javatimeoffsettime.persistence.OffsetTimeEntity;
 
 @Profile("demo-jpa")
 //tag::class[]
