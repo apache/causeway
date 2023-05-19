@@ -33,23 +33,23 @@ import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.domain.objects.progmodel.embeddedvalues.ComplexNumber;
 import demoapp.dom.domain.objects.progmodel.embeddedvalues.NumberConstantEntity;
 
-// tag::class[]
+//tag::class[]
 @Named("demo.EmbeddedTypePageJdo")
 @DomainObject(nature=Nature.VIEW_MODEL)
 public class EmbeddedTypePageJdo implements HasAsciiDocDescription {
 
     // ...
-// end::class[]
+//end::class[]
     @Inject private ValueHolderRepository<ComplexNumber, ? extends NumberConstantEntity> numberConstantRepo;
 
     @ObjectSupport public String title() {
         return "Embedded Types";
     }
 
-// tag::class[]
+//tag::class[]
     @Collection
     public List<? extends NumberConstantEntity> getAllConstants(){
         return numberConstantRepo.all();
     }
 }
-// end::class[]
+//end::class[]

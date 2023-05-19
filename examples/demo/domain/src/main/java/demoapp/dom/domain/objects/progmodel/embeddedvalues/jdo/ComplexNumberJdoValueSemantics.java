@@ -30,13 +30,13 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.schema.common.v2.ValueType;
 
 @Profile("demo-jdo")
-// tag::class[]
+//tag::class[]
 @Named("demo.ComplexNumberJdoValueSemantics")
 @Component
 public class ComplexNumberJdoValueSemantics
         extends ValueSemanticsAbstract<ComplexNumberJdo>{
     // ...
- // end::class[]
+ //end::class[]
 
     @Override
     public Class<ComplexNumberJdo> getCorrespondingClass() {
@@ -48,7 +48,7 @@ public class ComplexNumberJdoValueSemantics
         return ValueType.COMPOSITE;
     }
 
-// tag::compose[]
+//tag::compose[]
     @Override
     public ValueDecomposition decompose(final ComplexNumberJdo value) {
         return CommonDtoUtils.typedTupleBuilder(value)
@@ -66,9 +66,9 @@ public class ComplexNumberJdoValueSemantics
                         (Double)map.get("im")))
                 .orElse(null);
     }
-// end::compose[]
+//end::compose[]
 
-// tag::getRenderer[]
+//tag::getRenderer[]
      @Override
     public Renderer<ComplexNumberJdo> getRenderer() {
         return (context, object) -> title(object, "NaN");
@@ -82,7 +82,7 @@ public class ComplexNumberJdoValueSemantics
                         : (" - " + (-complexNumber.getIm())))
                 + "i";
      }
-// end::getRenderer[]
-// tag::class[]
+//end::getRenderer[]
+//tag::class[]
 }
-// end::class[]
+//end::class[]

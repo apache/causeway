@@ -47,46 +47,40 @@ import lombok.val;
  *     </ul>
  * </p>
  */
+//tag::class[]
 public class EmailTicket extends SimpleTicket {
+    // ...
+//end::class[]
 
-    // -- MAILTO VALUE TYPE
-
+//tag::mailTo[]
     @Builder
     public static class MailTo implements Serializable {
+    // ...
+//end::mailTo[]
 
         private static final long serialVersionUID = -817872853109724987L;
 
-        @Builder.Default
-        private String linkName = "Email";
-        @Builder.Default
-        private String receiver = "no-one@nowhere";
-        @Builder.Default
-        private String subject = "[Module-Name] Unexpected Error (#ref)";
-        @Builder.Default
-        private String body = "empty body";
+        @Builder.Default private String linkName = "Email";
+        @Builder.Default private String receiver = "no-one@nowhere";
+        @Builder.Default private String subject = "[Module-Name] Unexpected Error (#ref)";
+        @Builder.Default private String body = "empty body";
 
-        /**
-         * @implNote this is just a demo;
-         *      the body message is truncated at the 1000th character
-         *      due to potential browser limitations
-         */
+//tag::mailTo[]
         public String toHtmlLink() {
-
             val messageProperties = Map.<String, Object>of(
-                    "receiver", receiver,
-                    "subject", htmlEscape(subject),
-                    "body", htmlEscape(_Strings.ellipsifyAtEnd(body, 1000, "... truncated")),
-                    "linkName", linkName);
+                "receiver", receiver,
+                "subject",  htmlEscape(subject),
+                "body",     htmlEscape(
+                            _Strings.ellipsifyAtEnd(body, 1000, "... truncated")),  // <.>
+                "linkName", linkName);
 
-            return _Strings.format("<a href=\"mailto:${receiver}"
-                    + "?subject=${subject}"
-                    + "&body=${body}\">${linkName}</a>",
+            return _Strings.format(
+                    "<a href=\"mailto:${receiver}?subject=${subject}&body=${body}\">${linkName}</a>",
                     messageProperties);
         }
+//end::mailTo[]
 
-        // -- STACKTRACE FORMATTING
-
-        public static String mailBodyOf(final ErrorDetails errorDetails) {
+        static String mailBodyOf(final ErrorDetails errorDetails) {
             return "Stacktrace:%0D%0A=================%0D%0A" +
                     stream(errorDetails.getStackTraceDetailPerCause())
             .map(MailTo::causeToString)
@@ -101,41 +95,38 @@ public class EmailTicket extends SimpleTicket {
             .collect(Collectors.joining("%0D%0A"))
             ;
         }
-
-
+//tag::mailTo[]
     }
-
-    // TICKET IMPL
+//end::mailTo[]
 
     private static final long serialVersionUID = -748973805361941912L;
     private MailTo mailTo;
 
+//tag::class[]
     public EmailTicket(
             final MailTo mailTo,
             final String reference,
             final String userMessage,
             final String details,
             final StackTracePolicy stackTracePolicy,
-            final String kittenUrl) {
+            final String kittenUrl) {                   // <.>
         super(reference, userMessage, details, stackTracePolicy, kittenUrl);
         this.mailTo = mailTo;
     }
+//end::class[]
 
+//tag::markup[]
     @Override
     public String getMarkup() {
-
         val messageProperties = Map.<String, Object>of(
-                "title", ifPresentMap(getDetails(),
-                        details->"<h3>" + htmlEscape(details) + "</h3>"),
-                "kittenImg", ifPresentMap(getKittenUrl(),
-                        kittenUrl->"<img src=\"" + kittenUrl + "\"></img>"),
-                "mailToParagraph", "<p><h4>Please report this error: <span>"
-                                        + mailTo.toHtmlLink()
-                                        + "</span></h4></p>");
+            "title", ifPresentMap(getDetails(), details-> String.format("<h3>%s</h3>", htmlEscape(details))),
+            "img",   ifPresentMap(getKittenUrl(), kittenUrl-> String.format("<img src=\"%s\"></img>", kittenUrl)),
+            "para",  String.format("<p><h4>Please report this error: <span>%s</span></h4></p>", mailTo.toHtmlLink()));
         return _Strings.format(
-                "<p>${title}${kittenImg}</p>"
-                + "${mailToParagraph}",
+                "<p>${title}${img}</p>${para}",
                 messageProperties);
     }
-
+//end::markup[]
+//tag::class[]
 }
+//end::class[]

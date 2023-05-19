@@ -31,20 +31,20 @@ import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
-// tag::class[]
+//tag::class[]
 @Named("demo.ScalarValueTypePage")
 @DomainObject(nature=Nature.VIEW_MODEL)
 public class ScalarValueTypePage implements HasAsciiDocDescription {
     // ...
-// end::class[]
+//end::class[]
     @ObjectSupport public String title() {
         return "Scalar Value Types";
     }
 
 
-// tag::class[]
+//tag::class[]
     @Property(editing = Editing.ENABLED)
     @Getter @Setter
     private EmailAddress emailAddress;
 }
-// end::class[]
+//end::class[]

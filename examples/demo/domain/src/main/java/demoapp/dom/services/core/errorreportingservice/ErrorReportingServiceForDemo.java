@@ -30,16 +30,16 @@ import org.apache.causeway.applib.services.error.Ticket.StackTracePolicy;
 
 import lombok.val;
 
-// tag::class[]
+//tag::class[]
 @Service
 @Named("demo.ErrorReportingServiceDemoImplementation")
 @Qualifier("demo")
-public class ErrorReportingServiceDemoImplementation implements ErrorReportingService {
+public class ErrorReportingServiceForDemo implements ErrorReportingService {
 
     @Override
     public Ticket reportError(final ErrorDetails errorDetails) {
 
-        val reference = "#0";
+        val reference = "#0";                               // <.>
         val userMessage = errorDetails.getMainMessage();
         val details = "Apologies!";
 
@@ -49,10 +49,13 @@ public class ErrorReportingServiceDemoImplementation implements ErrorReportingSe
                 .body(EmailTicket.MailTo.mailBodyOf(errorDetails))
                 .build();
 
-        return new EmailTicket(
-                mailTo, reference, userMessage, details,
+        return new EmailTicket(                             // <.>
+                mailTo,
+                reference,
+                userMessage,
+                details,
                 StackTracePolicy.SHOW,
                 "http://www.randomkittengenerator.com/cats/rotator.php");
     }
 }
-// end::class[]
+//end::class[]

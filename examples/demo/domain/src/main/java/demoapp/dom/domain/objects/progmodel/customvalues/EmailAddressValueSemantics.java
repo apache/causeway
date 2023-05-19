@@ -37,13 +37,13 @@ import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.schema.common.v2.ValueType;
 
-// tag::class[]
+//tag::class[]
 @Named("demo.EmailAddressValueSemantics")
 @Component
 public class EmailAddressValueSemantics
         extends ValueSemanticsAbstract<EmailAddress> {   // <.>
     // ...
-// end::class[]
+//end::class[]
 
     @Override
     public Class<EmailAddress> getCorrespondingClass() {
@@ -55,7 +55,7 @@ public class EmailAddressValueSemantics
         return ValueType.STRING;
     }
 
-// tag::compose[]
+//tag::compose[]
     @Override
     public ValueDecomposition decompose(final EmailAddress value) {
         return decomposeAsNullable(value, EmailAddress::getEmailAddress, ()->null);
@@ -66,9 +66,9 @@ public class EmailAddressValueSemantics
         return composeFromNullable(
                 decomposition, ValueWithTypeDto::getString, EmailAddress::of, ()->null);
     }
-// end::compose[]
+//end::compose[]
 
-// tag::getDefaultsProvider[]
+//tag::getDefaultsProvider[]
     @Override
     public DefaultsProvider<EmailAddress> getDefaultsProvider() {
         return new DefaultsProvider<EmailAddress>() {
@@ -78,9 +78,9 @@ public class EmailAddressValueSemantics
             }
         };
     }
-// end::getDefaultsProvider[]
+//end::getDefaultsProvider[]
 
-// tag::getRenderer[]
+//tag::getRenderer[]
     @Override
     public Renderer<EmailAddress> getRenderer() {
         return new Renderer<>() {
@@ -91,9 +91,9 @@ public class EmailAddressValueSemantics
         };
     }
 
-// end::getRenderer[]
+//end::getRenderer[]
 
-// tag::getParser[]
+//tag::getParser[]
     @Override
     public Parser<EmailAddress> getParser() {
         return new Parser<>() {
@@ -125,9 +125,9 @@ public class EmailAddressValueSemantics
             }
         };
     }
-// end::getParser[]
+//end::getParser[]
 
-// tag::getIdStringifier[]
+//tag::getIdStringifier[]
     @Override
     public IdStringifier<EmailAddress> getIdStringifier() {
         return new IdStringifier.EntityAgnostic<>() {
@@ -147,8 +147,8 @@ public class EmailAddressValueSemantics
             }
         };
     }
-// end::getIdStringifier[]
+//end::getIdStringifier[]
 
-// tag::class[]
+//tag::class[]
 }
-// end::class[]
+//end::class[]

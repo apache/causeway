@@ -31,20 +31,20 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 
-// tag::class[]
+//tag::class[]
 @Named("demo.CompositeValuesPage")
 @DomainObject(nature=Nature.VIEW_MODEL)
 public class CompositeValueTypePage implements HasAsciiDocDescription {
     // ...
-// end::class[]
+//end::class[]
     @ObjectSupport public String title() {
         return "Composite Value Types";
     }
 
 
-// tag::class[]
+//tag::class[]
     @Property
     @Getter @Setter
     private ComplexNumber complexNumber;
 }
-// end::class[]
+//end::class[]

@@ -21,7 +21,7 @@ package demoapp.dom.domain.collections.Collection.domainEvent;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 
 @SuppressWarnings("SwitchStatementWithTooFewBranches")
-// tag::class[]
+//tag::class[]
 enum CollectionDomainEventControlStrategy {
 
     DO_NOTHING{
@@ -30,9 +30,9 @@ enum CollectionDomainEventControlStrategy {
         }
     },
     // ...
-// end::class[]
+//end::class[]
 
-// tag::hide[]
+//tag::hide[]
     HIDE {
         @Override
         void on(CollectionDomainEventPage.ChildrenDomainEvent ev, ServiceRegistry serviceRegistry) {
@@ -43,10 +43,10 @@ enum CollectionDomainEventControlStrategy {
             }
         }
     },
-// end::hide[]
+//end::hide[]
 
-// tag::class[]
+//tag::class[]
     ;
     abstract void on(CollectionDomainEventPage.ChildrenDomainEvent ev, ServiceRegistry serviceRegistry);
 }
-// end::class[]
+//end::class[]

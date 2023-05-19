@@ -30,13 +30,13 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.schema.common.v2.ValueType;
 
 @Profile("demo-jpa")
-// tag::class[]
+//tag::class[]
 @Named("demo.ComplexNumberJpaValueSemantics")
 @Component
 public class ComplexNumberJpaValueSemantics
         extends ValueSemanticsAbstract<ComplexNumberJpa> {
     // ...
-// end::class[]
+//end::class[]
 
     @Override
     public Class<ComplexNumberJpa> getCorrespondingClass() {
@@ -48,7 +48,7 @@ public class ComplexNumberJpaValueSemantics
         return ValueType.COMPOSITE;
     }
 
-// tag::compose[]
+//tag::compose[]
     @Override
     public ValueDecomposition decompose(final ComplexNumberJpa value) {
         return CommonDtoUtils.typedTupleBuilder(value)
@@ -66,9 +66,9 @@ public class ComplexNumberJpaValueSemantics
                         (Double)map.get("im")))
                 .orElse(null);
     }
-// end::compose[]
+//end::compose[]
 
-// tag::getRenderer[]
+//tag::getRenderer[]
     @Override
     public Renderer<ComplexNumberJpa> getRenderer() {
         return (context, object) -> title(object, "NaN");
@@ -82,8 +82,8 @@ public class ComplexNumberJpaValueSemantics
                         : (" - " + (-complexNumber.getIm())))
                 + "i";
     }
-// end::getRenderer[]
+//end::getRenderer[]
 
-// tag::class[]
+//tag::class[]
 }
-// end::class[]
+//end::class[]
