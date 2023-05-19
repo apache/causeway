@@ -1,0 +1,49 @@
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+The framework's programming model automatically emits events for each member of each object as it is rendered, allowing subscribers to determine what is visible/hidden, enabled/disabled, or valid (when invoking an action).
+And if an action is invoked, then additional events are emitted before and after execution.
+The same is true for property edits.
+
+Moreover, there are also events emitted for the persistence lifecycle of domain objects, and UI events that allow subscribers to influence the title, icon, CSS and layout of objects.
+
+In most cases you should find that this rich in-built event model will suffice for your needs.
+However, you can also post your own custom events, by accessing the API of the link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/services/eventbus/EventBusService.html[EventBusService] service.
+
+== How this demo works
+
+On the left hand side is an (initially empty) collection, and an action to trigger an event.
+When invoked, the action programmatically raises an event.
+A subscriber listening on this event then causes an entity representing that event to be raised.
+The list of all created events is shown in the table.
+
+In terms of code:
+
+* this page provides the action to trigger an event:
++
+[source,java,indent=0]
+.EventBusServiceDemoPage.java
+----
+include::EventBusServiceDemoPage.java[tags=triggerEvent]
+----
+<.> instantiates an event and posts to ...
+<.> \... the injected `EventBusService`
+
+* where the event class is:
++
+[source,java,indent=0]
+.EventBusServiceDemoPage.java
+----
+include::EventBusServiceDemoPage.java[tags=eventClass]
+----
+<.> it's idiomatic (but not necessary) to inherit from `EventObject`
+
+* Meanwhile the subscriber is a singleton service (entities and view models cannot be subscribers)
++
+[source,java]
+.EventSubscriberForDemo.java
+----
+include::EventSubscriberForDemo.java[tags=class]
+----
+<.> listen on the event, triggered by button in the UI
+<.> delegate to repository to store the event
+

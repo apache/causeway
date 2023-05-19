@@ -37,46 +37,23 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-import demoapp.dom.services.core.eventbusservice.EventBusServiceDemoVm.UiButtonEvent;
+import demoapp.dom.services.core.eventbusservice.EventBusServiceDemoPage.UiButtonEvent;
 
 import static demoapp.dom._infra.utils.LogUtils.emphasize;
 
+//tag::class[]
 @Service
 @Named("demo.eventSubscriber")
 @Qualifier("demo")
 @Log4j2
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
-public class EventSubscriberDemoImplementation {
+public class EventSubscriberForDemo {
 
-    final WrapperFactory wrapper;
-    final FactoryService factoryService;
+    final EventLogEntryRepository<? extends EventLogEntry> eventLogEntryRepository;
 
-    @EventListener(UiButtonEvent.class) // <-- listen on the event, triggered by button in the UI
+    @EventListener(UiButtonEvent.class)             // <.>
     public void on(final UiButtonEvent event) {
-
-        log.info(emphasize("UiButtonEvent")); // <-- log to the console
-
-        val eventLogWriter = factoryService.get(EventLogWriter.class); // <-- get a new writer
-
-        wrapper.asyncWrap(eventLogWriter, AsyncControl.returningVoid()).storeEvent(event);
-
+        eventLogEntryRepository.storeEvent(event);  // <.>
     }
-
-    @Named("demo.eventLogWriter")
-    @DomainObject(
-            nature = Nature.BEAN) @Scope("prototype") // <-- have this Object's lifecycle managed by Spring
-    public static class EventLogWriter {
-
-        @Inject private EventLogEntryRepository<? extends EventLogEntry> eventLogEntryRepository;
-
-        @Action // called asynchronously by above invocation
-        public void storeEvent(final UiButtonEvent event) {
-
-            eventLogEntryRepository.storeEvent(event);
-        }
-
-    }
-
-
-
 }
+//end::class[]

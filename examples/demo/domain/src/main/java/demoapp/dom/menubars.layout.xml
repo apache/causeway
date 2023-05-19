@@ -164,11 +164,14 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
         <mb3:menu>
             <mb3:named>Selected Services</mb3:named>
             <mb3:section>
-                <mb3:named>Core</mb3:named>
-                <mb3:serviceAction objectType="demo.ServicesMenu" id="errorReportingService" />
+                <mb3:named>Core APIs</mb3:named>
                 <mb3:serviceAction objectType="demo.ServicesMenu" id="eventBusService" />
                 <mb3:serviceAction objectType="demo.ServicesMenu" id="messageService" />
                 <mb3:serviceAction objectType="demo.ServicesMenu" id="wrapperFactory"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Core SPIs</mb3:named>
+                <mb3:serviceAction objectType="demo.ServicesMenu" id="errorReportingService" />
             </mb3:section>
         </mb3:menu>
 

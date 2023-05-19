@@ -39,7 +39,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
 
-import demoapp.dom.services.core.eventbusservice.EventBusServiceDemoVm.UiButtonEvent;
+import demoapp.dom.services.core.eventbusservice.EventBusServiceDemoPage.UiButtonEvent;
 
 @Profile("demo-jdo")
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo" )
@@ -51,7 +51,7 @@ extends EventLogEntry {
 
     // -- FACTORY
 
-    public static EventLogEntryJdo of(final UiButtonEvent even) {
+    public static EventLogEntryJdo of(final UiButtonEvent event) {
         val x = new EventLogEntryJdo();
         x.setEvent("Button clicked " + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_TIME));
         return x;

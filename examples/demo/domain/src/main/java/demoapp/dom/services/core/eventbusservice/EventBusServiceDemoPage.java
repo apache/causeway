@@ -18,6 +18,7 @@
  */
 package demoapp.dom.services.core.eventbusservice;
 
+import java.util.EventObject;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -35,39 +36,41 @@ import org.apache.causeway.applib.services.eventbus.EventBusService;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
-@Named("demo.EventBusServiceDemoVm")
+//tag::class[]
+@Named("demo.EventBusServiceDemoPage")
 @DomainObject(nature=Nature.VIEW_MODEL)
-public class EventBusServiceDemoVm implements HasAsciiDocDescription {
-
-    @Inject private EventLogEntryRepository<? extends EventLogEntry> eventLogEntryRepository;
-    @Inject private EventBusService eventBusService;
+public class EventBusServiceDemoPage implements HasAsciiDocDescription {
+    // ...
+//end::class[]
 
     @ObjectSupport public String title() {
         return "Event Demo";
     }
 
-    @Collection
-    public List<? extends EventLogEntry> getAllEvents(){
-        return eventLogEntryRepository.listAll();
+//tag::eventClass[]
+    public static class UiButtonEvent extends EventObject { // <.>
+        public UiButtonEvent(Object source) {
+            super(source);
+        }
     }
+//end::eventClass[]
 
-    @Named("demo.EventBusServiceDemoVm.UiButtonEvent")
-    @DomainObject(nature = Nature.VIEW_MODEL)
-    public static class UiButtonEvent implements ViewModel {
-        // -- VIEWMODEL CONTRACT
-        public UiButtonEvent(final String memento) { }
-        @Override public String viewModelMemento() { return ""; }
-    }
-
-    @ActionLayout(
-            describedAs = "Writes a new EventLog entry to the persistent eventlog.",
-            cssClassFa="fa-bolt",
-            position = Position.PANEL)
+//tag::triggerEvent[]
     @Action
-    public EventBusServiceDemoVm triggerEvent(){
-        eventBusService.post(new UiButtonEvent(null));
+    public EventBusServiceDemoPage triggerEvent(){
+        eventBusService.post(new UiButtonEvent(this));      // <.>
         return this;
     }
 
+    @Inject private EventBusService eventBusService;        // <.>
+//end::triggerEvent[]
 
+    @Collection public List<? extends EventLogEntry> getAllEvents(){
+        return eventLogEntryRepository.listAll();
+    }
+
+    @Inject private EventLogEntryRepository<? extends EventLogEntry> eventLogEntryRepository;
+
+//tag::class[]
 }
+//end::class[]
