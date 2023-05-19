@@ -247,6 +247,9 @@ class RenameProject {
                         .replace(
                                 "\"https://isis.apache.org/applib/layout/links",
                                 "\"http://isis.apache.org/applib/layout/links")
+                        .replace(
+                                "\"https://isis.apache.org/schema",
+                                "\"http://isis.apache.org/schema")
 
                         ;
                 newLines.add(newLine);
