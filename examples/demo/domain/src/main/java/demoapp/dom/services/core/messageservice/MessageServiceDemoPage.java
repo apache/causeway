@@ -27,13 +27,14 @@ import org.apache.causeway.applib.annotation.ActionLayout.Position;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.message.MessageService;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
-@Named("demo.MessageServiceDemoVm")
+@Named("demo.MessageServiceDemoPage")
 @DomainObject(nature=Nature.VIEW_MODEL)
-public class MessageServiceDemoVm implements HasAsciiDocDescription {
+public class MessageServiceDemoPage implements HasAsciiDocDescription {
 
     @Inject private MessageService messageService;
 
@@ -41,36 +42,43 @@ public class MessageServiceDemoVm implements HasAsciiDocDescription {
         return "Message Demo";
     }
 
+//tag::informUser[]
+    @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(
-            describedAs = "Presents an info style message.",
+            cssClass = "btn-info",
             cssClassFa="fa-sticky-note",
-            position = Position.PANEL)
-    @Action
-    public MessageServiceDemoVm infoMessage(){
-        System.err.println("EXEC");
+            position = Position.PANEL
+    )
+    public MessageServiceDemoPage informUser(){
         messageService.informUser("Demo Info Message.");
         return this;
     }
+//end::informUser[]
 
+//tag::warnUser[]
+    @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(
-            describedAs = "Presents an warning style message.",
+            cssClass = "btn-warning",
             cssClassFa="fa-sticky-note",
-            position = Position.PANEL)
-    @Action
-    public MessageServiceDemoVm warnMessage(){
+            position = Position.PANEL
+    )
+    public MessageServiceDemoPage warnUser(){
         messageService.warnUser("Demo Warning Message.");
         return this;
     }
+//end::warnUser[]
 
+//tag::raiseError[]
+    @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(
-            describedAs = "Presents an error style message.",
+            cssClass = "btn-danger",
             cssClassFa="fa-sticky-note",
-            position = Position.PANEL)
-    @Action
-    public MessageServiceDemoVm errorMessage(){
+            position = Position.PANEL
+    )
+    public MessageServiceDemoPage raiseError(){
         messageService.raiseError("Demo Error Message.");
         return this;
     }
-
+//end::raiseError[]
 
 }

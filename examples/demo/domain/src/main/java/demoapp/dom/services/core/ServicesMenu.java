@@ -34,7 +34,7 @@ import lombok.RequiredArgsConstructor;
 import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.services.core.errorreportingservice.ErrorReportingServiceDemoVm;
 import demoapp.dom.services.core.eventbusservice.EventBusServiceDemoPage;
-import demoapp.dom.services.core.messageservice.MessageServiceDemoVm;
+import demoapp.dom.services.core.messageservice.MessageServiceDemoPage;
 import demoapp.dom.services.core.wrapperFactory.WrapperFactoryEntity;
 
 @Named("demo.ServicesMenu")
@@ -57,8 +57,8 @@ public class ServicesMenu {
 
     @Action
     @ActionLayout(cssClassFa="fa-sticky-note")
-    public MessageServiceDemoVm messageService(){
-        return factoryService.viewModel(new MessageServiceDemoVm());
+    public MessageServiceDemoPage messageService(){
+        return factoryService.viewModel(new MessageServiceDemoPage());
     }
 
     @Action

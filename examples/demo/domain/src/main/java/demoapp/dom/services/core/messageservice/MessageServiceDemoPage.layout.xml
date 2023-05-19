@@ -24,9 +24,9 @@
         <bs3:col span="6">
             <bs3:row>
                 <bs3:col span="12">
-                    <cpt:action id="infoMessage" cssClass="btn-info"/>
-                    <cpt:action id="warnMessage" cssClass="btn-warning"/>
-                    <cpt:action id="errorMessage" cssClass="btn-danger"/>
+                    <cpt:action id="informUser"/>
+                    <cpt:action id="warnUser"/>
+                    <cpt:action id="raiseError"/>
                 </bs3:col>
             </bs3:row>
             <bs3:row>
