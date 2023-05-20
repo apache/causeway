@@ -41,6 +41,7 @@ import org.apache.causeway.commons.internal.functions._Predicates;
 import org.apache.causeway.commons.io.FileUtils;
 import org.apache.causeway.commons.io.TextUtils;
 
+import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -124,7 +125,7 @@ class ValueTypeGenTemplateTest {
         generatedFiles.forEach(src->{
             val dest = new File(destinationRoot, FileUtils.realtiveFileName(sourceRoot, src));
             FileUtils.makeDir(dest.getParentFile());
-            FileUtils.copyWithCrlf(src, dest);
+            copyWithCrlf(src, dest);
 //            FileUtils.copy(src, dest);
         });
     }
@@ -135,7 +136,7 @@ class ValueTypeGenTemplateTest {
             val dest = new File(destinationRoot, FileUtils.realtiveFileName(sourceRoot, src));
             if(!dest.exists()) {
                 FileUtils.makeDir(dest.getParentFile());
-                FileUtils.copyWithCrlf(src, dest);
+                copyWithCrlf(src, dest);
 //                FileUtils.copy(src, dest);
             }
         });
@@ -184,6 +185,11 @@ class ValueTypeGenTemplateTest {
             }
         }
         return "";
+    }
+
+    private void copyWithCrlf(final @NonNull File from, final @NonNull File to) {
+        // Append CRLF line endings to each line
+        FileUtils.copyLines(from, to, StandardCharsets.UTF_8, line->line + "\r\n");
     }
 
 }
