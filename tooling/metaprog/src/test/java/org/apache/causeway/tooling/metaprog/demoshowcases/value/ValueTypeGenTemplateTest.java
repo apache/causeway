@@ -188,8 +188,8 @@ class ValueTypeGenTemplateTest {
     }
 
     private void copyWithCrlf(final @NonNull File from, final @NonNull File to) {
-        // Append CRLF line endings to each line
-        FileUtils.copyLines(from, to, StandardCharsets.UTF_8, line->line + "\r\n");
+        // Appends CR before the LF line ending to each line
+        FileUtils.copyLines(from, to, StandardCharsets.UTF_8, line->line + "\r");
     }
 
 }
