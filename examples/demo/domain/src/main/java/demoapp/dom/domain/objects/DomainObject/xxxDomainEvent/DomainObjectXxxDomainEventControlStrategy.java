@@ -26,7 +26,7 @@ import org.apache.causeway.applib.services.registry.ServiceRegistry;
 
 import lombok.val;
 
-// tag::class[]
+//tag::class[]
 enum DomainObjectXxxDomainEventControlStrategy {
 
     DO_NOTHING{
@@ -35,9 +35,9 @@ enum DomainObjectXxxDomainEventControlStrategy {
         }
     },
     // ...
-// end::class[]
+//end::class[]
 
-// tag::hide[]
+//tag::hide[]
     HIDE {
         @Override
         void on(DomainObjectXxxDomainEventPage.DomainEventMarker ev, ServiceRegistry serviceRegistry) {
@@ -51,8 +51,8 @@ enum DomainObjectXxxDomainEventControlStrategy {
             }
         }
     },
-// end::hide[]
-// tag::disable[]
+//end::hide[]
+//tag::disable[]
     DISABLE {
         @Override
         void on(DomainObjectXxxDomainEventPage.DomainEventMarker ev, ServiceRegistry serviceRegistry) {
@@ -66,8 +66,8 @@ enum DomainObjectXxxDomainEventControlStrategy {
             }
         }
     },
-// end::disable[]
-// tag::validate[]
+//end::disable[]
+//tag::validate[]
     VALIDATE_MUST_BE_UPPER_CASE{
         @Override
         void on(DomainObjectXxxDomainEventPage.DomainEventMarker ev, ServiceRegistry serviceRegistry) {
@@ -95,8 +95,8 @@ enum DomainObjectXxxDomainEventControlStrategy {
             }
         }
     },
-// end::validate[]
-// tag::executing[]
+//end::validate[]
+//tag::executing[]
     EXECUTING_FORCE_UPPER_CASE{
         @Override
         void on(DomainObjectXxxDomainEventPage.DomainEventMarker ev, ServiceRegistry serviceRegistry) {
@@ -121,8 +121,8 @@ enum DomainObjectXxxDomainEventControlStrategy {
             }
         }
     },
-// end::executing[]
-// tag::executed[]
+//end::executing[]
+//tag::executed[]
     EXECUTED_ANNOUNCE{
         @Override
         void on(DomainObjectXxxDomainEventPage.DomainEventMarker ev, ServiceRegistry serviceRegistry) {
@@ -156,10 +156,10 @@ enum DomainObjectXxxDomainEventControlStrategy {
             }
         }
     }
-// end::executed[]
+//end::executed[]
 
-// tag::class[]
+//tag::class[]
     ;
     abstract void on(DomainObjectXxxDomainEventPage.DomainEventMarker ev, ServiceRegistry serviceRegistry);
 }
-// end::class[]
+//end::class[]

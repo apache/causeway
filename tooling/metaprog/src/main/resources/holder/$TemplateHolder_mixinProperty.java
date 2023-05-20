@@ -22,9 +22,10 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
 
+import /*${showcase-fully-qualified-type}*/;
+
 import lombok.RequiredArgsConstructor;
 
-/*${generated-file-notice}*/
 //tag::class[]
 @Property()
 @PropertyLayout(hidden = Where.ALL_TABLES, fieldSetId = "contributed", sequence = "1")
@@ -33,8 +34,8 @@ public class /*${showcase-name}*/Holder_mixinProperty {
 
     private final /*${showcase-name}*/Holder holder;
 
-    public /*${showcase-type}*/ prop() {
-        return holder./*${showcase-type-getter-prefix}*/ReadOnlyProperty();
+    public /*${showcase-simple-type}*/ prop() {
+        return holder./*${showcase-simple-type-getter-prefix}*/ReadOnlyProperty();
     }
 
 }

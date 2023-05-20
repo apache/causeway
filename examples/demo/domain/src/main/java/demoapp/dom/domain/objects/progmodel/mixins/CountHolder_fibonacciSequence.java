@@ -27,7 +27,7 @@ import org.apache.causeway.applib.annotation.CollectionLayout;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-// tag::class[]
+//tag::class[]
 @Collection                                 // <.>
 @CollectionLayout(paged = 10)
 @RequiredArgsConstructor                    // <.>
@@ -48,7 +48,7 @@ public class CountHolder_fibonacciSequence {
     }
     private static int fibonacciFor(int n) {
         // ...
-// end::class[]
+//end::class[]
         if(n <= 1) {
             return n;
         }
@@ -61,7 +61,7 @@ public class CountHolder_fibonacciSequence {
             prevFib = temp;
         }
         return fib;
-// tag::class[]
+//tag::class[]
     }
 }
-// end::class[]
+//end::class[]

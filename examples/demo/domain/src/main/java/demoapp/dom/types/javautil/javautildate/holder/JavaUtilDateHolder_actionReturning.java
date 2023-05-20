@@ -21,8 +21,9 @@ package demoapp.dom.types.javautil.javautildate.holder;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
-import lombok.RequiredArgsConstructor;
+import java.util.Date;
 
+import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(semantics = SemanticsOf.SAFE)
@@ -31,7 +32,7 @@ public class JavaUtilDateHolder_actionReturning {
 
     private final JavaUtilDateHolder holder;
 
-    public java.util.Date act() {
+    public Date act() {
         return holder.getReadOnlyProperty();
     }
 

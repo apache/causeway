@@ -21,11 +21,12 @@ package demoapp.dom.types.causeway.localresourcepaths.persistence;
 import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.value.LocalResourcePath;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.causeway.localresourcepaths.holder.CausewayLocalResourcePathHolder2;
+
+import org.apache.causeway.applib.value.LocalResourcePath;
 
 @Named("demo.CausewayLocalResourcePathEntity") // shared permissions with concrete sub class
 @DomainObject

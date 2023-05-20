@@ -22,6 +22,8 @@ import jakarta.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 import demoapp.dom._infra.seed.SeedServiceAbstract;
 import demoapp.dom._infra.values.ValueHolderRepository;
 
@@ -30,7 +32,7 @@ public class JavaUtilDateSeeding
 extends SeedServiceAbstract {
 
     @Inject
-    public JavaUtilDateSeeding(ValueHolderRepository<java.util.Date, ? extends JavaUtilDateEntity> entities) {
+    public JavaUtilDateSeeding(ValueHolderRepository<Date, ? extends JavaUtilDateEntity> entities) {
         super(entities);
     }
 

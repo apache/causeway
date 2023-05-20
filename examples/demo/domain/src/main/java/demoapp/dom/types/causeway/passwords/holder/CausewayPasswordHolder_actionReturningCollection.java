@@ -25,12 +25,12 @@ import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+
 import org.apache.causeway.applib.value.Password;
 
 import lombok.RequiredArgsConstructor;
 
 import demoapp.dom.types.Samples;
-
 
 //tag::class[]
 @Action(semantics = SemanticsOf.SAFE)
@@ -46,5 +46,6 @@ public class CausewayPasswordHolder_actionReturningCollection {
 
     @Inject
     Samples<Password> samples;
+
 }
 //end::class[]

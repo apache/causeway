@@ -21,8 +21,9 @@ package demoapp.dom.types.javasql.javasqltimestamp.holder;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
-import lombok.RequiredArgsConstructor;
+import java.sql.Timestamp;
 
+import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(semantics = SemanticsOf.SAFE)
@@ -31,7 +32,7 @@ public class JavaSqlTimestampHolder_actionReturning {
 
     private final JavaSqlTimestampHolder holder;
 
-    public java.sql.Timestamp act() {
+    public Timestamp act() {
         return holder.getReadOnlyProperty();
     }
 

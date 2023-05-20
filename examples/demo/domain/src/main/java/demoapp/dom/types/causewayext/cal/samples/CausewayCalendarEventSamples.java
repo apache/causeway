@@ -20,27 +20,20 @@ package demoapp.dom.types.causewayext.cal.samples;
 
 import java.util.stream.Stream;
 
-import jakarta.inject.Inject;
-
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
-import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEventSemantics;
 
 import demoapp.dom.types.Samples;
-import demoapp.dom.types.javatime.javatimezoneddatetime.samples.JavaTimeZonedDateTimeSamples;
 
 @Service
 public class CausewayCalendarEventSamples implements Samples<CalendarEvent> {
 
-    @Inject JavaTimeZonedDateTimeSamples zonedDateTimeSamples;
-
     @Override
     public Stream<CalendarEvent> stream() {
-        return new CalendarEventSemantics()
+        return new org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEventSemantics()
                 .getExamples()
                 .stream();
     }
-
 
 }

@@ -21,11 +21,12 @@ package demoapp.dom.types.causeway.clobs.persistence;
 import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.value.Clob;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.causeway.clobs.holder.CausewayClobHolder2;
+
+import org.apache.causeway.applib.value.Clob;
 
 @Named("demo.CausewayClobEntity") // shared permissions with concrete sub class
 @DomainObject

@@ -21,20 +21,21 @@ package /*${java-package}*/;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+import /*${showcase-fully-qualified-type}*/;
+
 import demoapp.dom._infra.values.ValueHolderRepository;
 
-/*${generated-file-notice}*/
 @Profile("demo-jdo")
 @Service
 public class /*${showcase-name}*/JdoEntities
-extends ValueHolderRepository</*${showcase-type-boxed}*/, /*${showcase-name}*/Jdo> {
+extends ValueHolderRepository</*${showcase-simple-type-boxed}*/, /*${showcase-name}*/Jdo> {
 
     protected /*${showcase-name}*/JdoEntities() {
         super(/*${showcase-name}*/Jdo.class);
     }
 
     @Override
-    protected /*${showcase-name}*/Jdo newDetachedEntity(/*${showcase-type-boxed}*/ value) {
+    protected /*${showcase-name}*/Jdo newDetachedEntity(/*${showcase-simple-type-boxed}*/ value) {
         return new /*${showcase-name}*/Jdo(value);
     }
 

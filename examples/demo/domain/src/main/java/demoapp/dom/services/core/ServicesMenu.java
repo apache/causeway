@@ -30,12 +30,11 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.factory.FactoryService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.services.core.errorreportingservice.ErrorReportingServiceDemoVm;
-import demoapp.dom.services.core.eventbusservice.EventBusServiceDemoVm;
-import demoapp.dom.services.core.messageservice.MessageServiceDemoVm;
+import demoapp.dom.services.core.eventbusservice.EventBusServiceDemoPage;
+import demoapp.dom.services.core.messageservice.MessageServiceDemoPage;
 import demoapp.dom.services.core.wrapperFactory.WrapperFactoryEntity;
 
 @Named("demo.ServicesMenu")
@@ -52,14 +51,14 @@ public class ServicesMenu {
 
     @Action
     @ActionLayout(cssClassFa="fa-bolt")
-    public EventBusServiceDemoVm eventBusService(){
-        return factoryService.viewModel(new EventBusServiceDemoVm());
+    public EventBusServiceDemoPage eventBusService(){
+        return factoryService.viewModel(new EventBusServiceDemoPage());
     }
 
     @Action
     @ActionLayout(cssClassFa="fa-sticky-note")
-    public MessageServiceDemoVm messageService(){
-        return factoryService.viewModel(new MessageServiceDemoVm());
+    public MessageServiceDemoPage messageService(){
+        return factoryService.viewModel(new MessageServiceDemoPage());
     }
 
     @Action

@@ -22,6 +22,7 @@ import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
+import org.joda.time.LocalDateTime;
 
 //tag::class[]
 public interface JodaLocalDateTimeHolder2 extends JodaLocalDateTimeHolder {
@@ -32,8 +33,8 @@ public interface JodaLocalDateTimeHolder2 extends JodaLocalDateTimeHolder {
         describedAs =
             "@PropertyLayout(labelPosition=LEFT)",
         hidden = Where.ALL_TABLES,
-        fieldSetId = "label-positions", sequence = "1")  // <.>
-    default org.joda.time.LocalDateTime getReadOnlyPropertyDerivedLabelPositionLeft() {
+        fieldSetId = "label-positions", sequence = "1")     // <.>
+    default LocalDateTime getReadOnlyPropertyDerivedLabelPositionLeft() {
         return getReadOnlyProperty();
     }
 
@@ -44,7 +45,7 @@ public interface JodaLocalDateTimeHolder2 extends JodaLocalDateTimeHolder {
             "@PropertyLayout(labelPosition=TOP)",
         hidden = Where.ALL_TABLES,
         fieldSetId = "label-positions", sequence = "2")
-    default org.joda.time.LocalDateTime getReadOnlyPropertyDerivedLabelPositionTop() {
+    default LocalDateTime getReadOnlyPropertyDerivedLabelPositionTop() {
         return getReadOnlyProperty();
     }
 
@@ -55,7 +56,7 @@ public interface JodaLocalDateTimeHolder2 extends JodaLocalDateTimeHolder {
             "@PropertyLayout(labelPosition=RIGHT)",
         hidden = Where.ALL_TABLES,
         fieldSetId = "label-positions", sequence = "3")
-    default org.joda.time.LocalDateTime getReadOnlyPropertyDerivedLabelPositionRight() {
+    default LocalDateTime getReadOnlyPropertyDerivedLabelPositionRight() {
         return getReadOnlyProperty();
     }
 
@@ -66,7 +67,7 @@ public interface JodaLocalDateTimeHolder2 extends JodaLocalDateTimeHolder {
             "@PropertyLayout(labelPosition=NONE)",
         hidden = Where.ALL_TABLES,
         fieldSetId = "label-positions", sequence = "4")
-    default org.joda.time.LocalDateTime getReadOnlyPropertyDerivedLabelPositionNone() {
+    default LocalDateTime getReadOnlyPropertyDerivedLabelPositionNone() {
         return getReadOnlyProperty();
     }
 

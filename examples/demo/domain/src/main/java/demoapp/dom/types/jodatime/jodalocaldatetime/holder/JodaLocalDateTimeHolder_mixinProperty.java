@@ -22,8 +22,9 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
 
-import lombok.RequiredArgsConstructor;
+import org.joda.time.LocalDateTime;
 
+import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Property()
@@ -33,7 +34,7 @@ public class JodaLocalDateTimeHolder_mixinProperty {
 
     private final JodaLocalDateTimeHolder holder;
 
-    public org.joda.time.LocalDateTime prop() {
+    public LocalDateTime prop() {
         return holder.getReadOnlyProperty();
     }
 

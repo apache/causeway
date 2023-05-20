@@ -125,7 +125,14 @@ implements
 
     @Override
     public Can<BigInteger> getExamples() {
-        return Can.of(BigInteger.valueOf(-63L), BigInteger.ZERO);
+        return Can.of(
+                BigInteger.valueOf(42L),
+                BigInteger.valueOf(-63L),
+                BigInteger.ZERO,
+                BigInteger.ONE,
+                BigInteger.TEN,
+                BigInteger.valueOf(123_456_789_012L)
+                );
     }
 
 }

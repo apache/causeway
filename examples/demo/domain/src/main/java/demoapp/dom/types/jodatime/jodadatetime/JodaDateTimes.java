@@ -18,7 +18,6 @@
  */
 package demoapp.dom.types.jodatime.jodadatetime;
 
-import java.util.Collections;
 import java.util.List;
 
 import jakarta.inject.Inject;
@@ -28,8 +27,6 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -42,10 +39,12 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
+import org.joda.time.DateTime;
+
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.types.Samples;
 import demoapp.dom.types.jodatime.jodadatetime.persistence.JodaDateTimeEntity;
-import demoapp.dom.types.jodatime.jodadatetime.samples.JodaDateTimeSamples;
 import demoapp.dom.types.jodatime.jodadatetime.vm.JodaDateTimeVm;
 
 @XmlRootElement(name = "Demo")
@@ -57,31 +56,29 @@ import demoapp.dom.types.jodatime.jodadatetime.vm.JodaDateTimeVm;
 public class JodaDateTimes implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "org.joda.time.DateTime data type";
+        return "DateTime data type";
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    public JodaDateTimeVm openViewModel(final org.joda.time.DateTime initialValue) {
+    public JodaDateTimeVm openViewModel(final DateTime initialValue) {
         return new JodaDateTimeVm(initialValue);
     }
-    @MemberSupport public org.joda.time.DateTime default0OpenViewModel() {
-        return stream.stream().findFirst().orElse(null);
+    @MemberSupport public DateTime default0OpenViewModel() {
+        return samples.single();
     }
 
     @Collection
     public List<? extends JodaDateTimeEntity> getEntities() {
-        return entities!=null
-                ? entities.all()
-                : Collections.emptyList();
+        return entities.all();
     }
-
-    @Autowired(required = false)
-    @XmlTransient
-    ValueHolderRepository<org.joda.time.DateTime, ? extends JodaDateTimeEntity> entities;
 
     @Inject
     @XmlTransient
-    JodaDateTimeSamples stream;
+    ValueHolderRepository<DateTime, ? extends JodaDateTimeEntity> entities;
+
+    @Inject
+    @XmlTransient
+    Samples<DateTime> samples;
 
 }

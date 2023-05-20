@@ -38,6 +38,7 @@ import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+
 import org.apache.causeway.applib.value.Password;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
@@ -63,7 +64,6 @@ public class CausewayPasswords implements HasAsciiDocDescription {
     public CausewayPasswordVm openViewModel(final Password initialValue) {
         return new CausewayPasswordVm(initialValue);
     }
-
     @MemberSupport public Password default0OpenViewModel() {
         return samples.single();
     }

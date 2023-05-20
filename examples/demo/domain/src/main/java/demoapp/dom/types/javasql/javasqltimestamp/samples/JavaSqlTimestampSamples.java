@@ -18,10 +18,11 @@
  */
 package demoapp.dom.types.javasql.javasqltimestamp.samples;
 
-import java.sql.Timestamp;
 import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
+
+import java.sql.Timestamp;
 
 import demoapp.dom.types.Samples;
 
@@ -30,8 +31,9 @@ public class JavaSqlTimestampSamples implements Samples<Timestamp> {
 
     @Override
     public Stream<Timestamp> stream() {
-        return Stream.of(1, 2, 3)
-                .map(x -> new java.sql.Timestamp(new java.util.Date(120, x, x, x, x).getTime()));
+        return new org.apache.causeway.core.metamodel.valuesemantics.temporal.legacy.JavaSqlTimeStampValueSemantics()
+                .getExamples()
+                .stream();
     }
 
 }

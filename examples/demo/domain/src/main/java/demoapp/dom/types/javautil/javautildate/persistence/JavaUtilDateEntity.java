@@ -24,18 +24,20 @@ import org.apache.causeway.applib.annotation.DomainObject;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
-import demoapp.dom.types.javautil.javautildate.holder.JavaUtilDateHolder3;
+import demoapp.dom.types.javautil.javautildate.holder.JavaUtilDateHolder2;
+
+import java.util.Date;
 
 @Named("demo.JavaUtilDateEntity") // shared permissions with concrete sub class
 @DomainObject
 public abstract class JavaUtilDateEntity
 implements
     HasAsciiDocDescription,
-    JavaUtilDateHolder3,
-    ValueHolder<java.util.Date> {
+    JavaUtilDateHolder2,
+    ValueHolder<Date> {
 
     @Override
-    public java.util.Date value() {
+    public Date value() {
         return getReadOnlyProperty();
     }
 

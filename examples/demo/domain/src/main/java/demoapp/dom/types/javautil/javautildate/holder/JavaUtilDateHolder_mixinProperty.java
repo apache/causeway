@@ -22,8 +22,9 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
 
-import lombok.RequiredArgsConstructor;
+import java.util.Date;
 
+import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Property()
@@ -33,7 +34,7 @@ public class JavaUtilDateHolder_mixinProperty {
 
     private final JavaUtilDateHolder holder;
 
-    public java.util.Date prop() {
+    public Date prop() {
         return holder.getReadOnlyProperty();
     }
 

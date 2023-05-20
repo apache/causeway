@@ -20,11 +20,10 @@ package demoapp.dom.domain.objects.progmodel.embeddedvalues.jpa;
 
 import org.apache.causeway.applib.annotation.Value;
 
+import demoapp.dom.domain.objects.progmodel.embeddedvalues.ComplexNumber;
 import lombok.AccessLevel;
 
-import demoapp.dom.domain.objects.progmodel.embeddedvalues.ComplexNumber;
-
-// tag::class[]
+//tag::class[]
 @jakarta.persistence.Embeddable                                       // <.>
 @Value                                                              // <.>
 @lombok.Getter                                                      // <.>
@@ -40,4 +39,4 @@ public class ComplexNumberJpa
     @jakarta.persistence.Column(nullable = false)
     private double im;                                              // <5>
 }
-// end::class[]
+//end::class[]

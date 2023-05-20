@@ -24,6 +24,8 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
+import org.joda.time.LocalDateTime;
+
 import lombok.RequiredArgsConstructor;
 
 //tag::class[]
@@ -40,12 +42,12 @@ public class JodaLocalDateTimeHolder_updateReadOnlyProperty {
 
     private final JodaLocalDateTimeHolder holder;
 
-    @MemberSupport public JodaLocalDateTimeHolder act(final org.joda.time.LocalDateTime newValue) {
+    @MemberSupport public JodaLocalDateTimeHolder act(final LocalDateTime newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport public org.joda.time.LocalDateTime default0Act() {
+    @MemberSupport public LocalDateTime default0Act() {
         return holder.getReadOnlyProperty();
     }
 

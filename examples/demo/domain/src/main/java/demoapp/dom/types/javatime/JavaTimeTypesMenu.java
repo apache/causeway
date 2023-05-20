@@ -29,12 +29,11 @@ import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
-import demoapp.dom.types.javatime.javatimelocaldate.JavaTimeLocalDates;
-import demoapp.dom.types.javatime.javatimelocaldatetime.JavaTimeLocalDateTimes;
-import demoapp.dom.types.javatime.javatimelocaltime.JavaTimeLocalTimes;
-import demoapp.dom.types.javatime.javatimeoffsetdatetime.JavaTimeOffsetDateTimes;
-import demoapp.dom.types.javatime.javatimeoffsettime.JavaTimeOffsetTimes;
-import demoapp.dom.types.javatime.javatimezoneddatetime.JavaTimeZonedDateTimes;
+import demoapp.dom.types.javatime.javatimelocaldate.LocalDates;
+import demoapp.dom.types.javatime.javatimelocaldatetime.LocalDateTimes;
+import demoapp.dom.types.javatime.javatimelocaltime.LocalTimes;
+import demoapp.dom.types.javatime.javatimeoffsetdatetime.OffsetDateTimes;
+import demoapp.dom.types.javatime.javatimezoneddatetime.ZonedDateTimes;
 
 @Named("demo.JavaTimeTypesMenu")
 @DomainService(
@@ -48,38 +47,38 @@ public class JavaTimeTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-clock")
-    public JavaTimeLocalTimes localTimes(){
-        return new JavaTimeLocalTimes();
+    public LocalTimes localTimes(){
+        return new LocalTimes();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-calendar")
-    public JavaTimeLocalDates localDates(){
-        return new JavaTimeLocalDates();
+    public LocalDates localDates(){
+        return new LocalDates();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-calendar")
-    public JavaTimeLocalDateTimes localDateTimes(){
-        return new JavaTimeLocalDateTimes();
+    public LocalDateTimes localDateTimes(){
+        return new LocalDateTimes();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-calendar")
-    public JavaTimeOffsetDateTimes offsetDateTimes(){
-        return new JavaTimeOffsetDateTimes();
+    public OffsetDateTimes offsetDateTimes(){
+        return new OffsetDateTimes();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-clock")
-    public JavaTimeOffsetTimes offsetTimes(){
-        return new JavaTimeOffsetTimes();
+    public demoapp.dom.types.javatime.javatimeoffsettime.OffsetTimes offsetTimes(){
+        return new demoapp.dom.types.javatime.javatimeoffsettime.OffsetTimes();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-calendar")
-    public JavaTimeZonedDateTimes zonedDateTimes(){
-        return new JavaTimeZonedDateTimes();
+    public ZonedDateTimes zonedDateTimes(){
+        return new ZonedDateTimes();
     }
 
 

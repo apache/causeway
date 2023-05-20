@@ -36,6 +36,8 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Title;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
+import java.sql.Timestamp;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -52,12 +54,12 @@ import demoapp.dom.types.javasql.javasqltimestamp.persistence.JavaSqlTimestampEn
 @EntityListeners(CausewayEntityListener.class)
 @Named("demo.JavaSqlTimestampEntity")
 @DomainObject
-@NoArgsConstructor
+@NoArgsConstructor                                                             // <.>
 public class JavaSqlTimestampJpa
         extends JavaSqlTimestampEntity {
 
 //end::class[]
-    public JavaSqlTimestampJpa(final java.sql.Timestamp initialValue) {
+    public JavaSqlTimestampJpa(final Timestamp initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
@@ -67,29 +69,29 @@ public class JavaSqlTimestampJpa
     @GeneratedValue
     private Long id;
 
-    @Title(prepend = "java.sql.Timestamp JPA entity: ")
+    @Title(prepend = "Timestamp JPA entity: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @Column(nullable = false)                                                   // <.>
     @Getter @Setter
-    private java.sql.Timestamp readOnlyProperty;
+    private Timestamp readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @Column(nullable = false)
     @Getter @Setter
-    private java.sql.Timestamp readWriteProperty;
+    private Timestamp readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
     @Column(nullable = true)                                                    // <.>
     @Getter @Setter
-    private java.sql.Timestamp readOnlyOptionalProperty;
+    private Timestamp readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
     @Column(nullable = true)
     @Getter @Setter
-    private java.sql.Timestamp readWriteOptionalProperty;
+    private Timestamp readWriteOptionalProperty;
 
 }
 //end::class[]

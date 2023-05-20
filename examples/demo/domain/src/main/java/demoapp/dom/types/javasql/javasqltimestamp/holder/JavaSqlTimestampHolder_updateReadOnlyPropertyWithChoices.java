@@ -18,7 +18,6 @@
  */
 package demoapp.dom.types.javasql.javasqltimestamp.holder;
 
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +28,8 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+
+import java.sql.Timestamp;
 
 import lombok.RequiredArgsConstructor;
 
@@ -48,21 +49,22 @@ public class JavaSqlTimestampHolder_updateReadOnlyPropertyWithChoices {
 
     private final JavaSqlTimestampHolder holder;
 
-    @MemberSupport public JavaSqlTimestampHolder act(final java.sql.Timestamp newValue) {
+    @MemberSupport public JavaSqlTimestampHolder act(final Timestamp newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport public java.sql.Timestamp default0Act() {
+    @MemberSupport public Timestamp default0Act() {
         return holder.getReadOnlyProperty();
     }
 
-    @MemberSupport public List<java.sql.Timestamp> choices0Act() {
+    @MemberSupport public List<Timestamp> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }
 
     @Inject
     Samples<Timestamp> samples;
+
 }
 //end::class[]

@@ -39,8 +39,11 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
+import java.sql.Timestamp;
+
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.types.Samples;
 import demoapp.dom.types.javasql.javasqltimestamp.persistence.JavaSqlTimestampEntity;
 import demoapp.dom.types.javasql.javasqltimestamp.vm.JavaSqlTimestampVm;
 
@@ -53,16 +56,16 @@ import demoapp.dom.types.javasql.javasqltimestamp.vm.JavaSqlTimestampVm;
 public class JavaSqlTimestamps implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "java.sql.Timestamp data type";
+        return "Timestamp data type";
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    public JavaSqlTimestampVm openViewModel(final java.sql.Timestamp initialValue) {
+    public JavaSqlTimestampVm openViewModel(final Timestamp initialValue) {
         return new JavaSqlTimestampVm(initialValue);
     }
-    @MemberSupport public java.sql.Timestamp default0OpenViewModel() {
-        return new java.sql.Timestamp(new java.util.Date(120,1,1, 1, 1).getTime()); // 1900 is the epoch
+    @MemberSupport public Timestamp default0OpenViewModel() {
+        return samples.single();
     }
 
     @Collection
@@ -72,7 +75,10 @@ public class JavaSqlTimestamps implements HasAsciiDocDescription {
 
     @Inject
     @XmlTransient
-    ValueHolderRepository<java.sql.Timestamp, ? extends JavaSqlTimestampEntity> entities;
+    ValueHolderRepository<Timestamp, ? extends JavaSqlTimestampEntity> entities;
 
+    @Inject
+    @XmlTransient
+    Samples<Timestamp> samples;
 
 }

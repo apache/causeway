@@ -34,6 +34,8 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Title;
 
+import org.joda.time.LocalTime;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -46,38 +48,38 @@ import demoapp.dom.types.jodatime.jodalocaltime.persistence.JodaLocalTimeEntity;
 @Named("demo.JodaLocalTimeEntity")
 @DomainObject
 public class JodaLocalTimeJdo                                          // <.>
-      extends JodaLocalTimeEntity {
+        extends JodaLocalTimeEntity {
 
 //end::class[]
-  public JodaLocalTimeJdo(final org.joda.time.LocalTime initialValue) {
-      this.readOnlyProperty = initialValue;
-      this.readWriteProperty = initialValue;
-  }
+    public JodaLocalTimeJdo(final LocalTime initialValue) {
+        this.readOnlyProperty = initialValue;
+        this.readWriteProperty = initialValue;
+    }
 
 //tag::class[]
-  @Title(prepend = "org.joda.time.LocalTime JDO entity: ")
-  @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
-  @Column(allowsNull = "false")                                               // <.>
-  @Getter @Setter
-  private org.joda.time.LocalTime readOnlyProperty;
+    @Title(prepend = "LocalTime JDO entity: ")
+    @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
+    @Column(allowsNull = "false")                                               // <.>
+    @Getter @Setter
+    private LocalTime readOnlyProperty;
 
-  @Property(editing = Editing.ENABLED)                                        // <.>
-  @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
-  @Column(allowsNull = "false")
-  @Getter @Setter
-  private org.joda.time.LocalTime readWriteProperty;
+    @Property(editing = Editing.ENABLED)                                        // <.>
+    @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
+    @Column(allowsNull = "false")
+    @Getter @Setter
+    private LocalTime readWriteProperty;
 
-  @Property(optionality = Optionality.OPTIONAL)                               // <.>
-  @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
-  @Column(allowsNull = "true")                                                // <.>
-  @Getter @Setter
-  private org.joda.time.LocalTime readOnlyOptionalProperty;
+    @Property(optionality = Optionality.OPTIONAL)                               // <.>
+    @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
+    @Column(allowsNull = "true")                                                // <.>
+    @Getter @Setter
+    private LocalTime readOnlyOptionalProperty;
 
-  @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
-  @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
-  @Column(allowsNull = "true")
-  @Getter @Setter
-  private org.joda.time.LocalTime readWriteOptionalProperty;
+    @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
+    @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
+    @Column(allowsNull = "true")
+    @Getter @Setter
+    private LocalTime readWriteOptionalProperty;
 
 }
 //end::class[]

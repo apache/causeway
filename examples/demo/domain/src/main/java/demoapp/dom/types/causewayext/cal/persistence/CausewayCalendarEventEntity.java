@@ -18,43 +18,27 @@
  */
 package demoapp.dom.types.causewayext.cal.persistence;
 
-import java.util.Optional;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.extensions.fullcalendar.applib.CalendarEventable;
-import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 import demoapp.dom.types.causewayext.cal.holder.CausewayCalendarEventHolder2;
-import jakarta.inject.Named;
 
-@Named("demo.CalendarEventEntity") // shared permissions with concrete sub class
+import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
+
+@Named("demo.CausewayCalendarEventEntity") // shared permissions with concrete sub class
 @DomainObject
 public abstract class CausewayCalendarEventEntity
 implements
     HasAsciiDocDescription,
     CausewayCalendarEventHolder2,
-    CalendarEventable,
     ValueHolder<CalendarEvent> {
 
     @Override
     public CalendarEvent value() {
         return getReadOnlyProperty();
-    }
-
-    // -- CALENDAR EVENTABLE
-
-    @Override
-    public String getCalendarName() {
-        return Optional.ofNullable(toCalendarEvent())
-                .map(CalendarEvent::getCalendarName)
-                .orElse(null);
-    }
-
-    @Override
-    public CalendarEvent toCalendarEvent() {
-        return value();
     }
 
 }

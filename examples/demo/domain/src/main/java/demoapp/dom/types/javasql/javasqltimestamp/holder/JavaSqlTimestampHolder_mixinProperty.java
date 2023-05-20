@@ -22,8 +22,9 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
 
-import lombok.RequiredArgsConstructor;
+import java.sql.Timestamp;
 
+import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Property()
@@ -33,7 +34,7 @@ public class JavaSqlTimestampHolder_mixinProperty {
 
     private final JavaSqlTimestampHolder holder;
 
-    public java.sql.Timestamp prop() {
+    public Timestamp prop() {
         return holder.getReadOnlyProperty();
     }
 

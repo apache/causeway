@@ -24,6 +24,7 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;
@@ -33,13 +34,14 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Title;
 
+import /*${showcase-fully-qualified-type}*/;
+
 import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import /*${showcase-java-package}*/.holder./*${showcase-name}*/Holder2;
 
-/*${generated-file-notice}*/
 //tag::class[]
 @XmlRootElement(name = "root")
 @XmlType
@@ -52,33 +54,33 @@ public class /*${showcase-name}*/Vm
         implements HasAsciiDocDescription, /*${showcase-name}*/Holder2 {
 
 //end::class[]
-    public /*${showcase-name}*/Vm(final /*${showcase-type}*/ initialValue) {
+    public /*${showcase-name}*/Vm(final /*${showcase-simple-type}*/ initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
 
 //tag::class[]
-    @Title(prepend = "/*${showcase-type}*/ view model: ")
+    @Title(prepend = "/*${showcase-simple-type}*/ view model: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
-    @XmlElement(required = true)                                                // <.>
+    /*${showcase-jaxb-adapter-type}*/@XmlElement(required = true)                                                // <.>
     @Getter @Setter
-    private /*${showcase-type}*/ readOnlyProperty;
+    private /*${showcase-simple-type}*/ readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
-    @XmlElement(required = true)
+    /*${showcase-jaxb-adapter-type}*/@XmlElement(required = true)
     @Getter @Setter
-    private /*${showcase-type}*/ readWriteProperty;
+    private /*${showcase-simple-type}*/ readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
-    @Getter @Setter
-    private /*${showcase-type}*/ readOnlyOptionalProperty;
+    /*${showcase-jaxb-adapter-type}*/@Getter @Setter
+    private /*${showcase-simple-type}*/ readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
-    @Getter @Setter
-    private /*${showcase-type}*/ readWriteOptionalProperty;
+    /*${showcase-jaxb-adapter-type}*/@Getter @Setter
+    private /*${showcase-simple-type}*/ readWriteOptionalProperty;
 
 }
 //end::class[]

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.apache.causeway.applib.annotation.*;
 
-// tag::class[]
+//tag::class[]
 @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
 @ActionLayout(
         associateWith = "complexNumber",
@@ -34,4 +34,4 @@ public class CompositeValueTypePage_addComplexNumber {
         return ComplexNumber.of(0,0);
     }
 }
-// end::class[]
+//end::class[]

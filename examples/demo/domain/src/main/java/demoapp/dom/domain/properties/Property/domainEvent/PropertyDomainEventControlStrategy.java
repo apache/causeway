@@ -21,7 +21,7 @@ package demoapp.dom.domain.properties.Property.domainEvent;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 
-// tag::class[]
+//tag::class[]
 enum PropertyDomainEventControlStrategy {
 
     DO_NOTHING{
@@ -30,9 +30,9 @@ enum PropertyDomainEventControlStrategy {
         }
     },
     // ...
-// end::class[]
+//end::class[]
 
-// tag::hide[]
+//tag::hide[]
     HIDE {
         @Override
         void on(PropertyDomainEventPage.TextDomainEvent ev, ServiceRegistry serviceRegistry) {
@@ -43,8 +43,8 @@ enum PropertyDomainEventControlStrategy {
             }
         }
     },
-// end::hide[]
-// tag::disable[]
+//end::hide[]
+//tag::disable[]
     DISABLE{
         @Override
         void on(PropertyDomainEventPage.TextDomainEvent ev, ServiceRegistry serviceRegistry) {
@@ -56,8 +56,8 @@ enum PropertyDomainEventControlStrategy {
 
         }
     },
-// end::disable[]
-// tag::validate[]
+//end::disable[]
+//tag::validate[]
     VALIDATE_MUST_BE_UPPER_CASE{
         @Override
         void on(PropertyDomainEventPage.TextDomainEvent ev, ServiceRegistry serviceRegistry) {
@@ -72,8 +72,8 @@ enum PropertyDomainEventControlStrategy {
 
         }
     },
-// end::validate[]
-// tag::executing[]
+//end::validate[]
+//tag::executing[]
     EXECUTING_FORCE_UPPER_CASE{
         @Override
         void on(PropertyDomainEventPage.TextDomainEvent ev, ServiceRegistry serviceRegistry) {
@@ -86,8 +86,8 @@ enum PropertyDomainEventControlStrategy {
             }
         }
     },
-// end::executing[]
-// tag::executed[]
+//end::executing[]
+//tag::executed[]
     EXECUTED_ANNOUNCE{
         @Override
         void on(PropertyDomainEventPage.TextDomainEvent ev, ServiceRegistry serviceRegistry) {
@@ -105,10 +105,10 @@ enum PropertyDomainEventControlStrategy {
             }
         }
     }
-// end::executed[]
+//end::executed[]
 
-// tag::class[]
+//tag::class[]
     ;
     abstract void on(PropertyDomainEventPage.TextDomainEvent ev, ServiceRegistry serviceRegistry);
 }
-// end::class[]
+//end::class[]

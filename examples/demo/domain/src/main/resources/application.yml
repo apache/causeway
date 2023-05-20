@@ -113,8 +113,9 @@ causeway:
         show-drop-down-on-footer: true
       dialog-mode: sidebar
       dialog-mode-for-menu: modal
+      disable-reason-explanation-in-prototyping-mode-enabled: false
 
-# schema auto creation etc. ...
+  # schema auto creation etc. ...
   persistence:
     schema:
        autoCreateSchemas: causewayExtSecman,causewayExtCommandLog,causewayExtExecutionLog,causewayExtExecutionOutbox,causewayExtSessionLog,causewayExtAuditTrail,demo

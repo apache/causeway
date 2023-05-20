@@ -26,9 +26,10 @@ import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
+import /*${showcase-fully-qualified-type}*/;
+
 import lombok.RequiredArgsConstructor;
 
-/*${generated-file-notice}*/
 //tag::class[]
 @Action(
         semantics = SemanticsOf.IDEMPOTENT
@@ -45,13 +46,13 @@ public class /*${showcase-name}*/Holder_updateReadOnlyOptionalProperty {
 
     @MemberSupport public /*${showcase-name}*/Holder act(
             @Parameter(optionality = Optionality.OPTIONAL)              // <.>
-            final /*${showcase-type}*/ newValue
+            final /*${showcase-simple-type}*/ newValue
     ) {
         holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
 
-    @MemberSupport public /*${showcase-type}*/ default0Act() {
+    @MemberSupport public /*${showcase-simple-type}*/ default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }
 

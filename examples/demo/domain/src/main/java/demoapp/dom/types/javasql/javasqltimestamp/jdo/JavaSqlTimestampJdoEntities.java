@@ -21,19 +21,21 @@ package demoapp.dom.types.javasql.javasqltimestamp.jdo;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+
 import demoapp.dom._infra.values.ValueHolderRepository;
 
 @Profile("demo-jdo")
 @Service
 public class JavaSqlTimestampJdoEntities
-extends ValueHolderRepository<java.sql.Timestamp, JavaSqlTimestampJdo> {
+extends ValueHolderRepository<Timestamp, JavaSqlTimestampJdo> {
 
     protected JavaSqlTimestampJdoEntities() {
         super(JavaSqlTimestampJdo.class);
     }
 
     @Override
-    protected JavaSqlTimestampJdo newDetachedEntity(java.sql.Timestamp value) {
+    protected JavaSqlTimestampJdo newDetachedEntity(Timestamp value) {
         return new JavaSqlTimestampJdo(value);
     }
 

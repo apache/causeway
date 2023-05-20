@@ -21,8 +21,9 @@ package demoapp.dom.types.jodatime.jodadatetime.holder;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
-import lombok.RequiredArgsConstructor;
+import org.joda.time.DateTime;
 
+import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(semantics = SemanticsOf.SAFE)
@@ -31,7 +32,7 @@ public class JodaDateTimeHolder_actionReturning {
 
     private final JodaDateTimeHolder holder;
 
-    public org.joda.time.DateTime act() {
+    public DateTime act() {
         return holder.getReadOnlyProperty();
     }
 

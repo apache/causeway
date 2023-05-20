@@ -34,6 +34,8 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Title;
 
+import java.sql.Timestamp;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -49,35 +51,35 @@ public class JavaSqlTimestampJdo                                          // <.>
         extends JavaSqlTimestampEntity {
 
 //end::class[]
-    public JavaSqlTimestampJdo(final java.sql.Timestamp initialValue) {
+    public JavaSqlTimestampJdo(final Timestamp initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
 
 //tag::class[]
-    @Title(prepend = "java.sql.Timestamp JDO entity: ")
+    @Title(prepend = "Timestamp JDO entity: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @Column(allowsNull = "false")                                               // <.>
     @Getter @Setter
-    private java.sql.Timestamp readOnlyProperty;
+    private Timestamp readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @Column(allowsNull = "false")
     @Getter @Setter
-    private java.sql.Timestamp readWriteProperty;
+    private Timestamp readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
     @Column(allowsNull = "true")                                                // <.>
     @Getter @Setter
-    private java.sql.Timestamp readOnlyOptionalProperty;
+    private Timestamp readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
     @Column(allowsNull = "true")
     @Getter @Setter
-    private java.sql.Timestamp readWriteOptionalProperty;
+    private Timestamp readWriteOptionalProperty;
 
 }
 //end::class[]

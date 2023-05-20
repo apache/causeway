@@ -21,19 +21,21 @@ package demoapp.dom.types.javasql.javasqldate.jdo;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+
 import demoapp.dom._infra.values.ValueHolderRepository;
 
 @Profile("demo-jdo")
 @Service
 public class JavaSqlDateJdoEntities
-extends ValueHolderRepository<java.sql.Date, JavaSqlDateJdo> {
+extends ValueHolderRepository<Date, JavaSqlDateJdo> {
 
     protected JavaSqlDateJdoEntities() {
         super(JavaSqlDateJdo.class);
     }
 
     @Override
-    protected JavaSqlDateJdo newDetachedEntity(java.sql.Date value) {
+    protected JavaSqlDateJdo newDetachedEntity(Date value) {
         return new JavaSqlDateJdo(value);
     }
 

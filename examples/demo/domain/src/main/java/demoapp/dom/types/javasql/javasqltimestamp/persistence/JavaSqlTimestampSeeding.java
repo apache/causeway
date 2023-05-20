@@ -22,6 +22,8 @@ import jakarta.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+
 import demoapp.dom._infra.seed.SeedServiceAbstract;
 import demoapp.dom._infra.values.ValueHolderRepository;
 
@@ -30,7 +32,7 @@ public class JavaSqlTimestampSeeding
 extends SeedServiceAbstract {
 
     @Inject
-    public JavaSqlTimestampSeeding(ValueHolderRepository<java.sql.Timestamp, ? extends JavaSqlTimestampEntity> entities) {
+    public JavaSqlTimestampSeeding(ValueHolderRepository<Timestamp, ? extends JavaSqlTimestampEntity> entities) {
         super(entities);
     }
 

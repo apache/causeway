@@ -2,7 +2,7 @@
 
 == Mixin actions
 
-A number of mixin actions contribute through the `JodaLocalDateHolder` interface, demonstrate the use of `joda.time.LocalDate` as a parameter and as a return type.
+A number of mixin actions contribute through the `JodaLocalDateHolder` interface, demonstrate the use of `LocalDate` as a parameter and as a return type.
 For example:
 
 * the `updateReadOnlyProperty` action is:
@@ -63,19 +63,4 @@ include::holder/JodaLocalDateHolder2.java[tags=class]
 +
 CAUTION: currently not supported
 <.> Hide the label completely.
-
-
-== @PropertyLayout(renderDay=...)
-
-To demonstrate support for `@PropertyLayout(renderDay=...)` -- to simplify the modelling "[inclusive, exclusive)" date ranges -- the entity and view model objects both implement the extended `JodaLocalDateHolder3` interface.
-All methods have a default implementation:
-
-[source,java]
-----
-include::holder/JodaLocalDateHolder3.java[tags=class]
-----
-
-<.> Render the value as the day before
-<.> Render the value unchanged
-<.> Render the value as the day before
 

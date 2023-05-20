@@ -32,8 +32,7 @@ public class CausewayCalendarEventSeeding
 extends SeedServiceAbstract {
 
     @Inject
-    public CausewayCalendarEventSeeding(
-            final ValueHolderRepository<CalendarEvent, ? extends CausewayCalendarEventEntity> entities) {
+    public CausewayCalendarEventSeeding(ValueHolderRepository<CalendarEvent, ? extends CausewayCalendarEventEntity> entities) {
         super(entities);
     }
 

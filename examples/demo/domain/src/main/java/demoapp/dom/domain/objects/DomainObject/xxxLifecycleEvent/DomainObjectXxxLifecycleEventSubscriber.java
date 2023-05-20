@@ -32,7 +32,7 @@ import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-// tag::class[]
+//tag::class[]
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 class DomainObjectXxxLifecycleEventSubscriber {
@@ -51,4 +51,4 @@ class DomainObjectXxxLifecycleEventSubscriber {
     List<DomainObjectLifecycleEventVm> events = new LinkedList<>();
 
 }
-// end::class[]
+//end::class[]

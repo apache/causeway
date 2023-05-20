@@ -23,13 +23,13 @@ import java.util.stream.Collectors;
 
 import jakarta.inject.Inject;
 
-import org.joda.time.LocalDateTime;
-
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+
+import org.joda.time.LocalDateTime;
 
 import lombok.RequiredArgsConstructor;
 
@@ -49,16 +49,16 @@ public class JodaLocalDateTimeHolder_updateReadOnlyPropertyWithChoices {
 
     private final JodaLocalDateTimeHolder holder;
 
-    @MemberSupport public JodaLocalDateTimeHolder act(final org.joda.time.LocalDateTime newValue) {
+    @MemberSupport public JodaLocalDateTimeHolder act(final LocalDateTime newValue) {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
 
-    @MemberSupport public org.joda.time.LocalDateTime default0Act() {
+    @MemberSupport public LocalDateTime default0Act() {
         return holder.getReadOnlyProperty();
     }
 
-    @MemberSupport public List<org.joda.time.LocalDateTime> choices0Act() {
+    @MemberSupport public List<LocalDateTime> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }

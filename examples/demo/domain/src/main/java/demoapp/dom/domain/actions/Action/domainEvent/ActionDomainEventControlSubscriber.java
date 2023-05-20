@@ -27,7 +27,7 @@ import org.apache.causeway.applib.services.registry.ServiceRegistry;
 
 import lombok.RequiredArgsConstructor;
 
-// tag::class[]
+//tag::class[]
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 class ActionDomainEventControlSubscriber {
@@ -42,4 +42,4 @@ class ActionDomainEventControlSubscriber {
         controlStrategy.on(ev, serviceRegistry);                            // <.>
     }
 }
-// end::class[]
+//end::class[]

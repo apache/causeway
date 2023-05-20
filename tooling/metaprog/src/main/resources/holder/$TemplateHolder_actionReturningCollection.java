@@ -26,11 +26,12 @@ import jakarta.inject.Inject;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
+import /*${showcase-fully-qualified-type}*/;
+
 import lombok.RequiredArgsConstructor;
 
 import demoapp.dom.types.Samples;
 
-/*${generated-file-notice}*/
 //tag::class[]
 @Action(semantics = SemanticsOf.SAFE)
 @RequiredArgsConstructor
@@ -38,13 +39,13 @@ public class /*${showcase-name}*/Holder_actionReturningCollection {
 
     private final /*${showcase-name}*/Holder holder;
 
-    public Collection</*${showcase-type}*/> act() {
+    public Collection</*${showcase-simple-type}*/> act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }
 
     @Inject
-    Samples</*${showcase-type}*/> samples;
+    Samples</*${showcase-simple-type}*/> samples;
 
 }
 //end::class[]

@@ -33,13 +33,14 @@ import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Title;
-import org.apache.causeway.valuetypes.jodatime.applib.jaxb.JodaTimeJaxbAdapters;
+
+import org.joda.time.LocalDateTime;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.jodatime.jodalocaldatetime.holder.JodaLocalDateTimeHolder3;
+import demoapp.dom.types.jodatime.jodalocaldatetime.holder.JodaLocalDateTimeHolder2;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -50,40 +51,40 @@ import demoapp.dom.types.jodatime.jodalocaldatetime.holder.JodaLocalDateTimeHold
         nature=Nature.VIEW_MODEL)
 @lombok.NoArgsConstructor                                                       // <.>
 public class JodaLocalDateTimeVm
-        implements HasAsciiDocDescription, JodaLocalDateTimeHolder3 {
+        implements HasAsciiDocDescription, JodaLocalDateTimeHolder2 {
 
 //end::class[]
-    public JodaLocalDateTimeVm(final org.joda.time.LocalDateTime initialValue) {
+    public JodaLocalDateTimeVm(final LocalDateTime initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
 
 //tag::class[]
-    @Title(prepend = "org.joda.time.LocalDateTime view model: ")
+    @Title(prepend = "LocalDateTime view model: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
+    @XmlJavaTypeAdapter(org.apache.causeway.valuetypes.jodatime.applib.jaxb.JodaTimeJaxbAdapters.LocalDateTimeToStringAdapter.class)
     @XmlElement(required = true)                                                // <.>
-    @XmlJavaTypeAdapter(JodaTimeJaxbAdapters.LocalDateTimeToStringAdapter.class)// <.>
     @Getter @Setter
-    private org.joda.time.LocalDateTime readOnlyProperty;
+    private LocalDateTime readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
+    @XmlJavaTypeAdapter(org.apache.causeway.valuetypes.jodatime.applib.jaxb.JodaTimeJaxbAdapters.LocalDateTimeToStringAdapter.class)
     @XmlElement(required = true)
-    @XmlJavaTypeAdapter(JodaTimeJaxbAdapters.LocalDateTimeToStringAdapter.class)
     @Getter @Setter
-    private org.joda.time.LocalDateTime readWriteProperty;
+    private LocalDateTime readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
-    @XmlJavaTypeAdapter(JodaTimeJaxbAdapters.LocalDateTimeToStringAdapter.class)
+    @XmlJavaTypeAdapter(org.apache.causeway.valuetypes.jodatime.applib.jaxb.JodaTimeJaxbAdapters.LocalDateTimeToStringAdapter.class)
     @Getter @Setter
-    private org.joda.time.LocalDateTime readOnlyOptionalProperty;
+    private LocalDateTime readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
-    @XmlJavaTypeAdapter(JodaTimeJaxbAdapters.LocalDateTimeToStringAdapter.class)
+    @XmlJavaTypeAdapter(org.apache.causeway.valuetypes.jodatime.applib.jaxb.JodaTimeJaxbAdapters.LocalDateTimeToStringAdapter.class)
     @Getter @Setter
-    private org.joda.time.LocalDateTime readWriteOptionalProperty;
+    private LocalDateTime readWriteOptionalProperty;
 
 }
 //end::class[]

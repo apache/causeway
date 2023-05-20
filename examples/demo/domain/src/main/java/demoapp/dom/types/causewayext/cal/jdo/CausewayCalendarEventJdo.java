@@ -33,6 +33,7 @@ import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Title;
+
 import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 
 import lombok.Getter;
@@ -46,7 +47,7 @@ import demoapp.dom.types.causewayext.cal.persistence.CausewayCalendarEventEntity
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @Named("demo.CausewayCalendarEventEntity")
 @DomainObject
-public class CausewayCalendarEventJdo
+public class CausewayCalendarEventJdo                                          // <.>
         extends CausewayCalendarEventEntity {
 
 //end::class[]

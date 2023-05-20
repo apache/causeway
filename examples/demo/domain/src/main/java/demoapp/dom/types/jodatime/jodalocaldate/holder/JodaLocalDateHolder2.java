@@ -22,6 +22,7 @@ import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
+import org.joda.time.LocalDate;
 
 //tag::class[]
 public interface JodaLocalDateHolder2 extends JodaLocalDateHolder {
@@ -32,8 +33,8 @@ public interface JodaLocalDateHolder2 extends JodaLocalDateHolder {
         describedAs =
             "@PropertyLayout(labelPosition=LEFT)",
         hidden = Where.ALL_TABLES,
-        fieldSetId = "label-positions", sequence = "1")  // <.>
-    default org.joda.time.LocalDate getReadOnlyPropertyDerivedLabelPositionLeft() {
+        fieldSetId = "label-positions", sequence = "1")     // <.>
+    default LocalDate getReadOnlyPropertyDerivedLabelPositionLeft() {
         return getReadOnlyProperty();
     }
 
@@ -44,7 +45,7 @@ public interface JodaLocalDateHolder2 extends JodaLocalDateHolder {
             "@PropertyLayout(labelPosition=TOP)",
         hidden = Where.ALL_TABLES,
         fieldSetId = "label-positions", sequence = "2")
-    default org.joda.time.LocalDate getReadOnlyPropertyDerivedLabelPositionTop() {
+    default LocalDate getReadOnlyPropertyDerivedLabelPositionTop() {
         return getReadOnlyProperty();
     }
 
@@ -55,7 +56,7 @@ public interface JodaLocalDateHolder2 extends JodaLocalDateHolder {
             "@PropertyLayout(labelPosition=RIGHT)",
         hidden = Where.ALL_TABLES,
         fieldSetId = "label-positions", sequence = "3")
-    default org.joda.time.LocalDate getReadOnlyPropertyDerivedLabelPositionRight() {
+    default LocalDate getReadOnlyPropertyDerivedLabelPositionRight() {
         return getReadOnlyProperty();
     }
 
@@ -66,7 +67,7 @@ public interface JodaLocalDateHolder2 extends JodaLocalDateHolder {
             "@PropertyLayout(labelPosition=NONE)",
         hidden = Where.ALL_TABLES,
         fieldSetId = "label-positions", sequence = "4")
-    default org.joda.time.LocalDate getReadOnlyPropertyDerivedLabelPositionNone() {
+    default LocalDate getReadOnlyPropertyDerivedLabelPositionNone() {
         return getReadOnlyProperty();
     }
 

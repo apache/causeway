@@ -22,6 +22,7 @@ import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
+import java.sql.Timestamp;
 
 //tag::class[]
 public interface JavaSqlTimestampHolder2 extends JavaSqlTimestampHolder {
@@ -32,8 +33,8 @@ public interface JavaSqlTimestampHolder2 extends JavaSqlTimestampHolder {
         describedAs =
             "@PropertyLayout(labelPosition=LEFT)",
         hidden = Where.ALL_TABLES,
-        fieldSetId = "label-positions", sequence = "1")  // <.>
-    default java.sql.Timestamp getReadOnlyPropertyDerivedLabelPositionLeft() {
+        fieldSetId = "label-positions", sequence = "1")     // <.>
+    default Timestamp getReadOnlyPropertyDerivedLabelPositionLeft() {
         return getReadOnlyProperty();
     }
 
@@ -44,7 +45,7 @@ public interface JavaSqlTimestampHolder2 extends JavaSqlTimestampHolder {
             "@PropertyLayout(labelPosition=TOP)",
         hidden = Where.ALL_TABLES,
         fieldSetId = "label-positions", sequence = "2")
-    default java.sql.Timestamp getReadOnlyPropertyDerivedLabelPositionTop() {
+    default Timestamp getReadOnlyPropertyDerivedLabelPositionTop() {
         return getReadOnlyProperty();
     }
 
@@ -55,7 +56,7 @@ public interface JavaSqlTimestampHolder2 extends JavaSqlTimestampHolder {
             "@PropertyLayout(labelPosition=RIGHT)",
         hidden = Where.ALL_TABLES,
         fieldSetId = "label-positions", sequence = "3")
-    default java.sql.Timestamp getReadOnlyPropertyDerivedLabelPositionRight() {
+    default Timestamp getReadOnlyPropertyDerivedLabelPositionRight() {
         return getReadOnlyProperty();
     }
 
@@ -66,7 +67,7 @@ public interface JavaSqlTimestampHolder2 extends JavaSqlTimestampHolder {
             "@PropertyLayout(labelPosition=NONE)",
         hidden = Where.ALL_TABLES,
         fieldSetId = "label-positions", sequence = "4")
-    default java.sql.Timestamp getReadOnlyPropertyDerivedLabelPositionNone() {
+    default Timestamp getReadOnlyPropertyDerivedLabelPositionNone() {
         return getReadOnlyProperty();
     }
 

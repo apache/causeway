@@ -8,7 +8,7 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
-// tag::default-mixin[]
+//tag::default-mixin[]
 @Action(semantics = SemanticsOf.SAFE)
 @ActionLayout(promptStyle = PromptStyle.INLINE_AS_IF_EDIT)  // <.>
 @RequiredArgsConstructor
@@ -29,4 +29,4 @@ public class ComplexNumber_default {
         return mixee.getIm();
     }
 }
-// end::default-mixin[]
+//end::default-mixin[]

@@ -40,7 +40,6 @@ import lombok.Setter;
 
 import /*${showcase-java-package}*/.persistence./*${showcase-name}*/Entity;
 
-/*${generated-file-notice}*/
 @Profile("demo-jpa")
 //tag::class[]
 @Entity
@@ -56,7 +55,7 @@ public class /*${showcase-name}*/Jpa
         extends /*${showcase-name}*/Entity {
 
 //end::class[]
-    public /*${showcase-name}*/Jpa(final /*${showcase-type}*/ initialValue) {
+    public /*${showcase-name}*/Jpa(final /*${showcase-simple-type}*/ initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
@@ -66,15 +65,15 @@ public class /*${showcase-name}*/Jpa
     @GeneratedValue
     private Long id;
 
-    @Title(prepend = "/*${showcase-type}*/ (primitive) JPA entity: ")
+    @Title(prepend = "/*${showcase-simple-type}*/ (primitive) JPA entity: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @Getter @Setter
-    private /*${showcase-type}*/ readOnlyProperty;                              // <.>
+    private /*${showcase-simple-type}*/ readOnlyProperty;                              // <.>
 
-    @Property(editing = Editing.ENABLED)                                        
+    @Property(editing = Editing.ENABLED)
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @Getter @Setter
-    private /*${showcase-type}*/ readWriteProperty;
+    private /*${showcase-simple-type}*/ readWriteProperty;
 
 }
 //end::class[]

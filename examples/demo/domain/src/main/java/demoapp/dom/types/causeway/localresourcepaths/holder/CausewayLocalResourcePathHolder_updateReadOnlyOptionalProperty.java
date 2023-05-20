@@ -25,10 +25,10 @@ import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+
 import org.apache.causeway.applib.value.LocalResourcePath;
 
 import lombok.RequiredArgsConstructor;
-
 
 //tag::class[]
 @Action(
@@ -51,6 +51,7 @@ public class CausewayLocalResourcePathHolder_updateReadOnlyOptionalProperty {
         holder.setReadOnlyOptionalProperty(newValue);
         return holder;
     }
+
     @MemberSupport public LocalResourcePath default0Act() {
         return holder.getReadOnlyOptionalProperty();
     }

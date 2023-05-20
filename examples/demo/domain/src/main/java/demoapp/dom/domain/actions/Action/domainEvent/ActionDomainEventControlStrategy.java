@@ -24,7 +24,7 @@ import org.apache.causeway.applib.events.domain.ActionDomainEvent;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 
-// tag::class[]
+//tag::class[]
 enum ActionDomainEventControlStrategy {
 
     DO_NOTHING{
@@ -33,9 +33,9 @@ enum ActionDomainEventControlStrategy {
         }
     },
     // ...
-// end::class[]
+//end::class[]
 
-// tag::hide[]
+//tag::hide[]
     HIDE {
         @Override
         void on(ActionDomainEvent<?> ev, ServiceRegistry serviceRegistry) {
@@ -46,8 +46,8 @@ enum ActionDomainEventControlStrategy {
             }
         }
     },
-// end::hide[]
-// tag::disable[]
+//end::hide[]
+//tag::disable[]
     DISABLE {
         @Override
         void on(ActionDomainEvent<?> ev, ServiceRegistry serviceRegistry) {
@@ -58,8 +58,8 @@ enum ActionDomainEventControlStrategy {
             }
         }
     },
-// end::disable[]
-// tag::validate[]
+//end::disable[]
+//tag::validate[]
     VALIDATE_MUST_BE_UPPER_CASE{
         @Override
         void on(ActionDomainEvent<?> ev, ServiceRegistry serviceRegistry) {
@@ -73,8 +73,8 @@ enum ActionDomainEventControlStrategy {
             }
         }
     },
-// end::validate[]
-// tag::executing[]
+//end::validate[]
+//tag::executing[]
     EXECUTING_FORCE_UPPER_CASE{
         @Override
         void on(ActionDomainEvent<?> ev, ServiceRegistry serviceRegistry) {
@@ -87,8 +87,8 @@ enum ActionDomainEventControlStrategy {
             }
         }
     },
-// end::executing[]
-// tag::executed[]
+//end::executing[]
+//tag::executed[]
     EXECUTED_ANNOUNCE{
         @Override
         void on(ActionDomainEvent<?> ev, ServiceRegistry serviceRegistry) {
@@ -103,10 +103,10 @@ enum ActionDomainEventControlStrategy {
             }
         }
     }
-// end::executed[]
+//end::executed[]
 
-// tag::class[]
+//tag::class[]
     ;
     abstract void on(ActionDomainEvent<?> ev, ServiceRegistry serviceRegistry);
 }
-// end::class[]
+//end::class[]

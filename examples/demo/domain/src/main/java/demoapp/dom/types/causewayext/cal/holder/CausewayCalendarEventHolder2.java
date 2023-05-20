@@ -33,7 +33,7 @@ public interface CausewayCalendarEventHolder2 extends CausewayCalendarEventHolde
         describedAs =
             "@PropertyLayout(labelPosition=LEFT)",
         hidden = Where.ALL_TABLES,
-        fieldSetId = "label-positions", sequence = "1")  // <.>
+        fieldSetId = "label-positions", sequence = "1")     // <.>
     default CalendarEvent getReadOnlyPropertyDerivedLabelPositionLeft() {
         return getReadOnlyProperty();
     }

@@ -23,15 +23,14 @@ import java.util.stream.Collectors;
 
 import jakarta.inject.Inject;
 
-import org.joda.time.LocalDateTime;
-
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+
+import org.joda.time.LocalTime;
 
 import lombok.RequiredArgsConstructor;
 
 import demoapp.dom.types.Samples;
-
 
 //tag::class[]
 @Action(semantics = SemanticsOf.SAFE)
@@ -40,13 +39,13 @@ public class JodaLocalTimeHolder_actionReturningCollection {
 
     private final JodaLocalTimeHolder holder;
 
-    public Collection<org.joda.time.LocalDateTime> act() {
+    public Collection<LocalTime> act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }
 
     @Inject
-    Samples<LocalDateTime> samples;
+    Samples<LocalTime> samples;
 
 }
 //end::class[]

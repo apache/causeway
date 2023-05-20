@@ -21,19 +21,21 @@ package demoapp.dom.types.javasql.javasqltimestamp.jpa;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+
 import demoapp.dom._infra.values.ValueHolderRepository;
 
 @Profile("demo-jpa")
 @Service
 public class JavaSqlTimestampJpaEntities
-extends ValueHolderRepository<java.sql.Timestamp, JavaSqlTimestampJpa> {
+extends ValueHolderRepository<Timestamp, JavaSqlTimestampJpa> {
 
     protected JavaSqlTimestampJpaEntities() {
         super(JavaSqlTimestampJpa.class);
     }
 
     @Override
-    protected JavaSqlTimestampJpa newDetachedEntity(java.sql.Timestamp value) {
+    protected JavaSqlTimestampJpa newDetachedEntity(Timestamp value) {
         return new JavaSqlTimestampJpa(value);
     }
 

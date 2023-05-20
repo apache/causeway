@@ -33,7 +33,7 @@ public interface CausewayPasswordHolder2 extends CausewayPasswordHolder {
         describedAs =
             "@PropertyLayout(labelPosition=LEFT)",
         hidden = Where.ALL_TABLES,
-        fieldSetId = "label-positions", sequence = "1")  // <.>
+        fieldSetId = "label-positions", sequence = "1")     // <.>
     default Password getReadOnlyPropertyDerivedLabelPositionLeft() {
         return getReadOnlyProperty();
     }

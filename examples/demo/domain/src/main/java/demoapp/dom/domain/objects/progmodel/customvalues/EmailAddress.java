@@ -19,11 +19,11 @@
 package demoapp.dom.domain.objects.progmodel.customvalues;
 
 
-// tag::class[]
+//tag::class[]
 @org.apache.causeway.applib.annotation.Value        // <.>
 @lombok.Value                                       // <.>
 @lombok.AllArgsConstructor(staticName = "of")
 public class EmailAddress {
     String emailAddress;                            // <.>
 }
-// end::class[]
+//end::class[]

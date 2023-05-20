@@ -36,6 +36,8 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Title;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
+import java.util.Date;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -52,12 +54,12 @@ import demoapp.dom.types.javautil.javautildate.persistence.JavaUtilDateEntity;
 @EntityListeners(CausewayEntityListener.class)
 @Named("demo.JavaUtilDateEntity")
 @DomainObject
-@NoArgsConstructor
+@NoArgsConstructor                                                             // <.>
 public class JavaUtilDateJpa
         extends JavaUtilDateEntity {
 
 //end::class[]
-    public JavaUtilDateJpa(final java.util.Date initialValue) {
+    public JavaUtilDateJpa(final Date initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
@@ -67,29 +69,29 @@ public class JavaUtilDateJpa
     @GeneratedValue
     private Long id;
 
-    @Title(prepend = "java.util.Date JPA entity: ")
+    @Title(prepend = "Date JPA entity: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @Column(nullable = false)                                                   // <.>
     @Getter @Setter
-    private java.util.Date readOnlyProperty;
+    private Date readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @Column(nullable = false)
     @Getter @Setter
-    private java.util.Date readWriteProperty;
+    private Date readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
     @Column(nullable = true)                                                    // <.>
     @Getter @Setter
-    private java.util.Date readOnlyOptionalProperty;
+    private Date readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
     @Column(nullable = true)
     @Getter @Setter
-    private java.util.Date readWriteOptionalProperty;
+    private Date readWriteOptionalProperty;
 
 }
 //end::class[]

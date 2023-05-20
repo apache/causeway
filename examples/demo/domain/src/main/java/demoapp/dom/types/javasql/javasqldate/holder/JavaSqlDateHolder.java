@@ -20,21 +20,23 @@ package demoapp.dom.types.javasql.javasqldate.holder;
 
 import jakarta.inject.Named;
 
+import java.sql.Date;
+
 @Named("demo.JavaSqlDateHolder")
 //tag::class[]
 public interface JavaSqlDateHolder {
 
-    java.sql.Date getReadOnlyProperty();
-    void setReadOnlyProperty(java.sql.Date c);
+    Date getReadOnlyProperty();
+    void setReadOnlyProperty(Date c);
 
-    java.sql.Date getReadWriteProperty();
-    void setReadWriteProperty(java.sql.Date c);
+    Date getReadWriteProperty();
+    void setReadWriteProperty(Date c);
 
-    java.sql.Date getReadOnlyOptionalProperty();
-    void setReadOnlyOptionalProperty(java.sql.Date c);
+    Date getReadOnlyOptionalProperty();
+    void setReadOnlyOptionalProperty(Date c);
 
-    java.sql.Date getReadWriteOptionalProperty();
-    void setReadWriteOptionalProperty(java.sql.Date c);
+    Date getReadWriteOptionalProperty();
+    void setReadWriteOptionalProperty(Date c);
 
 }
 //end::class[]

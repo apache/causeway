@@ -22,15 +22,18 @@ import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+
 import demoapp.dom.types.Samples;
 
 @Service
-public class JavaSqlDateSamples implements Samples<java.sql.Date> {
+public class JavaSqlDateSamples implements Samples<Date> {
 
     @Override
-    public Stream<java.sql.Date> stream() {
-        return Stream.of(1, 2, 3)
-                .map(x -> new java.sql.Date(120,x,x));  // 1900 is the epoch
+    public Stream<Date> stream() {
+        return new org.apache.causeway.core.metamodel.valuesemantics.temporal.legacy.JavaSqlDateValueSemantics()
+                .getExamples()
+                .stream();
     }
 
 }

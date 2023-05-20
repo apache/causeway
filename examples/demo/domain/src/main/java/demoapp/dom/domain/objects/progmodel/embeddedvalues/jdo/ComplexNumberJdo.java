@@ -24,7 +24,7 @@ import lombok.AccessLevel;
 
 import demoapp.dom.domain.objects.progmodel.embeddedvalues.ComplexNumber;
 
-// tag::class[]
+//tag::class[]
 @javax.jdo.annotations.PersistenceCapable
 @javax.jdo.annotations.EmbeddedOnly                                 // <.>
 @Value                                                              // <.>
@@ -41,4 +41,4 @@ public class ComplexNumberJdo
     @javax.jdo.annotations.Column(allowsNull = "false")
     private double im;                                              // <5>
 }
-// end::class[]
+//end::class[]

@@ -33,13 +33,14 @@ import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Title;
-import org.apache.causeway.applib.jaxb.JavaUtilJaxbAdapters;
+
+import java.util.Date;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.types.javautil.javautildate.holder.JavaUtilDateHolder3;
+import demoapp.dom.types.javautil.javautildate.holder.JavaUtilDateHolder2;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -50,40 +51,36 @@ import demoapp.dom.types.javautil.javautildate.holder.JavaUtilDateHolder3;
         nature=Nature.VIEW_MODEL)
 @lombok.NoArgsConstructor                                                       // <.>
 public class JavaUtilDateVm
-        implements HasAsciiDocDescription, JavaUtilDateHolder3 {
+        implements HasAsciiDocDescription, JavaUtilDateHolder2 {
 
 //end::class[]
-    public JavaUtilDateVm(final java.util.Date initialValue) {
+    public JavaUtilDateVm(final Date initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
 
 //tag::class[]
-    @Title(prepend = "java.util.Date view model: ")
+    @Title(prepend = "Date view model: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @XmlElement(required = true)                                                // <.>
-    @XmlJavaTypeAdapter(JavaUtilJaxbAdapters.DateToStringAdapter.class)                         // <.>
     @Getter @Setter
-    private java.util.Date readOnlyProperty;
+    private Date readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @XmlElement(required = true)
-    @XmlJavaTypeAdapter(JavaUtilJaxbAdapters.DateToStringAdapter.class)
     @Getter @Setter
-    private java.util.Date readWriteProperty;
+    private Date readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
-    @XmlJavaTypeAdapter(JavaUtilJaxbAdapters.DateToStringAdapter.class)
     @Getter @Setter
-    private java.util.Date readOnlyOptionalProperty;
+    private Date readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
-    @XmlJavaTypeAdapter(JavaUtilJaxbAdapters.DateToStringAdapter.class)
     @Getter @Setter
-    private java.util.Date readWriteOptionalProperty;
+    private Date readWriteOptionalProperty;
 
 }
 //end::class[]

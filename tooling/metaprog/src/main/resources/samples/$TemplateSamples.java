@@ -22,14 +22,15 @@ import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 
+import /*${showcase-fully-qualified-type}*/;
+
 import demoapp.dom.types.Samples;
 
-/*${generated-file-notice}*/
 @Service
-public class /*${showcase-name}*/Samples implements Samples</*${showcase-type}*/> {
+public class /*${showcase-name}*/Samples implements Samples</*${showcase-simple-type}*/> {
 
     @Override
-    public Stream</*${showcase-type}*/> stream() {
+    public Stream</*${showcase-simple-type}*/> stream() {
         return new /*${showcase-value-semantics-provider}*/()
                 .getExamples()
                 .stream();

@@ -22,19 +22,22 @@ import java.util.List;
 
 import lombok.val;
 
-import demoapp.dom.services.core.eventbusservice.EventBusServiceDemoVm.UiButtonEvent;
+import demoapp.dom.services.core.eventbusservice.EventBusServiceDemoPage.UiButtonEvent;
 
+//tag::class[]
 public interface EventLogEntryRepository<T extends EventLogEntry> {
-
+    // ...
+//end::class[]
     List<T> listAll();
 
     void add(T entry);
 
     T newEntityFor(UiButtonEvent event);
 
+//tag::class[]
     default void storeEvent(final UiButtonEvent event) {
         val entry = newEntityFor(event);
         add(entry);
     }
-
 }
+//end::class[]

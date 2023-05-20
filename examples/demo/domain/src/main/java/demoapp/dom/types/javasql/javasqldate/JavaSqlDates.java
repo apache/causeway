@@ -39,8 +39,11 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
+import java.sql.Date;
+
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.types.Samples;
 import demoapp.dom.types.javasql.javasqldate.persistence.JavaSqlDateEntity;
 import demoapp.dom.types.javasql.javasqldate.vm.JavaSqlDateVm;
 
@@ -53,16 +56,16 @@ import demoapp.dom.types.javasql.javasqldate.vm.JavaSqlDateVm;
 public class JavaSqlDates implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "java.sql.Date data type";
+        return "Date data type";
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    public JavaSqlDateVm openViewModel(final java.sql.Date initialValue) {
+    public JavaSqlDateVm openViewModel(final Date initialValue) {
         return new JavaSqlDateVm(initialValue);
     }
-    @MemberSupport public java.sql.Date default0OpenViewModel() {
-        return new java.sql.Date(120,1,1); // 1900 is the epoch
+    @MemberSupport public Date default0OpenViewModel() {
+        return samples.single();
     }
 
     @Collection
@@ -72,7 +75,10 @@ public class JavaSqlDates implements HasAsciiDocDescription {
 
     @Inject
     @XmlTransient
-    ValueHolderRepository<java.sql.Date, ? extends JavaSqlDateEntity> entities;
+    ValueHolderRepository<Date, ? extends JavaSqlDateEntity> entities;
 
+    @Inject
+    @XmlTransient
+    Samples<Date> samples;
 
 }

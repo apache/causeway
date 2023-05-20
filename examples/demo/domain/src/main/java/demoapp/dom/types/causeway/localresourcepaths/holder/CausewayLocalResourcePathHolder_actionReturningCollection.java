@@ -25,12 +25,12 @@ import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+
 import org.apache.causeway.applib.value.LocalResourcePath;
 
 import lombok.RequiredArgsConstructor;
 
 import demoapp.dom.types.Samples;
-
 
 //tag::class[]
 @Action(semantics = SemanticsOf.SAFE)
@@ -46,5 +46,6 @@ public class CausewayLocalResourcePathHolder_actionReturningCollection {
 
     @Inject
     Samples<LocalResourcePath> samples;
+
 }
 //end::class[]

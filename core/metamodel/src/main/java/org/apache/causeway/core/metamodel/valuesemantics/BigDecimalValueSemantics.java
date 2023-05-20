@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.valuesemantics;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.function.UnaryOperator;
+import java.util.stream.Stream;
 
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
@@ -166,7 +167,12 @@ implements
                 new BigDecimal("1001"),
                 new BigDecimal("-63.1"),
                 new BigDecimal("0.001"),
-                BigDecimal.ZERO);
+                BigDecimal.ZERO,
+                BigDecimal.ONE,
+                BigDecimal.TEN,
+                BigDecimal.valueOf(123_456_789_012L),
+                BigDecimal.valueOf(1234567.8890f),
+                BigDecimal.valueOf(123_456_789_012L, 3));
     }
 
 }

@@ -23,7 +23,6 @@ import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
 
 import org.springframework.context.annotation.Profile;
@@ -34,6 +33,7 @@ import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Title;
+
 import org.apache.causeway.applib.value.LocalResourcePath;
 
 import lombok.Getter;
@@ -47,7 +47,7 @@ import demoapp.dom.types.causeway.localresourcepaths.persistence.CausewayLocalRe
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @Named("demo.CausewayLocalResourcePathEntity")
 @DomainObject
-public class CausewayLocalResourcePathJdo                                   // <.>
+public class CausewayLocalResourcePathJdo                                          // <.>
         extends CausewayLocalResourcePathEntity {
 
 //end::class[]
@@ -59,26 +59,25 @@ public class CausewayLocalResourcePathJdo                                   // <
 //tag::class[]
     @Title(prepend = "LocalResourcePath JDO entity: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
-    @Column(allowsNull = "false")                                       // <.>
+    @Column(allowsNull = "false")                                               // <.>
     @Getter @Setter
     private LocalResourcePath readOnlyProperty;
 
-    @Property(editing = Editing.ENABLED)                                // <.>
+    @Property(editing = Editing.ENABLED)                                        // <.>
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @Column(allowsNull = "false")
     @Getter @Setter
     private LocalResourcePath readWriteProperty;
 
-    @Property(optionality = Optionality.OPTIONAL)                       // <.>
+    @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
-    @Column(allowsNull = "true")                                        // <.>
+    @Column(allowsNull = "true")                                                // <.>
     @Getter @Setter
     private LocalResourcePath readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
-    @NotPersistent
-    // @Column(allowsNull = "true")
+    @Column(allowsNull = "true")
     @Getter @Setter
     private LocalResourcePath readWriteOptionalProperty;
 

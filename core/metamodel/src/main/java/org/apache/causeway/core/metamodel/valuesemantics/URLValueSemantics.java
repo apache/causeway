@@ -128,8 +128,9 @@ implements
     @Override
     public Can<URL> getExamples() {
         return Can.of(
-                new URL("https://a.b.c"),
-                new URL("https://b.c.d"));
+                new URL("https://maps.google.com"),
+                new URL("https://en.wikipedia.org/wiki/Domain-driven_design")
+        );
     }
 
 }

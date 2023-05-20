@@ -39,13 +39,14 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
+import /*${showcase-fully-qualified-type}*/;
+
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.types.Samples;
 import /*${showcase-java-package}*/.persistence./*${showcase-name}*/Entity;
 import /*${showcase-java-package}*/.vm./*${showcase-name}*/Vm;
 
-/*${generated-file-notice}*/
 @XmlRootElement(name = "Demo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -55,15 +56,15 @@ import /*${showcase-java-package}*/.vm./*${showcase-name}*/Vm;
 public class /*${showcase-name}*/s implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "/*${showcase-type}*/ data type";
+        return "/*${showcase-simple-type}*/ data type";
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    public /*${showcase-name}*/Vm openViewModel(final /*${showcase-type}*/ initialValue) {
+    public /*${showcase-name}*/Vm openViewModel(final /*${showcase-simple-type}*/ initialValue) {
         return new /*${showcase-name}*/Vm(initialValue);
     }
-    @MemberSupport public /*${showcase-type}*/ default0OpenViewModel() {
+    @MemberSupport public /*${showcase-simple-type}*/ default0OpenViewModel() {
         return samples.single();
     }
 
@@ -74,10 +75,10 @@ public class /*${showcase-name}*/s implements HasAsciiDocDescription {
 
     @Inject
     @XmlTransient
-    ValueHolderRepository</*${showcase-type-boxed}*/, ? extends /*${showcase-name}*/Entity> entities;
+    ValueHolderRepository</*${showcase-simple-type-boxed}*/, ? extends /*${showcase-name}*/Entity> entities;
 
     @Inject
     @XmlTransient
-    Samples</*${showcase-type-boxed}*/> samples;
+    Samples</*${showcase-simple-type-boxed}*/> samples;
 
 }

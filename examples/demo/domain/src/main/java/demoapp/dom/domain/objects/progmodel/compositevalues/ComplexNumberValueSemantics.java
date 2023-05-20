@@ -30,7 +30,7 @@ import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.schema.common.v2.ValueType;
 
-// tag::class[]
+//tag::class[]
 @Named("demo.ComplexNumberValueSemantics")
 @Component
 @Import({
@@ -38,7 +38,7 @@ import org.apache.causeway.schema.common.v2.ValueType;
 })
 public class ComplexNumberValueSemantics
         extends ValueSemanticsAbstract<ComplexNumber> {     // <.>
-// end::class[]
+//end::class[]
 
     @Override
     public Class<ComplexNumber> getCorrespondingClass() {
@@ -50,7 +50,7 @@ public class ComplexNumberValueSemantics
         return ValueType.COMPOSITE;
     }
 
-// tag::compose[]
+//tag::compose[]
     @Override
     public ValueDecomposition decompose(final ComplexNumber value) {
         return CommonDtoUtils.typedTupleBuilder(value)
@@ -68,16 +68,16 @@ public class ComplexNumberValueSemantics
                         (Double)map.get("im")))
                 .orElse(null);
     }
-// end::compose[]
+//end::compose[]
 
-// tag::getDefaultsProvider[]
+//tag::getDefaultsProvider[]
     @Override
     public DefaultsProvider<ComplexNumber> getDefaultsProvider() {
         return ()-> ComplexNumber.of(0, 0);
     }
-// end::getDefaultsProvider[]
+//end::getDefaultsProvider[]
 
-// tag::getRenderer[]
+//tag::getRenderer[]
     @Override
     public Renderer<ComplexNumber> getRenderer() {
         return new Renderer<>() {
@@ -92,8 +92,8 @@ public class ComplexNumberValueSemantics
             }
         };
     }
-// end::getRenderer[]
+//end::getRenderer[]
 
-// tag::class[]
+//tag::class[]
 }
-// end::class[]
+//end::class[]
