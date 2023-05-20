@@ -339,6 +339,7 @@ public class FileUtils {
             String line;
             while ((line = reader.readLine()) != null) {
                 writer.write(lineProcessor.apply(line));
+                writer.write("\n");
             }
         }
     }
