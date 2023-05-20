@@ -38,8 +38,8 @@
     <dependencies>
 
 		<dependency>
-			<groupId>org.apache.causeway.viewer</groupId>
-			<artifactId>causeway-viewer-wicket-graceful</artifactId>
+			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket-core</artifactId>
 		</dependency>
 
         <dependency>
