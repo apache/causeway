@@ -3,7 +3,8 @@
 CAUTION: TODO - to document
 
 [source,java]
+.PrimeNumberJpa.java
 ----
-include::WrapperFactoryJpa.java[tags=class]
+include::PrimeNumberJpa.java[tags=class]
 ----
 

@@ -18,6 +18,7 @@
  */
 package demoapp.dom.services.core;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -29,48 +30,44 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.factory.FactoryService;
 
+import demoapp.dom.services.core.wrapperFactory.WrapperFactoryDemoPage;
+
 import lombok.RequiredArgsConstructor;
 
-import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.services.core.errorreportingservice.ErrorReportingServiceDemoVm;
+import demoapp.dom.services.core.errorreportingservice.ErrorReportingServiceDemoPage;
 import demoapp.dom.services.core.eventbusservice.EventBusServiceDemoPage;
 import demoapp.dom.services.core.messageservice.MessageServiceDemoPage;
-import demoapp.dom.services.core.wrapperFactory.WrapperFactoryEntity;
 
 @Named("demo.ServicesMenu")
-@DomainService(
-        nature=NatureOfService.VIEW
-)
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@DomainService(nature=NatureOfService.VIEW)
+@Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ServicesMenu {
 
-    final ValueHolderRepository<String, ? extends WrapperFactoryEntity> wrapperFactoryEntities;
-    final FactoryService factoryService;
-
+    private final FactoryService factoryService;
 
     @Action
     @ActionLayout(cssClassFa="fa-bolt")
     public EventBusServiceDemoPage eventBusService(){
-        return factoryService.viewModel(new EventBusServiceDemoPage());
+        return new EventBusServiceDemoPage();
     }
 
     @Action
     @ActionLayout(cssClassFa="fa-sticky-note")
     public MessageServiceDemoPage messageService(){
-        return factoryService.viewModel(new MessageServiceDemoPage());
+        return new MessageServiceDemoPage();
     }
 
     @Action
     @ActionLayout(cssClassFa="fa-bomb")
-    public ErrorReportingServiceDemoVm errorReportingService(){
-        return factoryService.viewModel(new ErrorReportingServiceDemoVm());
+    public ErrorReportingServiceDemoPage errorReportingService(){
+        return new ErrorReportingServiceDemoPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-gift", describedAs = "Formal object interactions + async")
-    public WrapperFactoryEntity wrapperFactory(){
-        return wrapperFactoryEntities.first().orElse(null);
+    public WrapperFactoryDemoPage wrapperFactory(){
+        return factoryService.viewModel(WrapperFactoryDemoPage.class);
     }
 
 }

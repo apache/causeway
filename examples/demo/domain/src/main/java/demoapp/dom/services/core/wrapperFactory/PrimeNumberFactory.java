@@ -18,21 +18,6 @@
  */
 package demoapp.dom.services.core.wrapperFactory;
 
-import javax.inject.Inject;
-
-import org.springframework.stereotype.Service;
-
-import demoapp.dom._infra.seed.SeedServiceAbstract;
-import demoapp.dom._infra.values.ValueHolderRepository;
-
-@Service
-public class WrapperFactorySeeding
-extends SeedServiceAbstract {
-
-    @Inject
-    public WrapperFactorySeeding(ValueHolderRepository<String, ? extends WrapperFactoryEntity> entities) {
-        super(entities);
-    }
-
+public interface PrimeNumberFactory<T extends PrimeNumber> {
+    T newPrimeNumber(Integer value);
 }
-

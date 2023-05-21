@@ -18,31 +18,27 @@
  */
 package demoapp.dom.services.core.wrapperFactory;
 
-import javax.inject.Named;
-
-import org.apache.causeway.applib.annotation.DomainObject;
-
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom._infra.values.ValueHolder;
-import demoapp.dom.domain._commands.ExposePersistedCommands;
 
-@Named("demo.WrapperFactoryEntity") // shared permissions with concrete sub class
-@DomainObject
-public abstract class WrapperFactoryEntity
-implements
-    HasAsciiDocDescription,
-    ExposePersistedCommands,
-    ValueHolder<String> {
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-    public abstract String getPropertyAsync();
-    public abstract void setPropertyAsync(String value);
+import org.apache.causeway.applib.annotation.*;
 
-    public abstract String getPropertyAsyncMixin();
-    public abstract void setPropertyAsyncMixin(String value);
+@XmlRootElement(name = "Demo")
+@XmlType
+@XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.WrapperFactoryDemoPage")
+@DomainObject(nature=Nature.VIEW_MODEL, editing=Editing.ENABLED)
+public class WrapperFactoryDemoPage implements HasAsciiDocDescription {
 
-    @Override
-    public String value() {
-        return getPropertyAsync();
+    @ObjectSupport
+    public String title() {
+        return "WrapperFactory Demo";
     }
 
 }

@@ -59,7 +59,7 @@ import demoapp.dom.domain.properties.Property.projecting.jpa.PropertyProjectingC
 import demoapp.dom.domain.properties.Property.snapshot.jpa.PropertySnapshotJpa;
 import demoapp.dom.domain.properties.PropertyLayout.hidden.jpa.PropertyLayoutHiddenJpa;
 import demoapp.dom.services.core.eventbusservice.EventLogEntryJpa;
-import demoapp.dom.services.core.wrapperFactory.jpa.WrapperFactoryJpa;
+import demoapp.dom.services.core.wrapperFactory.jpa.PrimeNumberJpa;
 import demoapp.dom.services.extensions.secman.apptenancy.jpa.TenantedJpa;
 import demoapp.dom.types.causeway.blobs.jpa.CausewayBlobJpa;
 import demoapp.dom.types.causeway.clobs.jpa.CausewayClobJpa;
@@ -206,7 +206,7 @@ import demoapp.dom.types.primitive.shorts.jpa.PrimitiveShortJpa;
         WrapperByteJpa.class,
 
         TenantedJpa.class,
-        WrapperFactoryJpa.class,
+        PrimeNumberJpa.class,
 
         NumberConstantJpa.class,
 

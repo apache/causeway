@@ -16,25 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.services.core.wrapperFactory.jdo;
+package demoapp.dom.services.core.wrapperFactory;
 
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Service;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.services.core.wrapperFactory.jpa.PrimeNumberJpa;
 
-import demoapp.dom._infra.values.ValueHolderRepository;
+import java.util.List;
 
-@Profile("demo-jdo")
-@Service
-public class WrapperFactoryJdoEntities
-extends ValueHolderRepository<String, WrapperFactoryJdo> {
+import javax.inject.Named;
 
-    protected WrapperFactoryJdoEntities() {
-        super(WrapperFactoryJdo.class);
-    }
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.ObjectSupport;
 
-    @Override
-    protected WrapperFactoryJdo newDetachedEntity(String value) {
-        return new WrapperFactoryJdo(value);
-    }
+public interface PrimeNumberRepository<T extends PrimeNumber> {
+
+    public List<T> all();
+    public void removeAll();
 
 }
