@@ -66,7 +66,7 @@ import demoapp.dom.types.causeway.clobs.jpa.CausewayClobJpa;
 import demoapp.dom.types.causeway.localresourcepaths.jpa.CausewayLocalResourcePathJpa;
 import demoapp.dom.types.causeway.markups.jpa.CausewayMarkupJpa;
 import demoapp.dom.types.causeway.passwords.jpa.CausewayPasswordJpa;
-import demoapp.dom.types.causewayext.cal.jpa.CausewayCalendarEventJpa;
+import demoapp.dom.featured.causewayext.cal.jpa.CausewayCalendarEventJpa;
 import demoapp.dom.types.causewayval.asciidocs.jpa.CausewayAsciiDocJpa;
 import demoapp.dom.types.causewayval.markdowns.jpa.CausewayMarkdownJpa;
 import demoapp.dom.types.causewayval.vegas.jpa.CausewayVegaJpa;

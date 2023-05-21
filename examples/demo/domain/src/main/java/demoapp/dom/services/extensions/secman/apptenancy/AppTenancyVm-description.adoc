@@ -2,27 +2,55 @@
 
 Application Tenancy is the idea that certain information "belongs" to one party and should be either not visible or at least not modifiable by some other party.
 
-The SecMan extension provides a very flexible way of implementing this, through the `ApplicationTenancyEvaluator` SPI.
+The SecMan extension provides a very flexible way of implementing this, through the link:https://causeway.apache.org/refguide/2.0.0-RC1/extensions/index/secman/applib/tenancy/spi/ApplicationTenancyEvaluator.html#section-top[ApplicationTenancyEvaluator] SPI.
 This allows a domain service to decide whether to hide or to disable each object for the current user.
 
-For example:
+[IMPORTANT]
+====
+This SPI is a presentation-layer concern only.
+It does not prevent the domain objects from being retrieved from the data store.
+In particular, there is nothing to prevent "malicious" code from retrieving and interacting with objects from another tenancy.
+====
 
+== How this demo works
+
+On the left hand side is a collection of objects, each with different names.
+There are also two properties that control an implementation of `ApplicationTenancyEvaluator`.
+
+* The "Hide Regex" determines which objects with a matching name should be hidden.
+For example, "M.\*" will hide those whose name starting "M", while ".*" will hide them all.
+* The "Disable Regex" determines which objects can no longer be modified (when you navigate into them).
+
+In terms of code:
+
+* the SPI implementation is:
++
 [source,java]
+.ApplicationTenancyEvaluatorForDemo.java
 ----
 include::ApplicationTenancyEvaluatorForDemo.java[tags=class]
 ----
 <.> implements the SPI.
 There can be multiple implementations; all will be checked.
-
 <.> whether this implementation handles the type of the domain object being considered.
-This demo application deals only with the `TenantedJdo` entity type.
-
+<.> set by the page object
+This demo application deals only with the `TenantedEntity` entity type.
 <.> whether the current user can view the domain object.
+<.> whether the current user can modify (invoke actions, edit the properties of) the domain object.
 
-<.> whether the current user can interact (invoke actions, modify the properties of) the domain object.
+* the page object has actions that set a pattern on the service.
++
+[source,java]
+.AppTenancyVm.java
+----
+include::AppTenancyVm.java[tags=hideRegex]
+----
 
-This demo example doesn't in fact use the current `ApplicationUser` at all.
-A typical implementation though can exploit the fact that `ApplicationUser` implements `HasAtPath` and therefore can return an `atPath`: the "application tenancy path":
+
+=== Leveraging User Tenancy
+
+This demo implementation doesn't in fact use the current `ApplicationUser` at all.
+A more realistic implementation would exploit the fact that `ApplicationUser` implements `HasAtPath` and therefore can return an `atPath`: the "application tenancy path":
 
 [source,java]
 ----
@@ -34,20 +62,4 @@ public interface ApplicationUser extends HasAtPath {
 
 The `atPath` is just a string and can take any format and be processed in any way that makes sense.
 One algorithm is to use it to define a hierarchy path, for example "/GBR/LON" represents a user based in London, Great Britain while "/ITA/MIL" is a user based in Milan, Italy.
-If the domain object also implements `HasAtPath`, then the `ApplicationTenancyEvaluator` can compare the two ``atPath``s to determine if the location/tenancy of the user is compatible with the location/tenancy of the domain object.
-
-This particular demo though simply uses a regular expression to control visibility and usability, with two properties (to the left-hand side of this page) used to control the domain service.
-For example:
-
-[source,java]
-----
-include::AppTenancyVm.java[tags=hideRegex]
-----
-
-[IMPORTANT]
-====
-This SPI is a presentation-layer concern only.
-It does not prevent the domain objects from being retrieved from the data store.
-
-In particular, there is nothing to prevent "malicious" code from retrieving and interacting with objects from another tenancy.
-====
+If the domain object also implements `HasAtPath`, then the `ApplicationTenancyEvaluator` can compare the two ``atPath``s to determine if the location/tenancy of the user is should allow access to the location/tenancy of the domain object.

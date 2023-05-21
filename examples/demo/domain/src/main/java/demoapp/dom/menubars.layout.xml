@@ -173,6 +173,10 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
                 <mb3:named>Core SPIs</mb3:named>
                 <mb3:serviceAction objectType="demo.ServicesMenu" id="errorReportingService" />
             </mb3:section>
+            <mb3:section>
+                <mb3:named>SecMan SPI</mb3:named>
+                <mb3:serviceAction objectType="demo.ExtSecManMenu" id="appTenancy"/>
+            </mb3:section>
         </mb3:menu>
 
         <mb3:menu>
@@ -284,27 +288,19 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
         </mb3:menu>
 
         <mb3:menu>
-            <mb3:named>Extensions</mb3:named>
-            <mb3:section>
-                <mb3:named>Wicket Viewer</mb3:named>
-                <mb3:serviceAction objectType="demo.CausewayExtTypesMenu" id="calendarEvents"/>
-                <mb3:serviceAction objectType="demo.AsyncActionMenu" id="asyncActions">
-                    <cpt:named>SSE</cpt:named>
-                    <cpt:describedAs>Background (Async) Actions</cpt:describedAs>
-                </mb3:serviceAction>
-            </mb3:section>
-            <mb3:section>
-                <mb3:named>SecMan</mb3:named>
-                <mb3:serviceAction objectType="demo.ExtSecManMenu" id="appTenancy"/>
-            </mb3:section>
-        </mb3:menu>
-
-        <mb3:menu>
             <mb3:named>Featured</mb3:named>
             <mb3:section>
                 <mb3:named>Layout</mb3:named>
                 <mb3:serviceAction objectType="demo.FeaturedMenu" id="toolTips" />
                 <mb3:serviceAction objectType="demo.FeaturedMenu" id="tabDemo" />
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Wicket Extensions</mb3:named>
+                <mb3:serviceAction objectType="demo.CausewayExtTypesMenu" id="calendarEvents"/>
+                <mb3:serviceAction objectType="demo.AsyncActionMenu" id="asyncActions">
+                    <cpt:named>SSE</cpt:named>
+                    <cpt:describedAs>Background (Async) Actions</cpt:describedAs>
+                </mb3:serviceAction>
             </mb3:section>
             <mb3:section>
                 <mb3:named>Custom UI</mb3:named>

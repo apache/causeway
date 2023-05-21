@@ -85,6 +85,8 @@ public class FeaturedMenu {
         return 14;
     }
 
+
+
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-comment", describedAs="Opens the Tooltip-Demo page.")
     public DescribedAsVm toolTips(){
