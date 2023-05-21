@@ -28,7 +28,7 @@ import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
-import demoapp.dom.services.extensions.secman.apptenancy.AppTenancyVm;
+import demoapp.dom.services.extensions.secman.apptenancy.AppTenancyPage;
 
 @Named("demo.ExtSecManMenu")
 @DomainService(
@@ -42,8 +42,8 @@ public class ExtSecManMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-home", describedAs = "Restricts access to objects dependent upon who \"owns\" those objects")
-    public AppTenancyVm appTenancy(){
-        return new AppTenancyVm();
+    public AppTenancyPage appTenancy(){
+        return new AppTenancyPage();
     }
 
 

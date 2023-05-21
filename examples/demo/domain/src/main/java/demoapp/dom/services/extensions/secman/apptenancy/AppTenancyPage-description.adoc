@@ -41,9 +41,9 @@ This demo application deals only with the `TenantedEntity` entity type.
 * the page object has actions that set a pattern on the service.
 +
 [source,java]
-.AppTenancyVm.java
+.AppTenancyPage.java
 ----
-include::AppTenancyVm.java[tags=hideRegex]
+include::AppTenancyPage.java[tags=hideRegex]
 ----
 
 

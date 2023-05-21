@@ -39,7 +39,7 @@ import lombok.val;
 import demoapp.dom.featured.customui.geocoding.GeoapifyClient;
 import demoapp.dom.featured.customui.latlng.Zoom;
 import demoapp.dom.featured.customui.vm.WhereInTheWorldVm;
-import demoapp.dom.featured.layout.describedAs.DescribedAsVm;
+import demoapp.dom.featured.layout.tooltip.TooltipPage;
 import demoapp.dom.featured.layout.tabs.TabDemo;
 
 @Named("demo.FeaturedMenu")
@@ -51,6 +51,7 @@ import demoapp.dom.featured.layout.tabs.TabDemo;
 public class FeaturedMenu {
 
     final FactoryService factoryService;
+
 
 //tag::whereInTheWorldAction[]
     @Inject
@@ -89,8 +90,8 @@ public class FeaturedMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-comment", describedAs="Opens the Tooltip-Demo page.")
-    public DescribedAsVm toolTips(){
-        val demo = factoryService.viewModel(new DescribedAsVm());
+    public TooltipPage toolTips(){
+        val demo = factoryService.viewModel(new TooltipPage());
 
         demo.getCollection().add(DemoItem.of("first"));
         demo.getCollection().add(DemoItem.of("second"));

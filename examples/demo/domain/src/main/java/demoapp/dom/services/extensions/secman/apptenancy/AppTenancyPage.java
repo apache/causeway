@@ -49,7 +49,7 @@ import demoapp.dom.services.extensions.secman.apptenancy.persistence.TenantedEnt
 @Named("demo.SecManVm")
 @DomainObject(
         nature=Nature.VIEW_MODEL)
-public class AppTenancyVm implements HasAsciiDocDescription {
+public class AppTenancyPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
         return "Tenancy demo";
@@ -67,7 +67,7 @@ public class AppTenancyVm implements HasAsciiDocDescription {
     @ActionLayout(
             associateWith = "hideRegex",
             promptStyle = PromptStyle.INLINE_AS_IF_EDIT)
-    public AppTenancyVm updateHideRegex(
+    public AppTenancyPage updateHideRegex(
             @Parameter(optionality = Optionality.OPTIONAL) final
             String regex) {
         applicationTenancyEvaluatorForDemo.setHideRegex(regex);
@@ -86,7 +86,7 @@ public class AppTenancyVm implements HasAsciiDocDescription {
     @ActionLayout(
             associateWith = "disableRegex",
             promptStyle = PromptStyle.INLINE_AS_IF_EDIT)
-    public AppTenancyVm updateDisableRegex(
+    public AppTenancyPage updateDisableRegex(
             @Parameter(optionality = Optionality.OPTIONAL) final
             String regex) {
         applicationTenancyEvaluatorForDemo.setDisableRegex(regex);

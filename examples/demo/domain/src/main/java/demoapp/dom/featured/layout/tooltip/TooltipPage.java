@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.featured.layout.describedAs;
+package demoapp.dom.featured.layout.tooltip;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,25 +60,23 @@ import demoapp.dom.featured.DemoItem;
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.Tooltip")
 @DomainObject(nature=Nature.VIEW_MODEL)
-public class DescribedAsVm implements HasAsciiDocDescription {
+public class TooltipPage implements HasAsciiDocDescription {
 
-    @XmlTransient
-    @Inject MessageService messageService;
+    @Inject @XmlTransient MessageService messageService;
 
     @ObjectSupport public String title() {
         return "Tooltip Demo";
     }
 
-    // -- NO ARG
-
     @Action
     @ActionLayout(
             named = "No Arguments",
             describedAs="This is a no-arg action with a tooltip.")
-    public DescribedAsVm noArgAction(){
+    public TooltipPage noArgAction(){
         messageService.informUser("clicked on noArgAction");
         return this;
     }
+
 
     @Action(semantics=SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
     @ActionLayout(
@@ -86,19 +84,19 @@ public class DescribedAsVm implements HasAsciiDocDescription {
             cssClass="btn-danger",
             describedAs="This is a no-arg action with a tooltip and 'are you sure' semantics."
             )
-    public DescribedAsVm noArgActionWithConfirm(){
+    public TooltipPage noArgActionWithConfirm(){
         messageService.informUser("clicked on noArgActionWithConfirm");
         return this;
     }
 
-    // -- WITH ARG
+
 
     @Action
     @ActionLayout(
             named = "With Arguments",
             describedAs="This is an action with arguments and a tooltip.",
             promptStyle=PromptStyle.DIALOG_MODAL)
-    public DescribedAsVm biArgAction(
+    public TooltipPage biArgAction(
 
             @Parameter(optionality=Optionality.MANDATORY)
             @ParameterLayout(
@@ -116,17 +114,17 @@ public class DescribedAsVm implements HasAsciiDocDescription {
 
         return this;
     }
-
     @MemberSupport public String validateBiArgAction(final String firstArg, final String secondArg) {
         return "always fail for demonstration";
     }
+
 
     @Action(semantics=SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
     @ActionLayout(
             named = "With Arguments And Confirm",
             describedAs="This is an action with arguments, a tooltip and 'are you sure' semantics.",
             promptStyle=PromptStyle.DIALOG_MODAL)
-    public DescribedAsVm biArgActionWithConfirm(
+    public TooltipPage biArgActionWithConfirm(
 
             @Parameter(optionality=Optionality.MANDATORY)
             @ParameterLayout(
@@ -150,19 +148,21 @@ public class DescribedAsVm implements HasAsciiDocDescription {
     }
 
 
-    // -- DISABLED
-
+//tag::disabledAction[]
     @Action
     @ActionLayout(
             named="Disabled",
             describedAs="This is a disabled action with a tooltip.")
-    public DescribedAsVm disabledAction(){
+    public TooltipPage disabledAction(){
         return this;
     }
 
     @MemberSupport public String disableDisabledAction() {
         return "Disabled for demonstration.";
     }
+//end::disabledAction[]
+
+
 
     @Action
     @ActionLayout(
@@ -170,7 +170,7 @@ public class DescribedAsVm implements HasAsciiDocDescription {
             cssClass="btn-danger",
             describedAs="This is a disabled action with a tooltip and 'are you sure' "
                     + "semantics.")
-    public DescribedAsVm disabledActionWithConfirmation(){
+    public TooltipPage disabledActionWithConfirmation(){
         return this;
     }
 
@@ -178,21 +178,26 @@ public class DescribedAsVm implements HasAsciiDocDescription {
         return "Disabled for demonstration.";
     }
 
-    // -- PROPERTIES
+
 
     @Property(editing=Editing.ENABLED)
     @PropertyLayout(describedAs="This is a property with a tooltip.")
     @Getter @Setter private String stringProperty;
 
+
     @Property
     @PropertyLayout(describedAs="This is a readonly property with a tooltip.")
     @Getter private String readonlyStringProperty = "readonly";
 
+
+//tag::disabledProperty[]
     @Property(
             editing=Editing.DISABLED,
             editingDisabledReason="Editing disabled for demonstration.")
     @PropertyLayout(describedAs="This is a 'editing-disabled' property with a tooltip.")
     @Getter @Setter private String editingDisabledStringProperty = "editing disabled";
+//end::disabledProperty[]
+
 
     // -- COLLECTION
 
@@ -224,7 +229,7 @@ public class DescribedAsVm implements HasAsciiDocDescription {
 
     @PropertyLayout(labelPosition=LabelPosition.NONE)
     public Markup getText4() {
-        return new Markup("Mouse-over below property lables, then tooltips should "
+        return new Markup("Mouse-over below property labels, then tooltips should "
                 + "pop up.<p>Mouse-over the disabled/readonly property value form-field,"
                 + " then the 'editing disabled reason' should pop up.</p>");
     }
