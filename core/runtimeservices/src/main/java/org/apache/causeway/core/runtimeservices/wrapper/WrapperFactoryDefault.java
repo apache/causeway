@@ -28,15 +28,16 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.BiConsumer;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
-import org.apache.causeway.core.runtimeservices.session.InteractionIdGenerator;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -96,6 +97,7 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.core.runtimeservices.session.InteractionIdGenerator;
 import org.apache.causeway.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcher;
 import org.apache.causeway.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcherTypeSafe;
 import org.apache.causeway.core.runtimeservices.wrapper.handlers.DomainObjectInvocationHandler;
@@ -138,8 +140,12 @@ implements WrapperFactory, HasMetaModelContext {
         dispatchersByEventClass = new HashMap<>();
     private ProxyContextHandler proxyContextHandler;
 
+    private ExecutorService commonExecutorService;
+
     @PostConstruct
     public void init() {
+
+        this.commonExecutorService = newCommonExecutorService();
 
         val proxyCreator = new ProxyCreator(proxyFactoryService);
         proxyContextHandler = new ProxyContextHandler(proxyCreator);
@@ -161,6 +167,11 @@ implements WrapperFactory, HasMetaModelContext {
         putDispatcher(ActionInvocationEvent.class, InteractionListener::actionInvoked);
         putDispatcher(ObjectValidityEvent.class, InteractionListener::objectPersisted);
         putDispatcher(CollectionMethodEvent.class, InteractionListener::collectionMethodInvoked);
+    }
+
+    @PreDestroy
+    public void close() {
+        commonExecutorService.shutdown();
     }
 
     // -- WRAPPING
@@ -397,7 +408,8 @@ implements WrapperFactory, HasMetaModelContext {
         asyncControl.setMethod(method);
         asyncControl.setBookmark(Bookmark.forOidDto(oidDto));
 
-        val executorService = asyncControl.getExecutorService();
+        val executorService = Optional.ofNullable(asyncControl.getExecutorService())
+                .orElse(commonExecutorService);
         val asyncTask = getServiceInjector().injectServicesInto(new AsyncTask<R>(
             asyncInteractionContext,
             Propagation.REQUIRES_NEW,
@@ -578,6 +590,8 @@ implements WrapperFactory, HasMetaModelContext {
     @RequiredArgsConstructor
     private static class AsyncTask<R> implements AsyncCallable<R> {
 
+        private static final long serialVersionUID = 1L;
+
         @Getter private final InteractionContext interactionContext;
         @Getter private final Propagation propagation;
         @Getter private final CommandDto commandDto;
@@ -664,6 +678,17 @@ implements WrapperFactory, HasMetaModelContext {
                         }
                         return domainObject;
                     }).orElse(null));
+    }
+
+    private final static int MIN_POOL_SIZE = 2; // at least 2
+    private final static int MAX_POOL_SIZE = 4; // max 4
+    private ExecutorService newCommonExecutorService() {
+        final int poolSize = Math.min(
+                MAX_POOL_SIZE,
+                Math.max(
+                        MIN_POOL_SIZE,
+                        Runtime.getRuntime().availableProcessors()));
+        return Executors.newFixedThreadPool(poolSize);
     }
 
 }
