@@ -16,25 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.services.core.wrapperFactory.jpa;
+package demoapp.dom.services.core.wrapperFactory;
 
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Service;
+import jakarta.inject.Named;
 
-import demoapp.dom._infra.values.ValueHolderRepository;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
+import org.apache.causeway.applib.annotation.ObjectSupport;
 
-@Profile("demo-jpa")
-@Service
-public class WrapperFactoryJpaEntities
-extends ValueHolderRepository<String, WrapperFactoryJpa> {
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
-    protected WrapperFactoryJpaEntities() {
-        super(WrapperFactoryJpa.class);
+@Named("demo.PrimeNumber") // shared permissions with concrete sub class
+@DomainObject
+@DomainObjectLayout
+public abstract class PrimeNumber
+implements
+    HasAsciiDocDescription {
+
+    @ObjectSupport
+    public String title() {
+        return "PrimeNumber: " + getPrimeNumber();
     }
 
-    @Override
-    protected WrapperFactoryJpa newDetachedEntity(String value) {
-        return new WrapperFactoryJpa(value);
-    }
+    public abstract Integer getPrimeNumber();
 
 }

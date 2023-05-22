@@ -1,0 +1,49 @@
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+The link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/services/wrapper/WrapperFactory.html[WrapperFactory] was originally developed for testing purposes, allowing an action to be invoked on another object "as if" through the UI.
+This use case is still supported.
+If any validation rules fail, then a corresponding exception is thrown, which the test code will catch and assert accordingly.
+
+The `WrapperFactory` also allows actions to be invoked with rules checking disabled.
+A common use case here is to trigger publishing, for example to the https://causeway.apache.org/userguide/2.0.0-RC1/executionoutbox/about.html[Execution outbox] for integration with downstream systems.
+
+A further use case is to support the execution of long-running actions, to be run asynchronously.
+This is the use case demonstrated on this page.
+
+== How this demo works
+
+On the left hand side of this page is an action, `calculatePrimeNumbers`.
+This can be used to calculate all prime numbers up to 10_000, the results of which are shown in the associated collection.
+
+The demo uses calculating a prime number as an example of a function that might take a long time to execute, though to emphasise this the function also waits ^1^/~5~^th^ of a second each time it is called.
+
+The function executes recursively, but each time invoking the next asynchronously, and therefore in a different interaction/transaction.
+This means that it is possible to refresh the page and see the numbers being generated in real-time.
+
+In terms of code:
+
+* the action to create primes is:
++
+[source,java]
+.WrapperFactoryDemoPage_createPrimes.java
+----
+include::WrapperFactoryDemoPage_createPrimes.java[tags=class]
+----
+<.> uses the `WrapperFactory` to create a proxy around the target
+<.> the target object to delegate to, in this case the injected `PrimeNumberGenerator` service.
+It is also possible to delegate to entities.
+<.> indicates that the action should be invoked asynchronously, and to ignore any hide/disable/validate rules
+<.> instruct the proxy to invoke the action.
+
+* the action invoked is:
++
+[source,java,indent=0]
+.PrimeNumberGenerator.java
+----
+include::PrimeNumberGenerator.java[tags=class]
+----
+<.> the target object _must_ be part of the framework's metamodel ...
+<.> \... and the method called must be an action.
+However, it can be hidden (which is why "skipRules" is commonly used).
+<.> calls itself recursively to calculate the next prime number
+<.> for demo purposes only

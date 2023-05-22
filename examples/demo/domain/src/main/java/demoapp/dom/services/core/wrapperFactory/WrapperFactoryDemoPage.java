@@ -16,25 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.services.core.wrapperFactory.jdo;
+package demoapp.dom.services.core.wrapperFactory;
 
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Service;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
-import demoapp.dom._infra.values.ValueHolderRepository;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlType;
 
-@Profile("demo-jdo")
-@Service
-public class WrapperFactoryJdoEntities
-extends ValueHolderRepository<String, WrapperFactoryJdo> {
+import org.apache.causeway.applib.annotation.*;
 
-    protected WrapperFactoryJdoEntities() {
-        super(WrapperFactoryJdo.class);
-    }
+@XmlRootElement(name = "Demo")
+@XmlType
+@XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.WrapperFactoryDemoPage")
+@DomainObject(nature=Nature.VIEW_MODEL, editing=Editing.ENABLED)
+public class WrapperFactoryDemoPage implements HasAsciiDocDescription {
 
-    @Override
-    protected WrapperFactoryJdo newDetachedEntity(String value) {
-        return new WrapperFactoryJdo(value);
+    @ObjectSupport
+    public String title() {
+        return "WrapperFactory Demo";
     }
 
 }

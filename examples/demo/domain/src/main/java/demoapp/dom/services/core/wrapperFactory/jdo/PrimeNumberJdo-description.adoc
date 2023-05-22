@@ -3,6 +3,7 @@
 CAUTION: TODO - to document
 
 [source,java]
+.PrimeNumberJdo.java
 ----
-include::WrapperFactoryJdo.java[tags=class]
+include::PrimeNumberJdo.java[tags=class]
 ----

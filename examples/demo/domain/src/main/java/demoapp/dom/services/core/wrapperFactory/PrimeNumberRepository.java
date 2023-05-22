@@ -18,31 +18,19 @@
  */
 package demoapp.dom.services.core.wrapperFactory;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.services.core.wrapperFactory.jpa.PrimeNumberJpa;
+
+import java.util.List;
+
 import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.ObjectSupport;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom._infra.values.ValueHolder;
-import demoapp.dom.domain._commands.ExposePersistedCommands;
+public interface PrimeNumberRepository<T extends PrimeNumber> {
 
-@Named("demo.WrapperFactoryEntity") // shared permissions with concrete sub class
-@DomainObject
-public abstract class WrapperFactoryEntity
-implements
-    HasAsciiDocDescription,
-    ExposePersistedCommands,
-    ValueHolder<String> {
-
-    public abstract String getPropertyAsync();
-    public abstract void setPropertyAsync(String value);
-
-    public abstract String getPropertyAsyncMixin();
-    public abstract void setPropertyAsyncMixin(String value);
-
-    @Override
-    public String value() {
-        return getPropertyAsync();
-    }
+    public List<T> all();
+    public void removeAll();
 
 }
