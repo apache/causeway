@@ -32,10 +32,13 @@ import org.apache.causeway.extensions.sse.applib.service.SseChannel;
 
 import lombok.RequiredArgsConstructor;
 
-@Named("demo.AsyncDemoTask")
+//tag::class[]
+@Named("demo.DemoTask")
 @DomainObject(nature=Nature.VIEW_MODEL, editing=Editing.DISABLED)
 @RequiredArgsConstructor(staticName="of")
 public class DemoTask implements SseSource {
+    // ...
+//end::class[]
 
     @ObjectSupport public String title() {
         return String.format("DemoTask '%s'", Integer.toHexString(hashCode()));
@@ -44,28 +47,20 @@ public class DemoTask implements SseSource {
     private final int totalSteps;
     private TaskProgress taskProgress;
 
-
+//tag::class[]
     @Override
-    public void run(final SseChannel eventStream) {
-
+    public void run(final SseChannel eventStream) {                     // <.>
         taskProgress = TaskProgress.of(new LongAdder(), totalSteps);
-
-        for(int i=0;i<totalSteps;++i) {
-
+        for(int i=0; i<totalSteps; ++i) {
             _ThreadSleep.millis(1000);
-
             taskProgress.getStepsProgressed().increment();
-
-            eventStream.fire(this);
-
+            eventStream.fire(this);                                     // <.>
         }
     }
 
     @Override
-    public String getPayload() {
-        return "" + taskProgress + "<br/>" + taskProgress.toHtmlProgressBar();
+    public String getPayload() {                                        // <.>
+        return taskProgress.toHtmlProgressBar();
     }
-
-
-
 }
+//end::class[]

@@ -31,6 +31,7 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.factory.FactoryService;
 
 import lombok.RequiredArgsConstructor;
@@ -53,7 +54,32 @@ public class FeaturedMenu {
     final FactoryService factoryService;
 
 
-//tag::whereInTheWorldAction[]
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-comment", describedAs="Opens the Tooltip-Demo page.")
+    public TooltipPage toolTips(){
+        val demo = factoryService.viewModel(new TooltipPage());
+
+        demo.getCollection().add(DemoItem.of("first"));
+        demo.getCollection().add(DemoItem.of("second"));
+        demo.getCollection().add(DemoItem.of("third"));
+
+        return demo;
+    }
+
+
+    @Action
+    @ActionLayout(
+            cssClassFa="fa-bolt",
+            describedAs="Opens the Tabs-Demo page.",
+            hidden = Where.EVERYWHERE               // TODO: not sure this is particularly valuable
+    )
+    public TabDemo tabDemo(){
+        return factoryService.viewModel(new TabDemo());
+    }
+
+
+
+    //tag::whereInTheWorldAction[]
     @Inject
     private GeoapifyClient geoapifyClient;
 
@@ -88,25 +114,5 @@ public class FeaturedMenu {
 
 
 
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-comment", describedAs="Opens the Tooltip-Demo page.")
-    public TooltipPage toolTips(){
-        val demo = factoryService.viewModel(new TooltipPage());
-
-        demo.getCollection().add(DemoItem.of("first"));
-        demo.getCollection().add(DemoItem.of("second"));
-        demo.getCollection().add(DemoItem.of("third"));
-
-        return demo;
-    }
-
-    @Action
-    @ActionLayout(
-            cssClassFa="fa-bolt",
-            describedAs="Opens the Tabs-Demo page."
-    )
-    public TabDemo tabDemo(){
-        return factoryService.viewModel(new TabDemo());
-    }
 
 }

@@ -296,8 +296,8 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
             </mb3:section>
             <mb3:section>
                 <mb3:named>Wicket Extensions</mb3:named>
-                <mb3:serviceAction objectType="demo.CausewayExtTypesMenu" id="calendarEvents"/>
-                <mb3:serviceAction objectType="demo.AsyncActionMenu" id="asyncActions">
+                <mb3:serviceAction objectType="demo.CalendarEventsMenu" id="calendarEvents"/>
+                <mb3:serviceAction objectType="demo.SseDemoMenu" id="sse">
                     <cpt:named>SSE</cpt:named>
                     <cpt:describedAs>Background (Async) Actions</cpt:describedAs>
                 </mb3:serviceAction>

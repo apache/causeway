@@ -152,13 +152,13 @@ public class TooltipPage implements HasAsciiDocDescription {
     @Action
     @ActionLayout(
             named="Disabled",
-            describedAs="This is a disabled action with a tooltip.")
+            describedAs="This is a disabled action with a tooltip." // <.>
+    )
     public TooltipPage disabledAction(){
         return this;
     }
-
     @MemberSupport public String disableDisabledAction() {
-        return "Disabled for demonstration.";
+        return "Disabled for demonstration.";                       // <.>
     }
 //end::disabledAction[]
 
@@ -168,8 +168,8 @@ public class TooltipPage implements HasAsciiDocDescription {
     @ActionLayout(
             named="Disabled With Confirm",
             cssClass="btn-danger",
-            describedAs="This is a disabled action with a tooltip and 'are you sure' "
-                    + "semantics.")
+            describedAs="This is a disabled action with a tooltip and 'are you sure' semantics."
+    )
     public TooltipPage disabledActionWithConfirmation(){
         return this;
     }
@@ -193,8 +193,11 @@ public class TooltipPage implements HasAsciiDocDescription {
 //tag::disabledProperty[]
     @Property(
             editing=Editing.DISABLED,
-            editingDisabledReason="Editing disabled for demonstration.")
-    @PropertyLayout(describedAs="This is a 'editing-disabled' property with a tooltip.")
+            editingDisabledReason="Editing disabled for demonstration."             // <.>
+    )
+    @PropertyLayout(
+            describedAs="This is a 'editing-disabled' property with a tooltip."     // <.>
+    )
     @Getter @Setter private String editingDisabledStringProperty = "editing disabled";
 //end::disabledProperty[]
 

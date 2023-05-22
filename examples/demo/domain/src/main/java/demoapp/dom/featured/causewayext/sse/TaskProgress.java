@@ -23,6 +23,7 @@ import java.util.concurrent.atomic.LongAdder;
 import lombok.Data;
 import lombok.val;
 
+//tag::class[]
 @Data(staticConstructor="of")
 public class TaskProgress {
 
@@ -30,27 +31,31 @@ public class TaskProgress {
     private final long totalSteps;
 
     public double progressedRelative() {
-        val totalReciprocal = 1./totalSteps;
-
+        final double totalReciprocal = 1. / totalSteps;
         return stepsProgressed.doubleValue() * totalReciprocal;
     }
-
     public double progressedPercent() {
         return Math.min(progressedRelative()*100., 100.);
     }
-
     public int progressedPercentAsInt() {
         return (int) Math.round(progressedPercent());
     }
-
+//tag::toHtmlProgressBar[]
     public String toHtmlProgressBar() {
-        val percent = progressedPercentAsInt();
-
-        return
+        final int percent = progressedPercentAsInt();
+        return stepsProgressed + "/" + totalSteps +
+                "<br/>" +
+                "<br/>" +
                 "<div class=\"progress\">" +
-                "  <div class=\"progress-bar\" role=\"progressbar\" style=\"width: "+percent+"%\" aria-valuenow=\""+percent+"\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>" +
+                "    <div class=\"progress-bar\" " +
+                         "role=\"progressbar\" " +
+                         "style=\"width: " + percent + "%\" " +
+                         "aria-valuenow=\""+percent+"\" " +
+                         "aria-valuemin=\"0\" " +
+                         "aria-valuemax=\"100\">" +
+                    "</div>" +
                 "</div>";
     }
-
-
+//end::toHtmlProgressBar[]
 }
+//end::class[]

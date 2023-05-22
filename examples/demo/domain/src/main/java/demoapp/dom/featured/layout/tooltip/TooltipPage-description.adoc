@@ -20,6 +20,8 @@ In terms of code:
 ----
 include::TooltipPage.java[tags=disabledAction]
 ----
+<.> Action description is _not_ shown as a tooltip, because ...
+<.> \... instead, the veto reason takes precedence
 
 * For disabled properties that have a tooltip, both are shown; the tooltip from the label, while the disabled reason from the disabled icon after the value:
 +
@@ -28,4 +30,5 @@ include::TooltipPage.java[tags=disabledAction]
 ----
 include::TooltipPage.java[tags=disabledProperty]
 ----
-
+<.> The veto reason is shown a tooltip on an icon next to the property value ...
+<.> \... but the property description is still shown, as a tooltip on the label

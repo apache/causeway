@@ -53,7 +53,7 @@ import demoapp.dom.types.Samples;
 @Named("demo.CausewayCalendarEvents")
 @DomainObject(nature=Nature.VIEW_MODEL, editing=Editing.ENABLED)
 //@Log4j2
-public class CausewayCalendarEvents implements HasAsciiDocDescription {
+public class CalendarEventsPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
         return "CalendarEvent data type";

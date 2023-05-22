@@ -49,33 +49,34 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.AsyncAction")
 @DomainObject(nature=Nature.VIEW_MODEL, editing=Editing.DISABLED)
-public class AsyncActionDemo implements HasAsciiDocDescription {
+public class SseDemoPage implements HasAsciiDocDescription {
 
-    @XmlTransient
-    @Inject SseService sseService;
+    public String title() { return "Server-side events"; }
 
+    @Inject @XmlTransient SseService sseService;
+
+//tag::progressView[]
     @XmlElement @XmlJavaTypeAdapter(Markup.JaxbToStringAdapter.class)
     @Property
-    @ServerSentEvents(observe=DemoTask.class) // bind to a SSE channel
+    @ServerSentEvents(observe=DemoTask.class)           // <.>
     @Getter @Setter Markup progressView;
+//end::progressView[]
 
+//tag::startSimpleTask[]
     @Action
-    public AsyncActionDemo startSimpleTask() {
-
-        val demoTask = DemoTask.of(10);  // setup to run in 10 steps
-        sseService.submit(demoTask, ExecutionBehavior.SIMPLE);
-
+    public SseDemoPage startSimpleTask() {
+        final DemoTask demoTask = DemoTask.of(100);             // <.>
+        sseService.submit(demoTask, ExecutionBehavior.SIMPLE);  // <.>
         return this;
     }
+//end::startSimpleTask[]
 
+//tag::startTaskWithItsOwnSession[]
     @Action
-    public AsyncActionDemo startTaskWithItsOwnSession() {
-
-        val demoTask = DemoTask.of(10);  // setup to run in 10 steps
+    public SseDemoPage startTaskWithItsOwnSession() {
+        final DemoTask demoTask = DemoTask.of(10);  // setup to run in 10 steps
         sseService.submit(demoTask, ExecutionBehavior.REQUIRES_NEW_SESSION);
-
         return this;
     }
-
-
+//end::startTaskWithItsOwnSession[]
 }

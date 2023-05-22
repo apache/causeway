@@ -1,4 +1,3 @@
-
 /*
  *  Licensed to the Apache Software Foundation (ASF) under one
  *  or more contributor license agreements.  See the NOTICE file
@@ -17,8 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.featured.causewayext;
+package demoapp.dom.featured.causewayext.sse;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -27,22 +27,29 @@ import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.services.factory.FactoryService;
+import org.apache.causeway.applib.value.Markup;
 
-import demoapp.dom.featured.causewayext.cal.CausewayCalendarEvents;
+import lombok.val;
 
-@Named("demo.CausewayExtTypesMenu")
+@Named("demo.SseDemoMenu")
 @DomainService(
         nature=NatureOfService.VIEW
 )
-@DomainObjectLayout(named="CausewayExtTypes")
+@DomainObjectLayout(
+        named="Async Actions"
+)
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
-public class CausewayExtTypesMenu {
+public class SseDemoMenu {
 
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="far fa-calendar-alt")
-    public CausewayCalendarEvents calendarEvents(){
-        return new CausewayCalendarEvents();
+    @Inject private FactoryService factoryService;
+
+    @Action
+    @ActionLayout(cssClassFa="fa-bolt")
+    public SseDemoPage sse(){
+        final SseDemoPage page = factoryService.viewModel(new SseDemoPage());
+        page.setProgressView(Markup.valueOf("Please start a task!"));
+        return page;
     }
 
 }
