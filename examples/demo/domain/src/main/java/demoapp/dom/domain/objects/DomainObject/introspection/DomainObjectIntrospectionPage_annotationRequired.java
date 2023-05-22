@@ -29,7 +29,7 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import lombok.RequiredArgsConstructor;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.objects.DomainObject.introspection.annotReqd.DomainObjectIntrospectionAnnotReqd;
+import demoapp.dom.domain.objects.DomainObject.introspection.annotReqd.DomainObjectIntrospectionAnnotReqdEntity;
 
 @Collection()
 @CollectionLayout()
@@ -40,10 +40,10 @@ public class DomainObjectIntrospectionPage_annotationRequired {
     private final DomainObjectIntrospectionPage page;
 
     @MemberSupport
-    public List<? extends DomainObjectIntrospectionAnnotReqd> coll() {
+    public List<? extends DomainObjectIntrospectionAnnotReqdEntity> coll() {
         return entities.all();
     }
 
-    @Inject ValueHolderRepository<String, ? extends DomainObjectIntrospectionAnnotReqd> entities;
+    @Inject ValueHolderRepository<String, ? extends DomainObjectIntrospectionAnnotReqdEntity> entities;
 
 }

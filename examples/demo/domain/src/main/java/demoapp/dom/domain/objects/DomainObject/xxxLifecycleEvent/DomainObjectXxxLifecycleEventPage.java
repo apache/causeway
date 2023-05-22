@@ -52,7 +52,7 @@ public class DomainObjectXxxLifecycleEventPage implements HasAsciiDocDescription
     @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
     @Property
     @Getter @Setter
-    private DomainObjectXxxLifecycleEvent entity;
+    private DomainObjectXxxLifecycleEventEntity entity;
 
 }
 //end::class[]

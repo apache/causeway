@@ -19,10 +19,10 @@ public class ActionLayoutHiddenPage_objects {
     @SuppressWarnings("unused")
     private final ActionLayoutHiddenPage page;
 
-    @MemberSupport public List<? extends ActionLayoutHidden> coll() {
+    @MemberSupport public List<? extends ActionLayoutHiddenEntity> coll() {
         return objectRepository.all();
     }
 
-    @Inject ValueHolderRepository<String, ? extends ActionLayoutHidden> objectRepository;
+    @Inject ValueHolderRepository<String, ? extends ActionLayoutHiddenEntity> objectRepository;
 }
 //end::class[]

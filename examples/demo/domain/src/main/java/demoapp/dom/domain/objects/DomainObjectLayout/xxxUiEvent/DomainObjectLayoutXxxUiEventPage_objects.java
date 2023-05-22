@@ -21,10 +21,10 @@ public class DomainObjectLayoutXxxUiEventPage_objects {
     private final DomainObjectLayoutXxxUiEventPage page;
 
     @MemberSupport
-    public List<? extends DomainObjectLayoutXxxUiEvent> coll() {
+    public List<? extends DomainObjectLayoutXxxUiEventEntity> coll() {
         return objectRepository.all();
     }
 
-    @Inject ValueHolderRepository<String, ? extends DomainObjectLayoutXxxUiEvent> objectRepository;
+    @Inject ValueHolderRepository<String, ? extends DomainObjectLayoutXxxUiEventEntity> objectRepository;
 
 }

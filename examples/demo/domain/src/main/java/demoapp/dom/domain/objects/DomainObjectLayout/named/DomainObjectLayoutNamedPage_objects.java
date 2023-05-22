@@ -21,10 +21,10 @@ public class DomainObjectLayoutNamedPage_objects {
     private final DomainObjectLayoutNamedPage page;
 
     @MemberSupport
-    public List<? extends DomainObjectLayoutNamed> coll() {
+    public List<? extends DomainObjectLayoutNamedEntity> coll() {
         return objectRepository.all();
     }
 
-    @Inject ValueHolderRepository<String, ? extends DomainObjectLayoutNamed> objectRepository;
+    @Inject ValueHolderRepository<String, ? extends DomainObjectLayoutNamedEntity> objectRepository;
 
 }

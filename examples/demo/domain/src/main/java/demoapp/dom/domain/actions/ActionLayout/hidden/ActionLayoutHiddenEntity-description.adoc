@@ -1,0 +1,48 @@
+:Notice: Licensed to the Apache 1Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+This domain class is used in the demo of `@ActionLayout#hidden`.
+
+== How this demo works
+
+This entity defines four actions, and depending upon context, they may be visible on an object form or when rendered in a collection.
+
+From this page, you can inspect the visibility of the actions from the context of an object form:
+
+* `hidden` not specified:
++
+[source,java]
+.ActionLayoutHiddenEntity_changeName
+----
+include::ActionLayoutHiddenEntity_changeName.java[tags=class]
+----
+<.> no `hidden` attribute specified, so implicitly visible
+
+* `hidden` on object forms (but not necessarily on collections):
++
+[source,java]
+.ActionLayoutHiddenEntity_changeNameHiddenObjectForms.java
+----
+include::ActionLayoutHiddenEntity_changeNameHiddenObjectForms.java[tags=class]
+----
+<.> action should _NOT_ be visible for this entity.
+
+* `hidden` on collections (but not necessarily on object forms):
++
+[source,java]
+.ActionLayoutHiddenEntity_changeNameHiddenAllTables.java
+----
+include::ActionLayoutHiddenEntity_changeNameHiddenAllTables.java[tags=class]
+----
+<.> action _should_ be visible for this entity.
+
+* `hidden` everywhere:
++
+[source,java]
+.ActionLayoutHiddenEntity_changeNameHiddenEverywhere.java
+----
+include::ActionLayoutHiddenEntity_changeNameHiddenEverywhere.java[tags=class]
+----
+<.> action should _NOT_ be visible for this entity.
+
+
+

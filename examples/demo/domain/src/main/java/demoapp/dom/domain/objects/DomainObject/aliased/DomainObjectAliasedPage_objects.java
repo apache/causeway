@@ -21,10 +21,10 @@ public class DomainObjectAliasedPage_objects {
     private final DomainObjectAliasedPage page;
 
     @MemberSupport
-    public List<? extends DomainObjectAliased> coll() {
+    public List<? extends DomainObjectAliasedEntity> coll() {
         return objectRepository.all();
     }
 
-    @Inject ValueHolderRepository<String, ? extends DomainObjectAliased> objectRepository;
+    @Inject ValueHolderRepository<String, ? extends DomainObjectAliasedEntity> objectRepository;
 
 }

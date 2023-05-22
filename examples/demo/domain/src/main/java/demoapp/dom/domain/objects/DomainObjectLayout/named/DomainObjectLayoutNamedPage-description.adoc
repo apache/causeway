@@ -17,8 +17,9 @@ Navigate into any of the objects and the name is shown when hovering over the ob
 In terms of code:
 
 [source,java,indent=0]
+.DomainObjectLayoutNamedEntity.java
 ----
-include::DomainObjectLayoutNamed.java[tags=class]
+include::DomainObjectLayoutNamedEntity.java[tags=class]
 ----
 <.> overrides the default name.
 The viewer renders this name in a tooltip.

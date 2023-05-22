@@ -37,20 +37,20 @@ public class ActionExecutionPublishingPage_changeNameWrapped {
     private final ActionExecutionPublishingPage page;
 
     @MemberSupport public ActionExecutionPublishingPage act(
-            final ActionExecutionPublishing entity,
+            final ActionExecutionPublishingEntity entity,
             final String newName) {
-        wrapperFactory.wrapMixin(ActionExecutionPublishing_changeNamePublished.class, entity).act(newName); // <.>
+        wrapperFactory.wrapMixin(ActionExecutionPublishingEntity_changeNamePublished.class, entity).act(newName); // <.>
         return page;
     }
 
-    public List<? extends ActionExecutionPublishing> choices0Act() {
+    public List<? extends ActionExecutionPublishingEntity> choices0Act() {
         return repository.allInstances();
     }
-    public String default1Act(ActionExecutionPublishing entity) {
+    public String default1Act(ActionExecutionPublishingEntity entity) {
         return entity != null ? entity.getName() : null;
     }
 
-    @Inject ActionExecutionPublishingRepository repository;
+    @Inject ActionExecutionPublishingEntityRepository repository;
     @Inject WrapperFactory wrapperFactory;
 }
 //end::class[]

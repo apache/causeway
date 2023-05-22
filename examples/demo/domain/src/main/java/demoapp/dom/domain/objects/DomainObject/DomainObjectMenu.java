@@ -35,7 +35,7 @@ import demoapp.dom.domain.objects.DomainObject.aliased.DomainObjectAliasedPage;
 import demoapp.dom.domain.objects.DomainObject.autoComplete.DomainObjectAutoCompletePage;
 import demoapp.dom.domain.objects.DomainObject.bounded.DomainObjectBoundingPage;
 import demoapp.dom.domain.objects.DomainObject.editing.DomainObjectEditingPage;
-import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingVm;
+import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingPage;
 import demoapp.dom.domain.objects.DomainObject.introspection.DomainObjectIntrospectionPage;
 import demoapp.dom.domain.objects.DomainObject.mixinMethod.DomainObjectMixinMethodPage;
 import demoapp.dom.domain.objects.DomainObject.nature.DomainObjectNaturePage;
@@ -76,8 +76,8 @@ public class DomainObjectMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-book", describedAs = "Entity changed events as XML")
-    public DomainObjectEntityChangePublishingVm entityChangePublishing(){
-        return new DomainObjectEntityChangePublishingVm();
+    public DomainObjectEntityChangePublishingPage entityChangePublishing(){
+        return new DomainObjectEntityChangePublishingPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)

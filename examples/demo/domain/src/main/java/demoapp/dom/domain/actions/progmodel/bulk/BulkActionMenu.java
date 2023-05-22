@@ -45,7 +45,7 @@ public class BulkActionMenu {
             Arrays.asList("Joey", "Monica", "Rachel", "Phoebe", "Chandler", "Ross");
 
     final FactoryService factoryService;
-    final BulkActionItemRepository repository;
+    final BulkActionItemEntityRepository repository;
 
     @Action
     @ActionLayout(cssClassFa="fa-bolt", describedAs = "Bulk actions")

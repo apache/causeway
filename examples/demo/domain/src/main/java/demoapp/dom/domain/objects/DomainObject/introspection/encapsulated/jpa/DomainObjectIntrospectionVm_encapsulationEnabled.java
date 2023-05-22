@@ -43,10 +43,10 @@ public class DomainObjectIntrospectionVm_encapsulationEnabled {
     private final DomainObjectIntrospectionPage page;
 
     @MemberSupport
-    public List<DomainObjectIntrospectionEncapsulatedJpa> coll() {
+    public List<DomainObjectIntrospectionEncapsulatedEntityImpl> coll() {
         return entities.all();
     }
 
-    @Inject ValueHolderRepository<String, DomainObjectIntrospectionEncapsulatedJpa> entities;
+    @Inject ValueHolderRepository<String, DomainObjectIntrospectionEncapsulatedEntityImpl> entities;
 
 }

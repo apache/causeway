@@ -21,11 +21,11 @@ public class DomainObjectEditingPage_objects {
     private final DomainObjectEditingPage page;
 
     @MemberSupport
-    public List<? extends DomainObjectEditing> coll() {
+    public List<? extends DomainObjectEditingEntity> coll() {
         return objectRepository.all();
     }
 
     @Inject
-    ValueHolderRepository<String, ? extends DomainObjectEditing> objectRepository;
+    ValueHolderRepository<String, ? extends DomainObjectEditingEntity> objectRepository;
 
 }

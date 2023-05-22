@@ -29,7 +29,7 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import lombok.RequiredArgsConstructor;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.objects.DomainObject.introspection.annotOpt.DomainObjectIntrospectionAnnotOpt;
+import demoapp.dom.domain.objects.DomainObject.introspection.annotOpt.DomainObjectIntrospectionAnnotOptEntity;
 
 @Collection()
 @CollectionLayout()
@@ -40,10 +40,10 @@ public class DomainObjectIntrospectionPage_annotationOptional {
     private final DomainObjectIntrospectionPage page;
 
     @MemberSupport
-    public List<? extends DomainObjectIntrospectionAnnotOpt> coll() {
+    public List<? extends DomainObjectIntrospectionAnnotOptEntity> coll() {
         return entities.all();
     }
 
-    @Inject ValueHolderRepository<String, ? extends DomainObjectIntrospectionAnnotOpt> entities;
+    @Inject ValueHolderRepository<String, ? extends DomainObjectIntrospectionAnnotOptEntity> entities;
 
 }

@@ -21,11 +21,11 @@ public class DomainObjectAutoCompletePage_objects {
     private final DomainObjectAutoCompletePage page;
 
     @MemberSupport
-    public List<? extends DomainObjectAutoComplete> coll() {
+    public List<? extends DomainObjectAutoCompleteEntity> coll() {
         return objectRepository.all();
     }
 
     @Inject
-    ValueHolderRepository<String, ? extends DomainObjectAutoComplete> objectRepository;
+    ValueHolderRepository<String, ? extends DomainObjectAutoCompleteEntity> objectRepository;
 
 }

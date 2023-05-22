@@ -43,6 +43,6 @@ public class DomainObjectXxxLifecycleEventPage_deleteEntity {
         return page.getEntity() == null ? "Entity not yet created" : null;
     }
 
-    @Inject ValueHolderRepository<String, ? extends DomainObjectXxxLifecycleEvent> objectRepository;
+    @Inject ValueHolderRepository<String, ? extends DomainObjectXxxLifecycleEventEntity> objectRepository;
 }
 //end::class[]

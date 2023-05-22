@@ -25,7 +25,7 @@ public class DomainObjectMixinMethodPage_updateName {
 
 //tag::class[]
     public DomainObjectMixinMethodPage action(          // <.>
-              final DomainObjectMixinMethod object,
+              final DomainObjectMixinMethodEntity object,
               final String newName
     ) {
         // ...
@@ -35,15 +35,15 @@ public class DomainObjectMixinMethodPage_updateName {
 //tag::class[]
     }
 //end::class[]
-    public List<? extends DomainObjectMixinMethod> choices0Action() {
+    public List<? extends DomainObjectMixinMethodEntity> choices0Action() {
         return objectRepository.all();
     }
-    public String default1Action(final DomainObjectMixinMethod object) {
-        return Optional.ofNullable(object).map(DomainObjectMixinMethod::getName).orElse(null);
+    public String default1Action(final DomainObjectMixinMethodEntity object) {
+        return Optional.ofNullable(object).map(DomainObjectMixinMethodEntity::getName).orElse(null);
     }
 
     @Inject
-    ValueHolderRepository<String, ? extends DomainObjectMixinMethod> objectRepository;
+    ValueHolderRepository<String, ? extends DomainObjectMixinMethodEntity> objectRepository;
 
 //tag::class[]
 }

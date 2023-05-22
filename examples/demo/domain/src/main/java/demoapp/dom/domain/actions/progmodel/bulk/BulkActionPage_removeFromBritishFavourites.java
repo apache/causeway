@@ -33,8 +33,8 @@ public class BulkActionPage_removeFromBritishFavourites {
     private final BulkActionPage page;
 
     @MemberSupport public BulkActionPage act(
-            final List<BulkActionItem> children) {
-        for (BulkActionItem child : children) {
+            final List<BulkActionItemEntity> children) {
+        for (BulkActionItemEntity child : children) {
             page.getBritishFavourites().remove(child);
             page.getBritishCharacters().add(child);
         }

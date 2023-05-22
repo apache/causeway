@@ -19,10 +19,10 @@ public class DomainObjectLayoutPagedPage_actionReturningObjects {
     private final DomainObjectLayoutPagedPage page;
 
     @MemberSupport
-    public List<? extends DomainObjectLayoutPaged> act() {
+    public List<? extends DomainObjectLayoutPagedEntity> act() {
         return objectRepository.all();
     }
 
-    @Inject ValueHolderRepository<String, ? extends DomainObjectLayoutPaged> objectRepository;
+    @Inject ValueHolderRepository<String, ? extends DomainObjectLayoutPagedEntity> objectRepository;
 
 }
