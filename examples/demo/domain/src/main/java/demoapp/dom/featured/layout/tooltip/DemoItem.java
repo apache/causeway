@@ -16,53 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.featured.customui.vm;
-
-import java.io.Serializable;
+package demoapp.dom.featured.layout.tooltip;
 
 import javax.inject.Named;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.Title;
+import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.featured.customui.latlng.Latitude;
-import demoapp.dom.featured.customui.latlng.Longitude;
-import demoapp.dom.featured.customui.latlng.Zoom;
-
-//tag::class[]
-@XmlRootElement(name = "demo.CustomUiVm")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.CustomUiVm")
+@Named("demo.DemoItem")
 @DomainObject(nature=Nature.VIEW_MODEL)
-public class WhereInTheWorldVm
-implements HasAsciiDocDescription, Serializable {
+@NoArgsConstructor
+@AllArgsConstructor(staticName="of")
+public class DemoItem {
 
-    private static final long serialVersionUID = 1L;
+    @ObjectSupport public String title() {
+        return String.format("DemoItem '%s'", getName());
+    }
 
-    @Title
-    @Getter @Setter
-    private String address;
+    @Property(editing = Editing.DISABLED)
+    @PropertyLayout(describedAs="The name of this 'DemoItem'.")
+    @Getter @Setter private String name;
 
-    @Latitude
-    @Getter @Setter
-    private String latitude;
-
-    @Longitude
-    @Getter @Setter
-    private String longitude;
-
-    @Zoom
-    @Getter @Setter
-    private int zoom;
 }
-//end::class[]

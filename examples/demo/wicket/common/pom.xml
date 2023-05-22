@@ -89,7 +89,7 @@
 			<groupId>org.apache.causeway.valuetypes</groupId>
 			<artifactId>causeway-valuetypes-markdown-ui-wkt</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.causeway.valuetypes</groupId>
 			<artifactId>causeway-valuetypes-vega-ui-wkt</artifactId>
@@ -110,7 +110,7 @@
 			<groupId>org.apache.causeway.extensions</groupId>
 			<artifactId>causeway-extensions-fullcalendar-wicket-ui</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.causeway.extensions</groupId>
 			<artifactId>causeway-extensions-exceldownload-wicket-ui</artifactId>

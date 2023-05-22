@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.featured.customui.latlng;
+package demoapp.dom.featured.customui;
 
 
 import java.lang.annotation.ElementType;
@@ -27,15 +27,10 @@ import java.lang.annotation.Target;
 
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.spec.AbstractSpecification;
 
-@Property(
-        regexPattern = Longitude.PATTERN
-        , regexPatternReplacement = "Does not match format of longitude"
-)
-@Parameter(
-        regexPattern = Longitude.PATTERN
-        , regexPatternReplacement = "Does not match format of longitude"
-)
+@Property(mustSatisfy = Zoom.Specification.class)
+@Parameter(mustSatisfy = Zoom.Specification.class)
 @Inherited
 @Target({
         ElementType.FIELD,
@@ -44,8 +39,15 @@ import org.apache.causeway.applib.annotation.Property;
         ElementType.ANNOTATION_TYPE
 })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Longitude {
+public @interface Zoom {
 
-    String PATTERN = "^[-+]?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$";
+    class Specification extends AbstractSpecification<Integer> {
 
+        @Override
+        public String satisfiesSafely(Integer candidate) {
+            return candidate >= 1 && candidate <=20
+                    ? null
+                    : "Must be between 1 and 20";
+        }
+    }
 }

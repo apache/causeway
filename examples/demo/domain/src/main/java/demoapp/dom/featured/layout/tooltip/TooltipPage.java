@@ -53,7 +53,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.featured.DemoItem;
 
 @XmlRootElement(name = "Demo")
 @XmlType

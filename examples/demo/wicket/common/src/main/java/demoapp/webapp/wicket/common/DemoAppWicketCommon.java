@@ -16,15 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.featured.customui.latlng;
+package demoapp.webapp.wicket.common;
 
-import lombok.Data;
-import lombok.Getter;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-@Data
-public class LatLng {
-    @Getter
-    private final String latitude;
-    @Getter
-    private final String longitude;
+import org.apache.causeway.extensions.fullcalendar.wkt.ui.viewer.CausewayModuleExtFullCalendarWicketUi;
+import org.apache.causeway.extensions.viewer.wicket.exceldownload.ui.CausewayModuleExtExcelDownloadWicketUi;
+
+import demoapp.webapp.wicket.common.featured.customui.WhereInTheWorldPanelFactory;
+
+/**
+ * Featured Wicket specific extensions.
+ */
+@Configuration
+@Import({
+    WhereInTheWorldPanelFactory.class,
+    CausewayModuleExtFullCalendarWicketUi.class,
+    CausewayModuleExtExcelDownloadWicketUi.class, // allows for collection download as excel
+})
+public class DemoAppWicketCommon {
+
 }

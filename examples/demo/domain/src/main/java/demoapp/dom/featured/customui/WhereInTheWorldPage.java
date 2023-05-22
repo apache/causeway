@@ -16,34 +16,38 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.featured;
+package demoapp.dom.featured.customui;
+
+import java.io.Serializable;
 
 import javax.inject.Named;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.Title;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Named("demo.AssociatedActionDemoTask")
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+
+//tag::class[]
+@XmlRootElement(name = "demo.WhereInTheWorldPage")
+@XmlType
+@XmlAccessorType(XmlAccessType.FIELD)
+@Named("demo.WhereInTheWorldPage")
 @DomainObject(nature=Nature.VIEW_MODEL)
-@NoArgsConstructor
-@AllArgsConstructor(staticName="of")
-public class DemoItem {
-
-    @ObjectSupport public String title() {
-        return String.format("DemoItem '%s'", getName());
-    }
-
-    @Property(editing = Editing.DISABLED)
-    @PropertyLayout(describedAs="The name of this 'DemoItem'.")
-    @Getter @Setter private String name;
-
+public class WhereInTheWorldPage
+implements HasAsciiDocDescription, Serializable {       // <.>
+    private static final long serialVersionUID = 1L;
+    @Title
+    @Getter @Setter private String address;
+    @Getter @Setter private String latitude;
+    @Getter @Setter private String longitude;
+    @Getter @Setter private int zoom;
 }
+//end::class[]

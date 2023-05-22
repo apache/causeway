@@ -22,6 +22,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import demoapp.dom.featured.customui.GeoapifyClient;
 import lombok.val;
 
 import demoapp.dom.AppConfiguration;
@@ -32,14 +33,15 @@ class GeoapifyClientTest_geocode {
     void happy_case() {
 
         // given
-        val appConfiguration = new AppConfiguration();
-        val client = new GeoapifyClient(appConfiguration);
+        final AppConfiguration appConfiguration = new AppConfiguration();
+        final GeoapifyClient client = new GeoapifyClient(appConfiguration);
 
         // when
-        val latLng = client.geocode("38 Upper Montagu Street, Westminster W1H 1LJ, United Kingdom");
+        final GeoapifyClient.GeocodeResponse response =
+                client.geocode("38 Upper Montagu Street, Westminster W1H 1LJ, United Kingdom");
 
         // then
-        assertEquals(Double.valueOf(latLng.getLatitude()), 51.520, 1E-2);
-        assertEquals(Double.valueOf(latLng.getLongitude()), -0.160, 1E-2);
+        assertEquals(Double.valueOf(response.getLatitude()), 51.520, 1E-2);
+        assertEquals(Double.valueOf(response.getLongitude()), -0.160, 1E-2);
     }
 }

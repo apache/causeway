@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.webapp.wicket.common.ui.custom;
+package demoapp.webapp.wicket.common.featured.customui;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
@@ -31,11 +31,12 @@ import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 
+import demoapp.dom.featured.customui.WhereInTheWorldPage;
+
 import lombok.SneakyThrows;
 import lombok.val;
 
-import demoapp.dom.featured.customui.geocoding.GeoapifyClient;
-import demoapp.dom.featured.customui.vm.WhereInTheWorldVm;
+import demoapp.dom.featured.customui.GeoapifyClient;
 
 //tag::class[]
 public class WhereInTheWorldPanel
@@ -68,7 +69,7 @@ extends PanelAbstract<ManagedObject, UiObjectWkt>  {
         super.onInitialize();
 
         val managedObject = getModel().getObject();;                       // <.>
-        val customUiVm = (WhereInTheWorldVm) managedObject.getPojo();      // <.>
+        val customUiVm = (WhereInTheWorldPage) managedObject.getPojo();    // <.>
 
         val latitude = new Label("latitude", customUiVm.getLatitude());    // <.>
         val longitude = new Label("longitude", customUiVm.getLongitude()); // <.>
@@ -87,7 +88,7 @@ extends PanelAbstract<ManagedObject, UiObjectWkt>  {
 
 //tag::createMapComponent[]
     @SneakyThrows
-    private Image createMapComponent(final String id, final WhereInTheWorldVm vm)  {
+    private Image createMapComponent(final String id, final WhereInTheWorldPage vm)  {
         val bytes = geoapifyClient.toJpeg(
                         vm.getLatitude(), vm.getLongitude(), vm.getZoom());  // <.>
         return new Image(id, new ByteArrayResource("image/jpeg", bytes));    // <.>
@@ -99,7 +100,6 @@ extends PanelAbstract<ManagedObject, UiObjectWkt>  {
         val managedObject = getModel().getManagedObject();
         val spec = managedObject.getSpecification();                               // <.>
         val property = spec.getPropertyElseFail(propertyId);                       // <.>
-        //val pm = otoa.getMemento();                                              // <.>
 
         val scalarModel =
                 getModel().getPropertyModel(                                       // <.>

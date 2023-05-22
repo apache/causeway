@@ -16,8 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.webapp.wicket.common.ui.custom;
+package demoapp.webapp.wicket.common.featured.customui;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 
 import org.apache.wicket.Component;
@@ -29,39 +30,37 @@ import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.components.entity.EntityComponentFactoryAbstract;
 
-import demoapp.dom.featured.customui.geocoding.GeoapifyClient;
-import demoapp.dom.featured.customui.vm.WhereInTheWorldVm;
+import demoapp.dom.featured.customui.WhereInTheWorldPage;
+import demoapp.dom.featured.customui.GeoapifyClient;
 
 //tag::class[]
 @org.springframework.stereotype.Component
-@javax.annotation.Priority(PriorityPrecedence.EARLY)                                             // <.>
-public class WhereInTheWorldPanelFactory extends EntityComponentFactoryAbstract {
-
+@Priority(PriorityPrecedence.EARLY)                                             // <.>
+public class WhereInTheWorldPanelFactory
+        extends EntityComponentFactoryAbstract {
     private static final long serialVersionUID = 1L;
 
     public WhereInTheWorldPanelFactory() {
         super(
-            UiComponentType.ENTITY                                          // <.>
+            UiComponentType.ENTITY                                              // <.>
             , WhereInTheWorldPanel.class
         );
     }
 
     @Override
     protected ApplicationAdvice doAppliesTo(final UiObjectWkt entityModel) {    // <.>
-        final ManagedObject managedObject = entityModel.getObject();      // <.>
-        final Object domainObject = managedObject.getPojo();              // <.>
+        final ManagedObject managedObject = entityModel.getObject();            // <.>
+        final Object domainObject = managedObject.getPojo();                    // <.>
         return ApplicationAdvice.appliesIf(
-                domainObject instanceof WhereInTheWorldVm);               // <.>
+                domainObject instanceof WhereInTheWorldPage);                   // <.>
     }
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        UiObjectWkt entityModel = (UiObjectWkt) model;                    // <.>
-        return new WhereInTheWorldPanel(id, entityModel, geoapifyClient); // <.>
+        UiObjectWkt entityModel = (UiObjectWkt) model;                          // <.>
+        return new WhereInTheWorldPanel(id, entityModel, geoapifyClient);       // <.>
     }
 
-    @Inject
-    private GeoapifyClient geoapifyClient;                                // <.>
-
+    @Inject private GeoapifyClient geoapifyClient;                              // <.>
 }
 //end::class[]

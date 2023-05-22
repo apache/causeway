@@ -16,13 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.featured.customui.geocoding;
+package demoapp.dom.featured.customui;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -38,6 +39,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import lombok.Value;
 import lombok.val;
 
 import demoapp.dom.AppConfiguration;
@@ -60,12 +62,10 @@ public class GeoapifyClient implements Serializable {
 
 
 //tag::class[]
-    @Data
+    @Value
     public class GeocodeResponse {
-        @Getter
-        private final String latitude;
-        @Getter
-        private final String longitude;
+        String latitude;
+        String longitude;
     }
 
     @SneakyThrows
@@ -75,7 +75,7 @@ public class GeoapifyClient implements Serializable {
 
         val url = new URL(String.format(
                 "https://api.geoapify.com/v1/geocode/search?text=%s&apiKey=%s"
-                , URLEncoder.encode(address, "UTF-8")
+                , URLEncoder.encode(address, StandardCharsets.UTF_8)
                 , apiKey));
 
         val response = objectMapper.readValue(url, Response.class);
@@ -86,7 +86,6 @@ public class GeoapifyClient implements Serializable {
         );
 //tag::class[]
     }
-
 //end::class[]
 
     @Data
@@ -100,7 +99,10 @@ public class GeoapifyClient implements Serializable {
     }
 
 //tag::class[]
-    public byte[] toJpeg(final String latitude, final String longitude, final int zoom) throws IOException {
+    public byte[] toJpeg(
+            final String latitude,
+            final String longitude,
+            final int zoom) throws IOException {
         //...
 //end::class[]
         return toJpeg(JpegRequest.builder().latitude(latitude).longitude(longitude).zoom(zoom).build());
@@ -136,5 +138,6 @@ public class GeoapifyClient implements Serializable {
         List<Feature> features;
     }
 
+//tag::class[]
 }
 //end::class[]
