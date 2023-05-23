@@ -37,7 +37,7 @@ import lombok.Setter;
 
 import demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingEntity;
 
-@Profile("demo-jdo")
+@Profile("demo-jpa")
 @Entity
 @Table(
     schema = "demo",
