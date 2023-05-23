@@ -57,7 +57,7 @@ import demoapp.dom.domain.properties.Property.editing.jpa.PropertyEditingEntityI
 import demoapp.dom.domain.properties.Property.executionPublishing.jpa.PropertyExecutionPublishingEntityImpl;
 import demoapp.dom.domain.properties.Property.projecting.jpa.PropertyProjectingChildEntityImpl;
 import demoapp.dom.domain.properties.Property.snapshot.jpa.PropertySnapshotEntityImpl;
-import demoapp.dom.domain.properties.PropertyLayout.hidden.jpa.PropertyLayoutHiddenJpa;
+import demoapp.dom.domain.properties.PropertyLayout.hidden.jpa.PropertyLayoutHiddenEntityImpl;
 import demoapp.dom.services.core.eventbusservice.EventLogEntryJpa;
 import demoapp.dom.services.core.wrapperFactory.jpa.PrimeNumberJpa;
 import demoapp.dom.services.extensions.secman.apptenancy.jpa.TenantedJpa;
@@ -151,7 +151,7 @@ import demoapp.dom.types.primitive.shorts.jpa.PrimitiveShortJpa;
         PropertyProjectingChildEntityImpl.class,
         PropertySnapshotEntityImpl.class,
 
-        PropertyLayoutHiddenJpa.class,
+        PropertyLayoutHiddenEntityImpl.class,
 
         CausewayBlobJpa.class,
         CausewayClobJpa.class,

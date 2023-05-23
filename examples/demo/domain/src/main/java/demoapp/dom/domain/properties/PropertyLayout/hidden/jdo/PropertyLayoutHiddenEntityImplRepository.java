@@ -16,40 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.PropertyLayout.hidden.jpa;
-
-import java.util.List;
+package demoapp.dom.domain.properties.PropertyLayout.hidden.jdo;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.properties.PropertyLayout.hidden.PropertyLayoutHidden;
 import demoapp.dom.domain.properties.PropertyLayout.hidden.PropertyLayoutHiddenRepository;
 
-@Profile("demo-jpa")
+@Profile("demo-jdo")
 @Service
-public class PropertyLayoutHiddenJpaEntities
-extends ValueHolderRepository<String, PropertyLayoutHiddenJpa> implements PropertyLayoutHiddenRepository {
+public class PropertyLayoutHiddenEntityImplRepository
+extends ValueHolderRepository<String, PropertyLayoutHiddenEntityImpl> implements PropertyLayoutHiddenRepository {
 
-    protected PropertyLayoutHiddenJpaEntities() {
-        super(PropertyLayoutHiddenJpa.class);
+    protected PropertyLayoutHiddenEntityImplRepository() {
+        super(PropertyLayoutHiddenEntityImpl.class);
     }
 
     @Override
-    protected PropertyLayoutHiddenJpa newDetachedEntity(String value) {
-        return new PropertyLayoutHiddenJpa(value);
-    }
-
-    @Override
-    public List<? extends PropertyLayoutHidden> allInstances() {
-        return all();
-    }
-
-    public List<? extends PropertyLayoutHidden> allMatches(final String s) {
-        return all();
-    }
-    public List<? extends PropertyLayoutHidden> allMatches() {
-        return all();
+    protected PropertyLayoutHiddenEntityImpl newDetachedEntity(String value) {
+        return new PropertyLayoutHiddenEntityImpl(value);
     }
 }

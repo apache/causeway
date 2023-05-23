@@ -16,11 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.PropertyLayout.hidden;
+package demoapp.dom.domain.properties.PropertyLayout.hidden.jpa;
 
-import java.util.List;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
 
-public interface PropertyLayoutHiddenRepository {
+import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.domain.properties.PropertyLayout.hidden.PropertyLayoutHiddenRepository;
 
-    List<? extends PropertyLayoutHidden> all();
+@Profile("demo-jpa")
+@Service
+public class PropertyLayoutHiddenEntityImplRepository
+extends ValueHolderRepository<String, PropertyLayoutHiddenEntityImpl> implements PropertyLayoutHiddenRepository {
+
+    protected PropertyLayoutHiddenEntityImplRepository() {
+        super(PropertyLayoutHiddenEntityImpl.class);
+    }
+
+    @Override
+    protected PropertyLayoutHiddenEntityImpl newDetachedEntity(String value) {
+        return new PropertyLayoutHiddenEntityImpl(value);
+    }
 }

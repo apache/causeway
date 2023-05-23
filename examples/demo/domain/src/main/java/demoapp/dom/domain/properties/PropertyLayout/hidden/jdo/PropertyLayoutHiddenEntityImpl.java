@@ -16,14 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.PropertyLayout.hidden.jpa;
+package demoapp.dom.domain.properties.PropertyLayout.hidden.jdo;
 
 import javax.inject.Named;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.jdo.annotations.DatastoreIdentity;
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.PersistenceCapable;
 
 import org.springframework.context.annotation.Profile;
 
@@ -32,40 +31,33 @@ import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import demoapp.dom.domain.properties.PropertyLayout.hidden.PropertyLayoutHidden;
 
-@Profile("demo-jpa")
-@Entity
-@Table(
+@Profile("demo-jdo")
+@PersistenceCapable(
+    identityType = IdentityType.DATASTORE,
     schema = "demo",
-    name = "PropertyLayoutHiddenJpa"
+    table = "PropertyLayoutHiddenEntity"
 )
-@EntityListeners(CausewayEntityListener.class)
-@Named("demo.PropertyLayoutHiddenJpa")
-@NoArgsConstructor
+@DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
+@Named("demo.PropertyLayoutHiddenEntity")
 //tag::class[]
 // ...
 @DomainObject(nature = Nature.ENTITY)
-public class PropertyLayoutHiddenJpa extends PropertyLayoutHidden {
+public class PropertyLayoutHiddenEntityImpl extends PropertyLayoutHidden {
     // ...
 //end::class[]
 
-    public PropertyLayoutHiddenJpa(final String value) {
+    public PropertyLayoutHiddenEntityImpl(final String value) {
         setName(value);
         setNameHiddenAllTables(value);
         setNameHiddenEverywhere(value);
         setNameHiddenObjectForms(value);
     }
-
-    @Id
-    @GeneratedValue
-    private Long id;
 
     @Property()
     @Getter @Setter
