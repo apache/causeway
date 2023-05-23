@@ -368,3 +368,7 @@ div.sect3 > h4 {
     font-style: italic;
     font-weight: bold;
 }
+
+img.navbar-brand-logo {
+    height: 30px;
+}

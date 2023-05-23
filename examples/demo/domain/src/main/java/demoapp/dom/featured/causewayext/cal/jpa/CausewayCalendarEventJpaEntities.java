@@ -16,32 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.featured.customui.geocoding;
+package demoapp.dom.featured.causewayext.cal.jpa;
 
-import org.junit.jupiter.api.Test;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 
-import demoapp.dom.featured.customui.GeoapifyClient;
-import lombok.val;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
-import demoapp.dom.AppConfiguration;
+@Profile("demo-jpa")
+@Service
+public class CausewayCalendarEventJpaEntities
+extends ValueHolderRepository<CalendarEvent, CausewayCalendarEventJpa> {
 
-class GeoapifyClientTest_geocode {
-
-    @Test
-    void happy_case() {
-
-        // given
-        final AppConfiguration appConfiguration = new AppConfiguration();
-        final GeoapifyClient client = new GeoapifyClient(appConfiguration);
-
-        // when
-        final GeoapifyClient.GeocodeResponse response =
-                client.geocode("38 Upper Montagu Street, Westminster W1H 1LJ, United Kingdom");
-
-        // then
-        assertEquals(Double.valueOf(response.getLatitude()), 51.520, 1E-2);
-        assertEquals(Double.valueOf(response.getLongitude()), -0.160, 1E-2);
+    protected CausewayCalendarEventJpaEntities() {
+        super(CausewayCalendarEventJpa.class);
     }
+
+    @Override
+    protected CausewayCalendarEventJpa newDetachedEntity(CalendarEvent value) {
+        return new CausewayCalendarEventJpa(value);
+    }
+
 }

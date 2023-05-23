@@ -17,14 +17,14 @@ In terms of code:
 * For the `children` collection, its description is specified using `@PropertyLayout#describedAs()`:
 +
 [source,java,indent=0]
-CollectionLayoutDescribedAsPage.java
+.CollectionLayoutDescribedAsPage.java
 ----
 include::CollectionLayoutDescribedAsPage.java[tags=children]
 ----
 <.> explicitly specifies the description of the collection
 
 * For the `moreChildren` property, its description is specified using the `.layout.xml` file:
-
++
 [source,xml,indent=0,tabsize=4]
 ----
 <cpt:collection id="moreChildren">

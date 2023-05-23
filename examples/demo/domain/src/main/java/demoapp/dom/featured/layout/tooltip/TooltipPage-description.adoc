@@ -1,0 +1,34 @@
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Tooltips appear in the UI for two different reasons:
+
+* to describe the purpose of an action, property or collection
+* to explain why an action or property cannot be invoked/edited.
+
+The former corresponds to the `describedAs` attribute (link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/ActionLayout.html#describedAs[@ActionLayout], link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/PropertyLayout.html#describedAs[PropertyLayout], link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/ParameterLayout.html#describedAs[@ParameterLayout], link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/CollectionLayout.html#describedAs[@CollectionLayout] or link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/DomainObjectLayout.html#describedAs[@DomainObjectLayout]), while the latter typically corresponds to the link:https://causeway.apache.org/refguide/2.0.0-RC1/applib-methods/prefixes/disable.html[disable...()] supporting method (though there are other ways in which a veto might occur).
+
+== How this demo works
+
+This demo shows examples of each of the members with a tooltip (implemented using `#describedAs`), and it also includes examples of disabled actions or properties.
+
+In terms of code:
+
+* For actions, where there is both a description but is also disabled, then the disabled reason is used for the tooltip:
++
+[source,java,indent=0]
+.TooltipPage.java
+----
+include::TooltipPage.java[tags=disabledAction]
+----
+<.> Action description is _not_ shown as a tooltip, because ...
+<.> \... instead, the veto reason takes precedence
+
+* For disabled properties that have a tooltip, both are shown; the tooltip from the label, while the disabled reason from the disabled icon after the value:
++
+[source,java,indent=0]
+.TooltipPage.java
+----
+include::TooltipPage.java[tags=disabledProperty]
+----
+<.> The veto reason is shown a tooltip on an icon next to the property value ...
+<.> \... but the property description is still shown, as a tooltip on the label

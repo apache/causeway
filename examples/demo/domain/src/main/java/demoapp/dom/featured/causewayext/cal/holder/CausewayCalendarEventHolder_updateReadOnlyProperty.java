@@ -16,35 +16,40 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.services.extensions.secman;
-
-import jakarta.inject.Named;
+package demoapp.dom.featured.causewayext.cal.holder;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.DomainObjectLayout;
-import org.apache.causeway.applib.annotation.DomainService;
-import org.apache.causeway.applib.annotation.NatureOfService;
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
-import demoapp.dom.services.extensions.secman.apptenancy.AppTenancyPage;
+import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 
-@Named("demo.ExtSecManMenu")
-@DomainService(
-        nature=NatureOfService.VIEW
-)
-@DomainObjectLayout(
-        named="SecMan"
-)
-@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
-public class ExtSecManMenu {
+import lombok.RequiredArgsConstructor;
 
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-home", describedAs = "Restricts access to objects dependent upon who \"owns\" those objects")
-    public AppTenancyPage appTenancy(){
-        return new AppTenancyPage();
+//tag::class[]
+@Action(
+        semantics = SemanticsOf.IDEMPOTENT
+)
+@ActionLayout(
+        promptStyle = PromptStyle.INLINE
+        , named = "Update"
+        , associateWith = "readOnlyProperty"
+        , sequence = "1")
+@RequiredArgsConstructor
+public class CausewayCalendarEventHolder_updateReadOnlyProperty {
+
+    private final CausewayCalendarEventHolder holder;
+
+    @MemberSupport public CausewayCalendarEventHolder act(final CalendarEvent newValue) {
+        holder.setReadOnlyProperty(newValue);
+        return holder;
     }
 
+    @MemberSupport public CalendarEvent default0Act() {
+        return holder.getReadOnlyProperty();
+    }
 
 }
+//end::class[]

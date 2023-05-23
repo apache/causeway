@@ -16,8 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.services.extensions.secman;
+package demoapp.dom.featured.causewayext.sse;
 
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -26,25 +27,29 @@ import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.services.factory.FactoryService;
+import org.apache.causeway.applib.value.Markup;
 
-import demoapp.dom.services.extensions.secman.apptenancy.AppTenancyPage;
+import lombok.val;
 
-@Named("demo.ExtSecManMenu")
+@Named("demo.SseDemoMenu")
 @DomainService(
         nature=NatureOfService.VIEW
 )
 @DomainObjectLayout(
-        named="SecMan"
+        named="Async Actions"
 )
 @jakarta.annotation.Priority(PriorityPrecedence.EARLY)
-public class ExtSecManMenu {
+public class SseDemoMenu {
 
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-home", describedAs = "Restricts access to objects dependent upon who \"owns\" those objects")
-    public AppTenancyPage appTenancy(){
-        return new AppTenancyPage();
+    @Inject private FactoryService factoryService;
+
+    @Action
+    @ActionLayout(cssClassFa="fa-bolt")
+    public SseDemoPage sse(){
+        final SseDemoPage page = factoryService.viewModel(new SseDemoPage());
+        page.setProgressView(Markup.valueOf("Please start a task!"));
+        return page;
     }
-
 
 }

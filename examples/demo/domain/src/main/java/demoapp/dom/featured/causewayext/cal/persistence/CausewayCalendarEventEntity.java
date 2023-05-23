@@ -16,32 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.featured.customui.geocoding;
+package demoapp.dom.featured.causewayext.cal.persistence;
 
-import org.junit.jupiter.api.Test;
+import jakarta.inject.Named;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.apache.causeway.applib.annotation.DomainObject;
 
-import demoapp.dom.featured.customui.GeoapifyClient;
-import lombok.val;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolder;
+import demoapp.dom.featured.causewayext.cal.holder.CausewayCalendarEventHolder2;
 
-import demoapp.dom.AppConfiguration;
+import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 
-class GeoapifyClientTest_geocode {
+@Named("demo.CausewayCalendarEventEntity") // shared permissions with concrete sub class
+@DomainObject
+public abstract class CausewayCalendarEventEntity
+implements
+    HasAsciiDocDescription,
+    CausewayCalendarEventHolder2,
+    ValueHolder<CalendarEvent> {
 
-    @Test
-    void happy_case() {
-
-        // given
-        final AppConfiguration appConfiguration = new AppConfiguration();
-        final GeoapifyClient client = new GeoapifyClient(appConfiguration);
-
-        // when
-        final GeoapifyClient.GeocodeResponse response =
-                client.geocode("38 Upper Montagu Street, Westminster W1H 1LJ, United Kingdom");
-
-        // then
-        assertEquals(Double.valueOf(response.getLatitude()), 51.520, 1E-2);
-        assertEquals(Double.valueOf(response.getLongitude()), -0.160, 1E-2);
+    @Override
+    public CalendarEvent value() {
+        return getReadOnlyProperty();
     }
+
 }

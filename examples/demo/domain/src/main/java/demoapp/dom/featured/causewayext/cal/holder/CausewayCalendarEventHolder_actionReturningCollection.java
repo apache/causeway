@@ -16,35 +16,36 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.services.extensions.secman;
+package demoapp.dom.featured.causewayext.cal.holder;
 
-import jakarta.inject.Named;
+import java.util.Collection;
+import java.util.stream.Collectors;
+
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.DomainObjectLayout;
-import org.apache.causeway.applib.annotation.DomainService;
-import org.apache.causeway.applib.annotation.NatureOfService;
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
-import demoapp.dom.services.extensions.secman.apptenancy.AppTenancyPage;
+import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 
-@Named("demo.ExtSecManMenu")
-@DomainService(
-        nature=NatureOfService.VIEW
-)
-@DomainObjectLayout(
-        named="SecMan"
-)
-@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
-public class ExtSecManMenu {
+import lombok.RequiredArgsConstructor;
 
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-home", describedAs = "Restricts access to objects dependent upon who \"owns\" those objects")
-    public AppTenancyPage appTenancy(){
-        return new AppTenancyPage();
+import demoapp.dom.types.Samples;
+
+//tag::class[]
+@Action(semantics = SemanticsOf.SAFE)
+@RequiredArgsConstructor
+public class CausewayCalendarEventHolder_actionReturningCollection {
+
+    private final CausewayCalendarEventHolder holder;
+
+    public Collection<CalendarEvent> act() {
+        return samples.stream()
+                .collect(Collectors.toList());
     }
 
+    @Inject
+    Samples<CalendarEvent> samples;
 
 }
+//end::class[]

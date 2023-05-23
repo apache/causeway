@@ -42,7 +42,7 @@ import org.apache.causeway.viewer.wicket.applib.CausewayModuleViewerWicketApplib
 import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 
 import demoapp.web.DemoAppManifestJpa;
-import demoapp.webapp.wicket.common.ui.DemoAppWicketCommon;
+import demoapp.webapp.wicket.common.DemoAppWicketCommon;
 
 /**
  * Bootstrap the application.

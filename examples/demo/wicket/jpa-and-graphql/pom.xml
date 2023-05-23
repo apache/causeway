@@ -41,7 +41,6 @@
 		<dependency>
 			<groupId>org.apache.causeway.examples.apps</groupId>
 			<artifactId>demo-wicket-common</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.services.extensions.secman;
+package demoapp.dom.featured.causewayext.cal;
 
 import jakarta.inject.Named;
 
@@ -28,23 +28,18 @@ import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
-import demoapp.dom.services.extensions.secman.apptenancy.AppTenancyPage;
-
-@Named("demo.ExtSecManMenu")
+@Named("demo.CalendarEventsMenu")
 @DomainService(
         nature=NatureOfService.VIEW
 )
-@DomainObjectLayout(
-        named="SecMan"
-)
+@DomainObjectLayout(named="CausewayExtTypes")
 @jakarta.annotation.Priority(PriorityPrecedence.EARLY)
-public class ExtSecManMenu {
+public class CalendarEventsMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-home", describedAs = "Restricts access to objects dependent upon who \"owns\" those objects")
-    public AppTenancyPage appTenancy(){
-        return new AppTenancyPage();
+    @ActionLayout(cssClassFa="far fa-calendar-alt")
+    public CalendarEventsPage calendarEvents(){
+        return new CalendarEventsPage();
     }
-
 
 }

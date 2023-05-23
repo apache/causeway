@@ -31,15 +31,18 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.factory.FactoryService;
+
+import demoapp.dom.featured.customui.WhereInTheWorldPage;
+import demoapp.dom.featured.layout.tooltip.DemoItem;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-import demoapp.dom.featured.customui.geocoding.GeoapifyClient;
-import demoapp.dom.featured.customui.latlng.Zoom;
-import demoapp.dom.featured.customui.vm.WhereInTheWorldVm;
-import demoapp.dom.featured.layout.describedAs.DescribedAsVm;
+import demoapp.dom.featured.customui.GeoapifyClient;
+import demoapp.dom.featured.customui.Zoom;
+import demoapp.dom.featured.layout.tooltip.TooltipPage;
 import demoapp.dom.featured.layout.tabs.TabDemo;
 
 @Named("demo.FeaturedMenu")
@@ -52,27 +55,52 @@ public class FeaturedMenu {
 
     final FactoryService factoryService;
 
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-comment", describedAs="Opens the Tooltip-Demo page.")
+    public TooltipPage toolTips(){
+        val demo = factoryService.viewModel(new TooltipPage());
+
+        demo.getCollection().add(DemoItem.of("first"));
+        demo.getCollection().add(DemoItem.of("second"));
+        demo.getCollection().add(DemoItem.of("third"));
+
+        return demo;
+    }
+
+
+    @Action
+    @ActionLayout(
+            cssClassFa="fa-bolt",
+            describedAs="Opens the Tabs-Demo page.",
+            hidden = Where.EVERYWHERE               // TODO: not sure this is particularly valuable
+    )
+    public TabDemo tabDemo(){
+        return factoryService.viewModel(new TabDemo());
+    }
+
+
+
 //tag::whereInTheWorldAction[]
-    @Inject
-    private GeoapifyClient geoapifyClient;
+    @Inject private GeoapifyClient geoapifyClient;
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(
-            cssClassFa="fa-globe",
-            describedAs="Opens a Custom UI page displaying a map for the provided address"
+        cssClassFa="fa-globe",
+        describedAs="Opens a Custom UI page displaying a map for the provided address"
     )
-    public WhereInTheWorldVm whereInTheWorld(
+    public WhereInTheWorldPage whereInTheWorld(
             final String address,
-            @Zoom final int zoom) {
-        val vm = new WhereInTheWorldVm();
+            @Zoom final int zoom) {                                     // <.>
+        final WhereInTheWorldPage page = new WhereInTheWorldPage();
 
-        val latLng = geoapifyClient.geocode(address);
-        vm.setAddress(address);
-        vm.setLatitude(latLng.getLatitude());
-        vm.setLongitude(latLng.getLongitude());
-        vm.setZoom(zoom);
+        final GeoapifyClient.GeocodeResponse response = geoapifyClient.geocode(address);
+        page.setAddress(address);
+        page.setLatitude(response.getLatitude());
+        page.setLongitude(response.getLongitude());
+        page.setZoom(zoom);
 
-        return vm;
+        return page;
     }
 //end::whereInTheWorldAction[]
     @MemberSupport public List<String> choices0WhereInTheWorld() {
@@ -84,26 +112,4 @@ public class FeaturedMenu {
     @MemberSupport public int default1WhereInTheWorld() {
         return 14;
     }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-comment", describedAs="Opens the Tooltip-Demo page.")
-    public DescribedAsVm toolTips(){
-        val demo = factoryService.viewModel(new DescribedAsVm());
-
-        demo.getCollection().add(DemoItem.of("first"));
-        demo.getCollection().add(DemoItem.of("second"));
-        demo.getCollection().add(DemoItem.of("third"));
-
-        return demo;
-    }
-
-    @Action
-    @ActionLayout(
-            cssClassFa="fa-bolt",
-            describedAs="Opens the Tabs-Demo page."
-    )
-    public TabDemo tabDemo(){
-        return factoryService.viewModel(new TabDemo());
-    }
-
 }

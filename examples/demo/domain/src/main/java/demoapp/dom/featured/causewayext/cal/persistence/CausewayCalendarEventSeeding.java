@@ -16,32 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.featured.customui.geocoding;
+package demoapp.dom.featured.causewayext.cal.persistence;
 
-import org.junit.jupiter.api.Test;
+import jakarta.inject.Inject;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.springframework.stereotype.Service;
 
-import demoapp.dom.featured.customui.GeoapifyClient;
-import lombok.val;
+import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 
-import demoapp.dom.AppConfiguration;
+import demoapp.dom._infra.seed.SeedServiceAbstract;
+import demoapp.dom._infra.values.ValueHolderRepository;
 
-class GeoapifyClientTest_geocode {
+@Service
+public class CausewayCalendarEventSeeding
+extends SeedServiceAbstract {
 
-    @Test
-    void happy_case() {
-
-        // given
-        final AppConfiguration appConfiguration = new AppConfiguration();
-        final GeoapifyClient client = new GeoapifyClient(appConfiguration);
-
-        // when
-        final GeoapifyClient.GeocodeResponse response =
-                client.geocode("38 Upper Montagu Street, Westminster W1H 1LJ, United Kingdom");
-
-        // then
-        assertEquals(Double.valueOf(response.getLatitude()), 51.520, 1E-2);
-        assertEquals(Double.valueOf(response.getLongitude()), -0.160, 1E-2);
+    @Inject
+    public CausewayCalendarEventSeeding(ValueHolderRepository<CalendarEvent, ? extends CausewayCalendarEventEntity> entities) {
+        super(entities);
     }
+
 }

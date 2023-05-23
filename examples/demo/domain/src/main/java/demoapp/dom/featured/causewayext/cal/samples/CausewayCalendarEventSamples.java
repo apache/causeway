@@ -16,32 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.featured.customui.geocoding;
+package demoapp.dom.featured.causewayext.cal.samples;
 
-import org.junit.jupiter.api.Test;
+import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.springframework.stereotype.Service;
 
-import demoapp.dom.featured.customui.GeoapifyClient;
-import lombok.val;
+import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 
-import demoapp.dom.AppConfiguration;
+import demoapp.dom.types.Samples;
 
-class GeoapifyClientTest_geocode {
+@Service
+public class CausewayCalendarEventSamples implements Samples<CalendarEvent> {
 
-    @Test
-    void happy_case() {
-
-        // given
-        final AppConfiguration appConfiguration = new AppConfiguration();
-        final GeoapifyClient client = new GeoapifyClient(appConfiguration);
-
-        // when
-        final GeoapifyClient.GeocodeResponse response =
-                client.geocode("38 Upper Montagu Street, Westminster W1H 1LJ, United Kingdom");
-
-        // then
-        assertEquals(Double.valueOf(response.getLatitude()), 51.520, 1E-2);
-        assertEquals(Double.valueOf(response.getLongitude()), -0.160, 1E-2);
+    @Override
+    public Stream<CalendarEvent> stream() {
+        return new org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEventSemantics()
+                .getExamples()
+                .stream();
     }
+
 }

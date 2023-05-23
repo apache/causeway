@@ -40,6 +40,7 @@ public class ApplicationTenancyEvaluatorForDemo
         return TenantedEntity.class.isAssignableFrom(cls);
     }
 
+    private Pattern hidePattern;                                                    // <.>
     @Override
     public String hides(Object domainObject, ApplicationUser applicationUser) {     // <.>
         if(hidePattern == null) {
@@ -53,6 +54,7 @@ public class ApplicationTenancyEvaluatorForDemo
                 : null;
     }
 
+    private Pattern disablePattern;                                                 // <3>
     @Override
     public String disables(Object domainObject, ApplicationUser applicationUser) {  // <.>
         if(disablePattern == null) {
@@ -65,7 +67,10 @@ public class ApplicationTenancyEvaluatorForDemo
                 ? String.format("disabled, because name matches '%s'", disablePattern)
                 : null;
     }
+    // ...
+//end::class[]
 
+//tag::hideRegex[]
     @Getter
     private String hideRegex;
     public void setHideRegex(String hideRegex) {
@@ -74,7 +79,7 @@ public class ApplicationTenancyEvaluatorForDemo
                 ? Pattern.compile(hideRegex)
                 : null;
     }
-    private Pattern hidePattern;
+//end::hideRegex[]
 
     @Getter
     private String disableRegex;
@@ -84,7 +89,7 @@ public class ApplicationTenancyEvaluatorForDemo
                 ? Pattern.compile(disableRegex)
                 : null;
     }
-    private Pattern disablePattern;
 
+//tag::class[]
 }
 //end::class[]
