@@ -16,11 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.Property.commandPublishing;
+package demoapp.dom.domain.properties.Property.snapshot.jdo;
 
-import java.util.List;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
 
-public interface PropertyCommandPublishingEntityRepository {
+import demoapp.dom._infra.values.ValueHolderRepository;
 
-    List<? extends PropertyCommandPublishingEntity> all();
+@Profile("demo-jdo")
+@Service
+public class PropertySnapshotEntityImplRepository
+extends ValueHolderRepository<String, PropertySnapshotEntityImpl> {
+
+    protected PropertySnapshotEntityImplRepository() {
+        super(PropertySnapshotEntityImpl.class);
+    }
+
+    @Override
+    protected PropertySnapshotEntityImpl newDetachedEntity(String value) {
+        return new PropertySnapshotEntityImpl(value);
+    }
+
 }

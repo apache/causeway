@@ -16,37 +16,36 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.Property.snapshot.jpa;
+package demoapp.dom.domain.properties.Property.snapshot.jdo;
+
+import demoapp.dom.domain.properties.Property.snapshot.PropertySnapshotEntity;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.inject.Named;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-import org.springframework.context.annotation.Profile;
+import javax.jdo.annotations.DatastoreIdentity;
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.persistence.*;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.springframework.context.annotation.Profile;
 
-import demoapp.dom.domain.properties.Property.snapshot.PropertySnapshotEntity;
-
-@Profile("demo-jpa")
-@Entity
-@Table(
+@Profile("demo-jdo")
+@PersistenceCapable(
+    identityType = IdentityType.DATASTORE,
     schema = "demo",
-    name = "PropertySnapshotEntity"
+    table = "PropertySnapshotEntity"
 )
-@EntityListeners(CausewayEntityListener.class)
+@DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @Named("demo.PropertySnapshotEntity")
-@NoArgsConstructor
 //tag::class[]
 // ...
 @DomainObject(nature = Nature.ENTITY)
@@ -58,10 +57,6 @@ public class PropertySnapshotEntityImpl
     public PropertySnapshotEntityImpl(String value) {
         setName(value);
     }
-
-    @Id
-    @GeneratedValue
-    private Long id;
 //tag::class[]
 
 //tag::name[]

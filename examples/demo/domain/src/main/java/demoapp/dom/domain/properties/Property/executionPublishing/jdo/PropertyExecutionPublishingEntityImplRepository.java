@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.Property.executionPublishing.jpa;
+package demoapp.dom.domain.properties.Property.executionPublishing.jdo;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingEntityRepository;
 
-@Profile("demo-jpa")
+@Profile("demo-jdo")
 @Service
 public class PropertyExecutionPublishingEntityImplRepository
 extends ValueHolderRepository<String, PropertyExecutionPublishingEntityImpl> implements PropertyExecutionPublishingEntityRepository {

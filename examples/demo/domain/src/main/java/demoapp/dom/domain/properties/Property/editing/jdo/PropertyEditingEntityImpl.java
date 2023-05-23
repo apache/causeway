@@ -16,14 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.Property.editing.jpa;
+package demoapp.dom.domain.properties.Property.editing.jdo;
 
 import javax.inject.Named;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.jdo.annotations.DatastoreIdentity;
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.PersistenceCapable;
 
 import org.springframework.context.annotation.Profile;
 
@@ -31,23 +30,20 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import demoapp.dom.domain.properties.Property.editing.PropertyEditingEntity;
 
-@Profile("demo-jpa")
-@Entity
-@Table(
+@Profile("demo-jdo")
+@PersistenceCapable(
+    identityType = IdentityType.DATASTORE,
     schema = "demo",
-    name = "PropertyEditingEntity"
+    table = "PropertyEditingEntity"
 )
-@EntityListeners(CausewayEntityListener.class)
+@DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @Named("demo.PropertyEditingEntity")
-@NoArgsConstructor
 //tag::class[]
 // ...
 @DomainObject(nature = Nature.ENTITY)
@@ -60,10 +56,6 @@ public class PropertyEditingEntityImpl
         setName(value);
         setOriginalName(value);
     }
-
-    @Id
-    @GeneratedValue
-    private Long id;
 //tag::class[]
 
 //tag::name[]

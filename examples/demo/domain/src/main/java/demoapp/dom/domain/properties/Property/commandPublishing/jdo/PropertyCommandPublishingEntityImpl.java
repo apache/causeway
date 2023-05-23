@@ -16,60 +16,48 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.Property.snapshot.jpa;
+package demoapp.dom.domain.properties.Property.commandPublishing.jdo;
 
 import javax.inject.Named;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.jdo.annotations.DatastoreIdentity;
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.PersistenceCapable;
 
 import org.springframework.context.annotation.Profile;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import demoapp.dom.domain.properties.Property.snapshot.PropertySnapshotEntity;
+import demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandPublishingEntity;
 
-@Profile("demo-jpa")
-@Entity
-@Table(
+@Profile("demo-jdo")
+@PersistenceCapable(
+    identityType = IdentityType.DATASTORE,
     schema = "demo",
-    name = "PropertySnapshotEntity"
+    table = "PropertyCommandPublishingEntity"
 )
-@EntityListeners(CausewayEntityListener.class)
-@Named("demo.PropertySnapshotEntity")
-@NoArgsConstructor
+@DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
+@Named("demo.PropertyCommandPublishingEntity")
 //tag::class[]
 // ...
 @DomainObject(nature = Nature.ENTITY)
-public class PropertySnapshotEntityImpl
-                extends PropertySnapshotEntity {
+public class PropertyCommandPublishingEntityImpl extends PropertyCommandPublishingEntity {
     // ...
 //end::class[]
 
-    public PropertySnapshotEntityImpl(String value) {
+    public PropertyCommandPublishingEntityImpl(String value) {
         setName(value);
     }
 
-    @Id
-    @GeneratedValue
-    private Long id;
-//tag::class[]
-
-//tag::name[]
-    @Property()
     @Getter @Setter
     private String name;
-//end::name[]
 
+    @Getter @Setter
+    private String notes;
 
 //tag::class[]
 }

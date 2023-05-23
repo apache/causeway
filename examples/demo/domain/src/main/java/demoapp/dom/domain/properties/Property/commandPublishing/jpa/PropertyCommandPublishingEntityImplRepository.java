@@ -18,13 +18,10 @@
  */
 package demoapp.dom.domain.properties.Property.commandPublishing.jpa;
 
-import java.util.List;
-
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandPublishingEntity;
 import demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandPublishingEntityRepository;
 
 @Profile("demo-jpa")
@@ -39,17 +36,5 @@ extends ValueHolderRepository<String, PropertyCommandPublishingEntityImpl> imple
     @Override
     protected PropertyCommandPublishingEntityImpl newDetachedEntity(String value) {
         return new PropertyCommandPublishingEntityImpl(value);
-    }
-
-    @Override
-    public List<? extends PropertyCommandPublishingEntity> allInstances() {
-        return all();
-    }
-
-    public List<? extends PropertyCommandPublishingEntity> allMatches(final String s) {
-        return all();
-    }
-    public List<? extends PropertyCommandPublishingEntity> allMatches() {
-        return all();
     }
 }

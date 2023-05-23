@@ -22,5 +22,5 @@ import java.util.List;
 
 public interface PropertyExecutionPublishingEntityRepository {
 
-    List<? extends PropertyExecutionPublishingEntity> allInstances();
+    List<? extends PropertyExecutionPublishingEntity> all();
 }

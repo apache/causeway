@@ -41,10 +41,10 @@ import demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandP
 @Entity
 @Table(
     schema = "demo",
-    name = "PropertyCommandPublishingJpa"
+    name = "PropertyCommandPublishingEntity"
 )
 @EntityListeners(CausewayEntityListener.class)
-@Named("demo.PropertyCommandPublishingJpa")
+@Named("demo.PropertyCommandPublishingEntity")
 @NoArgsConstructor
 //tag::class[]
 // ...

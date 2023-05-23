@@ -16,25 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.Property.executionPublishing.jpa;
+package demoapp.dom.domain.properties.Property.commandPublishing.jdo;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingEntityRepository;
+import demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandPublishingEntityRepository;
 
-@Profile("demo-jpa")
+@Profile("demo-jdo")
 @Service
-public class PropertyExecutionPublishingEntityImplRepository
-extends ValueHolderRepository<String, PropertyExecutionPublishingEntityImpl> implements PropertyExecutionPublishingEntityRepository {
+public class PropertyCommandPublishingEntityImplRepository
+extends ValueHolderRepository<String, PropertyCommandPublishingEntityImpl> implements PropertyCommandPublishingEntityRepository {
 
-    protected PropertyExecutionPublishingEntityImplRepository() {
-        super(PropertyExecutionPublishingEntityImpl.class);
+    protected PropertyCommandPublishingEntityImplRepository() {
+        super(PropertyCommandPublishingEntityImpl.class);
     }
 
     @Override
-    protected PropertyExecutionPublishingEntityImpl newDetachedEntity(String value) {
-        return new PropertyExecutionPublishingEntityImpl(value);
+    protected PropertyCommandPublishingEntityImpl newDetachedEntity(String value) {
+        return new PropertyCommandPublishingEntityImpl(value);
     }
 }

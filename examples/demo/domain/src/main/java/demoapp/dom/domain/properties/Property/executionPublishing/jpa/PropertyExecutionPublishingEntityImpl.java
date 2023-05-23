@@ -37,14 +37,14 @@ import lombok.Setter;
 
 import demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingEntity;
 
-@Profile("demo-jpa")
+@Profile("demo-jdo")
 @Entity
 @Table(
     schema = "demo",
-    name = "PropertyExecutionPublishingJpa"
+    name = "PropertyExecutionPublishingEntity"
 )
 @EntityListeners(CausewayEntityListener.class)
-@Named("demo.PropertyExecutionPublishingJpa")
+@Named("demo.PropertyExecutionPublishingEntity")
 @NoArgsConstructor
 //tag::class[]
 // ...
