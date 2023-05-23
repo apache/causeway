@@ -117,7 +117,6 @@ module org.apache.causeway.viewer.wicket.ui {
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
     requires com.github.openjson;
-    requires commons.fileupload2;
     requires glassfish.corba.omgapi;
     requires jakarta.activation;
     requires java.desktop;

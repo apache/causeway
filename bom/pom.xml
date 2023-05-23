@@ -191,17 +191,10 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <vaadin.version>24.0.5</vaadin.version>
 
-		<!--  9.4.0 is last known good, before wicket put jupiter-api on the module graph -->
-		<!--  <wicket.version>936167650a</wicket.version> 28 Nov '22 build -->
-        <!--  <wicket.version>spring6-4e058bde3a-1</wicket.version> 5 Mar '23 build -->
-        <wicket.version>c61acb79a9</wicket.version> <!-- 4 Apr '23 build -->
-        
-        
-        
+        <wicket.version>10.0.0-M1-SNAPSHOT</wicket.version>
         <wicket-bootstrap.version>6.0.3</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
         <wicket-webjars.version>3.0.7</wicket-webjars.version>
         <wicket-viewer-jquery.version>3.6.4</wicket-viewer-jquery.version> <!--  as served by wicket via webjars -->
-
         <wicketstuff.version>9.13.0</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
 
 		<!-- OTHER -->
@@ -1818,29 +1811,25 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			</dependency>
 
 			<dependency>
-				<!-- <groupId>org.apache.wicket</groupId> -->
-				<groupId>com.github.apache-causeway-committers.wicket</groupId>
+				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket</artifactId>
 				<version>${wicket.version}</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
-				<!-- <groupId>org.apache.wicket</groupId> -->
-				<groupId>com.github.apache-causeway-committers.wicket</groupId>
+				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-core</artifactId>
 				<version>${wicket.version}</version>
 			</dependency>
 			<dependency>
-				<!-- <groupId>org.apache.wicket</groupId> -->
-				<groupId>com.github.apache-causeway-committers.wicket</groupId>
+				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-devutils</artifactId>
 				<version>${wicket.version}</version>
 			</dependency>
 
 			<!-- TODO: when used, move exclusions down -->
 			<dependency>
-				<!-- <groupId>org.apache.wicket</groupId> -->
-				<groupId>com.github.apache-causeway-committers.wicket</groupId>
+				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-request</artifactId>
 				<version>${wicket.version}</version>
 				<exclusions>
@@ -1853,8 +1842,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
 			<!-- TODO: when used, move exclusions down -->
 			<dependency>
-				<!-- <groupId>org.apache.wicket</groupId> -->
-				<groupId>com.github.apache-causeway-committers.wicket</groupId>
+				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-util</artifactId>
 				<version>${wicket.version}</version>
 				<exclusions>
@@ -1866,16 +1854,14 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			</dependency>
 
 			<dependency>
-				<!-- <groupId>org.apache.wicket</groupId> -->
-				<groupId>com.github.apache-causeway-committers.wicket</groupId>
+				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-extensions</artifactId>
 				<version>${wicket.version}</version>
 			</dependency>
 
 			<!-- TODO: when used, move exclusions down -->
 			<dependency>
-				<!-- <groupId>org.apache.wicket</groupId> -->
-				<groupId>com.github.apache-causeway-committers.wicket</groupId>
+				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-datetime</artifactId>
 				<version>${wicket.version}</version>
 				<exclusions>
@@ -1887,14 +1873,12 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			</dependency>
 
 			<dependency>
-				<!-- <groupId>org.apache.wicket</groupId> -->
-				<groupId>com.github.apache-causeway-committers.wicket</groupId>
+				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-auth-roles</artifactId>
 				<version>${wicket.version}</version>
 			</dependency>
 			<dependency>
-				<!-- <groupId>org.apache.wicket</groupId> -->
-				<groupId>com.github.apache-causeway-committers.wicket</groupId>
+				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-spring</artifactId>
 				<version>${wicket.version}</version>
 			</dependency>
@@ -2183,13 +2167,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
             <url>https://repository.apache.org/content/groups/snapshots/</url>
             <snapshots><enabled>true</enabled></snapshots>
         </repository>
-		<repository>
-			<!-- used for wicket 10.0.0-M1-SNAPSHOT fork at 
-				https://jitpack.io/#apache-causeway-committers/wicket
-				temporary till release of wicket 10.0.0 -->
-		    <id>jitpack.io</id>
-		    <url>https://jitpack.io</url>
-		</repository>
         <repository>
 			<!-- temporary till release of wicket-stuff 10.0.0 -->
 			<id>sonatype-snapshots</id>
@@ -2205,11 +2182,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
-		</repository>
-		<repository>
-			<!-- temporary till release of vaadin 24.x with jakarta namespaces -->
-            <id>vaadin.prereleases</id>
-			<url>https://maven.vaadin.com/vaadin-prereleases/</url>
 		</repository>
     </repositories>
     <pluginRepositories>

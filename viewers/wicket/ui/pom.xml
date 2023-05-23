@@ -73,7 +73,7 @@
         </dependency>
 
 		<dependency>
-			<groupId>com.github.apache-causeway-committers.wicket</groupId>
+			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-devutils</artifactId>
 			<exclusions>
 				<exclusion>
@@ -88,7 +88,7 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.github.apache-causeway-committers.wicket</groupId>
+			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-extensions</artifactId>
 			<exclusions>
 				<exclusion>
@@ -98,7 +98,7 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>com.github.apache-causeway-committers.wicket</groupId>
+			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-auth-roles</artifactId>
 			<exclusions>
 				<exclusion>
@@ -109,7 +109,7 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.github.apache-causeway-committers.wicket</groupId>
+			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-spring</artifactId>
 			<exclusions>
 				<!-- already provided by jakarta.inject-api -->

@@ -36,8 +36,9 @@
     </properties>
 
     <dependencies>
+		
         <dependency>
-            <groupId>com.github.apache-causeway-committers.wicket</groupId>
+            <groupId>org.apache.wicket</groupId>
             <artifactId>wicket-core</artifactId>
             <exclusions>
                 <exclusion>
@@ -47,7 +48,7 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.github.apache-causeway-committers.wicket</groupId>
+            <groupId>org.apache.wicket</groupId>
             <artifactId>wicket-extensions</artifactId>
             <exclusions>
                 <exclusion>
