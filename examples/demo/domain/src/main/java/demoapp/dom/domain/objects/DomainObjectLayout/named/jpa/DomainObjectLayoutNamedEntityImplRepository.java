@@ -18,13 +18,10 @@
  */
 package demoapp.dom.domain.objects.DomainObjectLayout.named.jpa;
 
-import java.util.List;
-
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.objects.DomainObjectLayout.named.DomainObjectLayoutNamedEntity;
 import demoapp.dom.domain.objects.DomainObjectLayout.named.DomainObjectLayoutNamedEntityRepository;
 
 @Profile("demo-jpa")
@@ -39,17 +36,5 @@ extends ValueHolderRepository<String, DomainObjectLayoutNamedEntityImpl> impleme
     @Override
     protected DomainObjectLayoutNamedEntityImpl newDetachedEntity(String value) {
         return new DomainObjectLayoutNamedEntityImpl(value);
-    }
-
-    @Override
-    public List<? extends DomainObjectLayoutNamedEntity> allInstances() {
-        return all();
-    }
-
-    public List<? extends DomainObjectLayoutNamedEntity> allMatches(final String s) {
-        return all();
-    }
-    public List<? extends DomainObjectLayoutNamedEntity> allMatches() {
-        return all();
     }
 }

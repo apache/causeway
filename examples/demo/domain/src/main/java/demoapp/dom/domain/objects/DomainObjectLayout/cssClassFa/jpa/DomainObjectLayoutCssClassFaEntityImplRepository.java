@@ -18,13 +18,10 @@
  */
 package demoapp.dom.domain.objects.DomainObjectLayout.cssClassFa.jpa;
 
-import java.util.List;
-
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.objects.DomainObjectLayout.cssClassFa.DomainObjectLayoutCssClassFaEntity;
 import demoapp.dom.domain.objects.DomainObjectLayout.cssClassFa.DomainObjectLayoutCssClassFaEntityRepository;
 
 @Profile("demo-jpa")
@@ -39,17 +36,5 @@ extends ValueHolderRepository<String, DomainObjectLayoutCssClassFaEntityImpl> im
     @Override
     protected DomainObjectLayoutCssClassFaEntityImpl newDetachedEntity(String value) {
         return new DomainObjectLayoutCssClassFaEntityImpl(value);
-    }
-
-    @Override
-    public List<? extends DomainObjectLayoutCssClassFaEntity> allInstances() {
-        return all();
-    }
-
-    public List<? extends DomainObjectLayoutCssClassFaEntity> allMatches(final String s) {
-        return all();
-    }
-    public List<? extends DomainObjectLayoutCssClassFaEntity> allMatches() {
-        return all();
     }
 }

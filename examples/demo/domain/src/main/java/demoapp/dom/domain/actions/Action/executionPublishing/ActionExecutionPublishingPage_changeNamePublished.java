@@ -43,7 +43,7 @@ public class ActionExecutionPublishingPage_changeNamePublished {
     }
 
     public List<? extends ActionExecutionPublishingEntity> choices0Act() {
-        return repository.allInstances();
+        return repository.all();
     }
     public String default1Act(ActionExecutionPublishingEntity entity) {
         return entity != null ? entity.getName() : null;

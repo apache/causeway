@@ -18,13 +18,10 @@
  */
 package demoapp.dom.domain.objects.DomainObjectLayout.paged.jpa;
 
-import java.util.List;
-
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.objects.DomainObjectLayout.paged.DomainObjectLayoutPagedEntity;
 
 @Profile("demo-jpa")
 @Service
@@ -38,17 +35,5 @@ extends ValueHolderRepository<String, DomainObjectLayoutPagedEntityImpl> impleme
     @Override
     protected DomainObjectLayoutPagedEntityImpl newDetachedEntity(String value) {
         return new DomainObjectLayoutPagedEntityImpl(value);
-    }
-
-    @Override
-    public List<? extends DomainObjectLayoutPagedEntity> allInstances() {
-        return all();
-    }
-
-    public List<? extends DomainObjectLayoutPagedEntity> allMatches(final String s) {
-        return all();
-    }
-    public List<? extends DomainObjectLayoutPagedEntity> allMatches() {
-        return all();
     }
 }

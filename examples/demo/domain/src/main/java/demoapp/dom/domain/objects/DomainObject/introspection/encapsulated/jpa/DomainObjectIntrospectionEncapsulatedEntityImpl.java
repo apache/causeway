@@ -43,10 +43,10 @@ import demoapp.dom.domain.objects.DomainObject.introspection.encapsulated.Domain
 @Entity
 @Table(
     schema = "demo",
-    name = "DomainObjectIntrospectionEncapsulatedJpa"
+    name = "DomainObjectIntrospectionEncapsulatedEntity"
 )
 @EntityListeners(CausewayEntityListener.class)
-@Named("demo.DomainObjectIntrospectionEncapsulatedJpa")
+@Named("demo.DomainObjectIntrospectionEncapsulatedEntity")
 @NoArgsConstructor
 //tag::class[]
 // ...

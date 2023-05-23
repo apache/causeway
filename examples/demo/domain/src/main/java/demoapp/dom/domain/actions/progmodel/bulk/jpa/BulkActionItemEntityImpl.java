@@ -26,12 +26,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
-
 import org.springframework.context.annotation.Profile;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
 import lombok.Getter;
@@ -44,11 +43,11 @@ import demoapp.dom.domain.actions.progmodel.bulk.BulkActionItemEntity;
 @Entity
 @Table(
     schema = "demo",
-    name = "BulkActionItem"
+    name = "BulkActionItemEntity"
 )
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @EntityListeners(CausewayEntityListener.class)
-@Named("demo.BulkActionItemJpa")
+@Named("demo.BulkActionItemEntity")
 @NoArgsConstructor
 //tag::class[]
 // ...

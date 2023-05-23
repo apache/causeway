@@ -22,5 +22,5 @@ import java.util.List;
 
 public interface DomainObjectLayoutBookmarkingEntityRepository {
 
-    List<? extends DomainObjectLayoutBookmarkingEntity> allInstances();
+    List<? extends DomainObjectLayoutBookmarkingEntity> all();
 }

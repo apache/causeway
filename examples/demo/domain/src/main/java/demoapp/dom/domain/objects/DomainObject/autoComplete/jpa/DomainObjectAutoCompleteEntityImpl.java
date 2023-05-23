@@ -42,17 +42,17 @@ import demoapp.dom.domain.objects.DomainObject.autoComplete.DomainObjectAutoComp
 @Entity
 @Table(
     schema = "demo",
-    name = "DomainObjectAutoCompleteJpa"
+    name = "DomainObjectAutoCompleteEntity"
 )
 @EntityListeners(CausewayEntityListener.class)
-@Named("demo.DomainObjectAutoComplete")
+@Named("demo.DomainObjectAutoCompleteEntity")
 @NoArgsConstructor
 //tag::class[]
 // ...
 @DomainObject(
-        nature = Nature.ENTITY,
-        autoCompleteRepository = DomainObjectAutoCompleteEntityRepository.class,  // <.>
-        autoCompleteMethod = "findMatching"                 // <.>
+    nature = Nature.ENTITY,
+    autoCompleteRepository = DomainObjectAutoCompleteEntityRepository.class, // <.>
+    autoCompleteMethod = "findMatching"                                      // <.>
 )
 public class DomainObjectAutoCompleteEntityImpl extends DomainObjectAutoCompleteEntity {
     // ...

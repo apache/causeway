@@ -18,13 +18,10 @@
  */
 package demoapp.dom.domain.objects.DomainObjectLayout.bookmarking.jpa;
 
-import java.util.List;
-
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.objects.DomainObjectLayout.bookmarking.DomainObjectLayoutBookmarkingEntity;
 import demoapp.dom.domain.objects.DomainObjectLayout.bookmarking.DomainObjectLayoutBookmarkingEntityRepository;
 
 @Profile("demo-jpa")
@@ -39,17 +36,5 @@ extends ValueHolderRepository<String, DomainObjectLayoutBookmarkingEntityImpl> i
     @Override
     protected DomainObjectLayoutBookmarkingEntityImpl newDetachedEntity(String value) {
         return new DomainObjectLayoutBookmarkingEntityImpl(value);
-    }
-
-    @Override
-    public List<? extends DomainObjectLayoutBookmarkingEntity> allInstances() {
-        return all();
-    }
-
-    public List<? extends DomainObjectLayoutBookmarkingEntity> allMatches(final String s) {
-        return all();
-    }
-    public List<? extends DomainObjectLayoutBookmarkingEntity> allMatches() {
-        return all();
     }
 }

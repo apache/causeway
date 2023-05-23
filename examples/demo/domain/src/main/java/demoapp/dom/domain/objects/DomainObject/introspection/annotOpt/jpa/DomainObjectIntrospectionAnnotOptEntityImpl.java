@@ -39,10 +39,10 @@ import demoapp.dom.domain.objects.DomainObject.introspection.annotOpt.DomainObje
 @Entity
 @Table(
     schema = "demo",
-    name = "DomainObjectIntrospectionAnnotOptJpa"
+    name = "DomainObjectIntrospectionAnnotOptEntity"
 )
 @EntityListeners(CausewayEntityListener.class)
-@Named("demo.DomainObjectIntrospectionAnnotOpt")
+@Named("demo.DomainObjectIntrospectionAnnotOptEntity")
 @NoArgsConstructor
 //tag::class[]
 // ...

@@ -22,5 +22,5 @@ import java.util.List;
 
 public interface DomainObjectLayoutTableDecoratorEntityRepository {
 
-    List<? extends DomainObjectLayoutTableDecoratorEntity> allInstances();
+    List<? extends DomainObjectLayoutTableDecoratorEntity> all();
 }

@@ -41,10 +41,10 @@ import demoapp.dom.domain.objects.DomainObjectLayout.cssClassFa.DomainObjectLayo
 @Entity
 @Table(
     schema = "demo",
-    name = "DomainObjectLayoutCssClassFaJpa"
+    name = "DomainObjectLayoutCssClassFaEntity"
 )
 @EntityListeners(CausewayEntityListener.class)
-@Named("demo.DomainObjectLayoutCssClassFaJpa")
+@Named("demo.DomainObjectLayoutCssClassFaEntity")
 @NoArgsConstructor
 //tag::class[]
 // ...

@@ -22,5 +22,5 @@ import java.util.List;
 
 public interface DomainObjectLayoutXxxUiEventEntityRepository {
 
-    List<? extends DomainObjectLayoutXxxUiEventEntity> allInstances();
+    List<? extends DomainObjectLayoutXxxUiEventEntity> all();
 }

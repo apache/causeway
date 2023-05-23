@@ -22,5 +22,5 @@ import java.util.List;
 
 public interface ActionCommandPublishingEntityRepository {
 
-    List<? extends ActionCommandPublishingEntity> allInstances();
+    List<? extends ActionCommandPublishingEntity> all();
 }

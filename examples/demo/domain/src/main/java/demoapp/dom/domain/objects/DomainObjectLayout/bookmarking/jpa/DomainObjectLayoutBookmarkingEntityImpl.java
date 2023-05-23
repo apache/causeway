@@ -47,10 +47,10 @@ import demoapp.dom.domain.objects.DomainObjectLayout.bookmarking.DomainObjectLay
 @Entity
 @Table(
     schema = "demo",
-    name = "DomainObjectLayoutBookmarkingJpa"
+    name = "DomainObjectLayoutBookmarkingEntity"
 )
 @EntityListeners(CausewayEntityListener.class)
-@Named("demo.DomainObjectLayoutBookmarkingJpa")
+@Named("demo.DomainObjectLayoutBookmarkingEntity")
 @NoArgsConstructor
 //tag::class[]
 // ...

@@ -22,5 +22,5 @@ import java.util.List;
 
 public interface BulkActionItemEntityRepository {
 
-    List<? extends BulkActionItemEntity> allInstances();
+    List<? extends BulkActionItemEntity> all();
 }

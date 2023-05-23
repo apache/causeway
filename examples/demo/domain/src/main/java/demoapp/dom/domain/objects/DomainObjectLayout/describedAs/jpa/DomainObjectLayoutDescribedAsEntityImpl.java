@@ -41,10 +41,10 @@ import demoapp.dom.domain.objects.DomainObjectLayout.describedAs.DomainObjectLay
 @Entity
 @Table(
     schema = "demo",
-    name = "DomainObjectLayoutDescribedAsJpa"
+    name = "DomainObjectLayoutDescribedAsEntity"
 )
 @EntityListeners(CausewayEntityListener.class)
-@Named("demo.DomainObjectLayoutDescribedAsJpa")
+@Named("demo.DomainObjectLayoutDescribedAsEntity")
 @NoArgsConstructor
 //tag::class[]
 // ...

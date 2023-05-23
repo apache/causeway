@@ -18,13 +18,10 @@
  */
 package demoapp.dom.domain.actions.progmodel.bulk.jpa;
 
-import java.util.List;
-
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.actions.progmodel.bulk.BulkActionItemEntity;
 import demoapp.dom.domain.actions.progmodel.bulk.BulkActionItemEntityRepository;
 
 @Profile("demo-jpa")
@@ -41,15 +38,4 @@ extends ValueHolderRepository<String, BulkActionItemEntityImpl> implements BulkA
         return new BulkActionItemEntityImpl(value);
     }
 
-    @Override
-    public List<? extends BulkActionItemEntity> allInstances() {
-        return all();
-    }
-
-    public List<? extends BulkActionItemEntity> allMatches(final String s) {
-        return all();
-    }
-    public List<? extends BulkActionItemEntity> allMatches() {
-        return all();
-    }
 }

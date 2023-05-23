@@ -18,13 +18,10 @@
  */
 package demoapp.dom.domain.actions.ActionLayout.hidden.jpa;
 
-import java.util.List;
-
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.actions.ActionLayout.hidden.ActionLayoutHiddenEntity;
 import demoapp.dom.domain.actions.ActionLayout.hidden.ActionLayoutHiddenEntityRepository;
 
 @Profile("demo-jpa")
@@ -41,15 +38,4 @@ extends ValueHolderRepository<String, ActionLayoutHiddenEntityImpl> implements A
         return new ActionLayoutHiddenEntityImpl(value);
     }
 
-    @Override
-    public List<? extends ActionLayoutHiddenEntity> allInstances() {
-        return all();
-    }
-
-    public List<? extends ActionLayoutHiddenEntity> allMatches(final String s) {
-        return all();
-    }
-    public List<? extends ActionLayoutHiddenEntity> allMatches() {
-        return all();
-    }
 }

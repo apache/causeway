@@ -16,37 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.introspection.encapsulated.jpa;
-
-import java.util.List;
-
-import javax.inject.Inject;
+package demoapp.dom.domain.objects.DomainObject.editing.jdo;
 
 import org.springframework.context.annotation.Profile;
-
-import org.apache.causeway.applib.annotation.Collection;
-import org.apache.causeway.applib.annotation.CollectionLayout;
-import org.apache.causeway.applib.annotation.MemberSupport;
-
-import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.objects.DomainObject.introspection.DomainObjectIntrospectionPage;
 
-@Profile("demo-jpa")
-@Collection()
-@CollectionLayout()
-@RequiredArgsConstructor
-public class DomainObjectIntrospectionVm_encapsulationEnabled {
+@Profile("demo-jdo")
+@Service
+public class DomainObjectEditingEntityImplRepository
+extends ValueHolderRepository<String, DomainObjectEditingEntityImpl> {
 
-    @SuppressWarnings("unused")
-    private final DomainObjectIntrospectionPage page;
-
-    @MemberSupport
-    public List<DomainObjectIntrospectionEncapsulatedEntityImpl> coll() {
-        return entities.all();
+    protected DomainObjectEditingEntityImplRepository() {
+        super(DomainObjectEditingEntityImpl.class);
     }
 
-    @Inject ValueHolderRepository<String, DomainObjectIntrospectionEncapsulatedEntityImpl> entities;
+    @Override
+    protected DomainObjectEditingEntityImpl newDetachedEntity(String value) {
+        return new DomainObjectEditingEntityImpl(value);
+    }
 
 }

@@ -43,10 +43,10 @@ import demoapp.dom.domain.objects.DomainObject.nature.entity.DomainObjectNatureE
 @Entity                                             // <.>
 @Table(                                             // <1>
     schema = "demo",
-    name = "DomainObjectNatureJpa"
+    name = "DomainObjectNatureEntity"
 )
 @EntityListeners(CausewayEntityListener.class)
-@Named("demo.DomainObjectNatureJpa")
+@Named("demo.DomainObjectNatureEntity")
 @DomainObject(nature = Nature.ENTITY)               // <.>
 @NoArgsConstructor
 public class DomainObjectNatureEntityImpl

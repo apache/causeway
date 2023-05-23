@@ -18,13 +18,10 @@
  */
 package demoapp.dom.domain.objects.DomainObject.aliased.jpa;
 
-import java.util.List;
-
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.objects.DomainObject.aliased.DomainObjectAliasedEntity;
 import demoapp.dom.domain.objects.DomainObject.aliased.DomainObjectAliasedEntityRepository;
 
 @Profile("demo-jpa")
@@ -39,17 +36,5 @@ extends ValueHolderRepository<String, DomainObjectAliasedEntityImpl> implements 
     @Override
     protected DomainObjectAliasedEntityImpl newDetachedEntity(String value) {
         return new DomainObjectAliasedEntityImpl(value);
-    }
-
-    @Override
-    public List<? extends DomainObjectAliasedEntity> allInstances() {
-        return all();
-    }
-
-    public List<? extends DomainObjectAliasedEntity> allMatches(final String s) {
-        return all();
-    }
-    public List<? extends DomainObjectAliasedEntity> allMatches() {
-        return all();
     }
 }

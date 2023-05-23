@@ -22,5 +22,4 @@ import java.util.List;
 
 public interface ActionChoicesFromEntityRepository {
 
-    List<? extends ActionChoicesFromEntity> allInstances();
 }

@@ -41,10 +41,10 @@ import demoapp.dom.domain.objects.DomainObject.mixinMethod.DomainObjectMixinMeth
 @Entity
 @Table(
     schema = "demo",
-    name = "DomainObjectMixinMethodJpa"
+    name = "DomainObjectMixinMethodEntity"
 )
 @EntityListeners(CausewayEntityListener.class)
-@Named("demo.DomainObjectMixinMethodJpa")
+@Named("demo.DomainObjectMixinMethodEntity")
 @NoArgsConstructor
 //tag::class[]
 // ...

@@ -18,8 +18,6 @@
  */
 package demoapp.dom.domain.actions.Action.choicesFrom.jpa;
 
-import java.util.List;
-
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -38,17 +36,5 @@ extends ValueHolderRepository<String, ActionChoicesFromEntityImpl> implements Ac
     @Override
     protected ActionChoicesFromEntityImpl newDetachedEntity(String value) {
         return new ActionChoicesFromEntityImpl(value);
-    }
-
-    @Override
-    public List<? extends demoapp.dom.domain.actions.Action.choicesFrom.ActionChoicesFromEntity> allInstances() {
-        return all();
-    }
-
-    public List<? extends demoapp.dom.domain.actions.Action.choicesFrom.ActionChoicesFromEntity> allMatches(final String s) {
-        return all();
-    }
-    public List<? extends demoapp.dom.domain.actions.Action.choicesFrom.ActionChoicesFromEntity> allMatches() {
-        return all();
     }
 }

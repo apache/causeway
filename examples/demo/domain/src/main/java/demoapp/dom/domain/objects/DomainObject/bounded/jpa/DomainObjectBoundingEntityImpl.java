@@ -42,16 +42,16 @@ import demoapp.dom.domain.objects.DomainObject.bounded.DomainObjectBoundingEntit
 @Entity
 @Table(
     schema = "demo",
-    name = "DomainObjectBoundingJpa"
+    name = "DomainObjectBoundingEntity"
 )
 @EntityListeners(CausewayEntityListener.class)
-@Named("demo.DomainObjectBounding")
+@Named("demo.DomainObjectBoundingEntity")
 @NoArgsConstructor
 //tag::class[]
 // ...
 @DomainObject(
-        nature = Nature.ENTITY,
-        bounding = Bounding.BOUNDED         // <.>
+    nature = Nature.ENTITY,
+    bounding = Bounding.BOUNDED         // <.>
 )
 public class DomainObjectBoundingEntityImpl extends DomainObjectBoundingEntity {
     // ...

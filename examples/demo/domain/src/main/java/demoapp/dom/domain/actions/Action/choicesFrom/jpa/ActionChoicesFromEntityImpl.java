@@ -31,11 +31,11 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
-import demoapp.dom.domain.actions.Action.choicesFrom.ActionChoicesFromEntity;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import demoapp.dom.domain.actions.Action.choicesFrom.ActionChoicesFromEntity;
 
 @Profile("demo-jpa")
 @Entity
@@ -44,7 +44,7 @@ import lombok.Setter;
     name = "ActionChoicesFromEntity"
 )
 @EntityListeners(CausewayEntityListener.class)
-@Named("demo.ActionChoicesFromJpa")
+@Named("demo.ActionChoicesFromEntity")
 @NoArgsConstructor
 //tag::class[]
 // ...

@@ -22,5 +22,5 @@ import java.util.List;
 
 public interface DomainObjectLayoutCssClassFaEntityRepository {
 
-    List<? extends DomainObjectLayoutCssClassFaEntity> allInstances();
+    List<? extends DomainObjectLayoutCssClassFaEntity> all();
 }

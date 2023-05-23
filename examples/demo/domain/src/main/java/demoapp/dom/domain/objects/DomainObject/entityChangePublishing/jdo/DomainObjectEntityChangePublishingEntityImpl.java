@@ -37,7 +37,11 @@ import lombok.Setter;
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingEntity;
 
 @Profile("demo-jdo")
-@PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
+@PersistenceCapable(
+    identityType = IdentityType.DATASTORE,
+    schema = "demo",
+    table = "DomainObjectEntityChangePublishingEntity"
+)
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @Named("demo.DomainObjectEntityChangePublishingEntity")
 //tag::class[]

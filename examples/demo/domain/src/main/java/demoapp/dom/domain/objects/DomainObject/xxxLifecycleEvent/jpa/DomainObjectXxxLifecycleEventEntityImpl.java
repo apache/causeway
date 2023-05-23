@@ -41,10 +41,10 @@ import demoapp.dom.domain.objects.DomainObject.xxxLifecycleEvent.DomainObjectXxx
 @Entity
 @Table(
     schema = "demo",
-    name = "DomainObjectXxxLifecycleEventJpa"
+    name = "DomainObjectXxxLifecycleEventEntity"
 )
 @EntityListeners(CausewayEntityListener.class)
-@Named("demo.DomainObjectXxxLifecycleEventJpa")
+@Named("demo.DomainObjectXxxLifecycleEventEntity")
 @NoArgsConstructor
 //tag::class[]
 // ...

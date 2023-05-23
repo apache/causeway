@@ -28,7 +28,7 @@ public class DomainObjectAliasedPage_lookup {
     }
     public List<String> choices0Act() {
         val bookmarks = new ArrayList<String>();
-        val aliases = repository.allInstances();
+        val aliases = repository.all();
         aliases.stream().forEach(obj -> {
             bookmarks.add(obj.getBookmark());
             bookmarks.add(obj.getPreviousBookmark());

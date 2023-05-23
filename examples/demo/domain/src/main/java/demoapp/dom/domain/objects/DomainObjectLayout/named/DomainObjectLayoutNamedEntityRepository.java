@@ -22,5 +22,5 @@ import java.util.List;
 
 public interface DomainObjectLayoutNamedEntityRepository {
 
-    List<? extends DomainObjectLayoutNamedEntity> allInstances();
+    List<? extends DomainObjectLayoutNamedEntity> all();
 }

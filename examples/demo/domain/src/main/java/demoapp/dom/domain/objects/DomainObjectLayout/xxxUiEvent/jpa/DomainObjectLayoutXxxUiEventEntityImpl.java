@@ -41,10 +41,10 @@ import demoapp.dom.domain.objects.DomainObjectLayout.xxxUiEvent.DomainObjectLayo
 @Entity
 @Table(
     schema = "demo",
-    name = "DomainObjectLayoutXxxUiEventJpa"
+    name = "DomainObjectLayoutXxxUiEventEntity"
 )
 @EntityListeners(CausewayEntityListener.class)
-@Named("demo.DomainObjectLayoutXxxUiEventJpa")
+@Named("demo.DomainObjectLayoutXxxUiEventEntity")
 @NoArgsConstructor
 //tag::class[]
 // ...

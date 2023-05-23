@@ -41,7 +41,7 @@ import demoapp.dom.domain.objects.DomainObject.aliased.DomainObjectAliasedEntity
 @Entity
 @Table(
     schema = "demo",
-    name = "DomainObjectAliasedJpa"
+    name = "DomainObjectAliasedEntity"
 )
 @EntityListeners(CausewayEntityListener.class)
 @Named("demo.party.Customer")                   // <.>

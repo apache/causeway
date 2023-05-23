@@ -18,13 +18,10 @@
  */
 package demoapp.dom.domain.objects.DomainObjectLayout.xxxUiEvent.jpa;
 
-import java.util.List;
-
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.objects.DomainObjectLayout.xxxUiEvent.DomainObjectLayoutXxxUiEventEntity;
 import demoapp.dom.domain.objects.DomainObjectLayout.xxxUiEvent.DomainObjectLayoutXxxUiEventEntityRepository;
 
 @Profile("demo-jpa")
@@ -39,17 +36,5 @@ extends ValueHolderRepository<String, DomainObjectLayoutXxxUiEventEntityImpl> im
     @Override
     protected DomainObjectLayoutXxxUiEventEntityImpl newDetachedEntity(String value) {
         return new DomainObjectLayoutXxxUiEventEntityImpl(value);
-    }
-
-    @Override
-    public List<? extends DomainObjectLayoutXxxUiEventEntity> allInstances() {
-        return all();
-    }
-
-    public List<? extends DomainObjectLayoutXxxUiEventEntity> allMatches(final String s) {
-        return all();
-    }
-    public List<? extends DomainObjectLayoutXxxUiEventEntity> allMatches() {
-        return all();
     }
 }

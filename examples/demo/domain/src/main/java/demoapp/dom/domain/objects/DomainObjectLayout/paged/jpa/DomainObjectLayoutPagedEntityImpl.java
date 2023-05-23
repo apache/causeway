@@ -41,10 +41,10 @@ import demoapp.dom.domain.objects.DomainObjectLayout.paged.DomainObjectLayoutPag
 @Entity
 @Table(
     schema = "demo",
-    name = "DomainObjectLayoutPagedJpa"
+    name = "DomainObjectLayoutPagedEntity"
 )
 @EntityListeners(CausewayEntityListener.class)
-@Named("demo.DomainObjectLayoutPagedJpa")
+@Named("demo.DomainObjectLayoutPagedEntity")
 @NoArgsConstructor
 //tag::class[]
 // ...

@@ -22,5 +22,5 @@ import java.util.List;
 
 public interface DomainObjectAliasedEntityRepository {
 
-    List<? extends DomainObjectAliasedEntity> allInstances();
+    List<? extends DomainObjectAliasedEntity> all();
 }

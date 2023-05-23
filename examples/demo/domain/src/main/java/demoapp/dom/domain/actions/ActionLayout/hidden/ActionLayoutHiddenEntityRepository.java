@@ -22,5 +22,5 @@ import java.util.List;
 
 public interface ActionLayoutHiddenEntityRepository {
 
-    List<? extends ActionLayoutHiddenEntity> allInstances();
+    List<? extends ActionLayoutHiddenEntity> all();
 }

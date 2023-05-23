@@ -41,10 +41,10 @@ import demoapp.dom.domain.actions.Action.executionPublishing.ActionExecutionPubl
 @Entity
 @Table(
     schema = "demo",
-    name = "ActionExecutionPublishingJpa"
+    name = "ActionExecutionPublishingEntity"
 )
 @EntityListeners(CausewayEntityListener.class)
-@Named("demo.ActionExecutionPublishingJpa")
+@Named("demo.ActionExecutionPublishingEntity")
 @NoArgsConstructor
 //tag::class[]
 // ...

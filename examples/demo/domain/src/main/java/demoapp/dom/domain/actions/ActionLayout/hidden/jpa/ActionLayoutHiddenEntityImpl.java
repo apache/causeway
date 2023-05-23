@@ -41,10 +41,10 @@ import demoapp.dom.domain.actions.ActionLayout.hidden.ActionLayoutHiddenEntity;
 @Entity
 @Table(
     schema = "demo",
-    name = "ActionLayoutHiddenJpa"
+    name = "ActionLayoutHiddenEntity"
 )
 @EntityListeners(CausewayEntityListener.class)
-@Named("demo.ActionLayoutHiddenJpa")
+@Named("demo.ActionLayoutHiddenEntity")
 @NoArgsConstructor
 //tag::class[]
 // ...

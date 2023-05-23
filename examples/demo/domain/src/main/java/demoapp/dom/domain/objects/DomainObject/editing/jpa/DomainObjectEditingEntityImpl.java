@@ -43,16 +43,16 @@ import demoapp.dom.domain.objects.DomainObject.editing.DomainObjectEditingEntity
 @Entity
 @Table(
     schema = "demo",
-    name = "DomainObjectEditingJpa"
+    name = "DomainObjectEditingEntity"
 )
 @EntityListeners(CausewayEntityListener.class)
-@Named("demo.DomainObjectEditing")
+@Named("demo.DomainObjectEditingEntity")
 @NoArgsConstructor
 //tag::class[]
 // ...
 @DomainObject(
-        nature = Nature.ENTITY,
-        editing = Editing.ENABLED               // <.>
+    nature = Nature.ENTITY,
+    editing = Editing.ENABLED                   // <.>
 )
 public class DomainObjectEditingEntityImpl
                 extends DomainObjectEditingEntity {

@@ -42,10 +42,10 @@ import demoapp.dom.domain.objects.DomainObject.introspection.annotReqd.DomainObj
 @Entity
 @Table(
     schema = "demo",
-    name = "DomainObjectIntrospectionAnnotReqdJpa"
+    name = "DomainObjectIntrospectionAnnotReqdEntity"
 )
 @EntityListeners(CausewayEntityListener.class)
-@Named("demo.DomainObjectIntrospectionAnnotReqdJpa")
+@Named("demo.DomainObjectIntrospectionAnnotReqdEntity")
 @NoArgsConstructor
 //tag::class[]
 // ...

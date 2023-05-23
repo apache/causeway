@@ -18,13 +18,10 @@
  */
 package demoapp.dom.domain.objects.DomainObjectLayout.tabledec.jpa;
 
-import java.util.List;
-
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.objects.DomainObjectLayout.tabledec.DomainObjectLayoutTableDecoratorEntity;
 import demoapp.dom.domain.objects.DomainObjectLayout.tabledec.DomainObjectLayoutTableDecoratorEntityRepository;
 
 @Profile("demo-jpa")
@@ -39,17 +36,5 @@ extends ValueHolderRepository<String, DomainObjectLayoutTableDecoratorEntityImpl
     @Override
     protected DomainObjectLayoutTableDecoratorEntityImpl newDetachedEntity(String value) {
         return new DomainObjectLayoutTableDecoratorEntityImpl(value);
-    }
-
-    @Override
-    public List<? extends DomainObjectLayoutTableDecoratorEntity> allInstances() {
-        return all();
-    }
-
-    public List<? extends DomainObjectLayoutTableDecoratorEntity> allMatches(final String s) {
-        return all();
-    }
-    public List<? extends DomainObjectLayoutTableDecoratorEntity> allMatches() {
-        return all();
     }
 }

@@ -35,8 +35,8 @@ import org.apache.causeway.applib.services.repository.RepositoryService;
 public class DomainObjectAutoCompleteEntityRepository {                               // <.>
 
     public List<DomainObjectAutoCompleteEntity> findMatching(                         // <.>
-                                                                                      @MinLength(1)                                                   // <.>
-                final String search
+        @MinLength(1)                                                                 // <.>
+        final String search
     ) {
         return repositoryService.allInstances(DomainObjectAutoCompleteEntity.class)   // <.>
                 .stream()
