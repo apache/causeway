@@ -26,7 +26,7 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 
 /**
- * Provides a local copy of {@linkplain https://cdn.jsdelivr.net/npm/vega@5.24}
+ * Provides a local copy of {@linkplain https://cdn.jsdelivr.net/npm/vega@5.25}
  * <p>
  * Unfortunately the webjar {@code org.webjars.npm:vega:5.22.1} cannot be used,
  * as (at time of writing) <i>Maven</i> fails to resolve all its dependencies.
@@ -47,6 +47,6 @@ extends JavaScriptResourceReference {
     }
 
     private VegaJsReference() {
-        super(VegaJsReference.class, "vega@5.24.js");
+        super(VegaJsReference.class, "vega@5.25.js");
     }
 }
