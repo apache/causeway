@@ -41,9 +41,9 @@ import demoapp.dom.domain.objects.DomainObject.aliased.DomainObjectAliasedEntity
     table = "DomainObjectAliasedEntity"
 )
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@Named("demo.party.Customer")                   // <.>
 //tag::class[]
 // ...
+@Named("demo.party.Customer")                   // <.>
 @DomainObject(
         nature = Nature.ENTITY,
         aliased = {"demo.customer.Customer"}    // <.>

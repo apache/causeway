@@ -19,4 +19,4 @@
 #
 #
 
-mvn compile datanucleus:enhance@process-classes -Dmodule-examples-demo-wicket
+mvn compile datanucleus:enhance@process-classes -Dmodule-examples-demo-wicket -pl domain

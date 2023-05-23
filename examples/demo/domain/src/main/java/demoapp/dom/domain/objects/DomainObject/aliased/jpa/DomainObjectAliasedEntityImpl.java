@@ -44,10 +44,10 @@ import demoapp.dom.domain.objects.DomainObject.aliased.DomainObjectAliasedEntity
     name = "DomainObjectAliasedEntity"
 )
 @EntityListeners(CausewayEntityListener.class)
-@Named("demo.party.Customer")                   // <.>
-@NoArgsConstructor
 //tag::class[]
 // ...
+@Named("demo.party.Customer")                   // <.>
+@NoArgsConstructor
 @DomainObject(
         nature = Nature.ENTITY,
         aliased = {"demo.customer.Customer"}    // <.>
