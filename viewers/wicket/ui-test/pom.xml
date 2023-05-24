@@ -29,7 +29,7 @@
 	<properties>
 		<maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
-		
+        
 		<jar-plugin.automaticModuleName>org.apache.causeway.viewer.wicket.ui.test</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/causeway/viewer/wicket/ui-test</git-plugin.propertiesDir>
 	</properties>
@@ -62,6 +62,5 @@
 		</dependency>
 
 	</dependencies>
-
 
 </project>
