@@ -51,16 +51,7 @@
 			<groupId>org.apache.causeway.viewer</groupId>
 			<artifactId>causeway-viewer-commons-model</artifactId>
 		</dependency>
-	
-		<!-- TESTING -->
-
-		<dependency>
-			<groupId>org.apache.causeway.core</groupId>
-			<artifactId>causeway-core-internaltestsupport</artifactId>
-			<scope>test</scope>
-		</dependency>
 
     </dependencies>
-
 
 </project>

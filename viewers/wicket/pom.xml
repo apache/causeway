@@ -114,8 +114,9 @@
     <modules>
         <module>applib</module>
         <module>model</module>
-        <module>viewer</module>
         <module>ui</module>
+        <module>ui-test</module>
+        <module>viewer</module>
     </modules>
 
 </project>
