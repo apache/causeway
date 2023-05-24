@@ -669,7 +669,7 @@
 						<version>3.1.1</version>
 						<configuration>
 							<altDeploymentRepository>
-								nightly-localfs-repo::default::file://${MVN_SNAPSHOTS_PATH}
+								nightly-localfs-repo::file://${MVN_SNAPSHOTS_PATH}
 							</altDeploymentRepository>
 						</configuration>
 					</plugin>
