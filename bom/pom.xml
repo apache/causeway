@@ -2393,10 +2393,10 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 					<executions>
 						<execution>
 							<id>package-jars</id>
-							<phase>package</phase>
+							<!-- <phase>package</phase> failing since maven-source-plugin 3.3.0 -->
 							<goals>
 								<goal>jar</goal>
-								<goal>test-jar</goal>
+								<!-- <goal>test-jar</goal> failing since maven-source-plugin 3.3.0 -->
 							</goals>
 						</execution>
 					</executions>
