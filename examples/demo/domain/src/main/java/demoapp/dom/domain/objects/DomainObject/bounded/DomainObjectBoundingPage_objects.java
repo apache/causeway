@@ -21,11 +21,11 @@ public class DomainObjectBoundingPage_objects {
     private final DomainObjectBoundingPage page;
 
     @MemberSupport
-    public List<? extends DomainObjectBounding> coll() {
+    public List<? extends DomainObjectBoundingEntity> coll() {
         return objectRepository.all();
     }
 
     @Inject
-    ValueHolderRepository<String, ? extends DomainObjectBounding> objectRepository;
+    ValueHolderRepository<String, ? extends DomainObjectBoundingEntity> objectRepository;
 
 }

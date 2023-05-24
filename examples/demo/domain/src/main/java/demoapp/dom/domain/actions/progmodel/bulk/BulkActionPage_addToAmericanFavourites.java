@@ -33,14 +33,14 @@ public class BulkActionPage_addToAmericanFavourites {
     private final BulkActionPage page;
 
     @MemberSupport public BulkActionPage act(
-            final List<BulkActionItem> children) {
-        for (BulkActionItem child : children) {
+            final List<BulkActionItemEntity> children) {
+        for (BulkActionItemEntity child : children) {
             page.getAmericanFavourites().add(child);
             page.getAmericanCharacters().remove(child);
         }
         return page;
     }
-    public List<BulkActionItem> choices0Act() {     // <.>
+    public List<BulkActionItemEntity> choices0Act() {     // <.>
         return page.getAmericanCharacters();
     }
 }

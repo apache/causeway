@@ -24,7 +24,7 @@ public class DomainObjectMixinMethodPage_objects {
     private final DomainObjectMixinMethodPage page;
 
 //tag::class[]
-    public List<? extends DomainObjectMixinMethod> collection() {   // <.>
+    public List<? extends DomainObjectMixinMethodEntity> collection() {   // <.>
         // ...
 //end::class[]
         return objectRepository.all();
@@ -33,7 +33,7 @@ public class DomainObjectMixinMethodPage_objects {
 //end::class[]
 
     @Inject
-    ValueHolderRepository<String, ? extends DomainObjectMixinMethod> objectRepository;
+    ValueHolderRepository<String, ? extends DomainObjectMixinMethodEntity> objectRepository;
 
 //tag::class[]
 }

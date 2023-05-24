@@ -31,7 +31,6 @@ import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.domain.collections.CollectionLayout.tabledec.child.CollectionLayoutTableDecoratorChildVm;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -56,21 +55,21 @@ public class BulkActionPage implements HasAsciiDocDescription {
     @XmlElementWrapper(name = "americanCharacters")
     @XmlElement(name = "character")
     @Getter @Setter
-    private List<BulkActionItem> americanCharacters = new ArrayList<>();
+    private List<BulkActionItemEntity> americanCharacters = new ArrayList<>();
 
     @XmlElementWrapper(name = "americanFavourites")
     @XmlElement(name = "favourite")
     @Getter @Setter
-    private List<BulkActionItem> americanFavourites = new ArrayList<>();
+    private List<BulkActionItemEntity> americanFavourites = new ArrayList<>();
 
     @XmlElementWrapper(name = "britishCharacters")
     @XmlElement(name = "character")
     @Getter @Setter
-    private List<BulkActionItem> britishCharacters = new ArrayList<>();
+    private List<BulkActionItemEntity> britishCharacters = new ArrayList<>();
 
     @XmlElementWrapper(name = "britishFavourites")
     @XmlElement(name = "favourite")
     @Getter @Setter
-    private List<BulkActionItem> britishFavourites = new ArrayList<>();
+    private List<BulkActionItemEntity> britishFavourites = new ArrayList<>();
 }
 //end::class[]

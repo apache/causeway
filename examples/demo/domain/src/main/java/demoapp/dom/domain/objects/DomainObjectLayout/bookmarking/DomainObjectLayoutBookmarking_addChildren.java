@@ -34,10 +34,10 @@ import demoapp.dom.types.Samples;
 @RequiredArgsConstructor
 public class DomainObjectLayoutBookmarking_addChildren {
 
-    private final DomainObjectLayoutBookmarking parent;
+    private final DomainObjectLayoutBookmarkingEntity parent;
 
     @MemberSupport
-    public DomainObjectLayoutBookmarking act(int number) {
+    public DomainObjectLayoutBookmarkingEntity act(int number) {
         val strings = samples.stream().collect(Collectors.toList());
         for (int i = 0; i < number; i++) {
             parent.addChild(parent.getName() + " - " + strings.get(i));

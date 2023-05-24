@@ -50,7 +50,7 @@ public class DomainObjectXxxLifecycleEventPage_createEntity {
         return page.getEntity() != null ? "Entity already created" : null;
     }
 
-    @Inject ValueHolderRepository<String, ? extends DomainObjectXxxLifecycleEvent> objectRepository;
+    @Inject ValueHolderRepository<String, ? extends DomainObjectXxxLifecycleEventEntity> objectRepository;
     @Inject Samples<String> samples;
 }
 //end::class[]

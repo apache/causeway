@@ -26,7 +26,7 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
-import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingVm;
+import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingPage;
 
 //tag::class[]
 @Action(
@@ -38,10 +38,10 @@ public class ExposeCapturedChanges_clear {
     // ...
 //end::class[]
 
-    private final DomainObjectEntityChangePublishingVm domainObjectAuditingVm;
+    private final DomainObjectEntityChangePublishingPage domainObjectAuditingVm;
 
     //tag::class[]
-    public DomainObjectEntityChangePublishingVm act() {
+    public DomainObjectEntityChangePublishingPage act() {
         entityChangesSubscriberToCaptureChangesInMemory.clear();
         return domainObjectAuditingVm;
     }

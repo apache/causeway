@@ -21,10 +21,10 @@ public class PropertySnapshotPage_friends {
     private final PropertySnapshotPage page;
 
     @MemberSupport
-    public List<? extends PropertySnapshot> coll() {
+    public List<? extends PropertySnapshotEntity> coll() {
         return objectRepository.all();
     }
 
-    @Inject ValueHolderRepository<String, ? extends PropertySnapshot> objectRepository;
+    @Inject ValueHolderRepository<String, ? extends PropertySnapshotEntity> objectRepository;
 
 }

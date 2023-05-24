@@ -21,11 +21,11 @@ public class PropertyEditingPage_objects {
     private final PropertyEditingPage page;
 
     @MemberSupport
-    public List<? extends PropertyEditing> coll() {
+    public List<? extends PropertyEditingEntity> coll() {
         return objectRepository.all();
     }
 
     @Inject
-    ValueHolderRepository<String, ? extends PropertyEditing> objectRepository;
+    ValueHolderRepository<String, ? extends PropertyEditingEntity> objectRepository;
 
 }

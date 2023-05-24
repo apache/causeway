@@ -33,21 +33,20 @@ import demoapp.dom._infra.resources.AsciiDocReaderService;
 
 //tag::class[]
 @Named("demo.Homepage")
-@DomainObject(
-    nature=Nature.VIEW_MODEL)
-@HomePage                                                       // <.>
+@DomainObject(nature=Nature.VIEW_MODEL)
+@HomePage                                                           // <.>
 public class DemoHomePage
-        implements HasAsciiDocDescription {                     // <.>
+        implements HasAsciiDocDescription {                         // <.>
 
-    @ObjectSupport public String title() {                      // <.>
+    @ObjectSupport public String title() {                          // <.>
         return "Hello, " + userService.currentUserNameElseNobody();
     }
 
-    public AsciiDoc getWelcome() {                              // <.>
+    public AsciiDoc getWelcome() {                                  // <.>
         return asciiDocReaderService.readFor(this, "welcome");
     }
 
-    @Inject UserService userService;                            // <.>
+    @Inject UserService userService;                                // <.>
     @Inject AsciiDocReaderService asciiDocReaderService;
 }
 //end::class[]

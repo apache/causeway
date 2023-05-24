@@ -31,9 +31,9 @@ In terms of code:
 * the domain object defines these events:
 +
 [source,java,indent=0]
-.DomainObjectLayoutXxxUiEvent.java
+.DomainObjectLayoutXxxUiEventEntity.java
 ----
-include::DomainObjectLayoutXxxUiEvent.java[tags=class]
+include::DomainObjectLayoutXxxUiEventEntity.java[tags=class]
 ----
 <.> custom title UI event
 <.> custom icon UI event

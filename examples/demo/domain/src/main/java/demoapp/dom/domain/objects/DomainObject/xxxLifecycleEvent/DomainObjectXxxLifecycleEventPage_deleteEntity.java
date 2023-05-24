@@ -37,12 +37,13 @@ public class DomainObjectXxxLifecycleEventPage_deleteEntity {
     private final DomainObjectXxxLifecycleEventPage page;
     @MemberSupport public DomainObjectXxxLifecycleEventPage act() {
         objectRepository.remove(page.getEntity());
+        page.setEntity(null);
         return page;
     }
     @MemberSupport public String disableAct() {
         return page.getEntity() == null ? "Entity not yet created" : null;
     }
 
-    @Inject ValueHolderRepository<String, ? extends DomainObjectXxxLifecycleEvent> objectRepository;
+    @Inject ValueHolderRepository<String, ? extends DomainObjectXxxLifecycleEventEntity> objectRepository;
 }
 //end::class[]

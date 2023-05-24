@@ -40,7 +40,7 @@ public class DomainObjectLayoutXxxUiEventSubscriber {
 
 //tag::titleUiEvent[]
     @EventListener
-    void onTitleUiEvent(final DomainObjectLayoutXxxUiEvent.TitleEvent titleUiEvent) {
+    void onTitleUiEvent(final DomainObjectLayoutXxxUiEventEntity.TitleEvent titleUiEvent) {
         val source = titleUiEvent.getSource();
         titleUiEvent.setTitle(
                 hasNameInFirstHalfOfAlphabet(source)
@@ -51,7 +51,7 @@ public class DomainObjectLayoutXxxUiEventSubscriber {
 
 //tag::iconUiEvent[]
     @EventListener
-    void onIconUiEvent(final DomainObjectLayoutXxxUiEvent.IconEvent iconUiEvent) {
+    void onIconUiEvent(final DomainObjectLayoutXxxUiEventEntity.IconEvent iconUiEvent) {
         val source = iconUiEvent.getSource();
         if (hasNameInFirstHalfOfAlphabet(source)) {
             iconUiEvent.setIconName("signature");
@@ -61,7 +61,7 @@ public class DomainObjectLayoutXxxUiEventSubscriber {
 
 //tag::cssClassUiEvent[]
     @EventListener
-    void onCssClassUiEvent(final DomainObjectLayoutXxxUiEvent.CssClassEvent cssClassUiEvent) {
+    void onCssClassUiEvent(final DomainObjectLayoutXxxUiEventEntity.CssClassEvent cssClassUiEvent) {
         val source = cssClassUiEvent.getSource();
         cssClassUiEvent.setCssClass(hasNameInFirstHalfOfAlphabet(source)
                 ? "custom1"
@@ -71,7 +71,7 @@ public class DomainObjectLayoutXxxUiEventSubscriber {
 
 //tag::layoutUiEvent[]
     @EventListener
-    void onLayoutUiEvent(final DomainObjectLayoutXxxUiEvent.LayoutEvent layoutUiEvent) {
+    void onLayoutUiEvent(final DomainObjectLayoutXxxUiEventEntity.LayoutEvent layoutUiEvent) {
         val source = layoutUiEvent.getSource();
         layoutUiEvent.setLayout(
                 hasNameInFirstHalfOfAlphabet(source)
@@ -81,7 +81,7 @@ public class DomainObjectLayoutXxxUiEventSubscriber {
 //end::layoutUiEvent[]
 
 //tag::class[]
-    private boolean hasNameInFirstHalfOfAlphabet(DomainObjectLayoutXxxUiEvent source) {
+    private boolean hasNameInFirstHalfOfAlphabet(DomainObjectLayoutXxxUiEventEntity source) {
         return source.getName().toLowerCase().compareTo("m") < 0;
     }
 

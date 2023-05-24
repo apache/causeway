@@ -20,7 +20,7 @@ public class DomainObjectBoundingPage_find {
     private final DomainObjectBoundingPage page;
 
     @MemberSupport
-    public DomainObjectBoundingJpa act(final DomainObjectBoundingJpa domainObjectBounding) {  // <.>
+    public DomainObjectBoundingEntityImpl act(final DomainObjectBoundingEntityImpl domainObjectBounding) {  // <.>
         return domainObjectBounding;
     }
 

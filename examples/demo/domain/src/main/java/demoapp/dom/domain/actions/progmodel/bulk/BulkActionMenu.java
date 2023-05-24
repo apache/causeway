@@ -45,17 +45,17 @@ public class BulkActionMenu {
             Arrays.asList("Joey", "Monica", "Rachel", "Phoebe", "Chandler", "Ross");
 
     final FactoryService factoryService;
-    final BulkActionItemRepository repository;
+    final BulkActionItemEntityRepository repository;
 
     @Action
     @ActionLayout(cssClassFa="fa-bolt", describedAs = "Bulk actions")
     public BulkActionPage bulkActions() {
         val page = factoryService.viewModel(new BulkActionPage());
-        repository.allInstances()
+        repository.all()
                 .stream()
                 .filter(x -> FRIENDS_NAMES.contains(x.getName()))
                 .forEach(x -> page.getAmericanCharacters().add(x));
-        repository.allInstances()
+        repository.all()
                 .stream()
                 .filter(x -> ! FRIENDS_NAMES.contains(x.getName()))
                 .forEach(x -> page.getBritishCharacters().add(x));

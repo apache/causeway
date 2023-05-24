@@ -27,7 +27,6 @@ import jakarta.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.Projecting;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
@@ -39,8 +38,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.domain.properties.Property.projecting.jdo.PropertyProjectingChildJdo;
-import demoapp.dom.domain.properties.Property.projecting.jpa.PropertyProjectingChildJpa;
 
 //tag::class[]
 @XmlRootElement(name = "child")

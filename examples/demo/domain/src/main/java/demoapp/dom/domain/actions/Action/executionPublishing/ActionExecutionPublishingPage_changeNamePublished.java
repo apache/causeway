@@ -36,19 +36,19 @@ public class ActionExecutionPublishingPage_changeNamePublished {
     private final ActionExecutionPublishingPage page;
 
     @MemberSupport public ActionExecutionPublishingPage act(
-            final ActionExecutionPublishing entity,
+            final ActionExecutionPublishingEntity entity,
             final String newName) {
         entity.setName(newName);
         return page;
     }
 
-    public List<? extends ActionExecutionPublishing> choices0Act() {
-        return repository.allInstances();
+    public List<? extends ActionExecutionPublishingEntity> choices0Act() {
+        return repository.all();
     }
-    public String default1Act(ActionExecutionPublishing entity) {
+    public String default1Act(ActionExecutionPublishingEntity entity) {
         return entity != null ? entity.getName() : null;
     }
 
-    @Inject ActionExecutionPublishingRepository repository;
+    @Inject ActionExecutionPublishingEntityRepository repository;
 }
 //end::class[]

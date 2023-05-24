@@ -22,5 +22,5 @@ import java.util.List;
 
 public interface PropertyLayoutHiddenRepository {
 
-    List<? extends PropertyLayoutHidden> allInstances();
+    List<? extends PropertyLayoutHidden> all();
 }

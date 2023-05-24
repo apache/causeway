@@ -21,10 +21,10 @@ public class DomainObjectLayoutCssClassPage_objects {
     private final DomainObjectLayoutCssClassPage page;
 
     @MemberSupport
-    public List<? extends DomainObjectLayoutCssClass> coll() {
+    public List<? extends DomainObjectLayoutCssClassEntity> coll() {
         return objectRepository.all();
     }
 
-    @Inject ValueHolderRepository<String, ? extends DomainObjectLayoutCssClass> objectRepository;
+    @Inject ValueHolderRepository<String, ? extends DomainObjectLayoutCssClassEntity> objectRepository;
 
 }

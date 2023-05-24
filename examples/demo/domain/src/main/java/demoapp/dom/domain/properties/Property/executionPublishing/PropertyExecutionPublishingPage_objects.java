@@ -19,10 +19,10 @@ public class PropertyExecutionPublishingPage_objects {
     @SuppressWarnings("unused")
     private final PropertyExecutionPublishingPage page;
 
-    @MemberSupport public List<? extends PropertyExecutionPublishing> coll() {
+    @MemberSupport public List<? extends PropertyExecutionPublishingEntity> coll() {
         return objectRepository.all();
     }
 
-    @Inject ValueHolderRepository<String, ? extends PropertyExecutionPublishing> objectRepository;
+    @Inject ValueHolderRepository<String, ? extends PropertyExecutionPublishingEntity> objectRepository;
 }
 //end::class[]

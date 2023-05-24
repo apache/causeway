@@ -15,7 +15,7 @@ public class DomainObjectAutoCompletePage_find {
     private final DomainObjectAutoCompletePage page;
 
     @MemberSupport
-    public DomainObjectAutoComplete act(final DomainObjectAutoComplete domainObjectAutoComplete) {  // <.>
+    public DomainObjectAutoCompleteEntity act(final DomainObjectAutoCompleteEntity domainObjectAutoComplete) {  // <.>
         return domainObjectAutoComplete;
     }
 

@@ -33,8 +33,8 @@ public class ActionChoicesFromPage_makeUpperCase {
     private final ActionChoicesFromPage page;
 
     @MemberSupport public ActionChoicesFromPage act(
-            final List<ActionChoicesFrom> children) {
-        for (ActionChoicesFrom child : children) {
+            final List<ActionChoicesFromEntity> children) {
+        for (ActionChoicesFromEntity child : children) {
             child.setName(child.getName().toUpperCase());
         }
         return page;

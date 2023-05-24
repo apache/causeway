@@ -4,6 +4,8 @@ This is an link:https://causeway.apache.org[Apache Causeway] application to demo
 
 On the left hand side of each page you'll find a working example of the feature, while on the right hand side you'll find a description of the feature with annotated code examples.
 
+Be aware, the demo app uses an in-memory database, so any changes made will be lost when the app is stopped.
+
 == Page Layout
 
 This is as good place as any to explain the page layout of an Apache Causeway webapp:
@@ -20,16 +22,12 @@ Properties and collections are the object's state, actions are the object's beha
 (This home page object has two properties, each of type `AsciiDoc`.
 The `welcome` property - what you are reading now - is on the left, the `description` property on the right).
 +
-If running in prototype mode then there are a number of actions contributed by the framework (their label is in _italics_) so you can dig into the internal implementation.
+If running in prototype mode then there are a number of actions provided by the framework for development purposes; their label is in _italics_.
 
 * At the bottom is a menu bar with credits, and to allow the user to *change theme*.
 
 Click into the application and try things out.
 
-[CAUTION]
-====
-The demo app uses an in-memory database, so any changes made will be lost when the app is stopped.
-====
 
 === Getting Help and Assistance
 

@@ -19,10 +19,10 @@ public class ActionChoicesFromPage_objects {
     @SuppressWarnings("unused")
     private final ActionChoicesFromPage page;
 
-    @MemberSupport public List<? extends ActionChoicesFrom> coll() {
+    @MemberSupport public List<? extends ActionChoicesFromEntity> coll() {
         return objectRepository.all();
     }
 
-    @Inject ValueHolderRepository<String, ? extends ActionChoicesFrom> objectRepository;
+    @Inject ValueHolderRepository<String, ? extends ActionChoicesFromEntity> objectRepository;
 }
 //end::class[]

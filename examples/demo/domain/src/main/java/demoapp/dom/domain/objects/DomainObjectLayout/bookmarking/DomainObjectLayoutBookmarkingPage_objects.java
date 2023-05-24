@@ -21,10 +21,10 @@ public class DomainObjectLayoutBookmarkingPage_objects {
     private final DomainObjectLayoutBookmarkingPage page;
 
     @MemberSupport
-    public List<? extends DomainObjectLayoutBookmarking> coll() {
+    public List<? extends DomainObjectLayoutBookmarkingEntity> coll() {
         return objectRepository.all();
     }
 
-    @Inject ValueHolderRepository<String, ? extends DomainObjectLayoutBookmarking> objectRepository;
+    @Inject ValueHolderRepository<String, ? extends DomainObjectLayoutBookmarkingEntity> objectRepository;
 
 }

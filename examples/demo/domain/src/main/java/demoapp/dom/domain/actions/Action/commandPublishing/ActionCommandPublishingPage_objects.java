@@ -19,10 +19,10 @@ public class ActionCommandPublishingPage_objects {
     @SuppressWarnings("unused")
     private final ActionCommandPublishingPage page;
 
-    @MemberSupport public List<? extends ActionCommandPublishing> coll() {
+    @MemberSupport public List<? extends ActionCommandPublishingEntity> coll() {
         return objectRepository.all();
     }
 
-    @Inject ValueHolderRepository<String, ? extends ActionCommandPublishing> objectRepository;
+    @Inject ValueHolderRepository<String, ? extends ActionCommandPublishingEntity> objectRepository;
 }
 //end::class[]

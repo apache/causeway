@@ -18,9 +18,9 @@ The associated action "actionReturningCollection" returns these same objects as 
 In terms of code:
 
 [source,java,indent=0]
-.DomainObjectLayoutTableDecorator.java
+.DomainObjectLayoutTableDecoratorEntity.java
 ----
-include::DomainObjectLayoutTableDecorator.java[tags=class]
+include::DomainObjectLayoutTableDecoratorEntity.java[tags=class]
 ----
 <.> indicates that the link:https://datatables.net[datatables.net] decoration is used.
 

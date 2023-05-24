@@ -19,10 +19,10 @@ public class DomainObjectLayoutTableDecoratorPage_actionReturningObjects {
     private final DomainObjectLayoutTableDecoratorPage page;
 
     @MemberSupport
-    public List<? extends DomainObjectLayoutTableDecorator> act() {
+    public List<? extends DomainObjectLayoutTableDecoratorEntity> act() {
         return objectRepository.all();
     }
 
-    @Inject ValueHolderRepository<String, ? extends DomainObjectLayoutTableDecorator> objectRepository;
+    @Inject ValueHolderRepository<String, ? extends DomainObjectLayoutTableDecoratorEntity> objectRepository;
 
 }

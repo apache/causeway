@@ -23,12 +23,12 @@ public class DomainObjectAliasedPage_lookup {
     private final DomainObjectAliasedPage page;
 
     @MemberSupport
-    public DomainObjectAliased act(final String bookmark) {
-        return bookmarkService.lookup(Bookmark.parseElseFail(bookmark), DomainObjectAliased.class).orElseThrow(() -> new org.apache.causeway.applib.exceptions.RecoverableException("No customer exists for that bookmark"));
+    public DomainObjectAliasedEntity act(final String bookmark) {
+        return bookmarkService.lookup(Bookmark.parseElseFail(bookmark), DomainObjectAliasedEntity.class).orElseThrow(() -> new org.apache.causeway.applib.exceptions.RecoverableException("No customer exists for that bookmark"));
     }
     public List<String> choices0Act() {
         val bookmarks = new ArrayList<String>();
-        val aliases = repository.allInstances();
+        val aliases = repository.all();
         aliases.stream().forEach(obj -> {
             bookmarks.add(obj.getBookmark());
             bookmarks.add(obj.getPreviousBookmark());
@@ -36,7 +36,7 @@ public class DomainObjectAliasedPage_lookup {
         return bookmarks;
     }
 
-    @Inject DomainObjectAliasedRepository repository;
+    @Inject DomainObjectAliasedEntityRepository repository;
     @Inject BookmarkService bookmarkService;
 }
 //end::class[]

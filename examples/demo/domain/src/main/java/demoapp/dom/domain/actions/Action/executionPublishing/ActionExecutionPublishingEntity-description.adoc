@@ -1,0 +1,30 @@
+:Notice: Licensed to the Apache 1Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+This domain class is used in the demo of `@Action#executionPublishing`.
+
+== How this demo works
+
+This entity has two actions, each of which can be used to change its name.
+One of the actions is published, the other is not.
+
+Invoking the published action will result in an interaction representing the action invocation being persisted; these are listed in the collection at the bottom of the page.
+
+In terms of code:
+
+* action with execution publishing enabled:
++
+[source,java,indent=0]
+.ActionExecutionPublishingEntity_changeNamePublished.java
+----
+include::ActionExecutionPublishingEntity_changeNamePublished.java[tags=class]
+----
+<.> enables command publishing
+
+* contributed collection showing persisted ``ExecutionLogEntry``s:
++
+[source,java,indent=0]
+.ActionCommandPublishingEntity_changeNamePublished.java
+----
+include::ActionExecutionPublishingEntity_publishedExecutions.java[tags=class]
+----
+<.> repository provided by the _executionLog_ extension.

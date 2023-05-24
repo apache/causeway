@@ -22,5 +22,5 @@ import java.util.List;
 
 public interface DomainObjectLayoutBookmarkingChildRepository {
 
-    List<? extends DomainObjectLayoutBookmarkingChild> allInstances();
+    List<? extends DomainObjectLayoutBookmarkingChildEntity> allInstances();
 }

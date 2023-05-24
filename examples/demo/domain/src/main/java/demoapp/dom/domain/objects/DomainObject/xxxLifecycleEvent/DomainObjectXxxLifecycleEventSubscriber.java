@@ -39,8 +39,8 @@ class DomainObjectXxxLifecycleEventSubscriber {
 
     final BookmarkService bookmarkService;
 
-    @EventListener(DomainObjectXxxLifecycleEvent.LifecycleEvent.class)  // <.>
-    public void on(DomainObjectXxxLifecycleEvent.LifecycleEvent ev) {   // <1>
+    @EventListener(DomainObjectXxxLifecycleEventEntity.LifecycleEvent.class)  // <.>
+    public void on(DomainObjectXxxLifecycleEventEntity.LifecycleEvent ev) {   // <1>
         val vm = new DomainObjectLifecycleEventVm(
                 ev.getClass().getSimpleName(),
                 bookmarkService.bookmarkFor(ev.getSource()).map(Bookmark::toString).orElse(null)
