@@ -65,6 +65,7 @@ import org.apache.causeway.testdomain.model.bad.InvalidDomainObjectOnInterface;
 import org.apache.causeway.testdomain.model.bad.InvalidElementTypes;
 import org.apache.causeway.testdomain.model.bad.InvalidMemberIdClash;
 import org.apache.causeway.testdomain.model.bad.InvalidMemberOverloadingWhenInherited;
+import org.apache.causeway.testdomain.model.bad.InvalidMixinDeclarations;
 import org.apache.causeway.testdomain.model.bad.InvalidObjectWithAlias;
 import org.apache.causeway.testdomain.model.bad.InvalidOrphanedActionSupport;
 import org.apache.causeway.testdomain.model.bad.InvalidOrphanedCollectionSupport;
@@ -126,7 +127,7 @@ class DomainModelTest_usingBadDomain {
     void orphanedActionSupport_shouldFail() {
         validator.assertAnyFailuresContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedActionSupport.class)),
-                validationMessage(
+                unsatisfiedDomainIncludeSemantics(
                         "InvalidOrphanedActionSupport",
                         "hideOrphaned()"));
 
@@ -141,7 +142,7 @@ class DomainModelTest_usingBadDomain {
     void orphanedPropertySupport_shouldFail() {
         validator.assertAnyFailuresContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedPropertySupport.class)),
-                validationMessage(
+                unsatisfiedDomainIncludeSemantics(
                         "InvalidOrphanedPropertySupport",
                         "hideMyProperty()"));
 
@@ -155,7 +156,7 @@ class DomainModelTest_usingBadDomain {
     void orphanedCollectionSupport_shouldFail() {
         validator.assertAnyFailuresContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedCollectionSupport.class)),
-                validationMessage(
+                unsatisfiedDomainIncludeSemantics(
                         "InvalidOrphanedCollectionSupport",
                         "hideMyCollection()"));
 
@@ -208,14 +209,14 @@ class DomainModelTest_usingBadDomain {
         validator.assertAnyFailuresContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(
                         InvalidMemberOverloadingWhenInherited.WhenAnnotationRequired.class)),
-                validationMessage(
+                unsatisfiedDomainIncludeSemantics(
                         "",
                         "isActive()"));
 
         validator.assertAnyFailuresContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(
                         InvalidMemberOverloadingWhenInherited.WhenEncapsulationEnabled.class)),
-                validationMessage(
+                unsatisfiedDomainIncludeSemantics(
                         "",
                         "isActive()"));
     }
@@ -405,6 +406,34 @@ class DomainModelTest_usingBadDomain {
                 "has a member with vetoed, mixin or managed element-type");
     }
 
+    // -- MIXINS
+
+    @ParameterizedTest
+    @ValueSource(classes = {
+            InvalidMixinDeclarations.ActionMixinWithProp.class,
+            InvalidMixinDeclarations.ActionMixinWithColl.class,
+            InvalidMixinDeclarations.PropertyMixinWithOther.class,
+            InvalidMixinDeclarations.CollectionMixinWithOther.class,
+            })
+    void invalidMixinDeclaration(final Class<?> classUnderTest) {
+
+        // just by convention of these test scenarios ...
+        final String expectedMethodName = classUnderTest.getSimpleName().startsWith("Property")
+                ? "prop"
+                : classUnderTest.getSimpleName().startsWith("Collection")
+                    ? "coll"
+                    : "act";
+
+        validator.assertAnyFailuresContaining(
+                classUnderTest,
+                ProgrammingModelConstants.Violation.INVALID_MIXIN_MAIN.builder()
+                .addVariable("type", classUnderTest.getName())
+                .addVariable("expectedMethodName", expectedMethodName)
+                .addVariable("actualMethodName", "other")
+                .buildMessage()
+                );
+    }
+
     // -- INCUBATING
 
     @Test @Disabled("this case has no vaildation refiner yet")
@@ -427,7 +456,7 @@ class DomainModelTest_usingBadDomain {
 
     // -- HELPER
 
-    private String validationMessage(
+    private String unsatisfiedDomainIncludeSemantics(
             final String className,
             final String memberName) {
         return Violation.UNSATISFIED_DOMAIN_INCLUDE_SEMANTICS

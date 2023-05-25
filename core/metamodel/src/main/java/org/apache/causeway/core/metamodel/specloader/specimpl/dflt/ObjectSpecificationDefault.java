@@ -32,6 +32,7 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -49,6 +50,7 @@ import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
 import org.apache.causeway.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet;
+import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
@@ -221,6 +223,14 @@ implements FacetHolder {
 
     private ObjectAction createAction(final FacetedMethod facetedMethod) {
         if (facetedMethod.getFeatureType().isAction()) {
+            /* Assuming, that facetedMethod was already populated with ContributingFacet,
+             * we copy the mixin-sort information from the FacetedMethod to the MixinFacet
+             * that is held by the mixin's type spec. */
+            mixinFacet()
+            .flatMap(mixinFacet->_Casts.castTo(MixinFacetAbstract.class, mixinFacet))
+            .ifPresent(mixinFacetAbstract->
+                mixinFacetAbstract.initMixinSortFrom(facetedMethod));
+
             return this.isMixin()
                     ? ObjectActionDefault.forMixinMain(facetedMethod)
                     : ObjectActionDefault.forMethod(facetedMethod);

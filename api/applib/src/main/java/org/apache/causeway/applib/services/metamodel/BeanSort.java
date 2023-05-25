@@ -20,7 +20,6 @@ package org.apache.causeway.applib.services.metamodel;
 
 import org.springframework.context.annotation.Profile;
 
-import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.annotation.Programmatic;
 
 /**
@@ -59,8 +58,9 @@ public enum BeanSort {
      */
     MANAGED_BEAN_NOT_CONTRIBUTING,
     /**
-     * Object associated with an 'entity' or 'bean' to act as contributer of
-     * domain actions or properties. Might also be stateful similar to VIEW_MODEL.
+     * Object associated with an <i>entity</i>, <i>viewmodel</i> or <i>domain-service</i>
+     * to act as contributer of a single <i>domain-action</i> or
+     * <i>domain-property</i> or <i>domain-collection</i>.
      */
     MIXIN,
     /**
@@ -77,7 +77,7 @@ public enum BeanSort {
     ABSTRACT,
     /**
      * Type must not be added to the meta-model, eg. by means of
-     * {@link Domain#Exclude}, {@link Profile} or {@link Programmatic}
+     * {@link org.apache.causeway.applib.annotation.Domain.Exclude}, {@link Profile} or {@link Programmatic}
      */
     VETOED,
     UNKNOWN;

@@ -25,16 +25,25 @@ import java.util.function.BiConsumer;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.SingleValueFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
+import lombok.experimental.Accessors;
 
 //@Log4j2
 public abstract class MixinFacetAbstract
-extends SingleValueFacetAbstract<String>
+extends FacetAbstract
 implements MixinFacet {
+
+    @Getter(onMethod_={@Override})
+    private final @NonNull String mainMethodName;
+    @Getter(onMethod_={@Override}) @Accessors(fluent=true)
+    private @NonNull Contributing contributing = Contributing.UNSPECIFIED;
 
     private final @NonNull Class<?> mixinType;
     private final @NonNull Class<?> holderType;
@@ -50,7 +59,8 @@ implements MixinFacet {
             final Constructor<?> constructor,
             final FacetHolder holder) {
 
-        super(type(), mainMethodName, holder);
+        super(type(), holder);
+        this.mainMethodName = mainMethodName;
         this.mixinType = mixinType;
         this.constructor = constructor;
         // by mixin convention: first constructor argument is identified as the holder type
@@ -59,11 +69,9 @@ implements MixinFacet {
 
     @Override
     public boolean isMixinFor(final Class<?> candidateDomainType) {
-        if (candidateDomainType == null) {
-            return false;
-        }
-
-        return holderType.isAssignableFrom(candidateDomainType);
+        return candidateDomainType == null
+                ? false
+                : holderType.isAssignableFrom(candidateDomainType);
     }
 
     @Override
@@ -97,13 +105,12 @@ implements MixinFacet {
 
     @Override
     public boolean isCandidateForMain(final Method method) {
-
-        // include methods from super classes or interfaces
-        //
-        // it is sufficient to detect any match;
-        // mixin invocation will take care of calling the right method,
-        // that is in terms of type-hierarchy the 'nearest' to this mixin
-
+        /* include methods from super classes or interfaces
+         *
+         * it is sufficient to detect any match;
+         * mixin invocation will take care of calling the right method,
+         * that is in terms of type-hierarchy the 'nearest' to this mixin;
+         */
         return method.getName().equals(getMainMethodName())
                 && method.getDeclaringClass()
                     .isAssignableFrom(constructor.getDeclaringClass());
@@ -113,15 +120,22 @@ implements MixinFacet {
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("mixinType", mixinType);
+        visitor.accept("contributing", contributing);
+        visitor.accept("mainMethodName", mainMethodName);
         visitor.accept("holderType", holderType);
     }
 
     /**
-     * The mixin's main method name.
-     * @implNote as stored in the SingleValueFacetAbstract's value field
+     * Framework internal: copy the mixin-sort ({@link MixinFacet.Contributing})
+     * information from the {@link FacetedMethod}
+     * (as eg. associated with mixin main method 'act')
+     * to the {@link MixinFacet} that is held by the mixin's type spec.
      */
-    public String getMainMethodName() {
-        return super.value();
+    public void initMixinSortFrom(final FacetedMethod facetedMethod) {
+        this.contributing = facetedMethod
+                .lookupFacet(ContributingFacet.class)
+                .map(ContributingFacet::contributed)
+                .orElse(Contributing.AS_ACTION); // if not specified, defaults to ACTION
     }
 
 }
