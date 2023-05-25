@@ -415,9 +415,12 @@ class DomainModelTest_usingBadDomain {
     void invalidMixinDeclaration(final Class<?> classUnderTest) {
         validator.assertAnyFailuresContaining(
                 classUnderTest,
+//                "Mixin org.apache.causeway.testdomain.model.bad.InvalidMixinDeclarations$ActionMixinWithProp"
+//                + " could not be identified as action, property or collection."
                 "Mixin org.apache.causeway.testdomain.model.bad.InvalidMixinDeclarations$ActionMixinWithProp"
                 + " does declare method name 'act' as the mixin main method to use,"
-                + " but introspection did pick up method 'prop' instead.");
+                + " but introspection did pick up method 'prop' instead."
+                );
     }
 
     // -- INCUBATING

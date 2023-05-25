@@ -51,6 +51,7 @@ import org.apache.causeway.core.metamodel.facets.actions.contributing.Contributi
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
 import org.apache.causeway.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet;
+import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet.Contributing;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
@@ -231,7 +232,10 @@ implements FacetHolder {
             .ifPresent(mixinFacetAbstract->{
                 facetedMethod.lookupFacet(ContributingFacet.class)
                 .map(ContributingFacet::contributed)
-                .ifPresent(mixinFacetAbstract::initMixinSort);
+                .ifPresentOrElse(
+                        mixinFacetAbstract::initMixinSort,
+                        // if not specified, default to ACTION
+                        ()->mixinFacetAbstract.initMixinSort(Contributing.AS_ACTION));
             });
 
             return this.isMixin()

@@ -33,21 +33,6 @@ import lombok.val;
  */
 public interface ContributingFacet extends Facet {
 
-//    enum Contributing {
-//      /**
-//       * Contributed as an <i>Action</i>.
-//       */
-//      AS_ACTION,
-//      /**
-//       * Contributed as a <i>Property</i>.
-//       */
-//      AS_PROPERTY,
-//      /**
-//       * Contributed as a <i>Collection</i>.
-//       */
-//      AS_COLLECTION
-//  }
-
     public Contributing contributed();
 
     default boolean isActionContributionVetoed() {

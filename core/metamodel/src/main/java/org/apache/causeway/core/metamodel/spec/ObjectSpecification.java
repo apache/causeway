@@ -291,9 +291,11 @@ extends
     BeanSort getBeanSort();
 
     /**
+     * Optionally the mixin sort {@link Contributing},
+     * based on whether the corresponding class is a mixin type.
      * @since 2.0
      */
-    Optional<Contributing> getMixinSort();
+    Optional<Contributing> contributing();
 
 
     // //////////////////////////////////////////////////////////////

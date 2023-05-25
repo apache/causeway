@@ -537,7 +537,7 @@ implements ObjectSpecification {
     }
 
     @Override
-    public final Optional<Contributing> getMixinSort() {
+    public final Optional<Contributing> contributing() {
         return mixinFacet()
                 .map(MixinFacet::contributing);
     }

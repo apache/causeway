@@ -64,7 +64,7 @@ implements
 
     @Override
     public void validateObjectEnter(final ObjectSpecification objSpec) {
-        final Contributing contributing = objSpec.getMixinSort().orElse(null);
+        final Contributing contributing = objSpec.contributing().orElse(null);
         if(contributing==null
                 || contributing.isUnspecified()) {
             ValidationFailure.raiseFormatted(objSpec,
@@ -98,7 +98,7 @@ implements
     private void checkMixinSort(final ObjectSpecification objSpec, final FacetedMethod facetedMethod) {
         val expectedContributing = facetedMethod.lookupFacet(ContributingFacet.class)
             .map(ContributingFacet::contributed)
-            .orElse(null);
+            .orElse(Contributing.AS_ACTION); // if not specified, defaults to action
         val actualContributing = this.contributing;
 
         if(actualContributing!=expectedContributing) {
