@@ -43,6 +43,7 @@ public abstract class DomainObjectAliasedEntity
     public abstract String getName();
     public abstract void setName(String value);
 
+// tag::class[]
     @Property
     public String getBookmark() {
         return bookmarkService.bookmarkFor(this).orElseThrow().stringify();
@@ -54,4 +55,5 @@ public abstract class DomainObjectAliasedEntity
     }
 
     @Inject private BookmarkService bookmarkService;
+// end::class[]
 }

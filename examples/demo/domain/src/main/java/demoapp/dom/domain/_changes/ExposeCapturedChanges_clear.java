@@ -42,10 +42,10 @@ public class ExposeCapturedChanges_clear {
 
     //tag::class[]
     public DomainObjectEntityChangePublishingPage act() {
-        entityChangesSubscriberToCaptureChangesInMemory.clear();
+        subscriber.clear();
         return domainObjectAuditingVm;
     }
 
-    @Inject EntityChangesSubscriberToCaptureChangesInMemory entityChangesSubscriberToCaptureChangesInMemory;;
+    @Inject EntityChangesSubscriberToCaptureChangesInMemory subscriber;;
 }
 //end::class[]

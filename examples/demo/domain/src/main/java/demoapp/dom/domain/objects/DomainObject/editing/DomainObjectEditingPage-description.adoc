@@ -15,19 +15,11 @@ causeway:
 ----
 
 This demo application is configured in this recommended way, with property editing disabled by default.
-
 The link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/DomainObject.html#editing[@DomainObject#editing] annotation can be used to override the default for a specific object, so that all of its properties can be edited.
-It's also possible to override the class-level default on a per-property basis, using the link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/Property.html#editing[@Property#editing] attribute.
-
-There are therefore three levels at which property editing can be defined:
-
-    @Property > @DomainObject > global configuration property
-
-Alternatively, this works in the opposite direction also: if the global config property is to _allow_ properties to be edited, then the `@DomainObject#editing` (or `@Property#editing`) could be used to disable editing.
-This would be much less common, though.
 
 In addition, the link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/DomainObject.html#editingDisabledReason[@DomainObject#editingDisabledReason] can be used to specify the reason why a property cannot be edited.
-This can also be specified at the property level using link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/Property.html#editingDisabledReason[@Property#editingDisabledReason].
+
+
 
 == How this demo works
 
@@ -36,4 +28,32 @@ However, `@Property#editing` is then used to disable the "originalName" property
 The "initialCharacter" property cannot be edited either, because it is a derived property (has only a getter).
 
 Navigate through to the entity in order to edit its properties, and to see the corresponding source code.
+
+In terms of code:
+
+* the entity is defined thus:
++
+[source,java]
+----
+include::jpa/DomainObjectEditingEntityImpl.java[tags=class]
+----
+<.> indicates that the properties of this type may be edited, overriding the global default set by  configuration property.
+<.> editable property because of the `@DomainObject#editing` annotation
+<.> this property cannot, after all, be edited, with `@Property#editing` overriding `@DomainObject#editing`.
+See section below for further discussion.
+<.> also a non-editable property, but this time because it is a derived property.
+
+
+
+== See also
+
+It's also possible to override the class-level default on a per-property basis, using the link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/Property.html#editing[@Property#editing] attribute.
+A reason can also be specified at the property level using link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/Property.html#editingDisabledReason[@Property#editingDisabledReason].
+
+There are therefore three levels at which property editing can be defined:
+
+    @Property > @DomainObject > global configuration property
+
+Alternatively, this works in the opposite direction also: if the global config property is to _allow_ properties to be edited, then the `@DomainObject#editing` (or `@Property#editing`) could be used to disable editing.
+This would be much less common, though.
 

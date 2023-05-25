@@ -20,7 +20,6 @@ package org.apache.causeway.core.metamodel.specloader.validator;
 
 import java.lang.annotation.Annotation;
 
-import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
@@ -28,7 +27,6 @@ import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.Mandatory
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -79,15 +77,16 @@ public final class ValidationFailureUtils {
     @Deprecated // marked deprecated, because not implemented
     public void raiseIfConflictingOptionality(final MandatoryFacet mandatoryFacet, final String message) {
 
-        if(false && //FIXME yet has false positives
-
-                isConflictingOptionality(mandatoryFacet)) {
+        /* XXX yet has false positives
+        if(isConflictingOptionality(mandatoryFacet)) {
             addFailure(mandatoryFacet, message);
         }
+        */
     }
 
     // -- HELPER
 
+    /*
     private void addFailure(final MandatoryFacet mandatoryFacet, final String message) {
         if(mandatoryFacet != null) {
             val holder = mandatoryFacet.getFacetHolder();
@@ -125,6 +124,6 @@ public final class ValidationFailureUtils {
                         .anyMatch(firstOfTopRanking::semanticEquals)
                 : false; // not conflicting
 
-    }
+    }*/
 
 }

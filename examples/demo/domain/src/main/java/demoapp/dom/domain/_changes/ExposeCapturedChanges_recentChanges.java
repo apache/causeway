@@ -43,13 +43,13 @@ public class ExposeCapturedChanges_recentChanges {
 //tag::class[]
     public List<ChangesVm> coll() {
         val list = new LinkedList<ChangesVm>();
-        entityChangesSubscriberToCaptureChangesInMemory
+        subscriber
                 .streamChangedEntities()
                 .map(ChangesVm::new)
                 .forEach(list::push);   // reverse order
         return list;
     }
 
-    @Inject EntityChangesSubscriberToCaptureChangesInMemory entityChangesSubscriberToCaptureChangesInMemory;
+    @Inject EntityChangesSubscriberToCaptureChangesInMemory subscriber;
 }
 //end::class[]

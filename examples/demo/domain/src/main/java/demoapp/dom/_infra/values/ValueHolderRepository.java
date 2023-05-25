@@ -64,6 +64,10 @@ public abstract class ValueHolderRepository<T, E extends ValueHolder<T>> {
         List<E> all = all();
         return all.isEmpty() ? Collections.emptyList() : Collections.singletonList(all.get(0));
     }
+    public List<E> lastAsList() {
+        List<E> all = all();
+        return all.isEmpty() ? Collections.emptyList() : Collections.singletonList(all.get(all.size()-1));
+    }
 
     public void remove(final Object entity) {
         repositoryService.removeAndFlush(entity);

@@ -196,7 +196,9 @@ implements
                     throws IllegalAccessException, InvocationTargetException {
 
         final Object[] executionParameters = MmUnwrapUtils.multipleAsArray(arguments);
-        final Object targetPojo = MmUnwrapUtils.single(head.getTarget());
+        final Object targetPojo = Objects.requireNonNull(
+                MmUnwrapUtils.single(head.getTarget()),
+                ()->"Could not extract pojo, that this invocation is targeted at.");
 
         final ActionSemanticsFacet semanticsFacet = getFacetHolder().getFacet(ActionSemanticsFacet.class);
         final boolean cacheable = semanticsFacet != null && semanticsFacet.value().isSafeAndRequestCacheable();

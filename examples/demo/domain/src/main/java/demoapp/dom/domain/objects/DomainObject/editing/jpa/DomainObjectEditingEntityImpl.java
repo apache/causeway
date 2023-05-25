@@ -52,7 +52,7 @@ import demoapp.dom.domain.objects.DomainObject.editing.DomainObjectEditingEntity
 // ...
 @DomainObject(
     nature = Nature.ENTITY,
-    editing = Editing.ENABLED                   // <.>
+    editing = Editing.ENABLED                                       // <.>
 )
 public class DomainObjectEditingEntityImpl
                 extends DomainObjectEditingEntity {
@@ -70,16 +70,16 @@ public class DomainObjectEditingEntityImpl
 //tag::class[]
 
     @Getter @Setter
-    private String name;                        // <.>
+    private String name;                                            // <.>
 
     @Property(
-            editing = Editing.DISABLED,         // <.>
-            editingDisabledReason = "This property may not be edited"
+        editing = Editing.DISABLED,                                 // <.>
+        editingDisabledReason = "This property may not be edited"
     )
     @Getter @Setter
     private String originalName;
 
-    public Character getInitialCharacter() {    // <.>
+    public Character getInitialCharacter() {                        // <.>
         return getName().charAt(0);
     }
 //end::class[]

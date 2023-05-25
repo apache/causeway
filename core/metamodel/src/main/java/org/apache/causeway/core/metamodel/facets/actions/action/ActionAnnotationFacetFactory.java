@@ -102,14 +102,18 @@ extends FacetFactoryAbstract {
                 || actionIfAny.isPresent();
 
         try {
+
+            val typeSpec = getSpecificationLoader().loadSpecification(processMethodContext.getCls());
+            if(typeSpec==null) {
+                return;
+            }
+
             val returnType = actionMethod.getReturnType();
             val returnSpec = getSpecificationLoader().loadSpecification(returnType);
             if (returnSpec == null) {
                 return;
             }
 
-            val cls = processMethodContext.getCls();
-            val typeSpec = getSpecificationLoader().loadSpecification(cls);
             val holder = processMethodContext.getFacetHolder();
 
             //

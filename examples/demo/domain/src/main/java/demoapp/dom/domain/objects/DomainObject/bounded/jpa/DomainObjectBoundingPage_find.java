@@ -10,8 +10,8 @@ import lombok.RequiredArgsConstructor;
 
 import demoapp.dom.domain.objects.DomainObject.bounded.DomainObjectBoundingPage;
 
-//tag::class[]
 @Profile("demo-jpa")
+//tag::class[]
 @Action(semantics = SemanticsOf.SAFE)
 @RequiredArgsConstructor
 public class DomainObjectBoundingPage_find {
@@ -20,8 +20,9 @@ public class DomainObjectBoundingPage_find {
     private final DomainObjectBoundingPage page;
 
     @MemberSupport
-    public DomainObjectBoundingEntityImpl act(final DomainObjectBoundingEntityImpl domainObjectBounding) {  // <.>
-        return domainObjectBounding;
+    public DomainObjectBoundingEntityImpl act(                // <.>
+            final DomainObjectBoundingEntityImpl entity) {
+        return entity;
     }
 
 }

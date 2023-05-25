@@ -883,7 +883,7 @@ public final class _Strings {
                 ? ofCodePoints(
                         methodName.codePoints()
                             .dropWhile(c->c != '_' && Character.isLowerCase(c)))
-                : methodName!=null ? "" : null;
+                : "";
         val baseName = asPrefixDropped.isEmpty()
                 ? methodName
                 : asPrefixDropped;

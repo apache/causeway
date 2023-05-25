@@ -372,3 +372,7 @@ div.sect3 > h4 {
 img.navbar-brand-logo {
     height: 30px;
 }
+
+#fieldSet-sources span.scalarValueInput div.additionalButtons {
+    display: none;
+}
