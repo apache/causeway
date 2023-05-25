@@ -411,15 +411,26 @@ class DomainModelTest_usingBadDomain {
     @ParameterizedTest
     @ValueSource(classes = {
             InvalidMixinDeclarations.ActionMixinWithProp.class,
+            InvalidMixinDeclarations.ActionMixinWithColl.class,
+            InvalidMixinDeclarations.PropertyMixinWithOther.class,
+            InvalidMixinDeclarations.CollectionMixinWithOther.class,
             })
     void invalidMixinDeclaration(final Class<?> classUnderTest) {
+
+        // just by convention of these test scenarios ...
+        final String expectedMethodName = classUnderTest.getSimpleName().startsWith("Property")
+                ? "prop"
+                : classUnderTest.getSimpleName().startsWith("Collection")
+                    ? "coll"
+                    : "act";
+
         validator.assertAnyFailuresContaining(
                 classUnderTest,
-//                "Mixin org.apache.causeway.testdomain.model.bad.InvalidMixinDeclarations$ActionMixinWithProp"
-//                + " could not be identified as action, property or collection."
-                "Mixin org.apache.causeway.testdomain.model.bad.InvalidMixinDeclarations$ActionMixinWithProp"
-                + " does declare method name 'act' as the mixin main method to use,"
-                + " but introspection did pick up method 'prop' instead."
+                ProgrammingModelConstants.Violation.INVALID_MIXIN_MAIN.builder()
+                .addVariable("type", classUnderTest.getName())
+                .addVariable("expectedMethodName", expectedMethodName)
+                .addVariable("actualMethodName", "other")
+                .buildMessage()
                 );
     }
 

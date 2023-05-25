@@ -27,6 +27,8 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -124,11 +126,16 @@ implements MixinFacet {
     }
 
     /**
-     * Framework internal.
+     * Framework internal: copy the mixin-sort ({@link MixinFacet.Contributing})
+     * information from the {@link FacetedMethod}
+     * (as eg. associated with mixin main method 'act')
+     * to the {@link MixinFacet} that is held by the mixin's type spec.
      */
-    public MixinFacetAbstract initMixinSort(final @NonNull Contributing contributing) {
-        this.contributing = contributing;
-        return this;
+    public void initMixinSortFrom(final FacetedMethod facetedMethod) {
+        this.contributing = facetedMethod
+                .lookupFacet(ContributingFacet.class)
+                .map(ContributingFacet::contributed)
+                .orElse(Contributing.AS_ACTION); // if not specified, defaults to ACTION
     }
 
 }

@@ -47,11 +47,9 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
 import org.apache.causeway.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet;
-import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet.Contributing;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
@@ -225,18 +223,13 @@ implements FacetHolder {
 
     private ObjectAction createAction(final FacetedMethod facetedMethod) {
         if (facetedMethod.getFeatureType().isAction()) {
-
-            // assuming, that facetedMethod was already populated with ContributingFacet
+            /* Assuming, that facetedMethod was already populated with ContributingFacet,
+             * we copy the mixin-sort information from the FacetedMethod to the MixinFacet
+             * that is held by the mixin's type spec. */
             mixinFacet()
             .flatMap(mixinFacet->_Casts.castTo(MixinFacetAbstract.class, mixinFacet))
-            .ifPresent(mixinFacetAbstract->{
-                facetedMethod.lookupFacet(ContributingFacet.class)
-                .map(ContributingFacet::contributed)
-                .ifPresentOrElse(
-                        mixinFacetAbstract::initMixinSort,
-                        // if not specified, default to ACTION
-                        ()->mixinFacetAbstract.initMixinSort(Contributing.AS_ACTION));
-            });
+            .ifPresent(mixinFacetAbstract->
+                mixinFacetAbstract.initMixinSortFrom(facetedMethod));
 
             return this.isMixin()
                     ? ObjectActionDefault.forMixinMain(facetedMethod)

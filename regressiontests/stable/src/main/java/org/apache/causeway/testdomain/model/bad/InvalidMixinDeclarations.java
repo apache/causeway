@@ -18,14 +18,20 @@
  */
 package org.apache.causeway.testdomain.model.bad;
 
+import java.util.List;
+
 import javax.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
 
 import lombok.RequiredArgsConstructor;
 
@@ -40,17 +46,35 @@ public class InvalidMixinDeclarations {
     @RequiredArgsConstructor
     public static class ActionMixinWithProp {
         @SuppressWarnings("unused")
-        private final InvalidMixinDeclarations invalidElementTypes;
-        @MemberSupport public String prop() { return ""; }
+        private final InvalidMixinDeclarations mixee;
+        @MemberSupport public String other() { return ""; }
     }
-/*
+
     @Action
     @ActionLayout(named = "someActionColl")
     @RequiredArgsConstructor
     public static class ActionMixinWithColl {
         @SuppressWarnings("unused")
-        private final InvalidMixinDeclarations invalidElementTypes;
-        @MemberSupport public String coll() { return ""; }
-    }*/
+        private final InvalidMixinDeclarations mixee;
+        @MemberSupport public List<String> other() { return List.of(); }
+    }
+
+    @Property
+    @PropertyLayout(named = "someProperty")
+    @RequiredArgsConstructor
+    public static class PropertyMixinWithOther {
+        @SuppressWarnings("unused")
+        private final InvalidMixinDeclarations mixee;
+        @MemberSupport public void other() { }
+    }
+
+    @Collection
+    @CollectionLayout(named = "someCollection")
+    @RequiredArgsConstructor
+    public static class CollectionMixinWithOther {
+        @SuppressWarnings("unused")
+        private final InvalidMixinDeclarations mixee;
+        @MemberSupport public void other() { }
+    }
 
 }
