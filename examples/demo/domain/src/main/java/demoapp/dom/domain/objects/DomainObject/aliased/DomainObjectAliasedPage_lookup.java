@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.exceptions.RecoverableException;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 
@@ -24,14 +25,17 @@ public class DomainObjectAliasedPage_lookup {
 
     @MemberSupport
     public DomainObjectAliasedEntity act(final String bookmark) {
-        return bookmarkService.lookup(Bookmark.parseElseFail(bookmark), DomainObjectAliasedEntity.class).orElseThrow(() -> new org.apache.causeway.applib.exceptions.RecoverableException("No customer exists for that bookmark"));
+        return bookmarkService.lookup(
+                Bookmark.parseElseFail(bookmark),
+                DomainObjectAliasedEntity.class
+        ).orElseThrow(() -> new RecoverableException("No customer exists for that bookmark"));
     }
     public List<String> choices0Act() {
         val bookmarks = new ArrayList<String>();
         val aliases = repository.all();
         aliases.stream().forEach(obj -> {
-            bookmarks.add(obj.getBookmark());
-            bookmarks.add(obj.getPreviousBookmark());
+            bookmarks.add(obj.getBookmark());           // <.>
+            bookmarks.add(obj.getPreviousBookmark());   // <.>
         });
         return bookmarks;
     }

@@ -21,11 +21,35 @@ The collection on the left shows a set of entity instances, each indicating thei
 The "lookup" (mixin) action uses the https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/services/bookmark/BookmarkService.html[BookmarkService] to lookup any object using either their current bookmark (defined by `@Named`) or their previous bookmark (defined by `@DomainObject#alias`).
 For convenience, the action provides a choices method for all possible values.
 
+In terms of code:
+
+* the entity (subclass) is declared with `@DomainObject#aliased`.
++
+[source,java,indent=0]
+.DomainObjectAliasedEntityImpl.java
+----
+include::jpa/DomainObjectAliasedEntityImpl.java[tags=class]
+----
+<.> current logical type name
+<.> previous logical type name.
+The `previousBookmark` property (see below) calculates this
+
+* the entity (superclass) exposes this metadata as regular properties:
++
+[source,java,indent=0]
+.DomainObjectAliasedEntity.java
+----
+include::DomainObjectAliasedEntity.java[tags=class]
+----
+
+* the "lookup" mixin allows objects to be looked up using either a bookmark referencing the entity's current name, or its previous:
++
 [source,java,indent=0]
 .DomainObjectAliasedPage_lookup.java
 ----
 include::DomainObjectAliasedPage_lookup.java[tags=class]
 ----
+<.> can lookup using actual bookmark ...
+<.> \... or the previous bookmark (for which the class defines an alias)
 
-Navigate through to the entity to see the corresponding source code.
 

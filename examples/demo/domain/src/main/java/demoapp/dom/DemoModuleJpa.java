@@ -30,7 +30,7 @@ import demoapp.dom.domain.actions.Action.choicesFrom.jpa.ActionChoicesFromEntity
 import demoapp.dom.domain.actions.Action.commandPublishing.jpa.ActionCommandPublishingEntityImpl;
 import demoapp.dom.domain.actions.Action.executionPublishing.jpa.ActionExecutionPublishingEntityImpl;
 import demoapp.dom.domain.actions.ActionLayout.hidden.jpa.ActionLayoutHiddenEntityImpl;
-import demoapp.dom.domain.actions.progmodel.bulk.jpa.BulkActionItemEntityImpl;
+import demoapp.dom.progmodel.actions.bulk.jpa.BulkActionItemEntityImpl;
 import demoapp.dom.domain.objects.DomainObject.aliased.jpa.DomainObjectAliasedEntityImpl;
 import demoapp.dom.domain.objects.DomainObject.autoComplete.jpa.DomainObjectAutoCompleteEntityImpl;
 import demoapp.dom.domain.objects.DomainObject.bounded.jpa.DomainObjectBoundingEntityImpl;
@@ -51,7 +51,7 @@ import demoapp.dom.domain.objects.DomainObjectLayout.named.jpa.DomainObjectLayou
 import demoapp.dom.domain.objects.DomainObjectLayout.paged.jpa.DomainObjectLayoutPagedEntityImpl;
 import demoapp.dom.domain.objects.DomainObjectLayout.tabledec.jpa.DomainObjectLayoutTableDecoratorEntityImpl;
 import demoapp.dom.domain.objects.DomainObjectLayout.xxxUiEvent.jpa.DomainObjectLayoutXxxUiEventEntityImpl;
-import demoapp.dom.domain.objects.progmodel.embeddedvalues.jpa.NumberConstantJpa;
+import demoapp.dom.progmodel.customvaluetypes.embeddedvalues.jpa.NumberConstantJpa;
 import demoapp.dom.domain.properties.Property.commandPublishing.jpa.PropertyCommandPublishingEntityImpl;
 import demoapp.dom.domain.properties.Property.editing.jpa.PropertyEditingEntityImpl;
 import demoapp.dom.domain.properties.Property.executionPublishing.jpa.PropertyExecutionPublishingEntityImpl;
