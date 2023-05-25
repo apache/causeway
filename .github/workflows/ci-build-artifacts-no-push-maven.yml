@@ -52,14 +52,12 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Set up JDK 18
+    - name: Set up JDK 20
       if: matrix.language == 'java'
       uses: actions/setup-java@v3
       with:
         distribution: 'zulu'
-        # tried 19 on 2023-02-05 casing org.codehaus.plexus.archiver.ArchiverException:
-        # Could not create modular JAR file. The JDK jar tool exited with 1
-        java-version: 18
+        java-version: 20
 
     - name: Print Maven Version
       if: matrix.language == 'java'
