@@ -67,6 +67,7 @@ import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.causeway.core.metamodel.facets.object.logicaltype.AliasedFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
+import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet.MixinSort;
 import org.apache.causeway.core.metamodel.facets.object.navparent.NavigableParentFacet;
 import org.apache.causeway.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleFacet;
@@ -93,6 +94,7 @@ import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.val;
+import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
 
 @EqualsAndHashCode(of = "correspondingClass", callSuper = false)
@@ -533,6 +535,11 @@ implements ObjectSpecification {
         return helpFacet == null ? null : helpFacet.value();
     }
 
+    @Override
+    public final Optional<MixinSort> getMixinSort() {
+        return lookupMixinFacet()
+                .map(MixinFacet::getMixinSort);
+    }
 
     // -- FACET HANDLING
 
@@ -563,6 +570,21 @@ implements ObjectSpecification {
                     .orElse(notANoopFacetFilter.noopFacet);
 
         }
+    }
+
+    @Getter(lazy = true) @Accessors(fluent=true)
+    private final Optional<MixinFacet> mixinFacet = lookupMixinFacet();
+
+    private Optional<MixinFacet> lookupMixinFacet() {
+        if(!isMixin()) {
+            return Optional.empty();
+        }
+        val mixinFacet = getFacet(MixinFacet.class);
+        if(mixinFacet==null) {
+            throw _Exceptions.illegalState("type %s has BeanSort MIXIN but ended up NOT having a MixinFacet",
+                    getCorrespondingClass());
+        }
+        return Optional.of(mixinFacet);
     }
 
     @Domain.Exclude
@@ -736,7 +758,7 @@ implements ObjectSpecification {
         if(!mixinFacet.isMixinFor(getCorrespondingClass())) {
             return Stream.empty();
         }
-        val mixinMethodName = mixinFacet.value();
+        val mixinMethodName = mixinFacet.getMainMethodName();
 
         return specification.streamActions(ActionScope.ANY, MixedIn.INCLUDED)
         .filter(_SpecPredicates::isMixedInAssociation)
@@ -775,7 +797,7 @@ implements ObjectSpecification {
             return Stream.empty();
         }
 
-        val mixinMethodName = mixinFacet.value();
+        val mixinMethodName = mixinFacet.getMainMethodName();
 
         return mixinSpec.streamActions(ActionScope.ANY, MixedIn.EXCLUDED)
         // value types only support constructor mixins

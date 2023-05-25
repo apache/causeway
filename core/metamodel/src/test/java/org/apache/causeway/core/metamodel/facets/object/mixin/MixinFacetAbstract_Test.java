@@ -21,6 +21,8 @@ package org.apache.causeway.core.metamodel.facets.object.mixin;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet.MixinSort;
+
 import lombok.val;
 
 class MixinFacetAbstract_Test {
@@ -41,7 +43,7 @@ class MixinFacetAbstract_Test {
         // given
         val constructor = Collection_numberOfChildren.class.getConstructor(Object.class);
         val facet = new MixinFacetAbstract(
-                Collection_numberOfChildren.class, "prop", constructor, null) {};
+                Collection_numberOfChildren.class, MixinSort.MIXIN_PROP, "prop", constructor, null) {};
 
         val propMethodInSubclass = SimpleObject_numberOfChildren.class.getMethod("prop");
 

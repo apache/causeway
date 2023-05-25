@@ -25,16 +25,22 @@ import java.util.function.BiConsumer;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.SingleValueFacetAbstract;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 
 //@Log4j2
 public abstract class MixinFacetAbstract
-extends SingleValueFacetAbstract<String>
+extends FacetAbstract
 implements MixinFacet {
+
+    @Getter(onMethod_={@Override})
+    private final @NonNull String mainMethodName;
+    @Getter(onMethod_={@Override})
+    private final @NonNull MixinSort mixinSort;
 
     private final @NonNull Class<?> mixinType;
     private final @NonNull Class<?> holderType;
@@ -46,12 +52,15 @@ implements MixinFacet {
 
     protected MixinFacetAbstract(
             final Class<?> mixinType,
+            final MixinSort mixinSort,
             final String mainMethodName,
             final Constructor<?> constructor,
             final FacetHolder holder) {
 
-        super(type(), mainMethodName, holder);
+        super(type(), holder);
+        this.mainMethodName = mainMethodName;
         this.mixinType = mixinType;
+        this.mixinSort = mixinSort;
         this.constructor = constructor;
         // by mixin convention: first constructor argument is identified as the holder type
         this.holderType = constructor.getParameterTypes()[0];
@@ -113,15 +122,9 @@ implements MixinFacet {
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("mixinType", mixinType);
+        visitor.accept("mixinSort", mixinSort);
+        visitor.accept("mainMethodName", mainMethodName);
         visitor.accept("holderType", holderType);
-    }
-
-    /**
-     * The mixin's main method name.
-     * @implNote as stored in the SingleValueFacetAbstract's value field
-     */
-    public String getMainMethodName() {
-        return super.value();
     }
 
 }
