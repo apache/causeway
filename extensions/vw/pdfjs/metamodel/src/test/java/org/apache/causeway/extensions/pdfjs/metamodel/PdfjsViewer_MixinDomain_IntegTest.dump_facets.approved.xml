@@ -128,7 +128,7 @@
             <mml:attr name="returnType" value="org.apache.causeway.applib.value.Blob"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet">
-            <mml:attr name="contributing" value="AS_ASSOCIATION"/>
+            <mml:attr name="contributing" value="AS_PROPERTY"/>
             <mml:attr name="facet" value="PropertyAnnotationFacetFactory.2"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
@@ -1012,11 +1012,12 @@
         <mml:attr name="reason" value="Disabled via @DomainObject annotation, reason not given."/>
       </mml:facet>
       <mml:facet id="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation">
+        <mml:attr name="contributing" value="AS_PROPERTY"/>
         <mml:attr name="facet" value="MixinFacetForDomainObjectAnnotation"/>
         <mml:attr name="holderType" value="org.apache.causeway.extensions.pdfjs.metamodel.domains.mixin.SomeViewModel"/>
+        <mml:attr name="mainMethodName" value="prop"/>
         <mml:attr name="mixinType" value="org.apache.causeway.extensions.pdfjs.metamodel.domains.mixin.SomeViewModel_pdf"/>
         <mml:attr name="precedence" value="DEFAULT"/>
-        <mml:attr name="value" value="prop"/>
       </mml:facet>
       <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
         <mml:attr name="facet" value="ObjectValidPropertiesFacetImpl"/>
@@ -1073,7 +1074,7 @@
             <mml:attr name="returnType" value="org.apache.causeway.applib.value.Blob"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet">
-            <mml:attr name="contributing" value="AS_ASSOCIATION"/>
+            <mml:attr name="contributing" value="AS_PROPERTY"/>
             <mml:attr name="facet" value="PropertyAnnotationFacetFactory.2"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
