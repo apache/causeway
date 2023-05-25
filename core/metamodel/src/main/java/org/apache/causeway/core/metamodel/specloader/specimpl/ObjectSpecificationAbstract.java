@@ -67,7 +67,7 @@ import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.causeway.core.metamodel.facets.object.logicaltype.AliasedFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
-import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet.MixinSort;
+import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet.Contributing;
 import org.apache.causeway.core.metamodel.facets.object.navparent.NavigableParentFacet;
 import org.apache.causeway.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleFacet;
@@ -537,9 +537,9 @@ implements ObjectSpecification {
     }
 
     @Override
-    public final Optional<MixinSort> getMixinSort() {
+    public final Optional<Contributing> getMixinSort() {
         return mixinFacet()
-                .map(MixinFacet::getMixinSort);
+                .map(MixinFacet::contributing);
     }
 
     // -- FACET HANDLING
@@ -772,6 +772,9 @@ implements ObjectSpecification {
         val mixinFacet = mixinSpec.getFacet(MixinFacet.class);
         if(mixinFacet == null) {
             // this shouldn't happen; to be covered by meta-model validation later
+            return Stream.empty();
+        }
+        if(!mixinFacet.isMixinFor(getCorrespondingClass())) {
             return Stream.empty();
         }
         // don't mixin Object_ mixins to domain services

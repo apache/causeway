@@ -42,7 +42,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
  */
 public interface MixinFacet extends Facet {
 
-    public enum MixinSort {
+    public enum Contributing {
         /**
          * Initial state early during introspection.
          */
@@ -51,22 +51,22 @@ public interface MixinFacet extends Facet {
          * Object associated with an <i>entity</i>, <i>viewmodel</i> or <i>domain-service</i>
          * to act as contributer of a single <i>domain-action</i>.
          */
-        MIXIN_FOR_ACT,
+        AS_ACTION,
         /**
          * Object associated with an <i>entity</i>, <i>viewmodel</i> or <i>domain-service</i>
          * to act as contributer of a single <i>domain-property</i>.
          */
-        MIXIN_FOR_PROP,
+        AS_PROPERTY,
         /**
          * Object associated with an <i>entity</i>, <i>viewmodel</i> or <i>domain-service</i>
          * to act as contributer of a single <i>domain-collection</i>.
          */
-        MIXIN_FOR_COLL;
+        AS_COLLECTION;
 
         public boolean isUnspecified() { return this==UNSPECIFIED; }
     }
 
-    MixinSort getMixinSort();
+    Contributing contributing();
 
     /**
      * The mixin's main method name.

@@ -23,33 +23,34 @@ import java.util.function.BiConsumer;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet.Contributing;
+
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.experimental.Accessors;
 
 public abstract class ContributingFacetAbstract
 extends FacetAbstract
 implements ContributingFacet {
 
-    private final Contributing contributing;
+    @Getter(onMethod_={@Override}) @Accessors(fluent=true)
+    private final @NonNull Contributing contributed;
 
     private static final Class<? extends Facet> type() {
         return ContributingFacet.class;
     }
 
     public ContributingFacetAbstract(
-            final Contributing contributing,
+            final Contributing contributed,
             final FacetHolder holder) {
         super(type(), holder);
-        this.contributing = contributing;
-    }
-
-    @Override
-    public Contributing contributed() {
-        return contributing;
+        this.contributed = contributed;
     }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("contributing", contributing);
+        visitor.accept("contributing", contributed());
     }
 
 }

@@ -47,10 +47,10 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
 import org.apache.causeway.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet;
-import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet.MixinSort;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
@@ -207,18 +207,8 @@ implements FacetHolder {
 
     private ObjectAssociation createAssociation(final FacetedMethod facetMethod) {
         if (facetMethod.getFeatureType().isCollection()) {
-
-            mixinFacet()
-            .flatMap(mixinFacet->_Casts.castTo(MixinFacetAbstract.class, mixinFacet))
-            .ifPresent(mixinFacetAbstract->mixinFacetAbstract.initMixinSort(MixinSort.MIXIN_FOR_COLL));
-
             return OneToManyAssociationDefault.forMethod(facetMethod);
         } else if (facetMethod.getFeatureType().isProperty()) {
-
-            mixinFacet()
-            .flatMap(mixinFacet->_Casts.castTo(MixinFacetAbstract.class, mixinFacet))
-            .ifPresent(mixinFacetAbstract->mixinFacetAbstract.initMixinSort(MixinSort.MIXIN_FOR_PROP));
-
             return OneToOneAssociationDefault.forMethod(facetMethod);
         } else {
             return null;
@@ -235,9 +225,14 @@ implements FacetHolder {
     private ObjectAction createAction(final FacetedMethod facetedMethod) {
         if (facetedMethod.getFeatureType().isAction()) {
 
+            // assuming, that facetedMethod was already populated with ContributingFacet
             mixinFacet()
             .flatMap(mixinFacet->_Casts.castTo(MixinFacetAbstract.class, mixinFacet))
-            .ifPresent(mixinFacetAbstract->mixinFacetAbstract.initMixinSort(MixinSort.MIXIN_FOR_ACT));
+            .ifPresent(mixinFacetAbstract->{
+                facetedMethod.lookupFacet(ContributingFacet.class)
+                .map(ContributingFacet::contributed)
+                .ifPresent(mixinFacetAbstract::initMixinSort);
+            });
 
             return this.isMixin()
                     ? ObjectActionDefault.forMixinMain(facetedMethod)

@@ -21,14 +21,17 @@ package org.apache.causeway.core.metamodel.postprocessors.all;
 import javax.inject.Inject;
 
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet.MixinSort;
+import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet;
+import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet.Contributing;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
@@ -40,19 +43,19 @@ import lombok.val;
  * Checks various preconditions for a sane meta-model.
  * <ul>
  * <li>Guard against types that are identified as {@link BeanSort#MIXIN}, but don't contribute any member.</li>
- * <li>Make sure mixins contribute either an action or a property or a collection.</li>
- * <li>Make sure if a mixin main method name is specified (eg 'act', 'prop', 'coll'),
+ * <li>Make sure mixins contribute either an action or a property or a collection,
+ *  and if declared via {@link Action}, {@link Property} or {@link Collection} annotation,
+ *  that the {@link Contributing} is correct.</li>
+ * <li>Make sure if a mixin main method name is specified (eg. 'act', 'prop', 'coll'),
  *  that introspection was able to pick it up.</li>
  * </ul>
  */
 public class MixinSanityChecksValidator
 extends MetaModelValidatorAbstract
 implements
-    MetaModelValidator.ActionValidator,
-    MetaModelValidator.PropertyValidator,
-    MetaModelValidator.CollectionValidator {
+    MetaModelValidator.ActionValidator {
 
-    private MixinSort mixinSort;
+    private Contributing contributing;
 
     @Inject
     public MixinSanityChecksValidator(final MetaModelContext mmc) {
@@ -61,9 +64,9 @@ implements
 
     @Override
     public void validateObjectEnter(final ObjectSpecification objSpec) {
-        final MixinSort mixinSort = objSpec.getMixinSort().orElse(null);
-        if(mixinSort==null
-                || mixinSort.isUnspecified()) {
+        final Contributing contributing = objSpec.getMixinSort().orElse(null);
+        if(contributing==null
+                || contributing.isUnspecified()) {
             ValidationFailure.raiseFormatted(objSpec,
                     ProgrammingModelConstants.Violation.INVALID_MIXIN_TYPE
                         .builder()
@@ -71,33 +74,43 @@ implements
                         .buildMessage());
             return;
         }
-        this.mixinSort = mixinSort;
+        this.contributing = contributing;
     }
 
     @Override
     public void validateObjectExit(final ObjectSpecification objSpec) {
-        this.mixinSort = null;
+        this.contributing = null;
     }
 
+    /*
+     * (introspected) mixins have no properties nor collections; instead the single member is always
+     * an action that either contributes as action, property or collection
+     */
     @Override
     public void validateAction(final ObjectSpecification objSpec, final ObjectAction act) {
-        if(mixinSort==null) return; // skip if already failed earlier
+        if(contributing==null) return; // skip if already failed earlier
         checkMixinMainMethod(objSpec, act.getFeatureIdentifier());
-    }
-
-    @Override
-    public void validateProperty(final ObjectSpecification objSpec, final OneToOneAssociation prop) {
-        if(mixinSort==null) return; // skip if already failed earlier
-        checkMixinMainMethod(objSpec, prop.getFeatureIdentifier());
-    }
-
-    @Override
-    public void validateCollection(final ObjectSpecification objSpec, final OneToManyAssociation coll) {
-        if(mixinSort==null) return; // skip if already failed earlier
-        checkMixinMainMethod(objSpec, coll.getFeatureIdentifier());
+        checkMixinSort(objSpec, (FacetedMethod) act.getFacetHolder());
     }
 
     // -- HELPER
+
+    private void checkMixinSort(final ObjectSpecification objSpec, final FacetedMethod facetedMethod) {
+        val expectedContributing = facetedMethod.lookupFacet(ContributingFacet.class)
+            .map(ContributingFacet::contributed)
+            .orElse(null);
+        val actualContributing = this.contributing;
+
+        if(actualContributing!=expectedContributing) {
+            ValidationFailure.raiseFormatted(objSpec,
+                    ProgrammingModelConstants.Violation.INVALID_MIXIN_SORT
+                        .builder()
+                        .addVariable("type", objSpec.getCorrespondingClass().getName())
+                        .addVariable("expectedContributing", expectedContributing.name())
+                        .addVariable("actualContributing", actualContributing.name())
+                        .buildMessage());
+        }
+    }
 
     private void checkMixinMainMethod(final ObjectSpecification objSpec, final Identifier memberIdentifier) {
         val mixinFacet = ((ObjectSpecificationAbstract)objSpec).mixinFacet().orElseThrow();

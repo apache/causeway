@@ -31,6 +31,7 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
+import lombok.experimental.Accessors;
 
 //@Log4j2
 public abstract class MixinFacetAbstract
@@ -39,8 +40,8 @@ implements MixinFacet {
 
     @Getter(onMethod_={@Override})
     private final @NonNull String mainMethodName;
-    @Getter(onMethod_={@Override})
-    private @NonNull MixinSort mixinSort = MixinSort.UNSPECIFIED;
+    @Getter(onMethod_={@Override}) @Accessors(fluent=true)
+    private @NonNull Contributing contributing = Contributing.UNSPECIFIED;
 
     private final @NonNull Class<?> mixinType;
     private final @NonNull Class<?> holderType;
@@ -117,7 +118,7 @@ implements MixinFacet {
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("mixinType", mixinType);
-        visitor.accept("mixinSort", mixinSort);
+        visitor.accept("contributing", contributing);
         visitor.accept("mainMethodName", mainMethodName);
         visitor.accept("holderType", holderType);
     }
@@ -125,8 +126,8 @@ implements MixinFacet {
     /**
      * Framework internal.
      */
-    public MixinFacetAbstract initMixinSort(final @NonNull MixinSort mixinSort) {
-        this.mixinSort = mixinSort;
+    public MixinFacetAbstract initMixinSort(final @NonNull Contributing contributing) {
+        this.contributing = contributing;
         return this;
     }
 

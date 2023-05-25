@@ -541,6 +541,8 @@ public final class ProgrammingModelConstants {
         INVALID_MIXIN_MAIN("Mixin ${type} does declare method name '${expectedMethodName}' as"
                 + " the mixin main method to use,"
                 + " but introspection did pick up method '${actualMethodName}' instead."),
+        INVALID_MIXIN_SORT("Mixin ${type} is declared as contributing '${expectedContributing}'"
+                + " but introspection did pick it up as '${actualContributing}' instead."),
         ;
 
         private final String template;

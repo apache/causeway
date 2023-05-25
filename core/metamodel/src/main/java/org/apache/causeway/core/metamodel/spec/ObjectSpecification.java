@@ -59,7 +59,7 @@ import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
-import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet.MixinSort;
+import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet.Contributing;
 import org.apache.causeway.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
@@ -293,7 +293,7 @@ extends
     /**
      * @since 2.0
      */
-    Optional<MixinSort> getMixinSort();
+    Optional<Contributing> getMixinSort();
 
 
     // //////////////////////////////////////////////////////////////
