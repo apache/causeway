@@ -30,6 +30,9 @@
 			<cpt:collection id="objects">
 				<cpt:action id="modify"/>
 			</cpt:collection>
+            <cpt:collection id="recentChanges">
+				<cpt:action id="clear"/>
+            </cpt:collection>
 		</bs3:col>
 		<bs3:col span="6">
 			<cpt:fieldSet name="Description" id="description" >

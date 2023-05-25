@@ -41,6 +41,7 @@ public class DomainObjectEntityChangePublishingPage_modify {
 
     private final DomainObjectEntityChangePublishingPage page;
 
+//tag::act[]
     @MemberSupport public DomainObjectEntityChangePublishingPage act(
             final Integer howManyToCreate,
             final List<? extends DomainObjectEntityChangePublishingEntity> toUpdate,
@@ -53,6 +54,7 @@ public class DomainObjectEntityChangePublishingPage_modify {
         toDelete.forEach(x -> repositoryService.remove(x));
         return page;
     }
+//end::act[]
     @MemberSupport public Integer default0Act() {
         return 1;
     }
