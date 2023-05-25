@@ -537,6 +537,10 @@ public final class ProgrammingModelConstants {
                 + "'${memberId}', which is not allowed; clashes:\n\t[1]${member1}\n\t[2]${member2}"),
         AMBIGUOUS_MIXIN_ANNOTATIONS("Annotation ${annot} on both method and type level is not allowed, "
                 + "it must be one or the other. Found with mixin: ${mixinType}"),
+        INVALID_MIXIN_TYPE("Mixin ${type} could not be identified as action, property or collection."),
+        INVALID_MIXIN_MAIN("Mixin ${type} does declare method name '${expectedMethodName}' as"
+                + " the mixin main method to use,"
+                + " but introspection did pick up method '${actualMethodName}' instead."),
         ;
 
         private final String template;

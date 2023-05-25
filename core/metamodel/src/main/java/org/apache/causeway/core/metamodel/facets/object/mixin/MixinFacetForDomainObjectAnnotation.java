@@ -60,6 +60,7 @@ extends MixinFacetAbstract {
             final String mixinMethodName,
             final Constructor<?> constructor,
             final FacetHolder holder) {
-        super(mixinClass, MixinSort.AUTO, mixinMethodName, constructor, holder);
+        super(mixinClass, mixinMethodName, constructor, holder);
     }
+
 }

@@ -86,7 +86,7 @@ import org.apache.causeway.core.metamodel.methods.DomainIncludeAnnotationEnforce
 import org.apache.causeway.core.metamodel.postprocessors.all.CssOnActionFromConfiguredRegexPostProcessor;
 import org.apache.causeway.core.metamodel.postprocessors.all.DescribedAsFromTypePostProcessor;
 import org.apache.causeway.core.metamodel.postprocessors.all.SanityChecksValidator;
-import org.apache.causeway.core.metamodel.postprocessors.all.SanityChecksValidator2;
+import org.apache.causeway.core.metamodel.postprocessors.all.MixinSanityChecksValidator;
 import org.apache.causeway.core.metamodel.postprocessors.all.i18n.SynthesizeObjectNamingPostProcessor;
 import org.apache.causeway.core.metamodel.postprocessors.all.i18n.TranslationPostProcessor;
 import org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationPostProcessor;
@@ -274,7 +274,7 @@ extends ProgrammingModelAbstract {
         addValidator(ValidationOrder.A1_BUILTIN, new ActionOverloadingValidator(mmc));
         addValidator(ValidationOrder.A1_BUILTIN, new LogicalTypeMalformedValidator(mmc));
 
-        addValidator(ValidationOrder.A1_BUILTIN, new SanityChecksValidator2(mmc));
+        addValidator(ValidationOrder.A1_BUILTIN, new MixinSanityChecksValidator(mmc));
     }
 
 }

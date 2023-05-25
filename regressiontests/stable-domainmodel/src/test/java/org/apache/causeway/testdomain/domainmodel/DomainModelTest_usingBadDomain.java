@@ -415,7 +415,9 @@ class DomainModelTest_usingBadDomain {
     void invalidMixinDeclaration(final Class<?> classUnderTest) {
         validator.assertAnyFailuresContaining(
                 classUnderTest,
-                "has a member with vetoed, mixin or managed element-type");
+                "Mixin org.apache.causeway.testdomain.model.bad.InvalidMixinDeclarations$ActionMixinWithProp"
+                + " does declare method name 'act' as the mixin main method to use,"
+                + " but introspection did pick up method 'prop' instead.");
     }
 
     // -- INCUBATING

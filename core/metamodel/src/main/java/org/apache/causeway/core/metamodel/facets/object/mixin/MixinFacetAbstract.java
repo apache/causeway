@@ -40,7 +40,7 @@ implements MixinFacet {
     @Getter(onMethod_={@Override})
     private final @NonNull String mainMethodName;
     @Getter(onMethod_={@Override})
-    private final @NonNull MixinSort mixinSort;
+    private @NonNull MixinSort mixinSort = MixinSort.UNSPECIFIED;
 
     private final @NonNull Class<?> mixinType;
     private final @NonNull Class<?> holderType;
@@ -52,7 +52,6 @@ implements MixinFacet {
 
     protected MixinFacetAbstract(
             final Class<?> mixinType,
-            final MixinSort mixinSort,
             final String mainMethodName,
             final Constructor<?> constructor,
             final FacetHolder holder) {
@@ -60,7 +59,6 @@ implements MixinFacet {
         super(type(), holder);
         this.mainMethodName = mainMethodName;
         this.mixinType = mixinType;
-        this.mixinSort = mixinSort;
         this.constructor = constructor;
         // by mixin convention: first constructor argument is identified as the holder type
         this.holderType = constructor.getParameterTypes()[0];
@@ -68,11 +66,9 @@ implements MixinFacet {
 
     @Override
     public boolean isMixinFor(final Class<?> candidateDomainType) {
-        if (candidateDomainType == null) {
-            return false;
-        }
-
-        return holderType.isAssignableFrom(candidateDomainType);
+        return candidateDomainType == null
+                ? false
+                : holderType.isAssignableFrom(candidateDomainType);
     }
 
     @Override
@@ -106,13 +102,12 @@ implements MixinFacet {
 
     @Override
     public boolean isCandidateForMain(final Method method) {
-
-        // include methods from super classes or interfaces
-        //
-        // it is sufficient to detect any match;
-        // mixin invocation will take care of calling the right method,
-        // that is in terms of type-hierarchy the 'nearest' to this mixin
-
+        /* include methods from super classes or interfaces
+         *
+         * it is sufficient to detect any match;
+         * mixin invocation will take care of calling the right method,
+         * that is in terms of type-hierarchy the 'nearest' to this mixin;
+         */
         return method.getName().equals(getMainMethodName())
                 && method.getDeclaringClass()
                     .isAssignableFrom(constructor.getDeclaringClass());
@@ -125,6 +120,14 @@ implements MixinFacet {
         visitor.accept("mixinSort", mixinSort);
         visitor.accept("mainMethodName", mainMethodName);
         visitor.accept("holderType", holderType);
+    }
+
+    /**
+     * Framework internal.
+     */
+    public MixinFacetAbstract initMixinSort(final @NonNull MixinSort mixinSort) {
+        this.mixinSort = mixinSort;
+        return this;
     }
 
 }

@@ -32,6 +32,7 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -49,6 +50,8 @@ import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
 import org.apache.causeway.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet;
+import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet.MixinSort;
+import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
@@ -204,8 +207,18 @@ implements FacetHolder {
 
     private ObjectAssociation createAssociation(final FacetedMethod facetMethod) {
         if (facetMethod.getFeatureType().isCollection()) {
+
+            mixinFacet()
+            .flatMap(mixinFacet->_Casts.castTo(MixinFacetAbstract.class, mixinFacet))
+            .ifPresent(mixinFacetAbstract->mixinFacetAbstract.initMixinSort(MixinSort.MIXIN_FOR_COLL));
+
             return OneToManyAssociationDefault.forMethod(facetMethod);
         } else if (facetMethod.getFeatureType().isProperty()) {
+
+            mixinFacet()
+            .flatMap(mixinFacet->_Casts.castTo(MixinFacetAbstract.class, mixinFacet))
+            .ifPresent(mixinFacetAbstract->mixinFacetAbstract.initMixinSort(MixinSort.MIXIN_FOR_PROP));
+
             return OneToOneAssociationDefault.forMethod(facetMethod);
         } else {
             return null;
@@ -221,6 +234,11 @@ implements FacetHolder {
 
     private ObjectAction createAction(final FacetedMethod facetedMethod) {
         if (facetedMethod.getFeatureType().isAction()) {
+
+            mixinFacet()
+            .flatMap(mixinFacet->_Casts.castTo(MixinFacetAbstract.class, mixinFacet))
+            .ifPresent(mixinFacetAbstract->mixinFacetAbstract.initMixinSort(MixinSort.MIXIN_FOR_ACT));
+
             return this.isMixin()
                     ? ObjectActionDefault.forMixinMain(facetedMethod)
                     : ObjectActionDefault.forMethod(facetedMethod);

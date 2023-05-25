@@ -44,10 +44,9 @@ public interface MixinFacet extends Facet {
 
     public enum MixinSort {
         /**
-         * FIXME refactoring step
+         * Initial state early during introspection.
          */
-        @Deprecated
-        AUTO,
+        UNSPECIFIED,
         /**
          * Object associated with an <i>entity</i>, <i>viewmodel</i> or <i>domain-service</i>
          * to act as contributer of a single <i>domain-action</i>.
@@ -57,12 +56,14 @@ public interface MixinFacet extends Facet {
          * Object associated with an <i>entity</i>, <i>viewmodel</i> or <i>domain-service</i>
          * to act as contributer of a single <i>domain-property</i>.
          */
-        MIXIN_PROP,
+        MIXIN_FOR_PROP,
         /**
          * Object associated with an <i>entity</i>, <i>viewmodel</i> or <i>domain-service</i>
          * to act as contributer of a single <i>domain-collection</i>.
          */
-        MIXIN_COLL,
+        MIXIN_FOR_COLL;
+
+        public boolean isUnspecified() { return this==UNSPECIFIED; }
     }
 
     MixinSort getMixinSort();
