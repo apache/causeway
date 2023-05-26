@@ -37,12 +37,13 @@ include::ValueSemanticsDateRenderAdjustDaysPage.java[tags=render-not-specified]
 ----
 
 * The `endDate` property however should show 1 day before this date:
++
 [source,java,indent=0]
 .ValueSemanticsDateRenderAdjustDaysPage_updateEndDate.java
 ----
 include::ValueSemanticsDateRenderAdjustDaysPage_updateEndDate.java[tags=annotation]
 ----
-<.>
+<.> indicates that the value should render as one day _before_ the date actually stored.
 
 * The `endDate` can also be updated using an action, also with adjusted days:
 +
@@ -54,7 +55,7 @@ include::ValueSemanticsDateRenderAdjustDaysPage.java[tags=render-as-day-before]
 <.> render the internal date as the day before
 
 * The derived `endDateNotAdjusted` however shows the internally held date:
-
++
 [source,java,indent=0]
 .ValueSemanticsDateRenderAdjustDaysPage.java
 ----
@@ -63,7 +64,7 @@ include::ValueSemanticsDateRenderAdjustDaysPage.java[tags=render-as-day]
 <.> explicitly specifies that the property should be rendered "as is".
 
 * You can also use the "download as XML" to inspect the "raw" data of the domain object:
-
++
 [source,java,indent=0]
 .ValueSemanticsDateRenderAdjustDaysPage_downloadAsXml.java
 ----
