@@ -131,13 +131,10 @@ public class ActionLayoutDescribedAsPage
         getChildren().add(new ActionLayoutDescribedAsChildVm(newValue));
         return this;
     }
+//end::collection[]
 
     @Action
-    @ActionLayout(
-            associateWith = "children",
-            describedAs = "Removes a child from the collection",    // <1>
-            sequence = "2"
-    )
+    // no @ActionLayout, instead uses .layout.xml
     public Object removeChild(final ActionLayoutDescribedAsChildVm child) {
         getChildren().removeIf(x -> x.getValue().equals(child.getValue()));
         return this;
@@ -145,7 +142,6 @@ public class ActionLayoutDescribedAsPage
     public List<ActionLayoutDescribedAsChildVm> choices0RemoveChild() {
         return getChildren();
     }
-//end::collection[]
 
 
 //tag::delete[]

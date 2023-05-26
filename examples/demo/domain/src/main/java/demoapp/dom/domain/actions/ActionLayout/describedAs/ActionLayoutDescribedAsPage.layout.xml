@@ -36,7 +36,12 @@
 			</bs3:row>
 			<bs3:row>
 				<bs3:col span="12">
-					<cpt:collection id="children"/>
+					<cpt:collection id="children">
+                        <cpt:action id="addChild"/>
+                        <cpt:action id="removeChild">
+                            <cpt:describedAs>Removes a child from the collection</cpt:describedAs>
+                        </cpt:action>
+                    </cpt:collection>
 				</bs3:col>
 			</bs3:row>
 		</bs3:col>
