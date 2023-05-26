@@ -21,9 +21,8 @@ package demoapp.dom.domain.objects.DomainObject.autoComplete;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 public abstract class DomainObjectAutoCompleteEntity
-        implements
+implements
         HasAsciiDocDescription,
         ValueHolder<String> {
 

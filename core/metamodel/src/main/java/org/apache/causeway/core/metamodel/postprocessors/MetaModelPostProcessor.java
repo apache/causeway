@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.postprocessors;
 
+import org.apache.causeway.core.metamodel.commons.MetaModelVisitor;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -26,11 +27,9 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 public interface MetaModelPostProcessor
-extends HasMetaModelContext {
-
-    default boolean isEnabled() {
-        return true;
-    }
+extends
+    MetaModelVisitor,
+    HasMetaModelContext {
 
     /** entry to post-processing of specified {@code objSpec} */
     default void postProcessObject(final ObjectSpecification objSpec) {}

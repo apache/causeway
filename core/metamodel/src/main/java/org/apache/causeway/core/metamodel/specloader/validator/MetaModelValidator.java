@@ -18,24 +18,14 @@
  */
 package org.apache.causeway.core.metamodel.specloader.validator;
 
-import java.util.function.Predicate;
-
+import org.apache.causeway.core.metamodel.commons.MetaModelVisitor;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 
-public interface MetaModelValidator {
-
-    /** whether this validator should run at all; eg. could be disabled via configuration */
-    default boolean isEnabled() {
-        return true;
-    }
-
-    /** this validator only processes {@link ObjectSpecification}(s) that pass this filter */
-    Predicate<ObjectSpecification> getFilter();
+public interface MetaModelValidator extends MetaModelVisitor {
 
     /** entry to meta-model validation */
     default void validateEnter() {}
@@ -86,33 +76,5 @@ public interface MetaModelValidator {
         /** validate collection - mixed-in included */
         void validateCollection(final ObjectSpecification objSpec, final OneToManyAssociation coll);
     }
-
-    // -- PREDEFINED FILTERS
-
-    /** all types pass this filter */
-    public final static Predicate<ObjectSpecification> ALL = __->true;
-
-    /** no types pass this filter */
-    public final static Predicate<ObjectSpecification> NONE = __->false;
-
-    /** types pass this filter, if not-injectable (aka not managed by Spring) */
-    public final static Predicate<ObjectSpecification> SKIP_MANAGED_BEANS =
-            spec->!spec.isInjectable();
-
-    /** types pass this filter, if is NOT a mixin */
-    public final static Predicate<ObjectSpecification> SKIP_MIXINS =
-            spec->!spec.isMixin();
-
-    /** types pass this filter, if IS a mixin */
-    public final static Predicate<ObjectSpecification> MIXINS =
-            spec->spec.isMixin();
-
-    /** types pass this filter, if either not {@link ObjectSpecificationAbstract} or member-annotation is not required */
-    public final static Predicate<ObjectSpecification> SKIP_WHEN_MEMBER_ANNOT_REQUIRED =
-            spec->(!(spec instanceof ObjectSpecificationAbstract)
-                    || !((ObjectSpecificationAbstract)spec)
-                    .getIntrospectionPolicy()
-                    .getMemberAnnotationPolicy()
-                    .isMemberAnnotationsRequired());
 
 }

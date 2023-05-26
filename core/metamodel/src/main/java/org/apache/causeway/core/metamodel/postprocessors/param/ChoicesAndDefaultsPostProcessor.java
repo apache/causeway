@@ -57,7 +57,7 @@ extends MetaModelPostProcessorAbstract {
 
     @Inject
     public ChoicesAndDefaultsPostProcessor(final MetaModelContext metaModelContext) {
-        super(metaModelContext);
+        super(metaModelContext, SKIP_MIXINS);
     }
 
     @Override
@@ -65,7 +65,16 @@ extends MetaModelPostProcessorAbstract {
             final ObjectSpecification objectSpecification,
             final ObjectAction objectAction,
             final ObjectActionParameter param) {
-        if(!hasMemberLevelChoices(param)) {
+
+        //TODO[CAUSEWAY-3467] debug ...
+        if(param.toString().contains("DomainObjectAutoCompletePage_find#act[0]")) {
+            System.err.printf("param: %s%n", param);
+        }
+        if(param.toString().contains("BulkActionPage_addToBritishFavourites#act[0]")) {
+            System.err.printf("param: %s%n", param);
+        }
+
+        if(!hasChoicesOrAutoComplete(param)) {
 
             // if available on action, installs as a low precedence facets onto the parameters,
             // so can be overwritten by member support (imperative) choices
@@ -90,19 +99,22 @@ extends MetaModelPostProcessorAbstract {
                     ActionParameterChoicesFacetFromChoicesFacet
                     .create(choicesFacetIfAny, param.getFacetHolder()));
         }
+
+        checkParamHasChoicesOrAutoCompleteWhenRequired(param);
     }
 
     @Override
     public void postProcessProperty(
             final ObjectSpecification objectSpecification,
             final OneToOneAssociation prop) {
+
         if(!hasMemberLevelDefaults(prop)) {
             prop.getElementType()
             .lookupNonFallbackFacet(DefaultedFacet.class)
             .ifPresent(specFacet -> FacetUtil.addFacet(new PropertyDefaultFacetFromDefaultedFacet(
                                         specFacet, facetedMethodFor(prop))));
         }
-        if(!hasMemberLevelChoices(prop)) {
+        if(!hasChoicesOrAutoComplete(prop)) {
 
             val choicesFacetIfAny = prop.getElementType()
                     .lookupNonFallbackFacet(ChoicesFacet.class);
@@ -170,12 +182,12 @@ extends MetaModelPostProcessorAbstract {
         return prop.containsNonFallbackFacet(PropertyDefaultFacet.class);
     }
 
-    private static boolean hasMemberLevelChoices(final ObjectActionParameter param) {
+    private static boolean hasChoicesOrAutoComplete(final ObjectActionParameter param) {
         return param.containsNonFallbackFacet(ActionParameterChoicesFacet.class)
                 || param.containsNonFallbackFacet(ActionParameterAutoCompleteFacet.class);
     }
 
-    private static boolean hasMemberLevelChoices(final OneToOneAssociation prop) {
+    private static boolean hasChoicesOrAutoComplete(final OneToOneAssociation prop) {
         return prop.containsNonFallbackFacet(PropertyChoicesFacet.class)
                 || prop.containsNonFallbackFacet(PropertyAutoCompleteFacet.class);
     }
@@ -192,9 +204,31 @@ extends MetaModelPostProcessorAbstract {
     private static void addCollectionParamChoicesFacetIfNoneAlready(
             final OneToManyAssociation coll,
             final ObjectActionParameter param) {
-        if(!hasMemberLevelChoices(param)) {
+        if(!hasChoicesOrAutoComplete(param)) {
             FacetUtil.addFacet(
                     new ActionParameterChoicesFacetFromParentedCollection(param, coll));
+        }
+    }
+
+    private void checkParamHasChoicesOrAutoCompleteWhenRequired(final ObjectActionParameter param) {
+        val elementType = param.getElementType();
+        if(elementType == null
+                || elementType.getBeanSort().isManagedBeanAny()
+                || elementType.getBeanSort().isMixin()
+                || elementType.getBeanSort().isVetoed()) {
+            // ignore, as these cases are covered later by meta-model validation
+            return;
+        }
+        if(elementType.isEntityOrViewModelOrAbstract()
+                || param.isPlural()) {
+            if(!hasChoicesOrAutoComplete(param)) {
+
+                //TODO[CAUSEWAY-3186] surfaces CAUSEWAY-3467
+//                ValidationFailure.raiseFormatted(param,
+//                        ProgrammingModelConstants.Violation.PARAMETER_HAS_NO_CHOICES_NOR_AUTOCOMPLETE.builder()
+//                            .addVariable("paramId", param.getFeatureIdentifier().toString())
+//                            .buildMessage());
+            }
         }
     }
 

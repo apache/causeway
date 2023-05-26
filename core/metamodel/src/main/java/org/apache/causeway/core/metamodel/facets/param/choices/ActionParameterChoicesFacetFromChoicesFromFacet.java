@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.facets.param.choices;
 import java.util.Optional;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.actions.action.choicesfrom.ChoicesFromFacet;
@@ -40,6 +41,9 @@ extends ActionParameterChoicesFacetAbstract {
             final Optional<ChoicesFromFacet> choicesFromFacetIfAny,
             final ObjectSpecification actionOwnerSpec,
             final ObjectActionParameter param) {
+
+        _Assert.assertFalse(actionOwnerSpec.isMixin(), ()->"framework bug: "
+                + "not meant to be installed on mixin types");
 
         return choicesFromFacetIfAny
                 .map(ChoicesFromFacet::value)
