@@ -16,18 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.param.autocomplete.method;
+package org.apache.causeway.core.metamodel.facets.param.autocomplete;
 
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
-import org.apache.causeway.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
-import org.apache.causeway.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
@@ -68,20 +65,13 @@ extends ActionParameterAutoCompleteFacetAbstract {
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        //TODO[CAUSEWAY-3467] implement
-        throw _Exceptions.notImplemented();
-
-//        val method = methods.getFirstElseFail();
-//        final Object collectionOrArray = MmInvokeUtils
-//                .invokeWithSearchArg(patConstructor, method, owningAdapter, pendingArgs, searchArg);
-//        if (collectionOrArray == null) {
-//            return Can.empty();
-//        }
-//        val visibleChoices = ManagedObjects
-//                .adaptMultipleOfTypeThenFilterByVisibility(
-//                        elementSpec, collectionOrArray, interactionInitiatedBy);
-//
-//        return visibleChoices;
+        //TODO[CAUSEWAY-3467] yet fails DomainObjectAutoCompletePage#find[0]
+        /*
+        java.lang.IllegalArgumentException: unknown bulk object load request, loader: org.apache.causeway.core.metamodel.objectmanager.ObjectBulkLoader$BuiltinHandlers$3 loading ObjectSpecification ObjectSpecificationDefault@36d58306[class=demoapp.dom.domain.objects.DomainObject.autoComplete.DomainObjectAutoCompleteEntity,type=ABSTRACT,superclass=java.lang.Object]
+                at org.apache.causeway.commons.internal.exceptions._Exceptions.illegalArgument(_Exceptions.java:80) ~[classes/:?]
+                at org.apache.causeway.core.metamodel.objectmanager.ObjectBulkLoader$BuiltinHandlers$3.handle(ObjectBulkLoader.java:114) ~[classes/:?]
+                */
+        return autoCompleteFacet.execute(searchArg, interactionInitiatedBy);
     }
 
     @Override

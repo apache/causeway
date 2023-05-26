@@ -23,11 +23,10 @@ import javax.inject.Inject;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
-import org.apache.causeway.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.causeway.core.metamodel.facets.object.defaults.DefaultedFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.causeway.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
-import org.apache.causeway.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetFromElementType;
+import org.apache.causeway.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacetFromElementType;
 import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacetFromAction;
 import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacetFromElementType;
@@ -83,8 +82,6 @@ extends MetaModelPostProcessorAbstract {
                 return;
             }
 
-            val elementType = param.getElementType();
-
             if(FacetUtil
                     .addFacetIfPresent(
                         ActionParameterChoicesFacetFromElementType
@@ -95,13 +92,6 @@ extends MetaModelPostProcessorAbstract {
                  * ActionParameterAutoCompleteFacetFromElementType, so stop processing here.
                  * (also skips validation below) */
                 return;
-            }
-
-            //TODO[CAUSEWAY-3467] debug ...
-            if(param.toString().contains("DomainObjectAutoCompletePage#find[0]")) {
-                final AutoCompleteFacet af =
-                        elementType.getFacet(AutoCompleteFacet.class);
-                System.err.printf("param: %s -> %s%n", param, af);
             }
 
             if(FacetUtil
@@ -238,8 +228,6 @@ extends MetaModelPostProcessorAbstract {
         if(elementType.isEntityOrViewModel()
                 || param.isPlural()) {
             if(!hasChoicesOrAutoComplete(param)) {
-
-                System.err.printf("%s%n", elementType);
 
                 ValidationFailure.raiseFormatted(param,
                         ProgrammingModelConstants.Violation.PARAMETER_HAS_NO_CHOICES_NOR_AUTOCOMPLETE.builder()
