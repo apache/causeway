@@ -25,6 +25,7 @@ import javax.inject.Inject;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.commons.internal.base._NullSafe;
@@ -75,7 +76,7 @@ public class ApplicationUser_removeRoles {
     }
 
     /** similar logic in {@link ApplicationRole_removeUsers} */
-    public boolean canRemove(
+    @Programmatic public boolean canRemove(
             final ApplicationRole applicationRole) {
 
         if(applicationUserRepository.isAdminUser(target)
