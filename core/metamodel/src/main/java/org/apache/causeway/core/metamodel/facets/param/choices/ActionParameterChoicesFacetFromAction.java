@@ -29,34 +29,36 @@ import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 
+import lombok.NonNull;
 import lombok.val;
 
-public class ActionParameterChoicesFacetFromChoicesFromFacet
+public class ActionParameterChoicesFacetFromAction
 extends ActionParameterChoicesFacetAbstract {
 
     public static Optional<ActionParameterChoicesFacet> create(
-            final Optional<ChoicesFromFacet> choicesFromFacetIfAny,
-            final ObjectSpecification actionOwnerSpec,
-            final ObjectActionParameter param) {
+            final @NonNull ObjectAction objectAction,
+            final @NonNull ObjectSpecification actionOwnerSpec,
+            final @NonNull ObjectActionParameter param) {
 
         _Assert.assertFalse(actionOwnerSpec.isMixin(), ()->"framework bug: "
                 + "not meant to be installed on mixin types");
 
-        return choicesFromFacetIfAny
+        return objectAction.lookupFacet(ChoicesFromFacet.class)
                 .map(ChoicesFromFacet::value)
                 .flatMap(actionOwnerSpec::getCollection)
                 // param type must be assignable from types returned by choices
                 .filter(coll->coll.getElementType().isOfType(param.getElementType()))
                 .map(coll->
-                    new ActionParameterChoicesFacetFromChoicesFromFacet(coll, param.getFacetHolder()));
+                    new ActionParameterChoicesFacetFromAction(coll, param.getFacetHolder()));
     }
 
     private final OneToManyAssociation choicesFromCollection;
 
-    private ActionParameterChoicesFacetFromChoicesFromFacet(
+    private ActionParameterChoicesFacetFromAction(
             final OneToManyAssociation choicesFromCollection,
             final FacetHolder holder) {
         super(holder, Precedence.LOW); // precedence low, so is overridden by imperative facets (member support)

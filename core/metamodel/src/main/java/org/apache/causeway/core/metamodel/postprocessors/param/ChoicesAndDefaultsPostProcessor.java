@@ -20,15 +20,17 @@ package org.apache.causeway.core.metamodel.postprocessors.param;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
-import org.apache.causeway.core.metamodel.facets.actions.action.choicesfrom.ChoicesFromFacet;
+import org.apache.causeway.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.causeway.core.metamodel.facets.object.defaults.DefaultedFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.causeway.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
+import org.apache.causeway.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetFromElementType;
 import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
-import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacetFromChoicesFacet;
-import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacetFromChoicesFromFacet;
+import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacetFromAction;
+import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacetFromElementType;
 import org.apache.causeway.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
 import org.apache.causeway.core.metamodel.facets.properties.autocomplete.PropertyAutoCompleteFacet;
 import org.apache.causeway.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
@@ -42,6 +44,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.val;
 
@@ -66,38 +69,51 @@ extends MetaModelPostProcessorAbstract {
             final ObjectAction objectAction,
             final ObjectActionParameter param) {
 
-        //TODO[CAUSEWAY-3467] debug ...
-        if(param.toString().contains("DomainObjectAutoCompletePage_find#act[0]")) {
-            System.err.printf("param: %s%n", param);
-        }
-        if(param.toString().contains("BulkActionPage_addToBritishFavourites#act[0]")) {
-            System.err.printf("param: %s%n", param);
-        }
-
         if(!hasChoicesOrAutoComplete(param)) {
 
-            // if available on action, installs as a low precedence facets onto the parameters,
-            // so can be overwritten by member support (imperative) choices
-            val choicesFromFacetIfAny = objectAction
-                    .lookupFacet(ChoicesFromFacet.class);
-
             if(FacetUtil
-                .addFacetIfPresent(
-                    ActionParameterChoicesFacetFromChoicesFromFacet
-                    .create(choicesFromFacetIfAny, objectSpecification, param))
-                .isPresent()) {
+                    .addFacetIfPresent(
+                        ActionParameterChoicesFacetFromAction
+                            .create(objectAction, objectSpecification, param))
+                    .isPresent()) {
 
-                // ActionParameterChoicesFacetFromChoicesFromFacet has precedence over
-                // ActionParameterChoicesFacetFromChoicesFacet, so stop processing here
+                /* ActionParameterChoicesFacetFromAction has precedence over
+                 * ActionParameterChoicesFacetFromElementType, so stop processing here.
+                 * (also skips validation below) */
                 return;
             }
 
-            val choicesFacetIfAny = param.getElementType()
-                    .lookupNonFallbackFacet(ChoicesFacet.class);
+            val elementType = param.getElementType();
 
-            FacetUtil.addFacetIfPresent(
-                    ActionParameterChoicesFacetFromChoicesFacet
-                    .create(choicesFacetIfAny, param.getFacetHolder()));
+            if(FacetUtil
+                    .addFacetIfPresent(
+                        ActionParameterChoicesFacetFromElementType
+                            .create(param))
+                    .isPresent()) {
+
+                /* ActionParameterChoicesFacetFromElementType has precedence over
+                 * ActionParameterAutoCompleteFacetFromElementType, so stop processing here.
+                 * (also skips validation below) */
+                return;
+            }
+
+            //TODO[CAUSEWAY-3467] debug ...
+            if(param.toString().contains("DomainObjectAutoCompletePage#find[0]")) {
+                final AutoCompleteFacet af =
+                        elementType.getFacet(AutoCompleteFacet.class);
+                System.err.printf("param: %s -> %s%n", param, af);
+            }
+
+            if(FacetUtil
+                    .addFacetIfPresent(
+                            ActionParameterAutoCompleteFacetFromElementType
+                                .create(param))
+                    .isPresent()) {
+
+                /* skips validation below */
+                return;
+            }
+
         }
 
         checkParamHasChoicesOrAutoCompleteWhenRequired(param);
@@ -219,15 +235,16 @@ extends MetaModelPostProcessorAbstract {
             // ignore, as these cases are covered later by meta-model validation
             return;
         }
-        if(elementType.isEntityOrViewModelOrAbstract()
+        if(elementType.isEntityOrViewModel()
                 || param.isPlural()) {
             if(!hasChoicesOrAutoComplete(param)) {
 
-                //TODO[CAUSEWAY-3186] surfaces CAUSEWAY-3467
-//                ValidationFailure.raiseFormatted(param,
-//                        ProgrammingModelConstants.Violation.PARAMETER_HAS_NO_CHOICES_NOR_AUTOCOMPLETE.builder()
-//                            .addVariable("paramId", param.getFeatureIdentifier().toString())
-//                            .buildMessage());
+                System.err.printf("%s%n", elementType);
+
+                ValidationFailure.raiseFormatted(param,
+                        ProgrammingModelConstants.Violation.PARAMETER_HAS_NO_CHOICES_NOR_AUTOCOMPLETE.builder()
+                            .addVariable("paramId", param.getFeatureIdentifier().toString())
+                            .buildMessage());
             }
         }
     }

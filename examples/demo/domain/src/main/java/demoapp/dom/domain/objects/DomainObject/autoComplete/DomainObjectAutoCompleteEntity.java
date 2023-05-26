@@ -18,9 +18,19 @@
  */
 package demoapp.dom.domain.objects.DomainObject.autoComplete;
 
+import javax.inject.Named;
+
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Nature;
+
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 
+@DomainObject(
+        nature = Nature.ENTITY,
+        autoCompleteRepository = DomainObjectAutoCompleteEntityRepository.class,
+        autoCompleteMethod = "findMatching")
+@Named("demo.DomainObjectAutoCompleteEntityAbstract")
 public abstract class DomainObjectAutoCompleteEntity
 implements
         HasAsciiDocDescription,

@@ -27,20 +27,25 @@ import org.apache.causeway.core.metamodel.facets.objectvalue.choices.ChoicesFace
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 
-public class ActionParameterChoicesFacetFromChoicesFacet
+import lombok.NonNull;
+
+public class ActionParameterChoicesFacetFromElementType
 extends ActionParameterChoicesFacetAbstract {
 
     public static Optional<ActionParameterChoicesFacet> create(
-            final Optional<ChoicesFacet> choicesFacetIfAny,
-            final FacetHolder facetHolder) {
-        return choicesFacetIfAny
-        .map(choicesFacet->new ActionParameterChoicesFacetFromChoicesFacet(choicesFacet, facetHolder));
+            final @NonNull ObjectActionParameter param) {
+
+        return param.getElementType()
+                .lookupNonFallbackFacet(ChoicesFacet.class)
+                .map(choicesFacet->
+                    new ActionParameterChoicesFacetFromElementType(choicesFacet, param.getFacetHolder()));
     }
 
     private final ChoicesFacet choicesFacet;
 
-    private ActionParameterChoicesFacetFromChoicesFacet(
+    private ActionParameterChoicesFacetFromElementType(
             final ChoicesFacet choicesFacet,
             final FacetHolder holder) {
         super(holder, Precedence.INFERRED);

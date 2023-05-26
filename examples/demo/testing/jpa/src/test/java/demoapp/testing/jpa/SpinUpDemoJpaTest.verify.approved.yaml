@@ -1176,7 +1176,7 @@ ObjectSpecifications:
   - demo.ValueHolder(demoapp.dom.domain.actions.Action.executionPublishing.ActionExecutionPublishingEntity)
   - demo.ValueHolder(demoapp.dom.domain.actions.ActionLayout.hidden.ActionLayoutHiddenEntity)
   - demo.ValueHolder(demoapp.dom.domain.objects.DomainObject.aliased.DomainObjectAliasedEntity)
-  - demo.ValueHolder(demoapp.dom.domain.objects.DomainObject.autoComplete.DomainObjectAutoCompleteEntity)
+  - demo.DomainObjectAutoCompleteEntityAbstract(demoapp.dom.domain.objects.DomainObject.autoComplete.DomainObjectAutoCompleteEntity)
   - demo.ValueHolder(demoapp.dom.domain.objects.DomainObject.bounded.DomainObjectBoundingEntity)
   - demo.ValueHolder(demoapp.dom.domain.objects.DomainObject.editing.DomainObjectEditingEntity)
   - demo.DomainObjectEntityChangePublishingEntity(demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingEntity)
