@@ -381,4 +381,11 @@ implements
         return validResult.createConsent();
     }
 
+    // -- CONTRACT
+
+    @Override
+    public String toString() {
+        return String.format("ObjectActionParameter[id=%s]", getFeatureIdentifier());
+    }
+
 }
