@@ -4295,8 +4295,8 @@
 <mml:attr name="typicalLength" value="25"/>
 <mml:attr name="typicalLengthFacet" value="org.apache.causeway.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacetFromChoicesFromFacet">
-<mml:attr name="facet" value="ActionParameterChoicesFacetFromChoicesFromFacet"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacetFromAction">
+<mml:attr name="facet" value="ActionParameterChoicesFacetFromAction"/>
 <mml:attr name="precedence" value="LOW"/>
                             </mml:facet>
                             <mml:facet id="org.apache.causeway.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.param.ActionParameterDefaultsFacetFromAssociatedCollection">
@@ -16198,8 +16198,8 @@
 <mml:attr name="typicalLength" value="25"/>
 <mml:attr name="typicalLengthFacet" value="org.apache.causeway.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacetFromChoicesFromFacet">
-<mml:attr name="facet" value="ActionParameterChoicesFacetFromChoicesFromFacet"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacetFromAction">
+<mml:attr name="facet" value="ActionParameterChoicesFacetFromAction"/>
 <mml:attr name="precedence" value="LOW"/>
                             </mml:facet>
                             <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
@@ -16265,8 +16265,8 @@
 <mml:attr name="typicalLength" value="25"/>
 <mml:attr name="typicalLengthFacet" value="org.apache.causeway.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacetFromChoicesFromFacet">
-<mml:attr name="facet" value="ActionParameterChoicesFacetFromChoicesFromFacet"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacetFromAction">
+<mml:attr name="facet" value="ActionParameterChoicesFacetFromAction"/>
 <mml:attr name="precedence" value="LOW"/>
                             </mml:facet>
                             <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
@@ -22573,8 +22573,8 @@
 <mml:attr name="typicalLength" value="25"/>
 <mml:attr name="typicalLengthFacet" value="org.apache.causeway.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacetFromChoicesFromFacet">
-<mml:attr name="facet" value="ActionParameterChoicesFacetFromChoicesFromFacet"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacetFromAction">
+<mml:attr name="facet" value="ActionParameterChoicesFacetFromAction"/>
 <mml:attr name="precedence" value="LOW"/>
                             </mml:facet>
                             <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
@@ -22640,8 +22640,8 @@
 <mml:attr name="typicalLength" value="25"/>
 <mml:attr name="typicalLengthFacet" value="org.apache.causeway.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacetFromChoicesFromFacet">
-<mml:attr name="facet" value="ActionParameterChoicesFacetFromChoicesFromFacet"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacetFromAction">
+<mml:attr name="facet" value="ActionParameterChoicesFacetFromAction"/>
 <mml:attr name="precedence" value="LOW"/>
                             </mml:facet>
                             <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
