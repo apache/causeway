@@ -91,11 +91,9 @@ import org.apache.causeway.core.metamodel.specloader.postprocessor.PostProcessor
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
-import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.val;
-import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
 
 @EqualsAndHashCode(of = "correspondingClass", callSuper = false)
@@ -189,6 +187,7 @@ implements ObjectSpecification {
     private ValueFacet valueFacet;
     private EntityFacet entityFacet;
     private ViewModelFacet viewmodelFacet;
+    private MixinFacet mixinFacet;
     private TitleFacet titleFacet;
     private IconFacet iconFacet;
     private NavigableParentFacet navigableParentFacet;
@@ -400,6 +399,15 @@ implements ObjectSpecification {
     @Override
     public final Optional<ValueFacet> valueFacet() {
         return Optional.ofNullable(valueFacet);
+    }
+
+    @Override
+    public final Optional<MixinFacet> mixinFacet() {
+        // deliberately don't memoize lookup misses, because could be too early
+        if(mixinFacet==null) {
+            mixinFacet = getFacet(MixinFacet.class);
+        }
+        return Optional.ofNullable(mixinFacet);
     }
 
     @Override
@@ -733,10 +741,11 @@ implements ObjectSpecification {
 
         val mixinSpec = getSpecificationLoader().loadSpecification(mixinType,
                 IntrospectionState.FULLY_INTROSPECTED);
-        if (mixinSpec == this) {
+        if (mixinSpec == null
+                || mixinSpec == this) {
             return Stream.empty();
         }
-        val mixinFacet = mixinSpec.getFacet(MixinFacet.class);
+        val mixinFacet = mixinSpec.mixinFacet().orElse(null);
         if(mixinFacet == null) {
             // this shouldn't happen; to be covered by meta-model validation later
             return Stream.empty();
@@ -766,10 +775,11 @@ implements ObjectSpecification {
 
         val mixinSpec = getSpecificationLoader().loadSpecification(mixinType,
                 IntrospectionState.FULLY_INTROSPECTED);
-        if (mixinSpec == this) {
+        if (mixinSpec == null
+                || mixinSpec == this) {
             return Stream.empty();
         }
-        val mixinFacet = mixinSpec.getFacet(MixinFacet.class);
+        val mixinFacet = mixinSpec.mixinFacet().orElse(null);
         if(mixinFacet == null) {
             // this shouldn't happen; to be covered by meta-model validation later
             return Stream.empty();
@@ -905,22 +915,6 @@ implements ObjectSpecification {
         replaceAssociations(Stream.concat(
                 regularAssociations.stream(),
                 mixedInAssociations.stream()));
-    }
-
-    // -- MIXIN FACET LOOKUP - WITH CACHING
-
-    @Getter(lazy = true, value = AccessLevel.PUBLIC) @Accessors(fluent=true)
-    private final Optional<MixinFacet> mixinFacet = lookupMixinFacet();
-    private Optional<MixinFacet> lookupMixinFacet() {
-        if(!isMixin()) {
-            return Optional.empty();
-        }
-        val mixinFacet = getFacet(MixinFacet.class);
-        if(mixinFacet==null) {
-            throw _Exceptions.illegalState("type %s has BeanSort MIXIN but ended up NOT having a MixinFacet",
-                    getCorrespondingClass());
-        }
-        return Optional.of(mixinFacet);
     }
 
     @Getter(lazy = true)

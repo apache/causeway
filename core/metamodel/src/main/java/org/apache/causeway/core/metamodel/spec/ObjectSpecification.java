@@ -59,6 +59,7 @@ import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
+import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet.Contributing;
 import org.apache.causeway.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleFacet;
@@ -663,6 +664,13 @@ extends
     default ViewModelFacet viewmodelFacetElseFail() {
         return viewmodelFacet().orElseThrow(()->
             _Exceptions.unrecoverable("ViewModel type %s must have a ViewModelFacet", toString()));
+    }
+
+    /** introduced for lookup optimization / allow memoization */
+    Optional<MixinFacet> mixinFacet();
+    default MixinFacet mixinFacetElseFail() {
+        return mixinFacet().orElseThrow(()->
+            _Exceptions.unrecoverable("Type %s has BeanSort MIXIN but ended up NOT having a MixinFacet", toString()));
     }
 
 }
