@@ -18,28 +18,9 @@
  */
 package demoapp.dom.domain.actions.ActionLayout.redirectPolicy;
 
-import lombok.RequiredArgsConstructor;
+import java.util.List;
 
-import org.apache.causeway.applib.annotation.*;
+public interface ActionLayoutRedirectPolicyEntityRepository {
 
-
-//tag::class[]
-@Action(semantics = SemanticsOf.IDEMPOTENT)
-@ActionLayout(
-        redirectPolicy = Redirect.ONLY_IF_DIFFERS       // <.>
-)
-@RequiredArgsConstructor
-public class ActionLayoutRedirectPolicyPage_incrementRedirectOnlyIfDiffers {
-    // ...
-//end::class[]
-    private final ActionLayoutRedirectPolicyPage page;
-
-    @MemberSupport public ActionLayoutRedirectPolicyPage act() {
-        Integer count = page.getCount();
-        page.setCount(count == null ? 1 : count + 1);
-        return page;
-    }
-
-//tag::class[]
+    List<? extends ActionLayoutRedirectPolicyEntity> all();
 }
-//end::class[]
