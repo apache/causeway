@@ -37,11 +37,11 @@ import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityList
 
 import org.springframework.context.annotation.Profile;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.persistence.*;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlTransient;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.persistence.*;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 @Profile("demo-jpa")
 @Entity

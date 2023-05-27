@@ -31,9 +31,9 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Repainting;
 import org.apache.causeway.applib.services.clock.ClockService;
 
-import javax.inject.Inject;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlTransient;
+import jakarta.inject.Inject;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 //tag::class[]
 public abstract class ActionLayoutRedirectPolicyEntity
