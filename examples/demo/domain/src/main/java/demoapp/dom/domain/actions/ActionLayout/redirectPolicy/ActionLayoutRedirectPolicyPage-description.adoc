@@ -12,48 +12,50 @@ Not re-rendering can provide a smoother UI experience.
 
 == How this demo works
 
-This page has a `count` property with two associated actions.
-These both increment the `count`, but use different redirect policies.
+TODO
 
-The page also has a `currentTime` property, that displays the current time.
-This is a derived property that also has a built-in delay of 1 second.
-
-[source,java,indent=0]
-----
-include::ActionLayoutRedirectPolicyPage.java[tags=class]
-----
-<.> for demonstration purposes, this UI component opts out of being redrawn if there is no redirect.
-
-[NOTE]
-====
-In this demo we are somewhat misusing the `@PropertyLayout#repainting` attribute; normally this is used for components that are expensive to render _and_ which are generally unchanging.
-The most common example of such a property would be a PDF, rendered using the link:https://causeway.apache.org/vw/2.0.0-RC1/pdfjs/about.html[PDF.js] extension (the link:https://causeway.apache.org/refguide/2.0.0-RC1/extensions/index/pdfjs/applib/annotations/PdfJsViewer.html#section-top[@PdfJsViewer] annotation).
-====
-
-The behaviour observed therefore depends on which action is used:
-
-* if the "increment even if same" action is called:
-+
-[source,java,indent=0]
-----
-include::ActionLayoutRedirectPolicyPage_incrementRedirectEvenIfSame.java[tags=class]
-----
-<.> always render the page.
-+
-This causes the entire page to be re-rendered.
-That means that the current time will be updated, but only after a 1 second delay
-
-* if the "increment redirect only if differs" action is called:
-+
-[source,java,indent=0]
-----
-include::ActionLayoutRedirectPolicyPage_incrementRedirectOnlyIfDiffers.java[tags=class]
-----
-<.> only re-render the updated property.
-+
-This _should_ cause only the updated property to re-render.
-+
-[WARNING]
-====
-Because this feature is currently *not* supported by the _Wicket Viewer_, in fact the `currentTime` property also re-renders; see link:https://issues.apache.org/jira/browse/CAUSEWAY-1659[CAUSEWAY-1659]
-====
+// This page has a `count` property with two associated actions.
+// These both increment the `count`, but use different redirect policies.
+//
+// The page also has a `currentTime` property, that displays the current time.
+// This is a derived property that also has a built-in delay of 1 second.
+//
+// [source,java,indent=0]
+// ----
+// include::ActionLayoutRedirectPolicyPage.java[tags=class]
+// ----
+// <.> for demonstration purposes, this UI component opts out of being redrawn if there is no redirect.
+//
+// [NOTE]
+// ====
+// In this demo we are somewhat misusing the `@PropertyLayout#repainting` attribute; normally this is used for components that are expensive to render _and_ which are generally unchanging.
+// The most common example of such a property would be a PDF, rendered using the link:https://causeway.apache.org/vw/2.0.0-RC1/pdfjs/about.html[PDF.js] extension (the link:https://causeway.apache.org/refguide/2.0.0-RC1/extensions/index/pdfjs/applib/annotations/PdfJsViewer.html#section-top[@PdfJsViewer] annotation).
+// ====
+//
+// The behaviour observed therefore depends on which action is used:
+//
+// * if the "increment even if same" action is called:
+// +
+// [source,java,indent=0]
+// ----
+// include::ActionLayoutRedirectPolicyPage_incrementRedirectEvenIfSame.java[tags=class]
+// ----
+// <.> always render the page.
+// +
+// This causes the entire page to be re-rendered.
+// That means that the current time will be updated, but only after a 1 second delay
+//
+// * if the "increment redirect only if differs" action is called:
+// +
+// [source,java,indent=0]
+// ----
+// include::ActionLayoutRedirectPolicyPage_incrementRedirectOnlyIfDiffers.java[tags=class]
+// ----
+// <.> only re-render the updated property.
+// +
+// This _should_ cause only the updated property to re-render.
+// +
+// [WARNING]
+// ====
+// Because this feature is currently *not* supported by the _Wicket Viewer_, in fact the `currentTime` property also re-renders; see link:https://issues.apache.org/jira/browse/CAUSEWAY-1659[CAUSEWAY-1659]
+// ====

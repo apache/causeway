@@ -18,6 +18,8 @@
  */
 package demoapp.dom;
 
+import demoapp.dom.domain.actions.ActionLayout.redirectPolicy.jpa.ActionLayoutRedirectPolicyEntityImpl;
+
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -144,6 +146,7 @@ import demoapp.dom.types.primitive.shorts.jpa.PrimitiveShortJpa;
         BulkActionItemEntityImpl.class,
 
         ActionLayoutHiddenEntityImpl.class,
+        ActionLayoutRedirectPolicyEntityImpl.class,
 
         PropertyCommandPublishingEntityImpl.class,
         PropertyEditingEntityImpl.class,

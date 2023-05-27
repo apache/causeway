@@ -87,7 +87,9 @@ In addition to specifying optionality at the framework level, it's also importan
 
 If using JPA or JDO entities, the framework will infer the optionality semantics automatically.
 
-WARNING: link:https://issues.apache.org/jira/browse/CAUSEWAY-3437[CAUSEWAY-3437] is to extend the framework to infer optionality from these JPA/JDO/JAXB equivalents.
+// Once link:https://issues.apache.org/jira/browse/CAUSEWAY-3437[CAUSEWAY-3437] is implemented, update the paragraph above to say:
+//
+// The framework will infer the optionality semantics automatically from each of these, meaning that `@Property#optionality` can be omitted.
 
 Be aware that JPA, JDO and JAXB all assume a property is not required by default, whereas Apache Causeway assumes that properties are required by default.
 

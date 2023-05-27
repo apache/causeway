@@ -37,10 +37,10 @@ import lombok.val;
 @RequiredArgsConstructor
 public class ValueSemanticsDateRenderAdjustDaysPage_downloadAsXml {
 
-    private final ValueSemanticsDateRenderAdjustDaysPage valueSemanticsDateRenderAdjustDaysPage;
+    private final ValueSemanticsDateRenderAdjustDaysPage page;
 
     @MemberSupport public Clob act(final String fileName) {
-        val xml = jaxbService.toXml(valueSemanticsDateRenderAdjustDaysPage);
+        val xml = jaxbService.toXml(page);
         return Clob.of(fileName, NamedWithMimeType.CommonMimeType.XML, xml);
     }
 
@@ -48,8 +48,6 @@ public class ValueSemanticsDateRenderAdjustDaysPage_downloadAsXml {
         return "ValueSemantics.dateRenderAdjustDaysPage.xml";
     }
 
-    @Inject
-    JaxbService jaxbService;
-
+    @Inject JaxbService jaxbService;
 }
 //end::class[]

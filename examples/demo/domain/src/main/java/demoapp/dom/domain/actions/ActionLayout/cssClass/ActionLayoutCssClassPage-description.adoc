@@ -57,12 +57,17 @@ include::ActionLayoutCssClassPage.java[tags=panel-btn-primary]
 include::ActionLayoutCssClassPage.java[tags=panel-btn-secondary]
 ----
 <.> appends the `btn-warning` CSS class to the action's button, in effect rendering it with _Bootstrap_ `Warning` style
-<.> specifies the order in which associated actions in the same position are rendered
 
 
 === Positioned on the drop-down of the panel that contains the property:
 
-WARNING: although the CSS class is applied, the Bootstrap styling does not apply; see link:https://issues.apache.org/jira/browse/CAUSEWAY-3427[CAUSEWAY-3427].
+[NOTE]
+====
+For this position, although the CSS class is applied, the Bootstrap styling does not apply.
+This is arguably an issue with the bootstrap theme.
+
+Use the `application.css` file to apply appropriate styling if you require it.
+====
 
 Two actions:
 

@@ -26,16 +26,8 @@
 
 	<bs3:row>
 		<bs3:col span="6">
-			<cpt:fieldSet name="General" id="general">
-                <cpt:property id="count">
-                    <cpt:action id="incrementRedirectEvenIfSame"/>
-                    <cpt:action id="incrementRedirectOnlyIfDiffers"/>
-                </cpt:property>
-            </cpt:fieldSet>
-			<cpt:fieldSet name="Time" id="time">
-                <cpt:property id="currentTime"/>
-            </cpt:fieldSet>
 			<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
+			<cpt:collection id="objects"/>
 		</bs3:col>
 		<bs3:col span="6">
 			<cpt:fieldSet name="Description" id="description" >
