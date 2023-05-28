@@ -18,54 +18,59 @@
  */
 package demoapp.dom.domain.actions.ActionLayout.redirectPolicy;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlType;
-
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.annotation.Optionality;
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.annotation.Redirect;
-import org.apache.causeway.applib.annotation.Repainting;
-import org.apache.causeway.applib.services.clock.ClockService;
-
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolder;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 
-@DomainObject(nature=Nature.VIEW_MODEL)
-@Named("demo.ActionLayoutRedirectPolicyPage")
-@XmlRootElement(name = "root")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
+import org.apache.causeway.applib.annotation.Optionality;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.annotation.Repainting;
+import org.apache.causeway.applib.services.clock.ClockService;
+
+import javax.inject.Inject;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
+
 //tag::class[]
-// ...
-public class ActionLayoutRedirectPolicyPage
+public abstract class ActionLayoutRedirectPolicyEntity
 //end::class[]
-implements HasAsciiDocDescription
+        implements
+        HasAsciiDocDescription,
+        ValueHolder<String>
 //tag::class[]
 {
-
     // ...
 //end::class[]
 
-    @ObjectSupport public String title() {
-        return "@ActionLayout#redirectPolicy";
+    public String title() {
+        return value();
     }
 
-//tag::class[]
+    @Override
+    public String value() {
+        return getName();
+    }
 
+    public abstract String getName();
+    public abstract void setName(String value);
+
+    public abstract Integer getCount();
+    public abstract void setCount(Integer value);
+
+    @SneakyThrows
+    @Property
+    @PropertyLayout(repainting = Repainting.NO_REPAINT) // <.>
+    public String getCurrentTime() {
+        Thread.sleep(1000);
+        return clockService.getClock().nowAsLocalDateTime().toString();
+    }
+
+    @Inject private ClockService clockService;
+
+//tag::class[]
 }
 //end::class[]

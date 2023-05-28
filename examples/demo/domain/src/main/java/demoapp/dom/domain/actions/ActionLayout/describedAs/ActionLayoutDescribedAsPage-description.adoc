@@ -35,7 +35,7 @@ include::ActionLayoutDescribedAsPage.java[tags=panel-dropdown]
 ----
 <.> in effect adds a tooltip to this action's button, that shows on _mouse over_
 
-* actions associated with the `children` collection:
+* action associated with the `children` collection:
 +
 [source,java,indent=0]
 ----
@@ -65,3 +65,16 @@ Instead of using `@ActionLayout#describedAs`, it is also possible to specify a t
 
 One advantage of using the `.layout.xml` file is that changes can be picked up without having to restart the application.
 On the other hand, including descriptions can make that file rather large.
+
+The `removeChild` action is implemented this way:
+
+[source,xml]
+.layout.xml
+----
+<cpt:collection id="children">
+    <cpt:action id="addChild"/>
+    <cpt:action id="removeChild">
+        <cpt:describedAs>Removes a child from the collection</cpt:describedAs>
+    </cpt:action>
+</cpt:collection>
+----

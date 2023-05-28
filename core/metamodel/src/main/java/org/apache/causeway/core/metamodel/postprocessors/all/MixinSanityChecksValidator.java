@@ -89,6 +89,7 @@ implements
     @Override
     public void validateAction(final ObjectSpecification objSpec, final ObjectAction act) {
         if(contributing==null) return; // skip if already failed earlier
+        if(act.isMixedIn()) return; // don't process mixed in actions (that were mixed in to the mixin under validation)
         checkMixinMainMethod(objSpec, act.getFeatureIdentifier());
         checkMixinSort(objSpec, (FacetedMethod) act.getFacetHolder());
     }
