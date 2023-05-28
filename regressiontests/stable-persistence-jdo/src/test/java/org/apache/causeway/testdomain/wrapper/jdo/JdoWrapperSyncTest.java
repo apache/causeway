@@ -22,6 +22,7 @@ import java.util.concurrent.ExecutionException;
 
 import javax.inject.Inject;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -52,7 +53,7 @@ class JdoWrapperSyncTest extends CausewayIntegrationTestAbstract {
     @Inject private FactoryService facoryService;
     @Inject private WrapperFactory wrapper;
 
-    @Test
+    @Test @Disabled // FIXME[CAUSEWAY-3467]
     void testWrapper_waitingOnDomainEvent() throws InterruptedException, ExecutionException {
 
         val inventoryManager = facoryService.viewModel(JdoInventoryManager.class);

@@ -34,7 +34,7 @@ extends NonScalarInvocationHandlerAbstract<T, M> {
 
         super(mapToProxy, handler, otma);
 
-        _Assert.assertTrue(mapToProxy.getClass().isAssignableFrom(Map.class),
+        _Assert.assertTrue(Map.class.isAssignableFrom(mapToProxy.getClass()),
                 ()->String.format("Cannot use %s for type %s, these are not compatible.",
                         this.getClass().getName(),
                         mapToProxy.getClass()));

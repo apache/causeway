@@ -37,7 +37,7 @@ extends NonScalarInvocationHandlerAbstract<T, C> {
 
         super(collectionToProxy, handler, otma);
 
-        _Assert.assertTrue(collectionToProxy.getClass().isAssignableFrom(Collection.class),
+        _Assert.assertTrue(Collection.class.isAssignableFrom(collectionToProxy.getClass()),
                 ()->String.format("Cannot use %s for type %s, these are not compatible.",
                         this.getClass().getName(),
                         collectionToProxy.getClass()));
