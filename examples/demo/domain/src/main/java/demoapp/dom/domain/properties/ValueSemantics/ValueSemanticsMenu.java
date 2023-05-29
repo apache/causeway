@@ -61,7 +61,7 @@ public class ValueSemanticsMenu {
 
 //tag::percentage[]
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-step-forward", describedAs = "Use a custom ValueSemanticsProvider with meta-annotation to customise the display")
+    @ActionLayout(cssClassFa="fa-percent", describedAs = "Use a custom ValueSemanticsProvider with meta-annotation to customise the display")
     public ValueSemanticsProviderPercentagePage percentage(){
         val page = new ValueSemanticsProviderPercentagePage();
         page.setPercentage(new BigDecimal(".95"));

@@ -50,11 +50,13 @@ public class ValueSemanticsProviderPercentagePage implements HasAsciiDocDescript
         return "@ValueSemanticsProvider for percentage";
     }
 
-    @Percentage
+// tag::property[]
+    @Percentage                                     // <.>
     @XmlElement(required = false)
     @Property(optionality = Optionality.OPTIONAL)
     @Getter @Setter
     private BigDecimal percentage;
+// end::property[]
 
 }
 //end::class[]
