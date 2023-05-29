@@ -109,6 +109,7 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
             <mb3:section>
                 <mb3:named>@ValueSemantics</mb3:named>
                 <mb3:serviceAction objectType="demo.ValueSemanticsMenu" id="dateRenderAdjustDays"/>
+                <mb3:serviceAction objectType="demo.ValueSemanticsMenu" id="percentage"/>
             </mb3:section>
         </mb3:menu>
 

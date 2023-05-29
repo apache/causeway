@@ -30,6 +30,9 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Repainting;
 import org.apache.causeway.applib.services.clock.ClockService;
+import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.extensions.pdfjs.applib.annotations.PdfJsViewer;
+import org.apache.causeway.persistence.jpa.applib.types.BlobJpaEmbeddable;
 
 import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlElement;
@@ -61,15 +64,14 @@ public abstract class ActionLayoutRedirectPolicyEntity
     public abstract Integer getCount();
     public abstract void setCount(Integer value);
 
-    @SneakyThrows
+//tag::class[]
+    @PdfJsViewer                                            // <.>
     @Property
-    @PropertyLayout(repainting = Repainting.NO_REPAINT) // <.>
-    public String getCurrentTime() {
-        Thread.sleep(1000);
-        return clockService.getClock().nowAsLocalDateTime().toString();
-    }
-
-    @Inject private ClockService clockService;
+    @PropertyLayout(repainting = Repainting.NO_REPAINT)     // <.>
+    public abstract Blob getBlob();
+    // ...
+//end::class[]
+    public abstract void setBlob(final Blob blob);
 
 //tag::class[]
 }

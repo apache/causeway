@@ -53,8 +53,6 @@ import demoapp.dom.types.Samples;
 //@Log4j2
 public class PropertyLayoutMenu {
 
-    final Samples<Blob> samples;
-
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-pen-nib", describedAs = "CSS class to wrap the UI component representing this property")
@@ -132,15 +130,8 @@ public class PropertyLayoutMenu {
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-paint-brush", describedAs = "Performance hint for properties holding unchanging large objects")
     public PropertyLayoutRepaintingPage repainting(){
-        val vm = new PropertyLayoutRepaintingPage();
-        vm.setEditMe("Modify this field to see if repainting occurs...");
-        samples.stream()
-                .filter(x -> CommonMimeType.PDF.matches(x.getMimeType()))
-                .findFirst()
-                .ifPresent(pdfBlob -> {
-                    vm.setBlob(pdfBlob);
-                });
-        return vm;
+        val page = new PropertyLayoutRepaintingPage();
+        return page;
     }
 
 

@@ -53,25 +53,5 @@ public class PropertyLayoutRepaintingPage implements HasAsciiDocDescription {
         return "@PropertyLayout#repainting";
     }
 
-    @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
-    @PropertyLayout(
-        describedAs =
-            "Editable property (PDF should not repaint if it changes)"
-    )
-    @XmlElement(required = false)
-    @Getter @Setter
-    private String editMe;
-
-//tag::annotation[]
-    @Property()
-    @PropertyLayout(
-        repainting = Repainting.NO_REPAINT      // <.>
-    )
-    @XmlElement(required = true)
-    @PdfJsViewer                                // <.>
-    @Getter @Setter
-    private Blob blob;
-//end::annotation[]
-
 }
 //end::class[]

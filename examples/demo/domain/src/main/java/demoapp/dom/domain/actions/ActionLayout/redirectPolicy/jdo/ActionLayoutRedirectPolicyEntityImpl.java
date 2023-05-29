@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.actions.ActionLayout.redirectPolicy.jpa;
+package demoapp.dom.domain.actions.ActionLayout.redirectPolicy.jdo;
 
 import demoapp.dom.domain.actions.ActionLayout.redirectPolicy.ActionLayoutRedirectPolicyEntity;
 
@@ -30,22 +30,23 @@ import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
-
 import org.apache.causeway.persistence.jpa.applib.types.BlobJpaEmbeddable;
 
 import org.springframework.context.annotation.Profile;
 
 import javax.inject.Named;
+import javax.jdo.annotations.Column;
+import javax.jdo.annotations.DatastoreIdentity;
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
 import javax.persistence.*;
 
-@Profile("demo-jpa")
-@Entity
-@Table(
-    schema = "demo",
-    name = "ActionLayoutRedirectPolicyEntity"
-)
-@EntityListeners(CausewayEntityListener.class)
+@Profile("demo-jdo")
 @Named("demo.ActionLayoutRedirectPolicyEntity")
+@PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
+@DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @NoArgsConstructor
 //tag::class[]
 // ...
@@ -58,10 +59,6 @@ public class ActionLayoutRedirectPolicyEntityImpl extends ActionLayoutRedirectPo
         setName(value);
     }
 
-    @Id
-    @GeneratedValue
-    private Long id;
-
     @Getter @Setter
     private String name;
 
@@ -69,24 +66,13 @@ public class ActionLayoutRedirectPolicyEntityImpl extends ActionLayoutRedirectPo
     @Getter @Setter
     private Integer count;
 
-    @AttributeOverrides({
-            @AttributeOverride(name="name",    column=@Column(name="blob_name")),
-            @AttributeOverride(name="mimeType",column=@Column(name="blob_mimeType")),
-            @AttributeOverride(name="bytes",   column=@Column(name="blob_bytes"))
+    @Persistent(defaultFetchGroup="false", columns = {
+            @javax.jdo.annotations.Column(name = "blob_name"),
+            @javax.jdo.annotations.Column(name = "blob_mimetype"),
+            @Column(name = "blob_bytes")
     })
-    @Embedded
-    private BlobJpaEmbeddable blobJpaEmbeddable;
-
-    @Override
-    public Blob getBlob() {
-        return BlobJpaEmbeddable.toBlob(blobJpaEmbeddable);
-    }
-    @Override
-    public void setBlob(final Blob blob) {
-        this.blobJpaEmbeddable = BlobJpaEmbeddable.fromBlob(blob);
-    }
-
-
+    @Getter @Setter
+    private Blob blob;
 //tag::class[]
 }
 //end::class[]

@@ -26,12 +26,11 @@ import org.apache.causeway.applib.annotation.*;
 //tag::class[]
 @Action(semantics = SemanticsOf.IDEMPOTENT)
 @ActionLayout(
-        redirectPolicy = Redirect.EVEN_IF_SAME      // <.>
+    redirectPolicy = Redirect.EVEN_IF_SAME                  // <.>
 )
 @RequiredArgsConstructor
 public class ActionLayoutRedirectPolicyEntity_incrementRedirectEvenIfSame {
-    // ...
-//end::class[]
+
     private final ActionLayoutRedirectPolicyEntity entity;
 
     @MemberSupport public ActionLayoutRedirectPolicyEntity act() {
@@ -39,7 +38,5 @@ public class ActionLayoutRedirectPolicyEntity_incrementRedirectEvenIfSame {
         entity.setCount(count == null ? 1 : count + 1);
         return entity;
     }
-
-//tag::class[]
 }
 //end::class[]
