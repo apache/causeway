@@ -31,12 +31,10 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
+import demoapp.dom.domain.objects.DomainObject.autoComplete.DomainObjectAutoCompleteEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import demoapp.dom.domain.objects.DomainObject.autoComplete.DomainObjectAutoCompleteEntity;
-import demoapp.dom.domain.objects.DomainObject.autoComplete.DomainObjectAutoCompleteEntityRepository;
 
 @Profile("demo-jpa")
 @Entity
@@ -51,14 +49,14 @@ import demoapp.dom.domain.objects.DomainObject.autoComplete.DomainObjectAutoComp
 // ...
 @DomainObject(
     nature = Nature.ENTITY,
-    autoCompleteRepository = DomainObjectAutoCompleteEntityRepository.class, // <.>
-    autoCompleteMethod = "findMatching"                                      // <.>
+    autoCompleteRepository = DomainObjectAutoCompleteEntityImplRepository.class, // <.>
+    autoCompleteMethod = "findMatching"                                          // <.>
 )
 public class DomainObjectAutoCompleteEntityImpl extends DomainObjectAutoCompleteEntity {
     // ...
 //end::class[]
 
-    public DomainObjectAutoCompleteEntityImpl(String value) {
+    public DomainObjectAutoCompleteEntityImpl(final String value) {
         setName(value);
     }
 

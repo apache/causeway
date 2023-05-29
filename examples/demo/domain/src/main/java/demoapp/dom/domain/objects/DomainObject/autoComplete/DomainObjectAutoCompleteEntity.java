@@ -28,6 +28,7 @@ import demoapp.dom._infra.values.ValueHolder;
 
 @DomainObject(
         nature = Nature.ENTITY,
+        // references an interface, which Spring knows how to lookup and replace by a concrete bean
         autoCompleteRepository = DomainObjectAutoCompleteEntityRepository.class,
         autoCompleteMethod = "findMatching")
 @Named("demo.DomainObjectAutoCompleteEntityAbstract")

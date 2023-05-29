@@ -18,23 +18,48 @@
  */
 package demoapp.dom.domain.objects.DomainObject.autoComplete.jdo;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
+
+import org.apache.causeway.applib.annotation.MinLength;
+import org.apache.causeway.applib.services.repository.RepositoryService;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.domain.objects.DomainObject.autoComplete.DomainObjectAutoCompleteEntityRepository;
 
 @Profile("demo-jdo")
-@Service
+@Named("demo.DomainObjectAutoCompleteRepository")
+@Repository
 public class DomainObjectAutoCompleteEntityImplRepository
-extends ValueHolderRepository<String, DomainObjectAutoCompleteEntityImpl> {
+extends ValueHolderRepository<String, DomainObjectAutoCompleteEntityImpl>
+implements DomainObjectAutoCompleteEntityRepository<DomainObjectAutoCompleteEntityImpl> {
 
     protected DomainObjectAutoCompleteEntityImplRepository() {
         super(DomainObjectAutoCompleteEntityImpl.class);
     }
 
     @Override
-    protected DomainObjectAutoCompleteEntityImpl newDetachedEntity(String value) {
+    protected DomainObjectAutoCompleteEntityImpl newDetachedEntity(final String value) {
         return new DomainObjectAutoCompleteEntityImpl(value);
     }
+
+    @Override
+    public List<DomainObjectAutoCompleteEntityImpl> findMatching(
+            @MinLength(1)
+            final String search
+    ) {
+        return repositoryService.allInstances(DomainObjectAutoCompleteEntityImpl.class)
+                .stream()
+                .filter(x -> x.getName().contains(search))
+                .collect(Collectors.toList());
+    }
+
+    @Inject private RepositoryService repositoryService;
 
 }
