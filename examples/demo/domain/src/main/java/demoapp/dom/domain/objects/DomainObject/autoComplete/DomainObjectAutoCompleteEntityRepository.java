@@ -19,6 +19,7 @@
 package demoapp.dom.domain.objects.DomainObject.autoComplete;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.causeway.applib.annotation.MinLength;
 
@@ -26,15 +27,16 @@ import org.apache.causeway.applib.annotation.MinLength;
 public interface DomainObjectAutoCompleteEntityRepository // <.>
 <T extends DomainObjectAutoCompleteEntity>{
 
-    public List<T> findMatching(                          // <.>
+    List<T> all();
+
+    default List<T> findMatching(                         // <.>
         @MinLength(1)                                     // <.>
-        final String search);
-    /*{
-        return repositoryService.allInstances(DomainObjectAutoCompleteEntity.class)   // <.>
+        final String search) {
+        return all()                                      // <.>
                 .stream()
                 .filter(x -> x.getName().contains(search))
                 .collect(Collectors.toList());
-    }*/
+    }
 
 }
 //end::class[]
