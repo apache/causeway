@@ -23,7 +23,6 @@ import java.util.Map;
 
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
@@ -85,10 +84,7 @@ public class ProxyContextHandler {
                 handler.isResolveObjectChangedEnabled());
 
         val proxyBase = ProgrammingModelConstants.CollectionSemantics
-                .valueOf(collectionToBeProxied.getClass())
-                .orElseThrow(()->_Exceptions.unrecoverable(
-                        "failed to lookup CollectionSemantics for type %s",
-                        collectionToBeProxied.getClass()))
+                .valueOfElseFail(collectionToBeProxied.getClass())
                 .getContainerType();
 
         return proxyCreator.instantiateProxy(_Casts.uncheckedCast(proxyBase), collectionInvocationHandler);

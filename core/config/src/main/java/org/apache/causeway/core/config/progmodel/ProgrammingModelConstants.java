@@ -616,50 +616,50 @@ public final class ProgrammingModelConstants {
     @RequiredArgsConstructor
     @SuppressWarnings({"rawtypes", "unchecked"})
     public static enum CollectionSemantics {
-        ARRAY(Array.class){
+        ARRAY(Array.class, WrapperFactoryMethodSets.EMPTY){
             @Override public Object asContainerType(
                     final Class<?> elementType, final @NonNull List<?> nonScalar) {
                 return _Arrays.toArray(_Casts.uncheckedCast(nonScalar), elementType);
             }
         },
         @Deprecated
-        VECTOR(Vector.class){
+        VECTOR(Vector.class, WrapperFactoryMethodSets.LIST){
             @Override public Object asContainerType(
                     final Class<?> elementType, final @NonNull List<?> nonScalar) {
                 return new Vector(nonScalar);
             }
         },
-        LIST(List.class){
+        LIST(List.class, WrapperFactoryMethodSets.LIST){
             @Override public Object asContainerType(
                     final Class<?> elementType, final @NonNull List<?> nonScalar) {
                 return Collections.unmodifiableList(nonScalar);
             }
         },
-        SORTED_SET(SortedSet.class){
+        SORTED_SET(SortedSet.class, WrapperFactoryMethodSets.COLLECTION){
             @Override public Object asContainerType(
                     final Class<?> elementType, final @NonNull List<?> nonScalar) {
                 return _Collections.asUnmodifiableSortedSet(nonScalar);
             }
         },
-        SET(Set.class){
+        SET(Set.class, WrapperFactoryMethodSets.COLLECTION){
             @Override public Object asContainerType(
                     final Class<?> elementType, final @NonNull List<?> nonScalar) {
                 return _Collections.asUnmodifiableSet(nonScalar);
             }
         },
-        COLLECTION(Collection.class){
+        COLLECTION(Collection.class, WrapperFactoryMethodSets.COLLECTION){
             @Override public Object asContainerType(
                     final Class<?> elementType, final @NonNull List<?> nonScalar) {
                 return Collections.unmodifiableCollection(nonScalar);
             }
         },
-        CAN(Can.class){
+        CAN(Can.class, WrapperFactoryMethodSets.CAN){
             @Override public Object asContainerType(
                     final Class<?> elementType, final @NonNull List<?> nonScalar) {
                 return Can.ofCollection(nonScalar);
             }
         },
-        IMMUTABLE_COLLECTION(ImmutableCollection.class){
+        IMMUTABLE_COLLECTION(ImmutableCollection.class, WrapperFactoryMethodSets.COLLECTION){
             @Override public Object asContainerType(
                     final Class<?> elementType, final @NonNull List<?> nonScalar) {
                 return CAN.asContainerType(elementType, nonScalar);
@@ -677,6 +677,8 @@ public final class ProgrammingModelConstants {
         //
         public boolean isSetAny() {return isSet() || isSortedSet(); }
         @Getter private final Class<?> containerType;
+        @Getter private final WrapperFactoryMethodSets methodSets;
+
         private static final ImmutableEnumSet<CollectionSemantics> all =
                 ImmutableEnumSet.allOf(CollectionSemantics.class);
         @Getter @Accessors(fluent = true)
@@ -688,6 +690,10 @@ public final class ProgrammingModelConstants {
                     : all.stream()
                         .filter(collType->collType.getContainerType().isAssignableFrom(type))
                         .findFirst();
+        }
+        public static CollectionSemantics valueOfElseFail(final @Nullable Class<?> type) {
+            return valueOf(type).orElseThrow(()->_Exceptions.illegalArgument(
+                            "failed to lookup CollectionSemantics for type %s", type));
         }
         public Object unmodifiableCopyOf(
                 final Class<?> elementType, final @NonNull Iterable<?> nonScalar) {
@@ -701,7 +707,8 @@ public final class ProgrammingModelConstants {
 
     //TODO perhaps needs an update to reflect Java 7->11 Language changes
     @RequiredArgsConstructor
-    public static enum WrapperFactoryProxy {
+    public static enum WrapperFactoryMethodSets {
+        EMPTY(List.of(), List.of()),
         COLLECTION(
                 // intercepted ...
                 List.of(
@@ -724,6 +731,25 @@ public final class ProgrammingModelConstants {
                         COLLECTION.intercepted,
                         List.of(
                                 getMethod(List.class, "get", int.class)
+                        )
+                ),
+                // vetoed ...
+                _Lists.concat(
+                        COLLECTION.vetoed,
+                        List.of(
+                        )
+                )),
+        CAN(
+                // intercepted ...
+                _Lists.concat(
+                        COLLECTION.intercepted,
+                        List.of(
+                                getMethod(Can.class, "get", int.class),
+                                getMethod(Can.class, "getElseFail", int.class),
+                                getMethod(Can.class, "getFirst"),
+                                getMethod(Can.class, "getFirstElseFail"),
+                                getMethod(Can.class, "getLast"),
+                                getMethod(Can.class, "getLastElseFail")
                         )
                 ),
                 // vetoed ...

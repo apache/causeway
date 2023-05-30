@@ -19,7 +19,6 @@
 package org.apache.causeway.core.runtimeservices.wrapper.handlers;
 
 import java.util.Collection;
-import java.util.List;
 
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
@@ -42,9 +41,10 @@ extends NonScalarInvocationHandlerAbstract<T, C> {
                         this.getClass().getName(),
                         collectionToBeProxied.getClass()));
 
-        val methodSets = (collectionToBeProxied instanceof List)
-                ? ProgrammingModelConstants.WrapperFactoryProxy.LIST
-                : ProgrammingModelConstants.WrapperFactoryProxy.COLLECTION;
+        val collectionSemantics = ProgrammingModelConstants.CollectionSemantics
+                .valueOfElseFail(collectionToBeProxied.getClass());
+
+        val methodSets = collectionSemantics.getMethodSets();
 
         methodSets.getIntercepted().forEach(this::intercept);
         methodSets.getVetoed().forEach(this::veto);

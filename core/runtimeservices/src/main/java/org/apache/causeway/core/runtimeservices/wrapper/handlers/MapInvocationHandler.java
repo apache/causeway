@@ -39,11 +39,11 @@ extends NonScalarInvocationHandlerAbstract<T, M> {
                         this.getClass().getName(),
                         mapToBeProxied.getClass()));
 
-        ProgrammingModelConstants.WrapperFactoryProxy.MAP
+        ProgrammingModelConstants.WrapperFactoryMethodSets.MAP
         .getIntercepted()
         .forEach(this::intercept);
 
-        ProgrammingModelConstants.WrapperFactoryProxy.MAP
+        ProgrammingModelConstants.WrapperFactoryMethodSets.MAP
         .getVetoed()
         .forEach(this::veto);
     }
