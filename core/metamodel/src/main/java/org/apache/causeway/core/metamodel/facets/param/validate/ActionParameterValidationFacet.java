@@ -46,5 +46,5 @@ extends Facet, ValidatingInteractionAdvisor {
     public String invalidReason(
             ManagedObject target,
             Can<ManagedObject> pendingArgs,
-            ManagedObject proposedArgument);
+            int paramIndex);
 }

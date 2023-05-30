@@ -63,7 +63,7 @@ public class ImperativeAspect {
 
     public Object invokeSingleMethod(final ManagedObject domainObject) {
         val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular, as the factories only creates regular
-        final Object returnValue = MmInvokeUtils.invoke(method, domainObject);
+        final Object returnValue = MmInvokeUtils.invokeNoArg(method, domainObject);
         return returnValue;
     }
 

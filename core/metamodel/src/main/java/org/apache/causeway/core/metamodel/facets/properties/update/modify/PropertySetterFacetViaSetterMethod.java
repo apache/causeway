@@ -58,7 +58,7 @@ implements ImperativeFacet {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
-        MmInvokeUtils.invoke(method, targetAdapter, valueAdapter);
+        MmInvokeUtils.invokeWithSingleArg(method, targetAdapter, valueAdapter);
         return targetAdapter;
     }
 

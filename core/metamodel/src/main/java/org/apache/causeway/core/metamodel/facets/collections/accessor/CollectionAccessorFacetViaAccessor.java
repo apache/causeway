@@ -61,7 +61,7 @@ implements ImperativeFacet {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
-        final Object collectionOrArray = MmInvokeUtils.invoke(method, owningAdapter);
+        final Object collectionOrArray = MmInvokeUtils.invokeNoArg(method, owningAdapter);
         if(collectionOrArray == null) {
             return null;
         }
