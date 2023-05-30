@@ -7,22 +7,11 @@ This callback is done only at the end of the interaction.
 Common use cases are to replicate data to another system, or for gathering metrics ("which objects change the most?").
 A typical SPI implementation could publish the event over the network, or perhaps store in a database.
 
-NOTE: Publishing of domain objects is only supported for domain entities, not view models.
-
-Entity change publishing can be enabled or disabled globally using a configuration property:
-
-[source,yaml]
-.application.yml
-----
-causeway:
-  applib:
-    annotation:
-      domain-object:
-        entity-change-publishing: 'none'    # 'none' | 'all'
-----
-
-This demo app has entity change publishing disabled by default, but can be re-enabled on a case by case basis using the link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/DomainObject.html#entitychangepublishing[@DomainObject#entitychangepublishing] attribute.
+Entity change publishing can be enabled or disabled globally using a configuration property (see section below).
+This demo app has entity change publishing disabled by default, but can be re-enabled on a case by case basis using the link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/DomainObject.html#entitychangepublishing[@DomainObject#entityChangePublishing] attribute.
 This page references a domain object that uses this attribute.
+
+NOTE: Publishing of domain objects is only supported for domain entities, not view models.
 
 
 
@@ -31,7 +20,7 @@ This page references a domain object that uses this attribute.
 The collection on the left shows a set of entity instances, which have `@DomainObject#entityChangePublishing` to enable the publishing of any changes to their state.
 Below it is a collection that simply lists all of the changes that have been received.
 This uses an implementation of `EntityChangesSubscriber` that captures changes and simply holds them in-memory.
-(There will always be some listed from the fixture scripts run when the application first bootstraps.)
+(There will always be some listed from the fixture scripts that are run when the application bootstraps.)
 
 Using the "modify" action, you can (in one go) create new instances of the entity class, update existing instances, or delete instances.
 This will cause new events to be logged.
@@ -46,14 +35,14 @@ In terms of code:
 include::jpa/DomainObjectEntityChangePublishingEntityImpl.java[tags=class]
 ----
 
-* the modify action:
+* the modify action can be used to create new instances, update existing instances and/or delete existing instances:
 +
 [source,java,indent=0]
 ----
 include::DomainObjectEntityChangePublishingPage_modify.java[tags=act]
 ----
 
-* the subscriber:
+* the subscriber listens to the events and simply adds them to the list:
 +
 [source,java,indent=0]
 .EntityChangesSubscriberToCaptureChangesInMemory.java
@@ -62,12 +51,26 @@ include::../../../_changes/EntityChangesSubscriberToCaptureChangesInMemory.java[
 ----
 <.> describes the set of changes
 
-* NB: this page shows the list of recent changes by virtue of also implementing a `ExposeCapturedChanges` marker interface (part of the demo app, not the framework).
+* the list of recent changes is shown because this page implementing an `ExposeCapturedChanges` marker interface (part of the demo app, not the framework).
 A mixin then contributes the "recentChanges" collection:
 +
 [source,java,indent=0]
 .ExposeCapturedChanges_recentChanges.java
 ----
 include::../../../_changes/ExposeCapturedChanges_recentChanges.java[tags=class]
+----
+
+== Configuration property
+
+To enable/disable entity change publishing, use this configuration property:
+
+[source,yaml]
+.application.yml
+----
+causeway:
+  applib:
+    annotation:
+      domain-object:
+        entity-change-publishing: 'none'    # 'none' | 'all'
 ----
 

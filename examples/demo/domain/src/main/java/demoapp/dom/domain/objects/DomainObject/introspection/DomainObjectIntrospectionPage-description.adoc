@@ -5,26 +5,73 @@ Introspection is the process by which the framework builds up its internal metam
 The framework supports three different introspection policies, depending on your taste of whether the metamodel should be explicitly called out (but that means more 'boilerplate'), or should be inferred so far as possible.
 These introspection policies are:
 
-* "annotation optional"
-+
-Introspect public methods only, recognising getters as either properties or collections, and other public methods as actions.
+* *annotation optional* - introspect public methods only, recognising getters as either properties or collections, and other public methods as actions.
 +
 Supporting methods for either domain members (`hide`, `disable`, `validate`, `choices`, `autoComplete`) or for the object (`title`, `iconName`, `layout`, `cssClass`) do not need to be annotated either.
 
-* "annotation required"
-+
-Requires that getter methods representing properties or collections, and public methods representing actions are all explicitly annotated (with link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/Property.html[@Property], link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/Collection.html[@Collection] and link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/Action.html[@Action])
+* *annotation required* - requires that getter methods representing properties or collections, and public methods representing actions are all explicitly annotated (with link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/Property.html[@Property], link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/Collection.html[@Collection] and link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/Action.html[@Action])
 +
 However supporting methods for domain members (`hide`, `disable`, `validate`, `choices`, `autoComplete`) and for the object (`title`, `iconName`, `layout`, `cssClass`) do not need to be annotated.
 
-* "encapsulation enabled"
-+
-Requires that both the methods representing properties, collections an actions are annotated (with `@Property,` `@Collection` and `@Action`), and _also_ that the supporting methods are annotated (with link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/MemberSupport.html[@MemberSupport] for methods relating to domain members, and link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/ObjectSupport.html[@ObjectSupport] for the object-level supporting methods).
+* *encapsulation enabled* - requires that both the methods representing properties, collections an actions are annotated (with `@Property,` `@Collection` and `@Action`), and _also_ that the supporting methods are annotated (with link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/MemberSupport.html[@MemberSupport] for methods relating to domain members, and link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/ObjectSupport.html[@ObjectSupport] for the object-level supporting methods).
 +
 However, the methods can have _any_ visibility, including `private` visibility.
 This reduces the programmatic API of the domain object can so can help eliminate bugs.
++
+[NOTE]
+====
+entities using this type do not render correctly in collections - properties are not shown as columns.
+Tracking with https://issues.apache.org/jira/browse/CAUSEWAY-3471[CAUSEWAY-3471]
+====
 
-The default policy is set using a configuration property:
+The default policy is set using a configuration property (see section below).
+Normally there would be little reason to override this - just adopt the convention that best fits your style, and leave it at that.
+However, it the need arises then it can be overridden on a class by class basis using the link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/DomainObject.html#introspection[@DomainObject#introspection] attribute.
+
+== How this demo works
+
+The collections on the left show three variants of the same entity, each with a property and an action, but each configured to use a different introspection policy.
+
+Navigate through to the entity to inspect the differences in their source code.
+
+In terms of code:
+
+* annotation optional:
++
+[source,java]
+----
+include::annotOpt/jpa/DomainObjectIntrospectionAnnotOptEntityImpl.java[tags=class]
+----
+<.> no need to annotate with `@Property`.
+It would also be ok to remove the methods but then annotate the field with `@lombok.Getter` and `@lombok.Setter`
+<.> no need to annotate with `@Action`
+<.> no need to annotate with `@MemberSupport`
+
+* annotation required:
++
+[source,java]
+----
+include::annotReqd/jpa/DomainObjectIntrospectionAnnotReqdEntityImpl.java[tags=class]
+----
+<.> must annotate as `@Property`.
+It would also be ok to remove the methods but then annotate the field with `@Property` and also with `@lombok.Getter` and `@lombok.Setter`
+<.> must annotate as `@Action`
+<.> no need to annotate with `@MemberSupport`
+
+* encapsulated:
++
+[source,java]
+----
+include::encapsulated/jpa/DomainObjectIntrospectionEncapsulatedEntityImpl.java[tags=class]
+----
+<.> must annotate as `@Property`, but can have any visibility
+<.> must annotate as `@Action`, but can have any visibility
+<.> must annotate as @`MemberSupport` or `@Domain.Include`, but can have any visibility
+
+
+== Configuration property
+
+The default introspection policy is set using a configuration property:
 
 [source,yaml]
 .application.yaml
@@ -37,11 +84,3 @@ causeway:
 ----
 <.> `annotation_optional` | `annotation_required` | `encapsulation_enabled`
 
-Normally there would be little reason to override this - just adopt the convention that best fits your style, and leave it at that.
-However, it the need arises then it can be overridden on a class by class basis using the link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/DomainObject.html#introspection[@DomainObject#introspection] attribute.
-
-== How this demo works
-
-The collections on the left show three variants of the same entity, each with a property and an action, but each configured to use a different introspection policy.
-
-Navigate through to the entity to inspect the differences in their source code.
