@@ -7,7 +7,7 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import lombok.RequiredArgsConstructor;
 
 //tag::class[]
-@DomainObject(mixinMethod = "action")                               // <.>
+@DomainObject(mixinMethod = "action")                                           // <.>
 @Action()
 @RequiredArgsConstructor
 public class DomainObjectMixinMethodEntity_updateName {
@@ -15,7 +15,7 @@ public class DomainObjectMixinMethodEntity_updateName {
     private final DomainObjectMixinMethodEntity mixee;
 
     @MemberSupport
-    public DomainObjectMixinMethodEntity action(final String newName) {   // <.>
+    public DomainObjectMixinMethodEntity action(final String newName) {         // <.>
         mixee.setName(newName);
         return mixee;
     }

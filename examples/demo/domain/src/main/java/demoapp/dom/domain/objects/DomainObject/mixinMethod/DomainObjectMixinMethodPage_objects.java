@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 import demoapp.dom._infra.values.ValueHolderRepository;
 
 //tag::class[]
-@DomainObject(mixinMethod = "collection")                           // <.>
+@DomainObject(mixinMethod = "collection")                               // <.>
 @Collection()
 @CollectionLayout()
 @RequiredArgsConstructor
@@ -24,7 +24,7 @@ public class DomainObjectMixinMethodPage_objects {
     private final DomainObjectMixinMethodPage page;
 
 //tag::class[]
-    public List<? extends DomainObjectMixinMethodEntity> collection() {   // <.>
+    public List<? extends DomainObjectMixinMethodEntity> collection() { // <.>
         // ...
 //end::class[]
         return objectRepository.all();
