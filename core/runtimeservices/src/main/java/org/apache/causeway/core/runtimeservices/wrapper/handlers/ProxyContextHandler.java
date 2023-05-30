@@ -22,6 +22,9 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
+import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.runtimeservices.wrapper.proxy.ProxyCreator;
@@ -81,7 +84,14 @@ public class ProxyContextHandler {
         collectionInvocationHandler.setResolveObjectChangedEnabled(
                 handler.isResolveObjectChangedEnabled());
 
-        return proxyCreator.instantiateProxy(collectionInvocationHandler);
+        val proxyBase = ProgrammingModelConstants.CollectionSemantics
+                .valueOf(collectionToBeProxied.getClass())
+                .orElseThrow(()->_Exceptions.unrecoverable(
+                        "failed to lookup CollectionSemantics for type %s",
+                        collectionToBeProxied.getClass()))
+                .getContainerType();
+
+        return proxyCreator.instantiateProxy(_Casts.uncheckedCast(proxyBase), collectionInvocationHandler);
     }
 
     /**
@@ -97,7 +107,9 @@ public class ProxyContextHandler {
                 collectionToBeProxied, handler, otma);
         mapInvocationHandler.setResolveObjectChangedEnabled(handler.isResolveObjectChangedEnabled());
 
-        return proxyCreator.instantiateProxy(mapInvocationHandler);
+        val proxyBase = Map.class;
+
+        return proxyCreator.instantiateProxy(_Casts.uncheckedCast(proxyBase), mapInvocationHandler);
     }
 
 

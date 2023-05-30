@@ -91,8 +91,8 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
         resolveIfRequired(objectManager.adapt(domainObject));
     }
 
-    protected Object delegate(final Method method, final Object[] args) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-
+    protected Object delegate(final Method method, final Object[] args)
+            throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         return method.invoke(getDelegate(), args);
     }
 

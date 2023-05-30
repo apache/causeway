@@ -34,7 +34,8 @@ import lombok.NonNull;
 public abstract class _ProxyFactoryServiceAbstract implements _ProxyFactoryService {
 
     @NonNull
-    private final Map<Class<?>, _ProxyFactory<?>> proxyFactoryByClass = Collections.synchronizedMap(new WeakHashMap<>());
+    private final Map<Class<?>, _ProxyFactory<?>> proxyFactoryByClass =
+            Collections.synchronizedMap(new WeakHashMap<>());
 
     @Override
     public <T> _ProxyFactory<T> factory(final Class<T> classToBeProxied, final Class<?> additionalClass) {
@@ -44,7 +45,6 @@ public abstract class _ProxyFactoryServiceAbstract implements _ProxyFactoryServi
             proxyFactoryByClass.put(classToBeProxied, proxyFactory);
         }
         return proxyFactory;
-
     }
 
     private <T> _ProxyFactory<T> createFactory(
