@@ -50,7 +50,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.PropertyLayoutRenderDayVm")
+@Named("demo.ValueSemanticsDateRenderAdjustDaysPage")
 @DomainObject(
         nature=Nature.VIEW_MODEL,
         editing = Editing.ENABLED

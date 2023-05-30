@@ -26,20 +26,17 @@ import org.apache.causeway.applib.annotation.*;
 //tag::class[]
 @Action(semantics = SemanticsOf.IDEMPOTENT)
 @ActionLayout(
-        redirectPolicy = Redirect.ONLY_IF_DIFFERS       // <.>
+    redirectPolicy = Redirect.ONLY_IF_DIFFERS               // <.>
 )
 @RequiredArgsConstructor
 public class ActionLayoutRedirectPolicyEntity_incrementRedirectOnlyIfDiffers {
-    // ...
-//end::class[]
+
     private final ActionLayoutRedirectPolicyEntity entity;
 
     @MemberSupport public ActionLayoutRedirectPolicyEntity act() {
         Integer count = entity.getCount();
         entity.setCount(count == null ? 1 : count + 1);
-        return entity;
+        return entity;                                      // <.>
     }
-
-//tag::class[]
 }
 //end::class[]

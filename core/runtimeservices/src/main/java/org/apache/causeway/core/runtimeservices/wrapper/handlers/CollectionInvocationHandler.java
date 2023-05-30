@@ -19,7 +19,6 @@
 package org.apache.causeway.core.runtimeservices.wrapper.handlers;
 
 import java.util.Collection;
-import java.util.List;
 
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
@@ -31,20 +30,21 @@ class CollectionInvocationHandler<T, C extends Collection<?>>
 extends NonScalarInvocationHandlerAbstract<T, C> {
 
     public CollectionInvocationHandler(
-            final C collectionToProxy,
+            final C collectionToBeProxied,
             final DomainObjectInvocationHandler<T> handler,
             final OneToManyAssociation otma) {
 
-        super(collectionToProxy, handler, otma);
+        super(collectionToBeProxied, handler, otma);
 
-        _Assert.assertTrue(collectionToProxy.getClass().isAssignableFrom(Collection.class),
+        _Assert.assertTrue(Collection.class.isAssignableFrom(collectionToBeProxied.getClass()),
                 ()->String.format("Cannot use %s for type %s, these are not compatible.",
                         this.getClass().getName(),
-                        collectionToProxy.getClass()));
+                        collectionToBeProxied.getClass()));
 
-        val methodSets = (collectionToProxy instanceof List)
-                ? ProgrammingModelConstants.WrapperFactoryProxy.LIST
-                : ProgrammingModelConstants.WrapperFactoryProxy.COLLECTION;
+        val collectionSemantics = ProgrammingModelConstants.CollectionSemantics
+                .valueOfElseFail(collectionToBeProxied.getClass());
+
+        val methodSets = collectionSemantics.getMethodSets();
 
         methodSets.getIntercepted().forEach(this::intercept);
         methodSets.getVetoed().forEach(this::veto);

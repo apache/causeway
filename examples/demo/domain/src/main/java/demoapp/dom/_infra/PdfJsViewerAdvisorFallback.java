@@ -16,19 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.properties.PropertyLayout.repainting;
-
-import org.springframework.stereotype.Service;
+package demoapp.dom._infra;
 
 import org.apache.causeway.extensions.pdfjs.applib.config.Scale;
 import org.apache.causeway.extensions.pdfjs.applib.spi.PdfJsViewerAdvisor;
+
+import org.springframework.stereotype.Service;
 
 @Service
 public class PdfJsViewerAdvisorFallback implements PdfJsViewerAdvisor {
 
     @Override
     public Advice advise(final InstanceKey instanceKey) {
-        return new Advice(1, Scale._1_00, 400);
+        return new Advice(1, Scale._1_00, 800);
     }
 
     @Override

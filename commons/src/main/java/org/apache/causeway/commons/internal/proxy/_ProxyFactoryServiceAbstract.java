@@ -34,28 +34,28 @@ import lombok.NonNull;
 public abstract class _ProxyFactoryServiceAbstract implements _ProxyFactoryService {
 
     @NonNull
-    private final Map<Class<?>, _ProxyFactory<?>> proxyFactoryByClass = Collections.synchronizedMap(new WeakHashMap<>());
+    private final Map<Class<?>, _ProxyFactory<?>> proxyFactoryByClass =
+            Collections.synchronizedMap(new WeakHashMap<>());
 
     @Override
-    public <T> _ProxyFactory<T> factory(final Class<T> toProxyClass, final Class<?> additionalClass) {
-        _ProxyFactory<T> proxyFactory = _Casts.uncheckedCast(proxyFactoryByClass.get(toProxyClass));
+    public <T> _ProxyFactory<T> factory(final Class<T> classToBeProxied, final Class<?> additionalClass) {
+        _ProxyFactory<T> proxyFactory = _Casts.uncheckedCast(proxyFactoryByClass.get(classToBeProxied));
         if(proxyFactory == null) {
-            proxyFactory = createFactory(toProxyClass, additionalClass);
-            proxyFactoryByClass.put(toProxyClass, proxyFactory);
+            proxyFactory = createFactory(classToBeProxied, additionalClass);
+            proxyFactoryByClass.put(classToBeProxied, proxyFactory);
         }
         return proxyFactory;
-
     }
 
     private <T> _ProxyFactory<T> createFactory(
-            final Class<T> toProxyClass,
+            final Class<T> classToBeProxied,
             final Class<?> additionalClass) {
 
         final Class<?>[] interfaces = _Arrays.combine(
-                toProxyClass.getInterfaces(),
+                classToBeProxied.getInterfaces(),
                 ProxyEnhanced.class, additionalClass);
 
-        final _ProxyFactory<T> proxyFactory = _ProxyFactory.builder(toProxyClass)
+        final _ProxyFactory<T> proxyFactory = _ProxyFactory.builder(classToBeProxied)
                 .interfaces(interfaces)
                 .build(this);
 

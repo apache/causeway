@@ -18,9 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.postprocessors;
 
+import java.util.function.Predicate;
+
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 
@@ -34,9 +37,19 @@ implements MetaModelPostProcessor {
     @Getter(onMethod_ = {@Override})
     private final @NonNull MetaModelContext metaModelContext;
 
+    @Getter(onMethod_ = {@Override})
+    private final @NonNull Predicate<ObjectSpecification> filter;
+
     protected MetaModelPostProcessorAbstract(final MetaModelContext metaModelContext) {
+        this(metaModelContext, ALL);
+    }
+
+    protected MetaModelPostProcessorAbstract(
+            final MetaModelContext metaModelContext,
+            final Predicate<ObjectSpecification> filter) {
         super();
         this.metaModelContext = metaModelContext;
+        this.filter = filter;
     }
 
     /**

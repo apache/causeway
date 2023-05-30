@@ -18,10 +18,13 @@
  */
 package demoapp.dom.domain.properties.ValueSemantics;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+
+import demoapp.dom.domain.properties.ValueSemantics.percentage.ValueSemanticsProviderPercentagePage;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -54,5 +57,15 @@ public class ValueSemanticsMenu {
         return page;
     }
 //end::create-page[]
+
+//tag::percentage[]
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-percent", describedAs = "Use a custom ValueSemanticsProvider with meta-annotation to customise the display")
+    public ValueSemanticsProviderPercentagePage percentage(){
+        val page = new ValueSemanticsProviderPercentagePage();
+        page.setPercentage(new BigDecimal(".95"));
+        return page;
+    }
+//end::percentage[]
 
 }
