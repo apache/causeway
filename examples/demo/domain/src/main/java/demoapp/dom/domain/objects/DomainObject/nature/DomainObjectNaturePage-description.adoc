@@ -6,27 +6,40 @@ Domain classes fall into three broad categories:
 * domain entities, representing shared persistence state (eg `Customer`, `Order`, `Product` and so on)
 * link:https://causeway.apache.org/userguide/${CAUSEWAY_VERSION}/fun/overview.html#view-models[view models], which hold session-specific (temporary) state.
 View models can be used for a variety of use cases, such as a "manager" class to handle a complicated workflow (part of an "application layer"), or as an object to render as a simplified representation of an entity (part of the "presentation layer").
+The object you are looking at right now is a view model.
 
 Strictly speaking mixins are domain objects (with a `nature` of "MIXIN"), though they manifest as contributed domain members (properties, collections or actions) rather than as individual object instances in their own right.
 
-The object you are looking at right now is a view model.
-Its source code is:
-
-[source,java]
-.DomainObjectNaturePage.java
-----
-include::DomainObjectNaturePage.java[tags=class]
-----
-<.> Specifies this is a JAXB element.
-This is actually enough for the framework to infer that this domain object is a view model.
-<.> Nevertheless, it's generally good practice to specify the nature explicitly.
 
 
 == How this demo works
 
 There are two collections on the left hand side, one of domain entities and the other of view models.
-The entities are obtained by querying a repository, while the view models are created on the fly, each wrapping a corresponding entity:
+The entities are obtained by querying a repository, while the view models are created on the fly, each wrapping a corresponding entity.
 
+In terms of code:
+
+* collection of entities:
++
+[source,java]
+.DomainObjectNaturePage_entities.java
+----
+include::DomainObjectNaturePage_entities.java[tags=class]
+----
++
+where `DomainObjectNatureEntity` (JPA version) is defined as:
++
+[source,java]
+.DomainObjectNaturePage_entities.java
+----
+include::entity/jpa/DomainObjectNatureEntityImpl.java[tags=class]
+----
+<.> The framework can infer the nature of the domain class from these annotations
+<.> Nevertheless, it's generally good practice to specify the nature explicitly.
+
+
+* collection of view models:
++
 [source,java]
 .DomainObjectNaturePage_viewModels.java
 ----
@@ -34,5 +47,17 @@ include::DomainObjectNaturePage_viewModels.java[tags=class]
 ----
 <.> creates view model on the fly.
 
-Navigate through to these domain objects to inspect their source code; both the entity and view model explicitly indicates its `nature`.
++
+where `DomainObjectNatureEntity` is defined as:
++
+[source,java]
+.DomainObjectNaturePage_entities.java
+----
+include::viewmodel/DomainObjectNatureViewModel.java[tags=class]
+----
+<.> Specifies this is a JAXB element.
+This is actually enough for the framework to infer that this domain object is a view model.
+<.> Nevertheless, it's generally good practice to specify the nature explicitly.
+<.> Required to reference a persistent entity (or the entity class itself can be so annotated).
+
 

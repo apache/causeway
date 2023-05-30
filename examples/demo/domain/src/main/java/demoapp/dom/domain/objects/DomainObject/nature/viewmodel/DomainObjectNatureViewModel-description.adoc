@@ -10,7 +10,6 @@ include::DomainObjectNatureViewModel.java[tags=class]
 <.> Specifies this is a JAXB element.
 This is actually enough for the framework to infer that this domain object is a view model.
 <.> Nevertheless, it's generally good practice to specify the nature explicitly.
-<.> Presentation logic that build on the behaviour of the underlying entity.
 <.> Required to reference a persistent entity (or the entity class itself can be so annotated).
 
 In many cases the framework is able to infer the nature of the domain object from annotations such as `@Entity` or `@PersistenceCapable` (for JPA or JDO entities), or from `@XmlElement` for JAXB-style view models.
