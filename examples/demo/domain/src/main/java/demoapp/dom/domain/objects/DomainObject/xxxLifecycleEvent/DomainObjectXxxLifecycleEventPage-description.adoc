@@ -9,7 +9,7 @@ However, using link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/
 * link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/DomainObject.html#createdlifecycleevent[@DomainObject#createdLifecycleEvent] - when an entity is instantiated in memory (but not yet persisted).
 Must be a subclass of https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/events/lifecycle/ObjectCreatedEvent[ObjectCreatedEvent].
 +
-CAUTION: The new-ed up entity must be passed to (or created via) either `FactoryService.detachedEntity(...)` or `RepositoryService.detachedEntity(...)` for the 'created' lifecycle event to be fired.   
+CAUTION: The new-ed up entity must be passed to (or created via) either `FactoryService.detachedEntity(...)` or `RepositoryService.detachedEntity(...)` for the 'created' lifecycle event to be fired.
 
 * link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/DomainObject.html#persistinglifecycleevent[@DomainObject#persistingLifecycleEvent] - when a newly instantiated entity is about to be INSERTed for the first time to the database.
 Must be a subclass of https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/events/lifecycle/ObjectPersistingEvent[ObjectPersistingEvent].
@@ -43,7 +43,7 @@ In terms of code:
 [source,java]
 .DomainObjectXxxLifecycleEvent.java
 ----
-include::DomainObjectXxxLifecycleEvent.java[tags=class]
+include::DomainObjectXxxLifecycleEventEntity.java[tags=class]
 ----
 <.> specifies a custom event type for the "created" callback
 <.> specifies a custom event type for the "persisting" callback
@@ -52,11 +52,11 @@ include::DomainObjectXxxLifecycleEvent.java[tags=class]
 <.> specifies a custom event type for the "updated" callback
 <.> specifies a custom event type for the "removing" callback
 <.> specifies a custom event type for the "loaded" callback
-<.> This class is `abstract` only because the demo includes JPA and JDO specific subclasses
 <.> interface that all event classes implemented.
 Such an interface isn't mandatory, but it allows the subscriber (below) to subscribe to all events with a single callback.
 
-* the subscriber:
+* the subscriber subscribes to the common interface.
+For all events, it simply constructs a view model and adds to a list:
 +
 [source,java]
 .DomainObjectXxxLifecycleEventSubscriber.java
@@ -66,7 +66,7 @@ include::DomainObjectXxxLifecycleEventSubscriber.java[tags=class]
 <.> for simplicity, listens to the common interface defined by all of the custom event types
 <.> appends to an in-memory list
 
-* contributed `events` collection that simply surfaces the list of events received by the subscriber
+* the contributed `events` collection simply surfaces the list of events received by the subscriber:
 +
 [source,java]
 .DomainObjectXxxLifecycleEventPage_events.java
@@ -74,7 +74,8 @@ include::DomainObjectXxxLifecycleEventSubscriber.java[tags=class]
 include::DomainObjectXxxLifecycleEventPage_events.java[tags=class]
 ----
 
-* the actions to create, update and delete:
+* finally there are actions to create, update and delete an entity.
+There's nothing very remarkable about them:
 
 ** create:
 +

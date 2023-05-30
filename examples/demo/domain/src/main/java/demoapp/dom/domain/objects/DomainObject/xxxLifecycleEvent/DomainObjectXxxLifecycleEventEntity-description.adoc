@@ -7,5 +7,5 @@ This domain class inherits from the superclass that is annotated with the variou
 ----
 include::DomainObjectXxxLifecycleEventEntity.java[tags=class]
 ----
-<.> ..cr
+<.> ..
 
