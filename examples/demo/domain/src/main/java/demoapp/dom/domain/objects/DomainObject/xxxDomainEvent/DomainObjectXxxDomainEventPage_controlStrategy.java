@@ -22,15 +22,22 @@ import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
+import org.apache.causeway.applib.events.domain.ActionDomainEvent;
+import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
 
 import lombok.RequiredArgsConstructor;
 
 
 //tag::class[]
-@Property()
+@Property(
+    domainEvent = DomainObjectXxxDomainEventPage_controlStrategy.DomainEvent.class              // <.>
+)
 @PropertyLayout(fieldSetId = "contributed", sequence = "1")
 @RequiredArgsConstructor
 public class DomainObjectXxxDomainEventPage_controlStrategy {
+
+    public static class DomainEvent                                                             // <1>
+            extends PropertyDomainEvent<DomainObjectXxxDomainEventPage, DomainObjectXxxDomainEventControlStrategy> {}
 
     private final DomainObjectXxxDomainEventPage page;
 

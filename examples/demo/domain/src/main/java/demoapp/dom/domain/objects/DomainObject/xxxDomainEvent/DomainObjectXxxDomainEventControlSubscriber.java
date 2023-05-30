@@ -35,11 +35,11 @@ class DomainObjectXxxDomainEventControlSubscriber {
     final ServiceRegistry serviceRegistry;
 
     DomainObjectXxxDomainEventControlStrategy controlStrategy =
-            DomainObjectXxxDomainEventControlStrategy.DO_NOTHING;           // <.>
+            DomainObjectXxxDomainEventControlStrategy.DO_NOTHING;                         // <.>
 
-    @EventListener(DomainObjectXxxDomainEventPage.DomainEventMarker.class)  // <.>
-    public void on(DomainObjectXxxDomainEventPage.DomainEventMarker ev) {
-        controlStrategy.on(ev, serviceRegistry);                            // <.>
+    @EventListener(DomainObjectXxxDomainEventPage.DomainObjectXxxDomainEventMarker.class) // <.>
+    public void on(DomainObjectXxxDomainEventPage.DomainObjectXxxDomainEventMarker ev) {
+        controlStrategy.on(ev, serviceRegistry);                                          // <.>
     }
 }
 //end::class[]

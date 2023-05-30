@@ -31,7 +31,7 @@ enum DomainObjectXxxDomainEventControlStrategy {
 
     DO_NOTHING{
         @Override
-        void on(DomainObjectXxxDomainEventPage.DomainEventMarker ev, ServiceRegistry serviceRegistry) {
+        void on(DomainObjectXxxDomainEventPage.DomainObjectXxxDomainEventMarker ev, ServiceRegistry serviceRegistry) {
         }
     },
     // ...
@@ -40,9 +40,9 @@ enum DomainObjectXxxDomainEventControlStrategy {
 //tag::hide[]
     HIDE {
         @Override
-        void on(DomainObjectXxxDomainEventPage.DomainEventMarker ev, ServiceRegistry serviceRegistry) {
+        void on(DomainObjectXxxDomainEventPage.DomainObjectXxxDomainEventMarker ev, ServiceRegistry serviceRegistry) {
             if (ev instanceof AbstractDomainEvent) {
-                AbstractDomainEvent domainEvent = (AbstractDomainEvent) ev;
+                val domainEvent = (AbstractDomainEvent<?>) ev;
                 switch (domainEvent.getEventPhase()) {
                     case HIDE:
                         domainEvent.hide();
@@ -55,9 +55,9 @@ enum DomainObjectXxxDomainEventControlStrategy {
 //tag::disable[]
     DISABLE {
         @Override
-        void on(DomainObjectXxxDomainEventPage.DomainEventMarker ev, ServiceRegistry serviceRegistry) {
+        void on(DomainObjectXxxDomainEventPage.DomainObjectXxxDomainEventMarker ev, ServiceRegistry serviceRegistry) {
             if (ev instanceof AbstractDomainEvent) {
-                AbstractDomainEvent domainEvent = (AbstractDomainEvent) ev;
+                val domainEvent = (AbstractDomainEvent<?>) ev;
                 switch (domainEvent.getEventPhase()) {
                     case DISABLE:
                         domainEvent.disable("ControlStrategy set to DISABLE");
@@ -70,7 +70,7 @@ enum DomainObjectXxxDomainEventControlStrategy {
 //tag::validate[]
     VALIDATE_MUST_BE_UPPER_CASE{
         @Override
-        void on(DomainObjectXxxDomainEventPage.DomainEventMarker ev, ServiceRegistry serviceRegistry) {
+        void on(DomainObjectXxxDomainEventPage.DomainObjectXxxDomainEventMarker ev, ServiceRegistry serviceRegistry) {
             if (ev instanceof DomainObjectXxxDomainEventPage.ActionEvent) {
                 val actionEvent = (DomainObjectXxxDomainEventPage.ActionEvent) ev;
                 switch (actionEvent.getEventPhase()) {
@@ -99,7 +99,7 @@ enum DomainObjectXxxDomainEventControlStrategy {
 //tag::executing[]
     EXECUTING_FORCE_UPPER_CASE{
         @Override
-        void on(DomainObjectXxxDomainEventPage.DomainEventMarker ev, ServiceRegistry serviceRegistry) {
+        void on(DomainObjectXxxDomainEventPage.DomainObjectXxxDomainEventMarker ev, ServiceRegistry serviceRegistry) {
             if (ev instanceof DomainObjectXxxDomainEventPage.ActionEvent) {
                 val actionEvent = (DomainObjectXxxDomainEventPage.ActionEvent) ev;
                 switch (actionEvent.getEventPhase()) {
@@ -125,7 +125,7 @@ enum DomainObjectXxxDomainEventControlStrategy {
 //tag::executed[]
     EXECUTED_ANNOUNCE{
         @Override
-        void on(DomainObjectXxxDomainEventPage.DomainEventMarker ev, ServiceRegistry serviceRegistry) {
+        void on(DomainObjectXxxDomainEventPage.DomainObjectXxxDomainEventMarker ev, ServiceRegistry serviceRegistry) {
             if (ev instanceof DomainObjectXxxDomainEventPage.ActionEvent) {
                 val actionEvent = (DomainObjectXxxDomainEventPage.ActionEvent) ev;
                 switch (actionEvent.getEventPhase()) {
@@ -133,7 +133,7 @@ enum DomainObjectXxxDomainEventControlStrategy {
                         serviceRegistry
                             .lookupService(MessageService.class)
                             .ifPresent(ms ->
-                                    ms.informUser("Changed using updateText")
+                                    ms.informUser("Changed using updateText('" + actionEvent.getArguments().get(0) + "')")
                             );
                         break;
                 }
@@ -160,6 +160,6 @@ enum DomainObjectXxxDomainEventControlStrategy {
 
 //tag::class[]
     ;
-    abstract void on(DomainObjectXxxDomainEventPage.DomainEventMarker ev, ServiceRegistry serviceRegistry);
+    abstract void on(DomainObjectXxxDomainEventPage.DomainObjectXxxDomainEventMarker ev, ServiceRegistry serviceRegistry);
 }
 //end::class[]
