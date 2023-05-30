@@ -64,13 +64,6 @@ extends ActionParameterAutoCompleteFacetAbstract {
             final Can<ManagedObject> pendingArgs,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
-
-        //TODO[CAUSEWAY-3467] yet fails DomainObjectAutoCompletePage#find[0]
-        /*
-        java.lang.IllegalArgumentException: unknown bulk object load request, loader: org.apache.causeway.core.metamodel.objectmanager.ObjectBulkLoader$BuiltinHandlers$3 loading ObjectSpecification ObjectSpecificationDefault@36d58306[class=demoapp.dom.domain.objects.DomainObject.autoComplete.DomainObjectAutoCompleteEntity,type=ABSTRACT,superclass=java.lang.Object]
-                at org.apache.causeway.commons.internal.exceptions._Exceptions.illegalArgument(_Exceptions.java:80) ~[classes/:?]
-                at org.apache.causeway.core.metamodel.objectmanager.ObjectBulkLoader$BuiltinHandlers$3.handle(ObjectBulkLoader.java:114) ~[classes/:?]
-                */
         return autoCompleteFacet.execute(searchArg, interactionInitiatedBy);
     }
 
