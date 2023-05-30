@@ -31,18 +31,18 @@ class CollectionInvocationHandler<T, C extends Collection<?>>
 extends NonScalarInvocationHandlerAbstract<T, C> {
 
     public CollectionInvocationHandler(
-            final C collectionToProxy,
+            final C collectionToBeProxied,
             final DomainObjectInvocationHandler<T> handler,
             final OneToManyAssociation otma) {
 
-        super(collectionToProxy, handler, otma);
+        super(collectionToBeProxied, handler, otma);
 
-        _Assert.assertTrue(Collection.class.isAssignableFrom(collectionToProxy.getClass()),
+        _Assert.assertTrue(Collection.class.isAssignableFrom(collectionToBeProxied.getClass()),
                 ()->String.format("Cannot use %s for type %s, these are not compatible.",
                         this.getClass().getName(),
-                        collectionToProxy.getClass()));
+                        collectionToBeProxied.getClass()));
 
-        val methodSets = (collectionToProxy instanceof List)
+        val methodSets = (collectionToBeProxied instanceof List)
                 ? ProgrammingModelConstants.WrapperFactoryProxy.LIST
                 : ProgrammingModelConstants.WrapperFactoryProxy.COLLECTION;
 

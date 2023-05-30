@@ -44,12 +44,12 @@ extends DelegatingInvocationHandlerDefault<P> {
     private final T domainObject;
 
     protected NonScalarInvocationHandlerAbstract(
-            final P collectionOrMapToProxy,
+            final P collectionOrMapToBeProxied,
             final DomainObjectInvocationHandler<T> handler,
             final OneToManyAssociation otma) {
 
         super(otma.getMetaModelContext(),
-                collectionOrMapToProxy,
+                collectionOrMapToBeProxied,
                 handler.getSyncControl());
 
         this.oneToManyAssociation = otma;

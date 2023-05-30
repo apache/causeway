@@ -37,9 +37,9 @@ public class ProxyCreator {
 
     public <T> T instantiateProxy(final DelegatingInvocationHandler<T> handler) {
 
-        final T toProxy = handler.getDelegate();
+        final T classToBeProxied = handler.getDelegate();
 
-        final Class<T> base = _Casts.uncheckedCast(toProxy.getClass());
+        final Class<T> base = _Casts.uncheckedCast(classToBeProxied.getClass());
 
         if (base.isInterface()) {
             return _Casts.uncheckedCast(

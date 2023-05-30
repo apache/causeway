@@ -56,7 +56,6 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
             final @NonNull MetaModelContext metaModelContext,
             final @NonNull T delegate,
             final SyncControl syncControl) {
-
         this.delegate = delegate;
         this.objectManager = metaModelContext.getObjectManager();
         this.wrapperFactory = metaModelContext.getWrapperFactory();

@@ -28,16 +28,16 @@ class MapInvocationHandler<T, M extends Map<?,?>>
 extends NonScalarInvocationHandlerAbstract<T, M> {
 
     public MapInvocationHandler(
-            final M mapToProxy,
+            final M mapToBeProxied,
             final DomainObjectInvocationHandler<T> handler,
             final OneToManyAssociation otma) {
 
-        super(mapToProxy, handler, otma);
+        super(mapToBeProxied, handler, otma);
 
-        _Assert.assertTrue(Map.class.isAssignableFrom(mapToProxy.getClass()),
+        _Assert.assertTrue(Map.class.isAssignableFrom(mapToBeProxied.getClass()),
                 ()->String.format("Cannot use %s for type %s, these are not compatible.",
                         this.getClass().getName(),
-                        mapToProxy.getClass()));
+                        mapToBeProxied.getClass()));
 
         ProgrammingModelConstants.WrapperFactoryProxy.MAP
         .getIntercepted()

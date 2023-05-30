@@ -72,12 +72,12 @@ public class ProxyContextHandler {
      * handler.
      */
     public <T, E> Collection<E> proxy(
-            final Collection<E> collectionToProxy,
+            final Collection<E> collectionToBeProxied,
             final DomainObjectInvocationHandler<T> handler,
             final OneToManyAssociation otma) {
 
         val collectionInvocationHandler = new CollectionInvocationHandler<T, Collection<E>>(
-                        collectionToProxy, handler, otma);
+                        collectionToBeProxied, handler, otma);
         collectionInvocationHandler.setResolveObjectChangedEnabled(
                 handler.isResolveObjectChangedEnabled());
 
@@ -89,12 +89,12 @@ public class ProxyContextHandler {
      * handler.
      */
     public <T, P, Q> Map<P, Q> proxy(
-            final Map<P, Q> collectionToProxy,
+            final Map<P, Q> collectionToBeProxied,
             final DomainObjectInvocationHandler<T> handler,
             final OneToManyAssociation otma) {
 
         val mapInvocationHandler = new MapInvocationHandler<T, Map<P, Q>>(
-                collectionToProxy, handler, otma);
+                collectionToBeProxied, handler, otma);
         mapInvocationHandler.setResolveObjectChangedEnabled(handler.isResolveObjectChangedEnabled());
 
         return proxyCreator.instantiateProxy(mapInvocationHandler);

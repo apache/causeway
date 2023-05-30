@@ -58,7 +58,7 @@ class ProxyCreatorTestUsingCodegenPlugin {
         private final Set<String> invoked = new HashSet<>();
 
         @Override
-        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
             invoked.add(method.getName());
             return "hi";
         }
@@ -74,10 +74,10 @@ class ProxyCreatorTestUsingCodegenPlugin {
         }
 
         @Override
-        public void setResolveObjectChangedEnabled(boolean resolveObjectChangedEnabled) {
+        public void setResolveObjectChangedEnabled(final boolean resolveObjectChangedEnabled) {
         }
 
-        public boolean wasInvoked(String methodName) {
+        public boolean wasInvoked(final String methodName) {
             return invoked.contains(methodName);
         }
     }
