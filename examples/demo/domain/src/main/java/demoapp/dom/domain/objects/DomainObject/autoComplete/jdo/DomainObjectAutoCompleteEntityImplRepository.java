@@ -18,22 +18,27 @@
  */
 package demoapp.dom.domain.objects.DomainObject.autoComplete.jdo;
 
+import javax.inject.Named;
+
 import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 import demoapp.dom._infra.values.ValueHolderRepository;
+import demoapp.dom.domain.objects.DomainObject.autoComplete.DomainObjectAutoCompleteEntityRepository;
 
 @Profile("demo-jdo")
-@Service
+@Named("demo.DomainObjectAutoCompleteRepository")
+@Repository
 public class DomainObjectAutoCompleteEntityImplRepository
-extends ValueHolderRepository<String, DomainObjectAutoCompleteEntityImpl> {
+extends ValueHolderRepository<String, DomainObjectAutoCompleteEntityImpl>
+implements DomainObjectAutoCompleteEntityRepository<DomainObjectAutoCompleteEntityImpl> {
 
     protected DomainObjectAutoCompleteEntityImplRepository() {
         super(DomainObjectAutoCompleteEntityImpl.class);
     }
 
     @Override
-    protected DomainObjectAutoCompleteEntityImpl newDetachedEntity(String value) {
+    protected DomainObjectAutoCompleteEntityImpl newDetachedEntity(final String value) {
         return new DomainObjectAutoCompleteEntityImpl(value);
     }
 

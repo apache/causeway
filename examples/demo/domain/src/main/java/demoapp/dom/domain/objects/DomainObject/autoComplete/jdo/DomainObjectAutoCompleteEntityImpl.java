@@ -29,11 +29,9 @@ import org.springframework.context.annotation.Profile;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 
+import demoapp.dom.domain.objects.DomainObject.autoComplete.DomainObjectAutoCompleteEntity;
 import lombok.Getter;
 import lombok.Setter;
-
-import demoapp.dom.domain.objects.DomainObject.autoComplete.DomainObjectAutoCompleteEntity;
-import demoapp.dom.domain.objects.DomainObject.autoComplete.DomainObjectAutoCompleteEntityRepository;
 
 @Profile("demo-jdo")
 @PersistenceCapable(
@@ -47,14 +45,14 @@ import demoapp.dom.domain.objects.DomainObject.autoComplete.DomainObjectAutoComp
 // ...
 @DomainObject(
     nature = Nature.ENTITY,
-    autoCompleteRepository = DomainObjectAutoCompleteEntityRepository.class, // <.>
-    autoCompleteMethod = "findMatching"                                      // <.>
+    autoCompleteRepository = DomainObjectAutoCompleteEntityImplRepository.class, // <.>
+    autoCompleteMethod = "findMatching"                                          // <.>
 )
 public class DomainObjectAutoCompleteEntityImpl extends DomainObjectAutoCompleteEntity {
     // ...
 //end::class[]
 
-    public DomainObjectAutoCompleteEntityImpl(String value) {
+    public DomainObjectAutoCompleteEntityImpl(final String value) {
         setName(value);
     }
 

@@ -106,7 +106,10 @@ extends DelegatingInvocationHandlerDefault<T> {
             final ManagedObject targetAdapter,
             final SyncControl syncControl,
             final ProxyContextHandler proxyContextHandler) {
-        super(targetAdapter.getSpecification().getMetaModelContext(), domainObject, syncControl);
+        super(
+                targetAdapter.getSpecification().getMetaModelContext(),
+                domainObject,
+                syncControl);
 
         this.mmContext = targetAdapter.getSpecification().getMetaModelContext();
         this.proxyContextHandler = proxyContextHandler;
@@ -441,7 +444,8 @@ extends DelegatingInvocationHandlerDefault<T> {
             return collectionToLookup;
         }
         if(proxyContextHandler == null) {
-            throw new IllegalStateException("Unable to create proxy for collection; proxyContextHandler not provided");
+            throw new IllegalStateException("Unable to create proxy for collection; "
+                    + "proxyContextHandler not provided");
         }
         return proxyContextHandler.proxy(collectionToLookup, this, otma);
     }
@@ -453,7 +457,8 @@ extends DelegatingInvocationHandlerDefault<T> {
             return mapToLookup;
         }
         if(proxyContextHandler == null) {
-            throw new IllegalStateException("Unable to create proxy for collection; proxyContextHandler not provided");
+            throw new IllegalStateException("Unable to create proxy for collection; "
+                    + "proxyContextHandler not provided");
         }
         return proxyContextHandler.proxy(mapToLookup, this, otma);
     }

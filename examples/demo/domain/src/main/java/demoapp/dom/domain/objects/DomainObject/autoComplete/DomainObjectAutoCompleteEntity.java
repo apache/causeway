@@ -18,12 +18,22 @@
  */
 package demoapp.dom.domain.objects.DomainObject.autoComplete;
 
+import javax.inject.Named;
+
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Nature;
+
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
+@DomainObject(
+        nature = Nature.ENTITY,
+        // references an interface, which Spring knows how to lookup and replace by a concrete bean
+        autoCompleteRepository = DomainObjectAutoCompleteEntityRepository.class,
+        autoCompleteMethod = "findMatching")
+@Named("demo.DomainObjectAutoCompleteEntityAbstract")
 public abstract class DomainObjectAutoCompleteEntity
-        implements
+implements
         HasAsciiDocDescription,
         ValueHolder<String> {
 

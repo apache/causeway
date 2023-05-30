@@ -59,7 +59,7 @@ import org.apache.causeway.core.metamodel.facets.object.introspection.Introspect
 import org.apache.causeway.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
-import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacetFromChoicesFromFacet;
+import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacetFromAction;
 import org.apache.causeway.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod;
 import org.apache.causeway.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -480,7 +480,7 @@ class DomainModelTest_usingGoodDomain {
         val param0 = action.getParameters().getFirstElseFail();
 
         assertEquals(
-                ActionParameterChoicesFacetFromChoicesFromFacet.class,
+                ActionParameterChoicesFacetFromAction.class,
                 param0.lookupFacet(ActionParameterChoicesFacet.class)
                     .map(Object::getClass)
                     .orElse(null));

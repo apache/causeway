@@ -456,18 +456,28 @@ extends
         return getBeanSort().isAbstract();
     }
 
+    /**
+     * Includes abstract types that have {@link EntityFacet}.
+     */
     default boolean isEntity() {
         return getBeanSort().isEntity()
                 || (getBeanSort().isAbstract()
                         && entityFacet().isPresent());
     }
 
+    /**
+     * Includes abstract types that have {@link ViewModelFacet}.
+     */
     default boolean isViewModel() {
         return getBeanSort().isViewModel()
                 || (getBeanSort().isAbstract()
                         && viewmodelFacet().isPresent());
     }
 
+    /**
+     * Includes abstract types that have
+     * {@link ViewModelFacet} or {@link EntityFacet}.
+     */
     default boolean isEntityOrViewModel() {
         return isViewModel() || isEntity();
     }

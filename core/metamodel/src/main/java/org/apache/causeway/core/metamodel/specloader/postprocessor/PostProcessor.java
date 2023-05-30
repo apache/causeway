@@ -47,6 +47,11 @@ public class PostProcessor implements AutoCloseable {
     public void postProcess(final ObjectSpecification objectSpecification) {
 
         for (val postProcessor : enabledPostProcessors) {
+
+            if(!postProcessor.getFilter().test(objectSpecification)) {
+                continue;
+            }
+
             postProcessor.postProcessObject(objectSpecification);
 
             objectSpecification.streamRuntimeActions(MixedIn.INCLUDED)
