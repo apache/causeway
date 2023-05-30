@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 //tag::class[]
-@DomainObject(mixinMethod = "property")                           // <.>
+@DomainObject(mixinMethod = "property")                         // <.>
 @Property()
 @RequiredArgsConstructor
 public class DomainObjectMixinMethodEntity_initialCharacter {
@@ -16,7 +16,7 @@ public class DomainObjectMixinMethodEntity_initialCharacter {
     private final DomainObjectMixinMethodEntity mixee;
 
     @MemberSupport
-    public Character property() {                                   // <.>
+    public Character property() {                               // <.>
         val charArray = mixee.getName().toCharArray();
         return charArray.length == 0 ? null : charArray[0];
     }

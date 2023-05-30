@@ -31,7 +31,6 @@ public class DomainObjectNaturePage_viewModels {
 //end::class[]
 
     @Inject ValueHolderRepository<String, ? extends DomainObjectNatureEntity> entities;
-
 //tag::class[]
 }
 //end::class[]

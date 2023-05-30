@@ -56,6 +56,9 @@ public class DomainObjectNatureViewModel
         this.message = underlying.getName();
         this.underlying = underlying;
     }
+    // ...
+
+//end::class[]
 
     @ObjectSupport public String title() {                  // <.>
         return message != null ? message : titleService.titleOf(underlying);
@@ -66,12 +69,15 @@ public class DomainObjectNatureViewModel
     @XmlElement(required = false)
     private String message;
 
+//tag::class[]
     @Property
     @Getter @Setter
     @XmlElement
     @XmlJavaTypeAdapter(PersistentEntityAdapter.class)      // <.>
     private DomainObjectNatureEntity underlying;
 
+//end::class[]
     @Inject @XmlTransient TitleService titleService;
+//tag::class[]
 }
 //end::class[]

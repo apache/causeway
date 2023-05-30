@@ -63,7 +63,7 @@ public class DomainObjectIntrospectionAnnotOptEntityImpl
     private Long id;
 //tag::class[]
 
-    private String name;                                                        // <.>
+    private String name;                                                                // <.>
     public String getName() {
         return name;
     }
@@ -71,11 +71,11 @@ public class DomainObjectIntrospectionAnnotOptEntityImpl
         this.name = name;
     }
 
-    public DomainObjectIntrospectionAnnotOptEntityImpl updateName(final String name) { // <.>
+    public DomainObjectIntrospectionAnnotOptEntityImpl updateName(final String name) {  // <.>
         setName(name);
         return this;
     }
-    public String default0UpdateName() {                                        // <.>
+    public String default0UpdateName() {                                                // <.>
         return getName();
     }
 }

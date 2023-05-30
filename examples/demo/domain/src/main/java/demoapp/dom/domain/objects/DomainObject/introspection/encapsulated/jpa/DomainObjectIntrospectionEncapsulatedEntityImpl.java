@@ -73,21 +73,21 @@ public class DomainObjectIntrospectionEncapsulatedEntityImpl
 //tag::class[]
 
     private String name;
-    @Property                                                                       // <.>
-    private String getName() {                                                      // <1>
+    @Property                                                                           // <.>
+    private String getName() {                                                          // <1>
         return name;
     }
     private void setName(String name) {
         this.name = name;
     }
 
-    @Action(semantics = SemanticsOf.IDEMPOTENT)                                     // <.>
-    private DomainObjectIntrospectionEncapsulatedEntity updateName(final String name) {   // <2>
+    @Action(semantics = SemanticsOf.IDEMPOTENT)                                         // <.>
+    private DomainObjectIntrospectionEncapsulatedEntity updateName(final String name) { // <2>
         setName(name);
         return this;
     }
-    @MemberSupport                                                                  // <.>
-    private String default0UpdateName() {                                           // <3>
+    @MemberSupport                                                                      // <.>
+    private String default0UpdateName() {                                               // <3>
         return getName();
     }
 }
