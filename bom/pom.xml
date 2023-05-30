@@ -182,8 +182,8 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <togglz.version>4.0.1</togglz.version>
 
-        <wicket.version>9.13.0</wicket.version> <!--  9.4.0 is last known good, before wicket put jupiter-api on the module graph -->
-        <wicket-bootstrap.version>6.0.3</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
+        <wicket.version>9.14.0</wicket.version>
+        <wicket-bootstrap.version>6.0.4</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
         <wicket-webjars.version>3.0.7</wicket-webjars.version>
         <wicket-viewer-jquery.version>3.6.4</wicket-viewer-jquery.version> <!--  as served by wicket via webjars -->
 
