@@ -16,21 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.introspection.encapsulated;
+package demoapp.dom.domain.objects.DomainObject.introspection.encapsulated.jdo;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
+import org.springframework.context.annotation.Profile;
+
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 
+import demoapp.dom.domain.objects.DomainObject.introspection.DomainObjectIntrospectionPage;
 import lombok.RequiredArgsConstructor;
 
-import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.objects.DomainObject.introspection.DomainObjectIntrospectionPage;
-
+@Profile("demo-jdo")
 @Collection()
 @CollectionLayout()
 @RequiredArgsConstructor
@@ -40,10 +41,10 @@ public class DomainObjectIntrospectionPage_encapsulationEnabled {
     private final DomainObjectIntrospectionPage page;
 
     @MemberSupport
-    public List<? extends DomainObjectIntrospectionEncapsulatedEntity> coll() {
-        return entities.all();
+    public List<DomainObjectIntrospectionEncapsulatedEntityImpl> coll() {
+        return repo.all();
     }
 
-    @Inject ValueHolderRepository<?, ? extends DomainObjectIntrospectionEncapsulatedEntity> entities;
+    @Inject DomainObjectIntrospectionEncapsulatedEntityImplRepository repo;
 
 }
