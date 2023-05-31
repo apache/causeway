@@ -31,6 +31,7 @@
 				<cpt:action id="changeNamePublished"/>
 				<cpt:action id="changeNameNotPublished"/>
 			</cpt:collection>
+            <cpt:collection id="publishedCommands"/>
 		</bs3:col>
 		<bs3:col span="6">
 			<cpt:fieldSet name="Description" id="description" >
@@ -47,11 +48,6 @@
 				<cpt:action id="openRestApi" position="PANEL_DROPDOWN" />
 				<cpt:property id="description"/>
 			</cpt:fieldSet>
-		</bs3:col>
-	</bs3:row>
-	<bs3:row>
-		<bs3:col span="12">
-			<cpt:collection id="publishedCommands"/>
 		</bs3:col>
 	</bs3:row>
 	<bs3:row>

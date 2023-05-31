@@ -17,7 +17,9 @@ The collection on the left hand side shows a list of entities, and two associate
 These actions can be used to change the name of any one of those entities.
 One of the actions is published, the other is not.
 
-Invoking the published action will result in a command representing the intention to invoke the action from being persisted; these are listed in the collection at the bottom of the page.
+Invoking the published action will result in a command representing the intention to invoke the action from being persisted.
+The link:https://causeway.apache.org/userguide/2.0.0-RC1/commandlog/about.html[commandlog] extension persists these as link:https://causeway.apache.org/refguide/2.0.0-RC1/extensions/index/commandlog/applib/dom/CommandLogEntry.html[CommandLogEntry] entities.
+These are listed in the second collection on the left.
 
 You can also navigate into the entities and invoke actions on the objects themselves.
 These actions are also logged.
