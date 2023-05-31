@@ -17,12 +17,6 @@ However supporting methods for domain members (`hide`, `disable`, `validate`, `c
 +
 However, the methods can have _any_ visibility, including `private` visibility.
 This reduces the programmatic API of the domain object can so can help eliminate bugs.
-+
-[NOTE]
-====
-entities using this type do not render correctly in collections - properties are not shown as columns.
-Tracking with https://issues.apache.org/jira/browse/CAUSEWAY-3471[CAUSEWAY-3471]
-====
 
 The default policy is set using a configuration property (see section below).
 Normally there would be little reason to override this - just adopt the convention that best fits your style, and leave it at that.

@@ -37,6 +37,8 @@ import org.apache.causeway.applib.annotation.ValueSemantics;
 import org.apache.causeway.applib.jaxb.JavaTimeXMLGregorianCalendarMarshalling;
 import org.apache.causeway.schema.chg.v2.ChangesDto;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -51,7 +53,9 @@ import lombok.Setter;
 )
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChangesVm {
+public class ChangesVm
+        implements
+        HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
         int numCreated = changesDto.getObjects().getCreated().getOid().size();
