@@ -481,9 +481,10 @@ public class ProjectDocModel {
         return String.format(".%s\n****\n%s\n****\n\n", title, content);
     }
 
+    /* not used
     private static String toAdocListItem(final String element) {
         return String.format("* %s\n", element);
-    }
+    } */
 
     private static String toAdocCompactListItem(final String element) {
         return String.format("%s +\n", element);

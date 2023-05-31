@@ -21,7 +21,6 @@ package demoapp.dom.featured.causewayext.sse;
 import java.util.concurrent.atomic.LongAdder;
 
 import lombok.Data;
-import lombok.val;
 
 //tag::class[]
 @Data(staticConstructor="of")

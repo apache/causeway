@@ -38,11 +38,9 @@ import org.apache.causeway.extensions.sse.applib.annotations.ServerSentEvents;
 import org.apache.causeway.extensions.sse.applib.service.SseService;
 import org.apache.causeway.extensions.sse.applib.service.SseService.ExecutionBehavior;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @XmlRootElement(name = "Demo")
 @XmlType

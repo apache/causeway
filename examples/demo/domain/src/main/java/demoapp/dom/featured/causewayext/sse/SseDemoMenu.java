@@ -30,8 +30,6 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.value.Markup;
 
-import lombok.val;
-
 @Named("demo.SseDemoMenu")
 @DomainService(
         nature=NatureOfService.VIEW

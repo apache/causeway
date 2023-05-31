@@ -18,25 +18,14 @@
  */
 package demoapp.dom.domain.actions.ActionLayout.redirectPolicy;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom._infra.values.ValueHolder;
-
-import lombok.Getter;
-import lombok.Setter;
-import lombok.SneakyThrows;
-
-import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Repainting;
-import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.extensions.pdfjs.applib.annotations.PdfJsViewer;
-import org.apache.causeway.persistence.jpa.applib.types.BlobJpaEmbeddable;
 
-import javax.inject.Inject;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlTransient;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom._infra.values.ValueHolder;
 
 //tag::class[]
 public abstract class ActionLayoutRedirectPolicyEntity

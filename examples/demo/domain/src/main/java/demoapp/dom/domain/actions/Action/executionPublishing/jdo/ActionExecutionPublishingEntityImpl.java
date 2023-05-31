@@ -29,11 +29,9 @@ import org.springframework.context.annotation.Profile;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import demoapp.dom.domain.actions.Action.executionPublishing.ActionExecutionPublishingEntity;
+import lombok.Getter;
+import lombok.Setter;
 
 @Profile("demo-jdo")
 @PersistenceCapable(
@@ -50,7 +48,7 @@ public class ActionExecutionPublishingEntityImpl extends ActionExecutionPublishi
     // ...
 //end::class[]
 
-    public ActionExecutionPublishingEntityImpl(String value) {
+    public ActionExecutionPublishingEntityImpl(final String value) {
         setName(value);
     }
 

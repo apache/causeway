@@ -18,9 +18,6 @@
  */
 package org.apache.causeway.applib.services.user;
 
-import lombok.SneakyThrows;
-
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
@@ -28,6 +25,8 @@ import java.util.Locale;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.internaltestsupport.contract.ValueTypeContractTestAbstract;
+
+import lombok.SneakyThrows;
 
 class UserMemento_value_Test extends ValueTypeContractTestAbstract<UserMemento> {
 
@@ -74,7 +73,7 @@ class UserMemento_value_Test extends ValueTypeContractTestAbstract<UserMemento> 
     }
 
     @SneakyThrows
-    private static URL newURL(String s) {
+    private static URL newURL(final String s) {
         return new URL(s);
     }
 

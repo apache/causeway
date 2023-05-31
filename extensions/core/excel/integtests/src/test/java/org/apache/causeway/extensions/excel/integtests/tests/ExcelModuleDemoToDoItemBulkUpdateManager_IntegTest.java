@@ -42,6 +42,7 @@ import org.apache.causeway.extensions.excel.fixtures.demoapp.demomodule.fixtures
 import org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItemMenu;
 import org.apache.causeway.extensions.excel.integtests.ExcelModuleIntegTestAbstract;
 
+@SuppressWarnings("unused")
 public class ExcelModuleDemoToDoItemBulkUpdateManager_IntegTest extends ExcelModuleIntegTestAbstract {
 
     @BeforeEach
@@ -105,7 +106,7 @@ public class ExcelModuleDemoToDoItemBulkUpdateManager_IntegTest extends ExcelMod
     private static final Matcher<? super byte[]> lengthWithinPercentage(final byte[] expectedBytes, final int percentage) {
         return new TypeSafeMatcher<byte[]>() {
             @Override
-            protected boolean matchesSafely(byte[] item) {
+            protected boolean matchesSafely(final byte[] item) {
                 final double lower = expectedBytes.length * (100 - percentage) / 100;
                 final double upper = expectedBytes.length * (100 + percentage) / 100;
                 final int actualLength = item.length;
@@ -113,7 +114,7 @@ public class ExcelModuleDemoToDoItemBulkUpdateManager_IntegTest extends ExcelMod
             }
 
             @Override
-            public void describeTo(Description description) {
+            public void describeTo(final Description description) {
                 description.appendText("Byte array with length within " + percentage + "% of expected length (" + expectedBytes.length + " bytes)");
             }
         };

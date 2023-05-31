@@ -24,10 +24,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.ActionLayout.Position;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
@@ -49,7 +46,7 @@ public class EventBusServiceDemoPage implements HasAsciiDocDescription {
 
 //tag::eventClass[]
     public static class UiButtonEvent extends EventObject { // <.>
-        public UiButtonEvent(Object source) {
+        public UiButtonEvent(final Object source) {
             super(source);
         }
     }

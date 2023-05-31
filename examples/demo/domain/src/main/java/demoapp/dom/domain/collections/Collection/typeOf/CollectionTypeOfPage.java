@@ -20,32 +20,22 @@ package demoapp.dom.domain.collections.Collection.typeOf;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.inject.Named;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.annotation.SemanticsOf;
-
-import demoapp.dom.domain.collections.Collection.typeOf.child.CollectionTypeOfChildVm;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.domain._entities.DemoEntity;
+import demoapp.dom.domain.collections.Collection.typeOf.child.CollectionTypeOfChildVm;
+import lombok.NoArgsConstructor;
 
 @Named("demo.CollectionTypeOfPage")
 @DomainObject(nature=Nature.VIEW_MODEL)

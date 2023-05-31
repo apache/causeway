@@ -30,7 +30,6 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.command.Command;
-import org.apache.causeway.applib.services.command.Command.CommandPublishingPhase;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.causeway.commons.collections.Can;
@@ -65,7 +64,7 @@ public class CommandPublisherDefault implements CommandPublisher {
     }
 
     @Override
-    public void ready(@NonNull Command command) {
+    public void ready(@NonNull final Command command) {
 
         val handle = _Xray.enterCommandReadyPublishing(
                 interactionServiceProvider.get(),
@@ -82,7 +81,7 @@ public class CommandPublisherDefault implements CommandPublisher {
     }
 
     @Override
-    public void start(@NonNull Command command) {
+    public void start(@NonNull final Command command) {
 
         val handle = _Xray.enterCommandStartedPublishing(
                 interactionServiceProvider.get(),

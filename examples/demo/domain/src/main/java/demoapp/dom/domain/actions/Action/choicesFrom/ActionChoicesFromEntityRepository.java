@@ -18,8 +18,6 @@
  */
 package demoapp.dom.domain.actions.Action.choicesFrom;
 
-import java.util.List;
-
 public interface ActionChoicesFromEntityRepository {
 
 }

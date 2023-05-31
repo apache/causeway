@@ -19,7 +19,6 @@
 package org.apache.causeway.extensions.pdfjs.metamodel.facet;
 
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facetapi.FacetWithAttributes;
 import org.apache.causeway.extensions.pdfjs.applib.config.PdfJsConfig;
 import org.apache.causeway.extensions.pdfjs.applib.spi.PdfJsViewerAdvisor;
 

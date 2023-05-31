@@ -18,14 +18,11 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.contributions;
 
-import lombok.RequiredArgsConstructor;
-
 import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
@@ -33,6 +30,8 @@ import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * This (abstract) mixin contributes a <tt>recentBackgroundCommands</tt> collection to any domain object.

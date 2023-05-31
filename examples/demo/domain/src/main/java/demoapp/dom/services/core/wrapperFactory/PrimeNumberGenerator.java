@@ -1,20 +1,18 @@
 package demoapp.dom.services.core.wrapperFactory;
 
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainService;
-
 import org.apache.causeway.applib.annotation.NatureOfService;
-import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.wrapper.control.AsyncControl;
+
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 
 //tag::class[]
 @Named("demo.DemoEntityFactory")
@@ -29,7 +27,7 @@ public class PrimeNumberGenerator {
 
     @Action
     @ActionLayout(hidden = Where.EVERYWHERE)                        // <.>
-    public void calculatePrimeNumbersAsync(int from, int upTo) {
+    public void calculatePrimeNumbersAsync(final int from, final int upTo) {
         int nextPrime = nextPrime(from);
         if (nextPrime <= upTo) {
             primeNumberFactory.newPrimeNumber(nextPrime);
@@ -50,7 +48,7 @@ public class PrimeNumberGenerator {
         return number;
     }
 
-    private static boolean isPrime(int number) {
+    private static boolean isPrime(final int number) {
         //...
 //end::class[]
         if (number <= 1) {

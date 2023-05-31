@@ -18,25 +18,21 @@
  */
 package demoapp.dom.domain.properties.Property.snapshot.jdo;
 
-import demoapp.dom.domain.properties.Property.snapshot.PropertySnapshotEntity;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import javax.inject.Named;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
-import javax.persistence.*;
+
+import org.springframework.context.annotation.Profile;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
-import org.springframework.context.annotation.Profile;
+import demoapp.dom.domain.properties.Property.snapshot.PropertySnapshotEntity;
+import lombok.Getter;
+import lombok.Setter;
 
 @Profile("demo-jdo")
 @PersistenceCapable(
@@ -54,7 +50,7 @@ public class PropertySnapshotEntityImpl
     // ...
 //end::class[]
 
-    public PropertySnapshotEntityImpl(String value) {
+    public PropertySnapshotEntityImpl(final String value) {
         setName(value);
     }
 //tag::class[]

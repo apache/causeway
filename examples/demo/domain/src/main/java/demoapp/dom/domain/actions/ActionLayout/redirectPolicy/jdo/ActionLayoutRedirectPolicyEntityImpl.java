@@ -18,22 +18,6 @@
  */
 package demoapp.dom.domain.actions.ActionLayout.redirectPolicy.jdo;
 
-import demoapp.dom.domain.actions.ActionLayout.redirectPolicy.ActionLayoutRedirectPolicyEntity;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.Optionality;
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.value.Blob;
-import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
-import org.apache.causeway.persistence.jpa.applib.types.BlobJpaEmbeddable;
-
-import org.springframework.context.annotation.Profile;
-
 import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
@@ -41,7 +25,19 @@ import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
-import javax.persistence.*;
+
+import org.springframework.context.annotation.Profile;
+
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.Optionality;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.value.Blob;
+
+import demoapp.dom.domain.actions.ActionLayout.redirectPolicy.ActionLayoutRedirectPolicyEntity;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Profile("demo-jdo")
 @Named("demo.ActionLayoutRedirectPolicyEntity")
@@ -55,7 +51,7 @@ public class ActionLayoutRedirectPolicyEntityImpl extends ActionLayoutRedirectPo
     // ...
 //end::class[]
 
-    public ActionLayoutRedirectPolicyEntityImpl(String value) {
+    public ActionLayoutRedirectPolicyEntityImpl(final String value) {
         setName(value);
     }
 

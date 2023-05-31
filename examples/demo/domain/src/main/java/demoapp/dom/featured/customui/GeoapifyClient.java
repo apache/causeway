@@ -35,14 +35,12 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.commons.internal.base._Bytes;
 
+import demoapp.dom.AppConfiguration;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.Value;
 import lombok.val;
-
-import demoapp.dom.AppConfiguration;
 
 //tag::class[]
 @Service

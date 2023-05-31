@@ -166,13 +166,14 @@ public final class _Annotations {
 
     // -- HELPER
 
-    /**
+    /* XXX no longer used
+    / **
      * Optionally create a type-safe synthesized version of this annotation based on presence.
      * <p>
      * Also includes annotated fields, getter methods might be associated with.
      * If annotations from a getter method are competing with annotations from its corresponding field,
      * let the one win, that is 'nearer' to the <i>Class</i> that is subject to introspection.
-     */
+     * /
     private static <A extends Annotation> Optional<A> synthesize(
             final AnnotatedElement annotatedElement,
             final Class<A> annotationType,
@@ -187,7 +188,7 @@ public final class _Annotations {
 
         return _Annotations_SynthesizedMergedAnnotationInvocationHandler
                 .createProxy(collected, associated, annotationType);
-    }
+    }*/
 
     /**
      * @apiNote don't publicly expose Spring's {@link MergedAnnotations}

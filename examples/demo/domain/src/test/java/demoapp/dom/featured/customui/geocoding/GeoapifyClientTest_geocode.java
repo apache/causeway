@@ -22,10 +22,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import demoapp.dom.featured.customui.GeoapifyClient;
-import lombok.val;
-
 import demoapp.dom.AppConfiguration;
+import demoapp.dom.featured.customui.GeoapifyClient;
 
 class GeoapifyClientTest_geocode {
 

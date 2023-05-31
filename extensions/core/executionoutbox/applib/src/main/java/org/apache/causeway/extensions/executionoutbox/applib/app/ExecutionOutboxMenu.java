@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.extensions.executionoutbox.applib.app;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -80,10 +78,9 @@ public class ExecutionOutboxMenu {
     final ExecutionOutboxEntryRepository<? extends ExecutionOutboxEntry> executionOutboxEntryRepository;
     final ClockService clockService;
 
-
-
+    /* not used
     private LocalDate now() {
         return clockService.getClock().nowAsLocalDate(ZoneId.systemDefault());
-    }
+    } */
 }
 

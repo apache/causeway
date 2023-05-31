@@ -23,19 +23,15 @@ import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 
 import org.springframework.context.annotation.Profile;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingEntity;
+import lombok.Getter;
+import lombok.Setter;
 
 @Profile("demo-jdo")
 @PersistenceCapable(
@@ -52,7 +48,7 @@ public class ActionCommandPublishingEntityImpl extends ActionCommandPublishingEn
     // ...
 //end::class[]
 
-    public ActionCommandPublishingEntityImpl(String value) {
+    public ActionCommandPublishingEntityImpl(final String value) {
         setName(value);
     }
 

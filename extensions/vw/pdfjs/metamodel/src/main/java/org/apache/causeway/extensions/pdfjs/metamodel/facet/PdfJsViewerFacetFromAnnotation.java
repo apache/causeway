@@ -23,7 +23,6 @@ import java.util.function.BiConsumer;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FacetWithAttributes;
 import org.apache.causeway.extensions.pdfjs.applib.annotations.PdfJsViewer;

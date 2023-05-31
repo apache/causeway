@@ -7,11 +7,7 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.wrapper.control.AsyncControl;
 
-import demoapp.dom.services.core.wrapperFactory.jdo.PrimeNumberJdo;
-
 import lombok.RequiredArgsConstructor;
-
-import lombok.val;
 
 @Action
 @RequiredArgsConstructor
@@ -24,7 +20,7 @@ public class WrapperFactoryDemoPage_createPrimes {
     @Inject PrimeNumberGenerator primeNumberGenerator;
 
     @MemberSupport
-    public WrapperFactoryDemoPage act(Integer upTo) {
+    public WrapperFactoryDemoPage act(final Integer upTo) {
         primeNumberRepository.removeAll();
         wrapperFactory.asyncWrap(                               // <.>
                 primeNumberGenerator,                           // <.>
@@ -33,7 +29,7 @@ public class WrapperFactoryDemoPage_createPrimes {
         return page;
     }
 // end::class[]
-    public String validateUpTo(Integer upTo) {
+    public String validateUpTo(final Integer upTo) {
         if (upTo < 1) return "cannot be less than 1";
         if (upTo > 10000) return "can only calculate primes up to than 10000";
         return null;

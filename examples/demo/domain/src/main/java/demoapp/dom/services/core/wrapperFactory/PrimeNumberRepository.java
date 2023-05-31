@@ -18,15 +18,7 @@
  */
 package demoapp.dom.services.core.wrapperFactory;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.services.core.wrapperFactory.jpa.PrimeNumberJpa;
-
 import java.util.List;
-
-import javax.inject.Named;
-
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.ObjectSupport;
 
 public interface PrimeNumberRepository<T extends PrimeNumber> {
 
