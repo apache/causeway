@@ -24,10 +24,13 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.util.schema.CommonDtoUtils;
+import org.apache.causeway.applib.value.semantics.Parser;
 import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.schema.common.v2.ValueType;
+
+import lombok.val;
 
 @Profile("demo-jdo")
 //tag::class[]
@@ -74,7 +77,7 @@ public class ComplexNumberJdoValueSemantics
         return (context, object) -> title(object, "NaN");
              }
 
-    private static String title(ComplexNumberJdo complexNumber, final String fallbackIfNull) {
+    private static String title(final ComplexNumberJdo complexNumber, final String fallbackIfNull) {
         if (complexNumber == null) return fallbackIfNull;
         return complexNumber.getRe() +
                 (complexNumber.getIm() >= 0
@@ -83,6 +86,38 @@ public class ComplexNumberJdoValueSemantics
                 + "i";
      }
 //end::getRenderer[]
+
+//tag::getParser[]
+    @Override
+    public Parser<ComplexNumberJdo> getParser() {
+        return new Parser<ComplexNumberJdo>() {
+            @Override
+            public String parseableTextRepresentation(final Context context, final ComplexNumberJdo value) {
+                return title(value, "NaN");
+            }
+
+            @Override
+            public ComplexNumberJdo parseTextRepresentation(final Context context, final String complexNumberString) {
+                if(!org.springframework.util.StringUtils.hasLength(complexNumberString)
+                        || complexNumberString.contains("NaN")) {
+                    return null;
+                }
+                // this is a naive implementation, just for demo
+                final String[] parts = complexNumberString.split("\\+|i");
+                val real = Double.parseDouble(parts[0]);
+                val imaginary = Double.parseDouble(parts[1]);
+                return ComplexNumberJdo.of(real, imaginary);
+            }
+
+            @Override
+            public int typicalLength() {
+                return 20;
+            }
+        };
+    }
+//end::getParser[]
+
+
 //tag::class[]
 }
 //end::class[]

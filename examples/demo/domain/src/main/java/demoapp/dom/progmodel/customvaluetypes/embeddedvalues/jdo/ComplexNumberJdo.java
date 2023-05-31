@@ -18,19 +18,23 @@
  */
 package demoapp.dom.progmodel.customvaluetypes.embeddedvalues.jdo;
 
+import org.springframework.context.annotation.Profile;
+
 import org.apache.causeway.applib.annotation.Value;
 
 import demoapp.dom.progmodel.customvaluetypes.embeddedvalues.ComplexNumber;
 import lombok.AccessLevel;
 
+@Profile("demo-jdo")
 //tag::class[]
-@javax.jdo.annotations.PersistenceCapable
+/* with presence of @EmbeddedOnly should not be required, but fails on launch if not provided */
+@javax.jdo.annotations.PersistenceCapable(embeddedOnly="true")
 @javax.jdo.annotations.EmbeddedOnly                                 // <.>
 @Value                                                              // <.>
 @lombok.Getter                                                      // <.>
 @lombok.Setter(AccessLevel.PRIVATE)                                 // <.>
 @lombok.AllArgsConstructor(staticName = "of")
-@lombok.NoArgsConstructor                                           // <4>
+@lombok.NoArgsConstructor                                           // <.>
 public class ComplexNumberJdo
         implements ComplexNumber {
 
@@ -38,6 +42,6 @@ public class ComplexNumberJdo
     private double re;                                              // <.>
 
     @javax.jdo.annotations.Column(allowsNull = "false")
-    private double im;                                              // <5>
+    private double im;                                              // <.>
 }
 //end::class[]
