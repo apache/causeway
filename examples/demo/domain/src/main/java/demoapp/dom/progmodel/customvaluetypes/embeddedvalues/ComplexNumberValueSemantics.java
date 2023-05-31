@@ -16,11 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.progmodel.customvaluetypes.embeddedvalues.jpa;
+package demoapp.dom.progmodel.customvaluetypes.embeddedvalues;
 
 import javax.inject.Named;
 
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.util.schema.CommonDtoUtils;
@@ -29,18 +28,19 @@ import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.schema.common.v2.ValueType;
 
-@Profile("demo-jpa")
+import demoapp.dom.progmodel.customvaluetypes.embeddedvalues.jpa.ComplexNumberJpa;
+
 //tag::class[]
-@Named("demo.ComplexNumberJpaValueSemantics")
+@Named("demo.embeddedvalues.ComplexNumberValueSemantics")
 @Component
-public class ComplexNumberJpaValueSemantics
-        extends ValueSemanticsAbstract<ComplexNumberJpa> {
+public class ComplexNumberValueSemantics
+        extends ValueSemanticsAbstract<ComplexNumber> {
     // ...
 //end::class[]
 
     @Override
-    public Class<ComplexNumberJpa> getCorrespondingClass() {
-        return ComplexNumberJpa.class;
+    public Class<ComplexNumber> getCorrespondingClass() {
+        return ComplexNumber.class;
     }
 
     @Override
@@ -50,10 +50,10 @@ public class ComplexNumberJpaValueSemantics
 
 //tag::compose[]
     @Override
-    public ValueDecomposition decompose(final ComplexNumberJpa value) {
+    public ValueDecomposition decompose(final ComplexNumber value) {
         return CommonDtoUtils.typedTupleBuilder(value)
-                .addFundamentalType(ValueType.DOUBLE, "re", ComplexNumberJpa::getRe)
-                .addFundamentalType(ValueType.DOUBLE, "im", ComplexNumberJpa::getIm)
+                .addFundamentalType(ValueType.DOUBLE, "re", ComplexNumber::getRe)
+                .addFundamentalType(ValueType.DOUBLE, "im", ComplexNumber::getIm)
                 .buildAsDecomposition();
     }
 
@@ -70,11 +70,11 @@ public class ComplexNumberJpaValueSemantics
 
 //tag::getRenderer[]
     @Override
-    public Renderer<ComplexNumberJpa> getRenderer() {
+    public Renderer<ComplexNumber> getRenderer() {
         return (context, object) -> title(object, "NaN");
     }
 
-    private static String title(ComplexNumberJpa complexNumber, final String fallbackIfNull) {
+    private static String title(final ComplexNumber complexNumber, final String fallbackIfNull) {
         if (complexNumber == null) return fallbackIfNull;
         return complexNumber.getRe() +
                 (complexNumber.getIm() >= 0

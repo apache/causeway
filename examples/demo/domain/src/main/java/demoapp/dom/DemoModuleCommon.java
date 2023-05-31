@@ -31,6 +31,8 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 import org.apache.causeway.extensions.docgen.CausewayModuleExtDocgen;
 import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
 
+import demoapp.dom.domain.properties.ValueSemantics.percentage.ValueSemanticsProviderForPercentage;
+
 @Configuration
 @Import({
     CausewayModuleApplibChangeAndExecutionLoggers.class,
@@ -38,6 +40,11 @@ import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixtures
     CausewayModuleCoreRuntimeServices.class,
     CausewayModuleExtDocgen.class,
     CausewayModuleTestingFixturesApplib.class,
+
+    // value semantics providers
+    ValueSemanticsProviderForPercentage.class,
+    demoapp.dom.progmodel.customvaluetypes.compositevalues.ComplexNumberValueSemantics.class,
+    demoapp.dom.progmodel.customvaluetypes.embeddedvalues.ComplexNumberValueSemantics.class,
 })
 @PropertySources({
     @PropertySource(CausewayPresets.NoTranslations),
