@@ -64,9 +64,6 @@ include::ActionValidatePage_selectTvCharactersByShowAndSexUsingName.java[tags=cl
 <.> the N-1 arguments are passed into the "validate" method and can be used for validation
 <.> the argument actually being validated.
 
-+
-WARNING: this version currently fails; being tracked with link:https://issues.apache.org/jira/browse/CAUSEWAY-3462[CAUSEWAY-3462].
-
 * the final example demonstrates validating _all_ of the arguments or an action together.
 +
 [source,java]

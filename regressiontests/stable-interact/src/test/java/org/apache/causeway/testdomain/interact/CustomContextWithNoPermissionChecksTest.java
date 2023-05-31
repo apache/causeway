@@ -61,6 +61,4 @@ class CustomContextWithNoPermissionChecksTest extends CausewayIntegrationTestAbs
         assertThat(iaCtx.getUser().hasSudoAccessAllRole()).isTrue();
     }
 
-
-
 }

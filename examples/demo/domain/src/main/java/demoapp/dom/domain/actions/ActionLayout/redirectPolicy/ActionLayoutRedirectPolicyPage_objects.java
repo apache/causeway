@@ -7,10 +7,8 @@ import jakarta.inject.Inject;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.MemberSupport;
 
-import lombok.RequiredArgsConstructor;
-
 import demoapp.dom._infra.values.ValueHolderRepository;
-import demoapp.dom.domain.actions.ActionLayout.hidden.ActionLayoutHiddenPage;
+import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Collection()

@@ -16,30 +16,35 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.DomainObject.xxxDomainEvent;
+package demoapp.dom.domain.objects.DomainObject.introspection.encapsulated.jpa;
+
+import java.util.List;
 
 import jakarta.inject.Inject;
 
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.Profile;
 
-import org.apache.causeway.applib.services.registry.ServiceRegistry;
+import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.applib.annotation.CollectionLayout;
+import org.apache.causeway.applib.annotation.MemberSupport;
 
+import demoapp.dom.domain.objects.DomainObject.introspection.DomainObjectIntrospectionPage;
 import lombok.RequiredArgsConstructor;
 
-//tag::class[]
-@Service
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
-class DomainObjectXxxDomainEventControlSubscriber {
+@Profile("demo-jpa")
+@Collection()
+@CollectionLayout()
+@RequiredArgsConstructor
+public class DomainObjectIntrospectionPage_encapsulationEnabled {
 
-    final ServiceRegistry serviceRegistry;
+    @SuppressWarnings("unused")
+    private final DomainObjectIntrospectionPage page;
 
-    DomainObjectXxxDomainEventControlStrategy controlStrategy =
-            DomainObjectXxxDomainEventControlStrategy.DO_NOTHING;                         // <.>
-
-    @EventListener(DomainObjectXxxDomainEventPage.DomainObjectXxxDomainEventMarker.class) // <.>
-    public void on(DomainObjectXxxDomainEventPage.DomainObjectXxxDomainEventMarker ev) {
-        controlStrategy.on(ev, serviceRegistry);                                          // <.>
+    @MemberSupport
+    public List<DomainObjectIntrospectionEncapsulatedEntityImpl> coll() {
+        return repo.all();
     }
+
+    @Inject DomainObjectIntrospectionEncapsulatedEntityImplRepository repo;
+
 }
-//end::class[]

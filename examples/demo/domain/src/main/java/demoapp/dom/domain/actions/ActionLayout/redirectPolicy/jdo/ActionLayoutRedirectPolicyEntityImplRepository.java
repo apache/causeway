@@ -18,10 +18,13 @@
  */
 package demoapp.dom.domain.actions.ActionLayout.redirectPolicy.jdo;
 
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
+
 import jakarta.inject.Inject;
 
 import org.joda.time.DateTime;
-
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -31,11 +34,6 @@ import org.apache.causeway.applib.value.NamedWithMimeType;
 import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.domain.actions.ActionLayout.redirectPolicy.ActionLayoutRedirectPolicyEntityRepository;
 import demoapp.dom.types.Samples;
-
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Profile("demo-jdo")
 @Service
@@ -52,7 +50,7 @@ extends ValueHolderRepository<String, ActionLayoutRedirectPolicyEntityImpl> impl
     }
 
     @Override
-    protected ActionLayoutRedirectPolicyEntityImpl newDetachedEntity(String value) {
+    protected ActionLayoutRedirectPolicyEntityImpl newDetachedEntity(final String value) {
         var entity = new ActionLayoutRedirectPolicyEntityImpl(value);
         entity.setBlob(randomBlob());
         return entity;

@@ -37,7 +37,6 @@ import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -82,7 +81,7 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
 
     private UUID interactionId;
 
-    public Command(UUID interactionId) {
+    public Command(final UUID interactionId) {
         this.interactionId = interactionId;
     }
 
@@ -363,7 +362,7 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          */
-        public void setInteractionId(UUID interactionId) {
+        public void setInteractionId(final UUID interactionId) {
             Command.this.interactionId = interactionId;
         }
     };

@@ -18,26 +18,31 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.dom;
 
-import lombok.val;
-
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import jakarta.inject.Inject;
+
+import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.jaxb.JavaSqlJaxbAdapters;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.command.Command;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.wrapper.callable.AsyncCallable;
 import org.apache.causeway.applib.services.wrapper.control.AsyncControl;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.common.v2.PeriodDto;
-import org.springframework.stereotype.Service;
+
+import lombok.val;
 
 /**
  * Allows the execution of action invocations or property edits to be deferred so that they can be executed later in
@@ -64,7 +69,7 @@ public class BackgroundService {
      *
      * @see #executeMixin(Class, Object) - to invoke actions that are implemented as mixins
      */
-    public <T> T execute(T object) {
+    public <T> T execute(final T object) {
         return wrapperFactory.asyncWrap(object, AsyncControl.returningVoid().withCheckRules()
                 .with(persistCommandExecutorService)
         );
@@ -75,7 +80,7 @@ public class BackgroundService {
      *
      * @see #executeMixin(Class, Object) - to invoke actions that are implemented as mixins
      */
-    public <T> T executeSkipRules(T object) {
+    public <T> T executeSkipRules(final T object) {
         return wrapperFactory.asyncWrap(object, AsyncControl.returningVoid().withSkipRules()
                 .with(persistCommandExecutorService)
         );
@@ -87,7 +92,7 @@ public class BackgroundService {
      *
      * @see #execute(Object) - to invoke actions that are implemented directly within the object
      */
-    public <T> T executeMixin(Class<T> mixinClass, Object mixedIn) {
+    public <T> T executeMixin(final Class<T> mixinClass, final Object mixedIn) {
         return wrapperFactory.asyncWrapMixin(mixinClass, mixedIn, AsyncControl.returningVoid().withCheckRules()
                 .with(persistCommandExecutorService)
         );
@@ -99,7 +104,7 @@ public class BackgroundService {
      *
      * @see #execute(Object) - to invoke actions that are implemented directly within the object
      */
-    public <T> T executeMixinSkipRules(Class<T> mixinClass, Object mixedIn) {
+    public <T> T executeMixinSkipRules(final Class<T> mixinClass, final Object mixedIn) {
         return wrapperFactory.asyncWrapMixin(mixinClass, mixedIn, AsyncControl.returningVoid().withSkipRules()
                 .with(persistCommandExecutorService)
         );
@@ -116,7 +121,7 @@ public class BackgroundService {
         private final static JavaSqlJaxbAdapters.TimestampToXMLGregorianCalendarAdapter gregorianCalendarAdapter  = new JavaSqlJaxbAdapters.TimestampToXMLGregorianCalendarAdapter();;
 
         @Override
-        public <T> Future<T> submit(Callable<T> task) {
+        public <T> Future<T> submit(final Callable<T> task) {
             val callable = (AsyncCallable<T>) task;
             val commandDto = callable.getCommandDto();
 
@@ -146,7 +151,7 @@ public class BackgroundService {
             // querying the CommandLogEntryRepository
             return new Future<T>() {
                 @Override
-                public boolean cancel(boolean mayInterruptIfRunning) {
+                public boolean cancel(final boolean mayInterruptIfRunning) {
                     throw new IllegalStateException("Not implemented");
                 }
                 @Override
@@ -165,13 +170,13 @@ public class BackgroundService {
                 }
 
                 @Override
-                public T get(long timeout, TimeUnit unit) {
+                public T get(final long timeout, final TimeUnit unit) {
                     throw new IllegalStateException("Not implemented");
                 }
             };
         }
 
-        private static Command newCommand(CommandDto commandDto) {
+        private static Command newCommand(final CommandDto commandDto) {
             return new Command(UUID.fromString(commandDto.getInteractionId())) {
                 @Override public String getUsername() {return commandDto.getUsername();}
                 @Override public Timestamp getTimestamp() {return gregorianCalendarAdapter.unmarshal(commandDto.getTimestamp());}
@@ -187,37 +192,37 @@ public class BackgroundService {
 
 
         @Override
-        public <T> Future<T> submit(Runnable task, T result) {
+        public <T> Future<T> submit(final Runnable task, final T result) {
             throw new IllegalStateException("Not implemented");
         }
 
         @Override
-        public Future<?> submit(Runnable task) {
+        public Future<?> submit(final Runnable task) {
             throw new IllegalStateException("Not implemented");
         }
 
         @Override
-        public void execute(Runnable command) {
+        public void execute(final Runnable command) {
             throw new IllegalStateException("Not implemented");
         }
 
         @Override
-        public <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks) {
+        public <T> List<Future<T>> invokeAll(final Collection<? extends Callable<T>> tasks) {
             throw new IllegalStateException("Not implemented");
         }
 
         @Override
-        public <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks, long timeout, TimeUnit unit) throws InterruptedException {
+        public <T> List<Future<T>> invokeAll(final Collection<? extends Callable<T>> tasks, final long timeout, final TimeUnit unit) throws InterruptedException {
             throw new IllegalStateException("Not implemented");
         }
 
         @Override
-        public <T> T invokeAny(Collection<? extends Callable<T>> tasks) throws InterruptedException, ExecutionException {
+        public <T> T invokeAny(final Collection<? extends Callable<T>> tasks) throws InterruptedException, ExecutionException {
             throw new IllegalStateException("Not implemented");
         }
 
         @Override
-        public <T> T invokeAny(Collection<? extends Callable<T>> tasks, long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+        public <T> T invokeAny(final Collection<? extends Callable<T>> tasks, final long timeout, final TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
             throw new IllegalStateException("Not implemented");
         }
 
@@ -232,7 +237,7 @@ public class BackgroundService {
         }
 
         @Override
-        public boolean awaitTermination(long timeout, TimeUnit unit) throws InterruptedException {
+        public boolean awaitTermination(final long timeout, final TimeUnit unit) throws InterruptedException {
             throw new IllegalStateException("Not implemented");
         }
 

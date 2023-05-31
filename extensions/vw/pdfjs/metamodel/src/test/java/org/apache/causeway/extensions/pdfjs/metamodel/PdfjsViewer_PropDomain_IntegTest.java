@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.extensions.pdfjs.metamodel;
 
-import org.apache.causeway.extensions.pdfjs.metamodel.domains.mixin.MixinDomain;
-import org.apache.causeway.extensions.pdfjs.metamodel.domains.prop.PropDomain;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -27,6 +25,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
+
+import org.apache.causeway.extensions.pdfjs.metamodel.domains.prop.PropDomain;
 
 @SpringBootTest(
         classes = {PdfjsViewer_PropDomain_IntegTest.AppManifest.class},
@@ -51,6 +51,7 @@ public class PdfjsViewer_PropDomain_IntegTest extends PdfjsViewer_Abstract_Integ
         return PropDomain.class;
     }
 
+    @Override
     @Test
     void dump_facets() {
         super.dump_facets();

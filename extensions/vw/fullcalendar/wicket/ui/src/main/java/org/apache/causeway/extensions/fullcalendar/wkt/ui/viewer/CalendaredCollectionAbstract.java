@@ -58,13 +58,13 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
 
     public CalendaredCollectionAbstract(final String id, final EntityCollectionModel model) {
         super(id, model);
-
         buildGui();
     }
 
+    /* not used
     private void buildGuiDebug() {
         _Sample.buildCalendar(this, ID_FULL_CALENDAR);
-    }
+    } */
 
     private void buildGui() {
 

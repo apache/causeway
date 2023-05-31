@@ -1,7 +1,5 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-WARNING: currently no tooltip is displayed for descriptions defined by layout.xml file; see link:https://issues.apache.org/jira/browse/CAUSEWAY-3441[CAUSEWAY-3441].
-
 Often the end-user of your application will be a frequent user and will know by sight the purpose of the various properties, collections and actions that are displayed.
 But, for less experienced users, or for new features, providing a description to provide brief additional information to the user may be of help.
 
@@ -54,8 +52,6 @@ include::PropertyLayoutDescribedAsPage_updateName.java[tags=annotation]
     <cpt:describedAs>Notes about this object</cpt:describedAs>
 </cpt:property>
 ----
-+
-WARNING: currently no tooltip is displayed for descriptions defined by layout.xml file; see link:https://issues.apache.org/jira/browse/CAUSEWAY-3441[CAUSEWAY-3441].
 
 * The `address` property is a counter-example: even though it has a description, it will not be rendered because it _also_ has a `labelPosition` which results in the label being suppressed:
 +

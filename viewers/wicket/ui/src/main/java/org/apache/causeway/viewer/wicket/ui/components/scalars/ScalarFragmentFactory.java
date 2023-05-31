@@ -155,12 +155,13 @@ public class ScalarFragmentFactory {
         @Getter private final String fragmentId;
         @Getter private final String containerId = "container-fieldFrame";
 
+        /* not used
         private boolean isMatching(final @Nullable MarkupContainer container) {
             if(container instanceof Fragment) {
                 return fragmentId.equals(((Fragment)container).getAssociatedMarkupId());
             }
             return false;
-        }
+        }*/
         public abstract RepeatingView createButtonContainer(final MarkupContainer container);
     }
 

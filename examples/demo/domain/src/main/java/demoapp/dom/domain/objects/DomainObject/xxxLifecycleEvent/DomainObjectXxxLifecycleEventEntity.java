@@ -31,51 +31,50 @@ import org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
-import demoapp.dom.domain.objects.DomainObject.xxxLifecycleEvent.jpa.DomainObjectXxxLifecycleEventEntityImpl;
 
 //tag::class[]
 @DomainObject(
-        nature = Nature.ENTITY,
-        createdLifecycleEvent = DomainObjectXxxLifecycleEventEntityImpl.CreatedEvent.class,        // <.>
-        persistingLifecycleEvent = DomainObjectXxxLifecycleEventEntityImpl.PersistingEvent.class,  // <.>
-        persistedLifecycleEvent = DomainObjectXxxLifecycleEventEntityImpl.PersistedEvent.class,    // <.>
-        updatingLifecycleEvent = DomainObjectXxxLifecycleEventEntityImpl.UpdatingEvent.class,      // <.>
-        updatedLifecycleEvent = DomainObjectXxxLifecycleEventEntityImpl.UpdatedEvent.class,        // <.>
-        removingLifecycleEvent = DomainObjectXxxLifecycleEventEntityImpl.RemovingEvent.class,      // <.>
-        loadedLifecycleEvent = DomainObjectXxxLifecycleEventEntityImpl.LoadedEvent.class           // <.>
+    nature = Nature.ENTITY,
+    createdLifecycleEvent = DomainObjectXxxLifecycleEventEntity.CreatedEvent.class,       // <.>
+    persistingLifecycleEvent = DomainObjectXxxLifecycleEventEntity.PersistingEvent.class, // <.>
+    persistedLifecycleEvent = DomainObjectXxxLifecycleEventEntity.PersistedEvent.class,   // <.>
+    updatingLifecycleEvent = DomainObjectXxxLifecycleEventEntity.UpdatingEvent.class,     // <.>
+    updatedLifecycleEvent = DomainObjectXxxLifecycleEventEntity.UpdatedEvent.class,       // <.>
+    removingLifecycleEvent = DomainObjectXxxLifecycleEventEntity.RemovingEvent.class,     // <.>
+    loadedLifecycleEvent = DomainObjectXxxLifecycleEventEntity.LoadedEvent.class          // <.>
 )
-public abstract class DomainObjectXxxLifecycleEventEntity                                         // <.>
+public abstract class DomainObjectXxxLifecycleEventEntity
 //end::class[]
         implements
         HasAsciiDocDescription,
         ValueHolder<String>
 //tag::class[]
 {
-    public interface LifecycleEvent {                                                       // <.>
+    public interface LifecycleEvent {                                                     // <.>
         DomainObjectXxxLifecycleEventEntity getSource();
     }
 
     public static class CreatedEvent
-            extends ObjectCreatedEvent<DomainObjectXxxLifecycleEventEntity>                       // <1>
-            implements LifecycleEvent { }                                                   // <9>
+            extends ObjectCreatedEvent<DomainObjectXxxLifecycleEventEntity>               // <1>
+            implements LifecycleEvent { }                                                 // <8>
     public static class PersistingEvent
-            extends ObjectPersistingEvent<DomainObjectXxxLifecycleEventEntity>                    // <2>
-            implements LifecycleEvent { }                                                   // <9>
+            extends ObjectPersistingEvent<DomainObjectXxxLifecycleEventEntity>            // <2>
+            implements LifecycleEvent { }
     public static class PersistedEvent
-            extends ObjectPersistedEvent<DomainObjectXxxLifecycleEventEntity>                     // <3>
-            implements LifecycleEvent { }                                                   // <9>
+            extends ObjectPersistedEvent<DomainObjectXxxLifecycleEventEntity>             // <3>
+            implements LifecycleEvent { }
     public static class UpdatingEvent
-            extends ObjectUpdatingEvent<DomainObjectXxxLifecycleEventEntity>                      // <4>
-            implements LifecycleEvent { }                                                   // <9>
+            extends ObjectUpdatingEvent<DomainObjectXxxLifecycleEventEntity>              // <4>
+            implements LifecycleEvent { }
     public static class UpdatedEvent
-            extends ObjectUpdatedEvent<DomainObjectXxxLifecycleEventEntity>                       // <5>
-            implements LifecycleEvent { }                                                   // <9>
+            extends ObjectUpdatedEvent<DomainObjectXxxLifecycleEventEntity>               // <5>
+            implements LifecycleEvent { }
     public static class RemovingEvent
-            extends ObjectRemovingEvent<DomainObjectXxxLifecycleEventEntity>                      // <6>
-            implements LifecycleEvent { }                                                   // <9>
+            extends ObjectRemovingEvent<DomainObjectXxxLifecycleEventEntity>              // <6>
+            implements LifecycleEvent { }
     public static class LoadedEvent
-            extends ObjectLoadedEvent<DomainObjectXxxLifecycleEventEntity>                        // <7>
-            implements LifecycleEvent { }                                                   // <9>
+            extends ObjectLoadedEvent<DomainObjectXxxLifecycleEventEntity>                // <7>
+            implements LifecycleEvent { }
 
     // ...
 //end::class[]

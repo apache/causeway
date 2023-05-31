@@ -20,7 +20,6 @@ package org.apache.causeway.core.runtimeservices;
 
 import jakarta.inject.Singleton;
 
-import org.apache.causeway.core.runtimeservices.session.InteractionIdGeneratorDefault;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -62,7 +61,7 @@ import org.apache.causeway.core.runtimeservices.repository.RepositoryServiceDefa
 import org.apache.causeway.core.runtimeservices.routing.RoutingServiceDefault;
 import org.apache.causeway.core.runtimeservices.scratchpad.ScratchpadDefault;
 import org.apache.causeway.core.runtimeservices.serializing.SerializingAdapterDefault;
-import org.apache.causeway.core.runtimeservices.session.InteractionIdGenerator;
+import org.apache.causeway.core.runtimeservices.session.InteractionIdGeneratorDefault;
 import org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault;
 import org.apache.causeway.core.runtimeservices.sitemap.SitemapServiceDefault;
 import org.apache.causeway.core.runtimeservices.spring.SpringBeansService;

@@ -25,6 +25,7 @@ import org.apache.causeway.applib.graph.tree.TreeNode;
 
 import lombok.RequiredArgsConstructor;
 
+@SuppressWarnings("unused")
 //tag::class[]
 @Property
 @RequiredArgsConstructor

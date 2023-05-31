@@ -25,13 +25,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Objects;
-import java.util.Set;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.causeway.commons.collections.Can;
@@ -46,6 +44,7 @@ import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
+@SuppressWarnings("unused")
 @Log4j2
 class ValueTypeGenTemplateTest {
 
@@ -107,6 +106,7 @@ class ValueTypeGenTemplateTest {
         return new File(outputRootDir, subfolder);
     }
 
+    /* not used
     private void assertFileSetEquals(
             final Set<File> setA, final File rootA,
             final Set<File> setB, final File rootB) {
@@ -117,10 +117,9 @@ class ValueTypeGenTemplateTest {
                 Can.ofCollection(setB)
                 .map(FileUtils.realtiveFileName(rootB))
                 .sorted(Comparator.naturalOrder()));
-    }
+    }*/
 
 
-    @SuppressWarnings("unused")
     private void copyFiles(final Collection<File> generatedFiles, final File sourceRoot, final File destinationRoot) {
         generatedFiles.forEach(src->{
             val dest = new File(destinationRoot, FileUtils.realtiveFileName(sourceRoot, src));
@@ -130,7 +129,6 @@ class ValueTypeGenTemplateTest {
         });
     }
 
-    @SuppressWarnings("unused")
     private void copyMissingFiles(final Collection<File> generatedFiles, final File sourceRoot, final File destinationRoot) {
         generatedFiles.forEach(src->{
             val dest = new File(destinationRoot, FileUtils.realtiveFileName(sourceRoot, src));

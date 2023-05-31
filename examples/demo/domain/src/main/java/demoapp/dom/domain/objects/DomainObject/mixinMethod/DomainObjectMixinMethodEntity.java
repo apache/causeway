@@ -23,7 +23,6 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 public abstract class DomainObjectMixinMethodEntity
         implements
         HasAsciiDocDescription,

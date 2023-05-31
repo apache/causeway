@@ -61,11 +61,12 @@ implements ImperativeFacet {
         return Intent.CHECK_IF_VALID;
     }
 
+    //@Override
     @Override
     public String invalidReason(
             final ManagedObject owningAdapter,
             final Can<ManagedObject> pendingArgs,
-            final ManagedObject proposedArgument) {
+            final int paramIndex) {
 
         val method = methods.getFirstElseFail();
         final Object returnValue = patConstructor.isPresent()
@@ -74,11 +75,11 @@ implements ImperativeFacet {
                         patConstructor.get(),
                         method.asMethodForIntrospection(),
                         owningAdapter, pendingArgs)
-                 // provides only a single pending arg (for validation)
-                : MmInvokeUtils.invoke(
+                 // provides pending args up to paramIndex (for validation)
+                : MmInvokeUtils.invokeWithArgs(
                         method.asMethodElseFail(),
                         owningAdapter,
-                        proposedArgument);
+                        pendingArgs.subCan(0, paramIndex + 1));
 
         if(returnValue instanceof String) {
             return (String) returnValue;

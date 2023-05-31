@@ -25,11 +25,9 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.services.repository.RepositoryService;
 
-import lombok.RequiredArgsConstructor;
-
 import demoapp.dom.services.core.wrapperFactory.PrimeNumberFactory;
 import demoapp.dom.services.core.wrapperFactory.PrimeNumberRepository;
-import demoapp.dom.services.core.wrapperFactory.jpa.PrimeNumberJpa;
+import lombok.RequiredArgsConstructor;
 
 @Profile("demo-jdo")
 @Service
@@ -40,7 +38,7 @@ public class PrimeNumberJdoFactoryAndRepository
     private final RepositoryService repositoryService;
 
     @Override
-    public PrimeNumberJdo newPrimeNumber(Integer value) {
+    public PrimeNumberJdo newPrimeNumber(final Integer value) {
         return repositoryService.persistAndFlush(new PrimeNumberJdo(value));
     }
 

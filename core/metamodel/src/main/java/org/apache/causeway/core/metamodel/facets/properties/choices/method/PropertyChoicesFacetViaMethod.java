@@ -64,7 +64,7 @@ implements ImperativeFacet {
 
         val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
         val elementSpec = ((FacetedMethod) getFacetHolder()).getElementSpecification();
-        val optionPojos = MmInvokeUtils.invoke(method, owningAdapter);
+        val optionPojos = MmInvokeUtils.invokeNoArg(method, owningAdapter);
         val visibleChoices = ManagedObjects
                 .adaptMultipleOfTypeThenFilterByVisibility(
                         elementSpec, optionPojos, interactionInitiatedBy);

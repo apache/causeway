@@ -27,7 +27,6 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.Collection;
@@ -36,15 +35,10 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 
-import demoapp.dom.domain.collections.CollectionLayout.paged.child.CollectionLayoutPagedChildVm;
-
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.domain.collections.CollectionLayout.sequence.child.CollectionLayoutSequenceChildVm;
-
 import lombok.Getter;
 import lombok.Setter;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.domain._entities.DemoEntity;
 
 //tag::class[]
 @Named("demo.CollectionLayoutSequencePage")

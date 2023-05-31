@@ -18,21 +18,26 @@
  */
 package demoapp.dom.domain.properties.ValueSemantics.percentage;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import java.math.BigDecimal;
 
+import jakarta.inject.Named;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlType;
+
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Editing;
+import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.Optionality;
+import org.apache.causeway.applib.annotation.Property;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import org.apache.causeway.applib.annotation.*;
-import org.apache.causeway.applib.jaxb.JavaTimeJaxbAdapters;
-
-import jakarta.inject.Named;
-import jakarta.xml.bind.annotation.*;
-import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
 
 //tag::class[]
 @XmlRootElement(name = "root")

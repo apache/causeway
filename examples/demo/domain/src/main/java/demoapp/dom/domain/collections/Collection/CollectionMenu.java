@@ -30,16 +30,11 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.factory.FactoryService;
 
 import demoapp.dom._infra.samples.NameSamples;
-import demoapp.dom.domain.actions.Action.typeOf.ActionTypeOfPage;
-import demoapp.dom.domain.actions.Action.typeOf.child.ActionTypeOfChildVm;
-
-import demoapp.dom.domain.collections.Collection.typeOf.child.CollectionTypeOfChildVm;
-
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-
 import demoapp.dom.domain.collections.Collection.domainEvent.CollectionDomainEventPage;
 import demoapp.dom.domain.collections.Collection.typeOf.CollectionTypeOfPage;
+import demoapp.dom.domain.collections.Collection.typeOf.child.CollectionTypeOfChildVm;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Named("demo.CollectionMenu")
 @DomainService(

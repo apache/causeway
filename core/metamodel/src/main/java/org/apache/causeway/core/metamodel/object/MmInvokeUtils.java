@@ -83,7 +83,7 @@ public final class MmInvokeUtils {
                 ? invokeWithPAT(patConstructor.get(),
                         methodFacade.asMethodForIntrospection(),
                         owningAdapter, pendingArgs)
-                : invoke(methodFacade.asMethodElseFail(),
+                : invokeWithArgs(methodFacade.asMethodElseFail(),
                         owningAdapter, pendingArgs);
     }
 
@@ -103,23 +103,23 @@ public final class MmInvokeUtils {
         return collectionOrArray;
     }
 
-    public static Object invoke(final Method method, final ManagedObject adapter) {
+    public static Object invokeNoArg(final Method method, final ManagedObject adapter) {
         return CanonicalInvoker.invoke(method, MmUnwrapUtils.single(adapter));
     }
 
-    public static Object invoke(final Method method, final ManagedObject adapter, final Object arg0) {
+    public static Object invokeWithSingleArgPojo(final Method method, final ManagedObject adapter, final Object arg0) {
         return CanonicalInvoker.invoke(method, MmUnwrapUtils.single(adapter), new Object[] {arg0});
     }
 
-    public static Object invoke(final Method method, final ManagedObject adapter, final Can<ManagedObject> argumentAdapters) {
+    public static Object invokeWithArgs(final Method method, final ManagedObject adapter, final Can<ManagedObject> argumentAdapters) {
         return CanonicalInvoker.invoke(method, MmUnwrapUtils.single(adapter), MmUnwrapUtils.multipleAsArray(argumentAdapters));
     }
 
-    public static Object invoke(final Method method, final ManagedObject adapter, final ManagedObject arg0Adapter) {
-        return invoke(method, adapter, MmUnwrapUtils.single(arg0Adapter));
+    public static Object invokeWithSingleArg(final Method method, final ManagedObject adapter, final ManagedObject arg0Adapter) {
+        return invokeWithSingleArgPojo(method, adapter, MmUnwrapUtils.single(arg0Adapter));
     }
 
-    public static Object invoke(final Method method, final ManagedObject adapter, final ManagedObject[] argumentAdapters) {
+    public static Object invokeWithArgArray(final Method method, final ManagedObject adapter, final ManagedObject[] argumentAdapters) {
         return CanonicalInvoker.invoke(method, MmUnwrapUtils.single(adapter), MmUnwrapUtils.multipleAsArray(argumentAdapters));
     }
 
@@ -132,7 +132,7 @@ public final class MmInvokeUtils {
      * </ul>
      */
     public static Object invokeAutofit(final Method method, final ManagedObject adapter) {
-        return invoke(method, adapter, new ManagedObject[method.getParameterTypes().length]);
+        return invokeWithArgArray(method, adapter, new ManagedObject[method.getParameterTypes().length]);
     }
 
     /**

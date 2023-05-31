@@ -55,7 +55,7 @@ implements ImperativeFacet {
     @Override
     public ManagedObject getDefault(final ManagedObject owningAdapter) {
         val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
-        final Object result = MmInvokeUtils.invoke(method, owningAdapter);
+        final Object result = MmInvokeUtils.invokeNoArg(method, owningAdapter);
         if (result == null) {
             return null;
         }

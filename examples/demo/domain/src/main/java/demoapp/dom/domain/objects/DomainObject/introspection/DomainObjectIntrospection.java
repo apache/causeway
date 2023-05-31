@@ -21,7 +21,6 @@ package demoapp.dom.domain.objects.DomainObject.introspection;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 public interface DomainObjectIntrospection
         extends
         HasAsciiDocDescription,

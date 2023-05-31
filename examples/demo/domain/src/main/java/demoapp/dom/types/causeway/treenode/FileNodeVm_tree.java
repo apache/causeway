@@ -19,15 +19,14 @@
 package demoapp.dom.types.causeway.treenode;
 
 import jakarta.inject.Inject;
-import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.graph.tree.TreeNode;
 
 import lombok.RequiredArgsConstructor;
 
+@SuppressWarnings("unused")
 //tag::class[]
-@Named("demo.treenode.FileNodeVm_tree")
 @Property
 @RequiredArgsConstructor
 public class FileNodeVm_tree {

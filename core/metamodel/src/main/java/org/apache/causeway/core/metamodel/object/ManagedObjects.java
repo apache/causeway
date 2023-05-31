@@ -428,7 +428,7 @@ public final class ManagedObjects {
         val mmc = object.getSpecification().getMetaModelContext();
 
         val result =  Try.call(()->{
-            final Object returnValue = MmInvokeUtils.invoke(method, object);
+            final Object returnValue = MmInvokeUtils.invokeNoArg(method, object);
             if(returnValue instanceof String) {
                 return (String) returnValue;
             }

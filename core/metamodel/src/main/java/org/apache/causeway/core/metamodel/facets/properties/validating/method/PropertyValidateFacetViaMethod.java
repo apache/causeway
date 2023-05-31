@@ -56,7 +56,7 @@ public class PropertyValidateFacetViaMethod extends PropertyValidateFacetAbstrac
     @Override
     public String invalidReason(final ManagedObject owningAdapter, final ManagedObject proposedAdapter) {
         val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
-        final Object returnValue = MmInvokeUtils.invoke(method, owningAdapter, proposedAdapter);
+        final Object returnValue = MmInvokeUtils.invokeWithSingleArg(method, owningAdapter, proposedAdapter);
         if(returnValue instanceof String) {
             return (String) returnValue;
         }

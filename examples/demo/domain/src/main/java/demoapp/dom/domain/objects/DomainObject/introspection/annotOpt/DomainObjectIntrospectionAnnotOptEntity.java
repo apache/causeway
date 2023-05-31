@@ -20,7 +20,6 @@ package demoapp.dom.domain.objects.DomainObject.introspection.annotOpt;
 
 import demoapp.dom.domain.objects.DomainObject.introspection.DomainObjectIntrospection;
 
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 public abstract class DomainObjectIntrospectionAnnotOptEntity
         implements DomainObjectIntrospection {
 

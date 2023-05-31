@@ -22,30 +22,17 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Scope;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.services.factory.FactoryService;
-import org.apache.causeway.applib.services.wrapper.WrapperFactory;
-import org.apache.causeway.applib.services.wrapper.control.AsyncControl;
-
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
-
 import demoapp.dom.services.core.eventbusservice.EventBusServiceDemoPage.UiButtonEvent;
-
-import static demoapp.dom._infra.utils.LogUtils.emphasize;
+import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Service
 @Named("demo.eventSubscriber")
 @Qualifier("demo")
-@Log4j2
+//@Log4j2
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class EventSubscriberForDemo {
 

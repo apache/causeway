@@ -18,20 +18,17 @@
  */
 package demoapp.dom.domain.actions.ActionLayout.redirectPolicy.jpa;
 
-import demoapp.dom.types.Samples;
-
-import lombok.RequiredArgsConstructor;
-
-import org.apache.causeway.applib.value.Blob;
-import org.apache.causeway.applib.value.NamedWithMimeType;
+import jakarta.inject.Inject;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.applib.value.NamedWithMimeType;
+
 import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.domain.actions.ActionLayout.redirectPolicy.ActionLayoutRedirectPolicyEntityRepository;
-
-import jakarta.inject.Inject;
+import demoapp.dom.types.Samples;
 
 @Profile("demo-jpa")
 @Service
@@ -45,7 +42,7 @@ extends ValueHolderRepository<String, ActionLayoutRedirectPolicyEntityImpl> impl
     }
 
     @Override
-    protected ActionLayoutRedirectPolicyEntityImpl newDetachedEntity(String value) {
+    protected ActionLayoutRedirectPolicyEntityImpl newDetachedEntity(final String value) {
         var entity = new ActionLayoutRedirectPolicyEntityImpl(value);
         blobSamples.stream()
                 .filter(x -> NamedWithMimeType.CommonMimeType.PDF.matches(x.getMimeType()))

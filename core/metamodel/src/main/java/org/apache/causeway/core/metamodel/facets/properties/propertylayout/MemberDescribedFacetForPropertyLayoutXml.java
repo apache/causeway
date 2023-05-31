@@ -36,7 +36,7 @@ extends MemberDescribedFacetWithStaticTextAbstract {
 
         return Optional.ofNullable(propertyLayoutData)
         .map(PropertyLayoutData::getDescribedAs)
-        .filter(_Strings::isEmpty)
+        .filter(_Strings::isNotEmpty)
         .map(describedAs->new MemberDescribedFacetForPropertyLayoutXml(
                 describedAs, holder, precedence));
     }

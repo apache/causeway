@@ -19,16 +19,15 @@
 package demoapp.dom.domain.properties.ValueSemantics.dateRenderAdjustDays;
 
 
+import java.time.LocalDate;
+
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
-import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.ValueSemantics;
-
-import java.time.LocalDate;
 
 import lombok.RequiredArgsConstructor;
 

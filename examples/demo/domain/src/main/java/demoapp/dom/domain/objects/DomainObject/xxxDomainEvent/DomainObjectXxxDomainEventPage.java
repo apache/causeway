@@ -64,19 +64,19 @@ import demoapp.dom.domain.objects.DomainObject.xxxDomainEvent.child.DomainObject
 )
 public class DomainObjectXxxDomainEventPage implements HasAsciiDocDescription {
 
-    public interface DomainEventMarker {}                                           // <.>
+    public interface DomainObjectXxxDomainEventMarker {}                            // <.>
 
     public static class ActionEvent                                                 // <1>
             extends ActionDomainEvent<DomainObjectXxxDomainEventPage>
-            implements DomainEventMarker {}
+            implements DomainObjectXxxDomainEventMarker {}
 
     public static class PropertyEvent                                               // <2>
             extends PropertyDomainEvent<DomainObjectXxxDomainEventPage, Object>
-            implements DomainEventMarker {}
+            implements DomainObjectXxxDomainEventMarker {}
 
     public static class CollectionEvent                                             // <3>
             extends CollectionDomainEvent<DomainObjectXxxDomainEventPage, Object>
-            implements DomainEventMarker {}
+            implements DomainObjectXxxDomainEventMarker {}
     // ...
 
 //end::class[]
@@ -103,10 +103,14 @@ public class DomainObjectXxxDomainEventPage implements HasAsciiDocDescription {
         setText(text);
         return this;
     }
+    // ...
+
+//end::class[]
     @MemberSupport public String default0UpdateTextDirectly() {
         return getText();
     }
 
+//tag::class[]
     @Collection
     @XmlElementWrapper(name = "children")
     @XmlElement(name = "child")

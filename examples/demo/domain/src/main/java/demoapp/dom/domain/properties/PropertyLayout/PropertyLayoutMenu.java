@@ -27,8 +27,6 @@ import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.value.Blob;
-import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 
 import demoapp.dom.domain.properties.PropertyLayout.cssClass.PropertyLayoutCssClassPage;
 import demoapp.dom.domain.properties.PropertyLayout.describedAs.PropertyLayoutDescribedAsPage;
@@ -39,7 +37,6 @@ import demoapp.dom.domain.properties.PropertyLayout.named.PropertyLayoutNamedPag
 import demoapp.dom.domain.properties.PropertyLayout.navigable.FileNodeVm;
 import demoapp.dom.domain.properties.PropertyLayout.repainting.PropertyLayoutRepaintingPage;
 import demoapp.dom.domain.properties.PropertyLayout.typicalLength.PropertyLayoutTypicalLengthPage;
-import demoapp.dom.types.Samples;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 

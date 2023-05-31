@@ -21,7 +21,6 @@ package demoapp.dom.domain.properties.Property.snapshot;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolder;
 
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 public abstract class PropertySnapshotEntity
         implements
         HasAsciiDocDescription,

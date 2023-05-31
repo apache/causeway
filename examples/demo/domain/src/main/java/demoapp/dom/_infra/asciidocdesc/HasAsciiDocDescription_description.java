@@ -26,16 +26,23 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Snapshot;
 import org.apache.causeway.applib.annotation.ValueSemantics;
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
 import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 import lombok.RequiredArgsConstructor;
 
 import demoapp.dom._infra.resources.AsciiDocReaderService;
 
-@Property(snapshot = Snapshot.EXCLUDED)
+@Property(
+        snapshot = Snapshot.EXCLUDED,
+        domainEvent = HasAsciiDocDescription_description.DomainEvent.class
+)
 @ValueSemantics(provider = "demo-adoc-pre-processor")
 @RequiredArgsConstructor
 public class HasAsciiDocDescription_description {
+
+    public static class DomainEvent
+            extends PropertyDomainEvent<HasAsciiDocDescription, AsciiDoc> {}
 
     private final HasAsciiDocDescription hasAsciiDocDescription;
 

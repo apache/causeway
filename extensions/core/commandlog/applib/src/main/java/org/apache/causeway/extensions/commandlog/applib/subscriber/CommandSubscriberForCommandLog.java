@@ -22,15 +22,14 @@ import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
-import org.apache.causeway.applib.services.clock.ClockService;
-import org.apache.causeway.applib.services.repository.RepositoryService;
-import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.publishing.spi.CommandSubscriber;
+import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.core.config.CausewayConfiguration;
@@ -70,7 +69,7 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
     }
 
     @Override
-    public void onReady(Command command) {
+    public void onReady(final Command command) {
 
         if (!isEnabled()) {
             return;
@@ -111,7 +110,7 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
     }
 
     @Override
-    public void onStarted(Command command) {
+    public void onStarted(final Command command) {
 
         if (!isEnabled()) {
             return;

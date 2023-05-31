@@ -30,13 +30,13 @@ import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(
-        domainEvent = DomainObjectXxxDomainEventPage_changeControlStrategy.DomainEvent.class,   // <.>
-        semantics = SemanticsOf.IDEMPOTENT
+    domainEvent = DomainObjectXxxDomainEventPage_changeControlStrategy.DomainEvent.class, // <.>
+    semantics = SemanticsOf.IDEMPOTENT
 )
 @RequiredArgsConstructor
 public class DomainObjectXxxDomainEventPage_changeControlStrategy {
 
-    public static class DomainEvent                                                             // <1>
+    public static class DomainEvent                                                       // <1>
             extends ActionDomainEvent<DomainObjectXxxDomainEventPage> {}
 
     private final DomainObjectXxxDomainEventPage page;

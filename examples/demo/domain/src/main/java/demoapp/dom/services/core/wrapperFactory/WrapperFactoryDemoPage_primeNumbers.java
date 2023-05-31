@@ -1,8 +1,5 @@
 package demoapp.dom.services.core.wrapperFactory;
 
-import lombok.RequiredArgsConstructor;
-
-import java.util.Collections;
 import java.util.List;
 
 import jakarta.inject.Inject;
@@ -10,6 +7,8 @@ import jakarta.inject.Inject;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
+
+import lombok.RequiredArgsConstructor;
 
 @Collection
 @CollectionLayout(paged = 20)

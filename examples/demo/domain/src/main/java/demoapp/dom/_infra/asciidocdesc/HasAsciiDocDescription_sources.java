@@ -25,6 +25,7 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Snapshot;
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
 import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 import lombok.RequiredArgsConstructor;
@@ -32,9 +33,15 @@ import lombok.val;
 
 import demoapp.dom._infra.resources.MarkupVariableResolverService;
 
-@Property(snapshot = Snapshot.EXCLUDED)
+@Property(
+        snapshot = Snapshot.EXCLUDED,
+        domainEvent = HasAsciiDocDescription_sources.DomainEvent.class
+)
 @RequiredArgsConstructor
 public class HasAsciiDocDescription_sources {
+
+    public static class DomainEvent
+            extends PropertyDomainEvent<HasAsciiDocDescription, AsciiDoc> {}
 
     private final HasAsciiDocDescription hasAsciiDocDescription;
 
@@ -48,7 +55,6 @@ public class HasAsciiDocDescription_sources {
                         String.format("link:${SOURCES_DEMO}/%s[Sources] for this demo", sourceLocation)));
     }
 
-    @Inject
-    MarkupVariableResolverService markupVariableResolverService;
+    @Inject MarkupVariableResolverService markupVariableResolverService;
 
 }

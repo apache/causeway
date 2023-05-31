@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.valuesemantics;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.function.UnaryOperator;
-import java.util.stream.Stream;
 
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
