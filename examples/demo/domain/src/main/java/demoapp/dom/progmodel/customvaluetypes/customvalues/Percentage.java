@@ -18,6 +18,7 @@
  */
 package demoapp.dom.progmodel.customvaluetypes.customvalues;
 
+
 //tag::class[]
 @org.apache.causeway.applib.annotation.Value        // <.>
 @lombok.Value                                       // <.>

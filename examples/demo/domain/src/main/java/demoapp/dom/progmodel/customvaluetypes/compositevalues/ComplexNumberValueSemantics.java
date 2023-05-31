@@ -31,7 +31,7 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.schema.common.v2.ValueType;
 
 //tag::class[]
-@Named("demo.compositevalues.ComplexNumberValueSemantics")
+@Named("demo.ComplexNumberValueSemantics")
 @Component
 @Import({
         ComplexNumber_default.class                         // <.>
@@ -80,13 +80,16 @@ public class ComplexNumberValueSemantics
 //tag::getRenderer[]
     @Override
     public Renderer<ComplexNumber> getRenderer() {
-        return (context, object) -> {
-            if (object == null) return "NaN";
-            return object.getRe() +
-                    (object.getIm() >= 0
-                            ? (" + " +  object.getIm())
-                            : (" - " + (-object.getIm())))
-                    + "i";
+        return new Renderer<>() {
+            @Override
+            public String titlePresentation(Context context, ComplexNumber object) {
+                if (object == null) return "NaN";
+                return object.getRe() +
+                        (object.getIm() >= 0
+                                ? (" + " +  object.getIm())
+                                : (" - " + (-object.getIm())))
+                        + "i";
+            }
         };
     }
 //end::getRenderer[]

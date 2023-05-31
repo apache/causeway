@@ -20,8 +20,9 @@ package demoapp.dom.progmodel.customvaluetypes.embeddedvalues.jpa;
 
 import org.apache.causeway.applib.annotation.Value;
 
-import demoapp.dom.progmodel.customvaluetypes.embeddedvalues.ComplexNumber;
 import lombok.AccessLevel;
+
+import demoapp.dom.progmodel.customvaluetypes.embeddedvalues.ComplexNumber;
 
 //tag::class[]
 @javax.persistence.Embeddable                                       // <.>
@@ -29,7 +30,7 @@ import lombok.AccessLevel;
 @lombok.Getter                                                      // <.>
 @lombok.Setter(AccessLevel.PRIVATE)                                 // <.>
 @lombok.AllArgsConstructor(staticName = "of")
-@lombok.NoArgsConstructor                                           // <.>
+@lombok.NoArgsConstructor                                           // <4>
 public class ComplexNumberJpa
         implements ComplexNumber {
 
@@ -37,6 +38,6 @@ public class ComplexNumberJpa
     private double re;                                              // <.>
 
     @javax.persistence.Column(nullable = false)
-    private double im;                                              // <.>
+    private double im;                                              // <5>
 }
 //end::class[]

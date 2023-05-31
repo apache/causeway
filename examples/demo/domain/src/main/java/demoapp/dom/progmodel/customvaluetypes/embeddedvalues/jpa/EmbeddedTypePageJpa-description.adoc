@@ -46,7 +46,7 @@ Accordingly, we will also need to provide a `ValueSemanticsProvider` implementat
 [source,java,indent=0]
 .ComplexNumberJpaValueSemantics.java
 ----
-include::../ComplexNumberValueSemantics.java[tags=class]
+include::ComplexNumberJpaValueSemantics.java[tags=class]
 ----
 +
 In this particular demo, the value is immutable.
@@ -57,7 +57,7 @@ See elsewhere for examples of value types that can be mutated.
 [source,java,indent=0]
 .ComplexNumberJpaValueSemantics.java
 ----
-include::../ComplexNumberValueSemantics.java[tags=getRenderer]
+include::ComplexNumberJpaValueSemantics.java[tags=getRenderer]
 ----
 +
 ** the `compose()`/`decompose()` methods:
@@ -65,5 +65,5 @@ include::../ComplexNumberValueSemantics.java[tags=getRenderer]
 [source,java,indent=0]
 .ComplexNumberJpaValueSemantics.java
 ----
-include::../ComplexNumberValueSemantics.java[tags=compose]
+include::ComplexNumberJpaValueSemantics.java[tags=compose]
 ----
