@@ -288,7 +288,7 @@ implements MetaModelRefiner {
                         "JAXB view model '%s' %s '%s' is of type '%s', "
                         + "but is not annotated with @XmlJavaTypeAdapter. "
                         + "The field/method must be annotated with "
-                        + "@XmlJavaTypeAdapter(org.apache.causeway.schema.utils.jaxbadapters.XxxAdapter.ForJaxb.class) "
+                        + "@XmlJavaTypeAdapter(org.apache.causeway.applib.jaxb.XxxJaxbAdapters.XxxToStringAdapter.class) "
                         + "or equivalent, "
                         + "or be ignored by being annotated with @XmlTransient.",
                         objectSpec.getFullIdentifier(),
