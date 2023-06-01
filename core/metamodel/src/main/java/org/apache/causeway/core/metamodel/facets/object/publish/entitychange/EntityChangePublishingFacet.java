@@ -46,7 +46,8 @@ public interface EntityChangePublishingFacet extends Facet {
         }
 
         val entityChangePublishingFacet = facetHolder.getFacet(EntityChangePublishingFacet.class);
-        return entityChangePublishingFacet != null && entityChangePublishingFacet.isEnabled();
+        return entityChangePublishingFacet != null
+                && entityChangePublishingFacet.isEnabled();
     }
 
     boolean isEnabled();
