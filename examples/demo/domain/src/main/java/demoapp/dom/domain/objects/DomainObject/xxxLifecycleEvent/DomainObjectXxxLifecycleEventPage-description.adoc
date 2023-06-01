@@ -31,8 +31,6 @@ Must be a subclass of https://causeway.apache.org/refguide/2.0.0-RC1/applib/inde
 removingLifecycleEvent] - when an already-persisted entity is about to be DELETEd from the database.
 Must be a subclass of https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/events/lifecycle/ObjectRemovingEvent[ObjectRemovingEvent].
 
-WARNING: for JDO, the `Persisted` and `Updated` events are currently not emitted; being tracked with https://issues.apache.org/jira/browse/CAUSEWAY-3472[CAUSEWAY-3472].
-
 == How this demo works
 
 The page provides actions to allow a single entity to be created, updated and deleted.
