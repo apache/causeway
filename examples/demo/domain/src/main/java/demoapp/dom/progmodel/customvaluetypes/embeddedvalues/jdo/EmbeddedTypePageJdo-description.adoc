@@ -68,3 +68,7 @@ include::ComplexNumberJdoValueSemantics.java[tags=getRenderer]
 ----
 include::ComplexNumberJdoValueSemantics.java[tags=compose]
 ----
+include::ComplexNumberJdoValueSemantics.java[tags=getParser]
+----
++
+WARNING: this feature is incomplete; being tracked by https://issues.apache.org/jira/browse/CAUSEWAY-3474[CAUSEWAY-3474].
