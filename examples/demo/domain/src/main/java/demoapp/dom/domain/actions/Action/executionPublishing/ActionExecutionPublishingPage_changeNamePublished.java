@@ -23,6 +23,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Publishing;
 
@@ -30,6 +31,9 @@ import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(executionPublishing = Publishing.ENABLED)                    // <.>
+@ActionLayout(
+    describedAs = "This action has execution publishing enabled"
+)
 @RequiredArgsConstructor
 public class ActionExecutionPublishingPage_changeNamePublished {
 
@@ -41,6 +45,8 @@ public class ActionExecutionPublishingPage_changeNamePublished {
         entity.setName(newName);
         return page;
     }
+    // ...
+//end::class[]
 
     public List<? extends ActionExecutionPublishingEntity> choices0Act() {
         return repository.all();
@@ -50,5 +56,6 @@ public class ActionExecutionPublishingPage_changeNamePublished {
     }
 
     @Inject ActionExecutionPublishingEntityRepository repository;
+//tag::class[]
 }
 //end::class[]

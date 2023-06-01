@@ -17,9 +17,31 @@ The collection on the left hand side shows a list of entities.
 Those entities have two properties, `name` and `description`.
 Both of these properties may be edited, but only the `name` property has command publishing enabled.
 
-Navigate into the entities and edit the properties.
+Editing the published property will result in a command representing the intention to edit the property being persisted.
+The link:https://causeway.apache.org/userguide/2.0.0-RC1/commandlog/about.html[commandlog] extension persists these as link:https://causeway.apache.org/refguide/2.0.0-RC1/extensions/index/commandlog/applib/dom/CommandLogEntry.html[CommandLogEntry] entities.
 
-Invoking the published property will result in a command representing the property edit invocation from being persisted; these are listed in the collection at the bottom of the entity.
+To see this happening you will need to navigate into the entities and edit properties on the objects themselves.
+
+In terms of code:
+
+* property with command publishing enabled:
++
+[source,java,indent=0]
+..PropertyCommandPublishingEntity.java
+----
+include::PropertyCommandPublishingEntity.java[tags=published]
+----
+<.> makes the property editable...
+<.> \... and enables command publishing
+
+* contributed collection showing persisted ``CommandLogEntry``s:
++
+[source,java,indent=0]
+.PropertyCommandPublishingEntity_publishedCommands.java
+----
+include::PropertyCommandPublishingEntity_publishedCommands.java[tags=class]
+----
+<.> repository provided by the _commandLog_ extension.
 
 
 == Related configuration property
@@ -35,6 +57,6 @@ causeway:
       property:
         command-publishing: "none"      # <.>
 ----
-<.> `none` | `disabled` | `enabled`.
+<.> either `none` or `all`
 
 

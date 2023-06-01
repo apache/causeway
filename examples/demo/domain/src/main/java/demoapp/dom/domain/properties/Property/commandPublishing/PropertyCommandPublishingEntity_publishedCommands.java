@@ -21,10 +21,11 @@ public class PropertyCommandPublishingEntity_publishedCommands {
     private final PropertyCommandPublishingEntity entity;
 
     @MemberSupport public List<? extends CommandLogEntry> coll() {
-        return commandLogEntryRepository.findRecentByTarget(bookmarkService.bookmarkForElseFail(entity));
+        return commandLogEntryRepository.findRecentByTarget(
+                bookmarkService.bookmarkForElseFail(entity));
     }
 
-    @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
+    @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository; // <.>
     @Inject BookmarkService bookmarkService;
 }
 //end::class[]

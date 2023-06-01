@@ -19,6 +19,7 @@
 package demoapp.dom.domain.actions.Action.domainEvent;
 
 import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,9 @@ import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action()                                                       // <.>
+@ActionLayout(
+    describedAs = "This action emits only the default domain event"
+)
 @RequiredArgsConstructor
 public class ActionDomainEventPage_updateTextNotAnnotated {
     // ...

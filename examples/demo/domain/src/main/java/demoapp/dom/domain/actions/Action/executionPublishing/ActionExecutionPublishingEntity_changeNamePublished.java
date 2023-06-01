@@ -39,12 +39,13 @@ public class ActionExecutionPublishingEntity_changeNamePublished {
         entity.setName(newName);
         return entity;
     }
+    // ...
+//end::class[]
 
     public String default0Act() {
         return entity.getName();
     }
 
-    @Inject
-    ActionExecutionPublishingEntityRepository repository;
+//tag::class[]
 }
 //end::class[]

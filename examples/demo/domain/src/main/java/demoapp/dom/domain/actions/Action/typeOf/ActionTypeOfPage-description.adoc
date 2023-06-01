@@ -9,16 +9,21 @@ In these cases the link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/in
 
 == How this demo works
 
-This page object defines a `children` collection:
+On the left hand side is a collection of entities that each have several properties.
+There are also three actions that can be used to find a subset of these entities; they all return a standalone collection.
+The three actions vary in how (or whether) they specify the element type of the returned collection.
 
+In terms of code:
+
+* the page object defines the `cihldren` collection:
++
 [source,java]
 ----
 include::ActionTypeOfPage.java[tags=class-collections-children]
 ----
 
-It also defines three variants of a "find" action, which all do the same thing: return those objects whose name matches.
-
-* the `find` action uses a generic parameter list:
+* the `find` action uses a generic parameter list.
+This is the preferred approach:
 +
 [source,java,indent=0]
 ----

@@ -30,6 +30,7 @@ import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
 
 import lombok.Getter;
@@ -66,11 +67,17 @@ public class PropertyDomainEventPage implements HasAsciiDocDescription {
         extends PropertyDomainEvent<PropertyDomainEventPage,String> {}
 
     @Property(domainEvent = TextDomainEvent.class)                  // <.>
+    @PropertyLayout(
+        describedAs = "This property emits a custom domain event"
+    )
     @XmlElement(required = true)
     @Getter @Setter
     private String text;
 
     @Property()                                                     // <.>
+    @PropertyLayout(
+        describedAs = "This property emits only the default domain event"
+    )
     @XmlElement(required = true)
     @Getter @Setter
     private String otherText;
