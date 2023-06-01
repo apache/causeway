@@ -31,15 +31,16 @@ import javax.persistence.PreUpdate;
 import org.eclipse.persistence.sessions.UnitOfWork;
 import org.eclipse.persistence.sessions.changesets.DirectToFieldChangeRecord;
 import org.eclipse.persistence.sessions.changesets.ObjectChangeSet;
+import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmEntityUtils;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyChangeRecord;
-import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyChangeRecordId;
 import org.apache.causeway.persistence.jpa.applib.services.JpaSupportService;
 
 import lombok.val;
@@ -119,7 +120,12 @@ public class CausewayEntityListener {
 
     // -- HELPER
 
-    private Can<PropertyChangeRecord> gatherPropertyChangeRecords(final ManagedObject entity) {
+    private Can<PropertyChangeRecord> gatherPropertyChangeRecords(final @Nullable ManagedObject entity) {
+
+        // guard against null and non-entity types
+        if(!ManagedObjects.isEntity(entity)) {
+            return Can.empty();
+        }
 
         final Object entityPojo = entity.getPojo();
         val entityManagerIfAny = jpaSupportServiceProvider.get().getEntityManager(entityPojo.getClass())
@@ -134,20 +140,16 @@ public class CausewayEntityListener {
             })
             .map((final ObjectChangeSet objectChanges)->{
                 return
-                    objectChanges
-                    .getChanges()
-                    .stream()
+                    objectChanges.getChanges().stream()
                     .filter(DirectToFieldChangeRecord.class::isInstance)
                     .map(DirectToFieldChangeRecord.class::cast)
                     .map(ormChangeRecord -> {
                         final String propertyName = ormChangeRecord.getAttribute();
-                        return MmEntityUtils.lookupPropertyEnabledForChangePublishing(entity, propertyName)
-                                .map(property -> PropertyChangeRecord.ofCurrent(
-                                        PropertyChangeRecordId.of(entity, property),
-                                        ormChangeRecord.getOldValue()))
+                        return MmEntityUtils.lookupPropertyChangeRecordIdForChangePublishing(entity, propertyName)
+                                .map(id -> PropertyChangeRecord.ofCurrent(id, ormChangeRecord.getOldValue()))
                                 .orElse(null); // ignore
                     })
-                    .collect(Can.toCan()); // a Can<T> only collects non-null elements
+                    .collect(Can.toCan()); // a Can only collects non-null elements
             })
             .orElseGet(Can::empty);
 

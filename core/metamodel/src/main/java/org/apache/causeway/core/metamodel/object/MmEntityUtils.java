@@ -179,6 +179,12 @@ public final class MmEntityUtils {
                 .filter(property -> !EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(property));
     }
 
+    public Optional<PropertyChangeRecordId> lookupPropertyChangeRecordIdForChangePublishing(
+            final @NonNull ManagedObject entity, final String propertyName) {
+        return lookupPropertyEnabledForChangePublishing(entity, propertyName)
+                .map(property->PropertyChangeRecordId.of(entity, property));
+    }
+
     // -- SHORTCUTS
 
     public boolean hasOid(final @Nullable ManagedObject adapter) {

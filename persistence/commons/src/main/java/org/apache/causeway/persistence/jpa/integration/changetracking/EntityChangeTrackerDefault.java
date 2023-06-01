@@ -375,6 +375,8 @@ implements
             return;
         }
 
+        log.debug("enlist entity's property changes for publishing {}", entity);
+
         // we call this come what may;
         // additional properties may now have been changed, and the changeKind for publishing might also be modified
         enlistForChangeKindPublishing(entity, EntityChangeKind.UPDATE);
@@ -391,8 +393,6 @@ implements
                     .forEach(pcr -> enlistedPropertyChangeRecordsById.put(pcr.getId(), pcr));
         } else {
             // home-grown approach
-            log.debug("enlist entity's property changes for publishing {}", entity);
-
             MmEntityUtils.streamPropertyChangeRecordIdsForChangePublishing(entity)
                     .filter(pcrId -> ! enlistedPropertyChangeRecordsById.containsKey(pcrId)) // only if not previously seen
                     .map(pcrId -> enlistedPropertyChangeRecordsById.put(pcrId, PropertyChangeRecord.ofCurrent(pcrId)))
