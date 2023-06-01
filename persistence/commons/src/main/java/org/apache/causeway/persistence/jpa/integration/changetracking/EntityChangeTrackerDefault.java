@@ -25,6 +25,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.LongAdder;
+import java.util.function.Function;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -56,14 +57,12 @@ import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
-import org.apache.causeway.core.metamodel.facets.properties.property.entitychangepublishing.EntityPropertyChangePublishingPolicyFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmEntityUtils;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.HasEnlistedEntityPropertyChanges;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyChangeRecord;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyChangeRecordId;
-import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.causeway.core.transaction.changetracking.EntityChangesPublisher;
 import org.apache.causeway.core.transaction.changetracking.EntityPropertyChangePublisher;
@@ -341,7 +340,6 @@ implements
         return false;
     }
 
-
     // side-effect free, used by XRay
     long countPotentialPropertyChangeRecords() {
         return enlistedPropertyChangeRecordsById.size();
@@ -361,9 +359,7 @@ implements
         log.debug("enlist entity's property changes for publishing {}", entity);
         enlistForChangeKindPublishing(entity, EntityChangeKind.CREATE);
 
-        entity.getSpecification().streamProperties(MixedIn.EXCLUDED)
-                .filter(property->!EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(property))
-                .map(property -> PropertyChangeRecordId.of(entity, property))
+        MmEntityUtils.streamPropertyChangeRecordIdsForChangePublishing(entity)
                 .filter(pcrId -> ! enlistedPropertyChangeRecordsById.containsKey(pcrId)) // only if not previously seen
                 .forEach(pcrId -> enlistedPropertyChangeRecordsById.put(pcrId, PropertyChangeRecord.ofNew(pcrId)));
     }
@@ -371,7 +367,7 @@ implements
     @Override
     public void enlistUpdating(
             final ManagedObject entity,
-            @Nullable final Can<PropertyChangeRecord> ormPropertyChangeRecords) {
+            final @Nullable Function<ManagedObject, Can<PropertyChangeRecord>> propertyChangeRecordSupplier) {
 
         _Xray.enlistUpdating(entity, interactionProviderProvider);
 
@@ -379,31 +375,31 @@ implements
             return;
         }
 
+        log.debug("enlist entity's property changes for publishing {}", entity);
+
         // we call this come what may;
         // additional properties may now have been changed, and the changeKind for publishing might also be modified
         enlistForChangeKindPublishing(entity, EntityChangeKind.UPDATE);
+
+        final Can<PropertyChangeRecord> ormPropertyChangeRecords = propertyChangeRecordSupplier!=null
+                ? propertyChangeRecordSupplier.apply(entity)
+                : null;
 
         if(ormPropertyChangeRecords != null) {
             // provided by ORM
             ormPropertyChangeRecords
                     .stream()
-                    .filter(pcr -> !EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(pcr.getProperty()))
                     .filter(pcr -> ! enlistedPropertyChangeRecordsById.containsKey(pcr.getId())) // only if not previously seen
-                    .forEach(pcr -> this.enlistedPropertyChangeRecordsById.put(pcr.getId(), pcr));
+                    .forEach(pcr -> enlistedPropertyChangeRecordsById.put(pcr.getId(), pcr));
         } else {
             // home-grown approach
-            log.debug("enlist entity's property changes for publishing {}", entity);
-
-            entity.getSpecification().streamProperties(MixedIn.EXCLUDED)
-                    .filter(property->!EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(property))
-                    .map(property -> PropertyChangeRecordId.of(entity, property))
+            MmEntityUtils.streamPropertyChangeRecordIdsForChangePublishing(entity)
                     .filter(pcrId -> ! enlistedPropertyChangeRecordsById.containsKey(pcrId)) // only if not previously seen
                     .map(pcrId -> enlistedPropertyChangeRecordsById.put(pcrId, PropertyChangeRecord.ofCurrent(pcrId)))
                     .filter(Objects::nonNull)   // shouldn't happen, just keeping compiler happy
                     .forEach(PropertyChangeRecord::withPreValueSetToCurrent);
         }
     }
-
 
     @Override
     public void enlistDeleting(final ManagedObject entity) {
@@ -416,19 +412,13 @@ implements
 
         final boolean enlisted = enlistForChangeKindPublishing(entity, EntityChangeKind.DELETE);
         if(enlisted) {
-
             log.debug("enlist entity's property changes for publishing {}", entity);
 
-            entity.getSpecification()
-                    .streamProperties(MixedIn.EXCLUDED)
-                    .filter(property -> EntityChangePublishingFacet.isPublishingEnabled(entity.getSpecification()))
-                    .filter(property -> !EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(property))
-                    .map(property -> PropertyChangeRecordId.of(entity, property))
-                    .forEach(pcrId -> enlistedPropertyChangeRecordsById.computeIfAbsent(pcrId, id -> PropertyChangeRecord.ofDeleting(id)));
+            MmEntityUtils.streamPropertyChangeRecordIdsForChangePublishing(entity)
+                    .forEach(pcrId -> enlistedPropertyChangeRecordsById
+                            .computeIfAbsent(pcrId, id -> PropertyChangeRecord.ofDeleting(id)));
         }
     }
-
-
 
     /**
      * Used only for the implementation of {@link MetricsService}.
@@ -439,7 +429,6 @@ implements
         _Xray.recognizeLoaded(entity, interactionProviderProvider);
         numberEntitiesLoaded.increment();
     }
-
 
     // -- METRICS SERVICE
 
@@ -452,6 +441,4 @@ implements
     public int numberEntitiesDirtied() {
         return changeKindByEnlistedAdapter.size();
     }
-
-
 }

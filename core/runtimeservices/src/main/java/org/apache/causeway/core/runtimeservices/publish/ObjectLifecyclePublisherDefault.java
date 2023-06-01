@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.core.runtimeservices.publish;
 
+import java.util.Optional;
+import java.util.function.Function;
+
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -55,20 +58,6 @@ public class ObjectLifecyclePublisherDefault implements ObjectLifecyclePublisher
     private final Provider<LifecycleCallbackNotifier> lifecycleCallbackNotifierProvider;
     private final Provider<InteractionService> interactionServiceProvider;
 
-    private InteractionService interactionService() {
-        return interactionServiceProvider.get();
-    }
-
-    private EntityChangeTracker entityChangeTracker() {
-        return interactionService().isInInteraction()
-                ? entityChangeTrackerProvider.get()
-                : EntityChangeTracker.NOOP;
-    }
-
-    LifecycleCallbackNotifier lifecycleCallbackNotifier() {
-        return lifecycleCallbackNotifierProvider.get();
-    }
-
     @Override
     public void onPostCreate(final ManagedObject entity) {
         lifecycleCallbackNotifier().postCreate(entity);
@@ -76,7 +65,8 @@ public class ObjectLifecyclePublisherDefault implements ObjectLifecyclePublisher
 
     @Override
     public void onPostLoad(final ManagedObject entity) {
-        entityChangeTracker().incrementLoaded(entity);
+        entityChangeTracker()
+            .ifPresent(entityChangeTracker->entityChangeTracker.incrementLoaded(entity));
         lifecycleCallbackNotifier().postLoad(entity);
     }
 
@@ -87,18 +77,19 @@ public class ObjectLifecyclePublisherDefault implements ObjectLifecyclePublisher
 
     @Override
     public void onPostPersist(final ManagedObject entity) {
-        entityChangeTracker().enlistCreated(entity);
+        entityChangeTracker()
+            .ifPresent(entityChangeTracker->entityChangeTracker.enlistCreated(entity));
         lifecycleCallbackNotifier().postPersist(entity);
     }
 
     @Override
     public void onPreUpdate(
             final ManagedObject entity,
-            @Nullable final Can<PropertyChangeRecord> changeRecords) {
-        entityChangeTracker().enlistUpdating(entity, changeRecords);
+            final @Nullable Function<ManagedObject, Can<PropertyChangeRecord>> propertyChangeRecordSupplier) {
+        entityChangeTracker()
+            .ifPresent(entityChangeTracker->entityChangeTracker.enlistUpdating(entity, propertyChangeRecordSupplier));
         lifecycleCallbackNotifier().preUpdate(entity);
     }
-
 
     @Override
     public void onPostUpdate(final ManagedObject entity) {
@@ -108,9 +99,25 @@ public class ObjectLifecyclePublisherDefault implements ObjectLifecyclePublisher
 
     @Override
     public void onPreRemove(final ManagedObject entity) {
-        entityChangeTracker().enlistDeleting(entity);
+        entityChangeTracker()
+            .ifPresent(entityChangeTracker->entityChangeTracker.enlistDeleting(entity));
         lifecycleCallbackNotifier().preRemove(entity);
     }
 
+    // -- HELPER
+
+    private InteractionService interactionService() {
+        return interactionServiceProvider.get();
+    }
+
+    private Optional<EntityChangeTracker> entityChangeTracker() {
+        return interactionService().isInInteraction()
+                ? Optional.of(entityChangeTrackerProvider.get())
+                : Optional.empty();
+    }
+
+    private LifecycleCallbackNotifier lifecycleCallbackNotifier() {
+        return lifecycleCallbackNotifierProvider.get();
+    }
 
 }

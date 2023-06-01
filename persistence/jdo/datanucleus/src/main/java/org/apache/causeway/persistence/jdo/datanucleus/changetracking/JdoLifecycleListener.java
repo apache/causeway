@@ -35,6 +35,7 @@ import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
+import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyChangeRecord;
 import org.apache.causeway.persistence.jdo.datanucleus.entities.DnObjectProviderForCauseway;
 
 import lombok.NonNull;
@@ -145,14 +146,19 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
                 doPreDirty);
     }
 
+    /**
+     * Besides triggering UPDATING lifecycle events, also enlists entity property changes, if enabled.
+     *
+     * @implNote {@code propertyChangeRecordSupplier} is an optional parameter to provide the pre-computed
+     * {@link PropertyChangeRecord}s from the ORM. JPA does this, JDO does not.
+     *
+     * @see ObjectLifecyclePublisher#onPreUpdate(ManagedObject, java.util.function.Function)
+     * @see org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener#onPreUpdate(Object)
+     * @see org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener#gatherPropertyChangeRecords(ManagedObject)
+     */
     private final void doPreDirty(final Persistable pojo) {
         val entity = adaptEntity(pojo);
-
-        /*
-         * JDO callbacks are implemented differently, hence breaking symmetry with JPA here
-         * see org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener.gatherPropertyChangeRecords(ManagedObject)
-         */
-        objectLifecyclePublisher.onPreUpdate(entity, null);
+        objectLifecyclePublisher.onPreUpdate(entity, /*propertyChangeRecordSupplier*/ null);
     }
 
     @Override
