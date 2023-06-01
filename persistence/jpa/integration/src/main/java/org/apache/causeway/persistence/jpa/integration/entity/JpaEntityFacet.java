@@ -131,9 +131,7 @@ public class JpaEntityFacet
             val queryEntityType = queryFindAllInstances.getResultType();
 
             // guard against misuse
-            if (!entityClass.isAssignableFrom(queryEntityType)) {
-                throw _Exceptions.unexpectedCodeReach();
-            }
+            _Assert.assertTypeIsInstanceOf(queryEntityType, entityClass);
 
             val entityManager = getEntityManager();
 
@@ -197,9 +195,7 @@ public class JpaEntityFacet
         }
 
         // guard against misuse
-        if (!entityClass.isAssignableFrom(pojo.getClass())) {
-            throw _Exceptions.unexpectedCodeReach();
-        }
+        _Assert.assertNullableObjectIsInstanceOf(pojo, entityClass);
 
         val entityManager = getEntityManager();
 
@@ -215,9 +211,7 @@ public class JpaEntityFacet
         }
 
         // guard against misuse
-        if (!entityClass.isAssignableFrom(pojo.getClass())) {
-            throw _Exceptions.unexpectedCodeReach();
-        }
+        _Assert.assertNullableObjectIsInstanceOf(pojo, entityClass);
 
         val entityManager = getEntityManager();
         entityManager.refresh(pojo);
@@ -225,15 +219,12 @@ public class JpaEntityFacet
 
     @Override
     public void delete(final Object pojo) {
-
         if (pojo == null) {
             return; // nothing to do
         }
 
         // guard against misuse
-        if (!entityClass.isAssignableFrom(pojo.getClass())) {
-            throw _Exceptions.unexpectedCodeReach();
-        }
+        _Assert.assertNullableObjectIsInstanceOf(pojo, entityClass);
 
         val entityManager = getEntityManager();
         entityManager.remove(pojo);
@@ -242,13 +233,8 @@ public class JpaEntityFacet
     @Override
     public EntityState getEntityState(final Object pojo) {
 
-        if (pojo == null) {
-            return EntityState.NOT_PERSISTABLE;
-        }
-
-        // guard against misuse
-        if (!entityClass.isAssignableFrom(pojo.getClass())) {
-            //throw _Exceptions.unexpectedCodeReach();
+        if (pojo == null
+                || !entityClass.isAssignableFrom(pojo.getClass())) {
             return EntityState.NOT_PERSISTABLE;
         }
 

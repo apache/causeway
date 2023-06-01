@@ -29,6 +29,7 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.primitives._Ints;
 import org.apache.causeway.commons.internal.primitives._Longs;
 
+import lombok.NonNull;
 import lombok.val;
 import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
@@ -228,11 +229,24 @@ public final class _Assert {
 
     // -- TYPE INSTANCE OF
 
-    public static void assertTypeIsInstanceOf(final Class<?> type, final Class<?> requiredType) {
+    /**
+     * Asserts, that given {@code type} is an instance of {@code requiredType}.
+     */
+    public static void assertTypeIsInstanceOf(final @NonNull Class<?> type, final @NonNull Class<?> requiredType) {
         if(!requiredType.isAssignableFrom(type)) {
             throw _Exceptions.assertionError(String.format(
-                    "unexpected type: <%s> is not an instance of <%s> ", ""+type, ""+requiredType));
+                    "unexpected type: '%s' is not an instance of '%s' ", ""+type, ""+requiredType));
         }
+    }
+
+    /**
+     * Asserts, that given null-able {@code pojo} is an instance of {@code requiredType}.
+     * <p>
+     * If {@code pojo} is {@code null}, the assertion is always satisfied.
+     */
+    public static void assertNullableObjectIsInstanceOf(final @Nullable Object pojo, final @NonNull Class<?> requiredType) {
+        if(pojo==null) return; // skip check
+        assertTypeIsInstanceOf(pojo.getClass(), requiredType);
     }
 
     // -- OPEN/CLOSE STATE

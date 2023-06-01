@@ -101,6 +101,10 @@ implements EntityFacet {
             final FacetHolder holder, final Class<?> entityClass) {
         super(EntityFacet.class, holder);
         this.entityClass = entityClass;
+
+        _Assert.assertTrue(isPersistableType(entityClass),
+                ()->String.format("JdoEntityFacet initialized with type '%s' "
+                        + "that is not Persistable (JDO)", entityClass));
     }
 
     @Override
@@ -233,6 +237,9 @@ implements EntityFacet {
             val queryFindAllInstances = (AllInstancesQuery<?>) query;
             val queryEntityType = queryFindAllInstances.getResultType();
 
+            // guard against misuse
+            _Assert.assertTypeIsInstanceOf(queryEntityType, entityClass);
+
             val persistenceManager = getPersistenceManager();
 
             val typedQuery = persistenceManager.newJDOQLTypedQuery(queryEntityType);
@@ -296,9 +303,10 @@ implements EntityFacet {
 
     @Override
     public void persist(final Object pojo) {
+        // guard against misuse
+        _Assert.assertNullableObjectIsInstanceOf(pojo, entityClass);
 
         if(pojo==null
-                || !isPersistableType(pojo.getClass())
                 || DnEntityStateProvider.entityState(pojo).hasOid()) {
             return; // nothing to do
         }
@@ -313,11 +321,31 @@ implements EntityFacet {
     }
 
     @Override
-    public void delete(final Object pojo) {
-
-        if(pojo==null || !isPersistableType(pojo.getClass())) {
+    public void refresh(final Object pojo) {
+        if(pojo==null) {
             return; // nothing to do
         }
+
+        // guard against misuse
+        _Assert.assertNullableObjectIsInstanceOf(pojo, entityClass);
+
+        val pm = getPersistenceManager();
+
+        log.debug("about to refresh entity {}", pojo);
+
+        getTransactionalProcessor()
+        .runWithinCurrentTransactionElseCreateNew(()->pm.refresh(pojo))
+        .ifFailureFail();
+    }
+
+    @Override
+    public void delete(final Object pojo) {
+        if(pojo==null) {
+            return; // nothing to do
+        }
+
+        // guard against misuse
+        _Assert.assertNullableObjectIsInstanceOf(pojo, entityClass);
 
         if (!DnEntityStateProvider.entityState(pojo).hasOid()) {
             throw _Exceptions.illegalArgument("can only delete an attached entity");
@@ -329,24 +357,6 @@ implements EntityFacet {
 
         getTransactionalProcessor()
         .runWithinCurrentTransactionElseCreateNew(()->pm.deletePersistent(pojo))
-        .ifFailureFail();
-    }
-
-    @Override
-    public void refresh(final Object pojo) {
-
-        if(pojo==null
-                || !isPersistableType(pojo.getClass())
-                || !DnEntityStateProvider.entityState(pojo).isPersistable()) {
-            return; // nothing to do
-        }
-
-        val pm = getPersistenceManager();
-
-        log.debug("about to refresh entity {}", pojo);
-
-        getTransactionalProcessor()
-        .runWithinCurrentTransactionElseCreateNew(()->pm.refresh(pojo))
         .ifFailureFail();
     }
 
