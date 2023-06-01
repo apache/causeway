@@ -94,10 +94,10 @@ public interface ObjectLifecyclePublisher {
      * </p>
      *
      * @param entity
-     * @param changeRecords - optional parameter to provide the pre-computed {@link PropertyChangeRecord}s from the ORM.
+     * @param propertyChangeRecordSupplier - optional parameter to provide the pre-computed {@link PropertyChangeRecord}s from the ORM.
      *      JPA does this, JDO does not.
      */
-    void onPreUpdate(ManagedObject entity, @Nullable Function<ManagedObject, Can<PropertyChangeRecord>> changeRecordSupplier);
+    void onPreUpdate(ManagedObject entity, @Nullable Function<ManagedObject, Can<PropertyChangeRecord>> propertyChangeRecordSupplier);
 
     /**
      * Called by both JPA and JDO, after an existing entity has been updated.

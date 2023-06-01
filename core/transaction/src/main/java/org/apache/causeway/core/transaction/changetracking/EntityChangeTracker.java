@@ -59,7 +59,7 @@ public interface EntityChangeTracker extends DisposableBean {
      * </p>
      *
      * @param entity
-     * @param propertyChangeRecords - optional parameter (as a performance optimization)
+     * @param propertyChangeRecordSupplier - optional parameter (as a performance optimization)
      *      to provide the pre-computed {@link PropertyChangeRecord}s from the ORM.  JPA does this, JDO does not.
      */
     void enlistUpdating(ManagedObject entity, @Nullable Function<ManagedObject, Can<PropertyChangeRecord>> propertyChangeRecordSupplier);
