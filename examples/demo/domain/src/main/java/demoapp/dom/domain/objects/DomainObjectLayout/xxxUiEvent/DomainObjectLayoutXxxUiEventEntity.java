@@ -29,10 +29,10 @@ import demoapp.dom._infra.values.ValueHolder;
 
 //tag::class[]
 @DomainObjectLayout(
-    titleUiEvent = DomainObjectLayoutXxxUiEventEntity.TitleEvent.class,               // <.>
-    iconUiEvent = DomainObjectLayoutXxxUiEventEntity.IconEvent.class,                 // <.>
-    cssClassUiEvent = DomainObjectLayoutXxxUiEventEntity.CssClassEvent.class,         // <.>
-    layoutUiEvent = DomainObjectLayoutXxxUiEventEntity.LayoutEvent.class              // <.>
+    titleUiEvent = DomainObjectLayoutXxxUiEventEntity.TitleEvent.class,       // <.>
+    iconUiEvent = DomainObjectLayoutXxxUiEventEntity.IconEvent.class,         // <.>
+    cssClassUiEvent = DomainObjectLayoutXxxUiEventEntity.CssClassEvent.class, // <.>
+    layoutUiEvent = DomainObjectLayoutXxxUiEventEntity.LayoutEvent.class      // <.>
 )
 public abstract class DomainObjectLayoutXxxUiEventEntity
 //end::class[]
@@ -41,13 +41,13 @@ public abstract class DomainObjectLayoutXxxUiEventEntity
         ValueHolder<String>
 //tag::class[]
 {
-    public static class TitleEvent                                              // <1>
+    public static class TitleEvent                                            // <1>
             extends TitleUiEvent<DomainObjectLayoutXxxUiEventEntity> { }
-    public static class IconEvent                                               // <2>
+    public static class IconEvent                                             // <2>
             extends IconUiEvent<DomainObjectLayoutXxxUiEventEntity> { }
-    public static class CssClassEvent                                           // <3>
+    public static class CssClassEvent                                         // <3>
             extends CssClassUiEvent<DomainObjectLayoutXxxUiEventEntity> { }
-    public static class LayoutEvent                                             // <4>
+    public static class LayoutEvent                                           // <4>
             extends LayoutUiEvent<DomainObjectLayoutXxxUiEventEntity> { }
     // ...
 //end::class[]

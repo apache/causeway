@@ -4,19 +4,19 @@ There are four different ways to influence the presentation of a domain object: 
 Normally the responsibility for specifying these presentation items belong with the domain object itself, but this responsibility can be moved to a subscriber which listens to an appropriate "UI event" and sets the corresponding presentation item.
 These are specified using link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/DomainObjectLayout.html[@DomainObjectLayout]:
 
-* link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/DomainObjectLayout.html#titleuievent[@DomainObjectLayout#titleUiEvent]
+* link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/DomainObjectLayout.html#titleuievent[@DomainObjectLayout#titleUiEvent] - equivalent to link:https://causeway.apache.org/refguide/2.0.0-RC1/applib-methods/ui-hints/title.html[title()]
 +
 specifies the UI event class for a subscriber to listen to for changing the title
 
-* link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/DomainObjectLayout.html#iconuievent[@DomainObjectLayout#iconUiEvent]
+* link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/DomainObjectLayout.html#iconuievent[@DomainObjectLayout#iconUiEvent] - equivalent to link:https://causeway.apache.org/refguide/2.0.0-RC1/applib-methods/ui-hints/iconName.html[iconName()]
 +
 specifies the UI event class for a subscriber to listen to for changing the icon
 
-* link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/DomainObjectLayout.html#cssclassuievent[@DomainObjectLayout#cssClassUiEvent]
+* link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/DomainObjectLayout.html#cssclassuievent[@DomainObjectLayout#cssClassUiEvent] - equivalent to link:https://causeway.apache.org/refguide/2.0.0-RC1/applib-methods/ui-hints/cssClass.html[cssClass()]
 +
 specifies the UI event class for a subscriber to listen to for changing the CSS class
 
-* link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/DomainObjectLayout.html#layoutuievent[@DomainObjectLayout#layoutUiEvent]
+* link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/DomainObjectLayout.html#layoutuievent[@DomainObjectLayout#layoutUiEvent] - equivalent to link:https://causeway.apache.org/refguide/2.0.0-RC1/applib-methods/ui-hints/layout.html[layout()]
 +
 specifies the UI event class for a subscriber to listen to for changing the layout
 
@@ -56,6 +56,8 @@ with callbacks:
 ----
 include::DomainObjectLayoutXxxUiEventSubscriber.java[tags=titleUiEvent]
 ----
++
+(Navigate into the object to see its title; or hover over its icon to see the title in the tooltip).
 
 ** for icon UI event:
 +
@@ -70,6 +72,8 @@ include::DomainObjectLayoutXxxUiEventSubscriber.java[tags=iconUiEvent]
 ----
 include::DomainObjectLayoutXxxUiEventSubscriber.java[tags=cssClassUiEvent]
 ----
++
+Entries in `application.css` style the object with different colours.
 
 ** for layout UI event:
 +
@@ -77,5 +81,7 @@ include::DomainObjectLayoutXxxUiEventSubscriber.java[tags=cssClassUiEvent]
 ----
 include::DomainObjectLayoutXxxUiEventSubscriber.java[tags=layoutUiEvent]
 ----
-
++
+This causes either `DomainObjectLayoutXxxUiEventEntity-alternative1.layout.xml` or `DomainObjectLayoutXxxUiEventEntity-alternative2.layout.xml` to be used as the layout file.
+Navigate into the objects and notice the different tab labels.
 

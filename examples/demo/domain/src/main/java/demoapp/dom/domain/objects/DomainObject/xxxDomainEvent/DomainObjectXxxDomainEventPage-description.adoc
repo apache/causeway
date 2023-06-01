@@ -19,6 +19,9 @@ But as a fallback the `domainEvent` can also be at the class level using link:ht
 This page object has a single (editable) property, `text`, actions to update it, and a collection.
 None of these domain members are annotated with a domainEvent directly, but the containing page object class _is_ annotated.
 
+NOTE: normally we would position the actions alongside the property to which they are associated.
+This demo deliberately does not (and leaves them near the page title), so that their behaviour (in particular, their visibility) can be checked independently of the property's behaviour.
+
 The page object also has a control strategy property and corresponding action.
 This is used to control interactions with the other members of the page: whether they are hidden, disabled, and so on.
 

@@ -20,15 +20,17 @@ package org.apache.causeway.persistence.jpa.applib.integration;
 
 import org.eclipse.persistence.sessions.UnitOfWork;
 import org.eclipse.persistence.sessions.changesets.DirectToFieldChangeRecord;
+import org.eclipse.persistence.sessions.changesets.ObjectChangeSet;
+import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Either;
-import org.apache.causeway.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
-import org.apache.causeway.core.metamodel.facets.properties.property.entitychangepublishing.EntityPropertyChangePublishingPolicyFacet;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.object.ManagedObjects;
+import org.apache.causeway.core.metamodel.object.MmEntityUtils;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyChangeRecord;
-import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyChangeRecordId;
 import org.apache.causeway.persistence.jpa.applib.services.JpaSupportService;
 
 import jakarta.inject.Inject;
@@ -87,43 +89,10 @@ public class CausewayEntityListener {
         objectLifecyclePublisher.onPostLoad(entity);
     }
 
-
     @PreUpdate void onPreUpdate(final Object entityPojo) {
         log.debug("onPreUpdate: {}", entityPojo);
-
         val entity = objectManager.adapt(entityPojo);
-
-        val entityManagerResult = jpaSupportServiceProvider.get().getEntityManager(entityPojo.getClass());
-        entityManagerResult.getValue().ifPresent(em -> {  // https://wiki.eclipse.org/EclipseLink/FAQ/JPA#How_to_access_what_changed_in_an_object_or_transaction.3F
-            val unwrap = em.unwrap(UnitOfWork.class);
-            val changes = unwrap.getCurrentChanges();
-            val objectChanges = changes.getObjectChangeSetForClone(entityPojo);
-            if(objectChanges==null) {
-                return;
-            }
-
-            final Can<PropertyChangeRecord> propertyChangeRecords =
-                objectChanges
-                .getChanges()
-                .stream()
-                .filter(property-> EntityChangePublishingFacet.isPublishingEnabled(entity.getSpecification()))
-                .filter(DirectToFieldChangeRecord.class::isInstance)
-                .map(DirectToFieldChangeRecord.class::cast)
-                .map(ormChangeRecord -> {
-                    //XXX lombok val issue with nested lambda
-                    final String propertyName = ormChangeRecord.getAttribute();
-                    return entity
-                            .getSpecification()
-                            .getProperty(propertyName)
-                            .filter(property -> !property.isMixedIn())
-                            .filter(property -> !EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(property))
-                            .map(property -> PropertyChangeRecord.ofCurrent(PropertyChangeRecordId.of(entity, property), ormChangeRecord.getOldValue()))
-                            .orElse(null); // ignore
-                })
-                .collect(Can.toCan()); // a Can<T> only collects non-null elements
-
-            objectLifecyclePublisher.onPreUpdate(entity, propertyChangeRecords);
-        });
+        objectLifecyclePublisher.onPreUpdate(entity, this::gatherPropertyChangeRecords);
     }
 
     @PreRemove void onPreRemove(final Object entityPojo) {
@@ -146,6 +115,44 @@ public class CausewayEntityListener {
 
     @PostRemove void onPostRemove(final Object entityPojo) {
         log.debug("onPostRemove: {}", entityPojo);
+    }
+
+    // -- HELPER
+
+    private Can<PropertyChangeRecord> gatherPropertyChangeRecords(final @Nullable ManagedObject entity) {
+
+        // guard against null and non-entity types
+        if(!ManagedObjects.isEntity(entity)) {
+            return Can.empty();
+        }
+
+        final Object entityPojo = entity.getPojo();
+        val entityManagerIfAny = jpaSupportServiceProvider.get().getEntityManager(entityPojo.getClass())
+                .getValue();
+
+        final Can<PropertyChangeRecord> propertyChangeRecords = entityManagerIfAny
+            .map(em -> {
+                // https://wiki.eclipse.org/EclipseLink/FAQ/JPA#How_to_access_what_changed_in_an_object_or_transaction.3F
+                val unwrap = em.unwrap(UnitOfWork.class);
+                val changes = unwrap.getCurrentChanges();
+                return changes.getObjectChangeSetForClone(entityPojo);
+            })
+            .map((final ObjectChangeSet objectChanges)->{
+                return
+                    objectChanges.getChanges().stream()
+                    .filter(DirectToFieldChangeRecord.class::isInstance)
+                    .map(DirectToFieldChangeRecord.class::cast)
+                    .map(ormChangeRecord -> {
+                        final String propertyName = ormChangeRecord.getAttribute();
+                        return MmEntityUtils.lookupPropertyChangeRecordIdForChangePublishing(entity, propertyName)
+                                .map(id -> PropertyChangeRecord.ofCurrent(id, ormChangeRecord.getOldValue()))
+                                .orElse(null); // ignore
+                    })
+                    .collect(Can.toCan()); // a Can only collects non-null elements
+            })
+            .orElseGet(Can::empty);
+
+        return propertyChangeRecords;
     }
 
 }

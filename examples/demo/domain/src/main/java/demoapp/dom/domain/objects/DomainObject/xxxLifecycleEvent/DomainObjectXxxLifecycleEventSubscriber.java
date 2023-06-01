@@ -23,6 +23,8 @@ import java.util.List;
 
 import jakarta.inject.Inject;
 
+import org.apache.causeway.applib.services.clock.ClockService;
+
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
@@ -38,10 +40,12 @@ import lombok.val;
 class DomainObjectXxxLifecycleEventSubscriber {
 
     final BookmarkService bookmarkService;
+    final ClockService clockService;
 
     @EventListener(DomainObjectXxxLifecycleEventEntity.LifecycleEvent.class)  // <.>
     public void on(DomainObjectXxxLifecycleEventEntity.LifecycleEvent ev) {   // <1>
         val vm = new DomainObjectLifecycleEventVm(
+                clockService.getClock().nowAsLocalDateTime(),
                 ev.getClass().getSimpleName(),
                 bookmarkService.bookmarkFor(ev.getSource()).map(Bookmark::toString).orElse(null)
         );

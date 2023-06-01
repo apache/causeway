@@ -7,10 +7,8 @@ The idea is that corresponding styling is added to the `css/application.css` fil
 == How this demo works
 
 The collection on the left shows a list of entities where the `cssClass` attribute has been set to a value of "custom".
-
-Custom CSS in `application.css` shows that they are rendered in italics and also in green, quite differently from the lists you will see on other demo pages.
-
-Navigate into one of these entities and -- again -- the custom CSS is used to change the styling of their title as using italics and coloured green.
+Custom CSS in `application.css` shows that they are rendered in italics and also in red, differently to the lists you will see on other demo pages.
+Navigate into one of these entities and -- again -- the custom CSS is used to change the styling of their title as using italics and coloured red.
 
 In terms of code:
 
@@ -19,7 +17,7 @@ In terms of code:
 [source,css]
 .DomainObjectLayoutCssClass.java
 ----
-include::DomainObjectLayoutCssClass.java[tags=class]
+include::DomainObjectLayoutCssClassEntity.java[tags=class]
 ----
 <.> specifies the "custom" CSS class
 
@@ -41,7 +39,7 @@ tr.odd.custom > td,
 === See also
 
 The link:https://causeway.apache.org/refguide/2.0.0-RC1/applib-methods/ui-hints/cssClass.html[cssClass()] method provides an alternative mechanism for specifying a custom CSS class for an object.
-The difference though is that `cssClass()` is dynamic (whereas `@DomainObjectLayout#cssClass` attribute is static).
+The difference though is that `cssClass()` is dynamic (whereas the `@DomainObjectLayout#cssClass` attribute is static).
 
 A common use case for `cssClass()` is to reflect the state of an object that has a lifecycle, such as an `Order` with an `orderStatus`.
 The colour used for a NEW order might be different from that for an CONFIRMED order, while a DISCARDED order might be rendered using [line-through]#strikethrough#.

@@ -160,6 +160,12 @@ For latest we use: https://raw.githubusercontent.com/apache/causeway/master/anto
                 <mb3:serviceAction objectType="demo.EmbeddedTypeMenuJpa" id="embeddedTypes"/>
                 <mb3:serviceAction objectType="demo.EmbeddedTypeMenuJdo" id="embeddedTypes"/>
             </mb3:section>
+            <mb3:section>
+                <mb3:named>UI Supporting Methods</mb3:named>
+                <mb3:serviceAction objectType="demo.UiHintsMenu" id="cssClassSupportingMethod"/>
+                <mb3:serviceAction objectType="demo.UiHintsMenu" id="iconSupportingMethod"/>
+                <mb3:serviceAction objectType="demo.UiHintsMenu" id="layoutSupportingMethod"/>
+            </mb3:section>
         </mb3:menu>
 
         <mb3:menu>

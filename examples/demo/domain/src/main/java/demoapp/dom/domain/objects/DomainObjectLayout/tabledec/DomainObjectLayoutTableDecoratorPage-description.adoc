@@ -17,6 +17,8 @@ The associated action "actionReturningCollection" returns these same objects as 
 
 In terms of code:
 
+* entity definition:
++
 [source,java,indent=0]
 .DomainObjectLayoutTableDecoratorEntity.java
 ----

@@ -37,6 +37,8 @@ import org.apache.causeway.applib.util.schema.InteractionDtoUtils;
 import org.apache.causeway.core.runtimeservices.urlencoding.UrlEncodingServiceWithCompression;
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -49,7 +51,7 @@ import lombok.val;
         nature = Nature.VIEW_MODEL)
 @NoArgsConstructor
 @AllArgsConstructor
-public class InteractionDtoVm implements ViewModel {
+public class InteractionDtoVm implements ViewModel, HasAsciiDocDescription {
 
     private final static UrlEncodingService encodingService = new UrlEncodingServiceWithCompression();
 

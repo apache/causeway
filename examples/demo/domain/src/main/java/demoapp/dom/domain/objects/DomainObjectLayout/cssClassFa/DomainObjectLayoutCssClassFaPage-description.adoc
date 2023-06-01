@@ -9,12 +9,14 @@ An alternative though is to use a fontawesome icon, specified using link:https:/
 
 The collection on the left shows a list of entities where the `cssClass` attribute has been set to a value of "fa-user".
 
-In terms of code, that is:
+In terms of code:
 
+* entity class definition:
++
 [source,css]
-.DomainObjectLayoutCssClass.java
+.DomainObjectLayoutCssClassFaEntity.java
 ----
-include::DomainObjectLayoutCssClassFa.java[tags=class]
+include::DomainObjectLayoutCssClassFaEntity.java[tags=class]
 ----
 <.> specifies the "fa-user" fontawesome CSS class
 

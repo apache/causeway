@@ -20,12 +20,18 @@ package demoapp.dom.domain.properties.PropertyLayout.navigable;
 
 import jakarta.inject.Inject;
 
+import org.springframework.stereotype.Component;
+
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.graph.tree.TreeNode;
 
 import lombok.RequiredArgsConstructor;
 
 @SuppressWarnings("unused")
+/* avoiding class-path scan bean-naming clash with the other FileNodeVm_tree
+ * and also not using @Named here,
+ * because this would trigger a meta-model warning when used on mixins */
+@Component("demo.navigable.FileNodeVm_tree")
 //tag::class[]
 @Property
 @RequiredArgsConstructor

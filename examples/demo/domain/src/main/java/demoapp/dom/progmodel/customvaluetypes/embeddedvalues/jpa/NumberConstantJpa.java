@@ -78,7 +78,7 @@ public class NumberConstantJpa
     private String name;
 
     @jakarta.persistence.Embedded                 // <.>
-    @Property(editing = Editing.DISABLED)
+    @Property(editing = Editing.ENABLED)
     @Getter @Setter
     private ComplexNumberJpa number;
 }

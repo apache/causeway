@@ -23,17 +23,21 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.jaxb.JavaTimeJaxbAdapters.LocalDateTimeToStringAdapter;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+
+import java.time.LocalDateTime;
 
 //tag::class[]
 @XmlRootElement(name = "demo.DomainObjectLifecycleEventVm")
@@ -44,14 +48,20 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @NoArgsConstructor
 public class DomainObjectLifecycleEventVm implements HasAsciiDocDescription {
 
-    public DomainObjectLifecycleEventVm(String eventType, String bookmark) {
+    public DomainObjectLifecycleEventVm(LocalDateTime timestamp, String eventType, String bookmark) {
         this.eventType = eventType;
         this.bookmark = bookmark;
+        this.timestamp = timestamp;
     }
 
     @ObjectSupport public String title() {
-        return eventType + ": " + bookmark;
+        return timestamp + ":" + eventType + " on " + bookmark;
     }
+
+    @Property
+    @XmlJavaTypeAdapter(LocalDateTimeToStringAdapter.class)
+    @Getter @Setter
+    private LocalDateTime timestamp;
 
     @Property
     @Getter @Setter

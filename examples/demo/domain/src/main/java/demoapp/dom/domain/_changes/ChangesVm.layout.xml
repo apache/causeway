@@ -31,9 +31,7 @@
 					<bs3:row>
 						<bs3:col span="12">
 							<cpt:fieldSet name="General" id="general" >
-								<cpt:property id="name"/>
-								<cpt:property id="originalName"/>
-								<cpt:property id="initialCharacter"/>
+								<cpt:property id="changesDto"/>
 							</cpt:fieldSet>
 						</bs3:col>
 					</bs3:row>

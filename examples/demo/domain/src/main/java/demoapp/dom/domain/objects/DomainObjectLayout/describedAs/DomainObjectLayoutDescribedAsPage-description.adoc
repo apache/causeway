@@ -12,8 +12,9 @@ Navigate into any of the objects and the same text is shown when hovering over t
 In terms of code:
 
 [source,java,indent=0]
+.DomainObjectLayoutDescribedAsEntity.java
 ----
-include::DomainObjectLayoutDescribedAs.java[tags=class]
+include::DomainObjectLayoutDescribedAsEntity.java[tags=class]
 ----
 <.> provides the description.
 The viewer renders this in a tooltip.

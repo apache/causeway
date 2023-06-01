@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.transaction.changetracking;
 
+import java.util.function.Function;
+
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.lang.Nullable;
 
@@ -32,18 +34,6 @@ import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyChang
  * @since 1.x but renamed/refactored for v2 {@index}
  */
 public interface EntityChangeTracker extends DisposableBean {
-
-    /**
-     * Provided primarily for testing, but also used in cases where an attempt is made to resolve a bean but
-     * there is no active interaction.
-     */
-    EntityChangeTracker NOOP = new EntityChangeTracker() {
-        @Override public void destroy() throws Exception {}
-        @Override public void enlistCreated(final ManagedObject entity) {}
-        @Override public void enlistUpdating(final ManagedObject entity, final Can<PropertyChangeRecord> propertyChangeRecords) {}
-        @Override public void enlistDeleting(final ManagedObject entity) {}
-        @Override public void incrementLoaded(final ManagedObject entity) {}
-    };
 
     /**
      * Publishing support: for object stores to enlist an object that has just been created,
@@ -69,10 +59,10 @@ public interface EntityChangeTracker extends DisposableBean {
      * </p>
      *
      * @param entity
-     * @param propertyChangeRecords - optional parameter (as a performance optimization) to provide the pre-computed {@link PropertyChangeRecord}s from the ORM.  JPA does this, JDO does not.
+     * @param propertyChangeRecordSupplier - optional parameter (as a performance optimization)
+     *      to provide the pre-computed {@link PropertyChangeRecord}s from the ORM.  JPA does this, JDO does not.
      */
-    void enlistUpdating(ManagedObject entity, @Nullable Can<PropertyChangeRecord> propertyChangeRecords);
-
+    void enlistUpdating(ManagedObject entity, @Nullable Function<ManagedObject, Can<PropertyChangeRecord>> propertyChangeRecordSupplier);
 
     /**
      * Publishing support: for object stores to enlist an object that is about to be deleted,
@@ -90,9 +80,6 @@ public interface EntityChangeTracker extends DisposableBean {
      * the {@link org.apache.causeway.applib.services.metrics.MetricsService}.
      */
     void incrementLoaded(ManagedObject entity);
-
-
-
 
 }
 

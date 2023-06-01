@@ -31,6 +31,7 @@
 					<bs3:row>
 						<bs3:col span="12">
 							<cpt:fieldSet name="General" id="general" >
+								<cpt:property id="timestamp"/>
 								<cpt:property id="eventType"/>
 								<cpt:property id="bookmark"/>
 							</cpt:fieldSet>

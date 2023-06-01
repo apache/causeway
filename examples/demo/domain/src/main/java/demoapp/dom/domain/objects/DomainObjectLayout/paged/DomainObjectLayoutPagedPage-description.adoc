@@ -18,9 +18,11 @@ Here again the `paged` value _is_ honoured.
 
 In terms of code:
 
+* entity definition:
++
 [source,java,indent=0]
 ----
-include::DomainObjectLayoutPaged.java[tags=class]
+include::DomainObjectLayoutPagedEntity.java[tags=class]
 ----
 <.> indicates that collections of this domain class should have no more than 5 objects per page.
 p
