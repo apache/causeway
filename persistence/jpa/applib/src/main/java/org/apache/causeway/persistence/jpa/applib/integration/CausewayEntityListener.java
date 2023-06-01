@@ -34,9 +34,8 @@ import org.eclipse.persistence.sessions.changesets.ObjectChangeSet;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Either;
-import org.apache.causeway.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
-import org.apache.causeway.core.metamodel.facets.properties.property.entitychangepublishing.EntityPropertyChangePublishingPolicyFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.object.MmEntityUtils;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyChangeRecord;
@@ -90,18 +89,10 @@ public class CausewayEntityListener {
         objectLifecyclePublisher.onPostLoad(entity);
     }
 
-
     @PreUpdate void onPreUpdate(final Object entityPojo) {
         log.debug("onPreUpdate: {}", entityPojo);
-
         val entity = objectManager.adapt(entityPojo);
-
-        final Can<PropertyChangeRecord> propertyChangeRecords =
-                EntityChangePublishingFacet.isPublishingEnabled(entity.getSpecification())
-                ? gatherPropertyChangeRecords(entity)
-                : Can.empty();
-
-        objectLifecyclePublisher.onPreUpdate(entity, propertyChangeRecords);
+        objectLifecyclePublisher.onPreUpdate(entity, this::gatherPropertyChangeRecords);
     }
 
     @PreRemove void onPreRemove(final Object entityPojo) {
@@ -150,11 +141,7 @@ public class CausewayEntityListener {
                     .map(DirectToFieldChangeRecord.class::cast)
                     .map(ormChangeRecord -> {
                         final String propertyName = ormChangeRecord.getAttribute();
-                        return entity
-                                .getSpecification()
-                                .getProperty(propertyName)
-                                .filter(property -> !property.isMixedIn())
-                                .filter(property -> !EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(property))
+                        return MmEntityUtils.lookupPropertyEnabledForChangePublishing(entity, propertyName)
                                 .map(property -> PropertyChangeRecord.ofCurrent(
                                         PropertyChangeRecordId.of(entity, property),
                                         ormChangeRecord.getOldValue()))

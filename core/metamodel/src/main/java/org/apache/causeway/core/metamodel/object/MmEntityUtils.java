@@ -19,6 +19,7 @@
 package org.apache.causeway.core.metamodel.object;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
 
@@ -27,6 +28,10 @@ import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.beans.PersistenceStack;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
+import org.apache.causeway.core.metamodel.facets.properties.property.entitychangepublishing.EntityPropertyChangePublishingPolicyFacet;
+import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyChangeRecordId;
+import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.NonNull;
 import lombok.val;
@@ -36,7 +41,7 @@ import lombok.experimental.UtilityClass;
 public final class MmEntityUtils {
 
     @NonNull
-    public static Optional<PersistenceStack> getPersistenceStandard(final @Nullable ManagedObject adapter) {
+    public Optional<PersistenceStack> getPersistenceStandard(final @Nullable ManagedObject adapter) {
         if(adapter==null) {
             return Optional.empty();
         }
@@ -50,27 +55,27 @@ public final class MmEntityUtils {
     }
 
     @NonNull
-    public static EntityState getEntityState(final @Nullable ManagedObject adapter) {
+    public EntityState getEntityState(final @Nullable ManagedObject adapter) {
         return adapter!=null
              ? adapter.getEntityState()
              : EntityState.NOT_PERSISTABLE;
     }
 
-    public static void persistInCurrentTransaction(final ManagedObject managedObject) {
+    public void persistInCurrentTransaction(final ManagedObject managedObject) {
         requiresEntity(managedObject);
         val spec = managedObject.getSpecification();
         val entityFacet = spec.entityFacetElseFail();
         entityFacet.persist(managedObject.getPojo());
     }
 
-    public static void destroyInCurrentTransaction(final ManagedObject managedObject) {
+    public void destroyInCurrentTransaction(final ManagedObject managedObject) {
         requiresEntity(managedObject);
         val spec = managedObject.getSpecification();
         val entityFacet = spec.entityFacetElseFail();
         entityFacet.delete(managedObject.getPojo());
     }
 
-    public static void requiresEntity(final ManagedObject managedObject) {
+    public void requiresEntity(final ManagedObject managedObject) {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(managedObject)) {
             throw _Exceptions.illegalArgument("requires an entity object but got null, unspecified or empty");
         }
@@ -87,7 +92,7 @@ public final class MmEntityUtils {
      * As a side-effect transitions a transient entity to a bookmarked one. For bookmarked entities,
      * or any non-entity types acts as a no-op.
      */
-    public static void ifHasNoOidThenFlush(final @Nullable ManagedObject entity) {
+    public void ifHasNoOidThenFlush(final @Nullable ManagedObject entity) {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(entity)
                 || !entity.getSpecialization().isEntity()
                 || entity.isBookmarkMemoized()) {
@@ -103,7 +108,7 @@ public final class MmEntityUtils {
     /**
      * Side-effect free check for whether given entity is attached.
      */
-    public static boolean isAttachedEntity(final @Nullable ManagedObject entity) {
+    public boolean isAttachedEntity(final @Nullable ManagedObject entity) {
         return entity!=null
                 ? entity.getSpecialization().isEntity()
                     && entity.isBookmarkMemoized()
@@ -117,7 +122,7 @@ public final class MmEntityUtils {
      * @throws AssertionError if managedObject is a detached entity
      */
     @NonNull
-    public static ManagedObject requiresAttached(final @NonNull ManagedObject managedObject) {
+    public ManagedObject requiresAttached(final @NonNull ManagedObject managedObject) {
         if(managedObject instanceof PackedManagedObject) {
             ((PackedManagedObject)managedObject).unpack().forEach(MmEntityUtils::requiresAttached);
             return managedObject;
@@ -134,7 +139,7 @@ public final class MmEntityUtils {
         return managedObject;
     }
 
-    public static void requiresWhenFirstIsBookmarkableSecondIsAlso(
+    public void requiresWhenFirstIsBookmarkableSecondIsAlso(
             final ManagedObject first,
             final ManagedObject second) {
 
@@ -154,18 +159,38 @@ public final class MmEntityUtils {
         }
     }
 
+    // -- PROPERTY CHANGE PUBLISHING
+
+    public Stream<OneToOneAssociation> streamPropertiesEnabledForChangePublishing(final @NonNull ManagedObject entity) {
+        return entity.getSpecification().streamProperties(MixedIn.EXCLUDED)
+            .filter(property->!EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(property));
+    }
+
+    public Stream<PropertyChangeRecordId> streamPropertyChangeRecordIdsForChangePublishing(final @NonNull ManagedObject entity) {
+        return streamPropertiesEnabledForChangePublishing(entity)
+                .map(property->PropertyChangeRecordId.of(entity, property));
+    }
+
+    public Optional<OneToOneAssociation> lookupPropertyEnabledForChangePublishing(
+            final @NonNull ManagedObject entity, final String propertyName) {
+        return entity
+                .getSpecification()
+                .getProperty(propertyName, MixedIn.EXCLUDED)
+                .filter(property -> !EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(property));
+    }
+
     // -- SHORTCUTS
 
-    public static boolean hasOid(final @Nullable ManagedObject adapter) {
+    public boolean hasOid(final @Nullable ManagedObject adapter) {
         return MmEntityUtils.getEntityState(adapter).hasOid();
     }
 
-    public static boolean isDetachedCannotReattach(final @Nullable ManagedObject adapter) {
+    public boolean isDetachedCannotReattach(final @Nullable ManagedObject adapter) {
         return MmEntityUtils.getEntityState(adapter).isDetachedCannotReattach();
     }
 
     /** TODO very strange logic */
-    public static boolean isDeleted(final @Nullable ManagedObject entity) {
+    public boolean isDeleted(final @Nullable ManagedObject entity) {
         val state = MmEntityUtils.getEntityState(entity);
         return state.isDetached()
                 || state.isRemoved()
