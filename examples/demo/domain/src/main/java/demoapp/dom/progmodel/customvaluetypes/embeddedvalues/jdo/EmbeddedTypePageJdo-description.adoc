@@ -35,6 +35,7 @@ include::NumberConstantJdo.java[tags=class]
 include::ComplexNumberJdo.java[tags=class]
 ----
 <.> JDO `@EmbeddedOnly` annotation is the companion of `@Embedded` on the owning object
+<.> with presence of `@EmbeddedOnly` should not be required; but app fails on launch if not provided.
 <.> Indicates to the framework that this is a value rather than an entity.
 Accordingly, we will also need to provide a `ValueSemanticsProvider` implementation, discussed below.
 <.> provides access the fields

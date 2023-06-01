@@ -34,7 +34,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 public class UiHintsMenu {
 
     @Action
-    @ActionLayout(cssClassFa="fa-question-mark", describedAs="cssClass()")
+    @ActionLayout(cssClassFa="fa-css3", describedAs="cssClass()")
     public Object cssClassSupportingMethod(){
         return null;
     }
@@ -43,7 +43,7 @@ public class UiHintsMenu {
     }
 
     @Action
-    @ActionLayout(cssClassFa="fa-question-mark", describedAs="icon()")
+    @ActionLayout(cssClassFa="fa-icons", describedAs="icon()")
     public Object iconSupportingMethod(){
         return null;
     }
@@ -52,7 +52,7 @@ public class UiHintsMenu {
     }
 
     @Action
-    @ActionLayout(cssClassFa="fa-question-mark", describedAs="layout()")
+    @ActionLayout(cssClassFa="fa-border-all", describedAs="layout()")
     public Object layoutSupportingMethod(){
         return null;
     }

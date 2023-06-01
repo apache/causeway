@@ -27,14 +27,13 @@ import lombok.AccessLevel;
 
 @Profile("demo-jdo")
 //tag::class[]
-/* with presence of @EmbeddedOnly should not be required, but fails on launch if not provided */
-@javax.jdo.annotations.PersistenceCapable(embeddedOnly="true")
 @javax.jdo.annotations.EmbeddedOnly                                 // <.>
+@javax.jdo.annotations.PersistenceCapable(embeddedOnly="true")      // <.>
 @Value                                                              // <.>
 @lombok.Getter                                                      // <.>
 @lombok.Setter(AccessLevel.PRIVATE)                                 // <.>
 @lombok.AllArgsConstructor(staticName = "of")
-@lombok.NoArgsConstructor                                           // <.>
+@lombok.NoArgsConstructor                                           // <5>
 public class ComplexNumberJdo
         implements ComplexNumber {
 
@@ -42,6 +41,6 @@ public class ComplexNumberJdo
     private double re;                                              // <.>
 
     @javax.jdo.annotations.Column(allowsNull = "false")
-    private double im;                                              // <.>
+    private double im;                                              // <6>
 }
 //end::class[]
