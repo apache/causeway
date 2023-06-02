@@ -5,10 +5,9 @@ Every action invocation is reified into an link:https://causeway.apache.org/refg
 
 The link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/Action.html#executionpublishing[@Action#executionPublishing] determines whether subscribers are notified of the action being executed.
 
-The link:https://causeway.apache.org/userguide/2.0.0-RC1/executionlog/about.html[executionlog] extension provides an out-of-the-box subscriber implementation that persists every published execution into a log.
+The link:https://causeway.apache.org/userguide/2.0.0-RC1/executionlog/about.html[executionLog] extension provides an out-of-the-box subscriber implementation that persists every published execution into a log.
 This can be invaluable for auditing and performance monitoring.
-
-The similar link:https://causeway.apache.org/userguide/2.0.0-RC1/executionoutbox/about.html[executionOutbox] extension (not part of this demo) is very similar, also persisting executions.
+The link:https://causeway.apache.org/userguide/2.0.0-RC1/executionoutbox/about.html[executionOutbox] extension (not part of this demo) is very similar, also persisting executions.
 It is designed for integration scenarios, interacting with downstream systems.
 
 It is of course also possible to register additional subscribers for your own purposes.

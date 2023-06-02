@@ -5,7 +5,7 @@ Every _intention_ to invoke an action is reified into a link:https://causeway.ap
 
 The link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/Action.html#commandpublishing[@Action#commandPublishing] determines whether subscribers are notified of the action being executed.
 
-The _commandLog_ extension provides an out-of-the-box subscriber implementation that persists every published command into a log.
+The link:https://causeway.apache.org/userguide/2.0.0-RC1/commandlog/about.html[commandLog] extension provides an out-of-the-box subscriber implementation that persists every published command into a log.
 This can be invaluable for auditing and performance monitoring.
 
 It is also possible to register additional subscribers for your own purposes.

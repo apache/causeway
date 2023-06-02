@@ -19,16 +19,16 @@ skinparam rectangle<<2>> {
   BorderColor #2E6295
 }
 
-class PropertyPublishingVm {
+class PropertyProjectingPage {
 }
-class PropertyPublishingChildVm {
+class PropertyProjectingChildVm {
 }
-class PropertyPublishingChildEntity {
+class PropertyProjectingChildEntity {
 }
 
-PropertyPublishingVm -r-> "1" PropertyPublishingChildVm : firstChild
-PropertyPublishingVm -r-> "1..*" PropertyPublishingChildVm : children
-PropertyPublishingChildVm -d-> PropertyPublishingChildEntity : backingEntity
+PropertyProjectingPage -r-> "1" PropertyProjectingChildVm : firstChild
+PropertyProjectingPage -r-> "1..*" PropertyProjectingChildVm : children
+PropertyProjectingChildVm -d-> PropertyProjectingChildEntity : backingEntity
 
 @enduml
 ----

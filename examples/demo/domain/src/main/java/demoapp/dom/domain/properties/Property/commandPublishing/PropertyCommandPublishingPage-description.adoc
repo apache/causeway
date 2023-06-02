@@ -5,7 +5,7 @@ Every _intention_ to edit a property is reified into a link:https://causeway.apa
 
 The link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/Property.html#commandpublishing[@Property#commandPublishing] determines whether subscribers are notified of the property being edited.
 
-The _commandLog_ extension provides an out-of-the-box subscriber implementation that persists every published command into a log.
+The link:https://causeway.apache.org/userguide/2.0.0-RC1/commandlog/about.html[commandLog] extension provides an out-of-the-box subscriber implementation that persists every published command into a log.
 This can be invaluable for auditing and performance monitoring.
 
 It is also possible to register additional subscribers for your own purposes.
@@ -34,14 +34,6 @@ include::PropertyCommandPublishingEntity.java[tags=published]
 <.> makes the property editable...
 <.> \... and enables command publishing
 
-* contributed collection showing persisted ``CommandLogEntry``s:
-+
-[source,java,indent=0]
-.PropertyCommandPublishingEntity_publishedCommands.java
-----
-include::PropertyCommandPublishingEntity_publishedCommands.java[tags=class]
-----
-<.> repository provided by the _commandLog_ extension.
 
 
 == Related configuration property
