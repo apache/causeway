@@ -88,7 +88,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <!-- LIBRARY DEPENDENCIES -->
 
         <archunit.version>1.0.1</archunit.version>
-        <asciidoctorj.version>2.5.8</asciidoctorj.version>
+        <asciidoctorj.version>2.5.9</asciidoctorj.version>
         <asm.version>9.5</asm.version> <!-- keep in sync with org.eclipse.persistence:org.eclipse.persistence.asm -->
         <approvaltests.version>18.6.0</approvaltests.version>
 
