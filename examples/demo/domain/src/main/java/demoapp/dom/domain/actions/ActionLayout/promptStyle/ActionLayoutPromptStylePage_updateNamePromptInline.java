@@ -30,9 +30,10 @@ import lombok.RequiredArgsConstructor;
 //tag::class[]
 @Action(semantics = SemanticsOf.IDEMPOTENT)
 @ActionLayout(
-        promptStyle = PromptStyle.INLINE,
-        associateWith = "name",
-        sequence = "1")
+    promptStyle = PromptStyle.INLINE,       // <.>
+    associateWith = "name",
+    sequence = "1"
+)
 @RequiredArgsConstructor
 public class ActionLayoutPromptStylePage_updateNamePromptInline {
     // ...

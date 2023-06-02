@@ -71,26 +71,32 @@ public class ActionLayoutNamedPage
 //tag::reset[]
     @Action(semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
     @ActionLayout(
-            named = "default",                                  // <.>
-            describedAs = "Resets the name back to a default"
+        named = "default",                                  // <.>
+        describedAs = "Resets the name back to a default"
     )
     public Object reset() {
+        // ...
+//end::reset[]
         setName("Fred");
         return this;
+//tag::reset[]
     }
 //end::reset[]
 
 //tag::updateNotes[]
     @Action(semantics = SemanticsOf.IDEMPOTENT)
     @ActionLayout(
-            named = "Updates (changes) the notes property"      // <.>
+        named = "Updates (changes) the notes property"      // <.>
     )
     public Object updateNotes(String newNotes) {
+        // ...
+//end::updateNotes[]
         setNotes(newNotes);
         return this;
     }
     public String default0UpdateNotes() {
         return getNotes();
+//tag::updateNotes[]
     }
 //end::updateNotes[]
 

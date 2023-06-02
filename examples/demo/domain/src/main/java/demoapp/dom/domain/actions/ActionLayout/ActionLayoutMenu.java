@@ -49,7 +49,11 @@ import demoapp.dom.domain.actions.ActionLayout.sequence.ActionLayoutSequencePage
 @Named("demo.ActionLayoutMenu")
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
+//tag::menu-item-described-as[]
 public class ActionLayoutMenu {
+    //...
+
+//end::menu-item-described-as[]
 
     final NameSamples samples;
 
@@ -80,8 +84,10 @@ public class ActionLayoutMenu {
 
 //tag::menu-item-described-as[]
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-comment",
-        describedAs = "Description of the action, shown as a tooltip")
+    @ActionLayout(
+        cssClassFa="fa-comment",
+        describedAs = "Description of the action, shown as a tooltip"
+    )
     public ActionLayoutDescribedAsPage describedAs(){
         return new ActionLayoutDescribedAsPage();
     }
@@ -137,4 +143,6 @@ public class ActionLayoutMenu {
         return new ActionLayoutSequencePage();
     }
 
+//tag::menu-item-described-as[]
 }
+//end::menu-item-described-as[]

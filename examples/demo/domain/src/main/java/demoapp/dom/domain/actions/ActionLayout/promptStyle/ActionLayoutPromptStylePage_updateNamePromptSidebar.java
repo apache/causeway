@@ -30,9 +30,10 @@ import lombok.RequiredArgsConstructor;
 //tag::class[]
 @Action(semantics = SemanticsOf.IDEMPOTENT)
 @ActionLayout(
-        promptStyle = PromptStyle.DIALOG_SIDEBAR,
-        associateWith = "name",
-        sequence = "2")
+    promptStyle = PromptStyle.DIALOG_SIDEBAR,       // <.>
+    associateWith = "name",
+    sequence = "2"
+)
 @RequiredArgsConstructor
 public class ActionLayoutPromptStylePage_updateNamePromptSidebar {
     // ...

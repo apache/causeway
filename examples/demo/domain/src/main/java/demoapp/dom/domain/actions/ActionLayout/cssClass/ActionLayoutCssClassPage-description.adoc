@@ -3,9 +3,7 @@
 To help the end-user navigate a page, it can sometimes be helpful to style individual actions so that their purpose is more obvious.
 
 The link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/ActionLayout.html#cssclass[@ActionLayout#cssClass] allows a CSS style (or styles) to be defined.
-
-One option is to reference a style that you have defined yourself in the `application.css` file.
-Alternatively, you can exploit the fact that the Wicket viewer uses the link:https://getbootstrap.com/[bootstrap] design system, and so just use one of the styles defined there, for example, the link:https://getbootstrap.com/docs/5.0/components/buttons/#button-tags[button tags]
+These can either reference a style that you have defined yourself in the `application.css` file, or alternatively, you can exploit the fact that the Wicket viewer uses the link:https://getbootstrap.com/[bootstrap] design system, and so just use one of the styles defined there (for example, the link:https://getbootstrap.com/docs/5.0/components/buttons/#button-tags[button tags]).
 
 
 == How this demo works

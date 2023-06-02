@@ -72,32 +72,38 @@ public class ActionLayoutFieldSetPage
 //tag::fieldsetId[]
     @Action
     @ActionLayout(
-            fieldSetId = "id",                          // <.>
-            position = ActionLayout.Position.PANEL      // <.>
+        fieldSetId = "id",                      // <.>
+        position = ActionLayout.Position.PANEL  // <.>
     )
     public Object updateName(final String newName) {
+        // ...
+//end::fieldsetId[]
         setName(newName);
         return this;
     }
     public String default0UpdateName() {
         return getName();
+//tag::fieldsetId[]
     }
 //end::fieldsetId[]
 
 //tag::fieldsetName[]
     @Action
     @ActionLayout(
-            fieldSetName = "Detail"                     // <.>
-                                                        // <.>
+        fieldSetName = "Detail"                 // <.>
+                                                // <.>
     )
     public Object updateNotes(
             @ParameterLayout(multiLine = 5)
             final String newNotes) {
+        // ...
+//end::fieldsetName[]
         setNotes(newNotes);
         return this;
     }
     public String default0UpdateNotes() {
         return getNotes();
+//tag::fieldsetName[]
     }
 //end::fieldsetName[]
 

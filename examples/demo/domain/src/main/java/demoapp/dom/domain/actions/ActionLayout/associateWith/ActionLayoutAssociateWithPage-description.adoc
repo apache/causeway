@@ -8,24 +8,29 @@ One way to specify this is with the `.layout.xml` files, but another option is t
 
 == How this demo works
 
-This page defines a `name` property, and a `children` collection:
+This page defines a `name` property, and a `children` collection.
+The `updateName` action only updates the `name` property, and so it makes sense to render its button close to this property.
+Similarly, the `addChild` and `removeChild` actions both modify the `children` collection:
 
+In terms of code:
+
+* the `children` collection is defined as:
++
 [source,java,indent=0]
 ----
 include::ActionLayoutAssociateWithPage.java[tags=class]
 ----
 
-The `updateName` action only updates the `name` property, and so it makes sense to render its button close to this property.
-This is done using `@Action#associateWith`:
-
+* The `updateName` action is defined as:
++
 [source,java,indent=0]
 ----
 include::ActionLayoutAssociateWithPage.java[tags=associate-with-property]
 ----
 <.> associates with the `name` property
 
-Similarly, the `addChild` and `removeChild` actions both modify the `children` collection:
-
+* similarly, the `addChild` and `removeChild` actions are defined:
++
 [source,java,indent=0]
 ----
 include::ActionLayoutAssociateWithPage.java[tags=associate-with-collection]
@@ -33,9 +38,6 @@ include::ActionLayoutAssociateWithPage.java[tags=associate-with-collection]
 <.> associates with the `children` collection
 <.> uses `sequence` to specify the order on the page (left to right)
 
-TIP: Note that it is also possible to associate an action with a collection using `Action#choicesFrom`,
-which has the additional semantic of the rows of the element being used as choices for that action’s collection parameter
-of the same type as the elements of the collection.
 
 
 == .layout.xml
@@ -96,7 +98,9 @@ The terms "fieldSet" and "panel" are synonymous.
 ...
 ----
 
-
-
-
 One advantage of using the `.layout.xml` file is that changes can be picked up without having to restart the application.
+
+== See also
+
+It is also possible to associate an action with a collection using `Action#choicesFrom`,
+which has the additional semantic of the rows of the element being used as choices for that action’s collection parameter of the same type as the elements of the collection.

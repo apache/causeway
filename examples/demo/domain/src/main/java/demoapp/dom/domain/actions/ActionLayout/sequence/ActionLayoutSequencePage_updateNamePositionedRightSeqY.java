@@ -28,9 +28,9 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 //tag::class[]
 @Action(semantics = SemanticsOf.IDEMPOTENT)
 @ActionLayout(
-        associateWith = "name",
-        sequence = "1.2",                           // <.>
-        position = ActionLayout.Position.RIGHT      // <.>
+    associateWith = "name",
+    sequence = "1.2",                           // <.>
+    position = ActionLayout.Position.RIGHT      // <.>
 )
 @RequiredArgsConstructor
 public class ActionLayoutSequencePage_updateNamePositionedRightSeqY {

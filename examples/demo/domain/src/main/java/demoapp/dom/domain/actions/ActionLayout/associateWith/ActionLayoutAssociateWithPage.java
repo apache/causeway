@@ -92,8 +92,11 @@ public class ActionLayoutAssociateWithPage
             sequence = "1"              // <.>
     )
     public Object addChild(final String newValue) {
+        // ...
+//end::associate-with-collection[]
         getChildren().add(new ActionLayoutAssociateWithChildVm(newValue));
         return this;
+//tag::associate-with-collection[]
     }
 
     @Action
@@ -102,11 +105,14 @@ public class ActionLayoutAssociateWithPage
             sequence = "2"              // <2>
     )
     public Object removeChild(final ActionLayoutAssociateWithChildVm child) {
+        // ...
+//end::associate-with-collection[]
         getChildren().removeIf(x -> x.getValue().equals(child.getValue()));
         return this;
     }
     public List<ActionLayoutAssociateWithChildVm> choices0RemoveChild() {
         return getChildren();
+//tag::associate-with-collection[]
     }
 //end::associate-with-collection[]
 

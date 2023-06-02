@@ -78,10 +78,12 @@ public class ActionLayoutDescribedAsPage
 //tag::below[]
     @Action
     @ActionLayout(
-            associateWith = "name",
-            describedAs = "Updates the name property.  The new name must be different from the old name" // <.>
-            )
+        associateWith = "name",
+        describedAs = "Updates the name property.  The new name must be different from the old name" // <.>
+    )
     public Object updateName(final String newName) {
+        // ...
+//end::below[]
         setName(newName);
         return this;
     }
@@ -90,19 +92,23 @@ public class ActionLayoutDescribedAsPage
     }
     public String validate0UpdateName(final String proposedName) {
         return Objects.equals(name, proposedName) ? "New name must be different from current name" : null;
+//tag::below[]
     }
 //end::below[]
 
 //tag::panel[]
     @Action
     @ActionLayout(
-            associateWith = "name",
-            describedAs = "Updates the name property.  This action has no validation",  // <.>
-            position = ActionLayout.Position.PANEL
+        associateWith = "name",
+        describedAs = "Updates the name property.  This action has no validation",  // <.>
+        position = ActionLayout.Position.PANEL
     )
     public Object updateNameFromPanel(final String newName) {
+        // ...
+//end::panel[]
         setName(newName);
         return this;
+//tag::panel[]
     }
 //end::panel[]
 
@@ -110,26 +116,32 @@ public class ActionLayoutDescribedAsPage
 //tag::panel-dropdown[]
     @Action
     @ActionLayout(
-            associateWith = "name",
-            describedAs = "Updates the name property.  This action also has no validation",  // <.>
-            position = ActionLayout.Position.PANEL_DROPDOWN
+        associateWith = "name",
+        describedAs = "Updates the name property.  This action also has no validation",  // <.>
+        position = ActionLayout.Position.PANEL_DROPDOWN
     )
     public Object updateNameFromPanelDropdown(final String newName) {
+        // ...
+//end::panel-dropdown[]
         setName(newName);
         return this;
+//tag::panel-dropdown[]
     }
 //end::panel-dropdown[]
 
 //tag::collection[]
     @Action
     @ActionLayout(
-            associateWith = "children",
-            describedAs = "Adds a child to the collection",         // <.>
-            sequence = "1"
+        associateWith = "children",
+        describedAs = "Adds a child to the collection",         // <.>
+        sequence = "1"
     )
     public Object addChild(final String newValue) {
+        // ...
+//end::collection[]
         getChildren().add(new ActionLayoutDescribedAsChildVm(newValue));
         return this;
+//tag::collection[]
     }
 //end::collection[]
 
@@ -150,7 +162,10 @@ public class ActionLayoutDescribedAsPage
         describedAs = "Despite its name, this action is a no-op"  // <.>
     )
     public Object delete() {
+        // ...
+//end::delete[]
         return this;
+//tag::delete[]
     }
 //end::delete[]
 

@@ -30,9 +30,10 @@ import lombok.RequiredArgsConstructor;
 //tag::class[]
 @Action(semantics = SemanticsOf.IDEMPOTENT)
 @ActionLayout(
-        promptStyle = PromptStyle.INLINE_AS_IF_EDIT,
-        associateWith = "notes",
-        sequence = "1")
+    promptStyle = PromptStyle.INLINE_AS_IF_EDIT,        // <.>
+    associateWith = "notes",
+    sequence = "1"
+)
 @RequiredArgsConstructor
 public class ActionLayoutPromptStylePage_updateNotesPromptInlineAsIfEdit {
     // ...

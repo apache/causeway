@@ -12,7 +12,9 @@ This can also be used if you want the name to include characters such as bracket
 == How this demo works
 
 This page object has two properties and an associated action with each.
-Both of these actions use `@ActionLayout#named`, for different reasons:
+Both of these actions use `@ActionLayout#named`, for different reasons.
+
+In terms of code:
 
 * the "reset" action uses a reserved Java name of "default" in the user interface:
 +
