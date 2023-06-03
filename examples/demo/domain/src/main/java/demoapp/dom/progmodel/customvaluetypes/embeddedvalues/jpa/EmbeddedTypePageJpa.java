@@ -44,9 +44,6 @@ import lombok.NoArgsConstructor;
 @Named("demo.EmbeddedTypePageJpa")
 @DomainObject(nature=Nature.VIEW_MODEL)
 @DomainObjectLayout(cssClassFa="fa-stop-circle")
-@XmlRootElement(name = "root")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
 @NoArgsConstructor
 public class EmbeddedTypePageJpa implements HasAsciiDocDescription {
 

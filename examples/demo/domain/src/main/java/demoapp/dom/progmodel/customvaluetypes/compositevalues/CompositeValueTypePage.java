@@ -40,9 +40,6 @@ import org.apache.causeway.applib.annotation.Property;
 @Named("demo.CompositeValuesPage")
 @DomainObject(nature=Nature.VIEW_MODEL)
 @DomainObjectLayout(cssClassFa="fa-cubes")
-@XmlRootElement(name = "root")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
 @NoArgsConstructor
 public class CompositeValueTypePage implements HasAsciiDocDescription {
     // ...

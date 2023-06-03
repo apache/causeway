@@ -42,9 +42,6 @@ import lombok.NoArgsConstructor;
 @Named("demo.MessageServiceDemoPage")
 @DomainObject(nature=Nature.VIEW_MODEL)
 @DomainObjectLayout(cssClassFa="fa-sticky-note")
-@XmlRootElement(name = "root")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
 @NoArgsConstructor
 public class MessageServiceDemoPage implements HasAsciiDocDescription {
 
