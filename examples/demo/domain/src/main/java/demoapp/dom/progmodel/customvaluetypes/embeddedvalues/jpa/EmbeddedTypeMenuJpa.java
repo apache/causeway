@@ -18,6 +18,7 @@
  */
 package demoapp.dom.progmodel.customvaluetypes.embeddedvalues.jpa;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -35,7 +36,7 @@ import lombok.RequiredArgsConstructor;
 @Profile("demo-jpa")
 @Named("demo.EmbeddedTypeMenuJpa")
 @DomainService(nature=NatureOfService.VIEW)
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class EmbeddedTypeMenuJpa {
 

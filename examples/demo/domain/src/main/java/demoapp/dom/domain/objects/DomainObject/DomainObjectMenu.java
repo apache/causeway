@@ -18,6 +18,7 @@
  */
 package demoapp.dom.domain.objects.DomainObject;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -43,63 +44,88 @@ import demoapp.dom.domain.objects.DomainObject.xxxDomainEvent.DomainObjectXxxDom
 import demoapp.dom.domain.objects.DomainObject.xxxLifecycleEvent.DomainObjectXxxLifecycleEventPage;
 
 @Named("demo.DomainObjectMenu")
-@DomainService(
-        nature=NatureOfService.VIEW
-)
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@DomainService(nature=NatureOfService.VIEW)
+@Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class DomainObjectMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-circle", describedAs = "Specify logical type name aliases")
+    @ActionLayout(
+            cssClassFa="fa-circle",
+            describedAs = "Specify logical type name aliases"
+    )
     public DomainObjectAliasedPage aliased() {
         return new DomainObjectAliasedPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-question-circle", describedAs = "Search object in prompt")
+    @ActionLayout(
+            cssClassFa="fa-question-circle",
+            describedAs = "Search object in prompt"
+    )
     public DomainObjectAutoCompletePage autoComplete(){
         return new DomainObjectAutoCompletePage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-list-ul", describedAs = "Choose 'reference data' object (one of a bounded set) in prompt")
+    @ActionLayout(
+            cssClassFa="fa-list-ul",
+            describedAs = "Choose 'reference data' object (one of a bounded set) in prompt"
+    )
     public DomainObjectBoundingPage bounding(){
         return new DomainObjectBoundingPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-pencil-alt", describedAs = "Default editability of properties")
+    @ActionLayout(
+            cssClassFa="fa-pencil-alt",
+            describedAs = "Default editability of properties"
+    )
     public DomainObjectEditingPage editing() {
         return new DomainObjectEditingPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-book", describedAs = "Entity changed events as XML")
+    @ActionLayout(
+            cssClassFa="fa-book",
+            describedAs = "Entity changed events as XML"
+    )
     public DomainObjectEntityChangePublishingPage entityChangePublishing(){
         return new DomainObjectEntityChangePublishingPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-pen-ruler", describedAs = "Control over introspection process")
+    @ActionLayout(
+            cssClassFa="fa-pen-ruler",
+            describedAs = "Control over introspection process"
+    )
     public DomainObjectIntrospectionPage introspection(){
         return new DomainObjectIntrospectionPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-mortar-pestle", describedAs = "For mixins, override the default method name")
+    @ActionLayout(
+            cssClassFa="fa-mortar-pestle",
+            describedAs = "For mixins, override the default method name"
+    )
     public DomainObjectMixinMethodPage mixinMethod() {
         return new DomainObjectMixinMethodPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa = "fa-gamepad", describedAs = "@DomainObject(nature=VIEW_MODEL) for a Stateful View Model")
+    @ActionLayout(
+            cssClassFa = "fa-gamepad",
+            describedAs = "@DomainObject(nature=VIEW_MODEL) for a Stateful View Model"
+    )
     public DomainObjectNaturePage nature() {
         return new DomainObjectNaturePage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-asterisk", describedAs = "Default class of the domain event emitted when interacting with the domain object's actions, properties or collections")
+    @ActionLayout(
+            cssClassFa="fa-asterisk",
+            describedAs = "Default class of the domain event emitted when interacting with the domain object's actions, properties or collections"
+    )
     public DomainObjectXxxDomainEventPage domainEvents() {
         val page = new DomainObjectXxxDomainEventPage("change me");
         page.addChild("#1");
@@ -109,7 +135,10 @@ public class DomainObjectMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-redo", describedAs = "Class of the lifecycle event emitted when the domain entity transitions through its persistence lifecycle")
+    @ActionLayout(
+            cssClassFa="fa-redo",
+            describedAs = "Class of the lifecycle event emitted when the domain entity transitions through its persistence lifecycle"
+    )
     public DomainObjectXxxLifecycleEventPage lifecycleEvents() {
         return new DomainObjectXxxLifecycleEventPage();
     }

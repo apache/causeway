@@ -10,7 +10,7 @@ This demo app uses the filesystem of the host computer to illustrate the idea:
 * This page you are viewing is a view model object, called `FileNodeVm`.
 It represents either a directory or a file within that filesystem.
 
-* Every instance of `FileNode` shows the same `TreeNode` instance, on the left hand side.
+* Every instance of `FileNodeVm` shows the same `TreeNode` instance, on the left hand side.
 This is contributed by a mixin property, and is cached on HTTP session.
 You can use this to navigate into the tree and inspect the individual files, without "losing your place".
 
@@ -20,19 +20,20 @@ This occurs because the `FileNodeVm` uses `@PropertyLayout#navigable`.
 
 === Navigable (Breadcrumbs)
 
-For all ``FileNode``s except the initial root node, a breadcrumb trail is rendered.
+For all ``FileNodeVm``s except the initial root node, a breadcrumb trail is rendered.
 
 The framework constructs the breadcrumbs using the value returned by the property with the `navigable` attribute.
 This hint should be used on no more than one property of the object, and points back to the logical parent of the domain object:
 
 [source,java,indent=0]
+.FileNodeVm.java
 ----
 include::FileNodeVm.java[tags=navigable]
 ----
 <.> indicates that this property returns a reference to its "parent" within some hierarchy
 <.> there is no requirement for the property to be visible.
 
-In the case of this demo app, the parent also happens to be a `FileNode`.
+In the case of this demo app, the parent also happens to be a `FileNodeVm`.
 However, in general, any type of the parent can be different from the type of the child.
 
 The returned parent is itself queried recursively, until eventually an object is returned that has no parent.
@@ -46,6 +47,7 @@ For a view model, we can simply instantiate the parent because view models have 
 It's common for hierarchical objects to indicate their nature using an icon:
 
 [source,java,indent=0]
+.FileNodeVm.java
 ----
 include::FileNodeVm.java[tags=iconName]
 ----
@@ -53,6 +55,7 @@ include::FileNodeVm.java[tags=iconName]
 where `FileNodeType` is:
 
 [source,java,indent=0]
+.FileNodeType.java
 ----
 include::FileNodeType.java[tags=class]
 ----

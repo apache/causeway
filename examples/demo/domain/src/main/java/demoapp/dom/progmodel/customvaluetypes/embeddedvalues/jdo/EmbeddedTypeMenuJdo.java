@@ -18,6 +18,7 @@
  */
 package demoapp.dom.progmodel.customvaluetypes.embeddedvalues.jdo;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -35,14 +36,17 @@ import lombok.RequiredArgsConstructor;
 @Profile("demo-jdo")
 @Named("demo.EmbeddedTypeMenuJdo")
 @DomainService(nature=NatureOfService.VIEW)
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class EmbeddedTypeMenuJdo {
 
     private final FactoryService factoryService;
 
     @Action
-    @ActionLayout(cssClassFa="fa-stop-circle", describedAs = "Embedded (value) types")
+    @ActionLayout(
+            cssClassFa="fa-stop-circle",
+            describedAs = "Embedded (value) types"
+    )
     public EmbeddedTypePageJdo embeddedTypes(){
         return factoryService.viewModel(new EmbeddedTypePageJdo());
     }

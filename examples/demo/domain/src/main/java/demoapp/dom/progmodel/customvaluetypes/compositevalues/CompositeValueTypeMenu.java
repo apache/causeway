@@ -18,6 +18,7 @@
  */
 package demoapp.dom.progmodel.customvaluetypes.compositevalues;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -32,14 +33,17 @@ import lombok.RequiredArgsConstructor;
 
 @Named("demo.CompositeValueTypeMenu")
 @DomainService(nature=NatureOfService.VIEW)
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class CompositeValueTypeMenu {
 
     private final FactoryService factoryService;
 
     @Action
-    @ActionLayout(cssClassFa="fa-cubes", describedAs = "Custom composite value types")
+    @ActionLayout(
+            cssClassFa="fa-cubes",
+            describedAs = "Custom composite value types"
+    )
     public CompositeValueTypePage compositeValueTypes(){
         CompositeValueTypePage page = factoryService.viewModel(new CompositeValueTypePage());
         page.setComplexNumber(ComplexNumber.of(1, 0));

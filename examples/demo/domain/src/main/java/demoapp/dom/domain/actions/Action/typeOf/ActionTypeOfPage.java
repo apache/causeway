@@ -32,6 +32,7 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.SemanticsOf;
@@ -42,12 +43,12 @@ import lombok.NoArgsConstructor;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.domain.actions.Action.typeOf.child.ActionTypeOfChildVm;
 
+@Named("demo.ActionTypeOfPage")
+@DomainObject(nature=Nature.VIEW_MODEL)
+@DomainObjectLayout(cssClassFa="fa-shapes")
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.ActionTypeOfPage")
-@DomainObject(
-    nature=Nature.VIEW_MODEL)
 @NoArgsConstructor
 //tag::class-collections-children[]
 public class ActionTypeOfPage implements HasAsciiDocDescription {

@@ -47,7 +47,7 @@ import demoapp.dom.types.Samples;
 import demoapp.dom.types.javalang.enums.persistence.JavaLangEnumEntity;
 import demoapp.dom.types.javalang.enums.vm.JavaLangEnumVm;
 
-@XmlRootElement(name = "Demo")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.JavaLangEnums")

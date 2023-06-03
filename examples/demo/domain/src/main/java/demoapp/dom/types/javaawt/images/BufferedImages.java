@@ -47,7 +47,7 @@ import demoapp.dom.types.Samples;
 import demoapp.dom.types.javaawt.images.persistence.BufferedImageEntity;
 import demoapp.dom.types.javaawt.images.vm.BufferedImageVm;
 
-@XmlRootElement(name = "Demo")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.BufferedImages")

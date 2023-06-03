@@ -28,23 +28,26 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
-@DomainObject(
-        nature=Nature.VIEW_MODEL)
 @Named("demo.ActionLayoutCssClassFaVm")
+@DomainObject(nature=Nature.VIEW_MODEL)
+@DomainObjectLayout(cssClassFa="fa-font-awesome-flag")
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@NoArgsConstructor
 public class ActionLayoutCssClassFaPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {

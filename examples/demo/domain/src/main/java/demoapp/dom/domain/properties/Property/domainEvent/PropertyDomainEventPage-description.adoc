@@ -9,7 +9,7 @@ Domain service subscribers can influence this interaction, either by:
 * performing arbitrary operations before the property has been modified (including modifying the proposed value of the property)
 * performing arbitrary operations after the property has been modified
 
-The link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/Property.html#domainevent element specifies the class to be emitted; this must be a subclass of the abstract link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/events/domain/PropertyDomainEvent.html[PropertyDomainEvent] class.
+The link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/Property.html#domainevent[@Property#domainEvent] element specifies the class to be emitted; this must be a subclass of the abstract link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/events/domain/PropertyDomainEvent.html[PropertyDomainEvent] class.
 
 If no `domainEvent` is specified on the property itself, then the domain event class can be specified at the class level using link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/DomainObject.html#propertydomainevent[@DomainObject#propertyDomainEvent].
 And if not specified at the class level, then an instance of `o.a.c.applib.events.domain.PropertyDomainEvent.Default` is emitted as the fallback.

@@ -30,6 +30,7 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 
@@ -39,6 +40,7 @@ import lombok.NoArgsConstructor;
 
 @Named("demo.CollectionTypeOfPage")
 @DomainObject(nature=Nature.VIEW_MODEL)
+@DomainObjectLayout(cssClassFa="fa-shapes")
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)

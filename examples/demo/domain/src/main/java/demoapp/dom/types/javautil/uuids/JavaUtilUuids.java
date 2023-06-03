@@ -47,7 +47,7 @@ import demoapp.dom.types.Samples;
 import demoapp.dom.types.javautil.uuids.persistence.JavaUtilUuidEntity;
 import demoapp.dom.types.javautil.uuids.vm.JavaUtilUuidVm;
 
-@XmlRootElement(name = "Demo")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.JavaUtilUuids")

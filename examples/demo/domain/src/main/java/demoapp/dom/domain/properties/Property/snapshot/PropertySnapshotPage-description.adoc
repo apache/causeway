@@ -14,7 +14,7 @@ Collections, meanwhile, are specified programmatically.
 
 This page defines four properties, and one contributed collection.
 The four properties are variously annotated (or not) with the different options `@Property#snapshot`.
-The `takeXmlSnapshot` action can be used to generate to download the generated XML as a file.
+wThe `takeXmlSnapshot` action can be used to generate to download the generated XML as a file.
 
 In terms of code, the following are all included in the snapshot:
 

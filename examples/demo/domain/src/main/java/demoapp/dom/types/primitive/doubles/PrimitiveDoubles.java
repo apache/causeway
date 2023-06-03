@@ -45,7 +45,7 @@ import demoapp.dom.types.Samples;
 import demoapp.dom.types.primitive.doubles.persistence.PrimitiveDoubleEntity;
 import demoapp.dom.types.primitive.doubles.vm.PrimitiveDoubleVm;
 
-@XmlRootElement(name = "Demo")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.PrimitiveDoubles")

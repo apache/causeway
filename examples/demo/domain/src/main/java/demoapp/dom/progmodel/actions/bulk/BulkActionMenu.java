@@ -48,7 +48,10 @@ public class BulkActionMenu {
     final BulkActionItemEntityRepository repository;
 
     @Action
-    @ActionLayout(cssClassFa="fa-bolt", describedAs = "Bulk actions")
+    @ActionLayout(
+            cssClassFa="fa-bolt",
+            describedAs = "Bulk actions"
+    )
     public BulkActionPage bulkActions() {
         val page = factoryService.viewModel(new BulkActionPage());
         repository.all()

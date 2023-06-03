@@ -47,7 +47,7 @@ import demoapp.dom.types.Samples;
 import demoapp.dom.types.causeway.markups.persistence.CausewayMarkupEntity;
 import demoapp.dom.types.causeway.markups.vm.CausewayMarkupVm;
 
-@XmlRootElement(name = "Demo")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.CausewayMarkups")

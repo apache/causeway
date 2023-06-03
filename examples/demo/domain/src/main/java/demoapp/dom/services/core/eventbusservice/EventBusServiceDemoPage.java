@@ -23,19 +23,31 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.services.eventbus.EventBusService;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
+import lombok.NoArgsConstructor;
+
 //tag::class[]
 @Named("demo.EventBusServiceDemoPage")
 @DomainObject(nature=Nature.VIEW_MODEL)
+@DomainObjectLayout(cssClassFa="fa-bolt")
+@XmlRootElement(name = "root")
+@XmlType
+@XmlAccessorType(XmlAccessType.FIELD)
+@NoArgsConstructor
 public class EventBusServiceDemoPage implements HasAsciiDocDescription {
     // ...
 //end::class[]

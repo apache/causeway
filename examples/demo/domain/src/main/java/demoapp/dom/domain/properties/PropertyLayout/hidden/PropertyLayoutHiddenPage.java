@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 
@@ -32,12 +33,12 @@ import lombok.NoArgsConstructor;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
+@Named("demo.PropertyLayoutHiddenPage")
+@DomainObject(nature=Nature.VIEW_MODEL)
+@DomainObjectLayout(cssClassFa="fa-glasses")
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.PropertyLayoutHiddenPage")
-@DomainObject(
-    nature=Nature.VIEW_MODEL)
 @NoArgsConstructor
 //tag::class[]
 public class PropertyLayoutHiddenPage implements HasAsciiDocDescription {

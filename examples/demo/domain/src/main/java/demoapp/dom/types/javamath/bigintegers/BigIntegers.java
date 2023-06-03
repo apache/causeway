@@ -47,7 +47,7 @@ import demoapp.dom.types.Samples;
 import demoapp.dom.types.javamath.bigintegers.persistence.BigIntegerEntity;
 import demoapp.dom.types.javamath.bigintegers.vm.BigIntegerVm;
 
-@XmlRootElement(name = "Demo")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.BigIntegers")

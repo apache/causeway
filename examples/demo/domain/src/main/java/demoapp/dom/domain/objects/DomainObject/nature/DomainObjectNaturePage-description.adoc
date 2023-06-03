@@ -30,7 +30,7 @@ include::DomainObjectNaturePage_entities.java[tags=class]
 where `DomainObjectNatureEntity` (JPA version) is defined as:
 +
 [source,java]
-.DomainObjectNaturePage_entities.java
+.DomainObjectNatureEntityImpl.java
 ----
 include::entity/jpa/DomainObjectNatureEntityImpl.java[tags=class]
 ----
@@ -48,10 +48,10 @@ include::DomainObjectNaturePage_viewModels.java[tags=class]
 <.> creates view model on the fly.
 
 +
-where `DomainObjectNatureEntity` is defined as:
+where `DomainObjectNatureViewModel` is defined as:
 +
 [source,java]
-.DomainObjectNaturePage_entities.java
+.DomainObjectNatureViewModel.java
 ----
 include::viewmodel/DomainObjectNatureViewModel.java[tags=class]
 ----

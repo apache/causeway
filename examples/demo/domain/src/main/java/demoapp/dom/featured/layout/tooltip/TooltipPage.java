@@ -34,6 +34,7 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.applib.annotation.MemberSupport;
@@ -50,15 +51,18 @@ import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.value.Markup;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
-@XmlRootElement(name = "Demo")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.Tooltip")
 @DomainObject(nature=Nature.VIEW_MODEL)
+@DomainObjectLayout(cssClassFa="fa-comment")
+@XmlRootElement(name = "root")
+@XmlType
+@XmlAccessorType(XmlAccessType.FIELD)
+@NoArgsConstructor
 public class TooltipPage implements HasAsciiDocDescription {
 
     @Inject @XmlTransient MessageService messageService;

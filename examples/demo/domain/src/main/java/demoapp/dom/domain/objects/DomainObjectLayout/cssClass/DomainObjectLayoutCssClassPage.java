@@ -31,6 +31,8 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
+import lombok.NoArgsConstructor;
+
 //tag::class[]
 @XmlRootElement(name = "root")
 @XmlType
@@ -38,8 +40,10 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @Named("demo.DomainObjectLayoutCssClassPage")
 @DomainObject(nature=Nature.VIEW_MODEL)
 @DomainObjectLayout(
-        cssClass = "green-title"                    // <.>
+        cssClass = "green-title",                   // <.>
+        cssClassFa = "fa-pen-nib"
 )
+@NoArgsConstructor
 public class DomainObjectLayoutCssClassPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {

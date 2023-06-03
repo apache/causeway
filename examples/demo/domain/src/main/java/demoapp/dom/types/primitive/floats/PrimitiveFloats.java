@@ -45,7 +45,7 @@ import demoapp.dom.types.Samples;
 import demoapp.dom.types.primitive.floats.persistence.PrimitiveFloatEntity;
 import demoapp.dom.types.primitive.floats.vm.PrimitiveFloatVm;
 
-@XmlRootElement(name = "Demo")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.PrimitiveFloats")

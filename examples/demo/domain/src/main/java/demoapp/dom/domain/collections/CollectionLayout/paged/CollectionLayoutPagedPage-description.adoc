@@ -1,10 +1,10 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 If a collection contains many instances, then by default these are paged.
-The link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/DomainObjectLayout.html#paged[@DomainObjectLayout#paged] is used to specify how many instances of the domain object should be shown for parented collections (those belonging to an object).
-(It is also used for standalone collections (those returned from an action invocation).
+The link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/DomainObjectLayout.html#paged[@DomainObjectLayout#paged] is used to specify how many instances of the domain object should be shown for parented collections, ie those belonging to an object.
+(It is also used for standalone collections -- those returned from an action invocation).
 
-The deefault provided by `@DomainObject#paged` can be overridden on a case-by-case basis using link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/CollectionLayout.html#paged[@CollectionLayout#paged].
+The default provided by `@DomainObject#paged` can be overridden on a case-by-case basis using link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/CollectionLayout.html#paged[@CollectionLayout#paged].
 
 IMPORTANT: the paging that occurs is at the application-layer, not the database layer.
 In other words, the framework resolves _all_ of the objects are meet the criteria, and then manages the paging.
@@ -14,8 +14,8 @@ There could therefore be performance/memory issues if too many objects are retur
 
 This page object has two collections, with each having a custom value of `paged` of 5.
 Accordingly, only 5 objects are shown per page.
+The first uses the annotation, the second uses `.layout.xml`.
 
-The first uses the annotation, the second uses `.layout.xml`
 In terms of code:
 
 * the `children` collection is annotated:

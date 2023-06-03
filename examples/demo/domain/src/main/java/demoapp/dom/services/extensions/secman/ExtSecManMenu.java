@@ -41,7 +41,10 @@ import demoapp.dom.services.extensions.secman.apptenancy.AppTenancyPage;
 public class ExtSecManMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-home", describedAs = "Restricts access to objects dependent upon who \"owns\" those objects")
+    @ActionLayout(
+            cssClassFa="fa-home",
+            describedAs = "Restricts access to objects dependent upon who \"owns\" those objects"
+    )
     public AppTenancyPage appTenancy(){
         return new AppTenancyPage();
     }

@@ -27,7 +27,9 @@
 	<bs3:row>
 		<bs3:col span="6">
 			<cpt:fieldSet name="General" id="general">
-                <cpt:property id="name"/>
+                <cpt:property id="name">
+                    <cpt:action id="updateName"/>
+                </cpt:property>
             </cpt:fieldSet>
 			<cpt:fieldSet name="Details" id="details">
 <!-- tag::layout-file[] -->

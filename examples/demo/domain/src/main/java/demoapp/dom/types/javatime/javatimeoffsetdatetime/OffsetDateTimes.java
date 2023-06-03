@@ -47,7 +47,7 @@ import demoapp.dom.types.Samples;
 import demoapp.dom.types.javatime.javatimeoffsetdatetime.persistence.OffsetDateTimeEntity;
 import demoapp.dom.types.javatime.javatimeoffsetdatetime.vm.OffsetDateTimeVm;
 
-@XmlRootElement(name = "Demo")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.OffsetDateTimes")

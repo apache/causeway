@@ -57,7 +57,10 @@ public class FeaturedMenu {
 
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-comment", describedAs="Opens the Tooltip-Demo page.")
+    @ActionLayout(
+            cssClassFa="fa-comment",
+            describedAs="Opens the Tooltip-Demo page."
+    )
     public TooltipPage toolTips(){
         val demo = factoryService.viewModel(new TooltipPage());
 

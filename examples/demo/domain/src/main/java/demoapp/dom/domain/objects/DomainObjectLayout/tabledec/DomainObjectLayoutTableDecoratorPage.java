@@ -33,14 +33,15 @@ import org.apache.causeway.applib.annotation.TableDecorator;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
+@Named("demo.DomainObjectLayoutTableDecoratorPage")
+@DomainObject(nature=Nature.VIEW_MODEL)
+@DomainObjectLayout(
+    cssClassFa="fa-solid fa-table-columns",
+    tableDecorator = TableDecorator.DatatablesNet.class
+)
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.DomainObjectLayoutTableDecoratorPage")
-@DomainObject(
-        nature=Nature.VIEW_MODEL)
-@DomainObjectLayout(
-        tableDecorator = TableDecorator.DatatablesNet.class)
 public class DomainObjectLayoutTableDecoratorPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {

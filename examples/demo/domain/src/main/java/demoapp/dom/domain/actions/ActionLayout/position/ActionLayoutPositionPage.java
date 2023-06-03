@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Optionality;
@@ -33,16 +34,19 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
+@Named("demo.ActionLayoutPositionPage")
+@DomainObject(nature=Nature.VIEW_MODEL)
+@DomainObjectLayout(cssClassFa="fa-map-pin")
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.ActionLayoutPositionPage")
-@DomainObject(nature=Nature.VIEW_MODEL)
+@NoArgsConstructor
 public class ActionLayoutPositionPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {

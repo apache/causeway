@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.applib.annotation.Nature;
@@ -35,18 +36,22 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
-@XmlRootElement(name = "root")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.PropertyLayoutLabelPositionVm")
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        editing = Editing.ENABLED)
+        editing = Editing.ENABLED
+)
+@DomainObjectLayout(cssClassFa="fa-tag")
+@XmlRootElement(name = "root")
+@XmlType
+@XmlAccessorType(XmlAccessType.FIELD)
+@NoArgsConstructor
 public class PropertyLayoutLabelPositionPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {

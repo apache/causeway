@@ -47,7 +47,7 @@ import demoapp.dom.types.Samples;
 import demoapp.dom.types.javalang.doubles.persistence.WrapperDoubleEntity;
 import demoapp.dom.types.javalang.doubles.vm.WrapperDoubleVm;
 
-@XmlRootElement(name = "Demo")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.WrapperDoubles")

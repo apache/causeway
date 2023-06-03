@@ -47,7 +47,7 @@ import demoapp.dom.types.Samples;
 import demoapp.dom.types.javalang.integers.persistence.WrapperIntegerEntity;
 import demoapp.dom.types.javalang.integers.vm.WrapperIntegerVm;
 
-@XmlRootElement(name = "Demo")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.WrapperIntegers")

@@ -32,6 +32,7 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Nature;
@@ -47,12 +48,15 @@ import demoapp.dom.featured.causewayext.cal.persistence.CausewayCalendarEventEnt
 import demoapp.dom.featured.causewayext.cal.vm.CausewayCalendarEventVm;
 import demoapp.dom.types.Samples;
 
-@XmlRootElement(name = "Demo")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
+import lombok.NoArgsConstructor;
+
 @Named("demo.CausewayCalendarEvents")
 @DomainObject(nature=Nature.VIEW_MODEL, editing=Editing.ENABLED)
-//@Log4j2
+@DomainObjectLayout(cssClassFa="far fa-calendar-alt")
+@XmlRootElement(name = "root")
+@XmlType
+@XmlAccessorType(XmlAccessType.FIELD)
+@NoArgsConstructor
 public class CalendarEventsPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {

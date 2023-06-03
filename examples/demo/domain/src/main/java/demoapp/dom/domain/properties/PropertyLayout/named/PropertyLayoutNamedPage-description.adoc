@@ -8,7 +8,7 @@ This inferred name can be however be overridden using various mechanisms with an
 
 * for parameters, the attribute can be specified using the link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/PropertyLayout.html#named[@ParameterLayout#named] annotation.
 
-This is useful for example if the desired name is a Java keyword (such as "default", or "package").
+This is useful for example if you want the name to include characters such as spaces or punctuation characters.
 
 
 == How this demo works
@@ -35,16 +35,6 @@ include::PropertyLayoutNamedPage_updateWithParameterLayout.java[tags=annotation]
 <.> explicitly specifies the name of the parameter
 
 * meanwhile, the `propertyUsingLayout` property has its name specified using the `Xxx.layout.xml` file:
-
-** the property's field is:
-+
-[source,java,indent=0]
-----
-include::PropertyLayoutNamedPage.java[tags=layout-file]
-----
-<.> `named` hint is _not_ present.
-
-** while its layout file snippet is:
 +
 [source,xml,indent=0,tabsize=4]
 ----

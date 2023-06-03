@@ -33,23 +33,26 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.domain.actions.ActionLayout.describedAs.child.ActionLayoutDescribedAsChildVm;
 
 @Named("demo.ActionLayoutDescribedAsPage")
-@DomainObject(
-        nature=Nature.VIEW_MODEL)
+@DomainObject(nature=Nature.VIEW_MODEL)
+@DomainObjectLayout(cssClassFa="fa-comment")
 @XmlRootElement(name = "root")
 @XmlType()
 @XmlAccessorType(XmlAccessType.FIELD)
+@NoArgsConstructor
 //tag::class[]
 //...
 public class ActionLayoutDescribedAsPage

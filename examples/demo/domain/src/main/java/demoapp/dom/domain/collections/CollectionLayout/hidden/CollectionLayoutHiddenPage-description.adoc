@@ -41,5 +41,5 @@ include::CollectionLayoutHiddenPage.java[tags=more-children]
 ----
 
 Note that only `Where.EVERYWHERE` (or its alias, `Where.ANYWHERE`) and `Where.NOWHERE` are permitted for collections.
-The other values are for use by properties and/or collections.
+The other values are for use by properties and/or actions.
 

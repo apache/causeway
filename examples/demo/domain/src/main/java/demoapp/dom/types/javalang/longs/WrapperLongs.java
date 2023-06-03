@@ -47,7 +47,7 @@ import demoapp.dom.types.Samples;
 import demoapp.dom.types.javalang.longs.persistence.WrapperLongEntity;
 import demoapp.dom.types.javalang.longs.vm.WrapperLongVm;
 
-@XmlRootElement(name = "Demo")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.WrapperLongs")

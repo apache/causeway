@@ -47,7 +47,7 @@ import demoapp.dom.types.Samples;
 import demoapp.dom.types.javasql.javasqldate.persistence.JavaSqlDateEntity;
 import demoapp.dom.types.javasql.javasqldate.vm.JavaSqlDateVm;
 
-@XmlRootElement(name = "Demo")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.JavaSqlDates")

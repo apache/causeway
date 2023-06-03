@@ -30,6 +30,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
@@ -37,13 +38,16 @@ import org.apache.causeway.applib.annotation.Property;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.domain.actions.ActionLayout.sequence.child.ActionLayoutSequenceChildVm;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Named("demo.ActionLayoutSequencePage")
 @DomainObject(nature=Nature.VIEW_MODEL)
+@DomainObjectLayout(cssClassFa = "fa-sharp fa-solid fa-sort")
 @XmlRootElement(name = "root")
 @XmlType()
 @XmlAccessorType(XmlAccessType.FIELD)
+@NoArgsConstructor
 //tag::class[]
 // ...
 public class ActionLayoutSequencePage

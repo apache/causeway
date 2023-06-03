@@ -47,7 +47,7 @@ import demoapp.dom.types.Samples;
 import demoapp.dom.types.causeway.localresourcepaths.persistence.CausewayLocalResourcePathEntity;
 import demoapp.dom.types.causeway.localresourcepaths.vm.CausewayLocalResourcePathVm;
 
-@XmlRootElement(name = "Demo")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.CausewayLocalResourcePaths")

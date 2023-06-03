@@ -35,7 +35,10 @@ import lombok.RequiredArgsConstructor;
     associateWith = "propertyUsingAnnotation"
     , sequence = "1")
 @RequiredArgsConstructor
+//tag::annotation[]
 public class PropertyLayoutDescribedAsPage_updateName {
+    // ...
+//end::annotation[]
 
     private final PropertyLayoutDescribedAsPage page;
 
@@ -49,9 +52,12 @@ public class PropertyLayoutDescribedAsPage_updateName {
         page.setName(newName);
         return page;
     }
+    // ...
 //end::annotation[]
     @MemberSupport public String default0Act() {
         return page.getName();
     }
 
+//tag::annotation[]
 }
+//end::annotation[]

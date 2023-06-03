@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
@@ -39,12 +40,14 @@ import lombok.Setter;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @Named("demo.PropertySnapshotPage")
+@DomainObject(
+    nature=Nature.VIEW_MODEL,
+    editing = Editing.ENABLED
+)
+@DomainObjectLayout(cssClassFa="fa-camera")
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(
-    nature=Nature.VIEW_MODEL,
-    editing = Editing.ENABLED)
 @NoArgsConstructor
 public class PropertySnapshotPage implements HasAsciiDocDescription {
 

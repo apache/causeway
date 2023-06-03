@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
@@ -39,16 +40,17 @@ import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
+//tag::class[]
+@Named("demo.PropertyDomainEventPage")
+@DomainObject(
+    nature=Nature.VIEW_MODEL,
+    editing = Editing.ENABLED                                       // <.>
+)
+@DomainObjectLayout(cssClassFa="fa-asterisk")
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.PropertyDomainEventPage")
 @NoArgsConstructor
-//tag::class[]
-// ...
-@DomainObject(
-    nature=Nature.VIEW_MODEL,
-    editing = Editing.ENABLED)                                      // <.>
 public class PropertyDomainEventPage implements HasAsciiDocDescription {
     // ...
 //end::class[]

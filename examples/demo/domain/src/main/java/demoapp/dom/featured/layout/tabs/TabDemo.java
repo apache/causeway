@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Nature;
@@ -33,15 +34,18 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
-@XmlRootElement(name = "Demo")
+@Named("demo.TabDemo")
+@DomainObject(nature=Nature.VIEW_MODEL)
+@DomainObjectLayout(cssClassFa="fa-bolt")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.Tab")
-@DomainObject(nature=Nature.VIEW_MODEL)
+@NoArgsConstructor
 public class TabDemo implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {

@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
@@ -33,16 +34,20 @@ import org.apache.causeway.applib.annotation.Property;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 //tag::class[]
+@Named("demo.PropertyMaxLengthPage")
+@DomainObject(
+        nature=Nature.VIEW_MODEL,
+        editing = Editing.ENABLED
+)
+@DomainObjectLayout(cssClassFa="fa-ruler-horizontal")
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.PropertyMaxLengthVm")
-@DomainObject(
-        nature=Nature.VIEW_MODEL,
-        editing = Editing.ENABLED)
+@NoArgsConstructor
 public class PropertyMaxLengthPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {

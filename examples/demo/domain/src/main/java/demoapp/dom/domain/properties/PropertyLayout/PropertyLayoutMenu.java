@@ -51,7 +51,10 @@ public class PropertyLayoutMenu {
 
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-pen-nib", describedAs = "CSS class to wrap the UI component representing this property")
+    @ActionLayout(
+            cssClassFa="fa-pen-nib",
+            describedAs = "CSS class to wrap the UI component representing this property"
+    )
     public PropertyLayoutCssClassPage cssClass(){
         return new PropertyLayoutCssClassPage();
     }
@@ -59,7 +62,10 @@ public class PropertyLayoutMenu {
 
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-comment", describedAs = "Description of the property, shown as a tooltip")
+    @ActionLayout(
+            cssClassFa="fa-comment",
+            describedAs = "Description of the property, shown as a tooltip"
+    )
     public PropertyLayoutDescribedAsPage describedAs(){
         val page = new PropertyLayoutDescribedAsPage();
         page.setName("Joey");
@@ -71,7 +77,10 @@ public class PropertyLayoutMenu {
 
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of the property in different contexts")
+    @ActionLayout(
+            cssClassFa="fa-glasses",
+            describedAs = "Visibility of the property in different contexts"
+    )
     public PropertyLayoutHiddenPage hidden() {
         return new PropertyLayoutHiddenPage();
     }
@@ -79,7 +88,10 @@ public class PropertyLayoutMenu {
 
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-tag", describedAs = "Label positions")
+    @ActionLayout(
+            cssClassFa="fa-tag",
+            describedAs = "Label positions"
+    )
     public PropertyLayoutLabelPositionPage labelPosition(){
         return new PropertyLayoutLabelPositionPage();
     }
@@ -87,7 +99,10 @@ public class PropertyLayoutMenu {
 
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-align-justify", describedAs = "Textboxes")
+    @ActionLayout(
+            cssClassFa="fa-align-justify",
+            describedAs = "Textboxes"
+    )
     public PropertyLayoutMultiLinePage multiLine(){
         val vm = new PropertyLayoutMultiLinePage();
         vm.setPropertyUsingAnnotation(
@@ -108,7 +123,10 @@ public class PropertyLayoutMenu {
 
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-signature", describedAs = "Custom text for the property's label")
+    @ActionLayout(
+            cssClassFa="fa-signature",
+            describedAs = "Custom text for the property's label"
+    )
     public PropertyLayoutNamedPage named(){
         return new PropertyLayoutNamedPage();
     }
@@ -116,7 +134,10 @@ public class PropertyLayoutMenu {
 
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-sitemap", describedAs = "Breadcrumbs (and trees)")
+    @ActionLayout(
+            cssClassFa="fa-sitemap",
+            describedAs = "Breadcrumbs (and trees)"
+    )
     public FileNodeVm navigable(){
         return new FileNodeVm();
     }
@@ -124,7 +145,10 @@ public class PropertyLayoutMenu {
 
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-paint-brush", describedAs = "Performance hint for properties holding unchanging large objects")
+    @ActionLayout(
+            cssClassFa="fa-paint-brush",
+            describedAs = "Performance hint for properties holding unchanging large objects"
+    )
     public PropertyLayoutRepaintingPage repainting(){
         val page = new PropertyLayoutRepaintingPage();
         return page;
@@ -133,13 +157,15 @@ public class PropertyLayoutMenu {
 
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-ruler-horizontal", describedAs = "Length of text fields")
+    @ActionLayout(
+            cssClassFa="fa-ruler-horizontal",
+            describedAs = "Length of text fields"
+    )
     public PropertyLayoutTypicalLengthPage typicalLength(){
         val page = new PropertyLayoutTypicalLengthPage();
         page.setName("abcdefghij");
         page.setNotes("abcdefghij");
         return page;
     }
-
 
 }

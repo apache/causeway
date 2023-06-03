@@ -22,9 +22,14 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 
@@ -33,9 +38,16 @@ import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.progmodel.customvaluetypes.embeddedvalues.ComplexNumber;
 import demoapp.dom.progmodel.customvaluetypes.embeddedvalues.NumberConstantEntity;
 
+import lombok.NoArgsConstructor;
+
 //tag::class[]
 @Named("demo.EmbeddedTypePageJdo")
 @DomainObject(nature=Nature.VIEW_MODEL)
+@DomainObjectLayout(cssClassFa="fa-stop-circle")
+@XmlRootElement(name = "root")
+@XmlType
+@XmlAccessorType(XmlAccessType.FIELD)
+@NoArgsConstructor
 public class EmbeddedTypePageJdo implements HasAsciiDocDescription {
 
     // ...

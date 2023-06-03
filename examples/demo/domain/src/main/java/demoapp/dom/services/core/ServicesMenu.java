@@ -65,7 +65,10 @@ public class ServicesMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-gift", describedAs = "Formal object interactions + async")
+    @ActionLayout(
+            cssClassFa="fa-gift",
+            describedAs = "Formal object interactions + async"
+    )
     public WrapperFactoryDemoPage wrapperFactory(){
         return factoryService.viewModel(WrapperFactoryDemoPage.class);
     }

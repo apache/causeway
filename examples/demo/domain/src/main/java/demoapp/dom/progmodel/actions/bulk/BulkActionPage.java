@@ -27,12 +27,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
@@ -41,9 +43,11 @@ import java.util.List;
 //tag::class[]
 @Named("demo.BulkActionPage")
 @DomainObject(nature=Nature.VIEW_MODEL)
+@DomainObjectLayout(cssClassFa="fa-bolt")
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@NoArgsConstructor
 public class BulkActionPage implements HasAsciiDocDescription {
     // ...
 //end::class[]

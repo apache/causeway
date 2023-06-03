@@ -47,7 +47,7 @@ import demoapp.dom.types.Samples;
 import demoapp.dom.types.javatime.javatimezoneddatetime.persistence.ZonedDateTimeEntity;
 import demoapp.dom.types.javatime.javatimezoneddatetime.vm.ZonedDateTimeVm;
 
-@XmlRootElement(name = "Demo")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.ZonedDateTimes")

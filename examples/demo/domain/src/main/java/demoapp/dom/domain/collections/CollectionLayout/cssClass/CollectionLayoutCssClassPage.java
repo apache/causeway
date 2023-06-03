@@ -32,10 +32,12 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
@@ -44,9 +46,11 @@ import demoapp.dom.domain.collections.CollectionLayout.cssClass.child.Collection
 //tag::class[]
 @Named("demo.CollectionLayoutCssClassPage")
 @DomainObject(nature=Nature.VIEW_MODEL)
+@DomainObjectLayout(cssClassFa="fa-pen-nib")
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@NoArgsConstructor
 public class CollectionLayoutCssClassPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {

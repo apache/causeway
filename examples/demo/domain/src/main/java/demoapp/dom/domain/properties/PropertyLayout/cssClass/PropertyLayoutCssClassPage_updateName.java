@@ -31,7 +31,10 @@ import lombok.RequiredArgsConstructor;
 @Action(semantics = SemanticsOf.IDEMPOTENT)
 @ActionLayout(associateWith = "name", sequence = "1")
 @RequiredArgsConstructor
+//tag::annotation[]
 public class PropertyLayoutCssClassPage_updateName {
+    // ...
+//end::annotation[]
 
     private final PropertyLayoutCssClassPage page;
 
@@ -45,9 +48,12 @@ public class PropertyLayoutCssClassPage_updateName {
         page.setName(name);
         return page;
     }
+    // ...
 //end::annotation[]
     @MemberSupport public String default0Act() {
         return page.getName();
     }
 
+//tag::annotation[]
 }
+//end::annotation[]

@@ -31,6 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
@@ -43,13 +44,15 @@ import lombok.Setter;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
-@XmlRootElement(name = "root")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.PropertyProjectingVm")
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        editing = Editing.ENABLED)
+        editing = Editing.ENABLED
+)
+@DomainObjectLayout(cssClassFa="fa-external-link-square-alt")
+@XmlRootElement(name = "root")
+@XmlType
+@XmlAccessorType(XmlAccessType.FIELD)
 @NoArgsConstructor
 public class PropertyProjectingPage implements HasAsciiDocDescription {
 

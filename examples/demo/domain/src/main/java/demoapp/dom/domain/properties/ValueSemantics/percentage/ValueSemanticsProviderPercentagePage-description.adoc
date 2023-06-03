@@ -35,7 +35,7 @@ include::Percentage.java[tags=class]
 ----
 <.> references the above provider using its `@Qualifier`
 
-* the page's property is anontated with the `@Percentage` meta-annotation:
+* the page's property is annotated with the `@Percentage` meta-annotation:
 +
 [source,java,indent=0]
 ----

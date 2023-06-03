@@ -25,17 +25,25 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
-@XmlRootElement(name = "Demo")
+import lombok.NoArgsConstructor;
+
+@Named("demo.WrapperFactoryDemoPage")
+@DomainObject(
+        nature=Nature.VIEW_MODEL,
+        editing=Editing.ENABLED
+)
+@DomainObjectLayout(cssClassFa="fa-gift")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.WrapperFactoryDemoPage")
-@DomainObject(nature=Nature.VIEW_MODEL, editing=Editing.ENABLED)
+@NoArgsConstructor
 public class WrapperFactoryDemoPage implements HasAsciiDocDescription {
 
     @ObjectSupport

@@ -32,6 +32,7 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Nature;
@@ -62,6 +63,7 @@ import demoapp.dom.domain.objects.DomainObject.xxxDomainEvent.child.DomainObject
     collectionDomainEvent = DomainObjectXxxDomainEventPage.CollectionEvent.class,   // <.>
     nature=Nature.VIEW_MODEL
 )
+@DomainObjectLayout(cssClassFa="fa-asterisk")
 public class DomainObjectXxxDomainEventPage implements HasAsciiDocDescription {
 
     public interface DomainObjectXxxDomainEventMarker {}                            // <.>

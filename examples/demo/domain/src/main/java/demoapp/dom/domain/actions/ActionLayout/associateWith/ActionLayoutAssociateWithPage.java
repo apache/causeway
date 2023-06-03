@@ -32,11 +32,13 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
@@ -44,9 +46,11 @@ import demoapp.dom.domain.actions.ActionLayout.associateWith.child.ActionLayoutA
 
 @Named("demo.ActionLayoutAssociateWithPage")
 @DomainObject(nature=Nature.VIEW_MODEL)
+@DomainObjectLayout(cssClassFa="fa-solid fa-arrows-left-right")
 @XmlRootElement(name = "root")
 @XmlType()
 @XmlAccessorType(XmlAccessType.FIELD)
+@NoArgsConstructor
 //tag::class[]
 // ...
 public class ActionLayoutAssociateWithPage

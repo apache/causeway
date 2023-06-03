@@ -24,6 +24,7 @@ import javax.inject.Named;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Navigable;
@@ -40,10 +41,11 @@ import lombok.ToString;
 import lombok.val;
 
 @Named("demo.FileNodeVm")
-@XmlRootElement(name="FileNodeVm")
 @DomainObject(nature=Nature.VIEW_MODEL)
-@ToString
+@DomainObjectLayout(cssClassFa="fa-sitemap")
+@XmlRootElement(name="FileNodeVm")
 @NoArgsConstructor
+@ToString
 public class FileNodeVm implements HasAsciiDocDescription {
 
     public FileNodeVm(final File file) {
