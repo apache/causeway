@@ -28,8 +28,8 @@
 		<bs3:col span="6">
 			<bs3:row>
 				<bs3:col span="12">
-					<cpt:collection id="children"/>
-					<cpt:collection id="moreChildren"/>
+					<cpt:collection id="children" paged="5"/>
+					<cpt:collection id="moreChildren" paged="5"/>
 				</bs3:col>
 			</bs3:row>
 			<bs3:row>

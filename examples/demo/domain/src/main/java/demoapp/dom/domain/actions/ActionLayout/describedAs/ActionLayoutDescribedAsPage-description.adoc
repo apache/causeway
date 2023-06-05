@@ -63,9 +63,6 @@ include::../ActionLayoutMenu.java[tags=menu-item-described-as]
 
 Instead of using `@ActionLayout#describedAs`, it is also possible to specify a tooltip using the `<action id="..." describedAs="...">` in the link:https://causeway.apache.org/userguide/2.0.0-RC1/fun/ui.html#by-example[.layout.xml] file.
 
-One advantage of using the `.layout.xml` file is that changes can be picked up without having to restart the application.
-On the other hand, including descriptions can make that file rather large.
-
 The `removeChild` action is implemented this way:
 
 [source,xml]
@@ -78,3 +75,6 @@ The `removeChild` action is implemented this way:
     </cpt:action>
 </cpt:collection>
 ----
+
+One advantage of using the `.layout.xml` file is that changes can be picked up without having to restart the application.
+On the other hand, including descriptions can make that file rather large.

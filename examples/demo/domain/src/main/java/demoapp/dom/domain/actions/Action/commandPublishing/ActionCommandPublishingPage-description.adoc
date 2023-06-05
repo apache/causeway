@@ -5,7 +5,7 @@ Every _intention_ to invoke an action is reified into a link:https://causeway.ap
 
 The link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/Action.html#commandpublishing[@Action#commandPublishing] determines whether subscribers are notified of the action being executed.
 
-The _commandLog_ extension provides an out-of-the-box subscriber implementation that persists every published command into a log.
+The link:https://causeway.apache.org/userguide/2.0.0-RC1/commandlog/about.html[commandLog] extension provides an out-of-the-box subscriber implementation that persists every published command into a log.
 This can be invaluable for auditing and performance monitoring.
 
 It is also possible to register additional subscribers for your own purposes.
@@ -17,7 +17,7 @@ The collection on the left hand side shows a list of entities, and two associate
 These actions can be used to change the name of any one of those entities.
 One of the actions is published, the other is not.
 
-Invoking the published action will result in a command representing the intention to invoke the action from being persisted.
+Invoking the published action will result in a command representing the intention to invoke the action being persisted.
 The link:https://causeway.apache.org/userguide/2.0.0-RC1/commandlog/about.html[commandlog] extension persists these as link:https://causeway.apache.org/refguide/2.0.0-RC1/extensions/index/commandlog/applib/dom/CommandLogEntry.html[CommandLogEntry] entities.
 These are listed in the second collection on the left.
 
@@ -59,6 +59,9 @@ causeway:
       action:
         command-publishing: "none"      # <.>
 ----
-<.> `none` | `disabled` | `enabled`.
+<.> can be one of:
+* `none` - by default, commands not published for any action
+* `ignore_safe` or `ignore_query_only` - commands published for all idempotent and non-idempotent actions, but not for query-only actions.
+* `all` - commands published for all actions (irrespective of their semantics)
 
 

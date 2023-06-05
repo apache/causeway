@@ -39,7 +39,10 @@ public class ScalarValueTypeMenu {
     private final FactoryService factoryService;
 
     @Action
-    @ActionLayout(cssClassFa="fa-cube", describedAs = "Custom scalar value types")
+    @ActionLayout(
+            cssClassFa="fa-cube",
+            describedAs = "Custom scalar value types"
+    )
     public ScalarValueTypePage scalarValueTypes(){
         ScalarValueTypePage page = factoryService.viewModel(new ScalarValueTypePage());
         page.setEmailAddress(EmailAddress.of("joe@bloggs.com"));

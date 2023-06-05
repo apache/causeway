@@ -28,23 +28,26 @@ import jakarta.xml.bind.annotation.XmlType;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
-@DomainObject(
-        nature=Nature.VIEW_MODEL)
 @Named("demo.ActionLayoutCssClassFaVm")
+@DomainObject(nature=Nature.VIEW_MODEL)
+@DomainObjectLayout(cssClassFa="fa-font-awesome-flag")
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@NoArgsConstructor
 public class ActionLayoutCssClassFaPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
@@ -53,41 +56,45 @@ public class ActionLayoutCssClassFaPage implements HasAsciiDocDescription {
 
     @Property
     @XmlElement
-    @Getter
-    @Setter
+    @Getter @Setter
     private String name;
-
 
 //tag::updateNameWithFaIconOnTheLeft[]
     @Action
     @ActionLayout(
-            cssClassFa = "fa-bus",                           // <.>
-            associateWith = "name",
-            sequence = "1"
-            )
+        cssClassFa = "fa-bus",                           // <.>
+        associateWith = "name",
+        sequence = "1"
+    )
     public Object updateNameWithFaIconOnTheLeft(final String arg) {
+        //...
+//end::updateNameWithFaIconOnTheLeft[]
         setName(arg);
         return this;
     }
     public String default0UpdateNameWithFaIconOnTheLeft() {
         return "bus !!!";
+//tag::updateNameWithFaIconOnTheLeft[]
     }
 //end::updateNameWithFaIconOnTheLeft[]
 
 //tag::updateNameWithFaIconOnTheRight[]
     @Action
     @ActionLayout(
-            cssClassFa = "fa-car",                          // <.>
-            cssClassFaPosition = CssClassFaPosition.RIGHT,  // <.>
-            associateWith = "name",
-            sequence = "2"
-            )
+        cssClassFa = "fa-car",                          // <.>
+        cssClassFaPosition = CssClassFaPosition.RIGHT,  // <.>
+        associateWith = "name",
+        sequence = "2"
+    )
     public Object updateNameWithFaIconOnTheRight(final String arg) {
+        //...
+//end::updateNameWithFaIconOnTheRight[]
         setName(arg);
         return this;
     }
     public String default0UpdateNameWithFaIconOnTheRight() {
         return "car !!!";
+//tag::updateNameWithFaIconOnTheRight[]
     }
 //end::updateNameWithFaIconOnTheRight[]
 

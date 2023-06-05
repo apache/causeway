@@ -5,10 +5,9 @@ Every property edit is reified into an link:https://causeway.apache.org/refguide
 
 The link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/Property.html#executionpublishing[@Property#executionPublishing] determines whether subscribers are notified of the property being edited.
 
-The _executionLog_ extension provides an out-of-the-box subscriber implementation that persists every published execution into a log.
+The link:https://causeway.apache.org/userguide/2.0.0-RC1/executionlog/about.html[executionLog] extension provides an out-of-the-box subscriber implementation that persists every published execution into a log.
 This can be invaluable for auditing and performance monitoring.
-
-The similar _executionOutbox_ extension (not part of this demo) is very similar, also persisting executions.
+The link:https://causeway.apache.org/userguide/2.0.0-RC1/executionoutbox/about.html[executionOutbox] extension (not part of this demo) is very similar, also persisting executions.
 It is designed for integration scenarios, interacting with downstream systems.
 
 It is of course also possible to register additional subscribers for your own purposes.
@@ -20,7 +19,20 @@ The collection on the left hand side shows a list of entities.
 Those entities have two properties, `name` and `description`.
 Both of these properties may be edited, but only the `name` property has execution publishing enabled.
 
-Navigate into the entities and edit the properties.
+To see this happening you will need to navigate into the entities and edit properties on the objects themselves.
+
+In terms of code:
+
+* property with execution publishing enabled:
++
+[source,java,indent=0]
+.PropertyExecutionPublishingEntity.java
+----
+include::PropertyExecutionPublishingEntity.java[tags=published]
+----
+<.> makes the property editable...
+<.> \... and enables execution publishing
+
 
 Editing the published property will result in the execution representing the property edit invocation being persisted; these are listed in the collection at the bottom of the entity's page.
 
@@ -38,6 +50,6 @@ causeway:
       property:
         execution-publishing: "none"      # <.>
 ----
-<.> `none` | `disabled` | `enabled`.
+<.> either `none` or `all`
 
 

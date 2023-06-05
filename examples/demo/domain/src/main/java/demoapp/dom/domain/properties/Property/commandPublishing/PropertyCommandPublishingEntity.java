@@ -48,8 +48,11 @@ public abstract class PropertyCommandPublishingEntity
 
 //tag::published[]
     @Property(
-            editing = Editing.ENABLED,                  // <.>
-            commandPublishing = Publishing.ENABLED      // <.>
+        editing = Editing.ENABLED,                  // <.>
+        commandPublishing = Publishing.ENABLED      // <.>
+    )
+    @PropertyLayout(
+        describedAs = "This property has command publishing enabled"
     )
     public abstract String getName();
     public abstract void setName(String value);
@@ -57,10 +60,13 @@ public abstract class PropertyCommandPublishingEntity
 
 //tag::not-published[]
     @Property(
-            editing = Editing.ENABLED,                  // <.>
-            commandPublishing = Publishing.DISABLED     // <.>
+        editing = Editing.ENABLED,                  // <.>
+        commandPublishing = Publishing.DISABLED     // <.>
     )
-    @PropertyLayout(multiLine = 5)
+    @PropertyLayout(
+        describedAs = "This property does NOT have command publishing enabled",
+        multiLine = 5
+    )
     public abstract String getNotes();
     public abstract void setNotes(String value);
 //end::not-published[]

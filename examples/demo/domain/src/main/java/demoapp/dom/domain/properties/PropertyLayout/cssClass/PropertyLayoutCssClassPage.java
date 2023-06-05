@@ -26,6 +26,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
@@ -34,18 +35,22 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
+@Named("demo.PropertyLayoutCssClassPage")
+@DomainObject(
+        nature=Nature.VIEW_MODEL,
+        editing = Editing.ENABLED
+)
+@DomainObjectLayout(cssClassFa="fa-pen-nib")
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.PropertyLayoutCssClassVm")
-@DomainObject(
-        nature=Nature.VIEW_MODEL,
-        editing = Editing.ENABLED)
+@NoArgsConstructor
 public class PropertyLayoutCssClassPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {

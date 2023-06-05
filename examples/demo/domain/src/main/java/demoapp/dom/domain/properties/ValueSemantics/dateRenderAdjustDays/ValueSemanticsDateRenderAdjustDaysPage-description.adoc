@@ -2,7 +2,6 @@
 
 WARNING: this functionality is currently *not* supported by the Wicket viewer; see link:https://issues.apache.org/jira/browse/CAUSEWAY-3445[CAUSEWAY-3445].
 
-
 When dealing with date ranges, sometimes it can be easier to define ranges that use a combination of inclusive-exclusive limits -- that is `[startDate, endDate)` -- so that the dates within the range meet the constraint `startDate <= date < endDate`.
 
 However, in the user interface your users may prefer inclusive ranges for both the _startDate_ _and_ the `endDate`.
@@ -18,15 +17,20 @@ The attribute can be applied to both properties and parameters:
 == How this demo works
 
 This page has a `startDate` and an `endDate`, with the `endDate` (internally) set to one week (7 days) after the `startDate`.
+The `endDate` can be changed by either action or as an editable property, but the value stored will be one day more than that entered.
 
+WARNING: this functionality is currently *not* supported by the Wicket viewer; see link:https://issues.apache.org/jira/browse/CAUSEWAY-3445[CAUSEWAY-3445].
+
+In terms of code:
+
+* the menu action initializes the start and end date as 7 days apart:
++
 [source,java,indent=0]
 .ValueSemanticsMenu.java
 ----
 include::../ValueSemanticsMenu.java[tags=create-page]
 ----
 <.> `endDate` set to +7 days from the `startDate`
-
-With respect to the page's members:
 
 * The `startDate` property has no annotations that would change the way in which it is rendered:
 +

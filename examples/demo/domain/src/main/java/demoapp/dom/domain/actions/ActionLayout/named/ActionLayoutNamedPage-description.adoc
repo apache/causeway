@@ -5,14 +5,16 @@ You will therefore need to use some other method name to implement the action.
 
 The link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/ActionLayout.html#named[@ActionLayout#named] attribute allows you to override the name (as used for rendering) from that derived from the action's method name).
 
-This can also be used if you want the name to include characters such as brackets `()[]` or quotation marks `' "`.
+This can also be used if you want the name to include characters such as spaces or punctuation characters.
 
 
 
 == How this demo works
 
 This page object has two properties and an associated action with each.
-Both of these actions use `@ActionLayout#named`, for different reasons:
+Both of these actions use `@ActionLayout#named`, for different reasons.
+
+In terms of code:
 
 * the "reset" action uses a reserved Java name of "default" in the user interface:
 +

@@ -46,7 +46,7 @@ import demoapp.dom.types.Samples;
 import demoapp.dom.types.javamath.bigdecimals.persistence.JavaMathBigDecimalEntity;
 import demoapp.dom.types.javamath.bigdecimals.vm.JavaMathBigDecimalVm;
 
-@XmlRootElement(name = "Demo")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.JavaMathBigDecimals")

@@ -7,7 +7,7 @@ Such embedded types have no identity in and of themselves; they are identified o
 Embedded types themselves can be mutable or immutable.
 When immutable, they are very similar to value types.
 However, they are not quite true value types as the ORM needs to update their fields directly.
-To enable that, a mutator method is required, though it can be made `private`
+To enable that, a mutator method is required, though it can be made `private`.
 
 
 == How this demo works
@@ -34,7 +34,7 @@ include::NumberConstantJdo.java[tags=class]
 ----
 include::ComplexNumberJdo.java[tags=class]
 ----
-<.> JDO `@EmbeddedOnly` annotation is the companion of `@Embedded` on the owning object
+<.> JDO `@EmbeddedOnly` annotation is the companion of `@Embedded` on the owning object.
 <.> with presence of `@EmbeddedOnly` should not be required; but app fails on launch if not provided.
 <.> Indicates to the framework that this is a value rather than an entity.
 Accordingly, we will also need to provide a `ValueSemanticsProvider` implementation, discussed below.

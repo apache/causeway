@@ -33,16 +33,19 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
+import lombok.NoArgsConstructor;
+
 //tag::class[]
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.DomainObjectLayoutBookmarkingVm")
-@DomainObject(
-        nature=Nature.VIEW_MODEL)
+@DomainObject(nature=Nature.VIEW_MODEL)
 @DomainObjectLayout(
-        bookmarking = BookmarkPolicy.AS_ROOT    // <.>
+        bookmarking = BookmarkPolicy.AS_ROOT,    // <.>
+        cssClassFa="fa-bookmark"
 )
+@NoArgsConstructor
 public class DomainObjectLayoutBookmarkingPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {

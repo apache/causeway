@@ -32,10 +32,12 @@ import jakarta.xml.bind.annotation.XmlType;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
@@ -44,9 +46,11 @@ import demoapp.dom.domain.collections.CollectionLayout.defaultView.child.Collect
 //tag::class[]
 @Named("demo.CollectionLayoutDefaultViewPage")
 @DomainObject(nature=Nature.VIEW_MODEL)
+@DomainObjectLayout(cssClassFa="fa-atom")
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@NoArgsConstructor
 public class CollectionLayoutDefaultViewPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
@@ -56,8 +60,8 @@ public class CollectionLayoutDefaultViewPage implements HasAsciiDocDescription {
 //tag::children[]
     @Collection()
     @CollectionLayout(
-            defaultView = "table",          // <.>
-            paged = 5
+        defaultView = "table",          // <.>
+        paged = 5
     )
     @XmlElementWrapper(name = "children")
     @XmlElement(name = "child")
@@ -68,8 +72,8 @@ public class CollectionLayoutDefaultViewPage implements HasAsciiDocDescription {
 //tag::more-children[]
     @Collection()
     @CollectionLayout(
-            defaultView = "hidden",         // <.>
-            paged = 5
+        defaultView = "hidden",         // <.>
+        paged = 5
     )
     @XmlElementWrapper(name = "moreChildren")
     @XmlElement(name = "child")
@@ -79,7 +83,7 @@ public class CollectionLayoutDefaultViewPage implements HasAsciiDocDescription {
 
 //tag::yet-more-children[]
     @Collection()
-    @CollectionLayout(paged = 5)             // <.>
+    @CollectionLayout(paged = 5)        // <.>
     @XmlElementWrapper(name = "moreChildren")
     @XmlElement(name = "child")
     @Getter @Setter

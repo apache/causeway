@@ -33,23 +33,26 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.domain.actions.ActionLayout.describedAs.child.ActionLayoutDescribedAsChildVm;
 
 @Named("demo.ActionLayoutDescribedAsPage")
-@DomainObject(
-        nature=Nature.VIEW_MODEL)
+@DomainObject(nature=Nature.VIEW_MODEL)
+@DomainObjectLayout(cssClassFa="fa-comment")
 @XmlRootElement(name = "root")
 @XmlType()
 @XmlAccessorType(XmlAccessType.FIELD)
+@NoArgsConstructor
 //tag::class[]
 //...
 public class ActionLayoutDescribedAsPage
@@ -78,10 +81,12 @@ public class ActionLayoutDescribedAsPage
 //tag::below[]
     @Action
     @ActionLayout(
-            associateWith = "name",
-            describedAs = "Updates the name property.  The new name must be different from the old name" // <.>
-            )
+        associateWith = "name",
+        describedAs = "Updates the name property.  The new name must be different from the old name" // <.>
+    )
     public Object updateName(final String newName) {
+        // ...
+//end::below[]
         setName(newName);
         return this;
     }
@@ -90,19 +95,23 @@ public class ActionLayoutDescribedAsPage
     }
     public String validate0UpdateName(final String proposedName) {
         return Objects.equals(name, proposedName) ? "New name must be different from current name" : null;
+//tag::below[]
     }
 //end::below[]
 
 //tag::panel[]
     @Action
     @ActionLayout(
-            associateWith = "name",
-            describedAs = "Updates the name property.  This action has no validation",  // <.>
-            position = ActionLayout.Position.PANEL
+        associateWith = "name",
+        describedAs = "Updates the name property.  This action has no validation",  // <.>
+        position = ActionLayout.Position.PANEL
     )
     public Object updateNameFromPanel(final String newName) {
+        // ...
+//end::panel[]
         setName(newName);
         return this;
+//tag::panel[]
     }
 //end::panel[]
 
@@ -110,26 +119,32 @@ public class ActionLayoutDescribedAsPage
 //tag::panel-dropdown[]
     @Action
     @ActionLayout(
-            associateWith = "name",
-            describedAs = "Updates the name property.  This action also has no validation",  // <.>
-            position = ActionLayout.Position.PANEL_DROPDOWN
+        associateWith = "name",
+        describedAs = "Updates the name property.  This action also has no validation",  // <.>
+        position = ActionLayout.Position.PANEL_DROPDOWN
     )
     public Object updateNameFromPanelDropdown(final String newName) {
+        // ...
+//end::panel-dropdown[]
         setName(newName);
         return this;
+//tag::panel-dropdown[]
     }
 //end::panel-dropdown[]
 
 //tag::collection[]
     @Action
     @ActionLayout(
-            associateWith = "children",
-            describedAs = "Adds a child to the collection",         // <.>
-            sequence = "1"
+        associateWith = "children",
+        describedAs = "Adds a child to the collection",         // <.>
+        sequence = "1"
     )
     public Object addChild(final String newValue) {
+        // ...
+//end::collection[]
         getChildren().add(new ActionLayoutDescribedAsChildVm(newValue));
         return this;
+//tag::collection[]
     }
 //end::collection[]
 
@@ -150,7 +165,10 @@ public class ActionLayoutDescribedAsPage
         describedAs = "Despite its name, this action is a no-op"  // <.>
     )
     public Object delete() {
+        // ...
+//end::delete[]
         return this;
+//tag::delete[]
     }
 //end::delete[]
 

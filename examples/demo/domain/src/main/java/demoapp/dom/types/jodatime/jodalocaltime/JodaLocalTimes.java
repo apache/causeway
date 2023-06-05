@@ -47,7 +47,7 @@ import demoapp.dom.types.Samples;
 import demoapp.dom.types.jodatime.jodalocaltime.persistence.JodaLocalTimeEntity;
 import demoapp.dom.types.jodatime.jodalocaltime.vm.JodaLocalTimeVm;
 
-@XmlRootElement(name = "Demo")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.JodaLocalTimes")

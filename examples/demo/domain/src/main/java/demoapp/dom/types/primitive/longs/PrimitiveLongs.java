@@ -45,7 +45,7 @@ import demoapp.dom.types.Samples;
 import demoapp.dom.types.primitive.longs.persistence.PrimitiveLongEntity;
 import demoapp.dom.types.primitive.longs.vm.PrimitiveLongVm;
 
-@XmlRootElement(name = "Demo")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.PrimitiveLongs")

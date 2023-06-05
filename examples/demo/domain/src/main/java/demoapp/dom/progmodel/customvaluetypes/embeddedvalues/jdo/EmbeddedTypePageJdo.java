@@ -25,6 +25,7 @@ import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 
@@ -32,10 +33,13 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.progmodel.customvaluetypes.embeddedvalues.ComplexNumber;
 import demoapp.dom.progmodel.customvaluetypes.embeddedvalues.NumberConstantEntity;
+import lombok.NoArgsConstructor;
 
 //tag::class[]
 @Named("demo.EmbeddedTypePageJdo")
 @DomainObject(nature=Nature.VIEW_MODEL)
+@DomainObjectLayout(cssClassFa="fa-stop-circle")
+@NoArgsConstructor
 public class EmbeddedTypePageJdo implements HasAsciiDocDescription {
 
     // ...

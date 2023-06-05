@@ -1,6 +1,7 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-The link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/ActionLayout.html#hidden[@ActionLayout#hidden] attribute specifies whether an action should be visible in the UI or not.
+The link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/ActionLayout.html#hidden[@ActionLayout#hidden] attribute specifies whether an action should be visible in the UI or not, based on the context in which the object being rendered (within a form, i.e. on its own page, or within a collection).
+
 
 == How this demo works
 
@@ -10,59 +11,51 @@ From this page, you can inspect the visibility of the actions from the context o
 
 Navigate into each domain object to inspect the visibility of the actions on an object form.
 
+NOTE: Currently the Wicket viewer never renders actions for objects rendered as instances of collections; this is being tracked as enhancement request link:https://issues.apache.org/jira/browse/CAUSEWAY-3477[CAUSEWAY-3477].
+
 The four actions are:
 
 * `hidden` not specified:
 +
 [source,java]
-.ActionLayoutHidden_changeName.java
+.ActionLayoutHiddenEntity_changeName.java
 ----
-include::ActionLayoutHidden_changeName.java[tags=class]
+include::ActionLayoutHiddenEntity_changeName.java[tags=class]
 ----
-<.> action _should_ be visible for this entity.
+<.> action _should_ be visible for this entity when rendered both on an object form and within a collection.
 +
-However, the Wicket viewer does _not_ render actions on instances of collections, so the action will not in fact be shown as visible.
 
 * `hidden` on object forms (but not necessarily on collections):
 +
 [source,java]
-.ActionLayoutHidden_changeNameHiddenObjectForms.java
+.ActionLayoutHiddenEntity_changeNameHiddenObjectForms.java
 ----
-include::ActionLayoutHidden_changeNameHiddenObjectForms.java[tags=class]
+include::ActionLayoutHiddenEntity_changeNameHiddenObjectForms.java[tags=class]
 ----
-<.> action should be visible for this entity.
-+
-However, the Wicket viewer does _not_ render actions on instances of collections, so the action will not in fact be shown as visible.
+<.> action should be visible for this entity when rendered in a collection.
 
 * `hidden` on collections (but not necessarily on object forms):
 +
 [source,java]
-.ActionLayoutHidden_changeNameHiddenAllTables.java
+.ActionLayoutHiddenEntity_changeNameHiddenAllTables.java
 ----
-include::ActionLayoutHidden_changeNameHiddenAllTables.java[tags=class]
+include::ActionLayoutHiddenEntity_changeNameHiddenAllTables.java[tags=class]
 ----
-<.> action should _NOT_ be visible for this entity.
-
-Currently the Wicket viewer does _not_ render actions of instances of collections, and so none of these actions will be visible on this page.
+<.> action should _NOT_ be visible for this entity within the collection.
++
 However, if you navigate into these domain objects then some of these actions will be visible.
 
 * `hidden` everywhere:
 +
 [source,java]
-.ActionLayoutHidden_changeNameHiddenEverywhere.java
+.ActionLayoutHiddenEntity_changeNameHiddenEverywhere.java
 ----
-include::ActionLayoutHidden_changeNameHiddenEverywhere.java[tags=class]
+include::ActionLayoutHiddenEntity_changeNameHiddenEverywhere.java[tags=class]
 ----
-<.> action should _NOT_ be visible for this entity.
+<.> action should _NOT_ be visible for this entity, in any context.
 
-Currently the Wicket viewer does _not_ render actions of instances of collections, and so none of these actions will be visible on this page.
-However, if you navigate into these domain objects then some of these actions will be visible.
-
-[TIP]
-.What is the difference between a hidden action and one annotated with `@Programmatic` ?
-====
-Although there is no difference in the UI, a hidden action _is_ part of the metadamodel while a link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/Programmatic.html#hidden[@Programmatic] property is not.
+The notion of an action that is _always_ hidden might seem nonsensical.
+But although there is no difference in the UI, a hidden action _is_ part of the metadamodel while a link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/Programmatic.html#hidden[@Programmatic] action is not.
 
 A rare (but valid) use case is to invoke such a hidden action using the link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/services/wrapper/WrapperFactory.html#wrap(t,-synccontrol)[WrapperFactory] (skipping rules).
 This can be for example to publish executions to any registered link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/services/publishing/spi/ExecutionSubscriber.html[ExecutionSubscriber]s.
-====

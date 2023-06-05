@@ -47,7 +47,7 @@ import demoapp.dom.types.Samples;
 import demoapp.dom.types.javalang.floats.persistence.WrapperFloatEntity;
 import demoapp.dom.types.javalang.floats.vm.WrapperFloatVm;
 
-@XmlRootElement(name = "Demo")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.WrapperFloats")

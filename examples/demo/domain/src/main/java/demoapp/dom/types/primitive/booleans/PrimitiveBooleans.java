@@ -45,7 +45,7 @@ import demoapp.dom.types.Samples;
 import demoapp.dom.types.primitive.booleans.persistence.PrimitiveBooleanEntity;
 import demoapp.dom.types.primitive.booleans.vm.PrimitiveBooleanVm;
 
-@XmlRootElement(name = "Demo")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.PrimitiveBooleans")

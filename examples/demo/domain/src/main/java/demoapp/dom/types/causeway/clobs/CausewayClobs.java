@@ -47,7 +47,7 @@ import demoapp.dom.types.Samples;
 import demoapp.dom.types.causeway.clobs.persistence.CausewayClobEntity;
 import demoapp.dom.types.causeway.clobs.vm.CausewayClobVm;
 
-@XmlRootElement(name = "Demo")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.CausewayClobs")

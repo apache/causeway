@@ -19,6 +19,7 @@
 package demoapp.dom.domain.actions.Action.domainEvent;
 
 import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.events.domain.ActionDomainEvent;
 
@@ -27,6 +28,9 @@ import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(domainEvent = ActionDomainEventPage_updateText.DomainEvent.class)   // <.>
+@ActionLayout(
+    describedAs = "This action emits a custom domain event"
+)
 @RequiredArgsConstructor
 public class ActionDomainEventPage_updateText {
 

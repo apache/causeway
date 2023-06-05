@@ -26,23 +26,26 @@ import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
+@Named("demo.DomainObjectXxxLifecycleEventPage")
+@DomainObject(nature = Nature.VIEW_MODEL)
+@DomainObjectLayout(cssClassFa="fa-redo")
 @XmlRootElement(name = "demo.DomainObjectXxxLifecycleEventPage")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.DomainObjectXxxLifecycleEventPage")
-@DomainObject(
-        nature = Nature.VIEW_MODEL)
+@NoArgsConstructor
 public class DomainObjectXxxLifecycleEventPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {

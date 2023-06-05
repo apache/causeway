@@ -32,12 +32,14 @@ import jakarta.xml.bind.annotation.XmlType;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 
 import demoapp.dom.domain.collections.CollectionLayout.sortedBy.child.CollectionLayoutSortedByChildVm;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
@@ -45,9 +47,11 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 //tag::class[]
 @Named("demo.CollectionLayoutSortedByPage")
 @DomainObject(nature=Nature.VIEW_MODEL)
+@DomainObjectLayout(cssClassFa="fa-solid fa-arrow-down-a-z")
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@NoArgsConstructor
 public class CollectionLayoutSortedByPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
@@ -59,7 +63,7 @@ public class CollectionLayoutSortedByPage implements HasAsciiDocDescription {
 //tag::children[]
     @Collection()
     @CollectionLayout(
-            sortedBy = NameComparator.class        // <.>
+        sortedBy = NameComparator.class        // <.>
     )
     @XmlElementWrapper(name = "children")
     @XmlElement(name = "child")

@@ -28,9 +28,9 @@ import lombok.RequiredArgsConstructor;
 //tag::class[]
 @Action(semantics = SemanticsOf.IDEMPOTENT)
 @ActionLayout(
-        associateWith = "name",
-        sequence = "1",
-        position = ActionLayout.Position.PANEL  // <.>
+    associateWith = "name",
+    sequence = "1",
+    position = ActionLayout.Position.PANEL  // <.>
 )
 @RequiredArgsConstructor
 public class ActionLayoutSequencePage_updateNamePositionedPanelSeqY {

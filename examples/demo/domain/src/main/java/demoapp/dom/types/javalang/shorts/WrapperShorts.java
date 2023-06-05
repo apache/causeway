@@ -47,7 +47,7 @@ import demoapp.dom.types.Samples;
 import demoapp.dom.types.javalang.shorts.persistence.WrapperShortEntity;
 import demoapp.dom.types.javalang.shorts.vm.WrapperShortVm;
 
-@XmlRootElement(name = "Demo")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.WrapperShorts")

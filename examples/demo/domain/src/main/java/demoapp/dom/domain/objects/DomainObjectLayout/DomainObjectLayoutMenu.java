@@ -18,6 +18,7 @@
  */
 package demoapp.dom.domain.objects.DomainObjectLayout;
 
+import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,70 +41,82 @@ import demoapp.dom.domain.objects.DomainObjectLayout.tabledec.DomainObjectLayout
 import demoapp.dom.domain.objects.DomainObjectLayout.xxxUiEvent.DomainObjectLayoutXxxUiEventPage;
 
 @Named("demo.DomainObjectLayoutMenu")
-@DomainService(
-        nature=NatureOfService.VIEW
-)
-@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
+@DomainService(nature=NatureOfService.VIEW)
+@Priority(PriorityPrecedence.EARLY)
 //@Log4j2
 public class DomainObjectLayoutMenu {
 
     @Autowired private FactoryService factoryService;
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-bookmark",
-        describedAs = "Add link to object once visited as a bookmark")
+    @ActionLayout(
+            cssClassFa="fa-bookmark",
+            describedAs = "Add link to object once visited as a bookmark"
+    )
     public DomainObjectLayoutBookmarkingPage bookmarking(){
         return factoryService.viewModel(new DomainObjectLayoutBookmarkingPage());
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-pen-nib",
-        describedAs = "CSS class to wrap the UI component representing the domain object")
+    @ActionLayout(
+            cssClassFa="fa-pen-nib",
+            describedAs = "CSS class to wrap the UI component representing the domain object"
+    )
     public DomainObjectLayoutCssClassPage cssClass(){
         return factoryService.viewModel(new DomainObjectLayoutCssClassPage());
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-font-awesome-flag",
-        describedAs = "Font awesome icon to represent domain object")
+    @ActionLayout(
+            cssClassFa="fa-font-awesome-flag",
+            describedAs = "Font awesome icon to represent domain object"
+    )
     public DomainObjectLayoutCssClassFaPage cssClassFa(){
         return factoryService.viewModel(new DomainObjectLayoutCssClassFaPage());
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-comment",
-        describedAs = "Description of the property, shown as a tooltip")
+    @ActionLayout(
+            cssClassFa="fa-comment",
+            describedAs = "Description of the property, shown as a tooltip"
+    )
     public DomainObjectLayoutDescribedAsPage describedAs(){
         return factoryService.viewModel(new DomainObjectLayoutDescribedAsPage());
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-signature",
-        describedAs = "Custom text for the domain object's type wherever labeled")
+    @ActionLayout(
+            cssClassFa="fa-signature",
+            describedAs = "Custom text for the domain object's type wherever labeled"
+    )
     public DomainObjectLayoutNamedPage named(){
         return factoryService.viewModel(new DomainObjectLayoutNamedPage());
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-fast-forward",
-        describedAs = "Number of domain objects per page in collections")
+    @ActionLayout(
+            cssClassFa="fa-fast-forward",
+            describedAs = "Number of domain objects per page in collections"
+    )
     public DomainObjectLayoutPagedPage paged(){
         return factoryService.viewModel(new DomainObjectLayoutPagedPage());
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-solid fa-table-columns",
-        describedAs = "Allows to specify a custom client side table renderer.")
+    @ActionLayout(
+            cssClassFa="fa-solid fa-table-columns",
+            describedAs = "Allows to specify a custom client side table renderer."
+    )
     public DomainObjectLayoutTableDecoratorPage tableDecorator(){
         return factoryService.viewModel(new DomainObjectLayoutTableDecoratorPage());
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-desktop",
-        describedAs = "Class of the UI events emitted to allow subscribers to specify "
+    @ActionLayout(
+            cssClassFa="fa-desktop",
+            describedAs = "Class of the UI events emitted to allow subscribers to specify "
                 + "title, icon, style and layout")
     public DomainObjectLayoutXxxUiEventPage uiEvents(){
         return factoryService.viewModel(new DomainObjectLayoutXxxUiEventPage());
     }
-
 }

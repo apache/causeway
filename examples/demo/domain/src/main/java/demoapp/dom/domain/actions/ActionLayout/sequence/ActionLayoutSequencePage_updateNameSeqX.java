@@ -28,8 +28,8 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 //tag::class[]
 @Action(semantics = SemanticsOf.IDEMPOTENT)
 @ActionLayout(
-        associateWith = "name",
-        sequence = "3"              // <.>
+    associateWith = "name",
+    sequence = "3"              // <.>
 )
 @RequiredArgsConstructor
 public class ActionLayoutSequencePage_updateNameSeqX {

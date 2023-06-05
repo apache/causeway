@@ -18,6 +18,7 @@
  */
 package demoapp.dom.domain.collections.CollectionLayout;
 
+import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
@@ -51,10 +52,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Named("demo.CollectionLayoutMenu")
-@DomainService(
-        nature=NatureOfService.VIEW
-)
-@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
+@DomainService(nature=NatureOfService.VIEW)
+@Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 //@Log4j2
 public class CollectionLayoutMenu {
@@ -62,8 +61,10 @@ public class CollectionLayoutMenu {
     final NameSamples samples;
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-pen-nib",
-        describedAs = "CSS class to wrap the UI component representing this collection")
+    @ActionLayout(
+            cssClassFa="fa-pen-nib",
+            describedAs = "CSS class to wrap the UI component representing this collection"
+    )
     public CollectionLayoutCssClassPage cssClass(){
         val page = new CollectionLayoutCssClassPage();
         samples.stream()
@@ -78,8 +79,10 @@ public class CollectionLayoutMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-atom",
-        describedAs = "View collection as a table, or collapsed, or some other representation if available")
+    @ActionLayout(
+            cssClassFa="fa-atom",
+            describedAs = "View collection as a table, or collapsed, or some other representation if available"
+    )
     public CollectionLayoutDefaultViewPage defaultView(){
         val page = new CollectionLayoutDefaultViewPage();
         samples.stream()
@@ -95,8 +98,10 @@ public class CollectionLayoutMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-comment",
-        describedAs = "Description of the collection, shown as a tooltip")
+    @ActionLayout(
+            cssClassFa="fa-comment",
+            describedAs = "Description of the collection, shown as a tooltip"
+    )
     public CollectionLayoutDescribedAsPage describedAs(){
         val page = new CollectionLayoutDescribedAsPage();
         samples.stream()
@@ -109,8 +114,10 @@ public class CollectionLayoutMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-glasses",
-        describedAs = "Visibility of the collection in different contexts")
+    @ActionLayout(
+            cssClassFa="fa-glasses",
+            describedAs = "Visibility of the collection in different contexts"
+    )
     public CollectionLayoutHiddenPage hidden(){
         val page = new CollectionLayoutHiddenPage();
         samples.stream()
@@ -120,8 +127,10 @@ public class CollectionLayoutMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-signature",
-        describedAs = "Custom text for the collection's label")
+    @ActionLayout(
+            cssClassFa="fa-signature",
+            describedAs = "Custom text for the collection's label"
+    )
     public CollectionLayoutNamedPage named(){
         val page = new CollectionLayoutNamedPage();
         samples.stream()
@@ -131,8 +140,10 @@ public class CollectionLayoutMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-fast-forward",
-        describedAs = "Number of domain objects per page in this collection")
+    @ActionLayout(
+            cssClassFa="fa-fast-forward",
+            describedAs = "Number of domain objects per page in this collection"
+    )
     public CollectionLayoutPagedPage paged(){
         val page = new CollectionLayoutPagedPage();
         samples.stream()
@@ -145,8 +156,10 @@ public class CollectionLayoutMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-sharp fa-solid fa-sort",
-        describedAs = "Order of this member relative to other members in the same (layout) group.")
+    @ActionLayout(
+            cssClassFa="fa-sharp fa-solid fa-sort",
+            describedAs = "Order of this member relative to other members in the same (layout) group."
+    )
     public CollectionLayoutSequencePage sequence(){
         val page = new CollectionLayoutSequencePage();
         samples.stream()
@@ -156,8 +169,10 @@ public class CollectionLayoutMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-solid fa-arrow-down-a-z",
-        describedAs = "Sort domain objects in this collection, overriding their default comparator")
+    @ActionLayout(
+            cssClassFa="fa-solid fa-arrow-down-a-z",
+            describedAs = "Sort domain objects in this collection, overriding their default comparator"
+    )
     public CollectionLayoutSortedByPage sortedBy(){
         val page = new CollectionLayoutSortedByPage();
         samples.stream()
@@ -168,8 +183,10 @@ public class CollectionLayoutMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-solid fa-table-columns",
-        describedAs = "Allows to specify a custom client side table renderer.")
+    @ActionLayout(
+            cssClassFa="fa-solid fa-table-columns",
+            describedAs = "Allows to specify a custom client side table renderer."
+    )
     public CollectionLayoutTableDecoratorPage tableDecorator(){
         val page = new CollectionLayoutTableDecoratorPage();
         samples.stream()
@@ -178,6 +195,4 @@ public class CollectionLayoutMenu {
         return page;
 
     }
-
-
 }

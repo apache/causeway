@@ -1,6 +1,6 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-When an action is associated with a property (using `@Action#associateWith`, then by default its button will be rendered in the UI underneath the property's field.
+When an action is associated with a property (using `@Action#associateWith`) then by default its button will be rendered in the UI underneath the property's field.
 
 The link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/ActionLayout.html#position[@ActionLayout#position] provides finer-grained control, allowing the button to be placed in one of four locations:
 
@@ -8,7 +8,7 @@ The link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/
 
 * alongside the property's field, as a drop-down
 
-* on the panel (or fieldset) containing the property
+* on the panel (also known as the _fieldset_) containing the property
 
 * as a drop-down of the panel containing the property.
 

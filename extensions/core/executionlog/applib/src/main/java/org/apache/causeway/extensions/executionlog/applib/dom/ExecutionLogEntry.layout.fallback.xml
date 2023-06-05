@@ -61,7 +61,9 @@
                 <cpt:property id="executionType"/>
             </cpt:fieldSet>
             <cpt:fieldSet name="Who and When">
-                <cpt:property id="username"/>
+                <cpt:property id="username">
+                    <cpt:action id="associatedUser"/>
+                </cpt:property>
                 <cpt:property id="timestamp"/>
             </cpt:fieldSet>
         </bs3:col>

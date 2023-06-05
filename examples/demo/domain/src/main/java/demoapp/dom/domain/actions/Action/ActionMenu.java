@@ -50,43 +50,64 @@ public class ActionMenu {
     final NameSamples samples;
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-list-ul", describedAs = "Choices for multi-valued parameters taken from corresponding collection (aka \"bulk\" actions)")
+    @ActionLayout(
+            cssClassFa="fa-list-ul",
+            describedAs = "Choices for multi-valued parameters taken from corresponding collection (aka \"bulk\" actions)"
+    )
     public ActionChoicesFromPage choicesFrom(){
         return new ActionChoicesFromPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-terminal", describedAs = "Action invocation intentions as XML")
+    @ActionLayout(
+            cssClassFa="fa-terminal",
+            describedAs = "Action invocation intentions as XML"
+    )
     public ActionCommandPublishingPage commandPublishing(){
         return new ActionCommandPublishingPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-asterisk", describedAs = "Class of the domain event emitted when interacting with the action")
+    @ActionLayout(
+            cssClassFa="fa-asterisk",
+            describedAs = "Class of the domain event emitted when interacting with the action"
+    )
     public ActionDomainEventPage domainEvent(){
         return new ActionDomainEventPage("value");
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-book", describedAs = "Action invocation events as XML")
+    @ActionLayout(
+            cssClassFa="fa-book",
+            describedAs = "Action invocation events as XML"
+    )
     public ActionExecutionPublishingPage executionPublishing(){
         return new ActionExecutionPublishingPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-paper-plane", describedAs = "Availability of actions per environment")
+    @ActionLayout(
+            cssClassFa="fa-paper-plane",
+            describedAs = "Availability of actions per environment"
+    )
     public ActionRestrictToPage restrictTo(){
         return new ActionRestrictToPage("change me");
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-skull-crossbones", describedAs = "Whether the action has side-effects")
+    @ActionLayout(
+            cssClassFa="fa-skull-crossbones",
+            describedAs = "Whether the action has side-effects"
+    )
     public ActionSemanticsPage semantics(){
         return new ActionSemanticsPage(123);
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-shapes", describedAs = "Semantic relationship between actions and other properties or collections")
+    @ActionLayout(
+            cssClassFa="fa-shapes",
+            describedAs = "Semantic relationship between actions and other properties or collections"
+    )
     public ActionTypeOfPage typeOf(){
         val page = new ActionTypeOfPage();
         samples.stream()

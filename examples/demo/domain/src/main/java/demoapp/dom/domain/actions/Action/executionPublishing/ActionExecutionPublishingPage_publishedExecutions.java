@@ -1,6 +1,7 @@
 package demoapp.dom.domain.actions.Action.executionPublishing;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import jakarta.inject.Inject;
 
@@ -21,7 +22,15 @@ public class ActionExecutionPublishingPage_publishedExecutions {
     private final ActionExecutionPublishingPage page;
 
     @MemberSupport public List<? extends ExecutionLogEntry> coll() {
-        return executionLogEntryRepository.findRecentByTarget(bookmarkService.bookmarkForElseFail(page));
+        return executionLogEntryRepository
+                .findMostRecent()
+                .stream()
+                /* display those log entries that are either associated with the (mixee) page
+                 * or the underlying ActionExecutionPublishingEntity as show-cased via a nested WrapperFactory call*/
+                .filter(execEntry->
+                    execEntry.getTargetLogicalTypeName().equals("demo.ActionExecutionPublishingPage")
+                        || execEntry.getTargetLogicalTypeName().equals("demo.ActionExecutionPublishingEntity"))
+                .collect(Collectors.toList());
     }
 
     @Inject ExecutionLogEntryRepository<? extends ExecutionLogEntry> executionLogEntryRepository; // <.>

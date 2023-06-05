@@ -23,6 +23,7 @@ import java.util.List;
 import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
@@ -30,7 +31,10 @@ import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import lombok.RequiredArgsConstructor;
 
 //tag::class[]
-@Action(executionPublishing = Publishing.ENABLED)                                                             // <.>
+@Action(executionPublishing = Publishing.DISABLED)                                              // <.>
+@ActionLayout(
+    describedAs = "This action does NOT have execution publishing enabled, but wraps an action that does"
+)
 @RequiredArgsConstructor
 public class ActionExecutionPublishingPage_changeNameWrapped {
 
@@ -39,9 +43,12 @@ public class ActionExecutionPublishingPage_changeNameWrapped {
     @MemberSupport public ActionExecutionPublishingPage act(
             final ActionExecutionPublishingEntity entity,
             final String newName) {
-        wrapperFactory.wrapMixin(ActionExecutionPublishingEntity_changeNamePublished.class, entity).act(newName); // <.>
+        wrapperFactory.wrapMixin(                                                               // <.>
+                ActionExecutionPublishingEntity_changeNamePublished.class, entity).act(newName);
         return page;
     }
+    // ...
+//end::class[]
 
     public List<? extends ActionExecutionPublishingEntity> choices0Act() {
         return repository.all();
@@ -51,6 +58,7 @@ public class ActionExecutionPublishingPage_changeNameWrapped {
     }
 
     @Inject ActionExecutionPublishingEntityRepository repository;
+//tag::class[]
     @Inject WrapperFactory wrapperFactory;
 }
 //end::class[]

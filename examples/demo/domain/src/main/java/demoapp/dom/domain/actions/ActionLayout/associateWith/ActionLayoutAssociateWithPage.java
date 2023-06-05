@@ -32,11 +32,13 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
@@ -44,9 +46,11 @@ import demoapp.dom.domain.actions.ActionLayout.associateWith.child.ActionLayoutA
 
 @Named("demo.ActionLayoutAssociateWithPage")
 @DomainObject(nature=Nature.VIEW_MODEL)
+@DomainObjectLayout(cssClassFa="fa-solid fa-arrows-left-right")
 @XmlRootElement(name = "root")
 @XmlType()
 @XmlAccessorType(XmlAccessType.FIELD)
+@NoArgsConstructor
 //tag::class[]
 // ...
 public class ActionLayoutAssociateWithPage
@@ -92,8 +96,11 @@ public class ActionLayoutAssociateWithPage
             sequence = "1"              // <.>
     )
     public Object addChild(final String newValue) {
+        // ...
+//end::associate-with-collection[]
         getChildren().add(new ActionLayoutAssociateWithChildVm(newValue));
         return this;
+//tag::associate-with-collection[]
     }
 
     @Action
@@ -102,11 +109,14 @@ public class ActionLayoutAssociateWithPage
             sequence = "2"              // <2>
     )
     public Object removeChild(final ActionLayoutAssociateWithChildVm child) {
+        // ...
+//end::associate-with-collection[]
         getChildren().removeIf(x -> x.getValue().equals(child.getValue()));
         return this;
     }
     public List<ActionLayoutAssociateWithChildVm> choices0RemoveChild() {
         return getChildren();
+//tag::associate-with-collection[]
     }
 //end::associate-with-collection[]
 

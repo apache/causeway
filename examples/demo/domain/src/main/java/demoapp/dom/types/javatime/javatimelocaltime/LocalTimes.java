@@ -47,7 +47,7 @@ import demoapp.dom.types.Samples;
 import demoapp.dom.types.javatime.javatimelocaltime.persistence.LocalTimeEntity;
 import demoapp.dom.types.javatime.javatimelocaltime.vm.LocalTimeVm;
 
-@XmlRootElement(name = "Demo")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.LocalTimes")

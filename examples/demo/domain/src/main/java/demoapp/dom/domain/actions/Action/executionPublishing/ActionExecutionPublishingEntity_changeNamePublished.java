@@ -19,8 +19,6 @@
  */
 package demoapp.dom.domain.actions.Action.executionPublishing;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Publishing;
@@ -39,12 +37,13 @@ public class ActionExecutionPublishingEntity_changeNamePublished {
         entity.setName(newName);
         return entity;
     }
+    // ...
+//end::class[]
 
     public String default0Act() {
         return entity.getName();
     }
 
-    @Inject
-    ActionExecutionPublishingEntityRepository repository;
+//tag::class[]
 }
 //end::class[]

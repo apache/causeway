@@ -14,6 +14,8 @@ This semantic applies only to strings.
 This page has an `emailAddress` property that can be edited directly, and also updated using an associated action.
 Both the property and the action's parameter are annotated with the `regexPattern`, to ensure that the entered value meets a regex representing (a simplified definition of) an email address.
 
+In terms of code:
+
 * To edit the property directly:
 +
 [source,java,indent=0]
@@ -34,6 +36,4 @@ These flags are as defined by link:https://docs.oracle.com/en/java/javase/11/doc
 include::PropertyRegexPatternPage_updateEmailAddress.java[tags=annotation]
 ----
 <.> explicitly specifies that the property must match the regex pattern
-
-The annotation could also be applied to a mixin, but would have little effect because mixin properties are always read-only.
 

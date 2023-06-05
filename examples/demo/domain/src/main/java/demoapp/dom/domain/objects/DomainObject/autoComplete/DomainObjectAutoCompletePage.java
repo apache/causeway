@@ -25,17 +25,21 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
+import lombok.NoArgsConstructor;
+
+@Named("demo.DomainObjectAutoCompleteVm")
+@DomainObject(nature = Nature.VIEW_MODEL)
+@DomainObjectLayout(cssClassFa = "fa-question-circle")
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.DomainObjectAutoCompleteVm")
-@DomainObject(
-        nature = Nature.VIEW_MODEL)
+@NoArgsConstructor
 public class DomainObjectAutoCompletePage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {

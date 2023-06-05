@@ -36,18 +36,24 @@ import lombok.val;
 )
 @RequiredArgsConstructor
 public class ValueSemanticsDateRenderAdjustDaysPage_downloadAsXml {
+    // ...
+//end::class[]
 
     private final ValueSemanticsDateRenderAdjustDaysPage page;
 
+//tag::class[]
     @MemberSupport public Clob act(final String fileName) {
         val xml = jaxbService.toXml(page);
         return Clob.of(fileName, NamedWithMimeType.CommonMimeType.XML, xml);
     }
+    // ...
+//end::class[]
 
     @MemberSupport public String default0Act() {
         return "ValueSemantics.dateRenderAdjustDaysPage.xml";
     }
 
+//tag::class[]
     @Inject JaxbService jaxbService;
 }
 //end::class[]

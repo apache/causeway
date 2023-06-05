@@ -5,7 +5,6 @@ When a collection of entities are rendered by the viewer, the table will by defa
 Sometimes though the columns to be shown will depend upon the context in which the entity is being interacted.
 One common approach is to define a view model as a projection of the entity, and return a collection of that view model instead.
 However, if the user wants to access the entity they must first navigate to the view model, and from their navigate to the backing entity instance that it wraps.
-
 The purpose of the link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/Property.html#projecting[@Property#projecting] attribute is to eliminate this extra hop.
 
 The idea is that the `projecting` attribute is placed on the property of the view model that references the backing entity.
@@ -14,33 +13,35 @@ From the end-user's perspectice, they aren't aware that a view model is in use a
 
 == How this demo works
 
-This page contains a collection of view models, and a reference to a single view model.
+This page contains a property of type view model, and also a collection whose element type is a view model.
 The view model in turn has a backing entity.
 The diagram below illustrates this:
 
 // see diag.adoc
-image::/demoapp/dom/annotDomain/Property/projecting/uml-class-diag.png[]
+image::/demoapp/dom/annotDomain/Property/projecting/uml-class-diag.png[width=600px]
 
+If you click on the icon for either the property or the children, you should be navigated to the entity directly.
 
-In code, we see that the `PropertyPublishingPage` has:
+In terms of code:
 
-* a property referencing a single child view model:
+* the `PropertyPublishingPage` has:
+
+** a property referencing a single child view model:
 +
 [source,java,indent=0]
 ----
 include::PropertyProjectingPage.java[tags=property]
 ----
 
-* a collection of child view model objects:
+** a collection of child view model objects:
 +
 [source,java,indent=0]
 ----
 include::PropertyProjectingPage.java[tags=children]
 ----
 
-
-Meanwhile the property from `PropertyPublishingChildVm` to `PropertyPublishingChildEntity` is annotated as a "projecting" property:
-
+* Meanwhile the property from `PropertyPublishingChildVm` to `PropertyPublishingChildEntity` is annotated as a "projecting" property:
++
 [source,java,indent=0]
 .PropertyProjectingChildVm.java
 ----
@@ -50,11 +51,10 @@ include::PropertyProjectingChildVm.java[tags=projecting]
 <.> it is _not_ necessary for the property to be visible.
 Indeed, it probably should not be visible as its presence might confuse the end-user who is interacting with the view model "as if" it is the entity.
 
-Any link to the view model (either the property or the collection) instead navigates the end-user to the backing entity.
 
 [TIP]
 ====
-As it isn't possible to access the projecting view model at all, there's little need to define a `layout.xml` file for the view model.
+As it isn't possible to access the projecting view model at all, there's no need to define a `layout.xml` file for the view model.
 ====
 
 

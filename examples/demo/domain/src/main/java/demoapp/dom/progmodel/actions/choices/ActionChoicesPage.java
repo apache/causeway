@@ -32,6 +32,7 @@ import jakarta.xml.bind.annotation.XmlType;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.applib.annotation.Nature;
@@ -47,11 +48,18 @@ import lombok.Getter;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.progmodel.actions.TvCharacter;
 
-@XmlRootElement(name = "Demo")
+import lombok.NoArgsConstructor;
+
+@Named("demo.ActionChoices")
+@DomainObject(
+        nature=Nature.VIEW_MODEL, 
+        editing=Editing.ENABLED
+)
+@DomainObjectLayout(cssClassFa="fa-list-ul")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.ActionChoices")
-@DomainObject(nature=Nature.VIEW_MODEL, editing=Editing.ENABLED)
+@NoArgsConstructor
 public class ActionChoicesPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {

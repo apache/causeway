@@ -352,7 +352,7 @@ tr.odd.custom2 > td,
 .navbar-nav.primary ul.dropdown-menu,
 .navbar-nav.secondary ul.dropdown-menu,
 .navbar-nav.tertiary ul.dropdown-menu {
-    max-height: 800px;
+    max-height: 840px;
 }
 
 div.sect1 > h2 {

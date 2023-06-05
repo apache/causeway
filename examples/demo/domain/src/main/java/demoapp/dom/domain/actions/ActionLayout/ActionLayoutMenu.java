@@ -49,13 +49,19 @@ import demoapp.dom.domain.actions.ActionLayout.sequence.ActionLayoutSequencePage
 @Named("demo.ActionLayoutMenu")
 @jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
+//tag::menu-item-described-as[]
 public class ActionLayoutMenu {
+    //...
+
+//end::menu-item-described-as[]
 
     final NameSamples samples;
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-solid fa-arrows-left-right",
-        describedAs = "Associate an action with a property or collection, specifying its id")
+    @ActionLayout(
+            cssClassFa="fa-solid fa-arrows-left-right",
+            describedAs = "Associate an action with a property or collection, specifying its id"
+    )
     public ActionLayoutAssociateWithPage associateWith(){
         val page = new ActionLayoutAssociateWithPage();
         samples.stream()
@@ -65,76 +71,97 @@ public class ActionLayoutMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-pen-nib",
-        describedAs = "CSS class to wrap the UI component representing this action")
+    @ActionLayout(
+            cssClassFa="fa-pen-nib",
+            describedAs = "CSS class to wrap the UI component representing this action"
+    )
     public ActionLayoutCssClassPage cssClass(){
         return new ActionLayoutCssClassPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-font-awesome-flag",
-        describedAs = "Font awesome icon to represent action")
+    @ActionLayout(
+            cssClassFa="fa-font-awesome-flag",
+            describedAs = "Font awesome icon to represent action"
+    )
     public ActionLayoutCssClassFaPage cssClassFa(){
         return new ActionLayoutCssClassFaPage();
     }
 
 //tag::menu-item-described-as[]
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-comment",
-        describedAs = "Description of the action, shown as a tooltip")
+    @ActionLayout(
+        cssClassFa="fa-comment",
+        describedAs = "Description of the action, shown as a tooltip"
+    )
     public ActionLayoutDescribedAsPage describedAs(){
         return new ActionLayoutDescribedAsPage();
     }
 //end::menu-item-described-as[]
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-solid fa-vector-square",
-        //TODO[CAUSEWAY-3310] missing description - need to double check how this behaves or should behave
-        describedAs = "todo - how does this behave?")
+    @ActionLayout(
+            cssClassFa="fa-solid fa-vector-square",
+            describedAs = "Associates an action with a fieldset"
+    )
     public ActionLayoutFieldSetPage fieldSet(){
         return new ActionLayoutFieldSetPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-glasses",
-        describedAs = "Visibility of the action in different contexts")
+    @ActionLayout(
+            cssClassFa="fa-glasses",
+            describedAs = "Visibility of the action in different contexts"
+    )
     public ActionLayoutHiddenPage hidden(){
         return new ActionLayoutHiddenPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-signature",
-        describedAs = "Custom text for the action's label")
+    @ActionLayout(
+            cssClassFa="fa-signature",
+            describedAs = "Custom text for the action's label"
+    )
     public ActionLayoutNamedPage named(){
         return new ActionLayoutNamedPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-map-pin",
-        describedAs = "Position of action buttons")
+    @ActionLayout(
+            cssClassFa="fa-map-pin",
+            describedAs = "Position of action buttons"
+    )
     public ActionLayoutPositionPage position(){
         return new ActionLayoutPositionPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-question-circle",
-        describedAs = "Location and style of action's prompt dialog")
+    @ActionLayout(
+            cssClassFa="fa-question-circle",
+            describedAs = "Location and style of action's prompt dialog"
+    )
     public ActionLayoutPromptStylePage promptStyle(){
         return new ActionLayoutPromptStylePage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-random",
-        describedAs = "Whether to redraw page if action returns same object")
+    @ActionLayout(
+            cssClassFa="fa-random",
+            describedAs = "Whether to redraw page if action returns same object"
+    )
     public ActionLayoutRedirectPolicyPage redirectPolicy(){
         return new ActionLayoutRedirectPolicyPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-sharp fa-solid fa-sort",
-        describedAs = "Order an action relative to other members in the same (layout) group.")
+    @ActionLayout(
+            cssClassFa="fa-sharp fa-solid fa-sort",
+            describedAs = "Order an action relative to other members in the same (layout) group."
+    )
     public ActionLayoutSequencePage sequence(){
         return new ActionLayoutSequencePage();
     }
 
+//tag::menu-item-described-as[]
 }
+//end::menu-item-described-as[]

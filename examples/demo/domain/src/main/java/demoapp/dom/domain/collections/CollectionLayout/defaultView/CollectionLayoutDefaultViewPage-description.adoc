@@ -5,24 +5,23 @@ The `defaultView` attribute is used to specify how each collection should be ini
 
 There are two built-in views:
 
-* "table", which shows all collection in a table view (an "expanded" view, if you like), and
-* "hidden", which shows only the name of the collection (in a "collapsed view)"
+* *table* - which shows all collection in a table view (an "expanded" view, if you like), and
+* *hidden* - which shows only the name of the collection (in a "collapsed view)"
 
 One reason to hide collections is if they are seldom used.
 Another is to improve the load speed of the page by reducing the amount of data to be retrieved.
 
 Extensions can provide alternative views:
 
-* "excel" (download as Excel spreadsheet)
-+
+* *excel* - meaning download as Excel spreadsheet.
 This demo app _does_ include this extension.
-* "calendar".
-+
-This requires that the element type implements a certain interface to expose the appropriate date
+
+* *calendar* - this requires that the element type implements a certain interface to expose the appropriate date.
+This demo app does NOT currently include this extension.
 
 //* "map".
 
-Every view is identified by a simple string, all of which must be unique.
+Every view type is identified by a simple string, which must be unique from other view types.
 
 The `defaultView` attribute can be specified using either the link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annotation/CollectionLayout.html#defaultView[@CollectionLayout#defaultView] annotation, or by using the link:https://causeway.apache.org/userguide/2.0.0-RC1/fun/ui.html#by-example[.layout.xml] layout file.
 
@@ -58,7 +57,6 @@ include::CollectionLayoutDefaultViewPage.java[tags=more-children]
 ----
 <cpt:collection id="yetMoreChildren" defaultView="hidden"/>
 ----
-
-
++
 One advantage of the layout file over the annotation is that the layout file is dynamic: it can be modified and the changes reloaded in a running application.
 

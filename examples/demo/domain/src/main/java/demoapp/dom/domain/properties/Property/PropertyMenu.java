@@ -66,31 +66,46 @@ public class PropertyMenu {
     final Samples<String> stringSamples;
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-terminal", describedAs = "Action invocation intentions as XML")
+    @ActionLayout(
+            cssClassFa="fa-terminal",
+            describedAs = "Action invocation intentions as XML"
+    )
     public PropertyCommandPublishingPage commandPublishing(){
         return new PropertyCommandPublishingPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-asterisk", describedAs = "Class of the domain event emitted when interacting with the property")
+    @ActionLayout(
+            cssClassFa="fa-asterisk",
+            describedAs = "Class of the domain event emitted when interacting with the property"
+    )
     public PropertyDomainEventPage domainEvent(){
         return new PropertyDomainEventPage("change me");
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-pencil-alt", describedAs = "Editable fields")
+    @ActionLayout(
+            cssClassFa="fa-pencil-alt",
+            describedAs = "Editable fields"
+    )
     public PropertyEditingPage editing(){
         return new PropertyEditingPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-book", describedAs = "Property changed events as XML")
+    @ActionLayout(
+            cssClassFa="fa-book",
+            describedAs = "Property changed events as XML"
+    )
     public PropertyExecutionPublishingPage executionPublishing(){
         return new PropertyExecutionPublishingPage();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-file-upload", describedAs = "Length of text fields")
+    @ActionLayout(
+            cssClassFa="fa-file-upload",
+            describedAs = "Length of text fields"
+    )
     public PropertyFileAcceptPage fileAccept(){
         val page = new PropertyFileAcceptPage();
         setSampleBlob(".pdf", page::setPdfProperty);
@@ -99,7 +114,10 @@ public class PropertyMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-ruler-horizontal", describedAs = "Length of text fields")
+    @ActionLayout(
+            cssClassFa="fa-ruler-horizontal",
+            describedAs = "Length of text fields"
+    )
     public PropertyMaxLengthPage maxLength(){
         val vm = new PropertyMaxLengthPage();
         vm.setName(stringSamples.single());
@@ -107,7 +125,10 @@ public class PropertyMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-star-half-alt", describedAs = "Regular expressions, such as email")
+    @ActionLayout(
+            cssClassFa="fa-star-half-alt",
+            describedAs = "Regular expressions, such as email"
+    )
     public PropertyMustSatisfyPage mustSatisfy(){
         val vm = new PropertyMustSatisfyPage();
         vm.setCustomerAge(18);
@@ -125,7 +146,10 @@ public class PropertyMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-external-link-square-alt", describedAs = "Regular expressions, such as email")
+    @ActionLayout(
+            cssClassFa="fa-external-link-square-alt",
+            describedAs = "Regular expressions, such as email"
+    )
     public PropertyProjectingPage projecting(){
         val vm = new PropertyProjectingPage();
 
@@ -138,7 +162,10 @@ public class PropertyMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-equals", describedAs = "Regular expressions, such as email")
+    @ActionLayout(
+            cssClassFa="fa-equals",
+            describedAs = "Regular expressions, such as email"
+    )
     public PropertyRegexPatternPage regexPattern(){
         val page = new PropertyRegexPatternPage();
         page.setEmailAddress("joe@bloggs.com");
@@ -146,7 +173,10 @@ public class PropertyMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-camera", describedAs = "Snapshot inclusion/exclusion")
+    @ActionLayout(
+            cssClassFa="fa-camera",
+            describedAs = "Snapshot inclusion/exclusion"
+    )
     public PropertySnapshotPage snapshot(){
         return new PropertySnapshotPage("Fred", "Bloggs", "K", "These are some notes");
     }

@@ -18,6 +18,7 @@
  */
 package demoapp.dom.domain.collections.Collection;
 
+import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
@@ -37,18 +38,19 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Named("demo.CollectionMenu")
-@DomainService(
-        nature=NatureOfService.VIEW
-)
-@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
+@DomainService(nature=NatureOfService.VIEW)
+@Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 //@Log4j2
-public class CollectionMenu {
+class CollectionMenu {
 
     final FactoryService factoryService;
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-asterisk", describedAs = "Class of the domain event emitted when interacting with the collection")
+    @ActionLayout(
+            cssClassFa="fa-asterisk",
+            describedAs = "Class of the domain event emitted when interacting with the collection"
+    )
     public CollectionDomainEventPage domainEvent(){
         val page = new CollectionDomainEventPage();
         samples.stream()
@@ -59,7 +61,10 @@ public class CollectionMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-shapes", describedAs = "Element type of collections")
+    @ActionLayout(
+            cssClassFa="fa-shapes",
+            describedAs = "Element type of collections"
+    )
     public CollectionTypeOfPage typeOf(){
         val page = new CollectionTypeOfPage();
         samples.stream()

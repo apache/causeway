@@ -46,7 +46,7 @@ import demoapp.dom.types.Samples;
 import demoapp.dom.types.javanet.urls.persistence.JavaNetUrlEntity;
 import demoapp.dom.types.javanet.urls.vm.JavaNetUrlVm;
 
-@XmlRootElement(name = "Demo")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.JavaNetUrls")

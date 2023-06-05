@@ -30,6 +30,7 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Property;
@@ -40,13 +41,16 @@ import org.apache.causeway.extensions.sse.applib.service.SseService.ExecutionBeh
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@XmlRootElement(name = "Demo")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.AsyncAction")
 @DomainObject(nature=Nature.VIEW_MODEL, editing=Editing.DISABLED)
+@DomainObjectLayout(cssClassFa="fa-bolt")
+@XmlRootElement(name = "root")
+@XmlType
+@XmlAccessorType(XmlAccessType.FIELD)
+@NoArgsConstructor
 public class SseDemoPage implements HasAsciiDocDescription {
 
     public String title() { return "Server-side events"; }

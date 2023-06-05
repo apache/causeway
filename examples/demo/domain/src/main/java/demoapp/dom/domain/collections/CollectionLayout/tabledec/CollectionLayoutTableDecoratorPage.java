@@ -32,11 +32,13 @@ import jakarta.xml.bind.annotation.XmlType;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.TableDecorator;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
@@ -45,9 +47,11 @@ import demoapp.dom.domain.collections.CollectionLayout.tabledec.child.Collection
 //tag::class[]
 @Named("demo.CollectionLayoutTableDecoratorPage")
 @DomainObject(nature=Nature.VIEW_MODEL)
+@DomainObjectLayout(cssClassFa="fa-solid fa-table-columns")
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@NoArgsConstructor
 public class CollectionLayoutTableDecoratorPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
@@ -57,7 +61,7 @@ public class CollectionLayoutTableDecoratorPage implements HasAsciiDocDescriptio
 //tag::children[]
     @Collection()
     @CollectionLayout(
-            tableDecorator = TableDecorator.DatatablesNet.class     // <.>
+        tableDecorator = TableDecorator.DatatablesNet.class     // <.>
     )
     @XmlElementWrapper(name = "children")
     @XmlElement(name = "child")

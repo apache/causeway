@@ -47,7 +47,7 @@ import demoapp.dom.types.Samples;
 import demoapp.dom.types.causewayval.vegas.persistence.CausewayVegaEntity;
 import demoapp.dom.types.causewayval.vegas.vm.CausewayVegaVm;
 
-@XmlRootElement(name = "Demo")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.CausewayVegas")

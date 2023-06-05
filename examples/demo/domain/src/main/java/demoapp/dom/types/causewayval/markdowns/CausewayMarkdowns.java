@@ -47,7 +47,7 @@ import demoapp.dom.types.Samples;
 import demoapp.dom.types.causewayval.markdowns.persistence.CausewayMarkdownEntity;
 import demoapp.dom.types.causewayval.markdowns.vm.CausewayMarkdownVm;
 
-@XmlRootElement(name = "Demo")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.CausewayMarkdowns")

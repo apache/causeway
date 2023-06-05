@@ -28,6 +28,7 @@ import jakarta.xml.bind.annotation.XmlType;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
@@ -36,14 +37,16 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@DomainObject(
-        nature=Nature.VIEW_MODEL)
-@Named("demo.ActionLayoutNamedVm")
+@Named("demo.ActionLayoutNamedPage")
+@DomainObject(nature=Nature.VIEW_MODEL)
+@DomainObjectLayout(cssClassFa="fa-signature")
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@NoArgsConstructor
 //tag::class[]
 //...
 public class ActionLayoutNamedPage
@@ -71,26 +74,32 @@ public class ActionLayoutNamedPage
 //tag::reset[]
     @Action(semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
     @ActionLayout(
-            named = "default",                                  // <.>
-            describedAs = "Resets the name back to a default"
+        named = "default",                                  // <.>
+        describedAs = "Resets the name back to a default"
     )
     public Object reset() {
+        // ...
+//end::reset[]
         setName("Fred");
         return this;
+//tag::reset[]
     }
 //end::reset[]
 
 //tag::updateNotes[]
     @Action(semantics = SemanticsOf.IDEMPOTENT)
     @ActionLayout(
-            named = "Updates (changes) the notes property"      // <.>
+        named = "Updates (changes) the notes property"      // <.>
     )
     public Object updateNotes(String newNotes) {
+        // ...
+//end::updateNotes[]
         setNotes(newNotes);
         return this;
     }
     public String default0UpdateNotes() {
         return getNotes();
+//tag::updateNotes[]
     }
 //end::updateNotes[]
 

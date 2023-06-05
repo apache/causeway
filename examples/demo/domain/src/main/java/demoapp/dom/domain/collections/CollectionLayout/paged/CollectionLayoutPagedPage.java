@@ -32,20 +32,24 @@ import jakarta.xml.bind.annotation.XmlType;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.domain.collections.CollectionLayout.paged.child.CollectionLayoutPagedChildVm;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 //tag::class[]
 @Named("demo.CollectionLayoutPagedPage")
 @DomainObject(nature=Nature.VIEW_MODEL)
+@DomainObjectLayout(cssClassFa="fa-fast-forward")
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
+@NoArgsConstructor
 public class CollectionLayoutPagedPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
@@ -55,7 +59,7 @@ public class CollectionLayoutPagedPage implements HasAsciiDocDescription {
 //tag::children[]
     @Collection()
     @CollectionLayout(
-            paged = 5               // <.>
+        paged = 5                   // <.>
     )
     @XmlElementWrapper(name = "children")
     @XmlElement(name = "child")

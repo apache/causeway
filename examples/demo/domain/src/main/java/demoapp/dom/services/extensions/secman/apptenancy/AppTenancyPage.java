@@ -31,6 +31,7 @@ import jakarta.xml.bind.annotation.XmlType;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
@@ -42,13 +43,16 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.services.extensions.secman.apptenancy.persistence.TenantedEntity;
 
+import lombok.NoArgsConstructor;
+
 //tag::class[]
+@Named("demo.AppTenancyPage")
+@DomainObject(nature=Nature.VIEW_MODEL)
+@DomainObjectLayout(cssClassFa="fa-home")
 @XmlRootElement(name = "root")
 @XmlType()
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.SecManVm")
-@DomainObject(
-        nature=Nature.VIEW_MODEL)
+@NoArgsConstructor
 public class AppTenancyPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {

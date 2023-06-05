@@ -27,22 +27,26 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Title;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
+@Named("demo.WhereInTheWorldPage")
+@DomainObject(nature=Nature.VIEW_MODEL)
+@DomainObjectLayout(cssClassFa="fa-globe")
 @XmlRootElement(name = "demo.WhereInTheWorldPage")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.WhereInTheWorldPage")
-@DomainObject(nature=Nature.VIEW_MODEL)
+@NoArgsConstructor
 public class WhereInTheWorldPage
-implements HasAsciiDocDescription, Serializable {       // <.>
+        implements HasAsciiDocDescription, Serializable {       // <.>
     private static final long serialVersionUID = 1L;
     @Title
     @Getter @Setter private String address;

@@ -28,9 +28,9 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 //tag::class[]
 @Action(semantics = SemanticsOf.IDEMPOTENT)
 @ActionLayout(
-        associateWith = "name",
-        sequence = "1.1",                                   // <.>
-        position = ActionLayout.Position.PANEL_DROPDOWN
+    associateWith = "name",
+    sequence = "1.1",                                   // <.>
+    position = ActionLayout.Position.PANEL_DROPDOWN
 )
 @RequiredArgsConstructor
 public class ActionLayoutSequencePage_updateNamePositionedPanelDropDownSeqX {

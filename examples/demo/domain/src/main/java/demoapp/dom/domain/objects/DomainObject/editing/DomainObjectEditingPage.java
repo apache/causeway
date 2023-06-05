@@ -25,18 +25,22 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
+import lombok.NoArgsConstructor;
+
 //tag::class[]
+@Named("demo.DomainObjectEditingPage")
+@DomainObject(editing = Editing.ENABLED)
+@DomainObjectLayout(cssClassFa="fa-pencil-alt")
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("demo.DomainObjectEditingPage")
-@DomainObject(
-        editing = Editing.ENABLED)
+@NoArgsConstructor
 public class DomainObjectEditingPage implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {

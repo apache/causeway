@@ -11,7 +11,6 @@ Note that link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/annot
 [CAUTION]
 ====
 The Wicket viewer does not use this hint, instead preferring to render all textfields as the same size irrespective.
-
 In other words, providing this hint has no impact on the UI (as rendered by the Wicket viewer, at least).
 ====
 
@@ -39,22 +38,13 @@ include::PropertyLayoutTypicalLengthPage_updateName.java[tags=annotation]
 ----
 <.> explicitly specifies the typical length
 
-* for the `notes` property:
-
-** the property has no annotations:
-+
-[source,java,indent=0]
-----
-include::PropertyLayoutTypicalLengthPage.java[tags=layout-file]
-----
-<.> `typicalLength` hint is _not_ present.
-
-** instead, the attribute is specified in the layout file:
+* for the `notes` property, the attribute is specified in the layout file:
 +
 [source,xml,indent=0,tabsize=4]
 ----
 <cpt:property id="notes" typicalLength="10"/>
 ----
 
++
 One advantage of the layout file over the annotation is that the layout file is dynamic: it can be modified and the changes reloaded in a running application.
 

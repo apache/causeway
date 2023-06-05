@@ -23,6 +23,7 @@ import java.util.List;
 import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Publishing;
 
@@ -30,6 +31,9 @@ import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(commandPublishing = Publishing.DISABLED)                    // <.>
+@ActionLayout(
+    describedAs = "This action does NOT have command publishing enabled"
+)
 @RequiredArgsConstructor
 public class ActionCommandPublishingPage_changeNameNotPublished {
 
@@ -41,6 +45,8 @@ public class ActionCommandPublishingPage_changeNameNotPublished {
         entity.setName(newName);
         return page;
     }
+    // ...
+//end::class[]
 
     public List<? extends ActionCommandPublishingEntity> choices0Act() {
         return repository.all();
@@ -50,5 +56,6 @@ public class ActionCommandPublishingPage_changeNameNotPublished {
     }
 
     @Inject ActionCommandPublishingEntityRepository repository;
+//tag::class[]
 }
 //end::class[]

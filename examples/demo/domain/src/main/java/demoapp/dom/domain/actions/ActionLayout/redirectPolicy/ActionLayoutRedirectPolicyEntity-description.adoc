@@ -8,6 +8,11 @@ This entity has a property holding an immutable PDF blob, and which is annotated
 There are also two mixin actions that are used to increment its counter, both of which return the same entity.
 One of these actions uses `@ActionLayout#redirectPolicy` to only update the page and so not redraw the PDF.
 
+[WARNING]
+====
+This feature is currently *not* supported by the _Wicket Viewer_; tracked by link:https://issues.apache.org/jira/browse/CAUSEWAY-1659[CAUSEWAY-1659]
+====
+
 In terms of code:
 
 * PDF blob

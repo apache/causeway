@@ -18,21 +18,24 @@
  */
 package demoapp.dom.progmodel.customvaluetypes.compositevalues;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-
-import lombok.Getter;
-import lombok.Setter;
-
 import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 //tag::class[]
 @Named("demo.CompositeValuesPage")
 @DomainObject(nature=Nature.VIEW_MODEL)
+@DomainObjectLayout(cssClassFa="fa-cubes")
+@NoArgsConstructor
 public class CompositeValueTypePage implements HasAsciiDocDescription {
     // ...
 //end::class[]

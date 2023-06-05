@@ -19,6 +19,8 @@ The three properties are annotated with different optionalities, and the action 
 
 When editing/modifying, you should be able to leave the two properties that are optional as blank, but the mandatory property will require a value to be set.
 
+In terms of code:
+
 * the `optionalProperty` is annotated using `@Property#optionality()`:
 +
 [source,java,indent=0]

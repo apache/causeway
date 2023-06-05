@@ -13,9 +13,10 @@ This attribute applies only to ``Blob``s and ``Clob``s.
 
 This page object has two properties, `pdfProperty` and `txtProperty`.
 The first is a `Blob` which is intended to hold only PDF files, while the second is a `Clob` that is intended to hold just `.txt` files.
-
 Both properties can be edited directly, and can also be updated using an action.
 Either way, the file extension that is acceptable is specified.
+
+In terms of code:
 
 * for the `pdfProperty`:
 

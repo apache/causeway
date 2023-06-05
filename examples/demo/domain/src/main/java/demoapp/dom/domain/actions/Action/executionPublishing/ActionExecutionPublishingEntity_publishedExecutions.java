@@ -17,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ActionExecutionPublishingEntity_publishedExecutions {
 
-    @SuppressWarnings("unused")
     private final ActionExecutionPublishingEntity entity;
 
     @MemberSupport public List<? extends ExecutionLogEntry> coll() {

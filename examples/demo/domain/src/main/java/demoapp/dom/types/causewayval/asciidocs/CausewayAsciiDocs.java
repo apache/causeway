@@ -47,7 +47,7 @@ import demoapp.dom.types.Samples;
 import demoapp.dom.types.causewayval.asciidocs.persistence.CausewayAsciiDocEntity;
 import demoapp.dom.types.causewayval.asciidocs.vm.CausewayAsciiDocVm;
 
-@XmlRootElement(name = "Demo")
+@XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("demo.CausewayAsciiDocs")

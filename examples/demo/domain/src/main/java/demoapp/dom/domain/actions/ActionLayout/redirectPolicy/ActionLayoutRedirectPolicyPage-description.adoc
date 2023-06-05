@@ -22,11 +22,6 @@ The value of the PDF property is immutable and so is annotated with `@PropertyLa
 The entity also has two actions that update a counter, and which both return `this`.
 One of these is annotated with `@ActionLayout#redirectPolicy` to specify that the page should be updated; this should result in the PDF not being unnecessarily redrawn.
 
-[WARNING]
-====
-This feature is currently *not* supported by the _Wicket Viewer_; tracked by link:https://issues.apache.org/jira/browse/CAUSEWAY-1659[CAUSEWAY-1659]
-====
-
 In terms of code:
 
 * PDF blob
