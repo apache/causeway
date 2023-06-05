@@ -22,10 +22,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -37,7 +33,6 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.progmodel.customvaluetypes.embeddedvalues.ComplexNumber;
 import demoapp.dom.progmodel.customvaluetypes.embeddedvalues.NumberConstantEntity;
-
 import lombok.NoArgsConstructor;
 
 //tag::class[]
