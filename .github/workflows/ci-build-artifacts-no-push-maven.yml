@@ -1,4 +1,4 @@
-name: Build, Test (JDK 18)
+name: Build, Test (JDK 20)
 
 on:
   push:
@@ -52,14 +52,12 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Set up JDK 18
+    - name: Set up JDK 20
       if: matrix.language == 'java'
       uses: actions/setup-java@v3
       with:
         distribution: 'zulu'
-        # tried 19 on 2023-02-05 casing org.codehaus.plexus.archiver.ArchiverException:
-        # Could not create modular JAR file. The JDK jar tool exited with 1
-        java-version: 18
+        java-version: 20
 
     - name: Print Maven Version
       if: matrix.language == 'java'
@@ -109,12 +107,13 @@ jobs:
         # -Dmodule-all-except-kroviz ... build all modules except 'kroviz' (eg. when kroviz build fails)
         # -Denforcer.failFast=true ... fail fast on convergence issues (enforcer plugin)
         # -Dmaven.source.skip=true ... no need for the CI build to pull sources
+        # -Dproject.build.outputTimestamp=2023-01-01T00:00:00Z see https://maven.apache.org/guides/mini/guide-reproducible-builds.html
         # -T 1C ... 1 build thread per core
         MVN_ADDITIONAL_OPTS: >-
           -Dmodule-all
-          -Dproject.build.outputTimestamp=1
-          -Dmaven.source.skip=true
           -Denforcer.failFast=true
+          -Dmaven.source.skip=true
+          -Dproject.build.outputTimestamp=2023-01-01T00:00:00Z
           -e
           
     # Autobuild attempts to build any compiled languages  (C/C++, C#, Go, or Java).
