@@ -24,8 +24,10 @@ import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
+import org.apache.causeway.commons.internal.base._Casts;
 
 import lombok.Setter;
+import lombok.SneakyThrows;
 
 /**
  * @since 2.0 {@index}
@@ -57,15 +59,10 @@ public class WorksheetSpec {
                 this.viewModelClass = viewModelClass;
             }
 
-            @Override
+            @Override @SneakyThrows
             public T create() {
-                try {
-                    final T t = viewModelClass.newInstance();
-                    servicesInjector.injectServicesInto(t);
-                    return t;
-                } catch (InstantiationException | IllegalAccessException e) {
-                    throw new RuntimeException(e);
-                }
+                final T t = viewModelClass.getConstructor().newInstance();
+                return servicesInjector.injectServicesInto(t);
             }
 
             @Override
@@ -86,11 +83,11 @@ public class WorksheetSpec {
      * @param sheetName - must be 31 chars or less
      * @param <T>
      */
-    public <T> WorksheetSpec(final Class<T> viewModelClass, String sheetName) {
+    public <T> WorksheetSpec(final Class<T> viewModelClass, final String sheetName) {
         this(viewModelClass, sheetName, Mode.STRICT);
     }
 
-    public <T> WorksheetSpec(final Class<T> viewModelClass, String sheetName, final Mode mode) {
+    public <T> WorksheetSpec(final Class<T> viewModelClass, final String sheetName, final Mode mode) {
         this(new RowFactory.Default<>(viewModelClass), sheetName, mode);
     }
 
@@ -115,7 +112,7 @@ public class WorksheetSpec {
     }
 
     @Programmatic
-    public <T> RowFactory<T> getFactory() { return (RowFactory<T>) factory; }
+    public <T> RowFactory<T> getFactory() { return _Casts.uncheckedCast(factory); }
 
     @Programmatic
     public String getSheetName() {
