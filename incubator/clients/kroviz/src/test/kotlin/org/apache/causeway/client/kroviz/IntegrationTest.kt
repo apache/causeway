@@ -84,6 +84,7 @@ open class IntegrationTest {
         return le
     }
 
+    @OptIn
     fun wait(milliseconds: Long) {
         GlobalScope.launch {
             delay(milliseconds)

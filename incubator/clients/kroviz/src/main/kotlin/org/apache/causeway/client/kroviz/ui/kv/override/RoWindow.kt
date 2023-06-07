@@ -397,24 +397,20 @@ open class RoWindow(
         }
     }
 
-    override fun add(child: Component): SimplePanel {
+    override fun add(child: Component) {
         content.add(child)
-        return this
     }
 
-    override fun addAll(children: List<Component>): SimplePanel {
+    override fun addAll(children: List<Component>) {
         content.addAll(children)
-        return this
     }
 
-    override fun remove(child: Component): SimplePanel {
+    override fun remove(child: Component) {
         content.remove(child)
-        return this
     }
 
-    override fun removeAll(): SimplePanel {
+    override fun removeAll() {
         content.removeAll()
-        return this
     }
 
     override fun getChildren(): List<Component> {

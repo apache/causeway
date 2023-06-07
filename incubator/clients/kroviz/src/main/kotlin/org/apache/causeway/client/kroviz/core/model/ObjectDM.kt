@@ -45,6 +45,8 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
     }
 
     fun hasCollectionModels(): Boolean {
+        console.log("[ODM_hasCollectionModels]")
+        console.log(collectionModelList)
         return collectionModelList.isNotEmpty()
     }
 
@@ -76,7 +78,7 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
     override fun addData(obj: TransferObject) {
         (obj as TObject)
         val exo = Exposer(obj)
-        data = exo.dynamise() as? Exposer
+        data = exo
     }
 
     fun addResult(resultObject: ResultObject) {

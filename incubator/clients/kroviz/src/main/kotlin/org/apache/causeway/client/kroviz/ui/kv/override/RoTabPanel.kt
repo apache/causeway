@@ -283,25 +283,22 @@ open class RoTabPanel(
         }
     }
 
-    override fun add(child: Component): RoTabPanel {
+    override fun add(child: Component) {
         addChild(child)
         refresh()
-        return this
     }
 
-    override fun add(position: Int, child: Component): RoTabPanel {
+    override fun add(position: Int, child: Component) {
         addChild(child, position)
         refresh()
-        return this
     }
 
-    override fun addAll(children: List<Component>): RoTabPanel {
+    override fun addAll(children: List<Component>) {
         children.forEach(::addChild)
         refresh()
-        return this
     }
 
-    override fun remove(child: Component): RoTabPanel {
+    override fun remove(child: Component) {
         if (child is RoTab) {
             removeTab(child)
             refresh()
@@ -311,10 +308,9 @@ open class RoTabPanel(
                 refresh()
             }
         }
-        return this
     }
 
-    override fun removeAt(position: Int): RoTabPanel {
+    override fun removeAt(position: Int) {
         if (position >= 0 && position < tabs.size) {
             val tab = tabs.removeAt(position)
             tab.parent = null
@@ -326,18 +322,15 @@ open class RoTabPanel(
                 activeIndex = activeIndex
             }
         }
-        return this
     }
 
-    override fun removeAll(): RoTabPanel {
+    override fun removeAll() {
         tabs.forEach { removeTab(it) }
-        return this
     }
 
-    override fun disposeAll(): RoTabPanel {
+    override fun disposeAll() {
         tabs.forEach { it.dispose() }
         removeAll()
-        return this
     }
 
     fun findTab(title: String): Int? {

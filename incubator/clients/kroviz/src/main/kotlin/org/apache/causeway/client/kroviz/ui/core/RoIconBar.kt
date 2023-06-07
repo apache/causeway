@@ -20,7 +20,6 @@ package org.apache.causeway.client.kroviz.ui.core
 
 import io.kvision.core.CssSize
 import io.kvision.core.UNIT
-import io.kvision.core.Widget
 import io.kvision.dropdown.DropDown
 import io.kvision.html.Button
 import io.kvision.html.ButtonStyle
@@ -66,13 +65,13 @@ class RoIconBar : SimplePanel() {
         if (panel.width?.first == 0) show() else hide()
     }
 
-    override fun hide(): Widget {
+    override fun hide(): Unit {
         panel.width = CssSize(0, UNIT.px)
         panel.removeAll()
-        return super.hide()
+        super.hide()
     }
 
-    override fun show(): Widget {
+    override fun show(): Unit {
         panel.width = CssSize(40, UNIT.px)
         icons.forEach { panel.add(it) }
         return super.show()
@@ -105,7 +104,7 @@ class RoIconBar : SimplePanel() {
             (obj == null) -> null
             is TObject -> {
                 val exp = Exposer(obj)
-                val ed = exp.dynamise()
+                val ed = exp.getWithDelegateProperties()
                 val hasIconName = ed.hasOwnProperty("iconName") as Boolean
                 val iconName = if (hasIconName) (ed["iconName"] as String) else ""
 

@@ -48,7 +48,7 @@ class ExposerTest {
         val jsonStr = CFG_1.str
         val to = TObjectHandler().parse(jsonStr) as TObject
 
-        val exposer = Exposer(to).dynamise()
+        val exposer = Exposer(to).getWithDelegateProperties()
 
         val actKey = exposer["key"]
         assertEquals("causeway.appManifest", actKey)
@@ -73,7 +73,7 @@ class ExposerTest {
         val actualDnvers = exposer.get("datanucleusVersionTimestamp") as Value
         assertEquals(1514897074953L, actualDnvers.content as Long)
 
-        val dynEx = exposer.dynamise()
+        val dynEx = exposer.getWithDelegateProperties()
         val actKey = dynEx["name"]
         assertEquals("Foo", actKey)
 

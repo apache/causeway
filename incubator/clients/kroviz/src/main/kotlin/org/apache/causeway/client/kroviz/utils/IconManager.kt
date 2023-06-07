@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.client.kroviz.utils
 
+import org.apache.causeway.client.kroviz.to.TObject
+
 object IconManager {
     private const val PREFIX = "fas fa-"   //TODO far fa- ???
     const val DEFAULT_ICON = PREFIX + "play"
@@ -134,6 +136,14 @@ object IconManager {
             }
         }
         return DEFAULT_ICON
+    }
+
+    fun findFor(tObject: TObject): String {
+        var iconName = find(tObject.title)
+        if (iconName == DEFAULT_ICON) {
+            iconName = find(tObject.domainType)
+        }
+        return iconName
     }
 
     fun findStyleFor(actionName: String): String {

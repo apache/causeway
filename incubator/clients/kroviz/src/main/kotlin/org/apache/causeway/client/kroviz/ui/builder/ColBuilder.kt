@@ -83,36 +83,37 @@ class ColBuilder(
     }
 
     private fun addCollections() {
-        col.collectionList.forEach {
-            buildTableAndWrapInFsPanel(it)
+        console.log("[CB_addCollections]")
+        if (dsp.displayModel.hasCollectionModels()) {
+            col.collectionList.forEach {
+                console.log(it)
+                buildTableAndWrapInFsPanel(it)
+            }
         }
     }
 
     private fun buildTableAndWrapInFsPanel(it: CollectionBs) {
-        val id = it.id
         val objectDM = dsp.displayModel
         try {
-            // objectDM is sometimes null
-            val cdm = objectDM.getCollectionDisplayModelFor(id)!!
+            val cdm = objectDM.getCollectionDisplayModelFor(it.id)!!
             val fsPanel = FieldsetPanel(legend = cdm.getTitle())
-            fsPanel.add(RoTable(cdm))
+            val table = RoTable(cdm)
+            console.log(table)
+            fsPanel.add(table)
             panel.add(fsPanel)
             cdm.isRendered = true
-            console.log("[CB_buildTableAndWrapInFsPanel] succeeded")
         } catch (npe: NullPointerException) {
-            console.log("[CB_buildTableAndWrapInFsPanel] failed with NPE")
-            throw npe
+            return
         }
     }
 
     private fun buildFieldSetPanel(fs: FieldSetBs): SimplePanel {
-        console.log("[CB_buildFieldSetPanel]")
         val fsCpt = FieldSetBuilder().create(fs, tObject, dsp)!!
         val legend = extractLegend(fs)
-        val fsPanel = FieldsetPanel(legend = legend).add(fsCpt)
+        val fsPanel = FieldsetPanel(legend = legend)
+        fsPanel.add(fsCpt)
         val tto = TooltipOptions(title = fs.id)
         fsPanel.enableTooltip(tto)
-//        fsPanel.flexDirection = FlexDirection.ROW
         return fsPanel
     }
 
@@ -150,9 +151,6 @@ class ColBuilder(
         val proportion = col.span.toDouble().div(12)
         val percent = proportion * 100
         val rounded = round(percent)
-        console.log("[CB_assignWidth]")
-        console.log(col.span)
-        console.log(rounded)
         val cssWidth = CssSize(rounded, UNIT.perc)
         panel.flexBasis = cssWidth
         panel.flexGrow = 1

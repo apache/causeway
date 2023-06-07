@@ -174,7 +174,6 @@ object ViewManager {
     }
 
     fun openObjectView(aggregator: SystemAggregator) {
-        console.log("[VM_openObjectView]")
         val dm = aggregator.displayModel
         dm.isRendered = true
         setNormalCursor()

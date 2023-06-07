@@ -134,7 +134,8 @@ class RoMenuBar : SimplePanel() {
 
     private fun buildMenuEntry(label: String, iconName: String, action: dynamic): Link {
         val icon = IconManager.find(iconName)
-        val link = Link(label, icon = icon, className = "dropdown-item").onClick { e ->
+        val link = Link(label, icon = icon, className = "dropdown-item")
+        link.onClick { e ->
             val at = Point(e.pageX.toInt(), e.pageY.toInt())
             ViewManager.position = at
             action()

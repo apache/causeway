@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.client.kroviz.ui.core
 
+import io.kvision.core.Component
+import io.kvision.panel.VPanel
 import io.kvision.tabulator.Align
 import io.kvision.tabulator.ColumnDefinition
 import io.kvision.tabulator.Editor
@@ -25,8 +27,11 @@ import io.kvision.tabulator.Formatter
 import io.kvision.tabulator.js.Tabulator
 import io.kvision.utils.obj
 import org.apache.causeway.client.kroviz.core.model.CollectionDM
-import org.apache.causeway.client.kroviz.core.model.Exposer
+import org.apache.causeway.client.kroviz.core.model.PropertyDetails
+import org.apache.causeway.client.kroviz.to.ValueType
+import org.apache.causeway.client.kroviz.to.Vega5
 import org.apache.causeway.client.kroviz.ui.menu.DynamicMenuBuilder
+import org.apache.causeway.client.kroviz.utils.js.Vega
 
 /**
  * Create ColumnDefinitions for Tabulator tables
@@ -41,11 +46,16 @@ class ColumnFactory {
     }
 
     fun buildColumns(displayCollection: CollectionDM): List<ColumnDefinition<dynamic>> {
-        val columns = mutableListOf<ColumnDefinition<Exposer>>()
-        addColumnForObjectIcon(displayCollection, columns)
-        addColumnsForProperties(displayCollection, columns)
+        val columns = mutableListOf<ColumnDefinition<dynamic>>()
+        columns.add(columnForObjectIcon(displayCollection))
+        columns.addAll(columnsForProperties(displayCollection))
         columns.add(columnForObjectMenu())
         return columns
+    }
+
+    private fun columnForObjectIcon(displayCollection: CollectionDM): ColumnDefinition<dynamic> {
+        exposeIcons(displayCollection)
+        return buildIconColumn()
     }
 
     private fun columnForObjectMenu(): ColumnDefinition<dynamic> {
@@ -65,31 +75,22 @@ class ColumnFactory {
 
     private fun buildObjectMenu(cell: Tabulator.CellComponent): dynamic {
         val row = cell.getRow()
-        val exposer = row.getData() as Exposer
-        val tObject = exposer.delegate
+        val dynamic = row.getData().asDynamic()
+        val tObject = dynamic.delegate
         return DynamicMenuBuilder().buildObjectMenu(tObject)
-    }
-
-    private fun addColumnForObjectIcon(
-        displayCollection: CollectionDM,
-        columns: MutableList<ColumnDefinition<Exposer>>,
-    ) {
-        exposeIcons(displayCollection)
-        val iconColumn = buildIconColumn()
-        columns.add(iconColumn)
     }
 
     private fun exposeIcons(displayCollection: CollectionDM) {
         val model = displayCollection.data
         val icon = displayCollection.icon
-        model.forEach { exposer ->
+        model.forEach { dynamic ->
             if (icon != null) {
-                exposer.setIcon(icon)
+                dynamic.setIcon(icon)
             }
         }
     }
 
-    private fun buildIconColumn(): ColumnDefinition<Exposer> {
+    private fun buildIconColumn(): ColumnDefinition<dynamic> {
         return ColumnDefinition<dynamic>(
             "",
             field = "icon",
@@ -97,13 +98,12 @@ class ColumnFactory {
             formatterParams = obj { width = "16px"; height = "16px" },
             hozAlign = Align.CENTER,
             width = "40",
-            headerSort = false)
+            headerSort = false
+        )
     }
 
-    private fun addColumnsForProperties(
-        collectionModel: CollectionDM,
-        columns: MutableList<ColumnDefinition<Exposer>>,
-    ) {
+    private fun columnsForProperties(collectionModel: CollectionDM): MutableList<ColumnDefinition<dynamic>> {
+        val answer = mutableListOf<ColumnDefinition<dynamic>>()
         val clo = collectionModel.collectionLayout
         val propSpecList = clo.propertyDetailsList
         if (propSpecList.size == 0) {
@@ -112,20 +112,63 @@ class ColumnFactory {
         }
         propSpecList.forEach {
             if (!it.hidden) {
-                var colDef = ColumnDefinition<dynamic>(
-                    title = it.name,
-                    field = it.id,
-                    width = (it.typicalLength * 8).toString(),
-                    headerFilter = Editor.INPUT)
-                if (it.id == "object") {
-                    colDef = buildLink()
-                }
-                columns.add(colDef)
+                val colDef = buildColumnDefinition(it)
+                answer.add(colDef)
             }
+        }
+        return answer
+    }
+
+    private fun buildColumnDefinition(pd: PropertyDetails): ColumnDefinition<dynamic> {
+        return when {
+            pd.id == "object" -> buildLink()
+            pd.type.equals(ValueType.CANVAS.type) -> buildVega(pd)
+            else -> buildDefault(pd)
         }
     }
 
-    private fun buildLink(): ColumnDefinition<Exposer> {
+    private fun buildDefault(it: PropertyDetails): ColumnDefinition<dynamic> {
+        return ColumnDefinition<dynamic>(
+            title = it.name,
+            field = it.id,
+            width = (it.typicalLength * 8).toString(),
+            headerFilter = Editor.INPUT
+        )
+    }
+
+    private fun buildVega(it: PropertyDetails): ColumnDefinition<dynamic> {
+        return ColumnDefinition<dynamic>(
+            title = it.name,
+            field = it.id,
+            width = (it.typicalLength * 8).toString(),
+            headerFilter = Editor.INPUT,
+            formatterComponentFunction = { cellComponent: dynamic, _, data: dynamic ->
+                console.log("[CF_buildVega]")
+                console.log(cellComponent)
+                this.buildDiagramPanel(cellComponent.unsafeCast<Tabulator.CellComponent>())
+            })
+    }
+
+    private fun buildDiagramPanel(cellComponent: Tabulator.CellComponent): Component {
+        console.log("[CF_buildDiagramPanel]")
+        console.log(cellComponent)
+        val panel = VPanel()
+        panel.addAfterInsertHook {
+            val row = cellComponent.getRow()
+            val dynamic = row.getData().asDynamic()
+            val json = dynamic.get("readOnlyProperty") as String
+            val spec = JSON.parse<Vega5>(json)
+            val view = Vega.View(Vega.parse(spec), obj {
+                this.renderer = "canvas"
+                this.container = getElement()
+                this.hover = true
+            })
+            view.runAsync()
+        }
+        return panel
+    }
+
+    private fun buildLink(): ColumnDefinition<dynamic> {
         return ColumnDefinition<dynamic>(
             title = "ResultListResult",
             field = "result",

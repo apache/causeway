@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.client.kroviz.ui.core
 
+import io.kvision.core.Component
 import io.kvision.core.CssSize
 import io.kvision.core.UNIT
 import io.kvision.core.Widget
@@ -47,24 +48,27 @@ class RoDialog(
 ) :
     Displayable, RoWindow(caption = caption, closeButton = true, menu = menu) {
 
-    private val okButton = Button(
-        text = defaultAction,
-        icon = IconManager.find(defaultAction),
-        style = ButtonStyle.SUCCESS
-    )
-        .onClick {
+    private val okButton:Button;
+    private val cancelButton:Button;
+    init {
+        okButton = Button(
+            text = defaultAction,
+            icon = IconManager.find(defaultAction),
+            style = ButtonStyle.SUCCESS
+        )
+        okButton.onClick {
             execute()
         }
 
-    private val cancelButton = Button(
-        "Cancel",
-        "fas fa-times",
-        ButtonStyle.OUTLINEINFO
-    )
-        .onClick {
+        cancelButton = Button(
+            "Cancel",
+            "fas fa-times",
+            ButtonStyle.OUTLINEINFO
+        )
+        cancelButton.onClick {
             close()
         }
-
+    }
     @Deprecated("remove once leaflet/svg is fully operational")
     private val scaleUpButton = Button(
         "",
@@ -118,8 +122,8 @@ class RoDialog(
         }
         buttonBar.add(cancelButton)
         if (items.isNotEmpty() && hasScalableContent()) {
-            buttonBar.add(scaleUpButton)
-            buttonBar.add(scaleDownButton)
+            buttonBar.add(scaleUpButton as Component)
+            buttonBar.add(scaleDownButton as Component)
         }
         return buttonBar
     }
@@ -132,7 +136,7 @@ class RoDialog(
     fun open(at: Point = Point(x = 100, y = 100)): Widget {
         ViewManager.openDialog(this, at)
         super.show()
-        okButton.focus()
+        (okButton as Component).focus()
         return this
     }
 

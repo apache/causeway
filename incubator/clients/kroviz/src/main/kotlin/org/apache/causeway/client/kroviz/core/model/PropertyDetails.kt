@@ -20,6 +20,8 @@ package org.apache.causeway.client.kroviz.core.model
 
 import org.apache.causeway.client.kroviz.to.Member
 import org.apache.causeway.client.kroviz.to.PropertyDescription
+import org.apache.causeway.client.kroviz.to.TypeMapper
+import org.apache.causeway.client.kroviz.to.ValueType
 import org.apache.causeway.client.kroviz.to.bs.PropertyBs
 
 /**
@@ -36,6 +38,7 @@ class PropertyDetails(member: Member) {
     private var isAmendedFromBs = false
     private var isAmendedFromPropertyDescription = false
     var typicalLength: Int = 10
+    var type = TypeMapper.match(member)
 
     fun amendWith(pbs: PropertyBs) {
         name = pbs.named

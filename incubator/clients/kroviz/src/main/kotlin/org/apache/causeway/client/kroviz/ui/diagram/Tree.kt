@@ -23,9 +23,6 @@ class Tree(val root: Node) {
     fun addChildToParent(childUrl: String, parentUrl: String) {
         var p = find(root, parentUrl)
         if (p == null) {
-            console.log("[Tree.addChildToParent] nothing found for parentUrl")
-            console.log(childUrl)
-            console.log(parentUrl)
             p = root
         }
         val c = Node(childUrl, p)

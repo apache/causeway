@@ -24,7 +24,7 @@ import org.apache.causeway.client.kroviz.core.event.ReplayEvent
 import org.apache.causeway.client.kroviz.to.ValueType
 import org.apache.causeway.client.kroviz.ui.core.RoDialog
 import io.kvision.core.StringPair
-import io.kvision.form.select.SimpleSelect
+import io.kvision.form.select.Select
 import org.apache.causeway.client.kroviz.ui.core.FormItem
 import org.apache.causeway.client.kroviz.ui.core.SessionManager
 
@@ -87,7 +87,7 @@ class EventImportDialog : Controller() {
         //iterate over FormItems (0,1) but not Buttons(2,3)
         for (i in kids) {
             when (i) {
-                is SimpleSelect -> {
+                is Select -> {
                     val key = i.label!!
                     val value = i.getValue()!!
                     if (key == fieldName) {

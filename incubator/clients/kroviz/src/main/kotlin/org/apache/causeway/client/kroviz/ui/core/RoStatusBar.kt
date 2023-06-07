@@ -167,18 +167,20 @@ class RoStatusBar {
         val classes = "causeway-logo-button-image logo-button"
         val b = Button("", style = ButtonStyle.LINK)
         b.addCssClass(classes)
-        return b.onClick {
+        b.onClick {
             window.open("https://causeway.apache.org")
         }
+        return b
     }
 
     private fun kvisionButton(): Button {
         val classes = "kvision-logo-button-image logo-button"
         val b = Button("", style = ButtonStyle.LINK)
         b.addCssClass(classes)
-        return b.onClick {
+        b.onClick {
             window.open("https://kvision.io")
         }
+        return b
     }
 
     /*

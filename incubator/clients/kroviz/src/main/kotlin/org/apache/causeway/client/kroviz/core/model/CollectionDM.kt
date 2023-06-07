@@ -72,9 +72,9 @@ class CollectionDM(override var title: String) : DisplayModelWithLayout() {
 
     override fun addData(obj: TransferObject) {
         rawData.add(obj)
-        val exo = Exposer(obj as TObject)
-        //if exposer is not dynamised, data access in Tabulator tables won't work
-        data.add(exo.dynamise() as Exposer)
+        val tObj = obj as TObject
+        val exo = Exposer(tObj)
+        data.add(exo)
     }
 
     override fun reset() {

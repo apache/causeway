@@ -26,7 +26,7 @@ import org.apache.causeway.client.kroviz.ui.core.FormItem
 import org.apache.causeway.client.kroviz.utils.Point
 import org.apache.causeway.client.kroviz.utils.StringUtils
 import io.kvision.core.StringPair
-import io.kvision.form.select.SimpleSelect
+import io.kvision.form.select.Select
 import io.kvision.form.text.TextArea
 import org.apache.causeway.client.kroviz.ui.core.RoDialog
 
@@ -93,7 +93,7 @@ class ActionPrompt(val action: Action) : Controller() {
                     key = i.label!!
                     value = i.getValue()
                 }
-                is SimpleSelect -> {
+                is Select -> {
                     key = i.label!!
                     value = i.getValue()!!
                     val p: Parameter = action.findParameterByName(key.lowercase())!!

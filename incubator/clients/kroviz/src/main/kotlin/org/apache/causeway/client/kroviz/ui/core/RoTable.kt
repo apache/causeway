@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.client.kroviz.ui.core
 
-import io.kvision.core.Container
 import io.kvision.core.CssSize
 import io.kvision.core.UNIT
 import io.kvision.panel.SimplePanel
@@ -27,9 +26,11 @@ import io.kvision.tabulator.TableType
 import io.kvision.tabulator.Tabulator
 import io.kvision.tabulator.TabulatorOptions
 import io.kvision.tabulator.js.Tabulator.CellComponent
+import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.serializer
 import org.apache.causeway.client.kroviz.core.event.ResourceProxy
 import org.apache.causeway.client.kroviz.core.model.CollectionDM
-import org.apache.causeway.client.kroviz.core.model.Exposer
+import org.apache.causeway.client.kroviz.core.model.Exhibit
 import org.apache.causeway.client.kroviz.utils.StringUtils
 
 /**
@@ -43,10 +44,14 @@ class RoTable(displayCollection: CollectionDM) : SimplePanel() {
     init {
         title = StringUtils.extractTitle(displayCollection.title)
         width = CssSize(100, UNIT.perc)
-        val model = displayCollection.data
+        val model = mutableListOf<Exhibit>()
+        displayCollection.data.forEach {
+            model.add(it.getWithDelegateProperties())
+        }
         val columns = ColumnFactory().buildColumns(
             displayCollection
         )
+        console.log(columns)
         val options = TabulatorOptions(
             movableColumns = true,
             height = Constants.calcHeight,
@@ -57,47 +62,33 @@ class RoTable(displayCollection: CollectionDM) : SimplePanel() {
 
         val tableTypes = setOf(TableType.STRIPED, TableType.HOVER)
 
-        tabulator(model, options = options, types = tableTypes) {
-            setEventListener<Tabulator<Exposer>> {
-                cellClickTabulator = {
-                    // can't check cast to external interface
-                    val cc = it.detail as CellComponent
-                    val column = cc.getColumn().getField()
-                    if (column == "icon") {
-                        val exposer = cc.getData() as Exposer
-                        val tObject = exposer.delegate
-                        ResourceProxy().load(tObject)
-                    }
+        console.log("[RT_before] tabulator()")
+        val tabulator = createTabulator(model, options, tableTypes)
+        tabulator.setEventListener<Tabulator<dynamic>> {
+            cellClickTabulator = {
+                // can't check cast to external interface
+                val cc = it.detail as CellComponent
+                val column = cc.getColumn().getField()
+                if (column == "icon") {
+                    val exhibit = cc.getData() as Exhibit
+                    val tObject = exhibit.getDelegate()
+                    ResourceProxy().load(tObject)
                 }
             }
         }
     }
 
-    fun <T : Any> Container.tabulator(
-        data: List<T>? = null,
-        dataUpdateOnEdit: Boolean = true,
-        options: TabulatorOptions<T> = TabulatorOptions(),
-        types: Set<TableType> = setOf(),
-        className: String? = null,
-        init: (Tabulator<T>.() -> Unit)? = null
-    ): Tabulator<T> {
-        val tabulator = create(data, dataUpdateOnEdit, options, types)
-        if (className != null)
-            tabulator.addCssClass(className)
-        init?.invoke(tabulator)
-        this.add(tabulator)
-        return tabulator
-    }
-
-    fun <T : Any> create(
-        data: List<T>? = null,
-        dataUpdateOnEdit: Boolean = true,
-        options: TabulatorOptions<T> = TabulatorOptions(),
-        types: Set<TableType> = setOf(),
-        className: String? = null,
-        init: (Tabulator<T>.() -> Unit)? = null
-    ): Tabulator<T> {
-        val tabulator = Tabulator(data, dataUpdateOnEdit, options, types)
+    @OptIn(InternalSerializationApi::class)
+    private fun createTabulator(
+        data: List<Exhibit>,
+        options: TabulatorOptions<Exhibit>,
+        types: Set<TableType>
+    ): Tabulator<dynamic> {
+        val dataUpdateOnEdit = true
+        val className: String? = null
+        val init: (Tabulator<dynamic>.() -> Unit)? = null
+        val serializer = Exhibit::class.serializer()
+        val tabulator = Tabulator(data, dataUpdateOnEdit, options, types, serializer = serializer)
         if (className != null)
             tabulator.addCssClass(className)
         init?.invoke(tabulator)
