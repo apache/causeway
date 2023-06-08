@@ -8,7 +8,7 @@ This section describes how to install and setup JetBrains' IntelliJ IDEA, then h
 == Installing and Importing
 
 This section covers installation and setup.
-These notes/screenshots were prepared using IntelliJ IDEA Community Edition 2019.3, but is believed to be compatible with more recent versions/other editions of the IDE.
+These notes/screenshots were prepared using IntelliJ IDEA Community Edition 2023.1.2, but is believed to be compatible with more recent versions/other editions of the IDE.
 
 === Download and Install
 
@@ -21,25 +21,27 @@ In IntelliJ a project can contain multiple modules; these need not be physically
 
 Download either the xref:docs:starters:helloworld.adoc[HelloWorld] or xref:docs:starters:simpleapp.adoc[SimpleApp] starter app to your filesystem.
 
-From the welcome screen, select "import project":
+From the welcome screen, select "open project":
 
-image::015-import-project/010-welcome.png[width="400px"]
+image::015-import-project/010-welcome.png[width="700px"]
 
 Navigate to the top-level pom.xml of the starter app:
 
-image::015-import-project/020-import-pom.png[width="300px"]
+image::015-import-project/020-import-pom.png[width="500px"]
 
-Project imported:
+Acknowledge that the containing directory can be trusted:
 
-image::015-import-project/030-imported.png[width="800px"]
-Start off by creating a new project:
+image::015-import-project/025-trust-directory.png[width=500]
+
+Project opened:
+
+image::015-import-project/030-imported.png[width="1000px"]
 
 
 Use menu:File[Project Structure] to confirm that JDK 11 is configured:
 
-image::015-import-project/040-project-structure.png[width="600px"]
+image::015-import-project/040-project-structure.png[width="800px"]
 
-*TODO*: this screenshot is out of date; JDK 11 is now the minimum version required.
 
 == Configuring
 
@@ -52,48 +54,36 @@ image::015-import-project/040-project-structure.png[width="600px"]
 There are a number of compiler settings that influence the compiler.
 We highly recommend you set these.
 
-On the *Compiler* Settings page, ensure that `build automatically` is enabled (and optionally `compile independent modules in parallel`):
+On the *Compiler* Settings page, ensure that `build automatically` is enabled, and optionally `compile independent modules in parallel`.
+You might also want to increase the heap size, eg to 2048.
 
 .IntelliJ Compiler Settings
-image::040-other-settings-compiler/010-build-automatically.png[width="700px"]
+image::040-other-settings-compiler/010-build-automatically.png[width="1000px"]
 
 
-On the *Annotation Processors* page, confirm that these are enabled for all of the `packaging=jar` modules (in other words, those that contain Java and have a `src/main/java` directory):
+On the *Annotation Processors* page, confirm that these are enabled for all modules with the `... sources directory` correctly defined.
+(In most recent editions of IntelliJ, this is detected automatically; no changes are required).
 
 .IntelliJ Annotation Processor Settings
-image::040-other-settings-compiler/020-annotation-processor.png[width="700px"]
+image::040-other-settings-compiler/020-annotation-processor.png[width="1000px"]
 
+[TIP]
+====
 If using xref:pjdo:ROOT:about.adoc[JDO/DataNucleus], this setting enables the generation of the `Q*` classes for DataNucleus type-safe queries.
 
 It is also required for frameworks such as link:https://projectlombok.org[Lombok].
+====
 
 
-=== Maven Settings
 
-There are also some other settings for Maven that we recommend you adjust (though these are less critical):
-
-On the Maven settings page:
-
-.IntelliJ Maven Settings - Installation
-image::042-other-settings-maven/010-maven-installation.png[width="700px"]
-
-Still on the Maven settings page, configure as follows:
-
-.IntelliJ Maven Settings - Configuration
-image::042-other-settings-maven/020-maven-configuration.png[width="700px"]
 
 === Editor Settings
 
 On the *Auto Import* settings page, check the `optimize imports on the fly` and `add unambiguous imports on the fly`
 
 .IntelliJ Auto Import Setting
-image::044-other-settings-misc/010-auto-import.png[width="700px"]
+image::044-other-settings-misc/010-auto-import.png[width="1000px"]
 
-You might also want to exclude certain packages or classes from auto-import, for example:
-
-* `java.awt.*`
-* `javax.swing.*`
-* `lombok.experimental.*`
 
 == Plugins
 
@@ -102,7 +92,7 @@ You can do this using `File > Settings > Plugins` (or equivalently `File > Other
 
 Highly recommended are:
 
-* Lombok plugin (bundled with the IDE)
+* Lombok plugin (bundled with the IDE, and pre-enabled)
 +
 If you plan to use link:https://projectlombok.org[Project Lombok] to reduce boilerplate.
 
@@ -112,6 +102,9 @@ If you plan to use link:https://projectlombok.org[Project Lombok] to reduce boil
 +
 Extremely useful if you are doing any authoring of documents (plugin's git repo is link:https://github.com/asciidoctor/asciidoctor-intellij-plugin[here])
 
+* link:https://plugins.jetbrains.com/plugin/15635-diagrams-net-integration[diagrams.net] plugin
+*
+Allows diagrams to be authored within the IDE; works well with the AsciiDoctor plugin.
 
 
 
