@@ -100,7 +100,6 @@
 						<exclude>**/domain/src/test/resources/demoapp/dom/_infra/resources/</exclude>
 						<exclude>**/wicket/src/test/e2e/cypress-scaffolding/integration/examples/*.spec.js</exclude>
 						<exclude>**/wicket/src/test/e2e/cypress-scaffolding/integration/typescript/basic.ts</exclude>
-						<exclude>**/vaadin/node_modules/**</exclude>
 
 						<exclude>**/*.gitkeep</exclude>
 						<exclude>**/*.pdn</exclude>
@@ -257,33 +256,6 @@
 				<module>web</module>
 				<module>wicket/common</module>
 				<module>wicket/jpa-and-graphql</module>
-			</modules>
-		</profile>
-		<profile>
-			<id>modules-example-demo-vaadin</id>
-			<activation>
-				<property>
-					<name>modules-example-demo-vaadin</name>
-				</property>
-			</activation>
-			<modules>
-				<module>domain</module>
-				<module>web</module>
-				<module>wicket/common</module>
-				<module>wicket/jdo</module>
-				<module>vaadin</module>
-			</modules>
-		</profile>
-		<profile>
-			<id>modules-example-demo-javafx</id>
-			<activation>
-				<property>
-					<name>demo-javafx</name>
-				</property>
-			</activation>
-			<modules>
-				<module>domain</module>
-				<module>javafx</module>
 			</modules>
 		</profile>
 

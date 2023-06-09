@@ -163,35 +163,6 @@
 				<version>3.0.0-SNAPSHOT</version>
 			</dependency>
 
-			<dependency>
-				<groupId>org.apache.causeway.incubator.viewer</groupId>
-				<artifactId>causeway-viewer-javafx</artifactId>
-				<version>3.0.0-SNAPSHOT</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.causeway.incubator.viewer</groupId>
-				<artifactId>causeway-viewer-vaadin</artifactId>
-				<version>3.0.0-SNAPSHOT</version>
-				<type>pom</type>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.causeway.incubator.viewer</groupId>
-				<artifactId>causeway-viewer-vaadin-model</artifactId>
-				<version>3.0.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.causeway.incubator.viewer</groupId>
-				<artifactId>causeway-viewer-vaadin-ui</artifactId>
-				<version>3.0.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.causeway.incubator.viewer</groupId>
-				<artifactId>causeway-viewer-vaadin-viewer</artifactId>
-				<version>3.0.0-SNAPSHOT</version>
-			</dependency>
-
-
 			<!-- TESTING -->
 
 			<dependency>
@@ -207,10 +178,6 @@
  		<module>clients/kroviz</module>
  		<module>extensions/core/commandreplay</module>
 		<module>viewers/graphql</module>
-		<module>viewers/javafx</module>
-		<module>viewers/thymeflux</module>
-		<module>viewers/vaadin</module>
-		<module>../valuetypes/asciidoc/ui/vaadin</module>
 	</modules>
 
 </project>

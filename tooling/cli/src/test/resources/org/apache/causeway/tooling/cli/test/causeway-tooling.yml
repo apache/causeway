@@ -75,8 +75,6 @@ commands:
       Incubator: org.apache.causeway.incubator
       "Kroviz Client": "org.apache.causeway.incubator.clients:causeway-client-kroviz.*"
       "GraphQL Viewer": "org.apache.causeway.incubator.viewer:causeway-viewer-graphql.*"
-      "Vaadin Viewer": "org.apache.causeway.incubator.viewer:causeway-viewer-vaadin.*"
-      "JavaFX Viewer": "org.apache.causeway.incubator.viewer:causeway-viewer-javafx.*"
 
   index:
 

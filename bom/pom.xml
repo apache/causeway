@@ -189,8 +189,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <togglz.version>4.0.1</togglz.version>
 
-        <vaadin.version>24.0.5</vaadin.version>
-
         <wicket.version>10.0.0-M1-SNAPSHOT</wicket.version>
         <wicket-bootstrap.version>6.0.4</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
         <wicket-webjars.version>3.0.7</wicket-webjars.version>
@@ -1795,19 +1793,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<groupId>org.jsoup</groupId>
 				<artifactId>jsoup</artifactId>
 				<version>${jsoup.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.vaadin</groupId>
-				<artifactId>vaadin-bom</artifactId>
-				<version>${vaadin.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			<dependency>
-			    <groupId>com.vaadin</groupId>
-			    <artifactId>vaadin-maven-plugin</artifactId>
-			    <version>${vaadin.version}</version>
 			</dependency>
 
 			<dependency>
