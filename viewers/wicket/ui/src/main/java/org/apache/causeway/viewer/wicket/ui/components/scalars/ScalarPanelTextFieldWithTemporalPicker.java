@@ -56,7 +56,7 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
             _Exceptions.illegalArgument("framework bug: ScalarPanelTextFieldWithTemporalPicker requires a converter"));
 
         val textField = new TextFieldWithDateTimePicker<T>(
-                id, scalarModel, type, converter, scalarModel.isRequired());
+                id, scalarModel, type, converter);
 
         /* [CAUSEWAY-3201]
          * Adding OnChangeAjaxBehavior registers a JavaScript event listener on change events.

@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.text;
 
-import java.io.Serializable;
 import java.util.Optional;
 
 import org.apache.wicket.markup.html.form.TextArea;
@@ -27,7 +26,6 @@ import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.validation.IValidationError;
 import org.springframework.lang.Nullable;
 
-import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.NonNull;
@@ -45,15 +43,10 @@ public class TextAreaWithConverter<T> extends TextArea<T> {
             final @NonNull String id,
             final @NonNull IModel<T> model,
             final @NonNull Class<T> type,
-            final @NonNull Optional<IConverter<T>> converter,
-            final boolean required) {
+            final @NonNull Optional<IConverter<T>> converter) {
         super(id, model);
         setType(type);
-
         this.converter = converter.orElse(null);
-        _Assert.assertNullableObjectIsInstanceOf(this.converter, Serializable.class);
-
-        if(required) setRequired(true);
     }
 
     @SuppressWarnings("unchecked")

@@ -43,13 +43,9 @@ public class TextFieldWithConverter<T> extends TextField<T> {
             final @NonNull String id,
             final @NonNull IModel<T> model,
             final @NonNull Class<T> type,
-            final @NonNull Optional<IConverter<T>> converter,
-            final boolean required) {
+            final @NonNull Optional<IConverter<T>> converter) {
         super(id, model, type);
-
         this.converter = converter.orElse(null);
-
-        if(required) setRequired(true);
     }
 
     @SuppressWarnings("unchecked")

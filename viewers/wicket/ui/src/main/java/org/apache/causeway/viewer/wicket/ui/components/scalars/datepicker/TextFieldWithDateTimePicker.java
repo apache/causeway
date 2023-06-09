@@ -64,9 +64,8 @@ extends TextFieldWithConverter<T> {
             final @NonNull String id,
             final @NonNull ScalarModel scalarModel,
             final @NonNull Class<T> type,
-            final @NonNull IConverter<T> converter,
-            final boolean required) {
-        super(id, scalarModel.unwrapped(type), type, Optional.of(converter), required);
+            final @NonNull IConverter<T> converter) {
+        super(id, scalarModel.unwrapped(type), type, Optional.of(converter));
         setOutputMarkupId(true);
 
         this.config = createDatePickerConfig(

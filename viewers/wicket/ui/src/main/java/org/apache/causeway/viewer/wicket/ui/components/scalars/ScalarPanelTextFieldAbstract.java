@@ -72,13 +72,11 @@ extends ScalarPanelFormFieldAbstract<T> {
      * TextField, with converter.
      */
     protected AbstractTextComponent<T> createTextField(final String id) {
-        val scalarModel = scalarModel();
-
         return getFormatModifiers().contains(FormatModifier.MULTILINE)
                 ? Wkt.textAreaWithConverter(
-                        id, unwrappedModel(), type, converter(), scalarModel.isRequired())
+                        id, unwrappedModel(), type, converter())
                 : Wkt.textFieldWithConverter(
-                        id, unwrappedModel(), type, converter(), scalarModel.isRequired());
+                        id, unwrappedModel(), type, converter());
     }
 
     protected final IModel<T> unwrappedModel() {
