@@ -20,6 +20,7 @@ package org.apache.causeway.viewer.wicket.ui.components.scalars.datepicker;
 
 import static de.agilecoders.wicket.jquery.JQuery.$;
 
+import java.io.Serializable;
 import java.util.Locale;
 import java.util.Map;
 
@@ -30,6 +31,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.causeway.applib.locale.UserLocale;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.model.value.ConverterBasedOnValueSemantics;
@@ -41,6 +43,7 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6I
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.references.DatetimePickerCssReference;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.references.DatetimePickerJsReference;
 import de.agilecoders.wicket.jquery.Config;
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -52,7 +55,7 @@ import lombok.val;
  * @param <T> The type of the date/time
  */
 public class TextFieldWithDateTimePicker<T>
-extends TextField<T>
+extends TextField<T> //TODO[CAUSEWAY-3458] rather extend on TextFieldWithConverter
 implements IConverter<T> {
 
     private static final long serialVersionUID = 1L;
@@ -62,19 +65,20 @@ implements IConverter<T> {
     private final DateTimeConfig config;
 
     public TextFieldWithDateTimePicker(
-            final String id,
-            final ScalarModel scalarModel,
-            final Class<T> type,
-            final IConverter<T> converter) {
+            final @NonNull String id,
+            final @NonNull ScalarModel scalarModel,
+            final @NonNull Class<T> type,
+            final @NonNull IConverter<T> converter) {
         super(id, scalarModel.unwrapped(type), type);
         setOutputMarkupId(true);
+
+        this.converter = converter;
+        _Assert.assertNullableObjectIsInstanceOf(converter, Serializable.class);
 
         this.config = createDatePickerConfig(
                 scalarModel.getMetaModelContext(),
                 ((ConverterBasedOnValueSemantics<T>) converter).getEditingPattern(),
                 !scalarModel.isRequired());
-
-        this.converter = converter;
 
         /* debug
                 new IConverter<T>() {

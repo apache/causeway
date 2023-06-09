@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.scalars;
 
+import java.util.Optional;
+
 import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
@@ -46,10 +48,11 @@ extends ScalarPanelTextFieldAbstract<T> {
     }
 
     @Override
-    protected final IConverter<T> getConverter(
+    protected final Optional<IConverter<T>> getConverter(
             final @NonNull ObjectFeature propOrParam,
             final @NonNull ScalarRepresentation scalarRepresentation) {
-        return new ConverterBasedOnValueSemantics<>(propOrParam, scalarRepresentation);
+        return Optional.of(
+                new ConverterBasedOnValueSemantics<>(propOrParam, scalarRepresentation));
     }
 
 }

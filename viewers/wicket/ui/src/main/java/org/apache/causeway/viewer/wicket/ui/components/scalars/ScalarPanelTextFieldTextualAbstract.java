@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.wicket.ui.components.scalars;
 
 import java.util.EnumSet;
+import java.util.Optional;
 
 import org.apache.wicket.util.convert.IConverter;
 
@@ -50,10 +51,10 @@ extends ScalarPanelTextFieldAbstract<String> {
     }
 
     @Override
-    protected final IConverter<String> getConverter(
+    protected final Optional<IConverter<String>> getConverter(
             final @NonNull ObjectFeature propOrParam,
             final @NonNull ScalarRepresentation scalarRepresentation) {
-        return null; // does not use conversion
+        return Optional.empty(); // does not use conversion
     }
 
 

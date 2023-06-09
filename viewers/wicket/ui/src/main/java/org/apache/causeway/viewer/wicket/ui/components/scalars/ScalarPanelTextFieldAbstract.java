@@ -64,7 +64,7 @@ extends ScalarPanelFormFieldAbstract<T> {
 
     // -- CONVERSION
 
-    protected final IConverter<T> getConverter(final ScalarModel scalarModel) {
+    protected final Optional<IConverter<T>> getConverter(final ScalarModel scalarModel) {
         return getConverter(scalarModel.getMetaModel(), scalarModel.isEditMode()
                 ? ScalarRepresentation.EDITING
                 : ScalarRepresentation.VIEWING);
@@ -74,7 +74,7 @@ extends ScalarPanelFormFieldAbstract<T> {
      * Converter that is used for the either regular (editing) or compact (HTML) view of the panel,
      * based on argument {@code scalarRepresentation}.
      */
-    protected abstract IConverter<T> getConverter(
+    protected abstract Optional<IConverter<T>> getConverter(
             @NonNull ObjectFeature propOrParam,
             @NonNull ScalarRepresentation scalarRepresentation);
 

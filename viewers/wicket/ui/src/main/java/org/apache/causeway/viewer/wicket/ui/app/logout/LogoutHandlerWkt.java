@@ -58,8 +58,4 @@ public class LogoutHandlerWkt implements LogoutHandler {
         }
     }
 
-    private boolean isHandlingCurrentThread() {
-        return RequestCycle.get()!=null;
-    }
-
 }

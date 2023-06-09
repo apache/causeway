@@ -21,6 +21,7 @@ package org.apache.causeway.viewer.wicket.ui.util;
 import static de.agilecoders.wicket.jquery.JQuery.$;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.function.Supplier;
 
@@ -93,6 +94,8 @@ import org.apache.causeway.viewer.commons.model.components.UiString;
 import org.apache.causeway.viewer.wicket.model.hints.CausewayActionCompletedEvent;
 import org.apache.causeway.viewer.wicket.model.hints.CausewayEnvelopeEvent;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
+import org.apache.causeway.viewer.wicket.ui.components.text.TextAreaWithConverter;
+import org.apache.causeway.viewer.wicket.ui.components.text.TextFieldWithConverter;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.fileinput.FileUploadFieldWithNestingFix;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.links.AjaxLinkNoPropagate;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
@@ -893,63 +896,36 @@ public class Wkt {
 //    }
 
     /**
-     * @param converter - if {@code null} returns {@link TextArea} using Wicket's default converters.
+     * @param converter - if {@code Optional.empty()} returns {@link TextArea} using Wicket's default converters.
      */
     public <T> TextArea<T> textAreaWithConverter(
-            final String id, final IModel<T> model, final Class<T> type,
-            final @Nullable IConverter<T> converter) {
-        return converter!=null
-            ? new TextArea<T>(id, model) {
-                    private static final long serialVersionUID = 1L;
-                    {setType(type);}
-                    @SuppressWarnings("unchecked")
-                    @Override public <C> IConverter<C> getConverter(final Class<C> cType) {
-                        return cType == type
-                                ? (IConverter<C>) converter
-                                : super.getConverter(cType);}
-                    @Override public void error(final IValidationError error) {
-                        errorMessageIgnoringResourceBundles(this, error);
-                    }
-                }
-            : new TextArea<T>(id, model);
+            final @NonNull String id,
+            final @NonNull IModel<T> model,
+            final @NonNull Class<T> type,
+            final @NonNull Optional<IConverter<T>> converter) {
+        return new TextAreaWithConverter<T>(id, model, type, converter);
     }
 
     // -- TEXT FIELD
 
     /**
-     * @param converter - if {@code null} returns {@link TextField} using Wicket's default converters.
+     * @param converter - if {@code Optional.empty()} returns {@link TextField} using Wicket's default converters.
      */
     public <T> TextField<T> textFieldWithConverter(
-            final String id, final IModel<T> model, final Class<T> type,
-            final @Nullable IConverter<T> converter) {
-        return converter!=null
-            ? new TextField<T>(id, model, type) {
-                    private static final long serialVersionUID = 1L;
-                    @SuppressWarnings("unchecked")
-                    @Override public <C> IConverter<C> getConverter(final Class<C> cType) {
-                        return cType == type
-                                ? (IConverter<C>) converter
-                                : super.getConverter(cType);}
-                    @Override public void error(final IValidationError error) {
-                        errorMessageIgnoringResourceBundles(this, error);
-                    }
-                }
-            : new TextField<>(id, model, type);
+            final @NonNull String id,
+            final @NonNull IModel<T> model,
+            final @NonNull Class<T> type,
+            final @NonNull Optional<IConverter<T>> converter) {
+        return new TextFieldWithConverter<T>(id, model, type, converter);
     }
 
     public <T> TextField<T> passwordFieldWithConverter(
-            final String id, final IModel<T> model, final Class<T> type,
-            final @NonNull IConverter<T> converter) {
-        return new TextField<T>(id, model, type) {
-            private static final long serialVersionUID = 1L;
-            @SuppressWarnings("unchecked")
-            @Override public <C> IConverter<C> getConverter(final Class<C> cType) {
-                return cType == type
-                        ? (IConverter<C>) converter
-                        : super.getConverter(cType);}
-            @Override public void error(final IValidationError error) {
-                errorMessageIgnoringResourceBundles(this, error);
-            }
+            final @NonNull String id,
+            final @NonNull IModel<T> model,
+            final @NonNull Class<T> type,
+            final @NonNull Optional<IConverter<T>> converter) {
+        return new TextFieldWithConverter<T>(id, model, type, converter) {
+            private static final long serialVersionUID = 2L;
             @Override protected void onComponentTag(final ComponentTag tag) {
                 Attributes.set(tag, "type", "password");
                 super.onComponentTag(tag);
@@ -1023,7 +999,7 @@ public class Wkt {
      * Reports a validation error against given form component.
      * Uses plain error message from ConversionException, circumventing resource bundles.
      */
-    private void errorMessageIgnoringResourceBundles(
+    public void errorMessageIgnoringResourceBundles(
             final @Nullable FormComponent<?> formComponent,
             final @Nullable IValidationError error) {
         if(formComponent==null
