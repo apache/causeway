@@ -20,21 +20,20 @@ package org.apache.causeway.viewer.wicket.ui.components.scalars.datepicker;
 
 import static de.agilecoders.wicket.jquery.JQuery.$;
 
-import java.io.Serializable;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.causeway.applib.locale.UserLocale;
-import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.model.value.ConverterBasedOnValueSemantics;
+import org.apache.causeway.viewer.wicket.ui.components.text.TextFieldWithConverter;
 
 import de.agilecoders.wicket.core.util.Attributes;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.datetime.DatetimePickerConfig;
@@ -55,12 +54,9 @@ import lombok.val;
  * @param <T> The type of the date/time
  */
 public class TextFieldWithDateTimePicker<T>
-extends TextField<T> //TODO[CAUSEWAY-3458] rather extend on TextFieldWithConverter
-implements IConverter<T> {
+extends TextFieldWithConverter<T> {
 
     private static final long serialVersionUID = 1L;
-
-    protected final IConverter<T> converter;
 
     private final DateTimeConfig config;
 
@@ -68,12 +64,10 @@ implements IConverter<T> {
             final @NonNull String id,
             final @NonNull ScalarModel scalarModel,
             final @NonNull Class<T> type,
-            final @NonNull IConverter<T> converter) {
-        super(id, scalarModel.unwrapped(type), type);
+            final @NonNull IConverter<T> converter,
+            final boolean required) {
+        super(id, scalarModel.unwrapped(type), type, Optional.of(converter), required);
         setOutputMarkupId(true);
-
-        this.converter = converter;
-        _Assert.assertNullableObjectIsInstanceOf(converter, Serializable.class);
 
         this.config = createDatePickerConfig(
                 scalarModel.getMetaModelContext(),
@@ -104,29 +98,6 @@ implements IConverter<T> {
             }
         };
         */
-    }
-
-    @Override
-    public T convertToObject(final String value, final Locale locale) {
-        return converter.convertToObject(value, locale);
-    }
-
-    @Override
-    public String convertToString(final T value, final Locale locale) {
-        return converter.convertToString(value, locale);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public <C> IConverter<C> getConverter(final Class<C> type) {
-        // we use isAssignableFrom rather than a simple == to handle
-        // the persistence of JDO/DataNucleus:
-        // if persisting a java.sql.Date, the object we are given is actually a
-        // org.datanucleus.store.types.simple.SqlDate (a subclass of java.sql.Date)
-        if (super.getType().isAssignableFrom(type)) {
-            return (IConverter<C>) this;
-        }
-        return super.getConverter(type);
     }
 
     @Override

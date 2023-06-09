@@ -45,14 +45,15 @@ public class TextAreaWithConverter<T> extends TextArea<T> {
             final @NonNull String id,
             final @NonNull IModel<T> model,
             final @NonNull Class<T> type,
-            final @NonNull Optional<IConverter<T>> converter) {
+            final @NonNull Optional<IConverter<T>> converter,
+            final boolean required) {
         super(id, model);
         setType(type);
 
         this.converter = converter.orElse(null);
         _Assert.assertNullableObjectIsInstanceOf(this.converter, Serializable.class);
 
-        //TODO[CAUSEWAY-3458] if required: setRequired(true);
+        if(required) setRequired(true);
     }
 
     @SuppressWarnings("unchecked")

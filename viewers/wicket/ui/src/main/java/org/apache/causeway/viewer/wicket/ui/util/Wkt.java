@@ -902,8 +902,9 @@ public class Wkt {
             final @NonNull String id,
             final @NonNull IModel<T> model,
             final @NonNull Class<T> type,
-            final @NonNull Optional<IConverter<T>> converter) {
-        return new TextAreaWithConverter<T>(id, model, type, converter);
+            final @NonNull Optional<IConverter<T>> converter,
+            final boolean required) {
+        return new TextAreaWithConverter<T>(id, model, type, converter, required);
     }
 
     // -- TEXT FIELD
@@ -915,16 +916,18 @@ public class Wkt {
             final @NonNull String id,
             final @NonNull IModel<T> model,
             final @NonNull Class<T> type,
-            final @NonNull Optional<IConverter<T>> converter) {
-        return new TextFieldWithConverter<T>(id, model, type, converter);
+            final @NonNull Optional<IConverter<T>> converter,
+            final boolean required) {
+        return new TextFieldWithConverter<T>(id, model, type, converter, required);
     }
 
     public <T> TextField<T> passwordFieldWithConverter(
             final @NonNull String id,
             final @NonNull IModel<T> model,
             final @NonNull Class<T> type,
-            final @NonNull Optional<IConverter<T>> converter) {
-        return new TextFieldWithConverter<T>(id, model, type, converter) {
+            final @NonNull Optional<IConverter<T>> converter,
+            final boolean required) {
+        return new TextFieldWithConverter<T>(id, model, type, converter, required) {
             private static final long serialVersionUID = 2L;
             @Override protected void onComponentTag(final ComponentTag tag) {
                 Attributes.set(tag, "type", "password");

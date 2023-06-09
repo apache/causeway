@@ -41,8 +41,8 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
     private static final long serialVersionUID = 1L;
 
     public ScalarPanelTextFieldWithTemporalPicker(
-            final String id, final ScalarModel scalarModel, final Class<T> cls) {
-        super(id, scalarModel, cls);
+            final String id, final ScalarModel scalarModel, final Class<T> type) {
+        super(id, scalarModel, type);
     }
 
     protected int getDateRenderAdjustDays() {
@@ -52,11 +52,11 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
     @Override
     protected final TextField<T> createTextField(final String id) {
         val scalarModel = scalarModel();
-        val converter = getConverter(scalarModel).orElseThrow(()->
-            _Exceptions.illegalArgument("ScalarPanelTextFieldWithTemporalPicker requires a converter"));
+        val converter = converter().orElseThrow(()->
+            _Exceptions.illegalArgument("framework bug: ScalarPanelTextFieldWithTemporalPicker requires a converter"));
 
         val textField = new TextFieldWithDateTimePicker<T>(
-                id, scalarModel, type, converter);
+                id, scalarModel, type, converter, scalarModel.isRequired());
 
         /* [CAUSEWAY-3201]
          * Adding OnChangeAjaxBehavior registers a JavaScript event listener on change events.

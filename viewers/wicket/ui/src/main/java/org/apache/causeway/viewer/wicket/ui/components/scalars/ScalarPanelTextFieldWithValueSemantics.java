@@ -23,12 +23,7 @@ import java.util.Optional;
 import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
-import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
-import org.apache.causeway.viewer.wicket.model.value.ConverterBasedOnValueSemantics;
-
-import lombok.NonNull;
 
 /**
  * Specialization of {@link ScalarPanelTextFieldAbstract},
@@ -48,11 +43,8 @@ extends ScalarPanelTextFieldAbstract<T> {
     }
 
     @Override
-    protected final Optional<IConverter<T>> getConverter(
-            final @NonNull ObjectFeature propOrParam,
-            final @NonNull ScalarRepresentation scalarRepresentation) {
-        return Optional.of(
-                new ConverterBasedOnValueSemantics<>(propOrParam, scalarRepresentation));
+    protected final Optional<IConverter<T>> converter() {
+        return scalarModel().getConverter(type);
     }
 
 }

@@ -24,10 +24,12 @@ import java.util.OptionalInt;
 
 import org.apache.wicket.model.ChainingModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Either;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedValue;
@@ -38,6 +40,7 @@ import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.hints.HasRenderingHints;
 import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
 import org.apache.causeway.viewer.commons.model.scalar.UiScalar;
+import org.apache.causeway.viewer.wicket.model.value.ConverterBasedOnValueSemantics;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -173,6 +176,18 @@ implements HasRenderingHints, UiScalar, FormExecutorContext {
     @Override
     public final PromptStyle getPromptStyle() {
         return Facets.promptStyleOrElse(getMetaModel(), PromptStyle.INLINE);
+    }
+
+    // -- CONVERSION
+
+    public final <T> Optional<IConverter<T>> getConverter(final Class<T> requiredType) {
+
+        _Assert.assertTypeIsInstanceOf(getMetaModel().getElementType().getCorrespondingClass(), requiredType);
+
+        return Optional.of(
+                new ConverterBasedOnValueSemantics<>(getMetaModel(), isEditMode()
+                        ? ScalarRepresentation.EDITING
+                        : ScalarRepresentation.VIEWING));
     }
 
     // -- PREDICATES
