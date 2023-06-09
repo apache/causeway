@@ -175,10 +175,6 @@ mvn -s $SETTINGS_XML \
 if [ "$JIB_CMD" != "skip"  ]; then
   buildDockerImage examples/demo/wicket/jdo
   buildDockerImage examples/demo/wicket/jpa
-
-  if [ "$INCUBATOR" != "skip"  ]; then
-    buildDockerImage examples/demo/vaadin
-  fi
 fi
 
 if [ ! -z "$REVISION" ] && [ "$REV_REVERT_FLAG" != "off" ]; then

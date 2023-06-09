@@ -801,6 +801,8 @@ Directory: /examples/demo/domain
 |.Components
 ****
 demoapp.dom.AppConfiguration +
+demoapp.dom._infra.PdfJsViewerAdvisorFallback +
+demoapp.dom._infra.docgen.SuppressDocumentation +
 demoapp.dom._infra.resources.AsciiDocConverterService +
 demoapp.dom._infra.resources.AsciiDocReaderService +
 demoapp.dom._infra.resources.AsciiDocValueSemanticsWithPreprocessing +
@@ -815,88 +817,127 @@ demoapp.dom._infra.samples.markdown.CausewayMarkdownSamples +
 demoapp.dom._infra.urlencoding.UrlEncodingServiceNaiveInMemory +
 demoapp.dom.domain._changes.EntityChangesSubscriberToCaptureChangesInMemory +
 demoapp.dom.domain._commands.ExposePersistedCommands$TableColumnOrderDefault +
-demoapp.dom.domain.actions.Action.choicesFrom.ActionChoicesFromSeeding +
-demoapp.dom.domain.actions.Action.choicesFrom.jpa.ActionChoicesFromJpaEntities +
-demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingSeeding +
-demoapp.dom.domain.actions.Action.commandPublishing.jpa.ActionCommandPublishingJpaEntities +
+demoapp.dom.domain.actions.Action.choicesFrom.ActionChoicesFromEntitySeeding +
+demoapp.dom.domain.actions.Action.choicesFrom.jdo.ActionChoicesFromEntityImplRepository +
+demoapp.dom.domain.actions.Action.choicesFrom.jpa.ActionChoicesFromEntityImplRepository +
+demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingEntitySeeding +
+demoapp.dom.domain.actions.Action.commandPublishing.jdo.ActionCommandPublishingEntityImplRepository +
+demoapp.dom.domain.actions.Action.commandPublishing.jpa.ActionCommandPublishingEntityImplRepository +
 demoapp.dom.domain.actions.Action.domainEvent.ActionDomainEventControlSubscriber +
-demoapp.dom.domain.actions.Action.executionPublishing.ActionExecutionPublishingSeeding +
-demoapp.dom.domain.actions.Action.executionPublishing.jpa.ActionExecutionPublishingJpaEntities +
-demoapp.dom.domain.actions.ActionLayout.hidden.ActionLayoutHiddenSeeding +
-demoapp.dom.domain.actions.ActionLayout.hidden.jpa.ActionLayoutHiddenJpaEntities +
+demoapp.dom.domain.actions.Action.executionPublishing.ActionExecutionPublishingEntitySeeding +
+demoapp.dom.domain.actions.Action.executionPublishing.jdo.ActionExecutionPublishingEntityImplRepository +
+demoapp.dom.domain.actions.Action.executionPublishing.jpa.ActionExecutionPublishingEntityImplRepository +
+demoapp.dom.domain.actions.ActionLayout.hidden.ActionLayoutHiddenEntitySeeding +
+demoapp.dom.domain.actions.ActionLayout.hidden.jdo.ActionLayoutHiddenEntityImplRepository +
+demoapp.dom.domain.actions.ActionLayout.hidden.jpa.ActionLayoutHiddenEntityImplRepository +
+demoapp.dom.domain.actions.ActionLayout.redirectPolicy.ActionLayoutRedirectPolicyEntitySeeding +
+demoapp.dom.domain.actions.ActionLayout.redirectPolicy.jdo.ActionLayoutRedirectPolicyEntityImplRepository +
+demoapp.dom.domain.actions.ActionLayout.redirectPolicy.jpa.ActionLayoutRedirectPolicyEntityImplRepository +
 demoapp.dom.domain.collections.Collection.domainEvent.CollectionDomainEventControlSubscriber +
-demoapp.dom.domain.objects.DomainObject.aliased.DomainObjectAliasedSeeding +
-demoapp.dom.domain.objects.DomainObject.aliased.jpa.DomainObjectAliasedJpaEntities +
-demoapp.dom.domain.objects.DomainObject.autoComplete.DomainObjectAutoCompleteRepository +
-demoapp.dom.domain.objects.DomainObject.autoComplete.DomainObjectAutoCompleteSeeding +
-demoapp.dom.domain.objects.DomainObject.autoComplete.jpa.DomainObjectAutoCompleteJpaEntities +
-demoapp.dom.domain.objects.DomainObject.bounded.DomainObjectBoundingSeeding +
-demoapp.dom.domain.objects.DomainObject.bounded.jpa.DomainObjectBoundingJpaEntities +
-demoapp.dom.domain.objects.DomainObject.editing.DomainObjectEditingSeeding +
-demoapp.dom.domain.objects.DomainObject.editing.jpa.DomainObjectEditingJpaEntities +
-demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingSeeding +
-demoapp.dom.domain.objects.DomainObject.entityChangePublishing.jdo.DomainObjectEntityChangePublishingJdoEntities +
-demoapp.dom.domain.objects.DomainObject.entityChangePublishing.jpa.DomainObjectEntityChangePublishingJpaEntities +
-demoapp.dom.domain.objects.DomainObject.introspection.annotOpt.DomainObjectIntrospectionAnnotOptSeeding +
-demoapp.dom.domain.objects.DomainObject.introspection.annotOpt.jpa.DomainObjectIntrospectionAnnotOptJpaEntities +
-demoapp.dom.domain.objects.DomainObject.introspection.annotReqd.DomainObjectIntrospectionAnnotReqdSeeding +
-demoapp.dom.domain.objects.DomainObject.introspection.annotReqd.jpa.DomainObjectIntrospectionAnnotReqdJpaEntities +
-demoapp.dom.domain.objects.DomainObject.introspection.encapsulated.DomainObjectIntrospectionEncapsulatedSeeding +
-demoapp.dom.domain.objects.DomainObject.introspection.encapsulated.jpa.DomainObjectIntrospectionEncapsulatedJpaEntities +
-demoapp.dom.domain.objects.DomainObject.mixinMethod.DomainObjectMixinMethodSeeding +
-demoapp.dom.domain.objects.DomainObject.mixinMethod.jpa.DomainObjectMixinMethodJpaEntities +
+demoapp.dom.domain.objects.DomainObject.aliased.DomainObjectAliasedEntitySeeding +
+demoapp.dom.domain.objects.DomainObject.aliased.jdo.DomainObjectAliasedEntityImplRepository +
+demoapp.dom.domain.objects.DomainObject.aliased.jpa.DomainObjectAliasedEntityImplRepository +
+demoapp.dom.domain.objects.DomainObject.autoComplete.DomainObjectAutoCompleteEntitySeeding +
+demoapp.dom.domain.objects.DomainObject.autoComplete.jdo.DomainObjectAutoCompleteEntityImplRepository +
+demoapp.dom.domain.objects.DomainObject.autoComplete.jpa.DomainObjectAutoCompleteEntityImplRepository +
+demoapp.dom.domain.objects.DomainObject.bounded.DomainObjectBoundingEntitySeeding +
+demoapp.dom.domain.objects.DomainObject.bounded.jdo.DomainObjectBoundingEntityImplRepository +
+demoapp.dom.domain.objects.DomainObject.bounded.jpa.DomainObjectBoundingEntityImplRepository +
+demoapp.dom.domain.objects.DomainObject.editing.DomainObjectEditingEntitySeeding +
+demoapp.dom.domain.objects.DomainObject.editing.jdo.DomainObjectEditingEntityImplRepository +
+demoapp.dom.domain.objects.DomainObject.editing.jpa.DomainObjectEditingEntityImplRepository +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.DomainObjectEntityChangePublishingEntitySeeding +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.jdo.DomainObjectEntityChangePublishingEntityImplRepository +
+demoapp.dom.domain.objects.DomainObject.entityChangePublishing.jpa.DomainObjectEntityChangePublishingEntityImplRepository +
+demoapp.dom.domain.objects.DomainObject.introspection.annotOpt.DomainObjectIntrospectionAnnotOptEntitySeeding +
+demoapp.dom.domain.objects.DomainObject.introspection.annotOpt.jdo.DomainObjectIntrospectionAnnotOptEntityImplRepository +
+demoapp.dom.domain.objects.DomainObject.introspection.annotOpt.jpa.DomainObjectIntrospectionAnnotOptEntityImplRepository +
+demoapp.dom.domain.objects.DomainObject.introspection.annotReqd.DomainObjectIntrospectionAnnotReqdEntitySeeding +
+demoapp.dom.domain.objects.DomainObject.introspection.annotReqd.jdo.DomainObjectIntrospectionAnnotReqdEntityImplRepository +
+demoapp.dom.domain.objects.DomainObject.introspection.annotReqd.jpa.DomainObjectIntrospectionAnnotReqdEntityImplRepository +
+demoapp.dom.domain.objects.DomainObject.introspection.encapsulated.DomainObjectIntrospectionEncapsulatedEntitySeeding +
+demoapp.dom.domain.objects.DomainObject.introspection.encapsulated.jdo.DomainObjectIntrospectionEncapsulatedEntityImplRepository +
+demoapp.dom.domain.objects.DomainObject.introspection.encapsulated.jpa.DomainObjectIntrospectionEncapsulatedEntityImplRepository +
+demoapp.dom.domain.objects.DomainObject.mixinMethod.DomainObjectMixinMethodEntitySeeding +
+demoapp.dom.domain.objects.DomainObject.mixinMethod.jdo.DomainObjectMixinMethodEntityImplRepository +
+demoapp.dom.domain.objects.DomainObject.mixinMethod.jpa.DomainObjectMixinMethodEntityImplRepository +
 demoapp.dom.domain.objects.DomainObject.nature.entity.DomainObjectNatureEntitySeeding +
-demoapp.dom.domain.objects.DomainObject.nature.entity.jpa.DomainObjectNatureJpaEntities +
+demoapp.dom.domain.objects.DomainObject.nature.entity.jdo.DomainObjectNatureEntityImplRepository +
+demoapp.dom.domain.objects.DomainObject.nature.entity.jpa.DomainObjectNatureEntityImplRepository +
 demoapp.dom.domain.objects.DomainObject.xxxDomainEvent.DomainObjectXxxDomainEventControlSubscriber +
 demoapp.dom.domain.objects.DomainObject.xxxLifecycleEvent.DomainObjectXxxLifecycleEventSubscriber +
-demoapp.dom.domain.objects.DomainObject.xxxLifecycleEvent.jpa.DomainObjectXxxLifecycleEventJpaEntities +
-demoapp.dom.domain.objects.DomainObjectLayout.bookmarking.DomainObjectLayoutBookmarkingSeeding +
-demoapp.dom.domain.objects.DomainObjectLayout.bookmarking.jpa.DomainObjectLayoutBookmarkingJpaEntities +
-demoapp.dom.domain.objects.DomainObjectLayout.cssClass.DomainObjectLayoutCssClassSeeding +
-demoapp.dom.domain.objects.DomainObjectLayout.cssClass.jpa.DomainObjectLayoutCssClassJpaEntities +
-demoapp.dom.domain.objects.DomainObjectLayout.cssClassFa.DomainObjectLayoutCssClassFaSeeding +
-demoapp.dom.domain.objects.DomainObjectLayout.cssClassFa.jpa.DomainObjectLayoutCssClassFaJpaEntities +
-demoapp.dom.domain.objects.DomainObjectLayout.describedAs.DomainObjectLayoutDescribedAsSeeding +
-demoapp.dom.domain.objects.DomainObjectLayout.describedAs.jpa.DomainObjectLayoutDescribedAsJpaEntities +
-demoapp.dom.domain.objects.DomainObjectLayout.named.DomainObjectLayoutNamedSeeding +
-demoapp.dom.domain.objects.DomainObjectLayout.named.jpa.DomainObjectLayoutNamedJpaEntities +
-demoapp.dom.domain.objects.DomainObjectLayout.paged.DomainObjectLayoutPagedSeeding +
-demoapp.dom.domain.objects.DomainObjectLayout.paged.jpa.DomainObjectLayoutPagedJpaEntities +
-demoapp.dom.domain.objects.DomainObjectLayout.tabledec.DomainObjectLayoutTableDecoratorSeeding +
-demoapp.dom.domain.objects.DomainObjectLayout.tabledec.jpa.DomainObjectLayoutTableDecoratorJpaEntities +
-demoapp.dom.domain.objects.DomainObjectLayout.xxxUiEvent.DomainObjectLayoutXxxUiEventSeeding +
+demoapp.dom.domain.objects.DomainObject.xxxLifecycleEvent.jdo.DomainObjectXxxLifecycleEventEntityImplRepository +
+demoapp.dom.domain.objects.DomainObject.xxxLifecycleEvent.jpa.DomainObjectXxxLifecycleEventEntityImplRepository +
+demoapp.dom.domain.objects.DomainObjectLayout.bookmarking.DomainObjectLayoutBookmarkingEntitySeeding +
+demoapp.dom.domain.objects.DomainObjectLayout.bookmarking.jdo.DomainObjectLayoutBookmarkingEntityImplRepository +
+demoapp.dom.domain.objects.DomainObjectLayout.bookmarking.jpa.DomainObjectLayoutBookmarkingEntityImplRepository +
+demoapp.dom.domain.objects.DomainObjectLayout.cssClass.DomainObjectLayoutCssClassEntitySeeding +
+demoapp.dom.domain.objects.DomainObjectLayout.cssClass.jdo.DomainObjectLayoutCssClassEntityImplRepository +
+demoapp.dom.domain.objects.DomainObjectLayout.cssClass.jpa.DomainObjectLayoutCssClassEntityImplRepository +
+demoapp.dom.domain.objects.DomainObjectLayout.cssClassFa.DomainObjectLayoutCssClassFaEntitySeeding +
+demoapp.dom.domain.objects.DomainObjectLayout.cssClassFa.jdo.DomainObjectLayoutCssClassFaEntityImplRepository +
+demoapp.dom.domain.objects.DomainObjectLayout.cssClassFa.jpa.DomainObjectLayoutCssClassFaEntityImplRepository +
+demoapp.dom.domain.objects.DomainObjectLayout.describedAs.DomainObjectLayoutDescribedAsEntitySeeding +
+demoapp.dom.domain.objects.DomainObjectLayout.describedAs.jdo.DomainObjectLayoutDescribedAsEntityImplRepository +
+demoapp.dom.domain.objects.DomainObjectLayout.describedAs.jpa.DomainObjectLayoutDescribedAsEntityImplRepository +
+demoapp.dom.domain.objects.DomainObjectLayout.named.DomainObjectLayoutNamedEntitySeeding +
+demoapp.dom.domain.objects.DomainObjectLayout.named.jdo.DomainObjectLayoutNamedEntityImplRepository +
+demoapp.dom.domain.objects.DomainObjectLayout.named.jpa.DomainObjectLayoutNamedEntityImplRepository +
+demoapp.dom.domain.objects.DomainObjectLayout.paged.DomainObjectLayoutPagedEntitySeeding +
+demoapp.dom.domain.objects.DomainObjectLayout.paged.jdo.DomainObjectLayoutPagedEntityRepository +
+demoapp.dom.domain.objects.DomainObjectLayout.paged.jpa.DomainObjectLayoutPagedEntityRepository +
+demoapp.dom.domain.objects.DomainObjectLayout.tabledec.DomainObjectLayoutTableDecoratorEntitySeeding +
+demoapp.dom.domain.objects.DomainObjectLayout.tabledec.jdo.DomainObjectLayoutTableDecoratorEntityImplRepository +
+demoapp.dom.domain.objects.DomainObjectLayout.tabledec.jpa.DomainObjectLayoutTableDecoratorEntityImplRepository +
+demoapp.dom.domain.objects.DomainObjectLayout.xxxUiEvent.DomainObjectLayoutXxxUiEventEntitySeeding +
 demoapp.dom.domain.objects.DomainObjectLayout.xxxUiEvent.DomainObjectLayoutXxxUiEventSubscriber +
-demoapp.dom.domain.objects.DomainObjectLayout.xxxUiEvent.jpa.DomainObjectLayoutXxxUiEventJpaEntities +
-demoapp.dom.domain.progmodel.objects.embedded.embedded.jdo.ComplexNumberJdoValueSemantics +
-demoapp.dom.domain.progmodel.objects.embedded.embedded.jdo.NumberConstantJdoRepository +
-demoapp.dom.domain.progmodel.objects.embedded.embedded.jpa.ComplexNumberJpaValueSemantics +
-demoapp.dom.domain.progmodel.objects.embedded.embedded.jpa.NumberConstantJpaRepository +
-demoapp.dom.domain.progmodel.objects.embedded.embedded.persistence.NumberConstantSeeding +
-demoapp.dom.domain.progmodel.objects.embedded.embedded.samples.ComplexNumberSamples +
-demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandPublishingSeeding +
-demoapp.dom.domain.properties.Property.commandPublishing.jpa.PropertyCommandPublishingJpaEntities +
+demoapp.dom.domain.objects.DomainObjectLayout.xxxUiEvent.jdo.DomainObjectLayoutXxxUiEventEntityImplRepository +
+demoapp.dom.domain.objects.DomainObjectLayout.xxxUiEvent.jpa.DomainObjectLayoutXxxUiEventEntityImplRepository +
+demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandPublishingEntitySeeding +
+demoapp.dom.domain.properties.Property.commandPublishing.jdo.PropertyCommandPublishingEntityImplRepository +
+demoapp.dom.domain.properties.Property.commandPublishing.jpa.PropertyCommandPublishingEntityImplRepository +
 demoapp.dom.domain.properties.Property.domainEvent.PropertyDomainEventControlSubscriber +
-demoapp.dom.domain.properties.Property.editing.PropertyEditingSeeding +
-demoapp.dom.domain.properties.Property.editing.jpa.PropertyEditingJpaEntities +
-demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingSeeding +
-demoapp.dom.domain.properties.Property.executionPublishing.jpa.PropertyExecutionPublishingJpaEntities +
-demoapp.dom.domain.properties.Property.projecting.PropertyProjectingChildSeeding +
-demoapp.dom.domain.properties.Property.projecting.jdo.PropertyProjectingChildJdoEntities +
-demoapp.dom.domain.properties.Property.projecting.jpa.PropertyProjectingChildJpaEntities +
-demoapp.dom.domain.properties.Property.snapshot.PropertySnapshotSeeding +
-demoapp.dom.domain.properties.Property.snapshot.jpa.PropertySnapshotJpaEntities +
+demoapp.dom.domain.properties.Property.editing.PropertyEditingEntitySeeding +
+demoapp.dom.domain.properties.Property.editing.jdo.PropertyEditingEntityImplRepository +
+demoapp.dom.domain.properties.Property.editing.jpa.PropertyEditingEntityImplRepository +
+demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingEntitySeeding +
+demoapp.dom.domain.properties.Property.executionPublishing.jdo.PropertyExecutionPublishingEntityImplRepository +
+demoapp.dom.domain.properties.Property.executionPublishing.jpa.PropertyExecutionPublishingEntityImplRepository +
+demoapp.dom.domain.properties.Property.projecting.PropertyProjectingChildEntitySeeding +
+demoapp.dom.domain.properties.Property.projecting.jdo.PropertyProjectingChildEntityImplRepository +
+demoapp.dom.domain.properties.Property.projecting.jpa.PropertyProjectingChildEntityImplRepository +
+demoapp.dom.domain.properties.Property.snapshot.PropertySnapshotEntitySeeding +
+demoapp.dom.domain.properties.Property.snapshot.jdo.PropertySnapshotEntityImplRepository +
+demoapp.dom.domain.properties.Property.snapshot.jpa.PropertySnapshotEntityImplRepository +
 demoapp.dom.domain.properties.PropertyLayout.hidden.PropertyLayoutHiddenSeeding +
-demoapp.dom.domain.properties.PropertyLayout.hidden.jpa.PropertyLayoutHiddenJpaEntities +
+demoapp.dom.domain.properties.PropertyLayout.hidden.jdo.PropertyLayoutHiddenEntityImplRepository +
+demoapp.dom.domain.properties.PropertyLayout.hidden.jpa.PropertyLayoutHiddenEntityImplRepository +
+demoapp.dom.domain.properties.PropertyLayout.navigable.FileNodeVm_tree +
 demoapp.dom.domain.properties.PropertyLayout.navigable.FileTreeNodeService +
-demoapp.dom.domain.properties.PropertyLayout.repainting.PdfJsViewerAdvisorFallback +
-demoapp.dom.featured.customui.geocoding.GeoapifyClient +
-demoapp.dom.services.core.errorreportingservice.ErrorReportingServiceDemoImplementation +
+demoapp.dom.domain.properties.ValueSemantics.percentage.ValueSemanticsProviderForPercentage +
+demoapp.dom.featured.causewayext.cal.jdo.CausewayCalendarEventJdoEntities +
+demoapp.dom.featured.causewayext.cal.jpa.CausewayCalendarEventJpaEntities +
+demoapp.dom.featured.causewayext.cal.persistence.CausewayCalendarEventSeeding +
+demoapp.dom.featured.causewayext.cal.samples.CausewayCalendarEventSamples +
+demoapp.dom.featured.customui.GeoapifyClient +
+demoapp.dom.progmodel.actions.TvCharacterPopulator +
+demoapp.dom.progmodel.actions.bulk.BulkActionItemEntitySeeding +
+demoapp.dom.progmodel.actions.bulk.jdo.BulkActionItemEntityImplRepository +
+demoapp.dom.progmodel.actions.bulk.jpa.BulkActionItemEntityImplRepository +
+demoapp.dom.progmodel.customvaluetypes.compositevalues.ComplexNumberValueSemantics +
+demoapp.dom.progmodel.customvaluetypes.customvalues.EmailAddressValueSemantics +
+demoapp.dom.progmodel.customvaluetypes.embeddedvalues.ComplexNumberSamples +
+demoapp.dom.progmodel.customvaluetypes.embeddedvalues.NumberConstantSeeding +
+demoapp.dom.progmodel.customvaluetypes.embeddedvalues.jdo.ComplexNumberJdoValueSemantics +
+demoapp.dom.progmodel.customvaluetypes.embeddedvalues.jdo.NumberConstantJdoRepository +
+demoapp.dom.progmodel.customvaluetypes.embeddedvalues.jpa.ComplexNumberJpaValueSemantics +
+demoapp.dom.progmodel.customvaluetypes.embeddedvalues.jpa.NumberConstantJpaRepository +
+demoapp.dom.services.core.errorreportingservice.ErrorReportingServiceForDemo +
 demoapp.dom.services.core.eventbusservice.EventLogEntryJdoRepository +
 demoapp.dom.services.core.eventbusservice.EventLogEntryJpaRepository +
-demoapp.dom.services.core.eventbusservice.EventSubscriberDemoImplementation +
-demoapp.dom.services.core.wrapperFactory.WrapperFactorySeeding +
-demoapp.dom.services.core.wrapperFactory.jdo.WrapperFactoryJdoEntities +
-demoapp.dom.services.core.wrapperFactory.jpa.WrapperFactoryJpaEntities +
+demoapp.dom.services.core.eventbusservice.EventSubscriberForDemo +
+demoapp.dom.services.core.wrapperFactory.jdo.PrimeNumberJdoFactoryAndRepository +
+demoapp.dom.services.core.wrapperFactory.jpa.PrimeNumberJpaFactoryAndRepository +
 demoapp.dom.services.extensions.secman.apptenancy.ApplicationTenancyEvaluatorForDemo +
 demoapp.dom.services.extensions.secman.apptenancy.jdo.TenantedJdoEntities +
 demoapp.dom.services.extensions.secman.apptenancy.jpa.TenantedJpaEntities +
@@ -921,12 +962,8 @@ demoapp.dom.types.causeway.markups.samples.CausewayMarkupSamples +
 demoapp.dom.types.causeway.passwords.jdo.CausewayPasswordJdoEntities +
 demoapp.dom.types.causeway.passwords.jpa.CausewayPasswordJpaEntities +
 demoapp.dom.types.causeway.passwords.persistence.CausewayPasswordSeeding +
-demoapp.dom.types.causeway.passwords.samples.CausewayPasswordsSamples +
+demoapp.dom.types.causeway.passwords.samples.CausewayPasswordSamples +
 demoapp.dom.types.causeway.treenode.FileTreeNodeService +
-demoapp.dom.types.causewayext.cal.jdo.CausewayCalendarEventEntities +
-demoapp.dom.types.causewayext.cal.jpa.CausewayCalendarEventEntities +
-demoapp.dom.types.causewayext.cal.persistence.CausewayCalendarEventSeeding +
-demoapp.dom.types.causewayext.cal.samples.CausewayCalendarEventSamples +
 demoapp.dom.types.causewayval.asciidocs.jdo.CausewayAsciiDocJdoEntities +
 demoapp.dom.types.causewayval.asciidocs.jpa.CausewayAsciiDocJpaEntities +
 demoapp.dom.types.causewayval.asciidocs.persistence.CausewayAsciiDocSeeding +
@@ -937,8 +974,11 @@ demoapp.dom.types.causewayval.vegas.jdo.CausewayVegaJdoEntities +
 demoapp.dom.types.causewayval.vegas.jpa.CausewayVegaJpaEntities +
 demoapp.dom.types.causewayval.vegas.persistence.CausewayVegaSeeding +
 demoapp.dom.types.causewayval.vegas.samples.CausewayVegaSamples +
+demoapp.dom.types.javaawt.images.jdo.BufferedImageJdoEntities +
 demoapp.dom.types.javaawt.images.jdo.JavaAwtBufferedImageJdoEntities +
+demoapp.dom.types.javaawt.images.jpa.BufferedImageJpaEntities +
 demoapp.dom.types.javaawt.images.jpa.JavaAwtBufferedImageJpaEntities +
+demoapp.dom.types.javaawt.images.persistence.BufferedImageSeeding +
 demoapp.dom.types.javaawt.images.persistence.JavaAwtBufferedImageSeeding +
 demoapp.dom.types.javaawt.images.samples.JavaAwtBufferedImageService +
 demoapp.dom.types.javaawt.images.samples.JavaAwtBufferedImagesSamples +
@@ -980,18 +1020,27 @@ demoapp.dom.types.javalang.shorts.samples.WrapperShortSamples +
 demoapp.dom.types.javalang.strings.jdo.JavaLangStringJdoEntities +
 demoapp.dom.types.javalang.strings.jpa.JavaLangStringJpaEntities +
 demoapp.dom.types.javalang.strings.persistence.JavaLangStringSeeding +
+demoapp.dom.types.javamath.bigdecimals.jdo.BigDecimalJdoEntities +
 demoapp.dom.types.javamath.bigdecimals.jdo.JavaMathBigDecimalJdoEntities +
+demoapp.dom.types.javamath.bigdecimals.jpa.BigDecimalJpaEntities +
 demoapp.dom.types.javamath.bigdecimals.jpa.JavaMathBigDecimalJpaEntities +
+demoapp.dom.types.javamath.bigdecimals.persistence.BigDecimalSeeding +
 demoapp.dom.types.javamath.bigdecimals.persistence.JavaMathBigDecimalSeeding +
-demoapp.dom.types.javamath.bigdecimals.samples.JavaMathBigDecimalSamples +
+demoapp.dom.types.javamath.bigdecimals.samples.BigDecimalSamples +
+demoapp.dom.types.javamath.bigintegers.jdo.BigIntegerJdoEntities +
 demoapp.dom.types.javamath.bigintegers.jdo.JavaMathBigIntegerJdoEntities +
+demoapp.dom.types.javamath.bigintegers.jpa.BigIntegerJpaEntities +
 demoapp.dom.types.javamath.bigintegers.jpa.JavaMathBigIntegerJpaEntities +
+demoapp.dom.types.javamath.bigintegers.persistence.BigIntegerSeeding +
 demoapp.dom.types.javamath.bigintegers.persistence.JavaMathBigIntegerSeeding +
-demoapp.dom.types.javamath.bigintegers.samples.JavaMathBigIntegerSamples +
+demoapp.dom.types.javamath.bigintegers.samples.BigIntegerSamples +
 demoapp.dom.types.javanet.urls.jdo.JavaNetUrlJdoEntities +
+demoapp.dom.types.javanet.urls.jdo.URLsJdoEntities +
 demoapp.dom.types.javanet.urls.jpa.JavaNetUrlJpaEntities +
+demoapp.dom.types.javanet.urls.jpa.URLsJpaEntities +
 demoapp.dom.types.javanet.urls.persistence.JavaNetUrlSeeding +
-demoapp.dom.types.javanet.urls.samples.JavaNetUrlSamples +
+demoapp.dom.types.javanet.urls.persistence.URLsSeeding +
+demoapp.dom.types.javanet.urls.samples.URLsSamples +
 demoapp.dom.types.javasql.javasqldate.jdo.JavaSqlDateJdoEntities +
 demoapp.dom.types.javasql.javasqldate.jpa.JavaSqlDateJpaEntities +
 demoapp.dom.types.javasql.javasqldate.persistence.JavaSqlDateSeeding +
@@ -1001,29 +1050,47 @@ demoapp.dom.types.javasql.javasqltimestamp.jpa.JavaSqlTimestampJpaEntities +
 demoapp.dom.types.javasql.javasqltimestamp.persistence.JavaSqlTimestampSeeding +
 demoapp.dom.types.javasql.javasqltimestamp.samples.JavaSqlTimestampSamples +
 demoapp.dom.types.javatime.javatimelocaldate.jdo.JavaTimeLocalDateJdoEntities +
+demoapp.dom.types.javatime.javatimelocaldate.jdo.LocalDateJdoEntities +
 demoapp.dom.types.javatime.javatimelocaldate.jpa.JavaTimeLocalDateJpaEntities +
+demoapp.dom.types.javatime.javatimelocaldate.jpa.LocalDateJpaEntities +
 demoapp.dom.types.javatime.javatimelocaldate.persistence.JavaTimeLocalDateSeeding +
-demoapp.dom.types.javatime.javatimelocaldate.samples.JavaTimeLocalDateSamples +
+demoapp.dom.types.javatime.javatimelocaldate.persistence.LocalDateSeeding +
+demoapp.dom.types.javatime.javatimelocaldate.samples.LocalDateSamples +
 demoapp.dom.types.javatime.javatimelocaldatetime.jdo.JavaTimeLocalDateTimeJdoEntities +
+demoapp.dom.types.javatime.javatimelocaldatetime.jdo.LocalDateTimeJdoEntities +
 demoapp.dom.types.javatime.javatimelocaldatetime.jpa.JavaTimeLocalDateTimeJpaEntities +
+demoapp.dom.types.javatime.javatimelocaldatetime.jpa.LocalDateTimeJpaEntities +
 demoapp.dom.types.javatime.javatimelocaldatetime.persistence.JavaTimeLocalDateTimeSeeding +
-demoapp.dom.types.javatime.javatimelocaldatetime.samples.JavaTimeLocalDateTimeSamples +
+demoapp.dom.types.javatime.javatimelocaldatetime.persistence.LocalDateTimeSeeding +
+demoapp.dom.types.javatime.javatimelocaldatetime.samples.LocalDateTimeSamples +
 demoapp.dom.types.javatime.javatimelocaltime.jdo.JavaTimeLocalTimeJdoEntities +
+demoapp.dom.types.javatime.javatimelocaltime.jdo.LocalTimeJdoEntities +
 demoapp.dom.types.javatime.javatimelocaltime.jpa.JavaTimeLocalTimeJpaEntities +
+demoapp.dom.types.javatime.javatimelocaltime.jpa.LocalTimeJpaEntities +
 demoapp.dom.types.javatime.javatimelocaltime.persistence.JavaTimeLocalTimeSeeding +
-demoapp.dom.types.javatime.javatimelocaltime.samples.JavaTimeLocalTimeSamples +
+demoapp.dom.types.javatime.javatimelocaltime.persistence.LocalTimeSeeding +
+demoapp.dom.types.javatime.javatimelocaltime.samples.LocalTimeSamples +
 demoapp.dom.types.javatime.javatimeoffsetdatetime.jdo.JavaTimeOffsetDateTimeJdoEntities +
+demoapp.dom.types.javatime.javatimeoffsetdatetime.jdo.OffsetDateTimeJdoEntities +
 demoapp.dom.types.javatime.javatimeoffsetdatetime.jpa.JavaTimeOffsetDateTimeJpaEntities +
+demoapp.dom.types.javatime.javatimeoffsetdatetime.jpa.OffsetDateTimeJpaEntities +
 demoapp.dom.types.javatime.javatimeoffsetdatetime.persistence.JavaTimeOffsetDateTimeSeeding +
-demoapp.dom.types.javatime.javatimeoffsetdatetime.samples.JavaTimeOffsetDateTimeSamples +
+demoapp.dom.types.javatime.javatimeoffsetdatetime.persistence.OffsetDateTimeSeeding +
+demoapp.dom.types.javatime.javatimeoffsetdatetime.samples.OffsetDateTimeSamples +
 demoapp.dom.types.javatime.javatimeoffsettime.jdo.JavaTimeOffsetTimeJdoEntities +
+demoapp.dom.types.javatime.javatimeoffsettime.jdo.OffsetTimeJdoEntities +
 demoapp.dom.types.javatime.javatimeoffsettime.jpa.JavaTimeOffsetTimeJpaEntities +
+demoapp.dom.types.javatime.javatimeoffsettime.jpa.OffsetTimeJpaEntities +
 demoapp.dom.types.javatime.javatimeoffsettime.persistence.JavaTimeOffsetTimeSeeding +
-demoapp.dom.types.javatime.javatimeoffsettime.samples.JavaTimeOffsetTimeSamples +
+demoapp.dom.types.javatime.javatimeoffsettime.persistence.OffsetTimeSeeding +
+demoapp.dom.types.javatime.javatimeoffsettime.samples.OffsetTimeSamples +
 demoapp.dom.types.javatime.javatimezoneddatetime.jdo.JavaTimeZonedDateTimeJdoEntities +
+demoapp.dom.types.javatime.javatimezoneddatetime.jdo.ZonedDateTimeJdoEntities +
 demoapp.dom.types.javatime.javatimezoneddatetime.jpa.JavaTimeZonedDateTimeJpaEntities +
+demoapp.dom.types.javatime.javatimezoneddatetime.jpa.ZonedDateTimeJpaEntities +
 demoapp.dom.types.javatime.javatimezoneddatetime.persistence.JavaTimeZonedDateTimeSeeding +
-demoapp.dom.types.javatime.javatimezoneddatetime.samples.JavaTimeZonedDateTimeSamples +
+demoapp.dom.types.javatime.javatimezoneddatetime.persistence.ZonedDateTimeSeeding +
+demoapp.dom.types.javatime.javatimezoneddatetime.samples.ZonedDateTimeSamples +
 demoapp.dom.types.javautil.javautildate.jdo.JavaUtilDateJdoEntities +
 demoapp.dom.types.javautil.javautildate.jpa.JavaUtilDateJpaEntities +
 demoapp.dom.types.javautil.javautildate.persistence.JavaUtilDateSeeding +
@@ -1033,15 +1100,21 @@ demoapp.dom.types.javautil.uuids.jpa.JavaUtilUuidJpaEntities +
 demoapp.dom.types.javautil.uuids.persistence.JavaUtilUuidSeeding +
 demoapp.dom.types.javautil.uuids.samples.JavaUtilUuidSamples +
 demoapp.dom.types.jodatime.jodadatetime.jdo.JodaDateTimeJdoEntities +
+demoapp.dom.types.jodatime.jodadatetime.jpa.JodaDateTimeJpaEntities +
 demoapp.dom.types.jodatime.jodadatetime.persistence.JodaDateTimeJdoSeeding +
+demoapp.dom.types.jodatime.jodadatetime.persistence.JodaDateTimeSeeding +
 demoapp.dom.types.jodatime.jodadatetime.samples.JodaDateTimeSamples +
 demoapp.dom.types.jodatime.jodalocaldate.jdo.JodaLocalDateJdoEntities +
+demoapp.dom.types.jodatime.jodalocaldate.jpa.JodaLocalDateJpaEntities +
 demoapp.dom.types.jodatime.jodalocaldate.persistence.JodaLocalDateJdoSeeding +
+demoapp.dom.types.jodatime.jodalocaldate.persistence.JodaLocalDateSeeding +
 demoapp.dom.types.jodatime.jodalocaldate.samples.JodaLocalDateSamples +
 demoapp.dom.types.jodatime.jodalocaldatetime.jdo.JodaLocalDateTimeJdoEntities +
+demoapp.dom.types.jodatime.jodalocaldatetime.jpa.JodaLocalDateTimeJpaEntities +
 demoapp.dom.types.jodatime.jodalocaldatetime.persistence.JodaLocalDateTimeSeeding +
 demoapp.dom.types.jodatime.jodalocaldatetime.samples.JodaLocalDateTimeSamples +
 demoapp.dom.types.jodatime.jodalocaltime.jdo.JodaLocalTimeJdoEntities +
+demoapp.dom.types.jodatime.jodalocaltime.jpa.JodaLocalTimeJpaEntities +
 demoapp.dom.types.jodatime.jodalocaltime.persistence.JodaLocalTimeSeeding +
 demoapp.dom.types.jodatime.jodalocaltime.samples.JodaLocalTimeSamples +
 demoapp.dom.types.primitive.booleans.jdo.PrimitiveBooleanJdoEntities +
@@ -1184,7 +1257,7 @@ Directory: /examples/demo/wicket/common
 ----
 |.Components
 ****
-demoapp.webapp.wicket.common.ui.custom.WhereInTheWorldPanelFactory +
+demoapp.webapp.wicket.common.featured.customui.WhereInTheWorldPanelFactory +
 ****
 
 .Dependencies
@@ -1226,7 +1299,7 @@ Directory: /examples/demo/wicket/jpa
 ----
 |.Dependencies
 ****
-org.apache.causeway.examples.apps:demo-wicket-common:jar:${project.version} +
+org.apache.causeway.examples.apps:demo-wicket-common:jar:<managed> +
 org.apache.causeway.persistence:causeway-persistence-jpa-eclipselink:jar:<managed> +
 ****
 
@@ -1240,7 +1313,7 @@ Directory: /examples/demo/wicket/jpa-and-graphql
 ----
 |.Dependencies
 ****
-org.apache.causeway.examples.apps:demo-wicket-common:jar:${project.version} +
+org.apache.causeway.examples.apps:demo-wicket-common:jar:<managed> +
 org.apache.causeway.incubator.viewer:causeway-viewer-graphql-viewer:jar:<managed> +
 org.apache.causeway.persistence:causeway-persistence-jpa-eclipselink:jar:<managed> +
 ****
@@ -3020,12 +3093,15 @@ Directory: /viewers/commons/services
 ****
 o.a.i.viewer.commons.services.branding.BrandingUiServiceDefault +
 o.a.i.viewer.commons.services.header.HeaderUiServiceDefault +
+o.a.i.viewer.commons.services.i8n.TranslationsResolverDefault +
 o.a.i.viewer.commons.services.menu.MenuUiServiceDefault +
 o.a.i.viewer.commons.services.userprof.UserProfileUiServiceDefault +
 ****
 
 .Dependencies
 ****
+javax.servlet:javax.servlet-api:jar:<managed> +
+org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-commons-model:jar:<managed> +
 ****
@@ -3326,12 +3402,6 @@ skinparam rectangle<<Wicket.ApacheCausewayViewerWicketApplib>> {
   BorderColor #2e6295
   shadowing false
 }
-skinparam rectangle<<Wicket.ApacheCausewayViewerWicketGraceful>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
 skinparam rectangle<<Wicket.ApacheCausewayViewerWicketModel>> {
   BackgroundColor #438dd5
   FontColor #fffffe
@@ -3339,6 +3409,12 @@ skinparam rectangle<<Wicket.ApacheCausewayViewerWicketModel>> {
   shadowing false
 }
 skinparam rectangle<<Wicket.ApacheCausewayViewerWicketUIComponents>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
+skinparam rectangle<<Wicket.ApacheCausewayViewerWicketUITest>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2e6295
@@ -3359,17 +3435,17 @@ skinparam rectangle<<Wicket>> {
 rectangle "Wicket\n<size:10>[Software System]</size>" <<Wicket>> {
   rectangle "==Apache Causeway Viewer - Wicket\n<size:10>[Container: packaging: pom]</size>" <<Wicket.ApacheCausewayViewerWicket>> as Wicket.ApacheCausewayViewerWicket
   rectangle "==Apache Causeway Viewer - Wicket (Applib)\n<size:10>[Container: packaging: jar]</size>" <<Wicket.ApacheCausewayViewerWicketApplib>> as Wicket.ApacheCausewayViewerWicketApplib
-  rectangle "==Apache Causeway Viewer - Wicket (Graceful)\n<size:10>[Container: packaging: jar]</size>" <<Wicket.ApacheCausewayViewerWicketGraceful>> as Wicket.ApacheCausewayViewerWicketGraceful
   rectangle "==Apache Causeway Viewer - Wicket (Model)\n<size:10>[Container: packaging: jar]</size>" <<Wicket.ApacheCausewayViewerWicketModel>> as Wicket.ApacheCausewayViewerWicketModel
   rectangle "==Apache Causeway Viewer - Wicket (UI Components)\n<size:10>[Container: packaging: jar]</size>" <<Wicket.ApacheCausewayViewerWicketUIComponents>> as Wicket.ApacheCausewayViewerWicketUIComponents
+  rectangle "==Apache Causeway Viewer - Wicket (UI Test)\n<size:10>[Container: packaging: jar]</size>" <<Wicket.ApacheCausewayViewerWicketUITest>> as Wicket.ApacheCausewayViewerWicketUITest
   rectangle "==Apache Causeway Viewer - Wicket (Viewer)\n<size:10>[Container: packaging: jar]</size>" <<Wicket.ApacheCausewayViewerWicketViewer>> as Wicket.ApacheCausewayViewerWicketViewer
 }
 
-Wicket.ApacheCausewayViewerWicket .[#707070,thickness=2].> Wicket.ApacheCausewayViewerWicketModel : "<color:#707070>"
 Wicket.ApacheCausewayViewerWicket .[#707070,thickness=2].> Wicket.ApacheCausewayViewerWicketUIComponents : "<color:#707070>"
+Wicket.ApacheCausewayViewerWicket .[#707070,thickness=2].> Wicket.ApacheCausewayViewerWicketUITest : "<color:#707070>"
 Wicket.ApacheCausewayViewerWicket .[#707070,thickness=2].> Wicket.ApacheCausewayViewerWicketViewer : "<color:#707070>"
 Wicket.ApacheCausewayViewerWicket .[#707070,thickness=2].> Wicket.ApacheCausewayViewerWicketApplib : "<color:#707070>"
-Wicket.ApacheCausewayViewerWicket .[#707070,thickness=2].> Wicket.ApacheCausewayViewerWicketGraceful : "<color:#707070>"
+Wicket.ApacheCausewayViewerWicket .[#707070,thickness=2].> Wicket.ApacheCausewayViewerWicketModel : "<color:#707070>"
 @enduml
 ----
 .Projects/Modules (Wicket)
@@ -3409,25 +3485,6 @@ org.apache.causeway.core:causeway-applib:jar:<managed> +
 xref:refguide:viewer:index/wicket/applib/CausewayModuleViewerWicketApplibMixins.adoc[CausewayModuleViewerWicketApplibMixins], xref:refguide:viewer:index/wicket/applib/mixins/Object_clearHints.adoc[Object_clearHints]
 ****
 
-|Apache Causeway Viewer - Wicket (Graceful)
-[source,yaml]
-----
-Group: org.apache.causeway.viewer
-Artifact: causeway-viewer-wicket-graceful
-Type: jar
-Directory: /viewers/wicket/graceful
-----
-|Helps with the CI build, that is, it replaces original Wicket artifacts at ~/.m2/repository
-with mangled variants, that do not include module-info.class entries.
-This artifact - in its realeased form - is empty.
-
-.Dependencies
-****
-org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
-org.apache.wicket:wicket-core:jar:<managed> +
-org.apache.wicket:wicket-extensions:jar:<managed> +
-****
-
 |Apache Causeway Viewer - Wicket (Model)
 [source,yaml]
 ----
@@ -3438,10 +3495,9 @@ Directory: /viewers/wicket/model
 ----
 |.Dependencies
 ****
-org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
 org.apache.causeway.core:causeway-core-webapp:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-commons-model:jar:<managed> +
-org.apache.causeway.viewer:causeway-viewer-wicket-graceful:jar:<managed> +
+org.apache.wicket:wicket-core:jar:<managed> +
 ****
 
 .Document Index Entries
@@ -3469,9 +3525,6 @@ com.google.guava:guava:jar:<managed> +
 de.agilecoders.wicket:wicket-bootstrap-core:jar:<managed> +
 de.agilecoders.wicket:wicket-bootstrap-themes:jar:<managed> +
 de.agilecoders.wicket.webjars:wicket-webjars:jar:<managed> +
-org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
-org.apache.causeway.core:causeway-core-runtimeservices:jar:<managed> +
-org.apache.causeway.valuetypes:causeway-valuetypes-jodatime-integration:jar:${project.version} +
 org.apache.causeway.viewer:causeway-viewer-commons-prism:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-commons-services:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-wicket-model:jar:<managed> +
@@ -3496,6 +3549,25 @@ org.wicketstuff:wicketstuff-select2:jar:<managed> +
 xref:refguide:viewer:index/wicket/ui/CausewayModuleViewerWicketUi.adoc[CausewayModuleViewerWicketUi]
 ****
 
+|Apache Causeway Viewer - Wicket (UI Test)
+[source,yaml]
+----
+Group: org.apache.causeway.viewer
+Artifact: causeway-viewer-wicket-ui-test
+Type: jar
+Directory: /viewers/wicket/ui-test
+----
+|Eclipse IDE failes to build the UI tests since junit-api is forced onto the module-path by Wicket.
+So as a workaround putting tests into their own artifact.
+
+.Dependencies
+****
+org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
+org.apache.causeway.core:causeway-core-runtimeservices:jar:<managed> +
+org.apache.causeway.valuetypes:causeway-valuetypes-jodatime-integration:jar:<managed> +
+org.apache.causeway.viewer:causeway-viewer-wicket-ui:jar:<managed> +
+****
+
 |Apache Causeway Viewer - Wicket (Viewer)
 [source,yaml]
 ----
@@ -3515,7 +3587,6 @@ o.a.i.viewer.wicket.viewer.services.BookmarkUiServiceWicket +
 o.a.i.viewer.wicket.viewer.services.DeepLinkServiceWicket +
 o.a.i.viewer.wicket.viewer.services.HintStoreUsingWicketSession +
 o.a.i.viewer.wicket.viewer.services.ImageResourceCacheClassPath +
-o.a.i.viewer.wicket.viewer.services.TranslationsResolverWicket +
 o.a.i.viewer.wicket.viewer.webmodule.WebModuleWicket +
 ****
 
@@ -4062,9 +4133,9 @@ Directory: /valuetypes/asciidoc/ui
 |.Dependencies
 ****
 com.github.jnr:jnr-constants:jar:0.10.4 +
-com.github.jnr:jnr-enxio:jar:0.32.14 +
-com.github.jnr:jnr-ffi:jar:2.2.13 +
-com.github.jnr:jnr-posix:jar:3.1.16 +
+com.github.jnr:jnr-enxio:jar:0.32.15 +
+com.github.jnr:jnr-ffi:jar:2.2.14 +
+com.github.jnr:jnr-posix:jar:3.1.17 +
 org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
 org.apache.causeway.valuetypes:causeway-valuetypes-asciidoc-applib:jar:<managed> +
 org.asciidoctor:asciidoctorj:jar:${asciidoctorj.version} +
@@ -6380,7 +6451,7 @@ eg. code mining, automated documentation.
 .Dependencies
 ****
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:${project.version} +
-org.checkerframework:checker-qual:jar:3.34.0 +
+org.checkerframework:checker-qual:jar:3.35.0 +
 org.mapstruct:mapstruct-processor:jar:1.5.5.Final +
 org.projectlombok:lombok:jar:<managed> +
 org.slf4j:slf4j-api:jar:<managed> +
@@ -7348,10 +7419,6 @@ org.apache.causeway.incubator.viewer:causeway-viewer-graphql-model:jar:<managed>
 org.springframework.boot:spring-boot-starter-websocket:jar:<managed> +
 ****
 |===
-
-=== Vaadin Viewer
-
-=== JavaFX Viewer
 
 == Other
 

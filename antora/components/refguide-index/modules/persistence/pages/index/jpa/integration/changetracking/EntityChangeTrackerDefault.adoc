@@ -19,7 +19,7 @@ class EntityChangeTrackerDefault {
   Interaction currentInteraction()
   long countPotentialPropertyChangeRecords()
   void enlistCreated(ManagedObject entity)
-  void enlistUpdating(ManagedObject entity, Can<PropertyChangeRecord> ormPropertyChangeRecords)
+  void enlistUpdating(ManagedObject entity, Function<ManagedObject, Can<PropertyChangeRecord>> propertyChangeRecordSupplier)
   void enlistDeleting(ManagedObject entity)
   void incrementLoaded(ManagedObject entity)     // <.>
   int numberEntitiesLoaded()

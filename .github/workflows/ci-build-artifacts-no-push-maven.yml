@@ -103,7 +103,7 @@ jobs:
       run: bash $CI_SCRIPTS_PATH/build-artifacts.sh
       env:
         # -Dmodule-all ... build all modules (default if all is well)
-        # -Dmodule-all-except-incubator ... build all modules except 'incubator' (eg. when vaadin build fails)
+        # -Dmodule-all-except-incubator ... build all modules except 'incubator'
         # -Dmodule-all-except-kroviz ... build all modules except 'kroviz' (eg. when kroviz build fails)
         # -Denforcer.failFast=true ... fail fast on convergence issues (enforcer plugin)
         # -Dmaven.source.skip=true ... no need for the CI build to pull sources
