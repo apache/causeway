@@ -34,4 +34,5 @@ module org.apache.causeway.viewer.commons.services {
     requires org.apache.logging.log4j;
     requires spring.beans;
     requires spring.context;
+    requires javax.servlet.api;
 }

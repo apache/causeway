@@ -47,6 +47,20 @@
             <artifactId>causeway-core-runtime</artifactId>
         </dependency>
 
+		<!-- for access to /WEB-INF/ where translation files may reside -->        
+        <dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>javax.servlet-api</artifactId>
+		</dependency>
+		
+		<!-- TESTING -->
+
+		<dependency>
+			<groupId>org.apache.causeway.core</groupId>
+			<artifactId>causeway-core-internaltestsupport</artifactId>
+			<scope>test</scope>
+		</dependency>
+
     </dependencies>
 
 </project>

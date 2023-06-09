@@ -38,6 +38,10 @@ public class LogoutHandlerWkt implements LogoutHandler {
     @Override
     public void logout() {
 
+        if(RequestCycle.get()==null) {
+            return; // logout is only permissive if within the context of a Wicket request-cycle
+        }
+
         val currentWktSession = AuthenticatedWebSession.get();
         if(currentWktSession==null) {
             return;
@@ -54,8 +58,7 @@ public class LogoutHandlerWkt implements LogoutHandler {
         }
     }
 
-    @Override
-    public boolean isHandlingCurrentThread() {
+    private boolean isHandlingCurrentThread() {
         return RequestCycle.get()!=null;
     }
 

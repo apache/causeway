@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.viewer.services;
+package org.apache.causeway.viewer.commons.services.i8n;
 
 import java.io.File;
 
@@ -30,7 +30,7 @@ import org.apache.causeway.commons.io.FileUtils;
 
 import lombok.val;
 
-class TranslationsResolverWicketTest {
+class TranslationsResolverDefaultTest {
 
     private File tempDir;
 
@@ -41,14 +41,14 @@ class TranslationsResolverWicketTest {
 
     @Test
     public void simple() throws Exception {
-        final File file = TranslationsResolverWicket.newFile(tempDir.getAbsolutePath(), "bar").toFile();
+        final File file = TranslationsResolverDefault.newFile(tempDir.getAbsolutePath(), "bar").toFile();
         val expected = new File(tempDir, "bar");
         assertThat(file.getAbsolutePath(), is(expected.getAbsolutePath()));
     }
 
     @Test
     public void nestedChild() throws Exception {
-        final File file = TranslationsResolverWicket.newFile(tempDir.getAbsolutePath(), "bar/baz").toFile();
+        final File file = TranslationsResolverDefault.newFile(tempDir.getAbsolutePath(), "bar/baz").toFile();
         val expected = new File(tempDir, "bar/baz");
         assertThat(file.getAbsolutePath(), is(expected.getAbsolutePath()));
     }

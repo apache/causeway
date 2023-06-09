@@ -48,7 +48,6 @@ public final class CausewayPresets  {
     public static final String SilenceMetaModel = "classpath:/org/apache/causeway/core/config/presets/SilenceMetaModel.properties";
 
     public static final String DebugCausewayInteraction = "classpath:/org/apache/causeway/core/config/presets/DebugCausewayInteraction.properties";
-    public static final String DebugVaadin = "classpath:/org/apache/causeway/core/config/presets/DebugVaadin.properties";
 
     public static final String SilenceWicket = "classpath:/org/apache/causeway/core/config/presets/SilenceWicket.properties";
     public static final String UseLog4j2Test = "classpath:/org/apache/causeway/core/config/presets/UseLog4j2Test.properties";
@@ -77,6 +76,5 @@ public final class CausewayPresets  {
     public static void logging(final Class<?> clazz, final String loggingLevel) {
         System.setProperty("logging.level." + clazz.getName(), loggingLevel);
     }
-
 
 }
