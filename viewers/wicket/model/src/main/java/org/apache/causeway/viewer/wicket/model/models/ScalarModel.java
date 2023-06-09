@@ -25,6 +25,7 @@ import java.util.OptionalInt;
 import org.apache.wicket.model.ChainingModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.convert.IConverter;
+import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.commons.collections.Can;
@@ -182,7 +183,9 @@ implements HasRenderingHints, UiScalar, FormExecutorContext {
 
     public final <T> Optional<IConverter<T>> getConverter(final Class<T> requiredType) {
 
-        _Assert.assertTypeIsInstanceOf(getMetaModel().getElementType().getCorrespondingClass(), requiredType);
+        _Assert.assertTypeIsInstanceOf(
+                ClassUtils.resolvePrimitiveIfNecessary(getMetaModel().getElementType().getCorrespondingClass()),
+                requiredType);
 
         return Optional.of(
                 new ConverterBasedOnValueSemantics<>(getMetaModel(), isEditMode()

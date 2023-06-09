@@ -60,14 +60,16 @@ public class TextAreaWithConverter<T> extends TextArea<T> {
     @Override
     public final <C> IConverter<C> getConverter(final Class<C> cType) {
         return converter!=null
-                && cType == getType()
+                && getType().isAssignableFrom(cType)
                 ? (IConverter<C>) converter
                 : super.getConverter(cType);
     }
 
     @Override
     public final void error(final IValidationError error) {
-        Wkt.errorMessageIgnoringResourceBundles(this, error);
+        if(!Wkt.errorMessageIgnoringResourceBundles(this, error)) {
+            super.error(error); // fallback to original behavior
+        }
     }
 
 }

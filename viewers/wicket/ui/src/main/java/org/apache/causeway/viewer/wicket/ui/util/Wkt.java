@@ -1001,25 +1001,24 @@ public class Wkt {
     /**
      * Reports a validation error against given form component.
      * Uses plain error message from ConversionException, circumventing resource bundles.
+     * @return whether handled
      */
-    public void errorMessageIgnoringResourceBundles(
+    public boolean errorMessageIgnoringResourceBundles(
             final @Nullable FormComponent<?> formComponent,
             final @Nullable IValidationError error) {
         if(formComponent==null
                 || error==null) {
-            return;
+            return true;
         }
         if(error instanceof ValidationError) {
             val message = ((ValidationError)error).getMessage();
             // use plain error message from ConversionException, circumventing resource bundles.
             if(_Strings.isNotEmpty(message)) {
                 formComponent.error(message);
-            } else {
-                formComponent.error("Unspecified error (no message associated).");
+                return true; // handled
             }
-        } else {
-            formComponent.error(error);
         }
+        return false; // not-handled
     }
 
     // -- FORM COMPONENT ATTRIBUTE UTILITY

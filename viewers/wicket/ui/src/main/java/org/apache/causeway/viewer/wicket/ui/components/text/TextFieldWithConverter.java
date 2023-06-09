@@ -63,7 +63,14 @@ public class TextFieldWithConverter<T> extends TextField<T> {
 
     @Override
     public final void error(final IValidationError error) {
-        Wkt.errorMessageIgnoringResourceBundles(this, error);
+        if(!Wkt.errorMessageIgnoringResourceBundles(this, error)) {
+            super.error(error); // fallback to original behavior
+        }
+    }
+
+    @Override
+    public boolean checkRequired() {
+        return super.checkRequired();
     }
 
 }
