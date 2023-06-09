@@ -30,9 +30,9 @@ import demoapp.dom._infra.values.ValueHolderRepository;
 import lombok.RequiredArgsConstructor;
 
 @Collection()
-@CollectionLayout()
+@CollectionLayout(named = "TV Characters")
 @RequiredArgsConstructor
-public class DomainObjectAutoCompletePage_objects {
+public class DomainObjectAutoCompletePage_characters {
 
     @SuppressWarnings("unused")
     private final DomainObjectAutoCompletePage page;
