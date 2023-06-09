@@ -18,11 +18,28 @@
  */
 package org.apache.causeway.incubator.viewer.vaadin.ui.components;
 
+import java.util.Optional;
+
 import com.vaadin.flow.component.Component;
 
+import org.springframework.lang.Nullable;
+
+import org.apache.causeway.commons.internal.functions._Predicates;
+import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.viewer.commons.model.components.UiComponentFactory;
 
 public interface UiComponentHandlerVaa
 extends UiComponentFactory.Handler<Component> {
+
+    default <T> Optional<T> getFeatureValue(final @Nullable Class<T> type, final ManagedProperty managedProperty) {
+        //TODO do a type check before the cast, so we can throw a more detailed exception
+        // that is, given type must be assignable from the actual pojo type
+        return Optional.ofNullable(managedProperty.getPropertyValue())
+                .filter(_Predicates.not(ManagedObjects::isNullOrUnspecifiedOrEmpty))
+                .map(ManagedObject::getPojo)
+                .map(type::cast);
+    }
 
 }

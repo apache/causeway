@@ -24,6 +24,7 @@ import org.springframework.context.annotation.Import;
 import org.apache.causeway.viewer.commons.applib.CausewayModuleViewerCommonsApplib;
 import org.apache.causeway.viewer.commons.services.branding.BrandingUiServiceDefault;
 import org.apache.causeway.viewer.commons.services.header.HeaderUiServiceDefault;
+import org.apache.causeway.viewer.commons.services.i8n.TranslationsResolverDefault;
 import org.apache.causeway.viewer.commons.services.menu.MenuUiServiceDefault;
 import org.apache.causeway.viewer.commons.services.userprof.UserProfileUiServiceDefault;
 
@@ -38,6 +39,7 @@ import org.apache.causeway.viewer.commons.services.userprof.UserProfileUiService
     UserProfileUiServiceDefault.class,
     MenuUiServiceDefault.class,
     HeaderUiServiceDefault.class,
+    TranslationsResolverDefault.class,
 
 })
 public class CausewayModuleViewerCommonsServices {

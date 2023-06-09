@@ -50,7 +50,7 @@ export MVN_STAGES=deploy
 # when 'off' keep unique REVISION that has SHA checksum - don't revert at end of script 
 export REV_REVERT_FLAG=off
 
-# used to skip building incubator docker images (demo vaadin)
+# used to skip building incubator docker images
 export INCUBATOR=skip
 
 # possible modes are

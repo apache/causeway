@@ -31,7 +31,6 @@ import org.apache.causeway.extensions.sse.wicket.CausewayModuleExtSseWicket;
 import org.apache.causeway.incubator.viewer.vaadin.viewer.CausewayModuleIncViewerVaadinViewer;
 import org.apache.causeway.valuetypes.asciidoc.metamodel.CausewayModuleValAsciidocMetaModel;
 import org.apache.causeway.valuetypes.asciidoc.persistence.jdo.dn.CausewayModuleValAsciidocPersistenceJdoDn;
-import org.apache.causeway.valuetypes.asciidoc.ui.vaa.CausewayModuleValAsciidocUiVaa;
 import org.apache.causeway.valuetypes.asciidoc.ui.wkt.CausewayModuleValAsciidocUiWkt;
 import org.apache.causeway.valuetypes.markdown.metamodel.CausewayModuleValMarkdownMetaModel;
 import org.apache.causeway.valuetypes.markdown.persistence.jdo.dn.CausewayModuleValMarkdownPersistenceJdoDn;
@@ -58,7 +57,6 @@ import demoapp.web.DemoAppManifestJdo;
 
     // INCUBATING
     CausewayModuleIncViewerVaadinViewer.class, // vaadin viewer
-    CausewayModuleValAsciidocUiVaa.class, // ascii-doc rendering support (for Vaadin)
 
     // Persistence (JDO/DN5)
     CausewayModuleValAsciidocPersistenceJdoDn.class,

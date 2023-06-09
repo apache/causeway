@@ -9,25 +9,19 @@ Responsible for collecting the details of all changes to domain objects within a
 .EntityChangeTracker.java
 ----
 interface EntityChangeTracker {
-  EntityChangeTracker NOOP;     // <.>
   void enlistCreated(ManagedObject entity)     // <.>
-  void enlistUpdating(ManagedObject entity, Can<PropertyChangeRecord> propertyChangeRecords)     // <.>
+  void enlistUpdating(ManagedObject entity, Function<ManagedObject, Can<PropertyChangeRecord>> propertyChangeRecordSupplier)     // <.>
   void enlistDeleting(ManagedObject entity)     // <.>
   void incrementLoaded(ManagedObject entity)     // <.>
 }
 ----
 
-<.> xref:#NOOP[NOOP]
-+
---
-Provided primarily for testing, but also used in cases where an attempt is made to resolve a bean but there is no active interaction.
---
 <.> xref:#enlistCreated_ManagedObject[enlistCreated(ManagedObject)]
 +
 --
 Publishing support: for object stores to enlist an object that has just been created, capturing a dummy value `'[NEW]'` for the pre-modification value.
 --
-<.> xref:#enlistUpdating_ManagedObject_Can[enlistUpdating(ManagedObject, Can)]
+<.> xref:#enlistUpdating_ManagedObject_Function[enlistUpdating(ManagedObject, Function)]
 +
 --
 Publishing support: for object stores to enlist an object that is about to be updated, capturing the pre-modification values of the properties of the xref:refguide:core:index/metamodel/object/ManagedObject.adoc[ManagedObject] .
@@ -45,11 +39,6 @@ Not strictly part of the concern of entity tracking, but allows the default impl
 
 == Members
 
-[#NOOP]
-=== NOOP
-
-Provided primarily for testing, but also used in cases where an attempt is made to resolve a bean but there is no active interaction.
-
 [#enlistCreated_ManagedObject]
 === enlistCreated(ManagedObject)
 
@@ -57,8 +46,8 @@ Publishing support: for object stores to enlist an object that has just been cre
 
 The post-modification values are captured when the transaction commits.
 
-[#enlistUpdating_ManagedObject_Can]
-=== enlistUpdating(ManagedObject, Can)
+[#enlistUpdating_ManagedObject_Function]
+=== enlistUpdating(ManagedObject, Function)
 
 Publishing support: for object stores to enlist an object that is about to be updated, capturing the pre-modification values of the properties of the xref:refguide:core:index/metamodel/object/ManagedObject.adoc[ManagedObject] .
 

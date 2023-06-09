@@ -52,11 +52,6 @@
 
 		<!-- EXTENSIONS VAA -->
 
-		<dependency>
-			<groupId>org.apache.causeway.valuetypes</groupId>
-			<artifactId>causeway-valuetypes-asciidoc-ui-vaa</artifactId>
-		</dependency>
-
 		<!-- EXTENSIONS WKT -->
 
 		<dependency>

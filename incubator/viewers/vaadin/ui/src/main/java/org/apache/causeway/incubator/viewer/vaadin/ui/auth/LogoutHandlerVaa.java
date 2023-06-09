@@ -40,6 +40,10 @@ public class LogoutHandlerVaa implements LogoutHandler {
     @Override
     public void logout() {
 
+        if(VaadinRequest.getCurrent()==null) {
+            return; // logout is only permissive if within the context of a Vaadin request-cycle
+        }
+
         val sessionVaa = VaadinSession.getCurrent();
         if(sessionVaa==null) {
             return; // ignore if there is no current session
@@ -56,12 +60,5 @@ public class LogoutHandlerVaa implements LogoutHandler {
         sessionVaa.close();
 
     }
-
-    @Override
-    public boolean isHandlingCurrentThread() {
-        return VaadinRequest.getCurrent()!=null;
-    }
-
-
 
 }

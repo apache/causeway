@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.extensions.excel.applib.util;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -408,34 +409,34 @@ class SheetPivoterTest {
     }
 
     @Test
-    void getDistinctValuesInSourceSheetColumnTest() {
+    void getDistinctValuesInSourceSheetColumnTest() throws IOException {
 
         // given (only headers in source)
-        XSSFWorkbook workbook = new XSSFWorkbook();
-        XSSFSheet sheet = workbook.createSheet();
-        sheet.createRow(0).createCell(0).setCellValue("row");
-        sheet.createRow(1).createCell(0).setCellValue(1);
-        sheet.createRow(2).createCell(0).setCellValue("fieldname");
+        try(XSSFWorkbook workbook = new XSSFWorkbook()) {
+            XSSFSheet sheet = workbook.createSheet();
+            sheet.createRow(0).createCell(0).setCellValue("row");
+            sheet.createRow(1).createCell(0).setCellValue(1);
+            sheet.createRow(2).createCell(0).setCellValue("fieldname");
 
-        // when
-        List<Cell> l = p.getDistinctValuesInSourceSheetColumn(sheet, 0);
+            // when
+            List<Cell> l = SheetPivoter.getDistinctValuesInSourceSheetColumn(sheet, 0);
 
-        // then
-        assertThat(l.size()).isEqualTo(0);
+            // then
+            assertThat(l.size()).isEqualTo(0);
 
-        // and when (values are added)
-        sheet.createRow(3).createCell(0).setCellValue("a");
-        sheet.createRow(4).createCell(0).setCellValue("a");
-        sheet.createRow(5).createCell(0).setCellValue("b");
-        sheet.createRow(6).createCell(0).setCellValue(1);
-        sheet.createRow(7).createCell(0).setCellValue(""); // empty string differs from empty cell
-        sheet.createRow(8).createCell(0);  // empty string differs from empty cell
+            // and when (values are added)
+            sheet.createRow(3).createCell(0).setCellValue("a");
+            sheet.createRow(4).createCell(0).setCellValue("a");
+            sheet.createRow(5).createCell(0).setCellValue("b");
+            sheet.createRow(6).createCell(0).setCellValue(1);
+            sheet.createRow(7).createCell(0).setCellValue(""); // empty string differs from empty cell
+            sheet.createRow(8).createCell(0);  // empty string differs from empty cell
 
-        l = p.getDistinctValuesInSourceSheetColumn(sheet, 0);
+            l = SheetPivoter.getDistinctValuesInSourceSheetColumn(sheet, 0);
 
-        // then
-        assertThat(l.size()).isEqualTo(5);
-
+            // then
+            assertThat(l.size()).isEqualTo(5);
+        }
     }
 
     void testRow(final int rowNumber, final Object... vals){

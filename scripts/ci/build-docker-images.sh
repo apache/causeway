@@ -115,9 +115,5 @@ if [ "$JIB_CMD" != "skip"  ]; then
   buildDockerImage examples/demo/wicket
 fi
 
-if [ "$INCUBATOR" != "skip"  ]; then
-  buildDockerImage examples/demo/vaadin
-fi
-
 revertRevision
 

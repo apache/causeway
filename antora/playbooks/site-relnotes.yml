@@ -16,7 +16,7 @@
 #  under the License.
 
 site:
-  title: Apache Causeway
+  title: causeway
   url: https://causeway.apache.org/
   start_page: docs:ROOT:about.adoc
 
@@ -48,9 +48,9 @@ content:
 
 ui:
   bundle:
-    url: ../causeway-antora/build/ui-bundle.zip
+    url: ../../causeway-antora/build/ui-bundle.zip
 #    url: https://github.com/apache/causeway-antora/blob/master/build/ui-bundle.zip?raw=true
-    #url: ./antora/theme/ui-bundle.zip
+    
     snapshot: true
   supplemental_files: antora/supplemental-ui
 

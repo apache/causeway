@@ -21,6 +21,7 @@ package org.apache.causeway.incubator.viewer.vaadin.ui.components.markup;
 import com.vaadin.flow.component.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.causeway.incubator.viewer.vaadin.ui.components.UiComponentHandlerVaa;
 import org.apache.causeway.viewer.commons.model.components.UiComponentFactory.ComponentRequest;
 
@@ -38,7 +39,8 @@ public class MarkupFieldFactory implements UiComponentHandlerVaa {
     @Override
     public Component handle(final ComponentRequest request) {
         val uiField = new MarkupField(request.getFriendlyName());
-        uiField.setValue(request.getFeatureValue(org.apache.causeway.applib.value.Markup.class).orElse(null));
+        val managedProperty = (ManagedProperty)request.getManagedFeature();
+        uiField.setValue(getFeatureValue(org.apache.causeway.applib.value.Markup.class, managedProperty).orElse(null));
         return uiField;
     }
 

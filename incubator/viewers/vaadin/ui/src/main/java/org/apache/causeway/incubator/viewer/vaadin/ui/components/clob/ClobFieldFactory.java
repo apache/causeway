@@ -22,6 +22,7 @@ import com.vaadin.flow.component.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.value.Clob;
+import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.causeway.incubator.viewer.vaadin.ui.components.UiComponentHandlerVaa;
 import org.apache.causeway.viewer.commons.model.components.UiComponentFactory.ComponentRequest;
 
@@ -39,7 +40,8 @@ public class ClobFieldFactory implements UiComponentHandlerVaa {
     @Override
     public Component handle(final ComponentRequest request) {
         val uiField = new ClobField(request.getFriendlyName());
-        uiField.setValue(request.getFeatureValue(Clob.class).orElse(null));
+        val managedProperty = (ManagedProperty)request.getManagedFeature();
+        uiField.setValue(getFeatureValue(Clob.class, managedProperty).orElse(null));
         return uiField;
     }
 

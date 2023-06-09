@@ -8,7 +8,7 @@ Then, in the IDE, exclude the parts that won't change and include in the relevan
 
 == Maven Build
 
-Perform a full mvn build, but exclude all of the incubator modules (vaadin in particular has some prereqs that aren't important to us here), and explicitly bring in this module.
+Perform a full mvn build, but exclude all of the incubator modules and explicitly bring in this module.
 Also include the 'wicket' variant of the demo app, as this also includes the graphql viewer (as well as the RO viewer).
 
 [source,bash]

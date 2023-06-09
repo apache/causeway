@@ -18,6 +18,7 @@ class TextUtils {
   Can<String> readLinesFromDataSource(DataSource dataSource, Charset charset)     // <.>
   void writeLinesToFile(Iterable<String> lines, File file, Charset charset)     // <.>
   void writeLinesToDataSink(Iterable<String> lines, DataSink dataSink, Charset charset)     // <.>
+  StringDelimiter delimiter(String delimiter)
   StringCutter cutter(String value)
 }
 ----

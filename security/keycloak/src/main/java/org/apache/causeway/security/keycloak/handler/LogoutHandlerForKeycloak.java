@@ -56,7 +56,7 @@ public class LogoutHandlerForKeycloak implements LogoutHandler {
         }
 
     }
-    private void propagateLogoutToKeycloak(OidcUser user) {
+    private void propagateLogoutToKeycloak(final OidcUser user) {
 
         val endSessionEndpoint = String.format("%s/protocol/openid-connect/logout", user.getIssuer());
 
@@ -72,7 +72,4 @@ public class LogoutHandlerForKeycloak implements LogoutHandler {
         }
     }
 
-    @Override public boolean isHandlingCurrentThread() {
-        return true;
-    }
 }
