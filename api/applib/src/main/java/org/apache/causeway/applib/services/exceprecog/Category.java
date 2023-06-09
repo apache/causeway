@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.applib.services.exceprecog;
 
+import org.apache.causeway.applib.exceptions.RecoverableException;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -51,10 +53,10 @@ public enum Category {
     RETRYABLE(
             "try again later"),
     /**
-     * Recognized, but for some other reason... 40x error
+     * Corresponds to {@link RecoverableException}.
      */
-    CLIENT_ERROR(
-            "client side error"),
+    RECOVERABLE(
+            "recoverable"),
     /**
      * 50x error
      */
@@ -68,4 +70,13 @@ public enum Category {
 
     @Getter
     private final String friendlyName;
+
+    /**
+     * [CAUSEWAY-2419] for a consistent user experience with action dialog validation messages,
+     * be less verbose (suppress the category) if its a Category.CONSTRAINT_VIOLATION.
+     */
+    public boolean isSuppressCategoryInUI() {
+        return this == Category.CONSTRAINT_VIOLATION
+                || this == Category.RECOVERABLE;
+    }
 }
