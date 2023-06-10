@@ -6,8 +6,7 @@ The `labelPosition` attribute indicates where the label for a property or an act
 
 * for parameters, the attribute can be specified using the `@ParameterLayout` annotation
 
-Some data types also support the label being rendered to the right (support for this is shown on each of the demo pages for each of the data types).
-
+Most data types also support the label being rendered to the right (support for this is shown on each of the demo pages for each of the data types).
 
 
 == How this demo works
@@ -112,11 +111,9 @@ The fallback will be the configuration property (see section below).
 
 === Boolean properties
 
-Positioning the label to the right is _only_ supported for boolean properties:
+Positioning the label to the right is also supported for boolean properties:
 
 * boolean property with label positioned to the right:
-+
-WARNING: currently the label is positioned above; see link:https://issues.apache.org/jira/browse/CAUSEWAY-3442[CAUSEWAY-3442]
 
 ** for the property:
 +
@@ -172,8 +169,6 @@ It's also possible to specify the label position using the `.layout.xml` file.
 ----
 <cpt:property id="propertyLayoutBooleanLabelPositionRight" labelPosition="RIGHT"/>
 ----
-+
-WARNING: currently the label is positioned above; see link:https://issues.apache.org/jira/browse/CAUSEWAY-3442[CAUSEWAY-3442]
 
 One advantage of the layout file over the annotation is that the layout file is dynamic: it can be modified and the changes reloaded in a running application.
 
