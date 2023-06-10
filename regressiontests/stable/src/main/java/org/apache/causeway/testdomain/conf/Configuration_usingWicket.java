@@ -213,7 +213,7 @@ public class Configuration_usingWicket {
         }
 
         public void assertFavoriteBookIs(final BookDto bookDto) {
-            assertLabel(FAVORITE_BOOK_SCALAR_NAME, "Favorite Book:");
+            assertLabel(FAVORITE_BOOK_SCALAR_NAME, "Favorite Book");
             assertComponent(FAVORITE_BOOK_ENTITY_LINK, BookmarkablePageLink.class);
 
             val expectedLinkTitle = bookFactory.apply(bookDto).title();
