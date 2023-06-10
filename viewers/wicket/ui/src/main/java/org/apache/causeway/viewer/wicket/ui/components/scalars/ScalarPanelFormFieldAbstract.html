@@ -25,11 +25,11 @@
 		<div wicket:id="scalarTypeContainer"
 			class="scalarNameAndValueComponentType">
 
-			<!-- regular frame -->
+			<!-- regular frame with label -->
 			<div class="form-group" wicket:id="scalarIfRegular">
 
-				<label wicket:id="scalarName"
-					class="scalarName col-form-label">[Label text]</label> 
+				<label wicket:id="scalarNameBeforeValue"
+					class="scalarName col-form-label">[scalarNameBeforeValue]</label> 
 				<span class="scalarValueWrapper">
 					<div class="scalarPlaceholder">
 					
@@ -42,6 +42,8 @@
 					<span wicket:id="feedback" class="form-text"/> 
 					<span wicket:id="associatedActionLinksBelow"/>
 				</span>
+				<label wicket:id="scalarNameAfterValue"
+					class="scalarName col-form-label">[scalarNameAfterValue]</label>
 				<div class="clearfix"/>
 			</div>
 

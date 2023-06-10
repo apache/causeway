@@ -35,6 +35,7 @@ import org.apache.wicket.model.IModel;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -71,6 +72,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import lombok.val;
 
 public abstract class ScalarPanelAbstract
@@ -81,7 +83,10 @@ implements ScalarModelChangeListener {
 
     protected static final String ID_SCALAR_TYPE_CONTAINER = "scalarTypeContainer";
 
-    protected static final String ID_SCALAR_NAME = "scalarName";
+    /** used for label-position LEFT and TOP */
+    protected static final String ID_SCALAR_NAME_BEFORE_VALUE = "scalarNameBeforeValue";
+    /** used for label-position RIGHT */
+    protected static final String ID_SCALAR_NAME_AFTER_VALUE = "scalarNameAfterValue";
     protected static final String ID_SCALAR_VALUE = "scalarValue";
     protected static final String ID_XRAY_DETAILS = "xrayDetails";
 
@@ -320,7 +325,7 @@ implements ScalarModelChangeListener {
         val shallowRegularFrame = FrameFragment.REGULAR
                 .createComponent(Wkt::container);
         WktComponents.permanentlyHide(shallowRegularFrame,
-                ID_SCALAR_NAME, ID_SCALAR_VALUE,
+                ID_SCALAR_NAME_BEFORE_VALUE, ID_SCALAR_VALUE, ID_SCALAR_NAME_AFTER_VALUE,
                 RegularFrame.FIELD.getContainerId(),
                 RegularFrame.FEEDBACK.getContainerId(),
                 RegularFrame.ASSOCIATED_ACTION_LINKS_BELOW.getContainerId(),
@@ -525,22 +530,43 @@ implements ScalarModelChangeListener {
 
     // ///////////////////////////////////////////////////////////////////
 
-    protected Label createScalarNameLabel(final String id, final IModel<String> labelCaption) {
-
-        final Label scalarNameLabel = Wkt.label(id, labelCaption);
-        if(_Strings.isNullOrEmpty(labelCaption.getObject())) {
-            return scalarNameLabel;
-        }
+    /**
+     * When label-position LEFT or TOP populates Wicket template ID_SCALAR_NAME_BEFORE_VALUE,
+     * else when label-position RIGHT then populates Wicket template ID_SCALAR_NAME_AFTER_VALUE.
+     * <p>
+     * When label-position NONE, then no label should be rendered.
+     */
+    protected final void addScalarNameLabel(final MarkupContainer container, final IModel<String> labelCaption) {
 
         val scalarModel = scalarModel();
+
+        val helper = ScalarNameHelper.from(scalarModel);
+
+        WktComponents.permanentlyHide(container, helper.hiddenLabelId);
+
+        final Label scalarNameLabel = Wkt.labelAdd(container, helper.visibleLabelId, labelCaption);
+        if(_Strings.isNullOrEmpty(labelCaption.getObject())) {
+            return;
+        }
 
         WktDecorators.getFormLabel()
             .decorate(scalarNameLabel, FormLabelDecorationModel
                     .mandatory(scalarModel.isShowMandatoryIndicator()));
 
         scalarModel.getDescribedAs()
-        .ifPresent(describedAs->WktTooltips.addTooltip(scalarNameLabel, describedAs));
-        return scalarNameLabel;
+            .ifPresent(describedAs->WktTooltips.addTooltip(scalarNameLabel, describedAs));
+    }
+
+    @Value
+    private static class ScalarNameHelper {
+        static ScalarNameHelper from(final ScalarModel scalarModel) {
+            final LabelPosition labelPostion = Facets.labelAt(scalarModel.getMetaModel());
+            return labelPostion == LabelPosition.RIGHT
+                    ? new ScalarNameHelper(ID_SCALAR_NAME_AFTER_VALUE, ID_SCALAR_NAME_BEFORE_VALUE)
+                    : new ScalarNameHelper(ID_SCALAR_NAME_BEFORE_VALUE, ID_SCALAR_NAME_AFTER_VALUE);
+        }
+        final String visibleLabelId;
+        final String hiddenLabelId;
     }
 
     // ///////////////////////////////////////////////////////////////////
