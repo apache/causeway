@@ -133,7 +133,7 @@ extends ScalarPanelAbstract2 {
             Wkt.cssAppend(formGroup, "mandatory");
         }
 
-        addScalarNameLabel(formGroup, friendlyNameModel);
+        scalarNameLabelAddTo(formGroup, friendlyNameModel);
 
         formComponent.add(_Util.createValidatorFor(scalarModel));
 

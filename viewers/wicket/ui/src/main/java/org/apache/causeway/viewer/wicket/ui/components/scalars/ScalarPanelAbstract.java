@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import org.apache.wicket.Component;
@@ -536,37 +537,48 @@ implements ScalarModelChangeListener {
      * <p>
      * When label-position NONE, then no label should be rendered.
      */
-    protected final void addScalarNameLabel(final MarkupContainer container, final IModel<String> labelCaption) {
+    protected final void scalarNameLabelAddTo(final MarkupContainer container, final IModel<String> labelCaption) {
 
         val scalarModel = scalarModel();
 
         val helper = ScalarNameHelper.from(scalarModel);
 
-        WktComponents.permanentlyHide(container, helper.hiddenLabelId);
+        helper.hideHiddenLabels(container);
 
-        final Label scalarNameLabel = Wkt.labelAdd(container, helper.visibleLabelId, labelCaption);
-        if(_Strings.isNullOrEmpty(labelCaption.getObject())) {
-            return;
-        }
+        helper.visibleLabelId.ifPresent(visibleLabelId->{
 
-        WktDecorators.getFormLabel()
-            .decorate(scalarNameLabel, FormLabelDecorationModel
-                    .mandatory(scalarModel.isShowMandatoryIndicator()));
+            final Label scalarNameLabel = Wkt.labelAdd(container, visibleLabelId, labelCaption);
+            if(_Strings.isNullOrEmpty(labelCaption.getObject())) {
+                return;
+            }
 
-        scalarModel.getDescribedAs()
-            .ifPresent(describedAs->WktTooltips.addTooltip(scalarNameLabel, describedAs));
+            WktDecorators.getFormLabel()
+                .decorate(scalarNameLabel, FormLabelDecorationModel
+                        .mandatory(scalarModel.isShowMandatoryIndicator()));
+
+            scalarModel.getDescribedAs()
+                .ifPresent(describedAs->WktTooltips.addTooltip(scalarNameLabel, describedAs));
+        });
     }
 
     @Value
     private static class ScalarNameHelper {
         static ScalarNameHelper from(final ScalarModel scalarModel) {
             final LabelPosition labelPostion = Facets.labelAt(scalarModel.getMetaModel());
-            return labelPostion == LabelPosition.RIGHT
-                    ? new ScalarNameHelper(ID_SCALAR_NAME_AFTER_VALUE, ID_SCALAR_NAME_BEFORE_VALUE)
-                    : new ScalarNameHelper(ID_SCALAR_NAME_BEFORE_VALUE, ID_SCALAR_NAME_AFTER_VALUE);
+            return labelPostion == LabelPosition.NONE
+                    ? new ScalarNameHelper(Optional.empty(), new String[]{ID_SCALAR_NAME_BEFORE_VALUE, ID_SCALAR_NAME_AFTER_VALUE})
+                    : labelPostion == LabelPosition.RIGHT
+                            ? new ScalarNameHelper(Optional.of(ID_SCALAR_NAME_AFTER_VALUE), new String[]{ID_SCALAR_NAME_BEFORE_VALUE})
+                            : new ScalarNameHelper(Optional.of(ID_SCALAR_NAME_BEFORE_VALUE), new String[]{ID_SCALAR_NAME_AFTER_VALUE});
         }
-        final String visibleLabelId;
-        final String hiddenLabelId;
+        final Optional<String> visibleLabelId;
+        final String[] hiddenLabelIds;
+
+        void hideHiddenLabels(final MarkupContainer container) {
+            for(final String hiddenLabelId : hiddenLabelIds) {
+                WktComponents.permanentlyHide(container, hiddenLabelId);
+            }
+        }
     }
 
     // ///////////////////////////////////////////////////////////////////
