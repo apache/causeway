@@ -23,14 +23,13 @@ import javax.inject.Named;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import org.apache.causeway.applib.util.schema.CommonDtoUtils;
 import org.apache.causeway.applib.value.semantics.Parser;
 import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.schema.common.v2.ValueType;
 
-import lombok.val;
+import demoapp.dom.progmodel.customvaluetypes.embeddedvalues.ComplexNumber;
 
 @Profile("demo-jpa")
 //tag::class[]
@@ -48,26 +47,20 @@ public class ComplexNumberJpaValueSemantics
 
     @Override
     public ValueType getSchemaValueType() {
-        return ValueType.COMPOSITE;
+        /* this type can be easily converted to string and back,
+         * so we use its string representation (instead of its decomposed representation) */
+        return ValueType.STRING;
     }
 
 //tag::compose[]
     @Override
     public ValueDecomposition decompose(final ComplexNumberJpa value) {
-        return CommonDtoUtils.typedTupleBuilder(value)
-                .addFundamentalType(ValueType.DOUBLE, "re", ComplexNumberJpa::getRe)
-                .addFundamentalType(ValueType.DOUBLE, "im", ComplexNumberJpa::getIm)
-                .buildAsDecomposition();
+        return decomposeAsString(value, ComplexNumberJpa::asString, ()->null);
     }
 
     @Override
     public ComplexNumberJpa compose(final ValueDecomposition decomposition) {
-        return decomposition.right()
-                .map(CommonDtoUtils::typedTupleAsMap)
-                .map(map->ComplexNumberJpa.of(
-                        (Double)map.get("re"),
-                        (Double)map.get("im")))
-                .orElse(null);
+        return composeFromString(decomposition, string->ComplexNumber.parse(string, ComplexNumberJpa::of), ()->null);
     }
 //end::compose[]
 
@@ -77,13 +70,10 @@ public class ComplexNumberJpaValueSemantics
         return (context, object) -> title(object, "NaN");
     }
 
-    private static String title(final ComplexNumberJpa complexNumber, final String fallbackIfNull) {
-        if (complexNumber == null) return fallbackIfNull;
-        return complexNumber.getRe() +
-                (complexNumber.getIm() >= 0
-                        ? (" + " +  complexNumber.getIm())
-                        : (" - " + (-complexNumber.getIm())))
-                + "i";
+    private static String title(final ComplexNumber complexNumber, final String fallbackIfNull) {
+        return complexNumber == null
+                ? fallbackIfNull
+                : complexNumber.asString();
     }
 //end::getRenderer[]
 
@@ -102,11 +92,7 @@ public class ComplexNumberJpaValueSemantics
                         || complexNumberString.contains("NaN")) {
                     return null;
                 }
-                // this is a naive implementation, just for demo
-                final String[] parts = complexNumberString.split("\\+|i");
-                val real = Double.parseDouble(parts[0]);
-                val imaginary = Double.parseDouble(parts[1]);
-                return ComplexNumberJpa.of(real, imaginary);
+                return ComplexNumber.parse(complexNumberString, ComplexNumberJpa::of);
             }
 
             @Override
