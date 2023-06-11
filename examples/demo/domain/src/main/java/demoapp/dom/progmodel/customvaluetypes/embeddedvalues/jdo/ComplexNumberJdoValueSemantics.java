@@ -45,21 +45,22 @@ public class ComplexNumberJdoValueSemantics
         return ComplexNumberJdo.class;
     }
 
+//tag::compose[]
     @Override
-    public ValueType getSchemaValueType() {
-        /* this type can be easily converted to string and back,
-         * so we use its string representation (instead of its decomposed representation) */
+    public ValueType getSchemaValueType() {                                    // <.>
+        /* This type can be easily converted to string and back.
+         * So for convenience, we use its string representation (instead of its decomposed representation).
+         * The decompose/compose methods below must honor the chosen type here. */
         return ValueType.STRING;
     }
 
-//tag::compose[]
     @Override
-    public ValueDecomposition decompose(final ComplexNumberJdo value) {
+    public ValueDecomposition decompose(final ComplexNumberJdo value) {        // <.>
         return decomposeAsString(value, ComplexNumberJdo::asString, ()->null);
     }
 
     @Override
-    public ComplexNumberJdo compose(final ValueDecomposition decomposition) {
+    public ComplexNumberJdo compose(final ValueDecomposition decomposition) {  // <.>
         return composeFromString(decomposition, string->ComplexNumber.parse(string, ComplexNumberJdo::of), ()->null);
     }
 //end::compose[]
