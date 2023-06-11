@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
 @ActionLayout(
         associateWith = "complexNumber",
-        cssClassFa = "fa-minus-scare",
+        cssClassFa = "fa-minus-square",
         sequence = "2",
         promptStyle = PromptStyle.DIALOG_SIDEBAR
 )
