@@ -1488,7 +1488,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 	            <groupId>com.sun.xml.bind</groupId>
 	            <artifactId>jaxb-impl</artifactId>
-	            <version>4.0.2</version>
+	            <version>4.0.3</version>
 	        </dependency>
 
 			<dependency>
