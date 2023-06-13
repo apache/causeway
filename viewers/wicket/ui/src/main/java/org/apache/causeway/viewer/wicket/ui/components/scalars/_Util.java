@@ -62,9 +62,13 @@ class _Util {
                 && !scalarModel.disabledReason().isPresent();
     }
 
+    /**
+     * Parameter disabled case should already be handled earlier.
+     * <p>
+     * @implNote {@code !scalarModel.disabledReason().isPresent()} is not checked nor asserted here
+     */
     boolean canParameterEnterNestedEdit(final ScalarModel scalarModel) {
         return scalarModel.isParameter()
-                // && !scalarModel.disabledReason().isPresent() // disabled case should already be handled earlier
                 && !scalarModel.hasChoices() // handled by select2 panels instead
                 && lookupCompositeValueMixinForFeature(scalarModel).isPresent();
     }

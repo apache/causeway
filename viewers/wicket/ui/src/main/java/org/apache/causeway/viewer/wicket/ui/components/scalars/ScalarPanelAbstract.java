@@ -134,7 +134,9 @@ implements ScalarModelChangeListener {
             if(!scalarModel.getRenderingHint().isRegular()) {
                 return COMPACT;
             }
-            if(scalarModel.disabledReason().isPresent()) {
+            if(scalarModel.isParameter()
+                    && scalarModel.disabledReason().isPresent()) {
+                // this simple logic only applies for params, as those don't support inline-as-if-edit
                 return READONLY;
             }
             if(scalarModel.isEditMode()) {
@@ -149,7 +151,9 @@ implements ScalarModelChangeListener {
             if(_Util.lookupPropertyActionForInlineEdit(scalarModel).isPresent()) {
                 return CAN_EDIT_INLINE_VIA_ACTION;
             }
-            return CAN_EDIT;
+            return scalarModel.disabledReason().isPresent()
+                    ? READONLY
+                    : CAN_EDIT;
         }
 
     }
