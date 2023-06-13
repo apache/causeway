@@ -152,8 +152,14 @@ extends PromptFormAbstract<ActionModel> {
             paramRepaint = paramRepaint.max(
                     paramPanel.updateIfNecessary(paramModel));
 
-            if(paramRepaint.isRequired()) {
+            switch (paramRepaint) {
+            case REQUIRED:
                 target.add(paramPanel);
+                break;
+            case REQUIRED_ON_PARENT:
+                target.add(paramPanel.getParent());
+                break;
+            default:
             }
         });
 

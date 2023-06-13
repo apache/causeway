@@ -167,12 +167,15 @@ implements ScalarModelChangeListener {
      */
     public enum Repaint {
         OPTIONAL,
-        REQUIRED;
+        REQUIRED,
+        /** if a previously hidden component becomes visible, its parent must be added to the AJAX request target */
+        REQUIRED_ON_PARENT;
         public static Repaint required(final boolean needsRepainting) {
             return needsRepainting ? Repaint.REQUIRED : Repaint.OPTIONAL;
         }
         public boolean isOptional() { return this == OPTIONAL; }
         public boolean isRequired() { return this == REQUIRED; }
+        public boolean isRequiredOnParent() { return this == REQUIRED_ON_PARENT; }
         public Repaint max(final @NonNull Repaint other) {
             return this.ordinal()>=other.ordinal()
                     ? this
@@ -660,16 +663,29 @@ implements ScalarModelChangeListener {
    public Repaint updateIfNecessary(
            final @NonNull UiParameter paramModel) {
 
-       // visibility
-       val visibilityBefore = isVisible() && isVisibilityAllowed();
+       /*
+        * VISIBILITY, cases to consider:
+        * (1) start showing     -> Repaint.REQUIRED_ON_PARENT
+        * (2) keep showing      -> Repaint.OPTIONAL
+        * (3) stop showing      -> Repaint.REQUIRED
+        * (4) keep hiding       -> Repaint.OPTIONAL
+        */
+
+       val visibilityBefore = isVisibilityAllowed();
        val visibilityConsent = paramModel.getParameterNegotiationModel().getVisibilityConsent(paramModel.getParameterIndex());
        val visibilityAfter = visibilityConsent.isAllowed();
        setVisibilityAllowed(visibilityAfter);
-       setVisible(visibilityAfter);
 
-       // usability
-       val usabilityConsent = paramModel.getParameterNegotiationModel().getUsabilityConsent(paramModel.getParameterIndex());
+       /*
+        * USABILITY, cases to consider:
+        * (5) start being usable    -> Repaint.REQUIRED (but only if visible)
+        * (6) keep being usable     -> Repaint.OPTIONAL
+        * (7) stop being usable     -> Repaint.REQUIRED (but only if visible)
+        * (8) keep being readonly   -> Repaint.OPTIONAL
+        */
+
        val usabilityBefore = isEnabled();
+       val usabilityConsent = paramModel.getParameterNegotiationModel().getUsabilityConsent(paramModel.getParameterIndex());
        val usabilityAfter = usabilityConsent.isAllowed();
        if(usabilityAfter) {
            onMakeEditable();
@@ -677,12 +693,16 @@ implements ScalarModelChangeListener {
            onMakeNotEditable(usabilityConsent.getReasonAsString().orElse(null));
        }
 
-       // repaint the param panel if visibility has changed
-       if (!visibilityBefore || !visibilityAfter) {
-           return Repaint.REQUIRED;
+       if (visibilityBefore != visibilityAfter) {
+           // repaint the param panel if visibility has changed
+           return visibilityAfter
+                   ? Repaint.REQUIRED_ON_PARENT
+                   : Repaint.REQUIRED;
        }
-       // repaint the param panel if usability has changed
-       if (!usabilityAfter || !usabilityBefore) {
+
+       if (usabilityBefore != usabilityAfter
+               && visibilityAfter) {
+           // repaint the param panel if usability has changed, but only if visible
            return Repaint.REQUIRED;
        }
 

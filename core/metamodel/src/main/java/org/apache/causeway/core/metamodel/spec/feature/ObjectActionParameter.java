@@ -269,7 +269,4 @@ extends ObjectFeature, CurrentHolder {
     default ActionParameterMemento getMemento() {
         return ActionParameterMemento.forActionParameter(this);
     }
-
-
-
 }
