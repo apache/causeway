@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.wicket.model.models;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
@@ -29,6 +30,7 @@ import org.apache.causeway.viewer.wicket.model.models.interaction.act.UiParamete
 
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.val;
 
 public class ScalarParameterModel
 extends ScalarModel
@@ -37,7 +39,10 @@ implements HasUiParameter {
     private static final long serialVersionUID = 1L;
 
     public static ScalarParameterModel wrap(final UiParameterWkt delegate) {
-        return new ScalarParameterModel(delegate);
+        val viewOrEdit = delegate.disabledReason().isPresent()
+                ? ScalarRepresentation.VIEWING
+                : ScalarRepresentation.EDITING;
+        return new ScalarParameterModel(delegate, viewOrEdit);
     }
 
     @Getter(onMethod_={@Override})
@@ -49,8 +54,9 @@ implements HasUiParameter {
      * value (if any) of that action parameter.
      */
     private ScalarParameterModel(
-            final UiParameterWkt uiParameter) {
-        super(UiObjectWkt.ofAdapter(uiParameter.getMetaModelContext(), uiParameter.getOwner()));
+            final UiParameterWkt uiParameter,
+            final ScalarRepresentation viewOrEdit) {
+        super(UiObjectWkt.ofAdapter(uiParameter.getMetaModelContext(), uiParameter.getOwner()), viewOrEdit);
         this.uiParameter = uiParameter;
     }
 

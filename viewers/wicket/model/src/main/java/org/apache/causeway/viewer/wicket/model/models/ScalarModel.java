@@ -84,8 +84,9 @@ implements HasRenderingHints, UiScalar, FormExecutorContext {
      * value (if any) of that action parameter.
      */
     protected ScalarModel(
-            final UiObjectWkt parentUiObject) {
-        this(parentUiObject, ScalarRepresentation.EDITING, RenderingHint.REGULAR);
+            final UiObjectWkt parentUiObject,
+            final ScalarRepresentation viewOrEdit) {
+        this(parentUiObject, viewOrEdit, RenderingHint.REGULAR);
     }
 
     /**
@@ -97,11 +98,10 @@ implements HasRenderingHints, UiScalar, FormExecutorContext {
             final @NonNull UiObjectWkt parentEntityModel,
             final @NonNull ScalarRepresentation viewOrEdit,
             final @NonNull RenderingHint renderingHint) {
-
         super(parentEntityModel); // the so called target model, we are chaining us to
         this.parentEntityModel = parentEntityModel;
-        this.mode = viewOrEdit;
         this.renderingHint = renderingHint;
+        this.mode = viewOrEdit;
     }
 
     /**

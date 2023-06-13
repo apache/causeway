@@ -64,7 +64,7 @@ class _Util {
 
     boolean canParameterEnterNestedEdit(final ScalarModel scalarModel) {
         return scalarModel.isParameter()
-                && !scalarModel.disabledReason().isPresent()
+                // && !scalarModel.disabledReason().isPresent() // disabled case should already be handled earlier
                 && !scalarModel.hasChoices() // handled by select2 panels instead
                 && lookupCompositeValueMixinForFeature(scalarModel).isPresent();
     }

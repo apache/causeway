@@ -134,6 +134,9 @@ implements ScalarModelChangeListener {
             if(!scalarModel.getRenderingHint().isRegular()) {
                 return COMPACT;
             }
+            if(scalarModel.disabledReason().isPresent()) {
+                return READONLY;
+            }
             if(scalarModel.isEditMode()) {
                 return
                         _Util.canParameterEnterNestedEdit(scalarModel)
@@ -146,9 +149,7 @@ implements ScalarModelChangeListener {
             if(_Util.lookupPropertyActionForInlineEdit(scalarModel).isPresent()) {
                 return CAN_EDIT_INLINE_VIA_ACTION;
             }
-            return scalarModel.disabledReason().isPresent()
-                    ? READONLY
-                    : CAN_EDIT;
+            return CAN_EDIT;
         }
 
     }
