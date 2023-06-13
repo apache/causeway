@@ -133,7 +133,7 @@ extends ScalarPanelAbstract2 {
             Wkt.cssAppend(formGroup, "mandatory");
         }
 
-        formGroup.add(createScalarNameLabel(ID_SCALAR_NAME, friendlyNameModel));
+        scalarNameLabelAddTo(formGroup, friendlyNameModel);
 
         formComponent.add(_Util.createValidatorFor(scalarModel));
 
@@ -275,7 +275,4 @@ extends ScalarPanelAbstract2 {
         WktTooltips.clearTooltip(getFormComponent());
         WktTooltips.clearTooltip(inlinePromptLink);
     }
-
-
-
 }

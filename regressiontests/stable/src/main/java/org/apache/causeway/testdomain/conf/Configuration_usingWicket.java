@@ -37,8 +37,6 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.tester.WicketTester;
-import org.apache.wicket.util.visit.IVisit;
-import org.apache.wicket.util.visit.IVisitor;
 import org.junit.jupiter.api.function.ThrowingConsumer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -119,7 +117,7 @@ public class Configuration_usingWicket {
                 + ":property:scalarTypeContainer:scalarIfRegular";
 
         public static final String FAVORITE_BOOK_SCALAR_NAME = FAVORITE_BOOK_SCALAR
-                + ":scalarName";
+                + ":scalarNameBeforeValue";
 
         public static final String FAVORITE_BOOK_ENTITY_LINK = FAVORITE_BOOK_SCALAR
                 + ":container-fieldFrame:scalarValueInlinePromptLink:container-scalarValue:entityLink"
@@ -215,7 +213,7 @@ public class Configuration_usingWicket {
         }
 
         public void assertFavoriteBookIs(final BookDto bookDto) {
-            assertLabel(FAVORITE_BOOK_SCALAR_NAME, "Favorite Book:");
+            assertLabel(FAVORITE_BOOK_SCALAR_NAME, "Favorite Book");
             assertComponent(FAVORITE_BOOK_ENTITY_LINK, BookmarkablePageLink.class);
 
             val expectedLinkTitle = bookFactory.apply(bookDto).title();
@@ -229,29 +227,26 @@ public class Configuration_usingWicket {
         }
 
         public void dumpComponentTree(final Predicate<Component> filter) {
-            getLastRenderedPage().visitChildren(new IVisitor<Component, Object>() {
-                @Override
-                public void component(final Component component, final IVisit<Object> visit) {
-                    if(filter.test(component)) {
+            getLastRenderedPage().visitChildren((component, visit) -> {
+                if(filter.test(component)) {
 
-                        val inversePath = new ArrayList<String>();
-                        var comp = component;
+                    val inversePath = new ArrayList<String>();
+                    var comp = component;
 
-                        while(comp!=null) {
-                            inversePath.add(comp.getId());
-                            comp = comp.getParent();
-                        }
-
-                        val path = Can.ofCollection(inversePath)
-                        .reverse()
-                        .stream()
-                        .skip(1L)
-                        .collect(Collectors.joining(":"));
-
-                        System.err.printf("comp[%s]: %s -> %s: %s%n",
-                                path, component, component.getClass().getSimpleName(),
-                                component.getDefaultModelObjectAsString());
+                    while(comp!=null) {
+                        inversePath.add(comp.getId());
+                        comp = comp.getParent();
                     }
+
+                    val path = Can.ofCollection(inversePath)
+                    .reverse()
+                    .stream()
+                    .skip(1L)
+                    .collect(Collectors.joining(":"));
+
+                    System.err.printf("comp[%s]: %s -> %s: %s%n",
+                            path, component, component.getClass().getSimpleName(),
+                            component.getDefaultModelObjectAsString());
                 }
             });
         }

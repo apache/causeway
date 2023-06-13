@@ -703,6 +703,14 @@ div.label-left label.col-form-label {
     text-align: left;
 }
 
+div.label-right label.col-form-label {
+    width: var(--form-label-width);
+    float: right;
+    padding-top: 2px;
+    padding-left: 2px;
+    text-align: right;
+}
+
 .propertyEditForm .label-left label.col-form-label,
 .actionParametersForm .label-left label.col-form-label {
     padding-left: 10px;
@@ -712,8 +720,12 @@ div.label-none label.col-form-label {
     display: none;
 }
 
-div.label-left .scalarValueWrapper {
+div.label-left .scalarValueWrapper { 
     width: var(--form-field-width);
+    float: left;
+}
+div.label-right .scalarValueWrapper { 
+	width: var(--form-field-width);
     float: left;
 }
 
@@ -757,10 +769,6 @@ div.label-left .choicesPlaceholder {
     width: 100%;
     vertical-align: -webkit-baseline-middle;
     vertical-align: middle;
-}
-
-div.label-right .scalarValueWrapper {
-    padding-left: var(--form-label-width);
 }
 
 div.label-right .scalarValueWrapper .col-form-label{
@@ -1071,6 +1079,7 @@ li.select2-results__option {
 
 .scalarName {
 	opacity: 0.8;
+	line-height: 1.3;
 }
 
 .scalarNameAndValueComponentType .inlinePromptForm {

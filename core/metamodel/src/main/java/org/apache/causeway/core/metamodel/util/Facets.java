@@ -18,8 +18,14 @@
  */
 package org.apache.causeway.core.metamodel.util;
 
-import lombok.experimental.UtilityClass;
-import lombok.val;
+import java.util.Optional;
+import java.util.OptionalInt;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+
+import org.springframework.lang.Nullable;
+import org.springframework.util.ClassUtils;
+
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.DomainServiceLayout.MenuBar;
 import org.apache.causeway.applib.annotation.LabelPosition;
@@ -70,13 +76,9 @@ import org.apache.causeway.core.metamodel.spec.TypeOfAnyCardinality;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
-import org.springframework.lang.Nullable;
-import org.springframework.util.ClassUtils;
 
-import java.util.Optional;
-import java.util.OptionalInt;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
+import lombok.val;
+import lombok.experimental.UtilityClass;
 
 /**
  * Facet utility.
@@ -215,30 +217,30 @@ public final class Facets {
         return objectSpec.containsFacet(IconFacet.class);
     }
 
-    public Optional<LabelPosition> labelAt(final ObjectFeature feature) {
+    /**
+     * Non-null, one of {LEFT, RIGHT, TOP or NONE}.
+     */
+    public LabelPosition labelAt(final ObjectFeature feature) {
         return feature.lookupFacet(LabelAtFacet.class)
-        .map(LabelAtFacet::label);
+                .map(LabelAtFacet::label)
+                .map(labelPos->{
+                    switch (labelPos) {
+                    case LEFT:
+                    case RIGHT:
+                    case NONE:
+                    case TOP:
+                        return labelPos;
+                    case DEFAULT:
+                    case NOT_SPECIFIED:
+                    default:
+                        return LabelPosition.LEFT;
+                    }
+                })
+                .orElse(LabelPosition.LEFT);
     }
 
     public String labelAtCss(final ObjectFeature feature) {
-        return Facets.labelAt(feature)
-        .map(labelPos->{
-            switch (labelPos) {
-            case LEFT:
-                return "label-left";
-            case RIGHT:
-                return "label-right";
-            case NONE:
-                return "label-none";
-            case TOP:
-                return "label-top";
-            case DEFAULT:
-            case NOT_SPECIFIED:
-            default:
-                return "label-left";
-            }
-        })
-        .orElse("label-left");
+        return "label-" + labelAt(feature).name().toLowerCase();
     }
 
     public OptionalInt minFractionalDigits(final FacetHolder facetHolder) {

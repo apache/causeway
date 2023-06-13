@@ -18,12 +18,42 @@
  */
 package demoapp.dom.progmodel.customvaluetypes.embeddedvalues;
 
+import java.util.function.BiFunction;
+
 import lombok.Value;
+import lombok.val;
 
 public interface ComplexNumber {
 
     double getRe();
     double getIm();
+
+    /**
+     * convert to string
+     */
+    default String asString() {
+        return getRe() +
+                (getIm() >= 0
+                        ? (" + " +  getIm())
+                        : (" - " + (-getIm())))
+                + "i";
+    }
+
+    /**
+     * convert from string
+     */
+    static <T extends ComplexNumber> T parse(
+            final String complexNumberString, final BiFunction<Double, Double, T> factory) {
+        if(!org.springframework.util.StringUtils.hasLength(complexNumberString)
+                || complexNumberString.contains("NaN")) {
+            return null;
+        }
+        // this is a naive implementation, just for demo
+        final String[] parts = complexNumberString.split("\\+|i");
+        val real = Double.parseDouble(parts[0]);
+        val imaginary = Double.parseDouble(parts[1]);
+        return factory.apply(real, imaginary);
+    }
 
     // used for seeding
     public static SimpleNamedComplexNumber named(

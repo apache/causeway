@@ -24,6 +24,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.form.TextField;
 
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
@@ -40,8 +41,8 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
     private static final long serialVersionUID = 1L;
 
     public ScalarPanelTextFieldWithTemporalPicker(
-            final String id, final ScalarModel scalarModel, final Class<T> cls) {
-        super(id, scalarModel, cls);
+            final String id, final ScalarModel scalarModel, final Class<T> type) {
+        super(id, scalarModel, type);
     }
 
     protected int getDateRenderAdjustDays() {
@@ -51,8 +52,11 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
     @Override
     protected final TextField<T> createTextField(final String id) {
         val scalarModel = scalarModel();
+        val converter = converter().orElseThrow(()->
+            _Exceptions.illegalArgument("framework bug: ScalarPanelTextFieldWithTemporalPicker requires a converter"));
+
         val textField = new TextFieldWithDateTimePicker<T>(
-                id, scalarModel, type, getConverter(scalarModel));
+                id, scalarModel, type, converter);
 
         /* [CAUSEWAY-3201]
          * Adding OnChangeAjaxBehavior registers a JavaScript event listener on change events.

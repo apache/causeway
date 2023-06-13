@@ -19,14 +19,11 @@
 package org.apache.causeway.viewer.wicket.ui.components.scalars;
 
 import java.util.EnumSet;
+import java.util.Optional;
 
 import org.apache.wicket.util.convert.IConverter;
 
-import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
-
-import lombok.NonNull;
 
 /**
  * Specialization of {@link ScalarPanelTextFieldAbstract},
@@ -50,11 +47,8 @@ extends ScalarPanelTextFieldAbstract<String> {
     }
 
     @Override
-    protected final IConverter<String> getConverter(
-            final @NonNull ObjectFeature propOrParam,
-            final @NonNull ScalarRepresentation scalarRepresentation) {
-        return null; // does not use conversion
+    protected final Optional<IConverter<String>> converter() {
+        return Optional.empty(); // does not use conversion
     }
-
 
 }

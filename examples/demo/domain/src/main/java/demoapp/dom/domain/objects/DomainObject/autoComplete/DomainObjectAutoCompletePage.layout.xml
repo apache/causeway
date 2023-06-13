@@ -27,7 +27,7 @@
 	<bs3:row>
 		<bs3:col span="6">
 			<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
-			<cpt:collection id="objects">
+			<cpt:collection id="characters">
 				<cpt:action id="find"/>
 			</cpt:collection>
 		</bs3:col>

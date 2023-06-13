@@ -20,7 +20,7 @@ package demoapp.dom.domain.objects.DomainObject.autoComplete;
 
 import java.util.List;
 
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
@@ -30,9 +30,9 @@ import demoapp.dom._infra.values.ValueHolderRepository;
 import lombok.RequiredArgsConstructor;
 
 @Collection()
-@CollectionLayout()
+@CollectionLayout(named = "TV Characters")
 @RequiredArgsConstructor
-public class DomainObjectAutoCompletePage_objects {
+public class DomainObjectAutoCompletePage_characters {
 
     @SuppressWarnings("unused")
     private final DomainObjectAutoCompletePage page;

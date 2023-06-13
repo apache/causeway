@@ -26,15 +26,12 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.viewer.commons.model.components.UiString;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -64,19 +61,10 @@ extends ScalarPanelFormFieldAbstract<T> {
 
     // -- CONVERSION
 
-    protected final IConverter<T> getConverter(final ScalarModel scalarModel) {
-        return getConverter(scalarModel.getMetaModel(), scalarModel.isEditMode()
-                ? ScalarRepresentation.EDITING
-                : ScalarRepresentation.VIEWING);
-    }
-
     /**
-     * Converter that is used for the either regular (editing) or compact (HTML) view of the panel,
-     * based on argument {@code scalarRepresentation}.
+     * Optionally the {@link IConverter} that is used for the either regular (editing) or compact (HTML) view of the panel.
      */
-    protected abstract IConverter<T> getConverter(
-            @NonNull ObjectFeature propOrParam,
-            @NonNull ScalarRepresentation scalarRepresentation);
+    protected abstract Optional<IConverter<T>> converter();
 
     // --
 
@@ -84,12 +72,11 @@ extends ScalarPanelFormFieldAbstract<T> {
      * TextField, with converter.
      */
     protected AbstractTextComponent<T> createTextField(final String id) {
-        val converter = getConverter(scalarModel());
         return getFormatModifiers().contains(FormatModifier.MULTILINE)
                 ? Wkt.textAreaWithConverter(
-                        id, unwrappedModel(), type, converter)
+                        id, unwrappedModel(), type, converter())
                 : Wkt.textFieldWithConverter(
-                        id, unwrappedModel(), type, converter);
+                        id, unwrappedModel(), type, converter());
     }
 
     protected final IModel<T> unwrappedModel() {

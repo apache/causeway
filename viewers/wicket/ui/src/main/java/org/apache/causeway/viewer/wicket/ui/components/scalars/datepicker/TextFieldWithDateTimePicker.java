@@ -22,17 +22,18 @@ import static de.agilecoders.wicket.jquery.JQuery.$;
 
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.causeway.applib.locale.UserLocale;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.model.value.ConverterBasedOnValueSemantics;
+import org.apache.causeway.viewer.wicket.ui.components.text.TextFieldWithConverter;
 
 import de.agilecoders.wicket.core.util.Attributes;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.datetime.DatetimePickerConfig;
@@ -41,6 +42,7 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesome6I
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.references.DatetimePickerCssReference;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.references.DatetimePickerJsReference;
 import de.agilecoders.wicket.jquery.Config;
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -52,29 +54,24 @@ import lombok.val;
  * @param <T> The type of the date/time
  */
 public class TextFieldWithDateTimePicker<T>
-extends TextField<T>
-implements IConverter<T> {
+extends TextFieldWithConverter<T> {
 
     private static final long serialVersionUID = 1L;
-
-    protected final IConverter<T> converter;
 
     private final DateTimeConfig config;
 
     public TextFieldWithDateTimePicker(
-            final String id,
-            final ScalarModel scalarModel,
-            final Class<T> type,
-            final IConverter<T> converter) {
-        super(id, scalarModel.unwrapped(type), type);
+            final @NonNull String id,
+            final @NonNull ScalarModel scalarModel,
+            final @NonNull Class<T> type,
+            final @NonNull IConverter<T> converter) {
+        super(id, scalarModel.unwrapped(type), type, Optional.of(converter));
         setOutputMarkupId(true);
 
         this.config = createDatePickerConfig(
                 scalarModel.getMetaModelContext(),
                 ((ConverterBasedOnValueSemantics<T>) converter).getEditingPattern(),
                 !scalarModel.isRequired());
-
-        this.converter = converter;
 
         /* debug
                 new IConverter<T>() {
@@ -100,29 +97,6 @@ implements IConverter<T> {
             }
         };
         */
-    }
-
-    @Override
-    public T convertToObject(final String value, final Locale locale) {
-        return converter.convertToObject(value, locale);
-    }
-
-    @Override
-    public String convertToString(final T value, final Locale locale) {
-        return converter.convertToString(value, locale);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public <C> IConverter<C> getConverter(final Class<C> type) {
-        // we use isAssignableFrom rather than a simple == to handle
-        // the persistence of JDO/DataNucleus:
-        // if persisting a java.sql.Date, the object we are given is actually a
-        // org.datanucleus.store.types.simple.SqlDate (a subclass of java.sql.Date)
-        if (super.getType().isAssignableFrom(type)) {
-            return (IConverter<C>) this;
-        }
-        return super.getConverter(type);
     }
 
     @Override

@@ -216,9 +216,7 @@ implements FormExecutor, HasCommonContext {
             final @Nullable Form<?> feedbackFormIfAny,
             final @NonNull  Recognition recognition) {
 
-        //[CAUSEWAY-2419] for a consistent user experience with action dialog validation messages,
-        //be less verbose (suppress the category) if its a Category.CONSTRAINT_VIOLATION.
-        val errorMsg = recognition.getCategory()==Category.CONSTRAINT_VIOLATION
+        val errorMsg = recognition.getCategory().isSuppressCategoryInUI()
                 ? recognition.toMessageNoCategory(getTranslationService())
                 : recognition.toMessage(getTranslationService());
 

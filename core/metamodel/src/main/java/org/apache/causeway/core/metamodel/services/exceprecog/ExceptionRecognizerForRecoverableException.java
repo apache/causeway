@@ -43,7 +43,7 @@ import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 public class ExceptionRecognizerForRecoverableException extends ExceptionRecognizerForType {
 
     public ExceptionRecognizerForRecoverableException() {
-        super(Category.CLIENT_ERROR, RecoverableException.class);
+        super(Category.RECOVERABLE, RecoverableException.class);
     }
 
 

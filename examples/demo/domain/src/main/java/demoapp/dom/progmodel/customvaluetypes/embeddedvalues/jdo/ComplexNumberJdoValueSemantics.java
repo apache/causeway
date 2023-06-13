@@ -23,14 +23,13 @@ import jakarta.inject.Named;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import org.apache.causeway.applib.util.schema.CommonDtoUtils;
 import org.apache.causeway.applib.value.semantics.Parser;
 import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.schema.common.v2.ValueType;
 
-import lombok.val;
+import demoapp.dom.progmodel.customvaluetypes.embeddedvalues.ComplexNumber;
 
 @Profile("demo-jdo")
 //tag::class[]
@@ -46,45 +45,37 @@ public class ComplexNumberJdoValueSemantics
         return ComplexNumberJdo.class;
     }
 
-    @Override
-    public ValueType getSchemaValueType() {
-        return ValueType.COMPOSITE;
-    }
-
 //tag::compose[]
     @Override
-    public ValueDecomposition decompose(final ComplexNumberJdo value) {
-        return CommonDtoUtils.typedTupleBuilder(value)
-                .addFundamentalType(ValueType.DOUBLE, "re", ComplexNumberJdo::getRe)
-                .addFundamentalType(ValueType.DOUBLE, "im", ComplexNumberJdo::getIm)
-                .buildAsDecomposition();
+    public ValueType getSchemaValueType() {                                    // <.>
+        /* This type can be easily converted to string and back.
+         * So for convenience, we use its string representation (instead of its decomposed representation).
+         * The decompose/compose methods below must honor the chosen type here. */
+        return ValueType.STRING;
     }
 
     @Override
-    public ComplexNumberJdo compose(final ValueDecomposition decomposition) {
-        return decomposition.right()
-                .map(CommonDtoUtils::typedTupleAsMap)
-                .map(map->ComplexNumberJdo.of(
-                        (Double)map.get("re"),
-                        (Double)map.get("im")))
-                .orElse(null);
+    public ValueDecomposition decompose(final ComplexNumberJdo value) {        // <.>
+        return decomposeAsString(value, ComplexNumberJdo::asString, ()->null);
+    }
+
+    @Override
+    public ComplexNumberJdo compose(final ValueDecomposition decomposition) {  // <.>
+        return composeFromString(decomposition, string->ComplexNumber.parse(string, ComplexNumberJdo::of), ()->null);
     }
 //end::compose[]
 
 //tag::getRenderer[]
-     @Override
+    @Override
     public Renderer<ComplexNumberJdo> getRenderer() {
         return (context, object) -> title(object, "NaN");
-             }
+    }
 
-    private static String title(final ComplexNumberJdo complexNumber, final String fallbackIfNull) {
-        if (complexNumber == null) return fallbackIfNull;
-        return complexNumber.getRe() +
-                (complexNumber.getIm() >= 0
-                        ? (" + " +  complexNumber.getIm())
-                        : (" - " + (-complexNumber.getIm())))
-                + "i";
-     }
+    private static String title(final ComplexNumber complexNumber, final String fallbackIfNull) {
+        return complexNumber == null
+                ? fallbackIfNull
+                : complexNumber.asString();
+    }
 //end::getRenderer[]
 
 //tag::getParser[]
@@ -102,11 +93,7 @@ public class ComplexNumberJdoValueSemantics
                         || complexNumberString.contains("NaN")) {
                     return null;
                 }
-                // this is a naive implementation, just for demo
-                final String[] parts = complexNumberString.split("\\+|i");
-                val real = Double.parseDouble(parts[0]);
-                val imaginary = Double.parseDouble(parts[1]);
-                return ComplexNumberJdo.of(real, imaginary);
+                return ComplexNumber.parse(complexNumberString, ComplexNumberJdo::of);
             }
 
             @Override
