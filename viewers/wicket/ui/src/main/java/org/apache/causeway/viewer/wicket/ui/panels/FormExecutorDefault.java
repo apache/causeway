@@ -28,9 +28,11 @@ import org.apache.causeway.applib.services.exceprecog.Category;
 import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.causeway.applib.services.exceprecog.Recognition;
 import org.apache.causeway.commons.functional.Either;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.debug._Debug;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmEntityUtils;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.FormExecutor;
@@ -128,6 +130,12 @@ implements FormExecutor, HasCommonContext {
             val resultAdapter = actionOrPropertyModel.fold(
                     act->act.executeActionAndReturnResult(),
                     prop->prop.applyValueThenReturnOwner());
+
+            if(!ManagedObjects.isNullOrUnspecifiedOrEmpty(resultAdapter)
+                    && resultAdapter.isBookmarkSupported()) {
+                _Assert.assertTrue(resultAdapter.isBookmarkMemoized(),
+                        ()->"does not accept domain objects, that are not already bookmarked");
+            }
 
             _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
 

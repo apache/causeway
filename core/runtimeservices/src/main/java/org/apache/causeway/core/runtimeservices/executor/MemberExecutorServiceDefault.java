@@ -201,6 +201,8 @@ implements MemberExecutorService {
         }
 
         val result = resultFilteredHonoringVisibility(returnedAdapter, interactionInitiatedBy);
+        result.bookmark(); // immediately bookmark any entities, before those get detached
+
         _Xray.exitInvocation(xrayHandle);
         return result;
     }
@@ -277,6 +279,8 @@ implements MemberExecutorService {
         }
 
         val result = getObjectManager().adapt(targetPojo);
+        result.bookmark(); // immediately bookmark any entities, before those get detached
+
         _Xray.exitInvocation(xrayHandle);
         return result;
 

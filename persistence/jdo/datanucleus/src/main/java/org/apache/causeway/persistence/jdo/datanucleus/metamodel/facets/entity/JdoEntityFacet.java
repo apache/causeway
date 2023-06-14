@@ -58,6 +58,7 @@ import org.apache.causeway.core.metamodel.services.idstringifier.IdStringifierLo
 import org.apache.causeway.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
 import org.apache.causeway.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
 import org.apache.causeway.persistence.jdo.datanucleus.entities.DnObjectProviderForCauseway;
+import org.apache.causeway.persistence.jdo.datanucleus.entities.DnStateManagerForHollow;
 import org.apache.causeway.persistence.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacetFactory;
 import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
 import org.apache.causeway.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
@@ -139,6 +140,14 @@ implements EntityFacet {
     public Optional<String> identifierFor(final Object pojo) {
 
         if (!getEntityState(pojo).hasOid()) {
+
+            if(pojo instanceof Persistable) {
+                var sm = ((Persistable) pojo).dnGetStateManager();
+                if(sm instanceof DnStateManagerForHollow) {
+                    val oidStringified = ((DnStateManagerForHollow)sm).oidStringified;
+                    return Optional.of(oidStringified);
+                }
+            }
             return Optional.empty();
         }
 
@@ -148,6 +157,15 @@ implements EntityFacet {
         _Assert.assertTrue(primaryKeyIfAny.isPresent(), ()->
             String.format("failed to get OID even though entity is attached %s", pojo.getClass().getName()));
 
+        val idIfAny = primaryKeyIfAny
+                .map(primaryKey->
+                    primaryKeyTypeForEncoding(primaryKey).enstringWithCast(primaryKey));
+        return idIfAny;
+    }
+
+    //TODO[CAUSEWAY-3486] code deduplicate
+    public Optional<String> identifierForDnPrimaryKey(final Object id) {
+        var primaryKeyIfAny = Optional.ofNullable(id);
         val idIfAny = primaryKeyIfAny
                 .map(primaryKey->
                     primaryKeyTypeForEncoding(primaryKey).enstringWithCast(primaryKey));

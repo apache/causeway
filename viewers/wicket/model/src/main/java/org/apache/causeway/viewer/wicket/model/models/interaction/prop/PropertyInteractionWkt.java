@@ -32,11 +32,8 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.causeway.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.PropertyNegotiationModel;
-import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.interaction.HasBookmarkedOwnerAbstract;
-
-import lombok.val;
 
 /**
  * The parent (container) model of multiple <i>property models</i> which implement
@@ -119,14 +116,9 @@ extends HasBookmarkedOwnerAbstract<PropertyInteraction> {
     private void setupLazyPropertyNegotiationModel() {
         // restore the lazy field - don't evaluate yet
         propertyNegotiationModel =
-                _Lazy.threadSafe(()->{
-                    val propIa = propertyInteraction();
-                    val prop = propIa.getManagedProperty().orElseThrow();
-                    ManagedObjects.refreshViewmodel(prop.getOwner(), /* bookmark provider*/ null);
-                    return propIa.startPropertyNegotiation()
-                            //.orElseThrow(()->_Exceptions.noSuchElement(memberId))
-                            ;
-                });
+                _Lazy.threadSafe(()->
+                    propertyInteraction()
+                            .startPropertyNegotiation());
     }
 
     private PropertyInteraction loadPropertyInteraction() {

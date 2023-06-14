@@ -32,7 +32,6 @@ import org.apache.causeway.applib.services.i18n.TranslatableString;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Objects;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -447,17 +446,6 @@ public final class ManagedObjects {
         }
 
         return result;
-    }
-
-    // -- VIEWMODEL UTILITIES
-
-    public static void refreshViewmodel(
-            final @Nullable ManagedObject viewmodel,
-            final @Nullable Supplier<Bookmark> bookmarkSupplier) {
-
-        _Casts.castTo(_RefreshableViewmodel.class, viewmodel)
-        .ifPresent(refreshableViewmodel->
-            refreshableViewmodel.refreshViewmodel(bookmarkSupplier));
     }
 
 }

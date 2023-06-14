@@ -266,7 +266,8 @@ public enum ActionResultResponseType {
     }
 
     public static ActionResultResponse toEntityPage(final @NonNull ManagedObject entityOrViewmodel) {
-        entityOrViewmodel.invalidateBookmark();
+        _Assert.assertTrue(entityOrViewmodel.isBookmarkMemoized(),
+                ()->"does not accept domain objects, that are not already bookmarked");
         return ActionResultResponse.toPage(EntityPage.class, entityOrViewmodel.getBookmark().orElseThrow());
     }
 

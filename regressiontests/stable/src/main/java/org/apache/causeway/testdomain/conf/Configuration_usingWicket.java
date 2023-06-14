@@ -62,7 +62,6 @@ import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFac
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
-import org.apache.causeway.viewer.wicket.viewer.wicketapp.CausewayWicketAjaxRequestListenerUtil;
 
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.settings.BootstrapSettings;
@@ -359,16 +358,7 @@ public class Configuration_usingWicket {
         protected IPageFactory newPageFactory() {
             return new PageFactory_forTesting(this, super.newPageFactory());
         }
-
-        @Override
-        protected void internalInit() {
-            super.internalInit();
-            // intercept AJAX requests and reload view-models so any detached entities are re-fetched
-            CausewayWicketAjaxRequestListenerUtil.setRootRequestMapper(this, metaModelContext);
-        }
-
     }
-
 
     // --
 

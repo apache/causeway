@@ -210,15 +210,6 @@ public class EntityPage extends PageAbstract {
     // -- REFRESH ENTITIES
 
     @Override
-    public void onNewRequestCycle() {
-        val entityModel = (UiObjectWkt) getUiHintContainerIfAny();
-        ManagedObjects.refreshViewmodel(entityModel.getObject(),
-                ()->PageParameterUtils
-                        .toBookmark(getPageParameters())
-                        .orElseThrow());
-    }
-
-    @Override
     public void onRendered(final Can<PageRenderSubscriber> pageRenderSubscribers) {
 
         // guard against unspecified

@@ -22,6 +22,7 @@ import javax.inject.Inject;
 
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
+import org.datanucleus.PropertyNames;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,6 +55,7 @@ import lombok.val;
                 //XrayEnable.class
                 },
         properties = {
+                PropertyNames.PROPERTY_RETAIN_VALUES + "=false"  //TODO[CAUSEWAY-3486] is default, but should be enforced by causeway
         })
 @TestPropertySource({
     CausewayPresets.SilenceMetaModel,

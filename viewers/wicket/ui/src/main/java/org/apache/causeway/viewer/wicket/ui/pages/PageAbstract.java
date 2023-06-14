@@ -474,7 +474,7 @@ implements ActionPromptProvider {
         return cfra.getComponentFactoryRegistry();
     }
 
-    // -- RE-ATTACH ENTITIES
+    // -- PAGE RENDERING
 
     @Override
     public void renderPage() {
@@ -491,25 +491,14 @@ implements ActionPromptProvider {
         if(XrayUi.isXrayEnabled()){
             _Debug.log("about to render %s ..", this.getClass().getSimpleName());
             val stopWatch = _Timing.now();
-            onNewRequestCycle();
             super.renderPage();
             stopWatch.stop();
             _Debug.log(".. rendering took %s", stopWatch.toString());
         } else {
-            onNewRequestCycle();
             super.renderPage();
         }
 
         onRendered(enabledPageRenderSubscribers);
-    }
-
-    /**
-     * Hook to re-fetch entities for view-models, usually required once at begin of request.
-     * @apiNote ideally we would not need that hook at all;
-     * this is a hack that came after re-designing the entity-model
-     */
-    public void onNewRequestCycle() {
-        // implemented only by EntityPage
     }
 
     /**
