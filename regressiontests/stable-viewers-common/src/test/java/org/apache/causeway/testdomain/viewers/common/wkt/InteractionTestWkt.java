@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
+import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -127,7 +127,7 @@ class InteractionTestWkt extends InteractionTestAbstract {
             final ScalarPropertyModel scalarModel = (ScalarPropertyModel) entityModel
                     .getPropertyModel(
                             prop,
-                            ScalarRepresentation.VIEWING,
+                            ViewOrEditMode.VIEWING,
                             RenderingHint.PARENTED_PROPERTY_COLUMN);
 
 

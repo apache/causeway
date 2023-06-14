@@ -20,7 +20,7 @@ package org.apache.causeway.viewer.wicket.ui.components.property;
 
 import org.apache.wicket.markup.html.WebMarkupContainer;
 
-import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
+import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
@@ -51,7 +51,7 @@ extends PanelAbstract<ManagedObject, ScalarPropertyModel> {
             final ScalarPropertyModel scalarModel) {
 
         super(id, scalarModel.copyHaving(
-                ScalarRepresentation.EDITING,
+                ViewOrEditMode.EDITING,
                 RenderingHint.REGULAR));
 
         buildGui(scalarModel);

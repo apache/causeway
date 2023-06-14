@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.viewer.commons.model.hints;
 
-import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
+import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 
 public interface HasRenderingHints {
 
@@ -30,26 +30,21 @@ public interface HasRenderingHints {
 
     RenderingHint getRenderingHint();
 
-    ScalarRepresentation getMode(); //TODO[CAUSEWAY-3463] rename
-    void setMode(ScalarRepresentation mode);
+    ViewOrEditMode getViewOrEditMode();
+    void setViewOrEditMode(ViewOrEditMode viewOrEditMode);
 
     // -- SHORTCUTS
 
-    default boolean isViewMode() {
-        return getMode() == ScalarRepresentation.VIEWING;
-    }
+    default boolean isViewingMode() { return getViewOrEditMode() == ViewOrEditMode.VIEWING; }
+    default boolean isEditingMode() { return getViewOrEditMode() == ViewOrEditMode.EDITING; }
 
-    default boolean isEditMode() {
-        return getMode() == ScalarRepresentation.EDITING;
-    }
-
-    default HasRenderingHints toEditMode() {
-        setMode(ScalarRepresentation.EDITING);
+    default HasRenderingHints toEditingMode() {
+        setViewOrEditMode(ViewOrEditMode.EDITING);
         return this;
     }
 
-    default HasRenderingHints toViewMode() {
-        setMode(ScalarRepresentation.VIEWING);
+    default HasRenderingHints toViewingMode() {
+        setViewOrEditMode(ViewOrEditMode.VIEWING);
         return this;
     }
 

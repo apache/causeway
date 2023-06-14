@@ -23,7 +23,7 @@ import java.util.Optional;
 import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.Renderer.SyntaxHighlighter;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
+import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 
 import lombok.NonNull;
@@ -36,7 +36,7 @@ extends ValueSemanticsModelAbstract {
 
     public OptionsBasedOnValueSemantics(
             final @NonNull ObjectFeature propOrParam,
-            final @NonNull ScalarRepresentation scalarRepresentation) {
+            final @NonNull ViewOrEditMode scalarRepresentation) {
         super(propOrParam, scalarRepresentation);
     }
 

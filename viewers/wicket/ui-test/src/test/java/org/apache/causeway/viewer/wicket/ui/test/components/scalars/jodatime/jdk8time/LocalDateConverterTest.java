@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
+import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.valuesemantics.temporal.LocalDateValueSemantics;
 import org.apache.causeway.viewer.wicket.ui.test.components.scalars.ConverterTester;
 
@@ -45,7 +45,7 @@ class LocalDateConverterTest {
         converterTester.setScenario(
                 Locale.ENGLISH,
                 converterTester.converterForProperty(
-                        CustomerWithLocalDate.class, "value", ScalarRepresentation.EDITING));
+                        CustomerWithLocalDate.class, "value", ViewOrEditMode.EDITING));
     }
 
     @Test

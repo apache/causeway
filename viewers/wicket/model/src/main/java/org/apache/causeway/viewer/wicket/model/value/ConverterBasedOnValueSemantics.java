@@ -25,7 +25,7 @@ import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
+import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 
@@ -40,7 +40,7 @@ implements IConverter<T> {
 
     public ConverterBasedOnValueSemantics(
             final @NonNull ObjectFeature propOrParam,
-            final @NonNull ScalarRepresentation scalarRepresentation) {
+            final @NonNull ViewOrEditMode scalarRepresentation) {
         super(propOrParam, scalarRepresentation);
     }
 

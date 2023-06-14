@@ -318,7 +318,7 @@ extends ScalarPanelAbstract {
     }
 
     private void onPropertyInlineEditClick(final AjaxRequestTarget target) {
-        scalarModel().toEditMode();
+        scalarModel().toEditingMode();
 
         switchRegularFrameToFormFrame();
         onSwitchFormForInlinePrompt(getFormFrame(), target);

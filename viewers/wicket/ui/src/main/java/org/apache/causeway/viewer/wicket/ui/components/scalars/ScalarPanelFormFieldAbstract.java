@@ -86,7 +86,7 @@ extends ScalarPanelAbstract2 {
             break;
         case EDITING:
             // setup as input-format
-            fieldFragement = scalarModel().isEditMode()
+            fieldFragement = scalarModel().isEditingMode()
                 ? FieldFragement.NO_LINK_EDITING // supports additional buttons (clear, ...)
                 : FieldFragement.NO_LINK_VIEWING;
             break;

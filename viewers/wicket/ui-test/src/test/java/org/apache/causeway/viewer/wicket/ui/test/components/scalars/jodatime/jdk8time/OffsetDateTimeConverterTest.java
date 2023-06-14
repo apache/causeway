@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
+import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.valuesemantics.temporal.OffsetDateTimeValueSemantics;
 import org.apache.causeway.viewer.wicket.ui.test.components.scalars.ConverterTester;
 
@@ -46,7 +46,7 @@ class OffsetDateTimeConverterTest {
         converterTester.setScenario(
                 Locale.ENGLISH,
                 converterTester.converterForProperty(
-                        CustomerWithOffsetDateTime.class, "value", ScalarRepresentation.EDITING));
+                        CustomerWithOffsetDateTime.class, "value", ViewOrEditMode.EDITING));
     }
 
     @Test

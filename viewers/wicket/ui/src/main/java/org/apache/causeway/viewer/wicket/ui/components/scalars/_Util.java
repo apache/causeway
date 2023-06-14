@@ -30,7 +30,6 @@ import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -51,14 +50,14 @@ class _Util {
      */
     boolean isPropertyWithEnterEditNotAvailable(final ScalarModel scalarModel) {
         return scalarModel.isProperty()
-                && scalarModel.getMode() == ScalarRepresentation.VIEWING
+                && scalarModel.isViewingMode()
                 && (scalarModel.getPromptStyle().isDialogAny()
                         || !canEnterEditMode(scalarModel));
     }
 
     boolean canPropertyEnterInlineEditDirectly(final ScalarModel scalarModel) {
         return scalarModel.getPromptStyle().isInline()
-                && scalarModel.isViewMode()
+                && scalarModel.isViewingMode()
                 && !scalarModel.disabledReason().isPresent();
     }
 
@@ -115,7 +114,7 @@ class _Util {
     // -- HELPER
 
     private boolean canEnterEditMode(final ScalarModel scalarModel) {
-        return scalarModel.isViewMode()
+        return scalarModel.isViewingMode()
                 && !scalarModel.disabledReason().isPresent();
     }
 

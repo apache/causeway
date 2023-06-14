@@ -44,7 +44,6 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.debug._Probe.EntryPoint;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
 import org.apache.causeway.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -142,7 +141,7 @@ implements ScalarModelChangeListener {
                  * so it must not be initialized readonly here */
                 return READONLY;
             }
-            if(scalarModel.isEditMode()) {
+            if(scalarModel.isEditingMode()) {
                 return
                         _Util.canParameterEnterNestedEdit(scalarModel)
                         ? EDITING_WITH_LINK_TO_NESTED // nested/embedded dialog
@@ -396,7 +395,7 @@ implements ScalarModelChangeListener {
              * <tt>true</tt> if the widget for this model must be editable.
              */
             final boolean isOrCanBeSwitchedToEditable =
-                    scalarModel.getMode() == ScalarRepresentation.EDITING
+                    scalarModel.isEditingMode()
                         || scalarModel.isParameter()
                         || scalarModel.hasAssociatedActionWithInlineAsIfEdit();
 
@@ -412,7 +411,7 @@ implements ScalarModelChangeListener {
                 onInitializeReadonly(disabledReason);
             }
         } else {
-            if (scalarModel.isViewMode()) {
+            if (scalarModel.isViewingMode()) {
                 onInitializeNotEditable();
             } else {
                 onInitializeEditable();
