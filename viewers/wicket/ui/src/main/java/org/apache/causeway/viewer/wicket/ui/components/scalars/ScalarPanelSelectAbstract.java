@@ -97,7 +97,7 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
         val scalarModel = scalarModel();
         // cannot edit if in table or is view-mode
         return !scalarModel.getRenderingHint().isInTable()
-                && !scalarModel.isViewMode();
+                && !scalarModel.isViewingMode();
     }
 
     protected final boolean hasAnyChoices() {

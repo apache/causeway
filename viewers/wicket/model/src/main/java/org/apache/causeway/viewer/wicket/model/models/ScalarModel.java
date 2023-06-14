@@ -32,7 +32,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
+import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
@@ -73,7 +73,7 @@ implements HasRenderingHints, UiScalar, FormExecutorContext {
 
     @Getter(onMethod_={@Override})
     @Setter(onMethod_={@Override})
-    private ScalarRepresentation mode;
+    private ViewOrEditMode viewOrEditMode;
 
     @Getter(onMethod_={@Override})
     private RenderingHint renderingHint;
@@ -85,7 +85,7 @@ implements HasRenderingHints, UiScalar, FormExecutorContext {
      */
     protected ScalarModel(
             final UiObjectWkt parentUiObject,
-            final ScalarRepresentation viewOrEdit) {
+            final ViewOrEditMode viewOrEdit) {
         this(parentUiObject, viewOrEdit, RenderingHint.REGULAR);
     }
 
@@ -96,12 +96,12 @@ implements HasRenderingHints, UiScalar, FormExecutorContext {
      */
     protected ScalarModel(
             final @NonNull UiObjectWkt parentEntityModel,
-            final @NonNull ScalarRepresentation viewOrEdit,
+            final @NonNull ViewOrEditMode viewOrEdit,
             final @NonNull RenderingHint renderingHint) {
         super(parentEntityModel); // the so called target model, we are chaining us to
         this.parentEntityModel = parentEntityModel;
         this.renderingHint = renderingHint;
-        this.mode = viewOrEdit;
+        this.viewOrEditMode = viewOrEdit;
     }
 
     /**
@@ -188,9 +188,7 @@ implements HasRenderingHints, UiScalar, FormExecutorContext {
                 requiredType);
 
         return Optional.of(
-                new ConverterBasedOnValueSemantics<>(getMetaModel(), isEditMode()
-                        ? ScalarRepresentation.EDITING
-                        : ScalarRepresentation.VIEWING));
+                new ConverterBasedOnValueSemantics<>(getMetaModel(), getViewOrEditMode()));
     }
 
     // -- PREDICATES
@@ -199,7 +197,7 @@ implements HasRenderingHints, UiScalar, FormExecutorContext {
     public final boolean isInlinePrompt() {
         return hasAssociatedActionWithInlineAsIfEdit()
                 || (getPromptStyle().isInline()
-                        && isViewMode()
+                        && isViewingMode()
                         && !disabledReason().isPresent());
     }
 

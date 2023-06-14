@@ -32,7 +32,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
+import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
@@ -187,7 +187,7 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> imp
             final Consumer<LinkAndLabel> onAssociatedAction) {
 
         final ScalarModel scalarModel =
-                entityModel.getPropertyModel(property, ScalarRepresentation.VIEWING, RenderingHint.REGULAR);
+                entityModel.getPropertyModel(property, ViewOrEditMode.VIEWING, RenderingHint.REGULAR);
 
         final Component scalarNameAndValueComponent = getComponentFactoryRegistry()
                 .addOrReplaceComponent(container, ID_PROPERTY, UiComponentType.SCALAR_NAME_AND_VALUE, scalarModel);

@@ -22,9 +22,9 @@ import org.apache.causeway.applib.value.semantics.Parser;
 import org.apache.causeway.applib.value.semantics.Renderer;
 
 /**
- * Mode of representation for a Scalar within the UI.
+ * Mode of representation for a <i>(Action) Parameter</i> or a <i>Property</i> within the UI.
  */
-public enum ScalarRepresentation {
+public enum ViewOrEditMode {
 
     /**
      * Editing (text-parsing) mode, corresponds to 'regular' UI components.
@@ -42,11 +42,6 @@ public enum ScalarRepresentation {
      */
     VIEWING;
 
-    public boolean isEditing() {
-        return this == EDITING;
-    }
-
-    public boolean isViewing() {
-        return this == VIEWING;
-    }
+    public boolean isEditing() { return this == EDITING; }
+    public boolean isViewing() { return this == VIEWING; }
 }

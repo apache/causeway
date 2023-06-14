@@ -23,7 +23,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.request.resource.ByteArrayResource;
 
-import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
+import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
@@ -31,12 +31,10 @@ import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 
+import demoapp.dom.featured.customui.GeoapifyClient;
 import demoapp.dom.featured.customui.WhereInTheWorldPage;
-
 import lombok.SneakyThrows;
 import lombok.val;
-
-import demoapp.dom.featured.customui.GeoapifyClient;
 
 //tag::class[]
 public class WhereInTheWorldPanel
@@ -103,7 +101,7 @@ extends PanelAbstract<ManagedObject, UiObjectWkt>  {
 
         val scalarModel =
                 getModel().getPropertyModel(                                       // <.>
-                    property, ScalarRepresentation.VIEWING,
+                    property, ViewOrEditMode.VIEWING,
                     RenderingHint.REGULAR);
         return getComponentFactoryRegistry().createComponent(                      // <.>
                 propertyId, UiComponentType.SCALAR_NAME_AND_VALUE, scalarModel);

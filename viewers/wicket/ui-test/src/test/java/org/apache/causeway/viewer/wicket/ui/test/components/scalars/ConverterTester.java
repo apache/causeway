@@ -45,7 +45,7 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
-import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
+import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 import org.apache.causeway.core.security._testing.InteractionService_forTesting;
@@ -112,7 +112,7 @@ public class ConverterTester<T extends Serializable> {
     public ConverterBasedOnValueSemantics<T> converterForProperty(
             final Class<?> type,
             final String propertyId,
-            final ScalarRepresentation representation) {
+            final ViewOrEditMode representation) {
         val customerSpec = mmc.getSpecificationLoader().specForTypeElseFail(type);
         val prop = customerSpec.getPropertyElseFail("value");
         return new ConverterBasedOnValueSemantics<>(prop, representation);

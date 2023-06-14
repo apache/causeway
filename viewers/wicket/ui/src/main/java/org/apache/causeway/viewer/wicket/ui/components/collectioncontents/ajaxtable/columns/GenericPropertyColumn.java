@@ -27,7 +27,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
+import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataRow;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -114,7 +114,7 @@ extends GenericColumnAbstract {
         val scalarModel = entityModel
                 .getPropertyModel(
                         property,
-                        ScalarRepresentation.VIEWING,
+                        ViewOrEditMode.VIEWING,
                         collectionVariant.getColumnRenderingHint());
 
         return findComponentFactory(UiComponentType.SCALAR_NAME_AND_VALUE, scalarModel)

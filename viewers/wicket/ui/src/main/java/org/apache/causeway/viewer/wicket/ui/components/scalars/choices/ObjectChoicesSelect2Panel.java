@@ -187,7 +187,7 @@ implements ChoiceTitleHandler {
 
         // set mutability
         select2.setEnabled(entityLink.isEnableAllowed()
-                && !getModel().isViewMode());
+                && !getModel().isViewingMode());
 
         /* XXX not sure if required any more
         if(hasAnyChoices()) {

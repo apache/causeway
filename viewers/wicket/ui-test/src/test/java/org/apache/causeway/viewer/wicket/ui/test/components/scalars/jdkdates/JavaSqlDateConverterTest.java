@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
+import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.valuesemantics.temporal.LocalDateValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.temporal.legacy.JavaSqlDateValueSemantics;
 import org.apache.causeway.viewer.wicket.ui.test.components.scalars.ConverterTester;
@@ -46,7 +46,7 @@ class JavaSqlDateConverterTest {
         converterTester.setScenario(
                 Locale.ENGLISH,
                 converterTester.converterForProperty(
-                        CustomerWithJavaSqlDate.class, "value", ScalarRepresentation.EDITING));
+                        CustomerWithJavaSqlDate.class, "value", ViewOrEditMode.EDITING));
     }
 
     @Test

@@ -33,7 +33,7 @@ import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
+import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFactory;
@@ -86,7 +86,7 @@ implements
             final @NonNull MetaModelContext commonContext,
             final @Nullable ManagedObject adapter) {
         return new UiObjectWkt(BookmarkedObjectWkt.ofAdapter(commonContext, adapter),
-                ScalarRepresentation.VIEWING, RenderingHint.REGULAR);
+                ViewOrEditMode.VIEWING, RenderingHint.REGULAR);
     }
 
     public static UiObjectWkt ofAdapterForCollection(
@@ -94,7 +94,7 @@ implements
             final ManagedObject adapter,
             final @NonNull EntityCollectionModel.Variant variant) {
         return new UiObjectWkt(BookmarkedObjectWkt.ofAdapter(commonContext, adapter),
-                ScalarRepresentation.VIEWING, variant.getTitleColumnRenderingHint());
+                ViewOrEditMode.VIEWING, variant.getTitleColumnRenderingHint());
     }
 
 
@@ -102,7 +102,7 @@ implements
             final @NonNull MetaModelContext commonContext,
             final @Nullable Bookmark bookmark) {
         return new UiObjectWkt(BookmarkedObjectWkt.ofBookmark(commonContext, bookmark),
-                ScalarRepresentation.VIEWING, RenderingHint.REGULAR);
+                ViewOrEditMode.VIEWING, RenderingHint.REGULAR);
     }
 
     // -- CONSTRUCTORS
@@ -114,15 +114,15 @@ implements
             final MetaModelContext commonContext,
             final ManagedObject adapter) {
         this(BookmarkedObjectWkt.ofAdapter(commonContext, adapter),
-                ScalarRepresentation.VIEWING, RenderingHint.REGULAR);
+                ViewOrEditMode.VIEWING, RenderingHint.REGULAR);
     }
 
     private UiObjectWkt(
             final @NonNull BookmarkedObjectWkt bookmarkedObject,
-            final ScalarRepresentation mode,
+            final ViewOrEditMode viewOrEditMode,
             final RenderingHint renderingHint) {
         super(bookmarkedObject);
-        this.mode = mode;
+        this.viewOrEditMode = viewOrEditMode;
         this.renderingHint = renderingHint;
     }
 
@@ -156,7 +156,7 @@ implements
 
     @Getter(onMethod = @__(@Override))
     @Setter(onMethod = @__(@Override))
-    private ScalarRepresentation mode;
+    private ViewOrEditMode viewOrEditMode;
 
     @Getter(onMethod = @__(@Override))
     private RenderingHint renderingHint;
@@ -219,7 +219,7 @@ implements
      */
     public ScalarModel getPropertyModel(
             final OneToOneAssociation property,
-            final ScalarRepresentation viewOrEdit,
+            final ViewOrEditMode viewOrEdit,
             final RenderingHint renderingHint) {
 
         val pm = property.getMemento();
@@ -263,13 +263,13 @@ implements
     // -- VIEW OR EDIT
 
     @Override
-    public UiObjectWkt toEditMode() {
+    public UiObjectWkt toEditingMode() {
         //noop for objects
         return this;
     }
 
     @Override
-    public UiObjectWkt toViewMode() {
+    public UiObjectWkt toViewingMode() {
         //noop for objects
         return this;
     }

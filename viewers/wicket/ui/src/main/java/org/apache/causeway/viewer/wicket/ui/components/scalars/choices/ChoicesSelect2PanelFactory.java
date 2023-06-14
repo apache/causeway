@@ -38,7 +38,7 @@ extends ComponentFactoryScalarAbstract {
         static ComponentSort valueOf(final ScalarModel scalarModel) {
             if(scalarModel.getScalarTypeSpec().isValue()
                     && scalarModel.getChoiceProviderSort().isChoicesAny()) {
-                return scalarModel.isViewMode()
+                return scalarModel.isViewingMode()
                     ? TITLE_BADGE
                     : VALUE_CHOICES;
             }

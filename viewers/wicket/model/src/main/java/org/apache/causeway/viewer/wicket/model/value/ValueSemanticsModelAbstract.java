@@ -23,7 +23,7 @@ import java.io.Serializable;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.metamodel.commons.ScalarRepresentation;
+import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
@@ -44,13 +44,13 @@ implements
     private static final long serialVersionUID = 1L;
 
     protected final Identifier featureIdentifier;
-    protected final ScalarRepresentation scalarRepresentation;
+    protected final ViewOrEditMode scalarRepresentation;
     protected transient Either<OneToOneAssociation, ObjectActionParameter> propOrParam;
 
 
     protected ValueSemanticsModelAbstract(
             final @NonNull ObjectFeature propOrParam,
-            final @NonNull ScalarRepresentation scalarRepresentation) {
+            final @NonNull ViewOrEditMode scalarRepresentation) {
         this.scalarRepresentation = scalarRepresentation;
         this.propOrParam = propOrParam instanceof OneToOneAssociation // memoize
                 ? Either.left((OneToOneAssociation)propOrParam)
