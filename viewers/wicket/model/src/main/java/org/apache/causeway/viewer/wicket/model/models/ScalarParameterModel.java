@@ -30,7 +30,6 @@ import org.apache.causeway.viewer.wicket.model.models.interaction.act.UiParamete
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 public class ScalarParameterModel
 extends ScalarModel
@@ -39,10 +38,7 @@ implements HasUiParameter {
     private static final long serialVersionUID = 1L;
 
     public static ScalarParameterModel wrap(final UiParameterWkt delegate) {
-        val viewOrEdit = delegate.disabledReason().isPresent()
-                ? ScalarRepresentation.VIEWING
-                : ScalarRepresentation.EDITING;
-        return new ScalarParameterModel(delegate, viewOrEdit);
+        return new ScalarParameterModel(delegate);
     }
 
     @Getter(onMethod_={@Override})
@@ -54,9 +50,10 @@ implements HasUiParameter {
      * value (if any) of that action parameter.
      */
     private ScalarParameterModel(
-            final UiParameterWkt uiParameter,
-            final ScalarRepresentation viewOrEdit) {
-        super(UiObjectWkt.ofAdapter(uiParameter.getMetaModelContext(), uiParameter.getOwner()), viewOrEdit);
+            final UiParameterWkt uiParameter) {
+        super(
+                UiObjectWkt.ofAdapter(uiParameter.getMetaModelContext(), uiParameter.getOwner()),
+                ScalarRepresentation.EDITING); // always init params in editing mode, decide usability later dynamically
         this.uiParameter = uiParameter;
     }
 

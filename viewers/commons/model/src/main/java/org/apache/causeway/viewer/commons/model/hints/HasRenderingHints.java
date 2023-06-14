@@ -30,8 +30,7 @@ public interface HasRenderingHints {
 
     RenderingHint getRenderingHint();
 
-    ScalarRepresentation getMode();
-    @Deprecated// make immutable? - need to recreate any bound UI components anyway
+    ScalarRepresentation getMode(); //TODO[CAUSEWAY-3463] rename
     void setMode(ScalarRepresentation mode);
 
     // -- SHORTCUTS

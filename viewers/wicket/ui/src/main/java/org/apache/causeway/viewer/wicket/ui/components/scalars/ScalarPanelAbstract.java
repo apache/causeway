@@ -135,8 +135,11 @@ implements ScalarModelChangeListener {
                 return COMPACT;
             }
             if(scalarModel.isParameter()
+                    && !(scalarPanel instanceof ScalarPanelSelectAbstract)
                     && scalarModel.disabledReason().isPresent()) {
-                // this simple logic only applies for params, as those don't support inline-as-if-edit
+                /* this simple logic only applies for params, as those don't support inline-as-if-edit
+                 * however, our select2 component does not allow for dynamic switching of usability,
+                 * so it must not be initialized readonly here */
                 return READONLY;
             }
             if(scalarModel.isEditMode()) {

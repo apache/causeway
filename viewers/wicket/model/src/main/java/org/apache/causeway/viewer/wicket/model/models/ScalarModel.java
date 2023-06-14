@@ -73,7 +73,7 @@ implements HasRenderingHints, UiScalar, FormExecutorContext {
 
     @Getter(onMethod_={@Override})
     @Setter(onMethod_={@Override})
-    private ScalarRepresentation mode;
+    private ScalarRepresentation mode; //TODO[CAUSEWAY-3463] rename to 'ViewOrEditMode'
 
     @Getter(onMethod_={@Override})
     private RenderingHint renderingHint;
@@ -188,9 +188,7 @@ implements HasRenderingHints, UiScalar, FormExecutorContext {
                 requiredType);
 
         return Optional.of(
-                new ConverterBasedOnValueSemantics<>(getMetaModel(), isEditMode()
-                        ? ScalarRepresentation.EDITING
-                        : ScalarRepresentation.VIEWING));
+                new ConverterBasedOnValueSemantics<>(getMetaModel(), getMode()));
     }
 
     // -- PREDICATES
