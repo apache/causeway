@@ -32,6 +32,7 @@ import javax.jdo.PersistenceManager;
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 import org.datanucleus.enhancement.Persistable;
 import org.datanucleus.store.rdbms.RDBMSPropertyNames;
+import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.exceptions.unrecoverable.ObjectNotFoundException;
 import org.apache.causeway.applib.query.AllInstancesQuery;
@@ -152,23 +153,18 @@ implements EntityFacet {
         }
 
         val pm = getPersistenceManager();
-        var primaryKeyIfAny = Optional.ofNullable(pm.getObjectId(pojo));
+        val primaryKey = pm.getObjectId(pojo);
 
-        _Assert.assertTrue(primaryKeyIfAny.isPresent(), ()->
+        _Assert.assertNotNull(primaryKey, ()->
             String.format("failed to get OID even though entity is attached %s", pojo.getClass().getName()));
 
-        val idIfAny = primaryKeyIfAny
-                .map(primaryKey->
-                    primaryKeyTypeForEncoding(primaryKey).enstringWithCast(primaryKey));
-        return idIfAny;
+        return identifierForDnPrimaryKey(primaryKey);
     }
 
-    //TODO[CAUSEWAY-3486] code deduplicate
-    public Optional<String> identifierForDnPrimaryKey(final Object id) {
-        var primaryKeyIfAny = Optional.ofNullable(id);
-        val idIfAny = primaryKeyIfAny
-                .map(primaryKey->
-                    primaryKeyTypeForEncoding(primaryKey).enstringWithCast(primaryKey));
+    public Optional<String> identifierForDnPrimaryKey(final @Nullable Object primaryKey) {
+        val idIfAny = Optional.ofNullable(primaryKey)
+                .map(pk->
+                    primaryKeyTypeForEncoding(pk).enstringWithCast(pk));
         return idIfAny;
     }
 

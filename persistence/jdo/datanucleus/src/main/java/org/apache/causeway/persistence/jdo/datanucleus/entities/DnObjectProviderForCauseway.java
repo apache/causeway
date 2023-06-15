@@ -20,7 +20,6 @@ package org.apache.causeway.persistence.jdo.datanucleus.entities;
 
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.jdo.PersistenceManager;
 
@@ -36,34 +35,28 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.persistence.jdo.datanucleus.metamodel.facets.entity.JdoEntityFacet;
 import org.apache.causeway.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
 
-import lombok.SneakyThrows;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Handles injection into JDO entities.
  * <p>
  * Installed via config property "datanucleus.objectProvider.className".
  */
-//@Log4j2
+@Log4j2
 public class DnObjectProviderForCauseway //TODO[CAUSEWAY-3486] rename to DnStateManagerForCauseway
 extends ReferentialStateManagerImpl {
 
-    private static final org.apache.logging.log4j.Logger log = org.apache.logging.log4j.LogManager.getLogger(DnObjectProviderForCauseway.class);
-
     private Optional<MetaModelContext> mmcIfAny;
-    private Optional<EntityFacet> entityFacetIfAny;
 
     public DnObjectProviderForCauseway(final ExecutionContext ec, final AbstractClassMetaData cmd) {
         super(ec, cmd);
         this.mmcIfAny = extractMetaModelContextFrom(ec);
-        this.entityFacetIfAny = extractEntityFacet(cmd);
     }
 
     @SuppressWarnings("rawtypes")
@@ -71,7 +64,6 @@ extends ReferentialStateManagerImpl {
     public void initialiseForHollow(final Object id, final FieldValues fv, final Class pcClass) {
         super.initialiseForHollow(id, fv, pcClass);
         injectServicesIfNotAlready();
-        System.err.printf("initialiseForHollow %s%n", ""+id);
     }
 
     @SuppressWarnings({ "deprecation", "rawtypes" })
@@ -79,74 +71,68 @@ extends ReferentialStateManagerImpl {
     public void initialiseForHollowAppId(final FieldValues fv, final Class pcClass) {
         super.initialiseForHollowAppId(fv, pcClass);
         injectServicesIfNotAlready();
-        System.err.printf("initialiseForHollowAppId %n");
     }
 
     @Override
     public void initialiseForHollowPreConstructed(final Object id, final Persistable pc) {
         super.initialiseForHollowPreConstructed(id, pc);
         injectServicesIfNotAlready();
-
-        System.err.printf("initialiseForHollowPreConstructed %s%n", ""+id);
     }
 
     @Override
     public void initialiseForPersistentClean(final Object id, final Persistable pc) {
         super.initialiseForPersistentClean(id, pc);
         injectServicesIfNotAlready();
-
-        System.err.printf("initialiseForPersistentClean %s%n", ""+id);
     }
 
     @Override
     public void initialiseForEmbedded(final Persistable pc, final boolean copyPc) {
         super.initialiseForEmbedded(pc, copyPc);
         injectServicesIfNotAlready();
-        System.err.printf("initialiseForEmbedded %n");
     }
 
     @Override
     public void initialiseForPersistentNew(final Persistable pc, final FieldValues preInsertChanges) {
         super.initialiseForPersistentNew(pc, preInsertChanges);
         injectServicesIfNotAlready();
-
-        System.err.printf("initialiseForPersistentNew %s%n", ""+pc.dnGetObjectId());
     }
 
     @Override
     public void initialiseForTransactionalTransient(final Persistable pc) {
         super.initialiseForTransactionalTransient(pc);
         injectServicesIfNotAlready();
-
-        System.err.printf("initialiseForTransactionalTransient %s%n", ""+pc.dnGetObjectId());
     }
 
     @Override
     public void initialiseForDetached(final Persistable pc, final Object id, final Object version) {
         super.initialiseForDetached(pc, id, version);
         injectServicesIfNotAlready();
-        System.err.printf("initialiseForDetached %n");
     }
 
     @Override
     public void initialiseForPNewToBeDeleted(final Persistable pc) {
         super.initialiseForPNewToBeDeleted(pc);
         injectServicesIfNotAlready();
-        System.err.printf("initialiseForPNewToBeDeleted %n");
     }
 
     @Override
     public void initialiseForCachedPC(final CachedPC cachedPC, final Object id) {
         super.initialiseForCachedPC(cachedPC, id);
         injectServicesIfNotAlready();
-
-        System.err.printf("initialiseForCachedPC %s%n", ""+id);
     }
 
     @Override
-    public void clearNonPrimaryKeyFields() {
-        super.clearNonPrimaryKeyFields();
-        System.err.printf("clearNonPrimaryKeyFields %s%n", ""+myID);
+    public void disconnect() {
+        /* If a previously attached entity becomes hollow (or detached),
+         * we memoize the OID in the Persistable.dnStateManager field.
+         * Using a pseudo StateManager, that only acts as a holder of an OID. */
+        val entityPojo = myPC;
+        final Optional<DnStateManagerForHollow> smHollow = snapshotOid()
+                .map(DnStateManagerForHollow::new);
+
+        super.disconnect();
+        smHollow
+            .ifPresent(sm->replaceStateManager(entityPojo, sm));
     }
 
     // -- HELPER
@@ -169,32 +155,12 @@ extends ReferentialStateManagerImpl {
         }
 
         val mmc = (MetaModelContext)mmcValue;
-
         if(mmc.getServiceInjector() == null) {
-            log.error("could not find a usable ServiceInjector with given MetaModelContext");
+            log.error("could not find a usable ServiceInjector within given MetaModelContext");
             return Optional.empty();
         }
 
         return Optional.of(mmc);
-    }
-
-    @Deprecated
-    static AtomicInteger ai2 = new AtomicInteger(0);
-
-    @SneakyThrows
-    private Optional<EntityFacet> extractEntityFacet(final AbstractClassMetaData cmd) {
-
-        final int count = ai2.incrementAndGet();
-        System.err.printf("new SM %d%n", count);
-
-        val entityType = _Context.loadClass(cmd.getFullClassName());
-
-        val entityFacet = mmcIfAny
-            .map(MetaModelContext::getSpecificationLoader)
-            .flatMap(specLoader->specLoader.specForType(entityType))
-            .flatMap(ObjectSpecification::entityFacet);
-
-        return entityFacet;
     }
 
     private boolean injectionPointsResolved = false;
@@ -208,7 +174,6 @@ extends ReferentialStateManagerImpl {
             return true;
         }
         if(injectionPointsResolved) {
-            //XXX would be nice to count as a metric
             return true;
         }
 
@@ -226,53 +191,44 @@ extends ReferentialStateManagerImpl {
         return injectionPointsResolved;
     }
 
-    @Deprecated
-    static AtomicInteger ai = new AtomicInteger(0);
-
-    @Override
-    public void disconnect() {
-        //TODO[CAUSEWAY-3486] if a previously attached entity becomes hollow (or detached)
-        // we could enforce, that the caller creates a bookmark, before its too late
-
-        val entityPojo = myPC;
-        final Optional<DnStateManagerForHollow> smHollow = snapshotOid()
-                .map(oid->new DnStateManagerForHollow(cmd, oid));
-
-        final int count = ai.incrementAndGet();
-        System.err.printf("disconnect %d->%s%n", count, smHollow.map(sm->sm.oidStringified));
-
-        super.disconnect();
-        smHollow
-            .ifPresent(sm->replaceStateManager(entityPojo, sm));
-        flags = 0;
-    }
+    // -- SNAPSHOT OID
 
     private Optional<String> snapshotOid() {
-        if(super.myID==null
-                || entityFacetIfAny.isEmpty()) {
+        if(myID==null) {
             return Optional.empty();
         }
-
-        val entityFacet = (JdoEntityFacet)entityFacetIfAny.get();
-
         try {
             Object id = myPC.dnGetObjectId();
-            if (id != null && id instanceof SingleFieldId)
-            {
-                // Convert to javax.jdo.identity.*
-                id = DataNucleusHelperJDO.getSingleFieldIdentityForDataNucleusIdentity((SingleFieldId)id, myPC.getClass());
+            if(id==null) {
+                return Optional.empty();
             }
-            return entityFacet.identifierForDnPrimaryKey(id);
-
-
-            //return entityFacetIfAny.get().identifierFor(myPC);
+            val entityFacet = lookupEntityFacet().orElse(null);
+            if(entityFacet==null) {
+                return Optional.empty();
+            }
+            if (id instanceof SingleFieldId) {
+                id = DataNucleusHelperJDO
+                        .getSingleFieldIdentityForDataNucleusIdentity((SingleFieldId)id, myPC.getClass());
+            }
+            val oidIfAny = entityFacet.identifierForDnPrimaryKey(id);
+            return oidIfAny;
         } catch (Exception e) {
-            // TODO: handle exception
-
+            log.error("exception while trying to extract entity's current primary key", e);
             e.printStackTrace();
-
             return Optional.empty();
         }
+    }
+
+    private Optional<JdoEntityFacet> lookupEntityFacet() {
+        if(myPC==null) {
+            return Optional.empty();
+        }
+        val entityFacet = mmcIfAny
+            .map(MetaModelContext::getSpecificationLoader)
+            .flatMap(specLoader->specLoader.specForType(myPC.getClass()))
+            .flatMap(ObjectSpecification::entityFacet)
+            .flatMap(facet->_Casts.castTo(JdoEntityFacet.class, facet));
+        return entityFacet;
     }
 
     // -- [CAUSEWAY-3126] PRE-DIRTY NESTED LOOP PREVENTION
