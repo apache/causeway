@@ -81,11 +81,10 @@ class ColumnFactory {
     }
 
     private fun exposeIcons(displayCollection: CollectionDM) {
-        val model = displayCollection.data
         val icon = displayCollection.icon
-        model.forEach { dynamic ->
+        displayCollection.data.forEach { exhibit ->
             if (icon != null) {
-                dynamic.setIcon(icon)
+                exhibit.asDynamic()["icon"] = icon
             }
         }
     }

@@ -23,6 +23,7 @@ import io.kvision.panel.FieldsetPanel
 import io.kvision.panel.FlexPanel
 import io.kvision.panel.HPanel
 import io.kvision.panel.SimplePanel
+import org.apache.causeway.client.kroviz.core.model.DisplayModelException
 import org.apache.causeway.client.kroviz.to.TObject
 import org.apache.causeway.client.kroviz.to.bs.ColBs
 import org.apache.causeway.client.kroviz.to.bs.CollectionBs
@@ -83,19 +84,23 @@ class ColBuilder(
     }
 
     private fun addCollections() {
-        console.log("[CB_addCollections]")
-        if (dsp.displayModel.hasCollectionModels()) {
-            col.collectionList.forEach {
-                console.log(it)
-                buildTableAndWrapInFsPanel(it)
-            }
+        col.collectionList.forEach {
+            console.log(it)
+            buildTableAndWrapInFsPanel(it)
         }
     }
 
     private fun buildTableAndWrapInFsPanel(it: CollectionBs) {
         val objectDM = dsp.displayModel
+        console.log("[CB_buildTableAndWrapInFsPanel] ODM")
+        console.log(objectDM)
         try {
+            console.log("[CB_buildTableAndWrapInFsPanel] CollectionBs/id")
+            console.log(it)
+            console.log(it.id)
             val cdm = objectDM.getCollectionDisplayModelFor(it.id)!!
+            console.log("[CB_buildTableAndWrapInFsPanel] CDM")
+            console.log(cdm)
             val fsPanel = FieldsetPanel(legend = cdm.getTitle())
             val table = RoTable(cdm)
             console.log(table)
@@ -103,7 +108,9 @@ class ColBuilder(
             panel.add(fsPanel)
             cdm.isRendered = true
         } catch (npe: NullPointerException) {
-            return
+            console.log("[CB_buildTableAndWrapInFsPanel] NPE caught")
+            val dme = DisplayModelException(message = "collectionDisplayModel not found", cause = npe)
+            throw dme
         }
     }
 

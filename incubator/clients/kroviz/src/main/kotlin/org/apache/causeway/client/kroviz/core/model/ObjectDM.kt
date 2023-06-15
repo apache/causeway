@@ -45,8 +45,12 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
     }
 
     fun hasCollectionModels(): Boolean {
-        console.log("[ODM_hasCollectionModels]")
-        console.log(collectionModelList)
+        console.log("[ODM_hasCollectionModels] ${collectionModelList.isNotEmpty()}")
+        if (collectionModelList.isNotEmpty()) {
+            val firstCM = collectionModelList.get(0)
+            console.log("[ODM_hasCollectionModels] data:")
+            console.log(firstCM.data)
+        }
         return collectionModelList.isNotEmpty()
     }
 
@@ -59,19 +63,23 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
     }
 
     override fun readyToRender(): Boolean {
-        return when {
+        val result = when {
             data == null -> false
             isRendered -> false
             layout == null -> false
             else -> areCollectionsReadyToRender()
         }
+        return result
     }
 
     private fun areCollectionsReadyToRender(): Boolean {
+        if (collectionModelList.size < 1) return false
         collectionModelList.forEach {
             if (!it.readyToRender())
                 return false
         }
+        console.log("[ODM_areCollectionsReadyToRender] (true)")
+        console.log(collectionModelList)
         return true
     }
 

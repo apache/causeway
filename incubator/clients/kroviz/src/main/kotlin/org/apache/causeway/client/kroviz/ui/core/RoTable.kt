@@ -44,9 +44,9 @@ class RoTable(displayCollection: CollectionDM) : SimplePanel() {
     init {
         title = StringUtils.extractTitle(displayCollection.title)
         width = CssSize(100, UNIT.perc)
-        val model = mutableListOf<Exhibit>()
+        val model = mutableListOf<dynamic>()
         displayCollection.data.forEach {
-            model.add(it.getWithDelegateProperties())
+            model.add(it.asDynamic())
         }
         val columns = ColumnFactory().buildColumns(
             displayCollection
@@ -62,7 +62,8 @@ class RoTable(displayCollection: CollectionDM) : SimplePanel() {
 
         val tableTypes = setOf(TableType.STRIPED, TableType.HOVER)
 
-        console.log("[RT_before] tabulator()")
+        console.log("[RT_before] tabulator(), model ->")
+        console.log(model)
         val tabulator = createTabulator(model, options, tableTypes)
         tabulator.setEventListener<Tabulator<dynamic>> {
             cellClickTabulator = {

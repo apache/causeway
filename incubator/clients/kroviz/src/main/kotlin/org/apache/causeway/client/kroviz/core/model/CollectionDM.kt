@@ -67,14 +67,19 @@ class CollectionDM(override var title: String) : DisplayModelWithLayout() {
     }
 
     override fun readyToRender(): Boolean {
-        return collectionLayout.readyToRender()
+        val result = collectionLayout.readyToRender() && data.size > 0
+        if (result) {
+            console.log("[CDM_readyToRender]")
+            console.log(this)
+        }
+        return result
     }
 
     override fun addData(obj: TransferObject) {
         rawData.add(obj)
         val tObj = obj as TObject
         val exo = Exposer(tObj)
-        data.add(exo)
+        data.add(exo.exhibit.asDynamic())
     }
 
     override fun reset() {

@@ -34,6 +34,7 @@ class ObjectLayout(val grid: GridBs, val aggregator: ObjectAggregator, val refer
     }
 
     override fun readyToRender(): Boolean {
+        console.log("[OL_readyToRender] constant:true")
         return true //TODO remove from protocol ?
     }
 

@@ -60,8 +60,6 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
             height = auto
             margin = 10.px
             for (fi: FormItem in items) {
-                console.log("[FPF_init]")
-                console.log(fi.type)
                 when (fi.type) {
                     ValueType.TEXT -> add(createText(fi))
                     ValueType.PASSWORD -> add(createPassword(fi))
