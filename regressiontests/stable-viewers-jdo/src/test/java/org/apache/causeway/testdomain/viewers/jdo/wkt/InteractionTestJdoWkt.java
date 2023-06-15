@@ -55,7 +55,9 @@ import lombok.val;
                 //XrayEnable.class
                 },
         properties = {
-                PropertyNames.PROPERTY_RETAIN_VALUES + "=false"  //TODO[CAUSEWAY-3486] is default, but should be enforced by causeway
+                PropertyNames.PROPERTY_RETAIN_VALUES + "=false"  // default anyway
+                /* TODO[CAUSEWAY-3486] default, but should be enforced by causeway:
+                 * datanucleus.detachAllOnCommit = false */
         })
 @TestPropertySource({
     CausewayPresets.SilenceMetaModel,

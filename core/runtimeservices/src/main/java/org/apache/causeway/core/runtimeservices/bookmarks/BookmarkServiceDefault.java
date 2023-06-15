@@ -109,11 +109,6 @@ public class BookmarkServiceDefault implements BookmarkService {
     @Override
     public Bookmark bookmarkForElseFail(final @Nullable Object domainObject) {
 
-        if(bookmarkFor(domainObject).isEmpty()) {
-            val adapter = objectManager.adapt(unwrapped(domainObject));
-            System.err.printf("about to fail %s%n", adapter);
-        }
-
         return bookmarkFor(domainObject)
                 .orElseThrow(
                         ()->_Exceptions.illegalArgument(
