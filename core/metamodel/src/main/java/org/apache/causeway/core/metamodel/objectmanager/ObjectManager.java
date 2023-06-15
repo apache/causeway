@@ -51,7 +51,6 @@ public interface ObjectManager extends HasMetaModelContext {
     ObjectCreator getObjectCreator();
     ObjectLoader getObjectLoader();
     ObjectBulkLoader getObjectBulkLoader();
-    ObjectBookmarker getObjectBookmarker();
 
     // -- OBJECT MEMENTOS
 
@@ -128,20 +127,6 @@ public interface ObjectManager extends HasMetaModelContext {
      */
     public default Can<ManagedObject> queryObjects(final ObjectBulkLoader.Request objectQuery) {
         return getObjectBulkLoader().loadObject(objectQuery);
-    }
-
-    /**
-     * Returns an object identifier for the instance.
-     * @param managedObject
-     */
-    public default Optional<Bookmark> bookmarkObject(final ManagedObject managedObject) {
-        return getObjectBookmarker().bookmarkObject(managedObject);
-    }
-
-    public default Bookmark bookmarkObjectElseFail(final ManagedObject managedObject) {
-        return bookmarkObject(managedObject)
-                .orElseThrow(()->
-                    _Exceptions.unrecoverable("failed to bookmark %s", managedObject.getSpecification()));
     }
 
     public default Optional<ObjectSpecification> specForPojo(final @Nullable Object pojo) {

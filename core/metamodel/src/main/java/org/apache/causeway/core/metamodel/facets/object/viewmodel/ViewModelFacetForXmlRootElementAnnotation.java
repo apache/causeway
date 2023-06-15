@@ -75,7 +75,8 @@ extends ViewModelFacetAbstract {
     @Override
     protected String serialize(final ManagedObject managedObject) {
 
-        final String xml = getJaxbService().toXml(managedObject.getPojo());        final String encoded = getUrlEncodingService().encodeString(xml);
+        final String xml = getJaxbService().toXml(managedObject.getPojo());
+        final String encoded = getUrlEncodingService().encodeString(xml);
         _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
             _Debug.log("[JAXB] serializing viewmodel %s\n"
                     + "--- XML ---\n"

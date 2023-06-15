@@ -151,7 +151,7 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
         return actionResultOrVeto;
     }
 
-    public ManagedObject invokeWithRuleChecking(
+    public final ManagedObject invokeWithRuleChecking(
             final ParameterNegotiationModel pendingArgs) throws AuthorizationException {
         val action = railway.getSuccessElseFail();
         return action.invokeWithRuleChecking(pendingArgs.getParamValues());

@@ -39,9 +39,8 @@ extends ModelAbstract<ManagedObject> {
     /** overwrites any current cache entry, only safe when no other views/models reference the same ManagedObject */
     public static BookmarkedObjectWkt ofAdapter(
             final @NonNull MetaModelContext commonContext,
-            final @Nullable ManagedObject domainObject) {
-        val bookmark = commonContext.getObjectManager()
-                .bookmarkObjectElseFail(domainObject);
+            final @NonNull ManagedObject domainObject) {
+        val bookmark = domainObject.getBookmarkElseFail();
         return new BookmarkedObjectWkt(commonContext, bookmark, domainObject);
     }
 
