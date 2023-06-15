@@ -143,6 +143,9 @@ implements
         setResourceSettings(new CausewayResourceSettings(this));
 
         super.internalInit();
+
+        // intercept AJAX requests and reload view-models so any detached entities are re-fetched
+        CausewayWicketAjaxRequestListenerUtil.setRootRequestMapper(this, metaModelContext);
     }
 
     private AjaxRequestTarget decorate(final AjaxRequestTarget ajaxRequestTarget) {
