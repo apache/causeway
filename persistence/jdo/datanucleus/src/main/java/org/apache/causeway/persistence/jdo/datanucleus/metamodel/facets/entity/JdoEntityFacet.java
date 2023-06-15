@@ -140,11 +140,15 @@ implements EntityFacet {
     @Override
     public Optional<String> identifierFor(final Object pojo) {
 
-        if (!getEntityState(pojo).hasOid()) {
+        val entityState = getEntityState(pojo);
+
+        if (!entityState.hasOid()) {
             /* for previously attached objects that have become hollow,
              * the OID can be looked up in our pseudo StateManager,
              * that only acts as a holder of OID. */
-            return DnStateManagerForHollow.lookupIdentifierFor(pojo);
+            return entityState.isDetached()
+                    ? DnStateManagerForHollow.lookupIdentifierFor(pojo)
+                    : Optional.empty();
         }
 
         val pm = getPersistenceManager();
