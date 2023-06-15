@@ -42,6 +42,16 @@ public enum EntityState {
      * Object with this state is an entity but that is detached from a
      * persistence session, in other words changes to the entity will <i>not</i>
      * be flushed back to the database.
+     *
+     * <h1>JDO specifics:</h1>
+     * <p>
+     * JDO distinguishes between DETACHED and HOLLOW, where we are using HOLLOW here,
+     * by virtue of {@code datanucleus.detachAllOnCommit=false}.
+     * <p>
+     * (Unfortunately, we have not found a way to recover <i>OIDs</i> from <i>hollow</i> entities,
+     * as used for serialization post commit. So a workaround is in place with DnStateManagerForHollow.)
+     *
+     * @see "https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#lifecycle"
      */
     PERSISTABLE_DETACHED,
     /**

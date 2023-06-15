@@ -198,9 +198,7 @@ extends IndicatingAjaxLink<ManagedObject> {
             // an error page, but is probably 'good enough').
             val targetAdapter = actionModel.getParentObject();
 
-            targetAdapter.invalidateBookmark();
-
-            val bookmark = targetAdapter.getBookmark().orElseThrow();
+            val bookmark = targetAdapter.refreshBookmark().orElseThrow();
             getMetaModelContext().getTransactionService().flushTransaction();
 
             // "redirect-after-post"

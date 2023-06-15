@@ -30,28 +30,26 @@ import org.apache.causeway.applib.services.homepage.HomePageResolverService;
 import org.apache.causeway.applib.services.routing.RoutingService;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".RoutingServiceDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 //@Log4j2
 public class RoutingServiceDefault implements RoutingService {
 
     private final HomePageResolverService homePageResolverService;
 
-    @Inject
-    public RoutingServiceDefault(final HomePageResolverService homePageResolverService) {
-        this.homePageResolverService = homePageResolverService;
-    }
-
     @Override
     public boolean canRoute(final Object original) {
-        return true;
+        return original == null;
     }
 
     @Override
     public Object route(final Object original) {
-        return original != null ? original : homePageResolverService.getHomePage();
+        return homePageResolverService.getHomePage();
     }
 
 }

@@ -24,17 +24,20 @@ import java.util.Optional;
 import javax.jdo.PersistenceManager;
 
 import org.datanucleus.ExecutionContext;
+import org.datanucleus.api.jdo.DataNucleusHelperJDO;
 import org.datanucleus.cache.CachedPC;
 import org.datanucleus.enhancement.Persistable;
+import org.datanucleus.identity.SingleFieldId;
 import org.datanucleus.metadata.AbstractClassMetaData;
 import org.datanucleus.state.ReferentialStateManagerImpl;
 import org.datanucleus.store.FieldValues;
 import org.springframework.lang.Nullable;
 
-import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.persistence.jdo.datanucleus.metamodel.facets.entity.JdoEntityFacet;
 import org.apache.causeway.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
 
 import lombok.val;
@@ -46,14 +49,14 @@ import lombok.extern.log4j.Log4j2;
  * Installed via config property "datanucleus.objectProvider.className".
  */
 @Log4j2
-public class DnObjectProviderForCauseway
+public class DnObjectProviderForCauseway //TODO[CAUSEWAY-3486] rename to DnStateManagerForCauseway
 extends ReferentialStateManagerImpl {
 
-    private ServiceInjector serviceInjector;
+    private Optional<MetaModelContext> mmcIfAny;
 
     public DnObjectProviderForCauseway(final ExecutionContext ec, final AbstractClassMetaData cmd) {
         super(ec, cmd);
-        this.serviceInjector = extractServiceInjectorFrom(ec).orElse(null);
+        this.mmcIfAny = extractMetaModelContextFrom(ec);
     }
 
     @SuppressWarnings("rawtypes")
@@ -118,9 +121,23 @@ extends ReferentialStateManagerImpl {
         injectServicesIfNotAlready();
     }
 
+    @Override
+    public void disconnect() {
+        /* If a previously attached entity becomes hollow (or detached),
+         * we memoize the OID in the Persistable.dnStateManager field.
+         * Using a pseudo StateManager, that only acts as a holder of an OID. */
+        val entityPojo = myPC;
+        final Optional<DnStateManagerForHollow> smHollow = snapshotOid()
+                .map(DnStateManagerForHollow::new);
+
+        super.disconnect();
+        smHollow
+            .ifPresent(sm->replaceStateManager(entityPojo, sm));
+    }
+
     // -- HELPER
 
-    private Optional<ServiceInjector> extractServiceInjectorFrom(final ExecutionContext ec) {
+    private Optional<MetaModelContext> extractMetaModelContextFrom(final ExecutionContext ec) {
 
         val pm = ec.getOwner();
         if(! (pm instanceof PersistenceManager)) {
@@ -129,21 +146,21 @@ extends ReferentialStateManagerImpl {
         }
 
         val mmcKey = TransactionAwarePersistenceManagerFactoryProxy.MMC_USER_OBJECT_KEY;
-        val mmc = ((PersistenceManager)pm)
+        val mmcValue = ((PersistenceManager)pm)
                 .getUserObject(mmcKey);
-        if(! (mmc instanceof MetaModelContext)) {
+        if(! (mmcValue instanceof MetaModelContext)) {
             log.error("MetaModelContext, stored as key/value pair with key '" + mmcKey +
                     "', was not found amoung current PersistenceManager's user objects");
             return Optional.empty();
         }
 
-        val serviceInjector = ((MetaModelContext)mmc).getServiceInjector();
-        if(serviceInjector == null) {
-            log.error("could not find a usable ServiceInjector with given MetaModelContext");
+        val mmc = (MetaModelContext)mmcValue;
+        if(mmc.getServiceInjector() == null) {
+            log.error("could not find a usable ServiceInjector within given MetaModelContext");
             return Optional.empty();
         }
 
-        return Optional.of(serviceInjector);
+        return Optional.of(mmc);
     }
 
     private boolean injectionPointsResolved = false;
@@ -157,18 +174,61 @@ extends ReferentialStateManagerImpl {
             return true;
         }
         if(injectionPointsResolved) {
-            //XXX would be nice to count as a metric
             return true;
         }
-        if(serviceInjector!=null) {
-            serviceInjector.injectServicesInto(myPC);
-            this.injectionPointsResolved = true;
-        } else {
-            log.warn("cannot inject services into entity of type {}, "
-                    + "as there is no ServiceInjector available",
-                    myPC.getClass());
-        }
+
+        mmcIfAny.ifPresentOrElse(
+                mmc->{
+                    mmc.getServiceInjector().injectServicesInto(myPC);
+                    this.injectionPointsResolved = true;
+                },
+                ()->{
+                    log.warn("cannot inject services into entity of type {}, "
+                            + "as there is no ServiceInjector available",
+                            myPC.getClass());
+                });
+
         return injectionPointsResolved;
+    }
+
+    // -- SNAPSHOT OID
+
+    private Optional<String> snapshotOid() {
+        if(myID==null) {
+            return Optional.empty();
+        }
+        try {
+            Object id = myPC.dnGetObjectId();
+            if(id==null) {
+                return Optional.empty();
+            }
+            val entityFacet = lookupEntityFacet().orElse(null);
+            if(entityFacet==null) {
+                return Optional.empty();
+            }
+            if (id instanceof SingleFieldId) {
+                id = DataNucleusHelperJDO
+                        .getSingleFieldIdentityForDataNucleusIdentity((SingleFieldId)id, myPC.getClass());
+            }
+            val oidIfAny = entityFacet.identifierForDnPrimaryKey(id);
+            return oidIfAny;
+        } catch (Exception e) {
+            log.error("exception while trying to extract entity's current primary key", e);
+            e.printStackTrace();
+            return Optional.empty();
+        }
+    }
+
+    private Optional<JdoEntityFacet> lookupEntityFacet() {
+        if(myPC==null) {
+            return Optional.empty();
+        }
+        val entityFacet = mmcIfAny
+            .map(MetaModelContext::getSpecificationLoader)
+            .flatMap(specLoader->specLoader.specForType(myPC.getClass()))
+            .flatMap(ObjectSpecification::entityFacet)
+            .flatMap(facet->_Casts.castTo(JdoEntityFacet.class, facet));
+        return entityFacet;
     }
 
     // -- [CAUSEWAY-3126] PRE-DIRTY NESTED LOOP PREVENTION
@@ -197,7 +257,7 @@ extends ReferentialStateManagerImpl {
 
     /**
      * Optionally provides a {@link PreDirtyPropagationLock} for pre-dirty event propagation,
-     * based on whether there is NOT already an pre-dirty event in progress for the same OID.
+     * based on whether there is NOT already a pre-dirty event in progress for the same OID.
      */
     public Optional<PreDirtyPropagationLock> acquirePreDirtyPropagationLock(final Object id) {
 

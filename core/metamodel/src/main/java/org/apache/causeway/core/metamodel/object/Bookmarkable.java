@@ -42,11 +42,29 @@ public interface Bookmarkable {
      */
     Optional<Bookmark> getBookmark();
 
+    default Bookmark getBookmarkElseFail() {
+        return getBookmark().orElseThrow(()->
+              _Exceptions.unrecoverable("failed to bookmark %s", ((ManagedObject)this).getSpecification()));
+    }
+
+    /**
+     * Identical to {@link #getBookmark()}, except it has no return.
+     */
+    default void bookmark() { getBookmark(); }
+
     boolean isBookmarkMemoized();
 
-    default void invalidateBookmark() {
-        _Casts.castTo(BookmarkRefreshable.class, this)
-            .ifPresent(Bookmarkable.BookmarkRefreshable::invalidateBookmark);
+    /**
+     * If supports bookmark refreshing does so, otherwise acts identical to
+     * {@link #getBookmark()}.
+     */
+    default Optional<Bookmark> refreshBookmark() {
+        return _Casts.castTo(BookmarkRefreshable.class, this)
+            .map(bookmarkRefreshable->{
+                bookmarkRefreshable.invalidateBookmark();
+                return bookmarkRefreshable.getBookmark();
+            })
+            .orElse(getBookmark());
     }
 
     /**
@@ -79,10 +97,7 @@ public interface Bookmarkable {
          * reflecting the object's current state.
          * @apiNote only makes sense in the context of (mutable) viewmodels
          */
-        @Override void invalidateBookmark();
-
+        void invalidateBookmark();
     }
-
-
 
 }

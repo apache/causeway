@@ -32,6 +32,7 @@ import javax.jdo.PersistenceManager;
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 import org.datanucleus.enhancement.Persistable;
 import org.datanucleus.store.rdbms.RDBMSPropertyNames;
+import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.exceptions.unrecoverable.ObjectNotFoundException;
 import org.apache.causeway.applib.query.AllInstancesQuery;
@@ -58,6 +59,7 @@ import org.apache.causeway.core.metamodel.services.idstringifier.IdStringifierLo
 import org.apache.causeway.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
 import org.apache.causeway.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
 import org.apache.causeway.persistence.jdo.datanucleus.entities.DnObjectProviderForCauseway;
+import org.apache.causeway.persistence.jdo.datanucleus.entities.DnStateManagerForHollow;
 import org.apache.causeway.persistence.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacetFactory;
 import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
 import org.apache.causeway.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
@@ -138,19 +140,30 @@ implements EntityFacet {
     @Override
     public Optional<String> identifierFor(final Object pojo) {
 
-        if (!getEntityState(pojo).hasOid()) {
-            return Optional.empty();
+        val entityState = getEntityState(pojo);
+
+        if (!entityState.hasOid()) {
+            /* for previously attached objects that have become hollow,
+             * the OID can be looked up in our pseudo StateManager,
+             * that only acts as a holder of OID. */
+            return entityState.isDetached()
+                    ? DnStateManagerForHollow.lookupIdentifierFor(pojo)
+                    : Optional.empty();
         }
 
         val pm = getPersistenceManager();
-        var primaryKeyIfAny = Optional.ofNullable(pm.getObjectId(pojo));
+        val primaryKey = pm.getObjectId(pojo);
 
-        _Assert.assertTrue(primaryKeyIfAny.isPresent(), ()->
+        _Assert.assertNotNull(primaryKey, ()->
             String.format("failed to get OID even though entity is attached %s", pojo.getClass().getName()));
 
-        val idIfAny = primaryKeyIfAny
-                .map(primaryKey->
-                    primaryKeyTypeForEncoding(primaryKey).enstringWithCast(primaryKey));
+        return identifierForDnPrimaryKey(primaryKey);
+    }
+
+    public Optional<String> identifierForDnPrimaryKey(final @Nullable Object primaryKey) {
+        val idIfAny = Optional.ofNullable(primaryKey)
+                .map(pk->
+                    primaryKeyTypeForEncoding(pk).enstringWithCast(pk));
         return idIfAny;
     }
 
