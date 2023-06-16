@@ -3,6 +3,8 @@
 The framework has built-in support for a number of temporal types, including `java.time.OffsetTime`.
 These can be used either in entities or view models.
 
+WARNING: changing the offset has the effect of adjusting the time rather than the offset itself (which remains fixed to the current user's timezone); being tracked under https://issues.apache.org/jira/browse/CAUSEWAY-3491[CAUSEWAY-3491].
+
 == How this demo works
 
 On the left hand side is a collection of entities that uses the `OffsetTime` datatype.
