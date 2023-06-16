@@ -60,7 +60,7 @@ public class PrimeNumberJpa
     private Long id;
 
     @Property
-    @Column(nullable = false)                                                   // <.>
+    @Column(nullable = false)
     @Getter
     private Integer primeNumber;
 
