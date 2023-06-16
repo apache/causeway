@@ -2390,19 +2390,16 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 					<!-- goal:aggregate (for aggregator modules) binds to phase:package -->
 					<!-- goal:jar and goal:test-jar are meant to bind to phase:package,
 						but doesn't seem to so bound explicitly -->
-					<!-- failing since maven-source-plugin 3.3.0 (as duplicated runs 
-					 		are no longer alloed; there is a clash with built-in goal 'jar-no-fork')
 					<executions>
 						<execution>
 							<id>package-jars</id>
-							<phase>package</phase> 
+							<phase>package</phase>
 							<goals>
 								<goal>jar</goal>
 								<goal>test-jar</goal>
 							</goals>
 						</execution>
 					</executions>
-					-->
 				</plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
