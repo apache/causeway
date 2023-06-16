@@ -18,6 +18,7 @@
  */
 package demoapp.dom.types.javaawt.images;
 
+import java.awt.image.BufferedImage;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -28,24 +29,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;
-import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.annotation.PromptStyle;
-import org.apache.causeway.applib.annotation.SemanticsOf;
-
-import java.awt.image.BufferedImage;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom._infra.values.ValueHolderRepository;
 import demoapp.dom.types.Samples;
 import demoapp.dom.types.javaawt.images.persistence.BufferedImageEntity;
-import demoapp.dom.types.javaawt.images.vm.BufferedImageVm;
 
 @XmlRootElement(name = "root")
 @XmlType
@@ -56,16 +49,7 @@ import demoapp.dom.types.javaawt.images.vm.BufferedImageVm;
 public class BufferedImages implements HasAsciiDocDescription {
 
     @ObjectSupport public String title() {
-        return "BufferedImage data type";
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    public BufferedImageVm openViewModel(final BufferedImage initialValue) {
-        return new BufferedImageVm(initialValue);
-    }
-    @MemberSupport public BufferedImage default0OpenViewModel() {
-        return samples.single();
+        return "java.awt.image.BufferedImage data type";
     }
 
     @Collection

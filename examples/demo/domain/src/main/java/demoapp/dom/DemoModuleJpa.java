@@ -72,7 +72,7 @@ import demoapp.dom.featured.causewayext.cal.jpa.CausewayCalendarEventJpa;
 import demoapp.dom.types.causewayval.asciidocs.jpa.CausewayAsciiDocJpa;
 import demoapp.dom.types.causewayval.markdowns.jpa.CausewayMarkdownJpa;
 import demoapp.dom.types.causewayval.vegas.jpa.CausewayVegaJpa;
-import demoapp.dom.types.javaawt.images.jpa.JavaAwtBufferedImageJpa;
+import demoapp.dom.types.javaawt.images.jpa.BufferedImageJpa;
 import demoapp.dom.types.javalang.booleans.jpa.WrapperBooleanJpa;
 import demoapp.dom.types.javalang.bytes.jpa.WrapperByteJpa;
 import demoapp.dom.types.javalang.characters.jpa.WrapperCharacterJpa;
@@ -167,7 +167,7 @@ import demoapp.dom.types.primitive.shorts.jpa.PrimitiveShortJpa;
         CausewayCalendarEventJpa.class,
         EventLogEntryJpa.class,
 
-        JavaAwtBufferedImageJpa.class,
+        BufferedImageJpa.class,
 
         JavaLangEnumJpa.class,
         JavaLangStringJpa.class,

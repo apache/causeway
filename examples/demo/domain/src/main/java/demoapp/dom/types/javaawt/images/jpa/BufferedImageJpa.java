@@ -61,7 +61,10 @@ public class BufferedImageJpa
 //end::class[]
     public BufferedImageJpa(final BufferedImage initialValue) {
         this.readOnlyProperty = initialValue;
-        this.readWriteProperty = initialValue;
+    }
+
+    public String title() {
+        return "java.awt.image.BufferedImage JPA entity";
     }
 
 //tag::class[]
@@ -69,29 +72,16 @@ public class BufferedImageJpa
     @GeneratedValue
     private Long id;
 
-    @Title(prepend = "BufferedImage JPA entity: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @Column(nullable = false)                                                   // <.>
     @Getter @Setter
     private BufferedImage readOnlyProperty;
-
-    @Property(editing = Editing.ENABLED)                                        // <.>
-    @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
-    @Column(nullable = false)
-    @Getter @Setter
-    private BufferedImage readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
     @Column(nullable = true)                                                    // <.>
     @Getter @Setter
     private BufferedImage readOnlyOptionalProperty;
-
-    @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
-    @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
-    @Column(nullable = true)
-    @Getter @Setter
-    private BufferedImage readWriteOptionalProperty;
 
 }
 //end::class[]
