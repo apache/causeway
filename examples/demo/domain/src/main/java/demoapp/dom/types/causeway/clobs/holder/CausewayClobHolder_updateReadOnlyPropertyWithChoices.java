@@ -53,18 +53,14 @@ public class CausewayClobHolder_updateReadOnlyPropertyWithChoices {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
-
     @MemberSupport public Clob default0Act() {
         return holder.getReadOnlyProperty();
     }
-
     @MemberSupport public List<Clob> choices0Act() {
         return samples.stream()
                 .collect(Collectors.toList());
     }
 
-    @Inject
-    Samples<Clob> samples;
-
+    @Inject Samples<Clob> samples;
 }
 //end::class[]

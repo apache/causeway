@@ -49,27 +49,28 @@ import demoapp.dom.types.causeway.clobs.persistence.CausewayClobEntity;
 @DomainObject
 public class CausewayClobJdo                                          // <.>
         extends CausewayClobEntity {
-
+    // ...
 //end::class[]
     public CausewayClobJdo(final Clob initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
 
-//tag::class[]
+//tag::property[]
     @Title(prepend = "Clob JDO entity: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @Persistent(defaultFetchGroup="false", columns = {              // <.>
             @Column(name = "readOnlyProperty_name"),
             @Column(name = "readOnlyProperty_mimetype"),
             @Column(name = "readOnlyProperty_chars"
-                    , jdbcType = "CLOB"
+                    , jdbcType = "CLOB"                             // <.>
             )
     })
     @Getter @Setter
     private Clob readOnlyProperty;
+//end::property[]
 
-    @Property(editing = Editing.ENABLED,                            // <.>
+    @Property(editing = Editing.ENABLED,
             optionality = Optionality.MANDATORY)
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @Persistent(defaultFetchGroup="false", columns = {
@@ -82,6 +83,7 @@ public class CausewayClobJdo                                          // <.>
     @Getter @Setter
     private Clob readWriteProperty;
 
+//tag::optional-property[]
     @Property(optionality = Optionality.OPTIONAL)                   // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
     @Persistent(defaultFetchGroup="false", columns = {
@@ -95,6 +97,7 @@ public class CausewayClobJdo                                          // <.>
     })
     @Getter @Setter
     private Clob readOnlyOptionalProperty;
+//end::optional-property[]
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
@@ -110,5 +113,6 @@ public class CausewayClobJdo                                          // <.>
     @Getter @Setter
     private Clob readWriteOptionalProperty;
 
+//tag::class[]
 }
 //end::class[]

@@ -46,10 +46,8 @@ public class CausewayClobHolder_updateReadOnlyProperty {
         holder.setReadOnlyProperty(newValue);
         return holder;
     }
-
     @MemberSupport public Clob default0Act() {
         return holder.getReadOnlyProperty();
     }
-
 }
 //end::class[]

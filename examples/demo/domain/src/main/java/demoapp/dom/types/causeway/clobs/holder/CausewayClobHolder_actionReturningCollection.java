@@ -44,8 +44,6 @@ public class CausewayClobHolder_actionReturningCollection {
                 .collect(Collectors.toList());
     }
 
-    @Inject
-    Samples<Clob> samples;
-
+    @Inject Samples<Clob> samples;
 }
 //end::class[]

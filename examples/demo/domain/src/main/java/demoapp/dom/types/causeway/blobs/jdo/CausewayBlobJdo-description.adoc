@@ -5,7 +5,7 @@ To do so correctly, it requires that the column names for the three constituent 
 
 == About this demo
 
-On the left hand side of this page, four `Blob` properties are defined for a JPA entity, along with a variety of contributed properties and action.
+On the left hand side of this page, four `Blob` properties are defined for a JDO entity, along with a variety of contributed properties and action.
 The properties can variously be edited directly or through actions.
 
 In terms of code:
@@ -19,14 +19,14 @@ include::CausewayBlobJdo.java[tags=class]
 
 * the `readOnlyProperty` (mandatory) property is mapped using:
 +
-[source,java]
+[source,java,indent=0]
 ----
 include::CausewayBlobJdo.java[tags=property]
 ----
 
 * while an optional property is mapped using:
 +
-[source,java]
+[source,java,indent=0]
 ----
 include::CausewayBlobJdo.java[tags=optional-property]
 ----

@@ -107,5 +107,6 @@ public class CausewayBlobJdo                                            // <.>
     @Getter @Setter
     private Blob readWriteOptionalProperty;
 
+//tag::class[]
 }
 //end::class[]

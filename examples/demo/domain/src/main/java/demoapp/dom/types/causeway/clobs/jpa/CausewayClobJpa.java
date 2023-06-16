@@ -58,19 +58,18 @@ import demoapp.dom.types.causeway.clobs.persistence.CausewayClobEntity;
 @NoArgsConstructor
 public class CausewayClobJpa
         extends CausewayClobEntity {
-
+    // ...
 //end::class[]
     public CausewayClobJpa(final Clob initialValue) {
         setReadOnlyProperty(initialValue);
         setReadWriteProperty(initialValue);
     }
 
-//tag::class[]
     @Id
     @GeneratedValue
     private Long id;
 
-
+//tag::field[]
     @AttributeOverrides({
             @AttributeOverride(name="name",    column=@Column(name="readOnlyProperty_name")),
             @AttributeOverride(name="mimeType",column=@Column(name="readOnlyProperty_mimeType")),
@@ -78,7 +77,9 @@ public class CausewayClobJpa
     })
     @Embedded
     private ClobJpaEmbeddable readOnlyProperty;
+//end::field[]
 
+//tag::accessors[]
     @Override
     @Title(prepend = "Clob JPA entity: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
@@ -90,7 +91,7 @@ public class CausewayClobJpa
     public void setReadOnlyProperty(final Clob readOnlyProperty) {
         this.readOnlyProperty = ClobJpaEmbeddable.fromClob(readOnlyProperty);
     }
-
+//end::accessors[]
 
     @AttributeOverrides({
             @AttributeOverride(name="name",    column=@Column(name="readWriteProperty_name")),
@@ -101,7 +102,7 @@ public class CausewayClobJpa
     private ClobJpaEmbeddable readWriteProperty;
 
     @Override
-    @Property(editing = Editing.ENABLED)                            // <.>
+    @Property(editing = Editing.ENABLED)
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     public Clob getReadWriteProperty() {
         return ClobJpaEmbeddable.toClob(readWriteProperty);
@@ -152,5 +153,6 @@ public class CausewayClobJpa
     public void setReadWriteOptionalProperty(final Clob readWriteOptionalProperty) {
         this.readWriteOptionalProperty = ClobJpaEmbeddable.fromClob(readWriteOptionalProperty);
     }
+//tag::class[]
 }
 //end::class[]
