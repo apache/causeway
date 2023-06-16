@@ -85,7 +85,6 @@ import demoapp.dom.types.javalang.shorts.jpa.WrapperShortJpa;
 import demoapp.dom.types.javalang.strings.jpa.JavaLangStringJpa;
 import demoapp.dom.types.javamath.bigdecimals.jpa.BigDecimalJpa;
 import demoapp.dom.types.javamath.bigintegers.jpa.BigIntegerJpa;
-import demoapp.dom.types.javanet.urls.jpa.JavaNetUrlJpa;
 import demoapp.dom.types.javasql.javasqldate.jpa.JavaSqlDateJpa;
 import demoapp.dom.types.javasql.javasqltimestamp.jpa.JavaSqlTimestampJpa;
 import demoapp.dom.types.javatime.javatimelocaldate.jpa.JavaTimeLocalDateJpa;

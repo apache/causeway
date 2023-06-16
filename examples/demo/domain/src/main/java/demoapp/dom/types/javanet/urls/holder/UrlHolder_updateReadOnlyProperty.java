@@ -16,35 +16,40 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javanet;
-
-import javax.inject.Named;
+package demoapp.dom.types.javanet.urls.holder;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.DomainObjectLayout;
-import org.apache.causeway.applib.annotation.DomainService;
-import org.apache.causeway.applib.annotation.NatureOfService;
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
-import demoapp.dom.types.javanet.urls.Url;
+import java.net.URL;
 
-@Named("demo.JavaNetTypesMenu")
-@DomainService(
-        nature=NatureOfService.VIEW
-)
-@DomainObjectLayout(
-        named="JavaNetTypes"
-)
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
-public class JavaNetTypesMenu {
+import lombok.RequiredArgsConstructor;
 
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-link")
-    public Url urls(){
-        return new Url();
+//tag::class[]
+@Action(
+        semantics = SemanticsOf.IDEMPOTENT
+)
+@ActionLayout(
+        promptStyle = PromptStyle.INLINE
+        , named = "Update"
+        , associateWith = "readOnlyProperty"
+        , sequence = "1")
+@RequiredArgsConstructor
+public class UrlHolder_updateReadOnlyProperty {
+
+    private final UrlHolder holder;
+
+    @MemberSupport public UrlHolder act(final URL newValue) {
+        holder.setReadOnlyProperty(newValue);
+        return holder;
     }
 
+    @MemberSupport public URL default0Act() {
+        return holder.getReadOnlyProperty();
+    }
 
 }
+//end::class[]

@@ -16,35 +16,36 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.types.javanet;
+package demoapp.dom.types.javanet.urls.holder;
 
-import javax.inject.Named;
+import java.util.Collection;
+import java.util.stream.Collectors;
+
+import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.DomainObjectLayout;
-import org.apache.causeway.applib.annotation.DomainService;
-import org.apache.causeway.applib.annotation.NatureOfService;
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
-import demoapp.dom.types.javanet.urls.Url;
+import java.net.URL;
 
-@Named("demo.JavaNetTypesMenu")
-@DomainService(
-        nature=NatureOfService.VIEW
-)
-@DomainObjectLayout(
-        named="JavaNetTypes"
-)
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
-public class JavaNetTypesMenu {
+import lombok.RequiredArgsConstructor;
 
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-link")
-    public Url urls(){
-        return new Url();
+import demoapp.dom.types.Samples;
+
+//tag::class[]
+@Action(semantics = SemanticsOf.SAFE)
+@RequiredArgsConstructor
+public class UrlHolder_actionReturningCollection {
+
+    private final UrlHolder holder;
+
+    public Collection<URL> act() {
+        return samples.stream()
+                .collect(Collectors.toList());
     }
 
+    @Inject
+    Samples<URL> samples;
 
 }
+//end::class[]
