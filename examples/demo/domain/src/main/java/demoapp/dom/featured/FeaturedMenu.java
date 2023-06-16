@@ -43,7 +43,6 @@ import lombok.val;
 import demoapp.dom.featured.customui.GeoapifyClient;
 import demoapp.dom.featured.customui.Zoom;
 import demoapp.dom.featured.layout.tooltip.TooltipPage;
-import demoapp.dom.featured.layout.tabs.TabDemo;
 
 @Named("demo.FeaturedMenu")
 @DomainService(
@@ -69,17 +68,6 @@ public class FeaturedMenu {
         demo.getCollection().add(DemoItem.of("third"));
 
         return demo;
-    }
-
-
-    @Action
-    @ActionLayout(
-            cssClassFa="fa-bolt",
-            describedAs="Opens the Tabs-Demo page.",
-            hidden = Where.EVERYWHERE               // TODO: not sure this is particularly valuable
-    )
-    public TabDemo tabDemo(){
-        return factoryService.viewModel(new TabDemo());
     }
 
 
