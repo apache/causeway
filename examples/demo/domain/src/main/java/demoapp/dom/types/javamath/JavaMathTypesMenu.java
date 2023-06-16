@@ -29,8 +29,8 @@ import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
-import demoapp.dom.types.javamath.bigdecimals.JavaMathBigDecimals;
-import demoapp.dom.types.javamath.bigintegers.JavaMathBigIntegers;
+import demoapp.dom.types.javamath.bigdecimals.BigDecimals;
+import demoapp.dom.types.javamath.bigintegers.BigIntegers;
 
 @Named("demo.JavaMathTypesMenu")
 @DomainService(
@@ -44,14 +44,14 @@ public class JavaMathTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-hashtag")
-    public JavaMathBigDecimals bigDecimals(){
-        return new JavaMathBigDecimals();
+    public BigDecimals bigDecimals(){
+        return new BigDecimals();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-hashtag")
-    public JavaMathBigIntegers bigIntegers(){
-        return new JavaMathBigIntegers();
+    public BigIntegers bigIntegers(){
+        return new BigIntegers();
     }
 
 }
