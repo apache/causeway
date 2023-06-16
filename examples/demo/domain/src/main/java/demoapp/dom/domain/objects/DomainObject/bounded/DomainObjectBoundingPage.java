@@ -47,11 +47,5 @@ public class DomainObjectBoundingPage implements HasAsciiDocDescription {
         return "@DomainObject#bounding";
     }
 
-    /*
-     * TODO on an entity ...
-    @DomainObject(
-            bounding = Bounding.BOUNDED)
-    */
-
 }
 //end::class[]
