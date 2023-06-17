@@ -15,7 +15,7 @@
 * *xref:what-is-apache-causeway/causeway-in-pictures.adoc[Apache Causeway in pictures]*
 * xref:what-is-apache-causeway/common-use-cases.adoc[Common Use Cases]
 
-// TODO: v2: NICE-TO-HAVE; update screencasts.
+// LATER: update screencasts.
 // * xref:what-is-apache-causeway/screencasts.adoc[Screencasts]
 
 |
