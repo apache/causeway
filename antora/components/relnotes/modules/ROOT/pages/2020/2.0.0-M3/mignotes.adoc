@@ -820,8 +820,7 @@ class Submitter {
 
 === ServicesInjector/ServiceRegistry
 
-ServicesInjector was removed. New interface ServiceInjector and ServiceRegistry redefined.
-//TODO work in progress with ISIS-2033
+The `ServicesInjector` service was removed, replaced by new interfaces `ServiceInjector` (note: singular) and `ServiceRegistry`.
 
 === BuilderScripts simplified
 
@@ -1494,11 +1493,10 @@ public class TemporalDemo {
 ----
 
 
-=== Ticket (for ErrorReportingService) is now an interface, not a class (ISIS-1955)
-
-NOTE: TODO - ... and so any concrete implementations will need to be changed
 
 === Override hsqldb for integtests (ISIS-1958)
+
+CAUTION: these examples are now out-of-date, superceded by later milestone releases.
 
 sample usage:
 

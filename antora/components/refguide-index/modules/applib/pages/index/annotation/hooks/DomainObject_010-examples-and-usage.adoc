@@ -44,7 +44,7 @@ public class CustomerViewModel {
 }
 ----
 
-Although there are several ways to instantiate a view model, we recommend that they are instantiated using an N-arg constructor that initializes all relevant state.
+Although there are several ways to instantiate a xref:userguide:fun:view-models.adoc[view model], we recommend that they are instantiated using an N-arg constructor that initializes all relevant state.
 The xref:refguide:applib:index/services/registry/ServiceRegistry.adoc[ServiceRegistry] can then be used to inject dependencies into the view model.
 For example:
 
@@ -54,13 +54,6 @@ Customer cust = ...
 CustomerViewModel vm = factoryService.viewModel(
     new CustomerViewModel(cust.getFirstName(), cust.getLastName()));
 ----
-
-[TIP]
-====
-See this xref:userguide:btb:hints-and-tips/view-model-instantiation.adoc[tip] for further discussion about instantiating view models.
-====
-
-View models must have a no-arg constructor; this is used internally by the framework for subsequent "recreation".
 
 The view model's memento will be derived from the value of the view model object's properties.
 Any properties annotated with xref:refguide:applib:index/annotation/Programmatic.adoc[@Programmatic] will be excluded from the memento.
@@ -74,8 +67,5 @@ View models when defined using `@DomainObject(nature=VIEW_MODEL)` have some limi
 
 However, these limitations do _not_ apply to xref:userguide:fun:view-models.adoc#jaxb[JAXB] view models.
 If you are using view models heavily, you may wish to restrict yourself to just the JAXB flavour.
-
-
-== Usage Notes
 
 
