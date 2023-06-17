@@ -254,29 +254,26 @@ There is no way to specify these semantics in the `.layout.xml` file (action par
 [#layout-file-styles]
 === Layout file styles
 
-NOTE: TODO v2 - Style has been changed (WIP)
-
 If you want to make your usage of layout files consistent, then the framework can help because it allows the layout XML files to be downloaded using the xref:refguide:applib:index/services/layout/LayoutService.adoc[LayoutService].
 This is exposed on the prototyping menu to allow you to download a ZIP file of layout XML files for all domain entities and view models.
 
-When downloading the layout files, there are four "styles" available:
+When downloading the layout files, there are two "styles" available:
 
-* complete
-* minimal
-
-// TODO: CAUSEWAY-3087: let's simplify and get rid of these
-//* current
-//* normalized
-
-Ignoring the "current" style (which merely downloads the currently cached layout), the other three styles allow the developer to choose how much metadata is to be specified in the XML, and how much (if any) will be obtained from annotations in the metamodel.
-
-As a developer, you can therefore select the layout file which maps to your preferred usage:
-
-* if you want all layout metadata to be read from the `.layout.xml` file, then download the "complete" version, and copy the file alongside the domain class.
+* `COMPLETE`
++
+\... for if you want all layout metadata to be read from the `.layout.xml` file.
+Copy the file alongside the domain class.
++
 You can then remove all `@ActionLayout`, `@PropertyLayout` and `@CollectionLayout` annotations from the source code of the domain class.
 
-* if you want to use layout XML file ONLY to describe the grid, then download the "minimal" version.
+* `MINIMAL`
++
+\... for if you want to use layout XML file ONLY to describe the grid.
++
 The grid regions will be empty in this version, and the framework will use the `@PropertyLayout#fieldSetId`, `@ActionLayout#fieldSetId`, `@ActionLayout#associateWith` and `@Action#choicesFrom` annotation attributes to bind object members to those regions.
++
+// LATER: we don't have any way to associate collections with regions for the "minimal" version.
 
-If you want to adjust the layout XML for a single domain object, then you can use the xref:refguide:applib-classes:mixees-and-mixins.adoc[mixin action] (contributed to every domain object).
+In practice, you will probably find yourself somewhere in between these two extremes, deciding which metadata you prefer to define using annotations, and which you like to specify using layout file.
+
 

@@ -29,7 +29,7 @@ You can then remove all `@ActionLayout`, `@PropertyLayout` and `@CollectionLayou
 +
 \... for if you want to use layout XML file ONLY to describe the grid.
 +
-The grid regions will be empty in this version, and the framework will use the `@ActionLayout` and `@PropertyLayout` annotations to bind object members to those regions, and to specify their order within those regions.
+The grid regions will be empty in this version, and the framework will use the `@PropertyLayout#fieldSetId`, `@ActionLayout#fieldSetId`, `@ActionLayout#associateWith` and `@Action#choicesFrom` annotation attributes to bind object members to those regions.
 +
 // LATER: we don't have any way to associate collections with regions for the "minimal" version.
 
