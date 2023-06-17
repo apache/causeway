@@ -13,7 +13,7 @@ For example, imagine a lease management system, where a lease is extended by cre
 There are three operations here: set the end date of the original lease term, create the new lease term with relevant details copied over from the original lease term, and set the start date of the lease term correctly.
 
 Instead, all of these operations can be combined into a single action, "renew".
-Through such means the xref:concepts-patterns.adoc#ubiquitous-language[ubiquitous language] grows.
+Through such means the xref:background-context-and-theory.adoc#ubiquitous-language[ubiquitous language] grows.
 
 TIP: This is the reason why Apache Causeway' default is xref:object-members.adoc#editable-properties[non-editable properties]: to encourage this sort of "knowledge crunching".
 

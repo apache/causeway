@@ -105,7 +105,7 @@ This is great for performing checks on the metamodel as a whole.
 Once you have implemented your validator, you must register it with the framework.
 This is most easily done by implementing service that implements  `MetaModelRefiner` service.
 
-For example, some folk advocate that pattern names such as "Repository" or "Factory" should not appear in class names because they are not part of the xref:userguide:fun:concepts-patterns.adoc#ubiquitous-language[ubiquitous language].
+For example, some folk advocate that pattern names such as "Repository" or "Factory" should not appear in class names because they are not part of the xref:userguide:fun:background-context-and-theory.adoc#ubiquitous-language[ubiquitous language].
 Such a rule could be verified using this implementation:
 
 [source,java]

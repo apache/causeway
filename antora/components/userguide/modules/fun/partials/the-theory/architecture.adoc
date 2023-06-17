@@ -38,7 +38,7 @@ Here Apache Causeway delegates most of the heavy lifting to an ORM (DataNucleus 
 [[aop]]
 == Aspect Oriented
 
-Although not a book about object modelling, Evans' "Domain Driven Design" does use object orientation as its primary modelling tool; while xref:userguide:fun:concepts-patterns.adoc#naked-objects-pattern[naked objects pattern] very much comes from an OO background (it even has 'object' in its name).
+Although not a book about object modelling, Evans' "Domain Driven Design" does use object orientation as its primary modelling tool; while xref:userguide:fun:background-context-and-theory.adoc#naked-objects-pattern[naked objects pattern] very much comes from an OO background (it even has 'object' in its name).
 
 It's certainly true that to develop an Apache Causeway application you will need reasonably good object oriented modelling skills.
 But given that all the mainstream languages for developing business systems are object oriented (Java, C#, Ruby), that's not such a stretch.
@@ -87,7 +87,7 @@ Mixins can also contribute read-only properties or collections: effectively the 
 In other words, we can dissociate behaviour from data.
 
 That's not always the right thing to do of course.
-In Richard Pawson's description of the xref:userguide:fun:concepts-patterns.adoc#naked-objects-pattern[naked objects pattern] he talks about "behaviourally rich" objects, in other words where the business functionality encapsulates the data.
+In Richard Pawson's description of the xref:userguide:fun:background-context-and-theory.adoc#naked-objects-pattern[naked objects pattern] he talks about "behaviourally rich" objects, in other words where the business functionality encapsulates the data.
 But on the other hand sometimes the behaviour and data structures change at different rates.
 The link:http://en.wikipedia.org/wiki/Single_responsibility_principle[single responsibility principle] says we should only lump code together that changes at the same rate.
 Apache Causeway' support for contributions (not only contributed actions, but also contributed properties and contributed collections) enables this.

@@ -5,7 +5,7 @@
 :page-partial:
 
 
-Apache Causeway supports recognises four main types of domain classes:
+Apache Causeway supports recognises five main types of domain classes:
 
 * *domain entities* - domain objects persisted to the database the ORM (eg  JDO/DataNucleus); for example `Customer`
 
@@ -15,6 +15,8 @@ Apache Causeway supports recognises four main types of domain classes:
 
 * *mixins* - allow functionality to be "contributed" in the UI by one module to another object, similar to traits or extension methods provided in some programming languages.
 This is an important capability to help keep large applications decoupled.
+
+* *value types*
 
 From the end-user's perspective the UI displays a single domain object instance that has state (that is, a domain entity or a view model) per page.
 The end-user can then inspect and modify its state, and navigate to related objects.
@@ -105,7 +107,7 @@ xref:userguide:fun:domain-entities-and-services.adoc#domain-services[here].
 
 === Hexagonal Architecture
 
-It's worth extending the xref:userguide:fun:concepts-patterns.adoc#hexagonal-architecture[Hexagonal Architecture] to show where domain services fit in:
+It's worth extending the xref:userguide:fun:background-context-and-theory.adoc#hexagonal-architecture[Hexagonal Architecture] to show where domain services fit in:
 
 .The hexagonal architecture with API and SPI implementations
 image::core-concepts/philosophy/hexagonal-architecture-addons.png[width="700px"]
@@ -253,7 +255,7 @@ ORMs such as DataNucleus link:http://www.datanucleus.org:15080/products/accesspl
 [#mixins]
 == Mixins
 
-The final type of domain object is the *mixin*.
+The next type of domain object is the *mixin*.
 These are similar to traits or extension methods in other programming languages.
 A mixin object allows one class to contribute behaviour - actions, (derived) properties and (derived) collections - to another domain object, either a domain entity or view model.
 Or rather, the mixin _appears_ to contribute the behaviour/state in the UI; the underlying domain class being "decorated" does not know this is happening.
@@ -297,4 +299,13 @@ DCI stands for Data-Context-Interaction and is presented as an evolution of obje
 The mixin pattern is Apache Causeway' straightforward take on the same basic concept.
 ****
 
+
+
+
+[#value-types]
+== Value Types
+
+Our final type of domain object is value types.
+
+// TODO: v2 flesh out
 

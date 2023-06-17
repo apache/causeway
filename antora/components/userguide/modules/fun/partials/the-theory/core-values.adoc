@@ -94,7 +94,7 @@ For further discussion on modular monoliths, check out Dan Haywood's article on 
 
 == Easing the road to DDD
 
-The case for xref:concepts-patterns.adoc#domain-driven-design[domain driven design]  might be compelling, but that doesn't necessarily make it easy to do.
+The case for xref:background-context-and-theory.adoc#domain-driven-design[domain driven design]  might be compelling, but that doesn't necessarily make it easy to do.
 Let's take a look at some of the challenges that _DDD_ throws up and see how Apache Causeway (and its implementation of the naked objects pattern) helps address them.
 
 === DDD takes a conscious effort
@@ -166,7 +166,7 @@ All the validation logic *must* be in the domain model because there is nowhere 
 
 Moreover, although Apache Causeway does provide a complete runtime framework, there is no direct coupling of your domain model to the framework.
 That means it is very possible to take your domain model prototyped in Apache Causeway and then deploy it on some other _J(2)EE_ architecture, with a custom _UI_ if you want.
-This is discussed later on, in xref:concepts-patterns.adoc#deployment-options[deployment options].
+This is discussed later on, in xref:background-context-and-theory.adoc#deployment-options[deployment options].
 
 === Extending the reach of DDD
 

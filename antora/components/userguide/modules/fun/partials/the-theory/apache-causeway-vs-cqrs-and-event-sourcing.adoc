@@ -63,7 +63,7 @@ With Apache Causeway, though, the end-user merely invokes the `placeOrder(...)` 
 
 == Event Sourcing
 
-The xref:userguide:fun:concepts-patterns.adoc#cqrs[CQRS architecture] is often combined with _Event Sourcing_ pattern, though they are separate ideas.
+The xref:userguide:fun:background-context-and-theory.adoc#cqrs[CQRS architecture] is often combined with _Event Sourcing_ pattern, though they are separate ideas.
 
 With event sourcing, each business operation emits a domain event (or possibly events) that allow other objects in the system to act accordingly.
 For example, if a customer places an order then this might emit the `OrderPlacedEvent`.

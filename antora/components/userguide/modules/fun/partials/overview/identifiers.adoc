@@ -38,7 +38,7 @@ Details on how to actually write titles and icons (the programming model) can be
 [[oid]]
 == OIDs
 
-As well as defining a xref:userguide:fun:concepts-patterns.adoc#metamodel[metamodel] of the structure (domain classes) of its domain objects, Apache Causeway also manages the runtime instances of said domain objects.
+As well as defining a xref:userguide:fun:background-context-and-theory.adoc#metamodel[metamodel] of the structure (domain classes) of its domain objects, Apache Causeway also manages the runtime instances of said domain objects.
 
 When a domain entity is recreated from the database, the framework keeps track of its identity through an "OID": an object identifier.
 Fundamentally this is a combination of its type (domain class), along with an identifier.
