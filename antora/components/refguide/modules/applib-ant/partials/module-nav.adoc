@@ -48,6 +48,9 @@
 *** xref:refguide:applib-ant:XmlJavaTypeAdapter.adoc[@XmlJavaTypeAdapter]
 *** xref:refguide:applib-ant:XmlRootElement.adoc[@XmlRootElement]
 
+** JPA
+*** xref:refguide:applib-ant:Entity.adoc[@Entity]
+
 ** JDO
 *** xref:refguide:applib-ant:Column.adoc[@Column]
 *** xref:refguide:applib-ant:Discriminator.adoc[@Discriminator]

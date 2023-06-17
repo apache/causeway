@@ -4,6 +4,57 @@
 :page-partial:
 
 
-TODO: v2 - JPA is now also supported as an ORM.
-(As with JDO), some of JPA's annotations are recognised by Apache Causeway.
+The table below lists the xref:pjpa:ROOT:about.adoc[JPA/EclipseLink] annotations currently recognized by Apache Causeway.
+
+
+.JPA Annotations
+[cols="2,4a,1,1", options="header"]
+|===
+|Annotation
+|Purpose
+|Layer
+|Applies to
+
+
+|xref:refguide:applib-ant:Entity.adoc[@javax.persistence. +
+Entity]
+|Flags that the class is an entity, creating an abstraction layer through which the Causeway framework interacts with the underlying persistent domain object.
+
+|Domain / persistence
+|Class
+
+
+
+|===
+
+
+
+Causeway also parses the following JPA annotations, but the metadata is currently unused.
+
+.JPA Annotations (unused within Apache Causeway)
+[cols="2,4a,1,1", options="header"]
+|===
+|Annotation
+|Purpose
+|Layer
+|Applies to
+
+
+|`@javax.persistence. +
+Transient`
+|Unused
+|Persistence
+|Property
+
+|`@javax.persistence. +
+Table`
+|Unused
+|Persistence
+|Class
+
+
+|===
+
+
+
 

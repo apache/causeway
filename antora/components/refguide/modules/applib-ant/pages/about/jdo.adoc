@@ -46,6 +46,8 @@ PersistenceCapable]
 |The `schema` attribute plus table name is used to the logical type name.
 However, `@Discriminator` (above) takes precedence, as does `@DomainObject#logicalTypeName`.
 
+Internally, it also flags that the class is an entity, creating an abstraction layer through which the Causeway framework interacts with the underlying persistent domain object.
+
 |Domain / persistence
 |Class
 

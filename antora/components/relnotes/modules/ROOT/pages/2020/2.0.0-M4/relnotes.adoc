@@ -17,7 +17,7 @@ This includes new extension modules to persist commands (xref:userguide:commandl
 // commandreplay moved to incubator for the time being
 //and xref:userguide:commandreplay:about.adoc[Command Replay], to assist regression testing.
 
-Also in this release, the xref:incubator:kroviz:about.adoc[Kroviz client] has been brought into the incubator.
+Also in this release, the _Kroviz client_ has been brought into the incubator.
 This is a single-page app that runs within the browser to provide a UI similar to that of the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)], but interacting with the domain application exclusively through the REST API provided by the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)].
 
 The release also includes some preliminary work preparing the way for support for JPA (as an alternative to xref:pjdo:ROOT:about.adoc[JDO/DataNucleus].
