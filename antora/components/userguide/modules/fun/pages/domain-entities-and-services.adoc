@@ -9,8 +9,8 @@ This section describes entities using JDO annotations, but (the more widely used
 See the xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] and xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] documentation for more details on how to configure one or the other.
 ====
 
-include::domain-entities-and-services/domain-entities.adoc[leveloffset=+1]
-include::domain-entities-and-services/domain-services.adoc[leveloffset=+1]
-include::domain-entities-and-services/inject-services.adoc[leveloffset=+1]
-include::domain-entities-and-services/crud.adoc[leveloffset=+1]
+include::partial$domain-entities-and-services/domain-entities.adoc[leveloffset=+1]
+include::partial$domain-entities-and-services/domain-services.adoc[leveloffset=+1]
+include::partial$domain-entities-and-services/inject-services.adoc[leveloffset=+1]
+include::partial$domain-entities-and-services/crud.adoc[leveloffset=+1]
 

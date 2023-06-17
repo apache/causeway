@@ -16,7 +16,7 @@
 * xref:what-is-apache-causeway/common-use-cases.adoc[Common Use Cases]
 
 // LATER: update screencasts.
-// * xref:what-is-apache-causeway/screencasts.adoc[Screencasts]
+// * xref:what-is-apache-causeway/screencasts.txt[Screencasts]
 
 |
 [discrete]

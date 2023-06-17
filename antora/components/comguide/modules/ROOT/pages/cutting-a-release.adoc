@@ -40,7 +40,7 @@ Before releasing the framework, ensure there is consensus on the xref:docs:suppo
 The discussion should include confirming the version number to be used, and to confirm content.
 
 These discussions should also confirm the version number of the module being released.
-This should be in line with our xref:comguide:ROOT:policies/versioning-policy.adoc#semantic-versioning[semantic versioning policy].
+This should be in line with our xref:policies.adoc#semantic-versioning[semantic versioning policy].
 
 Make sure you have a JIRA ticket open against which to perform all commits.
 In most cases a JIRA ticket will have been created at the beginning of the previous release cycle.

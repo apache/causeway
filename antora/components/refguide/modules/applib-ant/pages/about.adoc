@@ -11,12 +11,12 @@ It also identifies a number of annotations that are now deprecated, and indicate
 
 The annotations supported by Apache Causeway break out into several categories.
 
-include::about/main.adoc[leveloffset=+1]
-include::about/other.adoc[leveloffset=+1]
-include::about/jee.adoc[leveloffset=+1]
-include::about/jaxb.adoc[leveloffset=+1]
-include::about/jpa.adoc[leveloffset=+1]
-include::about/jdo.adoc[leveloffset=+1]
+include::partial$about/main.adoc[leveloffset=+1]
+include::partial$about/other.adoc[leveloffset=+1]
+include::partial$about/jee.adoc[leveloffset=+1]
+include::partial$about/jaxb.adoc[leveloffset=+1]
+include::partial$about/jpa.adoc[leveloffset=+1]
+include::partial$about/jdo.adoc[leveloffset=+1]
 
 
 == Examples

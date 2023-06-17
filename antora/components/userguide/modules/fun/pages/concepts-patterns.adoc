@@ -6,10 +6,10 @@
 This introductory chapter should give you a good about what Apache Causeway actually *is*: the ideas and principles that it builds upon, what its core values are, its architecture, how it compares to other architectural approaches other frameworks, and how it can be deployed.
 
 
-include::concepts-patterns/domain-driven-design.adoc[leveloffset=+1]
-include::concepts-patterns/naked-objects-pattern.adoc[leveloffset=+1]
-include::concepts-patterns/core-values.adoc[leveloffset=+1]
-include::concepts-patterns/architecture.adoc[leveloffset=+1]
-include::concepts-patterns/metamodel.adoc[leveloffset=+1]
-include::concepts-patterns/apache-causeway-vs-cqrs-and-event-sourcing.adoc[leveloffset=+1]
-include::concepts-patterns/deployment-options.adoc[leveloffset=+1]
+include::partial$concepts-patterns/domain-driven-design.adoc[leveloffset=+1]
+include::partial$concepts-patterns/naked-objects-pattern.adoc[leveloffset=+1]
+include::partial$concepts-patterns/core-values.adoc[leveloffset=+1]
+include::partial$concepts-patterns/architecture.adoc[leveloffset=+1]
+include::partial$concepts-patterns/metamodel.adoc[leveloffset=+1]
+include::partial$concepts-patterns/apache-causeway-vs-cqrs-and-event-sourcing.adoc[leveloffset=+1]
+include::partial$concepts-patterns/deployment-options.adoc[leveloffset=+1]

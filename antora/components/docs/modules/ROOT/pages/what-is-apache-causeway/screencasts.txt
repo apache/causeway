@@ -4,7 +4,7 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
-// LATER: v2: update these screenshots for v2
+// LATER: update these screenshots at some point
 
 We've prepared a number of screencasts to help you see what Apache Causeway has to offer.
 
@@ -41,7 +41,7 @@ Finally, you can also find some screencasts for earlier versions of the framewor
 
 12+| *IDE, layouts*
 
-include::screencasts/playlists.adoc[]
+include::partial$what-is-apache-causeway/screencasts/playlists.adoc[]
 
 
 //|https://www.youtube.com/watch?v=RQ_FFYd7npU[000^] +
@@ -80,7 +80,7 @@ Using the optional `Xxx.layout.xml` file to provide xref:userguide:fun:ui.adoc#o
 
 12+| *Fixture scripts, rules, tests*
 
-include::screencasts/playlists.adoc[]
+include::partial$what-is-apache-causeway/screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=pH02g0l2GKY[005^] +
@@ -110,7 +110,7 @@ Writing end-to-end xref:testing:integtestsupport:about.adoc[integration tests] f
 
 12+| *Swagger UI*
 
-include::screencasts/playlists.adoc[]
+include::partial$what-is-apache-causeway/screencasts/playlists.adoc[]
 
 |link:https://www.youtube.com/watch?v=lkZxRSS0Zwg[009^] +
 Using the Swagger UI to access the xref:vro:ROOT:about.adoc[REST API] automatically exposed for domain services, entities, and/or view models
@@ -134,7 +134,7 @@ Using the Swagger UI to access the xref:vro:ROOT:about.adoc[REST API] automatica
 12+| *Actions*
 
 
-include::screencasts/playlists.adoc[]
+include::partial$what-is-apache-causeway/screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=dfRZeYqzMtI[012^] +
@@ -149,7 +149,7 @@ Implementing business logic using a (no-arg) action, and associating with a prop
 12+| *Titles and icons, UI event subscribers*
 
 
-include::screencasts/playlists.adoc[]
+include::partial$what-is-apache-causeway/screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=CwM430UH5WE[014^] +
@@ -204,7 +204,7 @@ Using xref:userguide:fun:ui.adoc#object-layout[dynamic (XML) layouts] to specify
 12+| *Hints and end-user features*
 
 
-include::screencasts/playlists.adoc[]
+include::partial$what-is-apache-causeway/screencasts/playlists.adoc[]
 
 |link:https://www.youtube.com/watch?v=0d713-V4vrg[019^] +
 Demonstrates how Apache Causeway' xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] remembers the state of rendered domain objects, and how the end-user of the
@@ -231,7 +231,7 @@ Demonstrates how the end-user can use bookmarks and breadcrumbs within Apache Ca
 12+| *Decoupling (mixins & subscribers)*
 
 
-include::screencasts/playlists.adoc[]
+include::partial$what-is-apache-causeway/screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=Wn5215K7_Jg[022^] +
@@ -290,7 +290,7 @@ How to write an xref:testing:integtestsupport:about.adoc[integration test] for a
 
 
 
-include::screencasts/playlists.adoc[]
+include::partial$what-is-apache-causeway/screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=SLJPBruFMKY[028^] +
@@ -309,7 +309,7 @@ Using link:https://projectlombok.org/[Project Lombok] to remove boilerplate from
 
 
 
-include::screencasts/playlists.adoc[]
+include::partial$what-is-apache-causeway/screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=ORoEYlg6XFM[030^] +
@@ -342,7 +342,7 @@ How to instantiate/initialize objects using xref:refguide:applib:index/services/
 
 
 
-include::screencasts/playlists.adoc[]
+include::partial$what-is-apache-causeway/screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=cQ06PoMNDPw[033^] +
@@ -374,7 +374,7 @@ How to use an enum for choices (drop down list) for both a property or an action
 
 
 
-include::screencasts/playlists.adoc[]
+include::partial$what-is-apache-causeway/screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=1SCyBlMM2Bo[037^] +
@@ -393,7 +393,7 @@ How to hide properties as columns in tables, using CSS.
 
 
 
-include::screencasts/playlists.adoc[]
+include::partial$what-is-apache-causeway/screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=NKaR7ZedI8E[039^] +
@@ -412,7 +412,7 @@ Using the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s fakedat
 12+| *BigDecimals*
 
 
-include::screencasts/playlists.adoc[]
+include::partial$what-is-apache-causeway/screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=esujf_DFeWA[041^] +
@@ -433,7 +433,7 @@ How to use the xref:refguide:applib-ant:Digits.adoc[@Digits] annotation for acti
 
 
 
-include::screencasts/playlists.adoc[]
+include::partial$what-is-apache-causeway/screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=Rt4JoV4ssVY[043^] +
@@ -462,7 +462,7 @@ How to use the xref:refguide:applib-methods:prefixes.adoc#autoComplete[autoCompl
 
 
 
-include::screencasts/playlists.adoc[]
+include::partial$what-is-apache-causeway/screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=SoREp-8MQz0[047^] +
@@ -501,7 +501,7 @@ otherwise be part of the Apache Causeway metamodel (and thus show up in the UI).
 
 
 
-include::screencasts/playlists.adoc[]
+include::partial$what-is-apache-causeway/screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=puG-pzxRSd0[052^] +
@@ -530,7 +530,7 @@ Adding an action to a xref:userguide:fun:view-models.adoc#jaxb[(JAXB) view model
 
 
 
-include::screencasts/playlists.adoc[]
+include::partial$what-is-apache-causeway/screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=BYmSlgJP5KY[056^] +
@@ -567,7 +567,7 @@ Updating the logo for the application as it appears in the header.
 12+| *Decoupling*
 
 
-include::screencasts/playlists.adoc[]
+include::partial$what-is-apache-causeway/screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=vntv_5Z8Ros[061^] +
@@ -587,7 +587,7 @@ Separating out the responsibilities of the persistent domain entities from those
 
 
 
-include::screencasts/playlists.adoc[]
+include::partial$what-is-apache-causeway/screencasts/playlists.adoc[]
 
 |link:https://www.youtube.com/watch?v=9PgOSqf7rYE[063^] +
 How to implement a bidirectional 1-to-many association between two domain entities.
@@ -614,7 +614,7 @@ How deleting one persistent entity can, if required, automatically delete anothe
 
 12+| *Metadata fieldset*
 
-include::screencasts/playlists.adoc[]
+include::partial$what-is-apache-causeway/screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=kdhwMc0f7_k[067^] +
@@ -624,7 +624,7 @@ Improving the layout of domain entities by adding a metadata fieldset.
 
 //12+| *for Contributors and Committers*
 //
-//include::screencasts/playlists.adoc[]
+//include::partial$what-is-apache-causeway/screencasts/playlists.adoc[]
 //
 //
 //|https://www.youtube.com/watch?v=RQ_FFYd7npU[068^] +

@@ -10,15 +10,15 @@ This chapter provides some solutions for problems we've encountered ourselves or
 
 
 
-include::hints-and-tips/are-you-sure.adoc[leveloffset=+1]
-include::hints-and-tips/custom-css.adoc[leveloffset=+1]
-include::hints-and-tips/replacing-default-service-implementations.adoc[leveloffset=+1]
+include::partial$hints-and-tips/are-you-sure.adoc[leveloffset=+1]
+include::partial$hints-and-tips/custom-css.adoc[leveloffset=+1]
+include::partial$hints-and-tips/replacing-default-service-implementations.adoc[leveloffset=+1]
 
-include::hints-and-tips/vetoing-visibility.adoc[leveloffset=+1]
+include::partial$hints-and-tips/vetoing-visibility.adoc[leveloffset=+1]
 
-include::hints-and-tips/transactions-and-errors.adoc[leveloffset=+1]
-include::hints-and-tips/persisted-title.adoc[leveloffset=+1]
+include::partial$hints-and-tips/transactions-and-errors.adoc[leveloffset=+1]
+include::partial$hints-and-tips/persisted-title.adoc[leveloffset=+1]
 
-include::hints-and-tips/how-to-handle-void-and-null-results.adoc[leveloffset=+1]
-include::hints-and-tips/subclass-properties-in-tables.adoc[leveloffset=+1]
-include::hints-and-tips/how-to-implement-a-spellchecker.adoc[leveloffset=+1]
+include::partial$hints-and-tips/how-to-handle-void-and-null-results.adoc[leveloffset=+1]
+include::partial$hints-and-tips/subclass-properties-in-tables.adoc[leveloffset=+1]
+include::partial$hints-and-tips/how-to-implement-a-spellchecker.adoc[leveloffset=+1]

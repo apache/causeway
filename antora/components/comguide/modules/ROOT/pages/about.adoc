@@ -6,5 +6,3 @@
 This committers' guide is for committers of Apache Causeway itself who want guidance on release process, publishing documents and other related procedures.
 
 
-// https://manytools.org/hacker-tools/ascii-banner/
-// "Big" font

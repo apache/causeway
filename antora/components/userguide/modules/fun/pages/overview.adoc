@@ -5,12 +5,12 @@
 In this section we run through the main building blocks that make up an Apache Causeway application.
 
 
-include::overview/types-of-domain-objects.adoc[leveloffset=+1]
-include::overview/identifiers.adoc[leveloffset=+1]
-include::overview/object-members.adoc[leveloffset=+1]
-include::overview/business-rules.adoc[leveloffset=+1]
-include::overview/events.adoc[leveloffset=+1]
-include::overview/modules.adoc[leveloffset=+1]
-include::overview/programming-model.adoc[leveloffset=+1]
+include::partial$overview/types-of-domain-objects.adoc[leveloffset=+1]
+include::partial$overview/identifiers.adoc[leveloffset=+1]
+include::partial$overview/object-members.adoc[leveloffset=+1]
+include::partial$overview/business-rules.adoc[leveloffset=+1]
+include::partial$overview/events.adoc[leveloffset=+1]
+include::partial$overview/modules.adoc[leveloffset=+1]
+include::partial$overview/programming-model.adoc[leveloffset=+1]
 
 

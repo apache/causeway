@@ -9,7 +9,7 @@ In addition to these basic commands, please make sure you have read:
 
 * xref:conguide:ROOT:building-apache-causeway.adoc[building Apache Causeway]
 * xref:conguide:ROOT:contributing.adoc[Contributing]
-* xref:comguide:ROOT:policies/git-policy.adoc[Git policy]
+* xref:comguide:ROOT:policies.adoc#git-policy[Git policy]
 
 == Modifying existing files
 
@@ -70,7 +70,7 @@ git commit -m "CAUSEWAY-nnn: yada yada"
 == Common Workflows
 
 The xref:conguide:ROOT:contributing.adoc[contributing] page describes the workflow for non-committers.
-The xref:comguide:ROOT:policies/git-policy.adoc[Git policy] page describes a workflow for Apache Causeway **committers**.
+The xref:comguide:ROOT:policies.adoc#git-policy[Git policy] describes a workflow for Apache Causeway **committers**.
 
 == Backing up a local branch
 

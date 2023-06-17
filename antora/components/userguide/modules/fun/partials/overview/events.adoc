@@ -55,7 +55,7 @@ UI events have higher precedence than the other mechanisms of supplying a title.
 
 If annotated with xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#titleUiEvent[@DomainObjectLayout#titleUiEvent()], the appropriate (subclass of) `TitleUiEvent` will be emitted.
 Similarly for xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#iconUiEvent[#iconUiEvent()].
-In addition, it is possible to use events to obtain a CSS class to render with the domain object, using xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClassUiEvent[#cssClassUiEvent()], and to select an alternate xref:userguide:fun:ui/object-layout.adoc[layout file] using xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#layoutUiEvent[#layoutUiEvent()].
+In addition, it is possible to use events to obtain a CSS class to render with the domain object, using xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClassUiEvent[#cssClassUiEvent()], and to select an alternate xref:userguide:fun:ui.adoc#object-layout[layout file] using xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#layoutUiEvent[#layoutUiEvent()].
 
 There are two use cases where this feature is useful:
 

@@ -26,11 +26,11 @@ The Apache Causeway programming model includes several mechanisms to influence t
 This chapter discusses these topics.
 
 
-include::ui/names-and-descriptions.adoc[leveloffset=+1]
-include::ui/object-titles-and-icons.adoc[leveloffset=+1]
-include::ui/action-icons-and-css.adoc[leveloffset=+1]
+include::partial$ui/names-and-descriptions.adoc[leveloffset=+1]
+include::partial$ui/object-titles-and-icons.adoc[leveloffset=+1]
+include::partial$ui/action-icons-and-css.adoc[leveloffset=+1]
 
-include::ui/menubars-layout.adoc[leveloffset=+1]
-include::ui/object-layout.adoc[leveloffset=+1]
+include::partial$ui/menubars-layout.adoc[leveloffset=+1]
+include::partial$ui/object-layout.adoc[leveloffset=+1]
 
-include::ui/table-columns.adoc[leveloffset=+1]
+include::partial$ui/table-columns.adoc[leveloffset=+1]
