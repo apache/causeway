@@ -2,7 +2,6 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-Search also for: "TODO: v2: " in the .adoc documentation.
 
 == to 2.0.0
 
@@ -1440,7 +1439,7 @@ The framework supports following temporal values from the Java Time API (and Jod
 
 ==== View Model Example
 
-TODO: have moved classes to `org.apache.isis.applib.jaxb`.
+CAUTION: this example is now out of date; more recent releases have moved changed the name and package of some of these adapter classes.
 
 If used with JAXB View Models, you need to specify specific XmlAdapters as provided by org.apache.isis.applib.jaxbadapters.JaxbAdapters.*. See this JAXB Viewmodel example using lombok:
 
@@ -1494,19 +1493,6 @@ public class TemporalDemo {
 }
 ----
 
-=== web-docker (ISIS-1969)
-
-NOTE: TODO - To document, in particular how to use in the helloworld/simpleapp archetypes.
-
-NB: ISIS-1969: the Docker image isn't yet being released, pending https://issues.apache.org/jira/browse/INFRA-17518[INFRA-17518].
-
-=== Plugin architecture (ISIS-1753 and others)
-
-NOTE: TODO ...
-
-* describe the plugin architecture in general, use of ServiceLoader etc
-* describe in particular the event bus plugin architecture (ISIS-1753)
-* describe in particular the other plugins (objectstore, security, resteasy, bytecode enhancement, ...)
 
 === Ticket (for ErrorReportingService) is now an interface, not a class (ISIS-1955)
 
