@@ -25,7 +25,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates that a method is a supporting-method, one that contributes (disabled, hidden, ...)
+ * Indicates that a method is a supporting-method that provides UI hints (title, iconName, layout, cssClass)
  * to its <i>Object</i>.
  * <p>
  * May only be placed on <i>domain object</i> methods, not <i>mixins</i> nor <i>domain services</i>.
