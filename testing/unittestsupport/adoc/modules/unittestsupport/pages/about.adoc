@@ -196,8 +196,41 @@ The xref:refguide:applib:index/util/ObjectContracts.adoc[ObjectContracts]  utili
 
 === Comparable
 
-TODO
-ComparableContractTest_compareTo
+The xref:refguide:testing:index/unittestsupport/applib/dom/comparable/ComparableContractTest_compareTo[ComparableContractTest_compareTo] tests that a custom value type implements `comparable()` correctly.
+
+For example,
+
+[source,java]
+----
+public class BigIntegerComparableContractTest_compareTo extends ComparableContractTest_compareTo<BigInteger> {
+
+    /**
+     * <code>
+     * item0  < item1 = item2 < item3
+     * </code>
+     */
+    @Override
+    protected List<List<BigInteger>> orderedTuples() {
+        return listOf(                                          // <.>
+                listOf(                                         // <.>
+                        BigInteger.ZERO,
+                        BigInteger.ONE,
+                        BigInteger.valueOf(1L),
+                        BigInteger.TWO
+                        ),
+                listOf(                                         // <2>
+                        BigInteger.valueOf(Long.MIN_VALUE),
+                        BigInteger.valueOf(Long.MAX_VALUE / 2),
+                        BigInteger.valueOf(Long.MAX_VALUE / 2),
+                        BigInteger.valueOf(Long.MAX_VALUE)
+                        )
+                );
+    }
+}
+----
+<.> can return as many sets of candidate tuples as you wish
+<.> there must be four items in each tuple and they must satisfy: `item0 < item1 == item2 < item3`.
+
 
 
 === Value Objects

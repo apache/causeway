@@ -11,25 +11,26 @@ WARNING: This is work-in-progress, no official Maven artifacts are published yet
 However, snapshots are available with our nightly-builds:
 https://github.com/apache-causeway-committers/causeway-nightly[]
 
-== Usage
 
-TODO
-
-[source,java]
-----
-//TODO
-----
-
-PlantUml syntax generated:
-
-[source]
-----
-TODO
-----
-
-which renders as
-
-TODO
+// == Usage
+//
+// LATER
+//
+// [source,java]
+// ----
+// ...
+// ----
+//
+// PlantUml syntax generated:
+//
+// [source]
+// ----
+// ...
+// ----
+//
+// which renders as
+//
+// ...
 
 == Install
 
