@@ -5,4 +5,4 @@
 
 This page lists (some of) the hooks available to interact with the JDO persistence mechanism itself.
 
-include::spis/JdoEntityDiscoveryListener.adoc[leveloffset=+1]
+include::partial$spis/JdoEntityDiscoveryListener.adoc[leveloffset=+1]
