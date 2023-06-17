@@ -15,7 +15,7 @@ Injection is requested using the JEE link:https://docs.oracle.com/javaee/7/api/j
 This is described in Spring's documentation, link:https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#beans-standard-annotations[using JSR330 standard annotations].
 
 It is also possible to use Spring's own link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/beans/factory/annotation/Autowired.html[@Autowired] annotation.
-Since the two annotations are effectively equivalent, we recommend using the JEE standard.
+Since the two annotations are for the most part equivalent, we recommend using the JEE standard.
 ====
 
 However, not only does Apache Causeway use Spring to autowire domain services into other services, the framework _also_ ensures that services are injected into any domain object (eg xref:overview.adoc#domain-entities[entity], xref:overview.adoc#view-models[view model], xref:overview.adoc#mixins[mixins], xref:testing:fixtures:about.adoc#fixture-scripts[fixture script], xref:refguide:applib:index/spec/Specification.adoc[specification] etc).

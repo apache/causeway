@@ -112,7 +112,7 @@ Apache Causeway can (currently) only provide a UI for collections of references.
 
 If you do wish to use collections of this type, then annotate the getter with xref:refguide:applib:index/annotation/Programmatic.adoc[@Programmatic] so that it is ignored by the Apache Causeway framework.
 
-As a workaround, if you want to visualize an array of value types in Apache Causeway, then one option is to wrap the value in a view model, as explained xref:userguide:btb:hints-and-tips/simulating-collections-of-values.adoc[here].
+As a workaround, if you want to visualize an array of value types in Apache Causeway, then one option is to wrap the value in a view model.
 
 == Derived Collections
 

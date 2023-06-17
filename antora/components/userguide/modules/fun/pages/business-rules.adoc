@@ -25,6 +25,6 @@ A more sophisticated approach, useful for decoupling functionality, is using xre
 The domain event is emitted multiple times, for the various types of precondition checks (and if not vetoed, they are also emitted on the execution of the action itself).
 
 
-include::business-rules/visibility.adoc[leveloffset=+1]
-include::business-rules/usability.adoc[leveloffset=+1]
-include::business-rules/validity.adoc[leveloffset=+1]
+include::partial$business-rules/visibility.adoc[leveloffset=+1]
+include::partial$business-rules/usability.adoc[leveloffset=+1]
+include::partial$business-rules/validity.adoc[leveloffset=+1]
