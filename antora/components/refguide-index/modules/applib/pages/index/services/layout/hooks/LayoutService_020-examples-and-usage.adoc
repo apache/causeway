@@ -35,12 +35,6 @@ The table below summarises the choices:
 |serialized as XML
 
 
-// TODO: let's remove this, it's too difficult
-//|`NORMALIZED`
-//|serialized as XML
-//|not in the XML
-
-
 |`MINIMAL`
 |not in the XML
 |not in the XML

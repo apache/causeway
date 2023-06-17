@@ -320,11 +320,6 @@ msgid "Name"
 msgstr ""
 
 
-#: org.apache.causeway.applib.services.layout.LayoutService$Style#NORMALIZED
-msgid "Normalized"
-msgstr ""
-
-
 #: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract#targetStr
 msgid "Object"
 msgstr ""
