@@ -28,7 +28,8 @@ is an overview of all of the modules that make up the framework.
 This can be found at xref:core:_overview:about.adoc[].
 
 +
-Inspect the `preview.sh` script (and the various scripts it calls in turn) to see how this CLI is invoked.
+For more on the CLI, see xref:tooling:tooling-cli:about.adoc[tooling CLI] docs.
+You could also inspect the `preview.sh` script (and the various scripts it calls in turn) to see how we use the CLI in practice.
 
 * the `causeway-toolikng-metaprog` module (in tooling/metaprog`) contains a set of test classes that are used to generate classes and files for the various datatypes showcased in the demo app.
 +
