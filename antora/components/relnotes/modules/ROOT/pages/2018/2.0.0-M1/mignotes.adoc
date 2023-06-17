@@ -11,6 +11,5 @@ include::mignotes/moved-types.adoc[leveloffset=+1]
 include::mignotes/removed-configuration-properties.adoc[leveloffset=+1]
 include::mignotes/updated-classes.adoc[leveloffset=+1]
 include::mignotes/removed-types.adoc[leveloffset=+1]
-include::mignotes/legacy-modules.adoc[leveloffset=+1]
 include::mignotes/other-changes.adoc[leveloffset=+1]
 
