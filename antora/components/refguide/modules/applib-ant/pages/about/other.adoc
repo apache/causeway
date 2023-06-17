@@ -30,7 +30,7 @@ The following are commonly used:
 |===
 
 
-Meanwhile, the following are used to indicate whether a given should be included or excluded in the metamodel.
+The following are used to indicate whether a given should be included or excluded in the metamodel.
 Whether they are required depends on the setting of xref:refguide:config:sections/causeway.core.meta-model.introspector.adoc#causeway.core.meta-model.introspector.policy[causeway.core.meta-model.introspector.policy], but it is always safe to use them.
 
 .Programming Model Inclusion/Exclusion
@@ -48,23 +48,67 @@ Whether they are required depends on the setting of xref:refguide:config:section
 |Explicitly exclude the method as part of the metamodel.
 |UI/Domain
 
-|xref:refguide:applib:index/annotation/Programmatic.adoc[]
-|Equivalent to (and the original name of) xref:refguide:applib:index/annotation/Domain_Exclude.adoc[]
-|UI/Domain
-
 |xref:refguide:applib:index/annotation/MemberSupport.adoc[]
 |Intended to be annotated on `hideXxx()`, `disableXxx()` and other supporting methods, explicitly include the method as part of the metamodel.
+Equivalent to xref:refguide:applib:index/annotation/Domain_Include.adoc[]
 |Domain
 
 |xref:refguide:applib:index/annotation/ObjectSupport.adoc[]
 |Intended to be annotated on `title()`, `iconName()` and other UI hint methods, explicitly include the method as part of the metamodel.
+Equivalent to xref:refguide:applib:index/annotation/Domain_Include.adoc[]
 |UI
 
 |xref:refguide:applib:index/annotation/ObjectLifecycle.adoc[]
 |Intended to be annotated on `created()`, `updated()` and other lifecycle methods, explicitly include the method as part of the metamodel.
+Equivalent to xref:refguide:applib:index/annotation/Domain_Include.adoc[]
 |Persistence
+
+|xref:refguide:applib:index/annotation/Programmatic.adoc[]
+|Indicates that a method is to be called only programmatically, and so is _not_ part of the metamodel.
+Equivalent to (and the original name of) xref:refguide:applib:index/annotation/Domain_Exclude.adoc[]
+|UI/Domain
 
 |===
 
 
+The next annotations relate to the overall system architecture.
 
+.Architecture
+[cols="2,4a,1", options="header"]
+|===
+|Annotation
+|Purpose
+|Layer
+
+|xref:refguide:applib:index/annotation/Module.adoc[@Module]
+|An alias for Spring's own `@Configuration`, identifies a logical module consisting of a set of services, entities, mixins, fixtures etc.
+|Domain
+
+|xref:refguide:applib:index/annotation/InteractionScope.adoc[@InteractionScope]
+|Annotated on a domain service to indicate that it should be scoped by the interaction (roughly equivalent to an HTTP request).
+|Domain
+
+|===
+
+The final annotations relate to the definition of custom value types:
+
+
+.Custom value type support
+[cols="2,4a,1", options="header"]
+|===
+|Annotation
+|Purpose
+|Layer
+
+|xref:refguide:applib:index/annotation/Value.adoc[@Value]
+|Marker annotation that indicates the object is a value type (as opposed to a domain service, entity, view model or mixin).
+
+Value types also require an implementation of a xref:refguide:applib:index/value/semantics/ValueSemanticsProvider.adoc[].
+
+|Domain
+
+|xref:refguide:applib:index/annotation/ValueSemantics.adoc[@ValueSemantics]
+|Annotated on a property or parameter, indicating that the property/parameter's type should be considered a value type, and supplying details of the service implementing xref:refguide:applib:index/value/semantics/ValueSemanticsProvider.adoc[] that describes how the framework should interact with the value type.
+|Domain
+
+|===

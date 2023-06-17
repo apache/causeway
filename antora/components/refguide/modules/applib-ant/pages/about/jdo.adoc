@@ -26,27 +26,25 @@ Column]
 
 |xref:refguide:applib-ant:Discriminator.adoc[@javax.jdo.annotations. +
 Discriminator]
-|Override for the object type, as used in `Bookmark`s, URLs for xref:vro:ROOT:about.adoc[RestfulObjects viewer] and elsewhere. +
-
-Note that the discriminator overrides the object type that may otherwise be inferred from the xref:refguide:applib-ant:PersistenceCapable.adoc[@PersistenceCapable] annotation.
+|Infer the logical type name.
+This takes precedence of `@PersistenceCapable` (below).
+However, `@DomainObject#logicalTypeName` takes precedence over this.
 |Domain / persistence
 |Class
 
 
 |xref:refguide:applib-ant:NotPersistent.adoc[@javax.jdo.annotations. +
 NotPersistent]
-|Used to determine whether to enforce or skip some metamodel validation for `@Column` versus equivalent Causeway annotations.
+|Used to determine whether to enforce or skip some metamodel validation on nullability (`@Column` vs equivalent Causeway annotations).
 
 |Domain / persistence
 |Property
 
 
-
 |xref:refguide:applib-ant:PersistenceCapable.adoc[@javax.jdo.annotations. +
 PersistenceCapable]
-|Used to build Apache Causeway' own internal identifier for objects. +
-
-If the `schema` attribute is specified (and if xref:refguide:applib-ant:Discriminator.adoc[@Discriminator] __hasn't__ been specified), is also used to derive the object type, as used in `Bookmark`s, URLs for xref:vro:ROOT:about.adoc[RestfulObjects viewer] and elsewhere.
+|The `schema` attribute plus table name is used to the logical type name.
+However, `@Discriminator` (above) takes precedence, as does `@DomainObject#logicalTypeName`.
 
 |Domain / persistence
 |Class
