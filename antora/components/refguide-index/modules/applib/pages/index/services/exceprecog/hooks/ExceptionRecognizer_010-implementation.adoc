@@ -14,44 +14,30 @@ The framework provides a number of default implementations for JPA and JDO, to r
 * other data access problem.
 
 
-// TODO: v2 - flesh this out once CAUSEWAY-2502 is complete.
+=== Configuration Properties
 
-//=== Configuration Properties
-//
-//The following configuration properties are relevant:
-//
-//[cols="2a,1,3a", options="header"]
-//|===
-//|Property
-//|Value +
-//(default value)
-//|Description
-//
-//| `causeway.services.` +
-//`exceprecog.` +
-//`logRecognized` +
-//`Exceptions` +
-//|`true`,`false` +
-//(`false`)
-//|whether recognized exceptions should also be logged. +
-//
-//Generally a recognized exception is one that is expected (for example a uniqueness constraint violated in the database) and which does not represent an error condition.
-//This property logs the exception anyway, useful for debugging.
-//
-//This is recognised by all implementations that subclass `ExceptionRecognizerAbstract`.
-//
-//| `causeway.services.` +
-//`ExceptionRecognizer` +
-//`CompositeFor` +
-//`JdoObjectStore.` +
-//`disable` +
-//|`true`,`false` +
-//(`false`)
-//|whether to disable the default recognizers registered by `ExceptionRecognizerCompositeForJdoObjectStore`. +
-//
-//This implementation provides a default set of recognizers to convert RDBMS constraints into user-friendly messages.
-//In the (probably remote) chance that this functionality isn't required, they can be disabled through this flag.
-//
-//
-//|===
+The following configuration property is relevant:
+
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+| `causeway.core.runtime-services.` +
+`exception-recognizer.dae.disable`
+|`true`,`false` +
+(`false`)
+|whether any `DataAccessException` exceptions should be recognized.+
+
+If Spring encounters a data access problem (either JPA or JDO) then it will throw a subclass of `DataAccessException`.
+
+This recogniser catches this exception class and throws a suitable recognition based on the subtype.
+
+By default, this is enabled.
+Disable it only if you need to fine-tune the built-in behaviour.
+
+
+|===
 

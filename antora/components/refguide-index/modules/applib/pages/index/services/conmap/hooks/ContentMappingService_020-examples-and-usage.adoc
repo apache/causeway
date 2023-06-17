@@ -4,8 +4,6 @@
 
 == Usage
 
-// TODO: v2: this is an SPI, so maybe restfulobjects should define an "spi" module for this.
-
 The `ContentMappingService` supports the (default implementation of the) internal xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationService.adoc[ContentNegotiationService] SPI enabling the xref:vro:ROOT:about.adoc[RestfulObjects viewer] to represent domain objects in some other format as specified by the HTTP `Accept` header.
 
 For its part, the (default implementation of the) `ContentNegotiationService` will check _all_ available implementations of `ContentMappingService` to convert the domain object to the requested media type, rather than merely the first implementation found; in other words it uses the link:https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern[chain-of-responsibility] pattern.
