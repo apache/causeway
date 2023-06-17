@@ -77,14 +77,14 @@ public class CustomerRepository {
 
 If the layering between services is well defined, as in the above example (application `CustomerRepository` depends upon framework `RepositoryService`), then constructor injection should work out.
 
-However, Spring does not support
+[CAUTION]
+====
+Be aware though that Spring does not support cyclic dependencies with constructor injection.
+In such cases, either use setter injection, or alternatively inject `Provider<ServiceType>` rather than `ServiceType`, thereby allowing the dependent bean to be lazily created.
 
+For more on this topic, see Spring's documentation on the link:https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#beans-dependency-resolution[Dependency Resolution Process], "Circular dependencies" sidebar.
+====
 
-TODO: Cyclic dependencies
-
-link:https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#beans-dependency-resolution[Dependency Resolution Process], ("Circular dependencies" sidebar).
-
-TODO: Provider<>
 
 == Setter and Field Injection
 
@@ -173,11 +173,11 @@ The framework provides a simple logging implementation, which will always be cal
 All other implementations available will also be called.
 
 
-== Injecting `CausewaySessionScope`d services
+== Injecting `InteractionScope`d services
 
 Most domain services are application-scoped, in other words they are stateless global singletons that are shared by all concurrent requests.
 
-A small number of framework-provided services are annotated using xref:refguide:applib:index/annotation/InteractionScope.adoc[@CausewaySessionScope].
+A small number of framework-provided services are annotated using xref:refguide:applib:index/annotation/InteractionScope.adoc[@InteractionScope].
 This means that they are stateful and scoped with each causeway session, in other words HTTP request.
 One such service is xref:refguide:applib:index/services/queryresultscache/QueryResultsCache.adoc[QueryResultsCache], used for performance caching.
 

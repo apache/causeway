@@ -10,6 +10,7 @@
 ** xref:userguide:fun:meta-annotations.adoc[Meta-annotations]
 ** xref:userguide:fun:view-models.adoc[View Models]
 ** xref:userguide:fun:mixins.adoc[Mixins]
+** xref:userguide:fun:value-types.adoc[Value types]
 ** xref:userguide:fun:modules.adoc[Modules]
 
 
