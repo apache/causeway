@@ -42,6 +42,7 @@ One way to remember this is: *"see it, use it, do it"*
 
 The framework provides a multitude of ways to implement these business rules.
 The simplest approach is to just implement the business rules imperatively in the domain object, using a supporting method.
+
 For example,
 
 [source,java]

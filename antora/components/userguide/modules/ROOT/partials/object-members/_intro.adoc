@@ -1,29 +1,8 @@
-[#object-members]
-= Object Members
+[#introduction]
+= Introduction
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
-
-
-Every domain object in Apache Causeway consists of (at most) three types of members:
-
-* properties, such as a ``Customer``'s `firstName`
-
-* collections, such as a ``Customer``'s `orders` collection of ``Order``s
-
-* actions, such as a ``Customer'``s `placeOrder(...)` method.
-
-In addition, mixins act as contributors of behaviour to an underlying domain object.
-Typically the behaviour being contributed is an action, but it could also be a derived property or a derived collection.
-
-
-[NOTE]
-====
-What follows _is_ a simplification; the Apache Causeway programming model also recognizes a number of other supporting methods for domain object members, for associated business logic.
-This is covered in more detail in xref:userguide:ROOT:business-rules.adoc[business rules].
-====
-
-
 
 [#properties]
 == Properties
@@ -52,11 +31,6 @@ From this the framework infers the `Customer` domain entity, which in turn has a
 
 `@PropertyLayout` is not mandatory either.
 Whether it is present or not depends to some extent on your preferred style: the UI semantics can be specified either in code within this annotation, or can be specified through the companion xref:userguide:ROOT:ui.adoc#layout-file-styles[layout file].
-
-[TIP]
-====
-Details on how to actually write properties in practice (the programming model) can be found xref:userguide:ROOT:object-members.adoc#properties[here].
-====
 
 
 [#collections]
@@ -88,11 +62,6 @@ As with properties, the `@Collection` annotation is not mandatory, though in man
 
 Similarly, `@CollectionLayout` is not mandatory either.
 Whether it is present or not depends to some extent on your preferred style: the UI semantics can be specified either in code within this annotation, or can be specified through the companion xref:userguide:ROOT:ui.adoc#layout-file-styles[layout file].
-
-[TIP]
-====
-Details on how to actually write collections in practice (the programming model) can be found xref:userguide:ROOT:object-members.adoc#collections[here].
-====
 
 
 [#actions]
@@ -151,7 +120,3 @@ The use of `@ActionLayout` is optional, the UI semantics can be specified either
 As with properties, both `@Parameter` and `@ParameterLayout` are also optional.
 Note though that UI hints for parameters _cannot_ be specified in the layout file.
 
-[TIP]
-====
-Details on how to actually write actions in practice (the programming model) can be found xref:userguide:ROOT:object-members.adoc#actions[here].
-====
