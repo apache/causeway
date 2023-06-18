@@ -3,19 +3,10 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
-// TODO: let's change to using JPA here.
-
-[NOTE]
-====
-This section describes entities using JDO annotations, but (the more widely used) JPA (in conjunction with Spring Data) is also supported.
-
-See the xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] and xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] documentation for more details on how to configure one or the other.
-====
-
 == Introduction
 
 Most domain objects that the end-user interacts with are likely to be _domain entities_, such as `Customer`, `Order`, `Product` and so on.
-These are persistent objects and which are mapped to a database (usually relational), using JDO/DataNucleus annotations.
+These are persistent objects and which are mapped to a relational database using either xref:pjpa::about.adoc[JPA/EclipseLink] or xref:pjdo::about.adoc[JDO/DataNucleus] ORM.
 
 Some domain entities are really aggregates, a combination of multiple objects.
 A commonly cited example of this is an `Order`, which really consists of both a root `Order` entity and a collection of ``OrderItem``s.
@@ -36,14 +27,6 @@ You'll probably find yourself defining a repository service (discussed in more d
 Similarly, you may also have a factory service, for example `OrderFactory`.
 However, you are less likely to have a repository service for the parts of an aggregate root: the role of retrieving ``OrderItem``s should fall to the `Order` root (typically by way of lazy loading of an "items" collection) rather than through an `OrderItemRepository` service.
 This isn't a hard-n-fast rule, but it is a good rule of thumb.
-
-[TIP]
-====
-Details on how to actually write a domain entity (the programming model for domain entities) is
-xref:userguide:ROOT:domain-services.adoc#domain-entities[here].
-====
-
-
 
 
 

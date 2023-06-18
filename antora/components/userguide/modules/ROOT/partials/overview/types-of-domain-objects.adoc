@@ -7,18 +7,24 @@
 
 Apache Causeway supports recognises five main types of domain classes:
 
-* *domain entities* - domain objects persisted to the database the ORM (eg  JDO/DataNucleus); for example `Customer`
+* *domain entities* - are domain objects that hold persisted state, for example `Customer` or `Order`.
+They can and often do also include business logic, encapsulating the state.
+An ORM (xref:pjpa::about.adoc[JPA/EclipseLink] or xref:pjdo::about.adoc[JDO/DataNucleus]) is used to persist the state to the database.
 
-* *domain services* - generally singletons, automatically injected, and providing various functionality; for example `CustomerRepository`
+* *domain services* - are (typically) singletons that act upon entities.
+Common implementations are repositories (to find domain entities) or factories (to create entities), but they might also be holders of business logic that for whatever reason you want to keep outside an entity; perhaps it easier to test that way.
+An example might be `InvoiceCalculationServices`.
 
-* *view models* - domain objects that are a projection of some state held by the database, in support a particular use case; for example `CustomerDashboard` (to pull together commonly accessed information about a customer).
+* *view models* - are domain objects that holds temporary state for a given user; you might consider these as part of the "application" layer.
+They could be a projection of an underlying entity/ies for some particular use case (eg `DocumentAndCommunication`); they could aggregate data from multiple locations (eg a `CustomerDashboard`); they could manage a business process (eg `PaymentBatchManager`).
 
 * *mixins* - allow functionality to be "contributed" in the UI by one module to another object, similar to traits or extension methods provided in some programming languages.
-This is an important capability to help keep large applications decoupled.
+This is an important capability to help keep large applications decoupled; for example `Customer_receivePayment` could be defined in the "accounts receivable" module, contributing behaviour to the "Customer" entity.
 
-* *value types*
-
-// TODO : flesh this section out.
+* *value types* - domain objects and view models maintain state (properties and collections); each property's will be for a certain value type.
+Normally these will be built-in, such as primitives, strings or dates.
+But the framework also supports custom value types, either scalar or composite.
+These could also be 3rd party, eg a library such as https://jscience.org[jscience.org].
 
 From the end-user's perspective the UI displays a single domain object instance that has state (that is, a domain entity or a view model) per page.
 The end-user can then inspect and modify its state, and navigate to related objects.
