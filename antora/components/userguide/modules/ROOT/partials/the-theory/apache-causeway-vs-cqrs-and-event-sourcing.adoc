@@ -39,7 +39,7 @@ But then again, having a separate read model just so that the querying is very s
 
 It is possible though to use Apache Causeway in a CQRS style.
 The entities would have no behaviour in and of themselves to modify their state, they would just be data structures.
-The behaviour (commands) would instead be implemented as xref:userguide:fun:mixins.adoc[mixins] that act upon those commands.
+The behaviour (commands) would instead be implemented as xref:userguide:ROOT:mixins.adoc[mixins] that act upon those commands.
 In the UI (surfaced by the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)]) or in the REST API (surfaced by the xref:vro:ROOT:about.adoc[RestfulObjects viewer]) the behaviour appears to reside on the domain object; however the behaviour actually resides on separate classes and is mixed in (like a trait), only at runtime.
 However, this wouldn't be true CQRS because those mixins would modify those entities which would then be flushed back to the single database.
 
@@ -63,7 +63,7 @@ With Apache Causeway, though, the end-user merely invokes the `placeOrder(...)` 
 
 == Event Sourcing
 
-The xref:userguide:fun:background-context-and-theory.adoc#cqrs[CQRS architecture] is often combined with _Event Sourcing_ pattern, though they are separate ideas.
+The xref:userguide:ROOT:background-context-and-theory.adoc#cqrs[CQRS architecture] is often combined with _Event Sourcing_ pattern, though they are separate ideas.
 
 With event sourcing, each business operation emits a domain event (or possibly events) that allow other objects in the system to act accordingly.
 For example, if a customer places an order then this might emit the `OrderPlacedEvent`.
@@ -85,7 +85,7 @@ An event sourced entity "rehydrate" the domain object from persistence different
 To use Apache Causeway with event sourcing would require disregarding the built-in support for persistence though an ORM, and  instead implement some other event sourced persistence mechanism to rehydrate the object.
 Because Apache Causeway runs on top of Spring Boot, such an integration ought to be comparatively easy to do.
 
-As with a CQRS architecture, Apache xref:userguide:fun:mixins.adoc[mixins] would be the obvious way to associate behaviour with an event sourced entity.
+As with a CQRS architecture, Apache xref:userguide:ROOT:mixins.adoc[mixins] would be the obvious way to associate behaviour with an event sourced entity.
 These mixins would most likely delegate to an event sourcing framework such as link:https://axoniq.io/[Axon] to do the work.
 Also, in Apache Causeway every business action (and indeed, property and collection) emits domain events through the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService], and can optionally also be published through the xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber].
 These features could also have a role to play in an event sourced system.

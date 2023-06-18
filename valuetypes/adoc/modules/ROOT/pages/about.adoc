@@ -10,7 +10,7 @@ This section provides details of those additional value types.
 ====
 Full details of all value types are in the xref:refguide:applib-classes:value-types.adoc[reference guide].
 
-It is also possible to define custom value types; details of that in xref:userguide:fun:value-types.adoc[the user guide].
+It is also possible to define custom value types; details of that in xref:userguide:ROOT:value-types.adoc[the user guide].
 ====
 
 

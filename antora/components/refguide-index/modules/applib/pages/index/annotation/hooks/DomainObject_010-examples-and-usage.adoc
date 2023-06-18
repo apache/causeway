@@ -44,7 +44,7 @@ public class CustomerViewModel {
 }
 ----
 
-Although there are several ways to instantiate a xref:userguide:fun:view-models.adoc[view model], we recommend that they are instantiated using an N-arg constructor that initializes all relevant state.
+Although there are several ways to instantiate a xref:userguide:ROOT:view-models.adoc[view model], we recommend that they are instantiated using an N-arg constructor that initializes all relevant state.
 The xref:refguide:applib:index/services/registry/ServiceRegistry.adoc[ServiceRegistry] can then be used to inject dependencies into the view model.
 For example:
 
@@ -65,7 +65,7 @@ View models when defined using `@DomainObject(nature=VIEW_MODEL)` have some limi
 * collections (of either view models or entities) are ignored.
 * not every data type is supported,
 
-However, these limitations do _not_ apply to xref:userguide:fun:view-models.adoc#jaxb[JAXB] view models.
+However, these limitations do _not_ apply to xref:userguide:ROOT:view-models.adoc#jaxb[JAXB] view models.
 If you are using view models heavily, you may wish to restrict yourself to just the JAXB flavour.
 
 

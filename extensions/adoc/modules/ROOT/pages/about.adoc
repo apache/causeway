@@ -14,7 +14,7 @@ This page catalogues all the available extensions, but they are incorporated int
 
 
 |
-xref:userguide:fun:about.adoc[User Guide] (core extensions):
+xref:userguide:ROOT:about.adoc[User Guide] (core extensions):
 
 include::userguide:ROOT:partial$extensions.adoc[]
 

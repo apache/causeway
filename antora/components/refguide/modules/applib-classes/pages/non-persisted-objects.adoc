@@ -6,6 +6,6 @@
 
 The xref:refguide:applib:index/ViewModel.adoc[ViewModel] interface can be implemented by a view model domain object to provide full control over its serialization to and from a memento.
 
-TIP: There is a more in-depth discussion on view models in the xref:userguide:fun:view-models.adoc[user guide] and the xref:userguide:fun:overview.adoc#view-models[user guide overview].
+TIP: There is a more in-depth discussion on view models in the xref:userguide:ROOT:view-models.adoc[user guide] and the xref:userguide:ROOT:overview.adoc#view-models[user guide overview].
 
 

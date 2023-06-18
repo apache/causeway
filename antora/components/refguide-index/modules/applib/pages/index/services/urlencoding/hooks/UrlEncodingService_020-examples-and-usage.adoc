@@ -20,5 +20,5 @@ For large view models, there's the possibility that the 2083 character limit cou
 
 == See also
 
-* xref:userguide:fun:overview.adoc#view-models[view models]
+* xref:userguide:ROOT:overview.adoc#view-models[view models]
 

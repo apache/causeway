@@ -147,7 +147,7 @@ We can therefore rely on Maven to ensure there are no cyclic dependencies: the a
 
 [TIP]
 ====
-Details on how to actually define modules can be found xref:userguide:fun:modules.adoc[here].
+Details on how to actually define modules can be found xref:userguide:ROOT:modules.adoc[here].
 ====
 
 If the above convention is too officious,then you could choose to have multiple Spring modules per Maven module, but you will need to watch out for cycles.

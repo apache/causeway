@@ -167,7 +167,7 @@ public List<Product> autoComplete0AddToBasket(              // <.>
 }
 ----
 
-As the example suggests, any collection parameter type must provide a way to select items, either by way of a "choices" or "autoComplete" supporting method or alternatively defined globally using xref:refguide:applib:index/annotation/DomainObject.adoc[@DomainObject] on the referenced type (described xref:userguide:fun:object-members.adoc#reference-parameter-types[above]).
+As the example suggests, any collection parameter type must provide a way to select items, either by way of a "choices" or "autoComplete" supporting method or alternatively defined globally using xref:refguide:applib:index/annotation/DomainObject.adoc[@DomainObject] on the referenced type (described xref:userguide:ROOT:object-members.adoc#reference-parameter-types[above]).
 
 
 == Optional Parameters
@@ -204,7 +204,7 @@ private LocalDate shipBy;
 +
 Note that this uses an ORM-specific mechanism to specify the same semantics (in this case, using JDO/DataNucleus' `@Column#allowsNull()`.)
 
-See also xref:userguide:fun:meta-annotations.adoc#properties-vs-parameters[properties vs parameters].
+See also xref:userguide:ROOT:meta-annotations.adoc#properties-vs-parameters[properties vs parameters].
 
 == ``String`` Parameters (Length)
 
@@ -250,7 +250,7 @@ Incidentally, note in the above example that the new value is assigned to the pr
 This is important, because it allows the ORM to keep track that this instance variable is "dirty" and so needs writing to the database table before the transaction completes.
 ====
 
-See also xref:userguide:fun:meta-annotations.adoc#properties-vs-parameters[properties vs parameters].
+See also xref:userguide:ROOT:meta-annotations.adoc#properties-vs-parameters[properties vs parameters].
 
 == ``BigDecimal``s (Precision)
 
@@ -281,7 +281,7 @@ private BigDecimal discountRate;
 +
 Note that this uses an ORM-specific annotation (in this case,  xref:refguide:applib-ant:Column.adoc#lengthscale-for-bigdecimals[@Column#scale]
 
-See also xref:userguide:fun:meta-annotations.adoc#properties-vs-parameters[properties vs parameters].
+See also xref:userguide:ROOT:meta-annotations.adoc#properties-vs-parameters[properties vs parameters].
 
 
 

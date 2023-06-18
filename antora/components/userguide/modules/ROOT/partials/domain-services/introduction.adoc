@@ -25,7 +25,7 @@ Domain services can also be used for a number of other purposes:
 
 * to act as a subscribers to the event bus, potentially influencing events fired by some other module (a key technique for decoupling large applications)
 +
-This is discussed in more detail below, in the section on xref:userguide:fun:overview.adoc#events[events].
+This is discussed in more detail below, in the section on xref:userguide:ROOT:overview.adoc#events[events].
 
 * to implement an link:https://en.wikipedia.org/wiki/Service_provider_interface[SPI] of the Apache Causeway framework, most notably cross-cutting concerns such as security, command profiling, auditing and publishing.
 
@@ -38,12 +38,12 @@ Domain services are instantiated once and once only by the framework, and are us
 [TIP]
 ====
 Details on how to actually write a domain service (the programming model for domain services) is
-xref:userguide:fun:domain-services.adoc#domain-services[here].
+xref:userguide:ROOT:domain-services.adoc#domain-services[here].
 ====
 
 === Hexagonal Architecture
 
-It's worth extending the xref:userguide:fun:background-context-and-theory.adoc#hexagonal-architecture[Hexagonal Architecture] to show where domain services fit in:
+It's worth extending the xref:userguide:ROOT:background-context-and-theory.adoc#hexagonal-architecture[Hexagonal Architecture] to show where domain services fit in:
 
 .The hexagonal architecture with API and SPI implementations
 image::core-concepts/philosophy/hexagonal-architecture-addons.png[width="700px"]
@@ -144,7 +144,7 @@ These can be executed through the xref:refguide:persistence:index/jdo/applib/ser
 Menu services provide actions to be rendered on the menu.
 
 For the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)], each service's actions appear as a collection of menu items of a named menu, and this menu is on one of the three menu bars provided by the Wicket viewer.
-Although these can be organised using annotations, it's usually easier to use a xref:userguide:fun:ui.adoc#file-based-menus[file-based layout file] (`menubars.layout.xml`).
+Although these can be organised using annotations, it's usually easier to use a xref:userguide:ROOT:ui.adoc#file-based-menus[file-based layout file] (`menubars.layout.xml`).
 
 For the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)], all menu services are shown in the services representation.
 
@@ -192,7 +192,7 @@ There's no need to name the action parameters if the code is compiled using the 
 
 <.> the action implementation delegates to an injected repository.
 The framework can inject into not just other domain services but will also automatically into domain entities and view models.
-There is further discussion of service injection xref:userguide:fun:domain-services.adoc#injecting-services[below].
+There is further discussion of service injection xref:userguide:ROOT:domain-services.adoc#injecting-services[below].
 
 <.> xref:refguide:applib:index/annotation/Action.adoc#restrictTo[Prototype] actions are rendered only in prototyping mode.
 A "list all" action such as this can be useful when exploring the domain with a small dataset.
@@ -205,7 +205,7 @@ An alternative perspective is that the duplication is just unnecessary boilerpla
 
 == Event Subscribers
 
-Domain services acting as event subscribers can subscribe to xref:userguide:fun:overview.adoc#lifecycle-events[lifecycle] events, influencing the rendering and behaviour of other objects.
+Domain services acting as event subscribers can subscribe to xref:userguide:ROOT:overview.adoc#lifecycle-events[lifecycle] events, influencing the rendering and behaviour of other objects.
 Behind the scenes this uses Spring's (in-memory) link:https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#context-functionality-events-annotation[event bus].
 
 [source,java]

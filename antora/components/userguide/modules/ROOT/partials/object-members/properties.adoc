@@ -5,7 +5,7 @@
 :page-partial:
 
 
-A property is an instance variable of a domain object, of a scalar type, that holds some state in either a xref:userguide:fun:domain-services.adoc#domain-entities[domain entity] or a xref:userguide:fun:view-models.adoc[view model].
+A property is an instance variable of a domain object, of a scalar type, that holds some state in either a xref:userguide:ROOT:domain-services.adoc#domain-entities[domain entity] or a xref:userguide:ROOT:view-models.adoc[view model].
 
 For example, a ``Customer``'s `firstName` would be a property, as would their `accountCreationDate` that they created their account.
 All properties have at least a "getter" method, and most properties have also a "setter" method (meaning that they are mutable).
@@ -16,7 +16,7 @@ Most properties (those that are editable/modifiable) will also have a setter and
 And most properties will also have a number of annotations:
 
 * Apache Causeway defines its own xref:refguide:applib:index/annotation/Property.adoc[@Property] annotation for capturing domain semantics.
-It also provides a xref:refguide:applib:index/annotation/PropertyLayout.adoc[@PropertyLayout] for UI hints (though the information in this annotation may instead be provided by a supplementary xref:userguide:fun:ui.adoc#object-layout[.layout.xml] file)
+It also provides a xref:refguide:applib:index/annotation/PropertyLayout.adoc[@PropertyLayout] for UI hints (though the information in this annotation may instead be provided by a supplementary xref:userguide:ROOT:ui.adoc#object-layout[.layout.xml] file)
 
 * the properties of domain entities are usually also annotated with an ORM annotation.
 +
@@ -73,7 +73,7 @@ import lombok.Setter;
 private Customer customer;
 ----
 
-It's ok for a xref:userguide:fun:view-models.adoc[view model] to reference other view models and also to reference domain entities.
+It's ok for a xref:userguide:ROOT:view-models.adoc[view model] to reference other view models and also to reference domain entities.
 However, it _isn't_ valid for a domain entity to hold a reference to view model, because the ORM will not know how to persist the view model object.
 
 [TIP]

@@ -40,7 +40,7 @@ This isn't a hard-n-fast rule, but it is a good rule of thumb.
 [TIP]
 ====
 Details on how to actually write a domain entity (the programming model for domain entities) is
-xref:userguide:fun:domain-services.adoc#domain-entities[here].
+xref:userguide:ROOT:domain-services.adoc#domain-entities[here].
 ====
 
 

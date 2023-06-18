@@ -184,7 +184,7 @@ If there is no requirement to customize the icon (the normal case), then the ico
 For example, the icon for a class `org.mydomain.myapp.Customer` will be `org/mydomain/myapp/Customer.png` (if it exists).
 
 Alternatively, a font-awesome icon can be used.
-This is specified using the xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClassFa[@DomainObjectLayout#cssClassFa()] attribute or in the xref:userguide:fun:ui.adoc#object-layout[layout.xml] file.
+This is specified using the xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClassFa[@DomainObjectLayout#cssClassFa()] attribute or in the xref:userguide:ROOT:ui.adoc#object-layout[layout.xml] file.
 
 For example:
 
@@ -267,7 +267,7 @@ In conjunction with a viewer-specific customisation of CSS (eg for the xref:vw:R
 === Declarative style
 
 To render an object with a particular CSS, use
-xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClass[@DomainObjectLayout#cssClass()] or in the xref:userguide:fun:ui.adoc#object-layout[layout.xml] file.
+xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClass[@DomainObjectLayout#cssClass()] or in the xref:userguide:ROOT:ui.adoc#object-layout[layout.xml] file.
 
 The usage of this CSS class is viewer-specific.
 In the case of the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)], when the domain object is rendered on its own page, this CSS class will appear on a top-level `<div>`.

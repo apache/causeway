@@ -63,9 +63,9 @@ public class ShoppingCartItem {
 <.> default the 1-th parameter using the current value of the `quantity` property
 
 
-If implemented as a mixin xref:userguide:fun:mixins.adoc#contributed-action[contributed action], the code would look something like:
+If implemented as a mixin xref:userguide:ROOT:mixins.adoc#contributed-action[contributed action], the code would look something like:
 
-Defaults are also supported (of course) for xref:userguide:fun:mixins.adoc#contributed-action[contributed actions].
+Defaults are also supported (of course) for xref:userguide:ROOT:mixins.adoc#contributed-action[contributed actions].
 For example, here is a contributed action for updating category/subcategory of a `ToDoItem`:
 
 [source,java]

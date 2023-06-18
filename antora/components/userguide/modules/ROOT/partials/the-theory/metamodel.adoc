@@ -21,7 +21,7 @@ The framework integrates an ORM for persistence, specifically DataNucleus and th
 Both JDO and JPA can map to both relational databases and also to various NoSQL objectstores such as MongoDB or Neo4J.
 Apache Causeway recognizes a number of these persistence-specific annotations, for example `@javax.jdo.annotations.Column(allowsNull=...)`.
 
-In addition, the framework builds up the metamodel for each domain object using xref:userguide:fun:ui.adoc#object-layout[layout hints], such as `Customer.layout.xml`.
+In addition, the framework builds up the metamodel for each domain object using xref:userguide:ROOT:ui.adoc#object-layout[layout hints], such as `Customer.layout.xml`.
 These provide metadata such as grouping elements of the UI together, using multi-column layouts, and so on.
 The layout file can be modified while the application is still running, and are picked up automatically; a useful way to speed up feedback.
 

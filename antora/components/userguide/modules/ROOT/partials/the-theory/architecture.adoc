@@ -38,7 +38,7 @@ Here Apache Causeway delegates most of the heavy lifting to an ORM (DataNucleus 
 [[aop]]
 == Aspect Oriented
 
-Although not a book about object modelling, Evans' "Domain Driven Design" does use object orientation as its primary modelling tool; while xref:userguide:fun:background-context-and-theory.adoc#naked-objects-pattern[naked objects pattern] very much comes from an OO background (it even has 'object' in its name).
+Although not a book about object modelling, Evans' "Domain Driven Design" does use object orientation as its primary modelling tool; while xref:userguide:ROOT:background-context-and-theory.adoc#naked-objects-pattern[naked objects pattern] very much comes from an OO background (it even has 'object' in its name).
 
 It's certainly true that to develop an Apache Causeway application you will need reasonably good object oriented modelling skills.
 But given that all the mainstream languages for developing business systems are object oriented (Java, C#, Ruby), that's not such a stretch.
@@ -87,11 +87,11 @@ Mixins can also contribute read-only properties or collections: effectively the 
 In other words, we can dissociate behaviour from data.
 
 That's not always the right thing to do of course.
-In Richard Pawson's description of the xref:userguide:fun:background-context-and-theory.adoc#naked-objects-pattern[naked objects pattern] he talks about "behaviourally rich" objects, in other words where the business functionality encapsulates the data.
+In Richard Pawson's description of the xref:userguide:ROOT:background-context-and-theory.adoc#naked-objects-pattern[naked objects pattern] he talks about "behaviourally rich" objects, in other words where the business functionality encapsulates the data.
 But on the other hand sometimes the behaviour and data structures change at different rates.
 The link:http://en.wikipedia.org/wiki/Single_responsibility_principle[single responsibility principle] says we should only lump code together that changes at the same rate.
 Apache Causeway' support for contributions (not only contributed actions, but also contributed properties and contributed collections) enables this.
 And again, to loop back to the topic of this section, it's an AOP concept that being implemented by the framework.
 
 The nice thing about aspect orientation is that for the most part you can ignore these cross-cutting concerns and - at least initially - just focus on implementing your domain object.
-Later when your app starts to grow and you start to break it out into smaller modules, you can leverage Apache Causeway' AOP support for xref:userguide:fun:overview.adoc#mixins[mixins] and interceptors (using the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[event bus]) to ensure that your codebase remains maintainable.
+Later when your app starts to grow and you start to break it out into smaller modules, you can leverage Apache Causeway' AOP support for xref:userguide:ROOT:overview.adoc#mixins[mixins] and interceptors (using the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[event bus]) to ensure that your codebase remains maintainable.

@@ -158,7 +158,7 @@ The extension also provides these mixins:
 +
 This contributes a `recentCommands` collection to each and every domain object.
 +
-This can be explicit positioned through the domain class' own xref:userguide:fun:ui.adoc#object-layout[layout file], but this is generally not necessary: it will slot into the tab group in the layout file indicated for unreferenced collections using `<tabGroup unreferencedCollections="true">`.
+This can be explicit positioned through the domain class' own xref:userguide:ROOT:ui.adoc#object-layout[layout file], but this is generally not necessary: it will slot into the tab group in the layout file indicated for unreferenced collections using `<tabGroup unreferencedCollections="true">`.
 
 * xref:refguide:extensions:index/commandlog/applib/contributions/HasUsername_recentCommandsByUser.adoc[]
 +

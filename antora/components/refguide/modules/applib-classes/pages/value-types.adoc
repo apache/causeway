@@ -60,4 +60,4 @@ These can be found in the catalog of xref:valuetypes:ROOT:about.adoc[Value Types
 == Custom value types
 
 It is also possible to write your own value types, either scalar or composite.
-For more on this topic, see xref:userguide:fun:value-types.adoc[value types] topic in the user guide.
+For more on this topic, see xref:userguide:ROOT:value-types.adoc[value types] topic in the user guide.

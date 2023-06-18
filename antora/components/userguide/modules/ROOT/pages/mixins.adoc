@@ -41,7 +41,7 @@ There are also commercial products such as JRebel.
 [TIP]
 ====
 Details on how to actually write a mixin (the programming model for mixins) is
-xref:userguide:fun:mixins.adoc[here].
+xref:userguide:ROOT:mixins.adoc[here].
 ====
 
 .DCI Architecture
@@ -55,7 +55,7 @@ The mixin pattern is Apache Causeway' straightforward take on the same basic con
 
 
 
-As described in the xref:userguide:fun:overview.adoc#mixins[overview], a mixin acts like a trait or extension method, allowing one module to contribute behaviour or derived state to another object.
+As described in the xref:userguide:ROOT:overview.adoc#mixins[overview], a mixin acts like a trait or extension method, allowing one module to contribute behaviour or derived state to another object.
 This is a *very powerful feature*, but at the same time is  easy to use.
 
 Under the covers, all mixins are basically actions that use the mixee as one of their arguments.

@@ -8,7 +8,7 @@ This section defines a number of "mixee" interfaces that define a contract for s
 
 [TIP]
 ====
-See the xref:userguide:fun:overview.adoc#mixins[user guide] for a discussion of mixins.
+See the xref:userguide:ROOT:overview.adoc#mixins[user guide] for a discussion of mixins.
 ====
 
 

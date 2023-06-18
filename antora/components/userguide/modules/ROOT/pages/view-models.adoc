@@ -31,7 +31,7 @@ We explore these use cases in more detail below.
 
 [TIP]
 ====
-Details on how to actually write a view model (the programming model for view models) can be found xref:userguide:fun:view-models.adoc[here].
+Details on how to actually write a view model (the programming model for view models) can be found xref:userguide:ROOT:view-models.adoc[here].
 ====
 
 === Externally-managed entities
@@ -106,7 +106,7 @@ This is done by annotating the class using JAXB annotations; this allows the con
 
 
 These DTOs are still usable as "regular" view models; they will render in the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] just like any other.
-In fact (as the xref:userguide:fun:view-models.adoc#jaxb[programming model] section below makes clear), these JAXB-annotated view models are in many regards the most powerful of all the alternative ways of writing view models.
+In fact (as the xref:userguide:ROOT:view-models.adoc#jaxb[programming model] section below makes clear), these JAXB-annotated view models are in many regards the most powerful of all the alternative ways of writing view models.
 
 It's also worth noting that it is also possible to download the XML (or XSD) straight from the UI, useful during development.
 The view model simply needs to implement the xref:refguide:applib:index/mixins/dto/Dto.adoc[Dto] marker interface; the framework has xref:refguide:applib-classes:mixees-and-mixins.adoc#Dto[mixins] that contribute the download actions to the view model.
@@ -148,7 +148,7 @@ ORMs such as DataNucleus link:http://www.datanucleus.org:15080/products/accesspl
 
 
 
-As described in the xref:userguide:fun:overview.adoc#view-models[overview], view models are generally domain objects concerned with facilitating or optimising a particular business process.
+As described in the xref:userguide:ROOT:overview.adoc#view-models[overview], view models are generally domain objects concerned with facilitating or optimising a particular business process.
 As such, they bring together the domain entities involved in that process and provide actions to be performed against or on those domain entities.
 
 Such view models are generally considered to reside in the application layer, and -- unlike domain entities -- their state is _not_ persisted to a database.
@@ -222,7 +222,7 @@ This is an all-or-nothing affair: either all properties must be listed, or else 
 <.> The `@XmlElement` indicates the property is part of the view model's state.
 For collections, the `@XmlElementWrapper` would also typically be used.
 <.> The `@XmlTransient` indicates that the property is derived and should be ignored by JAXB. +
-The derived properties could also have been implemented using xref:userguide:fun:overview.adoc#mixins[mixins].
+The derived properties could also have been implemented using xref:userguide:ROOT:overview.adoc#mixins[mixins].
 
 [IMPORTANT]
 ====
@@ -238,7 +238,7 @@ If the URL does exceed limits or contains invalid characters, then provide a cus
 === Referencing Domain Entities
 
 It's quite common for view models to be "backed by" (be projections of) some underlying domain entity.
-For example, the `CompareCustomers` view model described xref:userguide:fun:view-models.adoc#jaxb[above] actually references two underlying ``Customer`` entities.
+For example, the `CompareCustomers` view model described xref:userguide:ROOT:view-models.adoc#jaxb[above] actually references two underlying ``Customer`` entities.
 
 It wouldn't make sense to serialize out the state of a persistent entity.
 However, the identity of the underlying entity is well defined; Apache Causeway defines the xref:refguide:schema:common.adoc[common schema] which defines the `<oid-dto>` element (and corresponding `OidDto` class): the object's type and its identifier.

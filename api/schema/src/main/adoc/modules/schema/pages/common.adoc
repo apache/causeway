@@ -14,7 +14,7 @@ This is basically a formal XML equivalent to the `Bookmark` object obtained from
 
 Although simple, this is an enormously powerful concept, in that it represents a URI to any domain object managed by a given Apache Causeway application.
 With it, we have the ability to lookup any arbitrary object.
-Further discussion and examples can be found xref:userguide:fun:overview.adoc#oid[here].
+Further discussion and examples can be found xref:userguide:ROOT:overview.adoc#oid[here].
 
 The `oidDto` complex type is defined as:
 

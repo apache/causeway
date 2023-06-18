@@ -60,7 +60,7 @@ For example, consider a todo app whereby ``ToDoItem``s are categorized and then 
 
 image::reference-methods/prefixes/choices/dependent.png[width="800px"]
 
-If implemented as a mixin xref:userguide:fun:mixins.adoc#contributed-action[contributed action], the code would look something like:
+If implemented as a mixin xref:userguide:ROOT:mixins.adoc#contributed-action[contributed action], the code would look something like:
 
 [source,java]
 ----
