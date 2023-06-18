@@ -5,6 +5,8 @@
 
 include::partial$domain-entities/_intro.adoc[leveloffset=+1]
 include::partial$domain-entities/progmodel.adoc[leveloffset=+1]
+include::partial$domain-entities/jpa.adoc[leveloffset=+1]
+include::partial$domain-entities/jdo.adoc[leveloffset=+1]
 
 
 
