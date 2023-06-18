@@ -37,11 +37,11 @@ Both xref:refguide:applib-svc:about.adoc[framework-defined] domain services and 
 By "everywhere", we mean not just into domain services, but _also_ injected into domain entities and view models.
 This enables us to implement behaviourally complete domain objects (if we so wish).
 
-* xref:overview.adoc#mixins[mixins] that allow functionality defined in one module to appear (in the UI) to be provided by some other module.
+* xref:mixins.adoc[mixins] that allow functionality defined in one module to appear (in the UI) to be provided by some other module.
 +
 For example, a _Document_ module might allow `Document` objects to be attached to any arbitrary domain object (such as `Order` or `Customer`) in other modules.
 A mixin would allow the UI for a `Customer` to also display these attached ``Document``s, even though the _Customer_ module would have no knowledge of/dependency on the _Workflow_ module.
-(More on this example xref:overview.adoc#inverting-dependencies[below]).
+(More on this example xref:modules.adoc#inverting-dependencies[below]).
 +
 Dependencies are also injected into mixins.
 A common technique is to factor out from domain objects into mixins and then generalise.
@@ -49,7 +49,7 @@ A common technique is to factor out from domain objects into mixins and then gen
 * the internal xref:refguide:applib:index/services/eventbus/EventBusService.adoc[event bus] allows modules to influence other modules.
 +
 A subscriber in one module can subscribe to events emitted by domain objects in another module.
-These events can affect both the UI (eg hiding or disabling xref:overview.adoc#object-members[object members], or allowing or vetoing interactions).
+These events can affect both the UI (eg hiding or disabling xref:object-members.adoc[object members], or allowing or vetoing interactions).
 
 A good example of this last is supporting (what in an RDBMS we would call) referential integrity.
 Suppose the `customers` module has a `Customer` object and a `EmailAddress` object, with a customer having a collection of email addresses.
@@ -69,7 +69,7 @@ If we get the dependencies wrong (that is, our initial guess on stability is pro
 
 * use the link:https://en.wikipedia.org/wiki/Dependency_inversion_principle[dependency inversion principle] to introduce an abstraction representing the dependency.
 
-* move functionality, eg by factoring it out into xref:overview.adoc#mixins[mixins] into the other module or into a third module which depends on the other modules that had a bidirectional relationship
+* move functionality, eg by factoring it out into xref:mixins.adoc[mixins] into the other module or into a third module which depends on the other modules that had a bidirectional relationship
 
 Mixins in particular allow dependencies to be inverted, so that the dependencies between modules can be kept acyclic and under control.
 
@@ -166,7 +166,7 @@ Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/o
 TIP: See Spring documentation on link:https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-annotation-config[annotation-based container configuration], link:https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-classpath-scanning[classpath scanning] and link:https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-java[java-based configuration] for much more on this topic.
 
 By convention, we have one Spring "logical" module in each Maven "physical" module, meaning that Maven itself can be used to enforce acyclic dependencies.
-(See xref:overview.adoc#modules[previous chapter] for more discussion on the alternatives).
+(See the xref:modules.adoc[modules] page for more discussion on the alternatives).
 
 Thus, there will be a single top-level package corresponding to the module, and this will be aligned with the `<groupId>` and `<artifactId>` of the Maven module in which it resides.
 

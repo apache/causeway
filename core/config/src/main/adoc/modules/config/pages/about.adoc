@@ -150,7 +150,7 @@ There are several security implementations, precisely one must be selected
 +
 Alternatively, `CausewayModuleJdoDataNucleus5.class` would be specified in order to use xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] instead.
 +
-Optional (though if omitted then only xref:userguide:ROOT:overview.adoc#view-models[view models] may be used, with hand-rolled persistence).
+Optional (though if omitted then only xref:userguide:ROOT:view-models.adoc[view models] may be used, with hand-rolled persistence).
 
 <.> Enables the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)].
 <.> Enables the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)]

@@ -30,7 +30,7 @@ indicates that the domain object is an entity whose persistence is managed inter
 +
 indicates that the domain object is part of the domain layer, and is contributing behaviour to objects of some other type as a mixin (also known as a trait).
 +
-For further discussion on using mixins, see xref:userguide:ROOT:overview.adoc#mixins[mixins] in the user guide.
+For further discussion on using mixins, see xref:userguide:ROOT:overview.adoc[mixins] in the user guide.
 
 * `VIEW_MODEL`
 +

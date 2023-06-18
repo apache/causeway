@@ -40,5 +40,5 @@ The framework provides a multitude of ways to implement these business rules.
 
 The simplest mechanism is to just implement the business rules imperatively in the domain object, or in a xref:mixins.adoc[mixin] for the object.
 
-A more sophisticated approach, useful for decoupling functionality, is using xref:userguide:ROOT:overview.adoc#domain-events[domain events].
+A more sophisticated approach, useful for decoupling functionality, is using xref:userguide:ROOT:events.adoc#domain-events[domain events].
 The domain event is emitted multiple times, for the various types of precondition checks (and if not vetoed, they are also emitted on the execution of the action itself).

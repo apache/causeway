@@ -28,7 +28,7 @@ Domain services can also be used for a number of other purposes:
 
 * to act as a subscribers to the event bus, potentially influencing events fired by some other module (a key technique for decoupling large applications)
 +
-This is discussed in more detail below, in the section on xref:userguide:ROOT:overview.adoc#events[events].
+This is discussed in more detail below, in the section on xref:userguide:ROOT:events.adoc[events].
 
 * to implement an link:https://en.wikipedia.org/wiki/Service_provider_interface[SPI] of the Apache Causeway framework, most notably cross-cutting concerns such as security, command profiling, auditing and publishing.
 

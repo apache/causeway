@@ -78,7 +78,7 @@ The framework encourages splitting this functionality into modules; each such mo
 This architecture means that it's impossible for business logic to leach out into the adjacent presentation layer because the developer doesn't (can't) write any code for presentation layer.
 We in effect have a "firewall" between the two layers.
 
-To support the business domain being split into separate modules, the framework provides various features, the most important of which are the dependency injection of xref:overview.adoc#domain-services[domain services], xref:overview.adoc#mixins[mixins], and in-memory xref:overview.adoc#events[events].
+To support the business domain being split into separate modules, the framework provides various features, the most important of which are the dependency injection of xref:overview.adoc#domain-services[domain services], xref:mixins.adoc[mixins], and in-memory xref:events.adoc[events].
 
 For those cases where a module needs to interact with other modules but does not know about their implementations, the module can either define its own link:https://en.wikipedia.org/wiki/Service_provider_interface[SPI] domain services or it can define custom domain events and fire them.
 This technique is also used extensively by the framework itself.

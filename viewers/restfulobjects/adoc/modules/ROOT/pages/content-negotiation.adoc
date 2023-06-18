@@ -18,7 +18,7 @@ If the entities were exposed directly then those REST clients will break.
 Instead you need to create some sort of stable facade over your domain entities, one which you will preserve even if the domain entities change.
 There are three ways in which you can do this:
 
-* first is to solve the problem at the domain layer by defining a regular Apache Causeway xref:userguide:ROOT:overview.adoc#view-models[view model].
+* first is to solve the problem at the domain layer by defining a regular Apache Causeway xref:userguide:ROOT:view-models.adoc[view model].
 This is then surfaced by the RO viewer.
 +
 If the underlying entities change, then care must be taken to ensure that structure of the view model nevertheless is unchanged.

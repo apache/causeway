@@ -7,10 +7,10 @@
 * xref:userguide::drop-downs-and-defaults.adoc[Drop downs and Defaults]
 * xref:userguide::view-models.adoc[View Models]
 * xref:userguide::mixins.adoc[Mixins]
+* xref:userguide::events.adoc[Events]
+* xref:userguide::modules.adoc[Modules]
 * xref:userguide::value-types.adoc[Value types]
 * xref:userguide::meta-annotations.adoc[Meta-annotations]
-* xref:userguide::modules.adoc[Modules]
-* xref:userguide::events.adoc[Events]
 * xref:userguide::background-context-and-theory.adoc[Background, Context & Theory]
 
 

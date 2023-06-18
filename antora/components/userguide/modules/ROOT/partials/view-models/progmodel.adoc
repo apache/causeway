@@ -76,7 +76,7 @@ This is an all-or-nothing affair: either all properties must be listed, or else 
 <.> The `@XmlElement` indicates the property is part of the view model's state.
 For collections, the `@XmlElementWrapper` would also typically be used.
 <.> The `@XmlTransient` indicates that the property is derived and should be ignored by JAXB. +
-The derived properties could also have been implemented using xref:userguide:ROOT:overview.adoc#mixins[mixins].
+The derived properties could also have been implemented using xref:userguide:ROOT:mixins.adoc[mixins].
 
 [IMPORTANT]
 ====

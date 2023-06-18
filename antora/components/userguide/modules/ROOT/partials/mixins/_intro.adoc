@@ -10,7 +10,7 @@ A mixin object allows one class to contribute behaviour - actions, (derived) pro
 Or rather, the mixin _appears_ to contribute the behaviour/state in the UI; the underlying domain class being "decorated" does not know this is happening.
 
 This is therefore a key technique to allow the app to stay decoupled, so that it doesn't degrade into the proverbial link:http://www.laputan.org/mud/mud.html#BigBallOfMud["big ball of mud"].
-There's a lot more discussion on this topic in xref:overview.adoc#modules[modules], below.
+There's a lot more discussion on this topic in xref:modules.adoc[modules], below.
 
 
 Mixins are also a convenient mechanism for grouping functionality even for a concrete type, helping to rationalize about the dependency between the data and the behaviour.

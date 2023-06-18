@@ -54,3 +54,7 @@ class CustomController {
 The API described here is reasonably low-level, allowing code to interact very directly with the Apache Causeway metamodel and runtime.
 Such callers should be considered trusted: they do not (by default) honour any business rules eg implicit in the Causeway annotations or hide/disable/validate methods.
 
+== Another example: Seed services
+
+Another example is domain services that need to seed reference data during bootstrapping.
+An example of this can be found xref:userguide:ROOT:domain-services.adoc#instantiating[here].

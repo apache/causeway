@@ -29,8 +29,8 @@ Apache Causeway defines its own set of annotations, and
 you can generally recognize an Apache Causeway domain class because it will be probably be annotated using xref:refguide:applib:index/annotation/DomainObject.adoc[@DomainObject] and xref:refguide:applib:index/annotation/DomainService.adoc[@DomainService].
 There are though configuration options that allow you to control to what extent (some) annotations can be inferred implicitly rather than  specified explicitly.
 
-The framework also recognises some annotations from the ORM layer (ie JPA/EclipseLink or JDO/DataNucleus) and infers domain semantics from these annotations.
-Similarly, JAXB annotations are often used for view models.
+The framework also recognises some annotations from the ORM layer (ie xref:pjpa::about.adoc[JPA/EclipseLink] or xref:pjdo::about.adoc[JDO/DataNucleus]) and infers domain semantics from these annotations.
+Similarly, JAXB annotations are often used for xref:view-models.adoc[view models].
 
 The framework also defines supplementary annotations, notably xref:refguide:applib:index/annotation/DomainObjectLayout.adoc[@DomainObjectLayout] and xref:refguide:applib:index/annotation/DomainServiceLayout.adoc[@DomainServiceLayout].
 These provide hints relating to the layout of the domain object in the user interface.
@@ -48,7 +48,7 @@ It's also possible to customise other aspects of the domain object's presentatio
 
 
 
-== Object Members
+== Properties, Collections and Actions (and Mixins)
 
 Every domain object in Apache Causeway consists of three types of members:
 
@@ -56,7 +56,10 @@ Every domain object in Apache Causeway consists of three types of members:
 * collections, such as a ``Customer``'s `orders` collection of ``Order``s
 * actions, such as a ``Customer'``s `placeOrder(...)` method.
 
-In addition, xref:mixins.adoc[mixins] can contribute both actions (ie behaviour) and derived (read-only) state to an underlying domain object.
+In small or simple applications these are implemented as `public` methods on the domain object itself.
+In larger or more complicated applications, xref:mixins.adoc[mixins] provide an alternative way to implement actions (ie behaviour) and derived (read-only) properties or collections, with the implementation "contributed to" the underlying domain object.
+
+
 
 
 == Business Rules

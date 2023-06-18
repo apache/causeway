@@ -22,7 +22,7 @@ Customer customer = factoryService.detachedEntity(Customer.class);
 
 The returned domain entity is not persistent and is unknown to the ORM; hence "detached".
 
-When the framework instantiates the object, all services are injected into the framework, and an `ObjectCreatedEvent` xref:userguide:ROOT:overview.adoc#lifecycle-events[lifecycle event] will also be emitted.
+When the framework instantiates the object, all services are injected into the framework, and an `ObjectCreatedEvent` xref:userguide:ROOT:events.adoc#lifecycle-events[lifecycle event] will also be emitted.
 
 You may prefer however for your domain entities to have regular constructor defining their minimum set of mandatory properties.
 For example:
@@ -111,7 +111,7 @@ Nevertheless, if you want to ensure that the persist command is flushed immediat
 repositoryService.persistAndFlush(customer);
 ----
 
-When an object is persisted the framework will emit `ObjectPersistingEvent` and `ObjectPersistedEvent` xref:userguide:ROOT:overview.adoc#lifecycle-events[lifecycle events].
+When an object is persisted the framework will emit `ObjectPersistingEvent` and `ObjectPersistedEvent` xref:userguide:ROOT:events.adoc#lifecycle-events[lifecycle events].
 
 === Persistence by Reachability (JDO)
 
@@ -265,7 +265,7 @@ public class CustomerRepository {
 Whenever a query is submitted, the framework will automatically "flush" any pending changes.
 This ensures that the database query runs against an up-to-date table so that all matching instances (with respect to the current transaction) are correctly retrieved.
 
-When an object is loaded from the database the framework will emit `ObjectLoadedEvent` xref:userguide:ROOT:overview.adoc#lifecycle-events[lifecycle event].
+When an object is loaded from the database the framework will emit `ObjectLoadedEvent` xref:userguide:ROOT:events.adoc#lifecycle-events[lifecycle event].
 
 === Type-safe queries
 
@@ -285,7 +285,7 @@ That said, it is possible to "flush" pending changes:
 
 * (if using xref:pjdo:ROOT:about.adoc[JDO/DataNucleus]), the xref:refguide:persistence:index/jdo/applib/services/JdoSupportService.adoc[JdoSupportService] domain service can be used reach down to the underlying JDO API, and perform a flush of pending object updates also.
 
-When an object is updated the framework will emit `ObjectUpdatingEvent` and `ObjectUpdatedEvent` xref:userguide:ROOT:overview.adoc#lifecycle-events[lifecycle events].
+When an object is updated the framework will emit `ObjectUpdatingEvent` and `ObjectUpdatedEvent` xref:userguide:ROOT:events.adoc#lifecycle-events[lifecycle events].
 
 [[deleting]]
 == Deleting Objects
@@ -315,7 +315,7 @@ repositoryService.removeAndFlush(customer);
 
 to eagerly perform the object deletion from the database.
 
-When an object is deleted the framework will emit `ObjectRemovingEvent` xref:userguide:ROOT:overview.adoc#lifecycle-events[lifecycle event].
+When an object is deleted the framework will emit `ObjectRemovingEvent` xref:userguide:ROOT:events.adoc#lifecycle-events[lifecycle event].
 
 
 

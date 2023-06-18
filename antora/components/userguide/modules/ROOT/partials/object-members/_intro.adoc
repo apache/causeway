@@ -74,7 +74,7 @@ Such applications are often called CRUD applications (create/read/update/delete)
 
 In more complex domains, it's not realistic/feasible to expect the end-user to have to remember all the different business rules that govern the valid states for each domain object.
 Actions allow those business rules to be encoded programmatically.
-Those actions can either be defined in the domain class itself, or can be contributed by way of a xref:overview.adoc#mixins[mixin].
+Those actions can either be defined in the domain class itself, or can be contributed by way of a xref:mixins.adoc[mixin].
 
 The general philosophy for an Apache Causeway (naked objects) application is _not_ to constrain the end-user in how they interact with the UI: it doesn't attempt to define a rigid business process.
 However, it _does_ aim to ensure that business rule invariants are maintained, that is that domain objects aren't allowed to enter into an invalid state.

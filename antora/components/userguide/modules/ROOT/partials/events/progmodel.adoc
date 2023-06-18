@@ -55,7 +55,7 @@ There are two use cases where this feature is useful:
 
 * the second is for xref:userguide:ROOT:view-models.adoc#jaxb[JAXB-style view models] which are code generated from XSDs and so cannot have any dependencies on the rest of the Apache Causeway framework.
 
-In this second case a subscriber on the default events can provide a title and icon for such an object, with the behaviour provided using xref:userguide:ROOT:overview.adoc#mixins[mixins].
+In this second case a subscriber on the default events can provide a title and icon for such an object, with the behaviour provided using xref:userguide:ROOT:mixins.adoc[mixins].
 
 [#lifecycle-events]
 == Lifecycle Events

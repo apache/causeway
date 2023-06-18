@@ -52,15 +52,6 @@ We can also define view models; you might consider these as part of the "applica
 These can also hold state, but their state is temporary (per user) rather than persistent.
 Sometimes a view model is a projection of some an underlying entity/ies for a particular use case (eg `DocumentAndCommunication`; sometimes they aggregate data from multiple locations (eg a `CustomerDashboard`), sometimes they manage a business process (eg `PaymentBatchManager`).
 
-* xref:userguide:ROOT:value-types.adoc[Value types] and xref:userguide:ROOT:meta-annotations.adoc[Meta-annotations]
-+
-Both domain entities and view models are built from values.
-The framework does (of course) have built-in support for primitives, strings, dates and so on.
-But it also allows you to define your own custom value types, either scalar or composite.
-
-+
-Meta-annotations provide an alternative way to factor out common rules, also extending the vocabulary (ubiquitous language) into your app.
-
 * xref:userguide:ROOT:modules.adoc[Modules], xref:userguide:ROOT:mixins.adoc[Mixins] and xref:userguide:ROOT:events.adoc[Events]
 +
 Causeway emphasises rapid development and a fast feedback loop with your domain expert.
@@ -76,4 +67,13 @@ The second part of the user guide moves xref:userguide:btb:about.adoc[], explori
 
 The user guide finishes with a set of extensions that provide additional capabilities to the core framework.
 
+
+* xref:userguide:ROOT:value-types.adoc[Value types] and xref:userguide:ROOT:meta-annotations.adoc[Meta-annotations]
++
+Both domain entities and view models are built from values.
+The framework does (of course) have built-in support for primitives, strings, dates and so on.
+But it also allows you to define your own custom value types, either scalar or composite.
+
++
+Meta-annotations provide an alternative way to factor out common rules, also extending the vocabulary (ubiquitous language) into your app.
 

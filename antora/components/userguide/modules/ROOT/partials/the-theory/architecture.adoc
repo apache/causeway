@@ -94,4 +94,4 @@ Apache Causeway' support for contributions (not only contributed actions, but al
 And again, to loop back to the topic of this section, it's an AOP concept that being implemented by the framework.
 
 The nice thing about aspect orientation is that for the most part you can ignore these cross-cutting concerns and - at least initially - just focus on implementing your domain object.
-Later when your app starts to grow and you start to break it out into smaller modules, you can leverage Apache Causeway' AOP support for xref:userguide:ROOT:overview.adoc#mixins[mixins] and interceptors (using the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[event bus]) to ensure that your codebase remains maintainable.
+Later when your app starts to grow and you start to break it out into smaller modules, you can leverage Apache Causeway' AOP support for xref:userguide:ROOT:mixins.adoc[mixins] and interceptors (using the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[event bus]) to ensure that your codebase remains maintainable.
