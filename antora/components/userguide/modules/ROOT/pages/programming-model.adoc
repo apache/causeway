@@ -1,37 +1,30 @@
- = Identifiers
+= Programming Model
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
-:page-partial:
 
 
-The Apache Causeway framework tracks the identity of each domain object.
-This identity is represented to the end-user in human-readable form so that they know which object they are interacting with, and is also used and is available internally/for integrations.
+Apache Causeway works by building a xref:background-context-and-theory.adoc#metamodel[metamodel] of the domain objects: entities, domain services, view models and mixins.
+Dependent on the xref:overview.adoc#type-of-domain-objects[sort of domain object], the class methods represent both state -- (single-valued) xref:object-members.adoc#properties[properties] and (multi-valued) xref:object-members.adoc#collections[collections] -- and behaviour -- xref:object-members.adoc#actions[actions].
 
-This section explores these two related concepts.
+More specifically, both xref:domain-entities.adoc[entities] and xref:view-models.adoc[view models] can have properties, collections and actions, while xref:domain-services.adoc[domain services] have just actions.
+xref:mixins.adoc[Mixins] also define only actions, though depending on their semantics they may be rendered as derived properties or collections on the domain object to which they contribute.
 
-[[title-and-icon-and-css-class]]
-== Title, Icon etc.
+In the automatically generated UI a property is rendered as a field.
+This can be either of a value type (a string, number, date, boolean etc) or can be a reference to another entity.
+A collection is generally rendered as a table.
 
-To allow the end-user to distinguish one domain object from another, it is rendered with a title and an icon.
-The icon informally identifies the type of the domain object, while the title identifies the instance.
+Additional xref:business-rules.adoc[business rules] semantics are inferred both imperatively from _supporting methods_ (such as `disableXxx()`) and declaratively from xref:refguide:applib-ant:about.adoc[annotations].
 
-* Title
-+
-The title of a domain object is shown in several places: as the main heading for an object; as a link text or tooltip for an object referencing another object, and also in tables representing collections of objects.
-+
-The title is not formally required to be a unique identify the object within its type, but it needs to be "unique enough" that a human user is able to distinguish one instance from another.
-+
-The title is usually just a simple string, but the framework also allows for the title to be translated into different locales.
-
-* Icon
-+
-Sometimes it's helpful for the icon to represent more than just the object's type; it might also indicate the state of an object.
-For example, a shipped `Order` might have a slightly different icon to a yet-to-be-shipped `Order`; or a library book that is `loaned out` might be distinguished from one that is `available`.
+Taken together this set of conventions are what we call the _**Apache Causeway Programming Model**_.
+In essence, these conventions are just an extension of the pojo / JavaBean standard of yesteryear: properties and collections are getters/setters, while actions are simply any remaining `public` methods.
 
 
 [TIP]
 ====
-Details on how to actually write titles and icons (the programming model) can be found xref:userguide:ROOT:ui.adoc#object-titles-and-icons[here].
+In fact, the Apache Causeway programming model is extensible; you can teach Apache Causeway new programming conventions and you can remove existing ones; ultimately they amount to syntax.
+The only real fundamental that can't be changed is the notion that objects consist of properties, collections and actions.
+
+You can learn more about extending Apache Causeway programming model xref:userguide:btb:programming-model.adoc[here].
 ====
 
 

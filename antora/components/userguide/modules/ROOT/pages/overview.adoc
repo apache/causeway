@@ -37,6 +37,17 @@ These provide hints relating to the layout of the domain object in the user inte
 Alternatively, these UI hints might be defined in a supplementary xref:userguide:ROOT:ui.adoc#object-layout[.layout.xml] file.
 
 
+
+[[title-and-icon-and-css-class]]
+== Title and Icon
+
+To allow the end-user to distinguish one domain object from another, it is rendered with a xref:ui.adoc#object-title[title] and an xref:ui.adoc#object-icon[icon].
+The icon informally identifies the type of the domain object, while the title identifies the instance.
+
+It's also possible to customise other aspects of the domain object's presentation within the xref:ui.adoc[user interface].
+
+
+
 == Object Members
 
 Every domain object in Apache Causeway consists of three types of members:
@@ -64,8 +75,29 @@ The framework provides a multitude of ways to implement these business rules.
 The simplest approach is to just implement the business rules imperatively in the domain object, using a supporting method.
 
 
-include::partial$overview/events.adoc[leveloffset=+1]
-include::partial$overview/modules.adoc[leveloffset=+1]
-include::partial$overview/programming-model.adoc[leveloffset=+1]
+== Events
 
+When the framework renders a domain object, and as the end-user interacts with the domain object, the framework it emits multiple events using the intra-process xref:refguide:applib:index/services/eventbus/EventBusService.adoc[event bus].
+These events enable other domain services (possibly in other modules) to influence how the domain object is rendered, or to perform side-effects or even veto an action invocation.
+
+The framework has several categories of events: domain events, UI events and lifecycle events.
+Learn more about these in xref:events.adoc[events] page.
+
+To receive the events, the domain service should subscribe to the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService], and implement an appropriately annotated method to receive the events.
+
+
+
+== Modularity
+
+Enabling and ensuring modularity is a xref:background-context-and-theory.adoc#modular[key principle] for the Apache Causeway framework.
+Modularity is the only way to ensure that a complex application domain does not over time degenerate into the infamous "big ball of mud", software that is difficult, dangerous and expensive to change.
+
+xref:modules.adoc[Modules] chunk up the overall application into smaller pieces, usually a pacakge and subpackages.
+The smaller pieces can be either "horizontal" tiers (presentation / domain / persistence) or "vertial" functional slices (eg customer vs orders vs products vs invoice etc).
+
+Because the framework takes care in large part of the presentation and persistence tiers, modules in an Apache Causeway application are oriented around vertical slices, and determining the dependencies between those modules.
+These modules will form a directed acyclic graph (DAG)
+
+Both xref:mixins.adoc[mixins] and xref:events.adoc[events] are important to enabling modularity.
+Mixins allow one module to seemingly "contribute" behaviour to a domain object in another module, while events allow modules to interact in a decoupled fashion, either reacting to or vetoing actions originating in some other module.
 
