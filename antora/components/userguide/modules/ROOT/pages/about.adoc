@@ -9,27 +9,36 @@ This user guide introduces you to the main concepts within Apache Causeway, so y
 It starts with a xref:userguide:ROOT:overview.adoc[10,000ft overview] of the main building blocks that make up the framework.
 The following pages then look at each of those building blocks in a little more detail:
 
-* xref:userguide:ROOT:domain-services.adoc[Domain Entities & Services]
+* xref:userguide:ROOT:domain-entities.adoc[Domain Entities]
 +
-Domain entities hold persisted state, services are (typically) singletons that act upon or create entities.
+Domain entities hold persisted state of domain objects such as `Customer` or `Order`.
+They can and often do also include business logic, encapsulating the state.
+, services are (typically) singletons that act upon or create entities.
 Business logic can reside in either.
+
+* xref:userguide:ROOT:domain-services.adoc[Domain Services]
++
+Domain services are (typically) singletons that act upon entities.
+Common implementations are repositories (to find domain entities) or factories (to create entities), but they might also be holders of business logic that for whatever reason you want to keep outside an entity; perhaps it easier to test that way.
+An example might be `InvoiceCalculationServices`.
 
 * xref:userguide:ROOT:object-members.adoc[Properties, Collections & Actions]
 +
-\... are the parts that make up a domain object.
+Properties and collections are the state that is maintained by domain entities (above), while actions can reside on either a domain entity or domain service.
+The framework automatically exposes this state and behaviour in the user interface (unless you otherwise suppress it).
 
 * xref:userguide:ROOT:ui.adoc[UI Layout & Hints]
 +
-Apache Causeway applications do not require you to develop a user interface explicitly.
-But they do allow you to provide optional hints so that the domain objects appear in the UI the way that you want them to appear.
+As noted above, Apache Causeway applications do not require you to write code to render your domain objects in the UI; the framework provides a generic UI.
+But the framework _does_ allow you to provide optional hints so that the domain objects appear in the UI the way that you want them to appear.
 
 * xref:userguide:ROOT:business-rules.adoc[Business Rules]
 +
-The framework has a well-defined set of conventions for expressing certain business rule contracts.
+The framework has a well-defined set of conventions for expressing certain business rule contracts, either declaratively (framework-provided annotations) or imperative (supporting methods following a naming convention).
 
-* xref:userguide:ROOT:drop-downs-and-defaults.adoc[Drop downs and Defaults]
+* xref:userguide:ROOT:drop-downs-and-defaults.adoc[Drop-downs and Defaults]
 +
-To streamline the user experience, we can provide drop-downs and default values.
+To streamline the user experience, yuo can provide choices for action parameters (drop-downs) as well as default values.
 
 * xref:userguide:ROOT:view-models.adoc[View Models]
 +
