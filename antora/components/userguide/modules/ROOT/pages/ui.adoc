@@ -10,9 +10,9 @@ Nevertheless, some metadata relating solely to the UI is inevitably required.
 
 The Apache Causeway programming model includes several mechanisms to influence the way in which the domain objects are rendered in the UI.
 
-* the layout of application menu items (inferred from xref:domain-services.adoc#domain-services[domain services])
+* the layout of application menu items (inferred from xref:domain-services.adoc[domain services])
 
-* the layout of domain objects (xref:domain-services.adoc#domain-entities[domain entities] and xref:view-models.adoc[view models]) allow the positioning of the xref:object-members.adoc[object members] into columns and tabs
+* the layout of domain objects (xref:domain-entities.adoc[domain entities] and xref:view-models.adoc[view models]) allow the positioning of the xref:object-members.adoc[object members] into columns and tabs
 
 * UI hints provided by the domain object itself returning:
 

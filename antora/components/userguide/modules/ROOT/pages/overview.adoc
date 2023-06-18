@@ -48,8 +48,22 @@ Every domain object in Apache Causeway consists of three types of members:
 In addition, xref:mixins.adoc[mixins] can contribute both actions (ie behaviour) and derived (read-only) state to an underlying domain object.
 
 
+== Business Rules
 
-include::partial$overview/business-rules.adoc[leveloffset=+1]
+When a domain object is rendered in the UI or the end-user interacts with the domain object through the UI, the framework applies a series of precondition business rules to each object member (property, collection or action).
+
+When the object is being rendered, the framework checks:
+
+* is the object member visible? - Members that are not visible are simply omitted from the page.
+* if the object member is visible, is the object member enabled (or is it not editable/greyed out)?
+* for enabled object members, are the supplied arguments valid?
+
+One way to remember this is: *"see it, use it, do it"*.
+
+The framework provides a multitude of ways to implement these business rules.
+The simplest approach is to just implement the business rules imperatively in the domain object, using a supporting method.
+
+
 include::partial$overview/events.adoc[leveloffset=+1]
 include::partial$overview/modules.adoc[leveloffset=+1]
 include::partial$overview/programming-model.adoc[leveloffset=+1]

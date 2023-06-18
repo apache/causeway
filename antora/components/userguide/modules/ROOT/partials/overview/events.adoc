@@ -8,10 +8,11 @@
 When the framework renders a domain object, and as the end-user interacts with the domain object, the framework it emits multiple events using the intra-process xref:refguide:applib:index/services/eventbus/EventBusService.adoc[event bus].
 These events enable other domain services (possibly in other modules) to influence how the domain object is rendered, or to perform side-effects or even veto an action invocation.
 
-To receive the events, the domain service should subscribe to the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService], and implement an appropriately annotated method to receive the events.
-
 The framework has several categories of events: domain events, UI events and lifecycle events.
 These are explored in the sections below.
+
+To receive the events, the domain service should subscribe to the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService], and implement an appropriately annotated method to receive the events.
+
 
 [#domain-events]
 == Domain Events

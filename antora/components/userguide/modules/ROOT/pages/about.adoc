@@ -57,17 +57,18 @@ Sometimes a view model is a projection of some an underlying entity/ies for a pa
 Both domain entities and view models are built from values.
 The framework does (of course) have built-in support for primitives, strings, dates and so on.
 But it also allows you to define your own custom value types, either scalar or composite.
-http://localhost:5000
+
 +
 Meta-annotations provide an alternative way to factor out common rules, also extending the vocabulary (ubiquitous language) into your app.
 
-* xref:userguide:ROOT:modules.adoc[Modules] and xref:userguide:ROOT:mixins.adoc[Mixins]
+* xref:userguide:ROOT:modules.adoc[Modules], xref:userguide:ROOT:mixins.adoc[Mixins] and xref:userguide:ROOT:events.adoc[Events]
 +
 Causeway emphasises rapid development and a fast feedback loop with your domain expert.
 Modularity is key to preserving that feedback loop as your application's capability grows.
 +
 Mixins provide a powerful mechanism to decouple the various concerns within your application, allowing even the largest of monolith applications to keep modular.
-
++
+Events are broadcast on an intra-process event bus, allowing subscribers in other modules to influence the domain logic being executed, hook into persistence or to refine the UI.
 
 The first part of the user guide ends with a look at the xref:userguide:ROOT:background-context-and-theory.adoc[background, context and theory] that underpin the framework: domain driven design, the naked objects pattern, the hexagonal architecture and aspect orientation to name a few.
 
