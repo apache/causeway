@@ -4,7 +4,7 @@
 * xref:userguide::object-members.adoc[Properties, Collections & Actions]
 * xref:userguide::ui.adoc[UI Layout & Hints]
 * xref:userguide::business-rules.adoc[Business Rules]
-* xref:userguide::drop-downs-and-defaults.adoc[Drop downs and Defaults]
+* xref:userguide::drop-downs-and-defaults.adoc[Drop downs & Defaults]
 * xref:userguide::view-models.adoc[View Models]
 * xref:userguide::mixins.adoc[Mixins]
 * xref:userguide::events.adoc[Events]

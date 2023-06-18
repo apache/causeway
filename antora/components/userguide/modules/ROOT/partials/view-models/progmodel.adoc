@@ -9,6 +9,7 @@ View models are generally considered to reside in the application layer, and -- 
 Instead, it is serialized into its identifier (in effect, its URL).
 The framework unpacks this URL to infer/recreate the view model's state with each interaction.
 
+View models are typically annotated with xref:refguide:applib:index/annotation/DomainObject.adoc[@DomainObject(nature=VIEW_MODEL)].
 
 The framework provides three ways to implement a view model:
 

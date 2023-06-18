@@ -5,7 +5,7 @@
 :page-partial:
 
 
-Domain entities are persistent domain objects, and will typically be annotated with `@DomainObject(nature=ENTITY)`.
+Domain entities are persistent domain objects, and will typically be annotated with xref:refguide:applib:index/annotation/DomainObject.adoc[@DomainObject(nature=ENTITY)].
 
 Their persistence is handled by either xref:pjpa:ROOT:about.adoc[JPA/EclipseLink] or xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] ORM, with the ORM taking care of both lazy loading and also the persisting of modified ("dirty") objects.
 

@@ -1,8 +1,8 @@
+= Entities (JDO)
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
-== Entities (JDO)
 
 If the xref:pjdo:ROOT:about.adoc[JDO/DataNucleus object store] is to be used, then the domain entities should be annotated using JDO annotations.
 
@@ -10,7 +10,7 @@ This section shows a simple example.
 See the xref:pjdo:ROOT:about.adoc[JDO/DataNucleus object store] documentation for further information on annotating domain entities.
 
 
-=== Class definition
+== Class definition
 
 For the domain class itself, this will be `@javax.jdo.annotations.PersistenceCapable` annotation and probably the `@javax.jdo.annotations.DatastoreIdentity`, as well as others to define indices and queries.
 
@@ -51,7 +51,7 @@ It isn't necessary to include this annotation -- at least, not for entities -- b
 In particular, its strongly recommended that the `logicalTypeName` (which acts like an alias to the concrete domain class) is specified; note that it corresponds to the schema/table for DataNucleus' `@PersistenceCapable` annotation.
 
 
-=== Scalar Properties
+== Scalar Properties
 
 All domain entities will have some sort of mandatory key properties.
 Additional annotations are also required to define their scalar properties and relationships to other entities.
@@ -110,7 +110,7 @@ The ORM will create a no-arg constructor to allow domain entity to be rehydrated
 <.> Use `java.util.Comparator#comparing()` to implement `Comparable` interface.
 
 
-=== Queries
+== Queries
 
 When using JDO, it's also common for domain entities to have queries annotated on them.
 These are used by repository domain services to query for instances of the entity:
