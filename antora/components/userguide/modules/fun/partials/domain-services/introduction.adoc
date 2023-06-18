@@ -1,8 +1,55 @@
-[#domain-services]
-= Domain Services
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
+
+
+== Introduction
+
+_Domain services_ are (usually) singleton stateless services that provide additional functionality.
+Domain services consist of a set of logically grouped actions, and as such follow the same conventions as for entities.
+However, a service cannot have (persisted) properties, nor can it have (persisted) collections.
+
+A very common type of domain service is a repository, that is used to look up existing instances of a domain entity.
+For example, for the `Customer` entity there may be a `CustomerRepository`, while for `Order` entity there may be an `OrderRepository`.
+
+Similarly, entities might also have a corresponding factory service: a `CustomerFactory` or an `OrderFactory`; Evans' link:http://books.google.com/books/about/Domain_Driven_Design.html?id=hHBf4YxMnWMC[Domain Driven Design], draws a clear distinction between a factory (that creates object) and a repository (that is used to find existing objecpts).
+
+On the other hand, from an end-users' perspective the act of finding an existing object vs creating a new one are quite closely related.
+For this reason, in Apache Causeway it's therefore quite common to have a single domain service that acts as both a factory and a repository (and is usually called just a "repository").
+
+The behaviour of these services is rendered in various ways, though the most obvious is as the menu actions on the top-level menu bars in the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)]'s UI.
+
+Domain services can also be used for a number of other purposes:
+
+* to provide additional non-UI functionality; an example being to perform an address geocoding lookup against the google-maps API, or to perform some calculation, or attach a barcode, send an email etc
+
+* to act as a subscribers to the event bus, potentially influencing events fired by some other module (a key technique for decoupling large applications)
++
+This is discussed in more detail below, in the section on xref:userguide:fun:overview.adoc#events[events].
+
+* to implement an link:https://en.wikipedia.org/wiki/Service_provider_interface[SPI] of the Apache Causeway framework, most notably cross-cutting concerns such as security, command profiling, auditing and publishing.
+
+Domain objects of any type (entities, other services, view models, mixins) can also delegate to domain services; domain services are automatically injected into every other domain object.
+This injection of domain services into entities is significant: it allows business logic to be implemented in the domain entities, rather than have it "leach away" into supporting service layers.
+Said another way: it is the means by which Apache Causeway helps you avoid the anaemic domain model anti-pattern.
+
+Domain services are instantiated once and once only by the framework, and are used to centralize any domain logic that does not logically belong in a domain entity or value.
+
+[TIP]
+====
+Details on how to actually write a domain service (the programming model for domain services) is
+xref:userguide:fun:domain-services.adoc#domain-services[here].
+====
+
+=== Hexagonal Architecture
+
+It's worth extending the xref:userguide:fun:background-context-and-theory.adoc#hexagonal-architecture[Hexagonal Architecture] to show where domain services fit in:
+
+.The hexagonal architecture with API and SPI implementations
+image::core-concepts/philosophy/hexagonal-architecture-addons.png[width="700px"]
+
+The xref:extensions:ROOT:about.adoc[extensions] catalog provide SPI implementations of the common cross-cutting concerns.
+You can also write your own domain services as well, for example to interface with some external CMS system, say.
 
 
 _Domain services_ are (usually) singleton stateless services that provide additional functionality.
@@ -20,7 +67,7 @@ The `@javax.annotation.Priority` annotation is used to prioritize multiple servi
 This section looks at the programming model for writing your own domain services.
 
 
-== Nature of Service
+=== Nature of Service
 
 Apache Causeway uses Spring Boot to instantiate and manage the dependency injection of domain services.
 The vast majority of these are singleton (application) scoped; a smaller number are request scoped (using the xref:refguide:applib:index/annotation/InteractionScope.adoc[@InteractionScope] annotation).
@@ -145,7 +192,7 @@ There's no need to name the action parameters if the code is compiled using the 
 
 <.> the action implementation delegates to an injected repository.
 The framework can inject into not just other domain services but will also automatically into domain entities and view models.
-There is further discussion of service injection xref:userguide:fun:domain-entities-and-services.adoc#injecting-services[below].
+There is further discussion of service injection xref:userguide:fun:domain-services.adoc#injecting-services[below].
 
 <.> xref:refguide:applib:index/annotation/Action.adoc#restrictTo[Prototype] actions are rendered only in prototyping mode.
 A "list all" action such as this can be useful when exploring the domain with a small dataset.

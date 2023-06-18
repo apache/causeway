@@ -5,7 +5,7 @@
 :page-partial:
 
 
-A property is an instance variable of a domain object, of a scalar type, that holds some state in either a xref:userguide:fun:domain-entities-and-services.adoc#domain-entities[domain entity] or a xref:userguide:fun:view-models.adoc[view model].
+A property is an instance variable of a domain object, of a scalar type, that holds some state in either a xref:userguide:fun:domain-services.adoc#domain-entities[domain entity] or a xref:userguide:fun:view-models.adoc[view model].
 
 For example, a ``Customer``'s `firstName` would be a property, as would their `accountCreationDate` that they created their account.
 All properties have at least a "getter" method, and most properties have also a "setter" method (meaning that they are mutable).

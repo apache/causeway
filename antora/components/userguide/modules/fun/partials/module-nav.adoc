@@ -1,6 +1,6 @@
 
 * xref:userguide:fun:overview.adoc[10,000ft overview]
-* xref:userguide:fun:domain-entities-and-services.adoc[Domain Entities & Services]
+* xref:userguide:fun:domain-services.adoc[Domain Entities & Services]
 * xref:userguide:fun:object-members.adoc[Properties, Collections & Actions]
 * xref:userguide:fun:ui.adoc[UI Layout & Hints]
 * xref:userguide:fun:business-rules.adoc[Business Rules]

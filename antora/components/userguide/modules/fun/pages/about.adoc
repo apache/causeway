@@ -9,7 +9,7 @@ This user guide introduces you to the main concepts within Apache Causeway, so y
 It starts with a xref:userguide:fun:overview.adoc[10,000ft overview] of the main building blocks that make up the framework.
 The following pages then look at each of those building blocks in a little more detail:
 
-* xref:userguide:fun:domain-entities-and-services.adoc[Domain Entities & Services]
+* xref:userguide:fun:domain-services.adoc[Domain Entities & Services]
 +
 Domain entities hold persisted state, services are (typically) singletons that act upon or create entities.
 Business logic can reside in either.

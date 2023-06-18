@@ -80,7 +80,7 @@ The lifecycle events supported are:
 * *created*
 +
 Entity has just been instantiated.
-Note that this requires that the object is instantiated using the framework, see xref:userguide:fun:domain-entities-and-services.adoc#instantiating[here] for further discussion.
+Note that this requires that the object is instantiated using the framework, see xref:userguide:fun:domain-services.adoc#instantiating[here] for further discussion.
 
 * *loaded*
 +

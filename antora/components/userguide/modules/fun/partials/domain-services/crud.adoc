@@ -5,7 +5,7 @@
 :page-partial:
 
 
-This chapter shows the idioms for creating, reading, updating and deleting xref:userguide:fun:overview.adoc#domain-entities[domain entities].
+This section shows the idioms for creating, reading, updating and deleting xref:userguide:fun:domain-entities.adoc[domain entities] using domain services.
 The main domain services used for this are xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService] and xref:refguide:applib:index/services/factory/FactoryService.adoc[FactoryService].
 
 
@@ -100,7 +100,7 @@ Note that the `persist()` returns the object passed to it.
 
 It's worth being aware that the framework does _not_ eagerly persist the object.
 Rather, it queues up an internal command structure representing the object persistence request.
-This is then executed either at the end of the transaction, or if a xref:userguide:fun:domain-entities-and-services.adoc#finding[query is run], or if the internal queue is manually flushed using xref:refguide:applib:index/services/xactn/TransactionService.adoc[TransactionService]'s `flush()` method.
+This is then executed either at the end of the transaction, or if a xref:userguide:fun:domain-services.adoc#finding[query is run], or if the internal queue is manually flushed using xref:refguide:applib:index/services/xactn/TransactionService.adoc[TransactionService]'s `flush()` method.
 Flushing also happens when a repository query is executed, so that the pending persist operation is performed first.
 Generally therefore the lazy persistence approach works well enough.
 
@@ -304,7 +304,7 @@ repositoryService.remove(customer);
 
 It's worth being aware that (as for persisting new entities) the framework does _not_ eagerly delete the object.
 Rather, it queues up an internal command structure representing the object deletion request.
-This is then executed either at the end of the transaction, or if a xref:userguide:fun:domain-entities-and-services.adoc#finding[query is run], or if the internal queue is manually flushed using xref:refguide:applib:index/services/xactn/TransactionService.adoc[TransactionService]'s `flush()` method.
+This is then executed either at the end of the transaction, or if a xref:userguide:fun:domain-services.adoc#finding[query is run], or if the internal queue is manually flushed using xref:refguide:applib:index/services/xactn/TransactionService.adoc[TransactionService]'s `flush()` method.
 
 Alternatively, you can use:
 
