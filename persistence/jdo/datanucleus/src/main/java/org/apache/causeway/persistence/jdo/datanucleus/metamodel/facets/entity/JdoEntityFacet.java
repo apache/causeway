@@ -53,6 +53,7 @@ import org.apache.causeway.core.config.beans.PersistenceStack;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
+import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet.PrimaryKeyType;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.services.idstringifier.IdStringifierLookupService;
@@ -81,7 +82,7 @@ public class JdoEntityFacet
 extends FacetAbstract
 implements EntityFacet {
 
-    // self managed injections via getPersistenceManager or getTransactionalProcessor
+    // self managed injections via constructor ...
     @Inject private TransactionAwarePersistenceManagerFactoryProxy pmf;
     @Inject private TransactionService txService;
     @Inject private ObjectManager objectManager;
@@ -107,6 +108,9 @@ implements EntityFacet {
         _Assert.assertTrue(isPersistableType(entityClass),
                 ()->String.format("JdoEntityFacet initialized with type '%s' "
                         + "that is not Persistable (JDO)", entityClass));
+
+        // resolve injection points on self
+        getServiceInjector().injectServicesInto(this);
     }
 
     @Override
@@ -397,16 +401,10 @@ implements EntityFacet {
     // -- DEPENDENCIES
 
     private PersistenceManager getPersistenceManager() {
-        if(pmf==null) {
-            getFacetHolder().getServiceInjector().injectServicesInto(this);
-        }
         return pmf.getPersistenceManagerFactory().getPersistenceManager();
     }
 
     private TransactionalProcessor getTransactionalProcessor() {
-        if(txService==null) {
-            getFacetHolder().getServiceInjector().injectServicesInto(this);
-        }
         return txService;
     }
 
