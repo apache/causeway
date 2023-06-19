@@ -115,7 +115,6 @@
 			</activation>
 			<modules>
 				<module>antora</module>
-				<module>examples/demo</module>
 				<module>incubator</module>
 				<module>regressiontests</module>
 				<module>tooling</module>
@@ -133,7 +132,6 @@
 			</activation>
 			<modules>
 				<module>antora</module>
-				<module>examples/demo</module>
 				<module>regressiontests</module>
 				<module>tooling</module>
 			</modules>
@@ -174,41 +172,6 @@
 			</activation>
 			<modules>
 				<module>extensions/security/secman</module>
-			</modules>
-		</profile>
-
-		<profile>
-			<id>module-examples-demo-testing</id>
-			<activation>
-				<property>
-					<name>module-examples-demo-testing</name>
-				</property>
-			</activation>
-			<modules>
-				<module>examples/demo</module>
-			</modules>
-		</profile>
-		<profile>
-			<id>module-examples-demo-wicket</id>
-			<activation>
-				<property>
-					<name>module-examples-demo-wicket</name>
-				</property>
-			</activation>
-			<modules>
-				<module>examples/demo</module>
-			</modules>
-		</profile>
-		<profile>
-			<id>module-examples-demo-graphql</id>
-			<activation>
-				<property>
-					<name>module-examples-demo-graphql</name>
-				</property>
-			</activation>
-			<modules>
-				<module>incubator/viewers/graphql</module>
-				<module>examples/demo</module>
 			</modules>
 		</profile>
 
