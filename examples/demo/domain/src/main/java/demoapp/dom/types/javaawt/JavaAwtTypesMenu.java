@@ -28,7 +28,7 @@ import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
-import demoapp.dom.types.javaawt.images.JavaAwtBufferedImages;
+import demoapp.dom.types.javaawt.images.BufferedImages;
 
 @Named("demo.JavaAwtTypesMenu")
 @DomainService(
@@ -42,8 +42,8 @@ public class JavaAwtTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-image")
-    public JavaAwtBufferedImages bufferedImages(){
-        return new JavaAwtBufferedImages();
+    public BufferedImages bufferedImages(){
+        return new BufferedImages();
     }
 
 

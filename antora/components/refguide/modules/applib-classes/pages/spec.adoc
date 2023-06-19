@@ -17,7 +17,7 @@ The heart of the support for this pattern is the `Specification` interface:
 [source,java]
 ----
 public interface Specification {
-    public String satisfies(Object obj);  // <1>
+    String satisfies(Object obj);  // <1>
 }
 ----
 <1> if returns `null`, then the constraint is satisfies; otherwise returns the reason why the constraint has not been satisfied.

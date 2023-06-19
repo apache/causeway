@@ -116,11 +116,11 @@ A suitable error message is logged so that the issue can be easily diagnosed.
 ====
 
 
-include::prefixes/autoComplete.adoc[leveloffset=+1]
-include::prefixes/choices.adoc[leveloffset=+1]
-include::prefixes/default.adoc[leveloffset=+1]
-include::prefixes/disable.adoc[leveloffset=+1]
-include::prefixes/get.adoc[leveloffset=+1]
-include::prefixes/hide.adoc[leveloffset=+1]
-include::prefixes/set.adoc[leveloffset=+1]
-include::prefixes/validate.adoc[leveloffset=+1]
+include::partial$prefixes/autoComplete.adoc[leveloffset=+1]
+include::partial$prefixes/choices.adoc[leveloffset=+1]
+include::partial$prefixes/default.adoc[leveloffset=+1]
+include::partial$prefixes/disable.adoc[leveloffset=+1]
+include::partial$prefixes/get.adoc[leveloffset=+1]
+include::partial$prefixes/hide.adoc[leveloffset=+1]
+include::partial$prefixes/set.adoc[leveloffset=+1]
+include::partial$prefixes/validate.adoc[leveloffset=+1]

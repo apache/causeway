@@ -1,0 +1,164 @@
+[[custom-value-types]]
+= Custom Value Types
+
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+
+The framework provides a number of custom value types.
+Some of these are wrappers around a single value (eg `AsciiDoc` or `Password`) while others map onto multiple values (eg `Blob`).
+
+This section shows how to map each (and can be adapted for your own custom types or `@Embedded` values).
+
+
+== Mapping AsciiDoc
+
+The xref:refguide:valuetypes:index/asciidoc/applib/value/AsciiDoc.adoc[] value type is used for documentation written using the link:https://asciidoctor.org/[AsciiDoc] syntax:
+
+* In the domain entity, map `AsciiDoc` type using `@Column(jdbcType = "CLOB")`:
++
+[source,java]
+.MyEntity.java
+----
+public class MyEntity ... {
+
+    @Column(allowsNull = "false", jdbcType = "CLOB")
+    @Property
+    @Getter @Setter
+    private AsciiDoc documentation;
+
+}
+----
+
+* in the webapp module, register the JDO specific converter by:
+
+** adding a dependency to this module:
++
+[source,xml]
+.pom.xml
+----
+<dependency>
+    <groupId>org.apache.causeway.valuetypes</groupId>
+    <artifactId>causeway-valuetypes-asciidoc-persistence-jdo</artifactId>
+</dependency>
+----
+
+** and adding reference the corresponding module in the `AppManifest`:
++
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        ...
+        CausewayModuleValAsciidocPersistenceJdo.java
+        ...
+})
+public class AppManifest {
+}
+----
+
+== Mapping Markdown
+
+The xref:refguide:valuetypes:index/markdown/applib/value/Markdown.adoc[] value type is used for documentation written using markdown:
+
+* In the domain entity, map `Markdown` type using `@Column(jdbcType = "CLOB")`:
++
+[source,java]
+.MyEntity.java
+----
+public class MyEntity ... {
+
+    @Column(allowsNull = "false", jdbcType = "CLOB")
+    @Property
+    @Getter @Setter
+    private Markdown documentation;
+
+}
+----
+
+* in the webapp module, register the JDO specific converter by:
+
+** adding a dependency to this module:
++
+[source,xml]
+.pom.xml
+----
+<dependency>
+    <groupId>org.apache.causeway.valuetypes</groupId>
+    <artifactId>causeway-valuetypes-markdown-persistence-jdo</artifactId>
+</dependency>
+----
+
+** and adding reference the corresponding module in the `AppManifest`:
++
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        ...
+        CausewayModuleValMarkdownPersistenceJdo.java
+        ...
+})
+public class AppManifest {
+}
+----
+
+
+== Mapping Blobs and Clobs
+
+The JDO ObjectStore integration of DataNucleus ORM can automatically persist xref:refguide:applib:index/value/Blob.adoc[] and xref:refguide:applib:index/value/Clob.adoc[] values into multiple columns, corresponding to their constituent parts.
+
+=== Blobs
+
+To map a xref:refguide:applib:index/value/Blob.adoc[Blob], use:
+
+[source,java]
+.MyEntity.java
+----
+public class MyEntity ... {
+
+    @Persistent(defaultFetchGroup="false", columns = {
+            @Column(name = "pdf_name"),                 // <.>
+            @Column(name = "pdf_mimetype"),             // <.>
+            @Column(name = "pdf_bytes")                 // <.>
+    })
+    @Getter @Setter
+    private Blob pdf;
+
+}
+----
+<.> string, maps to a varchar in the database
+<.> string, maps to a varchar in the database
+<.> byte array, maps to a Blob or varbinary in the database
+
+
+=== Clobs
+
+To map a xref:refguide:applib:index/value/Clob.adoc[Clob], use:
+
+[source]
+.MyEntity.java
+----
+public class MyEntity ... {
+
+    @Persistent(defaultFetchGroup="false", columns = {
+            @Column(name = "xml_name"),                 // <.>
+            @Column(name = "xml_mimetype"),             // <.>
+            @Column(name = "xml_chars"                  // <.>
+                    , jdbcType = "CLOB"
+            )
+    })
+    @Getter @Setter
+    private Clob xml;
+
+}
+----
+
+<.> string, maps to a varchar in the database
+<.> string, maps to a varchar in the database
+<.> char array, maps to a Clob or varchar in the database
+
+

@@ -50,8 +50,6 @@ include::PropertyLayoutMultiLinePage.java[tags=layout-file]
 ----
 <cpt:property id="propertyUsingLayout" multiLine="5"/>
 ----
-// TODO: for some reason this doesn't include correctly in the app...
-//include::PropertyLayoutMultiLinePage.layout.xml[tags=layout-file]
 
 One advantage of the layout file over the annotation is that the layout file is dynamic: it can be modified and the changes reloaded in a running application.
 

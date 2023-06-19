@@ -76,10 +76,11 @@ public interface FacetFactory {
 
         /**
          * The class being introspected.
+         *
          * <p>
          *     In the context of method introspection, this isn't necessarily the same as the
          *     {@link java.lang.reflect.Method#getDeclaringClass() declaring class}
-         *     of the {@link #getMethod() method}; the method might have been inherited.
+         *     of the method being introspected; that method might have been inherited.
          * </p>
          */
         @Getter private final @NonNull Class<?> cls;

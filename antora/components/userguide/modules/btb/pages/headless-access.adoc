@@ -22,7 +22,7 @@ The xref:docs:starters:simpleapp.adoc[SimpleApp] starter app demonstrates the pa
 [source,java]
 ----
 @RestController
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 class CustomController {
 
     private final InteractionService interactionService;
@@ -31,30 +31,30 @@ class CustomController {
 
     @GetMapping("/custom/simpleObjects")
     List<SimpleObject> all() {
-        return callAuthenticated(newAuthentication(), () -> simpleObjects.listAll())
-                .optionalElseFail() // <.>
-                .orElse(Collections.emptyList()); // <.>
+        return call("sven", simpleObjects::listAll)
+                .orElse(Collections.<SimpleObject>emptyList());                                     // <3>
     }
 
-    private SimpleAuthentication newAuthentication() {
-        return SimpleAuthentication.validOf(UserMemento.ofName("sven")); // <.>
-    }
+    private <T> Optional<T> call(
+            final String username,
+            final Callable<T> callable) {
 
-    private <T> Result<T> callAuthenticated(
-            final Authentication authentication,
-            final Callable<T> task) {
-
-        return interactionFactory.callAuthenticated(
-                authentication,
-                () -> transactionalProcessor
-                      .callWithinCurrentTransactionElseCreateNew(task));
+        return interactionService.call(
+                InteractionContext.ofUserWithSystemDefaults(UserMemento.ofName(username)),          // <1>
+                () -> transactionalProcessor.callWithinCurrentTransactionElseCreateNew(callable))
+                .ifFailureFail()                                                                    // <2>
+                .getValue();
     }
 }
 ----
+<.> the context of this interaction: who, when and where
 <.> re-throws exception that has occurred, if any
 <.> handles null case, if required
-<.> a more sophisticated implementation could inspect the HTTP request
 
 The API described here is reasonably low-level, allowing code to interact very directly with the Apache Causeway metamodel and runtime.
 Such callers should be considered trusted: they do not (by default) honour any business rules eg implicit in the Causeway annotations or hide/disable/validate methods.
 
+== Another example: Seed services
+
+Another example is domain services that need to seed reference data during bootstrapping.
+An example of this can be found xref:userguide:ROOT:domain-services.adoc#instantiating[here].

@@ -28,7 +28,7 @@ import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
-import demoapp.dom.types.javanet.urls.JavaNetUrls;
+import demoapp.dom.types.javanet.urls.Url;
 
 @Named("demo.JavaNetTypesMenu")
 @DomainService(
@@ -42,8 +42,8 @@ public class JavaNetTypesMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-link")
-    public JavaNetUrls urls(){
-        return new JavaNetUrls();
+    public Url urls(){
+        return new Url();
     }
 
 

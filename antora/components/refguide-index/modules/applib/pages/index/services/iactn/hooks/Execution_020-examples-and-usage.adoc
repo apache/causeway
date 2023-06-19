@@ -21,7 +21,12 @@ This supports several use cases:
 
 * xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber]
 
+* xref:userguide:executionlog:about.adoc[] extension
++
+which subscribes to ``Execution``s and simply persists as xref:refguide:extensions:index/executionlog/applib/dom/ExecutionLogEntry.adoc[]s.
 
-// TODO: mention oubox publisher once ported over from incode-platform
-//xref:mappings:outbox-publisher:about.adoc[Outbox Publisher] mapping module, for example.
+* xref:userguide:executionoutbox:about.adoc[] extension
++
+which subscribes to ``Execution``s and (similarly) persists as xref:refguide:extensions:index/executionoutbox/applib/dom/ExecutionOutboxEntry.adoc[]s.
+However, the outbox extension also provides a REST API which allows outbox entries to be queried and consumed, in other words providing an implementation of the link:https://microservices.io/patterns/data/transactional-outbox.html[Outbox pattern].
 

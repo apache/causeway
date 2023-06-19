@@ -37,6 +37,5 @@ public class CausewayClobHolder_mixinProperty {
     public Clob prop() {
         return holder.getReadOnlyProperty();
     }
-
 }
 //end::class[]

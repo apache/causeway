@@ -18,6 +18,14 @@ to test Asciidoctor compliance.
 This document exercises many of the features of AsciiDoc to test the {library} implementation.
 ****
 
-TIP: If you want the output to look familiar, copy (or link) the AsciiDoc stylesheet, asciidoc.css, to the output directory.
+AsciiDoc supports five different types of admonitions.
 
-NOTE: Items marked with TODO are either not yet supported or a work in progress.
+NOTE: This is a note.
+
+TIP: This is a tip.
+
+CAUTION: This is a caution.
+
+WARNING: This is a warning.
+
+IMPORTANT: This is important!

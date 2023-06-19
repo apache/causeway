@@ -12,10 +12,7 @@ Apache Causeway also checks for this annotation, and if the `@PersistenceCapable
 [NOTE]
 ====
 Causeway parses the `@PersistenceCapable` annotation from the Java source code; it does not query the JDO metamodel.
-This means that it the `@PersistenceCapable` annotation must be used rather than the equivalent `<class>` link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/class_mapping.html[XML metadata].
-
-Moreover, while JDO/DataNucleus will recognize annotations on either the field or the getter method, Apache Causeway (currently) only inspects the getter method.
-Therefore ensure that the annotation is placed there.
+This means that it the `@PersistenceCapable` annotation must be used rather than the equivalent `<class>` link:https://www.datanucleus.org/products/accessplatform_6_0/jdo/metadata_xml.html[XML metadata].
 ====
 
 This value is used internally to generate a string representation of an objects identity (the `Oid`).

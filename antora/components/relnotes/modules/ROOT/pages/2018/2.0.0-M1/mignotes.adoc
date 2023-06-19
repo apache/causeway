@@ -4,13 +4,12 @@
 :page-partial:
 
 
-include::mignotes/meta-annotations.adoc[leveloffset=+1]
-include::mignotes/updated-annotations.adoc[leveloffset=+1]
-include::mignotes/removed-annotations.adoc[leveloffset=+1]
-include::mignotes/moved-types.adoc[leveloffset=+1]
-include::mignotes/removed-configuration-properties.adoc[leveloffset=+1]
-include::mignotes/updated-classes.adoc[leveloffset=+1]
-include::mignotes/removed-types.adoc[leveloffset=+1]
-include::mignotes/legacy-modules.adoc[leveloffset=+1]
-include::mignotes/other-changes.adoc[leveloffset=+1]
+include::partial$2018/2.0.0-M1/mignotes/meta-annotations.adoc[leveloffset=+1]
+include::partial$2018/2.0.0-M1/mignotes/updated-annotations.adoc[leveloffset=+1]
+include::partial$2018/2.0.0-M1/mignotes/removed-annotations.adoc[leveloffset=+1]
+include::partial$2018/2.0.0-M1/mignotes/moved-types.adoc[leveloffset=+1]
+include::partial$2018/2.0.0-M1/mignotes/removed-configuration-properties.adoc[leveloffset=+1]
+include::partial$2018/2.0.0-M1/mignotes/updated-classes.adoc[leveloffset=+1]
+include::partial$2018/2.0.0-M1/mignotes/removed-types.adoc[leveloffset=+1]
+include::partial$2018/2.0.0-M1/mignotes/other-changes.adoc[leveloffset=+1]
 

@@ -31,19 +31,15 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.factory.FactoryService;
 
+import demoapp.dom.featured.customui.GeoapifyClient;
 import demoapp.dom.featured.customui.WhereInTheWorldPage;
+import demoapp.dom.featured.customui.Zoom;
 import demoapp.dom.featured.layout.tooltip.DemoItem;
-
+import demoapp.dom.featured.layout.tooltip.TooltipPage;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-
-import demoapp.dom.featured.customui.GeoapifyClient;
-import demoapp.dom.featured.customui.Zoom;
-import demoapp.dom.featured.layout.tooltip.TooltipPage;
-import demoapp.dom.featured.layout.tabs.TabDemo;
 
 @Named("demo.FeaturedMenu")
 @DomainService(
@@ -69,17 +65,6 @@ public class FeaturedMenu {
         demo.getCollection().add(DemoItem.of("third"));
 
         return demo;
-    }
-
-
-    @Action
-    @ActionLayout(
-            cssClassFa="fa-bolt",
-            describedAs="Opens the Tabs-Demo page.",
-            hidden = Where.EVERYWHERE               // TODO: not sure this is particularly valuable
-    )
-    public TabDemo tabDemo(){
-        return factoryService.viewModel(new TabDemo());
     }
 
 

@@ -18,6 +18,8 @@
  */
 package demoapp.dom.types.javaawt.images.jdo;
 
+import java.awt.image.BufferedImage;
+
 import jakarta.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
@@ -28,18 +30,13 @@ import javax.jdo.annotations.PersistenceCapable;
 import org.springframework.context.annotation.Profile;
 
 import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.annotation.Title;
-
-import java.awt.image.BufferedImage;
-
-import lombok.Getter;
-import lombok.Setter;
 
 import demoapp.dom.types.javaawt.images.persistence.BufferedImageEntity;
+import lombok.Getter;
+import lombok.Setter;
 
 @Profile("demo-jdo")
 //tag::class[]
@@ -53,33 +50,23 @@ public class BufferedImageJdo                                          // <.>
 //end::class[]
     public BufferedImageJdo(final BufferedImage initialValue) {
         this.readOnlyProperty = initialValue;
-        this.readWriteProperty = initialValue;
+    }
+
+    public String title() {
+        return "java.awt.image.BufferedImage JPA entity";
     }
 
 //tag::class[]
-    @Title(prepend = "BufferedImage JDO entity: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @Column(allowsNull = "false")                                               // <.>
     @Getter @Setter
     private BufferedImage readOnlyProperty;
-
-    @Property(editing = Editing.ENABLED)                                        // <.>
-    @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
-    @Column(allowsNull = "false")
-    @Getter @Setter
-    private BufferedImage readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
     @Column(allowsNull = "true")                                                // <.>
     @Getter @Setter
     private BufferedImage readOnlyOptionalProperty;
-
-    @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
-    @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
-    @Column(allowsNull = "true")
-    @Getter @Setter
-    private BufferedImage readWriteOptionalProperty;
 
 }
 //end::class[]

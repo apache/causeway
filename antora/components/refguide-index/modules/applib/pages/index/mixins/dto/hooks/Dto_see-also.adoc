@@ -53,8 +53,8 @@ public class ToDoItemV1_1 implements Dto {                          // <.>
 <.> again, see discussion on xref:#versioning[versioning]
 <.> again, see discussion on xref:#versioning[versioning]
 <.> simple scalar properties
-<.> reference to a persistent entity; discussed xref:userguide:fun:view-models.adoc#referencing-domain-entities[here]
-<.> reference to a collection of persistent entities; again discussed xref:userguide:fun:view-models.adoc#referencing-domain-entities[here]
+<.> reference to a persistent entity; discussed xref:userguide:ROOT:view-models.adoc#referencing-domain-entities[here]
+<.> reference to a collection of persistent entities; again discussed xref:userguide:ROOT:view-models.adoc#referencing-domain-entities[here]
 
 
 

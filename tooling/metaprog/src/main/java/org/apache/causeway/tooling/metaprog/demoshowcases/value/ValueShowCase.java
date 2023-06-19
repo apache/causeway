@@ -92,17 +92,18 @@ public enum ValueShowCase {
             .causewaySpecific(true)
             .templateVariant(TemplateVariant.DEFAULT)
     ),
-    JAVAAWTBUFFEREDIMAGE(Config.builder()
-            .showcaseName("BufferedImage")
-            .javaPackage("demoapp.dom.types.javaawt.images")
-            .showcaseValueFullyQualifiedType("java.awt.image.BufferedImage")
-            .showcaseValueSemantics("org.apache.causeway.core.metamodel.valuesemantics.BufferedImageValueSemantics")
-            .frameworkSupportForJpa(true)
-            .frameworkSupportForJdo(true)
-            .frameworkSupportForJaxb(true)
-            .templates(Template.REGULAR_SET_NO_SAMPLES)
-            .templateVariant(TemplateVariant.DEFAULT)
-    ),
+    // removed, due to https://issues.apache.org/jira/browse/CAUSEWAY-3487 ... no support for editable properties, view model or title.
+//    JAVAAWTBUFFEREDIMAGE(Config.builder()
+//            .showcaseName("BufferedImage")
+//            .javaPackage("demoapp.dom.types.javaawt.images")
+//            .showcaseValueFullyQualifiedType("java.awt.image.BufferedImage")
+//            .showcaseValueSemantics("org.apache.causeway.core.metamodel.valuesemantics.BufferedImageValueSemantics")
+//            .frameworkSupportForJpa(true)
+//            .frameworkSupportForJdo(true)
+//            .frameworkSupportForJaxb(true)
+//            .templates(Template.REGULAR_SET_NO_SAMPLES)
+//            .templateVariant(TemplateVariant.DEFAULT)
+//    ),
     JAVAMATHBIGDECIMAL(Config.builder()
             .showcaseName("BigDecimal")
             .javaPackage("demoapp.dom.types.javamath.bigdecimals")
@@ -118,7 +119,7 @@ public enum ValueShowCase {
             .templateVariant(TemplateVariant.DEFAULT)
     ),
     JAVANETURL(Config.builder()
-            .showcaseName("URLs")
+            .showcaseName("Url")
             .javaPackage("demoapp.dom.types.javanet.urls")
             .showcaseValueFullyQualifiedType("java.net.URL")
             .showcaseValueSemantics("org.apache.causeway.core.metamodel.valuesemantics.URLValueSemantics")

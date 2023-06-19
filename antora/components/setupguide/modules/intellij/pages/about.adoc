@@ -122,14 +122,19 @@ If the app uses xref:pjdo:ROOT:about.adoc[JDO], then Datanucleus enhancer should
 
 === Running the App (JPA)
 
+The screenshot below shows a run configuration for JPA:
+
+image::110-running-the-app/012-run-configuration-jpa.png[width=1000]
+
+
 With JPA, the classes need to be "weaved" in order to support lazy loading and (more performant) dirty object tracking.
 This is typically done dynamically at runtime, using a Java agent.
-The xref:docs:starters:simpleapp.adoc[SimpleApp] and xref:docs:starters:helloworld.adoc[HelloWorld] starter apps demonstrate this, bundling the `spring-instrument-5.3.5.jar` file.
+The xref:docs:starters:simpleapp.adoc[SimpleApp] and xref:docs:starters:helloworld.adoc[HelloWorld] starter apps demonstrate this, bundling the `spring-instrument.jar` file.
 To run, use:
 
 [source,bash]
 ----
--javaagent:lib/spring-instrument-5.3.5.jar
+-javaagent:lib/spring-instrument.jar
 ----
 
 as a JVM argument (where the system properties also are located.)
@@ -147,18 +152,28 @@ First, set up the run configuration to do the enhance:
 .Run Configuration to enhance the entities
 image::110-running-the-app/005-datanucleus-enhance-run-configuration.png[width="700px"]
 
-TIP: Check "work offline" (on the General tab) to speed this up slightly.
+TIP: Check "work offline" (in Maven Options) to speed this up slightly.
 
 [WARNING]
 ====
-If on Windows you encounter a "The command line is too long" error, then set '-Dfork=false' as a VM option (on the Runner tab).
+If on Windows you encounter "The command line is too long", then set '-Dfork=false' as a VM option, in Java options:
+
+image::110-running-the-app/006-datanucleus-enhance-run-configuration-fork-false.png[width="400px"]
 ====
 
-Then, set up the run configuration for the app.
-Note how it runs the "enhance" configuration first:
+Then, set up the run configuration for the app:
 
 .Run Configuration to run the app
 image::110-running-the-app/010-run-configuration.png[width="700px"]
+
+Note how it runs the "enhance" configuration first, specified using "Modify options".
+
+Because we are using Maven to enhance the app, build the app at least once from the Maven command line:
+
+[source,bash]
+----
+mvn install -DskipTests -T1C
+----
 
 You should now be able to run the app using `Run > Run Configuration`.
 The same configuration can also be used to debug the app if you so need.
@@ -169,7 +184,7 @@ The same configuration can also be used to debug the app if you so need.
 ****
 Rather than statically enhancing the classes, an alternative -- at least in theory -- is to enhance the classes dynamically, at runtime.
 
-This plugin (not tested) purports to support this: link:https://plugins.jetbrains.com/plugin/11119-datanucleus-runtime-enhancement[].
+There is an link:https://plugins.jetbrains.com/plugin/11119-datanucleus-runtime-enhancement[IntelliJ plugin] (not tested) that purports to support this, but (at time of writing) is out of date and only supports older versions of IntelliJ.
 ****
 
 
@@ -179,14 +194,9 @@ The easiest way to run the unit tests is just to right click on the relevant pac
 Hopefully your tests will pass (!).
 
 .Running Unit Tests from Project Explorer
-image::110-running-the-app/030-running-unit-tests.png[width="300px"]
+image::110-running-the-app/030-running-unit-tests.png[width="500px"]
 
-As a side-effect, this will create a run configuration, very similar to the one we manually created for the main app:
-
-.Unit Tests Run Configuration
-image::110-running-the-app/040-running-unit-tests-run-configuration.png[width="700px"]
-
-Thereafter, you should run units by selecting this configuration (if you use the right click approach you'll end up with lots of run configurations, all similar).
+As a side-effect, this will create a run configuration, very similar to the one we manually created for the main app.
 
 === Running the Integration Tests
 
@@ -195,17 +205,19 @@ Integration tests can be run in the same way as unit tests.
 One approach is to initially run the tests use the right click on the `integtests` module:
 
 .Running Integ Tests from Project Explorer
-image::110-running-the-app/045-running-integ-tests.png[width="400px"]
+image::110-running-the-app/045-running-integ-tests.png[width="800px"]
 
+There are also tests in the `webapp-tests` module:
+
+image::110-running-the-app/046-running-integ-tests-webapp-tests.png[width=800]
 
 If the app uses JDO, then the tests might fail because the entities won't have been enhanced.
-However, we can then easily update the run configuration to run the datanucleus enhancer goal (same as when running the application):
+However, we can then easily update the automatically-created run configuration to run the datanucleus enhancer goal (same as when running the application):
 
 .Integration Tests Run Configuration
 image::110-running-the-app/050-running-integration-tests-run-configuration.png[width="700px"]
 
-
-CAUTION: Make sure that the `search for tests` radio button is set to `In single module`.
-If this radio button is set to one of the other options then you may obtain class loading issues.
+// CAUTION: Make sure that the `search for tests` radio button is set to `In single module`.
+// If this radio button is set to one of the other options then you may obtain class loading issues.
 
 

@@ -1,0 +1,43 @@
+= Introduction
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+_Domain services_ are (usually) singleton stateless services that provide act upon xref:domain-entities.adoc[entities] or xref:view-models.adoc[view models].
+
+Domain services fall into two main categories: those that part of the Causeway metamodel, and those that are not.
+
+* For the former, their actions (which follow the same conventions as other domain objects) will typically be rendered either in the menu; or they might be surfaced through the REST API.
+However, a service can only declare actions; it cannot have properties nor can it have collections.
+
+* For the latter, these are often repositories or factories.
+Evans' link:http://books.google.com/books/about/Domain_Driven_Design.html?id=hHBf4YxMnWMC[Domain Driven Design], draws a clear distinction between a factory (that creates object) and a repository (that is used to find existing objects).
+For example, for the `Customer` entity there may be a `CustomerRepository` and an `CustomerFactory`
+or an `OrderFactory`; .
+
+On the other hand, from an end-users' perspective the act of finding an existing object vs creating a new one are quite closely related.
+For this reason, in Apache Causeway it's therefore quite common to have a single menu domain service that delegates programmatically to other factory or repository services.
+
+Sometimes though a domain service might be holders of business logic that for whatever reason you want to keep outside an entity; perhaps it easier to test that way.
+An example might be `InvoiceCalculationServices`.
+
+The behaviour of these services is rendered in various ways, though the most obvious is as the menu actions on the top-level menu bars in the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)]'s UI.
+
+Domain services can also be used for a number of other purposes:
+
+* to provide additional non-UI functionality; an example being to perform an address geocoding lookup against the google-maps API, or to perform some calculation, or attach a barcode, send an email etc
+
+* to act as a subscribers to the event bus, potentially influencing events fired by some other module (a key technique for decoupling large applications)
++
+This is discussed in more detail below, in the section on xref:userguide:ROOT:events.adoc[events].
+
+* to implement an link:https://en.wikipedia.org/wiki/Service_provider_interface[SPI] of the Apache Causeway framework, most notably cross-cutting concerns such as security, command profiling, auditing and publishing.
+
+Domain objects of any type (entities, other services, view models, mixins) can also delegate to domain services; domain services are automatically injected into every other domain object.
+This injection of domain services into entities is significant: it allows business logic to be implemented in the domain entities, rather than have it "leach away" into supporting service layers.
+Said another way: it is the means by which Apache Causeway helps you avoid the anaemic domain model anti-pattern.
+
+Domain services are instantiated once and once only by the framework, and are used to centralize any domain logic that does not logically belong in a domain entity or value.
+
+

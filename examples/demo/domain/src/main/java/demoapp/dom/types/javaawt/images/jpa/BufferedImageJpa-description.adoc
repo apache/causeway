@@ -10,7 +10,6 @@ include::BufferedImageJpa.java[tags=class]
 <.> required property as defined to JPA.
 +
 Apache Causeway assumes properties are mandatory, so no additional annotation is required.
-<.> directly editable property as defined to Apache Causeway
 <.> optional property as defined to Apache Causeway
 <.> optional property as defined to JPA
 

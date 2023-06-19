@@ -49,14 +49,14 @@ import demoapp.dom.types.causeway.blobs.persistence.CausewayBlobEntity;
 @DomainObject
 public class CausewayBlobJdo                                            // <.>
         extends CausewayBlobEntity {
-
+    // ...
 //end::class[]
     public CausewayBlobJdo(final Blob initialValue) {
         this.readOnlyProperty = initialValue;
         this.readWriteProperty = initialValue;
     }
 
-//tag::class[]
+//tag::property[]
     @Title(prepend = "Blob JDO entity: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @Persistent(defaultFetchGroup="false", columns = {              // <.>
@@ -66,8 +66,9 @@ public class CausewayBlobJdo                                            // <.>
     })
     @Getter @Setter
     private Blob readOnlyProperty;
+//end::property[]
 
-    @Property(editing = Editing.ENABLED,                            // <.>
+    @Property(editing = Editing.ENABLED,
             optionality = Optionality.MANDATORY)
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @Persistent(defaultFetchGroup="false", columns = {
@@ -78,6 +79,7 @@ public class CausewayBlobJdo                                            // <.>
     @Getter @Setter
     private Blob readWriteProperty;
 
+//tag::optional-property[]
     @Property(optionality = Optionality.OPTIONAL)                   // <.>
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
     @Persistent(defaultFetchGroup="false", columns = {
@@ -90,6 +92,7 @@ public class CausewayBlobJdo                                            // <.>
     })
     @Getter @Setter
     private Blob readOnlyOptionalProperty;
+//end::optional-property[]
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
@@ -104,5 +107,6 @@ public class CausewayBlobJdo                                            // <.>
     @Getter @Setter
     private Blob readWriteOptionalProperty;
 
+//tag::class[]
 }
 //end::class[]

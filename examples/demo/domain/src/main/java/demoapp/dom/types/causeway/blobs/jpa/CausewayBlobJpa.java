@@ -58,18 +58,18 @@ import demoapp.dom.types.causeway.blobs.persistence.CausewayBlobEntity;
 @NoArgsConstructor
 public class CausewayBlobJpa
         extends CausewayBlobEntity {
-
+    // ...
 //end::class[]
     public CausewayBlobJpa(final Blob initialValue) {
         setReadOnlyProperty(initialValue);
         setReadWriteProperty(initialValue);
     }
 
-//tag::class[]
     @Id
     @GeneratedValue
     private Long id;
 
+//tag::field[]
     @AttributeOverrides({
         @AttributeOverride(name="name",    column=@Column(name="readOnlyProperty_name")),
         @AttributeOverride(name="mimeType",column=@Column(name="readOnlyProperty_mimeType")),
@@ -77,7 +77,9 @@ public class CausewayBlobJpa
     })
     @Embedded
     private BlobJpaEmbeddable readOnlyProperty;
+//end::field[]
 
+//tag::accessors[]
     @Override
     @Title(prepend = "Blob JPA entity: ")
     @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
@@ -88,6 +90,7 @@ public class CausewayBlobJpa
     public void setReadOnlyProperty(final Blob readOnlyProperty) {
         this.readOnlyProperty = BlobJpaEmbeddable.fromBlob(readOnlyProperty);
     }
+//end::accessors[]
 
     @AttributeOverrides({
             @AttributeOverride(name="name",    column=@Column(name="readWriteProperty_name")),
@@ -98,7 +101,7 @@ public class CausewayBlobJpa
     private BlobJpaEmbeddable readWriteProperty;
 
     @Override
-    @Property(editing = Editing.ENABLED)                            // <.>
+    @Property(editing = Editing.ENABLED)
     @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     public Blob getReadWriteProperty() {
         return BlobJpaEmbeddable.toBlob(readWriteProperty);
@@ -118,7 +121,7 @@ public class CausewayBlobJpa
     private BlobJpaEmbeddable readOnlyOptionalProperty;
 
     @Override
-    @Property(optionality = Optionality.OPTIONAL)                   // <.>
+    @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
     public Blob getReadOnlyOptionalProperty() {
         return BlobJpaEmbeddable.toBlob(readOnlyOptionalProperty);
@@ -149,5 +152,6 @@ public class CausewayBlobJpa
     public void setReadWriteOptionalProperty(final Blob readWriteOptionalProperty) {
         this.readWriteOptionalProperty = BlobJpaEmbeddable.fromBlob(readWriteOptionalProperty);
     }
+//tag::class[]
 }
 //end::class[]

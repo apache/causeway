@@ -35,6 +35,5 @@ public class CausewayClobHolder_actionReturning {
     public Clob act() {
         return holder.getReadOnlyProperty();
     }
-
 }
 //end::class[]

@@ -493,11 +493,6 @@ msgid "New To Do Item"
 msgstr ""
 
 
-#: org.apache.causeway.applib.services.layout.LayoutService$Style#NORMALIZED
-msgid "Normalized"
-msgstr ""
-
-
 #: org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#notYetCompleted()
 msgid "Not Yet Completed"
 msgstr ""

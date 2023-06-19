@@ -29,14 +29,8 @@ public interface BufferedImageHolder {
     BufferedImage getReadOnlyProperty();
     void setReadOnlyProperty(BufferedImage c);
 
-    BufferedImage getReadWriteProperty();
-    void setReadWriteProperty(BufferedImage c);
-
     BufferedImage getReadOnlyOptionalProperty();
     void setReadOnlyOptionalProperty(BufferedImage c);
-
-    BufferedImage getReadWriteOptionalProperty();
-    void setReadWriteOptionalProperty(BufferedImage c);
 
 }
 //end::class[]

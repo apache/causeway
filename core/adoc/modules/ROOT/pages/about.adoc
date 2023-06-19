@@ -54,9 +54,10 @@ That said, Spring Boot is responsible for instantiating domain service instances
 There are also two `core` modules not listed above, because their documentation are both part of the end-user docs:
 
 * the docs for the `core/config` module consistitute the xref:refguide:config:about.adoc[]
-* the docs for the `core/security` module consistitute  the xref:security:ROOT:about.adoc[Security Guide]
+* the docs for the `core/security` module consistitute the xref:security:ROOT:about.adoc[Security Guide]
 
 
+[#generated-index]
 == Generated Index
 
 This is probably a good place as any to mention that the documentation/website procedures include tooling to automatically create Asciidoc reference documentation for _any_ Java class in the codebase.

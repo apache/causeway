@@ -3,6 +3,9 @@
 The framework has built-in support for a number of temporal types, including `java.time.ZonedDateTime`.
 These can be used either in entities or view models.
 
+WARNING: it is currently not possible to enter values of this type; being tracked under https://issues.apache.org/jira/browse/CAUSEWAY-3489[CAUSEWAY-3489].
+
+
 == How this demo works
 
 On the left hand side is a collection of entities that uses the `ZonedDateTime` datatype.

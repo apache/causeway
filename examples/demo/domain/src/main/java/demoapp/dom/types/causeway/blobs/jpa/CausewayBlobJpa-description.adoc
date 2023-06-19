@@ -1,24 +1,37 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-[WARNING]
-==== 
-TODO this yet is just a copy from JDO
-====
+Apache Causeway supports JPA persistence of the link:https://causeway.apache.org/refguide/2.0.0-RC1/applib/index/value/Blob.html[Blob] type using the link:https://causeway.apache.org/refguide/2.0.0-RC1/persistence/index/jpa/applib/types/BlobJpaEmbeddable.html[BlobJpaEmbeddable] utility class.
+This is declared as a persisted field, while getters and setters expose the `Blob` to the user interface.
 
-Apache Causeway implements the relevant JDO extension points to allow the `Blob` type to be persisted.
-To do so correctly, it requires that the column names for the three constituent parts of a `Blob` are specified using `@Column`:
+== About this demo
 
+On the left hand side of this page, four `Blob` properties are defined for a JPA entity, along with a variety of contributed properties and action.
+The properties can variously be edited directly or through actions.
+
+In terms of code:
+
+* the entity class is:
++
 [source,java]
 ----
 include::CausewayBlobJpa.java[tags=class]
 ----
-<.> a no-arg constructor is introduced by JDO enhancer
-<.> required property as defined to JDO/DataNucleus.
+
+* each field is defined of type `BlobJpaEmbeddable`, mapping the 3 attributes to separate columns.
+For example, the `readOnlyProperty` is mapped using:
 +
-Apache Causeway assumes properties are mandatory, so no additional annotation is required.
-<.> directly editable property as defined to Apache Causeway
-<.> optional property as defined to Apache Causeway
-<.> optional property as defined to JDO/DataNucleus
+[source,java,indent=0]
+----
+include::CausewayBlobJpa.java[tags=field]
+----
 
+* the corresponding getter and setters marshal the `Blob` to and from the user interface:
++
+[source,java,indent=0]
+----
+include::CausewayBlobJpa.java[tags=accessors]
+----
 
-include::../CausewayBlobs-common.adoc[]
+The remainder of this page describes the mixin actions and label placement for this datatype.
+
+include::../CausewayBlobs-common.adoc[leveloffset=+1]

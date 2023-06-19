@@ -4,15 +4,76 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
-This guide introduces the xref:userguide:fun:concepts-patterns.adoc[core concepts] and provides an xref:userguide:fun:overview.adoc[overview] of the building blocks of Apache Causeway applications.
+This user guide aims to get you developing Causeway applications as quickly as possible.
 
-It next describes the basics of the Apache Causeway' programming model: xref:userguide:fun:domain-entities-and-services.adoc[domain entities and services], xref:userguide:fun:object-members.adoc[object members], xref:userguide:fun:ui.adoc[UI layout and hints], xref:userguide:fun:business-rules.adoc[business rules] and xref:userguide:fun:drop-downs-and-defaults.adoc[drop downs and defaults].
-This includes a discussion on xref:userguide:fun:domain-entities-and-services.adoc#object-management-crud[the basic CRUD operations].
+[TIP]
+.Quick start resources
+====
+If you prefer learn by _doing_, you can use the xref:docs:starters:helloworld.adoc[] and xref:docs:starters:simpleapp.adoc[] starter apps to get going in a few minutes.
+Also check out the xref:docs:demo:about.adoc[] which provides a working example of much of the Causeway programming model; you can access a live instance link:https://demo-wicket-jpa-snapshot.apps.causeway.dev/[here].
+====
+
+This guide starts with a xref:userguide:ROOT:overview.adoc[10,000ft overview] of the main building blocks that make up the framework.
+The following pages then look at each of those building blocks in a little more detail:
+
+* xref:userguide:ROOT:domain-entities.adoc[Domain Entities]
++
+Domain entities hold persisted state of domain objects such as `Customer` or `Order`.
+They can and often do also include business logic, encapsulating the manipulations of their state.
+
+* xref:userguide:ROOT:domain-services.adoc[Domain Services]
++
+Domain services are (typically) singletons that act upon entities.
+Common implementations are repositories (to find domain entities) or factories (to create entities), but they might also be holders of business logic that for whatever reason you want to keep outside an entity; perhaps it easier to test that way.
+An example might be `InvoiceCalculationServices`.
+
+* xref:userguide:ROOT:object-members.adoc[Properties, Collections & Actions]
++
+Properties and collections are the state that is maintained by domain entities (above), while actions can reside on either a domain entity or domain service.
+The framework automatically exposes this state and behaviour in the user interface (unless you otherwise suppress it).
+
+* xref:userguide:ROOT:ui.adoc[UI Layout & Hints]
++
+As noted above, Apache Causeway applications do not require you to write code to render your domain objects in the UI; the framework provides a generic UI.
+But the framework _does_ allow you to provide optional hints so that the domain objects appear in the UI the way that you want them to appear.
+
+* xref:userguide:ROOT:business-rules.adoc[Business Rules]
++
+The framework has a well-defined set of conventions for expressing certain business rule contracts, either declaratively (framework-provided annotations) or imperative (supporting methods following a naming convention).
+
+* xref:userguide:ROOT:drop-downs-and-defaults.adoc[Drop-downs and Defaults]
++
+To streamline the user experience, yuo can provide choices for action parameters (drop-downs) as well as default values.
+
+* xref:userguide:ROOT:view-models.adoc[View Models]
++
+Not every domain object is an entity.
+We can also define view models; you might consider these as part of the "application" layer.
+These can also hold state, but their state is temporary (per user) rather than persistent.
+Sometimes a view model is a projection of some an underlying entity/ies for a particular use case (eg `DocumentAndCommunication`; sometimes they aggregate data from multiple locations (eg a `CustomerDashboard`), sometimes they manage a business process (eg `PaymentBatchManager`).
+
+* xref:userguide:ROOT:modules.adoc[Modules], xref:userguide:ROOT:mixins.adoc[Mixins] and xref:userguide:ROOT:events.adoc[Events]
++
+Causeway emphasises rapid development and a fast feedback loop with your domain expert.
+Modularity is key to preserving that feedback loop as your application's capability grows.
++
+Mixins provide a powerful mechanism to decouple the various concerns within your application, allowing even the largest of monolith applications to keep modular.
++
+Events are broadcast on an intra-process event bus, allowing subscribers in other modules to influence the domain logic being executed, hook into persistence or to refine the UI.
+
+The first part of the user guide ends with a look at the xref:userguide:ROOT:background-context-and-theory.adoc[background, context and theory] that underpin the framework: domain driven design, the naked objects pattern, the hexagonal architecture and aspect orientation to name a few.
+
+The second part of the user guide moves xref:userguide:btb:about.adoc[], exploring a number of more advanced topics.
+
+The user guide finishes with a set of extensions that provide additional capabilities to the core framework.
 
 
-It then moves on to discuss some slightly more advanced areas of the programming model: xref:userguide:fun:meta-annotations.adoc[meta-annotations], xref:userguide:fun:view-models.adoc[view models] and xref:userguide:fun:mixins.adoc[mixins].
-These all allow you to develop more sophisticated applications, while remaining maintainable and elegant.
-There is also a discussion on how to structure your application using xref:userguide:fun:modules.adoc[modules].
+* xref:userguide:ROOT:value-types.adoc[Value types] and xref:userguide:ROOT:meta-annotations.adoc[Meta-annotations]
++
+Both domain entities and view models are built from values.
+The framework does (of course) have built-in support for primitives, strings, dates and so on.
+But it also allows you to define your own custom value types, either scalar or composite.
 
-Finally the xref:userguide:btb:about.adoc[Beyond the Basics] tackles some more advanced topics.
++
+Meta-annotations provide an alternative way to factor out common rules, also extending the vocabulary (ubiquitous language) into your app.
 

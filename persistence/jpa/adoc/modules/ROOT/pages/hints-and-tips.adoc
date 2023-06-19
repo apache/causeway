@@ -6,4 +6,4 @@
 
 This page provides some solutions for problems we've encountered ourselves or have been raised on the Apache Causeway mailing lists.
 
-include::pjdo:ROOT:page$hints-and-tips/tracing-sql-statements.adoc[leveloffset=+1]
+include::pjdo:ROOT:partial$hints-and-tips/tracing-sql-statements.adoc[leveloffset=+1]

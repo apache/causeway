@@ -33,7 +33,7 @@ If null or no such layout, then uses to the default layout.
 
 
 
-include::ui-hints/cssClass.adoc[leveloffset=+1]
-include::ui-hints/iconName.adoc[leveloffset=+1]
-include::ui-hints/layout.adoc[leveloffset=+1]
-include::ui-hints/title.adoc[leveloffset=+1]
+include::partial$ui-hints/cssClass.adoc[leveloffset=+1]
+include::partial$ui-hints/iconName.adoc[leveloffset=+1]
+include::partial$ui-hints/layout.adoc[leveloffset=+1]
+include::partial$ui-hints/title.adoc[leveloffset=+1]

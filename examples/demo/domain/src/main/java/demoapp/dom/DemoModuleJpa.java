@@ -72,7 +72,7 @@ import demoapp.dom.featured.causewayext.cal.jpa.CausewayCalendarEventJpa;
 import demoapp.dom.types.causewayval.asciidocs.jpa.CausewayAsciiDocJpa;
 import demoapp.dom.types.causewayval.markdowns.jpa.CausewayMarkdownJpa;
 import demoapp.dom.types.causewayval.vegas.jpa.CausewayVegaJpa;
-import demoapp.dom.types.javaawt.images.jpa.JavaAwtBufferedImageJpa;
+import demoapp.dom.types.javaawt.images.jpa.BufferedImageJpa;
 import demoapp.dom.types.javalang.booleans.jpa.WrapperBooleanJpa;
 import demoapp.dom.types.javalang.bytes.jpa.WrapperByteJpa;
 import demoapp.dom.types.javalang.characters.jpa.WrapperCharacterJpa;
@@ -83,17 +83,17 @@ import demoapp.dom.types.javalang.integers.jpa.WrapperIntegerJpa;
 import demoapp.dom.types.javalang.longs.jpa.WrapperLongJpa;
 import demoapp.dom.types.javalang.shorts.jpa.WrapperShortJpa;
 import demoapp.dom.types.javalang.strings.jpa.JavaLangStringJpa;
-import demoapp.dom.types.javamath.bigdecimals.jpa.JavaMathBigDecimalJpa;
-import demoapp.dom.types.javamath.bigintegers.jpa.JavaMathBigIntegerJpa;
-import demoapp.dom.types.javanet.urls.jpa.JavaNetUrlJpa;
+import demoapp.dom.types.javamath.bigdecimals.jpa.BigDecimalJpa;
+import demoapp.dom.types.javamath.bigintegers.jpa.BigIntegerJpa;
+import demoapp.dom.types.javanet.urls.jpa.UrlJpa;
 import demoapp.dom.types.javasql.javasqldate.jpa.JavaSqlDateJpa;
 import demoapp.dom.types.javasql.javasqltimestamp.jpa.JavaSqlTimestampJpa;
-import demoapp.dom.types.javatime.javatimelocaldate.jpa.JavaTimeLocalDateJpa;
-import demoapp.dom.types.javatime.javatimelocaldatetime.jpa.JavaTimeLocalDateTimeJpa;
-import demoapp.dom.types.javatime.javatimelocaltime.jpa.JavaTimeLocalTimeJpa;
-import demoapp.dom.types.javatime.javatimeoffsetdatetime.jpa.JavaTimeOffsetDateTimeJpa;
-import demoapp.dom.types.javatime.javatimeoffsettime.jpa.JavaTimeOffsetTimeJpa;
-import demoapp.dom.types.javatime.javatimezoneddatetime.jpa.JavaTimeZonedDateTimeJpa;
+import demoapp.dom.types.javatime.javatimelocaldate.jpa.LocalDateJpa;
+import demoapp.dom.types.javatime.javatimelocaldatetime.jpa.LocalDateTimeJpa;
+import demoapp.dom.types.javatime.javatimelocaltime.jpa.LocalTimeJpa;
+import demoapp.dom.types.javatime.javatimeoffsetdatetime.jpa.OffsetDateTimeJpa;
+import demoapp.dom.types.javatime.javatimeoffsettime.jpa.OffsetTimeJpa;
+import demoapp.dom.types.javatime.javatimezoneddatetime.jpa.ZonedDateTimeJpa;
 import demoapp.dom.types.javautil.javautildate.jpa.JavaUtilDateJpa;
 import demoapp.dom.types.javautil.uuids.jpa.JavaUtilUuidJpa;
 import demoapp.dom.types.jodatime.jodadatetime.jpa.JodaDateTimeJpa;
@@ -167,22 +167,22 @@ import demoapp.dom.types.primitive.shorts.jpa.PrimitiveShortJpa;
         CausewayCalendarEventJpa.class,
         EventLogEntryJpa.class,
 
-        JavaAwtBufferedImageJpa.class,
+        BufferedImageJpa.class,
 
         JavaLangEnumJpa.class,
         JavaLangStringJpa.class,
 
-        JavaMathBigDecimalJpa.class,
-        JavaMathBigIntegerJpa.class,
-        JavaNetUrlJpa.class,
+        BigDecimalJpa.class,
+        BigIntegerJpa.class,
+        UrlJpa.class,
         JavaSqlDateJpa.class,
         JavaSqlTimestampJpa.class,
-        JavaTimeLocalTimeJpa.class,
-        JavaTimeLocalDateJpa.class,
-        JavaTimeLocalDateTimeJpa.class,
-        JavaTimeOffsetDateTimeJpa.class,
-        JavaTimeOffsetTimeJpa.class,
-        JavaTimeZonedDateTimeJpa.class,
+        LocalTimeJpa.class,
+        LocalDateJpa.class,
+        LocalDateTimeJpa.class,
+        OffsetDateTimeJpa.class,
+        OffsetTimeJpa.class,
+        ZonedDateTimeJpa.class,
         JavaUtilDateJpa.class,
         JavaUtilUuidJpa.class,
         JodaDateTimeJpa.class,

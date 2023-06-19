@@ -1,0 +1,114 @@
+= Other Causeway Annotations
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+There are a number of other annotations defined by the framework, for a variety of purposes.
+
+The following are commonly used:
+
+.Commonly annotations
+[cols="2,4a,1", options="header"]
+|===
+|Annotation
+|Purpose
+|Layer
+
+|xref:refguide:applib:index/annotation/HomePage.adoc[]
+|Query-only action (on domain service) to be invoked, result of which is rendered as the user's home page.
+|UI
+
+|xref:refguide:applib:index/annotation/MinLength.adoc[]
+|Minimum number of characters required for an auto-complete search argument.
+|UI
+
+|xref:refguide:applib:index/annotation/Title.adoc[@Title]
+|Indicates which of the object's properties should be used to build up a title for the object.
+|UI
+
+|===
+
+
+The following are used to indicate whether a given should be included or excluded in the metamodel.
+Whether they are required depends on the setting of xref:refguide:config:sections/causeway.core.meta-model.introspector.adoc#causeway.core.meta-model.introspector.policy[causeway.core.meta-model.introspector.policy], but it is always safe to use them.
+
+.Programming Model Inclusion/Exclusion
+[cols="2,4a,1", options="header"]
+|===
+|Annotation
+|Purpose
+|Layer
+
+|xref:refguide:applib:index/annotation/Domain_Include.adoc[]
+|Explicitly include the method as part of the metamodel.
+|UI/Domain
+
+|xref:refguide:applib:index/annotation/Domain_Exclude.adoc[]
+|Explicitly exclude the method as part of the metamodel.
+|UI/Domain
+
+|xref:refguide:applib:index/annotation/MemberSupport.adoc[]
+|Intended to be annotated on `hideXxx()`, `disableXxx()` and other supporting methods, explicitly include the method as part of the metamodel.
+Equivalent to xref:refguide:applib:index/annotation/Domain_Include.adoc[]
+|Domain
+
+|xref:refguide:applib:index/annotation/ObjectSupport.adoc[]
+|Intended to be annotated on `title()`, `iconName()` and other UI hint methods, explicitly include the method as part of the metamodel.
+Equivalent to xref:refguide:applib:index/annotation/Domain_Include.adoc[]
+|UI
+
+|xref:refguide:applib:index/annotation/ObjectLifecycle.adoc[]
+|Intended to be annotated on `created()`, `updated()` and other lifecycle methods, explicitly include the method as part of the metamodel.
+Equivalent to xref:refguide:applib:index/annotation/Domain_Include.adoc[]
+|Persistence
+
+|xref:refguide:applib:index/annotation/Programmatic.adoc[]
+|Indicates that a method is to be called only programmatically, and so is _not_ part of the metamodel.
+Equivalent to (and the original name of) xref:refguide:applib:index/annotation/Domain_Exclude.adoc[]
+|UI/Domain
+
+|===
+
+
+The next annotations relate to the overall system architecture.
+
+.Architecture
+[cols="2,4a,1", options="header"]
+|===
+|Annotation
+|Purpose
+|Layer
+
+|xref:refguide:applib:index/annotation/Module.adoc[@Module]
+|An alias for Spring's own `@Configuration`, identifies a logical module consisting of a set of services, entities, mixins, fixtures etc.
+|Domain
+
+|xref:refguide:applib:index/annotation/InteractionScope.adoc[@InteractionScope]
+|Annotated on a domain service to indicate that it should be scoped by the interaction (roughly equivalent to an HTTP request).
+|Domain
+
+|===
+
+The final annotations relate to the definition of custom value types:
+
+
+.Custom value type support
+[cols="2,4a,1", options="header"]
+|===
+|Annotation
+|Purpose
+|Layer
+
+|xref:refguide:applib:index/annotation/Value.adoc[@Value]
+|Marker annotation that indicates the object is a value type (as opposed to a domain service, entity, view model or mixin).
+
+Value types also require an implementation of a xref:refguide:applib:index/value/semantics/ValueSemanticsProvider.adoc[].
+
+|Domain
+
+|xref:refguide:applib:index/annotation/ValueSemantics.adoc[@ValueSemantics]
+|Annotated on a property or parameter, indicating that the property/parameter's type should be considered a value type, and supplying details of the service implementing xref:refguide:applib:index/value/semantics/ValueSemanticsProvider.adoc[] that describes how the framework should interact with the value type.
+|Domain
+
+|===

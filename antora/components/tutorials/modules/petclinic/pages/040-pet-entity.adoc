@@ -153,7 +153,7 @@ Confirm the application still runs
 [#exercise-4-3-add-petowners-collection-of-pets]
 == Ex 4.3: Add PetOwner's collection of Pets
 
-In this next exercise we'll add the ``PetOwner``'s collection of ``Pet``s, using a xref:userguide:fun:mixins.adoc[mixin].
+In this next exercise we'll add the ``PetOwner``'s collection of ``Pet``s, using a xref:userguide:ROOT:mixins.adoc[mixin].
 
 [plantuml]
 ----
@@ -465,7 +465,7 @@ Let's now add some validation to ensure that two pets with the same name cannot 
 Optional<Pet> findByPetOwnerAndName(PetOwner petOwner, String name);
 ----
 
-* Now use a supporting xref:userguide:fun:business-rules/validity.adoc[validate] method to prevent two pets with the same name from being added:
+* Now use a supporting xref:userguide:ROOT:business-rules.adoc#validity[validate] method to prevent two pets with the same name from being added:
 +
 [source,java]
 .PetOwner_addPet.java

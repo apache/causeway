@@ -1,4 +1,3 @@
 include::incubator:ROOT:partial$module-nav.adoc[]
 include::incubator:graphql:partial$module-nav.adoc[GraphQL Viewer]
-include::incubator:kroviz:partial$module-nav.adoc[Kroviz Viewer]
 include::incubator:commandreplay:partial$module-nav.adoc[Command Replay]
