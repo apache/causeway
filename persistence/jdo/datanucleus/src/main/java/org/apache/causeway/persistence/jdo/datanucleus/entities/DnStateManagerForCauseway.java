@@ -49,12 +49,12 @@ import lombok.extern.log4j.Log4j2;
  * Installed via config property "datanucleus.objectProvider.className".
  */
 @Log4j2
-public class DnObjectProviderForCauseway //TODO[CAUSEWAY-3486] rename to DnStateManagerForCauseway
+public class DnStateManagerForCauseway
 extends ReferentialStateManagerImpl {
 
     private Optional<MetaModelContext> mmcIfAny;
 
-    public DnObjectProviderForCauseway(final ExecutionContext ec, final AbstractClassMetaData cmd) {
+    public DnStateManagerForCauseway(final ExecutionContext ec, final AbstractClassMetaData cmd) {
         super(ec, cmd);
         this.mmcIfAny = extractMetaModelContextFrom(ec);
     }
@@ -280,9 +280,9 @@ extends ReferentialStateManagerImpl {
 
     // -- UTILITY
 
-    public static Optional<DnObjectProviderForCauseway> extractFrom(final @Nullable Persistable pojo) {
+    public static Optional<DnStateManagerForCauseway> extractFrom(final @Nullable Persistable pojo) {
         return pojo!=null
-                ? _Casts.castTo(DnObjectProviderForCauseway.class, pojo.dnGetStateManager())
+                ? _Casts.castTo(DnStateManagerForCauseway.class, pojo.dnGetStateManager())
                 : Optional.empty();
     }
 

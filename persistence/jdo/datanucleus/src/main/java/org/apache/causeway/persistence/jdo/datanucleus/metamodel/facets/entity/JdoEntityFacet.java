@@ -58,7 +58,7 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.services.idstringifier.IdStringifierLookupService;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
 import org.apache.causeway.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
-import org.apache.causeway.persistence.jdo.datanucleus.entities.DnObjectProviderForCauseway;
+import org.apache.causeway.persistence.jdo.datanucleus.entities.DnStateManagerForCauseway;
 import org.apache.causeway.persistence.jdo.datanucleus.entities.DnStateManagerForHollow;
 import org.apache.causeway.persistence.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacetFactory;
 import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
@@ -130,8 +130,8 @@ implements EntityFacet {
     @Override
     public boolean isInjectionPointsResolved(final Object pojo) {
         if(pojo instanceof Persistable) {
-            DnObjectProviderForCauseway.extractFrom((Persistable) pojo)
-            .map(DnObjectProviderForCauseway::injectServicesIfNotAlready)
+            DnStateManagerForCauseway.extractFrom((Persistable) pojo)
+            .map(DnStateManagerForCauseway::injectServicesIfNotAlready)
             .orElse(false);
         }
         return pojo==null;

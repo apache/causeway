@@ -36,7 +36,7 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyChangeRecord;
-import org.apache.causeway.persistence.jdo.datanucleus.entities.DnObjectProviderForCauseway;
+import org.apache.causeway.persistence.jdo.datanucleus.entities.DnStateManagerForCauseway;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -139,7 +139,7 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
 
         // [CAUSEWAY-3126] pre-dirty nested loop prevention,
         // assuming we can cast the DN StateManager to the custom one as provided by the framework
-        DnObjectProviderForCauseway.extractFrom(pojo).ifPresentOrElse(
+        DnStateManagerForCauseway.extractFrom(pojo).ifPresentOrElse(
                 stateManager->
                     stateManager.acquirePreDirtyPropagationLock(pojo.dnGetObjectId())
                     .ifPresent(lock->lock.releaseAfter(doPreDirty)),

@@ -27,7 +27,7 @@ import org.datanucleus.enhancement.Persistable;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.persistence.jdo.datanucleus.entities.DnObjectProviderForCauseway;
+import org.apache.causeway.persistence.jdo.datanucleus.entities.DnStateManagerForCauseway;
 
 import lombok.NonNull;
 import lombok.val;
@@ -45,9 +45,9 @@ final class _Utils {
             final @NonNull InstanceLifecycleEvent event) {
         final Persistable pojo = _Utils.persistableFor(event);
         if(pojo!=null) {
-            DnObjectProviderForCauseway.extractFrom(pojo)
+            DnStateManagerForCauseway.extractFrom(pojo)
             .ifPresentOrElse(
-                    DnObjectProviderForCauseway::injectServicesIfNotAlready,
+                    DnStateManagerForCauseway::injectServicesIfNotAlready,
                     ()->mmc.getServiceInjector().injectServicesInto(pojo));
             }
     }
