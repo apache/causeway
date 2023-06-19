@@ -18,6 +18,8 @@
  */
 package demoapp.dom.types.javaawt.images.jpa;
 
+import java.awt.image.BufferedImage;
+
 import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,20 +31,15 @@ import javax.persistence.Table;
 import org.springframework.context.annotation.Profile;
 
 import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.annotation.Title;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
-import java.awt.image.BufferedImage;
-
+import demoapp.dom.types.javaawt.images.persistence.BufferedImageEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import demoapp.dom.types.javaawt.images.persistence.BufferedImageEntity;
 
 @Profile("demo-jpa")
 //tag::class[]

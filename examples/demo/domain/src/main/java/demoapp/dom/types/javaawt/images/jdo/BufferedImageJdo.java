@@ -18,6 +18,8 @@
  */
 package demoapp.dom.types.javaawt.images.jdo;
 
+import java.awt.image.BufferedImage;
+
 import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
@@ -28,18 +30,13 @@ import javax.jdo.annotations.PersistenceCapable;
 import org.springframework.context.annotation.Profile;
 
 import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.annotation.Title;
-
-import java.awt.image.BufferedImage;
-
-import lombok.Getter;
-import lombok.Setter;
 
 import demoapp.dom.types.javaawt.images.persistence.BufferedImageEntity;
+import lombok.Getter;
+import lombok.Setter;
 
 @Profile("demo-jdo")
 //tag::class[]
