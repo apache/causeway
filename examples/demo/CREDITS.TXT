@@ -1,8 +1,0 @@
-== Credits ==
-
-This Demo App uses icons made by Freepik and Smashicons from www.flaticon.com 
-which are licensed by CC 3.0 BY. 
-
-We use AsciidoctorJ [1] for Asciidoc rendering.
-
-[1] https://github.com/asciidoctor/asciidoctorj
