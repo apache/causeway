@@ -1,0 +1,75 @@
+= Scoped Services
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+By default all domain services are application-scoped, in other words singletons.
+Such domain services are required to be thread-safe, usually satisfied by being intrinsically stateless.
+
+Sometimes though a service's lifetime is applicable only to a single (http) request.
+The framework has a number of such services, including a xref:refguide:applib:index/services/scratchpad/Scratchpad.adoc[Scratchpad] service (to share adhoc data between methods), and xref:refguide:applib:index/services/queryresultscache/QueryResultsCache.adoc[QueryResultsCache], which as its name suggests will cache query results.
+Such services _do_ hold state, but that state is scoped per (possibly concurrent) request and should be removed afterwards.
+
+The requirement for request-scoped services is supported using Apache Causeway' own xref:refguide:applib:index/annotation/InteractionScope.adoc[@InteractionScope] annotation (named because a short-lived `CausewaySession` is created for each request).
+This is used by the framework services and can also be used for user-defined services.
+
+For example:
+
+[source,java]
+----
+@Service
+@InteractionScope
+public class MyService {
+    ...
+    public void doSomething() { ... }
+}
+----
+
+Unlike application-scoped services, these request-scoped services must be injected using a slightly different idiom (borrowed from CDI), using a `javax.inject.Provider`.
+For example:
+
+[source,java]
+----
+import javax.inject.Provider;
+
+public class SomeClient {
+    ...
+    @Inject Provider<MyService> myServiceProvider;  // <.>
+
+    public void someMethod() {
+        myServiceProvider.get()                     // <.>
+                         .doSomething();
+}
+----
+<.> Inject using `Provider`
+<.> Obtain an instance using `Provider#get()`
+
+
+As mentioned above, the xref:refguide:applib:index/services/queryresultscache/QueryResultsCache.adoc[QueryResultsCache] (used for performance caching) is also scoped.
+To use that service, the idiom would be:
+
+[source,java]
+----
+import javax.inject.Inject;
+import javax.inject.Provider;
+
+public class Customer {
+    ...
+    @Inject OrderRepository orderRepository;
+    @Inject Provider<QueryResultsCache> queryResultsCacheProvider;  // <.>
+
+    public List<Order> getOrders() {
+        Customer customer = this;
+        return queryResultsCacheProvider
+                .get()                                              // <.>
+                .execute(
+                    () -> orderRepository.findByCustomer(customer),
+                    Customer.class, "getOrders",
+                    customer)
+        );
+}
+----
+<.> inject a `Provider` for the service, not directly
+<.> Get the cache from the provider
+
+If you accidentally inject the service directly (without being wrapped in `Provider`), then the framework will detect this and fail-fast.

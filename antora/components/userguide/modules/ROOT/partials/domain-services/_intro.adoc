@@ -1,21 +1,23 @@
+= Introduction
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
 
-== Introduction
+_Domain services_ are (usually) singleton stateless services that provide act upon xref:domain-entities.adoc[entities] or xref:view-models.adoc[view models].
 
-_Domain services_ are (usually) singleton stateless services that provide additional functionality.
-Domain services consist of a set of logically grouped actions, and as such follow the same conventions as for entities.
-However, a service cannot have (persisted) properties, nor can it have (persisted) collections.
+Domain services fall into two main categories: those that part of the Causeway metamodel, and those that are not.
 
-A very common type of domain service is a repository, that is used to look up existing instances of a domain entity.
-For example, for the `Customer` entity there may be a `CustomerRepository`, while for `Order` entity there may be an `OrderRepository`.
+* For the former, their actions (which follow the same conventions as other domain objects) will typically be rendered either in the menu; or they might be surfaced through the REST API.
+However, a service can only declare actions; it cannot have properties nor can it have collections.
 
-Similarly, entities might also have a corresponding factory service: a `CustomerFactory` or an `OrderFactory`; Evans' link:http://books.google.com/books/about/Domain_Driven_Design.html?id=hHBf4YxMnWMC[Domain Driven Design], draws a clear distinction between a factory (that creates object) and a repository (that is used to find existing objecpts).
+* For the latter, these are often repositories or factories.
+Evans' link:http://books.google.com/books/about/Domain_Driven_Design.html?id=hHBf4YxMnWMC[Domain Driven Design], draws a clear distinction between a factory (that creates object) and a repository (that is used to find existing objects).
+For example, for the `Customer` entity there may be a `CustomerRepository` and an `CustomerFactory`
+or an `OrderFactory`; .
 
 On the other hand, from an end-users' perspective the act of finding an existing object vs creating a new one are quite closely related.
-For this reason, in Apache Causeway it's therefore quite common to have a single domain service that acts as both a factory and a repository (and is usually called just a "repository").
+For this reason, in Apache Causeway it's therefore quite common to have a single menu domain service that delegates programmatically to other factory or repository services.
 
 Sometimes though a domain service might be holders of business logic that for whatever reason you want to keep outside an entity; perhaps it easier to test that way.
 An example might be `InvoiceCalculationServices`.

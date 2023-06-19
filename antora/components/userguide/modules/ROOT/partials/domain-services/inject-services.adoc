@@ -26,7 +26,7 @@ There are three ways in which to inject the domain services:
 
 * constructor injection (further discussion in the Spring documentation, link:https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#beans-constructor-injection[here])
 +
-This is recommended approach, but note that it is only supported for domain services, NOT for other domain object types.
+This is recommended approach, but note that it is only supported for domain services and (non-JAXB) xref:view-models.adoc[view models], but not for xref:domain-entities.adoc[entities], xref:mixins.adoc[mixins] or xref:value-types.adoc[value types].
 
 * setter injection (further discussion link:https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#beans-setter-injection[here])
 
@@ -158,8 +158,7 @@ import javax.inject.Inject;
 
 public class DocumentService {
     ...
-    @Inject
-    List<PaperclipFactory> paperclipFactories;
+    @Inject List<PaperclipFactory> paperclipFactories;
 }
 ----
 
@@ -173,39 +172,3 @@ The framework provides a simple logging implementation, which will always be cal
 All other implementations available will also be called.
 
 
-== Injecting `InteractionScope`d services
-
-Most domain services are application-scoped, in other words they are stateless global singletons that are shared by all concurrent requests.
-
-A small number of framework-provided services are annotated using xref:refguide:applib:index/annotation/InteractionScope.adoc[@InteractionScope].
-This means that they are stateful and scoped with each causeway session, in other words HTTP request.
-One such service is xref:refguide:applib:index/services/queryresultscache/QueryResultsCache.adoc[QueryResultsCache], used for performance caching.
-
-These domain services must be requested using a slightly different idiom, using the `Provider` interface.
-For example:
-
-[source,java]
-----
-import javax.inject.Inject;
-import javax.inject.Provider;
-
-public class Customer {
-    ...
-    @Inject OrderRepository orderRepository;
-    @Inject Provider<QueryResultsCache> queryResultsCacheProvider;  // <.>
-
-    public List<Order> getOrders() {
-        Customer customer = this;
-        return queryResultsCacheProvider
-                .get()                                              // <.>
-                .execute(
-                    () -> orderRepository.findByCustomer(customer),
-                    Customer.class, "getOrders",
-                    customer)
-        );
-}
-----
-<.> inject a `Provider` for the service, not directly
-<.> Get the cache from the provider
-
-If you accidentally inject the service directly (without being wrapped in `Provider`), then the framework will detect this and fail-fast.

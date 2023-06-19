@@ -6,6 +6,10 @@
 
 include::partial$domain-services/_intro.adoc[leveloffset=+1]
 include::partial$domain-services/progmodel.adoc[leveloffset=+1]
-include::partial$domain-services/inject-services.adoc[leveloffset=+1]
 include::partial$domain-services/crud.adoc[leveloffset=+1]
+include::partial$domain-services/inject-services.adoc[leveloffset=+1]
+include::partial$domain-services/scoped-services.adoc[leveloffset=+1]
+include::partial$domain-services/overriding.adoc[leveloffset=+1]
+include::partial$domain-services/initialization.adoc[leveloffset=+1]
+include::partial$domain-services/config.adoc[leveloffset=+1]
 

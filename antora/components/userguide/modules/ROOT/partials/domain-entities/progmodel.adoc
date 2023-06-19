@@ -11,4 +11,5 @@ Their persistence is handled by either xref:pjpa:ROOT:about.adoc[JPA/EclipseLink
 
 As such, they will also require ORM metadata.
 Both ORMs allow the metadata to be specified using either annotations or XML.
+The following sections show the basics for both ORMs, but see their respective guides for more detail.
 

@@ -5,8 +5,8 @@
 :page-partial:
 
 
-This section shows the idioms for creating, reading, updating and deleting xref:userguide:ROOT:domain-entities.adoc[domain entities] using domain services.
-The main domain services used for this are xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService] and xref:refguide:applib:index/services/factory/FactoryService.adoc[FactoryService].
+One of the most common use cases for services is to create, read, update and delete xref:userguide:ROOT:domain-entities.adoc[domain entities], leveraging the framework-provided  xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService] and xref:refguide:applib:index/services/factory/FactoryService.adoc[FactoryService].
+This page shows some of the common idioms for achieving this.
 
 
 [[instantiating]]
