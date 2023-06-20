@@ -94,7 +94,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <assertj-guava.version>3.24.2</assertj-guava.version>
 
-        <camel.version>3.14.8</camel.version>
+        <camel.version>3.14.9</camel.version>
 
         <commons-email.version>1.5</commons-email.version>
         <commons-httpclient.version>4.5.12</commons-httpclient.version>
