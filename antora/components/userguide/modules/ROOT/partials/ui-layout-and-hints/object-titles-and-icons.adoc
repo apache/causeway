@@ -14,7 +14,7 @@ This could represent the state of that object (eg a shipped order, say, or overd
 It is also possible for an object to provide a CSS class hint.
 In conjunction with xref:vw:ROOT:customisation.adoc#custom-css[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
 
-Finally, a domain object can even indicate the xref:ui.adoc#object-layout[layout] that should be used to render it.
+Finally, a domain object can even indicate the xref:ui-layout-and-hints.adoc#object-layout[layout] that should be used to render it.
 For example, a domain object may be rendered differently depending upon the role of the user viewing it.
 
 [#object-title]
@@ -184,7 +184,7 @@ If there is no requirement to customize the icon (the normal case), then the ico
 For example, the icon for a class `org.mydomain.myapp.Customer` will be `org/mydomain/myapp/Customer.png` (if it exists).
 
 Alternatively, a font-awesome icon can be used.
-This is specified using the xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClassFa[@DomainObjectLayout#cssClassFa()] attribute or in the xref:userguide:ROOT:ui.adoc#object-layout[layout.xml] file.
+This is specified using the xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClassFa[@DomainObjectLayout#cssClassFa()] attribute or in the xref:userguide:ROOT:ui-layout-and-hints.adoc#object-layout[layout.xml] file.
 
 For example:
 
@@ -267,7 +267,7 @@ In conjunction with a viewer-specific customisation of CSS (eg for the xref:vw:R
 === Declarative style
 
 To render an object with a particular CSS, use
-xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClass[@DomainObjectLayout#cssClass()] or in the xref:userguide:ROOT:ui.adoc#object-layout[layout.xml] file.
+xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClass[@DomainObjectLayout#cssClass()] or in the xref:userguide:ROOT:ui-layout-and-hints.adoc#object-layout[layout.xml] file.
 
 The usage of this CSS class is viewer-specific.
 In the case of the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)], when the domain object is rendered on its own page, this CSS class will appear on a top-level `<div>`.

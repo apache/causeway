@@ -57,7 +57,7 @@ The menu service:
 Menu services provide actions to be rendered on the menu.
 
 For the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)], each service's actions appear as a collection of menu items of a named menu, and this menu is on one of the three menu bars provided by the Wicket viewer.
-Although these can be organised using annotations, it's usually easier to use a xref:userguide:ROOT:ui.adoc#file-based-menus[file-based layout file] (`menubars.layout.xml`).
+Although these can be organised using annotations, it's usually easier to use a xref:userguide:ROOT:ui-layout-and-hints.adoc#file-based-menus[file-based layout file] (`menubars.layout.xml`).
 
 For the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)], all menu services are shown in the services representation.
 

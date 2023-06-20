@@ -5,48 +5,95 @@
 :page-partial:
 
 
-== Choices and Default
+Choices, defaults and auto-complete are defined using supporting methods, whose name has an appropriate prefix and returns the appropriate data type.
+But there are several different conventions available; choose the one that works best for you.
 
-For example, _choices_ for a property are specified using:
+== Choices
+
+A drop-down list of _choices_ for a property are specified using:
 
 [source,java]
+.Customer.java
 ----
 import lombok.Getter;
 import lombok.Setter;
 
-@Property(editing = Editing.ENABLED)                    // <.>
-@Getter @Setter
-private String paymentMethod;
+public class Customer {
 
-public List<String> choicesPaymentMethod() {            // <.>
-    return Arrays.asList("Visa", "Mastercard", "Amex");
+    @Property(editing = Editing.ENABLED)                    // <.>
+    @Getter @Setter
+    private String paymentMethod;
+
+    public List<String> choicesPaymentMethod() {            // <.>
+        return Arrays.asList("Visa", "Mastercard", "Amex");
+    }
+
+    // ...
 }
 ----
 <.> If required; properties are by default disabled globally.
 <.> Note the "choices" prefix and the suffix matching up with the getter.
 The method must return a collection of the same type as the property.
 
-For an action the _choices_ and a suitable _default_ method would be:
+For an action, the _choices_ for the N-th parameter can be specified by "number":
 
 [source,java]
+.Customer.java
 ----
-public Order changePaymentMethod(String paymentMethod) {
-    setPaymentMethod(paymentMethod);
-    return this;
-}
+public class Customer {
 
-public List<String> choices0ChangePaymentMethod() {         // <.>
-    return Arrays.asList("Visa", "Mastercard", "Amex");
-}
-public String default0ChangePaymentMethod() {               // <.>
-    return getPaymentMethod();                              // <.>
+    public Order invoice(
+            ShoppingCart cart,
+            String paymentMethod,
+            DiscountVoucher voucher,
+            LocalDate shipBy) {
+        ...
+        return this;
+    }
+
+    public List<String> choices1Invoice() {         // <.>
+        return this.getPaymentMethods();
+    }
+
+    // ...
 }
 ----
 <.> "choices" prefix, N-th param, suffix matches up with the action's name. +
 Returns a collection of the same type as the parameter.
+
+
+== Default
+
+For properties, there is no concept of a default value ; just initialize the field to an appropriate value the object is created.
+For actions, though, providing a default value for its parameters can substantially improve the user experience.
+
+For an action, the _choices_ for the N-th parameter can be specified by "number":
+
+[source,java]
+.Customer.java
+----
+public class Customer {
+
+    public Order invoice(
+            ShoppingCart cart,
+            String paymentMethod,
+            DiscountVoucher voucher,
+            LocalDate shipBy) {
+        ...
+        return this;
+    }
+
+    public String default1Invoice() {       // <.>
+        return this.getPaymentMethod();     // <.>
+    }
+
+    // ...
+}
+----
 <.> "default" prefix, N-th param, the suffix matches up with the action's name. +
 Returns object of same type as parameter.
-<.> Common idiom to return the current value of an property of the object.
+<.> A common idiom is to return the current value of a property of the object.
+
 
 
 == AutoComplete
@@ -55,14 +102,20 @@ The _autocomplete_ is similar to _choices_, but accepts a string parameter, to s
 A property for example might have:
 
 [source,java]
+.Order.java
 ----
-@Property(editing = Editing.ENABLED)                        // <.>
-@Getter @Setter
-private Product product;
+public class Order {
 
-public List<Product> autoCompleteProduct(                   // <.>
-                        @MinLength(2) String search) {      // <.>
-    return productRepository.findByReferenceOrName(search);
+    @Property(editing = Editing.ENABLED)                        // <.>
+    @Getter @Setter
+    private Product product;
+
+    public List<Product> autoCompleteProduct(                   // <.>
+                            @MinLength(2) String search) {      // <.>
+        return productRepository.findByReferenceOrName(search);
+    }
+
+    // ...
 }
 ----
 <.> If required; properties are by default disabled globally.
@@ -70,18 +123,25 @@ public List<Product> autoCompleteProduct(                   // <.>
 Returns a collection of the property's type.
 <.> The `@MinLength(...)` annotation indicates the minimum number of characters that must be entered before a search is initiated.
 
-Actions are very similar:
+Actions are very similar.
+Here the supporting "autoComplete" method is matched by number:
 
 [source,java]
+.Order.java
 ----
-public Order changeProduct(Product product) {
-    setProduct(product);
-    return this;
-}
+public class Order {
 
-public List<Product> autoComplete0Product(                  // <.>
-                        @MinLength(2) String search) {
-    return productRepository.findByReferenceOrName(search);
+    public Order changeProduct(Product product) {
+        setProduct(product);
+        return this;
+    }
+
+    public List<Product> autoComplete0Product(                  // <.>
+                            @MinLength(2) String search) {
+        return productRepository.findByReferenceOrName(search);
+    }
+
+    // ...
 }
 ----
 <.> "autoComplete" prefix, N-th param, suffix matches action name. +

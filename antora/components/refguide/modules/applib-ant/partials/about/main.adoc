@@ -10,7 +10,7 @@ For each of these domain types and members there are two annotations.  One cover
 
 [TIP]
 ====
-Most UI semantics can also be specified using xref:userguide:ROOT:ui.adoc#object-layout[dynamic object layout].
+Most UI semantics can also be specified using xref:userguide:ROOT:ui-layout-and-hints.adoc#object-layout[dynamic object layout].
 ====
 
 
@@ -23,7 +23,7 @@ The table below summarizes these most commonly used annotations in Apache Causew
 |Annotation
 |Purpose
 |Layer
-|xref:userguide:ROOT:ui.adoc#object-layout[File-based layout]?
+|xref:userguide:ROOT:ui-layout-and-hints.adoc#object-layout[File-based layout]?
 
 |xref:refguide:applib:index/annotation/Action.adoc[@Action]
 |Domain semantics for actions

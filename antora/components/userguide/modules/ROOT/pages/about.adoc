@@ -27,12 +27,12 @@ Domain services are (typically) singletons that act upon entities.
 Common implementations are repositories (to find domain entities) or factories (to create entities), but they might also be holders of business logic that for whatever reason you want to keep outside an entity; perhaps it easier to test that way.
 An example might be `InvoiceCalculationServices`.
 
-* xref:userguide:ROOT:object-members.adoc[Properties, Collections & Actions]
+* xref:userguide:ROOT:properties-collections-actions.adoc[Properties, Collections & Actions]
 +
 Properties and collections are the state that is maintained by domain entities (above), while actions can reside on either a domain entity or domain service.
 The framework automatically exposes this state and behaviour in the user interface (unless you otherwise suppress it).
 
-* xref:userguide:ROOT:ui.adoc[UI Layout & Hints]
+* xref:userguide:ROOT:ui-layout-and-hints.adoc[UI Layout & Hints]
 +
 As noted above, Apache Causeway applications do not require you to write code to render your domain objects in the UI; the framework provides a generic UI.
 But the framework _does_ allow you to provide optional hints so that the domain objects appear in the UI the way that you want them to appear.
