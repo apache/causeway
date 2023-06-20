@@ -4,11 +4,12 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
-The next type of domain object is the *mixin*.
-These are similar to traits or extension methods in other programming languages.
-A mixin object allows one class to contribute behaviour - actions, (derived) properties and (derived) collections - to another domain object, either a domain entity or view model.
+
+Mixins are somewhat similar to traits or extension methods in other programming languages.
+A mixin class is an implementation of behaviour - actions, (derived) properties and (derived) collections - that is contributed to another class, either a domain entity or view model.
 Or rather, the mixin _appears_ to contribute the behaviour/state in the UI; the underlying domain class being "decorated" does not know this is happening.
 
+In fact, the mixin class is bound to the contributee through a Java type, which could be a concrete class, an abstract class, an interface or -- even -- `java.lang.Object`.
 This is therefore a key technique to allow the app to stay decoupled, so that it doesn't degrade into the proverbial link:http://www.laputan.org/mud/mud.html#BigBallOfMud["big ball of mud"].
 There's a lot more discussion on this topic in xref:modules.adoc[modules], below.
 
@@ -33,16 +34,12 @@ The Hotspot JVM has limited support for hot reloading; generally you can change 
 However, the link:https://dcevm.github.io/[DCEVM] open source project will patch the JVM to support much more complete hot reloading support.
 There are also commercial products such as JRebel.
 
-[TIP]
-====
-Details on how to actually write a mixin (the programming model for mixins) is
-xref:userguide:ROOT:mixins.adoc[here].
-====
 
 .DCI Architecture
 ****
 Mixins are an implementation of the link:http://www.artima.com/articles/dci_vision.html[DCI architecture] architecture, as formulated and described by link:https://en.wikipedia.org/wiki/Trygve_Reenskaug[Trygve Reenskaug] and link:https://en.wikipedia.org/wiki/Jim_Coplien[Jim Coplien].
-Reenskaug was the inventor of the MVC pattern (and also the external examiner for Richard Pawson's link:../../../../../ug/fun/_attachments/core-concepts/Pawson-Naked-Objects-thesis.pdf[PhD thesis]), while Coplien has a long history in object-orientation, C++ and patterns.
+Reenskaug was the inventor of the MVC pattern (and also the external examiner for Richard Pawson's link:https://causeway.apache.org/docs/2.0.0-RC1/_attachments/Pawson-Naked-Objects-thesis.pdf[PhD thesis] on Naked Objects), while Coplien has a long history in object-orientation, C++ and patterns.
+
 
 DCI stands for Data-Context-Interaction and is presented as an evolution of object-oriented programming, but one where behaviour is bound to objects dynamically rather than statically in some context or other.
 The mixin pattern is Apache Causeway' straightforward take on the same basic concept.
