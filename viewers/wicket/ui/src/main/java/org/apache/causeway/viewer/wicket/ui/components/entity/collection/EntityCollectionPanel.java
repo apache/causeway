@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.entity.collection;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -37,7 +36,6 @@ import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelParented;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.util.ComponentHintKey;
-import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.causeway.viewer.wicket.ui.components.collection.CollectionPanel;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorHelper;
@@ -191,14 +189,12 @@ extends PanelAbstract<ManagedObject, UiObjectWkt> {
                 new CollectionPresentationSelectorHelper(collectionModel, getComponentFactoryRegistry(),
                         selectedItemHintKey);
 
-        final List<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
-
-        if (componentFactories.size() <= 1) {
-            WktComponents.permanentlyHide(div, ID_SELECTOR_DROPDOWN);
-        } else {
+        if (selectorHelper.getComponentFactories().isCardinalityMultiple()) {
             selectorDropdownPanel = new CollectionPresentationSelectorPanel(ID_SELECTOR_DROPDOWN,
                     collectionModel, selectedItemHintKey);
             div.addOrReplace(selectorDropdownPanel);
+        } else {
+            WktComponents.permanentlyHide(div, ID_SELECTOR_DROPDOWN);
         }
     }
 

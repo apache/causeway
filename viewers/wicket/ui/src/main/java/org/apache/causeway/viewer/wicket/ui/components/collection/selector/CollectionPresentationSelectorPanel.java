@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.wicket.ui.components.collection.selector;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.event.Broadcast;
@@ -28,6 +29,7 @@ import org.apache.wicket.markup.html.link.DownloadLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
@@ -95,11 +97,11 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
     }
 
     private void addDropdown() {
-        final List<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
+        final Can<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
         final String selected = selectorHelper.honourViewHintElseDefault(this);
 
         // selector
-        if (componentFactories.size() <= 1) {
+        if (!componentFactories.isCardinalityMultiple()) {
             WktComponents.permanentlyHide(this, ID_VIEWS);
             return;
         }
@@ -121,13 +123,13 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
 //        final Label viewButtonTitle = Wkt.labelAdd(views, ID_VIEW_BUTTON_TITLE, translate("Hidden"));
         final Label viewButtonIcon = Wkt.labelAdd(views, ID_VIEW_BUTTON_ICON, "");
 
-        Wkt.listViewAdd(container, ID_VIEW_ITEM, componentFactories, item->{
+        Wkt.listViewAdd(container, ID_VIEW_ITEM, sorted(componentFactories), item->{
             final ComponentFactory componentFactory = item.getModelObject();
 
             // add direct download link instead of a panel
             if(componentFactory.getComponentType() == UiComponentType.COLLECTION_CONTENTS_EXPORT) {
 
-                DownloadLink downloadLink = (DownloadLink)
+                final DownloadLink downloadLink = (DownloadLink)
                         componentFactory.createComponent(ID_VIEW_LINK, getModel());
 
                 item.addOrReplace(downloadLink);
@@ -173,10 +175,29 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
         addOrReplace(views);
     }
 
+    /**
+     * Sorts given CollectionContentsAsFactory(s) by their orderOfAppearanceInUiDropdown,
+     * in order of discovery otherwise.
+     * @see CollectionContentsAsFactory#orderOfAppearanceInUiDropdown()
+     */
+    private List<ComponentFactory> sorted(final Can<ComponentFactory> componentFactories) {
+        return componentFactories.stream()
+            .sorted((a, b)->Integer.compare(
+                        orderOfAppearanceInUiDropdown(a),
+                        orderOfAppearanceInUiDropdown(b)))
+            .collect(Collectors.toList());
+    }
+
+    private static int orderOfAppearanceInUiDropdown(final ComponentFactory componentFactory) {
+        return componentFactory instanceof CollectionContentsAsFactory
+                ? ((CollectionContentsAsFactory) componentFactory).orderOfAppearanceInUiDropdown()
+                : Integer.MAX_VALUE;
+    }
+
     private static IModel<String> cssClassFor(final ComponentFactory componentFactory, final Label viewIcon) {
         IModel<String> cssClass = null;
         if (componentFactory instanceof CollectionContentsAsFactory) {
-            CollectionContentsAsFactory collectionContentsAsFactory = (CollectionContentsAsFactory) componentFactory;
+            val collectionContentsAsFactory = (CollectionContentsAsFactory) componentFactory;
             cssClass = collectionContentsAsFactory.getCssClass();
             viewIcon.setDefaultModelObject("");
             viewIcon.setEscapeModelStrings(true);
@@ -196,7 +217,7 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
     private static IModel<String> nameFor(final ComponentFactory componentFactory) {
         IModel<String> name = null;
         if (componentFactory instanceof CollectionContentsAsFactory) {
-            CollectionContentsAsFactory collectionContentsAsFactory = (CollectionContentsAsFactory) componentFactory;
+            val collectionContentsAsFactory = (CollectionContentsAsFactory) componentFactory;
             name = collectionContentsAsFactory.getTitleLabel();
         }
         if (name == null) {

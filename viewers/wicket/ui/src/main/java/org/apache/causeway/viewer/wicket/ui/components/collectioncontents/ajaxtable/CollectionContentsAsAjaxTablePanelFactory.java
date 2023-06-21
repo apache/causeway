@@ -64,4 +64,9 @@ implements CollectionContentsAsFactory {
     public IModel<String> getCssClass() {
         return Model.of("fa fa-fw fa-table");
     }
+
+    @Override
+    public int orderOfAppearanceInUiDropdown() {
+        return 1200;
+    }
 }

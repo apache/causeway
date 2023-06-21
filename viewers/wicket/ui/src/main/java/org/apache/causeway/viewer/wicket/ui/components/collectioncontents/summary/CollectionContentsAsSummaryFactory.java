@@ -95,4 +95,9 @@ implements CollectionContentsAsFactory {
         return Model.of("fa fa-fw fa-usd");
     }
 
+    @Override
+    public int orderOfAppearanceInUiDropdown() {
+        return 1700;
+    }
+
 }

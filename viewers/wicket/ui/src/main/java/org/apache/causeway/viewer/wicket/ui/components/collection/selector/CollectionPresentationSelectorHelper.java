@@ -19,9 +19,7 @@
 package org.apache.causeway.viewer.wicket.ui.components.collection.selector;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
@@ -29,8 +27,8 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
@@ -54,7 +52,7 @@ public class CollectionPresentationSelectorHelper implements Serializable {
     private final EntityCollectionModel collectionModel;
 
     @Getter
-    private final List<ComponentFactory> componentFactories;
+    private final Can<ComponentFactory> componentFactories;
     private final ComponentHintKey componentHintKey;
 
     public CollectionPresentationSelectorHelper(
@@ -68,36 +66,23 @@ public class CollectionPresentationSelectorHelper implements Serializable {
             final ComponentFactoryRegistry componentFactoryRegistry,
             final ComponentHintKey componentHintKey) {
         this.collectionModel = collectionModel;
-        this.componentFactories = locateComponentFactories(componentFactoryRegistry);
+        this.componentFactories = gatherComponentFactories(componentFactoryRegistry);
         this.componentHintKey = componentHintKey != null
                 ? componentHintKey
                 : ComponentHintKey.noop();
     }
 
-    private List<ComponentFactory> locateComponentFactories(
+    private Can<ComponentFactory> gatherComponentFactories(
             final ComponentFactoryRegistry componentFactoryRegistry) {
 
-        final List<ComponentFactory> ajaxFactoriesToEnd = _Lists.newArrayList();
-
-        final List<ComponentFactory> componentFactories = componentFactoryRegistry
+        return componentFactoryRegistry
         .streamComponentFactories(ImmutableEnumSet.of(
                 UiComponentType.COLLECTION_CONTENTS,
                 UiComponentType.COLLECTION_CONTENTS_EXPORT),
                 collectionModel)
         .filter(componentFactory ->
             componentFactory.getClass() != CollectionContentsMultipleViewsPanelFactory.class)
-        .filter(componentFactory -> {
-            if(componentFactory instanceof CollectionContentsAsAjaxTablePanelFactory) {
-                ajaxFactoriesToEnd.add(componentFactory);
-                return false;
-            }
-            return true;
-        })
-        .collect(Collectors.toList());
-
-        componentFactories.addAll(ajaxFactoriesToEnd);
-
-        return componentFactories;
+        .collect(Can.toCan());
     }
 
     public String honourViewHintElseDefault(final Component component) {

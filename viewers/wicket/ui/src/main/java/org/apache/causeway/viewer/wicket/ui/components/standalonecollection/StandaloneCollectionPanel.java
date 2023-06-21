@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.standalonecollection;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.apache.wicket.MarkupContainer;
@@ -82,15 +81,12 @@ implements CollectionCountProvider, CollectionPresentationSelectorProvider {
         });
 
         // selector
-        final CollectionPresentationSelectorHelper selectorHelper = new CollectionPresentationSelectorHelper(collectionModel, getComponentFactoryRegistry());
+        final CollectionPresentationSelectorHelper selectorHelper =
+                new CollectionPresentationSelectorHelper(collectionModel, getComponentFactoryRegistry());
 
-        final List<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
-
-        if (componentFactories.size() <= 1) {
-            WktComponents.permanentlyHide(outerDiv, ID_SELECTOR_DROPDOWN);
-            this.selectorDropdownPanel = null;
-        } else {
-            CollectionPresentationSelectorPanel selectorDropdownPanel = new CollectionPresentationSelectorPanel(ID_SELECTOR_DROPDOWN, collectionModel);
+        if (selectorHelper.getComponentFactories().isCardinalityMultiple()) {
+            final CollectionPresentationSelectorPanel selectorDropdownPanel =
+                    new CollectionPresentationSelectorPanel(ID_SELECTOR_DROPDOWN, collectionModel);
 
             final Model<ComponentFactory> componentFactoryModel = new Model<>();
 
@@ -103,6 +99,9 @@ implements CollectionCountProvider, CollectionPresentationSelectorProvider {
             outerDiv.addOrReplace(selectorDropdownPanel);
 
             this.selectorDropdownPanel = selectorDropdownPanel;
+        } else {
+            WktComponents.permanentlyHide(outerDiv, ID_SELECTOR_DROPDOWN);
+            this.selectorDropdownPanel = null;
         }
 
         getComponentFactoryRegistry()

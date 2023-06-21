@@ -48,4 +48,12 @@ public interface CollectionContentsAsFactory {
      * for "collection contents as" component factories
      */
     IModel<String> getCssClass();
+
+    /**
+     * An ordinal, that governs the order of appearance in the UI dropdown,
+     * that will associate with this factory.
+     * <p>
+     * Lowest comes first.
+     */
+    int orderOfAppearanceInUiDropdown();
 }
