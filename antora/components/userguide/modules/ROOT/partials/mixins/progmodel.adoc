@@ -5,39 +5,65 @@
 :page-partial:
 
 
-A mixin acts like a trait or extension method, allowing one module to contribute behaviour or derived state to another object.
-This is a *very powerful feature*, but at the same time is  easy to use.
-
-Under the covers, all mixins are basically actions that use the mixee as one of their arguments.
-
-* if the mixin action takes some arguments (apart from the mixee), then it will only ever be rendered as an action
-* if the mixin action is not query-only, then again it will only ever be rendered as an action
-* if the mixin action is query-only and takes no arguments, then it can either be rendered as an action or as some derived state
-** if as an action, then it's basically a query to find and return some related info (eg "most recent order", "last 5 orders")
-** if as derived state, then it will be rendered as a property (if it returns a scalar), or as a collection (if it returns a vector).
+Mixins are implemented as classes that have a single argument constructor and, depending on the behaviour they contribute, are annotated using either xref:refguide:applib:index/annotation/Action.adoc[@Action], a xref:refguide:applib:index/annotation/Collection.adoc[@Collection] or a xref:refguide:applib:index/annotation/Property.adoc[@Property].footnote:[Mixin classes are also required to be annotated with  xref:refguide:applib:index/annotation/DomainObject.adoc[@DomainObject]xref:refguide:applib:index/annotation/Nature.adoc#MIXIN[(nature=MIXIN)].
+The `@Action`, `@Collection` and `@Property` are in fact meta-annotations that satisfy this requirement for us.]
 
 
-Accordingly, a mixin can be defined using the xref:refguide:applib:index/annotation/Action.adoc[@Action], xref:refguide:applib:index/annotation/Property.adoc[@Property] or xref:refguide:applib:index/annotation/Collection.adoc[@Collection] annotations, but defined at the domain class level rather than at the method level.
+These classes have a single method which implements the behaviour; the name of this method is determined by whether it is an action, collection or property.
 
-The mixin is expected to follow the naming convention `SomeType_mixinName`, with the name of the contributed member being contributed is inferred from the name of the class itself, being everything after the last '_'.
-For example, if the mixin is called `DocumentHolder_documents`, then the mixee is `DocumentHolder` interface, and `documents` is the name of the contributed collection.
-
-This example also hints at why mixins are so powerful: the mixee's type is usually an interface, not a concrete class.
-Thus, any class that implements `DocumentHolder`, eg `Customer` or `Order`, will be contributed to.
+In addition, mixin classes also must define a `public` single-arg constructor.
+It is this argument's parameter type which determines the domain class being contributed to.
 
 
-// TODO: mention @DomainObject(MIXIN) and @Mixin
+
+The sections below provide complete examples of collection, property or action mixins, with contributions through a `DocumentHolder` interface.
+
+
+[#contributed-action]
+== Contributed Action
+
+Contributed actions are defined as classes annotated xref:refguide:applib:index/annotation/Action.adoc[@Action], and with a method called "act".
+
+For example, the following contributes an "addDocument" action to classes that implement/extend `DocumentHolder`:
+
+[source,java]
+----
+@Action                                             // <.>
+@RequiredArgsConstructor                            // <.>
+public class DocumentHolder_addDocument {           // <.>
+
+    private final DocumentHolder holder;            // <.>
+
+    public <Document> act(Document doc) {           // <.>
+        /// ...
+    }
+    public boolean hideAct() { /* ... */ }          // <.>
+}
+----
+<.> indicates this class is an action mixin
+<.> It's common to use Lombok to automatically create the constructor.
+<.> The action Id is "addDocument", ie everything after the "\_".
+By convention, the prefix before the "_" is the mixee's type name.
+<.> Mixee is injected into the mixin as a field through the constructor.
+Most mixins will interact with their mixee in some way.
+<.> method must be called "act"
+<.> xref:business-rules.adoc[supporting methods] follow the usual naming conventions.
+However, mixins also support xref:mixins.adoc#action-parameters[alternative conventions] that you may prefer.
+
+Contributed actions can accept parameters, and have any semantics.
+(This is not true for contributed collections, or properties; see below).
 
 
 == Contributed Collection
 
-The example below shows in more detail how to contribute a collection, using xref:refguide:applib:index/annotation/Collection.adoc[@Collection].
-The method is expected to be called "coll":
+Contributed collections are defined using as classes annotated with xref:refguide:applib:index/annotation/Collection.adoc[@Collection], and with a method called "coll":
+
+For example, the following contributes a "documents" collection to classes that implement/extend `DocumentHolder`:
 
 [source,java]
 ----
 @Collection                                     // <.>
-@RequiredArgsConstructor                        // <.>
+@RequiredArgsConstructor
 public class DocumentHolder_documents {
 
     private final DocumentHolder holder;
@@ -48,74 +74,47 @@ public class DocumentHolder_documents {
     public boolean hideColl() { /* ... */ }     // <.>
 }
 ----
-<.> indicates this is a collection mixin (that contributes its method as an association) with method name 'coll'
-<.> mixee is injected into the mixin
-<.> method (which must be called "coll") must accept no arguments, be query-only, and return a collection
+<.> indicates that this class is a collection mixin
+<.> method (which must be called "coll") must accept no arguments, and return a collection
 <.> supporting methods (discussed in xref:business-rules.adoc[business rules]) follow the usual naming conventions
 (Because the collection is derived/read-only, the only supporting method that is relevant is `hideColl()`).
 
-The above will result in a contributed collection "documents" for all types that implement/extend from `DocumentHolder`.
 
+Contributed collections are derived, which means:
 
+* the "coll" method must take no-arguments.
+* the method should have no side-effects; otherwise the very act of rendering the domain object would change state.
+* it should (of course) return a `java.util.Collection` (or `List`, or `Set`, or `SortedSet`); however ``java.util.Map``s are _not supported.
 
 
 == Contributed Property
 
+Contributed properties can likewise be defined as classes annotated with  xref:refguide:applib:index/annotation/Property.adoc[@Property], and a method called "prop":
 
-Contributed properties can likewise be defined using xref:refguide:applib:index/annotation/Property.adoc[@Property]; this implies a method called "prop":
+For example, the following contributes a "mostRecentDocument" collection to classes that implement/extend `DocumentHolder`:
 
 [source,java]
 ----
-@Property                                                       // <.>
-@RequiredArgsConstructor                                        // <.>
+@Property                                           // <.>
+@RequiredArgsConstructor
 public class DocumentHolder_mostRecentDocument {
 
     private final DocumentHolder holder;
 
-    public Document prop() {                                    // <.>
+    public Document prop() {                        // <.>
         ...
     }
-    public boolean hiderProp() { /* ... */ }                    // <.>
+    public boolean hideProp() { /* ... */ }         // <.>
 }
 ----
-<.> indicates this is a property mixin (that contributes its method as an association) with method name 'prop'
-<.> mixee is injected into the mixin
+<.> indicates this is a property mixin
 <.> method (which must be called "prop") must accept no arguments, be query-only, and return a scalar value
 <.> supporting methods (discussed in xref:business-rules.adoc[business rules]) follow the usual naming conventions
 (Because the property is derived/read-only, the only supporting method that is relevant is `hideProp()`).
 
-This contributes a property called "mostRecentDocument".
+Like collections, contributed properties are derived, which means:
 
-
-
-
-[#contributed-action]
-== Contributed Action
-
-
-Contributed actions are defined similarly, using xref:refguide:applib:index/annotation/Action.adoc[@Action]; this implies a method called "act".
-For example:
-
-[source,java]
-----
-@Action                                                         // <.>
-@RequiredArgsConstructor                                        // <.>
-public class DocumentHolder_addDocument {
-
-    private final DocumentHolder holder;
-
-    public Document> act(Document doc) {                        // <.>
-        ...
-    }
-    public boolean hideAct() { /* ... */ }                      // <.>
-}
-----
-<.> indicates this is an action mixin (that contributes its method as an action) with method name 'act'
-<.> mixee is injected into the mixin
-<.> method must be called "act"
-Unlike contributed properties and collections, contributed actions can accept parameters, and have any semantics.
-<.> xref:business-rules.adoc[supporting methods] follow the usual naming conventions
-
-This contributes an action called "addDocument".
-
+* the "prop" method must take no-arguments.
+* the method should have no side-effects; otherwise the very act of rendering the domain object would change state.
+* it should return a scalar value.
 

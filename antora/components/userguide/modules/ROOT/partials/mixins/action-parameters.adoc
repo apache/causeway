@@ -4,4 +4,13 @@
 :page-partial:
 
 
-// TODO: alternative programming model.
+
+If you have defined an action as a mixin, then the name of the method is "act" and so supporting methods (which match on the name) are easier to write.
+For example, the supporting method to hide the action will always be called "hideAct".
+
+In the regular programming model, the supporting methods for individual parameters are matched by number, eg "validate0Act" to validate the 0-th argument.
+If using mixins, there are two alternative syntaxes for implementing the supporting methods for actions that you may prefer.
+This page describes them both.
+
+
+// TODO: alternative programming model for parameter names; and using java record type

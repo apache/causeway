@@ -1,0 +1,50 @@
+= Modularity
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+// TODO: clean up
+
+It is this argument's parameter type which determines the domain class being contributed to.
+
+[source,java]
+----
+@Action                                     // <.>
+@RequiredArgsConstructor                    // <.>
+public class Customer_placeOrder {          // <.>
+
+    private final Customer customer;        // <.>
+
+    // ...                                  // <.>
+}
+----
+<.> Determines this is a mixin that will contribute an action
+<.> It's common to use lombok to generate the constructor (for the one `final` field)
+<.> The name is derived from the class name; anything after the '_'.
+The name beforehand can be anything, but the convention is to use the mixee's name
+<.> A field declaring the mixee.
+The action implementation itself will interact with the mixee .
+<.> Actual implementation not yet shown, keep reading :-)
+
+== Contributing through an interface
+
+The contribution could be through a Java interface.
+Suppose that `Customer` implements `DocumentHolder`:
+
+[source,java]
+----
+@Collection
+@RequiredArgsConstructor
+public class DocumentHolder_documents {
+
+    private final DocumentHolder documentHolder;
+
+    // ...
+}
+----
+
+In both cases, when the `Customer` is rendered in the user interface, it will appear to have a "placeOrder" action or a "documents" collection.
+Programmatically, the `Customer` itself won't know anything about this behaviour.
+Indeed, if the mixin is defined in some other (Maven) module (such as "ordermgmt" say), then the `Customer` class won't even be able to access this contributed behaviour.
+
