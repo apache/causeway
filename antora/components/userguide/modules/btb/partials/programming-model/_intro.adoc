@@ -5,7 +5,7 @@
 :page-partial:
 
 Apache Causeway works by building a xref:background-context-and-theory.adoc#metamodel[metamodel] of the domain objects: entities, domain services, view models and mixins.
-Dependent on the xref:overview.adoc#type-of-domain-objects[sort of domain object], the class methods represent both state -- (single-valued) xref:object-members.adoc#properties[properties] and (multi-valued) xref:object-members.adoc#collections[collections] -- and behaviour -- xref:object-members.adoc#actions[actions].
+Dependent on the xref:overview.adoc#type-of-domain-objects[sort of domain object], the class methods represent both state -- (single-valued) xref:properties-collections-actions.adoc#properties[properties] and (multi-valued) xref:properties-collections-actions.adoc#collections[collections] -- and behaviour -- xref:properties-collections-actions.adoc#actions[actions].
 
 More specifically, both xref:domain-entities.adoc[entities] and xref:view-models.adoc[view models] can have properties, collections and actions, while xref:domain-services.adoc[domain services] have just actions.
 xref:mixins.adoc[Mixins] also define only actions, though depending on their semantics they may be rendered as derived properties or collections on the domain object to which they contribute.

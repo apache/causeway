@@ -15,7 +15,7 @@ From the end-user's perspective the UI displays a single domain object instance 
 These will be either a xref:domain-entities.adoc[domain entity] (persisted state) or a xref:view-models.adoc[view model] (user-specific temporary state).
 To access them, a menu xref:domain-services.adoc[domain service] will be used to find from the database (a repository service) or occasionally to create a new instance (a factory service).
 
-The state managed by entities and view models is expressed in terms of xref:object-members.adoc[properties and collections], with properties either referring to other domain objects or alternatively to values.
+The state managed by entities and view models is expressed in terms of xref:properties-collections-actions.adoc[properties and collections], with properties either referring to other domain objects or alternatively to values.
 These values will have xref:value-types.adoc[value types] that are either built-in (such as primitives, strings or dates_, 3rd party or custom.
 
 Actions allow the end-user to invoke business logic.
@@ -34,17 +34,17 @@ Similarly, JAXB annotations are often used for xref:view-models.adoc[view models
 
 The framework also defines supplementary annotations, notably xref:refguide:applib:index/annotation/DomainObjectLayout.adoc[@DomainObjectLayout] and xref:refguide:applib:index/annotation/DomainServiceLayout.adoc[@DomainServiceLayout].
 These provide hints relating to the layout of the domain object in the user interface.
-Alternatively, these UI hints might be defined in a supplementary xref:userguide:ROOT:ui.adoc#object-layout[.layout.xml] file.
+Alternatively, these UI hints might be defined in a supplementary xref:userguide:ROOT:ui-layout-and-hints.adoc#object-layout[.layout.xml] file.
 
 
 
 [[title-and-icon-and-css-class]]
 == Title and Icon
 
-To allow the end-user to distinguish one domain object from another, it is rendered with a xref:ui.adoc#object-title[title] and an xref:ui.adoc#object-icon[icon].
+To allow the end-user to distinguish one domain object from another, it is rendered with a xref:ui-layout-and-hints.adoc#object-title[title] and an xref:ui-layout-and-hints.adoc#object-icon[icon].
 The icon informally identifies the type of the domain object, while the title identifies the instance.
 
-It's also possible to customise other aspects of the domain object's presentation within the xref:ui.adoc[user interface].
+It's also possible to customise other aspects of the domain object's presentation within the xref:ui-layout-and-hints.adoc[user interface].
 
 
 

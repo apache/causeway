@@ -1,0 +1,35 @@
+= Defaults
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+
+For properties, there is no concept of a default value ; just initialize the field to an appropriate value the object is created.
+For actions, though, providing a default value for its parameters can substantially improve the user experience.
+
+For an action, the _choices_ for the N-th parameter can be specified by "number":
+
+[source,java]
+----
+public class Customer {
+
+    public Order invoice(
+            ShoppingCart cart,
+            String paymentMethod,
+            DiscountVoucher voucher,
+            LocalDate shipBy) {
+        ...
+        return this;
+    }
+
+    public String default1Invoice() {       // <.>
+        return this.getPaymentMethod();     // <.>
+    }
+
+    // ...
+}
+----
+<.> "default" prefix, N-th param, the suffix matches up with the action's name. +
+Returns object of same type as parameter.
+<.> A common idiom is to return the current value of a property of the object.

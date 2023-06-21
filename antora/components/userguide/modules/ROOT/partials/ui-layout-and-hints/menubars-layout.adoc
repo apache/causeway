@@ -77,7 +77,7 @@ There are some significant limitations, however:
 This cannot be controlled using annotations.
 * there is no way to order or group menu items from multiple domain services that appear on the same menu.
 
-The annotation based approach is therefore useful during very early prototyping, but in real-world applications you should use xref:ui.adoc#file-based-menus[file based] menu layouts.
+The annotation based approach is therefore useful during very early prototyping, but in real-world applications you should use xref:ui-layout-and-hints.adoc#file-based-menus[file based] menu layouts.
 
 
 [[file-based-menus]]

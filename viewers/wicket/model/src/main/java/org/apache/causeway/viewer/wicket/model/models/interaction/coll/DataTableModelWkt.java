@@ -126,11 +126,19 @@ implements
 
     @Override
     public final void detach() {
-        // in support of table sorting, don't detach; instead reuse model
-        // however, for troubleshooting allow detaching
-        if("true".equalsIgnoreCase(System.getenv("causeway.viewer.wicket.dataTableModelDetachEnabled"))) {
+        /* in support of table sorting, don't detach; instead reuse the already populated model;
+         * however, for troubleshooting allows detaching */
+        if(isDetachEnabled()) {
             super.detach();
         }
+    }
+
+    // -- HELPER
+
+    private final static String PROPERTY_NAME_DETACH_ENABLED = "causeway.viewer.wicket.dataTableModelDetachEnabled";
+    private static boolean isDetachEnabled() {
+        return "true".equalsIgnoreCase(System.getenv(PROPERTY_NAME_DETACH_ENABLED))
+                || "true".equalsIgnoreCase(System.getProperty(PROPERTY_NAME_DETACH_ENABLED));
     }
 
 }

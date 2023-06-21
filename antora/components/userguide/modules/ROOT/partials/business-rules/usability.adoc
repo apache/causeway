@@ -111,6 +111,8 @@ public String disable1Categorize(                           // <.>
 A non-`null` return string is taken as the _reason_ why the action argument cannot be changed.
 
 
+// TODO: xref mixins for specifying supporting methods by name or using `Parameters`
+
 == For more information
 
 For more information, see  xref:refguide:applib-methods:prefixes.adoc#disable[disable...()] section in the appropriate reference guide.

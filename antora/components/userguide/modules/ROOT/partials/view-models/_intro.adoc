@@ -9,7 +9,7 @@ View models are similar to entities in that (unlike domain services) there can b
 End users interact with view models in the same way as a domain entity, indeed they are unlikely to distinguish one from the other.
 
 However, whereas domain entities are mapped to a datastore, view models are not.
-Instead they are recreated dynamically by serializing their state, ultimately into the URL itself (meaning their state it is in effect implicitly managed by the client browser).
+Instead, they are recreated dynamically by serializing their state, ultimately into the URL itself (meaning their state it is in effect implicitly managed by the client browser).
 You will notice that the URL for view models (as shown in xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] or xref:vro:ROOT:about.adoc[RestfulObjects viewer]) tends to be quite long.
 
 This capability opens up a number of more advanced use cases:
@@ -24,26 +24,7 @@ Such view models are part of the application layer, not part of the domain layer
 
 We explore these use cases in more detail below.
 
-[TIP]
-====
-Details on how to actually write a view model (the programming model for view models) can be found xref:userguide:ROOT:view-models.adoc[here].
-====
 
-== Externally-managed entities
-
-Sometimes the entities that make up your application are persisted not in the local database but reside in some other system, for example accessible only through a SOAP web service.
-Logically that data might still be considered a domain entity and we might want to associate behaviour with it, however it cannot be modelled as a domain entity if only because JDO/DataNucleus doesn't know about the entity nor how to retrieve or update it.
-
-There are a couple of ways around this: we could either replicate the data somehow from the external system into the Causeway-managed database (in which case it is once again just another domain entity), or we could set up a stub/proxy for the externally managed entity.
-This proxy would hold the reference to the externally-managed domain entity (eg an external id), as well as the "smarts" to know how to interact with that entity (by making SOAP web service calls etc).
-
-The stub/proxy is a type of view model: a view -- if you like -- onto the domain entity managed by the external system.
-
-== In-memory entities
-
-As a variation on the above, sometimes there are domain objects that are, conceptually at least entities, but whose state is not actually persisted anywhere, merely held in-memory (eg in a hash).
-
-A simple example is read-only configuration data that is read from a config file (eg log4j appender definitions) but thereafter is presented in the UI just like any other entity.
 
 == Application-layer view models
 
@@ -84,6 +65,33 @@ Obtaining this information by hand (by querying the respective services/reposito
 
 A dashboard object is a model of the most relevant state to the end-user, in other words it is (quite literally) a view model.
 It is not a persisted entity, instead it belongs to the application layer.
+
+== Self-persisting Domain entities
+
+Sometimes we may have domain entities whose persistence is _not_ managed by JDO or JPA mechanism, in other words they take responsibility for their own persistence.
+Because such entities are responsible for their own state management, they can be implemented as view models.
+
+
+=== Externally-managed entities
+
+Sometimes the entities that make up your application are persisted not in the local database but reside in some other system, for example accessible only through a SOAP web service.
+Logically that data might still be considered a domain entity and we might want to associate behaviour with it, however it cannot be modelled as a domain entity if only because JDO/DataNucleus doesn't know about the entity nor how to retrieve or update it.
+
+There are a couple of ways around this: we could either replicate the data somehow from the external system into the Causeway-managed database (in which case it is once again just another domain entity), or we could set up a stub/proxy for the externally managed entity.
+This proxy would hold the reference to the externally-managed domain entity (eg an external id), as well as the "smarts" to know how to interact with that entity (by making SOAP web service calls etc).
+
+The stub/proxy is a type of view model: a view -- if you like -- onto the domain entity managed by the external system.
+
+
+=== Internal entities
+
+Alternatively, perhaps your application has an entity that is best persisted not in a relational database but instead in a custom datastore, for example a graph database such as neo4j.
+
+=== In-memory entities
+
+As a variation on the above, sometimes there are domain objects that are, conceptually at least entities, but whose state is not actually persisted anywhere, merely held in-memory (eg in a hash).
+
+A simple example is read-only configuration data that is read from a config file (eg log4j appender definitions) but thereafter is presented in the UI just like any other entity.
 
 == DTOs
 

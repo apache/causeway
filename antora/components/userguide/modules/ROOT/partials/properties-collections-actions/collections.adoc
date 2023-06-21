@@ -16,7 +16,7 @@ Most collections (those that are modifiable) will also have a setter and, if per
 And collections properties will also have a number of annotations:
 
 * Apache Causeway defines its own xref xref:refguide:applib:index/annotation/Collection.adoc[@Collection] annotation for capturing domain semantics.
-It also provides a xref:refguide:applib:index/annotation/CollectionLayout.adoc[@CollectionLayout] for UI hints (though the information in this annotation may instead be provided by a supplementary xref:userguide:ROOT:ui.adoc#object-layout[.layout.xml] file)
+It also provides a xref:refguide:applib:index/annotation/CollectionLayout.adoc[@CollectionLayout] for UI hints (though the information in this annotation may instead be provided by a supplementary xref:userguide:ROOT:ui-layout-and-hints.adoc#object-layout[.layout.xml] file)
 
 * the collections of domain entities are often annotated with ORM annotation(s).
 In the case of JDO/DataNucleus annotations this is most notably `javax.jdo.annotations.Persistent`.
@@ -26,8 +26,8 @@ Other annotations can be used to specify if the association is bidirectional, an
 
 Apache Causeway may recognise some of these annotations from the persistence layer infers some domain semantics from them.
 
-Unlike xref:userguide:ROOT:object-members.adoc#properties[properties], the framework does not allow collections to be "edited".
-Instead, xref:userguide:ROOT:object-members.adoc#actions[action]s can be written that will modify the contents of the collection as a side-effect.
+Unlike xref:userguide:ROOT:properties-collections-actions.adoc#properties[properties], the framework does not allow collections to be "edited".
+Instead, xref:userguide:ROOT:properties-collections-actions.adoc#actions[action]s can be written that will modify the contents of the collection as a side-effect.
 For example, a `placeOrder(...)` action will likely add an `Order` to the `Customer#orders` collection.
 
 Since writing getter and setter methods adds quite a bit of boilerplate, it's common to use link:https://projectlombok.org/[Project Lombok] to code generate these methods at compile time (using Java's annotation processor) simply by adding the `@lombok.Getter` and `@lombok.Setter` annotations to the field.

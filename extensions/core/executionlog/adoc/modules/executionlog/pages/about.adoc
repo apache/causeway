@@ -142,7 +142,7 @@ The extension also provides these mixins:
 +
 This contributes a `recentExecutions` collection to each and every domain object.
 +
-This can be explicit positioned through the domain class' own xref:userguide:ROOT:ui.adoc#object-layout[layout file], but this is generally not necessary: it will slot into the tab group in the layout file indicated for unreferenced collections using `<tabGroup unreferencedCollections="true">`.
+This can be explicit positioned through the domain class' own xref:userguide:ROOT:ui-layout-and-hints.adoc#object-layout[layout file], but this is generally not necessary: it will slot into the tab group in the layout file indicated for unreferenced collections using `<tabGroup unreferencedCollections="true">`.
 
 * xref:refguide:extensions:index/executionlog/applib/contributions/HasUsername_recentExecutionsByUser.adoc[]
 +

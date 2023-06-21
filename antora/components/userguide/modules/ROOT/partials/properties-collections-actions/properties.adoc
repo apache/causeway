@@ -16,11 +16,11 @@ Most properties (those that are editable/modifiable) will also have a setter and
 And most properties will also have a number of annotations:
 
 * Apache Causeway defines its own xref:refguide:applib:index/annotation/Property.adoc[@Property] annotation for capturing domain semantics.
-It also provides a xref:refguide:applib:index/annotation/PropertyLayout.adoc[@PropertyLayout] for UI hints (though the information in this annotation may instead be provided by a supplementary xref:userguide:ROOT:ui.adoc#object-layout[.layout.xml] file)
+It also provides a xref:refguide:applib:index/annotation/PropertyLayout.adoc[@PropertyLayout] for UI hints (though the information in this annotation may instead be provided by a supplementary xref:userguide:ROOT:ui-layout-and-hints.adoc#object-layout[.layout.xml] file)
 
-* the properties of domain entities are usually also annotated with an ORM annotation.
+* the properties of domain entities are usually also annotated with ORM annotation(s).
 +
-In the case of xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] this would be the link:http://www.datanucleus.org/products/datanucleus/jdo/annotations.html#Column[@javax.jdo.annotations.Column] annotation.
+For xref:pjpa::about.adoc[JPA/EclipseLink] this would be link:https://www.objectdb.com/api/java/jpa/Column[javax.persistence.Column], for xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] it is link:http://www.datanucleus.org/products/datanucleus/jdo/annotations.html#Column[@javax.jdo.annotations.Column] annotation.
 For property references, there may be other annotations to indicate whether the reference is bidirectional.
 It's also possible (using annotations) to define a link table to hold foreign key columns.
 

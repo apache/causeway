@@ -34,11 +34,11 @@ public class Customer {
 }
 ----
 <.> Depending on configuration settings, the xref:refguide:applib:index/annotation/Property.adoc[@Property] annotation may or may not be required; its role is to define additional domain-layer semantics
-<.> The xref:refguide:applib:index/annotation/PropertyLayout.adoc[@PropertyLayout] annotation defines additional presentation-layer hints; alternatively this metadata can be provided using the xref:ui.adoc#object-layout[layout.xml] file.
+<.> The xref:refguide:applib:index/annotation/PropertyLayout.adoc[@PropertyLayout] annotation defines additional presentation-layer hints; alternatively this metadata can be provided using the xref:ui-layout-and-hints.adoc#object-layout[layout.xml] file.
 <.> It's commonplace to use link:https://projectlombok.org/features/GetterSetter[Project Lombok] to remove boilerplate.
 As there is a `@Setter`, this property may also editable (though this does also depend on configuration settings).
 <.> Depending on configuration settings, the xref:refguide:applib:index/annotation/Collection.adoc[@Collection] annotation may or may not be required; its role is to define additional domain-layer semantics
-<.> The xref:refguide:applib:index/annotation/CollectionLayout.adoc[@CollectionLayout] annotation defines additional presentation-layer hints; alternatively this metadata can be provided using the xref:ui.adoc#object-layout[layout.xml] file.
+<.> The xref:refguide:applib:index/annotation/CollectionLayout.adoc[@CollectionLayout] annotation defines additional presentation-layer hints; alternatively this metadata can be provided using the xref:ui-layout-and-hints.adoc#object-layout[layout.xml] file.
 <.> Collections are immutable, so no setter is required.
 <.> Typically entities implement `Comparable`, so `SortedSet` is typical.
 (For entities, the actual implementation will be replaced by the ORM).
@@ -49,7 +49,7 @@ From this the framework infers the `Customer` domain entity, which in turn has a
 [#actions]
 == Actions
 
-While xref:userguide:ROOT:object-members.adoc#properties[properties] and xref:userguide:ROOT:object-members.adoc#collections[collections] define the state held by a domain object (its "know what" responsibilities), actions define the object's behaviour (its "know how-to" responsibilities).
+While xref:userguide:ROOT:properties-collections-actions.adoc#properties[properties] and xref:userguide:ROOT:properties-collections-actions.adoc#collections[collections] define the state held by a domain object (its "know what" responsibilities), actions define the object's behaviour (its "know how-to" responsibilities).
 
 An application that consists only of domain entities with just "know-what" responsibilities is pretty dumb: it requires that the end-user know the business rules and doesn't modify the state of the domain objects such that they are invalid (for example, an "end date" being before a "start date").
 Such applications are often called CRUD applications (create/read/update/delete).
@@ -91,7 +91,7 @@ public class Customer {
 }
 ----
 <.> Depending on configuration settings, the xref:refguide:applib:index/annotation/Action.adoc[@Action] annotation may or may not be required; its role is to define additional domain-layer semantics
-<.> The xref:refguide:applib:index/annotation/ActionLayout.adoc[@ActionLayout] annotation defines additional presentation-layer hints; alternatively this metadata can be provided using the xref:ui.adoc#object-layout[layout.xml] file.
+<.> The xref:refguide:applib:index/annotation/ActionLayout.adoc[@ActionLayout] annotation defines additional presentation-layer hints; alternatively this metadata can be provided using the xref:ui-layout-and-hints.adoc#object-layout[layout.xml] file.
 <.> The xref:refguide:applib:index/annotation/Parameter.adoc[@Parameter] annotation defines additional domain-layer semantics.
 This is optional though often required.
 <.> The xref:refguide:applib:index/annotation/ParameterLayout.adoc[@ParameterLayout] annotation defines additional presentation-layer hints

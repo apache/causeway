@@ -41,13 +41,13 @@ For more details on the actual domain event classes, see the xref:refguide:appli
 
 As explained xref:userguide:ROOT:overview.adoc#title-and-icon-and-css-class[earlier], to allow the end-user to distinguish one domain object from another, it is rendered with a title and an icon.
 
-xref:userguide:ROOT:ui.adoc#object-titles-and-icons[Normally] the code to return title and icon of an object is part of the domain object's implementation.
+xref:userguide:ROOT:ui-layout-and-hints.adoc#object-titles-and-icons[Normally] the code to return title and icon of an object is part of the domain object's implementation.
 However, UI events allow this title and icon to be provided instead by a subscriber.
 UI events have higher precedence than the other mechanisms of supplying a title.
 
 If annotated with xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#titleUiEvent[@DomainObjectLayout#titleUiEvent()], the appropriate (subclass of) `TitleUiEvent` will be emitted.
 Similarly for xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#iconUiEvent[#iconUiEvent()].
-In addition, it is possible to use events to obtain a CSS class to render with the domain object, using xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClassUiEvent[#cssClassUiEvent()], and to select an alternate xref:userguide:ROOT:ui.adoc#object-layout[layout file] using xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#layoutUiEvent[#layoutUiEvent()].
+In addition, it is possible to use events to obtain a CSS class to render with the domain object, using xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClassUiEvent[#cssClassUiEvent()], and to select an alternate xref:userguide:ROOT:ui-layout-and-hints.adoc#object-layout[layout file] using xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#layoutUiEvent[#layoutUiEvent()].
 
 There are two use cases where this feature is useful:
 

@@ -11,3 +11,8 @@
 
 include::partial$view-models/_intro.adoc[leveloffset=+1]
 include::partial$view-models/progmodel.adoc[leveloffset=+1]
+include::partial$view-models/jaxb-view-models.adoc[leveloffset=+1]
+include::partial$view-models/non-jaxb-view-models.adoc[leveloffset=+1]
+include::partial$view-models/view-model-interface.adoc[leveloffset=+1]
+// include::partial$view-models/serializable-view-models.adoc[leveloffset=+1]
+include::partial$view-models/url-encoding-service.adoc[leveloffset=+1]
