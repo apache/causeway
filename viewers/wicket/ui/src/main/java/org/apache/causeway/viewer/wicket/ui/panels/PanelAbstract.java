@@ -22,6 +22,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.TableDecorator;
@@ -29,6 +30,8 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
+
+import lombok.val;
 
 /**
  * Convenience adapter for {@link Panel}s built up using {@link UiComponentType}s.
@@ -94,6 +97,11 @@ extends PanelBase<T> {
         _Strings.nonEmpty(tableDecorator.documentReadyJavaScript())
             .map(Wkt::javaScriptAsOnDomReadyHeaderItem)
             .ifPresent(response::render);
+    }
+
+    protected void reloadPage() {
+        val currentPage = getPage();
+        RequestCycle.get().setResponsePage(currentPage.getPageClass(), currentPage.getPageParameters());
     }
 
 }

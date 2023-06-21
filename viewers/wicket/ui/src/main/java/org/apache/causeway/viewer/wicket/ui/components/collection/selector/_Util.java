@@ -74,6 +74,12 @@ class _Util {
                 : Integer.MAX_VALUE;
     }
 
+    boolean isPageReloadRequiredOnTableViewActivation(final ComponentFactory componentFactory) {
+        return componentFactory instanceof CollectionContentsAsFactory
+                ? ((CollectionContentsAsFactory) componentFactory).isPageReloadRequiredOnTableViewActivation()
+                : false;
+    }
+
     Predicate<? super ComponentFactory> filterTablePresentations() {
         return f->f.getComponentType() == UiComponentType.COLLECTION_CONTENTS;
     }
@@ -86,5 +92,7 @@ class _Util {
                 _Util.orderOfAppearanceInUiDropdownFor(a),
                 _Util.orderOfAppearanceInUiDropdownFor(b));
     }
+
+
 
 }

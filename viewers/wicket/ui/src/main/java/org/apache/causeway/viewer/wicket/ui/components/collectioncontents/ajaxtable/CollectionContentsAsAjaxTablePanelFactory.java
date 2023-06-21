@@ -69,4 +69,9 @@ implements CollectionContentsAsFactory {
     public int orderOfAppearanceInUiDropdown() {
         return 1200;
     }
+
+    @Override
+    public boolean isPageReloadRequiredOnTableViewActivation() {
+        return true;
+    }
 }

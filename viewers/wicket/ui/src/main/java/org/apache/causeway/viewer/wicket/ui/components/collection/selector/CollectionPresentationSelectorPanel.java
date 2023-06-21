@@ -66,10 +66,7 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
     private static final String ID_VIEW_ITEM = "viewItem";
     private static final String ID_VIEW_ITEM_TITLE = "viewItemTitle";
     private static final String ID_VIEW_ITEM_ICON = "viewItemIcon";
-
-//    private static final String ID_VIEW_BUTTON_TITLE = "viewButtonTitle";
     private static final String ID_VIEW_BUTTON_ICON = "viewButtonIcon";
-
     private static final String ID_SECTION_LABEL = "sectionLabel";
 
     private final CollectionPresentationSelectorHelper selectorHelper;
@@ -127,7 +124,6 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
 
         this.setOutputMarkupId(true);
 
-//        final Label viewButtonTitle = Wkt.labelAdd(views, ID_VIEW_BUTTON_TITLE, translate("Hidden"));
         final Label viewButtonIcon = Wkt.labelAdd(views, ID_VIEW_BUTTON_ICON, "");
 
         Wkt.listViewAdd(container, ID_VIEW_ITEM, sorted(componentFactories), item->{
@@ -166,9 +162,15 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
                 linksSelectorPanel.selectedComponentFactory = componentFactory;
 
                 CollectionPresentationSelectorPanel.this.getModel().parentedHintingBookmark()
-                .ifPresent(bookmark->componentHintKey.set(bookmark, componentFactory.getName()));
+                    .ifPresent(bookmark->componentHintKey.set(bookmark, componentFactory.getName()));
 
-                target.add(linksSelectorPanel, views);
+                /* [CAUSEWAY-3415] do a full page reload when required,
+                 * to properly trigger all client side java-script, that decorates HTML (datatable.net, vega, ...) */
+                if(eitherComponentFactoryOrSectionLabel.isPageReloadRequiredOnTableViewActivation()) {
+                    linksSelectorPanel.reloadPage();
+                } else {
+                    target.add(linksSelectorPanel, views);
+                }
             });
 
             // add title and icon to the link
@@ -193,14 +195,15 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
     private List<EitherComponentFactoryOrSectionLabel> sorted(final Can<ComponentFactory> componentFactories) {
         val presentations = sorted(componentFactories, _Util.filterTablePresentations());
         val exports = sorted(componentFactories, _Util.filterTableExports());
-        val sortedWithSeparators = new ArrayList<EitherComponentFactoryOrSectionLabel>();
+        val sortedWithSeparators = new ArrayList<EitherComponentFactoryOrSectionLabel>(
+                presentations.size() + exports.size() + 2); // heap optimization, not strictly required
 
         if(!presentations.isEmpty()) {
-            sortedWithSeparators.add(EitherComponentFactoryOrSectionLabel.of("Presentations"));
+            sortedWithSeparators.add(EitherComponentFactoryOrSectionLabel.of(translate("Presentations")));
             sortedWithSeparators.addAll(presentations);
         }
         if(!exports.isEmpty()) {
-            sortedWithSeparators.add(EitherComponentFactoryOrSectionLabel.of("Exports"));
+            sortedWithSeparators.add(EitherComponentFactoryOrSectionLabel.of(translate("Exports")));
             sortedWithSeparators.addAll(exports);
         }
 
@@ -238,7 +241,12 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
         boolean isComponentFactory() { return componentFactory!=null; }
         boolean isSectionLabel() { return sectionLabel!=null; }
         boolean isSelectedIn(final CollectionPresentationSelectorPanel panel) {
-           return componentFactory == panel.selectedComponentFactory;
+           return isComponentFactory()
+                   && componentFactory == panel.selectedComponentFactory;
+        }
+        boolean isPageReloadRequiredOnTableViewActivation() {
+            return isComponentFactory()
+                    && _Util.isPageReloadRequiredOnTableViewActivation(componentFactory);
         }
         void markAsActive(final Label viewButtonIcon, final AjaxLinkNoPropagate link) {
             final IModel<String> cssClass = _Util.cssClassFor(componentFactory, viewButtonIcon);

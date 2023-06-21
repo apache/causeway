@@ -59,4 +59,9 @@ public interface CollectionContentsAsFactory {
      * Lowest comes first.
      */
     int orderOfAppearanceInUiDropdown();
+
+    /**
+     * Whether activation of this table presentation view should result in a full page reload.
+     */
+    default boolean isPageReloadRequiredOnTableViewActivation() { return false; }
 }
