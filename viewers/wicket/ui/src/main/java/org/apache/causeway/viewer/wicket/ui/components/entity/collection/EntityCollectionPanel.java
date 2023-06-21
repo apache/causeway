@@ -42,7 +42,6 @@ import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.
 import org.apache.causeway.viewer.wicket.ui.components.collection.CollectionPanel;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorHelper;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorPanel;
-import org.apache.causeway.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
@@ -57,8 +56,7 @@ import lombok.val;
  * the provided {@link UiObjectWkt}.
  */
 public class EntityCollectionPanel
-extends PanelAbstract<ManagedObject, UiObjectWkt>
-implements HasDynamicallyVisibleContent {
+extends PanelAbstract<ManagedObject, UiObjectWkt> {
 
     private static final long serialVersionUID = 1L;
 
@@ -70,9 +68,6 @@ implements HasDynamicallyVisibleContent {
     private static final String ID_SELECTOR_DROPDOWN = "selectorDropdown";
 
     private final ComponentHintKey selectedItemHintKey;
-
-    @Getter(onMethod_= {@Override})
-    private boolean visible = false;
 
     @Getter(value = AccessLevel.PROTECTED)
     private CollectionPresentationSelectorPanel selectorDropdownPanel;
@@ -90,6 +85,8 @@ implements HasDynamicallyVisibleContent {
                 this::getSelectorDropdownPanel,
                 EntityCollectionModelParented.HINT_KEY_SELECTED_ITEM);
 
+        setVisibilityAllowed(assessVisibility());
+
         buildGui();
     }
 
@@ -101,42 +98,67 @@ implements HasDynamicallyVisibleContent {
         super.onInitialize();
 
         final WebMarkupContainer panel = this;
-        if(visible) {
+        if(isVisibilityAllowed()) {
             panel.add(div);
             this.setOutputMarkupId(true);
         } else {
             WktComponents.permanentlyHide(panel, div.getId());
         }
-
     }
 
     @Override
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
+
         tableDecorator().ifPresent(tableDecorator->
             renderHeadForTableDecorator(response, tableDecorator));
     }
 
     // -- HELPER
 
-    private void buildGui() {
+    // EntityCollectionModelParented caching
+    private transient EntityCollectionModelParented entityCollectionModelParented;
+    private EntityCollectionModelParented entityCollectionModelParented() {
+        if(entityCollectionModelParented == null) {
+            this.entityCollectionModelParented = EntityCollectionModelParented.forParentObjectModel(getModel(), layoutData);
+        }
+        return entityCollectionModelParented;
+    }
+
+    // TableDecorator caching
+    private transient Optional<TableDecorator> tableDecorator;
+    private Optional<TableDecorator> tableDecorator() {
+        if(tableDecorator == null) {
+            this.tableDecorator = entityCollectionModelParented()
+                    .getMetaModel()
+                    .getTableDecorator();
+        }
+        return tableDecorator;
+    }
+
+    private boolean assessVisibility() {
         val collectionModel = entityCollectionModelParented();
-        div.setMarkupId("collection-" + collectionModel.getLayoutData().getId());
-
         val collectionMetaModel = collectionModel.getMetaModel();
-
-        Wkt.cssAppend(div, collectionModel.getIdentifier());
-        Wkt.cssAppend(div, collectionModel.getElementType().getFeatureIdentifier());
 
         val objectAdapter = getModel().getObject();
         final Consent visibility = collectionMetaModel
                 .isVisible(objectAdapter, InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
 
-        if(visibility.isAllowed()) {
+        return visibility.isAllowed();
+    }
 
-            visible = true;
+    private void buildGui() {
+        val collectionModel = entityCollectionModelParented();
+        div.setMarkupId("collection-" + collectionModel.getLayoutData().getId());
 
-            Facets.cssClass(collectionMetaModel, objectAdapter)
+        Wkt.cssAppend(div, collectionModel.getIdentifier());
+        Wkt.cssAppend(div, collectionModel.getElementType().getFeatureIdentifier());
+
+        if(isVisibilityAllowed()) {
+
+            val collectionMetaModel = collectionModel.getMetaModel();
+
+            Facets.cssClass(collectionMetaModel, getModel().getObject())
                 .ifPresent(cssClass->Wkt.cssAppend(div, cssClass));
 
             tableDecorator().ifPresent(tableDecorator->
@@ -161,26 +183,6 @@ implements HasDynamicallyVisibleContent {
             collectionPanel.setSelectorDropdownPanel(selectorDropdownPanel);
 
         }
-    }
-
-    // EntityCollectionModelParented caching
-    private transient EntityCollectionModelParented entityCollectionModelParented;
-    private EntityCollectionModelParented entityCollectionModelParented() {
-        if(entityCollectionModelParented == null) {
-            this.entityCollectionModelParented = EntityCollectionModelParented.forParentObjectModel(getModel(), layoutData);
-        }
-        return entityCollectionModelParented;
-    }
-
-    // TableDecorator caching
-    private transient Optional<TableDecorator> tableDecorator;
-    private Optional<TableDecorator> tableDecorator() {
-        if(tableDecorator == null) {
-            this.tableDecorator = entityCollectionModelParented()
-                    .getMetaModel()
-                    .getTableDecorator();
-        }
-        return tableDecorator;
     }
 
     private void createSelectorDropdownPanel(final EntityCollectionModel collectionModel) {

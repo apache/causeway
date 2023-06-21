@@ -34,6 +34,8 @@ import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
+import lombok.Getter;
+
 public class Row
 extends PanelAbstract<ManagedObject, UiObjectWkt>
 implements HasDynamicallyVisibleContent {
@@ -43,6 +45,9 @@ implements HasDynamicallyVisibleContent {
     private static final String ID_ROW_CONTENTS = "rowContents";
 
     private final BSRow bsRow;
+
+    @Getter(onMethod_= {@Override})
+    private boolean visibleBasedOnContent = false;
 
     public Row(
             final String id,
@@ -55,6 +60,14 @@ implements HasDynamicallyVisibleContent {
 
         buildGui();
     }
+
+    @Override
+    public boolean isVisible() {
+        return super.isVisible()
+            && isVisibleBasedOnContent();
+    }
+
+    // -- HELPER
 
     private void buildGui() {
 
@@ -71,7 +84,7 @@ implements HasDynamicallyVisibleContent {
                 final BSCol bsCol = (BSCol) bsRowContent;
                 final Col col = new Col(id, getModel(), bsCol);
 
-                visible = visible || col.isVisible();
+                visibleBasedOnContent = visibleBasedOnContent || col.isVisible();
                 rowContent = col;
 
             } else if (bsRowContent instanceof BSClearFix) {
@@ -85,7 +98,7 @@ implements HasDynamicallyVisibleContent {
         }
 
         final WebMarkupContainer panel = this;
-        if(visible) {
+        if(visibleBasedOnContent) {
             Wkt.cssAppend(panel, "row");
             Wkt.cssAppend(panel, bsRow.getCssClass());
             panel.add(rv);
@@ -94,13 +107,5 @@ implements HasDynamicallyVisibleContent {
         }
 
     }
-
-
-    private boolean visible = false;
-    @Override
-    public boolean isVisible() {
-        return visible;
-    }
-
 
 }
