@@ -18,19 +18,22 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.collection.selector;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.DownloadLink;
+import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.hints.CausewaySelectorEvent;
@@ -38,11 +41,13 @@ import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.causeway.viewer.wicket.ui.CollectionContentsAsFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.links.AjaxLinkNoPropagate;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import org.apache.causeway.viewer.wicket.ui.util.WktLinks;
 
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -64,6 +69,8 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
 
 //    private static final String ID_VIEW_BUTTON_TITLE = "viewButtonTitle";
     private static final String ID_VIEW_BUTTON_ICON = "viewButtonIcon";
+
+    private static final String ID_SECTION_LABEL = "sectionLabel";
 
     private final CollectionPresentationSelectorHelper selectorHelper;
     private final ComponentHintKey componentHintKey;
@@ -124,7 +131,19 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
         final Label viewButtonIcon = Wkt.labelAdd(views, ID_VIEW_BUTTON_ICON, "");
 
         Wkt.listViewAdd(container, ID_VIEW_ITEM, sorted(componentFactories), item->{
-            final ComponentFactory componentFactory = item.getModelObject();
+            val eitherComponentFactoryOrSectionLabel = item.getModelObject();
+
+            if(eitherComponentFactoryOrSectionLabel.isSectionLabel()) {
+                Wkt.cssAppend(item, "list-section-label");
+                Wkt.labelAdd(item, ID_SECTION_LABEL, eitherComponentFactoryOrSectionLabel.getSectionLabel());
+                WktComponents.permanentlyHide(item, ID_VIEW_LINK);
+                return;
+            }
+
+            Wkt.cssAppend(item, "viewItem");
+            WktComponents.permanentlyHide(item, ID_SECTION_LABEL);
+
+            final ComponentFactory componentFactory = eitherComponentFactoryOrSectionLabel.getComponentFactory();
 
             // add direct download link instead of a panel
             if(componentFactory.getComponentType() == UiComponentType.COLLECTION_CONTENTS_EXPORT) {
@@ -135,10 +154,7 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
                 item.addOrReplace(downloadLink);
 
                 // add title and icon to the link
-                WktLinks.listItemAsDropdownLink(item, downloadLink,
-                        ID_VIEW_ITEM_TITLE, CollectionPresentationSelectorPanel::nameFor,
-                        ID_VIEW_ITEM_ICON, null,
-                        CollectionPresentationSelectorPanel::cssClassFor);
+                EitherComponentFactoryOrSectionLabel.addLinkWithIconAndTitle(item, downloadLink);
                 return;
             }
 
@@ -156,18 +172,11 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
             });
 
             // add title and icon to the link
-            WktLinks.listItemAsDropdownLink(item, link,
-                    ID_VIEW_ITEM_TITLE, CollectionPresentationSelectorPanel::nameFor,
-                    ID_VIEW_ITEM_ICON, null,
-                    CollectionPresentationSelectorPanel::cssClassFor);
+            EitherComponentFactoryOrSectionLabel.addLinkWithIconAndTitle(item, link);
 
-            // hide the selected item
-            val isSelected = componentFactory == CollectionPresentationSelectorPanel.this.selectedComponentFactory;
-            if (isSelected) {
-                //viewButtonTitle.setDefaultModel(nameFor(componentFactory));
-                final IModel<String> cssClass = cssClassFor(componentFactory, viewButtonIcon);
-                Wkt.cssReplace(viewButtonIcon, "ViewLinkItem " + cssClass.getObject());
-                Wkt.cssAppend(link, "active");
+            // mark the selected item as active
+            if (eitherComponentFactoryOrSectionLabel.isSelectedIn(this)) {
+                eitherComponentFactoryOrSectionLabel.markAsActive(viewButtonIcon, link);
             }
 
         });
@@ -178,58 +187,80 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
     /**
      * Sorts given CollectionContentsAsFactory(s) by their orderOfAppearanceInUiDropdown,
      * in order of discovery otherwise.
+     * @param filter
      * @see CollectionContentsAsFactory#orderOfAppearanceInUiDropdown()
      */
-    private List<ComponentFactory> sorted(final Can<ComponentFactory> componentFactories) {
-        return componentFactories.stream()
-            .sorted((a, b)->Integer.compare(
-                        orderOfAppearanceInUiDropdown(a),
-                        orderOfAppearanceInUiDropdown(b)))
+    private List<EitherComponentFactoryOrSectionLabel> sorted(final Can<ComponentFactory> componentFactories) {
+        val presentations = sorted(componentFactories, _Util.filterTablePresentations());
+        val exports = sorted(componentFactories, _Util.filterTableExports());
+        val sortedWithSeparators = new ArrayList<EitherComponentFactoryOrSectionLabel>();
+
+        if(!presentations.isEmpty()) {
+            sortedWithSeparators.add(EitherComponentFactoryOrSectionLabel.of("Presentations"));
+            sortedWithSeparators.addAll(presentations);
+        }
+        if(!exports.isEmpty()) {
+            sortedWithSeparators.add(EitherComponentFactoryOrSectionLabel.of("Exports"));
+            sortedWithSeparators.addAll(exports);
+        }
+
+        return sortedWithSeparators;
+    }
+
+    private List<EitherComponentFactoryOrSectionLabel> sorted(
+            final Can<ComponentFactory> componentFactories,
+            final Predicate<? super ComponentFactory> filter) {
+        final List<EitherComponentFactoryOrSectionLabel> sorted = componentFactories.stream()
+            .filter(filter)
+            .sorted(_Util.orderByOrderOfAppearanceInUiDropdown())
+            .map((final ComponentFactory factory)->EitherComponentFactoryOrSectionLabel.of(factory))
             .collect(Collectors.toList());
-    }
-
-    private static int orderOfAppearanceInUiDropdown(final ComponentFactory componentFactory) {
-        return componentFactory instanceof CollectionContentsAsFactory
-                ? ((CollectionContentsAsFactory) componentFactory).orderOfAppearanceInUiDropdown()
-                : Integer.MAX_VALUE;
-    }
-
-    private static IModel<String> cssClassFor(final ComponentFactory componentFactory, final Label viewIcon) {
-        IModel<String> cssClass = null;
-        if (componentFactory instanceof CollectionContentsAsFactory) {
-            val collectionContentsAsFactory = (CollectionContentsAsFactory) componentFactory;
-            cssClass = collectionContentsAsFactory.getCssClass();
-            viewIcon.setDefaultModelObject("");
-            viewIcon.setEscapeModelStrings(true);
-        }
-        if (cssClass == null) {
-            String name = componentFactory.getName();
-            cssClass = Model.of(_Strings.asLowerDashed.apply(name));
-            // Small hack: if there is no specific CSS class then we assume that background-image is used
-            // the span.ViewItemLink should have some content to show it
-            // FIX: find a way to do this with CSS (width and height don't seems to help)
-            viewIcon.setDefaultModelObject("&#160;&#160;&#160;&#160;&#160;");
-            viewIcon.setEscapeModelStrings(false);
-        }
-        return cssClass;
-    }
-
-    private static IModel<String> nameFor(final ComponentFactory componentFactory) {
-        IModel<String> name = null;
-        if (componentFactory instanceof CollectionContentsAsFactory) {
-            val collectionContentsAsFactory = (CollectionContentsAsFactory) componentFactory;
-            name = collectionContentsAsFactory.getTitleLabel();
-        }
-        if (name == null) {
-            name = Model.of(componentFactory.getName());
-        }
-        return name;
+        return sorted;
     }
 
     protected void setViewHintAndBroadcast(final String viewName, final AjaxRequestTarget target) {
         final CollectionPresentationSelectorPanel component = CollectionPresentationSelectorPanel.this;
         send(getPage(), Broadcast.EXACT,
                 new CausewaySelectorEvent(component, CollectionPresentationSelectorHelper.UIHINT_EVENT_VIEW_KEY, viewName, target));
+    }
+
+    @lombok.Value
+    static class EitherComponentFactoryOrSectionLabel implements Serializable {
+        private static final long serialVersionUID = 1L;
+        public static EitherComponentFactoryOrSectionLabel of(final @NonNull ComponentFactory componentFactory) {
+            return new EitherComponentFactoryOrSectionLabel(componentFactory, null);
+        }
+        public static EitherComponentFactoryOrSectionLabel of(final @NonNull String sectionLabel) {
+            return new EitherComponentFactoryOrSectionLabel(null, sectionLabel);
+        }
+        final ComponentFactory componentFactory;
+        final String sectionLabel;
+        boolean isComponentFactory() { return componentFactory!=null; }
+        boolean isSectionLabel() { return sectionLabel!=null; }
+        boolean isSelectedIn(final CollectionPresentationSelectorPanel panel) {
+           return componentFactory == panel.selectedComponentFactory;
+        }
+        void markAsActive(final Label viewButtonIcon, final AjaxLinkNoPropagate link) {
+            final IModel<String> cssClass = _Util.cssClassFor(componentFactory, viewButtonIcon);
+            Wkt.cssReplace(viewButtonIcon, "ViewLinkItem " + cssClass.getObject());
+            Wkt.cssAppend(link, "active");
+        }
+        // -- UTILITY
+        static void addLinkWithIconAndTitle(
+                final @NonNull ListItem<EitherComponentFactoryOrSectionLabel> item,
+                final @NonNull MarkupContainer link) {
+            WktLinks.listItemAsDropdownLink(item, link,
+                    ID_VIEW_ITEM_TITLE, EitherComponentFactoryOrSectionLabel::nameFor,
+                    ID_VIEW_ITEM_ICON, null,
+                    EitherComponentFactoryOrSectionLabel::cssClassFor);
+        }
+        // -- HELPER
+        private static IModel<String> nameFor(final EitherComponentFactoryOrSectionLabel either) {
+            return _Util.nameFor(either.getComponentFactory());
+        }
+        private static IModel<String> cssClassFor(final EitherComponentFactoryOrSectionLabel either, final Label viewIcon) {
+            return _Util.cssClassFor(either.getComponentFactory(), viewIcon);
+        }
     }
 
 }

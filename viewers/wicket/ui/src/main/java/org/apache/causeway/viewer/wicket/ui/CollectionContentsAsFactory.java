@@ -50,8 +50,11 @@ public interface CollectionContentsAsFactory {
     IModel<String> getCssClass();
 
     /**
-     * An ordinal, that governs the order of appearance in the UI dropdown,
-     * that will associate with this factory.
+     * An ordinal, that governs the order of appearance in the UI dropdown.
+     * <ul>
+     * <li>{@literal 1000..1999} reserved for different table presentations</li>
+     * <li>{@literal 2000..2999} reserved for different table exports</li>
+     * </ul>
      * <p>
      * Lowest comes first.
      */
