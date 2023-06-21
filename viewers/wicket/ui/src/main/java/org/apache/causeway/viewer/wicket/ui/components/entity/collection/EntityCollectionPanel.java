@@ -180,7 +180,6 @@ implements HasDynamicallyVisibleContent {
                     .getMetaModel()
                     .getTableDecorator();
         }
-        System.err.printf("tableDecorator %s%n", tableDecorator);
         return tableDecorator;
     }
 
