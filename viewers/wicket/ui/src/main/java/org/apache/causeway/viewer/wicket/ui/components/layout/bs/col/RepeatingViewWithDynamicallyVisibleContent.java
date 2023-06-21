@@ -24,14 +24,25 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 
 import org.apache.causeway.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 
+import lombok.Getter;
+
 public class RepeatingViewWithDynamicallyVisibleContent
 extends RepeatingView
 implements HasDynamicallyVisibleContent {
 
     private static final long serialVersionUID = 1L;
 
+    @Getter(onMethod_= {@Override})
+    private boolean visibleBasedOnContent = false;
+
     public RepeatingViewWithDynamicallyVisibleContent(final String id) {
         super(id);
+    }
+
+    @Override
+    public boolean isVisible() {
+        return super.isVisible()
+            && isVisibleBasedOnContent();
     }
 
     @Override
@@ -40,19 +51,12 @@ implements HasDynamicallyVisibleContent {
         for (Component child : children) {
             if(child instanceof HasDynamicallyVisibleContent) {
                 final HasDynamicallyVisibleContent hasDynamicallyVisibleContent = (HasDynamicallyVisibleContent) child;
-                visible = visible || hasDynamicallyVisibleContent.isVisible();
+                visibleBasedOnContent = visibleBasedOnContent || hasDynamicallyVisibleContent.isVisibleBasedOnContent();
             } else {
-                visible = true;
+                visibleBasedOnContent = true;
             }
         }
         return component;
-    }
-
-    private boolean visible = false;
-
-    @Override
-    public boolean isVisible() {
-        return visible;
     }
 
 }

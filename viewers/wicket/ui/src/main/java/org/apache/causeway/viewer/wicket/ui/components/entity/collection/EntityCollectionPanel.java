@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.entity.collection;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -37,12 +36,10 @@ import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelParented;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.util.ComponentHintKey;
-import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.causeway.viewer.wicket.ui.components.collection.CollectionPanel;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorHelper;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorPanel;
-import org.apache.causeway.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
@@ -57,8 +54,7 @@ import lombok.val;
  * the provided {@link UiObjectWkt}.
  */
 public class EntityCollectionPanel
-extends PanelAbstract<ManagedObject, UiObjectWkt>
-implements HasDynamicallyVisibleContent {
+extends PanelAbstract<ManagedObject, UiObjectWkt> {
 
     private static final long serialVersionUID = 1L;
 
@@ -70,9 +66,6 @@ implements HasDynamicallyVisibleContent {
     private static final String ID_SELECTOR_DROPDOWN = "selectorDropdown";
 
     private final ComponentHintKey selectedItemHintKey;
-
-    @Getter(onMethod_= {@Override})
-    private boolean visible = false;
 
     @Getter(value = AccessLevel.PROTECTED)
     private CollectionPresentationSelectorPanel selectorDropdownPanel;
@@ -90,6 +83,8 @@ implements HasDynamicallyVisibleContent {
                 this::getSelectorDropdownPanel,
                 EntityCollectionModelParented.HINT_KEY_SELECTED_ITEM);
 
+        setVisibilityAllowed(assessVisibility());
+
         buildGui();
     }
 
@@ -101,49 +96,71 @@ implements HasDynamicallyVisibleContent {
         super.onInitialize();
 
         final WebMarkupContainer panel = this;
-        if(visible) {
+        if(isVisibilityAllowed()) {
             panel.add(div);
             this.setOutputMarkupId(true);
         } else {
             WktComponents.permanentlyHide(panel, div.getId());
         }
-
     }
 
     @Override
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
+
         tableDecorator().ifPresent(tableDecorator->
             renderHeadForTableDecorator(response, tableDecorator));
     }
 
     // -- HELPER
 
-    private void buildGui() {
+    // EntityCollectionModelParented caching
+    private transient EntityCollectionModelParented entityCollectionModelParented;
+    private EntityCollectionModelParented entityCollectionModelParented() {
+        if(entityCollectionModelParented == null) {
+            this.entityCollectionModelParented = EntityCollectionModelParented.forParentObjectModel(getModel(), layoutData);
+        }
+        return entityCollectionModelParented;
+    }
 
-        val collectionModel = EntityCollectionModelParented.forParentObjectModel(getModel(), layoutData);
-        div.setMarkupId("collection-" + collectionModel.getLayoutData().getId());
+    // TableDecorator caching
+    private transient Optional<TableDecorator> tableDecorator;
+    private Optional<TableDecorator> tableDecorator() {
+        if(tableDecorator == null) {
+            this.tableDecorator = entityCollectionModelParented()
+                    .getMetaModel()
+                    .getTableDecorator();
+        }
+        return tableDecorator;
+    }
 
+    private boolean assessVisibility() {
+        val collectionModel = entityCollectionModelParented();
         val collectionMetaModel = collectionModel.getMetaModel();
-
-        Wkt.cssAppend(div, collectionModel.getIdentifier());
-        Wkt.cssAppend(div, collectionModel.getElementType().getFeatureIdentifier());
 
         val objectAdapter = getModel().getObject();
         final Consent visibility = collectionMetaModel
                 .isVisible(objectAdapter, InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
 
-        if(visibility.isAllowed()) {
+        return visibility.isAllowed();
+    }
 
-            visible = true;
+    private void buildGui() {
+        val collectionModel = entityCollectionModelParented();
+        div.setMarkupId("collection-" + collectionModel.getLayoutData().getId());
 
-            Facets.cssClass(collectionMetaModel, objectAdapter)
-            .ifPresent(cssClass->Wkt.cssAppend(div, cssClass));
+        Wkt.cssAppend(div, collectionModel.getIdentifier());
+        Wkt.cssAppend(div, collectionModel.getElementType().getFeatureIdentifier());
 
-            this.tableDecorator = collectionMetaModel.getTableDecorator();
-            tableDecorator.ifPresent(tableDecorator->{
-                    Wkt.cssAppend(div, tableDecorator.cssClass());
-                });
+        if(isVisibilityAllowed()) {
+
+            val collectionMetaModel = collectionModel.getMetaModel();
+
+            Facets.cssClass(collectionMetaModel, getModel().getObject())
+                .ifPresent(cssClass->Wkt.cssAppend(div, cssClass));
+
+            tableDecorator().ifPresent(tableDecorator->
+                Wkt.cssAppend(div, tableDecorator.cssClass()));
 
             val collectionPanel = new CollectionPanel(ID_COLLECTION, collectionModel);
             div.addOrReplace(collectionPanel);
@@ -154,7 +171,7 @@ implements HasDynamicallyVisibleContent {
             div.add(labelComponent);
 
             collectionMetaModel.getDescription(collectionModel::getParentObject)
-            .ifPresent(description->WktTooltips.addTooltip(labelComponent, description));
+                .ifPresent(description->WktTooltips.addTooltip(labelComponent, description));
 
             final Can<LinkAndLabel> links = collectionModel.getLinks();
             AdditionalLinksPanel.addAdditionalLinks(
@@ -166,31 +183,18 @@ implements HasDynamicallyVisibleContent {
         }
     }
 
-    // TableDecorator caching
-    private transient Optional<TableDecorator> tableDecorator;
-    private Optional<TableDecorator> tableDecorator() {
-        if(tableDecorator == null) {
-            val collectionModel = EntityCollectionModelParented.forParentObjectModel(getModel(), layoutData);
-            val collectionMetaModel = collectionModel.getMetaModel();
-            this.tableDecorator = collectionMetaModel.getTableDecorator();
-        }
-        return tableDecorator;
-    }
-
     private void createSelectorDropdownPanel(final EntityCollectionModel collectionModel) {
 
         final CollectionPresentationSelectorHelper selectorHelper =
                 new CollectionPresentationSelectorHelper(collectionModel, getComponentFactoryRegistry(),
                         selectedItemHintKey);
 
-        final List<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
-
-        if (componentFactories.size() <= 1) {
-            WktComponents.permanentlyHide(div, ID_SELECTOR_DROPDOWN);
-        } else {
+        if (selectorHelper.getComponentFactories().isCardinalityMultiple()) {
             selectorDropdownPanel = new CollectionPresentationSelectorPanel(ID_SELECTOR_DROPDOWN,
                     collectionModel, selectedItemHintKey);
             div.addOrReplace(selectorDropdownPanel);
+        } else {
+            WktComponents.permanentlyHide(div, ID_SELECTOR_DROPDOWN);
         }
     }
 

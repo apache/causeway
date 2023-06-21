@@ -5,6 +5,8 @@
 :page-partial:
 
 
+// TODO: extend this page with discussion of mixins and events.
+
 Enabling and ensuring modularity is a xref:background-context-and-theory.adoc#modular[key principle] for the Apache Causeway framework.
 Modularity is the only way to ensure that a complex application domain does not over time degenerate into the infamous "big ball of mud", software that is difficult, dangerous and expensive to change.
 

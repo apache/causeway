@@ -18,12 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.tabledec;
 
+import java.util.function.BiConsumer;
+
 import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.SingleValueFacetAbstract;
-
-import java.util.function.BiConsumer;
 
 public abstract class TableDecoratorFacetAbstract
 extends SingleValueFacetAbstract<Class<? extends TableDecorator>>
@@ -32,7 +32,6 @@ implements TableDecoratorFacet {
     public static final Class<TableDecoratorFacet> type() {
         return TableDecoratorFacet.class;
     }
-
 
     protected TableDecoratorFacetAbstract(
             final Class<? extends TableDecorator> value,
@@ -50,7 +49,6 @@ implements TableDecoratorFacet {
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("value", value());
     }
 
 }

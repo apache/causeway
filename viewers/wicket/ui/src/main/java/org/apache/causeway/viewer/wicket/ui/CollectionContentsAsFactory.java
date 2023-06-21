@@ -48,4 +48,20 @@ public interface CollectionContentsAsFactory {
      * for "collection contents as" component factories
      */
     IModel<String> getCssClass();
+
+    /**
+     * An ordinal, that governs the order of appearance in the UI dropdown.
+     * <ul>
+     * <li>{@literal 1000..1999} reserved for different table presentations</li>
+     * <li>{@literal 2000..2999} reserved for different table exports</li>
+     * </ul>
+     * <p>
+     * Lowest comes first.
+     */
+    int orderOfAppearanceInUiDropdown();
+
+    /**
+     * Whether activation of this table presentation view should result in a full page reload.
+     */
+    default boolean isPageReloadRequiredOnTableViewActivation() { return false; }
 }

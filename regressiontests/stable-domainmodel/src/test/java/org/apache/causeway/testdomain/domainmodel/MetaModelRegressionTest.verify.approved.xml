@@ -79,7 +79,6 @@
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
                 <mml:attr name="facet" value="AuthorizationFacetImpl"/>
@@ -176,7 +175,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -283,7 +281,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
@@ -484,7 +481,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
@@ -623,7 +619,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -724,7 +719,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
@@ -827,7 +821,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -913,7 +906,6 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec.TableDecoratorFacetFromConfiguration">
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForDomainObjectAnnotation">
@@ -1024,7 +1016,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
@@ -1226,7 +1217,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -1327,7 +1317,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -1476,7 +1465,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -1577,7 +1565,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
@@ -1680,7 +1667,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -1745,7 +1731,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -1879,7 +1864,6 @@
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="ViewModelFacetForDomainObjectAnnotation"/>
@@ -1928,7 +1912,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor">
@@ -2043,7 +2026,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
@@ -2245,7 +2227,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -2383,7 +2364,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -2484,7 +2464,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
@@ -2587,7 +2566,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -2664,7 +2642,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -2787,7 +2764,6 @@
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
                 <mml:attr name="facet" value="AuthorizationFacetImpl"/>
@@ -2869,7 +2845,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -2992,7 +2967,6 @@
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="ViewModelFacetForDomainObjectAnnotation"/>
@@ -3041,7 +3015,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor">
@@ -3156,7 +3129,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
@@ -3358,7 +3330,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -3496,7 +3467,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -3597,7 +3567,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
@@ -3700,7 +3669,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -3777,7 +3745,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -3906,7 +3873,6 @@
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
                 <mml:attr name="facet" value="AuthorizationFacetImpl"/>
@@ -3988,7 +3954,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -4117,7 +4082,6 @@
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="ViewModelFacetForDomainObjectAnnotation"/>
@@ -4166,7 +4130,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor">
@@ -4257,7 +4220,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -4409,7 +4371,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -4610,7 +4571,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -4748,7 +4708,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -4849,7 +4808,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
@@ -4952,7 +4910,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -5039,7 +4996,6 @@
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="ViewModelFacetForDomainObjectAnnotation"/>
@@ -5088,7 +5044,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor">
@@ -5142,7 +5097,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor">
                         <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperElementTypeVm"/>
@@ -5194,7 +5148,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor">
@@ -5248,7 +5201,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor">
                         <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperElementTypeVm"/>
@@ -5300,7 +5252,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor">
@@ -5354,7 +5305,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor">
                         <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperElementTypeVm"/>
@@ -5406,7 +5356,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor">
@@ -5460,7 +5409,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor">
                         <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperElementTypeVm"/>
@@ -5513,7 +5461,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor">
                         <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperElementTypeVm"/>
@@ -5565,7 +5512,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor">
@@ -5644,7 +5590,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -5789,7 +5734,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -5990,7 +5934,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -6128,7 +6071,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -6230,7 +6172,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>org.apache.causeway.applib.value.LocalResourcePath</mml:returnType>
@@ -6331,7 +6272,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
@@ -6436,7 +6376,6 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec.TableDecoratorFacetFromConfiguration">
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.title.TitleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.title.methods.TitleFacetViaTitleMethod">
@@ -6606,7 +6545,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetForCollectionLayoutAnnotation"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor">
                         <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperFullyImpl"/>
@@ -6720,7 +6658,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
@@ -6922,7 +6859,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -7060,7 +6996,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -7161,7 +7096,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
@@ -7264,7 +7198,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -7347,7 +7280,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -7439,7 +7371,6 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec.TableDecoratorFacetFromConfiguration">
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForDomainObjectAnnotation">
@@ -7628,7 +7559,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -7829,7 +7759,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -7967,7 +7896,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -8068,7 +7996,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
@@ -8171,7 +8098,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -8257,7 +8183,6 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec.TableDecoratorFacetFromConfiguration">
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForDomainObjectAnnotation">
@@ -8470,7 +8395,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -8671,7 +8595,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -8809,7 +8732,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -8911,7 +8833,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>org.apache.causeway.applib.value.LocalResourcePath</mml:returnType>
@@ -9012,7 +8933,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
@@ -9117,7 +9037,6 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec.TableDecoratorFacetFromConfiguration">
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.title.TitleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.title.methods.TitleFacetViaTitleMethod">
@@ -9381,7 +9300,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetForCollectionLayoutAnnotation"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor">
                         <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperMemberInheritance_usingAbstract"/>
@@ -9495,7 +9413,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
@@ -9697,7 +9614,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -9835,7 +9751,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -9936,7 +9851,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
@@ -10039,7 +9953,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -10122,7 +10035,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -10211,7 +10123,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -10309,7 +10220,6 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec.TableDecoratorFacetFromConfiguration">
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.title.TitleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.title.methods.TitleFacetViaTitleMethod">
@@ -10561,7 +10471,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetForCollectionLayoutAnnotation"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor">
                         <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperMemberInheritance_usingInterface"/>
@@ -10675,7 +10584,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
@@ -10877,7 +10785,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -11015,7 +10922,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -11116,7 +11022,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
@@ -11219,7 +11124,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -11302,7 +11206,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -11392,7 +11295,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
                         <mml:attr name="facet" value="AuthorizationFacetImpl"/>
@@ -11480,7 +11382,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -11607,7 +11508,6 @@
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="ViewModelFacetForDomainObjectAnnotation"/>
@@ -11677,7 +11577,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -11784,7 +11683,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
@@ -11986,7 +11884,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -12124,7 +12021,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -12226,7 +12122,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>org.apache.causeway.applib.value.LocalResourcePath</mml:returnType>
@@ -12327,7 +12222,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
@@ -12420,7 +12314,6 @@
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="ViewModelFacetForDomainObjectAnnotation"/>
@@ -12494,7 +12387,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -12601,7 +12493,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
@@ -12803,7 +12694,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -12941,7 +12831,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -13043,7 +12932,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>org.apache.causeway.applib.value.LocalResourcePath</mml:returnType>
@@ -13144,7 +13032,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
@@ -13237,7 +13124,6 @@
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="ViewModelFacetForDomainObjectAnnotation"/>
@@ -13311,7 +13197,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -13418,7 +13303,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
@@ -13620,7 +13504,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -13758,7 +13641,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -13859,7 +13741,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
@@ -13962,7 +13843,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -14048,7 +13928,6 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec.TableDecoratorFacetFromConfiguration">
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForDomainObjectAnnotation">
@@ -14288,7 +14167,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.typicallen.fromtype.TypicalLengthFacetOnPropertyFromType">
                         <mml:attr name="facet" value="TypicalLengthFacetOnPropertyFromType"/>
@@ -14428,7 +14306,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.typicallen.fromtype.TypicalLengthFacetOnPropertyFromType">
                         <mml:attr name="facet" value="TypicalLengthFacetOnPropertyFromType"/>
@@ -14553,7 +14430,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.typicallen.fromtype.TypicalLengthFacetOnPropertyFromType">
@@ -14697,7 +14573,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetForCollectionLayoutAnnotation"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.update.SnapshotExcludeFacetFromImmutableMember">
                         <mml:attr name="facet" value="SnapshotExcludeFacetFromImmutableMember"/>
@@ -14828,7 +14703,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetForCollectionLayoutAnnotation"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.update.SnapshotExcludeFacetFromImmutableMember">
                         <mml:attr name="facet" value="SnapshotExcludeFacetFromImmutableMember"/>
@@ -14938,7 +14812,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetForCollectionLayoutAnnotation"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.update.SnapshotExcludeFacetFromImmutableMember">
                         <mml:attr name="facet" value="SnapshotExcludeFacetFromImmutableMember"/>
@@ -15019,7 +14892,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetForCollectionLayoutAnnotation">
                         <mml:attr name="facet" value="TableDecoratorFacetForCollectionLayoutAnnotation"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor">
@@ -15146,7 +15018,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -15368,7 +15239,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
                         <mml:attr name="facet" value="AuthorizationFacetImpl"/>
@@ -15588,7 +15458,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -15824,7 +15693,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
                         <mml:attr name="facet" value="AuthorizationFacetImpl"/>
@@ -16045,7 +15913,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
                         <mml:attr name="facet" value="AuthorizationFacetImpl"/>
@@ -16132,7 +15999,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -16375,7 +16241,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -16576,7 +16441,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -16677,7 +16541,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -16785,7 +16648,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -16877,7 +16739,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -16983,7 +16844,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -17218,7 +17078,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>org.apache.causeway.applib.value.LocalResourcePath</mml:returnType>
@@ -17320,7 +17179,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -17411,7 +17269,6 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec.TableDecoratorFacetFromConfiguration">
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForDomainObjectAnnotation">
@@ -17610,7 +17467,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor">
                         <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupportDiscovery$WhenAnnotationOptional"/>
@@ -17724,7 +17580,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
@@ -17926,7 +17781,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -18064,7 +17918,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -18166,7 +18019,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>org.apache.causeway.applib.value.LocalResourcePath</mml:returnType>
@@ -18262,7 +18114,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -18496,7 +18347,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -18587,7 +18437,6 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec.TableDecoratorFacetFromConfiguration">
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForDomainObjectAnnotation">
@@ -18786,7 +18635,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor">
                         <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupportDiscovery$WhenAnnotationRequired"/>
@@ -18900,7 +18748,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
@@ -19102,7 +18949,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -19240,7 +19086,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -19342,7 +19187,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>org.apache.causeway.applib.value.LocalResourcePath</mml:returnType>
@@ -19442,7 +19286,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -19676,7 +19519,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -19767,7 +19609,6 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec.TableDecoratorFacetFromConfiguration">
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForDomainObjectAnnotation">
@@ -19966,7 +19807,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor">
                         <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperMemberSupportDiscovery$WhenEncapsulationEnabled"/>
@@ -20080,7 +19920,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
@@ -20282,7 +20121,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -20420,7 +20258,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -20522,7 +20359,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>org.apache.causeway.applib.value.LocalResourcePath</mml:returnType>
@@ -20622,7 +20458,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -20856,7 +20691,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -20942,7 +20776,6 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec.TableDecoratorFacetFromConfiguration">
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -21061,7 +20894,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -21267,7 +21099,6 @@
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
                 <mml:attr name="facet" value="AuthorizationFacetImpl"/>
@@ -21374,7 +21205,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -21580,7 +21410,6 @@
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
                 <mml:attr name="facet" value="AuthorizationFacetImpl"/>
@@ -21687,7 +21516,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -21907,7 +21735,6 @@
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
                 <mml:attr name="facet" value="AuthorizationFacetImpl"/>
@@ -22014,7 +21841,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -22234,7 +22060,6 @@
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
                 <mml:attr name="facet" value="AuthorizationFacetImpl"/>
@@ -22328,7 +22153,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
                         <mml:attr name="facet" value="AuthorizationFacetImpl"/>
@@ -22420,7 +22244,6 @@
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
                 <mml:attr name="facet" value="AuthorizationFacetImpl"/>
@@ -22507,7 +22330,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -22735,7 +22557,6 @@
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
                 <mml:attr name="facet" value="AuthorizationFacetImpl"/>
@@ -22863,7 +22684,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetForCollectionLayoutAnnotation"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.update.SnapshotExcludeFacetFromImmutableMember">
                         <mml:attr name="facet" value="SnapshotExcludeFacetFromImmutableMember"/>
@@ -22958,7 +22778,6 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec.TableDecoratorFacetFromConfiguration">
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -23087,7 +22906,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetForCollectionLayoutAnnotation"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.update.SnapshotExcludeFacetFromImmutableMember">
                         <mml:attr name="facet" value="SnapshotExcludeFacetFromImmutableMember"/>
@@ -23182,7 +23000,6 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec.TableDecoratorFacetFromConfiguration">
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -23290,7 +23107,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetForCollectionLayoutAnnotation"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.update.SnapshotExcludeFacetFromImmutableMember">
                         <mml:attr name="facet" value="SnapshotExcludeFacetFromImmutableMember"/>
@@ -23385,7 +23201,6 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec.TableDecoratorFacetFromConfiguration">
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -23491,7 +23306,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.typicallen.fromtype.TypicalLengthFacetOnPropertyFromType">
@@ -23619,7 +23433,6 @@
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
                 <mml:attr name="facet" value="AuthorizationFacetImpl"/>
@@ -23724,7 +23537,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.typicallen.fromtype.TypicalLengthFacetOnPropertyFromType">
@@ -23852,7 +23664,6 @@
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
                 <mml:attr name="facet" value="AuthorizationFacetImpl"/>
@@ -23943,7 +23754,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.typicallen.fromtype.TypicalLengthFacetOnPropertyFromType">
@@ -24050,7 +23860,6 @@
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="ViewModelFacetForDomainObjectAnnotation"/>
@@ -24124,7 +23933,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -24434,7 +24242,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -24635,7 +24442,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -24773,7 +24579,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -24874,7 +24679,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
@@ -24977,7 +24781,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -25063,7 +24866,6 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec.TableDecoratorFacetFromConfiguration">
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForDomainObjectAnnotation">
@@ -25175,7 +24977,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -25376,7 +25177,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -25477,7 +25277,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -25585,7 +25384,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -25686,7 +25484,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
@@ -25789,7 +25586,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -25875,7 +25671,6 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec.TableDecoratorFacetFromConfiguration">
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForDomainObjectAnnotation">
@@ -26035,7 +25830,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
                         <mml:attr name="facet" value="AuthorizationFacetImpl"/>
@@ -26141,7 +25935,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
@@ -26343,7 +26136,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -26481,7 +26273,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -26582,7 +26373,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
@@ -26685,7 +26475,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -26772,7 +26561,6 @@
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
                 <mml:attr name="facet" value="AuthorizationFacetImpl"/>
@@ -26854,7 +26642,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -26965,7 +26752,6 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec.TableDecoratorFacetFromConfiguration">
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.title.TitleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation">
@@ -27140,7 +26926,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor">
                         <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ViewModelWithAnnotationOptionalUsingPrivateSupport"/>
@@ -27254,7 +27039,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
@@ -27456,7 +27240,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -27594,7 +27377,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -27680,7 +27462,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -27788,7 +27569,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>org.apache.causeway.applib.value.LocalResourcePath</mml:returnType>
@@ -27890,7 +27670,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -27981,7 +27760,6 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec.TableDecoratorFacetFromConfiguration">
                 <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
-                <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForSerializableInterface">
@@ -28123,7 +27901,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor">
                         <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ViewModelWithEncapsulatedMembers"/>
@@ -28237,7 +28014,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
@@ -28439,7 +28215,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -28577,7 +28352,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>java.lang.Object</mml:returnType>
@@ -28649,7 +28423,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationFacetImpl">
@@ -28757,7 +28530,6 @@
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>
                 <mml:returnType>org.apache.causeway.applib.value.LocalResourcePath</mml:returnType>
@@ -28858,7 +28630,6 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetFromConfiguration">
                         <mml:attr name="facet" value="TableDecoratorFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                 </mml:facets>

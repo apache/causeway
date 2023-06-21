@@ -75,4 +75,9 @@ implements
     public IModel<String> getCssClass() {
         return Model.of("fa fa-calendar");
     }
+
+    @Override
+    public int orderOfAppearanceInUiDropdown() {
+        return 1600;
+    }
 }

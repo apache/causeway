@@ -18,12 +18,11 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.multiple;
 
-import java.util.List;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.event.IEvent;
 
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.hints.CausewayEnvelopeEvent;
@@ -94,13 +93,13 @@ implements CollectionCountProvider {
         final EntityCollectionModel hiddenCollModel = EntityCollectionModelHidden
                 .forCollectionModel((EntityCollectionModelAbstract) visibleCollModel);
 
-        final List<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
+        final Can<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
 
         final CollectionPresentationSelectorPanel selectorDropdownPanelIfAny =
                 CollectionPresentationSelectorProvider.getCollectionSelectorProvider(this);
         final String selectedCompFactoryName = selectorDropdownPanelIfAny != null
             ? selectorHelper.honourViewHintElseDefault(selectorDropdownPanelIfAny)
-            : componentFactories.get(0).getName();
+            : componentFactories.getFirstElseFail().getName();
 
 
         // create all, hide the one not selected

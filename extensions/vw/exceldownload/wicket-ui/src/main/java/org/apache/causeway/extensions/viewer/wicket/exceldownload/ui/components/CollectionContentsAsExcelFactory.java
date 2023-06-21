@@ -74,6 +74,11 @@ implements CollectionContentsAsFactory {
         return Model.of("fa-solid fa-file-excel");
     }
 
+    @Override
+    public int orderOfAppearanceInUiDropdown() {
+        return 2500;
+    }
+
     // -- HELPER
 
     private DownloadLink createDownloadLink(final String id, final EntityCollectionModel model) {

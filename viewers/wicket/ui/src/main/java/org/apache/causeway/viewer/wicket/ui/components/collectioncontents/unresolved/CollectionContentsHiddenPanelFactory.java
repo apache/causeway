@@ -68,4 +68,9 @@ implements CollectionContentsAsFactory {
     public IModel<String> getCssClass() {
         return Model.of("fa fa-fw fa-eye-slash");
     }
+
+    @Override
+    public int orderOfAppearanceInUiDropdown() {
+        return 1100;
+    }
 }

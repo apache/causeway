@@ -8,6 +8,8 @@
 
 include::partial$mixins/_intro.adoc[leveloffset=+1]
 include::partial$mixins/progmodel.adoc[leveloffset=+1]
-include::partial$mixins/as-nested-classes.adoc[leveloffset=+1]
-include::partial$mixins/programmatic-usage.adoc[leveloffset=+1]
 include::partial$mixins/action-parameters.adoc[leveloffset=+1]
+include::partial$mixins/as-nested-classes.adoc[leveloffset=+1]
+include::partial$mixins/modularity.adoc[leveloffset=+1]
+include::partial$mixins/programmatic-usage.adoc[leveloffset=+1]
+
