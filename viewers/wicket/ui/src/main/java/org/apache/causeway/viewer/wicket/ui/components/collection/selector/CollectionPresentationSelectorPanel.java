@@ -252,6 +252,7 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
             final IModel<String> cssClass = _Util.cssClassFor(componentFactory, viewButtonIcon);
             Wkt.cssReplace(viewButtonIcon, "ViewLinkItem " + cssClass.getObject());
             Wkt.cssAppend(link, "active");
+            link.setEnabled(false);
         }
         // -- UTILITY
         static void addLinkWithIconAndTitle(
