@@ -27,6 +27,7 @@ import io.kvision.tabulator.Formatter
 import io.kvision.tabulator.js.Tabulator
 import io.kvision.utils.obj
 import org.apache.causeway.client.kroviz.core.model.CollectionDM
+import org.apache.causeway.client.kroviz.core.model.Exhibit
 import org.apache.causeway.client.kroviz.core.model.PropertyDetails
 import org.apache.causeway.client.kroviz.to.ValueType
 import org.apache.causeway.client.kroviz.to.Vega5
@@ -46,6 +47,8 @@ class ColumnFactory {
     }
 
     fun buildColumns(displayCollection: CollectionDM): List<ColumnDefinition<dynamic>> {
+        console.log("[CF_buildColumns]")
+        console.log(displayCollection)
         val columns = mutableListOf<ColumnDefinition<dynamic>>()
         columns.add(columnForObjectIcon(displayCollection))
         columns.addAll(columnsForProperties(displayCollection))
@@ -59,7 +62,7 @@ class ColumnFactory {
     }
 
     private fun columnForObjectMenu(): ColumnDefinition<dynamic> {
-        return ColumnDefinition<dynamic>(
+        return ColumnDefinition(
             "",
             field = "iconName", // any existing field can be used
             formatter = Formatter.TICKCROSS,
@@ -84,13 +87,13 @@ class ColumnFactory {
         val icon = displayCollection.icon
         displayCollection.data.forEach { exhibit ->
             if (icon != null) {
-                exhibit.asDynamic()["icon"] = icon
+                exhibit.icon = icon
             }
         }
     }
 
     private fun buildIconColumn(): ColumnDefinition<dynamic> {
-        return ColumnDefinition<dynamic>(
+        return ColumnDefinition(
             "",
             field = "icon",
             formatter = Formatter.IMAGE,
@@ -127,7 +130,7 @@ class ColumnFactory {
     }
 
     private fun buildDefault(it: PropertyDetails): ColumnDefinition<dynamic> {
-        return ColumnDefinition<dynamic>(
+        return ColumnDefinition(
             title = it.name,
             field = it.id,
             width = (it.typicalLength * 8).toString(),
@@ -136,7 +139,7 @@ class ColumnFactory {
     }
 
     private fun buildVega(it: PropertyDetails): ColumnDefinition<dynamic> {
-        return ColumnDefinition<dynamic>(
+        return ColumnDefinition(
             title = it.name,
             field = it.id,
             width = (it.typicalLength * 8).toString(),
@@ -168,7 +171,7 @@ class ColumnFactory {
     }
 
     private fun buildLink(): ColumnDefinition<dynamic> {
-        return ColumnDefinition<dynamic>(
+        return ColumnDefinition(
             title = "ResultListResult",
             field = "result",
             headerFilter = Editor.INPUT

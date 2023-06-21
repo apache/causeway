@@ -42,6 +42,7 @@ class Exposer(val delegate: TObject) {
     init {
         val delegateUrl = getDelegateUrl()
         exhibit = Exhibit(delegateUrl)
+        exhibit.asDynamic()["icon"] = null
         for (m in delegate.members) {
             val member = m.value
             if (member.memberType == MemberType.PROPERTY.type) {
@@ -63,7 +64,7 @@ class Exposer(val delegate: TObject) {
     }
 
     fun getWithDelegateProperties(): dynamic {
-        return exhibit.asDynamic()
+        return exhibit
     }
 
     fun get(propertyName: String): Any? {

@@ -78,8 +78,6 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
             if (!it.readyToRender())
                 return false
         }
-        console.log("[ODM_areCollectionsReadyToRender] (true)")
-        console.log(collectionModelList)
         return true
     }
 

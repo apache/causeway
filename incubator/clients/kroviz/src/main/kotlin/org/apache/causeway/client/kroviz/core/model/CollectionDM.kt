@@ -29,7 +29,7 @@ class CollectionDM(override var title: String) : DisplayModelWithLayout() {
     val collectionLayout = CollectionLayout()
 
     var id = ""
-    var data = observableListOf<Exposer>()
+    var data = observableListOf<dynamic>()
     private var rawData = observableListOf<TransferObject>()
     private var protoType: TObject? = null
     private var protoTypeLayout: GridBs? = null
@@ -79,7 +79,7 @@ class CollectionDM(override var title: String) : DisplayModelWithLayout() {
         rawData.add(obj)
         val tObj = obj as TObject
         val exo = Exposer(tObj)
-        data.add(exo.exhibit.asDynamic())
+        data.add(exo.getWithDelegateProperties())
     }
 
     override fun reset() {

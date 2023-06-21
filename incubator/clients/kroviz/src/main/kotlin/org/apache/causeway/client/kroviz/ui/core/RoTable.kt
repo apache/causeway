@@ -26,6 +26,7 @@ import io.kvision.tabulator.TableType
 import io.kvision.tabulator.Tabulator
 import io.kvision.tabulator.TabulatorOptions
 import io.kvision.tabulator.js.Tabulator.CellComponent
+import io.kvision.utils.obj
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.serializer
 import org.apache.causeway.client.kroviz.core.event.ResourceProxy
@@ -44,10 +45,6 @@ class RoTable(displayCollection: CollectionDM) : SimplePanel() {
     init {
         title = StringUtils.extractTitle(displayCollection.title)
         width = CssSize(100, UNIT.perc)
-        val model = mutableListOf<dynamic>()
-        displayCollection.data.forEach {
-            model.add(it.asDynamic())
-        }
         val columns = ColumnFactory().buildColumns(
             displayCollection
         )
@@ -63,6 +60,7 @@ class RoTable(displayCollection: CollectionDM) : SimplePanel() {
         val tableTypes = setOf(TableType.STRIPED, TableType.HOVER)
 
         console.log("[RT_before] tabulator(), model ->")
+        val model = displayCollection.data
         console.log(model)
         val tabulator = createTabulator(model, options, tableTypes)
         tabulator.setEventListener<Tabulator<dynamic>> {
@@ -77,12 +75,14 @@ class RoTable(displayCollection: CollectionDM) : SimplePanel() {
                 }
             }
         }
+        tabulator.redraw(true)
+        console.log(tabulator)
     }
 
     @OptIn(InternalSerializationApi::class)
     private fun createTabulator(
-        data: List<Exhibit>,
-        options: TabulatorOptions<Exhibit>,
+        data: List<dynamic>,
+        options: TabulatorOptions<dynamic>,
         types: Set<TableType>
     ): Tabulator<dynamic> {
         val dataUpdateOnEdit = true
