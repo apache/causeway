@@ -77,6 +77,7 @@ import org.apache.causeway.core.metamodel.facets.properties.defaults.method.Prop
 import org.apache.causeway.core.metamodel.facets.properties.disabled.inferred.DisabledFacetOnPropertyInferredFactory;
 import org.apache.causeway.core.metamodel.facets.properties.mandatory.dflt.MandatoryFacetOnProperyDefaultFactory;
 import org.apache.causeway.core.metamodel.facets.properties.property.PropertyAnnotationFacetFactory;
+import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.jaxb.MandatoryFacetFromXmlElementAnnotationFactory;
 import org.apache.causeway.core.metamodel.facets.properties.propertylayout.PropertyLayoutFacetFactory;
 import org.apache.causeway.core.metamodel.facets.properties.update.PropertySetterFacetFactory;
 import org.apache.causeway.core.metamodel.facets.properties.validating.dflt.PropertyValidateFacetDefaultFactory;
@@ -85,8 +86,8 @@ import org.apache.causeway.core.metamodel.facets.value.semantics.ValueSemanticsA
 import org.apache.causeway.core.metamodel.methods.DomainIncludeAnnotationEnforcesMetamodelContributionValidator;
 import org.apache.causeway.core.metamodel.postprocessors.all.CssOnActionFromConfiguredRegexPostProcessor;
 import org.apache.causeway.core.metamodel.postprocessors.all.DescribedAsFromTypePostProcessor;
-import org.apache.causeway.core.metamodel.postprocessors.all.SanityChecksValidator;
 import org.apache.causeway.core.metamodel.postprocessors.all.MixinSanityChecksValidator;
+import org.apache.causeway.core.metamodel.postprocessors.all.SanityChecksValidator;
 import org.apache.causeway.core.metamodel.postprocessors.all.i18n.SynthesizeObjectNamingPostProcessor;
 import org.apache.causeway.core.metamodel.postprocessors.all.i18n.TranslationPostProcessor;
 import org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization.AuthorizationPostProcessor;
@@ -194,6 +195,7 @@ extends ProgrammingModelAbstract {
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new ActionAnnotationFacetFactory(mmc));
         // after the ActionAnnotationFacetFactory so that takes precedent for contributed associations
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new PropertyAnnotationFacetFactory(mmc));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new MandatoryFacetFromXmlElementAnnotationFactory(mmc));
         // after the ActionAnnotationFacetFactory so that takes precedent for contributed associations
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new CollectionAnnotationFacetFactory(mmc));
 
