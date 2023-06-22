@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.property.mandatory.jaxb;
 
-import javax.inject.Inject;
-import javax.xml.bind.annotation.XmlElement;
+import jakarta.inject.Inject;
+import jakarta.xml.bind.annotation.XmlElement;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;

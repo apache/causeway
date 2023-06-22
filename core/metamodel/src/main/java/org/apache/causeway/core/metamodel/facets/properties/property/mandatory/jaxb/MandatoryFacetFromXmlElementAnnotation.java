@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.facets.properties.property.mandatory.
 
 import java.util.Optional;
 
-import javax.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElement;
 
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetAbstract;
