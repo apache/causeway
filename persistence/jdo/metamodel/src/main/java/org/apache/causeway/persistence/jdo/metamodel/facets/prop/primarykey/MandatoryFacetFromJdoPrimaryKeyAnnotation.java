@@ -33,11 +33,11 @@ import org.apache.causeway.core.metamodel.facets.properties.defaults.PropertyDef
  * the property as optional, meaning that the {@link PrimaryKey} property is left
  * untouched by Causeway.
  */
-public class OptionalFacetFromJdoPrimaryKeyAnnotation
+public class MandatoryFacetFromJdoPrimaryKeyAnnotation
 extends MandatoryFacetAbstract {
 
-    public OptionalFacetFromJdoPrimaryKeyAnnotation(final FacetHolder holder) {
-        super(holder, Semantics.OPTIONAL, Precedence.INFERRED);
+    public MandatoryFacetFromJdoPrimaryKeyAnnotation(final FacetHolder holder) {
+        super(Semantics.OPTIONAL, holder, Precedence.INFERRED);
     }
 
 }

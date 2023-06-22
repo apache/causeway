@@ -64,8 +64,15 @@ extends MandatoryFacetAbstract {
     }
 
     public MandatoryFacetForPropertyAnnotation(final FacetHolder holder, final Semantics semantics) {
-        super(holder, semantics);
+        super(semantics, holder);
     }
+
+    @Override
+    public final String summarize() {
+        return MandatoryFacetForPropertyAnnotation.class.getSimpleName() + "." + super.summarize();
+    }
+
+    // -- IMPLEMENTATIONS
 
     public static class Primitive extends MandatoryFacetForPropertyAnnotation {
         public Primitive(final FacetHolder holder) {

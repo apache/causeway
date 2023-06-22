@@ -83,7 +83,7 @@ extends AbstractFacetFactoryTest {
 
         final Facet facet = facetedMethod.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof OptionalFacetFromJdoPrimaryKeyAnnotation);
+        assertTrue(facet instanceof MandatoryFacetFromJdoPrimaryKeyAnnotation);
     }
 
     public void testDisabledDerivedFromId() throws Exception {

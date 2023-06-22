@@ -23,7 +23,6 @@ import java.lang.annotation.Annotation;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
-import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 
@@ -71,59 +70,5 @@ public final class ValidationFailureUtils {
                     .addVariable("elementType", ""+elementType)
                     .buildMessage());
     }
-
-
-    //XXX assumes that given mandatoryFacet is one of the top ranking
-    @Deprecated // marked deprecated, because not implemented
-    public void raiseIfConflictingOptionality(final MandatoryFacet mandatoryFacet, final String message) {
-
-        /* XXX yet has false positives
-        if(isConflictingOptionality(mandatoryFacet)) {
-            addFailure(mandatoryFacet, message);
-        }
-        */
-    }
-
-    // -- HELPER
-
-    /*
-    private void addFailure(final MandatoryFacet mandatoryFacet, final String message) {
-        if(mandatoryFacet != null) {
-            val holder = mandatoryFacet.getFacetHolder();
-            ValidationFailure.raiseFormatted(
-                    holder,
-                    "%s : %s",
-                    message,
-                    holder.getFeatureIdentifier().getFullIdentityString());
-        }
-    }
-
-    private boolean isConflictingOptionality(final MandatoryFacet mandatoryFacet) {
-        if (mandatoryFacet == null) {
-            return false;
-        }
-
-        //TODO maybe move this kind of logic to FacetRanking
-
-        val facetRanking = mandatoryFacet.getSharedFacetRankingElseFail();
-
-        // assumes that given mandatoryFacet is one of the top ranking
-        _Assert.assertEquals(
-                mandatoryFacet.getPrecedence(),
-                facetRanking.getTopPrecedence().orElse(null));
-
-        val topRankingFacets = facetRanking.getTopRank(mandatoryFacet.facetType());
-        val firstOfTopRanking = topRankingFacets.getFirstElseFail();
-
-        // the top ranking mandatory facets should semantically agree
-
-        return topRankingFacets.isCardinalityMultiple()
-                ? topRankingFacets
-                        .stream()
-                        .skip(1)
-                        .anyMatch(firstOfTopRanking::semanticEquals)
-                : false; // not conflicting
-
-    }*/
 
 }

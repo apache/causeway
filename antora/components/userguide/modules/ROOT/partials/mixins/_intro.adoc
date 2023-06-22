@@ -23,12 +23,24 @@ Each mixin is in effect a single behavioural "responsibility" of the domain obje
 We find mixins nicely balance inside-out vs outside-in ways of thinking about a system:
 
 * inside-out tends to focus on the structure, the nouns that make up the domain.
++
+For Apache Causeway, these would typically be entities.
 
 * outside-in tends to focus on the behaviour, that is the functionality that the system provides to automate the business processes; the verbs, in other words.
++
+For Apache Causeway, these would typically be actions.
 
-So, while Apache Causeway allows you to put behaviour onto the underlying domain entities, it can often be better to treat the domain entities as immutable.
-Instead, use mixins to implement behaviour.
-When using an agile development methodology, it's common for a user story to correspond to a new mixin.
+So-called "behaviourally complete" objects have actions implemented by the entities ... in other words, good ole-fashioned object-orientation, as your Mother taught you.
+That's suitable in lots of cases, though the contract between the behaviour in the action vs the data structure is not explicit ... the method has access to all the object's state through the `this` keyword.
+
+With mixins, though, make the contract between the behaviour and the structure explicit by moving the behaviour into its own class.
+If you do this for all of the behaviour, then the entity might be simply a data container, immutable in and of itself.
+In practice, you might not do this completely, but rather have a set of methods on the entity (not actions) that enforce some basic integrity rules (eg ensure that a `startDate` \<= `endDate`, but don't do much more than that).
+The mixin for its part exposes behaviour to the end-user as an action, and then manipulates the state of the mixee only by way of the interface exposed to it.
+
+We've also found that mixins fit nicely with an agile development methodology.
+Often when there's a new user story/feature to be implemented, then that new feature may correspond to a new mixin to be implemented.
+
 
 == DCI Architecture
 

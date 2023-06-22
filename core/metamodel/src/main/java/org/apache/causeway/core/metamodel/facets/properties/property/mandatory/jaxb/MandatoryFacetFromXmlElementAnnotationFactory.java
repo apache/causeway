@@ -16,53 +16,37 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.persistence.jpa.metamodel.facets.prop.column;
+package org.apache.causeway.core.metamodel.facets.properties.property.mandatory.jaxb;
 
-import java.util.Optional;
-
-import jakarta.inject.Inject;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
+import javax.inject.Inject;
+import javax.xml.bind.annotation.XmlElement;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet.Semantics;
 
 import lombok.val;
 
-public class MandatoryFromJpaColumnAnnotationFacetFactory
+public class MandatoryFacetFromXmlElementAnnotationFactory
 extends FacetFactoryAbstract {
 
     @Inject
-    public MandatoryFromJpaColumnAnnotationFacetFactory(final MetaModelContext mmc) {
+    public MandatoryFacetFromXmlElementAnnotationFactory(final MetaModelContext mmc) {
         super(mmc, FeatureType.PROPERTIES_ONLY);
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-
-        //val cls = processMethodContext.getCls();
-
-        final Optional<Boolean> nullable1 = processMethodContext.synthesizeOnMethod(JoinColumn.class)
-                .map(JoinColumn::nullable);
-
-        final Optional<Boolean> nullable2 = processMethodContext.synthesizeOnMethod(Column.class)
-                .map(Column::nullable);
-
-        if(!nullable1.isPresent()
-                && !nullable2.isPresent()) {
-            return;
+        if(processMethodContext.isMixinMain()) {
+            return; // shortcut just in case
         }
 
-        val nullable = nullable1.orElseGet(nullable2::get);
-        val semantics = Semantics.required(!nullable);
-
+        val xmlElementIfAny = processMethodContext.synthesizeOnMethod(XmlElement.class);
         val facetHolder = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(
-                new MandatoryFacetFromJpaColumnAnnotation(semantics, facetHolder));
-    }
 
+        // search for @XmlElement(required=...)
+        addFacetIfPresent(
+                MandatoryFacetFromXmlElementAnnotation.create(xmlElementIfAny, facetHolder));
+    }
 
 }

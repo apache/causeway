@@ -36,7 +36,7 @@ import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
-import org.apache.causeway.persistence.jdo.metamodel.facets.prop.primarykey.OptionalFacetFromJdoPrimaryKeyAnnotation;
+import org.apache.causeway.persistence.jdo.metamodel.facets.prop.primarykey.MandatoryFacetFromJdoPrimaryKeyAnnotation;
 import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
@@ -70,7 +70,7 @@ implements MetaModelRefiner {
         final MandatoryFacet existingFacet = holder.getFacet(MandatoryFacet.class);
         if(existingFacet != null) {
 
-            if (existingFacet instanceof OptionalFacetFromJdoPrimaryKeyAnnotation) {
+            if (existingFacet instanceof MandatoryFacetFromJdoPrimaryKeyAnnotation) {
                 // do not replace this facet;
                 // we must keep an optional facet here for different reasons
                 return;
@@ -85,13 +85,13 @@ implements MetaModelRefiner {
         _ColumnUtil.inferSemantics(processMethodContext,
                 semanticsWhileColumnPresent->{
                     FacetUtil.addFacet(
-                            new MandatoryFacetFromColumnAnnotation(holder, semanticsWhileColumnPresent));
+                            new MandatoryFacetFromColumnAnnotation(semanticsWhileColumnPresent, holder));
                 },
                 semanticsWhileColumnAbsent->{
                     FacetUtil.addFacet(
                             new MandatoryFacetFromAbsenceOfColumnAnnotation(
-                                    holder,
                                     semanticsWhileColumnAbsent,
+                                    holder,
                                     semanticsWhileColumnAbsent.isRequired()
                                         ? Precedence.DEFAULT
                                         : Precedence.INFERRED));

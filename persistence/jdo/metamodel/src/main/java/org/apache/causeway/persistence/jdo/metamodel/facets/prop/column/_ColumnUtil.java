@@ -60,7 +60,7 @@ class _ColumnUtil {
         }
         val jpaColumnIfAny = processMethodContext.synthesizeOnMethod(jakarta.persistence.Column.class);
         if(jpaColumnIfAny.isPresent()) {
-            onColumnPresent.accept(Semantics.of(!jpaColumnIfAny.get().nullable()));
+            onColumnPresent.accept(Semantics.required(!jpaColumnIfAny.get().nullable()));
             return;
         }
         onColumnNotPresent.accept(inferSemantics(processMethodContext, Optional.empty()));
@@ -78,7 +78,7 @@ class _ColumnUtil {
 
         if(_Strings.isNotEmpty(allowsNull)) {
             // if miss-spelled, then DN assumes is not-nullable
-            return Semantics.of(!"true".equalsIgnoreCase(allowsNull.trim()));
+            return Semantics.required(!"true".equalsIgnoreCase(allowsNull.trim()));
         }
 
         final Class<?> returnType = processMethodContext.getMethod().getReturnType();

@@ -42,7 +42,7 @@ extends Facet, ValidatingInteractionAdvisor {
         REQUIRED,
         OPTIONAL;
 
-        public static Semantics of(boolean required) {
+        public static Semantics required(final boolean required) {
             return required ? REQUIRED: OPTIONAL;
         }
 
@@ -70,7 +70,16 @@ extends Facet, ValidatingInteractionAdvisor {
      * other words that the {@link FacetHolder} to which this {@link Facet} is
      * attached is <i>not</i> mandatory.
      */
-    public Semantics getSemantics();
+    Semantics getSemantics();
+
+    /**
+     * Used to generate validation message, when there are conflicting mandatory semantics.
+     */
+    default String summarize() {
+        return String.format("%s->%s", getClass().getSimpleName(), getSemantics().name());
+    }
+
+    // -- UTILITY
 
     static boolean isMandatory(final @NonNull FacetHolder facetHolder) {
         val mandatoryFacet = facetHolder.getFacet(MandatoryFacet.class);

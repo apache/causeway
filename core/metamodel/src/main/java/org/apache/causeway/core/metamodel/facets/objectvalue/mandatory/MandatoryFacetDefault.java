@@ -37,7 +37,7 @@ public class MandatoryFacetDefault extends MandatoryFacetAbstract {
 
     private MandatoryFacetDefault(final FacetHolder holder, final Semantics semantics) {
         // unconditionally created, hence acting as a fallback
-        super(holder, semantics, Facet.Precedence.FALLBACK);
+        super(semantics, holder, Facet.Precedence.FALLBACK);
     }
 
 }

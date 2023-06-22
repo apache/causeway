@@ -475,6 +475,9 @@ public final class ProgrammingModelConstants {
         CONFLICTING_TITLE_STRATEGIES(
                 "${type} has title() method with @Title annotation, which is not allowed; "
                 + "consider either removing the @Title annotation or renaming the method"),
+        CONFLICTING_OPTIONALITY(
+                "${member} has conflicting optionality semantics; facets involved are:\n"
+                + "${conflictingFacets}"),
         ORPHANED_METHOD("${type}#${member}: is public, but orphaned (was not picked up by the framework); "
                 + "reporting orphans, because the class is setup for member introspection, "
                 + "without enforcing annotations"),

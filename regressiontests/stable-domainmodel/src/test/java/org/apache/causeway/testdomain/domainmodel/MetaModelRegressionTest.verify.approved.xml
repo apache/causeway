@@ -8237,6 +8237,12 @@
                         <mml:attr name="labelPosition" value="NOT_SPECIFIED"/>
                         <mml:attr name="precedence" value="LOW"/>
                     </mml:facet>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.mandatory.jaxb.MandatoryFacetFromXmlElementAnnotation">
+                        <mml:attr name="facet" value="MandatoryFacetFromXmlElementAnnotation"/>
+                        <mml:attr name="interactionAdvisors" value="Validating"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                        <mml:attr name="semantics" value="OPTIONAL"/>
+                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.typicallen.fromtype.TypicalLengthFacetOnPropertyFromType">
                         <mml:attr name="facet" value="TypicalLengthFacetOnPropertyFromType"/>
                         <mml:attr name="precedence" value="INFERRED"/>

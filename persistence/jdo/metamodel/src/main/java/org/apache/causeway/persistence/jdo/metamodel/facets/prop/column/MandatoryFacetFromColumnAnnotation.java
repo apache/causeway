@@ -22,14 +22,14 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetAbstract;
 
 /**
- * Inferred from presence of an <tt>@Column</tt> method.
+ * Inferred from presence of an <tt>@Column</tt> annotation.
  */
 public class MandatoryFacetFromColumnAnnotation
 extends MandatoryFacetAbstract {
 
     public MandatoryFacetFromColumnAnnotation(
-            final FacetHolder holder, final Semantics semantics) {
-        super(holder, semantics);
+            final Semantics semantics, final FacetHolder holder) {
+        super(semantics, holder);
     }
 
 }
