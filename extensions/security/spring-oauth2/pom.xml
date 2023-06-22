@@ -48,6 +48,11 @@
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-starter-logging</artifactId>
 				</exclusion>
+				<exclusion>
+					<!-- also brought in by org.springframework.security:spring-security-oauth2-jose -->
+					<groupId>com.nimbusds</groupId>
+  					<artifactId>nimbus-jose-jwt</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 
