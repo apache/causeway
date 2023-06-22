@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -62,12 +63,10 @@ extends MetaModelPostProcessorAbstract {
         }
     }
 
-    @Inject ServiceRegistry serviceRegistry;
-    @Inject UserService userService;
-    @Inject @Lazy ApplicationUserRepository userRepository;
+    @Inject Provider<UserService> userServiceProvider;
+    @Inject Provider<ApplicationUserRepository> userRepositoryProvider;
     @Inject Provider<QueryResultsCache> queryResultsCacheProvider;
-
-    @Autowired(required=false) List<ApplicationTenancyEvaluator> applicationTenancyEvaluators;
+    @Inject ObjectProvider<ApplicationTenancyEvaluator> applicationTenancyEvaluators;
 
     @Inject
     public TenantedAuthorizationPostProcessor(final MetaModelContext metaModelContext) {
@@ -100,21 +99,19 @@ extends MetaModelPostProcessorAbstract {
         FacetUtil.addFacetIfPresent(createFacet(specification.getCorrespondingClass(), objectFeature));
     }
 
-
-
     private Optional<TenantedAuthorizationFacetDefault> createFacet(
             final Class<?> cls,
             final FacetHolder holder) {
 
-        val evaluators = _NullSafe.stream(applicationTenancyEvaluators)
+        val evaluators = applicationTenancyEvaluators.orderedStream()
                 .filter(evaluator -> evaluator.handles(cls))
                 .collect(Collectors.<ApplicationTenancyEvaluator>toList());
 
         return evaluators.isEmpty()
                 ? Optional.empty()
                 : Optional.of(new TenantedAuthorizationFacetDefault(
-                        evaluators, userRepository,
-                        queryResultsCacheProvider, userService,
+                        evaluators, userRepositoryProvider.get(),
+                        queryResultsCacheProvider, userServiceProvider.get(),
                         holder));
     }
 
