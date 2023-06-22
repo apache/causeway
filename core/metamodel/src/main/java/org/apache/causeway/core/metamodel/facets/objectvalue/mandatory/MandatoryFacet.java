@@ -42,7 +42,7 @@ extends Facet, ValidatingInteractionAdvisor {
         REQUIRED,
         OPTIONAL;
 
-        public static Semantics of(boolean required) {
+        public static Semantics required(final boolean required) {
             return required ? REQUIRED: OPTIONAL;
         }
 

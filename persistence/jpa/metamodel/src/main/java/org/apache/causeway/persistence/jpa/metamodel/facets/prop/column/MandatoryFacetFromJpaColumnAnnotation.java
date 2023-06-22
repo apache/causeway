@@ -24,12 +24,12 @@ import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.Mandatory
 /**
  * Derived by presence of an <tt>@Column</tt> method.
  */
-public class MandatoryFacetFromJpaColumnAnnotation 
+public class MandatoryFacetFromJpaColumnAnnotation
 extends MandatoryFacetAbstract {
 
 
     public MandatoryFacetFromJpaColumnAnnotation(final FacetHolder holder, final boolean required) {
-        super(holder, Semantics.of(required));
+        super(holder, Semantics.required(required));
     }
 
 
