@@ -4,36 +4,76 @@
 :page-partial:
 
 
-// TODO: clean up
+Mixins separate behaviour away from the underlying mixee, with the mixee operating _upon_ the mixee.
+The mixee itself knows nothing about its caller.
+This simple fact becomes very powerful in that the mixin could even be in a different module than the mixee, xref:modules.adoc[modularity] being an important concern of maintainability.
 
-It is this argument's parameter type which determines the domain class being contributed to.
+== Contributing to a class
+
+The simple case is for the mixin to contribute directly to a mixee's concrete class.
+For example, consider this mixin:
 
 [source,java]
 ----
-@Action                                     // <.>
-@RequiredArgsConstructor                    // <.>
-public class Customer_placeOrder {          // <.>
+package domainapp.orders;                   // <.>
 
-    private final Customer customer;        // <.>
+import domainapp.customers.Customer;        // <.>
 
-    // ...                                  // <.>
+@Action
+@RequiredArgsConstructor
+public class Customer_placeOrder {
+
+    private final Customer customer;
+
+    // ...
 }
 ----
-<.> Determines this is a mixin that will contribute an action
-<.> It's common to use lombok to generate the constructor (for the one `final` field)
-<.> The name is derived from the class name; anything after the '_'.
-The name beforehand can be anything, but the convention is to use the mixee's name
-<.> A field declaring the mixee.
-The action implementation itself will interact with the mixee .
-<.> Actual implementation not yet shown, keep reading :-)
+<.> defined in the "orders" module
+<.> acts upon objects in the "customers" module
 
-== Contributing through an interface
+When the `Customer` entity is rendered in the UI, it looks to the end-user that the entity "knows" how to place an order; and yet this functionality comes in from the "orders" module.
 
-The contribution could be through a Java interface.
-Suppose that `Customer` implements `DocumentHolder`:
+
+.Micro-frontends
+****
+A link:https://micro-frontends.org/[micro-frontend] is an extension of the microservices idea, but for the user interface.
+Rather than having a monolithic front-end UI that calls to multiple backends, instead the user interface that is composed of vertical slices of functionality, each slice calling its corresponding backend microservice.
+UI infrastructure pulls all of these fragments together into a coherent user interface.
+
+Microservices are (of course) just one means to implement modularity and enable product ownership.
+In the context of an Apache Causeway app, we are more likely to use individual Maven modules as our, well, as our modules.
+Each such module provides a set of mixins, and these mixins in effect show up to the end-user as slices of functionality.
+The framework itself brings all this together, acting as the UI infrastructure.
+****
+
+
+== Contributing to an interface
+
+In the previous section the `Customer` did not know that it was being contributed to; and the mixee had access to the entire (`public`) interface defined by the `Customer` type.
+A variation though is for the mixee to contribute by way of a (Java) `interface`.
+This interface needs to be in a module that both the mixee and mixin has access to, which might be in the mixee's module, or in some common/base module, or could perhaps be in the mixin's module.
+
+=== Interface defined in mixin's module
+
+For example, suppose that `Customer` implements `DocumentHolder`:
 
 [source,java]
 ----
+package domainapp.customer;
+
+import domainapp.docmgmt.DocumentHolder;
+
+public class Customter implements DocumentHolder {
+    // ...
+}
+----
+
+and that we have this mixin:
+
+[source,java]
+----
+package domainapp.docmgmt;
+
 @Collection
 @RequiredArgsConstructor
 public class DocumentHolder_documents {
@@ -44,7 +84,87 @@ public class DocumentHolder_documents {
 }
 ----
 
-In both cases, when the `Customer` is rendered in the user interface, it will appear to have a "placeOrder" action or a "documents" collection.
-Programmatically, the `Customer` itself won't know anything about this behaviour.
-Indeed, if the mixin is defined in some other (Maven) module (such as "ordermgmt" say), then the `Customer` class won't even be able to access this contributed behaviour.
+Probably in this case the `DocumentHolder` and mixin is part of "documents" module, and so the mixee is saying: "yes, I want to hold some documents, let the documents module take care of that concern for me".
+
+=== Interface defined in mixee's module
+
+Or the interface could be in the mixees's module.
+
+For example, suppose the customer module defines `HasAddress`, also implemented by `Customer`:
+
+[source,java]
+----
+package domainapp.customer;
+
+public interface HasAddress {
+    // ...
+}
+
+public class Customer implements HasAddress {
+    // ...
+}
+----
+
+Then a "mailmerge" module might contribute behaviour through this interface; it would know only about the address details, not the rest of Customer:
+
+[source,java]
+----
+package domainapp.mailmerge;
+
+@Action
+public class HasAddress_mailshot {
+    private final HasAddress hasAddress;
+    // ...
+}
+----
+
+=== Interface defined in a common module
+
+Even so, with this design there's nothing to prevent our "mailmerge" module from accessing the rest of `Customer`.
+We can fix this by moving the interface to some common location:
+
+[source,java]
+----
+package domainapp.address;
+
+@Action
+public interface HasAddress {
+    private final HasAddress hasAddress;
+    // ...
+}
+----
+
+then
+
+[source,java]
+----
+package domainapp.customer;
+
+import domainapp.address.HasAddress;
+
+@Action
+public class Customer implements HasAddress {
+    // ...
+}
+----
+
+and
+
+[source,java]
+----
+package domainapp.mailmerge;
+
+@Action
+public class HasAddress_mailshot {
+    private final HasAddress hasAddress;
+    // ...
+}
+----
+
+
+[NOTE]
+====
+Taking this idea to its logical conclusion, that common type could even be `java.lang.Object`.
+And indeed, the framework itself defines a handful of mixins that do exactly this.
+====
 

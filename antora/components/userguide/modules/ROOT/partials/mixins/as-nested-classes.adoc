@@ -20,8 +20,6 @@ For example, the following refactors the "updateName" action -- of the `SimpleOb
 ----
 public class SimpleObject /* ... */ {
 
-    // ...
-
     @Action(semantics = IDEMPOTENT,
             commandPublishing = Publishing.ENABLED,
             executionPublishing = Publishing.ENABLED,
@@ -36,21 +34,18 @@ public class SimpleObject /* ... */ {
             setName(name);                                              // <.>
             return SimpleObject.this;
         }
-        public String default0Act() {                                   // <.>
-            return getName();                                           // <.>
+        public String defaultName() {                                   // <.>
+            return getName();
         }
     }
     // ...
 }
 ----
 <.> Mixin class is not `static`, so that the containing object is implicitly available.
-+
-Its name can be either "camelCase" or "PascalCase", either will work.
-
 <.> Domain event can be declared within the mixin, again, not `static`.
 +
 Note that it is genericised on the mixin, not on the mixee
+<.> Acts on the owning instance.
+<.> Uses the xref:mixins.adoc#using-the-parameter-name[alternate programming model] matching the parameter by its name, not number
 
-<.> Acts on the owning instance.
-<.> xref:business-rules.adoc[Supporting methods] follow the same naming convention.
-<.> Acts on the owning instance.
+The mixin class name can be either "camelCase" or "PascalCase", as you prefer.
