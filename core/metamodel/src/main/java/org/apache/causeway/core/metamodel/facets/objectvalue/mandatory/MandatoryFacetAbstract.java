@@ -21,8 +21,16 @@ package org.apache.causeway.core.metamodel.facets.objectvalue.mandatory;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
+import org.springframework.lang.Nullable;
+
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.functions._Predicates;
+import org.apache.causeway.commons.internal.primitives._Ints;
+import org.apache.causeway.commons.internal.primitives._Ints.Range;
+import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -32,6 +40,7 @@ import org.apache.causeway.core.metamodel.interactions.ProposedHolder;
 import org.apache.causeway.core.metamodel.interactions.ValidityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
+import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -48,15 +57,17 @@ implements MandatoryFacet {
     @Getter(onMethod_ = {@Override})
     private Semantics semantics;
 
-    public MandatoryFacetAbstract(final Semantics semantics, final FacetHolder holder) {
-        super(type(), holder);
-        this.semantics = semantics;
+    protected MandatoryFacetAbstract(final Semantics semantics, final FacetHolder holder) {
+        this(semantics, holder, Precedence.DEFAULT);
     }
 
-    public MandatoryFacetAbstract(
+    protected MandatoryFacetAbstract(
             final Semantics semantics, final FacetHolder holder, final Facet.Precedence precedence) {
         super(type(), holder, precedence);
         this.semantics = semantics;
+        if(!getSystemEnvironment().isUnitTesting()) {
+            raiseIfConflictingOptionality(this);
+        }
     }
 
     @Override
@@ -111,4 +122,78 @@ implements MandatoryFacet {
         super.visitAttributes(visitor);
         visitor.accept("semantics", semantics);
     }
+
+    // -- HELPER - VALIDATION STUFF
+
+    private static final Range PRECEDENCE_ORDINALS_CONSIDERED_FOR_CONFLICTING_OPTIONALITY =
+            _Ints.rangeClosed(Precedence.LOW.ordinal(), Precedence.HIGH.ordinal());
+
+    /**
+     * As called on the fly during {@link MandatoryFacet} creation,
+     * not only checks the final top rank but also intermediate top ranks.
+     * However, only considering {LOW, DEFAULT and HIGH}. Others are ignored.
+     *
+     * @apiNote as an alternative we could do a check only on the top rank once the MM is fully populated
+     */
+    private static void raiseIfConflictingOptionality(
+            final @Nullable MandatoryFacet mandatoryFacet) {
+
+        if(mandatoryFacet == null
+                || !PRECEDENCE_ORDINALS_CONSIDERED_FOR_CONFLICTING_OPTIONALITY
+                    .contains(mandatoryFacet.getPrecedence().ordinal())) {
+            return; // ignore
+        }
+
+        final Can<MandatoryFacet> conflictingFacets = findConflictingMandatoryFacets(mandatoryFacet);
+
+
+        if(conflictingFacets.isNotEmpty()) {
+            val holder = mandatoryFacet.getFacetHolder();
+
+            ValidationFailure.raiseFormatted(holder,
+                    ProgrammingModelConstants.Violation.CONFLICTING_OPTIONALITY.builder()
+                        .addVariable("member", holder.getFeatureIdentifier().getFullIdentityString())
+                        .addVariable("conflictingFacets", conflictingFacets.stream()
+                                .map(MandatoryFacet::summarize)
+                                .collect(Collectors.joining(", \n")))
+                        .buildMessage());
+        }
+    }
+
+    private static Can<MandatoryFacet> findConflictingMandatoryFacets(final MandatoryFacet mandatoryFacet) {
+
+        //TODO maybe move this kind of logic to FacetRanking
+
+        val facetRanking = mandatoryFacet.getSharedFacetRanking().orElse(null);
+        if(facetRanking==null) return Can.empty(); // not yet initialized
+
+        // assumes that given mandatoryFacet is one of the top ranking
+
+        val isTopRanking = mandatoryFacet.getPrecedence()
+                .equals(facetRanking.getTopPrecedence().orElse(null));
+        if(!isTopRanking) {
+            // ignore validation of lower than top-rank
+            return Can.empty();
+        }
+
+        val topRankingFacets = facetRanking.getTopRank(mandatoryFacet.facetType());
+        val firstOfTopRanking = (MandatoryFacet)topRankingFacets.getFirstElseFail();
+
+        // the top ranking mandatory facets should semantically agree
+        final Can<MandatoryFacet> conflictingWithFirst = topRankingFacets.isCardinalityMultiple()
+                ? topRankingFacets
+                        .stream()
+                        .skip(1)
+                        .map(MandatoryFacet.class::cast) // upcast
+                        .filter(_Predicates.not(firstOfTopRanking::semanticEquals))
+                        .collect(Can.toCan())
+                : Can.empty(); // not conflicting
+
+        // if there are any conflicts, prepend first facet
+        return conflictingWithFirst.isEmpty()
+                ? conflictingWithFirst
+                : conflictingWithFirst
+                    .add(0, firstOfTopRanking);
+    }
+
 }

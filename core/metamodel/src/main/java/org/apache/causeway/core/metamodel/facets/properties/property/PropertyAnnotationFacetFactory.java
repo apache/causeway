@@ -284,20 +284,12 @@ extends FacetFactoryAbstract {
 
         addFacetIfPresent(
                 MandatoryFacetInvertedByNullableAnnotationOnProperty
-                .create(hasNullable, method, holder))
-        .ifPresent(mandatoryFacet->
-                ValidationFailureUtils.raiseIfConflictingOptionality(
-                        mandatoryFacet,
-                        ()->"Conflicting @Nullable with other optionality annotation"));
+                .create(hasNullable, method, holder));
 
         // search for @Property(optional=...)
         addFacetIfPresent(
                 MandatoryFacetForPropertyAnnotation
-                .create(propertyIfAny, method, holder))
-        .ifPresent(mandatoryFacet->
-                ValidationFailureUtils.raiseIfConflictingOptionality(
-                        mandatoryFacet,
-                        ()->"Conflicting Property#optionality with other optionality annotation"));
+                .create(propertyIfAny, method, holder));
     }
 
     void processRegEx(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
