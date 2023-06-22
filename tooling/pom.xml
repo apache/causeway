@@ -44,7 +44,7 @@
 		<picocli.version>4.7.4</picocli.version>
 		
 		<!-- brings in structurizr-core as a transitive dependency -->
-		<structurizr-export.version>1.14.0</structurizr-export.version>
+		<structurizr-export.version>1.15.0</structurizr-export.version>
 		
 	</properties>
 
