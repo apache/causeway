@@ -37,8 +37,8 @@ class LoginPrompt(val nextController: Controller? = null) : Controller() {
     override fun open() {
         val formItems = mutableListOf<FormItem>()
         val urlList = mutableListOf<StringPair>()
-        urlList.add(StringPair(Constants.demoUrl9, Constants.demoUrl9))
         urlList.add(StringPair(Constants.demoUrl8, Constants.demoUrl8))
+        urlList.add(StringPair(Constants.demoUrl9, Constants.demoUrl9))
         urlList.add(StringPair(Constants.demoUrlRemote, Constants.demoUrlRemote))
         urlList.add(StringPair(Constants.domoxUrl, Constants.domoxUrl))
         formItems.add(FormItem("Url", ValueType.SIMPLE_SELECT, urlList))

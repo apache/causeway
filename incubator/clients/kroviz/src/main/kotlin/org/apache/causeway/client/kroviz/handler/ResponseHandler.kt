@@ -29,16 +29,20 @@ object ResponseHandler {
 
     //sequence of handlers follows frequency of invocation (demo execute all menu actions)
     //IMPROVE by dynamic lookup at runtime?
+    private var _0 = RestfulHandler()
+    private var _0a = UserHandler()
+    private var _0b = VersionHandler()
+    private var _0c = DomainTypesHandler()
+    private var _0d = MenuBarsHandler()
+    private var _0e = IconHandler()
+
     private var _1 = TObjectHandler()
     private var _2 = LayoutXmlHandler()
     private var _3 = CollectionHandler()
     private var _4 = ActionHandler()
     private var _5 = HttpErrorHandler()
-    private var _6 = RestfulHandler()
-    private var _7 = VersionHandler()
-    private var _8 = MenuBarsHandler()
 
-    private var _9 = DomainTypesHandler()
+
     private var _10 = ServiceHandler()
     private var _11 = ResultListHandler()
     private var _12 = ResultObjectHandler()
@@ -46,34 +50,34 @@ object ResponseHandler {
     private var _15 = PropertyHandler()
     private var _16 = MemberHandler()
     private var _17 = Http401ErrorHandler()
-    private var _18 = UserHandler()
     private var _19 = DomainTypeHandler()
     private var _20 = DiagramHandler()
-    private var _21 = IconHandler()
     private var last = DefaultHandler()
 
     init {
-        delegate = _1
+        delegate = _0
+        _0.successor = _0a
+        _0a.successor = _0b
+        _0b.successor = _0c
+        _0c.successor = _0d
+        _0d.successor = _0e
+        _0e.successor = _1
         _1.successor = _2
         _2.successor = _3
         _3.successor = _4
         _4.successor = _5
-        _5.successor = _6
-        _6.successor = _7
-        _7.successor = _8
-        _8.successor = _9
-        _9.successor = _10
+        _5.successor = _10
+
         _10.successor = _11
         _11.successor = _12
         _12.successor = _13
         _13.successor = _15
         _15.successor = _16
         _16.successor = _17
-        _17.successor = _18
-        _18.successor = _19
+        _17.successor = _19
+
         _19.successor = _20
-        _20.successor = _21
-        _21.successor = last
+        _20.successor = last
     }
 
     fun handle(logEntry: LogEntry) {

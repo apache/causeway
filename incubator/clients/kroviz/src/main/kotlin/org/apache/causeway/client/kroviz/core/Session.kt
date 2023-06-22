@@ -35,9 +35,6 @@ class Session {
         this.user = user
         this.pw = pw
         this.baseUrl = url
-        if (url.contains("incode")) {
-            this.resString = Constants.demoRemoteImage as ResString
-        }
     }
 
     fun getCredentials(): String {

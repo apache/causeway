@@ -112,8 +112,6 @@ enum class Position(val type: String) {
 
 @Serializable
 data class Restful(
-    val userName: String? = null,
-    val roles: List<String>? = emptyList(),
     override val links: List<Link> = emptyList(),
     val extensions: Extensions
 ) : TransferObject, WithLinks
