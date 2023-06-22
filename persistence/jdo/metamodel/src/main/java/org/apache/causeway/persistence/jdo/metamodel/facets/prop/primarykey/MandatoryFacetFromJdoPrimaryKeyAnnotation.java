@@ -37,7 +37,7 @@ public class MandatoryFacetFromJdoPrimaryKeyAnnotation
 extends MandatoryFacetAbstract {
 
     public MandatoryFacetFromJdoPrimaryKeyAnnotation(final FacetHolder holder) {
-        super(holder, Semantics.OPTIONAL);
+        super(Semantics.OPTIONAL, holder, Precedence.INFERRED);
     }
 
 }

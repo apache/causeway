@@ -48,19 +48,19 @@ implements MandatoryFacet {
     @Getter(onMethod_ = {@Override})
     private Semantics semantics;
 
-    public MandatoryFacetAbstract(final FacetHolder holder, final Semantics semantics) {
+    public MandatoryFacetAbstract(final Semantics semantics, final FacetHolder holder) {
         super(type(), holder);
         this.semantics = semantics;
     }
 
     public MandatoryFacetAbstract(
-            final FacetHolder holder, final Semantics semantics, final Facet.Precedence precedence) {
+            final Semantics semantics, final FacetHolder holder, final Facet.Precedence precedence) {
         super(type(), holder, precedence);
         this.semantics = semantics;
     }
 
     @Override
-    public boolean semanticEquals(final @NonNull Facet other) {
+    public final boolean semanticEquals(final @NonNull Facet other) {
         return other instanceof MandatoryFacetAbstract
                 ? this.getSemantics() == ((MandatoryFacetAbstract)other).getSemantics()
                 : false;
@@ -107,7 +107,7 @@ implements MandatoryFacet {
     }
 
     @Override
-    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+    public final void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("semantics", semantics);
     }

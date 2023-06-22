@@ -24,11 +24,8 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetAbstract;
 
-public abstract class MandatoryFacetForParameterAnnotation extends MandatoryFacetAbstract {
-
-    public MandatoryFacetForParameterAnnotation(final FacetHolder holder, final Semantics semantics) {
-        super(holder, semantics);
-    }
+public abstract class MandatoryFacetForParameterAnnotation
+extends MandatoryFacetAbstract {
 
     public static java.util.Optional<MandatoryFacet> create(
             final java.util.Optional<Parameter> parameterIfAny,
@@ -57,21 +54,32 @@ public abstract class MandatoryFacetForParameterAnnotation extends MandatoryFace
         });
     }
 
+    protected MandatoryFacetForParameterAnnotation(final Semantics semantics, final FacetHolder holder) {
+        super(semantics, holder);
+    }
+
+    @Override
+    public final String summarize() {
+        return MandatoryFacetForParameterAnnotation.class.getSimpleName() + "." + super.summarize();
+    }
+
+    // -- IMPLEMENTATIONS
+
     public static class Primitive extends MandatoryFacetForParameterAnnotation {
         public Primitive(final FacetHolder holder) {
-            super(holder, Semantics.REQUIRED);
+            super(Semantics.REQUIRED, holder);
         }
     }
 
     public static class Required extends MandatoryFacetForParameterAnnotation {
         public Required(final FacetHolder holder) {
-            super(holder, Semantics.REQUIRED);
+            super(Semantics.REQUIRED, holder);
         }
     }
 
     public static class Optional extends MandatoryFacetForParameterAnnotation {
         public Optional(final FacetHolder holder) {
-            super(holder, Semantics.OPTIONAL);
+            super(Semantics.OPTIONAL, holder);
         }
     }
 

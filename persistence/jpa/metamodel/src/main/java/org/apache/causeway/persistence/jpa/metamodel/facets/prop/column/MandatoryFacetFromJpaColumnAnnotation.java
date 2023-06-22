@@ -27,10 +27,9 @@ import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.Mandatory
 public class MandatoryFacetFromJpaColumnAnnotation
 extends MandatoryFacetAbstract {
 
-
-    public MandatoryFacetFromJpaColumnAnnotation(final FacetHolder holder, final boolean required) {
-        super(holder, Semantics.required(required));
+    public MandatoryFacetFromJpaColumnAnnotation(
+            final Semantics semantics, final FacetHolder holder) {
+        super(semantics, holder);
     }
-
 
 }

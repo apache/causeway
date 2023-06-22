@@ -288,7 +288,7 @@ extends FacetFactoryAbstract {
         .ifPresent(mandatoryFacet->
                 ValidationFailureUtils.raiseIfConflictingOptionality(
                         mandatoryFacet,
-                        "Conflicting @Nullable with other optionality annotation"));
+                        ()->"Conflicting @Nullable with other optionality annotation"));
 
         // search for @Property(optional=...)
         addFacetIfPresent(
@@ -297,7 +297,7 @@ extends FacetFactoryAbstract {
         .ifPresent(mandatoryFacet->
                 ValidationFailureUtils.raiseIfConflictingOptionality(
                         mandatoryFacet,
-                        "Conflicting Property#optionality with other optionality annotation"));
+                        ()->"Conflicting Property#optionality with other optionality annotation"));
     }
 
     void processRegEx(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {

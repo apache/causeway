@@ -85,13 +85,13 @@ implements MetaModelRefiner {
         _ColumnUtil.inferSemantics(processMethodContext,
                 semanticsWhileColumnPresent->{
                     FacetUtil.addFacet(
-                            new MandatoryFacetFromColumnAnnotation(holder, semanticsWhileColumnPresent));
+                            new MandatoryFacetFromColumnAnnotation(semanticsWhileColumnPresent, holder));
                 },
                 semanticsWhileColumnAbsent->{
                     FacetUtil.addFacet(
                             new MandatoryFacetFromAbsenceOfColumnAnnotation(
-                                    holder,
                                     semanticsWhileColumnAbsent,
+                                    holder,
                                     semanticsWhileColumnAbsent.isRequired()
                                         ? Precedence.DEFAULT
                                         : Precedence.INFERRED));

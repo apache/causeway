@@ -24,6 +24,7 @@ import javax.xml.bind.annotation.XmlElement;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 
 import lombok.val;
 
@@ -46,7 +47,11 @@ extends FacetFactoryAbstract {
 
         // search for @XmlElement(required=...)
         addFacetIfPresent(
-                MandatoryFacetFromXmlElementAnnotation.create(xmlElementIfAny, facetHolder));
+                MandatoryFacetFromXmlElementAnnotation.create(xmlElementIfAny, facetHolder))
+        .ifPresent(mandatoryFacet->
+            ValidationFailureUtils.raiseIfConflictingOptionality(
+                    mandatoryFacet,
+                    ()->"Conflicting @XmlElement(required=...) with other optionality annotation"));
     }
 
 }

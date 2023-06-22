@@ -127,14 +127,14 @@ extends FacetFactoryAbstract {
                 .create(hasNullable, parameterType, holder))
         .ifPresent(mandatoryFacet->
                 ValidationFailureUtils.raiseIfConflictingOptionality(
-                    mandatoryFacet, "Conflicting @Nullable with other optionality annotation"));
+                    mandatoryFacet, ()->"Conflicting @Nullable with other optionality annotation"));
 
         addFacetIfPresent(
                 MandatoryFacetForParameterAnnotation
                 .create(parameterIfAny, parameterType, holder))
         .ifPresent(mandatoryFacet->
                 ValidationFailureUtils.raiseIfConflictingOptionality(
-                    mandatoryFacet, "Conflicting @Parameter#optionality with other optionality annotation"));
+                    mandatoryFacet, ()->"Conflicting @Parameter#optionality with other optionality annotation"));
     }
 
     void processParamsFileAccept(final ProcessParameterContext processParameterContext) {

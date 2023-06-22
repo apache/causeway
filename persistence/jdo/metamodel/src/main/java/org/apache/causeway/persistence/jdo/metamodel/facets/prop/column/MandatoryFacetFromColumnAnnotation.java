@@ -28,8 +28,8 @@ public class MandatoryFacetFromColumnAnnotation
 extends MandatoryFacetAbstract {
 
     public MandatoryFacetFromColumnAnnotation(
-            final FacetHolder holder, final Semantics semantics) {
-        super(holder, semantics);
+            final Semantics semantics, final FacetHolder holder) {
+        super(semantics, holder);
     }
 
 }

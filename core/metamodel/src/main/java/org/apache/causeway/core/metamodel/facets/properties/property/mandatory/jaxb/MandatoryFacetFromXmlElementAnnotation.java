@@ -51,7 +51,7 @@ extends MandatoryFacetAbstract {
 
     private MandatoryFacetFromXmlElementAnnotation(
             final Semantics semantics, final FacetHolder holder) {
-        super(holder, semantics);
+        super(semantics, holder);
     }
 
 }

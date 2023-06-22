@@ -52,7 +52,7 @@ extends MandatoryFacetAbstract {
     }
 
     private MandatoryFacetInvertedByNullableAnnotationOnParameter(final FacetHolder holder) {
-        super(holder, Semantics.OPTIONAL);
+        super(Semantics.OPTIONAL, holder);
     }
 
 
