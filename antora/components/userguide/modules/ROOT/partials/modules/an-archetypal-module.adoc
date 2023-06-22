@@ -1,0 +1,161 @@
+[#an-archetypal-module]
+= An archetypal module
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+As was discussed in the xref:modules.adoc#introduction[introductory] section above, in Apache Causeway a module corresponds to a vertical slice of functionality.
+But how should we organise the horizontal tiers (application vs domain) within the module?
+And how does one module interact with another module?
+
+The diagram below shows a set of packages for a module, for the different concerns:
+
+[plantuml]
+----
+include::docs:resources:partial$plantuml-stereotypes.puml[]
+
+
+package module1 {
+    package api     as module1.api     {}
+    package applib  as module1.applib  {}
+    package menu    as module1.menu    {}
+    package restapi as module1.restapi {}
+    package app     as module1.app     {}
+    package dom     as module1.dom     {}
+    package spi     as module1.spi     {}
+    package spiimpl as module1.spiimpl {}
+    package contrib as module1.contrib {}
+}
+
+module1.api     -->  module1.dom
+module1.api     -->  module1.applib
+module1.restapi -->  module1.dom
+module1.menu    -->  module1.dom
+module1.menu    -->  module1.app
+module1.app     -->  module1.dom
+module1.contrib -->  module1.dom
+module1.spiimpl -r-> module1.dom
+
+module1.dom     -d-> module1.spi
+module1.dom     -d^  module1.applib
+----
+
+
+.Module packages
+[cols="1m,2a,5a", options="header"]
+|===
+
+| Pkg
+| Pkg name
+| Description
+
+| dom
+| Domain object model
+| Holds entities, repositories, supporting services and "local" mixins that act upon those entities
+
+| app
+| Application layer
+| Holds view models and "manager" objects that describe a business process
+
+| menu
+| Menu services
+| `@DomainService(nature=VIEW)`; used to fnd entities, create view models ("manager" objects).
+The entrypoint for end-users
+
+| restapi
+| REST API
+| `@DomainService(nature=REST)`; entrypoint for clients accessing functionality through the xref:vro::about.adoc[Restful Objects] viewer.
+
+| api
+| Application Program Interface
+| `@Service`s and interfaces that define a formal interface for other modules to call this one programmatically.
+Will call into the functionality defined by the domain objects, might only expose the interfaces defined within the `applib`.
+
+| applib
+| Application library
+| Public interfaces implemented by domain objects in `dom`, to avoid exposing internal structure.
+Use by the `api`, also possibly used by _other_ modules mixin contributions.
+
+| contrib
+| Contributions
+| Mixins in _this_ module that contribute to _other_ modules.
+These mixins will use the domain objects in `dom` (and occasionally view models in `app`).
+
+| spi
+| Service Provider Interface
+| Defines hooks that allow other modules to influence behaviour of _this_ module.
+Called by objects in `dom` (and perhaps `app`).
+The SPI is typically either be an interface of a xref:events.adoc#custom-events[custom event].
+
+| spiimpl
+| SPI Implementations
+| Implementations in _this_ module of SPIs defined in _other_ modules.
+These SPI implementations will likely use the domain object functionality defined in `dom`.
+
+|===
+
+
+The following diagram extends the previous, this time showing the interactions between modules:
+
+[plantuml]
+----
+include::docs:resources:partial$plantuml-stereotypes.puml[]
+
+package module2 {
+    package spiimpl       as module2.spiimpl       {}
+}
+
+package module3 {
+    package dom           as module3.dom           { }
+}
+
+package module4 {
+    package applib        as module4.applib        { }
+}
+
+package module1 {
+    package api     as module1.api     {}
+    package applib  as module1.applib  {}
+    package restapi as module1.restapi {}
+    package menu    as module1.menu    {}
+    package app     as module1.app     {}
+    package dom     as module1.dom     {}
+    package contrib as module1.contrib {}
+    package spi     as module1.spi     {}
+    package spiimpl as module1.spiimpl {}
+}
+
+'package module5 {
+'    package spi     as module5.spi  {}
+'}
+
+module1.api     -->  module1.dom
+module1.api     -->  module1.applib
+module1.restapi -->  module1.dom
+module1.menu    -->  module1.dom
+module1.menu    -->  module1.app
+module1.app     -->  module1.dom
+module1.contrib -u->  module1.dom
+module1.spiimpl -r-> module1.dom
+
+module1.dom     --> module1.spi
+module1.dom     -^  module1.applib
+module2.spiimpl -u-^   module1.spi
+
+module1.contrib --> module4.applib
+module3.dom     --> module1.api
+
+'module1.spiimpl ---> module5.spi
+----
+
+In the above we see that:
+
+* `module3` makes programmatic calls into the `api` of `module1`
+* `module1` defines an `spi` that is implemented by `module2`
+  Presumably `spiimpl` of `module1` would implement the `spi` of some other module, not shown.
+* `module1`'s mixins in `contrib` contribute behaviour through the interfaces defined in ``module4``'s `applib`.
+
+
+
+

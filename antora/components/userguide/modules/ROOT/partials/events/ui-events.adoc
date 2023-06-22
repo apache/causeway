@@ -1,0 +1,27 @@
+= UI Events
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+To allow the end-user to distinguish one domain object from another, it is rendered with a title and an icon.
+
+The code to return title and icon of an object is typically part of the domain object's implementation, with the `title()` method providing the title string, and (occasionally) `iconName()` allowing the icon file (usually a `.png`) to be specified.
+(For more on this, see the xref:userguide:ROOT:ui-layout-and-hints.adoc#object-titles-and-icons[page earlier]).
+
+However, UI events allow this title and icon to be provided instead by a subscriber.
+UI events have higher precedence than the other mechanisms of supplying a title.
+
+If annotated with xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#titleUiEvent[@DomainObjectLayout#titleUiEvent()], the appropriate (subclass of) `TitleUiEvent` will be emitted.
+A subscriber can then provide the title on behalf of the domain object.
+Similarly for xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#iconUiEvent[#iconUiEvent()].
+
+In addition, it is possible to use events to obtain a CSS class to render with the domain object, using xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClassUiEvent[#cssClassUiEvent()], and to select an alternate xref:userguide:ROOT:ui-layout-and-hints.adoc#object-layout[layout file] using xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#layoutUiEvent[#layoutUiEvent()].
+
+There are two use cases where this feature is useful:
+
+* the first is to override the title/icon/CSS class/layout of library code, for example as provided by the xref:security:secman:about.adoc[SecMan] extension.
+
+* the second is for xref:userguide:ROOT:view-models.adoc#jaxb[JAXB-style view models] which are code generated from XSDs and so cannot have any dependencies on the rest of the Apache Causeway framework.
+
+In this second case a subscriber on the default events can provide a title and icon for such an object, with the behaviour provided using xref:userguide:ROOT:mixins.adoc[mixins].

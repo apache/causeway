@@ -4,3 +4,157 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
+
+In Apache Causeway we use Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration]s to define a module, consisting of a set of domain services and domain objects (entities, view models and mixins).
+Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Import.html[@Import] is used to express a dependency between each "configuration" module.
+
+By convention, we have just one Spring module to each Maven module.
+This means that the `<dependency>`s between Maven modules are mirrored in the Spring module's `@Import` statements).
+We can therefore rely on Maven to ensure there are no cyclic dependencies: the application simply won't compile if we introduce a cycle.
+
+[NOTE]
+====
+If the above convention is too officious, then you could choose to have multiple Spring modules per Maven module, but you will need to watch out for cycles.
+
+In such cases (proprietary) tools such as link:https://structure101.com/[Structure 101] can be used to help detect and visualize such cycles.
+Or, (open source) libraries such as link:https://www.archunit.org/[ArchUnit] or https://jqassistant.org/[jQAssistant] can help enforce architectural layering to prevent the issue arising in the first place.
+(These tools can enforce other conventions, too, so are well worth exploring).
+====
+
+TIP: See Spring documentation on link:https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-annotation-config[annotation-based container configuration], link:https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-classpath-scanning[classpath scanning] and link:https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#beans-java[java-based configuration] for much more on this topic.
+
+
+== Identity
+
+We recommend a single top-level package corresponding to the module, aligned with the `<groupId>` and `<artifactId>` of the Maven module in which it resides.
+This top-level package is also where the Spring `@Configuration` module class resides.
+
+Apache Causeway's own modules follow this convention.
+For example, the xref:vw:exceldownload:about.adoc[Excel extension] module has several submodules, one of which is its applib:
+
+* its Maven `groupId:artifactId` is:
++
+`org.apache.causeway.extensions:causeway-extensions-excel-applib`
+
+* in the applib, its top-level package is:
++
+`org.apache.causeway.extensions.excel.applib`
+
+* it defines a Spring configuration module called:
++
+`CausewayModuleExtExcelApplib`
++
+which looks like:
++
+[source,java]
+----
+@Configuration
+@ComponentScan                                  // <.>
+@EntityScan                                     // <.>
+public class CausewayModuleExtExcelApplib {
+}
+----
+<.> the link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/ComponentScan.html[@ComponentScan] indicates that the classpath should be scanned for domain services, entities and xref:testing:fixtures:about.adoc[fixture scripts].
+<.> recommended if using xref:pjpa::about.adoc[JPA/EclipseLink], skip if using JDO.
+
+
+== Dependencies
+
+When there is a dependency, this is expressed in two ways: first, as a "physical" `<dependency` in Maven; and second, as a "logical" dependency using link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Import.html[@Import] in the `@Configuration` module.
+
+We can see this for example in the `testing` module of the Excel library (artifactId of `causeway-extensions-excel-testing`), where:
+
+
+
+[plantuml]
+.Testing submodule depends upon Applib submodule
+----
+include::docs:resources:partial$plantuml-stereotypes.puml[]
+
+package excel-applib {
+}
+package excel-testing {
+}
+
+"excel-applib" <-.r- "excel-testing"
+----
+
+Therefore:
+
+* in the testing module's `pom.xml`, we see:
++
+[source,xml]
+----
+<dependency>
+    <groupId>org.apache.causeway.extensions</groupId>
+    <artifactId>causeway-extensions-excel-applib</artifactId>
+</dependency>
+----
+
+* and in the testing module's `CausewayModuleExtExcelTesting` we see:
++
+[source,java]
+----
+@Configuration
+@Import({                                           // <.>
+    CausewayModuleExtExcelApplib.class
+})
+@ComponentScan
+public class CausewayModuleExtExcelTesting {
+}
+----
+<.> The link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Import.html[@Import] annotation declares the dependency.
+
+NOTE: unlike Maven, there is no distinction in Spring between production (`src/main/java`) and test (`src/test/java`) classpath dependencies.
+But if the physical classpath dependency is missing, then an incorrectly defined `@Import` will simply not compile.
+
+
+=== Consuming a library
+
+In our own code, if an application's `customers` module needs to use the aforementioned Excel subdomain model (perhaps to generate a downloadable report), then this would be expressed using:
+
+[source,java]
+----
+package com.mycompany.modules.customer;
+...
+
+@Configuration                                  // <.>
+@Import({
+    CausewayModuleExtExcelApplib.class       // <.>
+})
+@ComponentScan                                  // <.>
+public class CustomerModule {}
+----
+<.> this is a module
+<.> dependency on the Excel module (more precisely, its "applib")
+<.> scan for domain services and objects etc under this package (eg a `Customer` entity or a `CustomerRepository` domain service).
+
+=== `@Module` meta-annotation
+
+Since `@Configuration` and `@ComponentScan` often appear together, Apache Causeway provides a convenience `@Module` annotation, which is meta-annotated with both.
+The above example could therefore be rewritten as:
+
+[source,java]
+----
+package com.mycompany.modules.customer;
+...
+import org.apache.causeway.applib.annotation.Module;
+
+@Module
+@Import({
+    CausewayModuleExtExcelApplib.class
+})
+public class CustomerModule {}
+----
+
+
+
+.Untangling the Terminology
+****
+Modularity is a rather overloaded term.
+We have Maven modules, Java 9 (Jigsaw) modules and we also have Spring modules (a class annotated with link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration]).
+
+In the context of Apache Causeway, a module is actually implemented as the last of these, a Spring `@Configuration` module.
+If you follow our recommendation of a single Spring module in each Maven module, then an Apache Causeway module is _also_ a Maven module.
+****
+
