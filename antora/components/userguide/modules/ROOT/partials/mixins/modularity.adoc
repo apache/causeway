@@ -8,10 +8,30 @@ Mixins separate behaviour away from the underlying mixee, with the mixee operati
 The mixee itself knows nothing about its caller.
 This simple fact becomes very powerful in that the mixin could even be in a different module than the mixee, xref:modules.adoc[modularity] being an important concern of maintainability.
 
+
 == Contributing to a class
 
 The simple case is for the mixin to contribute directly to a mixee's concrete class.
-For example, consider this mixin:
+
+For example, suppose we have an `orders` module and a `customers` module.
+The `orders` module could provide a mixin that (so far as the end-user is concerned in the UI) would allow a customer to place an order:
+
+[plantuml]
+.`orders` module contributes to `customers`
+----
+include::docs:resources:partial$plantuml-stereotypes.puml[]
+
+package orders {
+    class Customer_placeOrder <<mixin>>
+}
+
+package customers {
+    class Customer <<ppt>>
+}
+Customer_placeOrder -.r-> Customer: "contributes to"
+----
+
+In terms of code:
 
 [source,java]
 ----
@@ -28,48 +48,61 @@ public class Customer_placeOrder {
     // ...
 }
 ----
-<.> defined in the "orders" module
-<.> acts upon objects in the "customers" module
+<.> defined in the `orders` module
+<.> acts upon objects in the `customers` module
 
-When the `Customer` entity is rendered in the UI, it looks to the end-user that the entity "knows" how to place an order; and yet this functionality comes in from the "orders" module.
-
-
-.Micro-frontends
-****
-A link:https://micro-frontends.org/[micro-frontend] is an extension of the microservices idea, but for the user interface.
-Rather than having a monolithic front-end UI that calls to multiple backends, instead the user interface that is composed of vertical slices of functionality, each slice calling its corresponding backend microservice.
-UI infrastructure pulls all of these fragments together into a coherent user interface.
-
-Microservices are (of course) just one means to implement modularity and enable product ownership.
-In the context of an Apache Causeway app, we are more likely to use individual Maven modules as our, well, as our modules.
-Each such module provides a set of mixins, and these mixins in effect show up to the end-user as slices of functionality.
-The framework itself brings all this together, acting as the UI infrastructure.
-****
 
 
 == Contributing to an interface
 
 In the previous section the `Customer` did not know that it was being contributed to; and the mixee had access to the entire (`public`) interface defined by the `Customer` type.
 A variation though is for the mixee to contribute by way of a (Java) `interface`.
-This interface needs to be in a module that both the mixee and mixin has access to, which might be in the mixee's module, or in some common/base module, or could perhaps be in the mixin's module.
+
+This interface needs to be in a module that both the mixee and mixin has access to, and so there are three options:
+
+* interface is defined the mixin's module
+* interface is defined the mixee's module
+* interface is defined in some common/base module
+
+The sections below explore each of these alternatives.
 
 === Interface defined in mixin's module
 
-For example, suppose that `Customer` implements `DocumentHolder`:
+For example, suppose that the `docmgmt` module provides document management capabilities, provided to any `DocumentHolder`.
+The `Customer` class might then take advantage of this, saying in effect:  "yes, I want to hold some documents, please manage that concern for me".
 
+[plantuml]
+.`Customer` elects to have contributions made to it by `docmgmt` module
+----
+include::docs:resources:partial$plantuml-stereotypes.puml[]
+
+package docmgmt {
+    class DocumentHolder_documents <<mixin>>
+    interface DocumentHolder
+}
+
+package customers {
+    class Customer <<ppt>>
+}
+DocumentHolder_documents -.r-> DocumentHolder: "contributes to"
+Customer -u-^ DocumentHolder
+----
+
+Therefore `customer` (mixee) --- [depends upon]-> `docmgmt` (mixin).
+
+In terms of code:
+
+* in the `docmgmt` module:
++
 [source,java]
 ----
-package domainapp.customer;
+package domainapp.docmgmt;
 
-import domainapp.docmgmt.DocumentHolder;
-
-public class Customter implements DocumentHolder {
-    // ...
-}
+public interface DocumentHolder { ... }
 ----
-
-and that we have this mixin:
-
++
+and
++
 [source,java]
 ----
 package domainapp.docmgmt;
@@ -84,14 +117,51 @@ public class DocumentHolder_documents {
 }
 ----
 
-Probably in this case the `DocumentHolder` and mixin is part of "documents" module, and so the mixee is saying: "yes, I want to hold some documents, let the documents module take care of that concern for me".
+* in the `customers` module:
++
+[source,java]
+----
+package domainapp.customer;
+
+import domainapp.docmgmt.DocumentHolder;
+
+public class Customer implements DocumentHolder {
+    // ...
+}
+----
+
 
 === Interface defined in mixee's module
 
-Or the interface could be in the mixees's module.
+Alternatively, the interface could be in the mixees's module.
 
-For example, suppose the customer module defines `HasAddress`, also implemented by `Customer`:
+For example, suppose the `customer` module defines `HasAddress`, also implemented by `Customer`.
+The `mailmerge` module provides the ability to send out mailshots, but it only needs the information exposed through `HasAddress`, not all of `Customer`.
 
+
+[plantuml]
+.`mailmerge` module contributes to `customers`
+----
+include::docs:resources:partial$plantuml-stereotypes.puml[]
+
+package mailmerge {
+    class HasAddress_mailshot <<mixin>>
+}
+
+package customers {
+    interface HasAddress
+    class Customer <<ppt>>
+}
+HasAddress_mailshot -.r-> HasAddress: "contributes to"
+Customer -u-^ HasAddress
+----
+
+Therefore `mailmerge` (mixin) --- [depends upon]-> `customer` (mixee).
+
+In terms of code:
+
+* in the `customers` module:
++
 [source,java]
 ----
 package domainapp.customer;
@@ -99,14 +169,22 @@ package domainapp.customer;
 public interface HasAddress {
     // ...
 }
+}
+----
++
+and
++
+[source,java]
+----
+package domainapp.customer;
 
 public class Customer implements HasAddress {
     // ...
 }
 ----
 
-Then a "mailmerge" module might contribute behaviour through this interface; it would know only about the address details, not the rest of Customer:
-
+* and in the `mailmerge` module:
++
 [source,java]
 ----
 package domainapp.mailmerge;
@@ -118,11 +196,40 @@ public class HasAddress_mailshot {
 }
 ----
 
+
+
 === Interface defined in a common module
 
-Even so, with this design there's nothing to prevent our "mailmerge" module from accessing the rest of `Customer`.
+With this design in the previous section, there's nothing to prevent our "mailmerge" module from accessing the rest of `Customer`.
 We can fix this by moving the interface to some common location:
 
+
+[plantuml]
+.`mailmerge` module contributes to `customers`
+----
+include::docs:resources:partial$plantuml-stereotypes.puml[]
+
+package mailmerge {
+    class HasAddress_mailshot <<mixin>>
+}
+
+package address {
+    interface HasAddress
+}
+
+package customers {
+    class Customer <<ppt>>
+}
+HasAddress_mailshot -.r-> HasAddress: "contributes to"
+Customer -u-^ HasAddress
+----
+
+Therefore neither `mailmerge` (mixin) nor `customer` (mixee) depend upon each other; instead both depend upon `address`.
+
+In terms of code:
+
+* in the `address` module:
++
 [source,java]
 ----
 package domainapp.address;
@@ -134,8 +241,8 @@ public interface HasAddress {
 }
 ----
 
-then
-
+* in the `customers` module:
++
 [source,java]
 ----
 package domainapp.customer;
@@ -148,8 +255,8 @@ public class Customer implements HasAddress {
 }
 ----
 
-and
-
+* in the `mailmerge` module:
++
 [source,java]
 ----
 package domainapp.mailmerge;
@@ -168,3 +275,15 @@ Taking this idea to its logical conclusion, that common type could even be `java
 And indeed, the framework itself defines a handful of mixins that do exactly this.
 ====
 
+
+
+== Micro-frontends
+
+A link:https://micro-frontends.org/[micro-frontend] is an extension of the microservices idea, but for the user interface.
+Rather than having a monolithic front-end UI that calls to multiple backends, instead the user interface that is composed of vertical slices of functionality, each slice calling its corresponding backend microservice.
+UI infrastructure pulls all of these fragments together into a coherent user interface.
+
+Microservices are (of course) just one means to implement modularity and enable product ownership.
+In the context of an Apache Causeway app, we are more likely to use individual Maven modules as our, well, as our modules.
+Each such module provides a set of mixins, and these mixins in effect show up to the end-user as slices of functionality.
+The framework itself brings all this together, acting as the UI infrastructure.
