@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.persistence.jdo.datanucleus.entities;
 
-import java.util.Optional;
-
 import org.datanucleus.ExecutionContext;
 import org.datanucleus.FetchPlan;
 import org.datanucleus.FetchPlanForClass;
@@ -36,10 +34,10 @@ import org.datanucleus.store.FieldValues;
 import org.datanucleus.store.StoreManager;
 import org.datanucleus.store.fieldmanager.FieldManager;
 import org.datanucleus.transaction.Transaction;
-import org.springframework.lang.Nullable;
+
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * Used to memoize stringified OIDs of entities,
@@ -47,20 +45,7 @@ import lombok.val;
  * <p>
  * Has no purpose otherwise.
  */
-public class DnStateManagerForHollow implements DNStateManager<Persistable> {
-
-    // -- UTILITTY
-
-    public static Optional<String> lookupIdentifierFor(final @Nullable Object pojo) {
-        if(pojo instanceof Persistable) {
-            var sm = ((Persistable) pojo).dnGetStateManager();
-            if(sm instanceof DnStateManagerForHollow) {
-                val oidStringified = ((DnStateManagerForHollow)sm).oidStringified;
-                return Optional.of(oidStringified);
-            }
-        }
-        return Optional.empty();
-    }
+class DnStateManagerForHollow implements DNStateManager<Persistable> {
 
     // -- CONSTRUCTION
 
@@ -238,4 +223,50 @@ public class DnStateManagerForHollow implements DNStateManager<Persistable> {
     @Override public void retrieveDetachState(final DNStateManager sm) { }
     @Override public void checkInheritance(final FieldValues fv) { }
     @Override public void markFieldsAsLoaded(final int[] fieldNumbers) { }
+
+    private final static String INVALID_FIELD_ACCESS_MSG =
+            "JDO entity %s is in HOLLOW state, its fields are no longer valid.";
+
+    @Override public boolean getBooleanField(final Persistable pc, final int field, final boolean currentValue) {
+        throw _Exceptions.unrecoverable(INVALID_FIELD_ACCESS_MSG, pc);
+    }
+
+    @Override public char getCharField(final Persistable pc, final int field, final char currentValue) {
+        throw _Exceptions.unrecoverable(INVALID_FIELD_ACCESS_MSG, pc);
+    }
+
+    @Override public byte getByteField(final Persistable pc, final int field, final byte currentValue) {
+        throw _Exceptions.unrecoverable(INVALID_FIELD_ACCESS_MSG, pc);
+    }
+
+    @Override public short getShortField(final Persistable pc, final int field, final short currentValue) {
+        throw _Exceptions.unrecoverable(INVALID_FIELD_ACCESS_MSG, pc);
+    }
+
+    @Override public int getIntField(final Persistable pc, final int field, final int currentValue) {
+        throw _Exceptions.unrecoverable(INVALID_FIELD_ACCESS_MSG, pc);
+    }
+
+    @Override public long getLongField(final Persistable pc, final int field, final long currentValue) {
+        throw _Exceptions.unrecoverable(INVALID_FIELD_ACCESS_MSG, pc);
+    }
+
+    @Override public float getFloatField(final Persistable pc, final int field, final float currentValue) {
+        throw _Exceptions.unrecoverable(INVALID_FIELD_ACCESS_MSG, pc);
+    }
+
+    @Override public double getDoubleField(final Persistable pc, final int field, final double currentValue) {
+        throw _Exceptions.unrecoverable(INVALID_FIELD_ACCESS_MSG, pc);
+    }
+
+    @Override public String getStringField(final Persistable pc, final int field, final String currentValue) {
+        throw _Exceptions.unrecoverable(INVALID_FIELD_ACCESS_MSG, pc);
+        //return null; // mimics behavior as if there was no StateManager
+    }
+
+    @Override public Object getObjectField(final Persistable pc, final int field, final Object currentValue) {
+        throw _Exceptions.unrecoverable(INVALID_FIELD_ACCESS_MSG, pc);
+        //return null; // mimics behavior as if there was no StateManager
+    }
+
 }
