@@ -67,11 +67,13 @@ class RoTable(displayCollection: CollectionDM) : SimplePanel() {
             }
         }
         add(tabulator)
+        console.log("[RT_init]")
+        console.log(tabulator)
     }
 
     @OptIn(InternalSerializationApi::class)
     private fun createTabulator(
-        data: MutableList<Exhibit>,
+        data: MutableList<dynamic>,
         options: TabulatorOptions<dynamic>
     ): Tabulator<dynamic> {
         val dataUpdateOnEdit = true

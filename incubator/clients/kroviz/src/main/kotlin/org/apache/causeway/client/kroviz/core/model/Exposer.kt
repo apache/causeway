@@ -47,6 +47,8 @@ class Exposer(val delegate: TObject) {
             val member = m.value
             if (member.memberType == MemberType.PROPERTY.type) {
                 val realValue = member.value
+                console.log("[E_init]")
+                console.log(realValue)
                 if (realValue != null) {
                     that[member.id] = realValue.content
                 }
@@ -78,6 +80,4 @@ class Exposer(val delegate: TObject) {
 }
 
 @Serializable
-class Exhibit(val url: String) {
-
-}
+class Exhibit(val url: String) {}

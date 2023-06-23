@@ -1,0 +1,11 @@
+# in ~/causeway/incubator/clients/kroviz/docker/ execute
+# $ sudo docker-compose up
+version: "3"
+
+services:
+  causeway-app-demo:
+    image: apache/causeway-app-demo-jpa:latest
+    ports:
+      - "8080:8080"
+    environment:
+      - PROTOTYPING=true
