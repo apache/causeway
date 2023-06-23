@@ -46,6 +46,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
+import org.apache.causeway.core.metamodel.util.Facets;
 
 import lombok.val;
 
@@ -70,10 +71,12 @@ extends MetaModelPostProcessorAbstract {
             final ObjectAction objectAction,
             final ObjectActionParameter param) {
 
-        // no need to check if this action is always hidden in the UI
-        // (eg if it exists solely to be called via the WrapperFactory service)
-        val hiddenFacet = objectAction.getFacet(HiddenFacet.class);
-        if (hiddenFacet != null && hiddenFacet.where() == Where.EVERYWHERE) {
+        // no need to perform this check if the action is always hidden in the UI
+        // (one use case being if the action exists solely to be called via the WrapperFactory service,
+        //  eg to emit an outbox event for integration)
+        if (Facets.hiddenWhere(objectAction)
+                  .filter(where -> where == Where.EVERYWHERE)
+                  .isPresent()) {
             return;
         }
 
