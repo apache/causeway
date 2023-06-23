@@ -214,7 +214,6 @@ extends ReferentialStateManagerImpl {
             return oidIfAny;
         } catch (Exception e) {
             log.error("exception while trying to extract entity's current primary key", e);
-            e.printStackTrace();
             return Optional.empty();
         }
     }
