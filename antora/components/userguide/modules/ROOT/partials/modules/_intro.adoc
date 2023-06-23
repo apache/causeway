@@ -19,3 +19,14 @@ The framework is intended to support complex domains, which we tackle by breakin
 
 It could be argued that there is still an application tier (view models) and a domain tier (entities) to be considered, as well as mixins.
 We describe the structure of an xref:modules.adoc#an-archetypal-module[archetype module below], showing one way of organising the horizontal tiers within the vertical slices.
+
+Having broken the application down into smaller modules, these modules will then depend upon each other.
+The two main rule of thumbs for dependencies are:
+
+. there should be no cyclic dependencies (the module dependencies should form an acyclic graph), and
+. unstable modules should depend upon stable modules, rather than the other way around.
+
+By "unstable" we don't mean buggy, rather this relates to its likelihood to change its structure or behaviour over time: in other words its stability as a core set of concepts upon which other stuff can depend.
+Reference data (calendars, tax rates, lookups etc) are generally stable, as are "golden" concept such as counterparties / legal entities or financial accounts.
+Transactional concepts such as invoices or agreements is perhaps more likely to change.
+But this stuff is domain specific.

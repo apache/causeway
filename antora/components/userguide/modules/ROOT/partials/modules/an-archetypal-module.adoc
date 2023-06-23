@@ -1,5 +1,5 @@
 [#an-archetypal-module]
-= An archetypal module
+= An Archetypal Module
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
@@ -16,29 +16,29 @@ The diagram below shows a set of packages for a module, for the different concer
 include::docs:resources:partial$plantuml-stereotypes.puml[]
 
 
-package module1 {
-    package api     as module1.api     {}
-    package applib  as module1.applib  {}
-    package menu    as module1.menu    {}
-    package restapi as module1.restapi {}
-    package app     as module1.app     {}
-    package dom     as module1.dom     {}
-    package spi     as module1.spi     {}
-    package spiimpl as module1.spiimpl {}
-    package contrib as module1.contrib {}
+package ordermgmt {
+    package api     as ordermgmt.api     {}
+    package applib  as ordermgmt.applib  {}
+    package menu    as ordermgmt.menu    {}
+    package restapi as ordermgmt.restapi {}
+    package app     as ordermgmt.app     {}
+    package dom     as ordermgmt.dom     {}
+    package spi     as ordermgmt.spi     {}
+    package spiimpl as ordermgmt.spiimpl {}
+    package contrib as ordermgmt.contrib {}
 }
 
-module1.api     -->  module1.dom
-module1.api     -->  module1.applib
-module1.restapi -->  module1.dom
-module1.menu    -->  module1.dom
-module1.menu    -->  module1.app
-module1.app     -->  module1.dom
-module1.contrib -->  module1.dom
-module1.spiimpl -r-> module1.dom
+ordermgmt.api     -->  ordermgmt.dom
+ordermgmt.api     -->  ordermgmt.applib
+ordermgmt.restapi -->  ordermgmt.dom
+ordermgmt.menu    -->  ordermgmt.dom
+ordermgmt.menu    -->  ordermgmt.app
+ordermgmt.app     -->  ordermgmt.dom
+ordermgmt.contrib -->  ordermgmt.dom
+ordermgmt.spiimpl -r-> ordermgmt.dom
 
-module1.dom     -d-> module1.spi
-module1.dom     -d^  module1.applib
+ordermgmt.dom     -d-> ordermgmt.spi
+ordermgmt.dom     -d^  ordermgmt.applib
 ----
 
 
@@ -102,59 +102,58 @@ The following diagram extends the previous, this time showing the interactions b
 ----
 include::docs:resources:partial$plantuml-stereotypes.puml[]
 
-package module2 {
-    package spiimpl       as module2.spiimpl       {}
+package warehouse {
+    package spiimpl       as warehouse.spiimpl       {}
 }
 
-package module3 {
-    package dom           as module3.dom           { }
+package shipping {
+    package dom           as shipping.dom           { }
 }
 
-package module4 {
-    package applib        as module4.applib        { }
+package customer {
+    package applib        as customer.applib        { }
 }
 
-package module1 {
-    package api     as module1.api     {}
-    package applib  as module1.applib  {}
-    package restapi as module1.restapi {}
-    package menu    as module1.menu    {}
-    package app     as module1.app     {}
-    package dom     as module1.dom     {}
-    package contrib as module1.contrib {}
-    package spi     as module1.spi     {}
-    package spiimpl as module1.spiimpl {}
+package ordermgmt {
+    package api     as ordermgmt.api     {}
+    package applib  as ordermgmt.applib  {}
+    package restapi as ordermgmt.restapi {}
+    package menu    as ordermgmt.menu    {}
+    package app     as ordermgmt.app     {}
+    package dom     as ordermgmt.dom     {}
+    package contrib as ordermgmt.contrib {}
+    package spi     as ordermgmt.spi     {}
+    package spiimpl as ordermgmt.spiimpl {}
 }
 
-'package module5 {
-'    package spi     as module5.spi  {}
-'}
+ordermgmt.api     -->  ordermgmt.dom
+ordermgmt.api     -->  ordermgmt.applib
+ordermgmt.restapi -->  ordermgmt.dom
+ordermgmt.menu    -->  ordermgmt.dom
+ordermgmt.menu    -->  ordermgmt.app
+ordermgmt.app     -->  ordermgmt.dom
+ordermgmt.contrib -u->  ordermgmt.dom
+ordermgmt.spiimpl -r-> ordermgmt.dom
 
-module1.api     -->  module1.dom
-module1.api     -->  module1.applib
-module1.restapi -->  module1.dom
-module1.menu    -->  module1.dom
-module1.menu    -->  module1.app
-module1.app     -->  module1.dom
-module1.contrib -u->  module1.dom
-module1.spiimpl -r-> module1.dom
+ordermgmt.dom     --> ordermgmt.spi
+ordermgmt.dom     -^  ordermgmt.applib
+warehouse.spiimpl -u-^   ordermgmt.spi
 
-module1.dom     --> module1.spi
-module1.dom     -^  module1.applib
-module2.spiimpl -u-^   module1.spi
-
-module1.contrib --> module4.applib
-module3.dom     --> module1.api
-
-'module1.spiimpl ---> module5.spi
+ordermgmt.contrib --> customer.applib
+shipping.dom     --> ordermgmt.api
 ----
 
 In the above we see that:
 
-* `module3` makes programmatic calls into the `api` of `module1`
-* `module1` defines an `spi` that is implemented by `module2`
-  Presumably `spiimpl` of `module1` would implement the `spi` of some other module, not shown.
-* `module1`'s mixins in `contrib` contribute behaviour through the interfaces defined in ``module4``'s `applib`.
+* `shipping` makes programmatic calls into the `api` of `ordermgmt`
+* `ordermgmt` defines an `spi` that is implemented by `warehouse`
++
+Presumably `spiimpl` of `ordermgmt` would implement the `spi` of some other module, not shown.
+* ``ordermgmt``'s mixins in `contrib` contribute behaviour to all objects that implement the interfaces defined in ``customer``'s `applib`.
+* `ordermgmt`s domain objects in `dom` implement the interfaces in `applib`, meaning that other modules can contribute to them.
++
+They might also implement from the `applib` of other modules (eg a `Customer` declaring itself to be a `DocumentHolder`).
+
 
 
 

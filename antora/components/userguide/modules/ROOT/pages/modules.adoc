@@ -7,7 +7,6 @@
 
 include::partial$modules/_intro.adoc[leveloffset=+1]
 include::partial$modules/progmodel.adoc[leveloffset=+1]
-include::partial$modules/rules-of-thumb.adoc[leveloffset=+1]
 include::partial$modules/decoupling.adoc[leveloffset=+1]
 include::partial$modules/inverting-dependencies.adoc[leveloffset=+1]
 include::partial$modules/an-archetypal-module.adoc[leveloffset=+1]

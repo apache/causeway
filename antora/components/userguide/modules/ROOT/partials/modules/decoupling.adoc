@@ -24,12 +24,12 @@ A mixin would allow the UI for a `Customer` to also display these attached ``Doc
 Dependencies are also injected into mixins.
 A common technique is to factor out from domain objects into mixins and then generalise.
 
-* the internal xref:refguide:applib:index/services/eventbus/EventBusService.adoc[event bus] allows modules to influence other modules.
+* xref:events.adoc[events] allow modules to influence other modules.
 +
 A subscriber in one module can subscribe to events emitted by domain objects in another module.
 These events can affect both the UI (eg hiding or disabling xref:properties-collections-actions.adoc[object members], or allowing or vetoing interactions).
 
-Using events we can implement in the application layer something akin to (what in a relational model we would call) referential integrity.
+Using events we can implement referential integrity constraints within the application.
 For example, suppose the `customers` module has a `Customer` object and a `EmailAddress` object, with a customer having a collection of email addresses.
 A `communications` module might then use those email addresses to create ``EmailCommunication``s.
 
