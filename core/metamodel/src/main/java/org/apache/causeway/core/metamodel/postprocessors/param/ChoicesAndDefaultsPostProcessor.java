@@ -20,9 +20,11 @@ package org.apache.causeway.core.metamodel.postprocessors.param;
 
 import jakarta.inject.Inject;
 
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
+import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.object.defaults.DefaultedFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.causeway.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
@@ -44,6 +46,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
+import org.apache.causeway.core.metamodel.util.Facets;
 
 import lombok.val;
 
@@ -67,6 +70,15 @@ extends MetaModelPostProcessorAbstract {
             final ObjectSpecification objectSpecification,
             final ObjectAction objectAction,
             final ObjectActionParameter param) {
+
+        // no need to perform this check if the action is always hidden in the UI
+        // (one use case being if the action exists solely to be called via the WrapperFactory service,
+        //  eg to emit an outbox event for integration)
+        if (Facets.hiddenWhere(objectAction)
+                  .filter(where -> where == Where.EVERYWHERE)
+                  .isPresent()) {
+            return;
+        }
 
         if(!hasChoicesOrAutoComplete(param)) {
 

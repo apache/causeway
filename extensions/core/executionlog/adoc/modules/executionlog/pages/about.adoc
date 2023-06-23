@@ -103,20 +103,20 @@ To get you started, the following fragment adds all of the actions to an "Activi
 [source,xml]
 .menubars.layout.xml
 ----
-<mb3:secondary>
+<mb:secondary>
     ...
-    <mb3:menu>
-        <mb3:named>Activity</mb3:named>
+    <mb:menu>
+        <mb:named>Activity</mb:named>
         ...
-        <mb3:section>
-            <mb3:named>Execution Log</mb3:named>
-            <mb3:serviceAction id="findMostRecent" objectType="causeway.ext.executionLog.ExecutionLogMenu"/>
-            <mb3:serviceAction id="findExecutions" objectType="causeway.ext.executionLog.ExecutionLogMenu"/>
-            <mb3:serviceAction id="findAll" objectType="causeway.ext.executionLog.ExecutionLogMenu"/>
-        </mb3:section>
+        <mb:section>
+            <mb:named>Execution Log</mb:named>
+            <mb:serviceAction id="findMostRecent" objectType="causeway.ext.executionLog.ExecutionLogMenu"/>
+            <mb:serviceAction id="findExecutions" objectType="causeway.ext.executionLog.ExecutionLogMenu"/>
+            <mb:serviceAction id="findAll" objectType="causeway.ext.executionLog.ExecutionLogMenu"/>
+        </mb:section>
         ...
-    </mb3:menu>
-</mb3:secondary>
+    </mb:menu>
+</mb:secondary>
 ----
 
 

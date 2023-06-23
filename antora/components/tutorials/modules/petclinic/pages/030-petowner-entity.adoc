@@ -807,23 +807,23 @@ mvn -pl spring-boot:run
 .PetOwner.layout.xml
 ----
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<bs3:grid>
-    <bs3:row>
+<bs:grid>
+    <bs:row>
         <!-- ... -->
-    </bs3:row>
-    <bs3:row>
-        <bs3:col span="6">
-            <bs3:tabGroup>
+    </bs:row>
+    <bs:row>
+        <bs:col span="6">
+            <bs:tabGroup>
                 <!-- ... -->
-            </bs3:tabGroup>
+            </bs:tabGroup>
             <c:fieldSet id="contactDetails" name="Contact Details"/> <!--.-->
             <c:fieldSet id="notes" name="Notes"/>                    <!--.-->
-        </bs3:col>
-        <bs3:col span="6">
+        </bs:col>
+        <bs:col span="6">
             <!-- ... -->
-        </bs3:col>
-    </bs3:row>
-</bs3:grid>
+        </bs:col>
+    </bs:row>
+</bs:grid>
 ----
 <.> fieldSet for contact details
 <.> fieldset for the notes

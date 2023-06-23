@@ -17,19 +17,19 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<bs3:grid xsi:schemaLocation="https://causeway.apache.org/applib/layout/component https://causeway.apache.org/applib/layout/component/component.xsd https://causeway.apache.org/applib/layout/links https://causeway.apache.org/applib/layout/links/links.xsd https://causeway.apache.org/applib/layout/grid/bootstrap3 https://causeway.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd" xmlns:bs3="https://causeway.apache.org/applib/layout/grid/bootstrap3" xmlns:cpt="https://causeway.apache.org/applib/layout/component" xmlns:lnk="https://causeway.apache.org/applib/layout/links" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <bs3:row>
-        <bs3:col span="12" unreferencedActions="true">
+<bs:grid xsi:schemaLocation="https://causeway.apache.org/applib/layout/component https://causeway.apache.org/applib/layout/component/component.xsd https://causeway.apache.org/applib/layout/links https://causeway.apache.org/applib/layout/links/links.xsd https://causeway.apache.org/applib/layout/grid/bootstrap3 https://causeway.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd" xmlns:bs="https://causeway.apache.org/applib/layout/grid/bootstrap3" xmlns:cpt="https://causeway.apache.org/applib/layout/component" xmlns:lnk="https://causeway.apache.org/applib/layout/links" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <bs:row>
+        <bs:col span="12" unreferencedActions="true">
             <cpt:domainObject/>
             <cpt:action id="createSimpleObject">
             	<cpt:named>Hello</cpt:named>
             </cpt:action>
-        </bs3:col>
-    </bs3:row>
-    <bs3:row>
-        <bs3:col span="4">
+        </bs:col>
+    </bs:row>
+    <bs:row>
+        <bs:col span="4">
             <cpt:fieldSet name="General" unreferencedProperties="true"/>
-        </bs3:col>
-        <bs3:col span="12" unreferencedCollections="true"/>
-    </bs3:row>
-</bs3:grid>
+        </bs:col>
+        <bs:col span="12" unreferencedCollections="true"/>
+    </bs:row>
+</bs:grid>

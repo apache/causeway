@@ -19,22 +19,22 @@
   ~
   -->
 
-<bs3:grid
+<bs:grid
         xsi:schemaLocation="https://causeway.apache.org/applib/layout/component https://causeway.apache.org/applib/layout/component/component.xsd   https://causeway.apache.org/applib/layout/grid/bootstrap3 https://causeway.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd"
-        xmlns:bs3="https://causeway.apache.org/applib/layout/grid/bootstrap3"
+        xmlns:bs="https://causeway.apache.org/applib/layout/grid/bootstrap3"
         xmlns:cpt="https://causeway.apache.org/applib/layout/component"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <bs3:row>
-        <bs3:col span="12" unreferencedActions="true">
+    <bs:row>
+        <bs:col span="12" unreferencedActions="true">
             <cpt:domainObject/>
-        </bs3:col>
-    </bs3:row>
-    <bs3:row>
-        <bs3:col span="6">
-            <bs3:tabGroup>
-                <bs3:tab name="Identifier">
-                    <bs3:row>
-                        <bs3:col span="12">
+        </bs:col>
+    </bs:row>
+    <bs:row>
+        <bs:col span="6">
+            <bs:tabGroup>
+                <bs:tab name="Identifier">
+                    <bs:row>
+                        <bs:col span="12">
                             <cpt:fieldSet name="Identity" id="identity">
                                 <cpt:action id="previous"/>
                                 <cpt:action id="next"/>
@@ -47,41 +47,41 @@
                             <cpt:fieldSet name="" id="http-id">
                                 <cpt:property id="sessionGuid"/>
                             </cpt:fieldSet>
-                        </bs3:col>
-                    </bs3:row>
-                </bs3:tab>
-                <bs3:tab name="Other">
-                    <bs3:row>
-                        <bs3:col span="12">
+                        </bs:col>
+                    </bs:row>
+                </bs:tab>
+                <bs:tab name="Other">
+                    <bs:row>
+                        <bs:col span="12">
                             <cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
-                        </bs3:col>
-                    </bs3:row>
-                </bs3:tab>
-                <bs3:tab name="Metadata">
-                    <bs3:row>
-                        <bs3:col span="12">
+                        </bs:col>
+                    </bs:row>
+                </bs:tab>
+                <bs:tab name="Metadata">
+                    <bs:row>
+                        <bs:col span="12">
                             <cpt:fieldSet name="Metadata" id="metadata">
                             </cpt:fieldSet>
-                        </bs3:col>
-                    </bs3:row>
-                </bs3:tab>
-            </bs3:tabGroup>
-        </bs3:col>
-        <bs3:col span="6">
-            <bs3:tabGroup collapseIfOne="false">
-                <bs3:tab name="Logout">
-                    <bs3:row>
-                        <bs3:col span="12">
+                        </bs:col>
+                    </bs:row>
+                </bs:tab>
+            </bs:tabGroup>
+        </bs:col>
+        <bs:col span="6">
+            <bs:tabGroup collapseIfOne="false">
+                <bs:tab name="Logout">
+                    <bs:row>
+                        <bs:col span="12">
                             <cpt:fieldSet name="Timestamps" id="logout">
                                 <cpt:property id="loginTimestamp"/>
                                 <cpt:property id="logoutTimestamp"/>
                                 <cpt:property id="causedBy"/>
                             </cpt:fieldSet>
-                        </bs3:col>
-                    </bs3:row>
-                </bs3:tab>
-            </bs3:tabGroup>
-        </bs3:col>
-        <bs3:col span="12" unreferencedCollections="true"/>
-    </bs3:row>
-</bs3:grid>
+                        </bs:col>
+                    </bs:row>
+                </bs:tab>
+            </bs:tabGroup>
+        </bs:col>
+        <bs:col span="12" unreferencedCollections="true"/>
+    </bs:row>
+</bs:grid>

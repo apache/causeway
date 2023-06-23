@@ -19,30 +19,30 @@
   ~
   -->
 
-<bs3:grid xsi:schemaLocation="https://causeway.apache.org/applib/layout/component https://causeway.apache.org/applib/layout/component/component.xsd https://causeway.apache.org/applib/layout/links https://causeway.apache.org/applib/layout/links/links.xsd https://causeway.apache.org/applib/layout/grid/bootstrap3 https://causeway.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd" xmlns:bs3="https://causeway.apache.org/applib/layout/grid/bootstrap3" xmlns:cpt="https://causeway.apache.org/applib/layout/component" xmlns:lnk="https://causeway.apache.org/applib/layout/links" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <bs3:row>
-        <bs3:col span="12" unreferencedActions="true">
+<bs:grid xsi:schemaLocation="https://causeway.apache.org/applib/layout/component https://causeway.apache.org/applib/layout/component/component.xsd https://causeway.apache.org/applib/layout/links https://causeway.apache.org/applib/layout/links/links.xsd https://causeway.apache.org/applib/layout/grid/bootstrap3 https://causeway.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd" xmlns:bs="https://causeway.apache.org/applib/layout/grid/bootstrap3" xmlns:cpt="https://causeway.apache.org/applib/layout/component" xmlns:lnk="https://causeway.apache.org/applib/layout/links" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <bs:row>
+        <bs:col span="12" unreferencedActions="true">
             <cpt:domainObject/>
-        </bs3:col>
-    </bs3:row>
-    <bs3:row>
-        <bs3:col span="4">
+        </bs:col>
+    </bs:row>
+    <bs:row>
+        <bs:col span="4">
             <cpt:fieldSet name="General" unreferencedProperties="true">
                 <cpt:property id="name"/>
                 <cpt:property id="favoriteBook" />
             </cpt:fieldSet>
-        </bs3:col>
-        <bs3:col span="12" unreferencedCollections="true">
+        </bs:col>
+        <bs:col span="12" unreferencedCollections="true">
             <cpt:collection defaultView="table" id="books" paged="12"/>
-        </bs3:col>
+        </bs:col>
 
-        <bs3:col span="12">
+        <bs:col span="12">
 
-        	<bs3:tabGroup>
+        	<bs:tabGroup>
 
-				<bs3:tab name="Tab 1">
-					<bs3:row>
-						<bs3:col span="12">
+				<bs:tab name="Tab 1">
+					<bs:row>
+						<bs:col span="12">
 							<cpt:fieldSet id="fs1">
 								<cpt:property id="bookForTab1"/>
 								<cpt:property id="bookNameForTab1"/>
@@ -51,13 +51,13 @@
 							<cpt:collection defaultView="table" id="booksForTab1" paged="12"/>
 							<cpt:collection defaultView="table" id="productsForTab1" paged="12"/>
 
-						</bs3:col>
-					</bs3:row>
-				</bs3:tab>
+						</bs:col>
+					</bs:row>
+				</bs:tab>
 
-				<bs3:tab name="Tab 2">
-					<bs3:row>
-						<bs3:col span="12">
+				<bs:tab name="Tab 2">
+					<bs:row>
+						<bs:col span="12">
 							<cpt:fieldSet id="fs2">
 								<cpt:property id="bookForTab2"/>
 								<cpt:property id="bookNameForTab2"/>
@@ -66,13 +66,13 @@
 							<cpt:collection defaultView="table" id="booksForTab2" paged="12"/>
 							<cpt:collection defaultView="table" id="productsForTab2" paged="12"/>
 
-						</bs3:col>
-					</bs3:row>
-				</bs3:tab>
+						</bs:col>
+					</bs:row>
+				</bs:tab>
 
-			</bs3:tabGroup>
+			</bs:tabGroup>
 
-		</bs3:col>
+		</bs:col>
 
-    </bs3:row>
-</bs3:grid>
+    </bs:row>
+</bs:grid>

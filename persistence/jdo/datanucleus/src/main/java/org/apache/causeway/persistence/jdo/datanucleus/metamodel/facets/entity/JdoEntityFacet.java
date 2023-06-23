@@ -58,8 +58,8 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.services.idstringifier.IdStringifierLookupService;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
 import org.apache.causeway.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
+import org.apache.causeway.persistence.jdo.datanucleus.entities.DnOidStoreAndRecoverHelper;
 import org.apache.causeway.persistence.jdo.datanucleus.entities.DnStateManagerForCauseway;
-import org.apache.causeway.persistence.jdo.datanucleus.entities.DnStateManagerForHollow;
 import org.apache.causeway.persistence.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacetFactory;
 import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
 import org.apache.causeway.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
@@ -150,7 +150,7 @@ implements EntityFacet {
              * the OID can be looked up in our pseudo StateManager,
              * that only acts as a holder of OID. */
             return entityState.isDetached()
-                    ? DnStateManagerForHollow.lookupIdentifierFor(pojo)
+                    ? DnOidStoreAndRecoverHelper.forEntity((Persistable)pojo).recoverOid()
                     : Optional.empty();
         }
 

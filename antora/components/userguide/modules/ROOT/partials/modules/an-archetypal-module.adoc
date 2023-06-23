@@ -1,0 +1,160 @@
+[#an-archetypal-module]
+= An Archetypal Module
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+As was discussed in the xref:modules.adoc#introduction[introductory] section above, in Apache Causeway a module corresponds to a vertical slice of functionality.
+But how should we organise the horizontal tiers (application vs domain) within the module?
+And how does one module interact with another module?
+
+The diagram below shows a set of packages for a module, for the different concerns:
+
+[plantuml]
+----
+include::docs:resources:partial$plantuml-stereotypes.puml[]
+
+
+package ordermgmt {
+    package api     as ordermgmt.api     {}
+    package applib  as ordermgmt.applib  {}
+    package menu    as ordermgmt.menu    {}
+    package restapi as ordermgmt.restapi {}
+    package app     as ordermgmt.app     {}
+    package dom     as ordermgmt.dom     {}
+    package spi     as ordermgmt.spi     {}
+    package spiimpl as ordermgmt.spiimpl {}
+    package contrib as ordermgmt.contrib {}
+}
+
+ordermgmt.api     -->  ordermgmt.dom
+ordermgmt.api     -->  ordermgmt.applib
+ordermgmt.restapi -->  ordermgmt.dom
+ordermgmt.menu    -->  ordermgmt.dom
+ordermgmt.menu    -->  ordermgmt.app
+ordermgmt.app     -->  ordermgmt.dom
+ordermgmt.contrib -->  ordermgmt.dom
+ordermgmt.spiimpl -r-> ordermgmt.dom
+
+ordermgmt.dom     -d-> ordermgmt.spi
+ordermgmt.dom     -d^  ordermgmt.applib
+----
+
+
+.Module packages
+[cols="1m,2a,5a", options="header"]
+|===
+
+| Pkg
+| Pkg name
+| Description
+
+| dom
+| Domain object model
+| Holds entities, repositories, supporting services and "local" mixins that act upon those entities
+
+| app
+| Application layer
+| Holds view models and "manager" objects that describe a business process
+
+| menu
+| Menu services
+| `@DomainService(nature=VIEW)`; used to fnd entities, create view models ("manager" objects).
+The entrypoint for end-users
+
+| restapi
+| REST API
+| `@DomainService(nature=REST)`; entrypoint for clients accessing functionality through the xref:vro::about.adoc[Restful Objects] viewer.
+
+| api
+| Application Program Interface
+| `@Service`s and interfaces that define a formal interface for other modules to call this one programmatically.
+Will call into the functionality defined by the domain objects, might only expose the interfaces defined within the `applib`.
+
+| applib
+| Application library
+| Public interfaces implemented by domain objects in `dom`, to avoid exposing internal structure.
+Use by the `api`, also possibly used by _other_ modules mixin contributions.
+
+| contrib
+| Contributions
+| Mixins in _this_ module that contribute to _other_ modules.
+These mixins will use the domain objects in `dom` (and occasionally view models in `app`).
+
+| spi
+| Service Provider Interface
+| Defines hooks that allow other modules to influence behaviour of _this_ module.
+Called by objects in `dom` (and perhaps `app`).
+The SPI is typically either be an interface of a xref:events.adoc#custom-events[custom event].
+
+| spiimpl
+| SPI Implementations
+| Implementations in _this_ module of SPIs defined in _other_ modules.
+These SPI implementations will likely use the domain object functionality defined in `dom`.
+
+|===
+
+
+The following diagram extends the previous, this time showing the interactions between modules:
+
+[plantuml]
+----
+include::docs:resources:partial$plantuml-stereotypes.puml[]
+
+package warehouse {
+    package spiimpl       as warehouse.spiimpl       {}
+}
+
+package shipping {
+    package dom           as shipping.dom           { }
+}
+
+package customer {
+    package applib        as customer.applib        { }
+}
+
+package ordermgmt {
+    package api     as ordermgmt.api     {}
+    package applib  as ordermgmt.applib  {}
+    package restapi as ordermgmt.restapi {}
+    package menu    as ordermgmt.menu    {}
+    package app     as ordermgmt.app     {}
+    package dom     as ordermgmt.dom     {}
+    package contrib as ordermgmt.contrib {}
+    package spi     as ordermgmt.spi     {}
+    package spiimpl as ordermgmt.spiimpl {}
+}
+
+ordermgmt.api     -->  ordermgmt.dom
+ordermgmt.api     -->  ordermgmt.applib
+ordermgmt.restapi -->  ordermgmt.dom
+ordermgmt.menu    -->  ordermgmt.dom
+ordermgmt.menu    -->  ordermgmt.app
+ordermgmt.app     -->  ordermgmt.dom
+ordermgmt.contrib -u->  ordermgmt.dom
+ordermgmt.spiimpl -r-> ordermgmt.dom
+
+ordermgmt.dom     --> ordermgmt.spi
+ordermgmt.dom     -^  ordermgmt.applib
+warehouse.spiimpl -u-^   ordermgmt.spi
+
+ordermgmt.contrib --> customer.applib
+shipping.dom     --> ordermgmt.api
+----
+
+In the above we see that:
+
+* `shipping` makes programmatic calls into the `api` of `ordermgmt`
+* `ordermgmt` defines an `spi` that is implemented by `warehouse`
++
+Presumably `spiimpl` of `ordermgmt` would implement the `spi` of some other module, not shown.
+* ``ordermgmt``'s mixins in `contrib` contribute behaviour to all objects that implement the interfaces defined in ``customer``'s `applib`.
+* `ordermgmt`s domain objects in `dom` implement the interfaces in `applib`, meaning that other modules can contribute to them.
++
+They might also implement from the `applib` of other modules (eg a `Customer` declaring itself to be a `DocumentHolder`).
+
+
+
+
+

@@ -7,4 +7,8 @@
 
 
 include::partial$events/_intro.adoc[leveloffset=+1]
-include::partial$events/progmodel.adoc[leveloffset=+1]
+include::partial$events/domain-events.adoc[leveloffset=+1]
+include::partial$events/ui-events.adoc[leveloffset=+1]
+include::partial$events/lifecycle-events.adoc[leveloffset=+1]
+include::partial$events/custom-events.adoc[leveloffset=+1]
+include::partial$events/event-subscribers.adoc[leveloffset=+1]

@@ -1,0 +1,63 @@
+= Decoupling
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+Having broken up a domain into multiple modules, there is still a need for higher level modules to use lower level modules, and the application must still appear as a coherent whole to the end-user.
+
+The key features that Apache Causeway provides to support this are:
+
+* dependency injection of services
++
+Both xref:refguide:applib-svc:about.adoc[framework-defined] domain services and application-defined services (eg repositories and factories) are injected everywhere, using the `@javax.inject.Inject` annotation (Spring's `@Autowired` can also be used).
++
+By "everywhere", we mean not just into xref:domain-services.adoc[domain services], but _also_ can be injected into xref:domain-entities.adoc[domain entities], xref:view-models.adoc[view models] and xref:mixins.adoc[mixins].
+This enables us to implement behaviourally complete domain objects (if we so wish).
+
+* xref:mixins.adoc[mixins] that allow functionality defined in one module to appear (in the UI) to be provided by some other module.
++
+For example, a _Document_ module might allow `Document` objects to be attached to any arbitrary domain object (such as `Order` or `Customer`) in other modules.
+A mixin would allow the UI for a `Customer` to also display these attached ``Document``s, even though the _Customer_ module would have no knowledge of/dependency on the _Workflow_ module.
+(More on this example xref:modules.adoc#inverting-dependencies[below]).
++
+Dependencies are also injected into mixins.
+A common technique is to factor out from domain objects into mixins and then generalise.
+
+* xref:events.adoc[events] allow modules to influence other modules.
++
+A subscriber in one module can subscribe to events emitted by domain objects in another module.
+These events can affect both the UI (eg hiding or disabling xref:properties-collections-actions.adoc[object members], or allowing or vetoing interactions).
+
+Using events we can implement referential integrity constraints within the application.
+For example, suppose the `customers` module has a `Customer` object and a `EmailAddress` object, with a customer having a collection of email addresses.
+A `communications` module might then use those email addresses to create ``EmailCommunication``s.
+
+[plantuml]
+.`customers` module and `communications` module
+----
+include::docs:resources:partial$plantuml-stereotypes.puml[]
+
+package customers {
+    class Customer <<ppt>>
+    class Email\nAddress <<ppt>>
+}
+
+package communications {
+    class Email\nCommunication <<mi>>
+    class  Sender <<service>>
+}
+
+Customer --> "0..*" Email\nAddress
+Sender -.l-> "reads\n" Email\nAddress
+Sender -.> "creates" Email\nCommunication
+Email\nCommunication --> Email\nAddress
+----
+
+
+
+If the `customers` module wants to delete an `EmailAddress` then the `communications` module will probably want to veto this because they are "in use" by those ``EmailCommunication``s.
+Or, it might conceivably perform a cascade delete of all associated communications.
+Either way, the `communications` module receives an internal event representing the intention to delete the `EmailAddress`.
+It can then act accordingly, either vetoing the interaction or performing the cascade delete.
+The `customers` module for its part does not know anything about this other module.
