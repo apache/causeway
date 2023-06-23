@@ -32,7 +32,7 @@ import lombok.val;
 
 /**
  * Wraps and unwraps the contained value within {@link ManagedObject},
- * as provided by a {@link ScalarModel}.
+ * as provided by a {@link PopModel}.
  */
 public class ScalarUnwrappingModel<T>
 extends ChainingModel<T> {
@@ -43,30 +43,30 @@ extends ChainingModel<T> {
 
     public ScalarUnwrappingModel(
             final @NonNull Class<T> type,
-            final @NonNull ScalarModel scalarModel) {
-        super(scalarModel);
+            final @NonNull PopModel popModel) {
+        super(popModel);
         this.type = type;
-        _Assert.assertTrue(scalarModel.getScalarTypeSpec().isAssignableFrom(type), ()->
+        _Assert.assertTrue(popModel.getScalarTypeSpec().isAssignableFrom(type), ()->
                 String.format("cannot possibly unwrap model of type %s into target type %s",
-                        scalarModel.getScalarTypeSpec().getCorrespondingClass(),
+                        popModel.getScalarTypeSpec().getCorrespondingClass(),
                         type));
     }
 
     @Override
     public T getObject() {
-        val objectAdapter = scalarModel().getObject();
+        val objectAdapter = popModel().getObject();
         val pojo = unwrap(objectAdapter);
         return pojo;
     }
 
     @Override
     public void setObject(final T object) {
-        val scalarModel = scalarModel();
+        val popModel = popModel();
         if (object == null) {
-            scalarModel.setObject(null);
+            popModel.setObject(null);
         } else {
-            val objectAdapter = scalarModel.getMetaModelContext().getObjectManager().adapt(object);
-            scalarModel.setObject(objectAdapter);
+            val objectAdapter = popModel.getMetaModelContext().getObjectManager().adapt(object);
+            popModel.setObject(objectAdapter);
         }
     }
 
@@ -82,8 +82,8 @@ extends ChainingModel<T> {
         return _Casts.uncheckedCast(pojo);
     }
 
-    private ScalarModel scalarModel() {
-        return (ScalarModel) super.getTarget();
+    private PopModel popModel() {
+        return (PopModel) super.getTarget();
     }
 
 }

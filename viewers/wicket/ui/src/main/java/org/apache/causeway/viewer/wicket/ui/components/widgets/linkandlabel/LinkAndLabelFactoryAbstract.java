@@ -23,7 +23,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.PopModel;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +35,7 @@ implements Serializable {
     private static final long serialVersionUID = 1L;
 
     protected final String linkId;
-    protected final ScalarModel scalarModelForAssociationIfAny;
+    protected final PopModel popModelForAssociationIfAny;
     protected final EntityCollectionModel collectionModelForAssociationIfAny;
 
     /**
@@ -45,12 +45,12 @@ implements Serializable {
 
     protected abstract ActionModel actionModel(
             ManagedAction managedAction,
-            ScalarModel scalarModelForAssociationIfAny);
+            PopModel popModelForAssociationIfAny);
 
     // called exclusively by LinkAndLabel, which implements HasManagedAction
     protected final ActionLink newLinkComponent(final ManagedAction managedAction) {
         return ActionLink
-                .create(linkId, actionModel(managedAction, scalarModelForAssociationIfAny));
+                .create(linkId, actionModel(managedAction, popModelForAssociationIfAny));
     }
 
 }

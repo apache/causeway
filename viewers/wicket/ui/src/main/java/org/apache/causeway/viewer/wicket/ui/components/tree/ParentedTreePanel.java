@@ -21,9 +21,9 @@ package org.apache.causeway.viewer.wicket.ui.components.tree;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
+import org.apache.causeway.viewer.wicket.model.models.PopModel;
+import org.apache.causeway.viewer.wicket.ui.components.pops.ScalarPanelAbstract2;
+import org.apache.causeway.viewer.wicket.ui.components.pops.ScalarFragmentFactory.FrameFragment;
 
 import lombok.val;
 
@@ -35,8 +35,8 @@ extends ScalarPanelAbstract2 {
 
     private static final long serialVersionUID = 1L;
 
-    public ParentedTreePanel(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel);
+    public ParentedTreePanel(final String id, final PopModel popModel) {
+        super(id, popModel);
     }
 
     @Override
@@ -60,11 +60,11 @@ extends ScalarPanelAbstract2 {
 
     private MarkupContainer createTreeComponent(final String id) {
         val container = getScalarFrameContainer();
-        val scalarModel = scalarModel();
-        val tree = CausewayToWicketTreeAdapter.adapt(id, scalarModel);
+        val popModel = popModel();
+        val tree = CausewayToWicketTreeAdapter.adapt(id, popModel);
         container.add(tree);
         // adds the tree-theme behavior to the tree's parent
-        container.add(getTreeThemeProvider().treeThemeFor(scalarModel));
+        container.add(getTreeThemeProvider().treeThemeFor(popModel));
         return (MarkupContainer) tree;
     }
 

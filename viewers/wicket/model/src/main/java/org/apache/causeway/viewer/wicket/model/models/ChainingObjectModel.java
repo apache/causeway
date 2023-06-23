@@ -28,7 +28,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
 
 /**
- * Wraps a {@link ScalarModel} to act as an {@link ObjectAdapterModel}.
+ * Wraps a {@link PopModel} to act as an {@link ObjectAdapterModel}.
  */
 public final class ChainingObjectModel
 extends ChainingModel<ManagedObject>
@@ -36,19 +36,19 @@ implements ObjectAdapterModel {
 
     private static final long serialVersionUID = 1L;
 
-    public static ChainingObjectModel chain(final ScalarModel scalarModel) {
-        return new ChainingObjectModel(scalarModel);
+    public static ChainingObjectModel chain(final PopModel popModel) {
+        return new ChainingObjectModel(popModel);
     }
 
-    private ChainingObjectModel(final ScalarModel scalarModel) {
-        super(scalarModel);
+    private ChainingObjectModel(final PopModel popModel) {
+        super(popModel);
     }
 
     /**
-     * chaining idiom: the {@link ScalarModel} we are chained to
+     * chaining idiom: the {@link PopModel} we are chained to
      */
-    public ScalarModel scalarModel() {
-        return (ScalarModel) super.getTarget();
+    public PopModel popModel() {
+        return (PopModel) super.getTarget();
     }
 
     /**
@@ -56,17 +56,17 @@ implements ObjectAdapterModel {
      */
     @Override
     public ManagedObject getObject() {
-        return scalarModel().proposedValue().getValue().getValue();
+        return popModel().proposedValue().getValue().getValue();
     }
 
     @Override
     public RenderingHint getRenderingHint() {
-        return scalarModel().getRenderingHint();
+        return popModel().getRenderingHint();
     }
 
     @Override
     public ObjectSpecification getTypeOfSpecification() {
-        return scalarModel().getScalarTypeSpec();
+        return popModel().getScalarTypeSpec();
     }
 
     @Override
@@ -76,8 +76,8 @@ implements ObjectAdapterModel {
 
     @Override
     public boolean isInlinePrompt() {
-        return scalarModel().getPromptStyle().isInlineAny()
-                && !scalarModel().disabledReason().isPresent();
+        return popModel().getPromptStyle().isInlineAny()
+                && !popModel().disabledReason().isPresent();
     }
 
     @Override
@@ -92,7 +92,7 @@ implements ObjectAdapterModel {
 
     @Override
     public MetaModelContext getMetaModelContext() {
-        return scalarModel().getMetaModelContext();
+        return popModel().getMetaModelContext();
     }
 
 }

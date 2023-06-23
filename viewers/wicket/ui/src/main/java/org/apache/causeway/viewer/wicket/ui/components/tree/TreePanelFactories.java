@@ -22,11 +22,11 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.PopModel;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.pops.ComponentFactoryScalarAbstract;
 
 import lombok.val;
 
@@ -45,16 +45,16 @@ public class TreePanelFactories {
         }
 
         @Override
-        protected Component createComponent(final String id, final ScalarModel scalarModel) {
-            return new ParentedTreePanel(id, scalarModel);
+        protected Component createComponent(final String id, final PopModel popModel) {
+            return new ParentedTreePanel(id, popModel);
         }
 
         @Override
-        protected ApplicationAdvice appliesTo(final ScalarModel scalarModel) {
-            if(!scalarModel.isScalarTypeSubtypeOf(org.apache.causeway.applib.graph.tree.TreeNode.class)) {
+        protected ApplicationAdvice appliesTo(final PopModel popModel) {
+            if(!popModel.isScalarTypeSubtypeOf(org.apache.causeway.applib.graph.tree.TreeNode.class)) {
                 return ApplicationAdvice.DOES_NOT_APPLY;
             }
-            return appliesIf( !scalarModel.hasChoices() );
+            return appliesIf( !popModel.hasChoices() );
         }
     }
 

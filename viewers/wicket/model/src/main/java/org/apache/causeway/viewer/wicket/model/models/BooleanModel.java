@@ -32,22 +32,22 @@ extends ChainingModel<Boolean> {
 
     private static final long serialVersionUID = 1L;
 
-    public static BooleanModel forScalarModel(final @NonNull ScalarModel scalarModel) {
-        return new BooleanModel(scalarModel);
+    public static BooleanModel forPopModel(final @NonNull PopModel popModel) {
+        return new BooleanModel(popModel);
     }
 
     final boolean isPrimitive;
 
-    protected BooleanModel(final ScalarModel scalarModel) {
-        super(scalarModel);
+    protected BooleanModel(final PopModel popModel) {
+        super(popModel);
 
-        val spec = scalarModel().getScalarTypeSpec();
+        val spec = popModel().getScalarTypeSpec();
         this.isPrimitive = spec.getFullIdentifier().equals("boolean");
     }
 
     @Override
     public Boolean getObject() {
-        val adapter = scalarModel().getObject();
+        val adapter = popModel().getObject();
         final Boolean value = adapter != null
                 ? (Boolean) adapter.getPojo()
                 : null;
@@ -60,12 +60,12 @@ extends ChainingModel<Boolean> {
     @Override
     public void setObject(final Boolean value) {
         val adaptedValue = ManagedObject.value(
-                scalarModel().getScalarTypeSpec(),
+                popModel().getScalarTypeSpec(),
                 (value==null
                     && isPrimitive)
                 ? Boolean.FALSE
                 : value);
-        scalarModel().setObject(adaptedValue);
+        popModel().setObject(adaptedValue);
     }
 
     // -- UTILITY
@@ -95,8 +95,8 @@ extends ChainingModel<Boolean> {
 
     // -- HELPER
 
-    protected ScalarModel scalarModel() {
-        return (ScalarModel) super.getTarget();
+    protected PopModel popModel() {
+        return (PopModel) super.getTarget();
     }
 
 }

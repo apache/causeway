@@ -21,17 +21,17 @@ package org.apache.causeway.viewer.wicket.ui.components.widgets.select2.provider
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.PopModel;
 
 // values don't currently support autoComplete - no branch is required
 public class ChoiceProviderForValues
-extends ChoiceProviderAbstractForScalarModel {
+extends ChoiceProviderAbstractForPopModel {
 
     private static final long serialVersionUID = 1L;
 
     public ChoiceProviderForValues(
-            final ScalarModel scalarModel) {
-        super(scalarModel);
+            final PopModel popModel) {
+        super(popModel);
     }
 
     @Override
@@ -42,7 +42,7 @@ extends ChoiceProviderAbstractForScalarModel {
     // -- HELPER
 
     private Can<ObjectMemento> queryAll() {
-        return scalarModel().getChoices()
+        return popModel().getChoices()
             .map(ManagedObject::getMementoElseFail);
     }
 

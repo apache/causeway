@@ -27,7 +27,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.viewer.commons.model.object.HasUiParentObject;
 import org.apache.causeway.viewer.commons.model.object.UiObject;
-import org.apache.causeway.viewer.commons.model.scalar.UiParameter;
+import org.apache.causeway.viewer.commons.model.pop.UiParameter;
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 
 import lombok.NonNull;

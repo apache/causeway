@@ -111,14 +111,14 @@ extends GenericColumnAbstract {
         val property = domainObject.getSpecification().getPropertyElseFail(propertyId);
         val entityModel = UiObjectWkt.ofAdapter(super.getMetaModelContext(), domainObject);
 
-        val scalarModel = entityModel
+        val popModel = entityModel
                 .getPropertyModel(
                         property,
                         ViewOrEditMode.VIEWING,
                         collectionVariant.getColumnRenderingHint());
 
-        return findComponentFactory(UiComponentType.SCALAR_NAME_AND_VALUE, scalarModel)
-                .createComponent(id, scalarModel);
+        return findComponentFactory(UiComponentType.SCALAR_NAME_AND_VALUE, popModel)
+                .createComponent(id, popModel);
     }
 
 }

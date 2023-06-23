@@ -42,9 +42,9 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.PopModel;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarModelChangeDispatcher;
+import org.apache.causeway.viewer.wicket.ui.components.pops.PopModelChangeDispatcher;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -62,8 +62,8 @@ import lombok.val;
 class Select2OnSelect extends AbstractAjaxBehavior {
 
     private static final long serialVersionUID = 1L;
-    private final ScalarModel scalarModel;
-    private final ScalarModelChangeDispatcher select2ChangeDispatcher;
+    private final PopModel popModel;
+    private final PopModelChangeDispatcher select2ChangeDispatcher;
 
     private static enum Event {
         SELECT, UNSELECT, CLEAR;
@@ -193,7 +193,7 @@ class Select2OnSelect extends AbstractAjaxBehavior {
     }
 
     private ManagedObject demementify(final ObjectMemento memento) {
-        return scalarModel.getObjectManager().demementify(memento);
+        return popModel.getObjectManager().demementify(memento);
     }
 
     private PackedManagedObject demementify(
@@ -204,7 +204,7 @@ class Select2OnSelect extends AbstractAjaxBehavior {
     }
 
     private @NonNull Bindable<ManagedObject> updateReceiver() {
-        val updateReceiver = scalarModel.getSpecialization().fold(
+        val updateReceiver = popModel.getSpecialization().fold(
                 param->
                     param.getParameterNegotiationModel().getBindableParamValue(param.getParameterIndex()),
                 prop->
@@ -213,14 +213,14 @@ class Select2OnSelect extends AbstractAjaxBehavior {
     }
 
     private @NonNull ObjectSpecification elementSpec() {
-        val updateReceiver = scalarModel.getSpecialization().fold(
+        val updateReceiver = popModel.getSpecialization().fold(
                 param->param.getScalarTypeSpec(),
                 prop->prop.getScalarTypeSpec());
         return updateReceiver;
     }
 
     private void clearUpdateReceiver() {
-        scalarModel.getSpecialization().accept(
+        popModel.getSpecialization().accept(
             param->
                 param.getParameterNegotiationModel().getParamModels()
                 .getElseFail(param.getParameterIndex())

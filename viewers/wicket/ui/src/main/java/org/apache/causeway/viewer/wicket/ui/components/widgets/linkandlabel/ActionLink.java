@@ -42,7 +42,7 @@ import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistr
 import org.apache.causeway.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
 import org.apache.causeway.viewer.wicket.ui.components.actions.ActionParametersPanel;
 import org.apache.causeway.viewer.wicket.ui.components.layout.bs.BSGridPanel;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
+import org.apache.causeway.viewer.wicket.ui.components.pops.ScalarFragmentFactory.FrameFragment;
 import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.causeway.viewer.wicket.ui.panels.FormExecutorDefault;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;

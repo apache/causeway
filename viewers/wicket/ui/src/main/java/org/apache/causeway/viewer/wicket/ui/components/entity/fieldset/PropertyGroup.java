@@ -40,11 +40,11 @@ import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
 import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.PopModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.pops.ScalarPanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -225,14 +225,14 @@ implements HasDynamicallyVisibleContent {
             final WebMarkupContainer container,
             final Consumer<LinkAndLabel> onAssociatedAction) {
 
-        final ScalarModel scalarModel =
+        final PopModel popModel =
                 entityModel.getPropertyModel(property, ViewOrEditMode.VIEWING, RenderingHint.REGULAR);
 
         final Component scalarNameAndValueComponent = getComponentFactoryRegistry()
-                .addOrReplaceComponent(container, ID_PROPERTY, UiComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
+                .addOrReplaceComponent(container, ID_PROPERTY, UiComponentType.SCALAR_NAME_AND_VALUE, popModel);
 //XXX[CAUSEWAY-3026] this is a bad idea
 //        if(scalarNameAndValueComponent instanceof MarkupContainer) {
-//            Wkt.cssAppend(scalarNameAndValueComponent, scalarModel.getIdentifier());
+//            Wkt.cssAppend(scalarNameAndValueComponent, popModel.getIdentifier());
 //        }
 
         val entity = entityModel.getManagedObject();

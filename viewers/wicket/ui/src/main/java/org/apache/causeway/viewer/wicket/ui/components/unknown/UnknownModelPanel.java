@@ -22,7 +22,7 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.PopModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -63,9 +63,9 @@ extends PanelAbstract<Object, IModel<Object>> {
             } else {
                 buf.append("??? objectAdapter is NULL");
             }
-        } else if(model instanceof ScalarModel) {
-            val scalarModel = (ScalarModel) model;
-            val scalarAdapter = scalarModel.getObject();
+        } else if(model instanceof PopModel) {
+            val popModel = (PopModel) model;
+            val scalarAdapter = popModel.getObject();
             if(ManagedObjects.isSpecified(scalarAdapter)) {
                 buf.append(String.format("??? spec=%s, value='%s'",
                         scalarAdapter.getSpecification(), scalarAdapter.getPojo()));

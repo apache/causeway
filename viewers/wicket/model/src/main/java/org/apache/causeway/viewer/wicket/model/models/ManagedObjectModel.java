@@ -122,7 +122,7 @@ extends ModelAbstract<ManagedObject> {
     private transient ObjectSpecification elementTypeSpec;
     private transient boolean isObjectSpecMemoized = false;
     /**
-     * @implNote can be overridden by sub-models (eg {@link ScalarModel}) that know the type of
+     * @implNote can be overridden by sub-models (eg {@link PopModel}) that know the type of
      * the adapter without there being one. Overriding this must be consistent
      * with {@link #getLogicalElementType()}
      */

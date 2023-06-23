@@ -93,7 +93,7 @@ import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTab
 import org.apache.causeway.viewer.commons.model.components.UiString;
 import org.apache.causeway.viewer.wicket.model.hints.CausewayActionCompletedEvent;
 import org.apache.causeway.viewer.wicket.model.hints.CausewayEnvelopeEvent;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
+import org.apache.causeway.viewer.wicket.ui.components.pops.markup.MarkupComponent;
 import org.apache.causeway.viewer.wicket.ui.components.text.TextAreaWithConverter;
 import org.apache.causeway.viewer.wicket.ui.components.text.TextFieldWithConverter;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.fileinput.FileUploadFieldWithNestingFix;

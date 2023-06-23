@@ -24,7 +24,7 @@ import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.PopModel;
 import org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.causeway.viewer.wicket.ui.components.actions.ActionParametersPanel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
@@ -48,27 +48,27 @@ extends PanelAbstract<ManagedObject, ScalarPropertyModel> {
 
     public PropertyEditPanel(
             final String id,
-            final ScalarPropertyModel scalarModel) {
+            final ScalarPropertyModel popModel) {
 
-        super(id, scalarModel.copyHaving(
+        super(id, popModel.copyHaving(
                 ViewOrEditMode.EDITING,
                 RenderingHint.REGULAR));
 
-        buildGui(scalarModel);
+        buildGui(popModel);
     }
 
     @Override
     protected void onConfigure() {
         super.onConfigure();
 
-        buildGui(scalarModel());
+        buildGui(popModel());
     }
 
-    private void buildGui(final ScalarModel scalarModel) {
-        buildGuiForParameters(scalarModel);
+    private void buildGui(final PopModel popModel) {
+        buildGuiForParameters(popModel);
     }
 
-    ScalarPropertyModel scalarModel() {
+    ScalarPropertyModel popModel() {
         return super.getModel();
     }
 
@@ -77,14 +77,14 @@ extends PanelAbstract<ManagedObject, ScalarPropertyModel> {
         return this;
     }
 
-    private void buildGuiForParameters(final ScalarModel scalarModel) {
+    private void buildGuiForParameters(final PopModel popModel) {
 
         WebMarkupContainer header = addHeader();
 
-        getComponentFactoryRegistry().addOrReplaceComponent(this, UiComponentType.PROPERTY_EDIT_FORM, scalarModel());
-        getComponentFactoryRegistry().addOrReplaceComponent(header, UiComponentType.ENTITY_ICON_AND_TITLE, scalarModel.getParentUiModel());
+        getComponentFactoryRegistry().addOrReplaceComponent(this, UiComponentType.PROPERTY_EDIT_FORM, popModel());
+        getComponentFactoryRegistry().addOrReplaceComponent(header, UiComponentType.ENTITY_ICON_AND_TITLE, popModel.getParentUiModel());
 
-        Wkt.labelAdd(header, ID_PROPERTY_NAME, scalarModel()::getFriendlyName)
+        Wkt.labelAdd(header, ID_PROPERTY_NAME, popModel()::getFriendlyName)
             .setEscapeModelStrings(true);
     }
 

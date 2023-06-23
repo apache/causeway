@@ -68,7 +68,7 @@ import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistr
 import org.apache.causeway.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
 import org.apache.causeway.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
 import org.apache.causeway.viewer.wicket.ui.components.actionpromptsb.ActionPromptSidebar;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.image.JavaAwtImagePanelCssResourceReference;
+import org.apache.causeway.viewer.wicket.ui.components.pops.image.JavaAwtImagePanelCssResourceReference;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.causeway.viewer.wicket.ui.errors.ExceptionModel;

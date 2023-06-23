@@ -52,7 +52,7 @@ class ChoiceProviderForReferencesTest extends ChoiceProviderTestAbstract {
                 .map(mmc.getObjectManager()::adapt);
 
         val isRequired = true;
-        val choiceProvider = new ChoiceProviderForReferences(mockScalarModel(choices, isRequired));
+        val choiceProvider = new ChoiceProviderForReferences(mockPopModel(choices, isRequired));
 
         val response = new Response<ObjectMemento>();
         choiceProvider.query(null, 0, response);

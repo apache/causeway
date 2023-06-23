@@ -23,10 +23,10 @@ import org.springframework.stereotype.Component;
 import org.apache.causeway.applib.value.LocalResourcePath;
 import org.apache.causeway.applib.value.Markup;
 import org.apache.causeway.extensions.sse.metamodel.facets.SseObserveFacet;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.PopModel;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupPanelFactories;
+import org.apache.causeway.viewer.wicket.ui.components.pops.markup.MarkupComponent;
+import org.apache.causeway.viewer.wicket.ui.components.pops.markup.MarkupPanelFactories;
 
 import lombok.val;
 
@@ -50,7 +50,7 @@ public class ListeningMarkupPanelFactoriesForWicket {
 
 
         @Override
-        protected MarkupComponent newMarkupComponent(final String id, final ScalarModel model) {
+        protected MarkupComponent newMarkupComponent(final String id, final PopModel model) {
             val markupComponent = new ListeningMarkupComponent(
                     id, model, getEventStreamResource(model));
             markupComponent.setEnabled(false);
@@ -59,8 +59,8 @@ public class ListeningMarkupPanelFactoriesForWicket {
 
         // -- HELPER
 
-        private LocalResourcePath getEventStreamResource(final ScalarModel scalarModel) {
-            val observeFacet  = scalarModel.getMetaModel().getFacet(SseObserveFacet.class);
+        private LocalResourcePath getEventStreamResource(final PopModel popModel) {
+            val observeFacet  = popModel.getMetaModel().getFacet(SseObserveFacet.class);
             return observeFacet!=null
                     ? observeFacet.getEventStreamResource()
                     : null;

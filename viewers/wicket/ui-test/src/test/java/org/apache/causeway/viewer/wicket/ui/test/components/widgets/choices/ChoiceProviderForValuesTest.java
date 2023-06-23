@@ -55,7 +55,7 @@ extends ChoiceProviderTestAbstract {
                 .map(mmc.getObjectManager()::adapt);
 
         val isRequired = true;
-        val choiceProvider = new ChoiceProviderForValues(mockScalarModel(choices, isRequired));
+        val choiceProvider = new ChoiceProviderForValues(mockPopModel(choices, isRequired));
 
         val response = new Response<ObjectMemento>();
         choiceProvider.query(null, 0, response);

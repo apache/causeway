@@ -32,14 +32,14 @@ import lombok.experimental.UtilityClass;
 final class _Xray {
 
     static void onSclarModelUpdate(
-            final ScalarModel scalarModel, final ManagedObject oldValue, final ManagedObject newValue) {
+            final PopModel popModel, final ManagedObject oldValue, final ManagedObject newValue) {
         if(!XrayUi.isXrayEnabled()) return;
 
         val oldPojo = MmUnwrapUtils.single(oldValue);
         val newPojo = MmUnwrapUtils.single(newValue);
         val changed = !Objects.equals(oldPojo, newPojo);
 
-        final String updatingWhat = scalarModel.getSpecialization()
+        final String updatingWhat = popModel.getSpecialization()
                 .fold(
                     param->
                         String.format("param[index=%d,name=%s,changed=%b]",
@@ -51,7 +51,7 @@ final class _Xray {
                     );
 
         _XrayEvent.user("%s Model - updating %s: %s -> %s",
-                scalarModel.isParameter() ? "Parameter" : "Property",
+                popModel.isParameter() ? "Parameter" : "Property",
                 updatingWhat,
                 oldPojo, newPojo);
     }

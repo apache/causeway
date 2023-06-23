@@ -23,25 +23,25 @@ import org.apache.wicket.MarkupContainer;
 
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.util.Facets;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.PopModel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
 abstract class ScalarPanelAbstractLegacy
-extends PanelAbstract<ManagedObject, ScalarModel> {
+extends PanelAbstract<ManagedObject, PopModel> {
 
     private static final long serialVersionUID = 1L;
 
     protected Component compactFrame;
     private Component regularFrame;
 
-    public ScalarPanelAbstractLegacy(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel);
+    public ScalarPanelAbstractLegacy(final String id, final PopModel popModel) {
+        super(id, popModel);
     }
 
-    protected final ScalarModel scalarModel() {
+    protected final PopModel popModel() {
         return super.getModel();
     }
 
@@ -55,7 +55,7 @@ extends PanelAbstract<ManagedObject, ScalarModel> {
 
     private void buildGui() {
 
-        switch(scalarModel().getRenderingHint()) {
+        switch(popModel().getRenderingHint()) {
         case REGULAR:
             regularFrame = createRegularFrame();
             compactFrame = createShallowCompactFrame();
@@ -76,11 +76,11 @@ extends PanelAbstract<ManagedObject, ScalarModel> {
     }
 
     private void addCssFromMetaModel() {
-        val scalarModel = scalarModel();
+        val popModel = popModel();
 
-        Wkt.cssAppend(this, scalarModel.getCssClass());
+        Wkt.cssAppend(this, popModel.getCssClass());
 
-        Facets.cssClass(scalarModel.getMetaModel(), scalarModel.getParentUiModel().getManagedObject())
+        Facets.cssClass(popModel.getMetaModel(), popModel.getParentUiModel().getManagedObject())
         .ifPresent(cssClass->
             Wkt.cssAppend(this, cssClass));
     }

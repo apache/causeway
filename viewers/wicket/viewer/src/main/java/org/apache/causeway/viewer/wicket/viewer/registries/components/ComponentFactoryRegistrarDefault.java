@@ -37,7 +37,7 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.functions._Predicates;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.PopModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
 import org.apache.causeway.viewer.wicket.ui.components.about.AboutPanelFactory;
@@ -59,22 +59,22 @@ import org.apache.causeway.viewer.wicket.ui.components.entity.icontitle.EntityIc
 import org.apache.causeway.viewer.wicket.ui.components.footer.FooterPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.header.HeaderPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.layout.bs.BSGridPanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.pops.ComponentFactoryScalarTypeConstrainedAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.pops.ScalarPanelTextFieldNumeric;
+import org.apache.causeway.viewer.wicket.ui.components.pops.ScalarPanelTextFieldWithTemporalPicker;
+import org.apache.causeway.viewer.wicket.ui.components.pops.ScalarPanelTextFieldWithValueSemantics;
+import org.apache.causeway.viewer.wicket.ui.components.pops.blobclob.CausewayBlobPanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.pops.blobclob.CausewayClobPanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.pops.bool.BooleanPanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.pops.choices.ChoicesSelect2PanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.pops.composite.CompositeValuePanel;
+import org.apache.causeway.viewer.wicket.ui.components.pops.image.JavaAwtImagePanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.pops.markup.MarkupPanelFactories;
+import org.apache.causeway.viewer.wicket.ui.components.pops.passwd.CausewayPasswordPanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.pops.string.StringPanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.pops.value.fallback.ValueFallbackPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.property.PropertyEditFormPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.property.PropertyEditPanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryScalarTypeConstrainedAbstract;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithTemporalPicker;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemantics;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.blobclob.CausewayBlobPanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.blobclob.CausewayClobPanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.bool.BooleanPanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.choices.ChoicesSelect2PanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.composite.CompositeValuePanel;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.image.JavaAwtImagePanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupPanelFactories;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.passwd.CausewayPasswordPanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.string.StringPanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.value.fallback.ValueFallbackPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.standalonecollection.StandaloneCollectionPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.tree.TreePanelFactories;
 import org.apache.causeway.viewer.wicket.ui.components.unknown.UnknownModelPanelFactory;
@@ -304,8 +304,8 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         }
 
         @Override
-        public Component createComponent(final String id, final ScalarModel scalarModel) {
-            return new ScalarPanelTextFieldWithValueSemantics<T>(id, scalarModel, valueTypeClass);
+        public Component createComponent(final String id, final PopModel popModel) {
+            return new ScalarPanelTextFieldWithValueSemantics<T>(id, popModel, valueTypeClass);
         }
     }
 
@@ -323,8 +323,8 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         }
 
         @Override
-        public Component createComponent(final String id, final ScalarModel scalarModel) {
-            return new ScalarPanelTextFieldNumeric<T>(id, scalarModel, valueTypeClass);
+        public Component createComponent(final String id, final PopModel popModel) {
+            return new ScalarPanelTextFieldNumeric<T>(id, popModel, valueTypeClass);
         }
     }
 
@@ -343,8 +343,8 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         }
 
         @Override
-        public Component createComponent(final String id, final ScalarModel scalarModel) {
-            return new ScalarPanelTextFieldWithTemporalPicker<T>(id, scalarModel, valueTypeClass);
+        public Component createComponent(final String id, final PopModel popModel) {
+            return new ScalarPanelTextFieldWithTemporalPicker<T>(id, popModel, valueTypeClass);
         }
     }
 
@@ -363,8 +363,8 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         }
 
         @Override
-        public Component createComponent(final String id, final ScalarModel scalarModel) {
-            return new CompositeValuePanel<T>(id, scalarModel, valueTypeClass);
+        public Component createComponent(final String id, final PopModel popModel) {
+            return new CompositeValuePanel<T>(id, popModel, valueTypeClass);
         }
     }
 

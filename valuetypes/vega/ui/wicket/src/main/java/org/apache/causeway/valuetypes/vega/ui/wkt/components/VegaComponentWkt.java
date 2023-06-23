@@ -31,7 +31,7 @@ import org.apache.causeway.valuetypes.vega.applib.value.Vega;
 import org.apache.causeway.valuetypes.vega.ui.wkt.components.js.VegaEmbedJsReference;
 import org.apache.causeway.valuetypes.vega.ui.wkt.components.js.VegaJsReference;
 import org.apache.causeway.valuetypes.vega.ui.wkt.components.js.VegaLiteJsReference;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
+import org.apache.causeway.viewer.wicket.ui.components.pops.markup.MarkupComponent;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -43,7 +43,7 @@ public class VegaComponentWkt extends MarkupComponent {
 
     public VegaComponentWkt(final String id, final IModel<?> model){
         super(id, model,
-                org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent.Options.builder()
+                org.apache.causeway.viewer.wicket.ui.components.pops.markup.MarkupComponent.Options.builder()
                 .syntaxHighlighter(SyntaxHighlighter.NONE)
                 .build());
     }

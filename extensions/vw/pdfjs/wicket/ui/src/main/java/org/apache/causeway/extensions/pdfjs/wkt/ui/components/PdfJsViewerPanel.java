@@ -45,7 +45,7 @@ import org.apache.causeway.extensions.pdfjs.applib.config.Scale;
 import org.apache.causeway.extensions.pdfjs.applib.spi.PdfJsViewerAdvisor;
 import org.apache.causeway.extensions.pdfjs.metamodel.facet.PdfJsViewerFacet;
 import org.apache.causeway.extensions.pdfjs.wkt.integration.components.PdfJsPanel;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.PopModel;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
@@ -79,8 +79,8 @@ implements IRequestListener {
     AbstractDefaultAjaxBehavior updateScale;
     AbstractDefaultAjaxBehavior updateHeight;
 
-    PdfJsViewerPanel(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel);
+    PdfJsViewerPanel(final String id, final PopModel popModel) {
+        super(id, popModel);
     }
 
     interface Updater{
@@ -165,9 +165,9 @@ implements IRequestListener {
     private PdfJsViewerAdvisor.InstanceKey toInstanceKey(final UserService userService) {
         String userName = userService.currentUserNameElseNobody();
 
-        val scalarModel = getModel();
-        val propertyId = scalarModel.getIdentifier();
-        val bookmark = scalarModel.getParentUiModel().getOwnerBookmark();
+        val popModel = getModel();
+        val propertyId = popModel.getIdentifier();
+        val bookmark = popModel.getParentUiModel().getOwnerBookmark();
         val logicalTypeName = bookmark.getLogicalTypeName();
         val identifier = bookmark.getIdentifier();
 
@@ -181,12 +181,12 @@ implements IRequestListener {
             return createShallowRegularFrame();
         }
 
-        val scalarModel = scalarModel();
+        val popModel = popModel();
 
         val regularFrame = new WebMarkupContainer(ID_SCALAR_IF_REGULAR);
 
         val pdfJsConfig =
-                scalarModel.getMetaModel().lookupFacet(PdfJsViewerFacet.class)
+                popModel.getMetaModel().lookupFacet(PdfJsViewerFacet.class)
                 .map(pdfJsViewerFacet->pdfJsViewerFacet.configFor(buildKey()))
                 .orElseGet(PdfJsConfig::new)
                 .withDocumentUrl(urlFor(
@@ -296,7 +296,7 @@ implements IRequestListener {
     // -- HELPER
 
     private Blob getBlob() {
-        return (Blob) MmUnwrapUtils.single(scalarModel().getObject());
+        return (Blob) MmUnwrapUtils.single(popModel().getObject());
     }
 
     private static ByteArrayResource asBlobResource(final @NonNull Blob blob) {

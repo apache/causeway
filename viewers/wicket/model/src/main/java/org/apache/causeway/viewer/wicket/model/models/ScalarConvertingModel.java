@@ -37,23 +37,23 @@ extends ChainingModel<T> {
 
     private static final long serialVersionUID = 1L;
 
-    protected ScalarConvertingModel(final @NonNull ScalarModel scalarModel) {
-        super(scalarModel);
+    protected ScalarConvertingModel(final @NonNull PopModel popModel) {
+        super(popModel);
     }
 
     @Override
     public void setObject(final T modelValue) {
-        val scalarModel = scalarModel();
+        val popModel = popModel();
         val value = toScalarValue(modelValue);
         val objectAdapter = value != null
-                ? scalarModel().getMetaModelContext().getObjectManager().adapt(value)
-                : ManagedObject.empty(scalarModel.getScalarTypeSpec());
-        scalarModel.setObject(objectAdapter);
+                ? popModel().getMetaModelContext().getObjectManager().adapt(value)
+                : ManagedObject.empty(popModel.getScalarTypeSpec());
+        popModel.setObject(objectAdapter);
     }
 
     @Override
     public T getObject() {
-        val adapter = scalarModel().getObject();
+        val adapter = popModel().getObject();
         final V scalarValue = !ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
                 ? _Casts.uncheckedCast(adapter.getPojo())
                 : null;
@@ -67,8 +67,8 @@ extends ChainingModel<T> {
 
     // -- HELPER
 
-    protected ScalarModel scalarModel() {
-        return (ScalarModel) super.getTarget();
+    protected PopModel popModel() {
+        return (PopModel) super.getTarget();
     }
 
 }

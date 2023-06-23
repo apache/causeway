@@ -206,26 +206,26 @@ implements
 
     // -- PROPERTY MODELS (CHILDREN)
 
-    private transient Map<PropertyMemento, ScalarPropertyModel> propertyScalarModels;
-    private Map<PropertyMemento, ScalarPropertyModel> propertyScalarModels() {
-        if(propertyScalarModels==null) {
-            propertyScalarModels = _Maps.<PropertyMemento, ScalarPropertyModel>newHashMap();
+    private transient Map<PropertyMemento, ScalarPropertyModel> propertyPopModels;
+    private Map<PropertyMemento, ScalarPropertyModel> propertyPopModels() {
+        if(propertyPopModels==null) {
+            propertyPopModels = _Maps.<PropertyMemento, ScalarPropertyModel>newHashMap();
         }
-        return propertyScalarModels;
+        return propertyPopModels;
     }
 
     /**
      * Lazily populates with the current value of each property.
      */
-    public ScalarModel getPropertyModel(
+    public PopModel getPropertyModel(
             final OneToOneAssociation property,
             final ViewOrEditMode viewOrEdit,
             final RenderingHint renderingHint) {
 
         val pm = property.getMemento();
-        val propertyScalarModels = propertyScalarModels();
-        final ScalarModel existingScalarModel = propertyScalarModels.get(pm);
-        if (existingScalarModel == null) {
+        val propertyPopModels = propertyPopModels();
+        final PopModel existingPopModel = propertyPopModels.get(pm);
+        if (existingPopModel == null) {
 
             val propertyInteractionModel = new PropertyInteractionWkt(
                     bookmarkedObjectModel(),
@@ -234,16 +234,16 @@ implements
 
             final long modelsAdded = propertyInteractionModel.streamPropertyUiModels()
             .map(uiModel->ScalarPropertyModel.wrap(uiModel, viewOrEdit, renderingHint))
-            .peek(scalarModel->log.debug("adding: {}", scalarModel))
-            .filter(scalarModel->propertyScalarModels.put(pm, scalarModel)==null)
+            .peek(popModel->log.debug("adding: {}", popModel))
+            .filter(popModel->propertyPopModels.put(pm, popModel)==null)
             .count();
 
             // future extensions might allow to add multiple UI models per single property model (typed tuple support)
             _Assert.assertEquals(1L, modelsAdded, ()->
-                String.format("unexpected number of propertyScalarModels added %d", modelsAdded));
+                String.format("unexpected number of propertyPopModels added %d", modelsAdded));
 
         }
-        return propertyScalarModels.get(pm);
+        return propertyPopModels.get(pm);
 
     }
 
@@ -278,10 +278,10 @@ implements
 
     @Override
     protected void onDetach() {
-        propertyScalarModels().values()
+        propertyPopModels().values()
             .forEach(ScalarPropertyModel::detach);
         super.onDetach();
-        propertyScalarModels = null;
+        propertyPopModels = null;
     }
 
     // -- TAB AND COLUMN (metadata if any)

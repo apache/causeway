@@ -36,7 +36,7 @@ public class InlinePromptContext implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final ScalarModel scalarModel;
+    private final PopModel popModel;
 
     @Getter
     private final MarkupContainer scalarTypeContainer;
@@ -55,7 +55,7 @@ public class InlinePromptContext implements Serializable {
         .accept(_Functions.noopConsumer(), prop->{
             // reset the UI form input field to the untouched property value
             val untouchedPropertyValue = prop.getManagedProperty().getPropertyValue();
-            scalarModel.setObject(untouchedPropertyValue);
+            popModel.setObject(untouchedPropertyValue);
         });
 
         scalarIfRegular.setVisible(true);

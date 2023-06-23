@@ -25,14 +25,14 @@ import org.apache.causeway.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
-import org.apache.causeway.viewer.commons.model.scalar.HasUiProperty;
+import org.apache.causeway.viewer.commons.model.pop.HasUiProperty;
 import org.apache.causeway.viewer.wicket.model.models.interaction.prop.UiPropertyWkt;
 
 import lombok.Getter;
 import lombok.val;
 
 public class ScalarPropertyModel
-extends ScalarModel
+extends PopModel
 implements HasUiProperty {
 
     private static final long serialVersionUID = 1L;

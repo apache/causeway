@@ -290,7 +290,7 @@ implements ValueFacet<T> {
         if(!isCompositeValueType()) {
             return Optional.empty();
         }
-        //feed the action's invocation result back into the scalarModel's proposed value, then submit
+        //feed the action's invocation result back into the popModel's proposed value, then submit
         return resolveCompositeValueMixinForFeature(managedProperty.getProperty())
                 .map(m->CompositeValueUpdaterForProperty.createProxy(managedProperty, (ObjectActionMixedIn) m));
     }

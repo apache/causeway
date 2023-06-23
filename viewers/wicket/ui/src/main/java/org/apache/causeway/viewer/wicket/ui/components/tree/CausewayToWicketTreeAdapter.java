@@ -35,7 +35,7 @@ import org.apache.causeway.applib.graph.tree.TreeNode;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.PopModel;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 import org.apache.causeway.viewer.wicket.model.util.WktContext;
 import org.apache.causeway.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel;
@@ -55,13 +55,13 @@ class CausewayToWicketTreeAdapter {
     }
 
     /**
-     * @param scalarModel - holder of {@link TreeNode}
+     * @param popModel - holder of {@link TreeNode}
      */
-    public static Component adapt(final String id, final ScalarModel scalarModel) {
-        return scalarModel==null
-                || scalarModel.getObject()==null
+    public static Component adapt(final String id, final PopModel popModel) {
+        return popModel==null
+                || popModel.getObject()==null
             ? emptyTreeComponent(id)
-            : EntityTree.of(id, scalarModel.getObject(), scalarModel.getMetaModelContext());
+            : EntityTree.of(id, popModel.getObject(), popModel.getMetaModelContext());
     }
 
     // -- FALLBACK

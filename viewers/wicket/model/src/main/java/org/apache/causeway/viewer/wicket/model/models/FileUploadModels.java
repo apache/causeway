@@ -35,8 +35,8 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class FileUploadModels {
 
-    public ScalarConvertingModel<List<FileUpload>, Blob> blob(final @NonNull ScalarModel scalarModel) {
-        return new ScalarConvertingModel<List<FileUpload>, Blob>(scalarModel) {
+    public ScalarConvertingModel<List<FileUpload>, Blob> blob(final @NonNull PopModel popModel) {
+        return new ScalarConvertingModel<List<FileUpload>, Blob>(popModel) {
 
             private static final long serialVersionUID = 1L;
 
@@ -67,10 +67,10 @@ public class FileUploadModels {
     }
 
     public ScalarConvertingModel<List<FileUpload>, Clob> clob(
-            final @NonNull ScalarModel scalarModel,
+            final @NonNull PopModel popModel,
             final @NonNull Charset charset) {
 
-        return new ScalarConvertingModel<List<FileUpload>, Clob>(scalarModel) {
+        return new ScalarConvertingModel<List<FileUpload>, Clob>(popModel) {
 
             private static final long serialVersionUID = 1L;
             private final String charsetName = charset.name(); // Charset is not serializable

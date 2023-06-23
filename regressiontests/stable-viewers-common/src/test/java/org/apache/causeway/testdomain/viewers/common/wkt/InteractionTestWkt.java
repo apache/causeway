@@ -124,7 +124,7 @@ class InteractionTestWkt extends InteractionTestAbstract {
         objectSpec.streamProperties(MixedIn.INCLUDED)
         .filter(prop->{
 
-            final ScalarPropertyModel scalarModel = (ScalarPropertyModel) entityModel
+            final ScalarPropertyModel popModel = (ScalarPropertyModel) entityModel
                     .getPropertyModel(
                             prop,
                             ViewOrEditMode.VIEWING,
@@ -132,16 +132,16 @@ class InteractionTestWkt extends InteractionTestAbstract {
 
 
             // owner sharing (should be the same object)
-            assertTrue(domainObject == scalarModel.getOwner());
+            assertTrue(domainObject == popModel.getOwner());
 
             if(!prop.getId().equals("stringMultiline")) {
                 return true; // continue
             }
 
             // the scalar model should be in sync with the underlying interaction API
-            val pendingPropModel = scalarModel.getPendingPropertyModel();
+            val pendingPropModel = popModel.getPendingPropertyModel();
             val propBackendValue = pendingPropModel.getValue().getValue();
-            val propUIValue = scalarModel.getObject();
+            val propUIValue = popModel.getObject();
 
             assertEquals(
                     "initial",

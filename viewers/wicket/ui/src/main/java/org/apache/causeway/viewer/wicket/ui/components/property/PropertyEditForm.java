@@ -26,7 +26,7 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.pops.ScalarPanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.panels.PromptFormAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
@@ -50,15 +50,15 @@ extends PromptFormAbstract<ScalarPropertyModel> {
 
     @Override
     protected void addParameters() {
-        val scalarModel = scalarPropertyModel();
+        val popModel = scalarPropertyModel();
         val container = Wkt.containerAdd(this, PropertyEditFormPanel.ID_PROPERTY);
 
         val component = getComponentFactoryRegistry()
-                .addOrReplaceComponent(container, UiComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
+                .addOrReplaceComponent(container, UiComponentType.SCALAR_NAME_AND_VALUE, popModel);
 
         _Casts.castTo(ScalarPanelAbstract.class, component)
-        .ifPresent(scalarModelSubscriber->
-            scalarModelSubscriber.addChangeListener(this)); // handling onUpdate and onError
+        .ifPresent(popModelSubscriber->
+            popModelSubscriber.addChangeListener(this)); // handling onUpdate and onError
     }
 
     @Override

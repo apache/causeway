@@ -35,11 +35,11 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModelWithMultiChoice;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModelWithSingleChoice;
+import org.apache.causeway.viewer.wicket.model.models.PopModel;
+import org.apache.causeway.viewer.wicket.model.models.PopModelWithMultiChoice;
+import org.apache.causeway.viewer.wicket.model.models.PopModelWithSingleChoice;
 import org.apache.causeway.viewer.wicket.model.util.WktContext;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarModelChangeDispatcher;
+import org.apache.causeway.viewer.wicket.ui.components.pops.PopModelChangeDispatcher;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
 
 import lombok.NonNull;
@@ -59,26 +59,26 @@ implements
 
     public static Select2 createSelect2(
             final String id,
-            final ScalarModel scalarModel,
+            final PopModel popModel,
             final ChoiceProviderAbstract choiceProvider,
-            final ScalarModelChangeDispatcher select2ChangeDispatcher) {
-        val select2 = new Select2(scalarModel.isSingular()
+            final PopModelChangeDispatcher select2ChangeDispatcher) {
+        val select2 = new Select2(popModel.isSingular()
                 ? Either.left(
                         Select2ChoiceExt.create(id,
-                                ScalarModelWithSingleChoice.chain(scalarModel),
-                                scalarModel,
+                                PopModelWithSingleChoice.chain(popModel),
+                                popModel,
                                 choiceProvider))
                 : Either.right(
                         Select2MultiChoiceExt.create(id,
-                                ScalarModelWithMultiChoice.chain(scalarModel),
-                                scalarModel,
+                                PopModelWithMultiChoice.chain(popModel),
+                                popModel,
                                 choiceProvider)));
 
-        select2.setLabel(Model.of(scalarModel.getFriendlyName()));
+        select2.setLabel(Model.of(popModel.getFriendlyName()));
         select2.getSettings().setWidth("100%");
 
         // listen on select2:select/unselect events (client-side)
-        select2.add(new Select2OnSelect(scalarModel, select2ChangeDispatcher));
+        select2.add(new Select2OnSelect(popModel, select2ChangeDispatcher));
 
         return select2;
     }
@@ -142,7 +142,7 @@ implements
         asComponent().remove(behavior);
     }
 
-    public void syncIfNull(final ScalarModel model) {
+    public void syncIfNull(final PopModel model) {
         if(!model.isPlural()) {
             if(memento() == null) {
                 this.mementoModel().setObject(null);

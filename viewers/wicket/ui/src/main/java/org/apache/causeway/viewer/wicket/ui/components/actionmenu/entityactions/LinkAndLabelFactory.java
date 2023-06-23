@@ -29,7 +29,7 @@ import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.ActionModelImpl;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelParented;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.PopModel;
 import org.apache.causeway.viewer.wicket.model.models.ScalarParameterModel;
 import org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
@@ -79,10 +79,10 @@ extends Function<ObjectAction, LinkAndLabel> {
     }
 
     public static LinkAndLabelFactory forPropertyOrParameter(
-            final ScalarModel scalarModel) {
-        return scalarModel instanceof ScalarPropertyModel
-                ? forProperty((ScalarPropertyModel)scalarModel)
-                : forParameter((ScalarParameterModel)scalarModel);
+            final PopModel popModel) {
+        return popModel instanceof ScalarPropertyModel
+                ? forProperty((ScalarPropertyModel)popModel)
+                : forParameter((ScalarParameterModel)popModel);
     }
 
     public static LinkAndLabelFactory forProperty(

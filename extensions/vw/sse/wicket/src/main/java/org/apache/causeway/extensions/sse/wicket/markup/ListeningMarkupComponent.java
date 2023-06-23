@@ -25,9 +25,9 @@ import org.apache.wicket.markup.MarkupStream;
 
 import org.apache.causeway.applib.value.LocalResourcePath;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.PopModel;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
+import org.apache.causeway.viewer.wicket.ui.components.pops.markup.MarkupComponent;
 
 import lombok.val;
 
@@ -41,7 +41,7 @@ public class ListeningMarkupComponent extends MarkupComponent {
 
     public ListeningMarkupComponent(
             final String id,
-            final ScalarModel model,
+            final PopModel model,
             final LocalResourcePath observing){
         super(id, model, Options.defaults());
         this.observing = observing;

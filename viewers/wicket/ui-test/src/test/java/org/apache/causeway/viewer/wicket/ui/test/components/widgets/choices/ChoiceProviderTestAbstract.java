@@ -29,7 +29,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.valuesemantics.BigDecimalValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.IntValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.UUIDValueSemantics;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.PopModel;
 
 import lombok.val;
 
@@ -47,13 +47,13 @@ abstract class ChoiceProviderTestAbstract {
                 ;
     }
 
-    protected ScalarModel mockScalarModel(final Can<ManagedObject> choices, final boolean isRequired) {
-        val mockScalarModel = mock(ScalarModel.class);
-        when(mockScalarModel.getChoices()).thenReturn(choices);
-        when(mockScalarModel.isRequired()).thenReturn(isRequired);
-        when(mockScalarModel.hasChoices()).thenReturn(true);
-        when(mockScalarModel.getMetaModelContext()).thenReturn(mmc);
-        return mockScalarModel;
+    protected PopModel mockPopModel(final Can<ManagedObject> choices, final boolean isRequired) {
+        val mockPopModel = mock(PopModel.class);
+        when(mockPopModel.getChoices()).thenReturn(choices);
+        when(mockPopModel.isRequired()).thenReturn(isRequired);
+        when(mockPopModel.hasChoices()).thenReturn(true);
+        when(mockPopModel.getMetaModelContext()).thenReturn(mmc);
+        return mockPopModel;
     }
 
 }

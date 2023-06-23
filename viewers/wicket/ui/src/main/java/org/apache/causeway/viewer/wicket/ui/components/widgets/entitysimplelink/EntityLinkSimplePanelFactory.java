@@ -23,7 +23,7 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.PopModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 
@@ -40,7 +40,7 @@ public class EntityLinkSimplePanelFactory extends ComponentFactoryAbstract {
         if (model instanceof UiObjectWkt) {
             return ApplicationAdvice.APPLIES;
         }
-        if (model instanceof ScalarModel) {
+        if (model instanceof PopModel) {
             return ApplicationAdvice.APPLIES;
         }
         return ApplicationAdvice.DOES_NOT_APPLY;

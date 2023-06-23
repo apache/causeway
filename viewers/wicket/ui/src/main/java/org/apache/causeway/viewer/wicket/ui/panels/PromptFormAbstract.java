@@ -42,8 +42,8 @@ import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.causeway.viewer.wicket.model.models.FormExecutorContext;
 import org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarModelChangeListener;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.pops.PopModelChangeListener;
+import org.apache.causeway.viewer.wicket.ui.components.pops.ScalarPanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -56,7 +56,7 @@ public abstract class PromptFormAbstract<T extends
     FormExecutorContext
     & IModel<ManagedObject>>
 extends OkCancelForm<T>
-implements ScalarModelChangeListener {
+implements PopModelChangeListener {
 
     private static final long serialVersionUID = 1L;
 

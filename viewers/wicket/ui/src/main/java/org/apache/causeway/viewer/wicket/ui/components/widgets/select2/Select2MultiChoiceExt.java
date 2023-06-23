@@ -28,7 +28,7 @@ import org.apache.causeway.applib.id.HasLogicalType;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.PopModel;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
 
 import lombok.Getter;
@@ -43,10 +43,10 @@ implements HasLogicalType {
     public static Select2MultiChoiceExt create(
             final String id,
             final IModel<ArrayList<ObjectMemento>> modelObject,
-            final ScalarModel scalarModel,
+            final PopModel popModel,
             final ChoiceProviderAbstract choiceProvider) {
 
-        return new Select2MultiChoiceExt(id, _Casts.uncheckedCast(modelObject), scalarModel, choiceProvider);
+        return new Select2MultiChoiceExt(id, _Casts.uncheckedCast(modelObject), popModel, choiceProvider);
     }
 
     @Getter(onMethod_ = {@Override}) private final LogicalType logicalType;
@@ -54,11 +54,11 @@ implements HasLogicalType {
     Select2MultiChoiceExt(
             final String id,
             final IModel<Collection<ObjectMemento>> model,
-            final ScalarModel scalarModel,
+            final PopModel popModel,
             final ChoiceProviderAbstract choiceProvider) {
 
         super(id, model, choiceProvider);
-        logicalType = scalarModel.getScalarTypeSpec().getLogicalType();
+        logicalType = popModel.getScalarTypeSpec().getLogicalType();
 
         getSettings().setCloseOnSelect(true);
         getSettings().setWidth("auto");

@@ -26,7 +26,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.ChainingObjectModel;
 import org.apache.causeway.viewer.wicket.model.models.ObjectAdapterModel;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.PopModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 
@@ -36,9 +36,9 @@ import lombok.val;
  * {@link ComponentFactory} for {@link EntityIconAndTitlePanel}.
  *
  * @implNote Knows how to deal with {@link ObjectAdapterModel}. And for
- * {@link ScalarModel} we have an adapter {@link ChainingObjectModel}
+ * {@link PopModel} we have an adapter {@link ChainingObjectModel}
  * that implements {@link ObjectAdapterModel}, such that it can also deal
- * with {@link ScalarModel}.
+ * with {@link PopModel}.
  *
  */
 public class EntityIconAndTitlePanelFactory extends ComponentFactoryAbstract {
@@ -71,8 +71,8 @@ public class EntityIconAndTitlePanelFactory extends ComponentFactoryAbstract {
 
         if (model instanceof ObjectAdapterModel) {
             spec = ((ObjectAdapterModel) model).getTypeOfSpecification();
-        } else if (model instanceof ScalarModel) {
-            spec = ((ScalarModel) model).getScalarTypeSpec();
+        } else if (model instanceof PopModel) {
+            spec = ((PopModel) model).getScalarTypeSpec();
         } else {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
@@ -90,10 +90,10 @@ public class EntityIconAndTitlePanelFactory extends ComponentFactoryAbstract {
 
         if (model instanceof ObjectAdapterModel) {
             objectAdapterModel = (ObjectAdapterModel) model;
-        } else if (model instanceof ScalarModel) {
-            val scalarModel = (ScalarModel) model;
-            // effectively acts as an adapter from ScalarModel to ObjectAdapterModel
-            objectAdapterModel = ChainingObjectModel.chain(scalarModel);
+        } else if (model instanceof PopModel) {
+            val popModel = (PopModel) model;
+            // effectively acts as an adapter from PopModel to ObjectAdapterModel
+            objectAdapterModel = ChainingObjectModel.chain(popModel);
         } else {
             throw _Exceptions.unexpectedCodeReach();
         }
