@@ -87,7 +87,7 @@ class ColumnFactory {
         val icon = displayCollection.icon
         displayCollection.data.forEach { exhibit ->
             if (icon != null) {
-                exhibit.icon = icon
+                exhibit["icon"] = icon
             }
         }
     }
