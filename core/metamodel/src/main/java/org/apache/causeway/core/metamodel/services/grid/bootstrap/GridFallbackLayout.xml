@@ -17,51 +17,51 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<bs3:grid xsi:schemaLocation="https://causeway.apache.org/applib/layout/component https://causeway.apache.org/applib/layout/component/component.xsd https://causeway.apache.org/applib/layout/grid/bootstrap3 https://causeway.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd" xmlns:c="https://causeway.apache.org/applib/layout/component" xmlns:bs3="https://causeway.apache.org/applib/layout/grid/bootstrap3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<bs:grid xsi:schemaLocation="https://causeway.apache.org/applib/layout/component https://causeway.apache.org/applib/layout/component/component.xsd https://causeway.apache.org/applib/layout/grid/bootstrap3 https://causeway.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd" xmlns:c="https://causeway.apache.org/applib/layout/component" xmlns:bs="https://causeway.apache.org/applib/layout/grid/bootstrap3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-    <bs3:row>
-        <bs3:col span="12" unreferencedActions="true">
+    <bs:row>
+        <bs:col span="12" unreferencedActions="true">
             <c:domainObject bookmarking="AS_ROOT"/>
-        </bs3:col>
-    </bs3:row>
-    <bs3:row>
-        <bs3:col span="4">
-            <bs3:row>
-                <bs3:col span="12">
-                    <bs3:tabGroup>
-                        <bs3:tab name="Identity">
-                            <bs3:row>
-                                <bs3:col span="12">
+        </bs:col>
+    </bs:row>
+    <bs:row>
+        <bs:col span="4">
+            <bs:row>
+                <bs:col span="12">
+                    <bs:tabGroup>
+                        <bs:tab name="Identity">
+                            <bs:row>
+                                <bs:col span="12">
                                     <c:fieldSet name="Identity" id="identity"/>
-                                </bs3:col>
-                            </bs3:row>
-                        </bs3:tab>
-                        <bs3:tab name="Other">
-                            <bs3:row>
-                                <bs3:col span="12">
+                                </bs:col>
+                            </bs:row>
+                        </bs:tab>
+                        <bs:tab name="Other">
+                            <bs:row>
+                                <bs:col span="12">
                                     <c:fieldSet name="Other" id="other" unreferencedProperties="true"/>
-                                </bs3:col>
-                            </bs3:row>
-                        </bs3:tab>
-                        <bs3:tab name="Metadata">
-                            <bs3:row>
-                                <bs3:col span="12">
+                                </bs:col>
+                            </bs:row>
+                        </bs:tab>
+                        <bs:tab name="Metadata">
+                            <bs:row>
+                                <bs:col span="12">
                                     <c:fieldSet name="Metadata" id="metadata"/>
-                                </bs3:col>
-                            </bs3:row>
-                        </bs3:tab>
-                    </bs3:tabGroup>
-                </bs3:col>
-            </bs3:row>
-            <bs3:row>
-                <bs3:col span="12">
+                                </bs:col>
+                            </bs:row>
+                        </bs:tab>
+                    </bs:tabGroup>
+                </bs:col>
+            </bs:row>
+            <bs:row>
+                <bs:col span="12">
                     <c:fieldSet name="Details" id="details"/>
-                </bs3:col>
-            </bs3:row>
-        </bs3:col>
-        <bs3:col span="8">
-            <bs3:tabGroup  unreferencedCollections="true">
-            </bs3:tabGroup>
-        </bs3:col>
-    </bs3:row>
-</bs3:grid>
+                </bs:col>
+            </bs:row>
+        </bs:col>
+        <bs:col span="8">
+            <bs:tabGroup  unreferencedCollections="true">
+            </bs:tabGroup>
+        </bs:col>
+    </bs:row>
+</bs:grid>
