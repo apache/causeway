@@ -108,48 +108,48 @@ For example, here's a fragment of that provided by the xref:docs:starters:simple
 [source,xml]
 ----
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<mb3:menuBars
+<mb:menuBars
     xsi:schemaLocation="..."
     xmlns:cpt="https://causeway.apache.org/applib/layout/component"
     xmlns:lnk="https://causeway.apache.org/applib/layout/links"
-    xmlns:mb3="https://causeway.apache.org/applib/layout/menubars/bootstrap3"
+    xmlns:mb="https://causeway.apache.org/applib/layout/menubars/bootstrap3"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <mb3:primary>                                               <!--.-->
-        <mb3:menu>                                              <!--.-->
-            <mb3:named>Simple Objects</mb3:named>
-            <mb3:section>                                       <!--.-->
-                <mb3:serviceAction                              <!--.-->
+    <mb:primary>                                               <!--.-->
+        <mb:menu>                                              <!--.-->
+            <mb:named>Simple Objects</mb:named>
+            <mb:section>                                       <!--.-->
+                <mb:serviceAction                              <!--.-->
                         objectType="simple.SimpleObjects"       <!--.-->
                         id="create">
                     <cpt:named>Create</cpt:named>               <!--.-->
-                </mb3:serviceAction>
-                <mb3:serviceAction
+                </mb:serviceAction>
+                <mb:serviceAction
                         objectType="simple.SimpleObjects"
                         id="findByName">
                     <cpt:named>Find By Name</cpt:named>
-                </mb3:serviceAction>
-                <mb3:serviceAction
+                </mb:serviceAction>
+                <mb:serviceAction
                         objectType="simple.SimpleObjects"
                         id="listAll">
                     <cpt:named>List All</cpt:named>
-                </mb3:serviceAction>
-            </mb3:section>
-        </mb3:menu>
-        <mb3:menu unreferencedActions="true">                   <!--.-->
-            <mb3:named>Other</mb3:named>
-        </mb3:menu>
-    </mb3:primary>
-    <mb3:secondary>                                             <!--.-->
-        <mb3:menu>
-            <mb3:named>Prototyping</mb3:named>
+                </mb:serviceAction>
+            </mb:section>
+        </mb:menu>
+        <mb:menu unreferencedActions="true">                   <!--.-->
+            <mb:named>Other</mb:named>
+        </mb:menu>
+    </mb:primary>
+    <mb:secondary>                                             <!--.-->
+        <mb:menu>
+            <mb:named>Prototyping</mb:named>
             ...
-    </mb3:secondary>
-    <mb3:tertiary>                                              <!--.-->
-        <mb3:menu>
+    </mb:secondary>
+    <mb:tertiary>                                              <!--.-->
+        <mb:menu>
             ...
-        </mb3:menu>
-    </mb3:tertiary>
-</mb3:menuBars>
+        </mb:menu>
+    </mb:tertiary>
+</mb:menuBars>
 ----
 <.> Primary menu bar.
 <.> Menu on the menu bar
@@ -182,49 +182,49 @@ You can use `menubars.layout.xml` to arrange these as you see fit, though our re
 [source,xml]
 .menubars.layout.xml
 ----
-<mb3:secondary>
-    <mb3:menu>
-        <mb3:named>Prototyping</mb3:named>
-        <mb3:section>
-            <mb3:named>Fixtures</mb3:named>
-            <mb3:serviceAction objectType="causeway.testing.fixtures.FixtureScripts" id="runFixtureScript"/>
-            <mb3:serviceAction objectType="causeway.testing.fixtures.FixtureScripts" id="recreateObjectsAndReturnFirst"/>
-        </mb3:section>
-        <mb3:section>
-            <mb3:named>Layouts</mb3:named>
-            <mb3:serviceAction objectType="causeway.applib.LayoutServiceMenu" id="downloadLayouts"/>
-            <mb3:serviceAction objectType="causeway.applib.LayoutServiceMenu" id="downloadMenuBarsLayout"/>
-        </mb3:section>
-        <mb3:section>
-            <mb3:named>Meta Model and Features</mb3:named>
-            <mb3:serviceAction objectType="causeway.applib.MetaModelServiceMenu" id="downloadMetaModelXml"/>
-            <mb3:serviceAction objectType="causeway.applib.MetaModelServiceMenu" id="downloadMetaModelCsv"/>
-            <mb3:serviceAction objectType="causeway.feat.ApplicationFeatureMenu" id="allNamespaces"/>
-            <mb3:serviceAction objectType="causeway.feat.ApplicationFeatureMenu" id="allTypes"/>
-            <mb3:serviceAction objectType="causeway.feat.ApplicationFeatureMenu" id="allActions"/>
-            <mb3:serviceAction objectType="causeway.feat.ApplicationFeatureMenu" id="allProperties"/>
-            <mb3:serviceAction objectType="causeway.feat.ApplicationFeatureMenu" id="allCollections"/>
-        </mb3:section>
-        <mb3:section>
-            <mb3:named>Persistence</mb3:named>
-            <mb3:serviceAction objectType="causeway.persistence.jdo.JdoMetamodelMenu" id="downloadMetamodels"/>
-            <mb3:serviceAction objectType="causeway.ext.h2Console.H2ManagerMenu" id="openH2Console"/>
-        </mb3:section>
-        <mb3:section>
-            <mb3:named>REST API</mb3:named>
-            <mb3:serviceAction objectType="causeway.viewer.restfulobjects.SwaggerServiceMenu" id="openSwaggerUi"/>
-            <mb3:serviceAction objectType="causeway.viewer.restfulobjects.SwaggerServiceMenu" id="openRestApi"/>
-            <mb3:serviceAction objectType="causeway.viewer.restfulobjects.SwaggerServiceMenu" id="downloadSwaggerSchemaDefinition"/>
-        </mb3:section>
-        <mb3:section>
-            <mb3:named>i18n</mb3:named>
-            <mb3:serviceAction objectType="causeway.applib.TranslationServicePoMenu" id="downloadTranslations"/>
-            <mb3:serviceAction objectType="causeway.applib.TranslationServicePoMenu" id="resetTranslationCache"/>
-            <mb3:serviceAction objectType="causeway.applib.TranslationServicePoMenu" id="switchToReadingTranslations"/>
-            <mb3:serviceAction objectType="causeway.applib.TranslationServicePoMenu" id="switchToWritingTranslations"/>
-        </mb3:section>
-    </mb3:menu>
-</mb3:secondary>
+<mb:secondary>
+    <mb:menu>
+        <mb:named>Prototyping</mb:named>
+        <mb:section>
+            <mb:named>Fixtures</mb:named>
+            <mb:serviceAction objectType="causeway.testing.fixtures.FixtureScripts" id="runFixtureScript"/>
+            <mb:serviceAction objectType="causeway.testing.fixtures.FixtureScripts" id="recreateObjectsAndReturnFirst"/>
+        </mb:section>
+        <mb:section>
+            <mb:named>Layouts</mb:named>
+            <mb:serviceAction objectType="causeway.applib.LayoutServiceMenu" id="downloadLayouts"/>
+            <mb:serviceAction objectType="causeway.applib.LayoutServiceMenu" id="downloadMenuBarsLayout"/>
+        </mb:section>
+        <mb:section>
+            <mb:named>Meta Model and Features</mb:named>
+            <mb:serviceAction objectType="causeway.applib.MetaModelServiceMenu" id="downloadMetaModelXml"/>
+            <mb:serviceAction objectType="causeway.applib.MetaModelServiceMenu" id="downloadMetaModelCsv"/>
+            <mb:serviceAction objectType="causeway.feat.ApplicationFeatureMenu" id="allNamespaces"/>
+            <mb:serviceAction objectType="causeway.feat.ApplicationFeatureMenu" id="allTypes"/>
+            <mb:serviceAction objectType="causeway.feat.ApplicationFeatureMenu" id="allActions"/>
+            <mb:serviceAction objectType="causeway.feat.ApplicationFeatureMenu" id="allProperties"/>
+            <mb:serviceAction objectType="causeway.feat.ApplicationFeatureMenu" id="allCollections"/>
+        </mb:section>
+        <mb:section>
+            <mb:named>Persistence</mb:named>
+            <mb:serviceAction objectType="causeway.persistence.jdo.JdoMetamodelMenu" id="downloadMetamodels"/>
+            <mb:serviceAction objectType="causeway.ext.h2Console.H2ManagerMenu" id="openH2Console"/>
+        </mb:section>
+        <mb:section>
+            <mb:named>REST API</mb:named>
+            <mb:serviceAction objectType="causeway.viewer.restfulobjects.SwaggerServiceMenu" id="openSwaggerUi"/>
+            <mb:serviceAction objectType="causeway.viewer.restfulobjects.SwaggerServiceMenu" id="openRestApi"/>
+            <mb:serviceAction objectType="causeway.viewer.restfulobjects.SwaggerServiceMenu" id="downloadSwaggerSchemaDefinition"/>
+        </mb:section>
+        <mb:section>
+            <mb:named>i18n</mb:named>
+            <mb:serviceAction objectType="causeway.applib.TranslationServicePoMenu" id="downloadTranslations"/>
+            <mb:serviceAction objectType="causeway.applib.TranslationServicePoMenu" id="resetTranslationCache"/>
+            <mb:serviceAction objectType="causeway.applib.TranslationServicePoMenu" id="switchToReadingTranslations"/>
+            <mb:serviceAction objectType="causeway.applib.TranslationServicePoMenu" id="switchToWritingTranslations"/>
+        </mb:section>
+    </mb:menu>
+</mb:secondary>
 ----
 
 
@@ -236,24 +236,24 @@ You can use `menubars.layout.xml` to arrange these as you see fit, though our re
 [source,xml]
 .menubars.layout.xml
 ----
-<mb3:tertiary>
-    <mb3:menu>
-        <mb3:named/>
-        <mb3:section>
-            <mb3:named>Configuration</mb3:named>
-            <mb3:serviceAction objectType="causeway.conf.ConfigurationMenu" id="configuration"/>
-        </mb3:section>
-        <mb3:section>
-            <mb3:named>Impersonate</mb3:named>
-            <mb3:serviceAction objectType="causeway.sudo.ImpersonateMenu" id="impersonate"/>
-            <mb3:serviceAction objectType="causeway.sudo.ImpersonateMenu" id="impersonateWithRoles"/>
-            <mb3:serviceAction objectType="causeway.applib.ImpersonateStopMenu" id="stopImpersonating"/>
-        </mb3:section>
-        <mb3:section>
-            <mb3:serviceAction objectType="causeway.security.LogoutMenu" id="logout"/>
-        </mb3:section>
-    </mb3:menu>
-</mb3:tertiary>
+<mb:tertiary>
+    <mb:menu>
+        <mb:named/>
+        <mb:section>
+            <mb:named>Configuration</mb:named>
+            <mb:serviceAction objectType="causeway.conf.ConfigurationMenu" id="configuration"/>
+        </mb:section>
+        <mb:section>
+            <mb:named>Impersonate</mb:named>
+            <mb:serviceAction objectType="causeway.sudo.ImpersonateMenu" id="impersonate"/>
+            <mb:serviceAction objectType="causeway.sudo.ImpersonateMenu" id="impersonateWithRoles"/>
+            <mb:serviceAction objectType="causeway.applib.ImpersonateStopMenu" id="stopImpersonating"/>
+        </mb:section>
+        <mb:section>
+            <mb:serviceAction objectType="causeway.security.LogoutMenu" id="logout"/>
+        </mb:section>
+    </mb:menu>
+</mb:tertiary>
 ----
 
 

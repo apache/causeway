@@ -82,15 +82,15 @@ This can be fine-tuned using `menubars.layout.xml`:
 [source,xml]
 .menubars.layout.xml
 ----
-<mb3:section>
-    <mb3:named>Fixtures</mb3:named>
-    <mb3:serviceAction
+<mb:section>
+    <mb:named>Fixtures</mb:named>
+    <mb:serviceAction
         objectType="causeway.testing.fixtures.FixtureScripts"
         id="runFixtureScript"/>
-    <mb3:serviceAction
+    <mb:serviceAction
         objectType="causeway.testing.fixtures.FixtureScripts"
         id="recreateObjectsAndReturnFirst"/>
-</mb3:section>
+</mb:section>
 ----
 
 Let's now look at the `FixtureScript` class, where there's a bit more to discuss.
