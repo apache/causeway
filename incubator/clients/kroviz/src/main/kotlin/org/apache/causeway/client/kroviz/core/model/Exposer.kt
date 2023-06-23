@@ -19,7 +19,6 @@
 package org.apache.causeway.client.kroviz.core.model
 
 import kotlinx.serialization.Serializable
-import org.apache.causeway.client.kroviz.core.event.ResourceSpecification
 import org.apache.causeway.client.kroviz.to.Icon
 import org.apache.causeway.client.kroviz.to.MemberType
 import org.apache.causeway.client.kroviz.to.TObject
@@ -42,13 +41,14 @@ class Exposer(val delegate: TObject) {
     init {
         val delegateUrl = getDelegateUrl()
         exhibit = Exhibit(delegateUrl)
-        exhibit.asDynamic()["icon"] = null
+        val that = exhibit.asDynamic()
+        that["icon"] = null
         for (m in delegate.members) {
             val member = m.value
             if (member.memberType == MemberType.PROPERTY.type) {
                 val realValue = member.value
                 if (realValue != null) {
-                    (exhibit.asDynamic())[member.id] = realValue.content
+                    that[member.id] = realValue.content
                 }
             }
         }
@@ -78,12 +78,6 @@ class Exposer(val delegate: TObject) {
 }
 
 @Serializable
-class Exhibit(private val url: String) {
-
-    fun getDelegate(): TObject {
-        val rs = ResourceSpecification(url)
-        val le = SessionManager.getEventStore().findBy(rs)
-        return le!!.getTransferObject() as TObject
-    }
+class Exhibit(val url: String) {
 
 }

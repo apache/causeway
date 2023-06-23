@@ -55,12 +55,20 @@ class ResourceProxy {
         }
     }
 
+    fun loadObjectByUrl(url: String) {
+        val rs = ResourceSpecification(url)
+        val le = SessionManager.getEventStore().findBy(rs)
+        val tObject = le!!.getTransferObject() as TObject
+        load(tObject)
+    }
+
     fun fetch(
         link: Link,
         aggregator: BaseAggregator? = null,
         subType: String? = Constants.subTypeJson,
         isRest: Boolean = true,
-        referrer: String = "") {
+        referrer: String = ""
+    ) {
         val rs = ResourceSpecification(link.href, subType = subType, referrerUrl = referrer)
         val le = findAndSetupLogEntry(rs) //easier to read if outside 'when'
         val isCached = when (le) {

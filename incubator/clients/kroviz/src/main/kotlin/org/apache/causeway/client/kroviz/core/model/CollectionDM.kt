@@ -79,7 +79,9 @@ class CollectionDM(override var title: String) : DisplayModelWithLayout() {
         rawData.add(obj)
         val tObj = obj as TObject
         val exo = Exposer(tObj)
-        data.add(exo.getWithDelegateProperties())
+//        console.log("[CDM_addData]")
+//        console.log(exo)
+        data.add(exo.exhibit.asDynamic())
     }
 
     override fun reset() {
