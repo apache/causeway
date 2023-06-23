@@ -31,7 +31,7 @@ import org.apache.causeway.viewer.wicket.ui.components.collection.bulk.Multisele
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorPanel;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorProvider;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericToggleboxColumn;
-import org.apache.causeway.viewer.wicket.ui.components.pops.ScalarPanelAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;

@@ -23,8 +23,8 @@ import org.springframework.stereotype.Component;
 import org.apache.causeway.valuetypes.markdown.applib.value.Markdown;
 import org.apache.causeway.viewer.wicket.model.models.PopModel;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
-import org.apache.causeway.viewer.wicket.ui.components.pops.markup.MarkupComponent;
-import org.apache.causeway.viewer.wicket.ui.components.pops.markup.MarkupPanelFactories;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupPanelFactories;
 
 import lombok.val;
 

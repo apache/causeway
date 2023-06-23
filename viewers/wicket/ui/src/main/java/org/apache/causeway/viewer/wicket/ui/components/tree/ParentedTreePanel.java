@@ -22,8 +22,8 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 
 import org.apache.causeway.viewer.wicket.model.models.PopModel;
-import org.apache.causeway.viewer.wicket.ui.components.pops.ScalarPanelAbstract2;
-import org.apache.causeway.viewer.wicket.ui.components.pops.ScalarFragmentFactory.FrameFragment;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
 
 import lombok.val;
 

@@ -28,7 +28,7 @@ import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.viewer.wicket.model.causeway.WicketApplicationInitializer;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
-import org.apache.causeway.viewer.wicket.ui.components.pops.string.MultiLineStringPanel;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.string.MultiLineStringPanel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.causeway.viewer.wicket.viewer.wicketapp.CausewayWicketApplication;
 
