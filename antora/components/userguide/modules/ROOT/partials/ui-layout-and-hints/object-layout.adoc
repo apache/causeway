@@ -64,16 +64,16 @@ There are two: one for the grid classes, and one for the common component classe
 	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS
 	OF ANY KIND, either express or implied. See the License for the specific
 	language governing permissions and limitations under the License. -->
-<bs3:grid
+<bs:grid
   xsi:schemaLocation="https://causeway.apache.org/applib/layout/component
                       https://causeway.apache.org/applib/layout/component/component.xsd
                       https://causeway.apache.org/applib/layout/grid/bootstrap3
                       https://causeway.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd"
-  xmlns:bs3="https://causeway.apache.org/applib/layout/grid/bootstrap3"
+  xmlns:bs="https://causeway.apache.org/applib/layout/grid/bootstrap3"
   xmlns:c="https://causeway.apache.org/applib/layout/component"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     ...
-</bs3:grid>
+</bs:grid>
 ----
 
 Most IDEs will automatically download the XSD schemas from the specified schema locations, thereby providing "intellisense" help as you edit the file.
@@ -88,28 +88,28 @@ This corresponds to the following XML:
 
 [source,xml]
 ----
-<bs3:row>
-    <bs3:col span="12" unreferencedActions="true">
+<bs:row>
+    <bs:col span="12" unreferencedActions="true">
         <c:domainObject bookmarking="AS_ROOT"/>
-    </bs3:col>
-</bs3:row>
-<bs3:row>
-    <bs3:col span="12">
-        <bs3:tabGroup>
-            <bs3:tab name="Properties">...</bs3:tab>
-            <bs3:tab name="Other">...</bs3:tab>
-            <bs3:tab name="Metadata">...</bs3:tab>
-        </bs3:tabGroup>
-    </bs3:col>
-</bs3:row>
-<bs3:row>
-    <bs3:col span="12">
-        <bs3:tabGroup unreferencedCollections="true">
-            <bs3:tab name="Similar to">...</bs3:tab>
-            <bs3:tab name="Dependencies">...</bs3:tab>
-        </bs3:tabGroup>
-    </bs3:col>
-</bs3:row>
+    </bs:col>
+</bs:row>
+<bs:row>
+    <bs:col span="12">
+        <bs:tabGroup>
+            <bs:tab name="Properties">...</bs:tab>
+            <bs:tab name="Other">...</bs:tab>
+            <bs:tab name="Metadata">...</bs:tab>
+        </bs:tabGroup>
+    </bs:col>
+</bs:row>
+<bs:row>
+    <bs:col span="12">
+        <bs:tabGroup unreferencedCollections="true">
+            <bs:tab name="Similar to">...</bs:tab>
+            <bs:tab name="Dependencies">...</bs:tab>
+        </bs:tabGroup>
+    </bs:col>
+</bs:row>
 ----
 
 You will notice that one of the ``col``umns has an ``unreferencedActions`` attribute, while one of the ``tabGroup``s has a similar ``unreferencedCollections`` attribute.
@@ -124,9 +124,9 @@ This corresponds to the following XML:
 
 [source,xml]
 ----
-<bs3:tab name="Properties">
-    <bs3:row>
-        <bs3:col span="6">
+<bs:tab name="Properties">
+    <bs:row>
+        <bs:col span="6">
             <c:fieldSet name="General" id="general" unreferencedProperties="true">
                 <c:action id="duplicate" position="PANEL_DROPDOWN"/>
                 <c:action id="delete"/>
@@ -141,12 +141,12 @@ This corresponds to the following XML:
                     <c:action id="notYetCompleted" cssClassFa="fa-thumbs-down"/>
                 </c:property>
             </c:fieldSet>
-        </bs3:col>
-        <bs3:col span="6">
+        </bs:col>
+        <bs:col span="6">
             ...
-        </bs3:col>
-    </bs3:row>
-</bs3:tab>
+        </bs:col>
+    </bs:row>
+</bs:tab>
 ----
 
 The tab defines two columns, each span of 6 (meaning half the width of the page).
@@ -175,23 +175,23 @@ This corresponds to the following XML:
 
 [source,xml]
 ----
-<bs3:tab name="Similar to">
-    <bs3:row>
-        <bs3:col span="12">
+<bs:tab name="Similar to">
+    <bs:row>
+        <bs:col span="12">
             <c:collection defaultView="table" id="similarTo"/>
-        </bs3:col>
-    </bs3:row>
-</bs3:tab>
-<bs3:tab name="Dependencies">
-    <bs3:row>
-        <bs3:col span="12">
+        </bs:col>
+    </bs:row>
+</bs:tab>
+<bs:tab name="Dependencies">
+    <bs:row>
+        <bs:col span="12">
             <c:collection defaultView="table" id="dependencies">
                 <c:action id="add"/>
                 <c:action id="remove"/>
             </c:collection>
-        </bs3:col>
-    </bs3:row>
-</bs3:tab>
+        </bs:col>
+    </bs:row>
+</bs:tab>
 ----
 
 As with properties, actions can be associated with collections; this indicates that they should be rendered in the collection's header.

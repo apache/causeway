@@ -19,17 +19,17 @@ To get you started, the following fragment adds all of the actions to an "Activi
 [source,xml]
 .menubars.layout.xml
 ----
-<mb3:secondary>
+<mb:secondary>
     ...
-    <mb3:menu>
-        <mb3:named>Activity</mb3:named>
+    <mb:menu>
+        <mb:named>Activity</mb:named>
         ...
-        <mb3:section>
-            <mb3:named>Sessions</mb3:named>
-            <mb3:serviceAction id="activeSessions" objectType="causeway.ext.sessionLog.SessionLogMenu"/>
-            <mb3:serviceAction id="findSessions" objectType="causeway.ext.sessionLog.SessionLogMenu"/>
-        </mb3:section>
+        <mb:section>
+            <mb:named>Sessions</mb:named>
+            <mb:serviceAction id="activeSessions" objectType="causeway.ext.sessionLog.SessionLogMenu"/>
+            <mb:serviceAction id="findSessions" objectType="causeway.ext.sessionLog.SessionLogMenu"/>
+        </mb:section>
         ...
-    </mb3:menu>
-</mb3:secondary>
+    </mb:menu>
+</mb:secondary>
 ----

@@ -17,10 +17,10 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<bs3:grid
+<bs:grid
         xsi:schemaLocation="https://causeway.apache.org/applib/layout/grid/bootstrap3 https://causeway.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd"
-        xmlns:bs3="https://causeway.apache.org/applib/layout/grid/bootstrap3"
+        xmlns:bs="https://causeway.apache.org/applib/layout/grid/bootstrap3"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <bs3:row>
-    </bs3:row>
-</bs3:grid>
+    <bs:row>
+    </bs:row>
+</bs:grid>

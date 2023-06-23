@@ -19,12 +19,13 @@
 package org.apache.causeway.testing.fixtures.applib.modules;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import javax.annotation.Priority;
@@ -37,9 +38,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.runtimeservices.spring.BeanDescriptor;
 import org.apache.causeway.core.runtimeservices.spring.ContextBeans;
@@ -47,6 +50,7 @@ import org.apache.causeway.core.runtimeservices.spring.SpringBeansService;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 import lombok.Data;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -99,7 +103,8 @@ public class ModuleWithFixturesService {
     }
 
     static List<ModuleWithFixturesDescriptor> modulesWithin(final Map<String, ContextBeans> beans) {
-        final List<ModuleWithFixturesDescriptor> descriptors = new ArrayList<>();
+
+        val descriptors = new ArrayList<ModuleWithFixturesDescriptor>();
         for (Map.Entry<String, ContextBeans> contextEntry : beans.entrySet()) {
             final String contextId = contextEntry.getKey();
             final ContextBeans contextBeans = contextEntry.getValue();
@@ -115,34 +120,21 @@ public class ModuleWithFixturesService {
                 final ModuleWithFixtures module = modulesByBeanName.get(beanName);
                 if(module != null) {
 
-                    final Object annotatedWithConfiguration = configurationBeansByBeanName.get(beanName);
                     final Object annotatedWithImport = beansAnnotatedWithImportByBeanName.get(beanName);
 
-                    final Map<String, ModuleWithFixtures> importedModulesByBeanName = new LinkedHashMap<>();
-                    if(annotatedWithConfiguration != null && annotatedWithImport != null) {
+                    final Optional<Import> importIfAny = annotatedWithImport != null
+                            && configurationBeansByBeanName.get(beanName) != null
+                                ? Optional.ofNullable(_Reflect.getAnnotation(annotatedWithImport.getClass(), Import.class))
+                                : Optional.empty();
 
-                        final Import importAnnot = _Reflect.getAnnotation(annotatedWithImport.getClass(), Import.class);
-                        if(importAnnot!=null) {
-                            final Class<?>[] importedClasses = importAnnot.value();
-
-                            Arrays.stream(importedClasses)
-                            .forEach(importedClass -> {
-                                final Map<String, ?> importedBeansOfType = context.getBeansOfType(importedClass);
-                                importedBeansOfType.forEach((name, entryValue) -> {
-                                    final Collection<?> beanCollection;
-                                    if (entryValue instanceof Collection) {
-                                        beanCollection = (Collection) entryValue;
-                                    } else {
-                                        beanCollection = Collections.singletonList(entryValue);
-                                    }
-                                    beanCollection.stream()
-                                            .filter(ModuleWithFixtures.class::isInstance)
-                                            .map(ModuleWithFixtures.class::cast)
-                                            .forEach(mod -> importedModulesByBeanName.put(name, mod));
-                                });
-                            });
-                        }
-                    }
+                    final Map<String, ModuleWithFixtures> importedModulesByBeanName =
+                        importIfAny
+                            .map(importAnnot->{
+                                final Map<String, ModuleWithFixtures> map = new LinkedHashMap<>();
+                                visitImportAnnotation(importAnnot, ModuleWithFixtures.class, context, map::put);
+                                return map;
+                            })
+                            .orElseGet(Collections::emptyMap);
 
                     val descriptor = new ModuleWithFixturesDescriptor(contextId, beanName, module, importedModulesByBeanName);
                     descriptors.add(descriptor);
@@ -150,6 +142,32 @@ public class ModuleWithFixturesService {
             }
         }
         return descriptors;
+    }
+
+    static <T> void visitImportAnnotation(
+            final @Nullable Import importAnnot,
+            final @NonNull Class<T> requiredType,
+            final @NonNull ConfigurableApplicationContext springContext,
+            final @NonNull BiConsumer<String, T> visitor) {
+
+        if(importAnnot==null) return;
+        final Class<?>[] importedClasses = importAnnot.value();
+
+        _NullSafe.stream(importedClasses)
+        .filter(type->requiredType.isAssignableFrom(type))
+        .forEach(importedClass -> {
+            final Map<String, ?> importedBeansOfType = springContext.getBeansOfType(importedClass);
+            importedBeansOfType.forEach((name, entryValue) -> {
+                final Collection<?> beanCollection = entryValue instanceof Collection
+                        ? (Collection<?>) entryValue
+                        : Collections.singletonList(entryValue);
+
+                beanCollection.stream()
+                        .filter(requiredType::isInstance)
+                        .map(requiredType::cast)
+                        .forEach(mod -> visitor.accept(name, mod));
+            });
+        });
     }
 
 
