@@ -29,7 +29,7 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
-abstract class ScalarPanelAbstractLegacy
+abstract class PopPanelAbstractLegacy
 extends PanelAbstract<ManagedObject, PopModel> {
 
     private static final long serialVersionUID = 1L;
@@ -37,7 +37,7 @@ extends PanelAbstract<ManagedObject, PopModel> {
     protected Component compactFrame;
     private Component regularFrame;
 
-    public ScalarPanelAbstractLegacy(final String id, final PopModel popModel) {
+    public PopPanelAbstractLegacy(final String id, final PopModel popModel) {
         super(id, popModel);
     }
 

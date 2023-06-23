@@ -57,7 +57,7 @@ import lombok.val;
  *
  */
 class PdfJsViewerPanel
-extends ScalarPanelAbstractLegacy
+extends PopPanelAbstractLegacy
 implements IRequestListener {
 
     private static final long serialVersionUID = 1L;

@@ -26,7 +26,7 @@ import org.apache.causeway.viewer.wicket.model.models.PopModel;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.pops.ComponentFactoryPopAbstract;
 
 import lombok.val;
 
@@ -37,7 +37,7 @@ public class TreePanelFactories {
 
     // -- PARENTED
 
-    static class Parented extends ComponentFactoryScalarAbstract {
+    static class Parented extends ComponentFactoryPopAbstract {
         private static final long serialVersionUID = 1L;
 
         public Parented() {

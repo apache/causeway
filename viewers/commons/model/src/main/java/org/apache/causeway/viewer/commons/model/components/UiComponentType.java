@@ -88,9 +88,9 @@ public enum UiComponentType {
      */
     VALUE,
     /**
-     * The name and value of a single property or parameter, ie a scalar.
+     * The name and value of a single property or parameter.
      */
-    SCALAR_NAME_AND_VALUE,
+    POP_NAME_AND_VALUE,
     /**
      * The parameter form (dialog box) of an action.
      */

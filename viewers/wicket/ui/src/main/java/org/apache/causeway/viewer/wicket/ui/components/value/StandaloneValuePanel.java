@@ -27,7 +27,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmRenderUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.pops.PopPanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
@@ -35,7 +35,7 @@ import lombok.val;
 
 /**
  * Panel for rendering any value types that do not have their own custom
- * {@link ScalarPanelAbstract panel} to render them.
+ * {@link PopPanelAbstract panel} to render them.
  */
 public class StandaloneValuePanel
 extends PanelAbstract<ManagedObject, ValueModel> {
@@ -46,9 +46,9 @@ extends PanelAbstract<ManagedObject, ValueModel> {
     public StandaloneValuePanel(final String id, final ValueModel valueModel) {
         super(id, valueModel);
 
-        //XXX StandaloneValuePanel has its limitations compared to the ScalarPanel infrastructure,
+        //XXX StandaloneValuePanel has its limitations compared to the PopPanel infrastructure,
         // which has far better rendering support
-        // (we probably need to remove StandaloneValuePanel and utilize the ScalarPanel for standalone values instead)
+        // (we probably need to remove StandaloneValuePanel and utilize the PopPanel for standalone values instead)
         if(isProbablySimpleInlineHtml(valueModel.getObjectMember().getElementType())) {
             Wkt.markupAdd(this, ID_STANDALONE_VALUE, ()->
                 MmRenderUtils.htmlStringForValueType(getModel().getObject(), getModel().getObjectMember())

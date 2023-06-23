@@ -93,7 +93,7 @@ import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTab
 import org.apache.causeway.viewer.commons.model.components.UiString;
 import org.apache.causeway.viewer.wicket.model.hints.CausewayActionCompletedEvent;
 import org.apache.causeway.viewer.wicket.model.hints.CausewayEnvelopeEvent;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
+import org.apache.causeway.viewer.wicket.ui.components.pops.markup.MarkupComponent;
 import org.apache.causeway.viewer.wicket.ui.components.text.TextAreaWithConverter;
 import org.apache.causeway.viewer.wicket.ui.components.text.TextFieldWithConverter;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.fileinput.FileUploadFieldWithNestingFix;
@@ -373,19 +373,19 @@ public class Wkt {
     // -- CHECKBOX
 
     /**
-     * In correspondence with ScalarPanelFormFieldAbstract.html
+     * In correspondence with PopPanelFormFieldAbstract.html
      * <wicket:fragment wicket:id="fragment-prompt-checkboxYes">
      */
     final String fragment_prompt_checkboxYes = "<label class=\"fs-4\" style=\"color: green;\">"
             + "<i class=\"fa-regular fa-check-square\"></i></label>";
     /**
-     * In correspondence with ScalarPanelFormFieldAbstract.html
+     * In correspondence with PopPanelFormFieldAbstract.html
      * <wicket:fragment wicket:id="fragment-prompt-checkboxNo">
      */
     final String fragment_prompt_checkboxNo = "<label class=\"fs-4\">"
             + "<i class=\"fa-regular fa-square\"></i></label>";
     /**
-     * In correspondence with ScalarPanelFormFieldAbstract.html
+     * In correspondence with PopPanelFormFieldAbstract.html
      * <wicket:fragment wicket:id="fragment-prompt-checkboxIntermediate">
      */
     final String fragment_prompt_checkboxIntermediate = "<label class=\"fs-4\" style=\"color: silver;\">"

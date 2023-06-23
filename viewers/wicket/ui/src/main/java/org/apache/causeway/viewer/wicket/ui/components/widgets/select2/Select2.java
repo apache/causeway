@@ -39,7 +39,7 @@ import org.apache.causeway.viewer.wicket.model.models.PopModel;
 import org.apache.causeway.viewer.wicket.model.models.PopModelWithMultiChoice;
 import org.apache.causeway.viewer.wicket.model.models.PopModelWithSingleChoice;
 import org.apache.causeway.viewer.wicket.model.util.WktContext;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.PopModelChangeDispatcher;
+import org.apache.causeway.viewer.wicket.ui.components.pops.PopModelChangeDispatcher;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
 
 import lombok.NonNull;

@@ -21,7 +21,7 @@ module org.apache.causeway.viewer.wicket.ui {
     exports org.apache.causeway.viewer.wicket.ui.components.entity.header;
     exports org.apache.causeway.viewer.wicket.ui.components.widgets.select2;
     exports org.apache.causeway.viewer.wicket.ui.pages.common.datatables;
-    exports org.apache.causeway.viewer.wicket.ui.components.scalars.blobclob;
+    exports org.apache.causeway.viewer.wicket.ui.components.pops.blobclob;
     exports org.apache.causeway.viewer.wicket.ui.components.widgets.linkandlabel;
     exports org.apache.causeway.viewer.wicket.ui.util;
     exports org.apache.causeway.viewer.wicket.ui.pages.common.serversentevents.js;
@@ -30,7 +30,7 @@ module org.apache.causeway.viewer.wicket.ui {
     exports org.apache.causeway.viewer.wicket.ui.panels;
     exports org.apache.causeway.viewer.wicket.ui.components.collectioncontents.summary;
     exports org.apache.causeway.viewer.wicket.ui.pages.error;
-    exports org.apache.causeway.viewer.wicket.ui.components.scalars.composite;
+    exports org.apache.causeway.viewer.wicket.ui.components.pops.composite;
     exports org.apache.causeway.viewer.wicket.ui.components.actionmenu.serviceactions;
     exports org.apache.causeway.viewer.wicket.ui.pages.common.fontawesome;
     exports org.apache.causeway.viewer.wicket.ui.components.propertyheader;
@@ -40,19 +40,19 @@ module org.apache.causeway.viewer.wicket.ui {
     exports org.apache.causeway.viewer.wicket.ui.components.property;
     exports org.apache.causeway.viewer.wicket.ui.pages.common.bootstrap.css;
     exports org.apache.causeway.viewer.wicket.ui.components.empty;
-    exports org.apache.causeway.viewer.wicket.ui.components.scalars.passwd;
+    exports org.apache.causeway.viewer.wicket.ui.components.pops.passwd;
     exports org.apache.causeway.viewer.wicket.ui.components.footer;
     exports org.apache.causeway.viewer.wicket.ui.app.registry;
-    exports org.apache.causeway.viewer.wicket.ui.components.scalars.image;
+    exports org.apache.causeway.viewer.wicket.ui.components.pops.image;
     exports org.apache.causeway.viewer.wicket.ui.components.standalonecollection;
     exports org.apache.causeway.viewer.wicket.ui.components.header;
     exports org.apache.causeway.viewer.wicket.ui.pages.common.viewer.js;
     exports org.apache.causeway.viewer.wicket.ui.components.widgets.zclip;
     exports org.apache.causeway.viewer.wicket.ui.components.entity.icontitle;
     exports org.apache.causeway.viewer.wicket.ui.components.tree;
-    exports org.apache.causeway.viewer.wicket.ui.components.scalars.choices;
+    exports org.apache.causeway.viewer.wicket.ui.components.pops.choices;
     exports org.apache.causeway.viewer.wicket.ui.components.layout.bs.tabs;
-    exports org.apache.causeway.viewer.wicket.ui.components.scalars.datepicker;
+    exports org.apache.causeway.viewer.wicket.ui.components.pops.datepicker;
     exports org.apache.causeway.viewer.wicket.ui.pages.login;
     exports org.apache.causeway.viewer.wicket.ui.components;
     exports org.apache.causeway.viewer.wicket.ui.components.unknown;
@@ -60,13 +60,13 @@ module org.apache.causeway.viewer.wicket.ui {
     exports org.apache.causeway.viewer.wicket.ui.components.collection.selector;
     exports org.apache.causeway.viewer.wicket.ui.components.actionpromptsb;
     exports org.apache.causeway.viewer.wicket.ui.components.about;
-    exports org.apache.causeway.viewer.wicket.ui.components.scalars.string;
+    exports org.apache.causeway.viewer.wicket.ui.components.pops.string;
     exports org.apache.causeway.viewer.wicket.ui.components.widgets.breadcrumbs;
     exports org.apache.causeway.viewer.wicket.ui.components.bookmarkedpages;
     exports org.apache.causeway.viewer.wicket.ui.pages.common.livequery.js;
     exports org.apache.causeway.viewer.wicket.ui.pages.voidreturn;
     exports org.apache.causeway.viewer.wicket.ui.pages.accmngt.password_reset;
-    exports org.apache.causeway.viewer.wicket.ui.components.scalars;
+    exports org.apache.causeway.viewer.wicket.ui.components.pops;
     exports org.apache.causeway.viewer.wicket.ui.pages;
     exports org.apache.causeway.viewer.wicket.ui.components.widgets.navbar;
     exports org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions;
@@ -79,7 +79,7 @@ module org.apache.causeway.viewer.wicket.ui {
     exports org.apache.causeway.viewer.wicket.ui.components.actioninfo;
     exports org.apache.causeway.viewer.wicket.ui.components.collection.bulk;
     exports org.apache.causeway.viewer.wicket.ui.pages.entity;
-    exports org.apache.causeway.viewer.wicket.ui.components.scalars.bool;
+    exports org.apache.causeway.viewer.wicket.ui.components.pops.bool;
     exports org.apache.causeway.viewer.wicket.ui.pages.accmngt.register;
     exports org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable;
     exports org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers;
@@ -98,7 +98,7 @@ module org.apache.causeway.viewer.wicket.ui {
     exports org.apache.causeway.viewer.wicket.ui.pages.accmngt.signup;
     exports org.apache.causeway.viewer.wicket.ui.validation;
     exports org.apache.causeway.viewer.wicket.ui.components.actionprompt;
-    exports org.apache.causeway.viewer.wicket.ui.components.scalars.markup;
+    exports org.apache.causeway.viewer.wicket.ui.components.pops.markup;
     exports org.apache.causeway.viewer.wicket.ui.pages.about;
     exports org.apache.causeway.viewer.wicket.ui.components.actionmenu;
     exports org.apache.causeway.viewer.wicket.ui.pages.value;
@@ -111,7 +111,7 @@ module org.apache.causeway.viewer.wicket.ui {
     exports org.apache.causeway.viewer.wicket.ui.components.collectioncontents.icons;
     exports org.apache.causeway.viewer.wicket.ui.components.widgets.formcomponent;
     exports org.apache.causeway.viewer.wicket.ui.components.entity.collection;
-    exports org.apache.causeway.viewer.wicket.ui.components.scalars.value.fallback;
+    exports org.apache.causeway.viewer.wicket.ui.components.pops.value.fallback;
     exports org.apache.causeway.viewer.wicket.ui.components.actions;
 
     requires com.fasterxml.jackson.core;

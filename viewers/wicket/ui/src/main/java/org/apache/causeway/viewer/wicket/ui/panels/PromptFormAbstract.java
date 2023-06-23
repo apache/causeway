@@ -41,9 +41,9 @@ import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.causeway.viewer.wicket.model.models.FormExecutorContext;
-import org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.PopModelChangeListener;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.causeway.viewer.wicket.model.models.PropertyModel;
+import org.apache.causeway.viewer.wicket.ui.components.pops.PopModelChangeListener;
+import org.apache.causeway.viewer.wicket.ui.components.pops.PopPanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -60,7 +60,7 @@ implements PopModelChangeListener {
 
     private static final long serialVersionUID = 1L;
 
-    protected final List<ScalarPanelAbstract> paramPanels = _Lists.newArrayList();
+    protected final List<PopPanelAbstract> paramPanels = _Lists.newArrayList();
 
     private final Component parentPanel;
 
@@ -83,7 +83,7 @@ implements PopModelChangeListener {
     // -- SETUP
 
     protected abstract void addParameters();
-    protected abstract Either<ActionModel, ScalarPropertyModel> getMemberModel();
+    protected abstract Either<ActionModel, PropertyModel> getMemberModel();
 
     @Override
     public final void renderHead(final IHeaderResponse response) {
@@ -142,10 +142,10 @@ implements PopModelChangeListener {
     }
 
     @Override
-    public final void onError(final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
-        if (scalarPanel != null) {
+    public final void onError(final AjaxRequestTarget target, final PopPanelAbstract popPanel) {
+        if (popPanel != null) {
             // ensure that any feedback error associated with the providing component is shown.
-            target.add(scalarPanel);
+            target.add(popPanel);
         }
     }
 

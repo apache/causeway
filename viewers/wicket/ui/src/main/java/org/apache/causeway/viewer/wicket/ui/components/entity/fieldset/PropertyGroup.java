@@ -44,7 +44,7 @@ import org.apache.causeway.viewer.wicket.model.models.PopModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.pops.PopPanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -66,7 +66,7 @@ implements HasDynamicallyVisibleContent {
     private static final String ID_PROPERTY = "property";
 
     private final FieldSet fieldSet;
-    private final Can<ScalarPanelAbstract> childScalarPanels;
+    private final Can<PopPanelAbstract> childPopPanels;
     private final List<Component> childComponents;
 
     public PropertyGroup(final String id, final UiObjectWkt model, final FieldSet fieldSet) {
@@ -75,10 +75,10 @@ implements HasDynamicallyVisibleContent {
 
         // the UI is only ever built once.
         childComponents = buildGui();
-        childScalarPanels =
+        childPopPanels =
                 _NullSafe.stream(childComponents)
-                .filter(ScalarPanelAbstract.class::isInstance)
-                .map(ScalarPanelAbstract.class::cast)
+                .filter(PopPanelAbstract.class::isInstance)
+                .map(PopPanelAbstract.class::cast)
                 .collect(Can.toCan());
 
     }
@@ -90,7 +90,7 @@ implements HasDynamicallyVisibleContent {
 
     @Override
     public void onConfigure() {
-        for (final ScalarPanelAbstract childComponent : childScalarPanels) {
+        for (final PopPanelAbstract childComponent : childPopPanels) {
             childComponent.configure();
         }
         super.onConfigure();
@@ -105,18 +105,18 @@ implements HasDynamicallyVisibleContent {
     @Override
     public boolean isVisibleBasedOnContent() {
 
-        // HACK: there are some components that are not ScalarPanelAbstract2's, eg the pdfjsviewer.
+        // HACK: there are some components that are not PopPanelAbstract2's, eg the pdfjsviewer.
         // In this case, don't ever hide.
 
-        // TODO: should remove this hack.  We need some sort of SPI for ScalarPanelAbstract2's and any other component,
+        // TODO: should remove this hack.  We need some sort of SPI for PopPanelAbstract2's and any other component,
         // (eg PdfJsViewer) that can implement.  It's "probably" just a matter of having PdfJsViewer do its work in the
         // correct Wicket callback (probably onConfigure).
-        if(childComponents.size() > childScalarPanels.size()) {
+        if(childComponents.size() > childPopPanels.size()) {
             return true;
         }
         // HACK:END
 
-        for (final ScalarPanelAbstract childComponent : childScalarPanels) {
+        for (final PopPanelAbstract childComponent : childPopPanels) {
             if(childComponent.isVisibilityAllowed()) {
                 return true;
             }
@@ -199,7 +199,7 @@ implements HasDynamicallyVisibleContent {
         // and it may be that individual properties start out as invisible but then become visible later.
         //
         // therefore the responsibility of determining whether an individual property's component should be visible
-        // or not moves to ScalarPanelAbstract2#onConfigure(...)
+        // or not moves to PopPanelAbstract2#onConfigure(...)
         //
 
         return _NullSafe.stream(propertyLayouts)
@@ -229,7 +229,7 @@ implements HasDynamicallyVisibleContent {
                 entityModel.getPropertyModel(property, ViewOrEditMode.VIEWING, RenderingHint.REGULAR);
 
         final Component scalarNameAndValueComponent = getComponentFactoryRegistry()
-                .addOrReplaceComponent(container, ID_PROPERTY, UiComponentType.SCALAR_NAME_AND_VALUE, popModel);
+                .addOrReplaceComponent(container, ID_PROPERTY, UiComponentType.POP_NAME_AND_VALUE, popModel);
 //XXX[CAUSEWAY-3026] this is a bad idea
 //        if(scalarNameAndValueComponent instanceof MarkupContainer) {
 //            Wkt.cssAppend(scalarNameAndValueComponent, popModel.getIdentifier());

@@ -60,8 +60,8 @@ implements ActionModel {
             final UiObjectWkt parentEntityModel,
             final Identifier actionIdentifier,
             final Where where,
-            final ScalarPropertyModel associatedWithPropertyIfAny,
-            final ScalarParameterModel associatedWithParameterIfAny,
+            final PropertyModel associatedWithPropertyIfAny,
+            final ParameterModel associatedWithParameterIfAny,
             final EntityCollectionModel associatedWithCollectionIfAny) {
         val delegate = ActionInteractionWkt.forEntity(
                 parentEntityModel,
@@ -162,7 +162,7 @@ implements ActionModel {
     }
 
     @Override
-    public Optional<ScalarParameterModel> getAssociatedParameter() {
+    public Optional<ParameterModel> getAssociatedParameter() {
         return delegate.associatedWithParameter();
     }
 

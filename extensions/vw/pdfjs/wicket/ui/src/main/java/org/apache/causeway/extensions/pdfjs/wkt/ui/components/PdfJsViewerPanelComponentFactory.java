@@ -40,7 +40,7 @@ public class PdfJsViewerPanelComponentFactory extends ComponentFactoryAbstract {
 
     @Inject
     public PdfJsViewerPanelComponentFactory() {
-        super(UiComponentType.SCALAR_NAME_AND_VALUE, PdfJsViewerPanel.class);
+        super(UiComponentType.POP_NAME_AND_VALUE, PdfJsViewerPanel.class);
     }
 
     @Override

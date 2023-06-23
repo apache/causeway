@@ -59,22 +59,22 @@ import org.apache.causeway.viewer.wicket.ui.components.entity.icontitle.EntityIc
 import org.apache.causeway.viewer.wicket.ui.components.footer.FooterPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.header.HeaderPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.layout.bs.BSGridPanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.pops.ComponentFactoryPopTypeConstrainedAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.pops.PopPanelTextFieldNumeric;
+import org.apache.causeway.viewer.wicket.ui.components.pops.PopPanelTextFieldWithTemporalPicker;
+import org.apache.causeway.viewer.wicket.ui.components.pops.PopPanelTextFieldWithValueSemantics;
+import org.apache.causeway.viewer.wicket.ui.components.pops.blobclob.CausewayBlobPanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.pops.blobclob.CausewayClobPanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.pops.bool.BooleanPanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.pops.choices.ChoicesSelect2PanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.pops.composite.CompositeValuePanel;
+import org.apache.causeway.viewer.wicket.ui.components.pops.image.JavaAwtImagePanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.pops.markup.MarkupPanelFactories;
+import org.apache.causeway.viewer.wicket.ui.components.pops.passwd.CausewayPasswordPanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.pops.string.StringPanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.pops.value.fallback.ValueFallbackPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.property.PropertyEditFormPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.property.PropertyEditPanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryScalarTypeConstrainedAbstract;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithTemporalPicker;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemantics;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.blobclob.CausewayBlobPanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.blobclob.CausewayClobPanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.bool.BooleanPanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.choices.ChoicesSelect2PanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.composite.CompositeValuePanel;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.image.JavaAwtImagePanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupPanelFactories;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.passwd.CausewayPasswordPanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.string.StringPanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.value.fallback.ValueFallbackPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.standalonecollection.StandaloneCollectionPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.tree.TreePanelFactories;
 import org.apache.causeway.viewer.wicket.ui.components.unknown.UnknownModelPanelFactory;
@@ -273,70 +273,70 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
     // -- UTILTIY
 
-    public static <T extends Serializable> ComponentFactoryScalarTypeConstrainedAbstract
+    public static <T extends Serializable> ComponentFactoryPopTypeConstrainedAbstract
     createForValueSemantics(final ValueSemanticsProvider<T> valueSemantics) {
 
         if(valueSemantics.isNumberType()) {
-            return new ScalarPanelFactoryForNumberField<T>(valueSemantics.getCorrespondingClass());
+            return new PopPanelFactoryForNumberField<T>(valueSemantics.getCorrespondingClass());
         }
 
         if(valueSemantics.isTemporalType()) {
-            return new ScalarPanelFactoryForTemporalPicker<T>(valueSemantics.getCorrespondingClass());
+            return new PopPanelFactoryForTemporalPicker<T>(valueSemantics.getCorrespondingClass());
         }
 
         if(valueSemantics.isCompositeType()) {
-            return new ScalarPanelFactoryForCompositeValue<T>(valueSemantics.getCorrespondingClass());
+            return new PopPanelFactoryForCompositeValue<T>(valueSemantics.getCorrespondingClass());
         }
 
-        return new ScalarPanelFactoryForTextField<T>(valueSemantics.getCorrespondingClass());
+        return new PopPanelFactoryForTextField<T>(valueSemantics.getCorrespondingClass());
     }
 
-    public static class ScalarPanelFactoryForTextField<T extends Serializable>
-    extends ComponentFactoryScalarTypeConstrainedAbstract {
+    public static class PopPanelFactoryForTextField<T extends Serializable>
+    extends ComponentFactoryPopTypeConstrainedAbstract {
 
         private static final long serialVersionUID = 1L;
 
         private final Class<T> valueTypeClass;
 
-        protected ScalarPanelFactoryForTextField(final Class<T> valueTypeClass) {
-            super(ScalarPanelTextFieldWithValueSemantics.class, withPrimitiveVariant(valueTypeClass));
+        protected PopPanelFactoryForTextField(final Class<T> valueTypeClass) {
+            super(PopPanelTextFieldWithValueSemantics.class, withPrimitiveVariant(valueTypeClass));
             this.valueTypeClass = valueTypeClass;
         }
 
         @Override
         public Component createComponent(final String id, final PopModel popModel) {
-            return new ScalarPanelTextFieldWithValueSemantics<T>(id, popModel, valueTypeClass);
+            return new PopPanelTextFieldWithValueSemantics<T>(id, popModel, valueTypeClass);
         }
     }
 
 
-    public static class ScalarPanelFactoryForNumberField<T extends Serializable>
-    extends ComponentFactoryScalarTypeConstrainedAbstract {
+    public static class PopPanelFactoryForNumberField<T extends Serializable>
+    extends ComponentFactoryPopTypeConstrainedAbstract {
 
         private static final long serialVersionUID = 1L;
 
         private final Class<T> valueTypeClass;
 
-        protected ScalarPanelFactoryForNumberField(final Class<T> valueTypeClass) {
-            super(ScalarPanelTextFieldNumeric.class, withPrimitiveVariant(valueTypeClass));
+        protected PopPanelFactoryForNumberField(final Class<T> valueTypeClass) {
+            super(PopPanelTextFieldNumeric.class, withPrimitiveVariant(valueTypeClass));
             this.valueTypeClass = valueTypeClass;
         }
 
         @Override
         public Component createComponent(final String id, final PopModel popModel) {
-            return new ScalarPanelTextFieldNumeric<T>(id, popModel, valueTypeClass);
+            return new PopPanelTextFieldNumeric<T>(id, popModel, valueTypeClass);
         }
     }
 
-    public static class ScalarPanelFactoryForTemporalPicker<T extends Serializable>
-    extends ComponentFactoryScalarTypeConstrainedAbstract {
+    public static class PopPanelFactoryForTemporalPicker<T extends Serializable>
+    extends ComponentFactoryPopTypeConstrainedAbstract {
 
         private static final long serialVersionUID = 1L;
 
         private final Class<T> valueTypeClass;
 
-        protected ScalarPanelFactoryForTemporalPicker(final Class<T> valueTypeClass) {
-            super(ScalarPanelTextFieldWithTemporalPicker.class,
+        protected PopPanelFactoryForTemporalPicker(final Class<T> valueTypeClass) {
+            super(PopPanelTextFieldWithTemporalPicker.class,
                     // assuming there is no primitive temporal type
                     valueTypeClass);
             this.valueTypeClass = valueTypeClass;
@@ -344,18 +344,18 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
         @Override
         public Component createComponent(final String id, final PopModel popModel) {
-            return new ScalarPanelTextFieldWithTemporalPicker<T>(id, popModel, valueTypeClass);
+            return new PopPanelTextFieldWithTemporalPicker<T>(id, popModel, valueTypeClass);
         }
     }
 
-    public static class ScalarPanelFactoryForCompositeValue<T extends Serializable>
-    extends ComponentFactoryScalarTypeConstrainedAbstract {
+    public static class PopPanelFactoryForCompositeValue<T extends Serializable>
+    extends ComponentFactoryPopTypeConstrainedAbstract {
 
         private static final long serialVersionUID = 1L;
 
         private final Class<T> valueTypeClass;
 
-        protected ScalarPanelFactoryForCompositeValue(final Class<T> valueTypeClass) {
+        protected PopPanelFactoryForCompositeValue(final Class<T> valueTypeClass) {
             super(CompositeValuePanel.class,
                     // assuming there is no primitive composite type
                     valueTypeClass);
@@ -376,7 +376,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
         // collect those registered up to this point, so we don't override with generic ones at steps below
         val registeredScalarTypes =
-                componentFactories.stream(ComponentFactoryScalarTypeConstrainedAbstract.class)
+                componentFactories.stream(ComponentFactoryPopTypeConstrainedAbstract.class)
                 .flatMap(f->f.getScalarTypes().stream())
                 .collect(Collectors.toSet());
 

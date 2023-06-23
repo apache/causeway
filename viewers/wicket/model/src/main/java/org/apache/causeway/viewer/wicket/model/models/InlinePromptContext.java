@@ -49,7 +49,7 @@ public class InlinePromptContext implements Serializable {
         scalarIfRegularInlinePromptForm.setVisible(true);
     }
 
-    public void onCancel(final Either<ActionModel, ScalarPropertyModel> memberModel) {
+    public void onCancel(final Either<ActionModel, PropertyModel> memberModel) {
 
         memberModel
         .accept(_Functions.noopConsumer(), prop->{

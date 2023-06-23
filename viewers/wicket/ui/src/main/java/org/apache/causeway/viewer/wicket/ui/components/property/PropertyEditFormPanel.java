@@ -19,7 +19,7 @@
 package org.apache.causeway.viewer.wicket.ui.components.property;
 
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel;
+import org.apache.causeway.viewer.wicket.model.models.PropertyModel;
 import org.apache.causeway.viewer.wicket.ui.components.actions.ActionParametersFormPanel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.panels.PromptFormPanelAbstract;
@@ -33,14 +33,14 @@ import lombok.val;
  * Corresponding panel for property edits is {@link ActionParametersFormPanel}.
  */
 public class PropertyEditFormPanel
-extends PromptFormPanelAbstract<ManagedObject, ScalarPropertyModel> {
+extends PromptFormPanelAbstract<ManagedObject, PropertyModel> {
 
     private static final long serialVersionUID = 1L;
 
     static final String ID_PROPERTY = "property";
     static final String ID_INPUT_FORM = "inputForm";
 
-    public PropertyEditFormPanel(final String id, final ScalarPropertyModel model) {
+    public PropertyEditFormPanel(final String id, final PropertyModel model) {
         super(id, model);
         buildGui();
     }
@@ -50,7 +50,7 @@ extends PromptFormPanelAbstract<ManagedObject, ScalarPropertyModel> {
         add(new PropertyEditForm(ID_INPUT_FORM, this, scalarPropertyModel));
     }
 
-    private ScalarPropertyModel scalarPropertyModel() {
+    private PropertyModel scalarPropertyModel() {
         return getModel();
     }
 

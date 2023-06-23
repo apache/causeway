@@ -117,7 +117,7 @@ extends GenericColumnAbstract {
                         ViewOrEditMode.VIEWING,
                         collectionVariant.getColumnRenderingHint());
 
-        return findComponentFactory(UiComponentType.SCALAR_NAME_AND_VALUE, popModel)
+        return findComponentFactory(UiComponentType.POP_NAME_AND_VALUE, popModel)
                 .createComponent(id, popModel);
     }
 

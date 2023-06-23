@@ -206,10 +206,10 @@ implements
 
     // -- PROPERTY MODELS (CHILDREN)
 
-    private transient Map<PropertyMemento, ScalarPropertyModel> propertyPopModels;
-    private Map<PropertyMemento, ScalarPropertyModel> propertyPopModels() {
+    private transient Map<PropertyMemento, PropertyModel> propertyPopModels;
+    private Map<PropertyMemento, PropertyModel> propertyPopModels() {
         if(propertyPopModels==null) {
-            propertyPopModels = _Maps.<PropertyMemento, ScalarPropertyModel>newHashMap();
+            propertyPopModels = _Maps.<PropertyMemento, PropertyModel>newHashMap();
         }
         return propertyPopModels;
     }
@@ -233,7 +233,7 @@ implements
                     renderingHint.asWhere());
 
             final long modelsAdded = propertyInteractionModel.streamPropertyUiModels()
-            .map(uiModel->ScalarPropertyModel.wrap(uiModel, viewOrEdit, renderingHint))
+            .map(uiModel->PropertyModel.wrap(uiModel, viewOrEdit, renderingHint))
             .peek(popModel->log.debug("adding: {}", popModel))
             .filter(popModel->propertyPopModels.put(pm, popModel)==null)
             .count();
@@ -279,7 +279,7 @@ implements
     @Override
     protected void onDetach() {
         propertyPopModels().values()
-            .forEach(ScalarPropertyModel::detach);
+            .forEach(PropertyModel::detach);
         super.onDetach();
         propertyPopModels = null;
     }

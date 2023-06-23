@@ -36,8 +36,8 @@ import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiat
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.InlinePromptContext;
-import org.apache.causeway.viewer.wicket.model.models.ScalarParameterModel;
-import org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel;
+import org.apache.causeway.viewer.wicket.model.models.ParameterModel;
+import org.apache.causeway.viewer.wicket.model.models.PropertyModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.interaction.HasBookmarkedOwnerAbstract;
@@ -68,16 +68,16 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
     private final String memberId;
     private final Where where;
     private Can<UiParameterWkt> childModels;
-    private @Nullable ScalarPropertyModel associatedWithPropertyIfAny;
-    private @Nullable ScalarParameterModel associatedWithParameterIfAny;
+    private @Nullable PropertyModel associatedWithPropertyIfAny;
+    private @Nullable ParameterModel associatedWithParameterIfAny;
     private @Nullable EntityCollectionModel associatedWithCollectionIfAny;
 
     public static ActionInteractionWkt forEntity(
             final UiObjectWkt parentEntityModel,
             final Identifier actionIdentifier,
             final Where where,
-            final ScalarPropertyModel associatedWithPropertyIfAny,
-            final ScalarParameterModel associatedWithParameterIfAny,
+            final PropertyModel associatedWithPropertyIfAny,
+            final ParameterModel associatedWithParameterIfAny,
             final EntityCollectionModel associatedWithCollectionIfAny) {
         return new ActionInteractionWkt(
                 parentEntityModel.bookmarkedObjectModel(),
@@ -92,8 +92,8 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
             final BookmarkedObjectWkt bookmarkedObject,
             final String memberId,
             final Where where,
-            final ScalarPropertyModel associatedWithPropertyIfAny,
-            final ScalarParameterModel associatedWithParameterIfAny,
+            final PropertyModel associatedWithPropertyIfAny,
+            final ParameterModel associatedWithParameterIfAny,
             final EntityCollectionModel associatedWithCollectionIfAny) {
         super(bookmarkedObject);
         this.memberId = memberId;
@@ -141,11 +141,11 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
                         .noSuchElement("could not resolve action by memberId '%s'", memberId));
     }
 
-    public Optional<ScalarPropertyModel> associatedWithProperty() {
+    public Optional<PropertyModel> associatedWithProperty() {
         return Optional.ofNullable(associatedWithPropertyIfAny);
     }
 
-    public Optional<ScalarParameterModel> associatedWithParameter() {
+    public Optional<ParameterModel> associatedWithParameter() {
         return Optional.ofNullable(associatedWithParameterIfAny);
     }
 

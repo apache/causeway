@@ -30,8 +30,8 @@ import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.ActionModelImpl;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelParented;
 import org.apache.causeway.viewer.wicket.model.models.PopModel;
-import org.apache.causeway.viewer.wicket.model.models.ScalarParameterModel;
-import org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel;
+import org.apache.causeway.viewer.wicket.model.models.ParameterModel;
+import org.apache.causeway.viewer.wicket.model.models.PropertyModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
@@ -80,13 +80,13 @@ extends Function<ObjectAction, LinkAndLabel> {
 
     public static LinkAndLabelFactory forPropertyOrParameter(
             final PopModel popModel) {
-        return popModel instanceof ScalarPropertyModel
-                ? forProperty((ScalarPropertyModel)popModel)
-                : forParameter((ScalarParameterModel)popModel);
+        return popModel instanceof PropertyModel
+                ? forProperty((PropertyModel)popModel)
+                : forParameter((ParameterModel)popModel);
     }
 
     public static LinkAndLabelFactory forProperty(
-            final ScalarPropertyModel propertyModel) {
+            final PropertyModel propertyModel) {
         return action -> LinkAndLabel.of(
                 ActionModelImpl.forEntity(
                         propertyModel.getParentUiModel(),
@@ -97,7 +97,7 @@ extends Function<ObjectAction, LinkAndLabel> {
     }
 
     public static LinkAndLabelFactory forParameter(
-            final ScalarParameterModel parameterModel) {
+            final ParameterModel parameterModel) {
         //XXX[CAUSEWAY-3080] only supported, when parameter type is a singular composite value-type
         val param = parameterModel.getMetaModel();
         if(param.isSingular()

@@ -22,16 +22,16 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 
 import org.apache.causeway.viewer.wicket.model.models.PopModel;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
+import org.apache.causeway.viewer.wicket.ui.components.pops.PopPanelAbstract2;
+import org.apache.causeway.viewer.wicket.ui.components.pops.PopFragmentFactory.FrameFragment;
 
 import lombok.val;
 
 /**
- * Immutable tree, hooks into the ScalarPanelTextField without actually using its text field.
+ * Immutable tree, hooks into the PopPanelTextField without actually using its text field.
  */
 public class ParentedTreePanel
-extends ScalarPanelAbstract2 {
+extends PopPanelAbstract2 {
 
     private static final long serialVersionUID = 1L;
 

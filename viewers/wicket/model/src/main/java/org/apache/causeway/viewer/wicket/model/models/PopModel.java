@@ -103,12 +103,12 @@ implements HasRenderingHints, UiPop, FormExecutorContext {
     }
 
     /**
-     * This instance is either a {@link ScalarParameterModel} or a {@link ScalarPropertyModel}.
+     * This instance is either a {@link ParameterModel} or a {@link PropertyModel}.
      */
-    public final Either<ScalarParameterModel, ScalarPropertyModel> getSpecialization() {
+    public final Either<ParameterModel, PropertyModel> getSpecialization() {
         return this.isParameter()
-                ? Either.left((ScalarParameterModel) this)
-                : Either.right((ScalarPropertyModel) this);
+                ? Either.left((ParameterModel) this)
+                : Either.right((PropertyModel) this);
     }
 
     public <T> IModel<T> unwrapped(final Class<T> type) {

@@ -35,11 +35,11 @@ import org.apache.causeway.viewer.commons.model.decorators.ConfirmDecorator.Conf
 import org.apache.causeway.viewer.commons.model.layout.UiPlacementDirection;
 import org.apache.causeway.viewer.commons.model.pop.UiParameter;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
-import org.apache.causeway.viewer.wicket.model.models.ScalarParameterModel;
-import org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel;
+import org.apache.causeway.viewer.wicket.model.models.ParameterModel;
+import org.apache.causeway.viewer.wicket.model.models.PropertyModel;
 import org.apache.causeway.viewer.wicket.model.models.interaction.act.UiParameterWkt;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.Repaint;
+import org.apache.causeway.viewer.wicket.ui.components.pops.PopPanelAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.pops.PopPanelAbstract.Repaint;
 import org.apache.causeway.viewer.wicket.ui.panels.PromptFormAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktDecorators;
@@ -87,20 +87,20 @@ extends PromptFormAbstract<ActionModel> {
 
     private void newParamPanel(
             final WebMarkupContainer container,
-            final UiParameterWkt paramModel,
-            final Consumer<ScalarPanelAbstract> onNewScalarPanel) {
+            final UiParameterWkt uiParam,
+            final Consumer<PopPanelAbstract> onNewPopPanel) {
 
-        val scalarParamModel = ScalarParameterModel.wrap(paramModel);
+        val paramModel = ParameterModel.wrap(uiParam);
 
-        // returned ScalarPanelAbstract should already have added any associated LinkAndLabel(s)
+        // returned PopPanelAbstract should already have added any associated LinkAndLabel(s)
         val component = getComponentFactoryRegistry()
                 .addOrReplaceComponent(container, ActionParametersFormPanel.ID_SCALAR_NAME_AND_VALUE,
-                        UiComponentType.SCALAR_NAME_AND_VALUE, scalarParamModel);
+                        UiComponentType.POP_NAME_AND_VALUE, paramModel);
 
-        _Casts.castTo(ScalarPanelAbstract.class, component)
-        .ifPresent(scalarPanel->{
-            scalarPanel.addChangeListener(this); // handling onUpdate and onError
-            onNewScalarPanel.accept(scalarPanel);
+        _Casts.castTo(PopPanelAbstract.class, component)
+        .ifPresent(popPanel->{
+            popPanel.addChangeListener(this); // handling onUpdate and onError
+            onNewPopPanel.accept(popPanel);
         });
 
     }
@@ -127,10 +127,10 @@ extends PromptFormAbstract<ActionModel> {
     }
 
     @Override
-    public void onUpdate(final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanelUpdated) {
+    public void onUpdate(final AjaxRequestTarget target, final PopPanelAbstract popPanelUpdated) {
 
         val actionModel = actionModel();
-        val updatedParamModel = (UiParameter)scalarPanelUpdated.getModel();
+        val updatedParamModel = (UiParameter)popPanelUpdated.getModel();
         val paramNegotiationModel = updatedParamModel.getParameterNegotiationModel();
         val pendingParamModels = actionModel.streamPendingParamUiModels().collect(Can.toCan());
 
@@ -173,7 +173,7 @@ extends PromptFormAbstract<ActionModel> {
     }
 
     @Override
-    protected Either<ActionModel, ScalarPropertyModel> getMemberModel() {
+    protected Either<ActionModel, PropertyModel> getMemberModel() {
         return Either.left(actionModel());
     }
 
