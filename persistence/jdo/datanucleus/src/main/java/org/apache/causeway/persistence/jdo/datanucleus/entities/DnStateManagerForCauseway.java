@@ -126,13 +126,13 @@ extends ReferentialStateManagerImpl {
         /* If a previously attached entity becomes hollow (or detached),
          * we memoize the OID in the Persistable.dnStateManager field.
          * Using a pseudo StateManager, that only acts as a holder of an OID. */
-        val entityPojo = myPC;
-        final Optional<DnStateManagerForHollow> smHollow = snapshotOid()
-                .map(DnStateManagerForHollow::new);
+        val entityPojo = myPC; // keep local reference
+        val snapshotOid = snapshotOid();
 
         super.disconnect();
-        smHollow
-            .ifPresent(sm->replaceStateManager(entityPojo, sm));
+
+        snapshotOid
+            .ifPresent(oid->DnOidStoreAndRecoverHelper.forEntity(entityPojo).storeOid(oid));
     }
 
     // -- HELPER

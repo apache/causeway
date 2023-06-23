@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.persistence.jdo.datanucleus.entities;
 
-import java.util.Optional;
-
 import org.datanucleus.ExecutionContext;
 import org.datanucleus.FetchPlan;
 import org.datanucleus.FetchPlanForClass;
@@ -36,10 +34,8 @@ import org.datanucleus.store.FieldValues;
 import org.datanucleus.store.StoreManager;
 import org.datanucleus.store.fieldmanager.FieldManager;
 import org.datanucleus.transaction.Transaction;
-import org.springframework.lang.Nullable;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * Used to memoize stringified OIDs of entities,
@@ -47,20 +43,7 @@ import lombok.val;
  * <p>
  * Has no purpose otherwise.
  */
-public class DnStateManagerForHollow implements DNStateManager<Persistable> {
-
-    // -- UTILITTY
-
-    public static Optional<String> lookupIdentifierFor(final @Nullable Object pojo) {
-        if(pojo instanceof Persistable) {
-            var sm = ((Persistable) pojo).dnGetStateManager();
-            if(sm instanceof DnStateManagerForHollow) {
-                val oidStringified = ((DnStateManagerForHollow)sm).oidStringified;
-                return Optional.of(oidStringified);
-            }
-        }
-        return Optional.empty();
-    }
+class DnStateManagerForHollow implements DNStateManager<Persistable> {
 
     // -- CONSTRUCTION
 
