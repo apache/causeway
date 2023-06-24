@@ -223,7 +223,7 @@ extends
          * @apiNote Yet only tested with {@literal XXX}, as there needs to be a format correspondence with
          * <i>momentJs</i> for the <i>tempus-dominus</i> date/time-picker to work
          * (as used by the <i>Wicket Viewer</i>).
-         * {@link org.apache.causeway.viewer.wicket.ui.components.pops.datepicker._TimeFormatUtil}
+         * {@link org.apache.causeway.viewer.wicket.ui.components.scalars.datepicker._TimeFormatUtil}
          * does the format conversion.
          */
         @NonNull //@NotEmpty
