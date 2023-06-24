@@ -121,7 +121,7 @@ implements _Refetchable {
 
         if(refetchedIfSuccess.isEmpty()) {
             // if cannot refetch from this special JPA state, try again later
-            if(entityState.isJpaSpecificDetachedWithOid()) {
+            if(entityState.isDetachedWithOid()) {
                 return pojo;
             }
             // eg. throws on deleted entity

@@ -252,13 +252,13 @@ public class JpaEntityFacet
         try {
             val primaryKey = persistenceUnitUtil.getIdentifier(pojo);
             if (primaryKey == null) {
-                return EntityState.PERSISTABLE_DETACHED;
+                return EntityState.PERSISTABLE_DETACHED_NO_OID;
             } else {
                 // detect shallow primary key
                 //TODO this is a hack - see whether we can actually ask the EntityManager to give us an accurate answer
                 return primaryKeyType.isValid(primaryKey)
-                    ? EntityState.PERSISTABLE_DETACHED_WITH_OID
-                    : EntityState.PERSISTABLE_DETACHED;
+                    ? EntityState.PERSISTABLE_DETACHED
+                    : EntityState.PERSISTABLE_DETACHED_NO_OID;
             }
         } catch (PersistenceException ex) {
             /* horrible hack, but encountered NPEs if using a composite key (eg CommandLogEntry)
@@ -268,12 +268,12 @@ public class JpaEntityFacet
                 DescriptorException descriptorException = (DescriptorException) cause;
                 Throwable internalException = descriptorException.getInternalException();
                 if (internalException instanceof NullPointerException) {
-                    return EntityState.PERSISTABLE_DETACHED;
+                    return EntityState.PERSISTABLE_DETACHED_NO_OID;
                 }
             }
             if (cause instanceof NullPointerException) {
                 // horrible hack, encountered if using composite key (eg ExecutionLogEntry) with dynamic weaving
-                return EntityState.PERSISTABLE_DETACHED;
+                return EntityState.PERSISTABLE_DETACHED_NO_OID;
             }
             throw ex;
         }

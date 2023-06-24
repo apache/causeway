@@ -79,7 +79,7 @@ public class DnEntityStateProvider implements JdoFacetContext {
                     ? EntityState.PERSISTABLE_ATTACHED
                     : EntityState.PERSISTABLE_ATTACHED_NO_OID;
         }
-        return EntityState.PERSISTABLE_DETACHED;
+        return EntityState.PERSISTABLE_HOLLOW;
     }
 
     // -- HELPER

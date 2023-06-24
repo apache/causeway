@@ -147,11 +147,12 @@ implements EntityFacet {
 
         val entityState = getEntityState(pojo);
 
+        //TODO[CAUSEWAY-3500] could be refactored such that the HOLLOW state has on OID and provides it via the HollowStateManager
         if (!entityState.hasOid()) {
             /* for previously attached objects that have become hollow,
              * the OID can be looked up in our pseudo StateManager,
              * that only acts as a holder of OID. */
-            return entityState.isDetached()
+            return entityState.isHollow()
                     ? DnOidStoreAndRecoverHelper.forEntity((Persistable)pojo).recoverOid()
                     : Optional.empty();
         }

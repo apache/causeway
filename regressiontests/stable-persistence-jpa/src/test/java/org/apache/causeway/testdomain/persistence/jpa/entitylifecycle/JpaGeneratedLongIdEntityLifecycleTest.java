@@ -77,7 +77,7 @@ class JpaGeneratedLongIdEntityLifecycleTest {
 
         assertTrue(entity.getSpecification().isEntity());
         assertEquals(
-                EntityState.PERSISTABLE_DETACHED,
+                EntityState.PERSISTABLE_DETACHED_NO_OID,
                 MmEntityUtils.getEntityState(entity));
 
         setEntityRef(entity);
@@ -103,7 +103,7 @@ class JpaGeneratedLongIdEntityLifecycleTest {
 
         // expected post-condition (after persist, and having entered a new transaction)
         assertEquals(
-                EntityState.PERSISTABLE_DETACHED_WITH_OID,
+                EntityState.PERSISTABLE_DETACHED,
                 MmEntityUtils.getEntityState(getEntityRef()));
 
         val id = ((JpaEntityGeneratedLongId)getEntityRef().getPojo()).getId();

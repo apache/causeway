@@ -191,16 +191,19 @@ public final class MmEntityUtils {
         return MmEntityUtils.getEntityState(adapter).hasOid();
     }
 
+    //TODO[CAUSEWAY-3500] potential misnomer: if detached per def has an OID
     public boolean isDetachedCannotReattach(final @Nullable ManagedObject adapter) {
         return MmEntityUtils.getEntityState(adapter).isDetachedCannotReattach();
     }
 
+    //FIXME[CAUSEWAY-3500]
     /** TODO very strange logic */
     public boolean isDeleted(final @Nullable ManagedObject entity) {
         val state = MmEntityUtils.getEntityState(entity);
-        return state.isDetached()
+        return state.isHollow()
+                || state.isDetachedNoOid()
                 || state.isRemoved()
-                || state.isJpaSpecificDetachedWithOid();
+                || state.isDetachedWithOid();
     }
 
 }

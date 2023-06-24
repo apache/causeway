@@ -39,76 +39,105 @@ public enum EntityState {
      */
     PERSISTABLE_ATTACHED,
     /**
-     * Object with this state is an entity but that is detached from a
-     * persistence session, in other words changes to the entity will <i>not</i>
-     * be flushed back to the database.
-     *
-     * <h1>JDO specifics:</h1>
+     * Is attached, has no OID yet. On pre-store.
+     */
+    PERSISTABLE_ATTACHED_NO_OID,
+    /**
+     * <h1>JDO specific</h1>
+     * Object with this state is an entity that is detached from a
+     * persistence session and cannot be re-attached,
+     * in other words changes to the entity will <i>not</i>
+     * be tracked nor flushed back to the database.
      * <p>
-     * JDO distinguishes between DETACHED and HOLLOW, where we are using HOLLOW here,
+     * JDO distinguishes between DETACHED and HOLLOW,
      * by virtue of {@code datanucleus.detachAllOnCommit=false}.
      * <p>
-     * (Unfortunately, we have not found a way to recover <i>OIDs</i> from <i>hollow</i> entities,
-     * as used for serialization post commit. So a workaround is in place with DnStateManagerForHollow.)
+     * To recover <i>OIDs</i> from <i>hollow</i> entities, we introduced the DnStateManagerForHollow.
      *
      * @see "https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#lifecycle"
      */
+    PERSISTABLE_HOLLOW,
+    /**
+     * Is detached (has an OID). Supports re-attachment.
+     * <p>
+     * That is,
+     * when after a commit the entity had become DETACHED, it can be used elsewhere in the application.
+     * You then attach any changes back to persistence and it becomes ATTACHED again.
+     * <p>
+     * Supported by JDO and JPA. However, at the time of writing, we don't make use of this technology,
+     * but instead re-fetch entities based on their OID.
+     */
     PERSISTABLE_DETACHED,
+
+    PERSISTABLE_DETACHED_NO_OID,
     /**
      * Object with this state is an entity that has been removed from the
      * database. Objects in this state may no longer be interacted with.
      */
     PERSISTABLE_REMOVED,
-    /**
-     * Is attached, has no OID yet. On pre-store.
-     */
-    PERSISTABLE_ATTACHED_NO_OID,
-    /**
-     * JPA specific. Is detached, but has an OID.
-     */
-    PERSISTABLE_DETACHED_WITH_OID,
-
     ;
 
     /**
-     * Object is an entity so is <i>potentially</i> persistable ot the database.
+     * Object is an entity so is <i>potentially</i> persistable to the database.
      */
     public boolean isPersistable() { return this != NOT_PERSISTABLE; }
     /**
      * Object with this state is an entity that is attached to a persistence
      * session, in other words changes to the entity will be flushed back to
      * the database.
+     * @see #PERSISTABLE_ATTACHED
      */
     public boolean isAttached() { return this == PERSISTABLE_ATTACHED; }
     /**
      * Object with this state is an entity but that is detached from a
-     * persistence session, in other words changes to the entity will <i>not</i>
+     * persistence session and cannot be re-attached,
+     * in other words changes to the entity will <i>not</i>
      * be flushed back to the database.
+     * @see #PERSISTABLE_HOLLOW
      */
-    public boolean isDetached() { return this == PERSISTABLE_DETACHED; }
+    //TODO[CAUSEWAY-3500] perhaps reflect the fact, that this is JDO only with a better name
+    public boolean isHollow() { return this == PERSISTABLE_HOLLOW; }
+
+    /**
+     * Is detached and has an OID.
+     */
+    public boolean isDetachedWithOid() { return this == PERSISTABLE_DETACHED; }
+
+    /**
+     * Is detached but has <b>no</b> OID.
+     */
+    //TODO[CAUSEWAY-3500] potential misnomer: detached per def. has an OID
+    public boolean isDetachedNoOid() { return this == PERSISTABLE_DETACHED_NO_OID; }
+
     /**
      * Object with this state is an entity that has been removed from the
      * database.  Objects in this state may no longer be interacted with.
      * <p>
      * Only supported by JDO. Will always return false with JPA.
+     * @see #PERSISTABLE_REMOVED
      */
+    //TODO[CAUSEWAY-3500] perhaps reflect the fact, that this is JDO only with a better name
     public boolean isRemoved() { return this == PERSISTABLE_REMOVED; }
 
     // -- SPECIAL STATES
 
     /**
-     * @apiNote Is attached, has no OID yet. (On pre-store.)
+     * Is attached, has no OID yet. (On pre-store.)
      */
     public boolean isAttachedNoOid() {
         return this == PERSISTABLE_ATTACHED_NO_OID;
     }
 
+    //TODO[CAUSEWAY-3500] potential misnomer: if detached per def has an OID
+    //FIXME[CAUSEWAY-3500] in fact hollow can now be re-attached
     public boolean isDetachedCannotReattach() {
-        return (isDetached()
+        return (isHollow()
+                || isDetachedNoOid()
                 || isRemoved())
-                && !isJpaSpecificDetachedWithOid();
+                && !isDetachedWithOid();
     }
 
+    //TODO[CAUSEWAY-3500] either remove or un-deprecate
     /**
      * @apiNote 'removed' is only supported by JDO.
      * @deprecated not supported by JPA
@@ -119,19 +148,11 @@ public enum EntityState {
                 || isRemoved();
     }
 
-    // -- JPA SPECIFIC STATES
-
-    /**
-     * @apiNote JPA specific. Is detached, but has an OID.
-     */
-    public boolean isJpaSpecificDetachedWithOid() {
-        return this == PERSISTABLE_DETACHED_WITH_OID;
-    }
-
     // -- BOOKMARKABLE
 
+    //TODO[CAUSEWAY-3500] in fact hollow potentially also has an OID now
     public boolean hasOid() {
-        return isAttached() || isJpaSpecificDetachedWithOid();
+        return isAttached() || isDetachedWithOid();
     }
 
 }
