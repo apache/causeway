@@ -46,7 +46,6 @@ As there is a `@Setter`, this property may also editable (though this does also 
 From this the framework infers the `Customer` domain entity, which in turn has a `lastName` string _property_ and an `orders` _collection_.
 
 
-[#actions]
 == Actions
 
 While xref:userguide:ROOT:properties-collections-actions.adoc#properties[properties] and xref:userguide:ROOT:properties-collections-actions.adoc#collections[collections] define the state held by a domain object (its "know what" responsibilities), actions define the object's behaviour (its "know how-to" responsibilities).

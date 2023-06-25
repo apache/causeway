@@ -51,23 +51,27 @@ commands:
       Valuetypes: org.apache.causeway.valuetypes.*
       "Asciidoc": "org.apache.causeway.valuetypes:causeway-valuetypes-asciidoc.*"
       "Markdown": "org.apache.causeway.valuetypes:causeway-valuetypes-markdown.*"
-      "SSE": "org.apache.causeway.valuetypes:causeway-valuetypes-sse.*"
+      "Vega": "org.apache.causeway.valuetypes:causeway-valuetypes-vega.*"
 
       Extensions: org.apache.causeway.extensions
       "Applib: Excel": "org.apache.causeway.extensions:causeway-extensions-excel.*"
       "Core: Command Log": "org.apache.causeway.extensions:causeway-extensions-commandlog.*"
-      "Core: Command Replay": "org.apache.causeway.extensions:causeway-extensions-commandreplay.*"
-      #"Core: Flyway": "org.apache.causeway.extensions:causeway-extensions-flyway.*"
-      "Core: Quartz": "org.apache.causeway.extensions:causeway-extensions-quartz.*"
-      #"Security: Audit Trail": "org.apache.causeway.security:causeway-extensions-audittrail.*"
+      "Core: DocGen": "org.apache.causeway.extensions:causeway-extensions-docgen.*"
+      "Core: Execution Log": "org.apache.causeway.extensions:causeway-extensions-executionlog.*"
+      "Core: Execution Outbox": "org.apache.causeway.extensions:causeway-extensions-executionoutbox.*"
+      "Core: Execution Republisher": "org.apache.causeway.extensions:causeway-extensions-executionrepublisher.*"
+      "Core: Flyway": "org.apache.causeway.extensions:causeway-extensions-flyway.*"
+      "Security: Audit Trail": "org.apache.causeway.security:causeway-extensions-audittrail.*"
       "Security: Secman": "org.apache.causeway.security:causeway-extensions-secman.*"
-      #"Security: Session Log": "org.apache.causeway.security:causeway-extensions-sessionlog.*"
+      "Security: Session Log": "org.apache.causeway.security:causeway-extensions-sessionlog.*"
       "Security: Shiro LDAP Realm": "org.apache.causeway.security:causeway-extensions-shiro-realm-ldap.*"
+      "Security: Spring Oauth2": "org.apache.causeway.security:causeway-extensions-spring-security-oauth2.*"
       "RO Viewer: CORS": "org.apache.causeway.security:causeway-extensions-cors.*"
       "Wicket Viewer: Excel Download": "org.apache.causeway.security:causeway-extensions-exceldownload.*"
       "Wicket Viewer: Full Calendar": "org.apache.causeway.security:causeway-extensions-fullcalendar.*"
+      "Wicket Viewer: PDF.js": "org.apache.causeway.security:causeway-extensions-fullcalendar.*"
       #"Wicket Viewer: Gmap3": "org.apache.causeway.security:causeway-extensions-gmap3.*"
-      "Wicket Viewer: Pdf.js": "org.apache.causeway.security:causeway-extensions-fullcalendar.*"
+      "Wicket Viewer: SSE": "org.apache.causeway.security:causeway-extensions-sse.*"
 
       "Tooling": org.apache.causeway.tooling.*
       "Regression Tests": org.apache.causeway.regressiontests.*
@@ -80,7 +84,7 @@ commands:
 
     namespacePartsSkipCount: 3
 
-    fixOrphanedAdocIncludeStatements: true
+    fixOrphanedAdocIncludeStatements: false
     skipTitleHeader: false
     formatter: JAVA_SOURCES_WITH_SECTIONS
 

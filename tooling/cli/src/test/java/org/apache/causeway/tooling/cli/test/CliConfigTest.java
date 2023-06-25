@@ -23,6 +23,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -62,7 +63,7 @@ class CliConfigTest {
         assertNotNull(config.getCommands().getOverview().getSections());
         assertTrue(config.getCommands().getOverview().getSections().size()>5);
 
-        assertTrue(config.getCommands().getIndex().isFixOrphanedAdocIncludeStatements());
+        assertFalse(config.getCommands().getIndex().isFixOrphanedAdocIncludeStatements());
         assertEquals(3, config.getCommands().getIndex().getNamespacePartsSkipCount());
     }
 
