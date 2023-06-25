@@ -266,7 +266,7 @@ public class EmailAddressValueSemantics
 
     @Override
     public ValueType getSchemaValueType() {
-        return ValueType.STRING;
+        return ValueType.STRING;                                            // <.>
     }
 
     @Override
@@ -353,6 +353,7 @@ public class EmailAddressValueSemantics
     }
 }
 ----
+<.> determines the UI widget that the framework uses to display/edit the value
 <.> the `compose()` and `decompose()` methods are used to serialize the object using the structures defined by the link:https://causeway.apache.org/refguide/2.0.0-RC1/schema/about.html[XSD schemas].
 +
 Using this, the framework can render the composite value as JSON (as used by the REST API), or to XML, as used by SPIs such as xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] (see xref:refguide:applib:index/services/command/Command.adoc[Command] and xref:refguide:schema:cmd.adoc[CommandDto]).
@@ -455,12 +456,14 @@ public class DateInterval {
 <.> It's common for value types to have a set of methods that act upon them (sometimes called an "algebra").
 <.> Internally we leverage Joda to do the heavy lifting.
 
+The value type can be used in entities and view models the same as any other value type.
+For example:
 
 [source,java]
 ----
 // ..
 @DomainObject(nature=Nature.ENTITY)
-public class CalendarEntry {
+public class CarRental {
 
     @Property(editing = Editing.ENABLED)
     @Getter @Setter
@@ -469,16 +472,19 @@ public class CalendarEntry {
 }
 ----
 
+As with scalar custom types, we need some glue to "teach" the framework how to render with the value type, though it works slightly differently; rather than parsing text input to set the value, instead we provide a special mixin that the framework uses to prompt for the constituent values.
+The name of this mixin is always called "default".
 
-The "default" mixin:
+For our `DateInterval` example:
+
 
 [source,java]
 .DateInterval_default.java
 ----
 @Action(semantics = SemanticsOf.SAFE)
-@ActionLayout(promptStyle = PromptStyle.INLINE_AS_IF_EDIT)  // <.>
+@ActionLayout(promptStyle = PromptStyle.INLINE_AS_IF_EDIT)          // <.>
 @RequiredArgsConstructor
-public class DateInterval_default {
+public class DateInterval_default {                                 // <.>
 
     private final DateInterval mixee;
 
@@ -488,15 +494,26 @@ public class DateInterval_default {
     ) {
         return DateInterval.of(startDate, endDate);
     }
-    @MemberSupport public LocalDate defaultRe() {
-        return mixee.getRe();
+    @MemberSupport public LocalDate defaultStartDate() {
+        return mixee.getStartDate();
     }
-    @MemberSupport public LocalDate defaultIm() {
-        return mixee.getIm();
+    @MemberSupport public LocalDate defaultEndDate() {
+        return mixee.getEndDate();
+    }
+    @MemberSupport public LocalDate validateAct(                    // <.>
+            final LocalDate startDate,
+            final LocalDate endDate) {
+        return startDate.isBefore(endDate)
+                    ? null
+                    : "Start date must be before the end date";
     }
 }
 ----
+<.> The "default" action _must_ use this prompt style
+<.> Must be named "default"
+<.> Enforces validation constraints
 
+In addition, we also need an implementation of the xref:refguide:applib:index/value/semantics/ValueSemanticsProvider.adoc[ValueSemanticsProvider] SPI:
 
 [source,java]
 .DateIntervalValueSemantics.java
@@ -504,10 +521,13 @@ public class DateInterval_default {
 @Named("demo.DateIntervalValueSemantics")
 @Component
 @Import({
-        DateInterval_default.class
+        DateInterval_default.class                                          // <.>
 })
+@RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class DateIntervalValueSemantics
         extends ValueSemanticsAbstract<DateInterval> {
+
+    final ClockService clockService;
 
     @Override
     public Class<DateInterval> getCorrespondingClass() {
@@ -515,12 +535,12 @@ public class DateIntervalValueSemantics
     }
 
     @Override
-    public ValueType getSchemaValueType() {
+    public ValueType getSchemaValueType() {                                 // <.>
         return ValueType.COMPOSITE;
     }
 
     @Override
-    public ValueDecomposition decompose(final DateInterval value) {
+    public ValueDecomposition decompose(final DateInterval value) {         // <.>
         return CommonDtoUtils.typedTupleBuilder(value)
                 .addFundamentalType(ValueType.LOCAL_DATE, "startDate", DateInterval::getStartDate)
                 .addFundamentalType(ValueType.LOCAL_DATE, "endDate", DateInterval::getEndDate)
@@ -528,7 +548,7 @@ public class DateIntervalValueSemantics
     }
 
     @Override
-    public DateInterval compose(final ValueDecomposition decomposition) {
+    public DateInterval compose(final ValueDecomposition decomposition) {   // <3>
         return decomposition.right()
                 .map(CommonDtoUtils::typedTupleAsMap)
                 .map(map-> DateInterval.of(
@@ -538,35 +558,76 @@ public class DateIntervalValueSemantics
     }
 
     @Override
-    public DefaultsProvider<DateInterval> getDefaultsProvider() {
-        return ()-> DateInterval.of(0, 0);
+    public DefaultsProvider<DateInterval> getDefaultsProvider() {           // <.>
+        val nowAsMilli = clockService.getClock().now().toEpochMilli();
+        val now = new org.joda.time.DateTime(nowAsMilli).toLocalDate();
+        return ()-> DateInterval.of(now, now.plusDays(7));
     }
 
     @Override
-    public Renderer<DateInterval> getRenderer() {
+    public Renderer<DateInterval> getRenderer() {                           // <.>
         return new Renderer<>() {
             @Override
             public String titlePresentation(Context context, DateInterval object) {
-                if (object == null) return "NaN";
-                return object.getRe() +
-                        (object.getIm() >= 0
-                                ? (" + " +  object.getIm())
-                                : (" - " + (-object.getIm())))
-                        + "i";
+                if (object == null) return "(none)";
+                return "[" + object.getStartDate() + ", " + object.getEndDate() + "]";
             }
         };
     }
 }
 ----
+<.> Declares the existence of the "default" mixin.
+<.> Indicates this is a composite, and therefore that the value should be manipulated in the UI by way of the "default" mixin's prompt
+<.> the `compose()` and `decompose()` methods are used to serialize the object using the structures defined by the link:https://causeway.apache.org/refguide/2.0.0-RC1/schema/about.html[XSD schemas].
++
+Using this, the framework can render the composite value as JSON (as used by the REST API), or to XML, as used by SPIs such as xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] (see xref:refguide:applib:index/services/command/Command.adoc[Command] and xref:refguide:schema:cmd.adoc[CommandDto]).
+<.> the `getDefaultsProvider()` provides an initial value (eg non-nullable properties)
+<.> the `getRenderer()` is used to render the value as a string.
+An HTML representation can also be provided, though this type doesn’t warrant one.
+
+Compared to scalar types, note that the `ValueSemanticsProvider` does not need to provide an implementation of `getParser()` - instead the "default" mixin does this work.
+Also, it is not possible to use a custom value type as part of the object's id, and so no implementation of `getIdStringifier()` is required either.
 
 
-ORM mapping concerns:
+If using within the database then you will also need to map the custom type to the database:
 
 * if mapping to xref:pjpa::about.adoc[JPA/EclipseLink], use `@Embedded` and `@Embeddable`; see for example link:https://www.baeldung.com/jpa-embedded-embeddable[this baeldung post] on the topic.
 * If mapping to xref:pjdo::about.adoc[JDO/DataNucleus], use `@Embedded` and `@PersistenceCapable(embeddedOnly="true")`; see https://www.datanucleus.org/products/accessplatform_6_0/jdo/mapping.html#embedded[Datanucleus documentation].
 
 
 
-== 3rd party library
+// == 3rd party library
+//
+// TODO: show JScience temperature, say.
 
-TODO: show JScience temperature, say.
+// import javax.measure.Quantity;
+// import javax.measure.quantity.Temperature;
+// import tech.units.indriya.quantity.Quantities;
+// import tech.units.indriya.unit.Units;
+//
+// public class TemperatureConversionExample {
+// public static void main(String[] args) {
+// // Create a Quantity representing a temperature of 25 degrees Celsius
+// Quantity<Temperature> celsius = Quantities.getQuantity(25, Units.CELSIUS);
+//
+//         // Convert Celsius to Fahrenheit
+//         Quantity<Temperature> fahrenheit = celsius.to(Units.FAHRENHEIT);
+//         System.out.println("Temperature in Fahrenheit: " + fahrenheit);
+//
+//         // Convert Celsius to Kelvin
+//         Quantity<Temperature> kelvin = celsius.to(Units.KELVIN);
+//         System.out.println("Temperature in Kelvin: " + kelvin);
+//
+//         // Create a Quantity representing a temperature of 68 degrees Fahrenheit
+//         Quantity<Temperature> fahrenheit2 = Quantities.getQuantity(68, Units.FAHRENHEIT);
+//
+//         // Convert Fahrenheit to Celsius
+//         Quantity<Temperature> celsius2 = fahrenheit2.to(Units.CELSIUS);
+//         System.out.println("Temperature in Celsius: " + celsius2);
+//
+//         // Convert Fahrenheit to Kelvin
+//         Quantity<Temperature> kelvin2 = fahrenheit2.to(Units.KELVIN);
+//         System.out.println("Temperature in Kelvin: " + kelvin2);
+//     }
+// }
+
