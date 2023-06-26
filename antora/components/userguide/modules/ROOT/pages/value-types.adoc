@@ -4,10 +4,630 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
-CAUTION: TODO - this is the place to discuss the built-in types, but also the framework's support for custom value types (both scalar and composite).
-This includes being able to use 3rd-party value types.
+
+== Introduction
+The state managed by entities and view models is expressed in terms of xref:properties-collections-actions.adoc[properties and collections], with properties whose value either refers to other domain objects (reference types) or alternatively holds a value directly, in other words *value types*.
+This latter is the topic of this page.
+
+
+Apache Causeway supports a wide variety of xref:value-types.adoc[value types], including JDK types (eg primitives, dates and `String`) Causeway-specific (eg Asciidoc, Vega) and 3rd party (eg Jodatime).
+Moreover it is possible to define your own custom types.
+You can even teach the framework about other 3rd party libraries you might wish to use, e.g. https://jscience.org[JScience].
+
+
+== Programming Model
+
+To use a value type is generally very straightforward:
+
+[source,java]
+----
+// ...
+@Entity
+@DomainObject(nature = ENTITY)
+public class Customer {
+
+    @Property(editing = Editing.ENABLED)        // <.>
+    @Getter @Setter                             // <.>
+    private String firstName;                   // <.>
+
+    @Property(editing = Editing.ENABLED)
+    @Getter @Setter
+    private String lastName;
+
+    @Property(editing = Editing.DISABLED)
+    @Column(nullable = false)                   // <.>
+    @Getter                                     // <.>
+    private LocalDate dateOfBirth;
+
+    @Property(editing = Editing.DISABLED)
+    @Getter
+    private Integer numberOfOrdersPlacedToDate;
+
+    // ...
+}
+----
+<.> Depending on configuration, values are usually annotated with xref:refguide:applib:index/annotation/Property.adoc[@Property], indicating whether or not they can be edited directly.
+<.> Lombok avoids boilerplate.
+A setter is required for editable property values.
+<.> Depending on context and type, value properties may require additional annotations.
++
+In this case we have the JPA `@Column` annotation.
+A JAXB view model would require `@XmlJavaTypeAdapter(JavaTimeJaxbAdapters.LocalDateToStringAdapter.class)`
+<.> Not setter is required since this property is not ediable.
+
+In the following sections we look at the other datatypes that you can use as the value types, and then we look at defining custom types.
+
+== JDK types
+
+The most common value types to use are those built-into JDK.
+None of the following require additional annotations when used in entities or view models:
+
+* primitives
++
+`int`, `long`, `short`, `byte`, `char`, `float`, `double`, `boolean`
+
+* wrappers
++
+`Integer`, `Long`, `Short`, `Byte`, `Character`, `Float`, `Double`, `Boolean`
+
+* `java.lang.String`
+
+* `java.math.BigInteger` and `java.math.BigDecimal`
++
+for arbitrary accuracy.
+These can be combined with `@Digits` to specify scale.
+
+* `java.util.UUID`
+
+These are also a couple of value types that have special properties when rendered:
+
+* `java.net.URL`
++
+Essentially a string, but will render as a hyperlink that the end-user can click
+
+* `java.awt.image.BufferedImage`
++
+In essence a byte array containing a `.png` or similar.
+Note though that properties if this type must be read-only.
++
+[source,java]
+----
+val bytes = _Bytes.of(_Resources.load(getClass(), "spring-boot-logo.png" ));
+return javax.imageio.ImageIO.read(new ByteArrayInputStream(bytes));
+----
+
+== Dates
+
+Dates are also supported of course, though there are lots of options:
+
+* in the `java.time` package; these are the most modern and generally is to be preferred:
+
+** local times (no time zone):
++
+`java.time.LocalDate,` `java.time.LocalTime`, `java.time.LocalDateTime`
+
+** for storing date/time, with respect to the UTC:
++
+`java.time.OffsetDateTime`, `java.time.OffsetTime`
+
+** primarily for _displaying_ time in a specified time zone:
++
+`java.time.ZonedDateTime`
+
+* in the `java.util` package:
++
+`java.util.Date`
++
+The original date class, but unfortunately it is not immutable, and so is not a very good implementation of a value type.
+
+* in the `java.sql` package:
++
+`java.sql.Date,` `java.sql.Timestamp`.
++
+Unfortunately also not immutable.
+And `java.sql.Date` compounds the crimes by actually being a subclass of `java.util.Date`.
+Nevertheless, these are sometimes used for optimistic locking.
+
+* in `org.joda.time` package; a very popular 3rd party library that is still widely.
+The JDK `java.time` library took substantial inspiration from Joda.
+
+** local date/times (no timezone)
++
+`org.joda.time.LocalDate,` `org.joda.time.LocalDateTime,` `org.joda.time.LocalTime`
+
+** exact
++
+`org.joda.time.DateTime` (similar to `java.time.ZonedDateTime`)
+
+Depending on context, additional entities may be required on the property's field:
+
+* When used in entities, some of these classes may require `@Column` to be specified (it never hurts to do so anyway).
+
+* When used in JAXB view models, they all _will_ require `@XmlJavaTypeAdapter` to be specified.
+This tells JAXB how to serialize the value in and out of XML.
+Apache Causeway provides adapters for all of these.
+
+In addition to supporting JDK and Joda, Apache Causeway defines a number of its own custom value types, described next.
+
+== Causeway-specific
+
+Apache Causeway defines a number of its own value types.
+
+In the `org.apache.causeway.applib.value` we have:
+
+* `Blob`
++
+binary large object, suitable for capturing images, Word documents, Excel spreadsheets, PDFs and so on.
++
+If this is used to store a PDF, then the xref:refguide:extensions:index/pdfjs/applib/annotations/PdfJsViewer.adoc[@PdfJsViewer] (from the xref:vw:pdfjs:about.adoc[PDF.js] extension) will cause the xref:vw::about.adoc[Wicket viewer] to render it as a PDF.
+
+* `Clob`
++
+Character large object, suitable for text, RFT, base 64 encoded data and similar.
+
+* `Markup`
++
+Intended to holds HTML markup.
+The xref:vw::about.adoc[Wicket viewer] will render this more or less verbatim.
++
+TIP: Take care to sanitize inputs!
+
+* `LocalResourcePath`
++
+Resolves to a resource path local to the webapp.
+The primary use case for this value type is not as a property, but instead as a return type for an action.
+In such cases it will cause the web browser to redirect to the resource.
++
+There are several such built-in resources that can be useful in a development/prototyping context:
+
+** `/restful/` - the REST API
+** `/swagger-ui/index.thtml` - the Swagger UI
+** `/db/` - the H2 database console
+
++
+You could of course also define additional resources for your own requirements.
+
+The above value types are part of the core framework.
+There are also several value types that are packaged as extensions:
+
+* `AsciiDoc`, provided by the xref:valuetypes:asciidoc:about.adoc[asciidoc] value type extension
++
+This renders link:https://docs.asciidoctor.org/[Asciidoctor] content as HTML.
+
+* `Markdown`, provided by the xref:valuetypes:markdown:about.adoc[markdown] value type extension
++
+This renders Markdown content (as defined by the link:https://spec.commonmark.org/0.28/[CommonMark] spec) as HTML.
+
+* `Vega`, provided by the xref:valuetypes:vega:about.adoc[vega] value type extension
++
+This renders graphics defined by the link:https://vega.github.io/vega-lite/[Vega-Lite] grammar.
 
 
 
+== Custom value types
 
+As well as the built-in support and extensions provided by Apache Causeway, it is also possible to implement your own custom  value types.
+
+Implementing value types can be a great way of encapsulating functionality.
+Rather than have your entities and view models be concerned about the format of an invoice number, instead define an `InvoiceNumber`.
+Similarly, instead of littering your entities and view models with the same logic to ensure that a startDate \<= endDate, instead define a `DateInterval` value type.
+
+=== Scalar value types
+
+By way of example, let's define an `EmailAddress` value type.
+
+The value type itself is pretty easy:
+
+[source,java]
+.EmailAddress.java
+----
+@org.apache.causeway.applib.annotation.Value        // <.>
+@lombok.Value                                       // <.>
+@lombok.AllArgsConstructor(staticName = "of")       // <.>
+public class EmailAddress {
+    String emailAddress;                            // <.>
+}
+----
+<.> Defines this as a value type to the framework
+<.> Uses lombok to define getters, a `hashCode()`, `equals()`, `toString()`.
+<.> Uses lombok to a factory method (makes the constructor private).
+<.> The single data attribute
+
+And it can be used in an entity or a view model just like a built-in value type:
+
+[source,java]
+----
+// ..
+@DomainObject(nature=Nature.ENTITY)
+public class Customer {
+
+    @Property(editing = Editing.ENABLED)
+    @Getter @Setter
+    private EmailAddress emailAddress;
+    // ...
+}
+----
+
+However, we need some glue to "teach" the framework how to render with the value type.
+This is done using an implementation of the xref:refguide:applib:index/value/semantics/ValueSemanticsProvider.adoc[ValueSemanticsProvider] SPI:
+
+[source,java]
+.EmailAddressValueSemantics.java
+----
+@Named("demo.EmailAddressValueSemantics")
+@Component
+public class EmailAddressValueSemantics
+        extends ValueSemanticsAbstract<EmailAddress> {
+
+    @Override
+    public Class<EmailAddress> getCorrespondingClass() {
+        return EmailAddress.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {
+        return ValueType.STRING;                                            // <.>
+    }
+
+    @Override
+    public ValueDecomposition decompose(final EmailAddress value) {         // <.>
+        return decomposeAsNullable(value, EmailAddress::getEmailAddress, ()->null);
+    }
+
+    @Override
+    public EmailAddress compose(final ValueDecomposition decomposition) {   // <.>
+        return composeFromNullable(
+                decomposition, ValueWithTypeDto::getString, EmailAddress::of, ()->null);
+    }
+
+    @Override
+    public DefaultsProvider<EmailAddress> getDefaultsProvider() {           // <.>
+        return new DefaultsProvider<EmailAddress>() {
+            @Override
+            public EmailAddress getDefaultValue() {
+                return EmailAddress.of("");
+            }
+        };
+    }
+
+    @Override
+    public Renderer<EmailAddress> getRenderer() {                           // <.>
+        return new Renderer<>() {
+            @Override
+            public String titlePresentation(Context context, EmailAddress emailAddress) {
+                return emailAddress == null ? null : emailAddress.getEmailAddress();
+            }
+        };
+    }
+
+    @Override
+    public Parser<EmailAddress> getParser() {                               // <.>
+        return new Parser<>() {
+            // https://stackoverflow.com/a/47181151
+            final Pattern REGEX = Pattern.compile("^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-zA-Z]{2,})$");
+
+            @Override
+            public String parseableTextRepresentation(Context context, EmailAddress value) {
+                return renderTitle(value, EmailAddress::getEmailAddress);
+            }
+
+            @Override
+            public EmailAddress parseTextRepresentation(Context context, String text) {
+                if(!REGEX.matcher(text).matches()) {
+                    throw new RuntimeException("Invalid email format");
+                }
+                if (_Strings.isEmpty(text)) return null;
+                return EmailAddress.of(text);
+            }
+
+            @Override
+            public int typicalLength() {
+                return 20;
+            }
+
+            @Override
+            public int maxLength() {
+                return 50;
+            }
+        };
+    }
+
+    @Override
+    public IdStringifier<EmailAddress> getIdStringifier() {                 // <.>
+        return new IdStringifier.EntityAgnostic<>() {
+            @Override
+            public Class<EmailAddress> getCorrespondingClass() {
+                return EmailAddressValueSemantics.this.getCorrespondingClass();
+            }
+
+            @Override
+            public String enstring(@NonNull EmailAddress value) {
+                return _Strings.base64UrlEncode(value.getEmailAddress());
+            }
+
+            @Override
+            public EmailAddress destring(@NonNull String stringified) {
+                return EmailAddress.of(_Strings.base64UrlDecode(stringified));
+            }
+        };
+    }
+}
+----
+<.> determines the UI widget that the framework uses to display/edit the value
+<.> the `compose()` and `decompose()` methods are used to serialize the object using the structures defined by the link:https://causeway.apache.org/refguide/2.0.0-RC1/schema/about.html[XSD schemas].
++
+Using this, the framework can render the composite value as JSON (as used by the REST API), or to XML, as used by SPIs such as xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] (see xref:refguide:applib:index/services/command/Command.adoc[Command] and xref:refguide:schema:cmd.adoc[CommandDto]).
+<.> the `getDefaultsProvider()` provides an initial value (eg non-nullable properties)
+<.> the `getRenderer()` is used to render the value as a string.
+An HTML representation can also be provided, though this type doesn’t warrant one.
+<.> the `getParser()` is used to convert the string (entered in the UI) into the value type.
+If the value entered is invalid, then an exception can be thrown.
+<.> the `getIdStringifier()` allows the value type to be used as (part of) an identifier of the object.
+The string returned must be URL safe.
+
+As we can see, this is not the simplest of APIs, but the simplification it brings to your entities and view models that can now _consume_ your new value type means that it may be worth the effort.
+
+We're not quite finished with the glue code, unfortunately.
+Chances are that you will want to persist the new value to the database, which means that the ORM also requires its own SPI to be implemented (but they are almost identical).
+
+* if using xref:pjpa::about.adoc[JPA], then implement the `javax.persistence.AttributeConverter` SPI:
++
+[source,java]
+.EmailAddressConverter.java
+----
+@Converter(autoApply = true)
+public class EmailAddressConverter implements AttributeConverter<EmailAddress, String>{
+
+    @Override
+    public String convertToDatabaseColumn(final EmailAddress memberValue) {
+        return memberValue != null
+                ? memberValue.getEmailAddress()
+                : null;
+    }
+
+    @Override
+    public EmailAddress convertToEntityAttribute(final String datastoreValue) {
+        return datastoreValue != null
+                ? EmailAddress.of(datastoreValue)
+                : null;
+    }
+}
+----
+
+* if using xref:pjdo::about.adoc[JDO], then implement the `org.datanucleus.store.types.converters.TypeConverter` SPI:
++
+[source,java]
+----
+public class EmailAddressConverter implements TypeConverter<EmailAddress, String>{
+
+    private static final long serialVersionUID = 1L;
+
+    @Override
+    public String toDatastoreType(final EmailAddress memberValue) {
+        return memberValue != null
+                ? memberValue.getEmailAddress()
+                : null;
+    }
+
+    @Override
+    public EmailAddress toMemberType(final String datastoreValue) {
+        return datastoreValue != null
+                ? EmailAddress.of(datastoreValue)
+                : null;
+    }
+}
+----
+
+=== Composite value types
+
+A composite value type consists of several simple values.
+By way of example, let's consider a `DateInterval`, with a `startDate` and an `endDate`, and where we want to enforce that `startDate` \<= `endDate` at all times.
+
+[source,java]
+.DateInterval.java
+----
+@org.apache.causeway.applib.annotation.Value
+@lombok.Value
+@lombok.AllArgsConstructor(staticName = "of")
+public class DateInterval {
+
+    LocalDate startDate ;                                       // <.>
+    LocalDate endDate;                                          // <1>
+
+    public boolean overlaps(DateInterval other) {               // <.>
+        return toJoda().overlap(other.toJoda());
+    }
+    public DateInterval gap(DateInterval other) {               // <2>
+        return fromJoda(toJoda().gap(other.toJoda()));
+    }
+    private Interval toJoda() {                                 // <.>
+        return new Interval(startDate, endDate);
+    }
+    private static DateInterval fromJoda(Interval interval) {   // <3>
+        return interval == null
+                ? null
+                : DateInterval.of(
+                    interval.getStart().toLocalDate(),
+                    interval.getEnd().toLocalDate());
+    }
+}
+----
+<.> The internal fields
+<.> It's common for value types to have a set of methods that act upon them (sometimes called an "algebra").
+<.> Internally we leverage Joda to do the heavy lifting.
+
+The value type can be used in entities and view models the same as any other value type.
+For example:
+
+[source,java]
+----
+// ..
+@DomainObject(nature=Nature.ENTITY)
+public class CarRental {
+
+    @Property(editing = Editing.ENABLED)
+    @Getter @Setter
+    private DateInterval dateInterval;
+    // ...
+}
+----
+
+As with scalar custom types, we need some glue to "teach" the framework how to render with the value type, though it works slightly differently; rather than parsing text input to set the value, instead we provide a special mixin that the framework uses to prompt for the constituent values.
+The name of this mixin is always called "default".
+
+For our `DateInterval` example:
+
+
+[source,java]
+.DateInterval_default.java
+----
+@Action(semantics = SemanticsOf.SAFE)
+@ActionLayout(promptStyle = PromptStyle.INLINE_AS_IF_EDIT)          // <.>
+@RequiredArgsConstructor
+public class DateInterval_default {                                 // <.>
+
+    private final DateInterval mixee;
+
+    @MemberSupport public DateInterval act(
+            final LocalDate startDate,
+            final LocalDate endDate
+    ) {
+        return DateInterval.of(startDate, endDate);
+    }
+    @MemberSupport public LocalDate defaultStartDate() {
+        return mixee.getStartDate();
+    }
+    @MemberSupport public LocalDate defaultEndDate() {
+        return mixee.getEndDate();
+    }
+    @MemberSupport public LocalDate validateAct(                    // <.>
+            final LocalDate startDate,
+            final LocalDate endDate) {
+        return startDate.isBefore(endDate)
+                    ? null
+                    : "Start date must be before the end date";
+    }
+}
+----
+<.> The "default" action _must_ use this prompt style
+<.> Must be named "default"
+<.> Enforces validation constraints
+
+In addition, we also need an implementation of the xref:refguide:applib:index/value/semantics/ValueSemanticsProvider.adoc[ValueSemanticsProvider] SPI:
+
+[source,java]
+.DateIntervalValueSemantics.java
+----
+@Named("demo.DateIntervalValueSemantics")
+@Component
+@Import({
+        DateInterval_default.class                                          // <.>
+})
+@RequiredArgsConstructor(onConstructor_ = { @Inject })
+public class DateIntervalValueSemantics
+        extends ValueSemanticsAbstract<DateInterval> {
+
+    final ClockService clockService;
+
+    @Override
+    public Class<DateInterval> getCorrespondingClass() {
+        return DateInterval.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {                                 // <.>
+        return ValueType.COMPOSITE;
+    }
+
+    @Override
+    public ValueDecomposition decompose(final DateInterval value) {         // <.>
+        return CommonDtoUtils.typedTupleBuilder(value)
+                .addFundamentalType(ValueType.LOCAL_DATE, "startDate", DateInterval::getStartDate)
+                .addFundamentalType(ValueType.LOCAL_DATE, "endDate", DateInterval::getEndDate)
+                .buildAsDecomposition();
+    }
+
+    @Override
+    public DateInterval compose(final ValueDecomposition decomposition) {   // <3>
+        return decomposition.right()
+                .map(CommonDtoUtils::typedTupleAsMap)
+                .map(map-> DateInterval.of(
+                        (LocalDate)map.get("startDate"),
+                        (LocalDate)map.get("endDate")))
+                .orElse(null);
+    }
+
+    @Override
+    public DefaultsProvider<DateInterval> getDefaultsProvider() {           // <.>
+        val nowAsMilli = clockService.getClock().now().toEpochMilli();
+        val now = new org.joda.time.DateTime(nowAsMilli).toLocalDate();
+        return ()-> DateInterval.of(now, now.plusDays(7));
+    }
+
+    @Override
+    public Renderer<DateInterval> getRenderer() {                           // <.>
+        return new Renderer<>() {
+            @Override
+            public String titlePresentation(Context context, DateInterval object) {
+                if (object == null) return "(none)";
+                return "[" + object.getStartDate() + ", " + object.getEndDate() + "]";
+            }
+        };
+    }
+}
+----
+<.> Declares the existence of the "default" mixin.
+<.> Indicates this is a composite, and therefore that the value should be manipulated in the UI by way of the "default" mixin's prompt
+<.> the `compose()` and `decompose()` methods are used to serialize the object using the structures defined by the link:https://causeway.apache.org/refguide/2.0.0-RC1/schema/about.html[XSD schemas].
++
+Using this, the framework can render the composite value as JSON (as used by the REST API), or to XML, as used by SPIs such as xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] (see xref:refguide:applib:index/services/command/Command.adoc[Command] and xref:refguide:schema:cmd.adoc[CommandDto]).
+<.> the `getDefaultsProvider()` provides an initial value (eg non-nullable properties)
+<.> the `getRenderer()` is used to render the value as a string.
+An HTML representation can also be provided, though this type doesn’t warrant one.
+
+Compared to scalar types, note that the `ValueSemanticsProvider` does not need to provide an implementation of `getParser()` - instead the "default" mixin does this work.
+Also, it is not possible to use a custom value type as part of the object's id, and so no implementation of `getIdStringifier()` is required either.
+
+
+If using within the database then you will also need to map the custom type to the database:
+
+* if mapping to xref:pjpa::about.adoc[JPA/EclipseLink], use `@Embedded` and `@Embeddable`; see for example link:https://www.baeldung.com/jpa-embedded-embeddable[this baeldung post] on the topic.
+* If mapping to xref:pjdo::about.adoc[JDO/DataNucleus], use `@Embedded` and `@PersistenceCapable(embeddedOnly="true")`; see https://www.datanucleus.org/products/accessplatform_6_0/jdo/mapping.html#embedded[Datanucleus documentation].
+
+
+
+// == 3rd party library
+//
+// TODO: show JScience temperature, say.
+
+// import javax.measure.Quantity;
+// import javax.measure.quantity.Temperature;
+// import tech.units.indriya.quantity.Quantities;
+// import tech.units.indriya.unit.Units;
+//
+// public class TemperatureConversionExample {
+// public static void main(String[] args) {
+// // Create a Quantity representing a temperature of 25 degrees Celsius
+// Quantity<Temperature> celsius = Quantities.getQuantity(25, Units.CELSIUS);
+//
+//         // Convert Celsius to Fahrenheit
+//         Quantity<Temperature> fahrenheit = celsius.to(Units.FAHRENHEIT);
+//         System.out.println("Temperature in Fahrenheit: " + fahrenheit);
+//
+//         // Convert Celsius to Kelvin
+//         Quantity<Temperature> kelvin = celsius.to(Units.KELVIN);
+//         System.out.println("Temperature in Kelvin: " + kelvin);
+//
+//         // Create a Quantity representing a temperature of 68 degrees Fahrenheit
+//         Quantity<Temperature> fahrenheit2 = Quantities.getQuantity(68, Units.FAHRENHEIT);
+//
+//         // Convert Fahrenheit to Celsius
+//         Quantity<Temperature> celsius2 = fahrenheit2.to(Units.CELSIUS);
+//         System.out.println("Temperature in Celsius: " + celsius2);
+//
+//         // Convert Fahrenheit to Kelvin
+//         Quantity<Temperature> kelvin2 = fahrenheit2.to(Units.KELVIN);
+//         System.out.println("Temperature in Kelvin: " + kelvin2);
+//     }
+// }
 

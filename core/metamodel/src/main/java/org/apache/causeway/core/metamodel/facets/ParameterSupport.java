@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.facets;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
@@ -54,7 +53,7 @@ public final class ParameterSupport {
 
         @NonNull FacetFactory.ProcessMethodContext processMethodContext;
         @NonNull Can<IntFunction<String>> paramIndexToMethodNameProviders;
-        @NonNull EnumSet<SearchAlgorithm> searchAlgorithms;
+        @NonNull Can<SearchAlgorithm> searchAlgorithms;
         @NonNull ReturnTypePattern returnTypePattern;
 
         @Builder.Default
