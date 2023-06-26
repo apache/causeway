@@ -102,8 +102,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <cucumber.version>7.12.1</cucumber.version>
 
-        <cxf-rt-rs-client.version>4.0.2</cxf-rt-rs-client.version>
-
         <datanucleus-api-jdo.version>6.0.1</datanucleus-api-jdo.version>
         <datanucleus-api-jpa.version>6.0.1</datanucleus-api-jpa.version>
         <datanucleus-core.version>6.0.4</datanucleus-core.version>
@@ -1451,9 +1449,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <version>${maven.plugin.tools.version}</version>
             </dependency>
 
-
-            <!-- dependency convergence clash with org.apache.cxf:cxf-core:3.4.0 (used
-				by causeway-mappings-jaxrsclient-impl) TODO ... jaxrsclient was removed -->
 			<dependency>
 				<groupId>com.fasterxml.woodstox</groupId>
 				<artifactId>woodstox-core</artifactId>
@@ -1678,64 +1673,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				</exclusions>
 			</dependency>
 
-			<dependency>
-				<groupId>org.apache.camel</groupId>
-				<artifactId>camel-core</artifactId>
-				<version>${camel.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.camel</groupId>
-				<artifactId>camel-spring</artifactId>
-				<version>${camel.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.camel</groupId>
-				<artifactId>camel-jms</artifactId>
-				<version>${camel.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.camel</groupId>
-				<artifactId>camel-stream</artifactId>
-				<version>${camel.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.camel</groupId>
-				<artifactId>camel-ognl</artifactId>
-				<version>${camel.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.camel</groupId>
-				<artifactId>camel-jaxb</artifactId>
-				<version>${camel.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.camel</groupId>
-				<artifactId>camel-jackson</artifactId>
-				<version>${camel.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.camel</groupId>
-				<artifactId>camel-spring-javaconfig</artifactId>
-				<version>${camel.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.camel</groupId>
-				<artifactId>camel-cxf</artifactId>
-				<version>${camel.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.camel</groupId>
-				<artifactId>camel-test</artifactId>
-				<version>${camel.version}</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.camel</groupId>
-				<artifactId>camel-test-spring</artifactId>
-				<version>${camel.version}</version>
-				<scope>test</scope>
-			</dependency>
-
 			<!-- TODO: when used, move exclusions down -->
 			<dependency>
 				<groupId>org.apache.commons</groupId>
@@ -1752,12 +1689,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 						<artifactId>activation</artifactId>
 					</exclusion>
 				</exclusions>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.cxf</groupId>
-				<artifactId>cxf-rt-rs-client</artifactId>
-				<version>${cxf-rt-rs-client.version}</version>
 			</dependency>
 
 			<dependency>
@@ -2123,12 +2054,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
-        <repository>
-			<!-- temporary till release of cxf 4.0.0, shiro 2.0.0 and wicket 10.0.0 -->
-            <id>apache.snapshots</id>
-            <url>https://repository.apache.org/content/groups/snapshots/</url>
-            <snapshots><enabled>true</enabled></snapshots>
-        </repository>
 		<repository>
 			<!-- required for RestEasy -->
 			<id>JBoss Public Release</id>
