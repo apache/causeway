@@ -44,7 +44,7 @@ extends MemberSupportFacetFactoryAbstract {
     }
 
     @Override
-    protected void search(
+    protected final void search(
             final ProcessMethodContext processMethodContext,
             final MethodFinder methodFinder) {
 

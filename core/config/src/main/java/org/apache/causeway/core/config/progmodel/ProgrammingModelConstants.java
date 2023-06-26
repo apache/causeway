@@ -317,8 +317,8 @@ public final class ProgrammingModelConstants {
 
     @RequiredArgsConstructor
     public static enum ReturnTypePattern {
-        SCALAR(Can::ofSingleton),
-        NON_SCALAR(ReturnTypeCategory::nonScalar),
+        SINGULAR(Can::ofSingleton),
+        PLURAL(ReturnTypeCategory::nonScalar),
         TEXT(__->ReturnTypeCategory.TRANSLATABLE.getReturnTypes()),
         BOOLEAN(__->ReturnTypeCategory.BOOLEAN.getReturnTypes());
         final Function<Class<?>, Can<Class<?>>> matchingTypesForElementType;
@@ -359,9 +359,9 @@ public final class ProgrammingModelConstants {
 
     @Getter
     public static enum MemberSupportPrefix {
-        DEFAULT(ReturnTypePattern.SCALAR, "default"),
-        CHOICES(ReturnTypePattern.NON_SCALAR, "choices"),
-        AUTO_COMPLETE(ReturnTypePattern.NON_SCALAR, "autoComplete"),
+        DEFAULT(ReturnTypePattern.SINGULAR, "default"),
+        CHOICES(ReturnTypePattern.PLURAL, "choices"),
+        AUTO_COMPLETE(ReturnTypePattern.PLURAL, "autoComplete"),
         HIDE(ReturnTypePattern.BOOLEAN, "hide"),
         DISABLE(ReturnTypePattern.TEXT, "disable"),
         VALIDATE(ReturnTypePattern.TEXT, "validate"),

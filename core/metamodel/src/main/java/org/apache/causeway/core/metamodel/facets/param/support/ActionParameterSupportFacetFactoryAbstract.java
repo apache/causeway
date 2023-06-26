@@ -18,9 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.facets.param.support;
 
-import java.util.EnumSet;
 import java.util.function.UnaryOperator;
 
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -73,7 +73,8 @@ extends MemberAndPropertySupportFacetFactoryAbstract {
                         ParameterSupport.ParamSupportingMethodSearchRequest.builder()
                         .processMethodContext(processMethodContext)
                         .paramIndexToMethodNameProviders(methodNameCandidates)
-                        .searchAlgorithms(EnumSet.of(SearchAlgorithm.PAT, SearchAlgorithm.SWEEP))
+                        // default, can be overwritten
+                        .searchAlgorithms(Can.of(SearchAlgorithm.PAT, SearchAlgorithm.SWEEP))
                         .returnTypePattern(memberSupportPrefix.getSupportMethodReturnType()))
                 .build();
 
