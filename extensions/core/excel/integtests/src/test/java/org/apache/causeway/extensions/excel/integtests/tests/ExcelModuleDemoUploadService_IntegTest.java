@@ -35,6 +35,9 @@ import org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.Exce
 import org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_tearDown;
 import org.apache.causeway.extensions.excel.integtests.ExcelModuleIntegTestAbstract;
 
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+
 public class ExcelModuleDemoUploadService_IntegTest extends ExcelModuleIntegTestAbstract {
 
     @Inject private ExcelUploadServiceForDemoToDoItem uploadService;
@@ -45,7 +48,7 @@ public class ExcelModuleDemoUploadService_IntegTest extends ExcelModuleIntegTest
         fixtureScripts.run(new ExcelDemoToDoItem_tearDown());
     }
 
-    //@Test @Disabled("TODO[2033] removal of PlatformTransactionManager") 
+    @Test @Disabled
     public void uploadSpreadsheet() throws Exception{
 
         // Given

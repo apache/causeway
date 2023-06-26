@@ -18,6 +18,12 @@
  */
 package org.apache.causeway.extensions.excel.integtests;
 
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.ExecutionParametersServiceAutoConfiguration;
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScriptsSpecification;
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScriptsSpecificationProvider;
+
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScriptsSpecificationProviderAutoConfiguration;
+
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -54,9 +60,12 @@ public abstract class ExcelModuleIntegTestAbstract extends CausewayIntegrationTe
             CausewayModulePersistenceJdoApplib.class,
             CausewayModuleTestingFixturesApplib.class,
 
-            CausewayModuleExtExcelFixtures.class
+            CausewayModuleExtExcelFixtures.class,
+            FixtureScriptsSpecificationProviderAutoConfiguration.class,
+            ExecutionParametersServiceAutoConfiguration.class,
     })
     public static class AppManifest {
+
     }
 
 }
