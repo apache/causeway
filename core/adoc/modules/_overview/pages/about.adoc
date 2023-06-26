@@ -2990,48 +2990,6 @@ skinparam rectangle<<Valuetypes.ApacheCausewayValJodaTimeparent>> {
   BorderColor #2e6295
   shadowing false
 }
-skinparam rectangle<<Valuetypes.ApacheCausewayValVegaMetaModel>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<Valuetypes.ApacheCausewayValVegaPersistenceJDO>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<Valuetypes.ApacheCausewayValVegaapplib>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<Valuetypes.ApacheCausewayValVegaparent>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<Valuetypes.ApacheCausewayValVegapersistenceJPA>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<Valuetypes.ApacheCausewayValVegauiwicket>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<Valuetypes.ApacheCausewayValVegaui>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
 skinparam rectangle<<Valuetypes.ApacheCausewayValuetypes>> {
   BackgroundColor #438dd5
   FontColor #fffffe
@@ -3045,29 +3003,15 @@ skinparam rectangle<<Valuetypes>> {
 }
 
 rectangle "Valuetypes\n<size:10>[Software System]</size>" <<Valuetypes>> {
-  rectangle "==Apache Causeway Val - Vega (persistence JPA)\n<size:10>[Container: packaging: jar]</size>" <<Valuetypes.ApacheCausewayValVegapersistenceJPA>> as Valuetypes.ApacheCausewayValVegapersistenceJPA
-  rectangle "==Apache Causeway Val - Vega (ui)\n<size:10>[Container: packaging: pom]</size>" <<Valuetypes.ApacheCausewayValVegaui>> as Valuetypes.ApacheCausewayValVegaui
-  rectangle "==Apache Causeway Val - Vega (ui wicket)\n<size:10>[Container: packaging: jar]</size>" <<Valuetypes.ApacheCausewayValVegauiwicket>> as Valuetypes.ApacheCausewayValVegauiwicket
   rectangle "==Apache Causeway Value types\n<size:10>[Container: packaging: pom]</size>" <<Valuetypes.ApacheCausewayValuetypes>> as Valuetypes.ApacheCausewayValuetypes
   rectangle "==Apache Causeway Val - Joda Time (parent)\n<size:10>[Container: packaging: pom]</size>" <<Valuetypes.ApacheCausewayValJodaTimeparent>> as Valuetypes.ApacheCausewayValJodaTimeparent
   rectangle "==Apache Causeway Val - Joda Time (applib)\n<size:10>[Container: packaging: jar]</size>" <<Valuetypes.ApacheCausewayValJodaTimeapplib>> as Valuetypes.ApacheCausewayValJodaTimeapplib
   rectangle "==Apache Causeway Val - Joda Time (integration)\n<size:10>[Container: packaging: jar]</size>" <<Valuetypes.ApacheCausewayValJodaTimeintegration>> as Valuetypes.ApacheCausewayValJodaTimeintegration
-  rectangle "==Apache Causeway Val - Vega (parent)\n<size:10>[Container: packaging: pom]</size>" <<Valuetypes.ApacheCausewayValVegaparent>> as Valuetypes.ApacheCausewayValVegaparent
-  rectangle "==Apache Causeway Val - Vega (applib)\n<size:10>[Container: packaging: jar]</size>" <<Valuetypes.ApacheCausewayValVegaapplib>> as Valuetypes.ApacheCausewayValVegaapplib
-  rectangle "==Apache Causeway Val - Vega (MetaModel)\n<size:10>[Container: packaging: jar]</size>" <<Valuetypes.ApacheCausewayValVegaMetaModel>> as Valuetypes.ApacheCausewayValVegaMetaModel
-  rectangle "==Apache Causeway Val - Vega (Persistence JDO)\n<size:10>[Container: packaging: jar]</size>" <<Valuetypes.ApacheCausewayValVegaPersistenceJDO>> as Valuetypes.ApacheCausewayValVegaPersistenceJDO
 }
 
 Valuetypes.ApacheCausewayValuetypes .[#707070,thickness=2].> Valuetypes.ApacheCausewayValJodaTimeparent : "<color:#707070>"
-Valuetypes.ApacheCausewayValuetypes .[#707070,thickness=2].> Valuetypes.ApacheCausewayValVegaparent : "<color:#707070>"
 Valuetypes.ApacheCausewayValJodaTimeparent .[#707070,thickness=2].> Valuetypes.ApacheCausewayValJodaTimeapplib : "<color:#707070>"
 Valuetypes.ApacheCausewayValJodaTimeparent .[#707070,thickness=2].> Valuetypes.ApacheCausewayValJodaTimeintegration : "<color:#707070>"
-Valuetypes.ApacheCausewayValVegaparent .[#707070,thickness=2].> Valuetypes.ApacheCausewayValVegaapplib : "<color:#707070>"
-Valuetypes.ApacheCausewayValVegaparent .[#707070,thickness=2].> Valuetypes.ApacheCausewayValVegaMetaModel : "<color:#707070>"
-Valuetypes.ApacheCausewayValVegaparent .[#707070,thickness=2].> Valuetypes.ApacheCausewayValVegaPersistenceJDO : "<color:#707070>"
-Valuetypes.ApacheCausewayValVegaparent .[#707070,thickness=2].> Valuetypes.ApacheCausewayValVegapersistenceJPA : "<color:#707070>"
-Valuetypes.ApacheCausewayValVegaparent .[#707070,thickness=2].> Valuetypes.ApacheCausewayValVegaui : "<color:#707070>"
-Valuetypes.ApacheCausewayValVegaui .[#707070,thickness=2].> Valuetypes.ApacheCausewayValVegauiwicket : "<color:#707070>"
 @enduml
 ----
 .Projects/Modules (Valuetypes)
@@ -3147,137 +3091,6 @@ org.apache.causeway.valuetypes:causeway-valuetypes-jodatime-applib:jar:<managed>
 .Document Index Entries
 ****
 xref:refguide:valuetypes:index/jodatime/integration/CausewayModuleValJodatimeIntegration.adoc[CausewayModuleValJodatimeIntegration]
-****
-
-|Apache Causeway Val - Vega (parent)
-[source,yaml]
-----
-Group: org.apache.causeway.valuetypes
-Artifact: causeway-valuetypes-vega
-Type: pom
-Directory: /valuetypes/vega
-----
-|Vega/Vega-lite value type.
-
-|Apache Causeway Val - Vega (applib)
-[source,yaml]
-----
-Group: org.apache.causeway.valuetypes
-Artifact: causeway-valuetypes-vega-applib
-Type: jar
-Directory: /valuetypes/vega/applib
-----
-|.Dependencies
-****
-org.apache.causeway.commons:causeway-commons:jar:<managed> +
-org.apache.causeway.core:causeway-applib:jar:<managed> +
-****
-
-.Document Index Entries
-****
-xref:refguide:valuetypes:index/vega/applib/CausewayModuleValVegaApplib.adoc[CausewayModuleValVegaApplib], xref:refguide:valuetypes:index/vega/applib/jaxb/VegaJaxbAdapter.adoc[VegaJaxbAdapter], xref:refguide:valuetypes:index/vega/applib/value/Vega.adoc[Vega]
-****
-
-|Apache Causeway Val - Vega (MetaModel)
-[source,yaml]
-----
-Group: org.apache.causeway.valuetypes
-Artifact: causeway-valuetypes-vega-metamodel
-Type: jar
-Directory: /valuetypes/vega/metamodel
-----
-|.Components
-****
-o.a.i.valuetypes.vega.metamodel.semantics.VegaValueSemantics +
-****
-
-.Dependencies
-****
-org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
-org.apache.causeway.valuetypes:causeway-valuetypes-vega-applib:jar:<managed> +
-****
-
-.Document Index Entries
-****
-xref:refguide:valuetypes:index/vega/metamodel/CausewayModuleValVegaMetaModel.adoc[CausewayModuleValVegaMetaModel]
-****
-
-|Apache Causeway Val - Vega (Persistence JDO)
-[source,yaml]
-----
-Group: org.apache.causeway.valuetypes
-Artifact: causeway-valuetypes-vega-persistence-jdo
-Type: jar
-Directory: /valuetypes/vega/persistence-jdo
-----
-|.Dependencies
-****
-org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
-org.apache.causeway.valuetypes:causeway-valuetypes-vega-applib:jar:<managed> +
-org.datanucleus:datanucleus-core:jar:<managed> +
-****
-
-.Document Index Entries
-****
-xref:refguide:valuetypes:index/vega/persistence/jdo/dn/CausewayModuleValVegaPersistenceJdoDn.adoc[CausewayModuleValVegaPersistenceJdoDn], xref:refguide:valuetypes:index/vega/persistence/jdo/dn/converters/CausewayVegaConverter.adoc[CausewayVegaConverter]
-****
-
-|Apache Causeway Val - Vega (persistence JPA)
-[source,yaml]
-----
-Group: org.apache.causeway.valuetypes
-Artifact: causeway-valuetypes-vega-persistence-jpa
-Type: jar
-Directory: /valuetypes/vega/persistence-jpa
-----
-|.Dependencies
-****
-org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
-org.apache.causeway.valuetypes:causeway-valuetypes-vega-applib:jar:<managed> +
-****
-
-.Document Index Entries
-****
-xref:refguide:valuetypes:index/vega/persistence/jpa/CausewayModuleValVegaPersistenceJpa.adoc[CausewayModuleValVegaPersistenceJpa], xref:refguide:valuetypes:index/vega/persistence/jpa/converters/CausewayVegaConverter.adoc[CausewayVegaConverter]
-****
-
-|Apache Causeway Val - Vega (ui)
-[source,yaml]
-----
-Group: org.apache.causeway.valuetypes
-Artifact: causeway-valuetypes-vega-ui
-Type: pom
-Directory: /valuetypes/vega/ui
-----
-|.Dependencies
-****
-org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
-org.apache.causeway.valuetypes:causeway-valuetypes-vega-applib:jar:<managed> +
-****
-
-|Apache Causeway Val - Vega (ui wicket)
-[source,yaml]
-----
-Group: org.apache.causeway.valuetypes
-Artifact: causeway-valuetypes-vega-ui-wkt
-Type: jar
-Directory: /valuetypes/vega/ui/wicket
-----
-|.Components
-****
-o.a.i.valuetypes.vega.ui.wkt.components.VegaPanelFactoriesWkt$Parented +
-o.a.i.valuetypes.vega.ui.wkt.components.VegaPanelFactoriesWkt$Standalone +
-****
-
-.Dependencies
-****
-org.apache.causeway.valuetypes:causeway-valuetypes-vega-metamodel:jar:<managed> +
-org.apache.causeway.viewer:causeway-viewer-wicket-ui:jar:<managed> +
-****
-
-.Document Index Entries
-****
-xref:refguide:valuetypes:index/vega/ui/wkt/CausewayModuleValVegaUiWkt.adoc[CausewayModuleValVegaUiWkt]
 ****
 |===
 
@@ -3738,7 +3551,227 @@ xref:refguide:valuetypes:index/markdown/ui/wkt/CausewayModuleValMarkdownUiWkt.ad
 ****
 |===
 
-=== SSE
+=== Vega
+
+[plantuml,Vega,svg]
+----
+@startuml
+set separator none
+title Vega - Containers
+
+left to right direction
+
+skinparam {
+  arrowFontSize 10
+  defaultTextAlignment center
+  wrapWidth 200
+  maxMessageSize 100
+}
+
+hide stereotype
+
+skinparam rectangle<<Vega.ApacheCausewayValVegaMetaModel>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
+skinparam rectangle<<Vega.ApacheCausewayValVegaPersistenceJDO>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
+skinparam rectangle<<Vega.ApacheCausewayValVegaapplib>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
+skinparam rectangle<<Vega.ApacheCausewayValVegaparent>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
+skinparam rectangle<<Vega.ApacheCausewayValVegapersistenceJPA>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
+skinparam rectangle<<Vega.ApacheCausewayValVegauiwicket>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
+skinparam rectangle<<Vega.ApacheCausewayValVegaui>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
+skinparam rectangle<<Vega>> {
+  BorderColor #9a9a9a
+  FontColor #9a9a9a
+  shadowing false
+}
+
+rectangle "Vega\n<size:10>[Software System]</size>" <<Vega>> {
+  rectangle "==Apache Causeway Val - Vega (parent)\n<size:10>[Container: packaging: pom]</size>" <<Vega.ApacheCausewayValVegaparent>> as Vega.ApacheCausewayValVegaparent
+  rectangle "==Apache Causeway Val - Vega (applib)\n<size:10>[Container: packaging: jar]</size>" <<Vega.ApacheCausewayValVegaapplib>> as Vega.ApacheCausewayValVegaapplib
+  rectangle "==Apache Causeway Val - Vega (MetaModel)\n<size:10>[Container: packaging: jar]</size>" <<Vega.ApacheCausewayValVegaMetaModel>> as Vega.ApacheCausewayValVegaMetaModel
+  rectangle "==Apache Causeway Val - Vega (Persistence JDO)\n<size:10>[Container: packaging: jar]</size>" <<Vega.ApacheCausewayValVegaPersistenceJDO>> as Vega.ApacheCausewayValVegaPersistenceJDO
+  rectangle "==Apache Causeway Val - Vega (persistence JPA)\n<size:10>[Container: packaging: jar]</size>" <<Vega.ApacheCausewayValVegapersistenceJPA>> as Vega.ApacheCausewayValVegapersistenceJPA
+  rectangle "==Apache Causeway Val - Vega (ui)\n<size:10>[Container: packaging: pom]</size>" <<Vega.ApacheCausewayValVegaui>> as Vega.ApacheCausewayValVegaui
+  rectangle "==Apache Causeway Val - Vega (ui wicket)\n<size:10>[Container: packaging: jar]</size>" <<Vega.ApacheCausewayValVegauiwicket>> as Vega.ApacheCausewayValVegauiwicket
+}
+
+Vega.ApacheCausewayValVegaparent .[#707070,thickness=2].> Vega.ApacheCausewayValVegaMetaModel : "<color:#707070>"
+Vega.ApacheCausewayValVegaparent .[#707070,thickness=2].> Vega.ApacheCausewayValVegaPersistenceJDO : "<color:#707070>"
+Vega.ApacheCausewayValVegaparent .[#707070,thickness=2].> Vega.ApacheCausewayValVegapersistenceJPA : "<color:#707070>"
+Vega.ApacheCausewayValVegaparent .[#707070,thickness=2].> Vega.ApacheCausewayValVegaui : "<color:#707070>"
+Vega.ApacheCausewayValVegaui .[#707070,thickness=2].> Vega.ApacheCausewayValVegauiwicket : "<color:#707070>"
+Vega.ApacheCausewayValVegaparent .[#707070,thickness=2].> Vega.ApacheCausewayValVegaapplib : "<color:#707070>"
+@enduml
+----
+.Projects/Modules (Vega)
+[cols="3a,5a", options="header"]
+|===
+|Coordinates |Description 
+
+|Apache Causeway Val - Vega (parent)
+[source,yaml]
+----
+Group: org.apache.causeway.valuetypes
+Artifact: causeway-valuetypes-vega
+Type: pom
+Directory: /valuetypes/vega
+----
+|Vega/Vega-lite value type.
+
+|Apache Causeway Val - Vega (applib)
+[source,yaml]
+----
+Group: org.apache.causeway.valuetypes
+Artifact: causeway-valuetypes-vega-applib
+Type: jar
+Directory: /valuetypes/vega/applib
+----
+|.Dependencies
+****
+org.apache.causeway.commons:causeway-commons:jar:<managed> +
+org.apache.causeway.core:causeway-applib:jar:<managed> +
+****
+
+.Document Index Entries
+****
+xref:refguide:valuetypes:index/vega/applib/CausewayModuleValVegaApplib.adoc[CausewayModuleValVegaApplib], xref:refguide:valuetypes:index/vega/applib/jaxb/VegaJaxbAdapter.adoc[VegaJaxbAdapter], xref:refguide:valuetypes:index/vega/applib/value/Vega.adoc[Vega]
+****
+
+|Apache Causeway Val - Vega (MetaModel)
+[source,yaml]
+----
+Group: org.apache.causeway.valuetypes
+Artifact: causeway-valuetypes-vega-metamodel
+Type: jar
+Directory: /valuetypes/vega/metamodel
+----
+|.Components
+****
+o.a.i.valuetypes.vega.metamodel.semantics.VegaValueSemantics +
+****
+
+.Dependencies
+****
+org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
+org.apache.causeway.valuetypes:causeway-valuetypes-vega-applib:jar:<managed> +
+****
+
+.Document Index Entries
+****
+xref:refguide:valuetypes:index/vega/metamodel/CausewayModuleValVegaMetaModel.adoc[CausewayModuleValVegaMetaModel]
+****
+
+|Apache Causeway Val - Vega (Persistence JDO)
+[source,yaml]
+----
+Group: org.apache.causeway.valuetypes
+Artifact: causeway-valuetypes-vega-persistence-jdo
+Type: jar
+Directory: /valuetypes/vega/persistence-jdo
+----
+|.Dependencies
+****
+org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
+org.apache.causeway.valuetypes:causeway-valuetypes-vega-applib:jar:<managed> +
+org.datanucleus:datanucleus-core:jar:<managed> +
+****
+
+.Document Index Entries
+****
+xref:refguide:valuetypes:index/vega/persistence/jdo/dn/CausewayModuleValVegaPersistenceJdoDn.adoc[CausewayModuleValVegaPersistenceJdoDn], xref:refguide:valuetypes:index/vega/persistence/jdo/dn/converters/CausewayVegaConverter.adoc[CausewayVegaConverter]
+****
+
+|Apache Causeway Val - Vega (persistence JPA)
+[source,yaml]
+----
+Group: org.apache.causeway.valuetypes
+Artifact: causeway-valuetypes-vega-persistence-jpa
+Type: jar
+Directory: /valuetypes/vega/persistence-jpa
+----
+|.Dependencies
+****
+org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
+org.apache.causeway.valuetypes:causeway-valuetypes-vega-applib:jar:<managed> +
+****
+
+.Document Index Entries
+****
+xref:refguide:valuetypes:index/vega/persistence/jpa/CausewayModuleValVegaPersistenceJpa.adoc[CausewayModuleValVegaPersistenceJpa], xref:refguide:valuetypes:index/vega/persistence/jpa/converters/CausewayVegaConverter.adoc[CausewayVegaConverter]
+****
+
+|Apache Causeway Val - Vega (ui)
+[source,yaml]
+----
+Group: org.apache.causeway.valuetypes
+Artifact: causeway-valuetypes-vega-ui
+Type: pom
+Directory: /valuetypes/vega/ui
+----
+|.Dependencies
+****
+org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
+org.apache.causeway.valuetypes:causeway-valuetypes-vega-applib:jar:<managed> +
+****
+
+|Apache Causeway Val - Vega (ui wicket)
+[source,yaml]
+----
+Group: org.apache.causeway.valuetypes
+Artifact: causeway-valuetypes-vega-ui-wkt
+Type: jar
+Directory: /valuetypes/vega/ui/wicket
+----
+|.Components
+****
+o.a.i.valuetypes.vega.ui.wkt.components.VegaPanelFactoriesWkt$Parented +
+o.a.i.valuetypes.vega.ui.wkt.components.VegaPanelFactoriesWkt$Standalone +
+****
+
+.Dependencies
+****
+org.apache.causeway.valuetypes:causeway-valuetypes-vega-metamodel:jar:<managed> +
+org.apache.causeway.viewer:causeway-viewer-wicket-ui:jar:<managed> +
+****
+
+.Document Index Entries
+****
+xref:refguide:valuetypes:index/vega/ui/wkt/CausewayModuleValVegaUiWkt.adoc[CausewayModuleValVegaUiWkt]
+****
+|===
 
 == Extensions
 
@@ -3790,90 +3823,6 @@ skinparam rectangle<<Extensions.ApacheCausewayExtCORSimpl>> {
   shadowing false
 }
 skinparam rectangle<<Extensions.ApacheCausewayExtCORSparent>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<Extensions.ApacheCausewayExtDocgen>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<Extensions.ApacheCausewayExtExecutionLog>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<Extensions.ApacheCausewayExtExecutionLogAPI>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<Extensions.ApacheCausewayExtExecutionLogImplementationJDO>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<Extensions.ApacheCausewayExtExecutionLogImplementationJPA>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<Extensions.ApacheCausewayExtExecutionOutbox>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<Extensions.ApacheCausewayExtExecutionOutboxAPI>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<Extensions.ApacheCausewayExtExecutionOutboxImplementationJDO>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<Extensions.ApacheCausewayExtExecutionOutboxImplementationJPA>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<Extensions.ApacheCausewayExtExecutionOutboxRESTClient>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<Extensions.ApacheCausewayExtExecutionOutboxRepublisher>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<Extensions.ApacheCausewayExtExecutionRepublisher>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<Extensions.ApacheCausewayExtFlyway>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<Extensions.ApacheCausewayExtFlywayImpl>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2e6295
@@ -4078,72 +4027,48 @@ skinparam rectangle<<Extensions>> {
 }
 
 rectangle "Extensions\n<size:10>[Software System]</size>" <<Extensions>> {
-  rectangle "==Apache Causeway Ext - Execution Log\n<size:10>[Container: packaging: pom]</size>" <<Extensions.ApacheCausewayExtExecutionLog>> as Extensions.ApacheCausewayExtExecutionLog
-  rectangle "==Apache Causeway Ext - Execution Log API\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtExecutionLogAPI>> as Extensions.ApacheCausewayExtExecutionLogAPI
-  rectangle "==Apache Causeway Ext - Execution Log Implementation (JDO)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtExecutionLogImplementationJDO>> as Extensions.ApacheCausewayExtExecutionLogImplementationJDO
-  rectangle "==Apache Causeway Ext - Execution Log Implementation (JPA)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtExecutionLogImplementationJPA>> as Extensions.ApacheCausewayExtExecutionLogImplementationJPA
-  rectangle "==Apache Causeway Ext - Execution Outbox\n<size:10>[Container: packaging: pom]</size>" <<Extensions.ApacheCausewayExtExecutionOutbox>> as Extensions.ApacheCausewayExtExecutionOutbox
-  rectangle "==Apache Causeway Ext - Execution Outbox API\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtExecutionOutboxAPI>> as Extensions.ApacheCausewayExtExecutionOutboxAPI
-  rectangle "==Apache Causeway Ext - Execution Outbox Implementation (JDO)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtExecutionOutboxImplementationJDO>> as Extensions.ApacheCausewayExtExecutionOutboxImplementationJDO
-  rectangle "==Apache Causeway Ext - Execution Outbox Implementation (JPA)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtExecutionOutboxImplementationJPA>> as Extensions.ApacheCausewayExtExecutionOutboxImplementationJPA
-  rectangle "==Apache Causeway Ext - Execution Outbox REST Client\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtExecutionOutboxRESTClient>> as Extensions.ApacheCausewayExtExecutionOutboxRESTClient
-  rectangle "==Apache Causeway Ext - Execution Republisher\n<size:10>[Container: packaging: pom]</size>" <<Extensions.ApacheCausewayExtExecutionRepublisher>> as Extensions.ApacheCausewayExtExecutionRepublisher
-  rectangle "==Apache Causeway Extensions\n<size:10>[Container: packaging: pom]</size>" <<Extensions.ApacheCausewayExtensions>> as Extensions.ApacheCausewayExtensions
-  rectangle "==Apache Causeway Ext - Execution Outbox Republisher\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtExecutionOutboxRepublisher>> as Extensions.ApacheCausewayExtExecutionOutboxRepublisher
-  rectangle "==Apache Causeway Ext - Flyway\n<size:10>[Container: packaging: pom]</size>" <<Extensions.ApacheCausewayExtFlyway>> as Extensions.ApacheCausewayExtFlyway
-  rectangle "==Apache Causeway Ext - Flyway Impl\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtFlywayImpl>> as Extensions.ApacheCausewayExtFlywayImpl
-  rectangle "==Apache Causeway Ext - FullCalendar (parent)\n<size:10>[Container: packaging: pom]</size>" <<Extensions.ApacheCausewayExtFullCalendarparent>> as Extensions.ApacheCausewayExtFullCalendarparent
   rectangle "==Apache Causeway Ext - FullCalendar (applib)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtFullCalendarapplib>> as Extensions.ApacheCausewayExtFullCalendarapplib
   rectangle "==Apache Causeway Ext - FullCalendar Wicket\n<size:10>[Container: packaging: pom]</size>" <<Extensions.ApacheCausewayExtFullCalendarWicket>> as Extensions.ApacheCausewayExtFullCalendarWicket
   rectangle "==Apache Causeway Ext - FullCalendar Wicket (Integration)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtFullCalendarWicketIntegration>> as Extensions.ApacheCausewayExtFullCalendarWicketIntegration
   rectangle "==Apache Causeway Ext - FullCalendar Wicket (UI)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtFullCalendarWicketUI>> as Extensions.ApacheCausewayExtFullCalendarWicketUI
   rectangle "==Apache Causeway Ext - pdf.js - Parent\n<size:10>[Container: packaging: pom]</size>" <<Extensions.ApacheCausewayExtpdfjsParent>> as Extensions.ApacheCausewayExtpdfjsParent
   rectangle "==Apache Causeway Ext - pdf.js - Applib\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtpdfjsApplib>> as Extensions.ApacheCausewayExtpdfjsApplib
-  rectangle "==Apache Causeway Ext - Audit Trail\n<size:10>[Container: packaging: pom]</size>" <<Extensions.ApacheCausewayExtAuditTrail>> as Extensions.ApacheCausewayExtAuditTrail
   rectangle "==Apache Causeway Ext - pdf.js - Metamodel\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtpdfjsMetamodel>> as Extensions.ApacheCausewayExtpdfjsMetamodel
   rectangle "==Apache Causeway Ext - pdf.js Wicket\n<size:10>[Container: packaging: pom]</size>" <<Extensions.ApacheCausewayExtpdfjsWicket>> as Extensions.ApacheCausewayExtpdfjsWicket
   rectangle "==Apache Causeway Ext - pdf.js - Wicket (Integration)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtpdfjsWicketIntegration>> as Extensions.ApacheCausewayExtpdfjsWicketIntegration
   rectangle "==Apache Causeway Ext - pdf.js - Wicket (UI)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtpdfjsWicketUI>> as Extensions.ApacheCausewayExtpdfjsWicketUI
+  rectangle "==Apache Causeway Extensions\n<size:10>[Container: packaging: pom]</size>" <<Extensions.ApacheCausewayExtensions>> as Extensions.ApacheCausewayExtensions
   rectangle "==Apache Causeway Ext - Sec Man\n<size:10>[Container: packaging: pom]</size>" <<Extensions.ApacheCausewayExtSecMan>> as Extensions.ApacheCausewayExtSecMan
   rectangle "==Apache Causeway Ext - Sec Man Applib\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtSecManApplib>> as Extensions.ApacheCausewayExtSecManApplib
   rectangle "==Apache Causeway Ext - Sec Man Delegated (Using Shiro)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtSecManDelegatedUsingShiro>> as Extensions.ApacheCausewayExtSecManDelegatedUsingShiro
   rectangle "==Apache Causeway Ext - Sec Man Delegated (using Spring Oauth2)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtSecManDelegatedusingSpringOauth2>> as Extensions.ApacheCausewayExtSecManDelegatedusingSpringOauth2
   rectangle "==Apache Causeway Ext - Sec Man Encryption (Using jbcrypt)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtSecManEncryptionUsingjbcrypt>> as Extensions.ApacheCausewayExtSecManEncryptionUsingjbcrypt
   rectangle "==Apache Causeway Ext - Sec Man Encryption (Using Spring)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtSecManEncryptionUsingSpring>> as Extensions.ApacheCausewayExtSecManEncryptionUsingSpring
-  rectangle "==Apache Causeway Ext - Audit Trail Applib\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtAuditTrailApplib>> as Extensions.ApacheCausewayExtAuditTrailApplib
   rectangle "==Apache Causeway Ext - Sec Man Integration\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtSecManIntegration>> as Extensions.ApacheCausewayExtSecManIntegration
   rectangle "==Apache Causeway Ext - Sec Man Persistence (Using JDO)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtSecManPersistenceUsingJDO>> as Extensions.ApacheCausewayExtSecManPersistenceUsingJDO
   rectangle "==Apache Causeway Ext - Sec Man Persistence (Using JPA)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtSecManPersistenceUsingJPA>> as Extensions.ApacheCausewayExtSecManPersistenceUsingJPA
   rectangle "==Apache Causeway Ext - Session Log\n<size:10>[Container: packaging: pom]</size>" <<Extensions.ApacheCausewayExtSessionLog>> as Extensions.ApacheCausewayExtSessionLog
+  rectangle "==Apache Causeway Ext - Audit Trail\n<size:10>[Container: packaging: pom]</size>" <<Extensions.ApacheCausewayExtAuditTrail>> as Extensions.ApacheCausewayExtAuditTrail
   rectangle "==Apache Causeway Ext - Session Log Applib\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtSessionLogApplib>> as Extensions.ApacheCausewayExtSessionLogApplib
   rectangle "==Apache Causeway Ext - Session Log Persistence (using JDO)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtSessionLogPersistenceusingJDO>> as Extensions.ApacheCausewayExtSessionLogPersistenceusingJDO
   rectangle "==Apache Causeway Ext - Session Log Persistence (using JPA)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtSessionLogPersistenceusingJPA>> as Extensions.ApacheCausewayExtSessionLogPersistenceusingJPA
   rectangle "==Apache Causeway Ext - Security - Shiro LDAP Realm (parent)\n<size:10>[Container: packaging: pom]</size>" <<Extensions.ApacheCausewayExtSecurityShiroLDAPRealmparent>> as Extensions.ApacheCausewayExtSecurityShiroLDAPRealmparent
   rectangle "==Apache Causeway Ext - Security - Shiro LDAP Realm (impl)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtSecurityShiroLDAPRealmimpl>> as Extensions.ApacheCausewayExtSecurityShiroLDAPRealmimpl
   rectangle "==Apache Causeway Ext - Security - Spring Oauth2\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtSecuritySpringOauth2>> as Extensions.ApacheCausewayExtSecuritySpringOauth2
-  rectangle "==Apache Causeway Ext - Audit Trail Persistence (using JDO)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtAuditTrailPersistenceusingJDO>> as Extensions.ApacheCausewayExtAuditTrailPersistenceusingJDO
   rectangle "==Apache Causeway Ext - Server Sent Events (parent)\n<size:10>[Container: packaging: pom]</size>" <<Extensions.ApacheCausewayExtServerSentEventsparent>> as Extensions.ApacheCausewayExtServerSentEventsparent
   rectangle "==Apache Causeway Ext - Server Sent Events\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtServerSentEvents>> as Extensions.ApacheCausewayExtServerSentEvents
   rectangle "==Apache Causeway Ext - Server Sent Events (metamodel)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtServerSentEventsmetamodel>> as Extensions.ApacheCausewayExtServerSentEventsmetamodel
   rectangle "==Apache Causeway Ext - Server Sent Events (Wicket)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtServerSentEventsWicket>> as Extensions.ApacheCausewayExtServerSentEventsWicket
+  rectangle "==Apache Causeway Ext - Audit Trail Applib\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtAuditTrailApplib>> as Extensions.ApacheCausewayExtAuditTrailApplib
+  rectangle "==Apache Causeway Ext - Audit Trail Persistence (using JDO)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtAuditTrailPersistenceusingJDO>> as Extensions.ApacheCausewayExtAuditTrailPersistenceusingJDO
   rectangle "==Apache Causeway Ext - Audit Trail Persistence (using JPA)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtAuditTrailPersistenceusingJPA>> as Extensions.ApacheCausewayExtAuditTrailPersistenceusingJPA
   rectangle "==Apache Causeway Ext - CORS (parent)\n<size:10>[Container: packaging: pom]</size>" <<Extensions.ApacheCausewayExtCORSparent>> as Extensions.ApacheCausewayExtCORSparent
   rectangle "==Apache Causeway Ext - CORS (impl)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtCORSimpl>> as Extensions.ApacheCausewayExtCORSimpl
-  rectangle "==Apache Causeway Ext - Docgen\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtDocgen>> as Extensions.ApacheCausewayExtDocgen
+  rectangle "==Apache Causeway Ext - FullCalendar (parent)\n<size:10>[Container: packaging: pom]</size>" <<Extensions.ApacheCausewayExtFullCalendarparent>> as Extensions.ApacheCausewayExtFullCalendarparent
 }
 
-Extensions.ApacheCausewayExtSessionLog .[#707070,thickness=2].> Extensions.ApacheCausewayExtSessionLogPersistenceusingJPA : "<color:#707070>"
-Extensions.ApacheCausewayExtSecurityShiroLDAPRealmparent .[#707070,thickness=2].> Extensions.ApacheCausewayExtSecurityShiroLDAPRealmimpl : "<color:#707070>"
-Extensions.ApacheCausewayExtServerSentEventsparent .[#707070,thickness=2].> Extensions.ApacheCausewayExtServerSentEvents : "<color:#707070>"
-Extensions.ApacheCausewayExtServerSentEventsparent .[#707070,thickness=2].> Extensions.ApacheCausewayExtServerSentEventsmetamodel : "<color:#707070>"
-Extensions.ApacheCausewayExtServerSentEventsparent .[#707070,thickness=2].> Extensions.ApacheCausewayExtServerSentEventsWicket : "<color:#707070>"
 Extensions.ApacheCausewayExtensions .[#707070,thickness=2].> Extensions.ApacheCausewayExtAuditTrail : "<color:#707070>"
 Extensions.ApacheCausewayExtensions .[#707070,thickness=2].> Extensions.ApacheCausewayExtCORSparent : "<color:#707070>"
-Extensions.ApacheCausewayExtensions .[#707070,thickness=2].> Extensions.ApacheCausewayExtDocgen : "<color:#707070>"
-Extensions.ApacheCausewayExtensions .[#707070,thickness=2].> Extensions.ApacheCausewayExtExecutionLog : "<color:#707070>"
-Extensions.ApacheCausewayExtensions .[#707070,thickness=2].> Extensions.ApacheCausewayExtExecutionOutbox : "<color:#707070>"
-Extensions.ApacheCausewayExtensions .[#707070,thickness=2].> Extensions.ApacheCausewayExtExecutionRepublisher : "<color:#707070>"
-Extensions.ApacheCausewayExtensions .[#707070,thickness=2].> Extensions.ApacheCausewayExtFlyway : "<color:#707070>"
 Extensions.ApacheCausewayExtensions .[#707070,thickness=2].> Extensions.ApacheCausewayExtFullCalendarparent : "<color:#707070>"
 Extensions.ApacheCausewayExtensions .[#707070,thickness=2].> Extensions.ApacheCausewayExtpdfjsParent : "<color:#707070>"
 Extensions.ApacheCausewayExtensions .[#707070,thickness=2].> Extensions.ApacheCausewayExtSecMan : "<color:#707070>"
@@ -4155,15 +4080,6 @@ Extensions.ApacheCausewayExtAuditTrail .[#707070,thickness=2].> Extensions.Apach
 Extensions.ApacheCausewayExtAuditTrail .[#707070,thickness=2].> Extensions.ApacheCausewayExtAuditTrailPersistenceusingJDO : "<color:#707070>"
 Extensions.ApacheCausewayExtAuditTrail .[#707070,thickness=2].> Extensions.ApacheCausewayExtAuditTrailPersistenceusingJPA : "<color:#707070>"
 Extensions.ApacheCausewayExtCORSparent .[#707070,thickness=2].> Extensions.ApacheCausewayExtCORSimpl : "<color:#707070>"
-Extensions.ApacheCausewayExtExecutionLog .[#707070,thickness=2].> Extensions.ApacheCausewayExtExecutionLogAPI : "<color:#707070>"
-Extensions.ApacheCausewayExtExecutionLog .[#707070,thickness=2].> Extensions.ApacheCausewayExtExecutionLogImplementationJDO : "<color:#707070>"
-Extensions.ApacheCausewayExtExecutionLog .[#707070,thickness=2].> Extensions.ApacheCausewayExtExecutionLogImplementationJPA : "<color:#707070>"
-Extensions.ApacheCausewayExtExecutionOutbox .[#707070,thickness=2].> Extensions.ApacheCausewayExtExecutionOutboxAPI : "<color:#707070>"
-Extensions.ApacheCausewayExtExecutionOutbox .[#707070,thickness=2].> Extensions.ApacheCausewayExtExecutionOutboxImplementationJDO : "<color:#707070>"
-Extensions.ApacheCausewayExtExecutionOutbox .[#707070,thickness=2].> Extensions.ApacheCausewayExtExecutionOutboxImplementationJPA : "<color:#707070>"
-Extensions.ApacheCausewayExtExecutionOutbox .[#707070,thickness=2].> Extensions.ApacheCausewayExtExecutionOutboxRESTClient : "<color:#707070>"
-Extensions.ApacheCausewayExtExecutionRepublisher .[#707070,thickness=2].> Extensions.ApacheCausewayExtExecutionOutboxRepublisher : "<color:#707070>"
-Extensions.ApacheCausewayExtFlyway .[#707070,thickness=2].> Extensions.ApacheCausewayExtFlywayImpl : "<color:#707070>"
 Extensions.ApacheCausewayExtFullCalendarparent .[#707070,thickness=2].> Extensions.ApacheCausewayExtFullCalendarapplib : "<color:#707070>"
 Extensions.ApacheCausewayExtFullCalendarparent .[#707070,thickness=2].> Extensions.ApacheCausewayExtFullCalendarWicket : "<color:#707070>"
 Extensions.ApacheCausewayExtFullCalendarWicket .[#707070,thickness=2].> Extensions.ApacheCausewayExtFullCalendarWicketIntegration : "<color:#707070>"
@@ -4183,6 +4099,11 @@ Extensions.ApacheCausewayExtSecMan .[#707070,thickness=2].> Extensions.ApacheCau
 Extensions.ApacheCausewayExtSecMan .[#707070,thickness=2].> Extensions.ApacheCausewayExtSecManPersistenceUsingJPA : "<color:#707070>"
 Extensions.ApacheCausewayExtSessionLog .[#707070,thickness=2].> Extensions.ApacheCausewayExtSessionLogApplib : "<color:#707070>"
 Extensions.ApacheCausewayExtSessionLog .[#707070,thickness=2].> Extensions.ApacheCausewayExtSessionLogPersistenceusingJDO : "<color:#707070>"
+Extensions.ApacheCausewayExtSessionLog .[#707070,thickness=2].> Extensions.ApacheCausewayExtSessionLogPersistenceusingJPA : "<color:#707070>"
+Extensions.ApacheCausewayExtSecurityShiroLDAPRealmparent .[#707070,thickness=2].> Extensions.ApacheCausewayExtSecurityShiroLDAPRealmimpl : "<color:#707070>"
+Extensions.ApacheCausewayExtServerSentEventsparent .[#707070,thickness=2].> Extensions.ApacheCausewayExtServerSentEvents : "<color:#707070>"
+Extensions.ApacheCausewayExtServerSentEventsparent .[#707070,thickness=2].> Extensions.ApacheCausewayExtServerSentEventsmetamodel : "<color:#707070>"
+Extensions.ApacheCausewayExtServerSentEventsparent .[#707070,thickness=2].> Extensions.ApacheCausewayExtServerSentEventsWicket : "<color:#707070>"
 @enduml
 ----
 .Projects/Modules (Extensions)
@@ -4314,313 +4235,6 @@ org.springframework:spring-web:jar:<managed> +
 .Document Index Entries
 ****
 xref:refguide:extensions:index/cors/impl/CausewayModuleExtCors.adoc[CausewayModuleExtCors]
-****
-
-|Apache Causeway Ext - Docgen
-[source,yaml]
-----
-Group: org.apache.causeway.extensions
-Artifact: causeway-extensions-docgen
-Type: jar
-Directory: /extensions/core/docgen
-----
-|Provides a set of code mining features that can help building documentation for your application.
-
-.Components
-****
-o.a.i.extensions.docgen.topics.domainobjects.CausewayEntityDiagramPage +
-o.a.i.extensions.docgen.topics.domainobjects.DomainEntityDiagramPage +
-o.a.i.extensions.docgen.topics.domainobjects.EntityDiagramPageAbstract +
-o.a.i.extensions.docgen.topics.welcome.WelcomeHelpPage +
-****
-
-.Dependencies
-****
-org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
-org.apache.causeway.valuetypes:causeway-valuetypes-asciidoc-applib:jar:<managed> +
-****
-
-.Document Index Entries
-****
-xref:refguide:extensions:index/docgen/CausewayModuleExtDocgen.adoc[CausewayModuleExtDocgen], xref:refguide:extensions:index/docgen/applib/HelpNode.adoc[HelpNode], xref:refguide:extensions:index/docgen/menu/DocumentationMenu.adoc[DocumentationMenu]
-****
-
-|Apache Causeway Ext - Execution Log
-[source,yaml]
-----
-Group: org.apache.causeway.extensions
-Artifact: causeway-extensions-executionlog
-Type: pom
-Directory: /extensions/core/executionlog
-----
-|Logs executions
-
-|Apache Causeway Ext - Execution Log API
-[source,yaml]
-----
-Group: org.apache.causeway.extensions
-Artifact: causeway-extensions-executionlog-applib
-Type: jar
-Directory: /extensions/core/executionlog/applib
-----
-|.Components
-****
-o.a.i.extensions.executionlog.applib.dom.ExecutionLogEntry$TableColumnOrderDefault +
-o.a.i.extensions.executionlog.applib.spiimpl.ExecutionSubscriberForExecutionLog +
-****
-
-.Dependencies
-****
-org.apache.causeway.core:causeway-applib:jar:<managed> +
-org.apache.causeway.core:causeway-core-config:jar:<managed> +
-org.apache.causeway.core:causeway-core-runtimeservices:jar:<managed> +
-org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
-org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
-org.apache.causeway.testing:causeway-testing-unittestsupport-applib:jar:<managed> +
-****
-
-.Document Index Entries
-****
-xref:refguide:extensions:index/executionlog/applib/CausewayModuleExtExecutionLogApplib.adoc[CausewayModuleExtExecutionLogApplib], xref:refguide:extensions:index/executionlog/applib/app/ExecutionLogMenu.adoc[ExecutionLogMenu], xref:refguide:extensions:index/executionlog/applib/contributions/HasInteractionId_executionLogEntries.adoc[HasInteractionId_executionLogEntries], xref:refguide:extensions:index/executionlog/applib/contributions/HasUsername_recentExecutionsByUser.adoc[HasUsername_recentExecutionsByUser], xref:refguide:extensions:index/executionlog/applib/contributions/Object_recentExecutions.adoc[Object_recentExecutions], xref:refguide:extensions:index/executionlog/applib/dom/ExecutionLogEntry.adoc[ExecutionLogEntry], xref:refguide:extensions:index/executionlog/applib/dom/ExecutionLogEntryRepository.adoc[ExecutionLogEntryRepository], xref:refguide:extensions:index/executionlog/applib/dom/ExecutionLogEntryType.adoc[ExecutionLogEntryType], xref:refguide:extensions:index/executionlog/applib/dom/mixins/ExecutionLogEntry_siblingExecutions.adoc[ExecutionLogEntry_siblingExecutions], xref:refguide:extensions:index/executionlog/applib/spiimpl/ExecutionSubscriberForExecutionLog.adoc[ExecutionSubscriberForExecutionLog]
-****
-
-|Apache Causeway Ext - Execution Log Implementation (JDO)
-[source,yaml]
-----
-Group: org.apache.causeway.extensions
-Artifact: causeway-extensions-executionlog-persistence-jdo
-Type: jar
-Directory: /extensions/core/executionlog/persistence-jdo
-----
-|.Components
-****
-o.a.i.extensions.executionlog.jdo.dom.ExecutionLogEntryPK$Semantics +
-o.a.i.extensions.executionlog.jdo.dom.ExecutionLogEntryRepository +
-****
-
-.Dependencies
-****
-org.apache.causeway.extensions:causeway-extensions-executionlog-applib:jar:<managed> +
-org.apache.causeway.extensions:causeway-extensions-executionlog-applib:test-jar:<managed> +
-org.apache.causeway.persistence:causeway-persistence-jdo-datanucleus:jar:<managed> +
-org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
-org.apache.causeway.testing:causeway-testing-unittestsupport-applib:jar:<managed> +
-****
-
-.Document Index Entries
-****
-xref:refguide:extensions:index/executionlog/jdo/CausewayModuleExtExecutionLogPersistenceJdo.adoc[CausewayModuleExtExecutionLogPersistenceJdo]
-****
-
-|Apache Causeway Ext - Execution Log Implementation (JPA)
-[source,yaml]
-----
-Group: org.apache.causeway.extensions
-Artifact: causeway-extensions-executionlog-persistence-jpa
-Type: jar
-Directory: /extensions/core/executionlog/persistence-jpa
-----
-|.Components
-****
-o.a.i.extensions.executionlog.jpa.dom.ExecutionLogEntryPK$Semantics +
-o.a.i.extensions.executionlog.jpa.dom.ExecutionLogEntryRepository +
-****
-
-.Dependencies
-****
-org.apache.causeway.extensions:causeway-extensions-executionlog-applib:jar:<managed> +
-org.apache.causeway.extensions:causeway-extensions-executionlog-applib:test-jar:<managed> +
-org.apache.causeway.persistence:causeway-persistence-jpa-eclipselink:jar:<managed> +
-org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
-org.apache.causeway.testing:causeway-testing-unittestsupport-applib:jar:<managed> +
-****
-
-.Document Index Entries
-****
-xref:refguide:extensions:index/executionlog/jpa/CausewayModuleExtExecutionLogPersistenceJpa.adoc[CausewayModuleExtExecutionLogPersistenceJpa]
-****
-
-|Apache Causeway Ext - Execution Outbox
-[source,yaml]
-----
-Group: org.apache.causeway.extensions
-Artifact: causeway-extensions-executionoutbox
-Type: pom
-Directory: /extensions/core/executionoutbox
-----
-|Logs executions into an outbox, REST Client to consume
-
-|Apache Causeway Ext - Execution Outbox API
-[source,yaml]
-----
-Group: org.apache.causeway.extensions
-Artifact: causeway-extensions-executionoutbox-applib
-Type: jar
-Directory: /extensions/core/executionoutbox/applib
-----
-|.Components
-****
-o.a.i.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry$TableColumnOrderDefault +
-o.a.i.extensions.executionoutbox.applib.spiimpl.ContentMappingServiceForOutboxEvents +
-o.a.i.extensions.executionoutbox.applib.spiimpl.ExecutionSubscriberForExecutionOutbox +
-****
-
-.Dependencies
-****
-org.apache.causeway.core:causeway-applib:jar:<managed> +
-org.apache.causeway.core:causeway-core-config:jar:<managed> +
-org.apache.causeway.core:causeway-core-runtimeservices:jar:<managed> +
-org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
-org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
-org.apache.causeway.testing:causeway-testing-unittestsupport-applib:jar:<managed> +
-****
-
-.Document Index Entries
-****
-xref:refguide:extensions:index/executionoutbox/applib/CausewayModuleExtExecutionOutboxApplib.adoc[CausewayModuleExtExecutionOutboxApplib], xref:refguide:extensions:index/executionoutbox/applib/app/ExecutionOutboxMenu.adoc[ExecutionOutboxMenu], xref:refguide:extensions:index/executionoutbox/applib/dom/ExecutionOutboxEntry.adoc[ExecutionOutboxEntry], xref:refguide:extensions:index/executionoutbox/applib/dom/ExecutionOutboxEntryRepository.adoc[ExecutionOutboxEntryRepository], xref:refguide:extensions:index/executionoutbox/applib/dom/ExecutionOutboxEntryType.adoc[ExecutionOutboxEntryType], xref:refguide:extensions:index/executionoutbox/applib/restapi/OutboxEvents.adoc[OutboxEvents], xref:refguide:extensions:index/executionoutbox/applib/restapi/OutboxRestApi.adoc[OutboxRestApi], xref:refguide:extensions:index/executionoutbox/applib/spiimpl/ContentMappingServiceForOutboxEvents.adoc[ContentMappingServiceForOutboxEvents]
-****
-
-|Apache Causeway Ext - Execution Outbox Implementation (JDO)
-[source,yaml]
-----
-Group: org.apache.causeway.extensions
-Artifact: causeway-extensions-executionoutbox-persistence-jdo
-Type: jar
-Directory: /extensions/core/executionoutbox/persistence-jdo
-----
-|.Components
-****
-o.a.i.extensions.executionoutbox.jdo.dom.ExecutionOutboxEntryPK$Semantics +
-o.a.i.extensions.executionoutbox.jdo.dom.ExecutionOutboxEntryRepository +
-****
-
-.Dependencies
-****
-org.apache.causeway.extensions:causeway-extensions-executionoutbox-applib:jar:<managed> +
-org.apache.causeway.extensions:causeway-extensions-executionoutbox-applib:test-jar:<managed> +
-org.apache.causeway.persistence:causeway-persistence-jdo-datanucleus:jar:<managed> +
-org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
-org.apache.causeway.testing:causeway-testing-unittestsupport-applib:jar:<managed> +
-****
-
-.Document Index Entries
-****
-xref:refguide:extensions:index/executionoutbox/jdo/CausewayModuleExtExecutionOutboxPersistenceJdo.adoc[CausewayModuleExtExecutionOutboxPersistenceJdo]
-****
-
-|Apache Causeway Ext - Execution Outbox Implementation (JPA)
-[source,yaml]
-----
-Group: org.apache.causeway.extensions
-Artifact: causeway-extensions-executionoutbox-persistence-jpa
-Type: jar
-Directory: /extensions/core/executionoutbox/persistence-jpa
-----
-|.Components
-****
-o.a.i.extensions.executionoutbox.jpa.dom.ExecutionOutboxEntryPK$Semantics +
-o.a.i.extensions.executionoutbox.jpa.dom.ExecutionOutboxEntryRepository +
-****
-
-.Dependencies
-****
-org.apache.causeway.extensions:causeway-extensions-executionoutbox-applib:jar:<managed> +
-org.apache.causeway.extensions:causeway-extensions-executionoutbox-applib:test-jar:<managed> +
-org.apache.causeway.persistence:causeway-persistence-jpa-eclipselink:jar:<managed> +
-org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
-org.apache.causeway.testing:causeway-testing-unittestsupport-applib:jar:<managed> +
-****
-
-.Document Index Entries
-****
-xref:refguide:extensions:index/executionoutbox/jpa/CausewayModuleExtExecutionOutboxPersistenceJpa.adoc[CausewayModuleExtExecutionOutboxPersistenceJpa]
-****
-
-|Apache Causeway Ext - Execution Outbox REST Client
-[source,yaml]
-----
-Group: org.apache.causeway.extensions
-Artifact: causeway-extensions-executionoutbox-restclient
-Type: jar
-Directory: /extensions/core/executionoutbox/restclient
-----
-|.Dependencies
-****
-com.h2database:h2:jar:<managed> +
-org.apache.causeway.commons:causeway-commons:jar:<managed> +
-org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
-org.apache.causeway.core:causeway-schema:jar:<managed> +
-org.apache.causeway.extensions:causeway-extensions-executionoutbox-applib:test-jar:<managed> +
-org.apache.causeway.extensions:causeway-extensions-executionoutbox-persistence-jpa:jar:<managed> +
-org.apache.causeway.extensions:causeway-extensions-executionoutbox-persistence-jpa:test-jar:<managed> +
-org.apache.causeway.mavendeps:causeway-mavendeps-webapp:pom:<managed> +
-org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
-org.apache.causeway.viewer:causeway-viewer-restfulobjects-client:jar:2.0.0-SNAPSHOT +
-org.apache.causeway.viewer:causeway-viewer-restfulobjects-jaxrsresteasy:jar:<managed> +
-****
-
-.Document Index Entries
-****
-xref:refguide:extensions:index/executionoutbox/restclient/CausewayModuleExtExecutionRestClient.adoc[CausewayModuleExtExecutionRestClient], xref:refguide:extensions:index/executionoutbox/restclient/api/OutboxClient.adoc[OutboxClient]
-****
-
-|Apache Causeway Ext - Execution Republisher
-[source,yaml]
-----
-Group: org.apache.causeway.extensions
-Artifact: causeway-extensions-executionrepublisher
-Type: pom
-Directory: /extensions/core/executionrepublisher
-----
-|Republishes executions persisted in the execution log to the execution outbox
-
-|Apache Causeway Ext - Execution Outbox Republisher
-[source,yaml]
-----
-Group: org.apache.causeway.extensions
-Artifact: causeway-extensions-executionrepublisher-applib
-Type: jar
-Directory: /extensions/core/executionrepublisher/applib
-----
-|.Dependencies
-****
-org.apache.causeway.core:causeway-applib:jar:<managed> +
-org.apache.causeway.extensions:causeway-extensions-executionlog-applib:jar:<managed> +
-org.apache.causeway.extensions:causeway-extensions-executionoutbox-applib:jar:<managed> +
-org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
-org.apache.causeway.testing:causeway-testing-unittestsupport-applib:jar:<managed> +
-****
-
-.Document Index Entries
-****
-xref:refguide:extensions:index/executionrepublisher/applib/contributions/ExecutionLogEntry_copyToOutbox.adoc[ExecutionLogEntry_copyToOutbox]
-****
-
-|Apache Causeway Ext - Flyway
-[source,yaml]
-----
-Group: org.apache.causeway.extensions
-Artifact: causeway-extensions-flyway
-Type: pom
-Directory: /extensions/core/flyway
-----
-|Integrates Flyway when using any (relational) persistence store
-
-|Apache Causeway Ext - Flyway Impl
-[source,yaml]
-----
-Group: org.apache.causeway.extensions
-Artifact: causeway-extensions-flyway-impl
-Type: jar
-Directory: /extensions/core/flyway/impl
-----
-|.Dependencies
-****
-org.apache.causeway.core:causeway-core-config:jar:<managed> +
-org.flywaydb:flyway-core:jar:<managed> +
-org.springframework:spring-context:jar:<managed> +
-org.springframework:spring-jdbc:jar:<managed> +
-org.springframework.boot:spring-boot-autoconfigure:jar:<managed> +
 ****
 
 |Apache Causeway Ext - FullCalendar (parent)
@@ -5668,13 +5282,609 @@ xref:refguide:extensions:index/commandlog/jpa/CausewayModuleExtCommandLogPersist
 ****
 |===
 
-=== Core: Command Replay
+=== Core: DocGen
 
-=== Core: Quartz
+[plantuml,Core~ DocGen,svg]
+----
+@startuml
+set separator none
+title Core: DocGen - Containers
+
+left to right direction
+
+skinparam {
+  arrowFontSize 10
+  defaultTextAlignment center
+  wrapWidth 200
+  maxMessageSize 100
+}
+
+hide stereotype
+
+skinparam rectangle<<CoreDocGen.ApacheCausewayExtDocgen>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
+skinparam rectangle<<CoreDocGen>> {
+  BorderColor #9a9a9a
+  FontColor #9a9a9a
+  shadowing false
+}
+
+rectangle "Core: DocGen\n<size:10>[Software System]</size>" <<CoreDocGen>> {
+  rectangle "==Apache Causeway Ext - Docgen\n<size:10>[Container: packaging: jar]</size>" <<CoreDocGen.ApacheCausewayExtDocgen>> as CoreDocGen.ApacheCausewayExtDocgen
+}
+
+@enduml
+----
+.Projects/Modules (Core: DocGen)
+[cols="3a,5a", options="header"]
+|===
+|Coordinates |Description 
+
+|Apache Causeway Ext - Docgen
+[source,yaml]
+----
+Group: org.apache.causeway.extensions
+Artifact: causeway-extensions-docgen
+Type: jar
+Directory: /extensions/core/docgen
+----
+|Provides a set of code mining features that can help building documentation for your application.
+
+.Components
+****
+o.a.i.extensions.docgen.topics.domainobjects.CausewayEntityDiagramPage +
+o.a.i.extensions.docgen.topics.domainobjects.DomainEntityDiagramPage +
+o.a.i.extensions.docgen.topics.domainobjects.EntityDiagramPageAbstract +
+o.a.i.extensions.docgen.topics.welcome.WelcomeHelpPage +
+****
+
+.Dependencies
+****
+org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
+org.apache.causeway.valuetypes:causeway-valuetypes-asciidoc-applib:jar:<managed> +
+****
+
+.Document Index Entries
+****
+xref:refguide:extensions:index/docgen/CausewayModuleExtDocgen.adoc[CausewayModuleExtDocgen], xref:refguide:extensions:index/docgen/applib/HelpNode.adoc[HelpNode], xref:refguide:extensions:index/docgen/menu/DocumentationMenu.adoc[DocumentationMenu]
+****
+|===
+
+=== Core: Execution Log
+
+[plantuml,Core~ Execution Log,svg]
+----
+@startuml
+set separator none
+title Core: Execution Log - Containers
+
+left to right direction
+
+skinparam {
+  arrowFontSize 10
+  defaultTextAlignment center
+  wrapWidth 200
+  maxMessageSize 100
+}
+
+hide stereotype
+
+skinparam rectangle<<CoreExecutionLog.ApacheCausewayExtExecutionLog>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
+skinparam rectangle<<CoreExecutionLog.ApacheCausewayExtExecutionLogAPI>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
+skinparam rectangle<<CoreExecutionLog.ApacheCausewayExtExecutionLogImplementationJDO>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
+skinparam rectangle<<CoreExecutionLog.ApacheCausewayExtExecutionLogImplementationJPA>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
+skinparam rectangle<<CoreExecutionLog>> {
+  BorderColor #9a9a9a
+  FontColor #9a9a9a
+  shadowing false
+}
+
+rectangle "Core: Execution Log\n<size:10>[Software System]</size>" <<CoreExecutionLog>> {
+  rectangle "==Apache Causeway Ext - Execution Log\n<size:10>[Container: packaging: pom]</size>" <<CoreExecutionLog.ApacheCausewayExtExecutionLog>> as CoreExecutionLog.ApacheCausewayExtExecutionLog
+  rectangle "==Apache Causeway Ext - Execution Log API\n<size:10>[Container: packaging: jar]</size>" <<CoreExecutionLog.ApacheCausewayExtExecutionLogAPI>> as CoreExecutionLog.ApacheCausewayExtExecutionLogAPI
+  rectangle "==Apache Causeway Ext - Execution Log Implementation (JDO)\n<size:10>[Container: packaging: jar]</size>" <<CoreExecutionLog.ApacheCausewayExtExecutionLogImplementationJDO>> as CoreExecutionLog.ApacheCausewayExtExecutionLogImplementationJDO
+  rectangle "==Apache Causeway Ext - Execution Log Implementation (JPA)\n<size:10>[Container: packaging: jar]</size>" <<CoreExecutionLog.ApacheCausewayExtExecutionLogImplementationJPA>> as CoreExecutionLog.ApacheCausewayExtExecutionLogImplementationJPA
+}
+
+CoreExecutionLog.ApacheCausewayExtExecutionLog .[#707070,thickness=2].> CoreExecutionLog.ApacheCausewayExtExecutionLogAPI : "<color:#707070>"
+CoreExecutionLog.ApacheCausewayExtExecutionLog .[#707070,thickness=2].> CoreExecutionLog.ApacheCausewayExtExecutionLogImplementationJDO : "<color:#707070>"
+CoreExecutionLog.ApacheCausewayExtExecutionLog .[#707070,thickness=2].> CoreExecutionLog.ApacheCausewayExtExecutionLogImplementationJPA : "<color:#707070>"
+@enduml
+----
+.Projects/Modules (Core: Execution Log)
+[cols="3a,5a", options="header"]
+|===
+|Coordinates |Description 
+
+|Apache Causeway Ext - Execution Log
+[source,yaml]
+----
+Group: org.apache.causeway.extensions
+Artifact: causeway-extensions-executionlog
+Type: pom
+Directory: /extensions/core/executionlog
+----
+|Logs executions
+
+|Apache Causeway Ext - Execution Log API
+[source,yaml]
+----
+Group: org.apache.causeway.extensions
+Artifact: causeway-extensions-executionlog-applib
+Type: jar
+Directory: /extensions/core/executionlog/applib
+----
+|.Components
+****
+o.a.i.extensions.executionlog.applib.dom.ExecutionLogEntry$TableColumnOrderDefault +
+o.a.i.extensions.executionlog.applib.spiimpl.ExecutionSubscriberForExecutionLog +
+****
+
+.Dependencies
+****
+org.apache.causeway.core:causeway-applib:jar:<managed> +
+org.apache.causeway.core:causeway-core-config:jar:<managed> +
+org.apache.causeway.core:causeway-core-runtimeservices:jar:<managed> +
+org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
+org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
+org.apache.causeway.testing:causeway-testing-unittestsupport-applib:jar:<managed> +
+****
+
+.Document Index Entries
+****
+xref:refguide:extensions:index/executionlog/applib/CausewayModuleExtExecutionLogApplib.adoc[CausewayModuleExtExecutionLogApplib], xref:refguide:extensions:index/executionlog/applib/app/ExecutionLogMenu.adoc[ExecutionLogMenu], xref:refguide:extensions:index/executionlog/applib/contributions/HasInteractionId_executionLogEntries.adoc[HasInteractionId_executionLogEntries], xref:refguide:extensions:index/executionlog/applib/contributions/HasUsername_recentExecutionsByUser.adoc[HasUsername_recentExecutionsByUser], xref:refguide:extensions:index/executionlog/applib/contributions/Object_recentExecutions.adoc[Object_recentExecutions], xref:refguide:extensions:index/executionlog/applib/dom/ExecutionLogEntry.adoc[ExecutionLogEntry], xref:refguide:extensions:index/executionlog/applib/dom/ExecutionLogEntryRepository.adoc[ExecutionLogEntryRepository], xref:refguide:extensions:index/executionlog/applib/dom/ExecutionLogEntryType.adoc[ExecutionLogEntryType], xref:refguide:extensions:index/executionlog/applib/dom/mixins/ExecutionLogEntry_siblingExecutions.adoc[ExecutionLogEntry_siblingExecutions], xref:refguide:extensions:index/executionlog/applib/spiimpl/ExecutionSubscriberForExecutionLog.adoc[ExecutionSubscriberForExecutionLog]
+****
+
+|Apache Causeway Ext - Execution Log Implementation (JDO)
+[source,yaml]
+----
+Group: org.apache.causeway.extensions
+Artifact: causeway-extensions-executionlog-persistence-jdo
+Type: jar
+Directory: /extensions/core/executionlog/persistence-jdo
+----
+|.Components
+****
+o.a.i.extensions.executionlog.jdo.dom.ExecutionLogEntryPK$Semantics +
+o.a.i.extensions.executionlog.jdo.dom.ExecutionLogEntryRepository +
+****
+
+.Dependencies
+****
+org.apache.causeway.extensions:causeway-extensions-executionlog-applib:jar:<managed> +
+org.apache.causeway.extensions:causeway-extensions-executionlog-applib:test-jar:<managed> +
+org.apache.causeway.persistence:causeway-persistence-jdo-datanucleus:jar:<managed> +
+org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
+org.apache.causeway.testing:causeway-testing-unittestsupport-applib:jar:<managed> +
+****
+
+.Document Index Entries
+****
+xref:refguide:extensions:index/executionlog/jdo/CausewayModuleExtExecutionLogPersistenceJdo.adoc[CausewayModuleExtExecutionLogPersistenceJdo]
+****
+
+|Apache Causeway Ext - Execution Log Implementation (JPA)
+[source,yaml]
+----
+Group: org.apache.causeway.extensions
+Artifact: causeway-extensions-executionlog-persistence-jpa
+Type: jar
+Directory: /extensions/core/executionlog/persistence-jpa
+----
+|.Components
+****
+o.a.i.extensions.executionlog.jpa.dom.ExecutionLogEntryPK$Semantics +
+o.a.i.extensions.executionlog.jpa.dom.ExecutionLogEntryRepository +
+****
+
+.Dependencies
+****
+org.apache.causeway.extensions:causeway-extensions-executionlog-applib:jar:<managed> +
+org.apache.causeway.extensions:causeway-extensions-executionlog-applib:test-jar:<managed> +
+org.apache.causeway.persistence:causeway-persistence-jpa-eclipselink:jar:<managed> +
+org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
+org.apache.causeway.testing:causeway-testing-unittestsupport-applib:jar:<managed> +
+****
+
+.Document Index Entries
+****
+xref:refguide:extensions:index/executionlog/jpa/CausewayModuleExtExecutionLogPersistenceJpa.adoc[CausewayModuleExtExecutionLogPersistenceJpa]
+****
+|===
+
+=== Core: Execution Outbox
+
+[plantuml,Core~ Execution Outbox,svg]
+----
+@startuml
+set separator none
+title Core: Execution Outbox - Containers
+
+left to right direction
+
+skinparam {
+  arrowFontSize 10
+  defaultTextAlignment center
+  wrapWidth 200
+  maxMessageSize 100
+}
+
+hide stereotype
+
+skinparam rectangle<<CoreExecutionOutbox.ApacheCausewayExtExecutionOutbox>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
+skinparam rectangle<<CoreExecutionOutbox.ApacheCausewayExtExecutionOutboxAPI>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
+skinparam rectangle<<CoreExecutionOutbox.ApacheCausewayExtExecutionOutboxImplementationJDO>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
+skinparam rectangle<<CoreExecutionOutbox.ApacheCausewayExtExecutionOutboxImplementationJPA>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
+skinparam rectangle<<CoreExecutionOutbox.ApacheCausewayExtExecutionOutboxRESTClient>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
+skinparam rectangle<<CoreExecutionOutbox>> {
+  BorderColor #9a9a9a
+  FontColor #9a9a9a
+  shadowing false
+}
+
+rectangle "Core: Execution Outbox\n<size:10>[Software System]</size>" <<CoreExecutionOutbox>> {
+  rectangle "==Apache Causeway Ext - Execution Outbox\n<size:10>[Container: packaging: pom]</size>" <<CoreExecutionOutbox.ApacheCausewayExtExecutionOutbox>> as CoreExecutionOutbox.ApacheCausewayExtExecutionOutbox
+  rectangle "==Apache Causeway Ext - Execution Outbox API\n<size:10>[Container: packaging: jar]</size>" <<CoreExecutionOutbox.ApacheCausewayExtExecutionOutboxAPI>> as CoreExecutionOutbox.ApacheCausewayExtExecutionOutboxAPI
+  rectangle "==Apache Causeway Ext - Execution Outbox Implementation (JDO)\n<size:10>[Container: packaging: jar]</size>" <<CoreExecutionOutbox.ApacheCausewayExtExecutionOutboxImplementationJDO>> as CoreExecutionOutbox.ApacheCausewayExtExecutionOutboxImplementationJDO
+  rectangle "==Apache Causeway Ext - Execution Outbox Implementation (JPA)\n<size:10>[Container: packaging: jar]</size>" <<CoreExecutionOutbox.ApacheCausewayExtExecutionOutboxImplementationJPA>> as CoreExecutionOutbox.ApacheCausewayExtExecutionOutboxImplementationJPA
+  rectangle "==Apache Causeway Ext - Execution Outbox REST Client\n<size:10>[Container: packaging: jar]</size>" <<CoreExecutionOutbox.ApacheCausewayExtExecutionOutboxRESTClient>> as CoreExecutionOutbox.ApacheCausewayExtExecutionOutboxRESTClient
+}
+
+CoreExecutionOutbox.ApacheCausewayExtExecutionOutbox .[#707070,thickness=2].> CoreExecutionOutbox.ApacheCausewayExtExecutionOutboxRESTClient : "<color:#707070>"
+CoreExecutionOutbox.ApacheCausewayExtExecutionOutbox .[#707070,thickness=2].> CoreExecutionOutbox.ApacheCausewayExtExecutionOutboxAPI : "<color:#707070>"
+CoreExecutionOutbox.ApacheCausewayExtExecutionOutbox .[#707070,thickness=2].> CoreExecutionOutbox.ApacheCausewayExtExecutionOutboxImplementationJDO : "<color:#707070>"
+CoreExecutionOutbox.ApacheCausewayExtExecutionOutbox .[#707070,thickness=2].> CoreExecutionOutbox.ApacheCausewayExtExecutionOutboxImplementationJPA : "<color:#707070>"
+@enduml
+----
+.Projects/Modules (Core: Execution Outbox)
+[cols="3a,5a", options="header"]
+|===
+|Coordinates |Description 
+
+|Apache Causeway Ext - Execution Outbox
+[source,yaml]
+----
+Group: org.apache.causeway.extensions
+Artifact: causeway-extensions-executionoutbox
+Type: pom
+Directory: /extensions/core/executionoutbox
+----
+|Logs executions into an outbox, REST Client to consume
+
+|Apache Causeway Ext - Execution Outbox API
+[source,yaml]
+----
+Group: org.apache.causeway.extensions
+Artifact: causeway-extensions-executionoutbox-applib
+Type: jar
+Directory: /extensions/core/executionoutbox/applib
+----
+|.Components
+****
+o.a.i.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry$TableColumnOrderDefault +
+o.a.i.extensions.executionoutbox.applib.spiimpl.ContentMappingServiceForOutboxEvents +
+o.a.i.extensions.executionoutbox.applib.spiimpl.ExecutionSubscriberForExecutionOutbox +
+****
+
+.Dependencies
+****
+org.apache.causeway.core:causeway-applib:jar:<managed> +
+org.apache.causeway.core:causeway-core-config:jar:<managed> +
+org.apache.causeway.core:causeway-core-runtimeservices:jar:<managed> +
+org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
+org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
+org.apache.causeway.testing:causeway-testing-unittestsupport-applib:jar:<managed> +
+****
+
+.Document Index Entries
+****
+xref:refguide:extensions:index/executionoutbox/applib/CausewayModuleExtExecutionOutboxApplib.adoc[CausewayModuleExtExecutionOutboxApplib], xref:refguide:extensions:index/executionoutbox/applib/app/ExecutionOutboxMenu.adoc[ExecutionOutboxMenu], xref:refguide:extensions:index/executionoutbox/applib/dom/ExecutionOutboxEntry.adoc[ExecutionOutboxEntry], xref:refguide:extensions:index/executionoutbox/applib/dom/ExecutionOutboxEntryRepository.adoc[ExecutionOutboxEntryRepository], xref:refguide:extensions:index/executionoutbox/applib/dom/ExecutionOutboxEntryType.adoc[ExecutionOutboxEntryType], xref:refguide:extensions:index/executionoutbox/applib/restapi/OutboxEvents.adoc[OutboxEvents], xref:refguide:extensions:index/executionoutbox/applib/restapi/OutboxRestApi.adoc[OutboxRestApi], xref:refguide:extensions:index/executionoutbox/applib/spiimpl/ContentMappingServiceForOutboxEvents.adoc[ContentMappingServiceForOutboxEvents]
+****
+
+|Apache Causeway Ext - Execution Outbox Implementation (JDO)
+[source,yaml]
+----
+Group: org.apache.causeway.extensions
+Artifact: causeway-extensions-executionoutbox-persistence-jdo
+Type: jar
+Directory: /extensions/core/executionoutbox/persistence-jdo
+----
+|.Components
+****
+o.a.i.extensions.executionoutbox.jdo.dom.ExecutionOutboxEntryPK$Semantics +
+o.a.i.extensions.executionoutbox.jdo.dom.ExecutionOutboxEntryRepository +
+****
+
+.Dependencies
+****
+org.apache.causeway.extensions:causeway-extensions-executionoutbox-applib:jar:<managed> +
+org.apache.causeway.extensions:causeway-extensions-executionoutbox-applib:test-jar:<managed> +
+org.apache.causeway.persistence:causeway-persistence-jdo-datanucleus:jar:<managed> +
+org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
+org.apache.causeway.testing:causeway-testing-unittestsupport-applib:jar:<managed> +
+****
+
+.Document Index Entries
+****
+xref:refguide:extensions:index/executionoutbox/jdo/CausewayModuleExtExecutionOutboxPersistenceJdo.adoc[CausewayModuleExtExecutionOutboxPersistenceJdo]
+****
+
+|Apache Causeway Ext - Execution Outbox Implementation (JPA)
+[source,yaml]
+----
+Group: org.apache.causeway.extensions
+Artifact: causeway-extensions-executionoutbox-persistence-jpa
+Type: jar
+Directory: /extensions/core/executionoutbox/persistence-jpa
+----
+|.Components
+****
+o.a.i.extensions.executionoutbox.jpa.dom.ExecutionOutboxEntryPK$Semantics +
+o.a.i.extensions.executionoutbox.jpa.dom.ExecutionOutboxEntryRepository +
+****
+
+.Dependencies
+****
+org.apache.causeway.extensions:causeway-extensions-executionoutbox-applib:jar:<managed> +
+org.apache.causeway.extensions:causeway-extensions-executionoutbox-applib:test-jar:<managed> +
+org.apache.causeway.persistence:causeway-persistence-jpa-eclipselink:jar:<managed> +
+org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
+org.apache.causeway.testing:causeway-testing-unittestsupport-applib:jar:<managed> +
+****
+
+.Document Index Entries
+****
+xref:refguide:extensions:index/executionoutbox/jpa/CausewayModuleExtExecutionOutboxPersistenceJpa.adoc[CausewayModuleExtExecutionOutboxPersistenceJpa]
+****
+
+|Apache Causeway Ext - Execution Outbox REST Client
+[source,yaml]
+----
+Group: org.apache.causeway.extensions
+Artifact: causeway-extensions-executionoutbox-restclient
+Type: jar
+Directory: /extensions/core/executionoutbox/restclient
+----
+|.Dependencies
+****
+com.h2database:h2:jar:<managed> +
+org.apache.causeway.commons:causeway-commons:jar:<managed> +
+org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
+org.apache.causeway.core:causeway-schema:jar:<managed> +
+org.apache.causeway.extensions:causeway-extensions-executionoutbox-applib:test-jar:<managed> +
+org.apache.causeway.extensions:causeway-extensions-executionoutbox-persistence-jpa:jar:<managed> +
+org.apache.causeway.extensions:causeway-extensions-executionoutbox-persistence-jpa:test-jar:<managed> +
+org.apache.causeway.mavendeps:causeway-mavendeps-webapp:pom:<managed> +
+org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
+org.apache.causeway.viewer:causeway-viewer-restfulobjects-client:jar:2.0.0-SNAPSHOT +
+org.apache.causeway.viewer:causeway-viewer-restfulobjects-jaxrsresteasy:jar:<managed> +
+****
+
+.Document Index Entries
+****
+xref:refguide:extensions:index/executionoutbox/restclient/CausewayModuleExtExecutionRestClient.adoc[CausewayModuleExtExecutionRestClient], xref:refguide:extensions:index/executionoutbox/restclient/api/OutboxClient.adoc[OutboxClient]
+****
+|===
+
+=== Core: Execution Republisher
+
+[plantuml,Core~ Execution Republisher,svg]
+----
+@startuml
+set separator none
+title Core: Execution Republisher - Containers
+
+left to right direction
+
+skinparam {
+  arrowFontSize 10
+  defaultTextAlignment center
+  wrapWidth 200
+  maxMessageSize 100
+}
+
+hide stereotype
+
+skinparam rectangle<<CoreExecutionRepublisher.ApacheCausewayExtExecutionOutboxRepublisher>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
+skinparam rectangle<<CoreExecutionRepublisher.ApacheCausewayExtExecutionRepublisher>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
+skinparam rectangle<<CoreExecutionRepublisher>> {
+  BorderColor #9a9a9a
+  FontColor #9a9a9a
+  shadowing false
+}
+
+rectangle "Core: Execution Republisher\n<size:10>[Software System]</size>" <<CoreExecutionRepublisher>> {
+  rectangle "==Apache Causeway Ext - Execution Republisher\n<size:10>[Container: packaging: pom]</size>" <<CoreExecutionRepublisher.ApacheCausewayExtExecutionRepublisher>> as CoreExecutionRepublisher.ApacheCausewayExtExecutionRepublisher
+  rectangle "==Apache Causeway Ext - Execution Outbox Republisher\n<size:10>[Container: packaging: jar]</size>" <<CoreExecutionRepublisher.ApacheCausewayExtExecutionOutboxRepublisher>> as CoreExecutionRepublisher.ApacheCausewayExtExecutionOutboxRepublisher
+}
+
+CoreExecutionRepublisher.ApacheCausewayExtExecutionRepublisher .[#707070,thickness=2].> CoreExecutionRepublisher.ApacheCausewayExtExecutionOutboxRepublisher : "<color:#707070>"
+@enduml
+----
+.Projects/Modules (Core: Execution Republisher)
+[cols="3a,5a", options="header"]
+|===
+|Coordinates |Description 
+
+|Apache Causeway Ext - Execution Republisher
+[source,yaml]
+----
+Group: org.apache.causeway.extensions
+Artifact: causeway-extensions-executionrepublisher
+Type: pom
+Directory: /extensions/core/executionrepublisher
+----
+|Republishes executions persisted in the execution log to the execution outbox
+
+|Apache Causeway Ext - Execution Outbox Republisher
+[source,yaml]
+----
+Group: org.apache.causeway.extensions
+Artifact: causeway-extensions-executionrepublisher-applib
+Type: jar
+Directory: /extensions/core/executionrepublisher/applib
+----
+|.Dependencies
+****
+org.apache.causeway.core:causeway-applib:jar:<managed> +
+org.apache.causeway.extensions:causeway-extensions-executionlog-applib:jar:<managed> +
+org.apache.causeway.extensions:causeway-extensions-executionoutbox-applib:jar:<managed> +
+org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
+org.apache.causeway.testing:causeway-testing-unittestsupport-applib:jar:<managed> +
+****
+
+.Document Index Entries
+****
+xref:refguide:extensions:index/executionrepublisher/applib/contributions/ExecutionLogEntry_copyToOutbox.adoc[ExecutionLogEntry_copyToOutbox]
+****
+|===
+
+=== Core: Flyway
+
+[plantuml,Core~ Flyway,svg]
+----
+@startuml
+set separator none
+title Core: Flyway - Containers
+
+left to right direction
+
+skinparam {
+  arrowFontSize 10
+  defaultTextAlignment center
+  wrapWidth 200
+  maxMessageSize 100
+}
+
+hide stereotype
+
+skinparam rectangle<<CoreFlyway.ApacheCausewayExtFlyway>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
+skinparam rectangle<<CoreFlyway.ApacheCausewayExtFlywayImpl>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
+skinparam rectangle<<CoreFlyway>> {
+  BorderColor #9a9a9a
+  FontColor #9a9a9a
+  shadowing false
+}
+
+rectangle "Core: Flyway\n<size:10>[Software System]</size>" <<CoreFlyway>> {
+  rectangle "==Apache Causeway Ext - Flyway\n<size:10>[Container: packaging: pom]</size>" <<CoreFlyway.ApacheCausewayExtFlyway>> as CoreFlyway.ApacheCausewayExtFlyway
+  rectangle "==Apache Causeway Ext - Flyway Impl\n<size:10>[Container: packaging: jar]</size>" <<CoreFlyway.ApacheCausewayExtFlywayImpl>> as CoreFlyway.ApacheCausewayExtFlywayImpl
+}
+
+CoreFlyway.ApacheCausewayExtFlyway .[#707070,thickness=2].> CoreFlyway.ApacheCausewayExtFlywayImpl : "<color:#707070>"
+@enduml
+----
+.Projects/Modules (Core: Flyway)
+[cols="3a,5a", options="header"]
+|===
+|Coordinates |Description 
+
+|Apache Causeway Ext - Flyway
+[source,yaml]
+----
+Group: org.apache.causeway.extensions
+Artifact: causeway-extensions-flyway
+Type: pom
+Directory: /extensions/core/flyway
+----
+|Integrates Flyway when using any (relational) persistence store
+
+|Apache Causeway Ext - Flyway Impl
+[source,yaml]
+----
+Group: org.apache.causeway.extensions
+Artifact: causeway-extensions-flyway-impl
+Type: jar
+Directory: /extensions/core/flyway/impl
+----
+|.Dependencies
+****
+org.apache.causeway.core:causeway-core-config:jar:<managed> +
+org.flywaydb:flyway-core:jar:<managed> +
+org.springframework:spring-context:jar:<managed> +
+org.springframework:spring-jdbc:jar:<managed> +
+org.springframework.boot:spring-boot-autoconfigure:jar:<managed> +
+****
+|===
+
+=== Security: Audit Trail
 
 === Security: Secman
 
+=== Security: Session Log
+
 === Security: Shiro LDAP Realm
+
+=== Security: Spring Oauth2
 
 === RO Viewer: CORS
 
@@ -5682,7 +5892,9 @@ xref:refguide:extensions:index/commandlog/jpa/CausewayModuleExtCommandLogPersist
 
 === Wicket Viewer: Full Calendar
 
-=== Wicket Viewer: Pdf.js
+=== Wicket Viewer: PDF.js
+
+=== Wicket Viewer: SSE
 
 == Tooling
 
