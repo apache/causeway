@@ -4,21 +4,124 @@
 
 
 The xref:security:audittrail:about.adoc[] module provides an implementation of the xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber], which provides a fine-grained persistent audit trail: each and every change to a entity property is persisted as an individual `AuditTrailEntry` instance.
+This entity has a xref:refguide:applib:index/services/iactn/Interaction.adoc#getInteractionId_[interaction id] which makes it easy to identify all the changes made within a single xref:refguide:applib:index/services/iactn/Interaction.adoc[interaction].
+If the xref:userguide:commandlog:about.adoc[] extension is enabled, then it also means that the audit entries can be correlated back to the command (action invocation or property edit) that gave rise to them.
 
-
-The xref:refguide:applib:index/services/iactn/Interaction.adoc#getInteractionId_[interaction id] identifies all the changes made within a single xref:refguide:applib:index/services/iactn/Interaction.adoc[interaction].
-
-The xref:refguide:extensions:index/audittrail/applib/app/AuditTrailMenu.adoc[] ...
-
-// TODO: to complete
+The xref:refguide:extensions:index/audittrail/applib/app/AuditTrailMenu.adoc[] provides a set of actions that can be used to query the resultant audit trail.
+See xref:#menubar-layout-xml[menu bar layout] below for the configuration of these.
 
 == Setup
 
-// TODO: to complete
+=== Dependency Management
+
+In your application's top level `pom.xml`, add a dependency for this module's own bill of materials (BOM):
+
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-audittrail</artifactId>
+            <version>{page-causewayrel}</version>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+----
+
+=== Dependencies / Imports
+
+Your application may or may not need to interact with the audit trail directly.
+If it does, then add a dependency/import to the applib module wherever required:
+
+* add this dependency:
++
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions-audittrail-applib</artifactId>
+    </dependency>
+</dependencies>
+----
+
+* and `@Import` this module:
++
+[source,java]
+.MyModule.java
+----
+@Configuration
+@Import({
+    CausewayModuleExtAuditTrailApplib.class,
+    // ...
+})
+public class MyModule { ... }
+----
+
+In addition, your app _will_ need to reference the implementation part of the module, usually from your webapp Maven module / top-level xref:userguide::modules.adoc#appmanifest[AppManifest] module.
+The details will depend on the ORM in use.
+
+* if using xref:pjpa::about.adoc[JPA/EclipseLink]:
+
+** add this dependency to your webapp's `pom.xml`:
++
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions-audittrail-persistence-jpa</artifactId>
+    </dependency>
+</dependencies>
+----
+
+** and `@Import` this module to your app manifest:
++
+[source,java]
+.MyAppManifest.java
+----
+@Configuration
+@Import({
+    CausewayModuleExtAuditTrailPersistenceJpa.class,
+    // ...
+})
+public class MyAppManifest { ... }
+----
+
+* if using xref:pjdo::about.adoc[]:
+
+** add this dependency to your webapp's `pom.xml`:
++
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions-audittrail-persistence-jdo</artifactId>
+    </dependency>
+</dependencies>
+----
+
+** and `@Import` this module to your app manifest:
++
+[source,java]
+.MyAppManifest.java
+----
+@Configuration
+@Import({
+    CausewayModuleExtAuditTrailPersistenceJdo.class,
+    // ...
+})
+public class MyAppManifest { ... }
+----
 
 
-
-
+[#menubar-layout-xml]
 == menubar.layout.xml
 
 Once configured, the extension provides a number of menu actions.

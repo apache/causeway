@@ -44,7 +44,7 @@ public class NavigationFacetFromHiddenTypePostProcessor extends MetaModelPostPro
 
     @Override
     public void postProcessAction(final ObjectSpecification objectSpecification, final ObjectAction act) {
-        addFacetIfRequired(act, act.getReturnType());
+        addFacetIfRequired(act, act.getElementType());
     }
 
     @Override
@@ -61,7 +61,7 @@ public class NavigationFacetFromHiddenTypePostProcessor extends MetaModelPostPro
 
     private static void addFacetIfRequired(final FacetHolder facetHolder, final ObjectSpecification navigatedType) {
         if(navigatedType.containsNonFallbackFacet(HiddenTypeFacet.class)) {
-            FacetUtil.addFacet(new NavigationFacetFromHiddenType(facetHolder, navigatedType));
+            FacetUtil.addFacet(NavigationFacetFromHiddenType.create(navigatedType, facetHolder));
         }
     }
 

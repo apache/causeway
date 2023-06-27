@@ -169,6 +169,8 @@
           <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
             <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
             <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
+            <mml:attr name="navigatedType" value="causeway.applib.value.Blob"/>
+            <mml:attr name="navigatedTypeFqcn" value="org.apache.causeway.applib.value.Blob"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetFallback">
@@ -1108,6 +1110,8 @@
           <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
             <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
             <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
+            <mml:attr name="navigatedType" value="causeway.applib.value.Blob"/>
+            <mml:attr name="navigatedTypeFqcn" value="org.apache.causeway.applib.value.Blob"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetFallback">

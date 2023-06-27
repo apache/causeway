@@ -159,3 +159,63 @@ The benefit if you do is much stronger access control to ensure that modules onl
 Using the xref:modules.adoc#an-archetypal-module[archetypal module structure] described below will help.
 ****
 
+[#appmanifest]
+== AppManifest
+
+There needs to be one top-level module that references all of the modules that make up the application, either directly or indirectly (through transitive dependencies).
+In Apache Causeway we call this module the "app manifest" or `AppManifest`, though this is just a name: it is, ultimately, just another Spring `@Configuration` module.
+
+For example, in the xref:simpleapp.adoc[simpleapp] starter app the `AppManifest` looks like:
+
+[source,java]
+.AppManifest.java
+----
+package domainapp.webapp;
+
+//...
+
+@Configuration
+@Import({
+        CausewayModuleApplibMixins.class,
+        CausewayModuleApplibChangeAndExecutionLoggers.class,
+
+        CausewayModuleCoreRuntimeServices.class,
+        CausewayModulePersistenceJpaEclipselink.class,
+        CausewayModuleViewerRestfulObjectsJaxrsResteasy.class,
+        CausewayModuleViewerWicketApplibMixins.class,
+        CausewayModuleViewerWicketViewer.class,
+
+        CausewayModuleTestingFixturesApplib.class,
+        CausewayModuleTestingH2ConsoleUi.class,
+
+        CausewayModuleExtFlywayImpl.class,
+
+        CausewayModuleExtSecmanPersistenceJpa.class,
+        CausewayModuleExtSecmanEncryptionSpring.class,
+        CausewayModuleExtSessionLogPersistenceJpa.class,
+        CausewayModuleExtAuditTrailPersistenceJpa.class,
+        CausewayModuleExtCommandLogPersistenceJpa.class,
+        CausewayModuleExtExecutionLogPersistenceJpa.class,
+        CausewayModuleExtExecutionOutboxPersistenceJpa.class,
+
+        CausewayModuleExtExcelDownloadWicketUi.class,
+        CausewayModuleExtFullCalendarWicketUi.class,
+        CausewayModuleExtPdfjsWicketUi.class,
+
+        CausewayModuleValAsciidocMetaModel.class,
+        CausewayModuleValAsciidocUiWkt.class,
+
+        ApplicationModule.class,
+        CustomModule.class,
+        QuartzModule.class,
+
+        // discoverable fixtures
+        DomainAppDemo.class
+})
+@PropertySources({
+        @PropertySource(CausewayPresets.DebugDiscovery),    // <.>
+})
+public class AppManifest {
+}
+----
+<.> there are a whole set of preset configuration properties that you can enable
