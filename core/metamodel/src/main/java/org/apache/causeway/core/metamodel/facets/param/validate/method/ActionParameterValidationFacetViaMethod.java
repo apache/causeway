@@ -75,11 +75,17 @@ implements ImperativeFacet {
                         patConstructor.get(),
                         method.asMethodForIntrospection(),
                         owningAdapter, pendingArgs)
-                 // provides pending args up to paramIndex (for validation)
-                : MmInvokeUtils.invokeWithArgs(
-                        method.asMethodElseFail(),
-                        owningAdapter,
-                        pendingArgs.subCan(0, paramIndex + 1));
+                : method.asMethodElseFail().getParameterCount()==1
+                         // provides the a single arg, namely the param under validation
+                        ? MmInvokeUtils.invokeWithSingleArg(
+                                method.asMethodElseFail(),
+                                owningAdapter,
+                                pendingArgs.getElseFail(paramIndex))
+                        // provides pending args up to paramIndex (for validation)
+                        : MmInvokeUtils.invokeWithArgs(
+                            method.asMethodElseFail(),
+                            owningAdapter,
+                            pendingArgs.subCan(0, paramIndex + 1));
 
         if(returnValue instanceof String) {
             return (String) returnValue;
