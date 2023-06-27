@@ -10,7 +10,8 @@ Authentication is done via OAuth2 and authorization via Shiro.
 include::docs:mavendeps:partial$setup-and-configure-dependencyManagement.adoc[leveloffset=+1]
 
 
-== Dependency
+== Setup
+=== Dependency
 
 In the webapp module of your application, add the following dependency:
 
@@ -21,12 +22,13 @@ In the webapp module of your application, add the following dependency:
     <dependency>
         <groupId>org.apache.causeway.extensions</groupId>
         <artifactId>causeway-extensions-spring-security-oauth2</artifactId>
+        <version>{page-causewayrel}</version>
     </dependency>
 </dependencies>
 ----
 
 [[_update-appmanifest]]
-== Update AppManifest
+=== Update AppManifest
 
 In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import `CausewayModuleSecuritySpring` and `CausewayModuleExtSpringSecurityOAuth2` modules.
 

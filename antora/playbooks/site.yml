@@ -109,6 +109,9 @@ content:
       start_path: extensions/core/commandlog/adoc # userguide
       branches: HEAD
     - url: .
+      start_path: extensions/core/docgen/adoc # userguide
+      branches: HEAD
+    - url: .
       start_path: extensions/core/excel/adoc # userguide
       branches: HEAD
     - url: .

@@ -26,8 +26,6 @@ Add a section for _Excel_ module's own  BOM:
         <dependency>
             <groupId>org.apache.causeway.extensions</groupId>
             <artifactId>causeway-extensions-excel</artifactId>
-            <scope>import</scope>
-            <type>pom</type>
             <version>{page-causewayrel}</version>
         </dependency>
     </dependencies>
