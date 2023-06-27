@@ -69,7 +69,7 @@ Walking through the main classes that make up the SimpleApp: `SimpleObject` pers
 
 
 |link:https://www.youtube.com/watch?v=KCJ1ZPPB3pA[004^] +
-Using the optional `Xxx.layout.xml` file to provide xref:userguide:fun:ui.adoc#object-layout[layout metadata] to dynamically render a domain object using the link:http://getbootstrap.com[Bootstrap 3] grid system.
+Using the optional `Xxx.layout.xml` file to provide xref:userguide:ROOT:ui-layout-and-hints.adoc#object-layout[layout metadata] to dynamically render a domain object using the link:http://getbootstrap.com[Bootstrap 3] grid system.
 ||X|||||||||
 
 
@@ -138,7 +138,7 @@ include::partial$what-is-apache-causeway/screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=dfRZeYqzMtI[012^] +
-Implementing business logic using a (no-arg) action, and associating with a property using either the `@MemberOrder` annotations or using xref:userguide:fun:ui.adoc#object-layout[dynamic (XML) layouts].
+Implementing business logic using a (no-arg) action, and associating with a property using either the `@MemberOrder` annotations or using xref:userguide:ROOT:ui-layout-and-hints.adoc#object-layout[dynamic (XML) layouts].
 |X||||||||X||
 
 
@@ -193,7 +193,7 @@ Extending a xref:testing:fixtures:about.adoc[fixture script] to more easily demo
 
 
 |link:https://www.youtube.com/watch?v=39Hpd7C4Kvo[018^] +
-Using xref:userguide:fun:ui.adoc#object-layout[dynamic (XML) layouts] to specify the page size for a domain object's collection.
+Using xref:userguide:ROOT:ui-layout-and-hints.adoc#object-layout[dynamic (XML) layouts] to specify the page size for a domain object's collection.
 ||||X|||||||
 
 

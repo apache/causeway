@@ -1,0 +1,103 @@
+= DocGen
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+The _DocGen_ module provides the ability ...
+
+// TODO
+
+== Setup
+
+=== Dependency Management
+
+// TODO
+
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-docgen</artifactId>
+            <scope>import</scope>
+            <type>pom</type>
+            <version>{page-causewayrel}</version>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+----
+
+[#dependencies]
+=== Dependencies
+
+In the webapp module of your application, add the following dependency:
+
+[source,xml]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions-docgen</artifactId>
+        <version>{page-causewayrel}</version>
+    </dependency>
+</dependencies>
+----
+
+
+[#appmanifest]
+=== AppManifest
+
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the `CausewayModuleExtDocgen` module.
+
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        ...
+        CausewayModuleExtDocgen.class,
+        ...
+})
+public class AppManifest {
+}
+----
+
+[#menubar-layout-xml]
+=== menubar.layout.xml
+
+The extension provides its own menu.
+You can use `menubars.layout.xml` to arrange as you see fit, for example in the tertiary menu:
+
+[source,xml]
+.menubars.layout.xml
+----
+<mb:tertiary>
+    <mb:menu>
+        <mb:named/>
+        <mb:section>
+            <mb:named>Documentation</mb:named>
+            <mb:serviceAction objectType="causeway.ext.docgen.DocumentationMenu" id="help"/>
+        </mb:section>
+    </mb:menu>
+    ...
+</mb:tertiary>
+----
+
+
+== Usage
+
+Once setup, the extension provides a "help" action for the end-user to click on.
+This returns a view model that provides access to documentation about the application.
+
+The documentation shown is obtained from various `describedAs` annotations of the `@XxxLayout` annotations.
+
+
+== See also
+
+* xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#describedAs[@DomainObjectLayout(describedAs=...)]
+* xref:refguide:applib:index/annotation/ActionLayout.adoc#describedAs[@ActionLayout(describedAs=...)]
+* xref:refguide:applib:index/annotation/PropertyLayout.adoc#describedAs[@PropertyLayout(describedAs=...)]
+* xref:refguide:applib:index/annotation/CollectionLayout.adoc#describedAs[@CollectionLayout(describedAs=...)]
+

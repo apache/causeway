@@ -109,6 +109,9 @@ content:
       start_path: extensions/core/commandlog/adoc # userguide
       branches: HEAD
     - url: .
+      start_path: extensions/core/docgen/adoc # userguide
+      branches: HEAD
+    - url: .
       start_path: extensions/core/excel/adoc # userguide
       branches: HEAD
     - url: .
@@ -164,9 +167,9 @@ content:
     #- url: .
     #  start_path: incubator/clients/kroviz/adoc # incubator
     #  branches: HEAD
-    - url: .
-      start_path: incubator/extensions/core/commandreplay/adoc # incubator
-      branches: HEAD
+    #- url: .
+    #  start_path: incubator/extensions/core/commandreplay/adoc # incubator
+    #  branches: HEAD
     - url: .
       start_path: incubator/viewers/graphql/adoc # incubator
       branches: HEAD

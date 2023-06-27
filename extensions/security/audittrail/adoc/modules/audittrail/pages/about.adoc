@@ -8,9 +8,13 @@ The xref:security:audittrail:about.adoc[] module provides an implementation of t
 
 The xref:refguide:applib:index/services/iactn/Interaction.adoc#getInteractionId_[interaction id] identifies all the changes made within a single xref:refguide:applib:index/services/iactn/Interaction.adoc[interaction].
 
-The xref:refguide:extensions:index/audittrail/applib/app/AuditTrailMenu.adoc[]
+The xref:refguide:extensions:index/audittrail/applib/app/AuditTrailMenu.adoc[] ...
+
+// TODO: to complete
 
 == Setup
+
+// TODO: to complete
 
 
 

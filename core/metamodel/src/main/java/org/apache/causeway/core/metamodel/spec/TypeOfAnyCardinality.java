@@ -78,16 +78,19 @@ public class TypeOfAnyCardinality {
 
     // -- FACTORIES
 
-    public static TypeOfAnyCardinality scalar(final @NonNull Class<?> scalarType) {
-        return of(assertScalar(scalarType), Optional.empty(), Optional.empty());
+    public static TypeOfAnyCardinality singular(final @NonNull Class<?> scalarType) {
+        return of(assertSingular(scalarType), Optional.empty(), Optional.empty());
     }
 
-    public static TypeOfAnyCardinality nonScalar(
+    public static TypeOfAnyCardinality plural(
             final @NonNull Class<?> elementType,
             final @NonNull Class<?> nonScalarType,
             final @NonNull CollectionSemantics collectionSemantics) {
-        return of(assertScalar(elementType),
-                Optional.of(assertNonScalar(nonScalarType)),
+        if(ProgrammingModelConstants.CollectionSemantics.valueOf(elementType).isPresent()) {
+            System.err.printf("%s%n", elementType);
+        }
+        return of(assertSingular(elementType),
+                Optional.of(assertPlural(nonScalarType)),
                 Optional.of(collectionSemantics));
     }
 
@@ -114,14 +117,14 @@ public class TypeOfAnyCardinality {
 
             return ProgrammingModelConstants.CollectionSemantics.valueOf(methodReturn)
             .map(collectionSemantics->
-                nonScalar(
+                plural(
                         adopted.resolveFirstGenericTypeArgumentOnMethodReturn(),
                         methodReturn,
                         collectionSemantics)
             )
-            .orElseGet(()->scalar(methodReturn));
+            .orElseGet(()->singular(methodReturn));
         })
-        .orElseGet(()->scalar(methodReturnGuess));
+        .orElseGet(()->singular(methodReturnGuess));
     }
 
     public static TypeOfAnyCardinality forMethodFacadeParameter(
@@ -153,14 +156,14 @@ public class TypeOfAnyCardinality {
 
             return ProgrammingModelConstants.CollectionSemantics.valueOf(paramType)
             .map(collectionSemantics->
-                nonScalar(
+                plural(
                         adopted.resolveFirstGenericTypeArgumentOnParameter(paramIndex),
                         paramType,
                         collectionSemantics)
             )
-            .orElseGet(()->scalar(paramType));
+            .orElseGet(()->singular(paramType));
         })
-        .orElseGet(()->scalar(paramTypeGuess));
+        .orElseGet(()->singular(paramTypeGuess));
     }
 
     public static TypeOfAnyCardinality forMethodParameter(
@@ -181,20 +184,20 @@ public class TypeOfAnyCardinality {
 
             return ProgrammingModelConstants.CollectionSemantics.valueOf(paramType)
             .map(collectionSemantics->
-                nonScalar(
+                plural(
                         adopted.resolveFirstGenericTypeArgumentOnParameter(paramIndex),
                         paramType,
                         collectionSemantics)
             )
-            .orElseGet(()->scalar(paramType));
+            .orElseGet(()->singular(paramType));
         })
-        .orElseGet(()->scalar(paramTypeGuess));
+        .orElseGet(()->singular(paramTypeGuess));
     }
 
-    public static TypeOfAnyCardinality forNonScalarType(
+    public static TypeOfAnyCardinality forPluralType(
             final @NonNull Class<?> nonScalarType,
             final @NonNull CollectionSemantics collectionSemantics) {
-        return nonScalar(
+        return plural(
                 toClass(ResolvableType.forClass(nonScalarType)),
                 nonScalarType,
                 collectionSemantics);
@@ -203,30 +206,30 @@ public class TypeOfAnyCardinality {
     // -- WITHERS
 
     public TypeOfAnyCardinality withElementType(final @NonNull Class<?> elementType) {
-        return of(assertScalar(elementType), this.getContainerType(), this.getCollectionSemantics());
+        return of(assertSingular(elementType), this.getContainerType(), this.getCollectionSemantics());
     }
 
     // -- HELPER
 
-    private static Class<?> assertScalar(final @NonNull Class<?> scalarType) {
+    private static Class<?> assertSingular(final @NonNull Class<?> singularType) {
         _Assert.assertEquals(
                 Optional.empty(),
-                ProgrammingModelConstants.CollectionSemantics.valueOf(scalarType),
-                ()->String.format("%s should not match any supported non-scalar types", scalarType));
-        return scalarType;
+                ProgrammingModelConstants.CollectionSemantics.valueOf(singularType),
+                ()->String.format("%s should not match any supported non-scalar types", singularType));
+        return singularType;
     }
 
-    private static Class<?> assertNonScalar(final @NonNull Class<?> nonScalarType) {
+    private static Class<?> assertPlural(final @NonNull Class<?> pluralType) {
         _Assert.assertTrue(
-                ProgrammingModelConstants.CollectionSemantics.valueOf(nonScalarType).isPresent(),
-                ()->String.format("%s should match a supported non-scalar type", nonScalarType));
-        return nonScalarType;
+                ProgrammingModelConstants.CollectionSemantics.valueOf(pluralType).isPresent(),
+                ()->String.format("%s should match a supported non-scalar type", pluralType));
+        return pluralType;
     }
 
-    private static Class<?> toClass(final ResolvableType nonScalar){
-        val genericTypeArg = nonScalar.isArray()
-                ? nonScalar.getComponentType()
-                : nonScalar.getGeneric(0);
+    private static Class<?> toClass(final ResolvableType pluralType){
+        val genericTypeArg = pluralType.isArray()
+                ? pluralType.getComponentType()
+                : pluralType.getGeneric(0);
         return genericTypeArg.toClass();
     }
 

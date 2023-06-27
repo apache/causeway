@@ -179,6 +179,18 @@ This can be overridden on a case-by-case basis using ``ActionLayout#promptStyle(
 
 
 |
+[[causeway.viewer.wicket.disable-reason-explanation-in-prototyping-mode-enabled]]
+causeway.viewer.wicket. +
+disable-reason-explanation-in- +
+prototyping-mode-enabled
+
+|  true
+| In prototyping mode, a text icon is appeneded to any property that is disabled, with its tool-tip explaining why the property is disabled. This configuration property can be used to suppress the icon, even in prototyping mode, if desired.
+
+The default is to enable (show) the text icon (if in prototyping mode).
+
+
+|
 [[causeway.viewer.wicket.js]]
 causeway.viewer.wicket.js
 

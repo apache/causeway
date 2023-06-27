@@ -34,6 +34,8 @@ import org.apache.causeway.persistence.jdo.applib.CausewayModulePersistenceJdoAp
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testing.fixtures.applib.CausewayIntegrationTestAbstractWithFixtures;
 import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.ExecutionParametersServiceAutoConfiguration;
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScriptsSpecificationProviderAutoConfiguration;
 
 @SpringBootTest(
         classes = ExcelModuleIntegTestAbstract.AppManifest.class
@@ -54,9 +56,12 @@ public abstract class ExcelModuleIntegTestAbstract extends CausewayIntegrationTe
             CausewayModulePersistenceJdoApplib.class,
             CausewayModuleTestingFixturesApplib.class,
 
-            CausewayModuleExtExcelFixtures.class
+            CausewayModuleExtExcelFixtures.class,
+            FixtureScriptsSpecificationProviderAutoConfiguration.class,
+            ExecutionParametersServiceAutoConfiguration.class,
     })
     public static class AppManifest {
+
     }
 
 }

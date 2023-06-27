@@ -11,6 +11,7 @@ class ModuleWithFixturesService {
   FixtureScript getTeardownFixture()
   List<ModuleWithFixturesDescriptor> modules()
   List<ModuleWithFixturesDescriptor> modulesWithin(Map<String, ContextBeans> beans)
+  void visitImportAnnotation(Import importAnnot, Class<T> requiredType, ConfigurableApplicationContext springContext, BiConsumer<String, T> visitor)
   List<ModuleWithFixturesDescriptor> sequenced(List<ModuleWithFixturesDescriptor> modules)
   List<String> beanNamesOf(ArrayList<ModuleWithFixturesDescriptor> result)
   ModuleWithFixturesDescriptor addNextModule(List<ModuleWithFixturesDescriptor> result, List<ModuleWithFixturesDescriptor> remaining, LinkedHashMap<String, ModuleWithFixturesDescriptor> moduleByName)

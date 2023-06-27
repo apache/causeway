@@ -71,7 +71,7 @@ public interface TypeOfFacet extends Facet {
 
     static Optional<TypeOfFacet> inferFromNonScalarType(
             final CollectionSemantics collectionSemantics, final Class<?> nonScalarType, final FacetHolder holder) {
-        val type = TypeOfAnyCardinality.forNonScalarType(nonScalarType, collectionSemantics);
+        val type = TypeOfAnyCardinality.forPluralType(nonScalarType, collectionSemantics);
         return toInferredFrom(TypeOfFacet::inferredFromType, type, holder);
     }
 
