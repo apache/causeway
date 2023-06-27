@@ -18,7 +18,10 @@
  */
 package org.apache.causeway.core.metamodel.postprocessors.members.navigation;
 
+import java.util.function.BiConsumer;
+
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -41,9 +44,16 @@ implements
         return NavigationFacet.class;
     }
 
-    public NavigationFacetFromHiddenType(final FacetHolder holder, final ObjectSpecification navigatedType) {
+    public static NavigationFacet create(final ObjectSpecification navigatedType, final FacetHolder holder) {
+        return new NavigationFacetFromHiddenType(navigatedType, holder);
+    }
+
+    private NavigationFacetFromHiddenType(final ObjectSpecification navigatedType, final FacetHolder holder) {
         super(type(), holder);
         this.navigatedType = navigatedType;
+        _Assert.assertTrue(navigatedType.isSingular(), ()->String.format(
+                "framework bug: elementType must not match any supported plural (collection) types, "
+                + "nevertheless got %s", navigatedType));
     }
 
     @Override
@@ -61,6 +71,13 @@ implements
                 ic.getWhere());
         final String hides = facet.hides(objVisibilityContext);
         return hides;
+    }
+
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("navigatedType", navigatedType.getLogicalTypeName());
+        visitor.accept("navigatedTypeFqcn", navigatedType.getCorrespondingClass().getName());
     }
 
 }

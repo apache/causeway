@@ -215,14 +215,14 @@ public class TypeOfAnyCardinality {
         _Assert.assertEquals(
                 Optional.empty(),
                 ProgrammingModelConstants.CollectionSemantics.valueOf(singularType),
-                ()->String.format("%s should not match any supported non-scalar types", singularType));
+                ()->String.format("%s should not match any supported plural (collection) types", singularType));
         return singularType;
     }
 
     private static Class<?> assertPlural(final @NonNull Class<?> pluralType) {
         _Assert.assertTrue(
                 ProgrammingModelConstants.CollectionSemantics.valueOf(pluralType).isPresent(),
-                ()->String.format("%s should match a supported non-scalar type", pluralType));
+                ()->String.format("%s should match a supported plural (collection) type", pluralType));
         return pluralType;
     }
 

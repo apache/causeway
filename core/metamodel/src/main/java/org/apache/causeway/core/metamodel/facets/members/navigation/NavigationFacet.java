@@ -27,6 +27,4 @@ import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
  * {@link HiddenTypeFacet hidden} (typically due to security permissions).
  */
 public interface NavigationFacet extends Facet, HidingInteractionAdvisor {
-
-
 }
