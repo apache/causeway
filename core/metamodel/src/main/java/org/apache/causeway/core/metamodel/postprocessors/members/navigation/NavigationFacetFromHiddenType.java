@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.postprocessors.members.navigation;
 
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.applib.Identifier;
@@ -44,8 +45,10 @@ implements
         return NavigationFacet.class;
     }
 
-    public static NavigationFacet create(final ObjectSpecification navigatedType, final FacetHolder holder) {
-        return new NavigationFacetFromHiddenType(navigatedType, holder);
+    public static Optional<NavigationFacet> create(final ObjectSpecification navigatedType, final FacetHolder holder) {
+        return navigatedType.isValue()
+                ? Optional.empty() // don't create for value types (optimization, not strictly required)
+                : Optional.of(new NavigationFacetFromHiddenType(navigatedType, holder));
     }
 
     private NavigationFacetFromHiddenType(final ObjectSpecification navigatedType, final FacetHolder holder) {

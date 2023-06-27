@@ -2637,13 +2637,6 @@
                         <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="void"/>
-                        <mml:attr name="navigatedTypeFqcn" value="void"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                         <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -2842,13 +2835,6 @@
                         <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="void"/>
-                        <mml:attr name="navigatedTypeFqcn" value="void"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                         <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -3012,13 +2998,6 @@
                         <mml:attr name="facet" value="CollectionDomainEventFacet"/>
                         <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                         <mml:attr name="isPostable" value="true"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.paged.PagedFacet" fqcn="org.apache.causeway.core.metamodel.facets.fallback.PagedFacetFromConfiguration">
@@ -3746,13 +3725,6 @@
                         <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="void"/>
-                        <mml:attr name="navigatedTypeFqcn" value="void"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                         <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -3957,13 +3929,6 @@
                         <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="void"/>
-                        <mml:attr name="navigatedTypeFqcn" value="void"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                         <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -4135,13 +4100,6 @@
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.paged.PagedFacet" fqcn="org.apache.causeway.core.metamodel.facets.fallback.PagedFacetFromConfiguration">
                         <mml:attr name="facet" value="PagedFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="INFERRED"/>
@@ -4225,13 +4183,6 @@
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="CssClassFaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
@@ -5619,13 +5570,6 @@
                         <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="void"/>
-                        <mml:attr name="navigatedTypeFqcn" value="void"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                         <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -6459,13 +6403,6 @@
                         <mml:attr name="facet" value="LayoutOrderFacetFromPropertyLayoutAnnotation"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                         <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -6575,13 +6512,6 @@
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromCollectionLayoutAnnotation">
                         <mml:attr name="facet" value="LayoutOrderFacetFromCollectionLayoutAnnotation"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.paged.PagedFacet" fqcn="org.apache.causeway.core.metamodel.facets.fallback.PagedFacetFromConfiguration">
@@ -7315,13 +7245,6 @@
                         <mml:attr name="facet" value="LayoutOrderFacetFromActionLayoutAnnotation"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="void"/>
-                        <mml:attr name="navigatedTypeFqcn" value="void"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                         <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -7436,13 +7359,6 @@
         <mml:properties>
             <mml:prop id="value" mixedIn="false">
                 <mml:facets>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                         <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -8272,13 +8188,6 @@
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromPropertyLayoutAnnotation">
                         <mml:attr name="facet" value="LayoutOrderFacetFromPropertyLayoutAnnotation"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.time.LocalDate"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.time.LocalDate"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
@@ -9136,13 +9045,6 @@
                         <mml:attr name="facet" value="LayoutOrderFacetFromPropertyLayoutAnnotation"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                         <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -9230,13 +9132,6 @@
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromPropertyLayoutAnnotation">
                         <mml:attr name="facet" value="LayoutOrderFacetFromPropertyLayoutAnnotation"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
@@ -10088,13 +9983,6 @@
                         <mml:attr name="facet" value="LayoutOrderFacetFromActionLayoutAnnotation"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="void"/>
-                        <mml:attr name="navigatedTypeFqcn" value="void"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                         <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -10176,13 +10064,6 @@
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromActionLayoutAnnotation">
                         <mml:attr name="facet" value="LayoutOrderFacetFromActionLayoutAnnotation"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="void"/>
-                        <mml:attr name="navigatedTypeFqcn" value="void"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
@@ -10337,13 +10218,6 @@
                         <mml:attr name="facet" value="LayoutOrderFacetFromPropertyLayoutAnnotation"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                         <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -10411,13 +10285,6 @@
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromPropertyLayoutAnnotation">
                         <mml:attr name="facet" value="LayoutOrderFacetFromPropertyLayoutAnnotation"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
@@ -10529,13 +10396,6 @@
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromCollectionLayoutAnnotation">
                         <mml:attr name="facet" value="LayoutOrderFacetFromCollectionLayoutAnnotation"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.paged.PagedFacet" fqcn="org.apache.causeway.core.metamodel.facets.fallback.PagedFacetFromConfiguration">
@@ -11269,13 +11129,6 @@
                         <mml:attr name="facet" value="LayoutOrderFacetFromActionLayoutAnnotation"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="void"/>
-                        <mml:attr name="navigatedTypeFqcn" value="void"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                         <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -11359,13 +11212,6 @@
                         <mml:attr name="facet" value="LayoutOrderFacetFromActionLayoutAnnotation"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="void"/>
-                        <mml:attr name="navigatedTypeFqcn" value="void"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                         <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -11447,13 +11293,6 @@
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromActionLayoutAnnotation">
                         <mml:attr name="facet" value="LayoutOrderFacetFromActionLayoutAnnotation"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="void"/>
-                        <mml:attr name="navigatedTypeFqcn" value="void"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
@@ -11644,13 +11483,6 @@
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="CssClassFaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
@@ -12458,13 +12290,6 @@
                         <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                         <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -13270,13 +13095,6 @@
                         <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                         <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -14063,13 +13881,6 @@
                         <mml:attr name="facet" value="LayoutOrderFacetFromPropertyLayoutAnnotation"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                         <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -14243,13 +14054,6 @@
                         <mml:attr name="facet" value="LayoutOrderFacetFromPropertyLayoutAnnotation"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                         <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -14384,13 +14188,6 @@
                         <mml:attr name="facet" value="LayoutOrderFacetFromPropertyLayoutAnnotation"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                         <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -14509,13 +14306,6 @@
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromPropertyLayoutAnnotation">
                         <mml:attr name="facet" value="LayoutOrderFacetFromPropertyLayoutAnnotation"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
@@ -14655,13 +14445,6 @@
                         <mml:attr name="facet" value="LayoutOrderFacetFromCollectionLayoutAnnotation"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                         <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -14787,13 +14570,6 @@
                         <mml:attr name="facet" value="LayoutOrderFacetFromCollectionLayoutAnnotation"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                         <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -14898,13 +14674,6 @@
                         <mml:attr name="facet" value="LayoutOrderFacetFromCollectionLayoutAnnotation"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                         <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -14979,13 +14748,6 @@
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromCollectionLayoutAnnotation">
                         <mml:attr name="facet" value="LayoutOrderFacetFromCollectionLayoutAnnotation"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.paged.PagedFacet" fqcn="org.apache.causeway.core.metamodel.facets.fallback.PagedFacetFromConfiguration">
@@ -16644,13 +16406,6 @@
                         <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                         <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -16949,13 +16704,6 @@
                         <mml:attr name="intent.hideMyAction" value="CHECK_IF_HIDDEN"/>
                         <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                         <mml:attr name="methods" value="public boolean org.apache.causeway.testdomain.model.good.ProperMemberSupport.hideMyAction()"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="void"/>
-                        <mml:attr name="navigatedTypeFqcn" value="void"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
@@ -17434,13 +17182,6 @@
                         <mml:attr name="methods" value="public boolean org.apache.causeway.testdomain.model.base.MemberDetection$PublicBase.hideEmail()"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                         <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -17575,13 +17316,6 @@
                         <mml:attr name="intent.hideOrders" value="CHECK_IF_HIDDEN"/>
                         <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                         <mml:attr name="methods" value="public boolean org.apache.causeway.testdomain.model.base.MemberDetection$PublicBase.hideOrders()"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.paged.PagedFacet" fqcn="org.apache.causeway.core.metamodel.facets.fallback.PagedFacetFromConfiguration">
@@ -18227,13 +17961,6 @@
                         <mml:attr name="methods" value="public boolean org.apache.causeway.testdomain.model.base.MemberDetection$PublicBase.hidePlaceOrder()"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="void"/>
-                        <mml:attr name="navigatedTypeFqcn" value="void"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                         <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -18608,13 +18335,6 @@
                         <mml:attr name="methods" value="public boolean org.apache.causeway.testdomain.model.base.MemberDetection$PublicBase.hideEmail()"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                         <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -18749,13 +18469,6 @@
                         <mml:attr name="intent.hideOrders" value="CHECK_IF_HIDDEN"/>
                         <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                         <mml:attr name="methods" value="public boolean org.apache.causeway.testdomain.model.base.MemberDetection$PublicBase.hideOrders()"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.paged.PagedFacet" fqcn="org.apache.causeway.core.metamodel.facets.fallback.PagedFacetFromConfiguration">
@@ -19405,13 +19118,6 @@
                         <mml:attr name="methods" value="public boolean org.apache.causeway.testdomain.model.base.MemberDetection$PublicBase.hidePlaceOrder()"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="void"/>
-                        <mml:attr name="navigatedTypeFqcn" value="void"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                         <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -19786,13 +19492,6 @@
                         <mml:attr name="methods" value="protected boolean org.apache.causeway.testdomain.model.base.MemberDetection$ProtectedBase.hideEmail()"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                         <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -19927,13 +19626,6 @@
                         <mml:attr name="intent.hideOrders" value="CHECK_IF_HIDDEN"/>
                         <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                         <mml:attr name="methods" value="protected boolean org.apache.causeway.testdomain.model.base.MemberDetection$ProtectedBase.hideOrders()"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.paged.PagedFacet" fqcn="org.apache.causeway.core.metamodel.facets.fallback.PagedFacetFromConfiguration">
@@ -20581,13 +20273,6 @@
                         <mml:attr name="intent.hidePlaceOrder" value="CHECK_IF_HIDDEN"/>
                         <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                         <mml:attr name="methods" value="protected boolean org.apache.causeway.testdomain.model.base.MemberDetection$ProtectedBase.hidePlaceOrder()"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="void"/>
-                        <mml:attr name="navigatedTypeFqcn" value="void"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
@@ -22822,13 +22507,6 @@
                         <mml:attr name="facet" value="LayoutOrderFacetFromCollectionLayoutAnnotation"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                         <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -23046,13 +22724,6 @@
                         <mml:attr name="facet" value="LayoutOrderFacetFromCollectionLayoutAnnotation"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                         <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -23249,13 +22920,6 @@
                         <mml:attr name="facet" value="LayoutOrderFacetFromCollectionLayoutAnnotation"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                         <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -23449,13 +23113,6 @@
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromPropertyLayoutAnnotation">
                         <mml:attr name="facet" value="LayoutOrderFacetFromPropertyLayoutAnnotation"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
@@ -23684,13 +23341,6 @@
                         <mml:attr name="facet" value="LayoutOrderFacetFromPropertyLayoutAnnotation"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                         <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -23903,13 +23553,6 @@
                         <mml:attr name="facet" value="LayoutOrderFacetFromPropertyLayoutAnnotation"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                         <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -24082,13 +23725,6 @@
                         <mml:attr name="classes" value="!imperative"/>
                         <mml:attr name="facet" value="CssClassFaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="void"/>
-                        <mml:attr name="navigatedTypeFqcn" value="void"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
@@ -25430,13 +25066,6 @@
                         <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="boolean"/>
-                        <mml:attr name="navigatedTypeFqcn" value="boolean"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                         <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -25854,13 +25483,6 @@
         <mml:properties>
             <mml:prop id="disableProperty" mixedIn="false">
                 <mml:facets>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                         <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -25984,13 +25606,6 @@
                         <mml:attr name="intent.disableDisableSomething" value="CHECK_IF_DISABLED"/>
                         <mml:attr name="interactionAdvisors" value="DisablingOrEnabling"/>
                         <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperPrefixedMember.disableDisableSomething()"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
@@ -26801,13 +26416,6 @@
                         <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="org.joda.time.LocalDateTime"/>
-                        <mml:attr name="navigatedTypeFqcn" value="org.joda.time.LocalDateTime"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                         <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -26953,13 +26561,6 @@
                         <mml:attr name="methods" value="private java.lang.String org.apache.causeway.testdomain.model.good.ViewModelWithAnnotationOptionalUsingPrivateSupport.disablePropWithPrivateAccessors()"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.disabled.DisabledObjectFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.disabled.method.DisabledObjectFacetViaMethod">
                         <mml:attr name="facet" value="DisabledObjectFacetViaMethod"/>
                         <mml:attr name="intent.disabled" value="CHECK_IF_DISABLED"/>
@@ -27072,13 +26673,6 @@
                         <mml:attr name="intent.disableCollWithPrivateAccessors" value="CHECK_IF_DISABLED"/>
                         <mml:attr name="interactionAdvisors" value="DisablingOrEnabling"/>
                         <mml:attr name="methods" value="private java.lang.String org.apache.causeway.testdomain.model.good.ViewModelWithAnnotationOptionalUsingPrivateSupport.disableCollWithPrivateAccessors()"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.disabled.DisabledObjectFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.disabled.method.DisabledObjectFacetViaMethod">
@@ -27613,13 +27207,6 @@
                         <mml:attr name="methods" value="private java.lang.String org.apache.causeway.testdomain.model.good.ViewModelWithAnnotationOptionalUsingPrivateSupport.disableMyAction()"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.disabled.DisabledObjectFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.disabled.method.DisabledObjectFacetViaMethod">
                         <mml:attr name="facet" value="DisabledObjectFacetViaMethod"/>
                         <mml:attr name="intent.disabled" value="CHECK_IF_DISABLED"/>
@@ -27962,13 +27549,6 @@
                         <mml:attr name="methods" value="private java.lang.String org.apache.causeway.testdomain.model.good.ViewModelWithEncapsulatedMembers.disablePropWithPrivateAccessors()"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
                         <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -28067,13 +27647,6 @@
                         <mml:attr name="intent.disableCollWithPrivateAccessors" value="CHECK_IF_DISABLED"/>
                         <mml:attr name="interactionAdvisors" value="DisablingOrEnabling"/>
                         <mml:attr name="methods" value="private java.lang.String org.apache.causeway.testdomain.model.good.ViewModelWithEncapsulatedMembers.disableCollWithPrivateAccessors()"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.paged.PagedFacet" fqcn="org.apache.causeway.core.metamodel.facets.fallback.PagedFacetFromConfiguration">
@@ -28592,13 +28165,6 @@
                         <mml:attr name="intent.disableMyAction" value="CHECK_IF_DISABLED"/>
                         <mml:attr name="interactionAdvisors" value="DisablingOrEnabling"/>
                         <mml:attr name="methods" value="private java.lang.String org.apache.causeway.testdomain.model.good.ViewModelWithEncapsulatedMembers.disableMyAction()"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.String"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.String"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
