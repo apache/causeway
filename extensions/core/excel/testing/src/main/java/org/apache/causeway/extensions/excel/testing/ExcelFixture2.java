@@ -27,6 +27,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.value.Blob;
@@ -118,6 +119,7 @@ public class ExcelFixture2 extends FixtureScript implements FixtureScriptWithExe
     /**
      * Output... a list of list of objects (each representing a row of a sheet)
      */
+    @Programmatic // list of list not allowed to enter meta-model
     @Getter
     private List<List<?>> lists;
 

@@ -43,7 +43,7 @@ extends TypeOfFacetAbstract {
                 .map(typeOf ->
                     new TypeOfFacetForCollectionAnnotation(
                             TypeOfAnyCardinality
-                                .nonScalar(typeOf, collectionSemantics.getContainerType(), collectionSemantics),
+                                .plural(typeOf, collectionSemantics.getContainerType(), collectionSemantics),
                         facetHolder));
     }
 

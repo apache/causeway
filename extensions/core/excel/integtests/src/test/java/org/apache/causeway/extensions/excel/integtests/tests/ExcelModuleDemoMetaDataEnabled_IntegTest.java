@@ -24,6 +24,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -39,7 +41,7 @@ import lombok.val;
 public class ExcelModuleDemoMetaDataEnabled_IntegTest extends ExcelModuleIntegTestAbstract {
 
     @Inject protected FixtureScripts fixtureScripts;
-    
+
     List<FixtureResult> fixtureResults;
 
     @BeforeEach
@@ -55,14 +57,14 @@ public class ExcelModuleDemoMetaDataEnabled_IntegTest extends ExcelModuleIntegTe
     }
 
 
-    //@Test @Disabled("TODO[2033] removal of PlatformTransactionManager") 
+    @Test @Disabled("TODO[2033] removal of PlatformTransactionManager")
     public void testResults() throws Exception{
 
         assertThat(fixtureResults.size()).isEqualTo(8);
 
         val resultToTest = new ArrayList<DemoToDoItemRowHandler2>();
         for (val fixtureResult : fixtureResults){
-            
+
             val rowHandler = (DemoToDoItemRowHandler2) fixtureResult.getObject();
             resultToTest.add(rowHandler);
         }

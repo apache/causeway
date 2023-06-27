@@ -25,6 +25,8 @@ import javax.inject.Inject;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.commons.internal.resources._Resources;
@@ -34,9 +36,6 @@ import org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.Exce
 import org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItemMenu;
 import org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_tearDown;
 import org.apache.causeway.extensions.excel.integtests.ExcelModuleIntegTestAbstract;
-
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
 
 public class ExcelModuleDemoUploadService_IntegTest extends ExcelModuleIntegTestAbstract {
 
