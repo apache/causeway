@@ -16,7 +16,7 @@ In addition, the library provides fixture support, allowing test data to be spec
 
 === Dependency Management
 
-Add a section for _Excel_ module's own  BOM:
+In your application's top level `pom.xml`, add a dependency for this module's own bill of materials (BOM):
 
 [source,xml,subs="attributes+"]
 .pom.xml
@@ -33,13 +33,15 @@ Add a section for _Excel_ module's own  BOM:
 ----
 
 [#dependencies]
-=== Dependencies
+=== Dependencies / Imports
 
-In the modules of your application that will use the _Excel_ extension, add the following dependency/ies:
+In the modules of your application that will use the _Excel_ extension, add dependency/ies to `pom.xml`, and update the `@Import` of the corresponding xref:userguide::modules.adoc[module]:
 
-* for xref:export-and-import[export/import], add:
+For xref:export-and-import[export/import]:
+
+* add this dependency:
 +
-[source,xml]
+[source,xml,subs="attributes+"]
 .pom.xml
 ----
 <dependencies>
@@ -50,9 +52,25 @@ In the modules of your application that will use the _Excel_ extension, add the 
 </dependencies>
 ----
 
-* for xref:fixture-support[fixture support], add:
+* and `@Import` this module:
 +
-[source,xml]
+[source,java]
+.MyModule.java
+----
+@Configuration
+@Import({
+    CausewayModuleExtExcelApplib.class,
+    // ...
+})
+public class MyModule { ... }
+----
+
+
+For xref:fixture-support[fixture support]:
+
+* add this dependency:
++
+[source,xml,subs="attributes+"]
 .pom.xml
 ----
 <dependencies>
@@ -63,10 +81,23 @@ In the modules of your application that will use the _Excel_ extension, add the 
 </dependencies>
 ----
 
+* and `@Import` this module:
++
+[source,java]
+.MyModule.java
+----
+@Configuration
+@Import({
+    CausewayModuleExtExcelTesting.class,
+    // ...
+})
+public class MyModule { ... }
+----
+
 
 
 [#export-and-import]
-== Export and Import
+== Usage: Export and Import
 
 Define a view model to act as a DTO.
 For example:
@@ -136,7 +167,7 @@ public TransactionImportExportManager importFromExcel(
 
 
 [#fixture-support]
-== Fixture Support
+== Usage: Fixture Support
 
 The fixture support is provided through `ExcelFixture`, an implementation of `FixtureScript` that is initialized with a spreadsheet and a set of handler classes, one for each sheet.
 These handler classes implement `ExcelFixtureRowHandler`
