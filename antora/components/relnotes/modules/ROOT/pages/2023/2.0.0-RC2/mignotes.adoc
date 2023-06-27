@@ -16,6 +16,20 @@ that is, if the latter was present on an Action's return type, hence removed
 * `Collection#hidden` ... use `CollectionLayout#hidden` instead
 * `Property#hidden` ... use `PropertyLayout#hidden` instead
 
+Parameter support method `validateNXxx(...)` is now supported to only have a single argument, 
+namely the parameter, that is subject to validation. 
+
+[WARNING]
+====
+This may potentially change behavior
+for cases when the action's first and the n-th parameter 
+are the same type and 
+given a single argument parameter support method with same type also, 
+then previously it interpreted the support to be associated with 
+the first parameter, while now it will interpret the support to be 
+associated with the n-th parameter. (using _n_ as 1-based here)
+====
+
 == Maven Artifacts
 
 Incubator projects `viewer-vaadin` and `viewer-javafx` were discontinued in version 2.x,
