@@ -498,7 +498,7 @@ public abstract class FixtureScript {
                 final @NonNull FixtureScript callingFixtureScript,
                 final FixtureScript... fixtureScripts) {
             if(fixtureScripts==null) return; // no-op
-            executeChildren(callingFixtureScript, Can.ofArray(fixtureScripts).toList());
+            executeChildren(callingFixtureScript, Can.ofArray(fixtureScripts));
         }
 
         /**
