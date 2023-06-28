@@ -5,9 +5,33 @@
 
 The Excel Download module integrates with the xref:vw:ROOT:about.adoc[Wicket Viewer] to allow any collection to be downloaded as an Excel spreadsheet.
 
-== Configuration
+There is no applib for this extension;
 
-Add the following dependency:
+== Setup
+
+=== Dependency Management
+
+In your application's top level `pom.xml`, add a dependency for this module's own bill of materials (BOM):
+
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-exceldownload</artifactId>
+            <scope>import</scope>
+            <type>pom</type>
+            <version>{page-causewayrel}</version>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+----
+
+=== Dependencies / Imports
+
+In the webapp module of your application, add the following dependency:
 
 [source,xml]
 .pom.xml
@@ -18,7 +42,7 @@ Add the following dependency:
 </dependency>
 ----
 
-Also add the following module to your `AppManifest`:
+In your application's xref:userguide::modules.adoc#appmanifest[App Manifest], import the extension's implementation module:
 
 [source,java]
 .AppManifest.java
@@ -32,4 +56,10 @@ public class AppManifest {
 }
 ----
 
+== Usage
+
+[WARNING]
+====
+TODO: v2 - to write up...
+====
 

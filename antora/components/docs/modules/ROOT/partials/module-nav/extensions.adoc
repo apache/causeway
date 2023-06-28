@@ -7,6 +7,7 @@
 ** Core
 
 *** xref:userguide:commandlog:about.adoc[]
+*** xref:userguide:docgen:about.adoc[]
 *** xref:userguide:executionlog:about.adoc[]
 *** xref:userguide:executionoutbox:about.adoc[]
 *** xref:userguide:executionrepublisher:about.adoc[]

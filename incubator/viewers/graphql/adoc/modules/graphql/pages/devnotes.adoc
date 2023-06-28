@@ -81,12 +81,15 @@ System.setProperty("spring.profiles.active", "demo-jpa");
 ----
 ====
 
-
-TODO's
+[WARNING]
+====
+TODO: v2
 
 * use interfaces
 ** the beansort ABSTRACT could be implemented as gql interface
 ** for input types for interfaces (like PaperClip) we could create a mutator for each implementation (f.e. addClipA, addClipB,..)
+====
+
 
 
 

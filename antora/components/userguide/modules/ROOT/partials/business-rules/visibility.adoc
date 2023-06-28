@@ -90,5 +90,5 @@ However, if they check the first boolean parameter (ie, to ship the `Order` to t
 
 * xref:refguide:applib-methods:prefixes.adoc#hide[hide...()] method prefix
 
-// TODO: xref mixins for specifying supporting methods by name or using `Parameters`
+WARNING: TODO: v2: xref mixins for specifying supporting methods by name or using `Parameters`
 

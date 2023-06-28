@@ -31,7 +31,7 @@ Add an entry for the _Execution Republisher_ module's own BOM:
 ----
 
 [#dependencies]
-=== Dependencies
+=== Dependencies / Import
 
 In the webapp module of your application, add the following dependency:
 
@@ -48,10 +48,8 @@ In the webapp module of your application, add the following dependency:
 
 Note that this declares the xref:executionlog:about.adoc[] and xref:executionoutbox:about.adoc[] modules as dependencies.
 
-[[_update-appmanifest]]
-=== Update AppManifest
 
-In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the _ExecutionLog_ modules.
+In your application's xref:userguide::modules.adoc#appmanifest[App Manifest], import the _ExecutionRepublisher_ module.
 
 [source,java]
 .AppManifest.java
@@ -66,7 +64,7 @@ public class AppManifest {
 }
 ----
 
-Note that this expects (and depends upon) the xref:executionlog:about.adoc[] and xref:executionoutbox:about.adoc[] modules.
+Note that this depends upon the xref:executionlog:about.adoc[] and xref:executionoutbox:about.adoc[] modules.
 
 
 == User Interface

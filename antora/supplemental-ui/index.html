@@ -559,26 +559,18 @@
               <br/>
             </div>
             <div class="col-lg-6 text-left text-lg-left">
-              <p class="cta-text text-center" style="margin-block-end: 0; ">
-                Learn about Apache Causeway™ by running the minimal <a href="docs/latest/starters/helloworld.html">helloworld</a> starter&nbsp;app.
-                You can see the app running <a href="https://helloworld-jpa-snapshot.apps.causeway.dev/" target="_blank">here (jpa)</a>.
-                <br/>
-                (The app scales to zero when not in use, so please allow up to a minute for it to restart if necessary).
-              </p>
-            </div>
-            <div class="col-lg-6 text-left text-lg-left">
-              <p class="cta-text text-center" style="margin-block-end: 0; ">
-                Develop your own Apache Causeway™ app with the structured <a href="docs/latest/starters/simpleapp.html">simpleapp</a> starter&nbsp;app.
-                You can see the app running <a href="https://simpleapp-jpa-snapshot.apps.causeway.dev/" target="_blank">here (jpa)</a>.
-                <br/>
-                (The app scales to zero when not in use, so please allow up to a minute for it to restart if necessary).
-              </p>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-6 text-left text-lg-left">
-              <p>
-              <pre id="helloworld-jpa-text">
+              <h4 class="cta-text">Try out ...</h4>
+                <p class="cta-text text-left" style="margin-block-end: 0; ">
+                  Try out the framework with the minimal <a href="docs/latest/starters/helloworld.html">helloworld</a> starter&nbsp;app.
+                  <br/>
+                    Use the app <a href="https://helloworld-jpa-snapshot.apps.causeway.dev/" target="_blank">online (jpa)</a> or run it locally:
+                  <pre id="helloworld-docker-text"  style="margin-top: 5px">
+docker run -p 8080:8080 causeway-app-helloworld:jpa-SNAPSHOT
+docker run -p 8080:8080 causeway-app-helloworld:jdo-SNAPSHOT</pre>
+                <p class="cta-text text-left" style="margin-block-end: 0; ">
+                    Build from source:
+
+                <pre id="helloworld-jpa-text">
 APP=causeway-app-helloworld
 BRANCH=jpa
 curl https://codeload.github.com/apache/$APP/zip/$BRANCH | jar xv
@@ -586,10 +578,37 @@ cd $APP-$BRANCH
 
 mvn clean install -Dskip.staging -Dskip.nightly
 mvn spring-boot:run</pre>
-              </p>
+                <p class="cta-text text-center" style="margin-block-end: 0; margin-top: -10px;">
+                    <span id="helloworld-jpa-copy" style="cursor: pointer;"><img src="_/img/home/clipboard-copy.png" width="16" height="16"/>&nbsp;&nbsp;Copy text for helloworld (jpa)</span>
+                </p>
+
+                <p>
+                <pre id="helloworld-jdo-text">
+APP=causeway-app-helloworld
+BRANCH=jdo
+curl https://codeload.github.com/apache/$APP/zip/$BRANCH | jar xv
+cd $APP-$BRANCH
+
+mvn clean install -Dskip.staging -Dskip.nightly
+mvn spring-boot:run</pre>
+                <p class="cta-text text-center" style="margin-block-end: 0; margin-top: -10px;">
+                    <span id="helloworld-jdo-copy" style="cursor: pointer;"><img src="_/img/home/clipboard-copy.png" width="16" height="16"/>&nbsp;&nbsp;Copy text for helloworld (jdo)</span>
+                </p>
+
+
             </div>
             <div class="col-lg-6 text-left text-lg-left">
-              <p>
+                <h4 class="cta-text">Develop your own ...</h4>
+              <p class="cta-text text-left" style="margin-block-end: 0; ">
+                Develop your own app with the structured <a href="docs/latest/starters/simpleapp.html">simpleapp</a> starter&nbsp;app.
+                <br/>
+                  Use the app <a href="https://simpleapp-jpa-snapshot.apps.causeway.dev/" target="_blank">online (jpa)</a> or run it locally:
+                <pre id="simpleapp-docker-jpa-text"  style="margin-top: 5px">
+docker run -p 8080:8080 causeway-app-simpleapp:jpa-SNAPSHOT
+docker run -p 8080:8080 causeway-app-simpleapp:jdo-SNAPSHOT</pre>
+                <p class="cta-text text-left" style="margin-block-end: 0; ">
+                    Build from source:
+
               <pre id="simpleapp-jpa-text">
 APP=causeway-app-simpleapp
 BRANCH=jpa
@@ -598,37 +617,12 @@ cd $APP-$BRANCH
 
 mvn clean install -Dskip.staging -Dskip.nightly
 mvn -pl webapp spring-boot:run</pre>
-              </p>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-6 text-left text-lg-left">
-              <p class="cta-text text-center" style="margin-block-end: 0; margin-top: -20px;">
-                <span id="helloworld-jpa-copy" style="cursor: pointer;"><img src="_/img/home/clipboard-copy.png" width="16" height="16"/>&nbsp;&nbsp;Copy text for helloworld (jpa)</span>
-              </p>
-            </div>
-            <div class="col-lg-6 text-left text-lg-left">
-              <p class="cta-text text-center" style="margin-block-end: 0; margin-top: -20px;">
-                <span id="simpleapp-jpa-copy" style="cursor: pointer;"><img src="_/img/home/clipboard-copy.png" width="16" height="16"/>&nbsp;&nbsp;Copy text for simpleapp (jpa)</span>
-              </p>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-6 text-left text-lg-left">
-              <p>
-              <pre id="helloworld-jdo-text">
-APP=causeway-app-helloworld
-BRANCH=jdo
-curl https://codeload.github.com/apache/$APP/zip/$BRANCH | jar xv
-cd $APP-$BRANCH
+                <p class="cta-text text-center" style="margin-block-end: 0; margin-top: -10px;">
+                    <span id="simpleapp-jpa-copy" style="cursor: pointer;"><img src="_/img/home/clipboard-copy.png" width="16" height="16"/>&nbsp;&nbsp;Copy text for simpleapp (jpa)</span>
+                </p>
 
-mvn clean install -Dskip.staging -Dskip.nightly
-mvn spring-boot:run</pre>
-              </p>
-            </div>
-            <div class="col-lg-6 text-left text-lg-left">
-              <p>
-              <pre id="simpleapp-jdo-text">
+                <p/>
+                <pre id="simpleapp-jdo-text">
 APP=causeway-app-simpleapp
 BRANCH=jdo
 curl https://codeload.github.com/apache/$APP/zip/$BRANCH | jar xv
@@ -636,27 +630,34 @@ cd $APP-$BRANCH
 
 mvn clean install -Dskip.staging -Dskip.nightly
 mvn -pl webapp spring-boot:run</pre>
-              </p>
+                <p class="cta-text text-center" style="margin-block-end: 0; margin-top: -10px">
+                    <span id="simpleapp-jdo-copy" style="cursor: pointer;"><img src="_/img/home/clipboard-copy.png" width="16" height="16"/>&nbsp;&nbsp;Copy text for simpleapp (jdo)</span>
+                </p>
+
             </div>
           </div>
           <div class="row">
-            <div class="col-lg-6 text-left text-lg-left">
-              <p class="cta-text text-center" style="margin-block-end: 0; margin-top: -20px;">
-                <span id="helloworld-jdo-copy" style="cursor: pointer;"><img src="_/img/home/clipboard-copy.png" width="16" height="16"/>&nbsp;&nbsp;Copy text for helloworld (jdo)</span>
-              </p>
-            </div>
-            <div class="col-lg-6 text-left text-lg-left">
-              <p class="cta-text text-center" style="margin-block-end: 0; margin-top: -20px;">
-                <span id="simpleapp-jdo-copy" style="cursor: pointer;"><img src="_/img/home/clipboard-copy.png" width="16" height="16"/>&nbsp;&nbsp;Copy text for simpleapp (jdo)</span>
-              </p>
-            </div>
+              <div class="col-lg-2 text-left text-lg-left">
+              </div>
+              <div class="col-lg-8 text-left text-lg-left">
+                  <h4 class="cta-text" style="margin-top: 20px">Learn and Explore...</h4>
+                <p class="cta-text text-left" style="margin-block-end: 0; margin-top: 20px;">
+                  You can also explore the Apache Causeway™ programming model through the demo app, which illustrates many of the framework's annotations and programming conventions.
+                  <br/>
+                  Use the app <a href="https://simpleapp-jpa-snapshot.apps.causeway.dev/" target="_blank">online (jpa)</a> or run it locally:
+                  <pre id="demoapp-docker-text"  style="margin-top: 5px">
+docker run -p 8080:8080 causeway-app-demo-jpa:latest
+docker run -p 8080:8080 causeway-app-demo-jdo:latest</pre>
+                  <br/>
+                <p>
+              </div>
+              <div class="col-lg-2 text-left text-lg-left">
+              </div>
           </div>
-          <div class="row">
+            <div class="row">
             <div class="col-lg-12 text-left text-lg-left">
               <p class="cta-text text-center" style="margin-block-end: 0; margin-top: 20px;">
-                You can also explore the Apache Causeway™ programming model through the demo app, running <a href="https://demo-wicket-jpa-snapshot.apps.causeway.dev/" target="_blank">here (jpa)</a> or <a href="https://demo-wicket-jdo-snapshot.apps.causeway.dev/" target="_blank">here (jdo)</a>.
-                <br/>
-                (These apps scales to zero when not in use, so please allow up to a minute for them to restart if necessary).
+                  <b>NOTE</b>: The online apps all scale to zero when not in use, so please allow up to a minute for it to restart if necessary.
               </p>
             </div>
           </div>
