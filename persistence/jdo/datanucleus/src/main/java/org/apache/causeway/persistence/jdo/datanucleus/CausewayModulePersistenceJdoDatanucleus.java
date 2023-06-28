@@ -25,6 +25,8 @@ import javax.jdo.JDOException;
 import javax.jdo.PersistenceManagerFactory;
 import javax.sql.DataSource;
 
+import org.apache.causeway.persistence.jdo.datanucleus.idstringifers.IdStringifierForDnSCOID;
+
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 import org.datanucleus.metadata.PersistenceUnitMetaData;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -104,6 +106,8 @@ import lombok.extern.log4j.Log4j2;
     DnCharIdValueSemantics.class,
     DnStringIdValueSemantics.class,
     DnObjectIdValueSemantics.class,
+
+    IdStringifierForDnSCOID.class,
 
     // @Service's
     JdoSupportServiceDefault.class,
