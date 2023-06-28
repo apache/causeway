@@ -6,7 +6,95 @@ The Session Log extension provides an implementation of the xref:refguide:applib
 
 When a user logs on, a `SessionLogEntry` instance is persisted; when they log off, the same instance is updated.
 
-WARNING: TODO: v2 - to write up...
+
+== Setup
+
+=== Dependency Management
+
+In your application's top level `pom.xml`, add a dependency for this module's own bill of materials (BOM):
+
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-sessionlog</artifactId>
+             <scope>import</scope>
+            <type>pom</type>
+           <version>{page-causewayrel}</version>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+----
+
+=== Dependencies / Imports
+
+Your application may or may not need to interact with the audit trail directly.
+If it does, then add a dependency/import to the applib module wherever required:
+
+* add this dependency:
++
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions-sessionlog-applib</artifactId>
+    </dependency>
+</dependencies>
+----
+
+* and `@Import` this module:
++
+[source,java]
+.MyModule.java
+----
+@Configuration
+@Import({
+    CausewayModuleExtSessionLogApplib.class,
+    // ...
+})
+public class MyModule { ... }
+----
+
+In your application's xref:userguide::modules.adoc#appmanifest[App Manifest], import the implementation modules of this extension.
+The exact modules to use will depend upon the persistence mechanism in use:
+
+* add this dependency to your webapp's `pom.xml`:
++
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions-sessionlog-persistence-xxx</artifactId> <!--.-->
+    </dependency>
+</dependencies>
+----
+<.> either:
+** `causeway-extensions-sessionlog-persistence-jpa` (xref:pjpa::about.adoc[]) or
+** `causeway-extensions-sessionlog-persistence-jdo` (xref:pjdo::about.adoc[])
+
+* and `@Import` this module to your app manifest:
++
+[source,java]
+.MyAppManifest.java
+----
+@Configuration
+@Import({
+    CausewayModuleExtSessionLogPersistenceXxx.class,    // <.>
+    // ...
+})
+public class MyAppManifest { ... }
+----
+<.> either
++
+** `CausewayModuleExtSessionLogPersistenceJpa` (xref:pjpa::about.adoc[]) or
+** `CausewayModuleExtSessionLogPersistenceJdo` (xref:pjdo::about.adoc[])
 
 
 

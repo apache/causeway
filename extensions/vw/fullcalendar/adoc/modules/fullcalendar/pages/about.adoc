@@ -5,7 +5,84 @@
 The Full Calendar module integrates with the xref:vw:ROOT:about.adoc[Wicket Viewer], rendering any collection of domain objects that expose a date to be rendered in a calendar view (using the link:https://fullcalendar.io/[fullcalendar] javascript library).
 
 
-== Applib
+== Setup
+
+=== Dependency Management
+
+In your application's top level `pom.xml`, add a dependency for this module's own bill of materials (BOM):
+
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-fullcalendar</artifactId>
+            <scope>import</scope>
+            <type>pom</type>
+            <version>{page-causewayrel}</version>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+----
+
+=== Dependencies / Imports
+
+In those modules where there are domain objects to be represented on the calendar, add a dependency/import to the applib module:
+
+* add this dependency:
++
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions-fullcalendar-applib</artifactId>
+    </dependency>
+</dependencies>
+----
+
+* and `@Import` this module:
++
+[source,java]
+.MyModule.java
+----
+@Configuration
+@Import({
+    CausewayModuleExtFullcalendarApplib.class,
+    // ...
+})
+public class MyModule { ... }
+----
+
+In addition, in the webapp module of your application, add the following dependency:
+
+[source,xml]
+.pom.xml
+----
+<dependency>
+    <groupId>org.apache.causeway.extensions</groupId>
+    <artifactId>causeway-extensions-exceldownload-wicket-ui</artifactId>
+</dependency>
+----
+
+And in your application's xref:userguide::modules.adoc#appmanifest[App Manifest], import the extension's implementation module:
+
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        CausewayModuleExtFullcalendarWicketUi.class,
+        ...
+})
+public class AppManifest {
+}
+----
+
+== Usage
 
 [WARNING]
 ====
@@ -13,33 +90,4 @@ TODO: v2 - to write up...
 
 need to reference implement either `Calendarable` or `CalandarEventable` in the applib.
 ====
-
-== Usage
-
-To configure the extension:
-
-* include the dependency:
-+
-[source,xml]
-.pom.xml
-----
-<dependency>
-    <groupId>org.apache.causeway.extensions</groupId>
-    <artifactId>causeway-extensions-fullcalendar-wicket-ui</artifactId>
-</dependency>
-----
-
-* update the `AppManifest`:
-+
-[source,java]
-.AppManifest.java
-----
-@Configuration
-@Import({
-        CausewayModuleExtFullCalendarWicketUi.class,  // <.>
-        ...
-})
-public class AppManifest {
-}
-----
 

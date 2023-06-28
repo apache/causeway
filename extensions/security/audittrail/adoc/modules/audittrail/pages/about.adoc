@@ -24,7 +24,9 @@ In your application's top level `pom.xml`, add a dependency for this module's ow
         <dependency>
             <groupId>org.apache.causeway.extensions</groupId>
             <artifactId>causeway-extensions-audittrail</artifactId>
-            <version>{page-causewayrel}</version>
+             <scope>import</scope>
+            <type>pom</type>
+           <version>{page-causewayrel}</version>
         </dependency>
     </dependencies>
 </dependencyManagement>
@@ -61,12 +63,10 @@ If it does, then add a dependency/import to the applib module wherever required:
 public class MyModule { ... }
 ----
 
-In addition, your app _will_ need to reference the implementation part of the module, usually from your webapp Maven module / top-level xref:userguide::modules.adoc#appmanifest[AppManifest] module.
-The details will depend on the ORM in use.
+In your application's xref:userguide::modules.adoc#appmanifest[App Manifest], import the implementation modules of this extension.
+The exact modules to use will depend upon the persistence mechanism in use:
 
-* if using xref:pjpa::about.adoc[JPA/EclipseLink]:
-
-** add this dependency to your webapp's `pom.xml`:
+* add this dependency to your webapp's `pom.xml`:
 +
 [source,xml,subs="attributes+"]
 .pom.xml
@@ -74,51 +74,30 @@ The details will depend on the ORM in use.
 <dependencies>
     <dependency>
         <groupId>org.apache.causeway.extensions</groupId>
-        <artifactId>causeway-extensions-audittrail-persistence-jpa</artifactId>
+        <artifactId>causeway-extensions-audittrail-persistence-xxx</artifactId> <!--.-->
     </dependency>
 </dependencies>
 ----
+<.> either:
+** `causeway-extensions-audittrail-persistence-jpa` (xref:pjpa::about.adoc[]) or
+** `causeway-extensions-audittrail-persistence-jdo` (xref:pjdo::about.adoc[])
 
-** and `@Import` this module to your app manifest:
+* and `@Import` this module to your app manifest:
 +
 [source,java]
 .MyAppManifest.java
 ----
 @Configuration
 @Import({
-    CausewayModuleExtAuditTrailPersistenceJpa.class,
+    CausewayModuleExtAuditTrailPersistenceXxx.class,    // <.>
     // ...
 })
 public class MyAppManifest { ... }
 ----
-
-* if using xref:pjdo::about.adoc[]:
-
-** add this dependency to your webapp's `pom.xml`:
+<.> either
 +
-[source,xml,subs="attributes+"]
-.pom.xml
-----
-<dependencies>
-    <dependency>
-        <groupId>org.apache.causeway.extensions</groupId>
-        <artifactId>causeway-extensions-audittrail-persistence-jdo</artifactId>
-    </dependency>
-</dependencies>
-----
-
-** and `@Import` this module to your app manifest:
-+
-[source,java]
-.MyAppManifest.java
-----
-@Configuration
-@Import({
-    CausewayModuleExtAuditTrailPersistenceJdo.class,
-    // ...
-})
-public class MyAppManifest { ... }
-----
+** `CausewayModuleExtAuditTrailPersistenceJpa` (xref:pjpa::about.adoc[]) or
+** `CausewayModuleExtAuditTrailPersistenceJdo` (xref:pjdo::about.adoc[])
 
 
 [#menubar-layout-xml]

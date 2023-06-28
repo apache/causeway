@@ -6,18 +6,59 @@ The SSE (Server Side Events) module integrates with the xref:vw:ROOT:about.adoc[
 One use case could be to render a progress bar for a long-running action.
 
 
-== Usage
+== Setup
 
-[WARNING]
-====
-TODO: v2 - to write up...
+=== Dependency Management
 
-need to annotate property using `@ServerSentEvents` annotation, and provide an implementation of the `SseSource` SPI.
-====
+In your application's top level `pom.xml`, add a dependency for this module's own bill of materials (BOM):
 
-== Configuration
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-sse</artifactId>
+            <scope>import</scope>
+            <type>pom</type>
+            <version>{page-causewayrel}</version>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+----
 
-Add the following dependency:
+=== Dependencies / Imports
+
+In those modules where there are domain objects to be dynamically updated using SSE, add a dependency/import to the applib module:
+
+* add this dependency:
++
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions-sse-applib</artifactId>
+    </dependency>
+</dependencies>
+----
+
+* and `@Import` this module:
++
+[source,java]
+.MyModule.java
+----
+@Configuration
+@Import({
+    CausewayModuleExtSseApplib.class,
+    // ...
+})
+public class MyModule { ... }
+----
+
+In addition, in the webapp module of your application, add the following dependency:
 
 [source,xml]
 .pom.xml
@@ -28,19 +69,29 @@ Add the following dependency:
 </dependency>
 ----
 
-Also add the following module to your `AppManifest`:
+And in your application's xref:userguide::modules.adoc#appmanifest[App Manifest], import the extension's implementation module:
 
 [source,java]
 .AppManifest.java
 ----
 @Configuration
 @Import({
-        CausewayModuleExtSseWicket.class,  // <.>
+        CausewayModuleExtSseWicket.class,
         ...
 })
 public class AppManifest {
 }
 ----
+
+
+== Usage
+
+[WARNING]
+====
+TODO: v2 - to write up...
+
+need to annotate property using `@ServerSentEvents` annotation, and provide an implementation of the `SseSource` SPI.
+====
 
 
 

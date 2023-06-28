@@ -3,16 +3,6 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
-// see `shiro.ini` (example)
-
-//[source,properties]
-//----
-//include::security:shiro-realm-ldap:example$shiro.ini[]
-//----
-
-// == Setting up Users/Groups in Apache Directory Studio
-
-
 
 The Shiro framework also ships with an implementation of an LDAP-based realm; LDAP is often used to manage user/passwords and corresponding user groups.
 
@@ -20,3 +10,116 @@ Apache Causeway extends Shiro's implementation this  `CausewayLdapRealm`, which 
 
 
 WARNING: TODO: v2 - to write up...
+
+
+== Setup
+
+=== Dependency Management
+
+In your application's top level `pom.xml`, add a dependency for this module's own bill of materials (BOM):
+
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-shiro-realm-ldap</artifactId>
+            <scope>import</scope>
+            <type>pom</type>
+            <version>{page-causewayrel}</version>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+----
+
+
+=== Dependencies / Imports
+
+In your application's xref:userguide::modules.adoc#appmanifest[App Manifest], import the implementation module of this extension:
+
+* add this dependency to your webapp's `pom.xml`:
++
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions-shiro-realm-ldap-impl</artifactId>
+    </dependency>
+</dependencies>
+----
+
+* and `@Import` this module to your app manifest:
++
+[source,java]
+.MyAppManifest.java
+----
+@Configuration
+@Import({
+    CausewayModuleExtShiroRealmLdapImpl.class,
+    // ...
+})
+public class MyAppManifest { ... }
+----
+
+
+== Configuration
+
+
+
+[source,properties]
+----
+include::security:shiro-realm-ldap:example$shiro.ini[tags=example]
+----
+<.> declares the framework-provided subclass of Shiro's `org.apache.shiro.realm.ldap.JndiLdapContextFactory`.
+<.> Specifies the the "java.naming.security.authentication" context programmatically.
+<.> the URL and credentials for querying the LDAP store
+<.> indicates to use xref:https://docs.oracle.com/javase/jndi/tutorial/ldap/security/crammd5.html[CRAM-MD5]; this will depend on the capability of the LDAP server being provided.
+<.> declares the framework-provided subclass of Shiro's `org.apache.shiro.realm.ldap.DefaultLdapRealm`.
+<.> Configures the realm so it can additionally can retrieve the user's groups, by querying `objectClass=<groupObjectClass>` and inspecting the attributes of each group to see if it references the user.
+<.> Defines the location within the LDAP directory that acts as the 'base' of queries
+<.> Injects the `contextFactory` object into the `ldapRealm` object ...
+<.> \... and injects the `ldapRealm` into Shiro's in-built security manager.
+
+
+// TODO: v2 - work in progress - also describe how this can optionally map LDAP groups to roles, and can map roles to perms; neither are relevant if secman is used for permissioning.
+
+
+== Testing with ApacheDS and Apache Directory Studio
+
+WARNING: TODO: v2 - work in progress
+
+prereqs:
+
+* download Java 8 32-bit
+* download ApacheDS 2.0.0-AM26 or later
+* install, pointing to 32-bit version of Java 8
+* download Apache Directory Studio
+* install, ensure points to 64-bit version of Java :-)
+
+start ApacheDS:
+
+* navigate to its config directory
++
+on Windows, this is `C:\Program Files (x86)\ApacheDS\instances\default\conf`)
+
+* rename the `ou=config` folder (the server won't start if it exists as well as the `config.ldif`)
+
+* start the service
+
+using _Apache Directory Studio_
+
+* define a connection to `localhost:10389`
+** login: `uid=admin,ou=system`
+** password: `secret`
+
+
+// image::010-create-organizational-person.png[width=800px]
+// image::020-create-organizational-person.png[width=800px]
+// image::030-create-organizational-person.png[width=800px]
+
+
+// == Setting up Users/Groups in Apache Directory Studio

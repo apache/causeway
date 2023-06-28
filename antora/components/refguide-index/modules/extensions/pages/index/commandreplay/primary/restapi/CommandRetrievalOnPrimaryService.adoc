@@ -13,14 +13,13 @@ class CommandRetrievalOnPrimaryService {
 ----
 
 <.> xref:#findCommandsOnPrimaryAsDto_UUID_Integer[findCommandsOnPrimaryAsDto(UUID, Integer)]
-+
---
-TODO: outdated info ... These actions should be called with HTTP Accept Header set to: `application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.causeway.schema.cmd.v1.CommandsDto"` 
---
+
+WARNING: TODO: v2: outdated info ... These actions should be called with HTTP Accept Header set to: `application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.causeway.schema.cmd.v1.CommandsDto"`
+
 
 == Members
 
 [#findCommandsOnPrimaryAsDto_UUID_Integer]
 === findCommandsOnPrimaryAsDto(UUID, Integer)
 
-TODO: outdated info ... These actions should be called with HTTP Accept Header set to: `application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.causeway.schema.cmd.v1.CommandsDto"` 
+WARNING: TODO: v2: outdated info ... These actions should be called with HTTP Accept Header set to: `application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.causeway.schema.cmd.v1.CommandsDto"`

@@ -92,24 +92,10 @@ implements HasDynamicallyVisibleContent {
     }
 
     @Override
-    public boolean isVisible() {
-        return super.isVisible()
-            && isVisibleBasedOnContent();
-    }
-
-    @Override
-    public boolean isVisibleBasedOnContent() {
-        return _NullSafe.stream(getTabs())
-                .anyMatch(ITab::isVisible);
-    }
-
-    @Override
     public TabbedPanel<ITab> setSelectedTab(final int index) {
         selectedTabHintKey.set(entityModel.getOwnerBookmark(), ""+index);
         return super.setSelectedTab(index);
     }
-
-    // -- HELPER
 
     private void setSelectedTabFromSessionIfAny(
             final AjaxBootstrapTabbedPanel<ITab> ajaxBootstrapTabbedPanel) {
@@ -131,4 +117,12 @@ implements HasDynamicallyVisibleContent {
             return null;
         }
     }
+
+    @Override
+    public boolean isVisible() {
+        return _NullSafe.stream(getTabs())
+                .anyMatch(ITab::isVisible);
+    }
+
+
 }

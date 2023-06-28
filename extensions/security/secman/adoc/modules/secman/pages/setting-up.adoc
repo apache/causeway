@@ -34,7 +34,8 @@ In addition, add an entry for _SecMan_'s own BOM:
 [#dependencies]
 == Dependencies
 
-In the webapp module of your application, add the following dependency:
+In the webapp module of your application, add the implementation modules of the extension.
+The exact modules to use will depend upon the persistence mechanism in use:
 
 [source,xml]
 .pom.xml
@@ -50,15 +51,14 @@ In the webapp module of your application, add the following dependency:
     </dependency>
 </dependencies>
 ----
-<.> specify either `causeway-extensions-secman-persistence-jpa` or `causeway-extensions-secman-persistence-jdo`, as required
+<.> either:
+** `causeway-extensions-secman-persistence-jpa` (xref:pjpa::about.adoc[]) or
+** `causeway-extensions-secman-persistence-jdo` (xref:pjdo::about.adoc[])
 <.> provides an implementation of `PasswordEncoder`, so that passwords are only persisted in encrypted form.
 
 
-[[_update-appmanifest]]
-== Update AppManifest
-
-
-In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the SecMan modules.
+In your application's xref:userguide::modules.adoc#appmanifest[App Manifest], import the corresponding _SecMan_ modules.
+Again, the exact modules to use will depend upon the persistence mechanism in use.
 You will also need to import the fixture module; SecMan uses fixture scripts to seed its entities:
 
 [source,java]
@@ -76,8 +76,9 @@ You will also need to import the fixture module; SecMan uses fixture scripts to 
 public class AppManifest {
 }
 ----
-
-<.> specify either `CausewayModuleExtSecmanPersistenceJdo` or `CausewayModuleExtSecmanPersistenceJpa`, as required
+<.> either
+** `CausewayModuleExtSecmanPersistenceJpa` (xref:pjpa::about.adoc[]) or
+** `CausewayModuleExtSecmanPersistenceJdo` (xref:pjdo::about.adoc[])
 <.> use Jbcrypt to encrypt passwords
 <.> fixture script support
 

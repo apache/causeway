@@ -52,8 +52,7 @@ import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
 import lombok.val;
 
-public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt>
-implements HasDynamicallyVisibleContent {
+public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> implements HasDynamicallyVisibleContent {
 
     private static final long serialVersionUID = 1L;
     private static final String ID_MEMBER_GROUP = "memberGroup";
@@ -87,44 +86,6 @@ implements HasDynamicallyVisibleContent {
     public UiObjectWkt getModel() {
         return (UiObjectWkt) getDefaultModel();
     }
-
-    @Override
-    public void onConfigure() {
-        for (final ScalarPanelAbstract childComponent : childScalarPanels) {
-            childComponent.configure();
-        }
-        super.onConfigure();
-    }
-
-    @Override
-    public boolean isVisible() {
-        return super.isVisible()
-            && isVisibleBasedOnContent();
-    }
-
-    @Override
-    public boolean isVisibleBasedOnContent() {
-
-        // HACK: there are some components that are not ScalarPanelAbstract2's, eg the pdfjsviewer.
-        // In this case, don't ever hide.
-
-        // TODO: should remove this hack.  We need some sort of SPI for ScalarPanelAbstract2's and any other component,
-        // (eg PdfJsViewer) that can implement.  It's "probably" just a matter of having PdfJsViewer do its work in the
-        // correct Wicket callback (probably onConfigure).
-        if(childComponents.size() > childScalarPanels.size()) {
-            return true;
-        }
-        // HACK:END
-
-        for (final ScalarPanelAbstract childComponent : childScalarPanels) {
-            if(childComponent.isVisibilityAllowed()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // -- HELPER
 
     private List<Component> buildGui() {
 
@@ -242,6 +203,36 @@ implements HasDynamicallyVisibleContent {
         .forEach(onAssociatedAction);
 
         return scalarNameAndValueComponent;
+    }
+
+    @Override
+    public void onConfigure() {
+        for (final ScalarPanelAbstract childComponent : childScalarPanels) {
+            childComponent.configure();
+        }
+        super.onConfigure();
+    }
+
+    @Override
+    public boolean isVisible() {
+
+        // HACK: there are some components that are not ScalarPanelAbstract2's, eg the pdfjsviewer.
+        // In this case, don't ever hide.
+
+        // TODO: should remove this hack.  We need some sort of SPI for ScalarPanelAbstract2's and any other component,
+        // (eg PdfJsViewer) that can implement.  It's "probably" just a matter of having PdfJsViewer do its work in the
+        // correct Wicket callback (probably onConfigure).
+        if(childComponents.size() > childScalarPanels.size()) {
+            return true;
+        }
+        // HACK:END
+
+        for (final ScalarPanelAbstract childComponent : childScalarPanels) {
+            if(childComponent.isVisibilityAllowed()) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

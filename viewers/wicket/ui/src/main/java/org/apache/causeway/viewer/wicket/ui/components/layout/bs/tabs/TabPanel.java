@@ -32,8 +32,6 @@ import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
-import lombok.Getter;
-
 public class TabPanel
 extends PanelAbstract<ManagedObject, UiObjectWkt>
 implements HasUiHintDisambiguator, HasDynamicallyVisibleContent {
@@ -45,9 +43,6 @@ implements HasUiHintDisambiguator, HasDynamicallyVisibleContent {
 
     private final BSTab bsTab;
 
-    @Getter(onMethod_= {@Override})
-    private boolean visibleBasedOnContent = false;
-
     public TabPanel(final String id, final UiObjectWkt model, final BSTab bsTab) {
         this(id, model, bsTab, null);
     }
@@ -57,12 +52,6 @@ implements HasUiHintDisambiguator, HasDynamicallyVisibleContent {
 
         this.bsTab = bsTab;
         buildGui(model, bsTab, repeatingViewWithDynamicallyVisibleContent);
-    }
-
-    @Override
-    public boolean isVisible() {
-        return super.isVisible()
-            && isVisibleBasedOnContent();
     }
 
     /**
@@ -80,10 +69,10 @@ implements HasUiHintDisambiguator, HasDynamicallyVisibleContent {
 
         final RepeatingViewWithDynamicallyVisibleContent rv = rvIfAny != null ? rvIfAny : newRows(model, bsTab);
         div.add(rv);
-        visibleBasedOnContent = visibleBasedOnContent || rv.isVisible();
+        visible = visible || rv.isVisible();
 
         final WebMarkupContainer panel = this;
-        if(visibleBasedOnContent) {
+        if(visible) {
             Wkt.cssAppend(panel, bsTab.getCssClass());
             panel.add(div);
         } else {
@@ -103,4 +92,9 @@ implements HasUiHintDisambiguator, HasDynamicallyVisibleContent {
         return rv;
     }
 
+    private boolean visible = false;
+    @Override
+    public boolean isVisible() {
+        return visible;
+    }
 }

@@ -111,7 +111,7 @@ public String disable1Categorize(                           // <.>
 A non-`null` return string is taken as the _reason_ why the action argument cannot be changed.
 
 
-// TODO: xref mixins for specifying supporting methods by name or using `Parameters`
+WARNING: TODO: v2: xref mixins for specifying supporting methods by name or using `Parameters`
 
 == For more information
 

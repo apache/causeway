@@ -49,7 +49,7 @@ import org.apache.causeway.security.shiro.permrolemapper.PermissionToRoleMapperF
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
 /**
- * Implementation of {@link org.apache.shiro.realm.ldap.JndiLdapRealm} that also
+ * Implementation of {@link DefaultLdapRealm} that also
  * returns each user's groups.
  * <p/>
  * <p>

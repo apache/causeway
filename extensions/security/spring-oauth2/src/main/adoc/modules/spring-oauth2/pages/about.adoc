@@ -11,7 +11,8 @@ include::docs:mavendeps:partial$setup-and-configure-dependencyManagement.adoc[le
 
 
 == Setup
-=== Dependency
+
+=== Dependency / Imports
 
 In the webapp module of your application, add the following dependency:
 
@@ -27,13 +28,8 @@ In the webapp module of your application, add the following dependency:
 </dependencies>
 ----
 
-[[_update-appmanifest]]
-=== Update AppManifest
 
-In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import `CausewayModuleSecuritySpring` and `CausewayModuleExtSpringSecurityOAuth2` modules.
-
-Neither of these modules provide an implementation of the xref:refguide:core:index/security/authorization/Authorizor.adoc[] SPI, so we must also configure one.
-For the purpose of this walkthrough, we'll use the implementation provided by xref:security:shiro:about.adoc[Shiro], namely `AuthorizorShiro`.
+In your application's xref:userguide::modules.adoc#appmanifest[App Manifest], import `CausewayModuleExtSpringSecurityOAuth2` module:
 
 [source,java]
 .AppManifest.java
@@ -41,18 +37,24 @@ For the purpose of this walkthrough, we'll use the implementation provided by xr
 @Configuration
 @Import({
         ...
-        CausewayModuleExtSpringSecurityOAuth2.class, // <.>
-        AuthorizorShiro.class,
+        CausewayModuleExtSpringSecurityOAuth2.class,    // <.>
+        AuthorizorShiro.class,                          // <.>
         ...
 })
 public class AppManifest {
 }
 ----
 <.> The `CausewayModuleExtSpringSecurityOAuth2` module brings in a transitive dependency on `CausewayModuleSecuritySpring`.
-+
-Make sure though that no other `CausewayModuleSecurityXxx` module is imported.
+<.> An implementation of `Authorizor` is also required; see discussion below.
 
-It is also possible to use with other `Authorizor` implementations; for example, using xref:security:secman:setting-up-with-spring-oauth2.adoc[SecMan].
+[IMPORTANT]
+====
+Make sure that no other `CausewayModuleSecurityXxx` module is imported, either directly or indirectly.
+====
+
+Neither of these modules provide an implementation of the xref:refguide:core:index/security/authorization/Authorizor.adoc[] SPI, so we must also configure one.
+For the purpose of this walkthrough, we'll use the implementation provided by xref:security:shiro:about.adoc[Shiro], namely `AuthorizorShiro`.
+However, it is also possible to use with other `Authorizor` implementations; for example, using xref:security:secman:setting-up-with-spring-oauth2.adoc[SecMan].
 
 
 == Design
