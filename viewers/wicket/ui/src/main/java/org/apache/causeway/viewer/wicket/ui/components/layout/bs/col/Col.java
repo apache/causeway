@@ -52,7 +52,6 @@ import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
-import lombok.Getter;
 import lombok.val;
 
 public class Col
@@ -70,9 +69,6 @@ implements HasDynamicallyVisibleContent {
 
     private final BSCol bsCol;
 
-    @Getter(onMethod_= {@Override})
-    private boolean visibleBasedOnContent = false;
-
     public Col(
             final String id,
             final UiObjectWkt entityModel, final BSCol bsCol) {
@@ -83,14 +79,6 @@ implements HasDynamicallyVisibleContent {
 
         buildGui();
     }
-
-    @Override
-    public boolean isVisible() {
-        return super.isVisible()
-            && isVisibleBasedOnContent();
-    }
-
-    // -- HELPER
 
     private void buildGui() {
 
@@ -123,7 +111,7 @@ implements HasDynamicallyVisibleContent {
             actionIdToUse = "entityActions";
             actionIdToHide = "actions";
 
-            visibleBasedOnContent = true;
+            visible = true;
         } else {
             WktComponents.permanentlyHide(div, ID_ENTITY_HEADER_PANEL);
             actionOwner = div;
@@ -148,7 +136,7 @@ implements HasDynamicallyVisibleContent {
 
         if (!visibleActions.isEmpty()) {
             AdditionalLinksPanel.addAdditionalLinks(actionOwner, actionIdToUse, visibleActions, AdditionalLinksPanel.Style.INLINE_LIST);
-            visibleBasedOnContent = true;
+            visible = true;
         } else {
             WktComponents.permanentlyHide(actionOwner, actionIdToUse);
         }
@@ -162,7 +150,7 @@ implements HasDynamicallyVisibleContent {
         if(!rows.isEmpty()) {
             final RepeatingViewWithDynamicallyVisibleContent rowsRv = buildRows(ID_ROWS, rows);
             div.add(rowsRv);
-            visibleBasedOnContent = visibleBasedOnContent || rowsRv.isVisible();
+            visible = visible || rowsRv.isVisible();
         } else {
             WktComponents.permanentlyHide(div, ID_ROWS);
         }
@@ -212,7 +200,7 @@ implements HasDynamicallyVisibleContent {
 
             }
             div.add(tabGroupRv);
-            visibleBasedOnContent = visibleBasedOnContent || tabGroupRv.isVisible();
+            visible = visible || tabGroupRv.isVisible();
         } else {
             WktComponents.permanentlyHide(div, ID_TAB_GROUPS);
         }
@@ -238,7 +226,7 @@ implements HasDynamicallyVisibleContent {
                 fieldSetRv.add(propertyGroup);
             }
             div.add(fieldSetRv);
-            visibleBasedOnContent = visibleBasedOnContent || fieldSetRv.isVisible();
+            visible = visible || fieldSetRv.isVisible();
         } else {
             WktComponents.permanentlyHide(div, ID_FIELD_SETS);
         }
@@ -271,7 +259,7 @@ implements HasDynamicallyVisibleContent {
             });
 
             div.add(collectionRv);
-            visibleBasedOnContent = visibleBasedOnContent || collectionRv.isVisible();
+            visible = visible || collectionRv.isVisible();
 
         } else {
             WktComponents.permanentlyHide(div, ID_COLLECTIONS);
@@ -279,7 +267,7 @@ implements HasDynamicallyVisibleContent {
 
 
         final WebMarkupContainer panel = this;
-        if(visibleBasedOnContent) {
+        if(visible) {
             panel.add(div);
         } else {
             WktComponents.permanentlyHide(panel, div.getId());
@@ -298,5 +286,13 @@ implements HasDynamicallyVisibleContent {
         }
         return rowRv;
     }
+
+
+    private boolean visible = false;
+    @Override
+    public boolean isVisible() {
+        return visible;
+    }
+
 
 }
