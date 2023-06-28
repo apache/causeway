@@ -21,6 +21,7 @@ package org.apache.causeway.persistence.jdo.datanucleus.metamodel.facets.entity;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
@@ -30,6 +31,7 @@ import javax.jdo.FetchGroup;
 import javax.jdo.PersistenceManager;
 
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
+import org.datanucleus.api.jdo.JDOQuery;
 import org.datanucleus.enhancement.Persistable;
 import org.datanucleus.store.rdbms.RDBMSPropertyNames;
 import org.springframework.lang.Nullable;
@@ -283,6 +285,7 @@ implements EntityFacet {
             val namedParams = _Maps.<String, Object>newHashMap();
             val namedQuery = persistenceManager.newNamedQuery(queryResultType, applibNamedQuery.getName())
                     .setNamedParameters(namedParams);
+
             namedQuery.extension(RDBMSPropertyNames.PROPERTY_RDBMS_QUERY_MULTIVALUED_FETCH, "none");
 
             if(!range.isUnconstrained()) {
@@ -303,7 +306,10 @@ implements EntityFacet {
                 .getParametersByName()
                 .forEach(namedParams::put);
 
-            val resultList = fetchWithinTransaction(namedQuery::executeList);
+            Supplier<List<?>> executeMethod = hasResultPhrase(namedQuery)
+                    ? namedQuery::executeResultList     // eg SELECT DISTINCT this.paymentMethod FROM IncomingInvoice WHERE ...
+                    : namedQuery::executeList;          // eg SELECT FROM IncomingInvoice WHERE ...
+            val resultList = fetchWithinTransaction(executeMethod);
 
             if(range.hasLimit()) {
                 _Assert.assertTrue(resultList.size()<=range.getLimit());
@@ -315,6 +321,14 @@ implements EntityFacet {
         throw _Exceptions.unsupportedOperation("query type %s (%s) not supported by this persistence implementation",
                 query.getClass(),
                 query.getDescription());
+    }
+
+    private static boolean hasResultPhrase(javax.jdo.Query<?> namedQuery) {
+        if (namedQuery instanceof JDOQuery) {
+            JDOQuery<?> jdoQuery = (JDOQuery<?>) namedQuery;
+            return jdoQuery.getInternalQuery().getResult() != null;
+        }
+        return false;
     }
 
     @Override
