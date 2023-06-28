@@ -33,6 +33,7 @@ import javax.jdo.PersistenceManager;
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 import org.datanucleus.api.jdo.JDOQuery;
 import org.datanucleus.enhancement.Persistable;
+import org.datanucleus.identity.SCOID;
 import org.datanucleus.store.rdbms.RDBMSPropertyNames;
 import org.springframework.lang.Nullable;
 
@@ -232,8 +233,9 @@ implements EntityFacet {
                 return clr.classForName(objectIdClass);
             case DATASTORE:
                 return nucleusContext.getIdentityManager().getDatastoreIdClass();
-            case UNSPECIFIED:
             case NONDURABLE:
+                return SCOID.class;
+            case UNSPECIFIED:
             default:
                 throw new IllegalStateException(String.format(
                         "JdoEntityFacet has been incorrectly installed on '%s' which has an supported identityType of '%s'",
