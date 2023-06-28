@@ -84,6 +84,7 @@ include::security:shiro-realm-ldap:example$shiro.ini[tags=example]
 <.> Injects the `contextFactory` object into the `ldapRealm` object ...
 <.> \... and injects the `ldapRealm` into Shiro's in-built security manager.
 
+The `
 
 // TODO: v2 - work in progress - also describe how this can optionally map LDAP groups to roles, and can map roles to perms; neither are relevant if secman is used for permissioning.
 
@@ -117,9 +118,54 @@ using _Apache Directory Studio_
 ** password: `secret`
 
 
-// image::010-create-organizational-person.png[width=800px]
-// image::020-create-organizational-person.png[width=800px]
-// image::030-create-organizational-person.png[width=800px]
+=== Creating a user
+
+To create a user:
+
+* using the wizard, create an entry from scratch:
++
+image::010-create-first-page-of-wizard.png[width=600]
+
+* select the `inetOrgPerson` structural class
++
+image::020-create-inetOrgPerson.png[width=600]
+
+* provide the `cn` (common name)
++
+image::030-create-inetOrgPerson.png[width=600]
+
+* in addition, define a `uid` attribute:
++
+image::040-create-inetOrgPerson.png[width=600]
+
+* also enter a `userPassword`:
++
+image::060-create-inetOrgPerson.png[width=600]
++
+The value is entered through a separate dialog
++
+image::050-create-inetOrgPerson.png[width=600]
+
+
+=== Creating a group
+
+To create a group:
+
+* using the wizard, create an entry from scratch:
++
+image::010-create-first-page-of-wizard.png[width=600]
+
+* select `groupOfUniqueNames`
++
+image::110-groupOfUniqueNames.png[width=600]
+
+* provide a `cn` (common name) for the goup
++
+image::120-groupOfUniqueNames.png[width=600]
+
+* add a `uniqueMember` for each member of the group (there may be multiple)
++
+image::130-groupOfUniqueNames.png[width=600]
 
 
 // == Setting up Users/Groups in Apache Directory Studio
