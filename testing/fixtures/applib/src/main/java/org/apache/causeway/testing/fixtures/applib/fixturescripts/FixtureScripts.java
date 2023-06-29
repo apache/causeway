@@ -541,7 +541,7 @@ public class FixtureScripts {
         }
 
         if (object instanceof ViewModel
-                || repositoryService.getEntityState(object).unsafe.isAttachedOrRemoved()) {
+                || repositoryService.getEntityState(object).unsafe.shouldFlush()) {
             // continue
         } else {
             switch(getNonPersistedObjectsStrategy()) {
@@ -554,6 +554,20 @@ public class FixtureScripts {
                 throw _Exceptions.unmatchedCase(getNonPersistedObjectsStrategy());
             }
         }
+
+
+//        switch(getNonPersistedObjectsStrategy()) {
+//        case PERSIST:
+//            if (repositoryService.getEntityState(object).unsafe.shouldFlush()) {
+//                transactionService.flushTransaction();
+//            }
+//            break;
+//        case IGNORE:
+//            return null;
+//        default:
+//            throw _Exceptions.unmatchedCase(getNonPersistedObjectsStrategy());
+//        }
+
         final FixtureResult fixtureResult = serviceInjector.injectServicesInto(
                                                                 new FixtureResult());
         fixtureResult.setFixtureScriptClassName(firstTime ? script.getClass().getName() : null);

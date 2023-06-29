@@ -382,8 +382,8 @@ implements EntityFacet {
         // guard against misuse
         _Assert.assertNullableObjectIsInstanceOf(pojo, entityClass);
 
-        if (!DnEntityStateProvider.entityState(pojo).unsafe.canDelete()) {
-            throw _Exceptions.illegalArgument("can only delete an attached entity");
+        if (!DnEntityStateProvider.entityState(pojo).canDelete()) {
+            throw _Exceptions.illegalArgument("can only delete an entity when its state is ATTACHED OR DETACHED");
         }
 
         val pm = getPersistenceManager();

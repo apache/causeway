@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.applib.services.title.TitleService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
@@ -61,14 +62,24 @@ public class TitleServiceDefault implements TitleService {
             return "[UNSPECIFIED]";
         }
 
-        if(MmEntityUtils.isDetachedCannotReattach(objectAdapter)) {
-            return "[DETACHED]";
-        } else {
-            return objectAdapter.getSpecification().getTitle(
-                    TitleRenderRequest.builder()
-                    .object(objectAdapter)
-                    .build());
+        // side-effect free check
+        if(MmEntityUtils.isNonAttachedEntity(objectAdapter)) {
+
+            // try to re-attach / silently swallow exceptions
+            val isAttached = MmEntityUtils.tryGetEntityState(objectAdapter)
+                    .getValue()
+                    .map(EntityState::isAttached)
+                    .orElse(false);
+
+            if(!isAttached) {
+                return "[DETACHED]";
+            }
         }
+
+        return objectAdapter.getSpecification().getTitle(
+                TitleRenderRequest.builder()
+                .object(objectAdapter)
+                .build());
     }
 
     @Override

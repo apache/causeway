@@ -24,6 +24,7 @@ import java.util.stream.Stream;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.repository.EntityState;
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.beans.PersistenceStack;
@@ -59,6 +60,12 @@ public final class MmEntityUtils {
         return adapter!=null
              ? adapter.getEntityState()
              : EntityState.NOT_PERSISTABLE;
+    }
+
+    public Try<EntityState> tryGetEntityState(final @Nullable ManagedObject adapter) {
+        return adapter!=null
+             ? Try.call(adapter::getEntityState)
+             : Try.success(EntityState.NOT_PERSISTABLE);
     }
 
     public void persistInCurrentTransaction(final ManagedObject managedObject) {
@@ -98,7 +105,7 @@ public final class MmEntityUtils {
                 || entity.isBookmarkMemoized()) {
             return;
         }
-        if(canFlush(entity)) {
+        if(getEntityState(entity).unsafe.canFlush()) {
             entity.getTransactionService().flushTransaction();
             // force reassessment: as a side-effect transitions the transient entity to a bookmarked one
             entity.getEntityState();
@@ -106,13 +113,24 @@ public final class MmEntityUtils {
     }
 
     /**
-     * Side-effect free check for whether given entity is attached.
+     * Side-effect free check for whether given domain object is an entity and is attached.
      */
-    public boolean isAttachedEntity(final @Nullable ManagedObject entity) {
-        return entity!=null
-                ? entity.getSpecialization().isEntity()
-                    && entity.isBookmarkMemoized()
-                    && entity.getEntityState().isAttached()
+    public boolean isAttachedEntity(final @Nullable ManagedObject domainObject) {
+        return domainObject!=null
+                ? domainObject.getSpecialization().isEntity()
+                    && domainObject.isBookmarkMemoized()
+                    && domainObject.getEntityState().isAttached()
+                : false;
+    }
+
+    /**
+     * Side-effect free check for whether given domain object is an entity and is not attached.
+     */
+    public boolean isNonAttachedEntity(final @Nullable ManagedObject domainObject) {
+        return domainObject!=null
+                ? domainObject.getSpecialization().isEntity()
+                    && domainObject.isBookmarkMemoized()
+                    && !domainObject.getEntityState().isAttached()
                 : false;
     }
 
@@ -191,17 +209,8 @@ public final class MmEntityUtils {
         return getEntityState(adapter).hasOid();
     }
 
-    public boolean canFlush(final @Nullable ManagedObject adapter) {
-        return getEntityState(adapter).unsafe.canFlush();
-    }
-
     public boolean canDelete(final @Nullable ManagedObject adapter) {
-        return getEntityState(adapter).unsafe.canDelete();
-    }
-
-    //TODO[CAUSEWAY-3500] potential misnomer: if detached per def has an OID
-    public boolean isDetachedCannotReattach(final @Nullable ManagedObject entity) {
-        return getEntityState(entity).unsafe.isDetachedCannotReattach();
+        return getEntityState(adapter).canDelete();
     }
 
     public boolean isDeleted(final @Nullable ManagedObject entity) {

@@ -107,12 +107,22 @@ public enum EntityState {
     public boolean isJdoDeleted() { return this == JDO_DELETED; }
     /** @see #DETACHED */
     public boolean isDetached() { return this == DETACHED; }
-    /** @see #TRANSIENT_OR_REMOVED */
-    public boolean isTransientOrRemoved() { return this == TRANSIENT_OR_REMOVED; }
 
     // -- ADVANCED PREDICATES
 
+    /**
+     * @see #TRANSIENT_OR_REMOVED
+     * @see #JDO_DELETED
+     */
+    public boolean isTransientOrRemoved() {
+        return this == TRANSIENT_OR_REMOVED
+                || isJdoDeleted();
+    }
 
+    public boolean canDelete() {
+        return isAttached()
+                || isDetached();
+    }
 
     // -- DEPRECATIONS
 
@@ -123,27 +133,7 @@ public enum EntityState {
         public boolean isDeleted() {
             return isJdoHollow()
                     || isTransientOrRemoved()
-                    || isJdoDeleted()
                     || isDetached();
-        }
-
-        //TODO[CAUSEWAY-3500] potential misnomer: if detached per def has an OID
-        //FIXME[CAUSEWAY-3500] in fact hollow can now be re-attached
-        public boolean isDetachedCannotReattach() {
-            return (isJdoHollow()
-                    || isTransientOrRemoved()
-                    || isJdoDeleted())
-                    && !isDetached();
-        }
-
-        /**
-         * @apiNote 'removed' is only supported by JDO.
-         * @deprecated not supported by JPA
-         */
-        @Deprecated
-        public boolean isAttachedOrRemoved() {
-            return isAttached()
-                    || isJdoDeleted();
         }
 
         //FIXME[CAUSEWAY-3500] hollow has OID
@@ -158,12 +148,16 @@ public enum EntityState {
                     || isDetached();
         }
 
+        //FIXME[CAUSEWAY-3500] 3 different types of flush checks, which is it though
         public boolean canFlush() {
             return !unsafe.hasOid();
         }
 
-        public boolean canDelete() {
-            return unsafe.hasOid();
+        //FIXME[CAUSEWAY-3500] 3 different types of flush checks, which is it though
+        public boolean shouldFlush() {
+            return isPersistable()
+                    && !isAttached()
+                    && !isJdoDeleted();
         }
 
     }
