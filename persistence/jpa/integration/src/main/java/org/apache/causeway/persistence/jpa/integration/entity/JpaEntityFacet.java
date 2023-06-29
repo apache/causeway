@@ -23,11 +23,9 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceException;
 import javax.persistence.PersistenceUnitUtil;
 import javax.persistence.metamodel.EntityType;
 
-import org.eclipse.persistence.exceptions.DescriptorException;
 import org.springframework.data.jpa.repository.JpaContext;
 import org.springframework.lang.Nullable;
 
@@ -226,7 +224,7 @@ public class JpaEntityFacet
         // guard against misuse
         _Assert.assertNullableObjectIsInstanceOf(pojo, entityClass);
 
-        val entityManager = getEntityManager();
+        var entityManager = getEntityManager();
         entityManager.remove(pojo);
     }
 
@@ -241,42 +239,7 @@ public class JpaEntityFacet
         val entityManager = getEntityManager();
         val persistenceUnitUtil = getPersistenceUnitUtil(entityManager);
 
-        if (entityManager.contains(pojo)) {
-            val primaryKey = persistenceUnitUtil.getIdentifier(pojo);
-            if (primaryKey == null) {
-                return EntityState.ATTACHED_NO_OID;
-            }
-            return EntityState.ATTACHED;
-        }
-
-        try {
-            val primaryKey = persistenceUnitUtil.getIdentifier(pojo);
-            if (primaryKey == null) {
-                return EntityState.TRANSIENT_OR_REMOVED;
-            } else {
-                // detect shallow primary key
-                //TODO this is a hack - see whether we can actually ask the EntityManager to give us an accurate answer
-                return primaryKeyType.isValid(primaryKey)
-                    ? EntityState.DETACHED
-                    : EntityState.TRANSIENT_OR_REMOVED;
-            }
-        } catch (PersistenceException ex) {
-            /* horrible hack, but encountered NPEs if using a composite key (eg CommandLogEntry)
-                (this was without any weaving) */
-            Throwable cause = ex.getCause();
-            if (cause instanceof DescriptorException) {
-                DescriptorException descriptorException = (DescriptorException) cause;
-                Throwable internalException = descriptorException.getInternalException();
-                if (internalException instanceof NullPointerException) {
-                    return EntityState.TRANSIENT_OR_REMOVED;
-                }
-            }
-            if (cause instanceof NullPointerException) {
-                // horrible hack, encountered if using composite key (eg ExecutionLogEntry) with dynamic weaving
-                return EntityState.TRANSIENT_OR_REMOVED;
-            }
-            throw ex;
-        }
+        return _JpaEntityStateUtil.getEntityState(entityManager, persistenceUnitUtil, entityClass, primaryKeyType, pojo);
     }
 
     @Override

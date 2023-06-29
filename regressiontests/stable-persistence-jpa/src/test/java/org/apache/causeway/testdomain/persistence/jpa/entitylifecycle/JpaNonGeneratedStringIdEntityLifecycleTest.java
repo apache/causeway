@@ -77,7 +77,7 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
 
         assertTrue(entity.getSpecification().isEntity());
         assertEquals(
-                EntityState.DETACHED,
+                EntityState.TRANSIENT_OR_REMOVED,
                 MmEntityUtils.getEntityState(entity));
 
         setEntityRef(entity);
@@ -121,7 +121,7 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
         repository.remove(entity.getPojo());
 
         // expected post-condition (after removal)
-        assertTrue(MmEntityUtils.isDeleted(entity));
+        assertTrue(MmEntityUtils.isTransientOrRemoved(entity));
 
         setEntityRef(entity);
     }
@@ -131,9 +131,11 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
 
         val entity = getEntityRef();
 
-        assertTrue(MmEntityUtils.isDeleted(entity));
-        assertEquals(0, repository.allInstances(JpaEntityNonGeneratedStringId.class).size());
+        assertEquals(
+                EntityState.TRANSIENT_OR_REMOVED,
+                MmEntityUtils.getEntityState(entity));
 
+        assertEquals(0, repository.allInstances(JpaEntityNonGeneratedStringId.class).size());
     }
 
     @Test @Order(5)

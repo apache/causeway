@@ -205,16 +205,20 @@ public final class MmEntityUtils {
 
     // -- SHORTCUTS
 
-    public boolean hasOid(final @Nullable ManagedObject adapter) {
-        return getEntityState(adapter).hasOid();
+    public boolean hasOid(final @Nullable ManagedObject entity) {
+        return getEntityState(entity).hasOid();
     }
 
-    public boolean canDelete(final @Nullable ManagedObject adapter) {
-        return getEntityState(adapter).canDelete();
+    public boolean canDelete(final @Nullable ManagedObject entity) {
+        return getEntityState(entity).canDelete();
     }
 
-    public boolean isDeleted(final @Nullable ManagedObject entity) {
-        return getEntityState(entity).unsafe.isDeleted();
+    public boolean canUseForPostValues(final @Nullable ManagedObject entity) {
+        return getEntityState(entity).canUseForPostValues();
+    }
+
+    public boolean isTransientOrRemoved(final @Nullable ManagedObject entity) {
+        return getEntityState(entity).isTransientOrRemoved();
     }
 
 }

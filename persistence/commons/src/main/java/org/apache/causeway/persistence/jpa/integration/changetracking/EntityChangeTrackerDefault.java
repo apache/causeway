@@ -156,11 +156,10 @@ implements
         val records = enlistedPropertyChangeRecordsById.values().stream()
                 // set post values, which have been left empty up to now
                 .peek(rec -> {
-                    // assuming this check correctly detects deleted entities
-                    if(MmEntityUtils.isDeleted(rec.getEntity())) {
-                        rec.withPostValueSetToDeleted();
-                    } else {
+                    if(MmEntityUtils.canUseForPostValues(rec.getEntity())) {
                         rec.withPostValueSetToCurrent();
+                    } else {
+                        rec.withPostValueSetToDeleted();
                     }
                 })
                 .filter(managedProperty->managedProperty.getPreAndPostValue().shouldPublish())
