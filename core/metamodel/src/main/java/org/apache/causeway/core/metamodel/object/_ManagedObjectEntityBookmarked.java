@@ -130,7 +130,7 @@ implements _Refetchable {
 
         val refetchedPojo = refetchedIfSuccess.get();
 
-        if(!entityFacet.getEntityState(refetchedPojo).unsafe.hasOid()) {
+        if(!entityFacet.getEntityState(refetchedPojo).hasOid()) {
             throw new ObjectNotFoundException(""+bookmark);
             //throw _Exceptions.illegalState("entity not attached after refetch attempt %s", bookmark);
         }
@@ -148,13 +148,9 @@ implements _Refetchable {
     private Bookmark createBookmark() {
         val entityFacet = entityFacet();
 
-        // fail early when detached entities are detected
+        // fail early when non bookmarkable entities are detected
         // should have been re-fetched at start of this request-cycle
-        if(
-//                && EntityUtil.getPersistenceStandard(managedObject)
-//                    .map(PersistenceStandard::isJdo)
-//                    .orElse(false)
-                !entityFacet.getEntityState(pojo).unsafe.hasOid()) {
+        if(!entityFacet.getEntityState(pojo).hasOid()) {
 
             _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
                 _Debug.log("detached entity detected %s", pojo);

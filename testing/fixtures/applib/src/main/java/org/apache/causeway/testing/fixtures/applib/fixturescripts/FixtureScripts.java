@@ -31,7 +31,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.Domain;
@@ -540,33 +539,17 @@ public class FixtureScripts {
             return null;
         }
 
-        if (object instanceof ViewModel
-                || repositoryService.getEntityState(object).unsafe.shouldFlush()) {
-            // continue
-        } else {
-            switch(getNonPersistedObjectsStrategy()) {
-            case PERSIST:
+        switch(getNonPersistedObjectsStrategy()) {
+        case PERSIST:
+            if (repositoryService.getEntityState(object).unsafe.shouldFlush()) {
                 transactionService.flushTransaction();
-                break;
-            case IGNORE:
-                return null;
-            default:
-                throw _Exceptions.unmatchedCase(getNonPersistedObjectsStrategy());
             }
+            break;
+        case IGNORE:
+            return null;
+        default:
+            throw _Exceptions.unmatchedCase(getNonPersistedObjectsStrategy());
         }
-
-
-//        switch(getNonPersistedObjectsStrategy()) {
-//        case PERSIST:
-//            if (repositoryService.getEntityState(object).unsafe.shouldFlush()) {
-//                transactionService.flushTransaction();
-//            }
-//            break;
-//        case IGNORE:
-//            return null;
-//        default:
-//            throw _Exceptions.unmatchedCase(getNonPersistedObjectsStrategy());
-//        }
 
         final FixtureResult fixtureResult = serviceInjector.injectServicesInto(
                                                                 new FixtureResult());

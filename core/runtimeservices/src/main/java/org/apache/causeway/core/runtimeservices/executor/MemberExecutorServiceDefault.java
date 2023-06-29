@@ -315,7 +315,7 @@ implements MemberExecutorService {
         }
 
         val entityState2 = resultAdapter.getEntityState();
-        if(entityState2.unsafe.hasOid()) {
+        if(entityState2.hasOid()) {
             val bookmark = ManagedObjects.bookmarkElseFail(resultAdapter);
             command.updater().setResult(Try.success(bookmark));
             return;

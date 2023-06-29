@@ -341,8 +341,11 @@ implements EntityFacet {
         // guard against misuse
         _Assert.assertNullableObjectIsInstanceOf(pojo, entityClass);
 
-        if(pojo==null
-                || DnEntityStateProvider.entityState(pojo).unsafe.hasOid()) {
+        val entityState = DnEntityStateProvider.entityState(pojo);
+
+        if(!entityState.isPersistable()
+                || entityState.isAttached()
+                || entityState.isJdoDeleted()) {
             return; // nothing to do
         }
 

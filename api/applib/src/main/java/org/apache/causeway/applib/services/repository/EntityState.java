@@ -136,21 +136,16 @@ public enum EntityState {
                     || isDetached();
         }
 
-        //FIXME[CAUSEWAY-3500] hollow has OID
-        public boolean hasOid() {
-            return isAttached() || isDetached();
-        }
-
-        //FIXME[CAUSEWAY-3500] no of the below can be flushed!
+        //FIXME[CAUSEWAY-3500] 3 different types of flush checks, which is it though
         public boolean isFlushable() {
-            return isJdoHollow()
-                    || isTransientOrRemoved()
-                    || isDetached();
+            return isDetached()
+                    || (isTransientOrRemoved()
+                            && !isJdoDeleted());
         }
 
         //FIXME[CAUSEWAY-3500] 3 different types of flush checks, which is it though
         public boolean canFlush() {
-            return !unsafe.hasOid();
+            return (!isAttached() && !isDetached());
         }
 
         //FIXME[CAUSEWAY-3500] 3 different types of flush checks, which is it though
