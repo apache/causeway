@@ -50,7 +50,10 @@ class _JpaEntityStateUtil {
         }
 
         /*
-         * With JPA there is no direct way to distinguish between DETACHED or REMOVED.
+         * With JPA there is no obvious way to distinguish between TRANSIENT, REMOVED or DETACHED.
+         *
+         * Presence of a primary key AND a successful call to UnitOfWork#getReference(...) suggests
+         * that the state is DETACHED.
          */
 
         final Object primaryKey;
@@ -79,14 +82,11 @@ class _JpaEntityStateUtil {
             return EntityState.TRANSIENT_OR_REMOVED;
         }
 
-        // hack, to detect a removed entity
-
-        System.err.printf("opne? %b%n", entityManager.isOpen());
-
         final UnitOfWork session = entityManager.unwrap(UnitOfWork.class);
         final Object reference = session.getReference(entityClass, primaryKey);
         return reference != null
                 ? EntityState.DETACHED
+                // Sadness: With JPA there is no obvious way to distinguish between TRANSIENT or REMOVED.
                 : EntityState.TRANSIENT_OR_REMOVED;
     }
 
