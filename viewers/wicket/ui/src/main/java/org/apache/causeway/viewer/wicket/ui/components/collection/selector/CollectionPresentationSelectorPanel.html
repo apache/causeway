@@ -24,14 +24,19 @@
         <div class="viewLinks" wicket:id="views">
             <button type="button" class="btn btn-link dropdown-toggle" data-bs-toggle="dropdown" style="text-decoration: none">
             	<span wicket:id="viewButtonIcon" class="ViewLinkItem"></span>
-<!--                 <span wicket:id="viewButtonTitle" class="ViewLinkItemTitle"></span> -->
                 <span class="caret"></span>
             </button>
             <ul wicket:id="viewList" class="dropdown-menu dropdown-menu-right" role="menu">
 
                 <li wicket:id="viewItem">
+
+					<!-- either horizontal bar -->
+                	<div wicket:id="sectionSeparator" class="list-separator"></div>
+                	
+                	<!-- or section label -->
                 	<span wicket:id="sectionLabel" class="sectionLabel">[sectionLabel]</span>
                 
+                	<!-- or link entry -->
                     <a href="#" wicket:id="viewLink" class="dropdown-item">
                         <span wicket:id="viewItemIcon" class="ViewLinkItem"></span>
                         <span wicket:id="viewItemTitle" class="ViewLinkItemTitle">[link title]</span>
