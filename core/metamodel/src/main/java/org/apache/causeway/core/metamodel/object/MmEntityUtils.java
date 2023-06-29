@@ -105,7 +105,7 @@ public final class MmEntityUtils {
                 || entity.isBookmarkMemoized()) {
             return;
         }
-        if(getEntityState(entity).unsafe.canFlush()) {
+        if(getEntityState(entity).canFlush()) {
             entity.getTransactionService().flushTransaction();
             // force reassessment: as a side-effect transitions the transient entity to a bookmarked one
             entity.getEntityState();

@@ -309,7 +309,7 @@ implements MemberExecutorService {
         if(!entityState.isPersistable()) {
             return;
         }
-        if(entityState.unsafe.isFlushable()) {
+        if(entityState.canFlush()) {
             // ensure that any still-to-be-persisted adapters get persisted to DB.
             getTransactionService().flushTransaction();
         }

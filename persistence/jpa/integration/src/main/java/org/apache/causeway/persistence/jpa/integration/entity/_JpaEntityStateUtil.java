@@ -80,6 +80,9 @@ class _JpaEntityStateUtil {
         }
 
         // hack, to detect a removed entity
+
+        System.err.printf("opne? %b%n", entityManager.isOpen());
+
         final UnitOfWork session = entityManager.unwrap(UnitOfWork.class);
         final Object reference = session.getReference(entityClass, primaryKey);
         return reference != null

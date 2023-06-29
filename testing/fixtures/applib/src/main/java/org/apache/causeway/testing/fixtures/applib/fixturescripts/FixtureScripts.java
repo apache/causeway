@@ -541,7 +541,7 @@ public class FixtureScripts {
 
         switch(getNonPersistedObjectsStrategy()) {
         case PERSIST:
-            if (repositoryService.getEntityState(object).unsafe.shouldFlush()) {
+            if (repositoryService.getEntityState(object).canFlush()) {
                 transactionService.flushTransaction();
             }
             break;

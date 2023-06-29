@@ -103,10 +103,10 @@ public enum EntityState {
     public boolean isAttachedNoOid() { return this == ATTACHED_NO_OID; }
     /** @see #JDO_HOLLOW */
     public boolean isJdoHollow() { return this == JDO_HOLLOW; }
-    /** @see #DETACHED */
-    public boolean isDetached() { return this == DETACHED; }
     /** @see #JDO_DELETED */
     public boolean isJdoDeleted() { return this == JDO_DELETED; }
+    /** @see #DETACHED */
+    public boolean isDetached() { return this == DETACHED; }
 
     // -- ADVANCED PREDICATES
 
@@ -134,32 +134,10 @@ public enum EntityState {
                 && !isDetached();
     }
 
-    // -- DEPRECATIONS
-
-    @Deprecated
-    public class Unsafe {
-
-        //FIXME[CAUSEWAY-3500] 3 different types of flush checks, which is it though
-        public boolean isFlushable() {
-            return isDetached()
-                    || (isTransientOrRemoved()
-                            && !isJdoDeleted());
-        }
-
-        //FIXME[CAUSEWAY-3500] 3 different types of flush checks, which is it though
-        public boolean canFlush() {
-            return (!isAttached() && !isDetached());
-        }
-
-        //FIXME[CAUSEWAY-3500] 3 different types of flush checks, which is it though
-        public boolean shouldFlush() {
-            return isPersistable()
-                    && !isAttached()
-                    && !isJdoDeleted();
-        }
-
+    public boolean canFlush() {
+        return isAttached()
+                || isAttachedNoOid()
+                || this == TRANSIENT_OR_REMOVED;
     }
-
-    public final Unsafe unsafe = new Unsafe();
 
 }
