@@ -21,7 +21,6 @@ package org.apache.causeway.persistence.jdo.datanucleus.metamodel.facets.entity;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
@@ -238,7 +237,10 @@ implements EntityFacet {
             case UNSPECIFIED:
             default:
                 throw new IllegalStateException(String.format(
-                        "JdoEntityFacet has been incorrectly installed on '%s' which has an supported identityType of '%s'",
+                        "JdoEntityFacet was installed on '%s', "
+                        + "yet this entity has IdentityType '%s', "
+                        + "which is not supported by the framework's "
+                        + "JDO implementation.",
                         entityClass.getName(), identityType));
         }
     }
@@ -325,7 +327,7 @@ implements EntityFacet {
                 query.getDescription());
     }
 
-    private static boolean hasResultPhrase(javax.jdo.Query<?> namedQuery) {
+    private static boolean hasResultPhrase(final javax.jdo.Query<?> namedQuery) {
         if (namedQuery instanceof JDOQuery) {
             JDOQuery<?> jdoQuery = (JDOQuery<?>) namedQuery;
             return jdoQuery.getInternalQuery().getResult() != null;
