@@ -83,7 +83,7 @@ public class DnEntityStateProvider implements JdoFacetContext {
             // at time of writing we have no support for JDO detached states, hence failing early
             _Exceptions.throwUnexpectedCodeReach();
             return persistable.dnGetObjectId()!=null
-                    ? EntityState.JDO_DETACHED
+                    ? EntityState.DETACHED
                     : EntityState.TRANSIENT_OR_REMOVED;
         }
         return persistable.dnGetStateManager() instanceof DnStateManagerForHollow

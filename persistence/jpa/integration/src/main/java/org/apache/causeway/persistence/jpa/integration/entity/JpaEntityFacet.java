@@ -257,7 +257,7 @@ public class JpaEntityFacet
                 // detect shallow primary key
                 //TODO this is a hack - see whether we can actually ask the EntityManager to give us an accurate answer
                 return primaryKeyType.isValid(primaryKey)
-                    ? EntityState.JPA_DETACHED
+                    ? EntityState.DETACHED
                     : EntityState.TRANSIENT_OR_REMOVED;
             }
         } catch (PersistenceException ex) {

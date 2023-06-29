@@ -70,8 +70,6 @@ public enum EntityState {
      * Closest match for JPA is {@link #TRANSIENT_OR_REMOVED}.
      */
     JDO_DELETED(false),
-    /** not used */
-    JDO_DETACHED(true),
     /**
      * Entity is NOT attached to a persistence session. Has an OID, hence can be bookmarked and re-fetched.
      * <p>
@@ -83,7 +81,7 @@ public enum EntityState {
      * but instead re-fetch entities based on their OID,
      * discarding any changes that might have happened since the last commit.
      */
-    JPA_DETACHED(true),
+    DETACHED(true),
     /**
      * Entity is NOT attached to a persistence session. Has no OID.
      */
@@ -101,28 +99,16 @@ public enum EntityState {
 
     /** @see #ATTACHED */
     public boolean isAttached() { return this == ATTACHED; }
-
     /** @see #ATTACHED_NO_OID */
     public boolean isAttachedNoOid() { return this == ATTACHED_NO_OID; }
-
     /** @see #JDO_HOLLOW */
     public boolean isJdoHollow() { return this == JDO_HOLLOW; }
-
     /** @see #JDO_DELETED */
     public boolean isJdoDeleted() { return this == JDO_DELETED; }
-
-    /**
-     * @see #JDO_DETACHED
-     * @see #JPA_DETACHED
-     */
-    public boolean isDetached() {
-        return this == JPA_DETACHED
-                || this == JDO_DETACHED;
-    }
-
+    /** @see #DETACHED */
+    public boolean isDetached() { return this == DETACHED; }
     /** @see #TRANSIENT_OR_REMOVED */
     public boolean isTransientOrRemoved() { return this == TRANSIENT_OR_REMOVED; }
-
 
     // -- ADVANCED PREDICATES
 
