@@ -60,7 +60,6 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.services.idstringifier.IdStringifierLookupService;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
 import org.apache.causeway.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
-import org.apache.causeway.persistence.jdo.datanucleus.entities.DnOidStoreAndRecoverHelper;
 import org.apache.causeway.persistence.jdo.datanucleus.entities.DnStateManagerForCauseway;
 import org.apache.causeway.persistence.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacetFactory;
 import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
@@ -147,14 +146,15 @@ implements EntityFacet {
 
         val entityState = getEntityState(pojo);
 
-        //TODO[CAUSEWAY-3500] could be refactored such that the HOLLOW state has on OID and provides it via the HollowStateManager
         if (!entityState.hasOid()) {
+            return Optional.empty();
+        }
+        if(entityState.isJdoHollow()) {
             /* for previously attached objects that have become hollow,
              * the OID can be looked up in our pseudo StateManager,
              * that only acts as a holder of OID. */
-            return entityState.isHollow()
-                    ? DnOidStoreAndRecoverHelper.forEntity((Persistable)pojo).recoverOid()
-                    : Optional.empty();
+            final String id = (String)((Persistable)pojo).dnGetTransactionalObjectId();
+            return Optional.of(id);
         }
 
         val pm = getPersistenceManager();
@@ -342,7 +342,7 @@ implements EntityFacet {
         _Assert.assertNullableObjectIsInstanceOf(pojo, entityClass);
 
         if(pojo==null
-                || DnEntityStateProvider.entityState(pojo).hasOid()) {
+                || DnEntityStateProvider.entityState(pojo).unsafe.hasOid()) {
             return; // nothing to do
         }
 
@@ -382,7 +382,7 @@ implements EntityFacet {
         // guard against misuse
         _Assert.assertNullableObjectIsInstanceOf(pojo, entityClass);
 
-        if (!DnEntityStateProvider.entityState(pojo).hasOid()) {
+        if (!DnEntityStateProvider.entityState(pojo).unsafe.canDelete()) {
             throw _Exceptions.illegalArgument("can only delete an attached entity");
         }
 

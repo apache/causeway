@@ -132,7 +132,10 @@ extends ReferentialStateManagerImpl {
         super.disconnect();
 
         snapshotOid
-            .ifPresent(oid->DnOidStoreAndRecoverHelper.forEntity(entityPojo).storeOid(oid));
+            .ifPresent(oid->{
+                entityPojo.dnReplaceStateManager(new DnStateManagerForHollow(oid));
+                entityPojo.dnReplaceFlags(); // sets dnFlags to 0
+            });
     }
 
     // -- HELPER

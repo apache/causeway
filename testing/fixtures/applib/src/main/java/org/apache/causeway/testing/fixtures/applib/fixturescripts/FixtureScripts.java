@@ -541,7 +541,7 @@ public class FixtureScripts {
         }
 
         if (object instanceof ViewModel
-                || repositoryService.getEntityState(object).isAttachedOrRemoved()) {
+                || repositoryService.getEntityState(object).unsafe.isAttachedOrRemoved()) {
             // continue
         } else {
             switch(getNonPersistedObjectsStrategy()) {

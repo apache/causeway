@@ -18,6 +18,10 @@
  */
 package org.apache.causeway.applib.services.repository;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
+
 /**
  * Enumerates the state of an entity.
  *
@@ -25,23 +29,24 @@ package org.apache.causeway.applib.services.repository;
  *
  * @since 2.0 {@index}
  */
+@RequiredArgsConstructor
 public enum EntityState {
 
     /**
      * Object with this state is not an entity (for example it might be a view
      * model, value type or a domain service).
      */
-    NOT_PERSISTABLE,
+    NOT_PERSISTABLE(false),
     /**
      * Object with this state is an entity that is attached to a persistence
      * session, in other words changes to the entity will be flushed back to
      * the database.
      */
-    PERSISTABLE_ATTACHED,
+    ATTACHED(true),
     /**
-     * Is attached, has no OID yet. On pre-store.
+     * Is attached to a persistence session, but has no OID yet. (on pre-store)
      */
-    PERSISTABLE_ATTACHED_NO_OID,
+    ATTACHED_NO_OID(false),
     /**
      * <h1>JDO specific</h1>
      * Object with this state is an entity that is detached from a
@@ -56,103 +61,127 @@ public enum EntityState {
      *
      * @see "https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#lifecycle"
      */
-    PERSISTABLE_HOLLOW,
+    JDO_HOLLOW(true),
     /**
-     * Is detached (has an OID). Supports re-attachment.
+     * <h1>JDO specific</h1>
+     * Object with this state is an entity that has been deleted from the
+     * database and may no longer be interacted with.
      * <p>
-     * That is,
-     * when after a commit the entity had become DETACHED, it can be used elsewhere in the application.
-     * You then attach any changes back to persistence and it becomes ATTACHED again.
+     * Closest match for JPA is {@link #TRANSIENT_OR_REMOVED}.
+     */
+    JDO_DELETED(false),
+    /** not used */
+    JDO_DETACHED(true),
+    /**
+     * Entity is NOT attached to a persistence session. Has an OID, hence can be bookmarked and re-fetched.
+     * <p>
+     * That is, when after a commit the entity had become DETACHED,
+     * it can be used elsewhere in the application.
+     * You then attach any changes back to persistence and it becomes PERSISTENT again.
      * <p>
      * Supported by JDO and JPA. However, at the time of writing, we don't make use of this technology,
-     * but instead re-fetch entities based on their OID.
+     * but instead re-fetch entities based on their OID,
+     * discarding any changes that might have happened since the last commit.
      */
-    PERSISTABLE_DETACHED,
-
-    PERSISTABLE_DETACHED_NO_OID,
+    JPA_DETACHED(true),
     /**
-     * Object with this state is an entity that has been removed from the
-     * database. Objects in this state may no longer be interacted with.
+     * Entity is NOT attached to a persistence session. Has no OID.
      */
-    PERSISTABLE_REMOVED,
+    TRANSIENT_OR_REMOVED(false),
     ;
+
+    // -- PREDICATES
+
+    @Getter @Accessors(fluent=true) private final boolean hasOid;
 
     /**
      * Object is an entity so is <i>potentially</i> persistable to the database.
      */
     public boolean isPersistable() { return this != NOT_PERSISTABLE; }
-    /**
-     * Object with this state is an entity that is attached to a persistence
-     * session, in other words changes to the entity will be flushed back to
-     * the database.
-     * @see #PERSISTABLE_ATTACHED
-     */
-    public boolean isAttached() { return this == PERSISTABLE_ATTACHED; }
-    /**
-     * Object with this state is an entity but that is detached from a
-     * persistence session and cannot be re-attached,
-     * in other words changes to the entity will <i>not</i>
-     * be flushed back to the database.
-     * @see #PERSISTABLE_HOLLOW
-     */
-    //TODO[CAUSEWAY-3500] perhaps reflect the fact, that this is JDO only with a better name
-    public boolean isHollow() { return this == PERSISTABLE_HOLLOW; }
+
+    /** @see #ATTACHED */
+    public boolean isAttached() { return this == ATTACHED; }
+
+    /** @see #ATTACHED_NO_OID */
+    public boolean isAttachedNoOid() { return this == ATTACHED_NO_OID; }
+
+    /** @see #JDO_HOLLOW */
+    public boolean isJdoHollow() { return this == JDO_HOLLOW; }
+
+    /** @see #JDO_DELETED */
+    public boolean isJdoDeleted() { return this == JDO_DELETED; }
 
     /**
-     * Is detached and has an OID.
+     * @see #JDO_DETACHED
+     * @see #JPA_DETACHED
      */
-    public boolean isDetachedWithOid() { return this == PERSISTABLE_DETACHED; }
-
-    /**
-     * Is detached but has <b>no</b> OID.
-     */
-    //TODO[CAUSEWAY-3500] potential misnomer: detached per def. has an OID
-    public boolean isDetachedNoOid() { return this == PERSISTABLE_DETACHED_NO_OID; }
-
-    /**
-     * Object with this state is an entity that has been removed from the
-     * database.  Objects in this state may no longer be interacted with.
-     * <p>
-     * Only supported by JDO. Will always return false with JPA.
-     * @see #PERSISTABLE_REMOVED
-     */
-    //TODO[CAUSEWAY-3500] perhaps reflect the fact, that this is JDO only with a better name
-    public boolean isRemoved() { return this == PERSISTABLE_REMOVED; }
-
-    // -- SPECIAL STATES
-
-    /**
-     * Is attached, has no OID yet. (On pre-store.)
-     */
-    public boolean isAttachedNoOid() {
-        return this == PERSISTABLE_ATTACHED_NO_OID;
+    public boolean isDetached() {
+        return this == JPA_DETACHED
+                || this == JDO_DETACHED;
     }
 
-    //TODO[CAUSEWAY-3500] potential misnomer: if detached per def has an OID
-    //FIXME[CAUSEWAY-3500] in fact hollow can now be re-attached
-    public boolean isDetachedCannotReattach() {
-        return (isHollow()
-                || isDetachedNoOid()
-                || isRemoved())
-                && !isDetachedWithOid();
-    }
+    /** @see #TRANSIENT_OR_REMOVED */
+    public boolean isTransientOrRemoved() { return this == TRANSIENT_OR_REMOVED; }
 
-    //TODO[CAUSEWAY-3500] either remove or un-deprecate
-    /**
-     * @apiNote 'removed' is only supported by JDO.
-     * @deprecated not supported by JPA
-     */
+
+    // -- ADVANCED PREDICATES
+
+
+
+    // -- DEPRECATIONS
+
     @Deprecated
-    public boolean isAttachedOrRemoved() {
-        return isAttached()
-                || isRemoved();
+    public class Unsafe {
+
+        //FIXME[CAUSEWAY-3500] very strange logic
+        public boolean isDeleted() {
+            return isJdoHollow()
+                    || isTransientOrRemoved()
+                    || isJdoDeleted()
+                    || isDetached();
+        }
+
+        //TODO[CAUSEWAY-3500] potential misnomer: if detached per def has an OID
+        //FIXME[CAUSEWAY-3500] in fact hollow can now be re-attached
+        public boolean isDetachedCannotReattach() {
+            return (isJdoHollow()
+                    || isTransientOrRemoved()
+                    || isJdoDeleted())
+                    && !isDetached();
+        }
+
+        /**
+         * @apiNote 'removed' is only supported by JDO.
+         * @deprecated not supported by JPA
+         */
+        @Deprecated
+        public boolean isAttachedOrRemoved() {
+            return isAttached()
+                    || isJdoDeleted();
+        }
+
+        //FIXME[CAUSEWAY-3500] hollow has OID
+        public boolean hasOid() {
+            return isAttached() || isDetached();
+        }
+
+        //FIXME[CAUSEWAY-3500] no of the below can be flushed!
+        public boolean isFlushable() {
+            return isJdoHollow()
+                    || isTransientOrRemoved()
+                    || isDetached();
+        }
+
+        public boolean canFlush() {
+            return !unsafe.hasOid();
+        }
+
+        public boolean canDelete() {
+            return unsafe.hasOid();
+        }
+
     }
 
-    // -- BOOKMARKABLE
-
-    //TODO[CAUSEWAY-3500] in fact hollow potentially also has an OID now
-    public boolean hasOid() {
-        return isAttached() || isDetachedWithOid();
-    }
+    public final Unsafe unsafe = new Unsafe();
 
 }

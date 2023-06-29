@@ -62,7 +62,7 @@ implements _Refetchable {
         public boolean isBookmarked() { return this == BOOKMARKED; }
         public boolean isRemoved() { return this == REMOVED; }
         static MorphState valueOf(final EntityState entityState) {
-            return entityState.isRemoved()
+            return entityState.isJdoDeleted()
                     ? REMOVED
                     : entityState.hasOid()
                         ? BOOKMARKED
@@ -181,13 +181,13 @@ implements _Refetchable {
             makeBookmarked(pojo);
             return;
         }
-        /* if the current EntityState is REMOVED, we handle variant transition 
-         * - from BOOKMARKED 
-         * - as well as from TRANSIENT 
+        /* if the current EntityState is REMOVED, we handle variant transition
+         * - from BOOKMARKED
+         * - as well as from TRANSIENT
          * to REMOVED */
         if((isVariantBookmarked()
                 || isVariantTransient())
-                && entityState.isRemoved()) {
+                && entityState.isJdoDeleted()) {
             makeRemoved();
             return;
         }

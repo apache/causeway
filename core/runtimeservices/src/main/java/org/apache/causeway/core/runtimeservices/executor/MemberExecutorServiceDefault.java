@@ -309,14 +309,13 @@ implements MemberExecutorService {
         if(!entityState.isPersistable()) {
             return;
         }
-        if(entityState.isHollow()
-                || entityState.isDetachedNoOid()
-                || entityState.isDetachedWithOid()) {
+        if(entityState.unsafe.isFlushable()) {
             // ensure that any still-to-be-persisted adapters get persisted to DB.
             getTransactionService().flushTransaction();
         }
+
         val entityState2 = resultAdapter.getEntityState();
-        if(entityState2.hasOid()) {
+        if(entityState2.unsafe.hasOid()) {
             val bookmark = ManagedObjects.bookmarkElseFail(resultAdapter);
             command.updater().setResult(Try.success(bookmark));
             return;

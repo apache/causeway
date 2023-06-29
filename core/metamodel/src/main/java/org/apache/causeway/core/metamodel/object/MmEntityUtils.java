@@ -68,7 +68,7 @@ public final class MmEntityUtils {
         entityFacet.persist(managedObject.getPojo());
     }
 
-    public void destroyInCurrentTransaction(final ManagedObject managedObject) {
+    public void deleteInCurrentTransaction(final ManagedObject managedObject) {
         requiresEntity(managedObject);
         val spec = managedObject.getSpecification();
         val entityFacet = spec.entityFacetElseFail();
@@ -98,7 +98,7 @@ public final class MmEntityUtils {
                 || entity.isBookmarkMemoized()) {
             return;
         }
-        if(!hasOid(entity)) {
+        if(canFlush(entity)) {
             entity.getTransactionService().flushTransaction();
             // force reassessment: as a side-effect transitions the transient entity to a bookmarked one
             entity.getEntityState();
@@ -131,7 +131,7 @@ public final class MmEntityUtils {
         if(entityState.isPersistable()) {
             // ensure we have an attached entity
             _Assert.assertEquals(
-                    EntityState.PERSISTABLE_ATTACHED,
+                    EntityState.ATTACHED,
                     entityState,
                     ()-> String.format("entity %s is required to be attached (not detached)",
                             managedObject.getSpecification().getLogicalTypeName()));
@@ -188,22 +188,24 @@ public final class MmEntityUtils {
     // -- SHORTCUTS
 
     public boolean hasOid(final @Nullable ManagedObject adapter) {
-        return MmEntityUtils.getEntityState(adapter).hasOid();
+        return getEntityState(adapter).hasOid();
+    }
+
+    public boolean canFlush(final @Nullable ManagedObject adapter) {
+        return getEntityState(adapter).unsafe.canFlush();
+    }
+
+    public boolean canDelete(final @Nullable ManagedObject adapter) {
+        return getEntityState(adapter).unsafe.canDelete();
     }
 
     //TODO[CAUSEWAY-3500] potential misnomer: if detached per def has an OID
-    public boolean isDetachedCannotReattach(final @Nullable ManagedObject adapter) {
-        return MmEntityUtils.getEntityState(adapter).isDetachedCannotReattach();
+    public boolean isDetachedCannotReattach(final @Nullable ManagedObject entity) {
+        return getEntityState(entity).unsafe.isDetachedCannotReattach();
     }
 
-    //FIXME[CAUSEWAY-3500]
-    /** TODO very strange logic */
     public boolean isDeleted(final @Nullable ManagedObject entity) {
-        val state = MmEntityUtils.getEntityState(entity);
-        return state.isHollow()
-                || state.isDetachedNoOid()
-                || state.isRemoved()
-                || state.isDetachedWithOid();
+        return getEntityState(entity).unsafe.isDeleted();
     }
 
 }

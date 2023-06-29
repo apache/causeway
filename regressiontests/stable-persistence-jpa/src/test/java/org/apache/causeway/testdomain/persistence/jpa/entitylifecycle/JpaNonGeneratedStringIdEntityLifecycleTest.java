@@ -77,7 +77,7 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
 
         assertTrue(entity.getSpecification().isEntity());
         assertEquals(
-                EntityState.PERSISTABLE_DETACHED,
+                EntityState.JPA_DETACHED,
                 MmEntityUtils.getEntityState(entity));
 
         setEntityRef(entity);
@@ -91,7 +91,7 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
         repository.persist(entity.getPojo());
 
         assertEquals(
-                EntityState.PERSISTABLE_ATTACHED,
+                EntityState.ATTACHED,
                 MmEntityUtils.getEntityState(entity));
         assertEquals(1, repository.allInstances(JpaEntityNonGeneratedStringId.class).size());
 
@@ -102,7 +102,7 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
 
         // expected post-condition (after persist, and having entered a new transaction)
         assertEquals(
-                EntityState.PERSISTABLE_DETACHED,
+                EntityState.JPA_DETACHED,
                 MmEntityUtils.getEntityState(getEntityRef()));
 
         val id = ((JpaEntityNonGeneratedStringId)getEntityRef().getPojo()).getName();
@@ -115,7 +115,7 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
 
         // expected pre-condition (before removal)
         assertEquals(
-                EntityState.PERSISTABLE_ATTACHED,
+                EntityState.ATTACHED,
                 MmEntityUtils.getEntityState(entity));
 
         repository.remove(entity.getPojo());

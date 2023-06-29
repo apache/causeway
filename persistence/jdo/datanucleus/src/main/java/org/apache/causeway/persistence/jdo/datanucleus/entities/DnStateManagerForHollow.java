@@ -41,7 +41,8 @@ import lombok.NonNull;
 
 /**
  * Used to memoize stringified OIDs of entities,
- * to be stored in the {@link Persistable}'s dnStateManager field.
+ * to be stored in the {@link Persistable}'s dnStateManager field,
+ * exposed via {@link #getTransactionalObjectId(Persistable)}
  * <p>
  * Has no purpose otherwise.
  */
@@ -49,7 +50,7 @@ class DnStateManagerForHollow implements DNStateManager<Persistable> {
 
     // -- CONSTRUCTION
 
-    public final @NonNull String oidStringified;
+    private final @NonNull String oidStringified;
 
     public DnStateManagerForHollow(final @NonNull String oidStringified) {
         this.oidStringified = oidStringified;
@@ -65,7 +66,7 @@ class DnStateManagerForHollow implements DNStateManager<Persistable> {
     @Override public boolean isDeleted(final Persistable pc) { return false;}
     @Override public void makeDirty(final Persistable pc, final String fieldName) { }
     @Override public Object getObjectId(final Persistable pc) { return null;}
-    @Override public Object getTransactionalObjectId(final Persistable pc) { return null;}
+    @Override public Object getTransactionalObjectId(final Persistable pc) { return oidStringified;}
     @Override public Object getVersion(final Persistable pc) { return null;}
     @Override public boolean isLoaded(final Persistable pc, final int field) { return false;}
     @Override public void preSerialize(final Persistable pc) { }

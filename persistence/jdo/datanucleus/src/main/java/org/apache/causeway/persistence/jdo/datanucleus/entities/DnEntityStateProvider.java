@@ -28,6 +28,7 @@ import org.springframework.stereotype.Component;
 import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Sets;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.persistence.jdo.datanucleus.metamodel.facets.entity.JdoEntityFacet;
@@ -67,19 +68,27 @@ public class DnEntityStateProvider implements JdoFacetContext {
             return EntityState.NOT_PERSISTABLE;
         }
 
-        val persistable = (Persistable) pojo;
+        var persistable = (Persistable) pojo;
         val isDeleted = persistable.dnIsDeleted();
         if(isDeleted) {
-            return EntityState.PERSISTABLE_REMOVED;
+            return EntityState.JDO_DELETED;
         }
         val isPersistent = persistable.dnIsPersistent();
         if(isPersistent) {
-            val oid = persistable.dnGetObjectId();
-            return oid!=null
-                    ? EntityState.PERSISTABLE_ATTACHED
-                    : EntityState.PERSISTABLE_ATTACHED_NO_OID;
+            return persistable.dnGetObjectId()!=null
+                    ? EntityState.ATTACHED
+                    : EntityState.ATTACHED_NO_OID;
         }
-        return EntityState.PERSISTABLE_HOLLOW;
+        if(persistable.dnIsDetached()) {
+            // at time of writing we have no support for JDO detached states, hence failing early
+            _Exceptions.throwUnexpectedCodeReach();
+            return persistable.dnGetObjectId()!=null
+                    ? EntityState.JDO_DETACHED
+                    : EntityState.TRANSIENT_OR_REMOVED;
+        }
+        return persistable.dnGetStateManager() instanceof DnStateManagerForHollow
+                ? EntityState.JDO_HOLLOW
+                : EntityState.TRANSIENT_OR_REMOVED;
     }
 
     // -- HELPER

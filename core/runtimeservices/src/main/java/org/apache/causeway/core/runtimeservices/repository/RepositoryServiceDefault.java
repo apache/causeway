@@ -127,8 +127,8 @@ implements RepositoryService, HasMetaModelContext {
             return; // noop
         }
         val adapter = getObjectManager().adapt(unwrapped(domainObject));
-        if(MmEntityUtils.hasOid(adapter)) {
-            MmEntityUtils.destroyInCurrentTransaction(adapter);
+        if(MmEntityUtils.canDelete(adapter)) {
+            MmEntityUtils.deleteInCurrentTransaction(adapter);
         }
     }
 
