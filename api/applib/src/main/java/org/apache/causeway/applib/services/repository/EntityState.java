@@ -134,10 +134,20 @@ public enum EntityState {
                 && !isDetached();
     }
 
+    /**
+     * Cannot flush, when DELETED or HOLLOW.
+     */
+    public boolean cannotFlush() {
+        return this == NOT_PERSISTABLE
+                || isJdoDeleted()
+                || isJdoHollow();
+    }
+
+    /**
+     * Can flush, when not DELETED nor HOLLOW.
+     */
     public boolean canFlush() {
-        return isAttached()
-                || isAttachedNoOid()
-                || this == TRANSIENT_OR_REMOVED;
+        return !cannotFlush();
     }
 
 }
