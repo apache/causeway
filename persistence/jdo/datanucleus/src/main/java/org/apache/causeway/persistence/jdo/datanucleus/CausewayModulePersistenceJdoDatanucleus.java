@@ -55,6 +55,7 @@ import org.apache.causeway.persistence.jdo.datanucleus.valuetypes.DnDatastoreUni
 import org.apache.causeway.persistence.jdo.datanucleus.valuetypes.DnIntIdValueSemantics;
 import org.apache.causeway.persistence.jdo.datanucleus.valuetypes.DnLongIdValueSemantics;
 import org.apache.causeway.persistence.jdo.datanucleus.valuetypes.DnObjectIdValueSemantics;
+import org.apache.causeway.persistence.jdo.datanucleus.valuetypes.DnScoidValueSemantics;
 import org.apache.causeway.persistence.jdo.datanucleus.valuetypes.DnShortIdValueSemantics;
 import org.apache.causeway.persistence.jdo.datanucleus.valuetypes.DnStringIdValueSemantics;
 import org.apache.causeway.persistence.jdo.datanucleus.valuetypes.JdoByteIdentityValueSemantics;
@@ -104,6 +105,7 @@ import lombok.extern.log4j.Log4j2;
     DnCharIdValueSemantics.class,
     DnStringIdValueSemantics.class,
     DnObjectIdValueSemantics.class,
+    DnScoidValueSemantics.class, // in support of @PersistenceCapable(identityType=IdentityType.NONDURABLE)
 
     // @Service's
     JdoSupportServiceDefault.class,

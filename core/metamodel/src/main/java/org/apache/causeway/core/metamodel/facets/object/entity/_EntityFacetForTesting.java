@@ -106,4 +106,9 @@ class _EntityFacetForTesting implements EntityFacet {
         throw _Exceptions.unsupportedOperation();
     }
 
+    @Override
+    public EntityOrmMetadata getOrmMetadata() {
+        throw _Exceptions.unsupportedOperation();
+    }
+
 }
