@@ -259,9 +259,9 @@ content:
     - url: .
       start_path: valuetypes/asciidoc/adoc # valuetypes
       branches: HEAD
-#    - url: .
-#      start_path: valuetypes/jodatime/adoc # valuetypes
-#      branches: HEAD
+    - url: .
+      start_path: valuetypes/jodatime/adoc # valuetypes
+      branches: HEAD
     - url: .
       start_path: valuetypes/markdown/adoc # valuetypes
       branches: HEAD

@@ -83,7 +83,7 @@ System.setProperty("spring.profiles.active", "demo-jpa");
 
 [WARNING]
 ====
-TODO: v2
+TODO:
 
 * use interfaces
 ** the beansort ABSTRACT could be implemented as gql interface

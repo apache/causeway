@@ -18,7 +18,7 @@
     under the License.
 -->
 <plugin
-   id="org.apache.causeway.valuetypes.markdown.persistence.jdo.dn"
+   id="org.apache.causeway.valuetypes.markdown.persistence.jdo"
    name="Apache Causeway Value Types Markdown Persistence JDO DataNucleus Implementation"
    provider-name="Apache Causeway">
 
@@ -42,7 +42,7 @@
                 name="causeway.ext.markdown-string"
                 member-type="org.apache.causeway.valuetypes.markdown.applib.value.Markdown"
                 datastore-type="java.lang.String"
-                converter-class="org.apache.causeway.valuetypes.markdown.persistence.jdo.dn.converters.CausewayMarkdownConverter"/>
+                converter-class="org.apache.causeway.valuetypes.markdown.persistence.jdo.converters.CausewayMarkdownConverter"/>
     </extension>
 
 </plugin>

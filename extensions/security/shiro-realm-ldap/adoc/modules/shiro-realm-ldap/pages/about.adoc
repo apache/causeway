@@ -9,9 +9,6 @@ The Shiro framework also ships with an implementation of an LDAP-based realm; LD
 Apache Causeway extends Shiro's implementation this  `CausewayLdapRealm`, which provides more flexibility for both group/role and role/permissions management.
 
 
-WARNING: TODO: v2 - to write up...
-
-
 == Setup
 
 === Dependency Management
@@ -45,10 +42,12 @@ In your application's xref:userguide::modules.adoc#appmanifest[App Manifest], im
 .pom.xml
 ----
 <dependencies>
+    ...
     <dependency>
         <groupId>org.apache.causeway.extensions</groupId>
         <artifactId>causeway-extensions-shiro-realm-ldap-impl</artifactId>
     </dependency>
+    ...
 </dependencies>
 ----
 
@@ -84,7 +83,6 @@ include::security:shiro-realm-ldap:example$shiro.ini[tags=example]
 <.> Injects the `contextFactory` object into the `ldapRealm` object ...
 <.> \... and injects the `ldapRealm` into Shiro's in-built security manager.
 
-The `
 
 // TODO: v2 - work in progress - also describe how this can optionally map LDAP groups to roles, and can map roles to perms; neither are relevant if secman is used for permissioning.
 
@@ -107,7 +105,8 @@ start ApacheDS:
 +
 on Windows, this is `C:\Program Files (x86)\ApacheDS\instances\default\conf`)
 
-* rename the `ou=config` folder (the server won't start if it exists as well as the `config.ldif`)
+// think this isn't a problem after all; I did a clean reinstall and this issue didn't re-occur.
+// * rename the `ou=config` folder (the server won't start if it exists as well as the `config.ldif`)
 
 * start the service
 
@@ -116,6 +115,15 @@ using _Apache Directory Studio_
 * define a connection to `localhost:10389`
 ** login: `uid=admin,ou=system`
 ** password: `secret`
+
+
+image::open-configuration.png[width=300px]
+
+image::ldap-server-sasl-configuration.png[width=800px]
+
+* update the "Search Base Dn"
++
+this is where the search for valid users is performed from.
 
 
 === Creating a user

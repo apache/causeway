@@ -6,7 +6,7 @@
 
 Apache Causeway ships with an implementation of http://shiro.apache.org[Apache Shiro]'s `Realm` class that allows user authentication and authorization to be performed against an LDAP server.
 
-image::security:shiro-realm-ldap:configure-shiro-to-use-causeway-ldap-realm.png[width="600px"]
+image::security:shiro-realm-ldap:old/configure-shiro-to-use-causeway-ldap-realm.png[width="600px"]
 
 The LDAP database stores the user/passwords and user groups, while the `shiro.ini` file is used to map the LDAP groups to roles, and to map the roles to permissions.
 
@@ -124,22 +124,22 @@ The setup here was initially based on http://krams915.blogspot.co.uk/2011/01/lda
 
 To start, create a partition in order to hold the mojo node (holding the groups):
 
-image::security:shiro-realm-ldap:activeds-ldap-mojo-partition.png[]
+image::security:shiro-realm-ldap:old/activeds-ldap-mojo-partition.png[]
 
 Create the `ou=groups,o=mojo` hierarchy:
 
-image::security:shiro-realm-ldap:activeds-ldap-mojo-root-dse.png[]
+image::security:shiro-realm-ldap:old/activeds-ldap-mojo-root-dse.png[]
 
 Configure SASL authentication. This means that the checking of user/password is done implicitly by virtue of Apache Causeway connecting to LDAP using these credentials:
 
-image::security:shiro-realm-ldap:activeds-ldap-sasl-authentication.png[]
+image::security:shiro-realm-ldap:old/activeds-ldap-sasl-authentication.png[]
 
 In order for SASL to work, it seems to be necessary to put users under `o=system`. (This is why the setup is slightly different than the tutorial mentioned above):
 
-image::security:shiro-realm-ldap:activeds-ldap-users.png[]
+image::security:shiro-realm-ldap:old/activeds-ldap-users.png[]
 
 Configure the users into the groups:
 
-image::security:shiro-realm-ldap:activeds-ldap-groups.png[]
+image::security:shiro-realm-ldap:old/activeds-ldap-groups.png[]
 
 

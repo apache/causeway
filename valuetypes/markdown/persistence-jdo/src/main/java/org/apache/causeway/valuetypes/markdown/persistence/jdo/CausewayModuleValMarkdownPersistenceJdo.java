@@ -16,19 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.valuetypes.asciidoc.persistence.jdo.dn;
+package org.apache.causeway.valuetypes.markdown.persistence.jdo;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.causeway.valuetypes.asciidoc.applib.CausewayModuleValAsciidocApplib;
+import org.apache.causeway.valuetypes.markdown.applib.CausewayModuleValMarkdownApplib;
 
 /**
  * @since 2.0 {@index}
  */
 @Configuration
 @Import({
-    CausewayModuleValAsciidocApplib.class
+    CausewayModuleValMarkdownApplib.class
 })
-public class CausewayModuleValAsciidocPersistenceJdoDn {
+public class CausewayModuleValMarkdownPersistenceJdo {
 }

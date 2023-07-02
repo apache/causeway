@@ -6,6 +6,7 @@ The SSE (Server Side Events) module integrates with the xref:vw:ROOT:about.adoc[
 One use case could be to render a progress bar for a long-running action.
 
 
+
 == Setup
 
 === Dependency Management
@@ -86,12 +87,114 @@ public class AppManifest {
 
 == Usage
 
-[WARNING]
-====
-TODO: v2 - to write up...
+By way of example, let's see how to render a progress bar.
+We'll start with a background task which for demo purposes wil just count slowly up to some figure.
+This acts as a source of SSE events:
 
-need to annotate property using `@ServerSentEvents` annotation, and provide an implementation of the `SseSource` SPI.
-====
+[source,java]
+.DemoTask.java
+----
+@Named("demo.DemoTask")
+@DomainObject(nature=Nature.VIEW_MODEL, editing=Editing.DISABLED)
+@RequiredArgsConstructor(staticName="of")
+public class DemoTask implements SseSource {                // <.>
 
+    @ObjectSupport public String title() {
+        return String.format("DemoTask '%s'", Integer.toHexString(hashCode()));
+    }
 
+    private final int totalSteps;
+    private TaskProgress taskProgress;
+
+    @Override
+    public void run(final SseChannel eventStream) {
+        taskProgress = TaskProgress.of(new LongAdder(), totalSteps);
+        for(int i=0; i<totalSteps; ++i) {
+            _ThreadSleep.millis(1000);
+            taskProgress.getStepsProgressed().increment();
+            eventStream.fire(this);                     // <.>
+        }
+    }
+
+    @Override
+    public String getPayload() {                        // <.>
+        return taskProgress.toHtmlProgressBar();
+    }
+}
+----
+<.> Implements xref:refguide:extensions:index/sse/applib/annotations/SseSource.adoc[SseSource], meaning that it must implement `run(SseChannel)`.
+<.> Periodically emits events using the provided xref:refguide:extensions:index/sse/applib/service/SseChannel.adoc[SseChannel].
+<.> Also provides a payload, being a string representation of progress to date.
+
+It's idiomatic to use HTML as the payload, so that it can be rendered in a xref:refguide:applib:index/value/Markup.adoc[Markup] property (see later).
+This HTML payload is built using a helper class `TaskProgress`:
+
+[source,java]
+.TaskProgress.java
+----
+@Data(staticConstructor="of")
+public class TaskProgress {
+
+    private final LongAdder stepsProgressed;
+    private final long totalSteps;
+
+    public double progressedRelative() {
+        final double totalReciprocal = 1. / totalSteps;
+        return stepsProgressed.doubleValue() * totalReciprocal;
+    }
+    public double progressedPercent() {
+        return Math.min(progressedRelative()*100., 100.);
+    }
+    public int progressedPercentAsInt() {
+        return (int) Math.round(progressedPercent());
+    }
+
+    public String toHtmlProgressBar() {
+        final int percent = progressedPercentAsInt();
+        return stepsProgressed + "/" + totalSteps +
+                "<br/>" +
+                "<br/>" +
+                "<div class=\"progress\">" +
+                "    <div class=\"progress-bar\" " +
+                         "role=\"progressbar\" " +
+                         "style=\"width: " + percent + "%\" " +
+                         "aria-valuenow=\""+percent+"\" " +
+                         "aria-valuemin=\"0\" " +
+                         "aria-valuemax=\"100\">" +
+                    "</div>" +
+                "</div>";
+    }
+}
+----
+
+As mentioned above, we will use  a xref:refguide:applib:index/value/Markup.adoc[Markup] property to display the render the progress:
+
+[source,java]
+----
+@XmlElement @XmlJavaTypeAdapter(Markup.JaxbToStringAdapter.class)
+@Property
+@ServerSentEvents(observe=DemoTask.class)           // <.>
+@Getter @Setter Markup progressView;
+----
+<.> observes the state of this background task.
++
+IMPORTANT: If more than one instance of a task (of this class) runs at the same time, there is (currently) no way to distinguish their events.
+
+Finally, the task is kicked off using the xref:refguide:extensions:index/sse/applib/service/SseService.adoc[].
+This runs in the background using a separate thread:
+
+[source,java]
+----
+@Action
+public SseDemoPage startSimpleTask() {
+    final DemoTask demoTask = DemoTask.of(100);
+    sseService.submit(demoTask, ExecutionBehavior.REQUIRES_NEW_SESSION);  // <.>
+    return this;
+}
+
+@Inject SseService sseService;
+----
+<.> The `ExecutionBehaviour` determines whether the background thread should run in the context of a full-blown xref:refguide:applib:index/services/iactn/Interaction.adoc[].
++
+Most of the time this will be what you want, but if the background thread runs outside of the framework (eg perhaps just calls out to a web service), then instead `Execution.SIMPLE` can be used.
 

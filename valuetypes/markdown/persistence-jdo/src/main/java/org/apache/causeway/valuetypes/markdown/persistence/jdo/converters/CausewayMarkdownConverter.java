@@ -16,30 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.valuetypes.asciidoc.persistence.jdo.dn.converters;
+package org.apache.causeway.valuetypes.markdown.persistence.jdo.converters;
 
 import org.datanucleus.store.types.converters.TypeConverter;
 
-import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
+import org.apache.causeway.valuetypes.markdown.applib.value.Markdown;
 
 /**
  * @since 2.0 {@index}
  */
-public class CausewayAsciiDocConverter implements TypeConverter<AsciiDoc, String>{
+public class CausewayMarkdownConverter implements TypeConverter<Markdown, String>{
 
     private static final long serialVersionUID = 1L;
 
     @Override
-    public String toDatastoreType(final AsciiDoc memberValue) {
+    public String toDatastoreType(final Markdown memberValue) {
         return memberValue != null
-                ? memberValue.getAdoc()
+                ? memberValue.getMarkdown()
                 : null;
     }
 
     @Override
-    public AsciiDoc toMemberType(final String datastoreValue) {
+    public Markdown toMemberType(final String datastoreValue) {
         return datastoreValue != null
-                ? AsciiDoc.valueOf(datastoreValue)
+                ? Markdown.valueOf(datastoreValue)
                 : null;
     }
 

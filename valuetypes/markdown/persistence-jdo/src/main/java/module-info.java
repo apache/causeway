@@ -17,8 +17,8 @@
  *  under the License.
  */
 module org.apache.causeway.valuetypes.markdown.persistence.jdo {
-    exports org.apache.causeway.valuetypes.markdown.persistence.jdo.dn.converters;
-    exports org.apache.causeway.valuetypes.markdown.persistence.jdo.dn;
+    exports org.apache.causeway.valuetypes.markdown.persistence.jdo;
+    exports org.apache.causeway.valuetypes.markdown.persistence.jdo.converters;
 
     requires org.apache.causeway.core.config;
     requires org.apache.causeway.valuetypes.markdown.applib;

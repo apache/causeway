@@ -57,6 +57,7 @@ A JAXB view model would require `@XmlJavaTypeAdapter(JavaTimeJaxbAdapters.LocalD
 
 In the following sections we look at the other datatypes that you can use as the value types, and then we look at defining custom types.
 
+[#jdk-types]
 == JDK types
 
 The most common value types to use are those built-into JDK.
@@ -149,6 +150,7 @@ Apache Causeway provides adapters for all of these.
 
 In addition to supporting JDK and Joda, Apache Causeway defines a number of its own custom value types, described next.
 
+[#causeway-specific]
 == Causeway-specific
 
 Apache Causeway defines a number of its own value types.
@@ -204,9 +206,10 @@ This renders graphics defined by the link:https://vega.github.io/vega-lite/[Vega
 
 
 
+[#custom-value-types]
 == Custom value types
 
-As well as the built-in support and extensions provided by Apache Causeway, it is also possible to implement your own custom  value types.
+As well as the built-in support and extensions provided by Apache Causeway, it is also possible to implement your own custom value types.
 
 Implementing value types can be a great way of encapsulating functionality.
 Rather than have your entities and view models be concerned about the format of an invoice number, instead define an `InvoiceNumber`.

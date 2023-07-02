@@ -17,8 +17,8 @@
  *  under the License.
  */
 module org.apache.causeway.valuetypes.asciidoc.persistence.jdo {
-    exports org.apache.causeway.valuetypes.asciidoc.persistence.jdo.dn;
-    exports org.apache.causeway.valuetypes.asciidoc.persistence.jdo.dn.converters;
+    exports org.apache.causeway.valuetypes.asciidoc.persistence.jdo;
+    exports org.apache.causeway.valuetypes.asciidoc.persistence.jdo.converters;
 
     requires org.apache.causeway.core.config;
     requires org.apache.causeway.valuetypes.asciidoc.applib;
