@@ -372,8 +372,6 @@ public class UserToRole__bob_allRoles extends AbstractUserAndRolesFixtureScript 
         , CausewayConfiguration.Extensions.Secman.Seed.REGULAR_USER_ROLE_NAME_DEFAULT // <.>
         , CausewayAppFeatureRoleAndPermissions.ROLE_NAME                              // <.>
         , CausewayPersistenceJdoMetaModelRoleAndPermissions.ROLE_NAME                 // <7>
-        , CausewayExtCommandReplayPrimaryRoleAndPermissions.ROLE_NAME                 // <7>
-        , CausewayExtCommandReplaySecondaryRoleAndPermissions.ROLE_NAME               // <7>
         , CausewayExtH2ConsoleRoleAndPermissions.ROLE_NAME                            // <7>
         , CausewayViewerRestfulObjectsSwaggerRoleAndPermissions.ROLE_NAME             // <7>
         , CausewaySudoImpersonateRoleAndPermissions.ROLE_NAME                         // <7>
