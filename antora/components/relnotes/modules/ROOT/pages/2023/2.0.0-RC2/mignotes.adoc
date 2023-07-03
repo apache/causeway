@@ -9,24 +9,31 @@ This page will be added to as development progresses.
 
 === Removed
 * `ActionLayout#bookmarking` ... had conflicting semantics with `DomainObjectLayout#bookmarking`,
-that is, if the latter was present on an Action's return type, hence removed
+that is, if the latter was present on an Action's return type, hence removed.
++
+(Also, originally the intent was for action prompts to be bookmarked, but this was never implemented).
+
+* The `causeway-extensions-shiro-realm-ldap` extension has been removed.
++
+This extension extended Shiro's own `DefaultLdapRealm` realm to provide support for authorisation (statically defined in the `shiro.ini` file).
+Instead, use Shiro's own `DefaultLdapRealm` but configure with some other authorisation mechanism, eg Secman.
 
 === Marked Deprecated for Removal
 * `Action#hidden` ... use `ActionLayout#hidden` instead
 * `Collection#hidden` ... use `CollectionLayout#hidden` instead
 * `Property#hidden` ... use `PropertyLayout#hidden` instead
 
-Parameter support method `validateNXxx(...)` is now supported to only have a single argument, 
-namely the parameter, that is subject to validation. 
+Parameter support method `validateNXxx(...)` is now supported to only have a single argument,
+namely the parameter, that is subject to validation.
 
 [WARNING]
 ====
 This may potentially change behavior
-for cases when the action's first and the n-th parameter 
-are the same type and 
-given a single argument parameter support method with same type also, 
-then previously it interpreted the support to be associated with 
-the first parameter, while now it will interpret the support to be 
+for cases when the action's first and the n-th parameter
+are the same type and
+given a single argument parameter support method with same type also,
+then previously it interpreted the support to be associated with
+the first parameter, while now it will interpret the support to be
 associated with the n-th parameter. (using _n_ as 1-based here)
 ====
 

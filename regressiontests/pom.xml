@@ -255,12 +255,6 @@
 				<version>${project.version}</version>
 			</dependency>
 
-			<dependency>
-				<groupId>org.apache.causeway.extensions</groupId>
-				<artifactId>causeway-extensions-shiro-realm-ldap-impl</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-
 
 
 			<!-- TEST DEPENDENCIES -->
