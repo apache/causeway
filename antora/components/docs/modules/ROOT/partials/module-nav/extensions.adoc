@@ -20,7 +20,6 @@
 *** xref:security:secman:about.adoc[]
 *** xref:security:audittrail:about.adoc[]
 *** xref:security:spring-oauth2:about.adoc[Spring OAuth2]
-*** xref:security:shiro-realm-ldap:about.adoc[LDAP Realm for Shiro]
 *** xref:security:sessionlog:about.adoc[]
 
 

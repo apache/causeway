@@ -24,12 +24,11 @@ Configuring this realm is described <<shiro-ini-realm,below>>
 
 TIP: The xref:docs:starters:helloworld.adoc[HelloWorld] and xref:docs:starters:simpleapp.adoc[SimpleApp] starter apps are both configured to use this realm.
 
-A more sophisticated option is the LDAP realm.
-Shiro has its own implementation which is extended in the xref:security:shiro-realm-ldap:about.adoc[LDAP realm]
-This realm also supports permissions.
+For production use, a more sophisticated option is the LDAP realm.
+Shiro has its own implementation which can be used for authentication.
+We recommend that it is combined with xref:security:secman:about.adoc[] for authorization.
+See xref:security:secman:setting-up-with-shiro.adoc[setting up SecMan with Shiro] for more details.
 
-Permissions are ultimately represented as strings, and their interpretation of them is the responsibility of `AuthorizorShiro`.
-An enhanced "wildcard" syntax, described  <<enhanced-wildcard-permission,below>> in more detail, incorporates the notion of read and write permissions, and also of vetoing permissions (as well as the usual allow permissions).
 
 
 [[configuring-causeway-to-use-shiro]]
@@ -96,7 +95,8 @@ securityManager.realms = $realm1,$realm2
 ----
 
 How to configure the text-based ini realm is explained <<shiro-ini-realm,below>>.
-Another option alternative is the xref:security:shiro-realm-ldap:about.adoc[LDAP realm].
+Another option alternative is Shiro's own LDAP realm, which can be used for authentication and combined with SecMan for authorization.
+See xref:security:secman:setting-up-with-shiro.adoc[setting up SecMan with Shiro] for more details.
 
 
 As noted above, as well as realms many other aspects of configuration can be specified in this file:
@@ -280,14 +280,12 @@ Instead, the corresponding sections from for `realm1.ini` are used instead.
 [#enhanced-wildcard-permission]
 == Enhanced Wildcard Permission
 
-If using the text-based xref:security:shiro:about.adoc#shiro-ini-realm[IniRealm] or xref:security:shiro-realm-ldap:about.adoc[Apache Causeway' LDAP realm], then note that Shiro also allows the string representation of the permissions to be mapped (resolved) to alternative `Permission` instances.
-Apache Causeway provides its own `CausewayPermission` which introduces the concept of a "veto".
+If using xref:security:shiro:about.adoc#shiro-ini-realm[IniRealm], the string permissions can represent either a grant _or_ a veto for a particular feature.
 
-A vetoing permission is one that prevents access to a feature, rather than grants it.
 This is useful in some situations where most users have access to most features, and only a small number of features are particularly sensitive.
 The configuration can therefore be set up to grant fairly broad-brush permissions and then veto permission for the sensitive features for those users that do not have access.
 
-The string representation of the `CausewayPermission` uses the following format:
+The string representation of a "causeway" permission (implemented, in fact, by the xref:refguide:security:index/shiro/authorization/CausewayPermission.adoc[] class) uses the following format:
 
 [source,ini]
 ----
@@ -329,6 +327,7 @@ In this case the prefixes in ``reg/{asterisk}`` and ``adm/{asterisk}`` are requi
 
 The net effect is therefore what we would want: that a user with both `admin_role` and `user_role` would have access to everything, irrespective of those two veto permissions of the `user_role`.
 
+
 [[permission-resolver-configuration]]
 === Configuration
 
@@ -339,7 +338,7 @@ To configure Apache Causeway' extended permission support requires that a custom
 permissionResolver = org.apache.causeway.security.shiro.authorization.CausewayPermissionResolver
 myRealm.permissionResolver = $permissionResolver  # <.>
 ----
-<.> `myRealm` is the handle to the configured realm, eg `$iniRealm` or `$causewayLdapRealm` etc.
+<.> `myRealm` is the handle to the configured realm, eg `$iniRealm`.
 
 
 
@@ -356,6 +355,7 @@ securityManager.cacheManager = $memoryCacheManager
 ----
 
 Other implementations can be plugged in; see the Shiro link:http://shiro.apache.org/caching.html[documentation] for further details.
+
 
 == Further Reading
 

@@ -43,7 +43,7 @@ rectangle "App\n<size:10>[Software System]</size>" <<App>> {
 .Projects/Modules (App)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Starter Parent
 [source,yaml]
@@ -105,7 +105,7 @@ Mavendeps.ApacheCausewayMavenDeps .[#707070,thickness=2].> Mavendeps.ApacheCause
 .Projects/Modules (Mavendeps)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Maven Deps
 [source,yaml]
@@ -326,7 +326,7 @@ Testing.ApacheCausewayTstUnitTestSupportparent .[#707070,thickness=2].> Testing.
 .Projects/Modules (Testing)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Testing
 [source,yaml]
@@ -728,7 +728,7 @@ Root.ApacheCausewayAggregator .[#707070,thickness=2].> Root.ApacheCauseway : "<c
 .Projects/Modules (Root)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway (Aggregator)
 [source,yaml]
@@ -818,7 +818,7 @@ rectangle "Commons\n<size:10>[Software System]</size>" <<Commons>> {
 .Projects/Modules (Commons)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Commons
 [source,yaml]
@@ -1001,7 +1001,7 @@ Core.ApacheCausewayCore .[#707070,thickness=2].> Core.ApacheCausewayApiSchemas :
 .Projects/Modules (Core)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Core
 [source,yaml]
@@ -1513,7 +1513,7 @@ rectangle "Persistence\n<size:10>[Software System]</size>" <<Persistence>> {
 .Projects/Modules (Persistence)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Persistence - Commons
 [source,yaml]
@@ -1633,7 +1633,7 @@ JDO.ApacheCausewayPersistenceJDO .[#707070,thickness=2].> JDO.ApacheCausewayPers
 .Projects/Modules (JDO)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Persistence - JDO
 [source,yaml]
@@ -1887,7 +1887,7 @@ JPA.ApacheCausewayPersistenceJPA .[#707070,thickness=2].> JPA.ApacheCausewayPers
 .Projects/Modules (JPA)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Persistence - JPA
 [source,yaml]
@@ -2040,7 +2040,7 @@ rectangle "Bypass\n<size:10>[Software System]</size>" <<Bypass>> {
 .Projects/Modules (Bypass)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Security - Bypass
 [source,yaml]
@@ -2107,7 +2107,7 @@ rectangle "Keycloak\n<size:10>[Software System]</size>" <<Keycloak>> {
 .Projects/Modules (Keycloak)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Security - Keycloak
 [source,yaml]
@@ -2183,7 +2183,7 @@ rectangle "Shiro\n<size:10>[Software System]</size>" <<Shiro>> {
 .Projects/Modules (Shiro)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Security - Shiro
 [source,yaml]
@@ -2258,7 +2258,7 @@ rectangle "Spring\n<size:10>[Software System]</size>" <<Spring>> {
 .Projects/Modules (Spring)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Security - Spring
 [source,yaml]
@@ -2367,7 +2367,7 @@ Common.ApacheCausewayViewerCommons .[#707070,thickness=2].> Common.ApacheCausewa
 .Projects/Modules (Common)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Viewer - Commons
 [source,yaml]
@@ -2541,7 +2541,7 @@ RestfulObjects.ApacheCausewayViewerRO .[#707070,thickness=2].> RestfulObjects.Ap
 .Projects/Modules (Restful Objects)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Viewer - RO
 [source,yaml]
@@ -2797,7 +2797,7 @@ Wicket.ApacheCausewayViewerWicket .[#707070,thickness=2].> Wicket.ApacheCauseway
 .Projects/Modules (Wicket)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Viewer - Wicket
 [source,yaml]
@@ -3017,7 +3017,7 @@ Valuetypes.ApacheCausewayValJodaTimeparent .[#707070,thickness=2].> Valuetypes.A
 .Projects/Modules (Valuetypes)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Value types
 [source,yaml]
@@ -3182,7 +3182,7 @@ Asciidoc.ApacheCausewayValAsciidoctorparent .[#707070,thickness=2].> Asciidoc.Ap
 .Projects/Modules (Asciidoc)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Val - Asciidoctor (parent)
 [source,yaml]
@@ -3414,7 +3414,7 @@ Markdown.ApacheCausewayValMarkdownparent .[#707070,thickness=2].> Markdown.Apach
 .Projects/Modules (Markdown)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Val - Markdown (parent)
 [source,yaml]
@@ -3639,7 +3639,7 @@ Vega.ApacheCausewayValVegaparent .[#707070,thickness=2].> Vega.ApacheCausewayVal
 .Projects/Modules (Vega)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Val - Vega (parent)
 [source,yaml]
@@ -4109,7 +4109,7 @@ Extensions.ApacheCausewayExtServerSentEventsparent .[#707070,thickness=2].> Exte
 .Projects/Modules (Extensions)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Extensions
 [source,yaml]
@@ -4762,35 +4762,6 @@ org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
 ****
 
-|Apache Causeway Ext - Security - Shiro LDAP Realm (parent)
-[source,yaml]
-----
-Group: org.apache.causeway.extensions
-Artifact: causeway-extensions-shiro-realm-ldap
-Type: pom
-Directory: /extensions/security/shiro-realm-ldap
-----
-|Implementation of Shiro Realm using LDAP.
-
-|Apache Causeway Ext - Security - Shiro LDAP Realm (impl)
-[source,yaml]
-----
-Group: org.apache.causeway.extensions
-Artifact: causeway-extensions-shiro-realm-ldap-impl
-Type: jar
-Directory: /extensions/security/shiro-realm-ldap/impl
-----
-|.Dependencies
-****
-org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
-org.apache.causeway.security:causeway-security-shiro:jar:<managed> +
-****
-
-.Document Index Entries
-****
-xref:refguide:extensions:index/shirorealmldap/realm/impl/CausewayLdapContextFactory.adoc[CausewayLdapContextFactory], xref:refguide:extensions:index/shirorealmldap/realm/impl/CausewayLdapRealm.adoc[CausewayLdapRealm], xref:refguide:extensions:index/shirorealmldap/realm/impl/CausewayModuleExtShiroRealmLdapImpl.adoc[CausewayModuleExtShiroRealmLdapImpl]
-****
-
 |Apache Causeway Ext - Security - Spring Oauth2
 [source,yaml]
 ----
@@ -4982,7 +4953,7 @@ ApplibExcel.ApacheCausewayExtExcelparent .[#707070,thickness=2].> ApplibExcel.Ap
 .Projects/Modules (Applib: Excel)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Ext - Excel (parent)
 [source,yaml]
@@ -5180,7 +5151,7 @@ CoreCommandLog.ApacheCausewayExtCommandLog .[#707070,thickness=2].> CoreCommandL
 .Projects/Modules (Core: Command Log)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Ext - Command Log
 [source,yaml]
@@ -5322,7 +5293,7 @@ rectangle "Core: DocGen\n<size:10>[Software System]</size>" <<CoreDocGen>> {
 .Projects/Modules (Core: DocGen)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Ext - Docgen
 [source,yaml]
@@ -5418,7 +5389,7 @@ CoreExecutionLog.ApacheCausewayExtExecutionLog .[#707070,thickness=2].> CoreExec
 .Projects/Modules (Core: Execution Log)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Ext - Execution Log
 [source,yaml]
@@ -5588,7 +5559,7 @@ CoreExecutionOutbox.ApacheCausewayExtExecutionOutbox .[#707070,thickness=2].> Co
 .Projects/Modules (Core: Execution Outbox)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Ext - Execution Outbox
 [source,yaml]
@@ -5763,7 +5734,7 @@ CoreExecutionRepublisher.ApacheCausewayExtExecutionRepublisher .[#707070,thickne
 .Projects/Modules (Core: Execution Republisher)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Ext - Execution Republisher
 [source,yaml]
@@ -5846,7 +5817,7 @@ CoreFlyway.ApacheCausewayExtFlyway .[#707070,thickness=2].> CoreFlyway.ApacheCau
 .Projects/Modules (Core: Flyway)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Ext - Flyway
 [source,yaml]
@@ -5992,7 +5963,7 @@ Tooling.ApacheCausewayTooling .[#707070,thickness=2].> Tooling.ApacheCausewayToo
 .Projects/Modules (Tooling)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway - Tooling
 [source,yaml]
@@ -6366,7 +6337,7 @@ RegressionTests.ApacheCausewayRegressionTestsstableCmdExecAuditSession .[#707070
 .Projects/Modules (Regression Tests)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway - Regression Tests
 [source,yaml]
@@ -6803,7 +6774,7 @@ rectangle "Incubator\n<size:10>[Software System]</size>" <<Incubator>> {
 .Projects/Modules (Incubator)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Incubator
 [source,yaml]
@@ -6890,7 +6861,7 @@ GraphQLViewer.ApacheCausewayIncViewerGraphQL .[#707070,thickness=2].> GraphQLVie
 .Projects/Modules (GraphQL Viewer)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Inc - Viewer GraphQL
 [source,yaml]
@@ -7025,7 +6996,7 @@ Other.ApacheCausewayExtCommandReplay .[#707070,thickness=2].> Other.ApacheCausew
 .Projects/Modules (Other)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Ext - Command Replay
 [source,yaml]

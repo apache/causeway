@@ -1,4 +1,0 @@
-
-
-
-** xref:security:shiro-realm-ldap:about.adoc[LDAP Realm for Shiro]

@@ -64,7 +64,6 @@ commands:
       "Security: Audit Trail": "org.apache.causeway.security:causeway-extensions-audittrail.*"
       "Security: Secman": "org.apache.causeway.security:causeway-extensions-secman.*"
       "Security: Session Log": "org.apache.causeway.security:causeway-extensions-sessionlog.*"
-      "Security: Shiro LDAP Realm": "org.apache.causeway.security:causeway-extensions-shiro-realm-ldap.*"
       "Security: Spring Oauth2": "org.apache.causeway.security:causeway-extensions-spring-security-oauth2.*"
       "RO Viewer: CORS": "org.apache.causeway.security:causeway-extensions-cors.*"
       "Wicket Viewer: Excel Download": "org.apache.causeway.security:causeway-extensions-exceldownload.*"
