@@ -58,11 +58,11 @@ class ExecutionContext {
   void executeChild(FixtureScript callingFixtureScript, PersonaWithBuilderScript<?, ?> personaWithBuilderScript)
   T executeChildT(FixtureScript callingFixtureScript, PersonaWithBuilderScript<T, F> personaWithBuilderScript)
   void executeChild(FixtureScript callingFixtureScript, FixtureScript childFixtureScript)     // <.>
-  void executeChildren(FixtureScript callingFixtureScript, PersonaWithBuilderScript<?, ?>... personaWithBuilderScripts)
+  void executeChildren(FixtureScript callingFixtureScript, PersonaWithBuilderScript<?, ?>... personaWithBuilderScripts)     // <.>
   void executeChildren(FixtureScript callingFixtureScript, Class<T> personaClass)
-  void executeChildren(FixtureScript callingFixtureScript, FixtureScript... fixtureScripts)
-  void executeChildren(FixtureScript callingFixtureScript, List<FixtureScript> fixtureScripts)
-  void executeChildren(FixtureScript callingFixtureScript, Stream<FixtureScript> fixtureScripts)
+  void executeChildren(FixtureScript callingFixtureScript, FixtureScript... fixtureScripts)     // <.>
+  void executeChildren(FixtureScript callingFixtureScript, Iterable<FixtureScript> fixtureScripts)     // <.>
+  void executeChildren(FixtureScript callingFixtureScript, Stream<FixtureScript> fixtureScripts)     // <.>
   T executeChildT(FixtureScript callingFixtureScript, T childFixtureScript)     // <.>
   void executeChild(FixtureScript callingFixtureScript, String localNameOverride, FixtureScript childFixtureScript)     // <.>
   T executeChildT(FixtureScript callingFixtureScript, String localNameOverride, T childFixtureScript)     // <.>
@@ -82,6 +82,10 @@ Null implementation, to assist with unit testing of xref:refguide:testing:index/
 --
 Executes a child xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] , injecting services into it first, and (for any results that are _FixtureScript.ExecutionContext#addResult(FixtureScript, Object)_ added), uses a key that is derived from the fixture's class name.
 --
+<.> xref:#executeChildren_FixtureScript_PersonaWithBuilderScript[executeChildren(FixtureScript, PersonaWithBuilderScript)]
+<.> xref:#executeChildren_FixtureScript_FixtureScript[executeChildren(FixtureScript, FixtureScript)]
+<.> xref:#executeChildren_FixtureScript_Iterable[executeChildren(FixtureScript, Iterable)]
+<.> xref:#executeChildren_FixtureScript_Stream[executeChildren(FixtureScript, Stream)]
 <.> xref:#executeChildT_FixtureScript_T[executeChildT(FixtureScript, T)]
 +
 --
@@ -114,6 +118,18 @@ Null implementation, to assist with unit testing of xref:refguide:testing:index/
 === executeChild(FixtureScript, FixtureScript)
 
 Executes a child xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScript.adoc[FixtureScript] , injecting services into it first, and (for any results that are _FixtureScript.ExecutionContext#addResult(FixtureScript, Object)_ added), uses a key that is derived from the fixture's class name.
+
+[#executeChildren_FixtureScript_PersonaWithBuilderScript]
+=== executeChildren(FixtureScript, PersonaWithBuilderScript)
+
+[#executeChildren_FixtureScript_FixtureScript]
+=== executeChildren(FixtureScript, FixtureScript)
+
+[#executeChildren_FixtureScript_Iterable]
+=== executeChildren(FixtureScript, Iterable)
+
+[#executeChildren_FixtureScript_Stream]
+=== executeChildren(FixtureScript, Stream)
 
 [#executeChildT_FixtureScript_T]
 === executeChildT(FixtureScript, T)
