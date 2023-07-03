@@ -4,7 +4,7 @@
 
 
 
-The Shiro framework also ships with an implementation of an LDAP-based realm; LDAP is often used to manage user/passwords and corresponding user groups.
+The Shiro framework ships with an implementation of an LDAP-based realm which is typically be used for authentication (users/password).
 
 Apache Causeway extends Shiro's implementation this  `CausewayLdapRealm`, which provides more flexibility for both group/role and role/permissions management.
 
@@ -67,8 +67,6 @@ public class MyAppManifest { ... }
 
 == Configuration
 
-
-
 [source,properties]
 ----
 include::security:shiro-realm-ldap:example$shiro.ini[tags=example]
@@ -78,13 +76,8 @@ include::security:shiro-realm-ldap:example$shiro.ini[tags=example]
 <.> the URL and credentials for querying the LDAP store
 <.> indicates to use xref:https://docs.oracle.com/javase/jndi/tutorial/ldap/security/crammd5.html[CRAM-MD5]; this will depend on the capability of the LDAP server being provided.
 <.> declares the framework-provided subclass of Shiro's `org.apache.shiro.realm.ldap.DefaultLdapRealm`.
-<.> Configures the realm so it can additionally can retrieve the user's groups, by querying `objectClass=<groupObjectClass>` and inspecting the attributes of each group to see if it references the user.
-<.> Defines the location within the LDAP directory that acts as the 'base' of queries
 <.> Injects the `contextFactory` object into the `ldapRealm` object ...
 <.> \... and injects the `ldapRealm` into Shiro's in-built security manager.
-
-
-// TODO: v2 - work in progress - also describe how this can optionally map LDAP groups to roles, and can map roles to perms; neither are relevant if secman is used for permissioning.
 
 
 == Testing with ApacheDS and Apache Directory Studio
@@ -94,7 +87,9 @@ WARNING: TODO: v2 - work in progress
 prereqs:
 
 * download Java 8 32-bit
-* download ApacheDS 2.0.0-AM26 or later
+* download ApacheDS
++
+NOTE: This works with v1.5.7; we had problems getting SASL authentication to work with version 2.0.0-AM26
 * install, pointing to 32-bit version of Java 8
 * download Apache Directory Studio
 * install, ensure points to 64-bit version of Java :-)
@@ -105,8 +100,6 @@ start ApacheDS:
 +
 on Windows, this is `C:\Program Files (x86)\ApacheDS\instances\default\conf`)
 
-// think this isn't a problem after all; I did a clean reinstall and this issue didn't re-occur.
-// * rename the `ou=config` folder (the server won't start if it exists as well as the `config.ldif`)
 
 * start the service
 
@@ -117,9 +110,9 @@ using _Apache Directory Studio_
 ** password: `secret`
 
 
-image::open-configuration.png[width=300px]
+//image::open-configuration.png[width=300px]
 
-image::ldap-server-sasl-configuration.png[width=800px]
+//image::ldap-server-sasl-configuration.png[width=800px]
 
 * update the "Search Base Dn"
 +
@@ -155,6 +148,15 @@ The value is entered through a separate dialog
 image::050-create-inetOrgPerson.png[width=600]
 
 
+==== Test
+
+image::070-test-sasl.png[width=600]
+
+image::080-test-sasl.org[width=600]
+
+image::090-test-sasl.org[width=400px]
+
+
 === Creating a group
 
 To create a group:
@@ -177,3 +179,18 @@ image::130-groupOfUniqueNames.png[width=600]
 
 
 // == Setting up Users/Groups in Apache Directory Studio
+
+
+
+
+== Using Shiro for Authorization
+
+[source,properties]
+----
+include::security:shiro-realm-ldap:example$shiro.ini[tags=groups]
+----
+<.> Configures the realm so it can additionally can retrieve the user's groups, by querying `objectClass=<groupObjectClass>` and inspecting the attributes of each group to see if it references the user.
+<.> Defines the location within the LDAP directory that acts as the 'base' of queries
+
+// TODO: v2 - work in progress - also describe how this can optionally map LDAP groups to roles, and can map roles to perms; neither are relevant if secman is used for permissioning.
+

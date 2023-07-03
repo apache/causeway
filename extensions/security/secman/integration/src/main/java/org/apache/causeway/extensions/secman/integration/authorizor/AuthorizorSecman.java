@@ -48,11 +48,22 @@ import lombok.NonNull;
 import lombok.val;
 
 /**
+ * <p>
+ * Note that this service has an earlier precedence than <code>AuthorizorShiro</code>.
+ * Conversely, <code>AuthenticatorShiro</code> overrides
+ * {@link org.apache.causeway.extensions.secman.integration.authenticator.AuthenticatorSecman}.
+ * </p>
+ *
+ * <p>
+ * Therefore if both shiro and secman are configured, then shiro will be used for authentication, while secman will be
+ * used for authorization.
+ * </p>
+ *
  * @since 2.0 {@index}
  */
 @Service
 @Named(CausewayModuleExtSecmanApplib.NAMESPACE + ".AuthorizorSecman")
-@javax.annotation.Priority(PriorityPrecedence.EARLY - 10)
+@javax.annotation.Priority(PriorityPrecedence.EARLY - 10)   //
 @Qualifier("Secman")
 public class AuthorizorSecman implements Authorizor {
 

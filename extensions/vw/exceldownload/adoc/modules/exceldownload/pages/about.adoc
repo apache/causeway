@@ -9,7 +9,6 @@ There is no applib for this extension; the viewer automatically makes the "downl
 
 image::screenshot.png[width=300px]
 
-
 == Setup
 
 === Dependency Management
