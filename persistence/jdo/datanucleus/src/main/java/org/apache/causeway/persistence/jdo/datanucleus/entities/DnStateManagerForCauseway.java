@@ -135,6 +135,13 @@ extends ReferentialStateManagerImpl {
             .ifPresent(oid->DnOidStoreAndRecoverHelper.forEntity(entityPojo).storeOid(oid));
     }
 
+    // -- PREDICATES
+
+    public boolean isInsertingOrInsertingCallbacks() {
+        return super.isInserting()
+                || (flags & FLAG_INSERTING_CALLBACKS) != 0;
+    }
+
     // -- HELPER
 
     private Optional<MetaModelContext> extractMetaModelContextFrom(final ExecutionContext ec) {
@@ -208,7 +215,7 @@ extends ReferentialStateManagerImpl {
             }
             if (id instanceof SingleFieldId) {
                 id = DataNucleusHelperJDO
-                        .getSingleFieldIdentityForDataNucleusIdentity((SingleFieldId)id, myPC.getClass());
+                        .getSingleFieldIdentityForDataNucleusIdentity((SingleFieldId<?, ?>)id, myPC.getClass());
             }
             val oidIfAny = entityFacet.identifierForDnPrimaryKey(id);
             return oidIfAny;
