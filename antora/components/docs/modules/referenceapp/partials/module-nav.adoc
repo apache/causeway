@@ -1,2 +1,2 @@
 
-** xref:referenceapp:about.adoc[Reference App]
+** xref:docs:referenceapp:about.adoc[Reference App]

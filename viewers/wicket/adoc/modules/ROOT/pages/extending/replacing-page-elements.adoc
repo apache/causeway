@@ -117,4 +117,4 @@ Normally for entities this is done using `Bs3GridPanelFactory`, this being the f
 You could, though, register your own `ComponentFactory` for entities that is targeted at a particular class of entity - some sort of object representing a dashboard, for example.
 It can use the `EntityModel` provided to it to determine the class of the entity, checking if it is of the appropriate type.
 
-The xref:referenceapp:about.adoc[reference app] includes an example of this technique (`Featured > Where in the World`).
+The xref:docs:referenceapp:about.adoc[reference app] includes an example of this technique (`Featured > Where in the World`).
