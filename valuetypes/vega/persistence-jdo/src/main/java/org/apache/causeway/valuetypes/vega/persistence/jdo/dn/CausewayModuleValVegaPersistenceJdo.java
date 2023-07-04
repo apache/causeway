@@ -30,5 +30,5 @@ import org.apache.causeway.valuetypes.vega.applib.CausewayModuleValVegaApplib;
 @Import({
     CausewayModuleValVegaApplib.class
 })
-public class CausewayModuleValVegaPersistenceJdoDn {
+public class CausewayModuleValVegaPersistenceJdo {
 }
