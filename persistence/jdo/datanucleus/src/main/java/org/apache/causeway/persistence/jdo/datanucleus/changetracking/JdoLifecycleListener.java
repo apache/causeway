@@ -88,21 +88,17 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
     public void postLoad(final InstanceLifecycleEvent event) {
         log.debug("postLoad {}", ()->_Utils.debug(event));
 
-        System.err.printf("postLoad %s%n", "BEGIN {loaded}");
-
         final Persistable pojo = _Utils.persistableFor(event);
         val entity = adaptEntity(pojo);
-        //TODO only emit if new to session (based on OID)
-        objectLifecyclePublisher.onPostLoad(entity);
 
-        System.err.printf("postLoad %s%n", "END");
+        // it seems JDO only calls this once per transaction and entity
+        // so no need to keep track of OIDs that had already been loaded
+        objectLifecyclePublisher.onPostLoad(entity);
     }
 
     @Override
     public void preStore(final InstanceLifecycleEvent event) {
         log.debug("preStore {}", ()->_Utils.debug(event));
-
-        System.err.printf("preStore %s%n", "BEGIN {persisting, updating}");
 
         final Persistable pojo = _Utils.persistableFor(event);
         val isInserting = isInserting(pojo); // check before adapting
@@ -119,15 +115,11 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
             // not here, using preDirty for that instead
             //objectLifecyclePublisher.onPreUpdate(entity, /*propertyChangeRecordSupplier*/ null);
         }
-
-        System.err.printf("preStore %s%n", "END");
     }
 
     @Override
     public void postStore(final InstanceLifecycleEvent event) {
         log.debug("postStore {}", ()->_Utils.debug(event));
-
-        System.err.printf("postStore %s%n", "BEGIN {persisted, updated}");
 
         final Persistable pojo = _Utils.persistableFor(event);
         val isInserting = isInserting(pojo); // check before adapting
@@ -144,8 +136,6 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
             // (can't be done here, as the enlist requires to capture the 'before' values)
             objectLifecyclePublisher.onPostUpdate(entity);
         }
-
-        System.err.printf("postStore %s%n", "END");
     }
 
     @Override
@@ -155,8 +145,6 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
         final Persistable pojo = _Utils.persistableFor(event);
         final Runnable doPreDirty = ()->doPreDirty(pojo);
 
-        System.err.printf("preDirty %s%n", "BEGIN {updating}");
-
         // [CAUSEWAY-3126] pre-dirty nested loop prevention,
         // assuming we can cast the DN StateManager to the custom one as provided by the framework
         DnStateManagerForCauseway.extractFrom(pojo).ifPresentOrElse(
@@ -164,8 +152,6 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
                     stateManager.acquirePreDirtyPropagationLock(pojo.dnGetObjectId())
                     .ifPresent(lock->lock.releaseAfter(doPreDirty)),
                 doPreDirty);
-
-        System.err.printf("preDirty %s%n", "END");
     }
 
     /**
