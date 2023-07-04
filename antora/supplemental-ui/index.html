@@ -563,16 +563,17 @@
                 <p class="cta-text text-left" style="margin-block-end: 0; ">
                   Try out the framework with the minimal <a href="docs/latest/starters/helloworld.html">helloworld</a> starter&nbsp;app.
                   <p>
-                    Run it locally using:
+                  <p class="cta-text text-left" style="margin-block-end: 0; ">
+                    Run it locally (JPA or JDO) using:
                   <pre id="helloworld-docker-text"  style="margin-top: 5px">
 docker run -p 8080:8080 apache/causeway-app-helloworld:jpa-SNAPSHOT
 docker run -p 8080:8080 apache/causeway-app-helloworld:jdo-SNAPSHOT</pre>
                 <p>
                 <p class="cta-text text-left" style="margin-block-end: 0; ">
-                    Build from source (JPA):
+                    Build from source (JPA or JDO) using:
                 <pre id="helloworld-jpa-text">
 APP=causeway-app-helloworld
-BRANCH=jpa
+BRANCH=jpa   # or BRANCH=jdo
 curl https://codeload.github.com/apache/$APP/zip/$BRANCH | jar xv
 cd $APP-$BRANCH
 
@@ -581,39 +582,23 @@ mvn spring-boot:run</pre>
                 <p class="cta-text text-center" style="margin-block-end: 0; margin-top: -10px;">
                     <span id="helloworld-jpa-copy" style="cursor: pointer;"><img src="_/img/home/clipboard-copy.png" width="16" height="16"/>&nbsp;&nbsp;Copy text for helloworld (jpa)</span>
                 </p>
-
-                <p>
-                <p class="cta-text text-left" style="margin-block-end: 0; ">
-                    Build from source (JDO):
-                <pre id="helloworld-jdo-text">
-APP=causeway-app-helloworld
-BRANCH=jdo
-curl https://codeload.github.com/apache/$APP/zip/$BRANCH | jar xv
-cd $APP-$BRANCH
-
-mvn clean install -Dskip.staging -Dskip.nightly
-mvn spring-boot:run</pre>
-                <p class="cta-text text-center" style="margin-block-end: 0; margin-top: -10px;">
-                    <span id="helloworld-jdo-copy" style="cursor: pointer;"><img src="_/img/home/clipboard-copy.png" width="16" height="16"/>&nbsp;&nbsp;Copy text for helloworld (jdo)</span>
-                </p>
-
-
             </div>
             <div class="col-lg-6 text-left text-lg-left">
                 <h4 class="cta-text">Develop your own ...</h4>
               <p class="cta-text text-left" style="margin-block-end: 0; ">
                 Develop your own app with the structured <a href="docs/latest/starters/simpleapp.html">simpleapp</a> starter&nbsp;app.
                 <p>
-                Run it locally using:
+                <p class="cta-text text-left" style="margin-block-end: 0; ">
+                Run it locally (JPA or JDO) using:
                 <pre id="simpleapp-docker-jpa-text"  style="margin-top: 5px">
 docker run -p 8080:8080 apache/causeway-app-simpleapp:jpa-SNAPSHOT
 docker run -p 8080:8080 apache/causeway-app-simpleapp:jdo-SNAPSHOT</pre>
                 <p>
                 <p class="cta-text text-left" style="margin-block-end: 0; ">
-                    Build from source (JPA):
+                    Build from source (JPA or JDO) using:
               <pre id="simpleapp-jpa-text">
 APP=causeway-app-simpleapp
-BRANCH=jpa
+BRANCH=jpa   # or BRANCH=jdo
 curl https://codeload.github.com/apache/$APP/zip/$BRANCH | jar xv
 cd $APP-$BRANCH
 
@@ -622,21 +607,6 @@ mvn -pl webapp spring-boot:run</pre>
                 <p class="cta-text text-center" style="margin-block-end: 0; margin-top: -10px;">
                     <span id="simpleapp-jpa-copy" style="cursor: pointer;"><img src="_/img/home/clipboard-copy.png" width="16" height="16"/>&nbsp;&nbsp;Copy text for simpleapp (jpa)</span>
                 </p>
-                <p>
-                <p class="cta-text text-left" style="margin-block-end: 0; ">
-                    Build from source (JDO):
-                <pre id="simpleapp-jdo-text">
-APP=causeway-app-simpleapp
-BRANCH=jdo
-curl https://codeload.github.com/apache/$APP/zip/$BRANCH | jar xv
-cd $APP-$BRANCH
-
-mvn clean install -Dskip.staging -Dskip.nightly
-mvn -pl webapp spring-boot:run</pre>
-                <p class="cta-text text-center" style="margin-block-end: 0; margin-top: -10px">
-                    <span id="simpleapp-jdo-copy" style="cursor: pointer;"><img src="_/img/home/clipboard-copy.png" width="16" height="16"/>&nbsp;&nbsp;Copy text for simpleapp (jdo)</span>
-                </p>
-
             </div>
           </div>
           <div class="row">
@@ -647,7 +617,7 @@ mvn -pl webapp spring-boot:run</pre>
                 <p class="cta-text text-left" style="margin-block-end: 0; margin-top: 20px;">
                   You can also explore the Apache Causeway™ programming model through the demo app, which illustrates many of the framework's annotations and programming conventions.
                   <br/>
-                  Run it locally using:
+                  <p class="cta-text text-left" style="margin-block-end: 0; ">
                   <pre id="demoapp-docker-text"  style="margin-top: 5px">
 docker run -p 8080:8080 apache/causeway-app-demo-jpa:latest
 docker run -p 8080:8080 apache/causeway-app-demo-jdo:latest</pre>

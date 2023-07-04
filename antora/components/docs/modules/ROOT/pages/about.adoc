@@ -41,6 +41,7 @@ _POMs_
 * xref:docs:referenceapp:about.adoc[Reference App]
 (link:https://github.com/apache/causeway-app-referenceapp[github{nbsp}source])
 * xref:tutorials:petclinic:about.adoc[Petclinic]
+(link:https://github.com/apache/causeway-app-petclinic[github{nbsp}source])
 
 [discrete]
 == Resources

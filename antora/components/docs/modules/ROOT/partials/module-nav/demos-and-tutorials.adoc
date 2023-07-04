@@ -6,7 +6,7 @@
 
 include::referenceapp:partial$module-nav.adoc[]
 
-** xref:tutorials:petclinic:about.adoc[Petclinic (Tutorial)]
+** xref:tutorials:petclinic:about.adoc[Petclinic]
 
 
 

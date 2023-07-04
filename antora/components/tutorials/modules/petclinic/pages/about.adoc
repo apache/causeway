@@ -4,6 +4,6 @@
 
 This tutorial develops a variant of the venerable "pet clinic" app, broken up into a set of exercises.
 
-To guide you through those exercises, we've provided a git repo (https://github.com/apache/causeway-app-demo) with a set of tags, each tag representing the solution to one exercise and the starting point to the next.
+To guide you through those exercises, we've provided a git repo (https://github.com/apache/causeway-app-petclinic) with a set of tags, each tag representing the solution to one exercise and the starting point to the next.
 
 
