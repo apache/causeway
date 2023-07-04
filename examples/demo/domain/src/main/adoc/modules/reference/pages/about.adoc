@@ -1,0 +1,73 @@
+= Reference App
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+The link:https://github.com/apache/causeway-app-referenceapp[reference app] (previously called the 'demo app') provides an introduction to the Apache Causeway programming model, allowing you to learn the basics with a minimum of hassle.
+It's also a useful reference to help you develop your own Apache Causeway applications.
+
+
+image::teaser-light.png[]
+
+The application is packaged up as a Docker image (link:https://hub.docker.com/r/apache/causeway-app-demo-jpa[apache/causeway-app-demo-jpa] or link:https://hub.docker.com/r/apache/causeway-app-demo-jdo[apache/causeway-app-demo-jdo]) on Docker Hub, so you can easily run it yourself (as described <<Running the Docker Image,below>>).
+
+
+== Prereqs
+
+Head over to https://www.docker.com/community-edition[Docker] to install the community edition.
+
+
+== Running the Docker Image
+
+Assuming the `jpa` variant (if using `jdo`, just substitute "jpa" with "jdo" in the commands below):
+
+* Pull and run the Docker Image
++
+[source,bash]
+----
+docker pull apache/causeway-app-demo-jpa:latest
+docker run --name demo -d -p8080:8080 apache/causeway-app-demo-jpa:latest
+----
++
+The Demo app can then be accessed at http://localhost:8080/wicket/[].
+Login with `sven:pass`.
+
+* Stop and remove the container named `demo`
++
+[source,bash]
+----
+docker stop demo && docker rm demo
+----
+
+=== Customization
+
+The way in which the app is run by Docker be customised in a couple of ways.
+Assuming the `jpa` variant (if using `jdo`, just substitute "jpa" with "jdo" in the commands below):
+
+* Prototyping mode
++
+----
+docker run --name demo -d -p8080:8080 -ePROTOTYPING=true apache/causeway-app-demo-jpa:latest
+----
+
+* Specify a different context Path
++
+----
+docker run -d -p8080:8080 -eContextPath=/myPath apache/causeway-app-demo-jpa:latest
+----
++
+then access at http://localhost:8080/myPath/wicket/[].
+
+
+
+== Building from Source
+
+The source code for the reference app is on github, at link:https://github.com/apache/causeway-app-referenceapp[apache/causeway-app-referenceapp].
+
+
+== Credits
+
+* The Reference App uses icons made by link:http://www.freepik.com[Freepik] and
+link:https://www.flaticon.com/authors/smashicons[Smashicons].
+These are licensed by link:http://creativecommons.org/licenses/by/3.0/[Creative Commons BY 3.0^]
+
+* We use link:https://github.com/asciidoctor/asciidoctorj[AsciidoctorJ] for Asciidoc rendering.

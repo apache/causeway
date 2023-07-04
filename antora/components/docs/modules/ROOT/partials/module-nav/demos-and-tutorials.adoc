@@ -4,7 +4,7 @@
 
 * Demos & Tutorials
 
-include::docs:demo:partial$module-nav.adoc[]
+include::reference:partial$module-nav.adoc[]
 
 ** xref:tutorials:petclinic:about.adoc[Petclinic (Tutorial)]
 

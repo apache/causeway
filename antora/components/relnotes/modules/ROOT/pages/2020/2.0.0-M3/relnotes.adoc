@@ -35,7 +35,7 @@ This milestone also introduces a number of new features:
 Improvements:
 
 * xref:testing:integtestsupport:about.adoc[Integration test support], and xref:testing:specsupport:about.adoc[BDD (Cucumber) "spec" support] have been refactored to run on Spring Boot with Junit 5.
-* New xref:docs:demo:about.adoc[demo app] to demonstrate new features.
+* New xref:reference:about.adoc[demo app] to demonstrate new features.
 * New smoketest app to catch regressions
 * The maven plugin has been retired, replaced by utility classes that can be used within integration tests.
 * There are no longer any split packages, and Maven groupId/artifactIds have been rationalized.

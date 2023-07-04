@@ -40,7 +40,7 @@ _POMs_
 [discrete]
 == Demos & Tutorials
 
-* xref:docs:demo:about.adoc[Demo App]
+* xref:reference:about.adoc[Demo App]
 (link:https://demo-wicket.jdo.causeway.incode.work[jdo], link:https://demo-wicket.jpa.causeway.incode.work[jpa])
 * xref:tutorials:petclinic:about.adoc[Petclinic]
 

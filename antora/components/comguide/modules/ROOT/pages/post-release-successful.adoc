@@ -470,7 +470,7 @@ And, in the `apache-causeway-committers/causeway-nightly` repo, similarly update
 ----
 jobs:
   build:
-    name: build, site, build/push demo app
+    name: build, site, build/push reference app
     runs-on: ubuntu-latest
     env:
       # to be shared among all steps of this job
