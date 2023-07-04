@@ -38,7 +38,7 @@ _POMs_
 [discrete]
 == Learning & Tutorials
 
-* xref:reference:about.adoc[Reference App]
+* xref:referenceapp:about.adoc[Reference App]
 (link:https://github.com/apache/causeway-app-referenceapp[github{nbsp}source])
 * xref:tutorials:petclinic:about.adoc[Petclinic]
 

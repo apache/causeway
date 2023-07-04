@@ -3,13 +3,13 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 To speed up development it makes sense to only have the IDE build the stuff that's needed.
-The approach I use is to have Maven perform a full build of everything, more or less (including the example/demo app), so that the local cache in `~/.m2/repository` is up-to-date.
-Then, in the IDE, exclude the parts that won't change and include in the relevant parts of the example/demo app (which we can use to iterate on).
+The approach I use is to have Maven perform a full build of everything, more or less (including the xref:docs:referenceapp:about.adoc[reference app]), so that the local cache in `~/.m2/repository` is up-to-date.
+Then, in the IDE, exclude the parts that won't change and include in the relevant parts of the reference app (which we can use to iterate on).
 
 == Maven Build
 
 Perform a full mvn build, but exclude all of the incubator modules and explicitly bring in this module.
-Also include the 'wicket' variant of the demo app, as this also includes the graphql viewer (as well as the RO viewer).
+Also include the 'wicket' variant of the xref:docs:referenceapp:about.adoc[reference app], as this also includes the graphql viewer (as well as the RO viewer).
 
 [source,bash]
 ----
@@ -23,7 +23,7 @@ mvn install \
 == IntelliJ
 
 In IntelliJ, ignore most of the projects except the ones to be changed or will want to read (eg core).
-Also, explicit _include_ the relevant parts of the demo app (chances are that this will be excluded initially due to the default profiles.
+Also, explicit _include_ the relevant parts of the xref:docs:referenceapp:about.adoc[reference app] (chances are that this will be excluded initially due to the default profiles.
 
 Thus:
 
@@ -56,16 +56,16 @@ for a bit of "monkey see, monkey do"
 
 * exclude everything else
 
-Then, add in parts of the demo app:
+Then, (having also cloned the link:https://github.com/apache/causeway-app-reference[github repo] for the xref:docs:referenceapp:about.adoc[reference app] add in its paths:
 
 image::devnotes/example-demo-app-included-modules.png[width=300px]
 
 That is:
 
-* include `examples/demo/domain`
-* include `examples/demo/web`
-* include `examples/demo/wicket/demo-wicket-common`
-* include `examples/demo/wicket/demo-wicket-jpa`
+* include `domain`
+* include `web`
+* include `wicket/demo-wicket-common`
+* include `wicket/demo-wicket-jpa`
 +
 this is where the SpringApplication -- `DemoAppWicketJpa` -- resides.
 It's faster to use the jpa variant rather than the jdo variant; no need to wait for the DN enhancer.

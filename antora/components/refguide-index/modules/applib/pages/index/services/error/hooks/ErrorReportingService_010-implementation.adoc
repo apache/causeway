@@ -6,4 +6,4 @@
 == Implementation
 
 This is an SPI.
-The framework provides no default implementations, but an example implementation can be found in the xref:docs:reference:about.adoc[reference app].
+The framework provides no default implementations, but an example implementation can be found in the xref:referenceapp:about.adoc[reference app].

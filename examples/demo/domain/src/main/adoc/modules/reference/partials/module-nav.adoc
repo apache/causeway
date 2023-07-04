@@ -1,2 +1,0 @@
-
-** xref:reference:about.adoc[Demo App]
