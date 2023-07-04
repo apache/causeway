@@ -164,6 +164,9 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
     @Override
     public void postDirty(final InstanceLifecycleEvent event) {
         log.debug("postDirty {}", ()->_Utils.debug(event));
+        final Persistable pojo = _Utils.persistableFor(event);
+        val entity = adaptEntity(pojo);
+        objectLifecyclePublisher.onPostUpdate(entity);
     }
 
     @Override
