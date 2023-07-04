@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.persistence.jdo.datanucleus.entities;
 
-import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 import javax.jdo.PersistenceManager;
@@ -34,7 +34,7 @@ import org.datanucleus.store.FieldValues;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.persistence.jdo.datanucleus.metamodel.facets.entity.JdoEntityFacet;
@@ -251,14 +251,13 @@ extends ReferentialStateManagerImpl {
         }
     }
 
-    // assuming we don't require thread-safety here,
+    // assuming we don't need thread-safety here,
     // as each thread presumably has its own DN execution context
-    private final Map<Object, PreDirtyPropagationLock> preDirtyPropagationLocks =
-            _Maps.newHashMap();
+    private final _Refs.ObjectReference<PreDirtyPropagationLock> preDirtyPropagationLockRef =
+            _Refs.objectRef(null);
 
-    //TODO there is probably only ever one id per instance: verify and simplify
-    private final PreDirtyPropagationLock createPreDirtyPropagationLock(final Object id) {
-        return ()->preDirtyPropagationLocks.remove(id);
+    private final PreDirtyPropagationLock createPreDirtyPropagationLock() {
+        return ()->preDirtyPropagationLockRef.set(null);
     }
 
     /**
@@ -268,13 +267,13 @@ extends ReferentialStateManagerImpl {
     public Optional<PreDirtyPropagationLock> acquirePreDirtyPropagationLock(final Object id) {
 
         // this algorithm is not thread-safe
-        // assuming we don't require thread-safety here,
+        // assuming we don't need thread-safety here,
         // as each thread presumably has its own DN execution context
 
-        val lockIfGranted = preDirtyPropagationLocks.containsKey(id)
+        val lockIfGranted = !Objects.equals(myID, id)
+                || preDirtyPropagationLockRef.isNotNull()
                 ? Optional.<PreDirtyPropagationLock>empty()
-                : Optional.of(preDirtyPropagationLocks.computeIfAbsent(id,
-                        this::createPreDirtyPropagationLock));
+                : Optional.of(preDirtyPropagationLockRef.set(createPreDirtyPropagationLock()));
 
         if(log.isDebugEnabled()) {
             log.debug("acquirePreDirtyPropagationLock({}) -> {}",
