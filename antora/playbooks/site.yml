@@ -137,9 +137,6 @@ content:
       start_path: extensions/security/sessionlog/adoc # security
       branches: HEAD
     - url: .
-      start_path: extensions/security/shiro-realm-ldap/adoc # security
-      branches: HEAD
-    - url: .
       start_path: extensions/security/spring-oauth2/src/main/adoc # security
       branches: HEAD
 
@@ -167,9 +164,9 @@ content:
     #- url: .
     #  start_path: incubator/clients/kroviz/adoc # incubator
     #  branches: HEAD
-    #- url: .
-    #  start_path: incubator/extensions/core/commandreplay/adoc # incubator
-    #  branches: HEAD
+    - url: .
+      start_path: incubator/extensions/core/commandreplay/adoc # incubator
+      branches: HEAD
     - url: .
       start_path: incubator/viewers/graphql/adoc # incubator
       branches: HEAD
@@ -259,9 +256,9 @@ content:
     - url: .
       start_path: valuetypes/asciidoc/adoc # valuetypes
       branches: HEAD
-#    - url: .
-#      start_path: valuetypes/jodatime/adoc # valuetypes
-#      branches: HEAD
+    - url: .
+      start_path: valuetypes/jodatime/adoc # valuetypes
+      branches: HEAD
     - url: .
       start_path: valuetypes/markdown/adoc # valuetypes
       branches: HEAD

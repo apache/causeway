@@ -104,7 +104,6 @@
 		<module>security/audittrail</module>
 
 		<module>security/secman</module>
-		<module>security/shiro-realm-ldap</module>
 		<module>security/spring-oauth2</module>
 		<module>security/sessionlog</module>
 

@@ -42,7 +42,7 @@
                 name="causeway.ext.asciidoc-string"
                 member-type="org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc"
                 datastore-type="java.lang.String"
-                converter-class="org.apache.causeway.valuetypes.asciidoc.persistence.jdo.dn.converters.CausewayAsciiDocConverter"/>
+                converter-class="org.apache.causeway.valuetypes.asciidoc.persistence.jdo.converters.CausewayAsciiDocConverter"/>
     </extension>
 
 

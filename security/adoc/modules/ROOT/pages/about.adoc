@@ -33,7 +33,6 @@ include::security:spring:partial$module-nav.adoc[]
 In addition to the security SPI implementations, there are a number of security-related extensions:
 
 * The xref:security:spring-oauth2:about.adoc[Spring OAuth2] extension configures the xref:security:spring:about.adoc[Spring authenticator] for OAuth2 stores (eg gmail, facebook)
-* The xref:security:shiro-realm-ldap:about.adoc[LDAP Realm] extension confiures the xref:security:shiro:about.adoc[Shiro authenticator] to use LDAP as a credential source.
 * The xref:security:secman:about.adoc[SecMan extension] provides both an authenticator and an authorizor from domain entities (users, roles and permission entities) using either xref:pjpa:ROOT:about.adoc[JPA] or xref:pjdo:ROOT:about.adoc[JDO].
 +
 As these users, roles and permissions are domain objects, they can be administered through Apache Causeway itself.

@@ -76,15 +76,20 @@
 			<groupId>org.apache.causeway.core</groupId>
 			<artifactId>causeway-core-security</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.causeway.security</groupId>
-			<artifactId>causeway-security-bypass</artifactId>
-		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.causeway.core</groupId>
 			<artifactId>causeway-core-runtimeservices</artifactId>
 		</dependency>
+
+        <!--
+        we do not include causeway-security-bypass, because doing so would
+        in effect access to the app with any credentials.  This module is for use only in prototyping.
+        <dependency>
+            <groupId>org.apache.causeway.security</groupId>
+            <artifactId>causeway-security-bypass</artifactId>
+        </dependency>
+        -->
 
 		<!--
 		we no longer include causeway-security-keycloak in order to reduce the

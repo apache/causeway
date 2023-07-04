@@ -110,8 +110,10 @@ public String disable1Categorize(                           // <.>
 <.> "disable" prefix, N-th param, suffix matches action's name, parameters are subset up to Nth, same type.
 A non-`null` return string is taken as the _reason_ why the action argument cannot be changed.
 
-
-WARNING: TODO: v2: xref mixins for specifying supporting methods by name or using `Parameters`
+[TIP]
+====
+If the action is implemented as a xref:mixins.adoc[mixin], then the `disableXxx` supporting method can be matched to the action parameter xref:mixins.adoc#using-the-parameter-name[by name] and also using xref:mixins.adoc#using-a-parameters-class[Parameters] class.
+====
 
 == For more information
 

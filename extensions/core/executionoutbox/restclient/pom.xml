@@ -57,7 +57,12 @@
             <groupId>org.apache.causeway.core</groupId>
             <artifactId>causeway-schema</artifactId>
         </dependency>
-        
+
+        <dependency>
+            <groupId>org.apache.causeway.security</groupId>
+            <artifactId>causeway-security-bypass</artifactId>
+        </dependency>
+
 		<dependency>
 			<groupId>org.apache.causeway.viewer</groupId>
 			<artifactId>causeway-viewer-restfulobjects-client</artifactId>
@@ -65,7 +70,7 @@
 		</dependency>
 
 		<!-- TESTING -->
-		
+
         <dependency>
             <groupId>org.apache.causeway.core</groupId>
             <artifactId>causeway-core-internaltestsupport</artifactId>
@@ -77,7 +82,7 @@
             <artifactId>causeway-testing-fixtures-applib</artifactId>
             <scope>test</scope>
         </dependency>
-        
+
         <dependency>
             <groupId>org.apache.causeway.extensions</groupId>
             <artifactId>causeway-extensions-executionoutbox-persistence-jpa</artifactId>

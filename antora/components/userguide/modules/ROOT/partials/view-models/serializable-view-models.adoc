@@ -5,4 +5,38 @@
 :page-partial:
 
 
-WARNING: TODO: v2
+A further another option for view models is for the class to implement `java.io.Serializable`.
+This is a lower-level abstraction: you must take care that all fields referenced by the view model are serializable.
+Most of the value types are indeed serializable (including date/time classes), but for reference types, you will need to store the reference as a xref:refguide:applib:index/services/bookmark/Bookmark.adoc[bookmark].
+You can still inject services, but the fields these must be `transient` (that is, using the Java keyword).
+
+For example:
+
+[source,java]
+.CompareCustomers.java, implementing Serializable interface
+----
+@DomainObject
+public class CompareCustomers implements java.io.Serializable {     // <.>
+
+    @Inject transient BookmarkService bookmarkService;              // <.>
+
+    Bookmark customer1Bookmark;
+    Bookmark customer2Bookmark;
+
+    public Customer getCustomer1{} {
+        return bookmarkService.lookup(customer1Bookmark, Customer.class).orElse(null);
+    }
+
+    public Customer getCustomer2{} {
+        return bookmarkService.lookup(customer1Bookmark, Customer.class).orElse(null);
+    }
+
+    ...
+}
+----
+<.> View model class implements `java.io.Serializable`
+<.> Injected domain services must be `transient`
+
+
+
+

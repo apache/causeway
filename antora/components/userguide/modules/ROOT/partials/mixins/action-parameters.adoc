@@ -106,6 +106,7 @@ Note that the supporting methods no longer include the method name of the action
 For this reason, it isn't possible to use matching-by-name for non-mixin actions.
 
 
+[#using-a-parameters-class]
 == Using a "parameters" class
 
 In the previous section we made the names of the supporting methods more obvious.

@@ -2,16 +2,10 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-In addition, the core framework has built-in support for most of the value types defined by JDK (`String`, primitives, wrapper types, date/time), and also defines a number of more specialized value types that are not part of core framework.
+The core framework has built-in support for most of the value types defined by the xref:userguide::value-types.adoc#jdk-types[JDK] (primitives, wrapper types, String, java.math etc), and also ships with a number defines a number of more xref:userguide::value-types.adoc#causeway-specific[specialized value types] (`Blob`, `Clob`, `Markup`).
+You can also write your own xref:userguide::value-types.adoc#custom-value-types[custom] value types.
 
+In addition to all of that, there are a number of additional value types that are not part of core framework.
 This section provides details of those additional value types.
-
-[TIP]
-====
-Full details of all value types are in the xref:refguide:applib-classes:value-types.adoc[reference guide].
-
-It is also possible to define custom value types; details of that in xref:userguide:ROOT:value-types.adoc[the user guide].
-====
-
 
 

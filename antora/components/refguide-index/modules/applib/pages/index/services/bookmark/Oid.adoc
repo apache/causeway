@@ -7,7 +7,7 @@
 .Oid.java
 ----
 interface Oid {
-  static final String SEPARATOR;
+  String SEPARATOR;
   String getLogicalTypeName()     // <.>
   String getIdentifier()     // <.>
   String stringify()     // <.>

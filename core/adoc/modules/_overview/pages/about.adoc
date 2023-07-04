@@ -136,7 +136,6 @@ org.apache.causeway.core:causeway-applib:jar:<managed> +
 org.apache.causeway.core:causeway-core-runtimeservices:jar:<managed> +
 org.apache.causeway.core:causeway-core-security:jar:<managed> +
 org.apache.causeway.core:causeway-schema:jar:<managed> +
-org.apache.causeway.security:causeway-security-bypass:jar:<managed> +
 org.springframework.boot:spring-boot-starter-tomcat:jar:<managed> +
 org.springframework.boot:spring-boot-starter-web:jar:<managed> +
 ****
@@ -1689,6 +1688,7 @@ o.a.i.persistence.jdo.datanucleus.valuetypes.DnDatastoreUniqueLongIdValueSemanti
 o.a.i.persistence.jdo.datanucleus.valuetypes.DnIntIdValueSemantics +
 o.a.i.persistence.jdo.datanucleus.valuetypes.DnLongIdValueSemantics +
 o.a.i.persistence.jdo.datanucleus.valuetypes.DnObjectIdValueSemantics +
+o.a.i.persistence.jdo.datanucleus.valuetypes.DnScoidValueSemantics +
 o.a.i.persistence.jdo.datanucleus.valuetypes.DnShortIdValueSemantics +
 o.a.i.persistence.jdo.datanucleus.valuetypes.DnStringIdValueSemantics +
 o.a.i.persistence.jdo.datanucleus.valuetypes.JdoByteIdentityValueSemantics +
@@ -3259,7 +3259,7 @@ org.datanucleus:datanucleus-core:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:valuetypes:index/asciidoc/persistence/jdo/dn/CausewayModuleValAsciidocPersistenceJdoDn.adoc[CausewayModuleValAsciidocPersistenceJdoDn], xref:refguide:valuetypes:index/asciidoc/persistence/jdo/dn/converters/CausewayAsciiDocConverter.adoc[CausewayAsciiDocConverter]
+xref:refguide:valuetypes:index/asciidoc/persistence/jdo/CausewayModuleValAsciidocPersistenceJdo.adoc[CausewayModuleValAsciidocPersistenceJdo], xref:refguide:valuetypes:index/asciidoc/persistence/jdo/converters/CausewayAsciiDocConverter.adoc[CausewayAsciiDocConverter]
 ****
 
 |Apache Causeway Val - Asciidoctor (persistence JPA)
@@ -3487,7 +3487,7 @@ org.datanucleus:datanucleus-core:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:valuetypes:index/markdown/persistence/jdo/dn/CausewayModuleValMarkdownPersistenceJdoDn.adoc[CausewayModuleValMarkdownPersistenceJdoDn], xref:refguide:valuetypes:index/markdown/persistence/jdo/dn/converters/CausewayMarkdownConverter.adoc[CausewayMarkdownConverter]
+xref:refguide:valuetypes:index/markdown/persistence/jdo/CausewayModuleValMarkdownPersistenceJdo.adoc[CausewayModuleValMarkdownPersistenceJdo], xref:refguide:valuetypes:index/markdown/persistence/jdo/converters/CausewayMarkdownConverter.adoc[CausewayMarkdownConverter]
 ****
 
 |Apache Causeway Val - Markdown (persistence JPA)
@@ -3912,18 +3912,6 @@ skinparam rectangle<<Extensions.ApacheCausewayExtSecManPersistenceUsingJPA>> {
   BorderColor #2e6295
   shadowing false
 }
-skinparam rectangle<<Extensions.ApacheCausewayExtSecurityShiroLDAPRealmimpl>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<Extensions.ApacheCausewayExtSecurityShiroLDAPRealmparent>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
 skinparam rectangle<<Extensions.ApacheCausewayExtSecuritySpringOauth2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
@@ -4052,8 +4040,6 @@ rectangle "Extensions\n<size:10>[Software System]</size>" <<Extensions>> {
   rectangle "==Apache Causeway Ext - Session Log Applib\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtSessionLogApplib>> as Extensions.ApacheCausewayExtSessionLogApplib
   rectangle "==Apache Causeway Ext - Session Log Persistence (using JDO)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtSessionLogPersistenceusingJDO>> as Extensions.ApacheCausewayExtSessionLogPersistenceusingJDO
   rectangle "==Apache Causeway Ext - Session Log Persistence (using JPA)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtSessionLogPersistenceusingJPA>> as Extensions.ApacheCausewayExtSessionLogPersistenceusingJPA
-  rectangle "==Apache Causeway Ext - Security - Shiro LDAP Realm (parent)\n<size:10>[Container: packaging: pom]</size>" <<Extensions.ApacheCausewayExtSecurityShiroLDAPRealmparent>> as Extensions.ApacheCausewayExtSecurityShiroLDAPRealmparent
-  rectangle "==Apache Causeway Ext - Security - Shiro LDAP Realm (impl)\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtSecurityShiroLDAPRealmimpl>> as Extensions.ApacheCausewayExtSecurityShiroLDAPRealmimpl
   rectangle "==Apache Causeway Ext - Security - Spring Oauth2\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtSecuritySpringOauth2>> as Extensions.ApacheCausewayExtSecuritySpringOauth2
   rectangle "==Apache Causeway Ext - Server Sent Events (parent)\n<size:10>[Container: packaging: pom]</size>" <<Extensions.ApacheCausewayExtServerSentEventsparent>> as Extensions.ApacheCausewayExtServerSentEventsparent
   rectangle "==Apache Causeway Ext - Server Sent Events\n<size:10>[Container: packaging: jar]</size>" <<Extensions.ApacheCausewayExtServerSentEvents>> as Extensions.ApacheCausewayExtServerSentEvents
@@ -4073,7 +4059,6 @@ Extensions.ApacheCausewayExtensions .[#707070,thickness=2].> Extensions.ApacheCa
 Extensions.ApacheCausewayExtensions .[#707070,thickness=2].> Extensions.ApacheCausewayExtpdfjsParent : "<color:#707070>"
 Extensions.ApacheCausewayExtensions .[#707070,thickness=2].> Extensions.ApacheCausewayExtSecMan : "<color:#707070>"
 Extensions.ApacheCausewayExtensions .[#707070,thickness=2].> Extensions.ApacheCausewayExtSessionLog : "<color:#707070>"
-Extensions.ApacheCausewayExtensions .[#707070,thickness=2].> Extensions.ApacheCausewayExtSecurityShiroLDAPRealmparent : "<color:#707070>"
 Extensions.ApacheCausewayExtensions .[#707070,thickness=2].> Extensions.ApacheCausewayExtSecuritySpringOauth2 : "<color:#707070>"
 Extensions.ApacheCausewayExtensions .[#707070,thickness=2].> Extensions.ApacheCausewayExtServerSentEventsparent : "<color:#707070>"
 Extensions.ApacheCausewayExtAuditTrail .[#707070,thickness=2].> Extensions.ApacheCausewayExtAuditTrailApplib : "<color:#707070>"
@@ -4100,7 +4085,6 @@ Extensions.ApacheCausewayExtSecMan .[#707070,thickness=2].> Extensions.ApacheCau
 Extensions.ApacheCausewayExtSessionLog .[#707070,thickness=2].> Extensions.ApacheCausewayExtSessionLogApplib : "<color:#707070>"
 Extensions.ApacheCausewayExtSessionLog .[#707070,thickness=2].> Extensions.ApacheCausewayExtSessionLogPersistenceusingJDO : "<color:#707070>"
 Extensions.ApacheCausewayExtSessionLog .[#707070,thickness=2].> Extensions.ApacheCausewayExtSessionLogPersistenceusingJPA : "<color:#707070>"
-Extensions.ApacheCausewayExtSecurityShiroLDAPRealmparent .[#707070,thickness=2].> Extensions.ApacheCausewayExtSecurityShiroLDAPRealmimpl : "<color:#707070>"
 Extensions.ApacheCausewayExtServerSentEventsparent .[#707070,thickness=2].> Extensions.ApacheCausewayExtServerSentEvents : "<color:#707070>"
 Extensions.ApacheCausewayExtServerSentEventsparent .[#707070,thickness=2].> Extensions.ApacheCausewayExtServerSentEventsmetamodel : "<color:#707070>"
 Extensions.ApacheCausewayExtServerSentEventsparent .[#707070,thickness=2].> Extensions.ApacheCausewayExtServerSentEventsWicket : "<color:#707070>"
@@ -4413,7 +4397,7 @@ Directory: /extensions/vw/pdfjs/wicket/integration
 ****
 org.apache.causeway.extensions:causeway-extensions-pdfjs-applib:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-wicket-ui:jar:<managed> +
-org.webjars.npm:pdfjs-dist:jar:3.5.141 +
+org.webjars.npm:pdfjs-dist:jar:3.7.107 +
 ****
 
 .Document Index Entries
@@ -4760,35 +4744,6 @@ org.apache.causeway.extensions:causeway-extensions-sessionlog-applib:test-jar:<m
 org.apache.causeway.persistence:causeway-persistence-jpa-eclipselink:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
-****
-
-|Apache Causeway Ext - Security - Shiro LDAP Realm (parent)
-[source,yaml]
-----
-Group: org.apache.causeway.extensions
-Artifact: causeway-extensions-shiro-realm-ldap
-Type: pom
-Directory: /extensions/security/shiro-realm-ldap
-----
-|Implementation of Shiro Realm using LDAP.
-
-|Apache Causeway Ext - Security - Shiro LDAP Realm (impl)
-[source,yaml]
-----
-Group: org.apache.causeway.extensions
-Artifact: causeway-extensions-shiro-realm-ldap-impl
-Type: jar
-Directory: /extensions/security/shiro-realm-ldap/impl
-----
-|.Dependencies
-****
-org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
-org.apache.causeway.security:causeway-security-shiro:jar:<managed> +
-****
-
-.Document Index Entries
-****
-xref:refguide:extensions:index/shirorealmldap/realm/impl/CausewayLdapContextFactory.adoc[CausewayLdapContextFactory], xref:refguide:extensions:index/shirorealmldap/realm/impl/CausewayLdapRealm.adoc[CausewayLdapRealm], xref:refguide:extensions:index/shirorealmldap/realm/impl/CausewayModuleExtShiroRealmLdapImpl.adoc[CausewayModuleExtShiroRealmLdapImpl]
 ****
 
 |Apache Causeway Ext - Security - Spring Oauth2
@@ -5704,6 +5659,7 @@ org.apache.causeway.extensions:causeway-extensions-executionoutbox-applib:test-j
 org.apache.causeway.extensions:causeway-extensions-executionoutbox-persistence-jpa:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-executionoutbox-persistence-jpa:test-jar:<managed> +
 org.apache.causeway.mavendeps:causeway-mavendeps-webapp:pom:<managed> +
+org.apache.causeway.security:causeway-security-bypass:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-restfulobjects-client:jar:2.0.0-SNAPSHOT +
 org.apache.causeway.viewer:causeway-viewer-restfulobjects-jaxrsresteasy:jar:<managed> +
@@ -5881,8 +5837,6 @@ org.springframework.boot:spring-boot-autoconfigure:jar:<managed> +
 === Security: Secman
 
 === Security: Session Log
-
-=== Security: Shiro LDAP Realm
 
 === Security: Spring Oauth2
 

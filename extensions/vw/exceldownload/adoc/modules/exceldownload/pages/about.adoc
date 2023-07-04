@@ -5,7 +5,9 @@
 
 The Excel Download module integrates with the xref:vw:ROOT:about.adoc[Wicket Viewer] to allow any collection to be downloaded as an Excel spreadsheet.
 
-There is no applib for this extension;
+There is no applib for this extension; the viewer automatically makes the "download" menu item available for all tables:
+
+image::screenshot.png[width=300px]
 
 == Setup
 
@@ -55,11 +57,4 @@ In your application's xref:userguide::modules.adoc#appmanifest[App Manifest], im
 public class AppManifest {
 }
 ----
-
-== Usage
-
-[WARNING]
-====
-TODO: v2 - to write up...
-====
 

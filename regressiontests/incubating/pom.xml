@@ -23,7 +23,7 @@
 
 	<artifactId>causeway-regressiontests-incubating</artifactId>
 	<name>Apache Causeway - Regression Tests (incubating)</name>
-	
+
 	<properties>
         <maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
@@ -95,12 +95,6 @@
 		<dependency>
 			<groupId>org.apache.causeway.extensions</groupId>
 			<artifactId>causeway-extensions-secman-delegated-shiro</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.causeway.extensions</groupId>
-			<artifactId>causeway-extensions-shiro-realm-ldap-impl</artifactId>
 			<scope>test</scope>
 		</dependency>
 

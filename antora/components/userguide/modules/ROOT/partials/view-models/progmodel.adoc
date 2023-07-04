@@ -33,10 +33,12 @@ View models implemented this way cannot reference entities, either as properties
 +
 Domain services can be injected, but must be annotated declared with the `transient` keyword.
 
+If a view model class employs several of these options, then there is a precedence:
 
+* explicitly implemented interfaces take precedence:
++
+`ViewModel` interface over `Serializable`
+* JAXB-annotated classes are next
+* Causeway-annotated classes are the fallback.
 
-The first three of these options are discussed in more detail in the sections below.
-
-
-
-
+Each of these options are discussed in more detail in the sections below.
