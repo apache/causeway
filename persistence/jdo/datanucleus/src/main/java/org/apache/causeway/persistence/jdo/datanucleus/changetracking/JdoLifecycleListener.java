@@ -87,8 +87,12 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
     @Override
     public void postLoad(final InstanceLifecycleEvent event) {
         log.debug("postLoad {}", ()->_Utils.debug(event));
+
         final Persistable pojo = _Utils.persistableFor(event);
         val entity = adaptEntity(pojo);
+
+        // it seems JDO only calls this once per transaction and entity
+        // so no need to keep track of OIDs that had already been loaded
         objectLifecyclePublisher.onPostLoad(entity);
     }
 
@@ -97,15 +101,19 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
         log.debug("preStore {}", ()->_Utils.debug(event));
 
         final Persistable pojo = _Utils.persistableFor(event);
+        val isInserting = isInserting(pojo); // check before adapting
+        val entity = adaptEntity(pojo);
 
         /* Called either when an entity is initially persisted,
          * or when an entity is updated; fires the appropriate
          * lifecycle callback. So filter for those events when initially persisting. */
-        if(pojo.dnGetStateManager().isNew(pojo)) {
+        if(isInserting) {
             // well but then we need an OID, so we distinguish between either we have one or not
-            val entity = adaptEntity(pojo);
             objectLifecyclePublisher.onPrePersist(
                     entity.asEitherWithOrWithoutMemoizedBookmark());
+        } else {
+            // not here, using preDirty for that instead
+            //objectLifecyclePublisher.onPreUpdate(entity, /*propertyChangeRecordSupplier*/ null);
         }
     }
 
@@ -114,21 +122,21 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
         log.debug("postStore {}", ()->_Utils.debug(event));
 
         final Persistable pojo = _Utils.persistableFor(event);
+        val isInserting = isInserting(pojo); // check before adapting
+
         val entity = adaptEntity(pojo);
 
         /* Called either when an entity is initially persisted, or when an entity is updated;
          * fires the appropriate lifecycle callback.*/
-        if(pojo.dnGetStateManager().isNew(pojo)) {
 
+        if(isInserting) {
             objectLifecyclePublisher.onPostPersist(entity);
-
         } else {
             // the callback and transaction.enlist are done in the preStore callback
             // (can't be done here, as the enlist requires to capture the 'before' values)
             objectLifecyclePublisher.onPostUpdate(entity);
         }
     }
-
 
     @Override
     public void preDirty(final InstanceLifecycleEvent event) {
@@ -163,10 +171,7 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
 
     @Override
     public void postDirty(final InstanceLifecycleEvent event) {
-        log.debug("postDirty {}", ()->_Utils.debug(event));
-        final Persistable pojo = _Utils.persistableFor(event);
-        val entity = adaptEntity(pojo);
-        objectLifecyclePublisher.onPostUpdate(entity);
+        // not used (historically also not in v1)
     }
 
     @Override
@@ -174,9 +179,7 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
         log.debug("preDelete {}", ()->_Utils.debug(event));
 
         final Persistable pojo = _Utils.persistableFor(event);
-
         _Assert.assertNotNull(pojo.dnGetObjectId());
-        //val entity = adaptEntity(pojo, EntityAdaptingMode.NOT_YET_BOOKMARKABLE);
         val entity = adaptEntity(pojo);
 
         objectLifecyclePublisher.onPreRemove(entity);
@@ -220,4 +223,12 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
             final @NonNull Persistable pojo) {
         return _Utils.adaptEntity(metaModelContext, pojo);
     }
+
+    private boolean isInserting(
+            final @NonNull Persistable pojo) {
+        return DnStateManagerForCauseway.extractFrom(pojo)
+                .map(DnStateManagerForCauseway::isInsertingOrInsertingCallbacks)
+                .orElse(false);
+    }
+
 }
