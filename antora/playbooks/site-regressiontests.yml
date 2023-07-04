@@ -29,9 +29,6 @@ content:
       branches: HEAD
 
 # examples
-    - url: .
-      start_path: examples/reference/domain/src/main/adoc # docs
-      branches: HEAD
 
 # mavendeps
     - url: .

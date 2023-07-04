@@ -1,2 +1,2 @@
 
-** xref:referenceapp:about.adoc[Demo App]
+** xref:referenceapp:about.adoc[Reference App]

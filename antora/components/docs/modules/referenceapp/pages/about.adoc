@@ -28,7 +28,7 @@ docker pull apache/causeway-app-demo-jpa:latest
 docker run --name demo -d -p8080:8080 apache/causeway-app-demo-jpa:latest
 ----
 +
-The Demo app can then be accessed at http://localhost:8080/wicket/[].
+The app can then be accessed at http://localhost:8080/wicket/[].
 Login with `sven:pass`.
 
 * Stop and remove the container named `demo`

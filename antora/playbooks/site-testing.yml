@@ -27,10 +27,8 @@ content:
     - url: .
       start_path: antora/components/docs # docs
       branches: HEAD
+
 # examples
-    - url: .
-      start_path: examples/reference/domain/src/main/adoc # docs
-      branches: HEAD
 
 # mavendeps
     - url: .
@@ -77,7 +75,7 @@ ui:
   bundle:
     url: ../../causeway-antora/build/ui-bundle.zip
 #    url: https://github.com/apache/causeway-antora/blob/master/build/ui-bundle.zip?raw=true
-    
+
     snapshot: true
   supplemental_files: antora/supplemental-ui
 

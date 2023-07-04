@@ -94,9 +94,6 @@ content:
 
 # examples
     - url: .
-      start_path: examples/reference/domain/src/main/adoc # docs
-      branches: HEAD
-    - url: .
       start_path: antora/components/tutorials # tutorials
       branches: HEAD
 
