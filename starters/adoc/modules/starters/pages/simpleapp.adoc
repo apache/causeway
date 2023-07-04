@@ -5,14 +5,21 @@
 The quickest way to get started building an application "for real" is to use the `simpleapp` starter app.
 
 There are two variations of the application (and so two branches in the git repo).
-One variation uses JDO as the ORM, the other uses JPA, so you can focus on whichever ORM you prefer.
+One variation uses JPA as the ORM, the other uses JDO, so you can focus on whichever ORM you prefer.
 
-The application is also deployed online for you to try out, link:https://simpleapp.jdo.causeway.incode.work[here (jdo)] and link:https://simpleapp.jpa.causeway.incode.work[here (jpa)].
+The application is also built nightly as a docker image, so you can quickly try it out:
+
+[source,bash]
+----
+docker run -d -p 8080:8080 apache/causeway-app-simpleapp:jpa-SNAPSHOT
+----
+
+Replace "jpa" with "jdo" if using the JDO ORM.
 
 As with the xref:docs:starters:helloworld.adoc[HelloWorld] starter app, the instructions <<Downloading & Running,below>> will download a minimal Apache Causeway app consisting of a single entity (`SimpleObject`) with supporting domain services.
 
 However, unlike HelloWorld, this app also provides more structure to assist you as your application grows, with business logic placed in a separate Maven module (`simpleapp-...-module-simple`) to the module that bootstraps the webapp (`simpleapp-...-webapp`).
-Replace "..." with either "jdo" or "jpa", as appropriate.
+Replace "..." with either "jpa" or "jdo", as appropriate.
 
 The idea is that as your application grows in scope that you put each new area of functionality in its own module (copy-n-paste the `simpleapp-...-module-simple` module).
 These modules can depend on each other, but Maven will to ensure that dependencies between these areas of functionality are unidirectional.
