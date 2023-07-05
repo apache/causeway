@@ -32,6 +32,8 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.validation.constraints.Digits;
 
+import org.apache.causeway.applib.annotation.ValueSemantics;
+
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -352,6 +354,7 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
         boolean NULLABLE = HasInteractionDto.InteractionDtoAnnot.NULLABLE;
         String ALLOWS_NULL = HasInteractionDto.InteractionDtoAnnot.ALLOWS_NULL;
     }
+    @ValueSemantics(provider = "pretty-render") // attempting to fix
     @InteractionDtoAnnot
     @Override
     public abstract InteractionDto getInteractionDto();

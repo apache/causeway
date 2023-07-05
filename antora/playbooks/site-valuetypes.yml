@@ -27,10 +27,8 @@ content:
     - url: .
       start_path: antora/components/docs # docs
       branches: HEAD
+
 # examples
-    - url: .
-      start_path: examples/demo/domain/src/main/adoc # docs
-      branches: HEAD
 
 # mavendeps
     - url: .

@@ -52,6 +52,7 @@ import org.apache.causeway.applib.services.exceprecog.Recognition;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -136,20 +137,32 @@ implements
             return;
         }
 
-        val authenticatedWebSessionForCauseway = AuthenticatedWebSessionForCauseway.get();
 
-        authenticatedWebSessionForCauseway.syncExternalAuthenticationIfAvailable();
+        // participate if an InteractionContext was already provided through some other mechanism,
+        // but fail early if the current user is impersonating
+        // (seeing this if going back the browser history into a page, that was previously impersonated)
+        val interactionService = getInteractionService();
+        val currentInteractionContext = interactionService.currentInteractionContext();
+        if(currentInteractionContext.isPresent()
+                && currentInteractionContext.get().getUser().isImpersonating()) {
+            throw _Exceptions.illegalState("cannot enter a new request cycle with a left over impersonating user");
+        }
+        val interactionContext0 = currentInteractionContext
+            .orElseGet(AuthenticatedWebSessionForCauseway.get()::getAuthentication);
 
-        val interactionContext = authenticatedWebSessionForCauseway.getAuthentication();
-        if (interactionContext == null) {
+        if (interactionContext0 == null) {
             log.warn("onBeginRequest out - session was not opened (because no authentication)");
             return;
         }
 
-        val commonContext = getMetaModelContext();
-        val interactionService = commonContext.lookupServiceElseFail(InteractionService.class);
+        // impersonation support
+        val interactionContext1 = lookupServiceElseFail(UserService.class)
+                .lookupImpersonatedUser()
+                .map(sudoUser -> interactionContext0.withUser(sudoUser))
+                .orElse(interactionContext0);
+
         // Note: this is a no-op if an interactionContext layer was already opened and is unchanged.
-        interactionService.openInteraction(interactionContext);
+        interactionService.openInteraction(interactionContext1);
 
         log.debug("onBeginRequest out - session was opened");
     }

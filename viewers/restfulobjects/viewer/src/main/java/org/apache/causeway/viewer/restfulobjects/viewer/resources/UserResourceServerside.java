@@ -114,7 +114,7 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
         interactionService
         .currentInteractionContext()
         .ifPresent(interactionContext->{
-            authenticationManager.closeSession(interactionContext);
+            authenticationManager.closeSession(interactionContext.getUser());
             interactionService.closeInteractionLayers();
         });
     }

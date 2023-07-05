@@ -8,7 +8,15 @@ The quickest way to start learning about Apache Causeway is to use the `hellowor
 There are two variations of the application (and so two branches in the git repo).
 One variation uses JDO as the ORM, the other uses JPA, so you can focus on whichever ORM you prefer.
 
-The application is also deployed online for you to try out,  link:https://helloworld.jdo.causeway.incode.work[here (jdo)] and link:https://helloworld.jpa.causeway.incode.work[here (jpa)].
+The application is also built nightly as a docker image, so you can quickly try it out:
+
+[source,bash]
+----
+docker run -d -p 8080:8080 apache/causeway-app-helloworld:jpa-SNAPSHOT
+----
+
+Replace "jpa" with "jdo" if using the JDO ORM.
+
 
 Using the instructions <<Downloading & Running,below>>, you can download a minimal Apache Causeway app, consisting of a single domain entity (`HelloWorldObject`) with supporting domain services.
 Both the business logic and supporting bootstrapping classes are in a single Maven module.

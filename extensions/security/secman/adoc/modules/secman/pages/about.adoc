@@ -188,7 +188,7 @@ The implementation would parse the string and allow access for any country.
 
 For this reason, the xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUser.adoc[ApplicationUser]'s `atPath` property is _not_ a foreign key to the xref:refguide:extensions:index/secman/applib/tenancy/dom/ApplicationTenancy.adoc[ApplicationTenancy] entity.
 
-TIP: Another implementation of xref:refguide:extensions:index/secman/applib/tenancy/spi/ApplicationTenancyEvaluator.adoc[ApplicationTenancyEvaluator] can be found in the xref:docs:demo:about.adoc[Demo App]..
+TIP: Another implementation of xref:refguide:extensions:index/secman/applib/tenancy/spi/ApplicationTenancyEvaluator.adoc[ApplicationTenancyEvaluator] can be found in the xref:docs:referenceapp:about.adoc[reference app]..
 
 
 .Apache Causeway' multi-tenancy is only skin deep

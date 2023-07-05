@@ -101,7 +101,7 @@ public class AuthenticatorSecman implements Authenticator {
     }
 
     @Override
-    public void logout(final InteractionContext context) {
+    public void logout() {
         // nothing needs to be done.  On logout the top-level AuthenticationManager
         // will invalidate the validation code held in the Authentication
         // object; this will cause the next http request made by the user to

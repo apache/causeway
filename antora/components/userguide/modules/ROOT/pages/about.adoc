@@ -10,7 +10,7 @@ This user guide aims to get you developing Causeway applications as quickly as p
 .Quick start resources
 ====
 If you prefer learn by _doing_, you can use the xref:docs:starters:helloworld.adoc[] and xref:docs:starters:simpleapp.adoc[] starter apps to get going in a few minutes.
-Also check out the xref:docs:demo:about.adoc[] which provides a working example of much of the Causeway programming model; you can access a live instance link:https://demo-wicket-jpa-snapshot.apps.causeway.dev/[here].
+Also check out the xref:docs:referenceapp:about.adoc[reference app] which provides a working example of much of the Causeway programming model.
 ====
 
 This guide starts with a xref:userguide:ROOT:overview.adoc[10,000ft overview] of the main building blocks that make up the framework.

@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.net.URL;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import jakarta.inject.Named;
@@ -154,10 +155,8 @@ implements Serializable {
         @Order(PriorityPrecedence.LATE)
         @EventListener(UserMemento.TitleUiEvent.class)
         public void on(final UserMemento.TitleUiEvent ev) {
-            val userMemento = ev.getSource();
-            assert userMemento != null;
-            val title = String.format("%s %s", userMemento.getName(), userMemento.isImpersonating() ? " (impersonating)" : "");
-            ev.setTitle(title);
+            val userMemento = Objects.requireNonNull(ev.getSource());
+            ev.setTitle(userMemento.nameFormatted());
         }
     }
 
@@ -171,6 +170,12 @@ implements Serializable {
     @Getter
     @NonNull
     String name;
+
+    public String nameFormatted() {
+        return isImpersonating()
+                ? String.format("%s 👻", name)
+                : name;
+    }
 
     /**
      * Excluded from {@link #equals(Object) equality} checks.

@@ -30,12 +30,12 @@
     <supplement>
         <project>
             <groupId>org.webjars.npm</groupId>
-            <artifactId>web-streams-polyfill</artifactId>
-            <version>4.0.0-beta.3</version>
-            <name>web-streams-polyfill</name>
+            <artifactId>pdfjs-dist</artifactId>
+            <version>3.7.107</version>
+            <name>PDF.js</name>
             <licenses>
                 <license>
-                    <name>MIT License, Version 2.0</name>
+                    <name>The Apache Software License, Version 2.0</name>
                     <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
                 </license>
             </licenses>
@@ -45,13 +45,13 @@
     <supplement>
         <project>
             <groupId>org.webjars.npm</groupId>
-            <artifactId>pdfjs-dist</artifactId>
-            <version>3.3.122</version>
+            <artifactId>bootstrap-select</artifactId>
+            <version>1.14.0-beta3</version>
             <name>PDF.js</name>
             <licenses>
                 <license>
-                    <name>The Apache Software License, Version 2.0</name>
-                    <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+                    <name>MIT License</name>
+                    <url>https://spdx.org/licenses/MIT</url>
                 </license>
             </licenses>
         </project>
@@ -97,21 +97,6 @@
                 <license>
                     <name>MIT License</name>
                     <url>https://github.com/RobinHerbots/Inputmask/blob/5.x/LICENSE.txt</url>
-                </license>
-            </licenses>
-        </project>
-    </supplement>
-
-    <supplement>
-        <project>
-            <groupId>org.webjars.npm</groupId>
-            <artifactId>path2d-polyfill</artifactId>
-            <version>2.0.1</version>
-            <name>path2d-polyfill</name>
-            <licenses>
-                <license>
-                    <name>MIT License</name>
-                    <url>https://github.com/nilzona/path2d-polyfill/blob/main/LICENSE</url>
                 </license>
             </licenses>
         </project>

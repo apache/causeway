@@ -12,7 +12,7 @@ Domain objects that take part in such a navigable-tree-structure need to declare
 
 == Screenshots
 
-The following screenshot (from the link:https://demo-wicket-jpa-snapshot.causeway.dev/[demo app]) shows the navigation links below the top menu bar.
+The following screenshot (from the xref:docs:referenceapp:about.adoc[reference app]) shows the navigation links below the top menu bar.
 
 image::where-am-i/hello_grey_bg.png[width="720px"]
 
