@@ -13,7 +13,7 @@ There can be multiple xref:refguide:core:index/security/authentication/Authentic
 interface Authenticator {
   boolean canAuthenticate(Class<? extends AuthenticationRequest> authenticationRequestClass)     // <.>
   InteractionContext authenticate(AuthenticationRequest request, String code)     // <.>
-  void logout(InteractionContext context)     // <.>
+  void logout()     // <.>
 }
 ----
 
@@ -27,7 +27,7 @@ Whether the provided xref:refguide:core:index/security/authentication/Authentica
 --
 Authenticates the provided xref:refguide:core:index/security/authentication/AuthenticationRequest.adoc[AuthenticationRequest] , returning a non-null xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] if valid.
 --
-<.> xref:#logout_InteractionContext[logout(InteractionContext)]
+<.> xref:#logout_[logout()]
 +
 --
 Invalidates this xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] , meaning that the user will need to log in again to use the application.
@@ -45,7 +45,7 @@ Whether the provided xref:refguide:core:index/security/authentication/Authentica
 
 Authenticates the provided xref:refguide:core:index/security/authentication/AuthenticationRequest.adoc[AuthenticationRequest] , returning a non-null xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] if valid.
 
-[#logout_InteractionContext]
-=== logout(InteractionContext)
+[#logout_]
+=== logout()
 
 Invalidates this xref:refguide:applib:index/services/iactnlayer/InteractionContext.adoc[InteractionContext] , meaning that the user will need to log in again to use the application.
