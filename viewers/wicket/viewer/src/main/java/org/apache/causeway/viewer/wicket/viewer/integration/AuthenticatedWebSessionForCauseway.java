@@ -27,6 +27,7 @@ import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.clock.VirtualClock;
 import org.apache.causeway.applib.services.clock.ClockService;
@@ -81,8 +82,10 @@ implements
      * As populated in {@link #signIn(String, String)}.
      */
     private InteractionContext authentication;
-    private void setAuthentication(final InteractionContext authentication) {
-        _Assert.assertFalse(authentication.getUser().isImpersonating(), ()-> 
+    private void setAuthentication(final @Nullable InteractionContext authentication) {
+        _Assert.assertFalse(
+                authentication!=null
+                 && authentication.getUser().isImpersonating(), ()->
                 "framework bug: cannot signin with an impersonated user");
         this.authentication = authentication;
     }
