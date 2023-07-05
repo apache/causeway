@@ -36,9 +36,11 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.keyvaluestore.KeyValueSessionStore;
 import org.apache.causeway.applib.services.sudo.SudoService;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 /**
  * Allows the domain object to obtain the identity of the user interacting with
@@ -85,7 +87,7 @@ public class UserService {
 
     private static final String SESSION_KEY_IMPERSONATED_USER = UserService.class.getName() + "#sudo";
 
-    private final Provider<InteractionLayerTracker> iInteractionLayerTrackerProvider;
+    private final Provider<InteractionLayerTracker> interactionLayerTrackerProvider;
     private final Optional<KeyValueSessionStore> keyValueSessionStore;
 
     /**
@@ -95,9 +97,15 @@ public class UserService {
      * {@link InteractionContext} of the current thread).
      */
     public Optional<UserMemento> currentUser() {
-        return iInteractionLayerTrackerProvider.get() //TODO[CAUSEWAY-3519] must return the amended user
+        val currentUser = interactionLayerTrackerProvider.get()
                     .currentInteractionContext()
                     .map(InteractionContext::getUser);
+
+        currentUser.ifPresent(
+                u->_Assert.assertEquals(u.isImpersonating(), isImpersonating(), ()->
+                    "framework bug: UserService and InteractionService disagree on impersonation state"));
+
+        return currentUser;
     }
 
     /**
@@ -210,6 +218,7 @@ public class UserService {
             final List<String> roles,
             final String multiTenancyToken) {
         setSudoUser(UserMemento.ofNameAndRoleNames(userName, roles)
+                .withImpersonating(true)
                 .withMultiTenancyToken(multiTenancyToken));
     }
 

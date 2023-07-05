@@ -149,7 +149,7 @@ public class AuthenticatorShiro implements Authenticator {
     }
 
     @Override
-    public void logout(final InteractionContext context) {
+    public void logout() {
         Subject currentSubject = SecurityUtils.getSubject();
         if(currentSubject.isAuthenticated()) {
             currentSubject.logout();

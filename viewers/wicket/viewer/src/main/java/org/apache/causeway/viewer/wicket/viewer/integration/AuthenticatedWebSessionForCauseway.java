@@ -134,7 +134,10 @@ implements
         // principals for it to logout
         //
 
-        getAuthenticationManager().closeSession(getAuthentication());
+        getAuthenticationManager().closeSession(
+                Optional.ofNullable(authentication)
+                .map(InteractionContext::getUser)
+                .orElse(null));
 
         super.invalidateNow();
 
@@ -158,24 +161,9 @@ implements
         log(SessionSubscriber.Type.LOGOUT, userName, causedBy);
     }
 
-    /**
-     * If there is an {@link InteractionContext} already
-     * (as some authentication mechanisms setup in filters, eg
-     * SpringSecurityFilter), then just use it.
-     *
-     * <p>
-     *     This method is called early on by {@link WebRequestCycleForCauseway}.
-     * </p>
-     */
-    public void syncExternalAuthenticationIfAvailable() {
-        getInteractionService()
-            .currentInteractionContext()
-            .ifPresent(interactionContext -> this.authentication = interactionContext);
-    }
-
     @Override
     public void amendInteractionContext(final UnaryOperator<InteractionContext> updater) {
-        authentication = updater.apply(authentication);
+        this.authentication = updater.apply(authentication);
     }
 
     /**
@@ -187,7 +175,7 @@ implements
      *     note that this will always be true for externally authenticated users.
      * </p>
      */
-    public synchronized InteractionContext getAuthentication() {
+     synchronized InteractionContext getAuthentication() {
 
         if(authentication == null) {
             return null;
@@ -197,10 +185,7 @@ implements
         }
         signIn(true);
 
-        return lookupServiceElseFail(UserService.class)
-                .lookupImpersonatedUser()
-                .map(sudoUser -> this.authentication.withUser(sudoUser))
-                .orElse(this.authentication);
+        return authentication;
     }
 
     /**
@@ -211,7 +196,8 @@ implements
      */
     @Override
     public void invalidate() {
-        if(this.authentication.getUser().getAuthenticationSource().isExternal()) {
+        if(authentication!=null
+                && authentication.getUser().getAuthenticationSource().isExternal()) {
             return;
         }
         // otherwise
@@ -223,7 +209,8 @@ implements
         if (!isSignedIn()) {
             return null;
         }
-        return Optional.ofNullable(getAuthentication())
+        return getInteractionService()
+            .currentInteractionContext()
             .map(InteractionContext::getUser)
             .map(user->{
                 val roles = new Roles();

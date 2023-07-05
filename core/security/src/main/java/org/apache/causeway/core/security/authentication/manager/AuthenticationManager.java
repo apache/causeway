@@ -36,6 +36,7 @@ import org.apache.causeway.applib.exceptions.unrecoverable.NoAuthenticatorExcept
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.user.UserCurrentSessionTimeZoneHolder;
+import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.util.ToString;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Timing;
@@ -172,11 +173,12 @@ public class AuthenticationManager {
     }
 
 
-    public void closeSession(final InteractionContext context) {
+    public void closeSession(final @Nullable UserMemento user) {
         for (val authenticator : authenticators) {
-            authenticator.logout(context);
+            authenticator.logout();
         }
-        userByValidationCode.remove(context.getUser().getAuthenticationCode());
+        if(user==null) return;
+        userByValidationCode.remove(user.getAuthenticationCode());
     }
 
     // -- AUTHENTICATORS
@@ -211,7 +213,5 @@ public class AuthenticationManager {
     public String toString() {
         return toString.toString(this);
     }
-
-
 
 }
