@@ -32,9 +32,9 @@ import org.apache.causeway.applib.clock.VirtualClock;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.session.SessionSubscriber;
-import org.apache.causeway.applib.services.user.ImpersonatedUserHolder;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.user.UserMemento.AuthenticationSource;
+import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.security.authentication.AuthenticationRequestPassword;
@@ -180,7 +180,7 @@ implements
 
     /**
      * Returns an {@link InteractionContext} either as authenticated (and then cached on the session subsequently),
-     * or taking into account {@link ImpersonatedUserHolder impersonation}.
+     * or taking into account {@link UserService impersonation}.
      *
      * <p>
      *     The session must still {@link AuthenticationManager#isSessionValid(InteractionContext) be valid}, though
@@ -189,17 +189,17 @@ implements
      */
     public synchronized InteractionContext getAuthentication() {
 
-        if(this.authentication == null) {
+        if(authentication == null) {
             return null;
         }
-        if(!getAuthenticationManager().isSessionValid(this.authentication)) {
+        if(!getAuthenticationManager().isSessionValid(authentication)) {
             return null;
         }
         signIn(true);
 
-        val impersonatedUserHolder = lookupServiceElseFail(ImpersonatedUserHolder.class);
-        return impersonatedUserHolder.getUserMemento()
-                .map(x -> this.authentication.withUser(x))
+        return lookupServiceElseFail(UserService.class)
+                .lookupImpersonatedUser()
+                .map(sudoUser -> this.authentication.withUser(sudoUser))
                 .orElse(this.authentication);
     }
 
@@ -238,6 +238,12 @@ implements
     public synchronized void detach() {
         breadcrumbModel.detach();
         super.detach();
+    }
+
+    @Override
+    public void replaceSession() {
+        // do nothing here because this will lead to problems with Shiro
+        // see https://issues.apache.org/jira/browse/CAUSEWAY-1018
     }
 
     private void log(
@@ -286,11 +292,7 @@ implements
         return VirtualClock.system();
     }
 
-    @Override
-    public void replaceSession() {
-        // do nothing here because this will lead to problems with Shiro
-        // see https://issues.apache.org/jira/browse/CAUSEWAY-1018
-    }
+
 
 
 

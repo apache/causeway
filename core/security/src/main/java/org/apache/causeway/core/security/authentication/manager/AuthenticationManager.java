@@ -26,7 +26,6 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.causeway.core.security.CausewayModuleCoreSecurity;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -41,6 +40,7 @@ import org.apache.causeway.applib.util.ToString;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Timing;
 import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.core.security.CausewayModuleCoreSecurity;
 import org.apache.causeway.core.security.authentication.AuthenticationRequest;
 import org.apache.causeway.core.security.authentication.Authenticator;
 import org.apache.causeway.core.security.authentication.standard.RandomCodeGenerator;
