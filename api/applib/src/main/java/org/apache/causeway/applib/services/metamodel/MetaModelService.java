@@ -20,10 +20,13 @@ package org.apache.causeway.applib.services.metamodel;
 
 import java.util.Optional;
 
+import javax.inject.Named;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -41,18 +44,19 @@ import org.apache.causeway.schema.metamodel.v2.MetamodelDto;
 public interface MetaModelService {
 
     /**
-     * Provides a lookup by logicalTypeName of a domain class' object type, as defined by
-     * {@link DomainObject#logicalTypeName()} (or any other mechanism that corresponds to Causeway'
-     * <code>ObjectTypeFacet</code>). Will return an empty result if there is no
+     * Provides a lookup by logicalTypeName of a domain class' object type, corresponding to
+     * {@link Named#value()} or {@link DomainService#aliased()} or
+     * {@link DomainObject#aliased()}.
+     * Will return an empty result if there is no
      * such non-abstract class registered.
      * (interfaces and abstract types are never added to the lookup table).
      */
     Optional<LogicalType> lookupLogicalTypeByName(final String logicalTypeName);
 
     /**
-     * Provides a lookup by class of a domain class' object type, as defined by
-     * {@link DomainObject#logicalTypeName()} (or any other mechanism that corresponds to Causeway'
-     * <code>ObjectTypeFacet</code>).
+     * Provides a lookup by class of a domain class' object type,corresponding to
+     * {@link Named#value()} or {@link DomainService#aliased()} or
+     * {@link DomainObject#aliased()}.
      */
     Optional<LogicalType> lookupLogicalTypeByClass(final Class<?> domainType);
 
