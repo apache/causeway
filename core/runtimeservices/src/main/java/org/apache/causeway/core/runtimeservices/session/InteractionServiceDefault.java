@@ -31,6 +31,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
+import org.apache.causeway.applib.services.command.Command;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Lazy;
@@ -41,7 +42,6 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.clock.ClockService;
-import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayer;
@@ -186,11 +186,6 @@ implements
     public InteractionLayer openInteraction(
             final @NonNull InteractionContext interactionContextToUse) {
 
-        if(interactionContextToUse.getUser().isImpersonating()
-                || interactionContextToUse.getUser().getName().equals("sven")) {
-            System.err.printf("ia open %s%n", interactionContextToUse.getUser());
-        }
-
         val causewayInteraction = getOrCreateCausewayInteraction();
 
         // check whether we should reuse any current authenticationLayer,
@@ -268,11 +263,6 @@ implements
             final @NonNull InteractionContext interactionContext,
             final @NonNull Callable<R> callable) {
 
-        if(interactionContext.getUser().isImpersonating()
-                || interactionContext.getUser().getName().equals("sven")) {
-            System.err.printf("ia call %s%n", interactionContext.getUser());
-        }
-
         final int stackSizeWhenEntering = interactionLayerStack.get().size();
         openInteraction(interactionContext);
         try {
@@ -287,11 +277,6 @@ implements
     public void run(
             final @NonNull InteractionContext interactionContext,
             final @NonNull ThrowingRunnable runnable) {
-
-        if(interactionContext.getUser().isImpersonating()
-                || interactionContext.getUser().getName().equals("sven")) {
-            System.err.printf("ia run %s%n", interactionContext.getUser());
-        }
 
         final int stackSizeWhenEntering = interactionLayerStack.get().size();
         openInteraction(interactionContext);

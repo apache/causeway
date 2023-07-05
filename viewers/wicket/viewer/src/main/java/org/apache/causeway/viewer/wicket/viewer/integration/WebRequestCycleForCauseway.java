@@ -137,26 +137,32 @@ implements
             return;
         }
 
-        val interactionService = getInteractionService();
 
-        // participate if an InteractionContext was already provided through some other mechanism
-        val interactionContext0 = getInteractionService()
-            .currentInteractionContext()
+        // participate if an InteractionContext was already provided through some other mechanism,
+        // but fail early if the current user is impersonating
+        // (seeing this if going back the browser history into a page, that was previously impersonated)
+        val interactionService = getInteractionService();
+        val currentInteractionContext = interactionService.currentInteractionContext();
+        if(currentInteractionContext.isPresent()
+                && currentInteractionContext.get().getUser().isImpersonating()) {
+            throw _Exceptions.illegalState("cannot enter a new request cycle with a left over impersonating user");
+        }
+        val interactionContext0 = currentInteractionContext
             .orElseGet(AuthenticatedWebSessionForCauseway.get()::getAuthentication);
 
-        // impersonation support
-        val interactionContext = lookupServiceElseFail(UserService.class)
-                .lookupImpersonatedUser()
-                .map(sudoUser -> interactionContext0.withUser(sudoUser))
-                .orElse(interactionContext0);
-
-        if (interactionContext == null) {
+        if (interactionContext0 == null) {
             log.warn("onBeginRequest out - session was not opened (because no authentication)");
             return;
         }
 
+        // impersonation support
+        val interactionContext1 = lookupServiceElseFail(UserService.class)
+                .lookupImpersonatedUser()
+                .map(sudoUser -> interactionContext0.withUser(sudoUser))
+                .orElse(interactionContext0);
+
         // Note: this is a no-op if an interactionContext layer was already opened and is unchanged.
-        interactionService.openInteraction(interactionContext);
+        interactionService.openInteraction(interactionContext1);
 
         log.debug("onBeginRequest out - session was opened");
     }

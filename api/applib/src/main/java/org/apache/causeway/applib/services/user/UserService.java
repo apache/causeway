@@ -103,7 +103,7 @@ public class UserService {
 
         currentUser.ifPresent(
                 u->_Assert.assertEquals(u.isImpersonating(), isImpersonating(), ()->
-                    "framework bug: UserService and InteractionService disagree on impersonation state"));
+                    "framework bug: InteractionService and UserService disagree on impersonation state\n\t"));
 
         return currentUser;
     }

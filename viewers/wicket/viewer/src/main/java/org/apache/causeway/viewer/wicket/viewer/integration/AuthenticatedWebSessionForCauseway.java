@@ -36,6 +36,7 @@ import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.user.UserMemento.AuthenticationSource;
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
@@ -80,6 +81,11 @@ implements
      * As populated in {@link #signIn(String, String)}.
      */
     private InteractionContext authentication;
+    private void setAuthentication(final InteractionContext authentication) {
+        _Assert.assertFalse(authentication.getUser().isImpersonating(), ()-> 
+                "framework bug: cannot signin with an impersonated user");
+        this.authentication = authentication;
+    }
 
     @Getter
     private UUID sessionGuid;
@@ -114,8 +120,8 @@ implements
     public synchronized boolean authenticate(final String username, final String password) {
         val authenticationRequest = new AuthenticationRequestPassword(username, password);
         authenticationRequest.addRole(UserMemento.AUTHORIZED_USER_ROLE);
-        this.authentication = getAuthenticationManager().authenticate(authenticationRequest);
-        if (this.authentication != null) {
+        setAuthentication(getAuthenticationManager().authenticate(authenticationRequest));
+        if (authentication != null) {
             log(SessionSubscriber.Type.LOGIN, username, null);
             return true;
         } else {
@@ -163,7 +169,7 @@ implements
 
     @Override
     public void amendInteractionContext(final UnaryOperator<InteractionContext> updater) {
-        this.authentication = updater.apply(authentication);
+        setAuthentication(updater.apply(authentication));
     }
 
     /**
@@ -278,9 +284,5 @@ implements
     private VirtualClock nowFallback() {
         return VirtualClock.system();
     }
-
-
-
-
 
 }
