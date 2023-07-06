@@ -24,6 +24,7 @@ import java.util.UUID;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.handler.resource.ResourceReferenceRequestHandler;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 
 import lombok.val;
@@ -34,7 +35,7 @@ import lombok.val;
  */
 public class MarkupComponent_reloadJs {
 
-    public static CharSequence decorate(final CharSequence htmlContent, final Iterable<ResourceReference> jsRefs) {
+    public static CharSequence decorate(final CharSequence htmlContent, final Iterable<JavaScriptResourceReference> jsRefs) {
         val targetId = UUID.randomUUID().toString();
 
         val sb = new StringBuilder()
@@ -47,7 +48,7 @@ public class MarkupComponent_reloadJs {
         return sb.toString();
     }
 
-    public static CharSequence decorate(final CharSequence htmlContent, final ResourceReference jsRef) {
+    public static CharSequence decorate(final CharSequence htmlContent, final JavaScriptResourceReference jsRef) {
         return decorate(htmlContent, List.of(jsRef));
     }
 

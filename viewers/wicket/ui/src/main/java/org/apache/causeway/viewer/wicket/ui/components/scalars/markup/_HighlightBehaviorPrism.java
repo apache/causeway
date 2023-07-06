@@ -23,7 +23,8 @@ import java.util.List;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.request.resource.ResourceReference;
+import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 import org.apache.causeway.viewer.commons.prism.Prism;
 import org.apache.causeway.viewer.wicket.ui.util.PrismResourcesWkt;
@@ -36,16 +37,18 @@ class _HighlightBehaviorPrism implements _HighlightBehavior {
 
     private final Prism theme;
 
-    @Getter(lazy = true) private final ResourceReference cssResourceReference =
-            PrismResourcesWkt.cssResource(theme);
+    @Getter(lazy = true) private final List<CssResourceReference> cssResourceReferences =
+            PrismResourcesWkt.cssResources(theme);
 
-    @Getter(lazy = true) private final List<ResourceReference> jsResourceReferences =
+    @Getter(lazy = true) private final List<JavaScriptResourceReference> jsResourceReferences =
             PrismResourcesWkt.jsResources(theme);
 
     @Override
     public void renderHead(final IHeaderResponse response) {
-        response.render(CssHeaderItem.forReference(getCssResourceReference()));
-        for(ResourceReference jsRef : getJsResourceReferences()) {
+        for(CssResourceReference cssRef : getCssResourceReferences()) {
+            response.render(CssHeaderItem.forReference(cssRef));
+        }
+        for(JavaScriptResourceReference jsRef : getJsResourceReferences()) {
             response.render(JavaScriptHeaderItem.forReference(jsRef));
         }
     }
