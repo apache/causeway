@@ -378,9 +378,13 @@ implements
 
         Throwable flushException = null;
         try {
-            transactionServiceProvider.get().flushTransaction();
-            // publish only when flush was successful
-            completeAndPublishCurrentCommand();
+            val txService = transactionServiceProvider.get();
+            val mustAbort = txService.currentTransactionState().mustAbort();
+            if(!mustAbort) {
+                txService.flushTransaction();
+                // publish only when flush was successful
+                completeAndPublishCurrentCommand();
+            }
         } catch (Throwable e) {
             //[CAUSEWAY-3262] if flush fails rethrow later, when interaction was closed ...
             flushException = e;
@@ -398,6 +402,9 @@ implements
             throw flushException;
         }
     }
+
+
+
 
     private void closeInteractionLayerStackDownToStackSize(final int downToStackSize) {
 
