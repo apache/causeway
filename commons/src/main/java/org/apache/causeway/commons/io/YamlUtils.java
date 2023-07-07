@@ -62,7 +62,10 @@ import lombok.experimental.UtilityClass;
 public class YamlUtils {
 
     @FunctionalInterface
-    public interface YamlCustomizer extends UnaryOperator<DumperOptions> {}
+    public interface YamlDumpCustomizer extends UnaryOperator<DumperOptions> {}
+
+    @FunctionalInterface
+    public interface YamlLoadCustomizer extends UnaryOperator<LoaderOptions> {}
 
     // -- READING
 
@@ -72,8 +75,9 @@ public class YamlUtils {
      */
     public <T> Try<T> tryRead(
             final @NonNull Class<T> mappedType,
-            final @Nullable String stringUtf8) {
-        return tryRead(mappedType, DataSource.ofStringUtf8(stringUtf8));
+            final @Nullable String stringUtf8,
+            final YamlUtils.YamlLoadCustomizer ... customizers) {
+        return tryRead(mappedType, DataSource.ofStringUtf8(stringUtf8), customizers);
     }
 
     /**
@@ -82,9 +86,11 @@ public class YamlUtils {
      */
     public <T> Try<T> tryRead(
             final @NonNull Class<T> mappedType,
-            final @NonNull DataSource source) {
+            final @NonNull DataSource source,
+            final YamlUtils.YamlLoadCustomizer ... customizers) {
         return source.tryReadAll((final InputStream is)->{
-            return Try.call(()->createMapper(mappedType).load(is));
+            return Try.call(()->createMapper(mappedType, Can.ofArray(customizers), Can.empty())
+                    .load(is));
         });
     }
 
@@ -96,10 +102,10 @@ public class YamlUtils {
     public void write(
             final @Nullable Object pojo,
             final @NonNull DataSink sink,
-            final YamlUtils.YamlCustomizer ... customizers) {
+            final YamlUtils.YamlDumpCustomizer ... customizers) {
         if(pojo==null) return;
         sink.writeAll(os->
-            Try.run(()->createMapper(pojo.getClass(), customizers).dump(pojo, new OutputStreamWriter(os))));
+            Try.run(()->createMapper(pojo.getClass(), Can.empty(), Can.ofArray(customizers)).dump(pojo, new OutputStreamWriter(os))));
     }
 
     /**
@@ -110,9 +116,9 @@ public class YamlUtils {
     @Nullable
     public static String toStringUtf8(
             final @Nullable Object pojo,
-            final YamlUtils.YamlCustomizer ... customizers) {
+            final YamlUtils.YamlDumpCustomizer ... customizers) {
         return pojo!=null
-                ? createMapper(pojo.getClass(), customizers).dump(pojo)
+                ? createMapper(pojo.getClass(), Can.empty(), Can.ofArray(customizers)).dump(pojo)
                 : null;
     }
 
@@ -131,19 +137,26 @@ public class YamlUtils {
 
     private Yaml createMapper(
             final Class<?> mappedType,
-            final YamlUtils.YamlCustomizer ... customizers) {
-        var options = new DumperOptions();
-        options.setIndent(2);
-        options.setLineBreak(LineBreak.UNIX); // fixated for consistency
+            final Can<YamlUtils.YamlLoadCustomizer> loadCustomizers,
+            final Can<YamlUtils.YamlDumpCustomizer> dumpCustomizers) {
+        var dumperOptions = new DumperOptions();
+        dumperOptions.setIndent(2);
+        dumperOptions.setLineBreak(LineBreak.UNIX); // fixated for consistency
         //options.setPrettyFlow(true);
         //options.setDefaultFlowStyle(FlowStyle.BLOCK);
-        for(YamlUtils.YamlCustomizer customizer : customizers) {
-            options = Optional.ofNullable(customizer.apply(options))
-                    .orElse(options);
+        for(YamlUtils.YamlDumpCustomizer customizer : dumpCustomizers) {
+            dumperOptions = Optional.ofNullable(customizer.apply(dumperOptions))
+                    .orElse(dumperOptions);
         }
-        var presenter = new Representer(options);
+        var presenter = new Representer(dumperOptions);
         presenter.setPropertyUtils(new PropertyUtils2());
-        var mapper = new Yaml(new Constructor(mappedType, new LoaderOptions()), presenter);
+
+        var loaderOptions = new LoaderOptions();
+        for(YamlUtils.YamlLoadCustomizer customizer : loadCustomizers) {
+            loaderOptions = Optional.ofNullable(customizer.apply(loaderOptions))
+                    .orElse(loaderOptions);
+        }
+        var mapper = new Yaml(new Constructor(mappedType, loaderOptions), presenter, dumperOptions, loaderOptions);
         return mapper;
     }
 
