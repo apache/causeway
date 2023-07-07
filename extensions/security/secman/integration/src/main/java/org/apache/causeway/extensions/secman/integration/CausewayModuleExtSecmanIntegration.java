@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.extensions.secman.integration;
 
+import org.apache.causeway.extensions.secman.integration.permissions.ApplicationFeatureIdTransformer;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -44,6 +46,7 @@ import org.apache.causeway.extensions.secman.integration.userreg.UserRegistratio
         TableColumnVisibilityServiceForSecman.class,
         ImpersonateMenuAdvisorForSecman.class, //not activated by default yet
         PermissionsEvaluationServiceForSecman.class,
+        ApplicationFeatureIdTransformer.Identity.class,
         UserRegistrationServiceForSecman.class,
 
         UserMementoRefinerFromApplicationUser.class,
