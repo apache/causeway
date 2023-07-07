@@ -117,6 +117,10 @@ public class ApplicationPermissionValue implements Comparable<ApplicationPermiss
         return false;
     }
 
+    @Programmatic
+    public ApplicationPermissionValue withFeatureId(ApplicationFeatureId applicationFeatureId) {
+        return new ApplicationPermissionValue(applicationFeatureId, this.rule, this.mode);
+    }
 
 
     // -- Comparators

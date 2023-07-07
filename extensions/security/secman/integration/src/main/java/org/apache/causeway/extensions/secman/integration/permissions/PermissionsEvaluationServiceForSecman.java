@@ -20,6 +20,7 @@ package org.apache.causeway.extensions.secman.integration.permissions;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import javax.inject.Inject;
@@ -71,9 +72,12 @@ implements PermissionsEvaluationService {
 
     @Override
     public ApplicationPermissionValueSet.Evaluation evaluate(
-            final ApplicationFeatureId targetMemberId,
+            final ApplicationFeatureId targetMemberIdInput,
             final ApplicationPermissionMode mode,
-            final Collection<ApplicationPermissionValue> permissionValues) {
+            final Collection<ApplicationPermissionValue> permissionValuesInput) {
+
+        final ApplicationFeatureId targetMemberId = applicationFeatureIdTransformer().transform(targetMemberIdInput);
+        final Collection<ApplicationPermissionValue> permissionValues = applicationFeatureIdTransformer().transform(permissionValuesInput);
 
         if(_NullSafe.isEmpty(permissionValues)) {
             return null;
@@ -111,5 +115,15 @@ implements PermissionsEvaluationService {
         }
         throw _Exceptions.illegalArgument("PermissionsEvaluationPolicy '%s' not recognised", policy);
     }
+
+    private ApplicationFeatureIdTransformer applicationFeatureIdTransformerCached;
+    ApplicationFeatureIdTransformer applicationFeatureIdTransformer() {
+        if (applicationFeatureIdTransformerCached == null) {
+            applicationFeatureIdTransformerCached = applicationFeatureIdTransformers == null || applicationFeatureIdTransformers.isEmpty() ? new ApplicationFeatureIdTransformer.Identity() : applicationFeatureIdTransformers.get(0);
+        }
+        return applicationFeatureIdTransformerCached;
+    };
+
+    @Inject List<ApplicationFeatureIdTransformer> applicationFeatureIdTransformers;
 
 }
