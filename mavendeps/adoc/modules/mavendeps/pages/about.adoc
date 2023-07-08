@@ -19,26 +19,21 @@ To use, add the following :
 </dependencies>
 ----
 
-For convenience, it includes all of the current components available:
+For convenience, it includes:
 
 * Spring Boot (link:https://docs.spring.io/spring-boot/docs/current/reference/html/getting-started.html#getting-started-first-application-dependencies[spring-boot-starter-web])
 
 * Apache Causeway Core - the xref:refguide:ROOT:about.adoc[Applib] and underlying implementation (the _Runtime Services_ module)
 
-* The xref:security:bypass:about.adoc[Bypass] security implementation.
-+
-Other security implementations (xref:security:shiro:about.adoc[Shiro],  xref:security:spring:about.adoc[Spring] and and  xref:security:keycloak:about.adoc[Keycloak]) are omitted, as each of these have additional third-party dependencies.
+However, it does _not_ include a security implementation, a viewer implementation or a persistence implementation, which you should add as required:
 
-* The viewer implementations (xref:vw:ROOT:about.adoc[Wicket], xref:vro:ROOT:about.adoc[Restful Objects])
+* security, add _one_ of xref:security:shiro:about.adoc[Shiro], xref:security:spring:about.adoc[Spring], xref:security:keycloak:about.adoc[Keycloak] or xref:security:bypass:about.adoc[Bypass] if prototyping
 
-If you don't need any of these, then use a Maven `<exclusion>`.
+* for persistence, add _one_ of xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] or xref:pjdo:ROOT:about.adoc[JDO/DataNucleus].
 
-In addition, you will probably need to specify a persistence implementation (xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] or xref:pjdo:ROOT:about.adoc[JDO/DataNucleus]) as well as a security implementation.
+* viewer, you will almost certainly want to add xref:vw:ROOT:about.adoc[Wicket] and you might also add xref:vro:ROOT:about.adoc[Restful Objects].
 
 Also, remember that adding the class onto the classpath does _not_ make that functionality available (Apache Causeway does not currently leverage Spring Boot's link:https://docs.spring.io/spring-boot/docs/current/reference/html/using-spring-boot.html#using-boot-auto-configuration[auto configuration] capabilities).
 You must therefore also add in the appropriate `CausewayModuleXxx` to your application's top-level link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration] (aka "app manifest").
 For example, see the xref:docs:starters:simpleapp.adoc#appmanifest[AppManifest for the SimpleApp] starter app.
-
-
-
 
