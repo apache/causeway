@@ -18,39 +18,42 @@
  */
 package org.apache.causeway.extensions.secman.integration.permissions;
 
+import java.util.Collection;
+
+import lombok.RequiredArgsConstructor;
+
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
-
+import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionValue;
 
-import org.springframework.stereotype.Service;
+import javax.inject.Inject;
 
-import javax.annotation.Priority;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
+public class ApplicationFeatureIdTransformerV1Compatibility implements ApplicationFeatureIdTransformer {
 
-/**
- * Provides an SPI used by {@link PermissionsEvaluationServiceForSecman} that
- * pre-processes {@link ApplicationFeatureId}s before evaluating them.
- *
- * <p>
- *     The primary use case is to enable backward compatibility; rather than evaluating using the
- *     logicalTypeName#memberId, an alternative transformer could use the packageName#memberId (as was done in v1).
- * </p>
- *
- */
-public interface ApplicationFeatureIdTransformer {
+    private final SpecificationLoader specificationLoader;
 
     @Programmatic
-    ApplicationFeatureId transform(ApplicationFeatureId applicationFeatureId);
+    @Override
+    public ApplicationFeatureId transform(ApplicationFeatureId applicationFeatureId) {
+        return applicationFeatureId;
+    }
 
     @Programmatic
-    default Collection<ApplicationPermissionValue> transform(Collection<ApplicationPermissionValue> permissionValues) {
-        return permissionValues.stream()
-                .map(apv -> apv.withFeatureId(transform(apv.getFeatureId())))
-                .collect(Collectors.toList());
+    @Override
+    public Collection<ApplicationPermissionValue> transform(Collection<ApplicationPermissionValue> permissionValues) {
+        return permissionValues;
     }
 
 }
