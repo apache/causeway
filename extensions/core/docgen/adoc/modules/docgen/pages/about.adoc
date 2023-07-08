@@ -4,15 +4,9 @@
 
 The _DocGen_ module automatically generates help documentation from the application metamodel.
 
-It contributes
-
-// TODO
-
 == Setup
 
 === Dependency Management
-
-// TODO
 
 [source,xml,subs="attributes+"]
 .pom.xml
