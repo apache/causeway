@@ -2,6 +2,7 @@ package org.apache.causeway.extensions.secman.integration.permissions;
 
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 
+import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
@@ -37,11 +38,44 @@ class ApplicationFeatureIdTransformerV1Compatibility_Test {
     }
 
     @Test
-    void happy_case() {
+    void member_when_its_owning_type_exists() {
         ApplicationFeatureId input = ApplicationFeatureId.newMember("customer.Customer", "lastName");
-        ApplicationFeatureId transform = transformer.transform(input);
+        ApplicationFeatureId transformed = transformer.transform(input);
 
-        assertThat(transform.getLogicalTypeName()).isEqualTo(Customer.class.getName());
+        assertThat(transformed.getSort()).isEqualTo(ApplicationFeatureSort.MEMBER);
+        assertThat(transformed.getLogicalTypeName()).isEqualTo(Customer.class.getName());
+        assertThat(transformed.getLogicalMemberName()).isEqualTo("lastName");
+    }
+
+    @Test
+    void member_when_its_owning_type_does_not_exist() {
+        ApplicationFeatureId input = ApplicationFeatureId.newMember("order.Order", "placedOn");
+        ApplicationFeatureId transformed = transformer.transform(input);
+
+        assertThat(transformed.getSort()).isEqualTo(ApplicationFeatureSort.MEMBER);
+        assertThat(transformed.getLogicalTypeName()).isEqualTo("order.Order");
+        assertThat(transformed.getLogicalMemberName()).isEqualTo("placedOn");
+    }
+
+    @Test
+    void type_when_exists() {
+        ApplicationFeatureId input = ApplicationFeatureId.newType("customer.Customer");
+        ApplicationFeatureId transformed = transformer.transform(input);
+
+        assertThat(transformed.getSort()).isEqualTo(ApplicationFeatureSort.TYPE);
+        assertThat(transformed.getLogicalTypeName()).isEqualTo(Customer.class.getName());
+        assertThat(transformed.getLogicalMemberName()).isNull();
+    }
+
+
+    @Test
+    void type_when_does_not_exist() {
+        ApplicationFeatureId input = ApplicationFeatureId.newType("order.Order");
+        ApplicationFeatureId transformed = transformer.transform(input);
+
+        assertThat(transformed.getSort()).isEqualTo(ApplicationFeatureSort.TYPE);
+        assertThat(transformed.getLogicalTypeName()).isEqualTo("order.Order");
+        assertThat(transformed.getLogicalMemberName()).isNull();
     }
 
 }

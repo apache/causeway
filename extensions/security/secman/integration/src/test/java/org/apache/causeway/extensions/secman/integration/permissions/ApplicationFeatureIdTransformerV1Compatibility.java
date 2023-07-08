@@ -18,23 +18,18 @@
  */
 package org.apache.causeway.extensions.secman.integration.permissions;
 
-import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import lombok.RequiredArgsConstructor;
 
+import lombok.val;
+
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
-import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
-import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionValue;
 
 import javax.inject.Inject;
 
@@ -44,16 +39,25 @@ public class ApplicationFeatureIdTransformerV1Compatibility implements Applicati
 
     private final SpecificationLoader specificationLoader;
 
-    @Programmatic
-    @Override
-    public ApplicationFeatureId transform(ApplicationFeatureId applicationFeatureId) {
-        return applicationFeatureId;
-    }
+    /**
+     * local cache.
+     */
+    private final Map<ApplicationFeatureId, ApplicationFeatureId> transformedByOriginal = new HashMap<>();
 
     @Programmatic
     @Override
-    public Collection<ApplicationPermissionValue> transform(Collection<ApplicationPermissionValue> permissionValues) {
-        return permissionValues;
+    public ApplicationFeatureId transform(ApplicationFeatureId applicationFeatureId) {
+        return transformedByOriginal.computeIfAbsent(applicationFeatureId, this::doTransform);
+    }
+
+    private ApplicationFeatureId doTransform(ApplicationFeatureId applicationFeatureId) {
+        val logicalTypeName = applicationFeatureId.getLogicalTypeName();
+        val logicalTypeNameBasedOnPhysicalName =
+                specificationLoader.specForLogicalTypeName(logicalTypeName)
+                .map(ObjectSpecification::getCorrespondingClass)
+                .map(Class::getName)
+                .orElse(logicalTypeName);
+        return applicationFeatureId.withLogicalTypeName(logicalTypeNameBasedOnPhysicalName);
     }
 
 }

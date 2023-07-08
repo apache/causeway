@@ -26,6 +26,9 @@ import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -61,6 +64,22 @@ implements PermissionsEvaluationService {
     private static final long serialVersionUID = 1L;
 
     private final @NonNull PermissionsEvaluationPolicy policy; // serializable
+
+    /**
+     * for testing only
+     *
+     * @param policy
+     * @param applicationFeatureIdTransformer
+     */
+    @Builder
+    private PermissionsEvaluationServiceForSecman(
+            PermissionsEvaluationPolicy policy,
+            ApplicationFeatureIdTransformer applicationFeatureIdTransformer
+    ) {
+        this.policy = policy;
+        this.applicationFeatureIdTransformer = applicationFeatureIdTransformer;
+    }
+
 
     @Inject
     public PermissionsEvaluationServiceForSecman(final CausewayConfiguration causewayConfiguration) {
