@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.client.kroviz.ui.dialog
 
+import org.apache.causeway.client.kroviz.core.aggregator.CollectionAggregator
 import org.apache.causeway.client.kroviz.core.event.LogEntry
 import org.apache.causeway.client.kroviz.core.event.ResourceSpecification
 import org.apache.causeway.client.kroviz.to.ValueType
@@ -76,7 +77,7 @@ class EventLogDetail(logEntryFromTabulator: LogEntry) : Controller() {
 
         val title = StringUtils.shortTitle(logEntry.title)
         dialog = RoDialog(
-            caption = "Details :" + title,
+            caption = "Details :$title",
             items = formItems,
             controller = this,
             defaultAction = "Response Diagram",
@@ -119,7 +120,7 @@ class EventLogDetail(logEntryFromTabulator: LogEntry) : Controller() {
 
     private fun displayModelDiagram() {
         logEntry.aggregators.forEach {
-            val displayModel = it.displayModel
+            val displayModel = (it as CollectionAggregator).displayModel
             val json = Flatted.stringify(displayModel)
             console.log("[ELD.displayModelDiagram]")
             console.log(json)

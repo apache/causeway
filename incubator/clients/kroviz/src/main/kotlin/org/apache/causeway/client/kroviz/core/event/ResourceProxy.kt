@@ -55,13 +55,6 @@ class ResourceProxy {
         }
     }
 
-    fun loadObjectByUrl(url: String) {
-        val rs = ResourceSpecification(url)
-        val le = SessionManager.getEventStore().findBy(rs)
-        val tObject = le!!.getTransferObject() as TObject
-        load(tObject)
-    }
-
     fun fetch(
         link: Link,
         aggregator: BaseAggregator? = null,

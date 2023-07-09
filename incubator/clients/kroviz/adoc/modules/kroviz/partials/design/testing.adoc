@@ -1,0 +1,23 @@
+.Testing Overview
+
+
+[plantuml,file="testing-overview.png"]
+----
+
+@startmindmap
+* Testing
+** Automated
+*** Unit Testing
+**** JUnit
+**** TestNG
+*** Integration Testing
+**** API Testing
+**** Load Testing
+*** End-to-End Testing
+**** Selenium
+**** Cucumber
+** Manual
+*** Exploratory
+*** Acceptance
+*** Usability
+@endmindmap

@@ -25,9 +25,7 @@ import org.apache.causeway.client.kroviz.ui.core.ViewManager
 
 class DomainTypesAggregator(val url: String) : BaseAggregator() {
 
-    init {
-        displayModel = DiagramDM(url)
-    }
+    private var displayModel = DiagramDM(url)
 
     override fun update(logEntry: LogEntry, subType: String?) {
         when (val obj = logEntry.getTransferObject()) {
@@ -39,7 +37,7 @@ class DomainTypesAggregator(val url: String) : BaseAggregator() {
         }
 
         if (displayModel.readyToRender()) {
-            ViewManager.getRoStatusBar().updateDiagram(displayModel as DiagramDM)
+            ViewManager.getRoStatusBar().updateDiagram(displayModel)
             displayModel.isRendered = true
         }
     }
@@ -54,13 +52,13 @@ class DomainTypesAggregator(val url: String) : BaseAggregator() {
 
     private fun handleDomainType(obj: DomainType) {
         if (obj.isPrimitiveOrService()) {
-            (displayModel as DiagramDM).decNumberOfClasses()
+            displayModel.decNumberOfClasses()
         } else {
             displayModel.addData(obj)
             val propertyList = obj.members.filter {
                 it.value.isProperty()
             }
-            (displayModel as DiagramDM).incNumberOfProperties(propertyList.size)
+            displayModel.incNumberOfProperties(propertyList.size)
             propertyList.forEach {
                 invoke(it.value, this, referrer = "")
             }
@@ -99,7 +97,7 @@ class DomainTypesAggregator(val url: String) : BaseAggregator() {
                 }
             }
         }
-        (displayModel as DiagramDM).numberOfClasses = domainTypeLinkList.size
+        displayModel.numberOfClasses = domainTypeLinkList.size
         domainTypeLinkList.forEach {
             invoke(it, this, referrer = "")
         }

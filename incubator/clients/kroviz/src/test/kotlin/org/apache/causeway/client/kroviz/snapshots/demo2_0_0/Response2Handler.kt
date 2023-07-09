@@ -36,7 +36,7 @@ object Response2Handler {
             PRIMITIVES to TObjectHandler(),
             PROPERTY to PropertyHandler(),
             PROPERTY_DESCRIPTION to PropertyHandler(),
-            RESTFUL to RestfulHandler(),
+//            RESTFUL to RestfulHandler(), // commented out due to issues with icon
             RESTFUL_DOMAIN_TYPES to DomainTypesHandler(),
             TAB_LAYOUT_XML to LayoutXmlHandler(),
             TEMPORALS to TObjectHandler(),

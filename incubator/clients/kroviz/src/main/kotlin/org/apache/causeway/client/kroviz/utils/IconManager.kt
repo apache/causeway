@@ -22,7 +22,7 @@ import org.apache.causeway.client.kroviz.to.TObject
 
 object IconManager {
     private const val PREFIX = "fas fa-"   //TODO far fa- ???
-    const val DEFAULT_ICON = PREFIX + "play"
+    private const val DEFAULT_ICON = PREFIX + "play"
 
     const val DANGER = "text-danger"
     const val DISABLED = "text-disabled"
@@ -124,7 +124,6 @@ object IconManager {
         "Xml" to "code"
     )
 
-    @OptIn(ExperimentalStdlibApi::class)
     fun find(query: String): String {
         if (query.startsWith("fa")) return query
         val actionTitle = StringUtils.deCamel(query)

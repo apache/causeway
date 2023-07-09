@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.client.kroviz.core.aggregator
 
+import kotlinx.serialization.Serializable
 import org.apache.causeway.client.kroviz.core.event.LogEntry
 import org.apache.causeway.client.kroviz.to.*
 import org.apache.causeway.client.kroviz.ui.core.Constants
@@ -25,6 +26,7 @@ import org.apache.causeway.client.kroviz.ui.dialog.ActionPrompt
 import org.apache.causeway.client.kroviz.utils.Point
 import org.apache.causeway.client.kroviz.utils.StringUtils
 
+@Serializable
 class ActionDispatcher(private val at: Point = Point(100, 100)) : BaseAggregator() {
 
     override fun update(logEntry: LogEntry, subType: String?) {

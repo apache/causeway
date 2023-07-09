@@ -22,17 +22,13 @@ import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 plugins {
     val kotlinVersion: String by System.getProperties()
     kotlin("plugin.serialization") version kotlinVersion
-    kotlin("js") version kotlinVersion
+    kotlin("js") version kotlinVersion // https://youtrack.jetbrains.com/issue/KT-50381
 
     val kvisionVersion: String by System.getProperties()
     id("io.kvision") version kvisionVersion
 }
 
 var version = "2.0.0-SNAPSHOT"
-
-kotlin.sourceSets.all {
-    languageSettings.optIn("org.mylibrary.OptInAnnotation")
-}
 
 repositories {
     maven ("https://repository.int.kn/nexus/content/repositories/thirdparty/")

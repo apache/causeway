@@ -26,11 +26,9 @@ import io.kvision.tabulator.TableType
 import io.kvision.tabulator.Tabulator
 import io.kvision.tabulator.TabulatorOptions
 import io.kvision.tabulator.js.Tabulator.CellComponent
-import kotlinx.serialization.InternalSerializationApi
-import kotlinx.serialization.serializer
 import org.apache.causeway.client.kroviz.core.event.ResourceProxy
 import org.apache.causeway.client.kroviz.core.model.CollectionDM
-import org.apache.causeway.client.kroviz.core.model.Exhibit
+import org.apache.causeway.client.kroviz.core.model.Exposer
 import org.apache.causeway.client.kroviz.utils.StringUtils
 
 /**
@@ -49,29 +47,29 @@ class RoTable(displayCollection: CollectionDM) : SimplePanel() {
         val options = TabulatorOptions(
             movableColumns = true,
             height = Constants.calcHeight,
-            layout = Layout.FITDATA,
+            layout = Layout.FITDATASTRETCH,
             columns = columns,
             persistenceMode = false,
         )
         val tabulator = createTabulator(model, options)
-        tabulator.setEventListener<Tabulator<Exhibit>> {
+        tabulator.setEventListener<Tabulator<dynamic>> {
             cellClickTabulator = {
                 // can't check cast to external interface
                 val cc = it.detail as CellComponent
                 val column = cc.getColumn().getField()
                 if (column == "icon") {
-                    val exhibit = cc.getData().asDynamic()
-                    val url = exhibit["url"]
-                    ResourceProxy().loadObjectByUrl(url)
+                    val exposer = cc.getData() as Exposer
+                    val tObject = exposer.delegate
+                    ResourceProxy().load(tObject)
                 }
             }
         }
+        tabulator.addCssClass("horizontal-tb")
         add(tabulator)
         console.log("[RT_init]")
         console.log(tabulator)
     }
 
-    @OptIn(InternalSerializationApi::class)
     private fun createTabulator(
         data: MutableList<dynamic>,
         options: TabulatorOptions<dynamic>
@@ -80,8 +78,7 @@ class RoTable(displayCollection: CollectionDM) : SimplePanel() {
         val className: String? = null
         val init: (Tabulator<dynamic>.() -> Unit)? = null
         val tableTypes = setOf(TableType.STRIPED, TableType.HOVER)
-        val serializer = Exhibit::class.serializer()
-        val tabulator = Tabulator(data, dataUpdateOnEdit, options, tableTypes, serializer = serializer)
+        val tabulator = Tabulator(null, dataUpdateOnEdit, options.copy(data = data.toTypedArray()), tableTypes)
         if (className != null)
             tabulator.addCssClass(className)
         init?.invoke(tabulator)

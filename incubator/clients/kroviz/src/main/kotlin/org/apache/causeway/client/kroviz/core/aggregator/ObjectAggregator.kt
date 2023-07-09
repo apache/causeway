@@ -37,9 +37,7 @@ import org.apache.causeway.client.kroviz.utils.StringUtils
 class ObjectAggregator(private val actionTitle: String) : AggregatorWithLayout() {
     private var isContainedInParentCollection = false
 
-    init {
-        displayModel = ObjectDM(actionTitle)
-    }
+    private var displayModel = ObjectDM(actionTitle)
 
     override fun update(logEntry: LogEntry, subType: String?) {
         super.update(logEntry, subType)
@@ -82,7 +80,7 @@ class ObjectAggregator(private val actionTitle: String) : AggregatorWithLayout()
     }
 
     fun getDisplayModel(): ObjectDM {
-        return displayModel as ObjectDM
+        return displayModel
     }
 
     private fun handleResultObject(resultObject: ResultObject) {
@@ -93,7 +91,7 @@ class ObjectAggregator(private val actionTitle: String) : AggregatorWithLayout()
         throw NotImplementedError("$resultValue to be handled")
     }
 
-    override fun getObject(): TObject? {
+    override fun getObject(): TObject {
         return displayModel.getObject()
     }
 

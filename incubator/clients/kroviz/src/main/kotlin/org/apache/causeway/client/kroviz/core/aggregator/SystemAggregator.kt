@@ -30,9 +30,7 @@ import org.apache.causeway.client.kroviz.utils.UrlUtils
 
 class SystemAggregator : BaseAggregator() {
 
-    init {
-        displayModel = SystemDM("not filled (yet)")
-    }
+    var displayModel = SystemDM("not filled (yet)")
 
     override fun update(logEntry: LogEntry, subType: String?) {
         when (val obj = logEntry.getTransferObject()) {
@@ -45,12 +43,12 @@ class SystemAggregator : BaseAggregator() {
                     val url = logEntry.url
                     when (UrlUtils.isApplicationIcon(url)) {
                         url.contains("48") -> {
-                            (displayModel as SystemDM).addSmallIcon(icon)
+                            displayModel.addSmallIcon(icon)
                             val iconUrl = icon.image.src
                             SessionManager.setApplicationIcon(iconUrl)
                         }
 
-                        url.contains("256") -> (displayModel as SystemDM).addLargeIcon(icon)
+                        url.contains("256") -> displayModel.addLargeIcon(icon)
                         else -> log(logEntry)
                     }
                 } else {

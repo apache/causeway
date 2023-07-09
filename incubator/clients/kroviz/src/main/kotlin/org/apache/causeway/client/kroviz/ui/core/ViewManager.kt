@@ -27,13 +27,9 @@ import io.kvision.utils.ESC_KEY
 import kotlinx.browser.document
 import kotlinx.browser.window
 import org.apache.causeway.client.kroviz.App
-import org.apache.causeway.client.kroviz.core.aggregator.BaseAggregator
-import org.apache.causeway.client.kroviz.core.aggregator.ObjectAggregator
-import org.apache.causeway.client.kroviz.core.aggregator.SystemAggregator
-import org.apache.causeway.client.kroviz.core.aggregator.UndefinedDispatcher
+import org.apache.causeway.client.kroviz.core.aggregator.*
 import org.apache.causeway.client.kroviz.core.event.EventStore
 import org.apache.causeway.client.kroviz.core.event.StatusPo
-import org.apache.causeway.client.kroviz.core.model.CollectionDM
 import org.apache.causeway.client.kroviz.core.model.ObjectDM
 import org.apache.causeway.client.kroviz.to.TObject
 import org.apache.causeway.client.kroviz.to.ValueType
@@ -164,10 +160,10 @@ object ViewManager {
         document.body?.style?.cursor = "default"
     }
 
-    fun openCollectionView(aggregator: BaseAggregator) {
+    fun openCollectionView(aggregator: CollectionAggregator) {
         val displayable = aggregator.displayModel
         val title: String = StringUtils.extractTitle(displayable.title)
-        val panel = RoTable(displayable as CollectionDM)
+        val panel = RoTable(displayable)
         add(title, panel, aggregator)
         displayable.isRendered = true
         setNormalCursor()

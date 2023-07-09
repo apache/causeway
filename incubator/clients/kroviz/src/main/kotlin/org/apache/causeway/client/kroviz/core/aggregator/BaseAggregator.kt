@@ -18,9 +18,9 @@
  */
 package org.apache.causeway.client.kroviz.core.aggregator
 
+import kotlinx.serialization.Serializable
 import org.apache.causeway.client.kroviz.core.event.LogEntry
 import org.apache.causeway.client.kroviz.core.event.ResourceProxy
-import org.apache.causeway.client.kroviz.core.model.BaseDisplayModel
 import org.apache.causeway.client.kroviz.to.Link
 import org.apache.causeway.client.kroviz.to.TObject
 import org.apache.causeway.client.kroviz.ui.core.Constants
@@ -39,9 +39,8 @@ import org.apache.causeway.client.kroviz.utils.UrlUtils
  *
  * Could be named collector or assembler as well.
  */
-abstract class BaseAggregator {
-
-    open lateinit var displayModel: BaseDisplayModel
+@Serializable
+sealed class BaseAggregator {
 
     open fun update(logEntry: LogEntry, subType: String?) {
         /* default is do nothing - can be overridden in subclasses */

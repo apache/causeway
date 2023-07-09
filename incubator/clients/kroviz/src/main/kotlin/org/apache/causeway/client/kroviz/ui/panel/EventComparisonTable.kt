@@ -99,11 +99,11 @@ class EventComparisonTable(val model: List<LogEntryComparison>) : VPanel() {
             persistenceMode = false
         )
 
-        tabulator = tabulator(model, options = options) {
+        tabulator = tabulator(null, options = options.copy(data = model.toTypedArray())) {
             setEventListener<Tabulator<LogEntryComparison>> {
                 cellClickTabulator = {
                     // can't check cast to external interface
-                    val cc = it.detail as io.kvision.tabulator.js.Tabulator.CellComponent
+                    val cc = it.detail.unsafeCast<io.kvision.tabulator.js.Tabulator.CellComponent>()
                     val column = cc.getColumn().getField()
                     if (column == "changeType") {
                         val obj = cc.getData() as LogEntryComparison

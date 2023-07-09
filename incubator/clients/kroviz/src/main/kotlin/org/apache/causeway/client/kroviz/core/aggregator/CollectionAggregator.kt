@@ -35,6 +35,8 @@ import org.apache.causeway.client.kroviz.ui.core.ViewManager
  */
 class CollectionAggregator(actionTitle: String, private val parent: ObjectAggregator? = null) : AggregatorWithLayout() {
 
+    var displayModel: CollectionDM
+
     init {
         displayModel = CollectionDM(actionTitle)
     }
@@ -82,7 +84,7 @@ class CollectionAggregator(actionTitle: String, private val parent: ObjectAggreg
     }
 
     private fun getDisplayModel(): CollectionDM {
-        return displayModel as CollectionDM
+        return displayModel
     }
 
     private fun handleList(resultList: ResultList) {

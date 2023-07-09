@@ -27,8 +27,8 @@ import io.kvision.tabulator.Formatter
 import io.kvision.tabulator.js.Tabulator
 import io.kvision.utils.obj
 import org.apache.causeway.client.kroviz.core.model.CollectionDM
-import org.apache.causeway.client.kroviz.core.model.Exhibit
 import org.apache.causeway.client.kroviz.core.model.PropertyDetails
+import org.apache.causeway.client.kroviz.to.TObject
 import org.apache.causeway.client.kroviz.to.ValueType
 import org.apache.causeway.client.kroviz.to.Vega5
 import org.apache.causeway.client.kroviz.ui.menu.DynamicMenuBuilder
@@ -80,14 +80,14 @@ class ColumnFactory {
         val row = cell.getRow()
         val dynamic = row.getData().asDynamic()
         val tObject = dynamic.delegate
-        return DynamicMenuBuilder().buildObjectMenu(tObject)
+        return DynamicMenuBuilder().buildObjectMenu(tObject as TObject)
     }
 
     private fun exposeIcons(displayCollection: CollectionDM) {
         val icon = displayCollection.icon
-        displayCollection.data.forEach { exhibit ->
+        displayCollection.data.forEach {
             if (icon != null) {
-                exhibit["icon"] = icon
+                it["icon"] = icon
             }
         }
     }
@@ -124,7 +124,7 @@ class ColumnFactory {
     private fun buildColumnDefinition(pd: PropertyDetails): ColumnDefinition<dynamic> {
         return when {
             pd.id == "object" -> buildLink()
-            pd.type.equals(ValueType.CANVAS.type) -> buildVega(pd)
+            pd.type == ValueType.CANVAS.type -> buildVega(pd)
             else -> buildDefault(pd)
         }
     }
@@ -144,7 +144,7 @@ class ColumnFactory {
             field = it.id,
             width = (it.typicalLength * 8).toString(),
             headerFilter = Editor.INPUT,
-            formatterComponentFunction = { cellComponent: dynamic, _, data: dynamic ->
+            formatterComponentFunction = { cellComponent: dynamic, _, _: dynamic ->
                 console.log("[CF_buildVega]")
                 console.log(cellComponent)
                 this.buildDiagramPanel(cellComponent.unsafeCast<Tabulator.CellComponent>())
