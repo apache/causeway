@@ -171,6 +171,7 @@ implements Serializable {
     @NonNull
     String name;
 
+    @Programmatic
     public String nameFormatted() {
         return isImpersonating()
                 ? String.format("%s 👻", name)
