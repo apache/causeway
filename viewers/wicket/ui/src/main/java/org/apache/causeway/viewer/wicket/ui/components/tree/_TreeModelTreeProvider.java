@@ -46,6 +46,7 @@ class _TreeModelTreeProvider implements ITreeProvider<_TreeNodeMemento> {
 
     @Override
     public void detach() {
+        treeAdapter.detach();
     }
 
     @Override

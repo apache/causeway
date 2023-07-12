@@ -128,7 +128,12 @@ implements
 
     @Override
     protected ManagedObject load() {
-        return super.getBookmarkedOwner();
+        val entityOrViewmodel = super.getBookmarkedOwner();
+        if(hollow) {
+            ManagedObjects.refreshViewmodel(entityOrViewmodel, null);
+            this.hollow = false;
+        }
+        return entityOrViewmodel;
     }
 
     // -- BOOKMARKABLE MODEL
@@ -201,6 +206,7 @@ implements
 
     @Override
     public ManagedObject getManagedObject() {
+        refreshIfHollow();
         return getObject();
     }
 
@@ -277,11 +283,29 @@ implements
     // -- DETACH
 
     @Override
+    public void detach() {
+        hollow = true;
+        super.detach();
+    }
+
+    @Override
     protected void onDetach() {
         propertyScalarModels().values()
             .forEach(ScalarPropertyModel::detach);
         super.onDetach();
         propertyScalarModels = null;
+    }
+
+    @Getter @Setter
+    boolean hollow;
+
+    @Override
+    public void refreshIfHollow() {
+        if(hollow) {
+            val entityOrViewmodel = super.getBookmarkedOwner();
+            ManagedObjects.refreshViewmodel(entityOrViewmodel, null);
+            this.hollow = false;
+        }
     }
 
     // -- TAB AND COLUMN (metadata if any)
@@ -309,7 +333,5 @@ implements
     private ImageResourceCache imageResourceCache() {
         return imageResourceCache = getMetaModelContext().loadServiceIfAbsent(ImageResourceCache.class, imageResourceCache);
     }
-
-
 
 }

@@ -27,6 +27,9 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Wraps a {@link ScalarModel} to act as an {@link ObjectAdapterModel}.
  */
@@ -93,6 +96,14 @@ implements ObjectAdapterModel {
     @Override
     public MetaModelContext getMetaModelContext() {
         return scalarModel().getMetaModelContext();
+    }
+
+    @Getter @Setter
+    boolean hollow;
+
+    @Override
+    public void refreshIfHollow() {
+        throw _Exceptions.unexpectedCodeReach();
     }
 
 }

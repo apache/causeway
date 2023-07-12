@@ -72,7 +72,7 @@ extends ModelAbstract<ManagedObject> {
 
     @Override
     public final void setObject(final ManagedObject object) {
-        throw _Exceptions.unsupportedOperation("MangedObjectWkt is immuatable");
+        throw _Exceptions.unsupportedOperation("ManagedObjectWkt is immuatable");
     }
 
     @Override
@@ -81,5 +81,10 @@ extends ModelAbstract<ManagedObject> {
         return adapter;
     }
 
+    @Override
+    protected void onDetach() {
+        System.err.printf("onDetach %s%n", bookmark); //TODO[CAUSEWAY-3522]
+        super.onDetach();
+    }
 
 }

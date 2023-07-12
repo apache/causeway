@@ -53,4 +53,7 @@ extends
         return PageParameterUtils.createPageParametersForObject(getObject());
     }
 
+    boolean isHollow(); //TODO[CAUSEWAY-3522] debugging
+    void refreshIfHollow(); //TODO[CAUSEWAY-3522] debugging
+
 }

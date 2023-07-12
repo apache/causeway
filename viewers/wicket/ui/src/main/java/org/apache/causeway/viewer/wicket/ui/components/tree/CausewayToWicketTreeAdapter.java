@@ -51,7 +51,7 @@ class CausewayToWicketTreeAdapter {
         return valueModel==null
                 || valueModel.getObject()==null
             ? emptyTreeComponent(id)
-            : EntityTree.of(id, valueModel.getObject(), valueModel.getMetaModelContext());
+            : DomainObjectTree.of(id, valueModel.getObject(), valueModel.getMetaModelContext());
     }
 
     /**
@@ -61,7 +61,7 @@ class CausewayToWicketTreeAdapter {
         return scalarModel==null
                 || scalarModel.getObject()==null
             ? emptyTreeComponent(id)
-            : EntityTree.of(id, scalarModel.getObject(), scalarModel.getMetaModelContext());
+            : DomainObjectTree.of(id, scalarModel.getObject(), scalarModel.getMetaModelContext());
     }
 
     // -- FALLBACK
@@ -75,14 +75,14 @@ class CausewayToWicketTreeAdapter {
     /**
      * Wicket's Tree Component implemented for Causeway
      */
-    private static class EntityTree extends NestedTree<_TreeNodeMemento>
+    private static class DomainObjectTree extends NestedTree<_TreeNodeMemento>
     implements HasMetaModelContext {
 
         private static final long serialVersionUID = 1L;
 
         private transient MetaModelContext metaModelContext;
 
-        public static EntityTree of(
+        public static DomainObjectTree of(
                 final String id, final ManagedObject treeNodeObject, final MetaModelContext mmc) {
 
             val treeNode = (TreeNode<?>) treeNodeObject.getPojo();
@@ -91,18 +91,18 @@ class CausewayToWicketTreeAdapter {
             val wrappingTreeAdapter = new _TreeModelTreeAdapter(mmc, treeAdapterClass);
 
             val treeModelTreeProvider = new _TreeModelTreeProvider(
-                    wrappingTreeAdapter.wrap(treeNode.getValue(), treeNode.getPositionAsPath()),
+                    wrappingTreeAdapter.mementify(treeNode.getValue(), treeNode.getPositionAsPath()),
                     wrappingTreeAdapter);
 
             val treeExpansionModel = _TreeExpansionModel.of(
                     treeNode.getTreeState().getExpandedNodePaths());
 
-            return new EntityTree(id,
+            return new DomainObjectTree(id,
                     treeModelTreeProvider,
                     treeExpansionModel);
         }
 
-        private EntityTree(
+        private DomainObjectTree(
                 final String id,
                 final ITreeProvider<_TreeNodeMemento> provider,
                 final _TreeExpansionModel collapseExpandState) {
@@ -136,7 +136,7 @@ class CausewayToWicketTreeAdapter {
 
                 @Override
                 protected Component createContent(final String id, final IModel<_TreeNodeMemento> model) {
-                    return EntityTree.this.newContentComponent(id, model);
+                    return DomainObjectTree.this.newContentComponent(id, model);
                 }
 
                 @Override
@@ -155,7 +155,7 @@ class CausewayToWicketTreeAdapter {
 
                         @Override
                         public boolean isEnabled() {
-                            return EntityTree.this.getProvider().hasChildren(node.getModelObject());
+                            return DomainObjectTree.this.getProvider().hasChildren(node.getModelObject());
                         }
 
                         @Override
