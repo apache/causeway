@@ -24,11 +24,11 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.val;
 
 /**
  * Wraps a {@link ScalarModel} to act as an {@link ObjectAdapterModel}.
@@ -98,12 +98,43 @@ implements ObjectAdapterModel {
         return scalarModel().getMetaModelContext();
     }
 
-    @Getter @Setter
-    boolean hollow;
+    @Override
+    public boolean isHollow() {
+        val innermost = getInnermostObjectAdapterModel();
+        if (innermost instanceof ObjectAdapterModel) {
+            return ((ObjectAdapterModel)innermost).isHollow();
+        }
+        return false;
+    }
+
+    /**
+     * @return The innermost model or the object if the target is not a model
+     */
+    private final Object getInnermostObjectAdapterModel()
+    {
+        Object object = getTarget();
+        while (object instanceof ChainingModel)
+        {
+            Object tmp = ((ChainingModel<?>)object).getTarget();
+            if (tmp == object)
+            {
+                break;
+            }
+            object = tmp;
+        }
+        return object;
+    }
 
     @Override
     public void refreshIfHollow() {
-        throw _Exceptions.unexpectedCodeReach();
+        if(!isHollow()) return;
+
+        val innermost = getInnermostObjectAdapterModel();
+        if (innermost instanceof ObjectAdapterModel) {
+            if(!((ObjectAdapterModel)innermost).isHollow()) return;
+            ManagedObjects.refreshViewmodel(((ObjectAdapterModel)innermost).getObject(), null);
+        }
+
     }
 
 }
