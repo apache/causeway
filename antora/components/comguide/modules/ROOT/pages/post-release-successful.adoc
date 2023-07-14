@@ -397,7 +397,7 @@ NOTE: that this isn't performed in the docs branch (xref:#create-doc-branch[prev
 This will reference the new branch, and any previous branches.
 Every content source needs to be updated:
 +
-** `branches: HEAD` -> `branches: [2.0.0-M5, 2.0.0-M6, ... , {page-causewayrel}]`
+** `branches: [2.0.0-RC2]` -> `branches: [2.0.0-M5, 2.0.0-M6, ... , {page-causewayrel}]`
 +
 [WARNING]
 ====

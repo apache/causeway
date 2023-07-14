@@ -26,48 +26,48 @@ content:
 # antora
     - url: .
       start_path: antora/components/docs # docs
-      branches: HEAD
+      branches: [2.0.0-RC2]
 
 # examples
 
 # mavendeps
     - url: .
       start_path: mavendeps/adoc # docs
-      branches: HEAD
+      branches: [2.0.0-RC2]
 
 # starters
     - url: .
       start_path: starters/adoc # docs
-      branches: HEAD
+      branches: [2.0.0-RC2]
 
 # testing
     - url: .
       start_path: testing/adoc # testing
-      branches: HEAD
+      branches: [2.0.0-RC2]
     - url: .
       start_path: testing/archtestsupport/adoc # testing
-      branches: HEAD
+      branches: [2.0.0-RC2]
     - url: .
       start_path: testing/fakedata/adoc # testing
-      branches: HEAD
+      branches: [2.0.0-RC2]
     - url: .
       start_path: testing/fixtures/adoc # testing
-      branches: HEAD
+      branches: [2.0.0-RC2]
     - url: .
       start_path: testing/h2console/adoc # testing
-      branches: HEAD
+      branches: [2.0.0-RC2]
     - url: .
       start_path: testing/hsqldbmgr/adoc # testing
-      branches: HEAD
+      branches: [2.0.0-RC2]
     - url: .
       start_path: testing/integtestsupport/adoc # testing
-      branches: HEAD
+      branches: [2.0.0-RC2]
     - url: .
       start_path: testing/specsupport/adoc # testing
-      branches: HEAD
+      branches: [2.0.0-RC2]
     - url: .
       start_path: testing/unittestsupport/adoc # testing
-      branches: HEAD
+      branches: [2.0.0-RC2]
 
 
 

@@ -26,35 +26,35 @@ content:
 # antora
     - url: .
       start_path: antora/components/docs # docs
-      branches: HEAD
+      branches: [2.0.0-RC2]
     - url: .
       start_path: antora/components/userguide # userguide
-      branches: HEAD
+      branches: [2.0.0-RC2]
 
 # examples
 
 # extensions
     - url: .
       start_path: extensions/core/flyway/adoc # userguide
-      branches: HEAD
+      branches: [2.0.0-RC2]
 
 # mavendeps
     - url: .
       start_path: mavendeps/adoc # docs
-      branches: HEAD
+      branches: [2.0.0-RC2]
 
 # starters
     - url: .
       start_path: starters/adoc # docs
-      branches: HEAD
+      branches: [2.0.0-RC2]
 
 # tooling
     - url: .
       start_path: tooling/adoc # toc
-      branches: HEAD
+      branches: [2.0.0-RC2]
     - url: .
       start_path: tooling/cli/adoc # cli
-      branches: HEAD
+      branches: [2.0.0-RC2]
 
 
 

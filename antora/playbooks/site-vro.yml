@@ -26,29 +26,29 @@ content:
 # antora
     - url: .
       start_path: antora/components/docs # docs
-      branches: HEAD
+      branches: [2.0.0-RC2]
 
 # examples
 
 # extensions
     - url: .
       start_path: extensions/vro/cors/adoc # vro
-      branches: HEAD
+      branches: [2.0.0-RC2]
 
 # mavendeps
     - url: .
       start_path: mavendeps/adoc # docs
-      branches: HEAD
+      branches: [2.0.0-RC2]
 
 # starters
     - url: .
       start_path: starters/adoc # docs
-      branches: HEAD
+      branches: [2.0.0-RC2]
 
 # viewers
     - url: .
       start_path: viewers/restfulobjects/src/main/adoc # vro
-      branches: HEAD
+      branches: [2.0.0-RC2]
 
 
 

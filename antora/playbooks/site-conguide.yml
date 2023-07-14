@@ -26,22 +26,22 @@ content:
 # antora
     - url: .
       start_path: antora/components/docs # docs
-      branches: HEAD
+      branches: [2.0.0-RC2]
     - url: .
       start_path: antora/components/conguide # conguide
-      branches: HEAD
+      branches: [2.0.0-RC2]
 
 # examples
 
 # mavendeps
     - url: .
       start_path: mavendeps/adoc # docs
-      branches: HEAD
+      branches: [2.0.0-RC2]
 
 # starters
     - url: .
       start_path: starters/adoc # docs
-      branches: HEAD
+      branches: [2.0.0-RC2]
 
 
 

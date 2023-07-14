@@ -26,36 +26,36 @@ content:
 # antora
     - url: .
       start_path: antora/components/docs # docs
-      branches: HEAD
+      branches: [2.0.0-RC2]
 
 # examples
 
 # mavendeps
     - url: .
       start_path: mavendeps/adoc # docs
-      branches: HEAD
+      branches: [2.0.0-RC2]
 
 # starters
     - url: .
       start_path: starters/adoc # docs
-      branches: HEAD
+      branches: [2.0.0-RC2]
 
 # valuetypes
     - url: .
       start_path: valuetypes/adoc # valuetypes
-      branches: HEAD
+      branches: [2.0.0-RC2]
     - url: .
       start_path: valuetypes/asciidoc/adoc # valuetypes
-      branches: HEAD
+      branches: [2.0.0-RC2]
     - url: .
       start_path: valuetypes/jodatime/adoc # valuetypes
-      branches: HEAD
+      branches: [2.0.0-RC2]
     - url: .
       start_path: valuetypes/markdown/adoc # valuetypes
-      branches: HEAD
+      branches: [2.0.0-RC2]
     - url: .
       start_path: valuetypes/vega/adoc # valuetypes
-      branches: HEAD
+      branches: [2.0.0-RC2]
 
 
 ui:
