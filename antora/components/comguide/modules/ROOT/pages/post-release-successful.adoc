@@ -355,7 +355,7 @@ git checkout {page-causewayrel}
 [source,bash,subs="attributes+"]
 ----
 pushd bom
-mvn clean install -T1C -DskipTests -Dreleased
+mvn clean install -T1C -DskipTests -Dgithub
 popd
 mvn -D module-tooling -D skip.essential install -DskipTests
 ----
