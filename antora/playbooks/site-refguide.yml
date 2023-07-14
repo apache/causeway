@@ -81,8 +81,8 @@ asciidoc:
     kroki-default-options: interactive # only available for SVG
     kroki-fetch-diagram: true
     kroki-server-url: https://kroki.io # (default)
-    page-causewayprev: "2.0.0-M9"
-    page-causewayrel: "2.0.0-RC1"
+    page-causewayprev: "2.0.0-RC2"
+    page-causewayrel: "2.0.0-RC3"
 
 output:
   dir: antora/target/site
