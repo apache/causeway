@@ -791,5 +791,31 @@ docker run -p 8080:8080 apache/causeway-app-demo-jdo:latest</pre>
 <!-- Template Main JavaScript File -->
 <script src="_/js/home/main.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script>
+    function focusSearchInput () { document.querySelector('#algolia-search-input').focus() }
+    var search = docsearch({
+        appId: '5ISP5TFAEN',
+        apiKey: '0fc51c28b4ad46e7318e96d4e97fab7c',
+        indexName: 'causeway-apache-org',
+        inputSelector: '#algolia-search-input',
+        autocompleteOptions: { hint: false, keyboardShortcuts: ['s'] },
+        debug: false,
+    }).autocomplete
+    search.on('autocomplete:closed', function () { search.autocomplete.setVal() })
+    focusSearchInput()
+    window.addEventListener('load', focusSearchInput);
+</script>
+
+<!--
+  docsearch options:
+  https://docsearch.algolia.com/docs/behavior/
+-->
+<!--
+  https://www.algolia.com/doc/api-reference/api-parameters/
+  algoliaOptions: { hitsPerPage: 6 },
+-->
+
+
 </body>
 </html>
