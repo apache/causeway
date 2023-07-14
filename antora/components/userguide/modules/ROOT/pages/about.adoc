@@ -61,12 +61,6 @@ Mixins provide a powerful mechanism to decouple the various concerns within your
 +
 Events are broadcast on an intra-process event bus, allowing subscribers in other modules to influence the domain logic being executed, hook into persistence or to refine the UI.
 
-The first part of the user guide ends with a look at the xref:userguide:ROOT:background-context-and-theory.adoc[background, context and theory] that underpin the framework: domain driven design, the naked objects pattern, the hexagonal architecture and aspect orientation to name a few.
-
-The second part of the user guide moves xref:userguide:btb:about.adoc[], exploring a number of more advanced topics.
-
-The user guide finishes with a set of extensions that provide additional capabilities to the core framework.
-
 
 * xref:userguide:ROOT:value-types.adoc[Value types] and xref:userguide:ROOT:meta-annotations.adoc[Meta-annotations]
 +
@@ -76,4 +70,11 @@ But it also allows you to define your own custom value types, either scalar or c
 
 +
 Meta-annotations provide an alternative way to factor out common rules, also extending the vocabulary (ubiquitous language) into your app.
+
+
+The first part of the user guide ends with a look at the xref:userguide:ROOT:background-context-and-theory.adoc[background, context and theory] that underpin the framework: domain driven design, the naked objects pattern, the hexagonal architecture and aspect orientation to name a few.
+
+The second part of the user guide moves xref:userguide:btb:about.adoc[], exploring a number of more advanced topics.
+
+The user guide concludes with a set of extensions that provide additional capabilities to the core framework.
 
