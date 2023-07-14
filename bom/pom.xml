@@ -66,7 +66,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <causeway.skipTests>false</causeway.skipTests>
 		<maven.test.skip>${causeway.skipTests}</maven.test.skip>
 
-        <project.build.outputTimestamp>2023-07-04T21:19:08Z</project.build.outputTimestamp>
+        <project.build.outputTimestamp>2023-07-07T13:23:45Z</project.build.outputTimestamp>
 
         <delombok.output>${project.build.directory}/delombok</delombok.output>
 

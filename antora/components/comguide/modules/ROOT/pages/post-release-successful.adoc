@@ -341,7 +341,7 @@ git revert HEAD
 
 === Update the doc branch
 
-Now we make sure that the docs in the new doc branch are actually up to date:
+Now we make sure that the docs in the new doc branch are actually up-to-date:
 
 * checkout the branch:
 +
@@ -354,9 +354,8 @@ git checkout {page-causewayrel}
 +
 [source,bash,subs="attributes+"]
 ----
-git checkout $CAUSEWAYBRANCH
 pushd bom
-mvn clean install -DskipTests -Dreleased
+mvn clean install -T1C -DskipTests -Dgithub
 popd
 mvn -D module-tooling -D skip.essential install -DskipTests
 ----
