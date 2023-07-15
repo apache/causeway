@@ -527,6 +527,13 @@ Now that the release is complete, tidy up these branches and then set up the `-S
 IMPORTANT: The `jdo` and `jpa` branches should always work against the most recent release, whereas the `jdo-SNAPSHOT` and `jpa-SNAPSHOT` can reference more recently nightly builds if necessary.
 
 
+== Update the reference app
+
+The link:https://github.com/apache/causeway-app-referenceapp[reference app] has a configuration property `causeway.viewer.common.application.version` (in link:https://github.com/apache/causeway-app-referenceapp/blob/master/domain/src/main/resources/application.yml#L91[application.yml]); this should be updated.
+
+
+
+
 == Update the ASF Reporter website
 
 Log the new release in the link:https://reporter.apache.org/addrelease.html?causeway[ASF Reporter website].
