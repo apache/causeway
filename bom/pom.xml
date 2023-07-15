@@ -3392,6 +3392,16 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
             <timezone>+1</timezone>
         </developer>
         <developer>
+            <id>mhesse</id>
+            <name>Martin Hesse</name>
+            <email>mhesse@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>committer</role>
+            </roles>
+            <timezone>+9</timezone>
+        </developer>
+        <developer>
             <id>oscarbou</id>
             <name>Oscar Bou</name>
             <email>oscarbou@apache.org</email>
