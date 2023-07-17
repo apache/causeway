@@ -126,22 +126,8 @@ implements
 
     @Override
     public final void detach() {
-        if(isDataTableModelReuse()) return;
-        super.detach();
-    }
-
-    // -- HELPER
-
-    private final static String PROPERTY_NAME_MODEL_REUSE = "causeway.viewer.wicket.dataTableModelReuse";
-    /**
-     * experimental, undocumented feature:
-     * <p>
-     * when enabled, in support of optimized table sorting, don't detach;
-     * instead reuse the already populated model
-     */
-    private static boolean isDataTableModelReuse() {
-        return "true".equalsIgnoreCase(System.getenv(PROPERTY_NAME_MODEL_REUSE))
-                || "true".equalsIgnoreCase(System.getProperty(PROPERTY_NAME_MODEL_REUSE));
+        // don't detach the model, instead lazily re-fetch state of the contained elements
+        // at time of writing will otherwise break object deletion on JDO, see [CAUSEWAY-3530]
     }
 
 }

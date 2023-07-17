@@ -25,10 +25,10 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 
-import org.apache.causeway.applib.annotation.TableDecorator;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.binding._BindableAbstract;
@@ -65,6 +65,10 @@ public class DataTableModel
 implements MultiselectChoices {
 
     // -- FACTORIES
+
+    public static DataTableModel empty(final ManagedMember managedMember, final Where where) {
+        return new DataTableModel(managedMember, where, Can::empty);
+    }
 
     public static DataTableModel forCollection(
             final ManagedCollection managedCollection) {
@@ -293,6 +297,11 @@ implements MultiselectChoices {
         private final MementoForArgs argsMemento;
 
         public DataTableModel getDataTableModel(final ManagedObject owner) {
+
+            if(owner.getPojo()==null) {
+                // owner (if entity) might have been deleted
+                throw _Exceptions.illegalArgument("cannot recreate from memento for deleted object");
+            }
 
             val memberId = featureId.getMemberLogicalName();
 
