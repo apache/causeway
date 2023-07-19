@@ -49,6 +49,7 @@ import org.apache.causeway.applib.services.metamodel.MetaModelService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.applib.services.title.TitleService;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -87,6 +88,12 @@ import org.apache.causeway.testdomain.model.good.ProperMemberInheritance_usingIn
 import org.apache.causeway.testdomain.model.good.ProperMemberSupport;
 import org.apache.causeway.testdomain.model.good.ProperMemberSupportDiscovery;
 import org.apache.causeway.testdomain.model.good.ProperMixinContribution;
+import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action1;
+import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action2;
+import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action3;
+import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action4;
+import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action5;
+import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action6;
 import org.apache.causeway.testdomain.model.good.ProperObjectWithAlias;
 import org.apache.causeway.testdomain.model.good.ProperServiceWithAlias;
 import org.apache.causeway.testdomain.model.good.ProperServiceWithMixin;
@@ -105,6 +112,7 @@ import lombok.val;
 
         },
         properties = {
+                //"causeway.core.meta-model.introspector.policy=annotation_optional",
                 "causeway.core.meta-model.introspector.mode=FULL",
                 "causeway.applib.annotation.domain-object.editing=TRUE",
                 "causeway.core.meta-model.validator.explicit-object-type=FALSE", // does not override any of the imports
@@ -918,17 +926,35 @@ class DomainModelTest_usingGoodDomain {
 
     }
 
-    @Test
-    void mixins_shouldBePickedUp_asTheRightContributingFeature() {
+    @ParameterizedTest
+    @ValueSource(classes = {
+            ProperMixinContribution_action1.class,
+            ProperMixinContribution_action2.class,
+            ProperMixinContribution_action3.class,
+            ProperMixinContribution_action4.class,
+            ProperMixinContribution_action5.class,
+            ProperMixinContribution_action6.class})
+    void mixins_shouldBePickedUp_asTheRightContributingFeature(final Class<?> mixinClass) {
+
+        final String actionName = _Strings.splitThenStream(mixinClass.getSimpleName(), "_")
+                .reduce((a, b)->b)
+                .orElseThrow();
+
         val vmSpec = specificationLoader.specForTypeElseFail(ProperMixinContribution.class);
-        assertHasAction(vmSpec, "myAction"); // regular action
-        assertHasAction(vmSpec, "action1"); // contributed action
+        assertHasAction(vmSpec, "myAction"); // regular action (just a sanity check)
+        assertHasAction(vmSpec, actionName); // contributed action
+        assertMissesProperty(vmSpec, actionName); // verify don't contributes as property
     }
 
     // -- HELPER
 
     private void assertHasProperty(final ObjectSpecification spec, final String propertyId) {
         spec.getPropertyElseFail(propertyId);
+    }
+
+    private void assertMissesProperty(final ObjectSpecification spec, final String propertyId) {
+        assertFalse(spec.getProperty(propertyId).isPresent(),
+                ()->String.format("unexpected to find a property '%s'", propertyId));
     }
 
     private void assertHasAction(final ObjectSpecification spec, final String actionId) {

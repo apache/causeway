@@ -103,7 +103,7 @@ extends FacetFactoryAbstract {
         /* if @Property detected on method or type level infer:
          * @Action(semantics=SAFE) */
         addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
-        addFacet(new ContributingFacetAbstract(Contributing.AS_PROPERTY, facetedMethod) {});
+        addFacet(ContributingFacetAbstract.createAsProperty(facetedMethod));
     }
 
     void processDomainEvent(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
