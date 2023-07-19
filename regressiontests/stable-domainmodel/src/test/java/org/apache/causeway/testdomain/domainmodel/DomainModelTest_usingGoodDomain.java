@@ -86,6 +86,7 @@ import org.apache.causeway.testdomain.model.good.ProperMemberInheritance_usingAb
 import org.apache.causeway.testdomain.model.good.ProperMemberInheritance_usingInterface;
 import org.apache.causeway.testdomain.model.good.ProperMemberSupport;
 import org.apache.causeway.testdomain.model.good.ProperMemberSupportDiscovery;
+import org.apache.causeway.testdomain.model.good.ProperMixinContribution;
 import org.apache.causeway.testdomain.model.good.ProperObjectWithAlias;
 import org.apache.causeway.testdomain.model.good.ProperServiceWithAlias;
 import org.apache.causeway.testdomain.model.good.ProperServiceWithMixin;
@@ -917,6 +918,12 @@ class DomainModelTest_usingGoodDomain {
 
     }
 
+    @Test
+    void mixins_shouldBePickedUp_asTheRightContributingFeature() {
+        val vmSpec = specificationLoader.specForTypeElseFail(ProperMixinContribution.class);
+        assertHasAction(vmSpec, "myAction"); // regular action
+        assertHasAction(vmSpec, "action1"); // contributed action
+    }
 
     // -- HELPER
 
