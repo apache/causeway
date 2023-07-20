@@ -34,8 +34,8 @@ import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
+import org.apache.causeway.testdomain.fixtures.EntityTestFixtures;
 import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
-import org.apache.causeway.testdomain.jdo.JdoTestFixtures.Lock;
 import org.apache.causeway.testdomain.jdo.entities.JdoBook;
 
 import lombok.val;
@@ -51,16 +51,16 @@ class JdoTransactionRollbackTest_usingTransactionService {
     @Inject private TransactionService transactionService;
     @Inject private RepositoryService repository;
 
-    private Lock lock;
+    private EntityTestFixtures.Lock lock;
 
     @BeforeEach
     void setUp() {
         // clear repository
-        lock = jdoTestFixtures.clearAndAquireLock();
+        lock = jdoTestFixtures.aquireLockAndClear();
     }
 
     @AfterEach
-    void restore() {
+    void cleanUp() {
         lock.release();
     }
 
@@ -71,7 +71,7 @@ class JdoTransactionRollbackTest_usingTransactionService {
             // expected pre condition
             assertEquals(0, repository.allInstances(JdoBook.class).size());
 
-            jdoTestFixtures.install(lock);
+            lock.install();
 
             // expected post condition
             assertEquals(1, repository.allInstances(JdoBook.class).size());
@@ -89,7 +89,7 @@ class JdoTransactionRollbackTest_usingTransactionService {
 
         val result = transactionService.runWithinCurrentTransactionElseCreateNew(()->{
             //fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
-            jdoTestFixtures.install(lock);
+            lock.install();
             throw _Exceptions.unrecoverable("Test: force current tx to rollback");
         });
 

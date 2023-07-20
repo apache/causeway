@@ -70,7 +70,7 @@ class JdoEntityInjectingTest extends CausewayIntegrationTestAbstract {
     @Test @Order(0) @Rollback(false)
     void init() {
         // given
-        jdoTestFixtures.reinstall(()->kvStore.clear(JdoBook.class));
+        jdoTestFixtures.resetTo3Books(()->kvStore.clear(JdoBook.class));
         assertInjectCountRange(3, 12); //TODO there is some injection redundancy
     }
 

@@ -42,6 +42,7 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.services.repository.RepositoryService;
+import org.apache.causeway.testdomain.fixtures.InventoryJaxbVm;
 import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testdomain.jpa.entities.JpaInventory;
 import org.apache.causeway.testdomain.jpa.entities.JpaProduct;
@@ -60,11 +61,13 @@ import lombok.Setter;
 @Named("testdomain.jpa.JpaInventoryJaxbVm")
 @DomainObject(
         nature=Nature.VIEW_MODEL)
-public class JpaInventoryJaxbVm {
+public class JpaInventoryJaxbVm
+implements InventoryJaxbVm<JpaBook> {
 
     @XmlTransient @Inject
     private RepositoryService repository;
 
+    @Override
     @ObjectSupport public String title() {
         return String.format("%s; %s; %d products",
                 this.getClass().getSimpleName(), getName(), listProducts().size());
@@ -80,6 +83,7 @@ public class JpaInventoryJaxbVm {
         return repository.allInstances(JpaProduct.class);
     }
 
+    @Override
     @Action
     public List<JpaBook> listBooks() {
         return repository.allInstances(JpaBook.class);

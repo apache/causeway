@@ -42,6 +42,7 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.services.repository.RepositoryService;
+import org.apache.causeway.testdomain.fixtures.InventoryJaxbVm;
 import org.apache.causeway.testdomain.jdo.entities.JdoBook;
 import org.apache.causeway.testdomain.jdo.entities.JdoInventory;
 import org.apache.causeway.testdomain.jdo.entities.JdoProduct;
@@ -63,11 +64,13 @@ import lombok.Setter;
         aliased={
             "testdomain.jdo.JdoInventoryJaxbVmAlias"
         })
-public class JdoInventoryJaxbVm {
+public class JdoInventoryJaxbVm
+implements InventoryJaxbVm<JdoBook> {
 
     @XmlTransient @Inject
     private RepositoryService repository;
 
+    @Override
     @ObjectSupport public String title() {
         return String.format("%s; %s; %d products",
                 this.getClass().getSimpleName(), getName(), listProducts().size());
@@ -83,6 +86,7 @@ public class JdoInventoryJaxbVm {
         return repository.allInstances(JdoProduct.class);
     }
 
+    @Override
     @Action
     public List<JdoBook> listBooks() {
         return repository.allInstances(JdoBook.class);

@@ -29,9 +29,9 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
+import org.apache.causeway.testdomain.jdo.RegressionTestWithJdoFixtures;
 import org.apache.causeway.testdomain.jdo.entities.JdoProduct;
 import org.apache.causeway.testdomain.jdo.entities.JdoProductComment;
-import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
 import lombok.val;
 
@@ -43,7 +43,7 @@ import lombok.val;
                 "logging.level.org.apache.causeway.persistence.jdo.datanucleus.changetracking.JdoLifecycleListener = DEBUG"
         })
 @Transactional
-class JdoTimestampingTest extends CausewayIntegrationTestAbstract {
+class JdoTimestampingTest extends RegressionTestWithJdoFixtures {
 
     @Inject private RepositoryService repository;
 

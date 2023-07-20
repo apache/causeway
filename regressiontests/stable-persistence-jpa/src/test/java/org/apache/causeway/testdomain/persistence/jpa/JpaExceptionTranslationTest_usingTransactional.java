@@ -43,10 +43,10 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.testdomain.RegressionTestAbstract;
 import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.JpaInventoryDao;
 import org.apache.causeway.testdomain.jpa.JpaTestFixtures;
+import org.apache.causeway.testdomain.jpa.RegressionTestWithJpaFixtures;
 import org.apache.causeway.testdomain.jpa.entities.JpaInventory;
 
 import lombok.val;
@@ -61,7 +61,7 @@ import lombok.val;
 })
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class JpaExceptionTranslationTest_usingTransactional
-extends RegressionTestAbstract {
+extends RegressionTestWithJpaFixtures {
 
     @Inject private JpaTestFixtures testFixtures;
     @Inject private Provider<JpaInventoryDao> inventoryDao;

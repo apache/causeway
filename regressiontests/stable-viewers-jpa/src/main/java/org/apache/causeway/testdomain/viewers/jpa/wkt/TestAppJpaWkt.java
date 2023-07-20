@@ -34,6 +34,7 @@ import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.user.UserService;
+import org.apache.causeway.commons.internal.debug.xray.XrayEnable;
 import org.apache.causeway.commons.internal.os._OsUtil;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
@@ -55,7 +56,7 @@ import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer
     CausewayModuleViewerWicketViewer.class,
     //CausewayModuleViewerRestfulObjectsJaxrsResteasy.class,
 
-    //XrayEnable.class // for debugging only
+    XrayEnable.class // for debugging only
 })
 public class TestAppJpaWkt extends SpringBootServletInitializer {
 
@@ -87,14 +88,17 @@ public class TestAppJpaWkt extends SpringBootServletInitializer {
             return "Hello, " + userService.currentUserNameElseNobody();
         }
 
-        @Action @ActionLayout(sequence = "0.1")
-        public TestHomePage setup() {
-            return this;
+        @Action @ActionLayout(sequence = "0.1",
+                describedAs = "resets the repository to having 3 sample books")
+        public JpaInventoryJaxbVm reset() {
+            testFixtures.clearRepository();
+            testFixtures.add3Books();
+            return openSamplePage();
         }
 
         @Action @ActionLayout(sequence = "0.2")
         public JpaInventoryJaxbVm openSamplePage() {
-            return testFixtures.setUpViewmodelWith3Books();
+            return testFixtures.createViewmodelWithCurrentBooks();
         }
 
         @Action @ActionLayout(sequence = "0.3")

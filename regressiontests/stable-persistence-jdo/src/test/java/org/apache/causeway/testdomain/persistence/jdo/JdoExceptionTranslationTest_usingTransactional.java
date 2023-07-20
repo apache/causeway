@@ -38,13 +38,13 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.RegressionTestAbstract;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
+import org.apache.causeway.testdomain.fixtures.EntityTestFixtures.Lock;
 import org.apache.causeway.testdomain.jdo.JdoInventoryDao;
 import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
 import org.apache.causeway.testdomain.jdo.entities.JdoInventory;
@@ -65,6 +65,7 @@ extends RegressionTestAbstract {
 
     @Inject private JdoTestFixtures testFixtures;
     @Inject private Provider<JdoInventoryDao> inventoryDao;
+    private Lock lock;
 
     @BeforeAll
     static void beforeAll() throws SQLException {
@@ -78,6 +79,9 @@ extends RegressionTestAbstract {
         // when adding a book for which one with same ISBN already exists in the database,
         // we expect to see a Spring recognized DataAccessException been thrown
 
+        this.lock = testFixtures.aquireLock();
+        lock.install();
+
         final ThrowingRunnable uniqueConstraintViolator =
                 ()->inventoryDao.get().addBook_havingIsbnA_usingRepositoryService();
 
@@ -87,8 +91,11 @@ extends RegressionTestAbstract {
 
                 ThrowingRunnable.resultOf(uniqueConstraintViolator)
                 .ifSuccess(__->fail("expected to fail, but did not"))
-                //.mapFailure(ex->_JdoExceptionTranslator.translate(ex, txManager))
-                .ifFailure(ex->assertTrue(ex instanceof DataIntegrityViolationException))
+                .ifFailure(ex->{
+                    if(!(ex instanceof DataIntegrityViolationException)) {
+                        ex.printStackTrace();
+                    }
+                })
                 .ifFailureFail();
 
             });

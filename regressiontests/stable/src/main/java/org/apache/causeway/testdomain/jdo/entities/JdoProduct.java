@@ -58,7 +58,8 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-public class JdoProduct implements Comparable<JdoProduct> {
+public class JdoProduct
+implements Comparable<JdoProduct> {
 
     public String title() {
         return toString();

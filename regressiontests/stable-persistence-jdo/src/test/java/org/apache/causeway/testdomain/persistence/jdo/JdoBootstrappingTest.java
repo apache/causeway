@@ -65,7 +65,7 @@ class JdoBootstrappingTest extends CausewayIntegrationTestAbstract {
     void sampleInventoryShouldBeSetUp() {
 
         // when - expected condition before install: no inventories
-        testFixtures.reinstall(()->
+        testFixtures.resetTo3Books(()->
             assertEquals(0, repositoryService.allInstances(JdoInventory.class).size()));
 
         // then - expected post condition: ONE inventory

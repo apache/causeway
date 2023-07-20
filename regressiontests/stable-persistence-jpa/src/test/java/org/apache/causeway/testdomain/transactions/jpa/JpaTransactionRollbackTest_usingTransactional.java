@@ -26,7 +26,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,8 +56,6 @@ import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTe
 @Transactional
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@DirtiesContext
-// @Disabled // CAUSEWAY-2789 revert
 class JpaTransactionRollbackTest_usingTransactional
 extends CausewayIntegrationTestAbstract
 {

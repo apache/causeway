@@ -111,7 +111,7 @@ class JpaBootstrappingTest extends CausewayIntegrationTestAbstract {
 
         // given - expected pre condition: no inventories
 
-        testFixtures.reinstall(()->
+        testFixtures.resetTo3Books(()->
             assertEquals(0, repositoryService.allInstances(JpaInventory.class).size()));
 
         // then - expected post condition: ONE inventory

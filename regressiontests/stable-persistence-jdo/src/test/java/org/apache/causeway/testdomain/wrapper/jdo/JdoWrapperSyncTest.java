@@ -22,6 +22,8 @@ import java.util.concurrent.ExecutionException;
 
 import jakarta.inject.Inject;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -33,7 +35,9 @@ import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
+import org.apache.causeway.testdomain.fixtures.EntityTestFixtures;
 import org.apache.causeway.testdomain.jdo.JdoInventoryManager;
+import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
 import org.apache.causeway.testdomain.jdo.entities.JdoBook;
 import org.apache.causeway.testdomain.jdo.entities.JdoProduct;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
@@ -51,6 +55,20 @@ class JdoWrapperSyncTest extends CausewayIntegrationTestAbstract {
     @Inject private RepositoryService repository;
     @Inject private FactoryService facoryService;
     @Inject private WrapperFactory wrapper;
+    @Inject private JdoTestFixtures testFixtures;
+
+    protected EntityTestFixtures.Lock lock;
+
+    @BeforeEach
+    void installFixture() {
+        this.lock = testFixtures.aquireLock();
+        lock.install();
+    }
+
+    @AfterEach
+    void uninstallFixture() {
+        this.lock.release();
+    }
 
     @Test
     void testWrapper_waitingOnDomainEvent() throws InterruptedException, ExecutionException {
