@@ -20,19 +20,18 @@ package org.apache.causeway.testdomain.jpa;
 
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.testdomain.fixtures.EntityTestFixtures;
+import org.apache.causeway.testdomain.fixtures.InventoryJaxbVm;
 import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testdomain.jpa.entities.JpaInventory;
 import org.apache.causeway.testdomain.jpa.entities.JpaProduct;
 import org.apache.causeway.testdomain.util.dto.BookDto;
+import org.apache.causeway.testdomain.util.dto.IBook;
 
 import lombok.val;
 
@@ -45,38 +44,9 @@ public class JpaTestFixtures extends EntityTestFixtures {
                 "Sample Publisher"));
     }
 
-    public Bookmark getJpaInventoryJaxbVmAsBookmark() {
-        return bookmarkService.bookmarkForElseFail(setUpViewmodelWith3Books());
-    }
-
-    public JpaInventoryJaxbVm setUpViewmodelWith3Books() {
-        val inventoryJaxbVm = factoryService.viewModel(new JpaInventoryJaxbVm());
-        val books = inventoryJaxbVm.listBooks();
-        if(_NullSafe.size(books)>0) {
-            val favoriteBook = books.get(0);
-            inventoryJaxbVm.setName("Bookstore");
-            inventoryJaxbVm.setBooks(books);
-            inventoryJaxbVm.setFavoriteBook(favoriteBook);
-            inventoryJaxbVm.setBooksForTab1(books.stream().skip(1).collect(Collectors.toList()));
-            inventoryJaxbVm.setBooksForTab2(books.stream().limit(2).collect(Collectors.toList()));
-        }
-        return inventoryJaxbVm;
-    }
-
-    // -- ASSERTIONS
-
-    public void assertPopulatedWithDefaults(
-            final JpaInventoryJaxbVm inventoryJaxbVm) {
-        assertEquals("JpaInventoryJaxbVm; Bookstore; 3 products", inventoryJaxbVm.title());
-        assertEquals("Bookstore", inventoryJaxbVm.getName());
-        val books = inventoryJaxbVm.listBooks();
-        assertEquals(3, books.size());
-        val favoriteBook = inventoryJaxbVm.getFavoriteBook();
-        val expectedBook = BookDto.sample();
-        assertEquals(expectedBook.getName(), favoriteBook.getName());
-        assertHasPersistenceId(favoriteBook);
-        inventoryJaxbVm.listBooks()
-        .forEach(this::assertHasPersistenceId);
+    @Override
+    protected Class<? extends InventoryJaxbVm<? extends IBook>> vmClass() {
+        return JpaInventoryJaxbVm.class;
     }
 
     // -- FIXTURES
@@ -104,5 +74,7 @@ public class JpaTestFixtures extends EntityTestFixtures {
         val inventory = new JpaInventory("Sample Inventory", products);
         repository.persistAndFlush(inventory);
     }
+
+
 
 }

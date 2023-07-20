@@ -21,25 +21,31 @@ package org.apache.causeway.testdomain.fixtures;
 import java.util.Collection;
 import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import javax.inject.Inject;
 
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.events.metamodel.MetamodelListener;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Oneshot;
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.base._Refs.BooleanAtomicReference;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.testdomain.util.dto.BookDto;
+import org.apache.causeway.testdomain.util.dto.IBook;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -57,13 +63,33 @@ public abstract class EntityTestFixtures implements MetamodelListener {
         install();
     }
 
+    public final <B extends IBook, T extends InventoryJaxbVm<B>> T setUpViewmodelWith3Books() {
+        final T inventoryJaxbVm =
+                _Casts.uncheckedCast(factoryService.viewModel(vmClass()));
+        val books = inventoryJaxbVm.listBooks();
+        if(_NullSafe.size(books)>0) {
+            val favoriteBook = books.get(0);
+            inventoryJaxbVm.setName("Bookstore");
+            inventoryJaxbVm.setBooks(books);
+            inventoryJaxbVm.setFavoriteBook(favoriteBook);
+            inventoryJaxbVm.setBooksForTab1(books.stream().skip(1).collect(Collectors.toList()));
+            inventoryJaxbVm.setBooksForTab2(books.stream().limit(2).collect(Collectors.toList()));
+        }
+        return inventoryJaxbVm;
+    }
+
+    public final Bookmark getInventoryJaxbVmAsBookmark() {
+        return bookmarkService.bookmarkForElseFail(setUpViewmodelWith3Books());
+    }
+
+    protected abstract Class<? extends InventoryJaxbVm<? extends IBook>> vmClass();
     protected abstract void clearRepository();
     protected abstract void setUp3Books();
 
     // -- ASSERTIONS
 
     public final void assertInventoryHasBooks(
-            final Collection<? extends HasName> products,
+            final Collection<?> products,
             final int...expectedBookIndices) {
 
         final int[] zeroBasedIndices = IntStream.of(expectedBookIndices)
@@ -77,7 +103,8 @@ public abstract class EntityTestFixtures implements MetamodelListener {
         .toArray(new String[0]);
 
         val actualBookNames = products.stream()
-                .map(HasName::getName)
+                .map(IBook.class::cast)
+                .map(IBook::getName)
                 .sorted()
                 .toArray();
 
@@ -88,6 +115,20 @@ public abstract class EntityTestFixtures implements MetamodelListener {
         val bookmark = bookmarkService.bookmarkForElseFail(entity);
         final int id = Integer.parseInt(bookmark.getIdentifier());
         assertTrue(id>=-1, ()->String.format("expected valid id; got %d", id));
+    }
+
+    public final void assertPopulatedWithDefaults(
+            final InventoryJaxbVm inventoryJaxbVm) {
+        assertEquals("*InventoryJaxbVm; Bookstore; 3 products", "*" + (inventoryJaxbVm.title().substring(3)));
+        assertEquals("Bookstore", inventoryJaxbVm.getName());
+        val books = inventoryJaxbVm.listBooks();
+        assertEquals(3, books.size());
+        val favoriteBook = inventoryJaxbVm.getFavoriteBook();
+        val expectedBook = BookDto.sample();
+        assertEquals(expectedBook.getName(), favoriteBook.getName());
+        assertHasPersistenceId(favoriteBook);
+        inventoryJaxbVm.listBooks()
+        .forEach(this::assertHasPersistenceId);
     }
 
     public static Set<String> expectedBookTitles() {
@@ -160,5 +201,7 @@ public abstract class EntityTestFixtures implements MetamodelListener {
             return true;
         });
     }
+
+
 
 }

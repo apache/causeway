@@ -18,9 +18,19 @@
  */
 package org.apache.causeway.testdomain.fixtures;
 
-@FunctionalInterface
-public interface HasName {
+import java.util.Collection;
+import java.util.List;
 
+import org.apache.causeway.testdomain.util.dto.IBook;
+
+public interface InventoryJaxbVm<T extends IBook> {
+    String title();
     String getName();
-
+    List<T> listBooks();
+    T getFavoriteBook();
+    void setName(String string);
+    void setFavoriteBook(T favoriteBook);
+    void setBooks(Collection<T> books);
+    void setBooksForTab1(Collection<T> books);
+    void setBooksForTab2(Collection<T> books);
 }

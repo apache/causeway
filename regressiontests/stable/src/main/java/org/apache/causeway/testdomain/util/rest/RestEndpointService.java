@@ -213,7 +213,7 @@ public class RestEndpointService {
     public Try<Can<JdoBook>> getBooksFromInventoryAsJaxbVm(final RestfulClient client) {
 
         val objectId = interactionService.callAnonymous(
-                ()->jdoTestFixtures.getJdoInventoryJaxbVmAsBookmark().getIdentifier());
+                ()->jdoTestFixtures.getInventoryJaxbVmAsBookmark().getIdentifier());
 
         // using domain object alias ...
         val request = newInvocationBuilder(client,
