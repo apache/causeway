@@ -160,7 +160,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 		<npm.version>8.19.2</npm.version>
 
         <objenesis.version>3.3</objenesis.version>
-        <ognl.version>3.3.4</ognl.version>
+        <ognl.version>3.4.0</ognl.version>
 
         <picocontainer.version>2.15</picocontainer.version>
         <poi.version>5.2.3</poi.version>
