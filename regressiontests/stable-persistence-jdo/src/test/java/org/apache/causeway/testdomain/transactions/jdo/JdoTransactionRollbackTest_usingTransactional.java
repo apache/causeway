@@ -34,8 +34,8 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
+import org.apache.causeway.testdomain.fixtures.EntityTestFixtures;
 import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
-import org.apache.causeway.testdomain.jdo.JdoTestFixtures.Lock;
 import org.apache.causeway.testdomain.jdo.entities.JdoBook;
 
 /**
@@ -62,7 +62,7 @@ class JdoTransactionRollbackTest_usingTransactional {
     @Inject private JdoTestFixtures jdoTestFixtures;
     @Inject private RepositoryService repository;
     @Inject private InteractionService interactionService;
-    private static Lock lock;
+    private static EntityTestFixtures.Lock lock;
 
     @Test @Order(1) @Commit
     void clearRepository() {

@@ -45,8 +45,8 @@ import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction
 import org.apache.causeway.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
+import org.apache.causeway.testdomain.fixtures.EntityTestFixtures;
 import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
-import org.apache.causeway.testdomain.jdo.JdoTestFixtures.Lock;
 import org.apache.causeway.testdomain.jdo.entities.JdoBook;
 import org.apache.causeway.testdomain.publishing.PublishingTestFactoryAbstract.CommitListener;
 import org.apache.causeway.testdomain.util.dto.BookDto;
@@ -82,7 +82,7 @@ extends PublishingTestFactoryAbstract {
 
     @Named("transaction-aware-pmf-proxy")
     private final PersistenceManagerFactory pmf;
-    private Lock lock = null;
+    private EntityTestFixtures.Lock lock = null;
 
     // -- TEST SETUP
 

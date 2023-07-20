@@ -43,6 +43,7 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.testdomain.fixtures.HasName;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -62,7 +63,10 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-public class JpaProduct implements Comparable<JpaProduct> {
+public class JpaProduct
+implements
+    HasName,
+    Comparable<JpaProduct> {
 
     @ObjectSupport public String title() {
         return toString();

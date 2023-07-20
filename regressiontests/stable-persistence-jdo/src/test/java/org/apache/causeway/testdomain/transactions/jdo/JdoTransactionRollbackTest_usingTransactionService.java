@@ -34,8 +34,8 @@ import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
+import org.apache.causeway.testdomain.fixtures.EntityTestFixtures;
 import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
-import org.apache.causeway.testdomain.jdo.JdoTestFixtures.Lock;
 import org.apache.causeway.testdomain.jdo.entities.JdoBook;
 
 import lombok.val;
@@ -51,7 +51,7 @@ class JdoTransactionRollbackTest_usingTransactionService {
     @Inject private TransactionService transactionService;
     @Inject private RepositoryService repository;
 
-    private Lock lock;
+    private EntityTestFixtures.Lock lock;
 
     @BeforeEach
     void setUp() {
