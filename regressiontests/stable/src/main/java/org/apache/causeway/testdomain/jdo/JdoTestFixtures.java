@@ -23,8 +23,6 @@ import java.util.TreeSet;
 
 import org.springframework.stereotype.Service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.apache.causeway.testdomain.fixtures.EntityTestFixtures;
 import org.apache.causeway.testdomain.fixtures.InventoryJaxbVm;
 import org.apache.causeway.testdomain.jdo.entities.JdoBook;
@@ -52,17 +50,17 @@ public class JdoTestFixtures extends EntityTestFixtures {
     // -- HELPER
 
     @Override
-    protected void clearRepository() {
+    public void clearRepository() {
         repository.allInstances(JdoInventory.class).forEach(repository::remove);
         repository.allInstances(JdoBook.class).forEach(repository::remove);
         repository.allInstances(JdoProduct.class).forEach(repository::remove);
     }
 
     @Override
-    protected void setUp3Books() {
+    public void add3Books() {
 
         // given - expected pre condition: no inventories
-        assertEquals(0, repository.allInstances(JdoInventory.class).size());
+        //assertEquals(0, repository.allInstances(JdoInventory.class).size());
 
         // setup sample Inventory with 3 Books
         SortedSet<JdoProduct> products = new TreeSet<>();

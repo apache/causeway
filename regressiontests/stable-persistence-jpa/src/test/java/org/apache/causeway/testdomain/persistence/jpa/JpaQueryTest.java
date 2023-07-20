@@ -23,6 +23,7 @@ import java.sql.SQLException;
 import javax.inject.Inject;
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer;
@@ -31,6 +32,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +44,7 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.persistence.jpa.applib.services.JpaSupportService;
 import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
+import org.apache.causeway.testdomain.fixtures.EntityTestFixtures.Lock;
 import org.apache.causeway.testdomain.jpa.JpaTestFixtures;
 import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testdomain.jpa.entities.JpaInventory;
@@ -63,6 +66,7 @@ class JpaQueryTest extends CausewayIntegrationTestAbstract {
     @Inject private JpaTestFixtures testFixtures;
     @Inject private InteractionService interactionService;
     @Inject private JpaSupportService jpaSupport;
+    @Inject ConfigurableBeanFactory configurableBeanFactory;
 
     @BeforeAll
     static void beforeAll() throws SQLException {
@@ -70,7 +74,19 @@ class JpaQueryTest extends CausewayIntegrationTestAbstract {
         // Util_H2Console.main(null);
     }
 
-    @Inject ConfigurableBeanFactory configurableBeanFactory;
+    private static Lock lock;
+    @AfterAll
+    static void afterAll() throws SQLException {
+        if(lock!=null) {
+            lock.release();
+        }
+    }
+
+    @Test @Order(0) @Commit
+    void setUpWith3Books() {
+        lock = testFixtures.aquireLockAndClear();
+        lock.install();
+    }
 
     @Test @Order(1)
     void sampleInventory_shouldBeSetUpWith3Books() {

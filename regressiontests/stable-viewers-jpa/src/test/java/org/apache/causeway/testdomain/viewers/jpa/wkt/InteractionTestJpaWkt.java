@@ -34,7 +34,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.testdomain.RegressionTestAbstract;
 import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.conf.Configuration_usingWicket;
 import org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester;
@@ -42,6 +41,7 @@ import org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageT
 import org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester.SimulatedProperty;
 import org.apache.causeway.testdomain.conf.Configuration_usingWicket.WicketTesterFactory;
 import org.apache.causeway.testdomain.jpa.JpaTestFixtures;
+import org.apache.causeway.testdomain.jpa.RegressionTestWithJpaFixtures;
 import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testdomain.util.dto.BookDto;
 import org.apache.causeway.viewer.wicket.ui.panels.PromptFormAbstract;
@@ -64,7 +64,7 @@ import lombok.val;
     CausewayPresets.SilenceMetaModel,
     CausewayPresets.SilenceProgrammingModel
 })
-class InteractionTestJpaWkt extends RegressionTestAbstract {
+class InteractionTestJpaWkt extends RegressionTestWithJpaFixtures {
 
     @Inject private WicketTesterFactory wicketTesterFactory;
     @Inject private JpaTestFixtures testFixtures;
@@ -86,7 +86,7 @@ class InteractionTestJpaWkt extends RegressionTestAbstract {
     void load_viewmodel_with_referenced_entities_directly() {
 
         val pageParameters = call(()->{
-            val inventoryJaxbVm = testFixtures.setUpViewmodelWith3Books();
+            val inventoryJaxbVm = testFixtures.createViewmodelWithCurrentBooks();
             return wktTester.createPageParameters(inventoryJaxbVm);
         });
 

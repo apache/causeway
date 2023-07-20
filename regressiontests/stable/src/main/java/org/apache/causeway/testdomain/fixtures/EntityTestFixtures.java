@@ -19,12 +19,16 @@
 package org.apache.causeway.testdomain.fixtures;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import javax.inject.Inject;
+
+import org.springframework.beans.factory.DisposableBean;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -37,33 +41,53 @@ import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Oneshot;
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.base._Refs.BooleanAtomicReference;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.core.config.datasources.DataSourceIntrospectionService;
 import org.apache.causeway.testdomain.util.dto.BookDto;
 import org.apache.causeway.testdomain.util.dto.IBook;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
 
-public abstract class EntityTestFixtures implements MetamodelListener {
+public abstract class EntityTestFixtures
+implements
+    MetamodelListener,
+    DisposableBean {
 
     @Inject protected RepositoryService repository;
     @Inject protected FactoryService factoryService;
     @Inject protected BookmarkService bookmarkService;
     @Inject protected InteractionService interactionService;
+    @Inject protected DataSourceIntrospectionService dataSourceIntrospectionService;
+
+    //private Lock myLock;
+
+    protected abstract Class<? extends InventoryJaxbVm<? extends IBook>> vmClass();
 
     @Override
     public final void onMetamodelLoaded() {
-        install();
+        // -- disabled
     }
 
-    public final <B extends IBook, T extends InventoryJaxbVm<B>> T setUpViewmodelWith3Books() {
+    @Override
+    public void destroy() {
+        try {
+            if(lockQueue!=null) {
+                lockQueue.clear();
+            }
+        } finally {
+            lockQueue=null;
+        }
+    }
+
+    public final <B extends IBook, T extends InventoryJaxbVm<B>> T createViewmodelWithCurrentBooks() {
         final T inventoryJaxbVm =
                 _Casts.uncheckedCast(factoryService.viewModel(vmClass()));
         val books = inventoryJaxbVm.listBooks();
@@ -79,12 +103,13 @@ public abstract class EntityTestFixtures implements MetamodelListener {
     }
 
     public final Bookmark getInventoryJaxbVmAsBookmark() {
-        return bookmarkService.bookmarkForElseFail(setUpViewmodelWith3Books());
+        return bookmarkService.bookmarkForElseFail(createViewmodelWithCurrentBooks());
     }
 
-    protected abstract Class<? extends InventoryJaxbVm<? extends IBook>> vmClass();
-    protected abstract void clearRepository();
-    protected abstract void setUp3Books();
+    /** usable iff a transactional context is provided by the caller */
+    public abstract void clearRepository();
+    /** usable iff a transactional context is provided by the caller */
+    public abstract void add3Books();
 
     // -- ASSERTIONS
 
@@ -118,7 +143,7 @@ public abstract class EntityTestFixtures implements MetamodelListener {
     }
 
     public final void assertPopulatedWithDefaults(
-            final InventoryJaxbVm inventoryJaxbVm) {
+            final InventoryJaxbVm<? extends IBook> inventoryJaxbVm) {
         assertEquals("*InventoryJaxbVm; Bookstore; 3 products", "*" + (inventoryJaxbVm.title().substring(3)));
         assertEquals("Bookstore", inventoryJaxbVm.getName());
         val books = inventoryJaxbVm.listBooks();
@@ -141,39 +166,51 @@ public abstract class EntityTestFixtures implements MetamodelListener {
     @RequiredArgsConstructor
     public static class Lock {
         private final _Oneshot release = new _Oneshot();
+        private final String dsUrl;
         private final EntityTestFixtures entityTestFixtures;
+        public void install() {
+            entityTestFixtures.install(this);
+        }
         public void release() {
+            System.err.printf("releasing lock %s%n", dsUrl);
             release.trigger(()->entityTestFixtures.release(this));
         }
     }
 
     @SneakyThrows
-    public final Lock clearAndAquireLock() {
+    public final Lock aquireLock() {
+        val dsUrl = dataSourceIntrospectionService.getDataSourceInfos().getFirstElseFail().getJdbcUrl();
+        this.lockQueue = lockQueueByDatasource.computeIfAbsent(dsUrl, __->new LinkedBlockingQueue<>(1));
+        System.err.printf("waiting for lock %s%n", dsUrl);
         Lock lock;
-        lockQueue.put(lock = new Lock(this)); // put next lock on the queue; blocks until space available
-        clear();
+        lockQueue.put(lock = new Lock(dsUrl, this)); // put next lock on the queue; blocks until space available
+        return lock;
+    }
+
+    @SneakyThrows
+    public final Lock aquireLockAndClear() {
+        val lock = aquireLock();
+        clearRepositoryInTransaction();
         return lock;
     }
 
     @SneakyThrows
     private void release(final Lock lock) {
-        reinstall(()->{});
-        lockQueue.take(); // remove lock from queue
+        try {
+            clearRepositoryInTransaction();
+        } finally {
+            lockQueue.take(); // remove lock from queue
+        }
     }
 
-    // -- INSTALL
+    // -- INSTALL FIXTURE
 
-    public final void install(final Lock lock) {
-        _Assert.assertEquals(lockQueue.peek(), lock);
-        install();
-    }
-
-    public final void reinstall(final Runnable onBeforeInstall) {
+    public final void resetTo3Books(final Runnable onBeforeInstall) {
         isInstalled.compute(isInst->{
             interactionService.runAnonymous(()->{
                 clearRepository();
                 onBeforeInstall.run();
-                setUp3Books();
+                add3Books();
             });
             return false;
         });
@@ -181,10 +218,11 @@ public abstract class EntityTestFixtures implements MetamodelListener {
 
     // -- HELPER
 
-    private BooleanAtomicReference isInstalled = _Refs.booleanAtomicRef(false);
-    private LinkedBlockingQueue<Lock> lockQueue = new LinkedBlockingQueue<>(1);
+    private final BooleanAtomicReference isInstalled = _Refs.booleanAtomicRef(false);
+    private final static Map<String, LinkedBlockingQueue<Lock>> lockQueueByDatasource = new ConcurrentHashMap<>();
+    private LinkedBlockingQueue<Lock> lockQueue;
 
-    private void clear() {
+    private void clearRepositoryInTransaction() {
         isInstalled.computeIfTrue(()->{
             interactionService.runAnonymous(()->{
                 clearRepository();
@@ -193,15 +231,24 @@ public abstract class EntityTestFixtures implements MetamodelListener {
         });
     }
 
-    private void install() {
-        isInstalled.computeIfFalse(()->{
+    private void install(final @NonNull Lock lock) {
+        try {
             interactionService.runAnonymous(()->{
-                setUp3Books();
+                clearRepository();
+                add3Books();
             });
-            return true;
-        });
+        } catch (Exception ex) {
+            lock.release();
+        }
     }
 
-
+//    private void add3BooksInTransaction() {
+//        isInstalled.computeIfFalse(()->{
+//            interactionService.runAnonymous(()->{
+//                add3Books();
+//            });
+//            return true;
+//        });
+//    }
 
 }

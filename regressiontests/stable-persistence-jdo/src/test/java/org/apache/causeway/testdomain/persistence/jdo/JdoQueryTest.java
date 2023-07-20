@@ -20,8 +20,6 @@ package org.apache.causeway.testdomain.persistence.jdo;
 
 import java.sql.SQLException;
 
-import javax.inject.Inject;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer;
@@ -38,11 +36,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
-import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
+import org.apache.causeway.testdomain.jdo.RegressionTestWithJdoFixtures;
 import org.apache.causeway.testdomain.jdo.entities.JdoBook;
 import org.apache.causeway.testdomain.jdo.entities.JdoInventory;
 import org.apache.causeway.testdomain.jdo.entities.JdoProduct;
-import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
 import lombok.val;
 
@@ -53,10 +50,9 @@ import lombok.val;
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Transactional
-class JdoQueryTest extends CausewayIntegrationTestAbstract {
+class JdoQueryTest extends RegressionTestWithJdoFixtures {
 
  //   @Inject private JdoSupportService jdoSupport;
-    @Inject private JdoTestFixtures jdoTestFixtures;
 
     @BeforeAll
     static void beforeAll() throws SQLException {
@@ -80,7 +76,7 @@ class JdoQueryTest extends CausewayIntegrationTestAbstract {
         assertNotNull(inventory.getProducts());
         assertEquals(3, inventory.getProducts().size());
 
-        jdoTestFixtures.assertInventoryHasBooks(inventory.getProducts(), 1, 2, 3);
+        testFixtures.assertInventoryHasBooks(inventory.getProducts(), 1, 2, 3);
     }
 
     @Test @Order(2) @Disabled("broken won't fix")
@@ -88,11 +84,11 @@ class JdoQueryTest extends CausewayIntegrationTestAbstract {
 
         //testFixtures.setUp3Books();
 
-        jdoTestFixtures.assertInventoryHasBooks(repositoryService
+        testFixtures.assertInventoryHasBooks(repositoryService
                 .allMatches(Query.allInstances(JdoBook.class)),
                 1, 2, 3);
 
-        jdoTestFixtures.assertInventoryHasBooks(repositoryService
+        testFixtures.assertInventoryHasBooks(repositoryService
                 .allMatches(Query.allInstances(JdoBook.class)
                         .withLimit(2)),
                 1, 2);
@@ -103,12 +99,12 @@ class JdoQueryTest extends CausewayIntegrationTestAbstract {
 
         //testFixtures.setUp3Books();
 
-        jdoTestFixtures.assertInventoryHasBooks(repositoryService
+        testFixtures.assertInventoryHasBooks(repositoryService
                 .allMatches(Query.allInstances(JdoBook.class)
                         .withStart(1)),
                 2, 3);
 
-        jdoTestFixtures.assertInventoryHasBooks(repositoryService
+        testFixtures.assertInventoryHasBooks(repositoryService
                 .allMatches(Query.allInstances(JdoBook.class)
                         .withRange(1, 1)),
                 2);
@@ -123,7 +119,7 @@ class JdoQueryTest extends CausewayIntegrationTestAbstract {
                 .withParameter("priceUpperBound", 60.);
 
         val affordableBooks = repositoryService.allMatches(query);
-        jdoTestFixtures.assertInventoryHasBooks(affordableBooks, 1, 2);
+        testFixtures.assertInventoryHasBooks(affordableBooks, 1, 2);
     }
 
 //    @Test @Order(4)

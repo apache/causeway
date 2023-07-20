@@ -56,11 +56,11 @@ class JdoTransactionRollbackTest_usingTransactionService {
     @BeforeEach
     void setUp() {
         // clear repository
-        lock = jdoTestFixtures.clearAndAquireLock();
+        lock = jdoTestFixtures.aquireLockAndClear();
     }
 
     @AfterEach
-    void restore() {
+    void cleanUp() {
         lock.release();
     }
 
@@ -71,7 +71,7 @@ class JdoTransactionRollbackTest_usingTransactionService {
             // expected pre condition
             assertEquals(0, repository.allInstances(JdoBook.class).size());
 
-            jdoTestFixtures.install(lock);
+            lock.install();
 
             // expected post condition
             assertEquals(1, repository.allInstances(JdoBook.class).size());
@@ -89,7 +89,7 @@ class JdoTransactionRollbackTest_usingTransactionService {
 
         val result = transactionService.runWithinCurrentTransactionElseCreateNew(()->{
             //fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
-            jdoTestFixtures.install(lock);
+            lock.install();
             throw _Exceptions.unrecoverable("Test: force current tx to rollback");
         });
 

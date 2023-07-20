@@ -52,14 +52,14 @@ public class JpaTestFixtures extends EntityTestFixtures {
     // -- FIXTURES
 
     @Override
-    protected void clearRepository() {
+    public void clearRepository() {
         repository.allInstances(JpaInventory.class).forEach(repository::remove);
         repository.allInstances(JpaBook.class).forEach(repository::remove);
         repository.allInstances(JpaProduct.class).forEach(repository::remove);
     }
 
     @Override
-    protected void setUp3Books() {
+    public void add3Books() {
 
         // given - expected pre condition: no inventories
         assertEquals(0, repository.allInstances(JpaInventory.class).size());

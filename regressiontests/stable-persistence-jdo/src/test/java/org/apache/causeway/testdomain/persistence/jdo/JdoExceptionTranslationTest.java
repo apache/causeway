@@ -20,8 +20,6 @@ package org.apache.causeway.testdomain.persistence.jdo;
 
 import java.sql.SQLException;
 
-import javax.inject.Inject;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,9 +32,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.testdomain.RegressionTestAbstract;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
-import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
+import org.apache.causeway.testdomain.jdo.RegressionTestWithJdoFixtures;
 import org.apache.causeway.testdomain.jdo.entities.JdoInventory;
 
 import lombok.val;
@@ -49,9 +46,7 @@ import lombok.val;
     @TestPropertySource(CausewayPresets.UseLog4j2Test)
 })
 //@Transactional ... we manage transaction ourselves
-class JdoExceptionTranslationTest extends RegressionTestAbstract {
-
-    @Inject private JdoTestFixtures jdoTestFixtures;
+class JdoExceptionTranslationTest extends RegressionTestWithJdoFixtures {
 
     @BeforeAll
     static void beforeAll() throws SQLException {
@@ -79,7 +74,7 @@ class JdoExceptionTranslationTest extends RegressionTestAbstract {
 
 
                 // add a conflicting book (unique ISBN violation)
-                jdoTestFixtures.addABookTo(inventory);
+                testFixtures.addABookTo(inventory);
 
             });
 
@@ -99,7 +94,7 @@ class JdoExceptionTranslationTest extends RegressionTestAbstract {
             assertNotNull(inventory.getProducts());
             assertEquals(3, inventory.getProducts().size());
 
-            jdoTestFixtures.assertInventoryHasBooks(inventory.getProducts(), 1, 2, 3);
+            testFixtures.assertInventoryHasBooks(inventory.getProducts(), 1, 2, 3);
         });
 
     }

@@ -71,7 +71,7 @@ class JpaEntityInjectingTest extends CausewayIntegrationTestAbstract {
     void setup() {
 
         // given
-        jpaTestFixtures.reinstall(()->kvStore.clear(JpaBook.class));
+        jpaTestFixtures.resetTo3Books(()->kvStore.clear(JpaBook.class));
         assertInjectCountRange(3, 9); //TODO there is some injection redundancy
     }
 

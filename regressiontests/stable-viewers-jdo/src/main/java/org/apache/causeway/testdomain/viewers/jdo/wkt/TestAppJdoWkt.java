@@ -84,14 +84,17 @@ public class TestAppJdoWkt extends SpringBootServletInitializer {
             return "Hello, " + userService.currentUserNameElseNobody();
         }
 
-        @Action @ActionLayout(sequence = "0.1")
-        public TestHomePage setup() {
-            return this;
+        @Action @ActionLayout(sequence = "0.1",
+                describedAs = "resets the repository to having 3 sample books")
+        public JdoInventoryJaxbVm reset() {
+            testFixtures.clearRepository();
+            testFixtures.add3Books();
+            return openSamplePage();
         }
 
         @Action @ActionLayout(sequence = "0.2")
         public JdoInventoryJaxbVm openSamplePage() {
-            return testFixtures.setUpViewmodelWith3Books();
+            return testFixtures.createViewmodelWithCurrentBooks();
         }
 
         @Action @ActionLayout(sequence = "0.3")

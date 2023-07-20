@@ -26,10 +26,10 @@ import org.springframework.test.context.TestPropertySource;
 
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.testdomain.RegressionTestAbstract;
 import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.JpaInventoryJaxbVm;
 import org.apache.causeway.testdomain.jpa.JpaTestFixtures;
+import org.apache.causeway.testdomain.jpa.RegressionTestWithJpaFixtures;
 
 import lombok.val;
 
@@ -39,7 +39,7 @@ import lombok.val;
         })
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
 //@Transactional
-class JpaJaxbTest extends RegressionTestAbstract {
+class JpaJaxbTest extends RegressionTestWithJpaFixtures {
 
     @Inject private JpaTestFixtures testFixtures;
     @Inject private JaxbService jaxbService;
@@ -48,7 +48,7 @@ class JpaJaxbTest extends RegressionTestAbstract {
     void inventoryJaxbVm_shouldRoundtripProperly() {
 
         val xml = call(()->{
-            val inventoryJaxbVm = testFixtures.setUpViewmodelWith3Books();
+            val inventoryJaxbVm = testFixtures.createViewmodelWithCurrentBooks();
             // assert initial reference is populated as expected
             testFixtures.assertPopulatedWithDefaults(inventoryJaxbVm);
             // start round-trip

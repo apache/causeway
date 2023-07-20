@@ -105,7 +105,7 @@ extends PublishingTestFactoryAbstract {
         case ENTITY_PERSISTING:
 
             // given
-            lock = jdoTestFixtures.clearAndAquireLock();
+            lock = jdoTestFixtures.aquireLockAndClear();
             break;
 
         case ENTITY_LOADING:
@@ -145,7 +145,7 @@ extends PublishingTestFactoryAbstract {
 
             context.runGiven();
             //when
-            jdoTestFixtures.install(lock);
+            lock.install();
             break;
 
         case ENTITY_LOADING:
