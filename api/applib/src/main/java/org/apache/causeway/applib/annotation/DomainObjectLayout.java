@@ -132,17 +132,6 @@ public @interface DomainObjectLayout {
             default -1;
 
     /**
-     * The plural name of the class.
-     * @deprecated CAUSEWAY-3321: for standalone tables (action result),
-     *      parented tables (collections) or plural action parameters,
-     *      the framework should (and will) use the name of the originating action,
-     *      collection or action parameter instead.
-     */
-    @Deprecated(forRemoval = true)
-    String plural()
-            default "";
-
-    /**
      * Whether a standalone collection, when represented in a table form, should additionally be
      * &quot;decorated&quot; with client-side (javascript) enhancements, for example to enable paging and filtering.
      */

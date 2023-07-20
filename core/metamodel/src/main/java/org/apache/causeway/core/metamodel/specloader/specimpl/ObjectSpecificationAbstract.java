@@ -56,7 +56,6 @@ import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.help.HelpFacet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.causeway.core.metamodel.facets.all.i8n.noun.NounForm;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
@@ -516,7 +515,7 @@ implements ObjectSpecification {
     @Override
     public String getSingularName() {
         return lookupFacet(ObjectNamedFacet.class)
-            .flatMap(textFacet->textFacet.translated(NounForm.SINGULAR))
+            .flatMap(textFacet->textFacet.translated())
             // unexpected code reach, however keep for JUnit testing
             .orElseGet(()->String.format(
                     "(%s has neither title- nor object-named-facet)",

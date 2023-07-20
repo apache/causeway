@@ -20,7 +20,11 @@ package org.apache.causeway.core.metamodel.layout;
 
 import java.util.Comparator;
 
-import org.apache.causeway.applib.annotation.*;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.BookmarkPolicy;
+import org.apache.causeway.applib.annotation.LabelPosition;
+import org.apache.causeway.applib.annotation.TableDecorator;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
@@ -41,7 +45,6 @@ import org.apache.causeway.core.metamodel.facets.actions.position.ActionPosition
 import org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.causeway.core.metamodel.facets.all.i8n.noun.NounForm;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.causeway.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
@@ -137,7 +140,7 @@ public class LayoutFacetUtil {
             final FacetHolder facetHolder) {
 
         facetHolder.lookupNonFallbackFacet(ObjectNamedFacet.class)
-        .filter(namedFacet->namedFacet.getSupportedNounForms().contains(NounForm.SINGULAR))
+        .filter(ObjectNamedFacet::isNounPresent)
         .map(ObjectNamedFacet::singularTranslated)
         .ifPresent(hasNamed::setNamed);
     }

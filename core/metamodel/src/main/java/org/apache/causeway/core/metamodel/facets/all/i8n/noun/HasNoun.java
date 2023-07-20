@@ -22,10 +22,7 @@ import java.util.Optional;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.core.metamodel.facets.all.i8n.HasMemoizableTranslation;
-
-import lombok.NonNull;
 
 public interface HasNoun
 extends HasMemoizableTranslation {
@@ -34,19 +31,21 @@ extends HasMemoizableTranslation {
      * Originating text to be translated before use in the UI.
      * @return {@code Optional.empty()} if {@code nounForm} is not supported
      */
-    Optional<String> text(@NonNull NounForm nounForm);
+    Optional<String> text();
 
     /**
      * Translated text to be used in the UI.
      * @return {@code Optional.empty()} if {@code nounForm} is not supported
      */
-    Optional<String> translated(@NonNull NounForm nounForm);
+    Optional<String> translated();
 
-    ImmutableEnumSet<NounForm> getSupportedNounForms();
+    boolean isNounPresent();
 
     @Override
     default void memoizeTranslations() {
-        getSupportedNounForms().forEach(this::translated);
+        if(isNounPresent()) {
+            translated();
+        }
     }
 
     // -- SHORTCUTS
@@ -55,14 +54,14 @@ extends HasMemoizableTranslation {
      * Originating text of singular noun-form to be translated before use in the UI.
      */
     default @Nullable String singular() {
-        return text(NounForm.SINGULAR).orElse(null);
+        return text().orElse(null);
     }
 
     /**
      * Translated text of singular noun-form to be used in the UI.
      */
     default @Nullable String singularTranslated() {
-        return translated(NounForm.SINGULAR).orElse(null);
+        return translated().orElse(null);
     }
 
 

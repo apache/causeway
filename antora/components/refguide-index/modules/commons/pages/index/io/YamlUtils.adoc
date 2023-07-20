@@ -9,30 +9,30 @@ Utilities to convert from and to YAML format.
 .YamlUtils.java
 ----
 class YamlUtils {
-  Try<T> tryRead(Class<T> mappedType, String stringUtf8)     // <.>
-  Try<T> tryRead(Class<T> mappedType, DataSource source)     // <.>
-  void write(Object pojo, DataSink sink, YamlUtils.YamlCustomizer... customizers)     // <.>
-  String toStringUtf8(Object pojo, YamlUtils.YamlCustomizer... customizers)     // <.>
+  Try<T> tryRead(Class<T> mappedType, String stringUtf8, YamlUtils.YamlLoadCustomizer... customizers)     // <.>
+  Try<T> tryRead(Class<T> mappedType, DataSource source, YamlUtils.YamlLoadCustomizer... customizers)     // <.>
+  void write(Object pojo, DataSink sink, YamlUtils.YamlDumpCustomizer... customizers)     // <.>
+  String toStringUtf8(Object pojo, YamlUtils.YamlDumpCustomizer... customizers)     // <.>
   DumperOptions allowReadOnlyProperties(DumperOptions opts)     // <.>
 }
 ----
 
-<.> xref:#tryRead_Class_String[tryRead(Class, String)]
+<.> xref:#tryRead_Class_String_YamlUtils_YamlLoadCustomizer[tryRead(Class, String, YamlUtils_YamlLoadCustomizer)]
 +
 --
 Tries to deserialize YAML content from given UTF8 encoded _String_ into an instance of given _mappedType_ .
 --
-<.> xref:#tryRead_Class_DataSource[tryRead(Class, DataSource)]
+<.> xref:#tryRead_Class_DataSource_YamlUtils_YamlLoadCustomizer[tryRead(Class, DataSource, YamlUtils_YamlLoadCustomizer)]
 +
 --
 Tries to deserialize YAML content from given xref:refguide:commons:index/io/DataSource.adoc[DataSource] into an instance of given _requiredType_ .
 --
-<.> xref:#write_Object_DataSink_YamlUtils_YamlCustomizer[write(Object, DataSink, YamlUtils_YamlCustomizer)]
+<.> xref:#write_Object_DataSink_YamlUtils_YamlDumpCustomizer[write(Object, DataSink, YamlUtils_YamlDumpCustomizer)]
 +
 --
 Writes given _pojo_ to given xref:refguide:commons:index/io/DataSink.adoc[DataSink] .
 --
-<.> xref:#toStringUtf8_Object_YamlUtils_YamlCustomizer[toStringUtf8(Object, YamlUtils_YamlCustomizer)]
+<.> xref:#toStringUtf8_Object_YamlUtils_YamlDumpCustomizer[toStringUtf8(Object, YamlUtils_YamlDumpCustomizer)]
 +
 --
 Converts given _pojo_ to an UTF8 encoded _String_ .
@@ -45,23 +45,23 @@ Include read-only JavaBean properties (the ones without setters) in the YAML doc
 
 == Members
 
-[#tryRead_Class_String]
-=== tryRead(Class, String)
+[#tryRead_Class_String_YamlUtils_YamlLoadCustomizer]
+=== tryRead(Class, String, YamlUtils_YamlLoadCustomizer)
 
 Tries to deserialize YAML content from given UTF8 encoded _String_ into an instance of given _mappedType_ .
 
-[#tryRead_Class_DataSource]
-=== tryRead(Class, DataSource)
+[#tryRead_Class_DataSource_YamlUtils_YamlLoadCustomizer]
+=== tryRead(Class, DataSource, YamlUtils_YamlLoadCustomizer)
 
 Tries to deserialize YAML content from given xref:refguide:commons:index/io/DataSource.adoc[DataSource] into an instance of given _requiredType_ .
 
-[#write_Object_DataSink_YamlUtils_YamlCustomizer]
-=== write(Object, DataSink, YamlUtils_YamlCustomizer)
+[#write_Object_DataSink_YamlUtils_YamlDumpCustomizer]
+=== write(Object, DataSink, YamlUtils_YamlDumpCustomizer)
 
 Writes given _pojo_ to given xref:refguide:commons:index/io/DataSink.adoc[DataSink] .
 
-[#toStringUtf8_Object_YamlUtils_YamlCustomizer]
-=== toStringUtf8(Object, YamlUtils_YamlCustomizer)
+[#toStringUtf8_Object_YamlUtils_YamlDumpCustomizer]
+=== toStringUtf8(Object, YamlUtils_YamlDumpCustomizer)
 
 Converts given _pojo_ to an UTF8 encoded _String_ .
 

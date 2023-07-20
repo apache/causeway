@@ -149,19 +149,6 @@ public @interface Action {
             default Publishing.NOT_SPECIFIED;
 
     /**
-     * Indicates where (in the UI) the action is not visible to the user.
-     * <p>
-     * For {@link DomainService domain service} actions, the action's visibility is dependent upon its
-     * {@link DomainService#nature() nature}.
-     *
-     * @see ActionLayout#hidden()
-     * @deprecated use {@link ActionLayout#hidden()} instead
-     */
-    @Deprecated(forRemoval = true, since = "2.0.0-RC2")
-    Where hidden2()
-            default Where.NOT_SPECIFIED;
-
-    /**
      * Whether the action is restricted to prototyping, or whether it is
      * available also in production mode.
      *

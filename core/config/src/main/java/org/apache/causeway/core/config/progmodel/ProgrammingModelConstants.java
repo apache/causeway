@@ -625,7 +625,6 @@ public final class ProgrammingModelConstants {
                 return _Arrays.toArray(_Casts.uncheckedCast(nonScalar), elementType);
             }
         },
-        @Deprecated
         VECTOR(Vector.class, WrapperFactoryMethodSets.LIST){
             @Override public Object asContainerType(
                     final Class<?> elementType, final @NonNull List<?> nonScalar) {

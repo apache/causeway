@@ -6914,7 +6914,16 @@ Artifact: causeway-viewer-graphql-viewer
 Type: jar
 Directory: /incubator/viewers/graphql/viewer
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.viewer.graphql.viewer.source.ExecutionStrategyResolvingWithinInteraction +
+o.a.i.viewer.graphql.viewer.source.GraphQlServiceForCauseway +
+o.a.i.viewer.graphql.viewer.source.GraphQlSourceForCauseway +
+o.a.i.viewer.graphql.viewer.source.ObjectTypeFactory +
+o.a.i.viewer.graphql.viewer.source.QueryFieldFactory +
+****
+
+.Dependencies
 ****
 org.apache.causeway.core:causeway-core-webapp:jar:<managed> +
 org.apache.causeway.incubator.viewer:causeway-viewer-graphql-model:jar:<managed> +
@@ -7000,6 +7009,12 @@ Directory: /incubator/extensions/core/commandreplay/primary
 ----
 |A module for obtaining commands from a primary
 
+.Components
+****
+o.a.i.extensions.commandreplay.primary.config.PrimaryConfig +
+o.a.i.extensions.commandreplay.primary.spiimpl.CaptureResultOfCommand +
+****
+
 .Dependencies
 ****
 org.apache.causeway.core:causeway-core-config:jar:<managed> +
@@ -7024,6 +7039,16 @@ Directory: /incubator/extensions/core/commandreplay/secondary
 ----
 |A module providing a Quartz Job to run on a secondary system,
 for obtaining commands from a primary and saving them so that they are replayed.
+
+.Components
+****
+o.a.i.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserException +
+o.a.i.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserResult +
+o.a.i.extensions.commandreplay.secondary.analysis.CommandReplayAnalysisService +
+o.a.i.extensions.commandreplay.secondary.config.SecondaryConfig +
+o.a.i.extensions.commandreplay.secondary.fetch.CommandFetcher +
+o.a.i.extensions.commandreplay.secondary.job.ReplicateAndReplayJob +
+****
 
 .Dependencies
 ****

@@ -63,7 +63,6 @@ extends FacetFactoryAbstract {
         processRestrictTo(processMethodContext, actionIfAny);
         processSemantics(processMethodContext, actionIfAny);
 
-
         // must come after processing semantics
         processCommandPublishing(processMethodContext, actionIfAny);
 
