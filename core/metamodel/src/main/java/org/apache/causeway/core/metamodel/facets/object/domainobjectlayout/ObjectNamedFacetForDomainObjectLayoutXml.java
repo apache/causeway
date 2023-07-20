@@ -49,7 +49,7 @@ extends ObjectNamedFacetAbstract {
                 .singular(singular)
                 .build();
 
-        if(nounForms.getSupportedNounForms().isEmpty()) {
+        if(!nounForms.isNounPresent()) {
             return Optional.empty();
         }
 

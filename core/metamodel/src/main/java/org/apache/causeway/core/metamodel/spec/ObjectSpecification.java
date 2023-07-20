@@ -49,7 +49,6 @@ import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFa
 import org.apache.causeway.core.metamodel.facets.all.help.HelpFacet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.all.i8n.noun.HasNoun;
-import org.apache.causeway.core.metamodel.facets.all.i8n.noun.NounForm;
 import org.apache.causeway.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
@@ -215,8 +214,7 @@ extends
     /**
      * Returns the (singular) name for objects of this specification.
      * <p>
-     * Corresponds to the {@link HasNoun#translated(NounForm)}
-     * with {@link NounForm#SINGULAR}
+     * Corresponds to the {@link HasNoun#translated()}
      * of {@link ObjectNamedFacet}; is
      * not necessarily immutable.
      */

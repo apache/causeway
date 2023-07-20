@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.facets.all.i8n.noun;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
 
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.commons.internal.base._Lazy;
@@ -81,17 +80,13 @@ implements HasNoun {
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("context", translationContext);
-        visitor.accept("nounForms",
-                nounForms.getSupportedNounForms()
-                .stream()
-                .map(NounForm::name)
-                .collect(Collectors.joining(", ")));
-
-        nounForms.getSupportedNounForms()
-        .forEach(nounForm->{
-            visitor.accept("originalText." + nounForm, text());
-            visitor.accept("translated." + nounForm, translated()); // memoizes as a side-effect
-        });
+        if(nounForms.isNounPresent()) {
+            visitor.accept("nounForms", "SINGULAR");
+            visitor.accept("originalText.SINGULAR", text());
+            visitor.accept("translated.SINGULAR", translated()); // memoizes as a side-effect
+        } else {
+            visitor.accept("nounForms", "");
+        }
     }
 
     @Override

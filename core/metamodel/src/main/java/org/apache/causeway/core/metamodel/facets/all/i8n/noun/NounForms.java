@@ -18,25 +18,23 @@
  */
 package org.apache.causeway.core.metamodel.facets.all.i8n.noun;
 
-import java.util.EnumSet;
 import java.util.Optional;
 
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
-import org.apache.causeway.commons.collections.ImmutableEnumSet;
 
 import lombok.Builder;
 import lombok.NonNull;
-import lombok.Value;
 import lombok.val;
 
 /**
- * Immutable value object that holds literals for its various supported {@link NounForm}(s).
+ * Immutable value object that holds the literal (String) for a noun.
+ *
  * @since 2.0
  */
-@Value @Builder
+@lombok.Value @Builder
 public class NounForms {
 
     public static NounFormsBuilder builderSingular(final @Nullable String singular) {
@@ -63,20 +61,10 @@ public class NounForms {
         return builder.build();
     }
 
-    public ImmutableEnumSet<NounForm> getSupportedNounForms() {
-
-        val enumSet = singular!=null
-                ? EnumSet.of(NounForm.SINGULAR)
-                : EnumSet.noneOf(NounForm.class);
-
-        return ImmutableEnumSet.from(enumSet);
-    }
-
     public Optional<String> lookup() {
         return isNounPresent()
                 ? Optional.of(getSingular())
                 : Optional.empty();
     }
-
 
 }
