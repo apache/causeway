@@ -24,7 +24,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
-import org.apache.causeway.core.metamodel.facets.all.i8n.noun.NounForm;
 import org.apache.causeway.core.metamodel.facets.all.i8n.noun.NounForms;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetSynthesized;
@@ -44,8 +43,7 @@ extends MetaModelPostProcessorAbstract {
     @Override
     public void postProcessObject(final ObjectSpecification objectSpecification) {
 
-        if(!(objectSpecification.isEntityOrViewModelOrAbstract()
-                || objectSpecification.isInjectable())) {
+        if((!objectSpecification.isEntityOrViewModelOrAbstract() && !objectSpecification.isInjectable())) {
             return;
         }
 
@@ -58,7 +56,7 @@ extends MetaModelPostProcessorAbstract {
 
         val singular = topRank
                 .stream()
-                .filter(objectNamedFacet->objectNamedFacet.getSupportedNounForms().contains(NounForm.SINGULAR))
+                .filter(objectNamedFacet->objectNamedFacet.isNounPresent())
                 .findFirst()
                 .map(ObjectNamedFacet::singular)
                 .filter(_Strings::isNotEmpty)

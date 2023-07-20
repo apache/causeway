@@ -24,7 +24,6 @@ import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import org.apache.causeway.applib.services.i18n.TranslationContext;
-import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
@@ -64,18 +63,18 @@ implements HasNoun {
     }
 
     @Override
-    public final Optional<String> text(final @NonNull NounForm nounForm) {
-        return nounForms.lookup(nounForm);
+    public boolean isNounPresent() {
+        return nounForms.isNounPresent();
     }
 
     @Override
-    public final Optional<String> translated(final @NonNull NounForm nounForm) {
-        return translatedNounForms.get().lookup(nounForm);
+    public final Optional<String> text() {
+        return nounForms.lookup();
     }
 
     @Override
-    public ImmutableEnumSet<NounForm> getSupportedNounForms() {
-        return nounForms.getSupportedNounForms();
+    public final Optional<String> translated() {
+        return translatedNounForms.get().lookup();
     }
 
     @Override
@@ -83,15 +82,15 @@ implements HasNoun {
         super.visitAttributes(visitor);
         visitor.accept("context", translationContext);
         visitor.accept("nounForms",
-                getSupportedNounForms()
+                nounForms.getSupportedNounForms()
                 .stream()
                 .map(NounForm::name)
                 .collect(Collectors.joining(", ")));
 
-        getSupportedNounForms()
+        nounForms.getSupportedNounForms()
         .forEach(nounForm->{
-            visitor.accept("originalText." + nounForm, text(nounForm));
-            visitor.accept("translated." + nounForm, translated(nounForm)); // memoizes as a side-effect
+            visitor.accept("originalText." + nounForm, text());
+            visitor.accept("translated." + nounForm, translated()); // memoizes as a side-effect
         });
     }
 

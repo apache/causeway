@@ -43,7 +43,6 @@ import org.apache.causeway.applib.layout.links.Link;
         , propOrder = {
                 "named"
                 , "describedAs"
-                , "plural"
                 , "cssClass"
                 , "cssClassFa"
                 , "cssClassFaPosition"

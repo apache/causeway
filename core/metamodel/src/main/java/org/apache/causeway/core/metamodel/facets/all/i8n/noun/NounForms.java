@@ -26,10 +26,8 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.Builder;
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.Value;
 import lombok.val;
@@ -48,32 +46,8 @@ public class NounForms {
 
     private final @Nullable String singular;
 
-    @Getter(lazy = true)
-    final ImmutableEnumSet<NounForm> supportedNounForms = supportedNounForms();
-
-    private ImmutableEnumSet<NounForm> supportedNounForms() {
-
-        val supportedNounForms = EnumSet.noneOf(NounForm.class);
-
-        if(singular!=null) {
-            supportedNounForms.add(NounForm.SINGULAR);
-        }
-
-        return ImmutableEnumSet.from(supportedNounForms);
-    }
-
-    public Optional<String> lookup(final @NonNull NounForm nounForm) {
-        if(!getSupportedNounForms().contains(nounForm)) {
-            return Optional.empty();
-        };
-        switch(nounForm) {
-        case SINGULAR:
-            // non-null, as nulls are guarded by getSupportedNounForms()
-            return Optional.of(getSingular());
-        default:
-            break;
-        }
-        throw _Exceptions.unmatchedCase(nounForm);
+    public boolean isNounPresent() {
+        return singular!=null;
     }
 
     public NounForms translate(
@@ -83,20 +57,26 @@ public class NounForms {
         val builder = NounForms
                 .builder();
 
-        getSupportedNounForms()
-        .forEach(nounForm->{
-
-            switch(nounForm) {
-            case SINGULAR:
-                builder.singular(translationService.translate(context, singular));
-                break;
-            default:
-                throw _Exceptions.unmatchedCase(nounForm);
-            }
-
-        });
-
+        if(isNounPresent()) {
+            builder.singular(translationService.translate(context, singular));
+        }
         return builder.build();
     }
+
+    public ImmutableEnumSet<NounForm> getSupportedNounForms() {
+
+        val enumSet = singular!=null
+                ? EnumSet.of(NounForm.SINGULAR)
+                : EnumSet.noneOf(NounForm.class);
+
+        return ImmutableEnumSet.from(enumSet);
+    }
+
+    public Optional<String> lookup() {
+        return isNounPresent()
+                ? Optional.of(getSingular())
+                : Optional.empty();
+    }
+
 
 }

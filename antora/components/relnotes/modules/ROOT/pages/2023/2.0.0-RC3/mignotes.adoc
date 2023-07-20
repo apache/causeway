@@ -15,4 +15,4 @@ As previously marked deprecated for removal:
 * `Collection#hidden` ... use `CollectionLayout#hidden` instead
 * `Property#hidden` ... use `PropertyLayout#hidden` instead
 * `@LogicalTypeName(..)` ... use `@Named(..)` instead
-
+* `DomainObjectLayoutData#plural` (XML)
