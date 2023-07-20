@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.facets.all.named;
 
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.all.i8n.noun.NounForms;
+import org.apache.causeway.core.metamodel.facets.all.i8n.noun.Noun;
 
 /**
  * To be installed by facet-post-processing only,
@@ -32,11 +32,11 @@ public class ObjectNamedFacetSynthesized
 extends ObjectNamedFacetAbstract {
 
     public ObjectNamedFacetSynthesized(
-            final NounForms nounForms,
+            final Noun noun,
             final FacetHolder holder) {
-        super(nounForms, holder, Precedence.SYNTHESIZED);
+        super(noun, holder, Precedence.SYNTHESIZED);
         // assert that we have a noun
-        _Assert.assertTrue(nounForms.isNounPresent());
+        _Assert.assertTrue(noun.isLiteralPresent());
     }
 
 }

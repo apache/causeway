@@ -25,46 +25,35 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 
-import lombok.Builder;
 import lombok.NonNull;
-import lombok.val;
 
 /**
- * Immutable value object that holds the literal (String) for a noun.
+ * Immutable value object that holds the null-able literal (String) for a noun.
  *
  * @since 2.0
  */
-@lombok.Value @Builder
-public class NounForms {
-
-    public static NounFormsBuilder builderSingular(final @Nullable String singular) {
-        return NounForms.builder()
-                .singular(singular);
-    }
+@lombok.Value(staticConstructor = "singular")
+public class Noun {
 
     private final @Nullable String singular;
 
-    public boolean isNounPresent() {
+    public boolean isLiteralPresent() {
         return singular!=null;
     }
 
-    public NounForms translate(
+    public Optional<String> literal() {
+        return isLiteralPresent()
+                ? Optional.of(getSingular())
+                : Optional.empty();
+    }
+
+    public Noun translate(
             final @NonNull TranslationService translationService,
             final TranslationContext context) {
 
-        val builder = NounForms
-                .builder();
-
-        if(isNounPresent()) {
-            builder.singular(translationService.translate(context, singular));
-        }
-        return builder.build();
-    }
-
-    public Optional<String> lookup() {
-        return isNounPresent()
-                ? Optional.of(getSingular())
-                : Optional.empty();
+        return isLiteralPresent()
+                ? singular(translationService.translate(context, singular))
+                : this;
     }
 
 }

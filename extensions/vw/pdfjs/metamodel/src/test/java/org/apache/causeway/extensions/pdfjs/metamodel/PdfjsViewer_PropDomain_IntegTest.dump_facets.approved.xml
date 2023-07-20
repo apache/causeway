@@ -11,10 +11,10 @@
       <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetSynthesized">
         <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.extensions.pdfjs.metamodel.domains.prop.SomeViewModel#)"/>
         <mml:attr name="facet" value="ObjectNamedFacetSynthesized"/>
-        <mml:attr name="nounForms" value="SINGULAR"/>
-        <mml:attr name="originalText.SINGULAR" value="Optional[Some View Model]"/>
+        <mml:attr name="hasNoun" value="true"/>
+        <mml:attr name="originalText" value="Optional[Some View Model]"/>
         <mml:attr name="precedence" value="SYNTHESIZED"/>
-        <mml:attr name="translated.SINGULAR" value="Optional[Some View Model]"/>
+        <mml:attr name="translated" value="Optional[Some View Model]"/>
       </mml:facet>
       <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetFallback">
         <mml:attr name="bookmarkPolicy" value="NEVER"/>

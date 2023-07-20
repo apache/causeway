@@ -23,7 +23,7 @@ import java.util.Optional;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.all.i8n.noun.NounForms;
+import org.apache.causeway.core.metamodel.facets.all.i8n.noun.Noun;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetAbstract;
 
@@ -44,25 +44,22 @@ extends ObjectNamedFacetAbstract {
 
         val singular = _Strings.emptyToNull(domainObjectLayout.named());
 
-        val nounForms = NounForms
-                .builder()
-                .singular(singular)
-                .build();
+        val noun = Noun.singular(singular);
 
-        if(!nounForms.isNounPresent()) {
+        if(!noun.isLiteralPresent()) {
             return Optional.empty();
         }
 
         return Optional.of(
                 new ObjectNamedFacetForDomainObjectLayoutAnnotation(
-                            nounForms,
+                            noun,
                             holder));
     }
 
     private ObjectNamedFacetForDomainObjectLayoutAnnotation(
-            final NounForms nounForms,
+            final Noun noun,
             final FacetHolder holder) {
-        super(nounForms, holder);
+        super(noun, holder);
     }
 
 }

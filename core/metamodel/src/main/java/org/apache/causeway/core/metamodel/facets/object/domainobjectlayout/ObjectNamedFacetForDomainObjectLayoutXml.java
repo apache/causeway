@@ -24,7 +24,7 @@ import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.all.i8n.noun.NounForms;
+import org.apache.causeway.core.metamodel.facets.all.i8n.noun.Noun;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetAbstract;
 
@@ -44,27 +44,24 @@ extends ObjectNamedFacetAbstract {
 
         val singular = _Strings.emptyToNull(domainObjectLayout.getNamed());
 
-        val nounForms = NounForms
-                .builder()
-                .singular(singular)
-                .build();
+        val noun = Noun.singular(singular);
 
-        if(!nounForms.isNounPresent()) {
+        if(!noun.isLiteralPresent()) {
             return Optional.empty();
         }
 
         return Optional.of(
                 new ObjectNamedFacetForDomainObjectLayoutXml(
-                            nounForms,
+                        noun,
                             holder,
                             precedence));
     }
 
     private ObjectNamedFacetForDomainObjectLayoutXml(
-            final NounForms nounForms,
+            final Noun noun,
             final FacetHolder holder,
             final Facet.Precedence precedence) {
-        super(nounForms, holder, precedence);
+        super(noun, holder, precedence);
     }
 
     @Override

@@ -24,7 +24,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
-import org.apache.causeway.core.metamodel.facets.all.i8n.noun.NounForms;
+import org.apache.causeway.core.metamodel.facets.all.i8n.noun.Noun;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetSynthesized;
 import org.apache.causeway.core.metamodel.postprocessors.MetaModelPostProcessorAbstract;
@@ -64,9 +64,7 @@ extends MetaModelPostProcessorAbstract {
 
         FacetUtil.addFacet(
                 new ObjectNamedFacetSynthesized(
-                        NounForms.builder()
-                            .singular(singular)
-                            .build(),
+                        Noun.singular(singular),
                         objectSpecification)
                 );
 

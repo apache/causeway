@@ -842,10 +842,10 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetSynthesized">
                 <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperActionWithNameStartingWithSetOrGet#)"/>
                 <mml:attr name="facet" value="ObjectNamedFacetSynthesized"/>
-                <mml:attr name="nounForms" value="SINGULAR"/>
-                <mml:attr name="originalText.SINGULAR" value="Optional[Proper Action With Name Starting With Set Or Get]"/>
+                <mml:attr name="hasNoun" value="true"/>
+                <mml:attr name="originalText" value="Optional[Proper Action With Name Starting With Set Or Get]"/>
                 <mml:attr name="precedence" value="SYNTHESIZED"/>
-                <mml:attr name="translated.SINGULAR" value="Optional[Proper Action With Name Starting With Set Or Get]"/>
+                <mml:attr name="translated" value="Optional[Proper Action With Name Starting With Set Or Get]"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
@@ -1803,10 +1803,10 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetSynthesized">
                 <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperChoicesWhenActionHasParamSupportingMethodTypeOfReference#)"/>
                 <mml:attr name="facet" value="ObjectNamedFacetSynthesized"/>
-                <mml:attr name="nounForms" value="SINGULAR"/>
-                <mml:attr name="originalText.SINGULAR" value="Optional[Proper Choices When Action Has Param Supporting Method Type Of Reference]"/>
+                <mml:attr name="hasNoun" value="true"/>
+                <mml:attr name="originalText" value="Optional[Proper Choices When Action Has Param Supporting Method Type Of Reference]"/>
                 <mml:attr name="precedence" value="SYNTHESIZED"/>
-                <mml:attr name="translated.SINGULAR" value="Optional[Proper Choices When Action Has Param Supporting Method Type Of Reference]"/>
+                <mml:attr name="translated" value="Optional[Proper Choices When Action Has Param Supporting Method Type Of Reference]"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
@@ -2898,10 +2898,10 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetSynthesized">
                 <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperChoicesWhenActionHasParamSupportingMethodTypeOfString#)"/>
                 <mml:attr name="facet" value="ObjectNamedFacetSynthesized"/>
-                <mml:attr name="nounForms" value="SINGULAR"/>
-                <mml:attr name="originalText.SINGULAR" value="Optional[Proper Choices When Action Has Param Supporting Method Type Of String]"/>
+                <mml:attr name="hasNoun" value="true"/>
+                <mml:attr name="originalText" value="Optional[Proper Choices When Action Has Param Supporting Method Type Of String]"/>
                 <mml:attr name="precedence" value="SYNTHESIZED"/>
-                <mml:attr name="translated.SINGULAR" value="Optional[Proper Choices When Action Has Param Supporting Method Type Of String]"/>
+                <mml:attr name="translated" value="Optional[Proper Choices When Action Has Param Supporting Method Type Of String]"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
@@ -3998,10 +3998,10 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetSynthesized">
                 <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperChoicesWhenChoicesFrom#)"/>
                 <mml:attr name="facet" value="ObjectNamedFacetSynthesized"/>
-                <mml:attr name="nounForms" value="SINGULAR"/>
-                <mml:attr name="originalText.SINGULAR" value="Optional[Proper Choices When Choices From]"/>
+                <mml:attr name="hasNoun" value="true"/>
+                <mml:attr name="originalText" value="Optional[Proper Choices When Choices From]"/>
                 <mml:attr name="precedence" value="SYNTHESIZED"/>
-                <mml:attr name="translated.SINGULAR" value="Optional[Proper Choices When Choices From]"/>
+                <mml:attr name="translated" value="Optional[Proper Choices When Choices From]"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
@@ -4902,10 +4902,10 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetSynthesized">
                 <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperElementTypeVm#)"/>
                 <mml:attr name="facet" value="ObjectNamedFacetSynthesized"/>
-                <mml:attr name="nounForms" value="SINGULAR"/>
-                <mml:attr name="originalText.SINGULAR" value="Optional[Proper Element Type Vm]"/>
+                <mml:attr name="hasNoun" value="true"/>
+                <mml:attr name="originalText" value="Optional[Proper Element Type Vm]"/>
                 <mml:attr name="precedence" value="SYNTHESIZED"/>
-                <mml:attr name="translated.SINGULAR" value="Optional[Proper Element Type Vm]"/>
+                <mml:attr name="translated" value="Optional[Proper Element Type Vm]"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
@@ -6280,10 +6280,10 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetSynthesized">
                 <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperFullyImpl#)"/>
                 <mml:attr name="facet" value="ObjectNamedFacetSynthesized"/>
-                <mml:attr name="nounForms" value="SINGULAR"/>
-                <mml:attr name="originalText.SINGULAR" value="Optional[Proper Fully Impl]"/>
+                <mml:attr name="hasNoun" value="true"/>
+                <mml:attr name="originalText" value="Optional[Proper Fully Impl]"/>
                 <mml:attr name="precedence" value="SYNTHESIZED"/>
-                <mml:attr name="translated.SINGULAR" value="Optional[Proper Fully Impl]"/>
+                <mml:attr name="translated" value="Optional[Proper Fully Impl]"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.cssclass.method.CssClassFacetViaCssClassMethod">
                 <mml:attr name="facet" value="CssClassFacetViaCssClassMethod"/>
@@ -7278,10 +7278,10 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetSynthesized">
                 <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperGenericImpl#)"/>
                 <mml:attr name="facet" value="ObjectNamedFacetSynthesized"/>
-                <mml:attr name="nounForms" value="SINGULAR"/>
-                <mml:attr name="originalText.SINGULAR" value="Optional[Proper Generic Impl]"/>
+                <mml:attr name="hasNoun" value="true"/>
+                <mml:attr name="originalText" value="Optional[Proper Generic Impl]"/>
                 <mml:attr name="precedence" value="SYNTHESIZED"/>
-                <mml:attr name="translated.SINGULAR" value="Optional[Proper Generic Impl]"/>
+                <mml:attr name="translated" value="Optional[Proper Generic Impl]"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
@@ -8085,10 +8085,10 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetSynthesized">
                 <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperLayoutOnPropertyWithLombok#)"/>
                 <mml:attr name="facet" value="ObjectNamedFacetSynthesized"/>
-                <mml:attr name="nounForms" value="SINGULAR"/>
-                <mml:attr name="originalText.SINGULAR" value="Optional[Proper Layout On Property With Lombok]"/>
+                <mml:attr name="hasNoun" value="true"/>
+                <mml:attr name="originalText" value="Optional[Proper Layout On Property With Lombok]"/>
                 <mml:attr name="precedence" value="SYNTHESIZED"/>
-                <mml:attr name="translated.SINGULAR" value="Optional[Proper Layout On Property With Lombok]"/>
+                <mml:attr name="translated" value="Optional[Proper Layout On Property With Lombok]"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
@@ -8922,10 +8922,10 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetSynthesized">
                 <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperMemberInheritance_usingAbstract#)"/>
                 <mml:attr name="facet" value="ObjectNamedFacetSynthesized"/>
-                <mml:attr name="nounForms" value="SINGULAR"/>
-                <mml:attr name="originalText.SINGULAR" value="Optional[Proper Member Inheritance_using Abstract]"/>
+                <mml:attr name="hasNoun" value="true"/>
+                <mml:attr name="originalText" value="Optional[Proper Member Inheritance_using Abstract]"/>
                 <mml:attr name="precedence" value="SYNTHESIZED"/>
-                <mml:attr name="translated.SINGULAR" value="Optional[Proper Member Inheritance_using Abstract]"/>
+                <mml:attr name="translated" value="Optional[Proper Member Inheritance_using Abstract]"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.cssclass.method.CssClassFacetViaCssClassMethod">
                 <mml:attr name="facet" value="CssClassFacetViaCssClassMethod"/>
@@ -10099,10 +10099,10 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetSynthesized">
                 <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperMemberInheritance_usingInterface#)"/>
                 <mml:attr name="facet" value="ObjectNamedFacetSynthesized"/>
-                <mml:attr name="nounForms" value="SINGULAR"/>
-                <mml:attr name="originalText.SINGULAR" value="Optional[Proper Member Inheritance_using Interface]"/>
+                <mml:attr name="hasNoun" value="true"/>
+                <mml:attr name="originalText" value="Optional[Proper Member Inheritance_using Interface]"/>
                 <mml:attr name="precedence" value="SYNTHESIZED"/>
-                <mml:attr name="translated.SINGULAR" value="Optional[Proper Member Inheritance_using Interface]"/>
+                <mml:attr name="translated" value="Optional[Proper Member Inheritance_using Interface]"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
@@ -11357,10 +11357,10 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetSynthesized">
                 <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperMemberOverloadingWhenInherited.WhenAnnotationOptional#)"/>
                 <mml:attr name="facet" value="ObjectNamedFacetSynthesized"/>
-                <mml:attr name="nounForms" value="SINGULAR"/>
-                <mml:attr name="originalText.SINGULAR" value="Optional[When Annotation Optional]"/>
+                <mml:attr name="hasNoun" value="true"/>
+                <mml:attr name="originalText" value="Optional[When Annotation Optional]"/>
                 <mml:attr name="precedence" value="SYNTHESIZED"/>
-                <mml:attr name="translated.SINGULAR" value="Optional[When Annotation Optional]"/>
+                <mml:attr name="translated" value="Optional[When Annotation Optional]"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
@@ -12158,10 +12158,10 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetSynthesized">
                 <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperMemberOverloadingWhenInherited.WhenAnnotationRequired#)"/>
                 <mml:attr name="facet" value="ObjectNamedFacetSynthesized"/>
-                <mml:attr name="nounForms" value="SINGULAR"/>
-                <mml:attr name="originalText.SINGULAR" value="Optional[When Annotation Required]"/>
+                <mml:attr name="hasNoun" value="true"/>
+                <mml:attr name="originalText" value="Optional[When Annotation Required]"/>
                 <mml:attr name="precedence" value="SYNTHESIZED"/>
-                <mml:attr name="translated.SINGULAR" value="Optional[When Annotation Required]"/>
+                <mml:attr name="translated" value="Optional[When Annotation Required]"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
@@ -12963,10 +12963,10 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetSynthesized">
                 <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperMemberOverloadingWhenInherited.WhenEncapsulationEnabled#)"/>
                 <mml:attr name="facet" value="ObjectNamedFacetSynthesized"/>
-                <mml:attr name="nounForms" value="SINGULAR"/>
-                <mml:attr name="originalText.SINGULAR" value="Optional[When Encapsulation Enabled]"/>
+                <mml:attr name="hasNoun" value="true"/>
+                <mml:attr name="originalText" value="Optional[When Encapsulation Enabled]"/>
                 <mml:attr name="precedence" value="SYNTHESIZED"/>
-                <mml:attr name="translated.SINGULAR" value="Optional[When Encapsulation Enabled]"/>
+                <mml:attr name="translated" value="Optional[When Encapsulation Enabled]"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
@@ -13768,10 +13768,10 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetSynthesized">
                 <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperMemberSupport#)"/>
                 <mml:attr name="facet" value="ObjectNamedFacetSynthesized"/>
-                <mml:attr name="nounForms" value="SINGULAR"/>
-                <mml:attr name="originalText.SINGULAR" value="Optional[Proper Member Support]"/>
+                <mml:attr name="hasNoun" value="true"/>
+                <mml:attr name="originalText" value="Optional[Proper Member Support]"/>
                 <mml:attr name="precedence" value="SYNTHESIZED"/>
-                <mml:attr name="translated.SINGULAR" value="Optional[Proper Member Support]"/>
+                <mml:attr name="translated" value="Optional[Proper Member Support]"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
@@ -17068,10 +17068,10 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetSynthesized">
                 <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperMemberSupportDiscovery.WhenAnnotationOptional#)"/>
                 <mml:attr name="facet" value="ObjectNamedFacetSynthesized"/>
-                <mml:attr name="nounForms" value="SINGULAR"/>
-                <mml:attr name="originalText.SINGULAR" value="Optional[When Annotation Optional]"/>
+                <mml:attr name="hasNoun" value="true"/>
+                <mml:attr name="originalText" value="Optional[When Annotation Optional]"/>
                 <mml:attr name="precedence" value="SYNTHESIZED"/>
-                <mml:attr name="translated.SINGULAR" value="Optional[When Annotation Optional]"/>
+                <mml:attr name="translated" value="Optional[When Annotation Optional]"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
@@ -18221,10 +18221,10 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetSynthesized">
                 <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperMemberSupportDiscovery.WhenAnnotationRequired#)"/>
                 <mml:attr name="facet" value="ObjectNamedFacetSynthesized"/>
-                <mml:attr name="nounForms" value="SINGULAR"/>
-                <mml:attr name="originalText.SINGULAR" value="Optional[When Annotation Required]"/>
+                <mml:attr name="hasNoun" value="true"/>
+                <mml:attr name="originalText" value="Optional[When Annotation Required]"/>
                 <mml:attr name="precedence" value="SYNTHESIZED"/>
-                <mml:attr name="translated.SINGULAR" value="Optional[When Annotation Required]"/>
+                <mml:attr name="translated" value="Optional[When Annotation Required]"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
@@ -19378,10 +19378,10 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetSynthesized">
                 <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperMemberSupportDiscovery.WhenEncapsulationEnabled#)"/>
                 <mml:attr name="facet" value="ObjectNamedFacetSynthesized"/>
-                <mml:attr name="nounForms" value="SINGULAR"/>
-                <mml:attr name="originalText.SINGULAR" value="Optional[When Encapsulation Enabled]"/>
+                <mml:attr name="hasNoun" value="true"/>
+                <mml:attr name="originalText" value="Optional[When Encapsulation Enabled]"/>
                 <mml:attr name="precedence" value="SYNTHESIZED"/>
-                <mml:attr name="translated.SINGULAR" value="Optional[When Encapsulation Enabled]"/>
+                <mml:attr name="translated" value="Optional[When Encapsulation Enabled]"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
@@ -23600,10 +23600,10 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetSynthesized">
                 <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperMixinContribution#)"/>
                 <mml:attr name="facet" value="ObjectNamedFacetSynthesized"/>
-                <mml:attr name="nounForms" value="SINGULAR"/>
-                <mml:attr name="originalText.SINGULAR" value="Optional[Proper Mixin Contribution]"/>
+                <mml:attr name="hasNoun" value="true"/>
+                <mml:attr name="originalText" value="Optional[Proper Mixin Contribution]"/>
                 <mml:attr name="precedence" value="SYNTHESIZED"/>
-                <mml:attr name="translated.SINGULAR" value="Optional[Proper Mixin Contribution]"/>
+                <mml:attr name="translated" value="Optional[Proper Mixin Contribution]"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
@@ -25957,10 +25957,10 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetSynthesized">
                 <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperParameterSupport#)"/>
                 <mml:attr name="facet" value="ObjectNamedFacetSynthesized"/>
-                <mml:attr name="nounForms" value="SINGULAR"/>
-                <mml:attr name="originalText.SINGULAR" value="Optional[Proper Parameter Support]"/>
+                <mml:attr name="hasNoun" value="true"/>
+                <mml:attr name="originalText" value="Optional[Proper Parameter Support]"/>
                 <mml:attr name="precedence" value="SYNTHESIZED"/>
-                <mml:attr name="translated.SINGULAR" value="Optional[Proper Parameter Support]"/>
+                <mml:attr name="translated" value="Optional[Proper Parameter Support]"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
@@ -26959,10 +26959,10 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetSynthesized">
                 <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperPrefixedAction#)"/>
                 <mml:attr name="facet" value="ObjectNamedFacetSynthesized"/>
-                <mml:attr name="nounForms" value="SINGULAR"/>
-                <mml:attr name="originalText.SINGULAR" value="Optional[Proper Prefixed Action]"/>
+                <mml:attr name="hasNoun" value="true"/>
+                <mml:attr name="originalText" value="Optional[Proper Prefixed Action]"/>
                 <mml:attr name="precedence" value="SYNTHESIZED"/>
-                <mml:attr name="translated.SINGULAR" value="Optional[Proper Prefixed Action]"/>
+                <mml:attr name="translated" value="Optional[Proper Prefixed Action]"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
@@ -27759,10 +27759,10 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetSynthesized">
                 <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperPrefixedMember#)"/>
                 <mml:attr name="facet" value="ObjectNamedFacetSynthesized"/>
-                <mml:attr name="nounForms" value="SINGULAR"/>
-                <mml:attr name="originalText.SINGULAR" value="Optional[Proper Prefixed Member]"/>
+                <mml:attr name="hasNoun" value="true"/>
+                <mml:attr name="originalText" value="Optional[Proper Prefixed Member]"/>
                 <mml:attr name="precedence" value="SYNTHESIZED"/>
-                <mml:attr name="translated.SINGULAR" value="Optional[Proper Prefixed Member]"/>
+                <mml:attr name="translated" value="Optional[Proper Prefixed Member]"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
@@ -28806,10 +28806,10 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetSynthesized">
                 <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ViewModelWithAnnotationOptionalUsingPrivateSupport#)"/>
                 <mml:attr name="facet" value="ObjectNamedFacetSynthesized"/>
-                <mml:attr name="nounForms" value="SINGULAR"/>
-                <mml:attr name="originalText.SINGULAR" value="Optional[View Model With Annotation Optional Using Private Support]"/>
+                <mml:attr name="hasNoun" value="true"/>
+                <mml:attr name="originalText" value="Optional[View Model With Annotation Optional Using Private Support]"/>
                 <mml:attr name="precedence" value="SYNTHESIZED"/>
-                <mml:attr name="translated.SINGULAR" value="Optional[View Model With Annotation Optional Using Private Support]"/>
+                <mml:attr name="translated" value="Optional[View Model With Annotation Optional Using Private Support]"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
@@ -29813,10 +29813,10 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetSynthesized">
                 <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ViewModelWithEncapsulatedMembers#)"/>
                 <mml:attr name="facet" value="ObjectNamedFacetSynthesized"/>
-                <mml:attr name="nounForms" value="SINGULAR"/>
-                <mml:attr name="originalText.SINGULAR" value="Optional[View Model With Encapsulated Members]"/>
+                <mml:attr name="hasNoun" value="true"/>
+                <mml:attr name="originalText" value="Optional[View Model With Encapsulated Members]"/>
                 <mml:attr name="precedence" value="SYNTHESIZED"/>
-                <mml:attr name="translated.SINGULAR" value="Optional[View Model With Encapsulated Members]"/>
+                <mml:attr name="translated" value="Optional[View Model With Encapsulated Members]"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>

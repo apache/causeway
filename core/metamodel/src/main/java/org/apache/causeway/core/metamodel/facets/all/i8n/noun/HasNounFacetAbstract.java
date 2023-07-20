@@ -37,55 +37,55 @@ implements HasNoun {
 
     protected final TranslationContext translationContext;
 
-    private final @NonNull NounForms nounForms;
-    private final @NonNull _Lazy<NounForms> translatedNounForms;
+    private final @NonNull Noun noun;
+    private final @NonNull _Lazy<Noun> translatedNounForms;
 
     protected HasNounFacetAbstract(
             final Class<? extends Facet> facetType,
             final TranslationContext translationContext,
-            final NounForms nounForms,
+            final Noun noun,
             final FacetHolder holder) {
-        this(facetType, translationContext, nounForms, holder, Precedence.DEFAULT);
+        this(facetType, translationContext, noun, holder, Precedence.DEFAULT);
     }
 
     protected HasNounFacetAbstract(
             final Class<? extends Facet> facetType,
             final TranslationContext translationContext,
-            final NounForms nounForms,
+            final Noun noun,
             final FacetHolder holder,
             final Precedence precedence) {
         super(facetType, holder, precedence);
-        this.nounForms = nounForms;
+        this.noun = noun;
         this.translationContext = translationContext;
         this.translatedNounForms = _Lazy.threadSafe(()->
-            nounForms.translate(holder.getTranslationService(), translationContext));
+            noun.translate(holder.getTranslationService(), translationContext));
     }
 
     @Override
     public boolean isNounPresent() {
-        return nounForms.isNounPresent();
+        return noun.isLiteralPresent();
     }
 
     @Override
     public final Optional<String> text() {
-        return nounForms.lookup();
+        return noun.literal();
     }
 
     @Override
     public final Optional<String> translated() {
-        return translatedNounForms.get().lookup();
+        return translatedNounForms.get().literal();
     }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("context", translationContext);
-        if(nounForms.isNounPresent()) {
-            visitor.accept("nounForms", "SINGULAR");
-            visitor.accept("originalText.SINGULAR", text());
-            visitor.accept("translated.SINGULAR", translated()); // memoizes as a side-effect
+        if(noun.isLiteralPresent()) {
+            visitor.accept("hasNoun", "true");
+            visitor.accept("originalText", text());
+            visitor.accept("translated", translated()); // memoizes as a side-effect
         } else {
-            visitor.accept("nounForms", "");
+            visitor.accept("hasNoun", "false");
         }
     }
 
@@ -100,7 +100,7 @@ implements HasNoun {
 
         val otherFacet =  (HasNounFacetAbstract)other;
 
-        return Objects.equals(this.nounForms, otherFacet.nounForms)
+        return Objects.equals(this.noun, otherFacet.noun)
                 && Objects.equals(this.translationContext, otherFacet.translationContext);
 
     }
