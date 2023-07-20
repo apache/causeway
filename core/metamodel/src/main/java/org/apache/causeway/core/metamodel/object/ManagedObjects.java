@@ -366,29 +366,6 @@ public final class ManagedObjects {
         return input;
     }
 
-
-    // -- COMMON SUPER TYPE FINDER
-
-    /**
-     * Optionally the common {@link ObjectSpecification} based on whether provided {@code objects}
-     * have any at all.
-     * @deprecated this is a hack - the MM has strict type-of metadata for non-scalars,
-     * resorting to runtime introspection does not conform with our design decisions
-     */
-    @Deprecated
-    public static Optional<ObjectSpecification> commonSpecification(
-            final @Nullable Can<ManagedObject> objects) {
-
-        if (_NullSafe.isEmpty(objects)) {
-            return Optional.empty();
-        }
-
-        return objects.stream()
-        .filter(obj->obj.getSpecialization().isSpecified())
-        .map(ManagedObject::getSpecification)
-        .reduce(ObjectSpecification::commonSuperType);
-    }
-
     // -- ADABT UTILITIES
 
     public static Can<ManagedObject> adaptMultipleOfType(

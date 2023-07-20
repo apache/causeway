@@ -150,32 +150,6 @@ HasBookmarking, HasCssClass, HasCssClassFa, HasDescribedAs, HasNamed {
 
 
 
-
-    /**
-     * @deprecated - unused, to remove.
-     */
-    @Deprecated
-    private String plural;
-
-    /**
-     * @deprecated - unused, to remove.
-     */
-    @Deprecated
-    @XmlElement(required = false)
-    public String getPlural() {
-        return plural;
-    }
-
-    /**
-     * @deprecated - unused, to remove.
-     */
-    @Deprecated
-    public void setPlural(final String plural) {
-        this.plural = plural;
-    }
-
-
-
     private Integer paged;
 
     @XmlElement(required = false)
@@ -183,7 +157,7 @@ HasBookmarking, HasCssClass, HasCssClassFa, HasDescribedAs, HasNamed {
         return paged;
     }
 
-    public void setPaged(Integer paged) {
+    public void setPaged(final Integer paged) {
         this.paged = paged;
     }
 

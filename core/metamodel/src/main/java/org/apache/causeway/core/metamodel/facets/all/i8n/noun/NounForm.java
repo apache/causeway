@@ -32,8 +32,4 @@ public enum NounForm {
 
     ;
 
-    public boolean isSingular() {
-        return this == SINGULAR;
-    }
-
 }
