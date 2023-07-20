@@ -165,7 +165,7 @@ Using the xref:modules.adoc#an-archetypal-module[archetypal module structure] de
 There needs to be one top-level module that references all of the modules that make up the application, either directly or indirectly (through transitive dependencies).
 In Apache Causeway we call this module the "app manifest" or `AppManifest`, though this is just a name: it is, ultimately, just another Spring `@Configuration` module.
 
-For example, in the xref:simpleapp.adoc[simpleapp] starter app the `AppManifest` looks like:
+For example, in the xref:docs:starters:simpleapp.adoc[simpleapp] starter app the `AppManifest` looks like:
 
 [source,java]
 .AppManifest.java

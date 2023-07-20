@@ -21,7 +21,6 @@ package org.apache.causeway.security.spring.authentication;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.causeway.security.spring.CausewayModuleSecuritySpring;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +29,7 @@ import org.apache.causeway.applib.services.iactn.InteractionProvider;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.core.security.authentication.AuthenticationRequest;
 import org.apache.causeway.core.security.authentication.Authenticator;
+import org.apache.causeway.security.spring.CausewayModuleSecuritySpring;
 
 /**
  * @since 2.0 {@index}
@@ -56,7 +56,7 @@ public class AuthenticatorSpring implements Authenticator {
     }
 
     @Override
-    public void logout(final InteractionContext session) {
+    public void logout() {
     }
 
 }

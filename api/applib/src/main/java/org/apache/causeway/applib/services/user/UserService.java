@@ -34,7 +34,9 @@ import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
+import org.apache.causeway.applib.services.keyvaluestore.KeyValueSessionStore;
 import org.apache.causeway.applib.services.sudo.SudoService;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.RequiredArgsConstructor;
@@ -53,7 +55,7 @@ import lombok.val;
  * <p>
  * In addition, if impersonation has been invoked through the
  * {@link ImpersonateMenu}, then this service will report the impersonated user,
- * with the companion {@link ImpersonatedUserHolder} taking responsibilty for
+ * with the companion {@link KeyValueSessionStore} taking responsibilty for
  * remembering the impersonated user over multiple (http) requests, eg using an
  * http session. It's important to note that under these circumstances the user
  * reported by this service (the &quot;effective&quot; user) will <i>not</i> be
@@ -66,7 +68,6 @@ import lombok.val;
  * @see org.apache.causeway.applib.services.iactnlayer.InteractionContext
  * @see SudoService
  * @see ImpersonateMenu
- * @see ImpersonatedUserHolder
  *
  * @since 1.x revised in 2.0 {@index}
  */
@@ -84,8 +85,10 @@ public class UserService {
      */
     public static final String NOBODY = "__causeway_nobody";
 
-    private final Provider<InteractionLayerTracker> iInteractionLayerTrackerProvider;
-    private final List<ImpersonatedUserHolder> impersonatedUserHolders;
+    private static final String SESSION_KEY_IMPERSONATED_USER = UserService.class.getName() + "#sudo";
+
+    private final Provider<InteractionLayerTracker> interactionLayerTrackerProvider;
+    private final Optional<KeyValueSessionStore> keyValueSessionStore;
 
     /**
      * Returns the details about the current user, either the &quot;effective&quot;
@@ -94,12 +97,15 @@ public class UserService {
      * {@link InteractionContext} of the current thread).
      */
     public Optional<UserMemento> currentUser() {
-        val impersonatedUserIfAny = impersonatedUserIfAny();
-        return impersonatedUserIfAny.isPresent()
-                ? impersonatedUserIfAny
-                : iInteractionLayerTrackerProvider.get()
+        val currentUser = interactionLayerTrackerProvider.get()
                     .currentInteractionContext()
                     .map(InteractionContext::getUser);
+
+        currentUser.ifPresent(
+                u->_Assert.assertEquals(u.isImpersonating(), isImpersonating(), ()->
+                    "framework bug: InteractionService and UserService disagree on impersonation state\n\t"));
+
+        return currentUser;
     }
 
     /**
@@ -158,7 +164,7 @@ public class UserService {
      * @see #stopImpersonating()
      */
     public boolean isImpersonating() {
-        return impersonatedUserIfAny().isPresent();
+        return lookupSudoUser().isPresent();
     }
 
     /**
@@ -180,20 +186,9 @@ public class UserService {
      *         request.
      */
     public boolean supportsImpersonation() {
-        return impersonatingHolder().isPresent();
-    }
-
-    private Optional<ImpersonatedUserHolder> impersonatingHolder() {
-        for (ImpersonatedUserHolder impersonatedUserHolder : impersonatedUserHolders) {
-            try {
-                if (impersonatedUserHolder.supportsImpersonation()) {
-                    return Optional.of(impersonatedUserHolder);
-                }
-            } catch (Exception ignore) {
-                // ignore
-            }
-        }
-        return Optional.empty();
+        return keyValueSessionStore
+            .map(KeyValueSessionStore::isSessionAvailable)
+            .orElse(false);
     }
 
     /**
@@ -222,9 +217,18 @@ public class UserService {
             final String userName,
             final List<String> roles,
             final String multiTenancyToken) {
-        impersonatingHolder()
-        .ifPresent(x -> x.setUserMemento(UserMemento.ofNameAndRoleNames(userName, roles)
-                .withImpersonating(true).withMultiTenancyToken(multiTenancyToken)));
+        setSudoUser(UserMemento.ofNameAndRoleNames(userName, roles)
+                .withImpersonating(true)
+                .withMultiTenancyToken(multiTenancyToken));
+    }
+
+    /**
+     * Optionally the impersonated user, based on whether
+     * a call to {@link #impersonateUser(String, List, String)}
+     * was made within the current HTTP session.
+     */
+    public Optional<UserMemento> lookupImpersonatedUser() {
+        return lookupSudoUser();
     }
 
     /**
@@ -246,11 +250,28 @@ public class UserService {
      * @see #isImpersonating()
      */
     public void stopImpersonating() {
-        impersonatingHolder().ifPresent(ImpersonatedUserHolder::clearUserMemento);
+        clearSudoUser();
     }
 
-    private Optional<UserMemento> impersonatedUserIfAny() {
-        return impersonatingHolder().flatMap(ImpersonatedUserHolder::getUserMemento);
+    // -- HELPER - KEY STORE FOR IMPERSONATING
+
+    private void setSudoUser(final @Nullable UserMemento userMemento) {
+        if(userMemento==null) {
+            clearSudoUser();
+            return;
+        }
+        keyValueSessionStore
+            .ifPresent(store->store.put(SESSION_KEY_IMPERSONATED_USER, userMemento));
+    }
+
+    private Optional<UserMemento> lookupSudoUser() {
+        return keyValueSessionStore
+            .flatMap(store->store.lookupAs(SESSION_KEY_IMPERSONATED_USER, UserMemento.class));
+    }
+
+    private void clearSudoUser() {
+        keyValueSessionStore
+            .ifPresent(store->store.clear(SESSION_KEY_IMPERSONATED_USER));
     }
 
 }

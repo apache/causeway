@@ -6,4 +6,4 @@
 == Implementation
 
 This is an SPI.
-The framework provides no default implementations, but an example implementation can be found in the demo app (link:https://demo-wicket.jdo.causeway.incode.work[jdo] or link:https://demo-wicket.jpa.causeway.incode.work[jpa]).
+The framework provides no default implementations, but an example implementation can be found in the xref:docs:referenceapp:about.adoc[reference app].

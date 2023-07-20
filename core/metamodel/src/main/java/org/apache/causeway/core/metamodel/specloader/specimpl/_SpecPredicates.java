@@ -41,11 +41,11 @@ final class _SpecPredicates {
 
     // -- HIGHER LEVEL - MIXINS
 
-    static boolean isMixedInAction(final @NonNull ObjectAction mixinTypeAction) {
-        if(HiddenFacet.isAlwaysHidden(mixinTypeAction)) {
+    static boolean isMixedInAction(final @NonNull ObjectAction mixinAction) {
+        if(HiddenFacet.isAlwaysHidden(mixinAction)) {
             return false;
         }
-        if(ContributingFacet.isActionContributionVetoed(mixinTypeAction)) {
+        if(ContributingFacet.isActionContributionVetoed(mixinAction)) {
             return false;
         }
         return true;
@@ -64,9 +64,12 @@ final class _SpecPredicates {
         if(ContributingFacet.isAssociationContributionVetoed(mixinAction)) {
             return false;
         }
+        /* [CAUSEWAY-3531] if neither contribution AS_ACTION nor contribution AS_ASSOCIATION are vetoed,
+         * then let the contribution AS_ACTION win */
+        if(!ContributingFacet.isActionContributionVetoed(mixinAction)) {
+            return false;
+        }
         return true;
     }
-
-
 
 }

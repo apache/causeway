@@ -1,0 +1,154 @@
+= Joda Time
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+This module provides support for four of the link:https://www.joda.org/joda-time/[Joda Time] value types.
+In most cases it is recommended to instead use the similar JDK classes (in the `java.time`) packages.
+However, Joda is well-established, and you may prefer it, or have legacy applications not yet converted to use the JDK classes.
+
+These are the Joda Time classes supported:
+
+.Joda Time support
+[cols="2m,1m", options="header"]
+|===
+
+| Joda Time class
+| JDK equivalent
+
+
+|org.joda.time.LocalDate
+|java.time.LocalDate
+
+|org.joda.time.DateTime
+|java.time.DateTime
+
+|org.joda.time.LocalDateTime
+|java.time.LocalDateTime
+
+|org.joda.time.LocalTime
+|java.time.LocalTime
+
+|===
+
+The module's support consists of:
+
+* implementations of xref:refguide:applib:index/value/semantics/ValueSemanticsProvider.adoc[ValueSemanticsProvider] for these types so that the framework can interact and render these values types appropriately (eg with date/time pickers)
+* implementations of `javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter` (nested subsclasses of `o.a.c.valuetypes.jodatime.applib.jaxb.JodaTimeJaxbAdapters`) to allow these values to be used in xref:userguide::view-models.adoc#jaxb[JAXB view models].
+
+Note that both the persistence mechanisms have their own support for persisting these Joda-time types; consult their respective documentation:
+
+* xref:pjpa::about.adoc[] has the `@Convert` and `@Converter` annotations.
++
+See link:https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/annotations_ref.htm#CACDIEID[JPA docs] for more details.
+
+* xref:pjdo::about.adoc[] requires the `org.datanucleus:datanucleus-jodatime` Maven dependency.
++
+See link:https://www.datanucleus.org/products/accessplatform_6_0/jdo/mapping.html#_temporal_types_java_util_java_sql_java_time_jodatime[JDO docs] for more details.
+
+
+
+
+
+
+== Setup
+
+=== Dependency Management
+
+In your application's top level `pom.xml`, add a dependency for this module's own bill of materials (BOM):
+
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.causeway.valuetypes</groupId>
+            <artifactId>causeway-valuetypes-jodatime</artifactId>
+            <scope>import</scope>
+            <type>pom</type>
+            <version>{page-causewayrel}</version>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+----
+
+=== Dependencies / Imports
+
+In those modules where there are domain objects that use the Joda Time value types within JAXB view models:
+
+* add this dependency:
++
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.causeway.valuetypes</groupId>
+        <artifactId>causeway-valuetypes-jodatime-applib</artifactId>
+    </dependency>
+</dependencies>
+----
+
+* and `@Import` this module:
++
+[source,java]
+.MyModule.java
+----
+@Configuration
+@Import({
+    CausewayModuleValJodatimeApplib.class,
+    // ...
+})
+public class MyModule { ... }
+----
+
+In addition, in the webapp module of your application, add the following dependencies:
+
+* for the metamodel:
++
+[source,xml]
+.pom.xml
+----
+<dependency>
+    <groupId>org.apache.causeway.valuetypes</groupId>
+    <artifactId>causeway-valuetypes-vega-ui-wkt</artifactId>
+</dependency>
+----
+
+And in your application's xref:userguide::modules.adoc#appmanifest[App Manifest], import the extension's implementation module:
+
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        CausewayModuleValJodatimeIntegration.class,
+        ...
+})
+public class AppManifest {
+}
+----
+
+
+== Usage
+
+The property can be declared and used in both entities and view models.
+
+* if declared in an xref:pjpa::[JPA] entity, see the link:https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/annotations_ref.htm#CACDIEID[JPA docs] for more details.
+
+* if declared in an xref:pjdo::[JDO] entity, see the link:https://www.datanucleus.org/products/accessplatform_6_0/jdo/mapping.html#_temporal_types_java_util_java_sql_java_time_jodatime[JDO docs] for more details.
+
+* if declared in a JAXB view model, annotate with the appropriate `XmlJavaTypeAdapter`:
++
+[source,java]
+----
+@Property
+@PropertyLayout
+@XmlElement(required = true)
+@XmlJavaTypeAdapter(JodaTimeJaxbAdapters.LocalDateToStringAdapter.class)
+@Getter
+private LocalDate createdOn;
+----
+
+

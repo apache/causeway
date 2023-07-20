@@ -24,7 +24,6 @@ import java.util.Optional;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceUnitUtil;
-import javax.persistence.metamodel.EntityType;
 
 import org.springframework.data.jpa.repository.JpaContext;
 import org.springframework.lang.Nullable;
@@ -37,15 +36,16 @@ import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.beans.PersistenceStack;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
+import org.apache.causeway.core.metamodel.facets.object.entity.EntityOrmMetadata;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.idstringifier.IdStringifierLookupService;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -115,7 +115,7 @@ public class JpaEntityFacet
     }
 
     private Class<?> getPrimaryKeyType() {
-        return getJpaEntityType().getIdType().getJavaType();
+        return getOrmMetadata().primaryKeyClass();
     }
 
     @Override
@@ -255,26 +255,10 @@ public class JpaEntityFacet
 
     // -- JPA METAMODEL
 
-    private final _Lazy<Optional<EntityType<?>>> jpaEntityTypeRef = _Lazy.threadSafe(this::queryJpaMetamodel);
-
-    /**
-     * get the JPA meta-model associated with this (corresponding) entity
-     */
-    private EntityType<?> getJpaEntityType() {
-        return jpaEntityTypeRef.get().orElseThrow(_Exceptions::noSuchElement);
-    }
-
-    /**
-     * find the JPA meta-model associated with this (corresponding) entity
-     */
-    private Optional<EntityType<?>> queryJpaMetamodel() {
-        return getEntityManager().getMetamodel().getEntities()
-                .stream()
-                .filter(type -> type.getJavaType().equals(entityClass))
-                .findFirst();
-    }
-
-
+    // lazily looks up the ORM metadata (needs an EntityManager)
+    @Getter(lazy=true)
+    private final EntityOrmMetadata ormMetadata =
+            _MetadataUtil.ormMetadataFor(getEntityManager(), entityClass);
 
     // -- DEPENDENCIES
 

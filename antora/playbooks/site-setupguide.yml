@@ -26,24 +26,22 @@ content:
 # antora
     - url: .
       start_path: antora/components/docs # docs
-      branches: HEAD
+      branches: [2.0.0-RC2]
     - url: .
       start_path: antora/components/setupguide # setupguide
-      branches: HEAD
+      branches: [2.0.0-RC2]
+
 # examples
-    - url: .
-      start_path: examples/demo/domain/src/main/adoc # docs
-      branches: HEAD
 
 # mavendeps
     - url: .
       start_path: mavendeps/adoc # docs
-      branches: HEAD
+      branches: [2.0.0-RC2]
 
 # starters
     - url: .
       start_path: starters/adoc # docs
-      branches: HEAD
+      branches: [2.0.0-RC2]
 
 
 ui:
@@ -55,9 +53,9 @@ ui:
   supplemental_files: antora/supplemental-ui
 
 asciidoc:
+  # npm i @antora/cli@^3.1.1 @antora/site-generator-default@^3.1.1 asciidoctor-kroki
   extensions:
-    - asciidoctor-kroki # requires: npm i ... @asciidoctor/core@2.2.0 asciidoctor-kroki
-#    - asciidoctor-plantuml # requires: npm i ... asciidoctor-plantuml@1.5.0
+    - asciidoctor-kroki
     - ./antora/lib/lorem
     - ./antora/lib/jira-issue
   attributes:
@@ -70,8 +68,8 @@ asciidoc:
     kroki-default-options: interactive # only available for SVG
     kroki-fetch-diagram: true
     kroki-server-url: https://kroki.io # (default)
-    page-causewayprev: "2.0.0-M9"
-    page-causewayrel: "2.0.0-RC1"
+    page-causewayprev: "2.0.0-RC2"
+    page-causewayrel: "2.0.0-RC3"
 
 output:
   dir: antora/target/site

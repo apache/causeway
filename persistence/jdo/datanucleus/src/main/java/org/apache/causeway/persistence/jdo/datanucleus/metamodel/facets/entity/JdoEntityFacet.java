@@ -29,10 +29,8 @@ import javax.inject.Inject;
 import javax.jdo.FetchGroup;
 import javax.jdo.PersistenceManager;
 
-import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 import org.datanucleus.api.jdo.JDOQuery;
 import org.datanucleus.enhancement.Persistable;
-import org.datanucleus.identity.SCOID;
 import org.datanucleus.store.rdbms.RDBMSPropertyNames;
 import org.springframework.lang.Nullable;
 
@@ -55,6 +53,7 @@ import org.apache.causeway.core.config.beans.PersistenceStack;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
+import org.apache.causeway.core.metamodel.facets.object.entity.EntityOrmMetadata;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.services.idstringifier.IdStringifierLookupService;
@@ -98,7 +97,12 @@ implements EntityFacet {
     // lazily looks up the primaryKeyTypeFor (needs a PersistenceManager)
     @Getter(lazy=true, value = AccessLevel.PROTECTED) @Accessors(fluent = true)
     private final PrimaryKeyType<?> primaryKeyTypeForDecoding = idStringifierLookupService()
-            .primaryKeyTypeFor(entityClass, primaryKeyTypeFor(entityClass));
+            .primaryKeyTypeFor(entityClass, getOrmMetadata().primaryKeyClass());
+
+    // lazily looks up the ORM metadata (needs a PersistenceManager)
+    @Getter(lazy=true)
+    private final EntityOrmMetadata ormMetadata =
+            _MetadataUtil.ormMetadataFor(getPersistenceManager(), entityClass);
 
     public JdoEntityFacet(
             final FacetHolder holder, final Class<?> entityClass) {
@@ -207,43 +211,6 @@ implements EntityFacet {
         }
 
         return Optional.ofNullable(entityPojo);
-    }
-
-    private Map<Class<?>, Class<?>> primaryKeyClassByEntityClass = new ConcurrentHashMap<>();
-
-    private Class<?> primaryKeyTypeFor(final Class<?> entityClass) {
-        return primaryKeyClassByEntityClass.computeIfAbsent(entityClass, this::lookupPrimaryKeyTypeFor);
-    }
-
-    private Class<?> lookupPrimaryKeyTypeFor(final Class<?> entityClass) {
-
-        val persistenceManager = getPersistenceManager();
-        val pmf = (JDOPersistenceManagerFactory) persistenceManager.getPersistenceManagerFactory();
-        val nucleusContext = pmf.getNucleusContext();
-
-        val contextLoader = Thread.currentThread().getContextClassLoader();
-        val clr = nucleusContext.getClassLoaderResolver(contextLoader);
-
-        val typeMetadata = pmf.getMetadata(entityClass.getName());
-
-        val identityType = typeMetadata.getIdentityType();
-        switch (identityType) {
-            case APPLICATION:
-                String objectIdClass = typeMetadata.getObjectIdClass();
-                return clr.classForName(objectIdClass);
-            case DATASTORE:
-                return nucleusContext.getIdentityManager().getDatastoreIdClass();
-            case NONDURABLE:
-                return SCOID.class;
-            case UNSPECIFIED:
-            default:
-                throw new IllegalStateException(String.format(
-                        "JdoEntityFacet was installed on '%s', "
-                        + "yet this entity has IdentityType '%s', "
-                        + "which is not supported by the framework's "
-                        + "JDO implementation.",
-                        entityClass.getName(), identityType));
-        }
     }
 
     @Override

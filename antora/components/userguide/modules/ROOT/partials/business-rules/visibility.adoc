@@ -85,10 +85,13 @@ Returns `true` to hide the action parameter, `false` means it is visible
 In this case, the user can use the `shipTo(...)` action to specify where to ship the `Order` to.
 However, if they check the first boolean parameter (ie, to ship the `Order` to the billing address already held on file), then the remaining parameters will all be hidden.
 
+[TIP]
+====
+If the action is implemented as a xref:mixins.adoc[mixin], then the `disableXxx` supporting method can be matched to the action parameter xref:mixins.adoc#using-the-parameter-name[by name] and also using xref:mixins.adoc#using-a-parameters-class[Parameters] class.
+====
 
 == See also
 
 * xref:refguide:applib-methods:prefixes.adoc#hide[hide...()] method prefix
 
-WARNING: TODO: v2: xref mixins for specifying supporting methods by name or using `Parameters`
 

@@ -72,8 +72,8 @@
       <i class="fa fa-envelope-o"></i> <a href="mailto:users@causeway.apache.org">users@causeway.apache.org</a>
     </div>
     <div class="social-links float-right">
-      <a title="Mailing List" href="docs/latest/support/mailing-list.html" class="email"><i class="fa fa-at"></i></a>
-      <a title="Slack Channel" href="docs/latest/support/slack-channel.html" class="slack"><i class="fa fa-slack"></i></a>
+      <a title="Mailing List" href="docs/2.0.0-RC2/support/mailing-list.html" class="email"><i class="fa fa-at"></i></a>
+      <a title="Slack Channel" href="docs/2.0.0-RC2/support/slack-channel.html" class="slack"><i class="fa fa-slack"></i></a>
       <a title="Bug Reports (Jira)" href="https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87" class="bug"><i class="fa fa-bug"></i></a>
       <a title="Stackoverflow" href="https://stackoverflow.com/questions/tagged/causeway" class="stackoverflow"><i class="fa fa-stack-overflow"></i></a>
       <a title="Twitter" href="https://twitter.com/ApacheCauseway" class="twitter"><i class="fa fa-twitter"></i></a>
@@ -107,28 +107,28 @@
             <li><a href="#how-it-works">How does it work?</a></li>
             <li><a href="#services">What's it built with?</a></li>
             <li><a href="#call-to-action">Getting started</a></li>
-            <li><a href="#call-to-action">Support</a></li>
+            <li><a href="#contact">Support</a></li>
           </ul>
         </li>
         <li><a href="#call-to-action">Quick Start</a></li>
         <li class="menu-has-children">
-          <a href="docs/latest/about.html">Docs</a>
+          <a href="docs/2.0.0-RC2/about.html">Docs</a>
           <ul>
-            <li><a href="docs/latest/about.html">Table of Contents</a></li>
+            <li><a href="docs/2.0.0-RC2/about.html">Table of Contents</a></li>
             <li><hr/></li>
-            <li><a href="docs/latest/landing-page/guides.html">Guides</a></li>
-            <li><a href="docs/latest/landing-page/components.html">Components</a></li>
-            <li><a href="extensions/latest/about.html">Extensions</a></li>
-            <li><a href="valuetypes/latest/about.html">Value Types</a></li>
+            <li><a href="docs/2.0.0-RC2/landing-page/guides.html">Guides</a></li>
+            <li><a href="docs/2.0.0-RC2/landing-page/components.html">Components</a></li>
+            <li><a href="extensions/2.0.0-RC2/about.html">Extensions</a></li>
+            <li><a href="valuetypes/2.0.0-RC2/about.html">Value Types</a></li>
           </ul>
         </li>
         <li class="menu-has-children">
           <a href="#">Download</a>
           <ul>
-            <li><a href="docs/latest/starters/about.html">Starter Apps</a></li>
-            <li><a href="docs/latest/downloads/how-to#formal-releases">Source Releases</a></li>
-            <li><a href="docs/latest/landing-page/releases.html">Binary Releases</a></li>
-            <li><a href="docs/latest/downloads/how-to#source-code">Source @ Github</a></li>
+            <li><a href="docs/2.0.0-RC2/starters/about.html">Starter Apps</a></li>
+            <li><a href="docs/2.0.0-RC2/downloads/how-to#formal-releases">Source Releases</a></li>
+            <li><a href="docs/2.0.0-RC2/landing-page/releases.html">Binary Releases</a></li>
+            <li><a href="docs/2.0.0-RC2/downloads/how-to#source-code">Source @ Github</a></li>
           </ul>
         </li>
         <li class="menu-has-children">
@@ -162,7 +162,7 @@
       <p>
         <a href="#testimonials" class="btn-projects scrollto">&nbsp;Reviews&nbsp;</a>
         <a href="#call-to-action" class="btn-get-started scrollto">Quick Start</a>
-        <a href="docs/latest/about.html" class="btn-docs">&nbsp;&nbsp;&nbsp;Docs&nbsp;&nbsp;&nbsp;</a>
+        <a href="docs/2.0.0-RC2/about.html" class="btn-docs">&nbsp;&nbsp;&nbsp;Docs&nbsp;&nbsp;&nbsp;</a>
       </p>
       <p>
       <div class="nav-panel-search hide-for-print">
@@ -218,7 +218,7 @@
     <div class="container">
       <div class="section-header">
         <h2>Quotes</h2>
-        <p>We gathered together some quotes from current users of the framework.  You can find out who said what <a href="docs/latest/quotes/quotes.html">here</a>.</p>
+        <p>We gathered together some quotes from current users of the framework.  You can find out who said what <a href="docs/2.0.0-RC2/quotes/quotes.html">here</a>.</p>
       </div>
       <div class="owl-carousel testimonials-carousel">
 
@@ -561,18 +561,19 @@
             <div class="col-lg-6 text-left text-lg-left">
               <h4 class="cta-text">Try out ...</h4>
                 <p class="cta-text text-left" style="margin-block-end: 0; ">
-                  Try out the framework with the minimal <a href="docs/latest/starters/helloworld.html">helloworld</a> starter&nbsp;app.
-                  <br/>
-                    Use the app <a href="https://helloworld-jpa-snapshot.apps.causeway.dev/" target="_blank">online (jpa)</a> or run it locally:
+                  Try out the framework with the minimal <a href="docs/2.0.0-RC2/starters/helloworld.html">helloworld</a> starter&nbsp;app.
+                  <p>
+                  <p class="cta-text text-left" style="margin-block-end: 0; ">
+                    Run it locally (JPA or JDO) using:
                   <pre id="helloworld-docker-text"  style="margin-top: 5px">
 docker run -p 8080:8080 apache/causeway-app-helloworld:jpa-SNAPSHOT
 docker run -p 8080:8080 apache/causeway-app-helloworld:jdo-SNAPSHOT</pre>
+                <p>
                 <p class="cta-text text-left" style="margin-block-end: 0; ">
-                    Build from source:
-
+                    Build from source (JPA or JDO) using:
                 <pre id="helloworld-jpa-text">
 APP=causeway-app-helloworld
-BRANCH=jpa
+BRANCH=jpa   # or BRANCH=jdo
 curl https://codeload.github.com/apache/$APP/zip/$BRANCH | jar xv
 cd $APP-$BRANCH
 
@@ -581,37 +582,23 @@ mvn spring-boot:run</pre>
                 <p class="cta-text text-center" style="margin-block-end: 0; margin-top: -10px;">
                     <span id="helloworld-jpa-copy" style="cursor: pointer;"><img src="_/img/home/clipboard-copy.png" width="16" height="16"/>&nbsp;&nbsp;Copy text for helloworld (jpa)</span>
                 </p>
-
-                <p>
-                <pre id="helloworld-jdo-text">
-APP=causeway-app-helloworld
-BRANCH=jdo
-curl https://codeload.github.com/apache/$APP/zip/$BRANCH | jar xv
-cd $APP-$BRANCH
-
-mvn clean install -Dskip.staging -Dskip.nightly
-mvn spring-boot:run</pre>
-                <p class="cta-text text-center" style="margin-block-end: 0; margin-top: -10px;">
-                    <span id="helloworld-jdo-copy" style="cursor: pointer;"><img src="_/img/home/clipboard-copy.png" width="16" height="16"/>&nbsp;&nbsp;Copy text for helloworld (jdo)</span>
-                </p>
-
-
             </div>
             <div class="col-lg-6 text-left text-lg-left">
                 <h4 class="cta-text">Develop your own ...</h4>
               <p class="cta-text text-left" style="margin-block-end: 0; ">
-                Develop your own app with the structured <a href="docs/latest/starters/simpleapp.html">simpleapp</a> starter&nbsp;app.
-                <br/>
-                  Use the app <a href="https://simpleapp-jpa-snapshot.apps.causeway.dev/" target="_blank">online (jpa)</a> or run it locally:
+                Develop your own app with the structured <a href="docs/2.0.0-RC2/starters/simpleapp.html">simpleapp</a> starter&nbsp;app.
+                <p>
+                <p class="cta-text text-left" style="margin-block-end: 0; ">
+                Run it locally (JPA or JDO) using:
                 <pre id="simpleapp-docker-jpa-text"  style="margin-top: 5px">
 docker run -p 8080:8080 apache/causeway-app-simpleapp:jpa-SNAPSHOT
 docker run -p 8080:8080 apache/causeway-app-simpleapp:jdo-SNAPSHOT</pre>
+                <p>
                 <p class="cta-text text-left" style="margin-block-end: 0; ">
-                    Build from source:
-
+                    Build from source (JPA or JDO) using:
               <pre id="simpleapp-jpa-text">
 APP=causeway-app-simpleapp
-BRANCH=jpa
+BRANCH=jpa   # or BRANCH=jdo
 curl https://codeload.github.com/apache/$APP/zip/$BRANCH | jar xv
 cd $APP-$BRANCH
 
@@ -620,20 +607,6 @@ mvn -pl webapp spring-boot:run</pre>
                 <p class="cta-text text-center" style="margin-block-end: 0; margin-top: -10px;">
                     <span id="simpleapp-jpa-copy" style="cursor: pointer;"><img src="_/img/home/clipboard-copy.png" width="16" height="16"/>&nbsp;&nbsp;Copy text for simpleapp (jpa)</span>
                 </p>
-
-                <p/>
-                <pre id="simpleapp-jdo-text">
-APP=causeway-app-simpleapp
-BRANCH=jdo
-curl https://codeload.github.com/apache/$APP/zip/$BRANCH | jar xv
-cd $APP-$BRANCH
-
-mvn clean install -Dskip.staging -Dskip.nightly
-mvn -pl webapp spring-boot:run</pre>
-                <p class="cta-text text-center" style="margin-block-end: 0; margin-top: -10px">
-                    <span id="simpleapp-jdo-copy" style="cursor: pointer;"><img src="_/img/home/clipboard-copy.png" width="16" height="16"/>&nbsp;&nbsp;Copy text for simpleapp (jdo)</span>
-                </p>
-
             </div>
           </div>
           <div class="row">
@@ -644,7 +617,7 @@ mvn -pl webapp spring-boot:run</pre>
                 <p class="cta-text text-left" style="margin-block-end: 0; margin-top: 20px;">
                   You can also explore the Apache Causeway™ programming model through the demo app, which illustrates many of the framework's annotations and programming conventions.
                   <br/>
-                  Use the app <a href="https://simpleapp-jpa-snapshot.apps.causeway.dev/" target="_blank">online (jpa)</a> or run it locally:
+                  <p class="cta-text text-left" style="margin-block-end: 0; ">
                   <pre id="demoapp-docker-text"  style="margin-top: 5px">
 docker run -p 8080:8080 apache/causeway-app-demo-jpa:latest
 docker run -p 8080:8080 apache/causeway-app-demo-jdo:latest</pre>
@@ -683,7 +656,7 @@ docker run -p 8080:8080 apache/causeway-app-demo-jdo:latest</pre>
           <div class="contact-email">
             <i class="ion-ios-filing-outline"></i>
             <h3>Slack</h3>
-            <p><a href="docs/latest/support/slack-channel.html">Join #apache-causeway <br/>(on the ASF slack workspace)</a></p>
+            <p><a href="docs/2.0.0-RC2/support/slack-channel.html">Join #apache-causeway <br/>(on the ASF slack workspace)</a></p>
           </div>
         </div>
 
@@ -817,6 +790,32 @@ docker run -p 8080:8080 apache/causeway-app-demo-jdo:latest</pre>
 
 <!-- Template Main JavaScript File -->
 <script src="_/js/home/main.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script>
+    function focusSearchInput () { document.querySelector('#algolia-search-input').focus() }
+    var search = docsearch({
+        appId: '5ISP5TFAEN',
+        apiKey: '0fc51c28b4ad46e7318e96d4e97fab7c',
+        indexName: 'causeway-apache-org',
+        inputSelector: '#algolia-search-input',
+        autocompleteOptions: { hint: false, keyboardShortcuts: ['s'] },
+        debug: false,
+    }).autocomplete
+    search.on('autocomplete:closed', function () { search.autocomplete.setVal() })
+    focusSearchInput()
+    window.addEventListener('load', focusSearchInput);
+</script>
+
+<!--
+  docsearch options:
+  https://docsearch.algolia.com/docs/behavior/
+-->
+<!--
+  https://www.algolia.com/doc/api-reference/api-parameters/
+  algoliaOptions: { hitsPerPage: 6 },
+-->
+
 
 </body>
 </html>

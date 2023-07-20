@@ -33,6 +33,7 @@ import org.apache.causeway.applib.layout.LayoutConstants;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
 import org.apache.causeway.extensions.audittrail.applib.CausewayModuleExtAuditTrailApplib;
 import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry;
@@ -83,8 +84,8 @@ public class Object_recentAuditTrailEntries {
     }
     @MemberSupport public boolean hideAct() {
         val domainClass = domainObject.getClass();
-        val logicalTypeIfAny = metaModelService.lookupLogicalTypeByClass(domainClass);
-        return metaModelService.lookupLogicalTypeByClass(domainClass).isEmpty();
+        BeanSort beanSort = metaModelService.sortOf(domainClass, MetaModelService.Mode.RELAXED);
+        return !beanSort.isEntity();
     }
 
     @Inject MetaModelService metaModelService;

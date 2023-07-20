@@ -234,12 +234,6 @@ where `module-xxx` and `module-yyy` correspond to profile names, as provided wit
 | module-antora
 | Official Project Documentation
 
-| module-examples-demo-javafx
-| Demo Application (JavaFx)
-
-| module-examples-demo-wicket
-| Demo Application (Wicket).
-
 Note that this also includes the Restful Objects and GraphQL viewers.
 
 | module-incubator-all

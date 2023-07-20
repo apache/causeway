@@ -25,7 +25,7 @@ import java.io.Serializable;
  */
 public interface Oid extends Serializable {
 
-    static final String SEPARATOR = ":";
+    String SEPARATOR = ":";
 
     /**
      * Logical-type-name of the domain object this Oid is representing.

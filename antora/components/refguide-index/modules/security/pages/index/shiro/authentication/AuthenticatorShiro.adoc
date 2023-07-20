@@ -14,7 +14,7 @@ class AuthenticatorShiro {
   AuthenticatorShiro(CausewayConfiguration configuration)
   boolean canAuthenticate(Class<? extends AuthenticationRequest> authenticationRequestClass)
   InteractionContext authenticate(AuthenticationRequest request, String code)
-  void logout(InteractionContext context)
+  void logout()
   InteractionContext authenticationFor(AuthenticationRequest request, String validationCode, AuthenticationToken token, Subject currentSubject)
 }
 ----

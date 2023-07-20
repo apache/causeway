@@ -325,17 +325,12 @@ We activate the (inherited) `apache-release` profile to bring in the `gpg` plugi
 
 ==== Prerequisites
 
-[WARNING]
-====
-Make sure that the version of `gpg` on the `$PATH` is correct, because the configuration in the `pom.xml` assumes `gpg` v2.0, rather than v2.1+.
 
-The older version of `gpg` picks up the secret keys from `pubring.gpg` and `secring.gpg` (and does not use an agent); the newer version uses `pubring.pbx`.
+The release signs the artifacts, but is configured to use `gpg` v2.0, rather than v2.1+.
+This older version of `gpg` picks up the secret keys from `pubring.gpg` and `secring.gpg`, and does not use an agent.
+(The newer version -- that we don't use -- uses `pubring.pbx`, and _does_ use an agent).
 
-On Windows, be careful using git-bash as this will pick up git's version of `gpg` in `/usr/bin`, which is `gpg` v2.1.
-Instead, consider building in a Powershell console, described below.
-====
-
-If on Windows, we recommend you build under Powershell rather than git-bash, which means there are some prerequisites.
+To setup the gpg certificates on Windows, we require the particular version of gnupg:
 
 * install the correct version of choco:
 +
@@ -404,6 +399,21 @@ uid                  Dan Haywood (CODE SIGNING KEY) <danhaywood@apache.org>
 ...
 ----
 
+* If on Windows and you intend to perform the release using git-bash rather than powershell, then make sure that the version of `gpg` on the `$PATH` is correct.
++
+On Windows, you need to be careful using git-bash as this will pick up git's version of `gpg` in `/usr/bin`, which is `gpg` v2.1.
++
+One easy way to do this is just rename `/usr/bin/gpg` to `/usr/bin/MOVED-gpg`, restart the shell, and then confirm that `gpg` is now Windows' gnupg installation:
++
+[source,bash]
+----
+dan@halxps15-2022 MINGW64 /c/gitlab/hal-dsp/deliverables (master)
+$ gpg --version
+gpg (GnuPG) 2.0.30 (Gpg4win 2.3.4)
+...
+----
+
+
 * in `~/m2/settings.xml`, ensure that the `gpg.passphrase` server is set:
 +
 [source,xml]
@@ -420,6 +430,7 @@ uid                  Dan Haywood (CODE SIGNING KEY) <danhaywood@apache.org>
   </servers>
 </settings>
 ----
+
 
 
 ==== Perform the deploy

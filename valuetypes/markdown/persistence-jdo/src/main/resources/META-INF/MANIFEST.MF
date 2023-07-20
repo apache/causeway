@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Apache Causeway Value Types Markdown Persistence JDO DataNucleus Implementation
-Bundle-SymbolicName: org.apache.causeway.valuetypes.markdown.persistence.jdo.dn
+Bundle-SymbolicName: org.apache.causeway.valuetypes.markdown.persistence.jdo
 Bundle-Version: 2.0.0
 Bundle-Vendor: Apache Causeway

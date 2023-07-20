@@ -21,7 +21,7 @@ class AuthenticatorSecman {
   AuthenticatorSecman(ApplicationUserRepository applicationUserRepository, PasswordEncoder passwordEncoder)
   boolean canAuthenticate(Class<? extends AuthenticationRequest> authenticationRequestClass)
   InteractionContext authenticate(AuthenticationRequest request, String code)
-  void logout(InteractionContext context)
+  void logout()
 }
 ----
 

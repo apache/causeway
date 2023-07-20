@@ -10,9 +10,9 @@ The state managed by entities and view models is expressed in terms of xref:prop
 This latter is the topic of this page.
 
 
-Apache Causeway supports a wide variety of xref:value-types.adoc[value types], including JDK types (eg primitives, dates and `String`) Causeway-specific (eg Asciidoc, Vega) and 3rd party (eg Jodatime).
+Apache Causeway supports a wide variety of value types, including JDK types (eg primitives, dates and `String`) Causeway-specific (eg `Asciidoc`, `Vega`) and 3rd party (eg Joda Time).
 Moreover it is possible to define your own custom types.
-You can even teach the framework about other 3rd party libraries you might wish to use, e.g. https://jscience.org[JScience].
+You can even teach the framework about other 3rd party libraries you might wish to use.
 
 
 == Programming Model
@@ -57,6 +57,7 @@ A JAXB view model would require `@XmlJavaTypeAdapter(JavaTimeJaxbAdapters.LocalD
 
 In the following sections we look at the other datatypes that you can use as the value types, and then we look at defining custom types.
 
+[#jdk-types]
 == JDK types
 
 The most common value types to use are those built-into JDK.
@@ -149,6 +150,7 @@ Apache Causeway provides adapters for all of these.
 
 In addition to supporting JDK and Joda, Apache Causeway defines a number of its own custom value types, described next.
 
+[#causeway-specific]
 == Causeway-specific
 
 Apache Causeway defines a number of its own value types.
@@ -188,7 +190,7 @@ There are several such built-in resources that can be useful in a development/pr
 You could of course also define additional resources for your own requirements.
 
 The above value types are part of the core framework.
-There are also several value types that are packaged as extensions:
+There are also several value types that are packaged as extensions in the xref:valuetypes::about.adoc[Value Types Catalog]:
 
 * `AsciiDoc`, provided by the xref:valuetypes:asciidoc:about.adoc[asciidoc] value type extension
 +
@@ -202,11 +204,16 @@ This renders Markdown content (as defined by the link:https://spec.commonmark.or
 +
 This renders graphics defined by the link:https://vega.github.io/vega-lite/[Vega-Lite] grammar.
 
+* `Joda Time`, provided by the xref:valuetypes:jodatime:about.adoc[jodatime] value type extension
++
+This provides support for four value types defined within the link:https://www.joda.org/joda-time/[Joda Time] library.
 
 
+
+[#custom-value-types]
 == Custom value types
 
-As well as the built-in support and extensions provided by Apache Causeway, it is also possible to implement your own custom  value types.
+As well as the built-in support and extensions provided by Apache Causeway, it is also possible to implement your own custom value types.
 
 Implementing value types can be a great way of encapsulating functionality.
 Rather than have your entities and view models be concerned about the format of an invoice number, instead define an `InvoiceNumber`.
@@ -593,6 +600,7 @@ If using within the database then you will also need to map the custom type to t
 
 * if mapping to xref:pjpa::about.adoc[JPA/EclipseLink], use `@Embedded` and `@Embeddable`; see for example link:https://www.baeldung.com/jpa-embedded-embeddable[this baeldung post] on the topic.
 * If mapping to xref:pjdo::about.adoc[JDO/DataNucleus], use `@Embedded` and `@PersistenceCapable(embeddedOnly="true")`; see https://www.datanucleus.org/products/accessplatform_6_0/jdo/mapping.html#embedded[Datanucleus documentation].
+
 
 
 

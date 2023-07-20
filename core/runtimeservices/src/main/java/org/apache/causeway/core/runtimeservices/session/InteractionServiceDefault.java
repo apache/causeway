@@ -31,7 +31,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
-import org.apache.causeway.applib.services.command.Command;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Lazy;
@@ -42,6 +41,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.clock.ClockService;
+import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayer;
@@ -373,14 +373,19 @@ implements
         interactionScopeLifecycleHandler.onTopLevelInteractionOpened();
     }
 
+    @SneakyThrows
     private void preInteractionClosed(final CausewayInteraction interaction) {
 
-        completeAndPublishCurrentCommand();
-
-        RuntimeException flushException = null;
+        Throwable flushException = null;
         try {
-            transactionServiceProvider.get().flushTransaction();
-        } catch (RuntimeException e) {
+            val txService = transactionServiceProvider.get();
+            val mustAbort = txService.currentTransactionState().mustAbort();
+            if(!mustAbort) {
+                txService.flushTransaction();
+                // publish only when flush was successful
+                completeAndPublishCurrentCommand();
+            }
+        } catch (Throwable e) {
             //[CAUSEWAY-3262] if flush fails rethrow later, when interaction was closed ...
             flushException = e;
         }
@@ -397,6 +402,9 @@ implements
             throw flushException;
         }
     }
+
+
+
 
     private void closeInteractionLayerStackDownToStackSize(final int downToStackSize) {
 

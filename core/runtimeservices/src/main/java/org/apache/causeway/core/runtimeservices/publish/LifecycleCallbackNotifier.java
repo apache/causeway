@@ -105,6 +105,7 @@ public class LifecycleCallbackNotifier {
     }
 
     public void postUpdate(final ManagedObject entity) {
+        eventBusService.post(PostStoreEvent.of(entity.getPojo()));
         dispatch(entity, UpdatedCallbackFacet.class, UpdatedLifecycleEventFacet.class);
     }
 

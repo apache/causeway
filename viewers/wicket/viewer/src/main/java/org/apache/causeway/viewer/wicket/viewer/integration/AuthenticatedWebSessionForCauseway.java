@@ -27,15 +27,17 @@ import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.clock.VirtualClock;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.session.SessionSubscriber;
-import org.apache.causeway.applib.services.user.ImpersonatedUserHolder;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.user.UserMemento.AuthenticationSource;
+import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
@@ -80,6 +82,13 @@ implements
      * As populated in {@link #signIn(String, String)}.
      */
     private InteractionContext authentication;
+    private void setAuthentication(final @Nullable InteractionContext authentication) {
+        _Assert.assertFalse(
+                authentication!=null
+                 && authentication.getUser().isImpersonating(), ()->
+                "framework bug: cannot signin with an impersonated user");
+        this.authentication = authentication;
+    }
 
     @Getter
     private UUID sessionGuid;
@@ -114,8 +123,8 @@ implements
     public synchronized boolean authenticate(final String username, final String password) {
         val authenticationRequest = new AuthenticationRequestPassword(username, password);
         authenticationRequest.addRole(UserMemento.AUTHORIZED_USER_ROLE);
-        this.authentication = getAuthenticationManager().authenticate(authenticationRequest);
-        if (this.authentication != null) {
+        setAuthentication(getAuthenticationManager().authenticate(authenticationRequest));
+        if (authentication != null) {
             log(SessionSubscriber.Type.LOGIN, username, null);
             return true;
         } else {
@@ -134,7 +143,10 @@ implements
         // principals for it to logout
         //
 
-        getAuthenticationManager().closeSession(getAuthentication());
+        getAuthenticationManager().closeSession(
+                Optional.ofNullable(authentication)
+                .map(InteractionContext::getUser)
+                .orElse(null));
 
         super.invalidateNow();
 
@@ -158,49 +170,31 @@ implements
         log(SessionSubscriber.Type.LOGOUT, userName, causedBy);
     }
 
-    /**
-     * If there is an {@link InteractionContext} already
-     * (as some authentication mechanisms setup in filters, eg
-     * SpringSecurityFilter), then just use it.
-     *
-     * <p>
-     *     This method is called early on by {@link WebRequestCycleForCauseway}.
-     * </p>
-     */
-    public void syncExternalAuthenticationIfAvailable() {
-        getInteractionService()
-            .currentInteractionContext()
-            .ifPresent(interactionContext -> this.authentication = interactionContext);
-    }
-
     @Override
     public void amendInteractionContext(final UnaryOperator<InteractionContext> updater) {
-        authentication = updater.apply(authentication);
+        setAuthentication(updater.apply(authentication));
     }
 
     /**
      * Returns an {@link InteractionContext} either as authenticated (and then cached on the session subsequently),
-     * or taking into account {@link ImpersonatedUserHolder impersonation}.
+     * or taking into account {@link UserService impersonation}.
      *
      * <p>
      *     The session must still {@link AuthenticationManager#isSessionValid(InteractionContext) be valid}, though
      *     note that this will always be true for externally authenticated users.
      * </p>
      */
-    public synchronized InteractionContext getAuthentication() {
+     synchronized InteractionContext getAuthentication() {
 
-        if(this.authentication == null) {
+        if(authentication == null) {
             return null;
         }
-        if(!getAuthenticationManager().isSessionValid(this.authentication)) {
+        if(!getAuthenticationManager().isSessionValid(authentication)) {
             return null;
         }
         signIn(true);
 
-        val impersonatedUserHolder = lookupServiceElseFail(ImpersonatedUserHolder.class);
-        return impersonatedUserHolder.getUserMemento()
-                .map(x -> this.authentication.withUser(x))
-                .orElse(this.authentication);
+        return authentication;
     }
 
     /**
@@ -211,7 +205,8 @@ implements
      */
     @Override
     public void invalidate() {
-        if(this.authentication.getUser().getAuthenticationSource().isExternal()) {
+        if(authentication!=null
+                && authentication.getUser().getAuthenticationSource().isExternal()) {
             return;
         }
         // otherwise
@@ -223,7 +218,8 @@ implements
         if (!isSignedIn()) {
             return null;
         }
-        return Optional.ofNullable(getAuthentication())
+        return getInteractionService()
+            .currentInteractionContext()
             .map(InteractionContext::getUser)
             .map(user->{
                 val roles = new Roles();
@@ -238,6 +234,12 @@ implements
     public synchronized void detach() {
         breadcrumbModel.detach();
         super.detach();
+    }
+
+    @Override
+    public void replaceSession() {
+        // do nothing here because this will lead to problems with Shiro
+        // see https://issues.apache.org/jira/browse/CAUSEWAY-1018
     }
 
     private void log(
@@ -285,13 +287,5 @@ implements
     private VirtualClock nowFallback() {
         return VirtualClock.system();
     }
-
-    @Override
-    public void replaceSession() {
-        // do nothing here because this will lead to problems with Shiro
-        // see https://issues.apache.org/jira/browse/CAUSEWAY-1018
-    }
-
-
 
 }

@@ -126,22 +126,27 @@ implements
 
     @Override
     public final void detach() {
-        if(isDataTableModelReuse()) return;
-        super.detach();
+        if(isDataTableModelDetachable()) {
+            // at time of writing breaks object deletion on JDO, see [CAUSEWAY-3530]
+            super.detach();
+        }
+        //FIXME[CAUSEWAY-3522]
+        // perhaps instead call bookmarkedObjectModel().detach();
+        // or add custom HOLLOW flag and mark the bookmarkedObjectModel() hollow
     }
 
     // -- HELPER
 
     private final static String PROPERTY_NAME_MODEL_REUSE = "causeway.viewer.wicket.dataTableModelReuse";
     /**
-     * experimental, undocumented feature:
-     * <p>
-     * when enabled, in support of optimized table sorting, don't detach;
-     * instead reuse the already populated model
+     * when set to false, forces detach
+     * @deprecated remove this switch once we have a fix
      */
-    private static boolean isDataTableModelReuse() {
-        return "true".equalsIgnoreCase(System.getenv(PROPERTY_NAME_MODEL_REUSE))
-                || "true".equalsIgnoreCase(System.getProperty(PROPERTY_NAME_MODEL_REUSE));
+    @Deprecated
+    private static boolean isDataTableModelDetachable() {
+        return "false".equalsIgnoreCase(System.getenv(PROPERTY_NAME_MODEL_REUSE))
+                || "false".equalsIgnoreCase(System.getProperty(PROPERTY_NAME_MODEL_REUSE));
     }
+
 
 }

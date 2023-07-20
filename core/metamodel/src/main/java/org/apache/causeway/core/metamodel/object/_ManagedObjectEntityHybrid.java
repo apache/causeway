@@ -20,13 +20,13 @@ package org.apache.causeway.core.metamodel.object;
 
 import java.util.Optional;
 
-import org.apache.causeway.applib.exceptions.unrecoverable.ObjectNotFoundException;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Blackhole;
 
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.Synchronized;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -121,21 +121,26 @@ implements _Refetchable {
         return entityState;
     }
 
-    @Override
+    @Override @SneakyThrows
     public Object getPojo() {
         if(isVariantRemoved()) {
             return null; // don't reassess
         }
 
-        // handle the 'deleted' / 'not found' case gracefully
+        // handle the 'deleted' / 'not found' case gracefully ...
         try {
             val pojo = variant.getPojo();
             triggerReassessment();
             return pojo;
-        } catch (ObjectNotFoundException e) {
-            // if object not found, transition to 'removed' state
-            makeRemoved();
-            return null;
+        } catch (Throwable ex) {
+
+            if(_RecognizeObjectDeletedOrNotFound.recognize(ex)) {
+                // if object not found, transition to 'removed' state
+                makeRemoved();
+                return null;
+            }
+
+            throw ex;
         }
     }
 

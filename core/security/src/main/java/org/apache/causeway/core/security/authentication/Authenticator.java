@@ -56,5 +56,5 @@ public interface Authenticator {
      * Invalidates this {@link InteractionContext}, meaning that the user will need
      * to log in again to use the application.
      */
-    void logout(InteractionContext context);
+    void logout();
 }

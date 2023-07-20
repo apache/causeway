@@ -127,12 +127,11 @@ securityManager.realms = $causewayModuleSecurityRealm
 
 The `[users]` and `[roles]` sections are required but are unused.
 
-
 The main point of introducing Shiro though is to introduce support for authentication by external mechanisms such as LDAP.
 In this case we configure Shiro to use the external realm as the primary realm, with Secman's Shiro realm set up as a "delegate" realm.
 We specify the delegate realm implementation in the `shiro.ini` file, and "inject" it into the Secman realm.
 
-For example, to use xref:shiro-realm-ldap:about.adoc[LDAP Realm for Shiro] as a delegate:
+For example, to use Shiro's link:https://github.com/apache/shiro/blob/main/core/src/main/java/org/apache/shiro/realm/ldap/DefaultLdapRealm.java[LDAP Realm] as a delegate:
 
 [source,ini]
 .shiro.ini
@@ -140,19 +139,63 @@ For example, to use xref:shiro-realm-ldap:about.adoc[LDAP Realm for Shiro] as a 
 [main]
 
 ...
-ldapRealm=org.apache.causeway.extensions.shirorealmldap.realm.impl.CausewayLdapRealm #<.>
-ldapRealm.xxx=...                                                            #<.>
-ldapRealm.yyy=...
+contextFactory = org.apache.shiro.realm.ldap.JndiLdapContextFactory #<.>
+contextFactory.url = ldap://localhost:10389                         #<.>
+contextFactory.systemUsername = uid=admin,ou=system
+contextFactory.systemPassword = secret
+contextFactory.authenticationMechanism = CRAM-MD5
 
-causewayModuleSecurityRealm.delegateAuthenticationRealm=$ldapRealm               #<.>
+ldapRealm = org.apache.shiro.realm.ldap.DefaultLdapRealm            #<.>
+ldapRealm.contextFactory = $contextFactory
+
+causewayModuleSecurityRealm.delegateAuthenticationRealm=$ldapRealm  #<.>
 
 ...
 ----
+<.> instantiate a JNDI LDAP context ...
+<.> \... configured with credentials to query users
 <.> instantiate the LDAP realm
-<.> configure the LDAP realm as required
 <.> specify the LDAP realm as the delegate realm for SecMan's own realm.
 
+The users should then be defined in the LDAP server appropriately.
+For example, if using link:https://directory.apache.org/apacheds[ApacheDS] server:
 
+* the users are stored under the SASL `searchBaseDn` attribute
++
+for ApacheDS 1.5.7 this can be found in the `server.xml` file):
+
+* and can be defined as an `inetOrgPerson` with the `uid` and `userPassword` defining the credentials:
++
+image::060-create-inetOrgPerson.png[width=600]
+
+With this configuration, the user/password is defined in LDAP, while their users permissions are taken from their user/group/perms defined in SecMan.
+
+=== A simpler LDAP configuration
+
+In fact, it's also possible to simplify matters by just configuring Shiro to use LDAP realm, and not define a secman realm at all.
+
+For example:
+
+[source,ini]
+.shiro.ini
+----
+[main]
+
+contextFactory = org.apache.shiro.realm.ldap.JndiLdapContextFactory
+contextFactory.url = ldap://localhost:10389
+contextFactory.systemUsername = uid=admin,ou=system
+contextFactory.systemPassword = secret
+contextFactory.authenticationMechanism = CRAM-MD5
+
+ldapRealm = org.apache.shiro.realm.ldap.DefaultLdapRealm
+
+ldapRealm.contextFactory = $contextFactory
+
+securityManager.realms = $ldapRealm
+----
+
+Although simpler, the key difference with this approach is that will not auto-create ``ApplicationUser``s within secman; they must be created by some separate means.
+If there is an entry in LDAP, but none in secman, then the end-user will be able to "login" but will have access to no features.
 
 [#configure-properties]
 == Configuration Properties

@@ -68,7 +68,6 @@ import org.apache.causeway.core.runtimeservices.spring.SpringBeansService;
 import org.apache.causeway.core.runtimeservices.transaction.TransactionServiceSpring;
 import org.apache.causeway.core.runtimeservices.urlencoding.UrlEncodingServiceWithCompression;
 import org.apache.causeway.core.runtimeservices.user.ImpersonateMenuAdvisorDefault;
-import org.apache.causeway.core.runtimeservices.user.ImpersonatedUserHolderDefault;
 import org.apache.causeway.core.runtimeservices.user.UserCurrentSessionTimeZoneHolderDefault;
 import org.apache.causeway.core.runtimeservices.userreg.EmailNotificationServiceDefault;
 import org.apache.causeway.core.runtimeservices.wrapper.WrapperFactoryDefault;
@@ -96,7 +95,6 @@ import org.apache.causeway.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDe
         FactoryServiceDefault.class,
         HomePageResolverServiceDefault.class,
         ImpersonateMenuAdvisorDefault.class,
-        ImpersonatedUserHolderDefault.class,
         InteractionDtoFactoryDefault.class,
         InteractionIdGeneratorDefault.class,
         InteractionServiceDefault.class,

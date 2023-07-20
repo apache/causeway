@@ -53,7 +53,7 @@ public abstract class AuthenticatorAbstract implements Authenticator {
     protected abstract boolean isValid(AuthenticationRequest request);
 
     @Override
-    public final void logout(final InteractionContext session) {
+    public final void logout() {
         // no-op
     }
 

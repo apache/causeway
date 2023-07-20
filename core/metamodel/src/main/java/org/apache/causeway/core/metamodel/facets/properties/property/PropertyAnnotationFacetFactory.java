@@ -34,7 +34,6 @@ import org.apache.causeway.core.metamodel.facets.actions.contributing.Contributi
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingPropertyFacetForPropertyAnnotation;
-import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet.Contributing;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.causeway.core.metamodel.facets.properties.projection.ProjectingFacetFromPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.disabled.DisabledFacetForPropertyAnnotation;
@@ -103,7 +102,7 @@ extends FacetFactoryAbstract {
         /* if @Property detected on method or type level infer:
          * @Action(semantics=SAFE) */
         addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
-        addFacet(new ContributingFacetAbstract(Contributing.AS_PROPERTY, facetedMethod) {});
+        addFacet(ContributingFacetAbstract.createAsProperty(facetedMethod));
     }
 
     void processDomainEvent(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {

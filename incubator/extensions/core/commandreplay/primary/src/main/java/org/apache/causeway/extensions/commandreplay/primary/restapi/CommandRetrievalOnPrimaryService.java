@@ -62,9 +62,12 @@ public class CommandRetrievalOnPrimaryService {
     @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
 
     /**
-     * TODO: outdated info ...
-     * These actions should be called with HTTP Accept Header set to:
-     * <code>application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.causeway.schema.cmd.v1.CommandsDto"</code>
+     * Returns the command(s) that have been executed on the primary with the specified interactionId.
+     *
+     * <p>
+     * This action should be called with HTTP Accept Header set to:
+     * <code>application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.causeway.schema.cmd.v2.CommandsDto"</code>
+     * </p>
      *
      * @param interactionId - to search from.  This interactionId will <i>not</i> be included in the response.
      * @param batchSize - the maximum number of commands to return.  If not specified, all found will be returned.
