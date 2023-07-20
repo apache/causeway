@@ -39,7 +39,6 @@ import org.apache.causeway.core.metamodel.facets.properties.projection.Projectin
 import org.apache.causeway.core.metamodel.facets.properties.property.disabled.DisabledFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.entitychangepublishing.EntityPropertyChangePublishingPolicyFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.fileaccept.FileAcceptFacetForPropertyAnnotation;
-import org.apache.causeway.core.metamodel.facets.properties.property.hidden.HiddenFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.MandatoryFacetInvertedByNullableAnnotationOnProperty;
 import org.apache.causeway.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForPropertyAnnotation;
@@ -76,7 +75,6 @@ extends FacetFactoryAbstract {
         }
 
         processDomainEvent(processMethodContext, propertyIfAny);
-        processHidden(processMethodContext, propertyIfAny);
         processEditing(processMethodContext, propertyIfAny);
         processCommandPublishing(processMethodContext, propertyIfAny);
         processProjecting(processMethodContext, propertyIfAny);
@@ -161,16 +159,6 @@ extends FacetFactoryAbstract {
                             propertyDomainEventFacet, getterFacet, clearFacet, holder)));
         });
 
-    }
-
-    @SuppressWarnings("removal")
-    void processHidden(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
-        val facetHolder = processMethodContext.getFacetHolder();
-
-        // search for @Property(hidden=...)
-        addFacetIfPresent(
-                HiddenFacetForPropertyAnnotation
-                .create(propertyIfAny, facetHolder));
     }
 
     void processEditing(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {

@@ -28,7 +28,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.mockito.Mockito;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -38,12 +37,10 @@ import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.events.domain.CollectionDomainEvent;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
 import org.apache.causeway.core.metamodel.commons.matchers.CausewayMatchers;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract.EventTypeOrigin;
@@ -52,8 +49,6 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature;
-import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.causeway.core.metamodel.facets.collections.collection.hidden.HiddenFacetForCollectionAnnotation;
 import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacet;
 import org.apache.causeway.core.metamodel.facets.collections.collection.typeof.TypeOfFacetForCollectionAnnotation;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacetAbstract;
@@ -66,7 +61,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.val;
 
-@SuppressWarnings("removal")
 class CollectionAnnotationFacetFactoryTest
 extends FacetFactoryTestAbstract {
 
@@ -76,12 +70,6 @@ extends FacetFactoryTestAbstract {
             final CollectionAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
         val collectionIfAny = facetFactory.collectionIfAny(processMethodContext);
         facetFactory.processDomainEvent(processMethodContext, collectionIfAny);
-    }
-
-    private static void processHidden(
-            final CollectionAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
-        val collectionIfAny = facetFactory.collectionIfAny(processMethodContext);
-        facetFactory.processHidden(processMethodContext, collectionIfAny);
     }
 
     private static void processTypeOf(
@@ -395,43 +383,6 @@ extends FacetFactoryTestAbstract {
             });
         }
 
-
-    }
-
-    @Deprecated(forRemoval = true, since = "2.0.0-RC2")
-    static class Hidden extends CollectionAnnotationFacetFactoryTest {
-
-        @Test
-        void withAnnotation() {
-
-            class Order {
-            }
-            @SuppressWarnings("unused")
-            class Customer {
-                @Collection(hidden = Where.REFERENCES_PARENT)
-                public List<Order> getOrders() { return null; }
-                public void setOrders(final List<Order> orders) {}
-            }
-
-            // given
-            collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod)->{
-
-                // when
-                processHidden(facetFactory, processMethodContext);
-
-                // then
-                final HiddenFacet hiddenFacet = facetedMethod.getFacet(HiddenFacet.class);
-                assertNotNull(hiddenFacet);
-                assertTrue(hiddenFacet instanceof HiddenFacetForCollectionAnnotation);
-                final HiddenFacetForCollectionAnnotation hiddenFacetImpl = (HiddenFacetForCollectionAnnotation) hiddenFacet;
-                assertThat(hiddenFacetImpl.where(), is(Where.REFERENCES_PARENT));
-
-                final Facet hiddenFacetForColl = facetedMethod.getFacet(HiddenFacet.class);
-                assertNotNull(hiddenFacetForColl);
-                assertTrue(hiddenFacet == hiddenFacetForColl);
-
-            });
-        }
 
     }
 
