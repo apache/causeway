@@ -172,7 +172,10 @@ implements MixedInMember {
         _Assert.assertEquals(target.getSpecification(), head.getTarget().getSpecification(),
                 "head has the wrong target (should be a mixed-in adapter, but is the mixee adapter)");
 
-        setupCommand(head, arguments);
+        if(!interactionInitiatedBy.isPassThrough()) {
+            // skip if is PASS_THROUGH
+            setupCommand(head, arguments);
+        }
         return mixinAction.executeInternal(
                 head, arguments,
                 interactionInitiatedBy);

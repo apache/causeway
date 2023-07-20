@@ -34,7 +34,6 @@ import org.apache.causeway.core.metamodel.facets.actions.contributing.Contributi
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacet;
 import org.apache.causeway.core.metamodel.facets.collections.collection.typeof.TypeOfFacetForCollectionAnnotation;
-import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet.Contributing;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 
@@ -75,7 +74,7 @@ extends FacetFactoryAbstract {
         /* if @Collection detected on method or type level infer:
          * @Action(semantics=SAFE) */
         addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
-        addFacet(new ContributingFacetAbstract(Contributing.AS_COLLECTION, facetedMethod) {});
+        addFacet(ContributingFacetAbstract.createAsCollection(facetedMethod));
     }
 
     void processDomainEvent(final ProcessMethodContext processMethodContext, final Optional<Collection> collectionIfAny) {

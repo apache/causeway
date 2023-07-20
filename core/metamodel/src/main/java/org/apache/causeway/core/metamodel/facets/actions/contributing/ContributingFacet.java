@@ -47,19 +47,17 @@ public interface ContributingFacet extends Facet {
     // -- UTILITIES
 
     static boolean isActionContributionVetoed(final ObjectAction action) {
-        val notContributed = action.getFacet(ContributingFacet.class);
-        if(notContributed != null
-                && notContributed.isActionContributionVetoed()) {
-            return true;
+        val facet = action.getFacet(ContributingFacet.class);
+        if(facet != null) {
+            return facet.isActionContributionVetoed();
         }
         return false;
     }
 
     static boolean isAssociationContributionVetoed(final ObjectAction action) {
-        val notContributed = action.getFacet(ContributingFacet.class);
-        if(notContributed != null
-                && notContributed.isAssociationContributionVetoed()) {
-            return true;
+        val facet = action.getFacet(ContributingFacet.class);
+        if(facet != null) {
+            return facet.isAssociationContributionVetoed();
         }
         return false;
     }

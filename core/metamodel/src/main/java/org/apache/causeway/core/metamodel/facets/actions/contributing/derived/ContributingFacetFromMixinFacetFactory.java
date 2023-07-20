@@ -28,7 +28,6 @@ import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
-import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet.Contributing;
 
 import lombok.val;
 
@@ -61,11 +60,12 @@ extends FacetFactoryAbstract {
         //[1998] if @Action or @ActionLayout detected on type level infer:
         //@ActionLayout(contributed=ACTION)
         val isForceContributedAsAction =
-                processMethodContext.synthesizeOnType(Action.class).isPresent()
-                || processMethodContext.synthesizeOnType(ActionLayout.class).isPresent();
+                // not reporting ambiguity here, this is done else where
+                processMethodContext.synthesizeOnMethodOrMixinType(Action.class, ()->{}).isPresent()
+                || processMethodContext.synthesizeOnMethodOrMixinType(ActionLayout.class, ()->{}).isPresent();
 
         if(isForceContributedAsAction) {
-            FacetUtil.addFacet(new ContributingFacetAbstract(Contributing.AS_ACTION, facetedMethod) {});
+            FacetUtil.addFacet(ContributingFacetAbstract.createAsAction(facetedMethod));
         }
 
     }
