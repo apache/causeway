@@ -91,7 +91,6 @@ public class JpaTestFixtures extends EntityTestFixtures {
     @Override
     protected void setUp3Books() {
 
-        clearRepository();
         // given - expected pre condition: no inventories
         assertEquals(0, repository.allInstances(JpaInventory.class).size());
 
