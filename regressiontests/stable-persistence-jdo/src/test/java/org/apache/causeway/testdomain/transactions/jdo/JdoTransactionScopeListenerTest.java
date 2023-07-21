@@ -43,16 +43,7 @@ import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
         classes = {
                 Configuration_usingJdo.class,
                 InteractionBoundaryProbe.class
-        },
-        properties = {
-                "datanucleus.cache.level2.mode=ENABLE_SELECTIVE",
-                "datanucleus.cache.level2.type=none",
-                "datanucleus.identifier.case=MixedCase",
-                "datanucleus.persistenceByReachabilityAtCommit=false",
-                "datanucleus.schema.autoCreateAll=true",
-                "datanucleus.schema.validateAll=false",
-                "datanucleus.schema.validateConstraints=true",
-                "datanucleus.schema.validateTables=true"})
+        })
 //@Transactional
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
 /**
