@@ -33,4 +33,7 @@ public interface InventoryJaxbVm<T extends IBook> {
     void setBooks(Collection<T> books);
     void setBooksForTab1(Collection<T> books);
     void setBooksForTab2(Collection<T> books);
+
+    @org.apache.causeway.applib.annotation.Collection
+    List<? extends BookView<T>> getBookViews();
 }

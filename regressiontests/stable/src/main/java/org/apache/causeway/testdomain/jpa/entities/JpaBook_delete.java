@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.testdomain.jpa;
+package org.apache.causeway.testdomain.jpa.entities;
 
 import java.util.Collection;
 
@@ -27,7 +27,6 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.repository.RepositoryService;
-import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 
 import lombok.RequiredArgsConstructor;
 

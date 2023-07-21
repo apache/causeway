@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -41,7 +42,9 @@ import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.testdomain.fixtures.InventoryJaxbVm;
 import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testdomain.jpa.entities.JpaInventory;
@@ -64,8 +67,8 @@ import lombok.Setter;
 public class JpaInventoryJaxbVm
 implements InventoryJaxbVm<JpaBook> {
 
-    @XmlTransient @Inject
-    private RepositoryService repository;
+    @XmlTransient @Inject private RepositoryService repository;
+    @XmlTransient @Inject private FactoryService factory;
 
     @Override
     @ObjectSupport public String title() {
@@ -174,6 +177,14 @@ implements InventoryJaxbVm<JpaBook> {
         return Optional.ofNullable(inventory)
                 .map(JpaInventory::getProducts)
                 .orElseGet(Collections::emptySet);
+    }
+
+    @XmlTransient
+    @Override
+    public List<JpaBookView> getBookViews() {
+        return _NullSafe.stream(listBooks())
+                .map(book->JpaBookView.createForBook(factory, book))
+                .collect(Collectors.toList());
     }
 
 }
