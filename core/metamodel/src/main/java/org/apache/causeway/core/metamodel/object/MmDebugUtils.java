@@ -20,6 +20,8 @@ package org.apache.causeway.core.metamodel.object;
 
 import java.util.stream.Collectors;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedParameter;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
@@ -90,11 +92,13 @@ public final class MmDebugUtils {
 
     // -- HELPER
 
-    private String formatPendingValue(final ManagedObject managedObject) {
-        return String.format("(%s,cls=%s) pojo=%s",
-                managedObject.getSpecialization().name(),
-                managedObject.getCorrespondingClass().getName(),
-                ""+managedObject.getPojo());
+    private String formatPendingValue(final @Nullable ManagedObject managedObject) {
+        return ManagedObjects.isSpecified(managedObject)
+                ? String.format("(%s,cls=%s) pojo=%s",
+                    managedObject.getSpecialization().name(),
+                    managedObject.getCorrespondingClass().getName(),
+                    ""+managedObject.getPojo())
+                : "(unspecified) pojo=null";
     }
 
 }
