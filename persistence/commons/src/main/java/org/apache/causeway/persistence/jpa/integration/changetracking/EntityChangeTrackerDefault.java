@@ -178,6 +178,9 @@ implements
             return true; // ignore entities that are not enabled for entity change publishing
         }
 
+        // guard against transient
+        if(ManagedObjects.bookmark(entity).isEmpty()) return true;
+
         if(entityPropertyChangeRecordsForPublishing.isMemoized()) {
             throw _Exceptions.illegalState("Cannot enlist additional changes for auditing, "
                     + "since changedObjectPropertiesRef was already prepared (memoized) for auditing.");

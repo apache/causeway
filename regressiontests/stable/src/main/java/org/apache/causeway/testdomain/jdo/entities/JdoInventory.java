@@ -23,13 +23,17 @@ import java.util.Set;
 import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
+import javax.jdo.annotations.Element;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.Join;
 import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.Version;
 import javax.jdo.annotations.VersionStrategy;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.Publishing;
@@ -59,7 +63,12 @@ public class JdoInventory {
     @Getter @Setter @Column(allowsNull = "true")
     private String name;
 
-    @Property
-    @Getter @Setter @Column(allowsNull = "true")
+    // unidirectional 1:n relation
+    // see https://www.datanucleus.org/products/accessplatform_6_0/jdo/mapping.html#one_many_join_uni
+    @Collection
+    @Persistent(table="INVENTORY_PRODUCTS")
+    @Join(column="PRODUCT_ID_OID")
+    @Element(column="INVENTORY_ID_EID")
+    @Getter @Setter
     private Set<JdoProduct> products;
 }

@@ -22,7 +22,6 @@ import javax.inject.Inject;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -70,7 +69,6 @@ class JdoTransactionScopeListenerTest {
 
     @BeforeEach
     void setUp() {
-        // new InteractionScope with a new transaction (#1)
         // clear repository
         lock = jdoTestFixtures.aquireLockAndClear();
     }
@@ -81,17 +79,22 @@ class JdoTransactionScopeListenerTest {
         lock.release();
     }
 
-    @Test @Disabled("SQL bad grammar exception in jdoTestFixtures.add3Books()")
+    @Test
     void sessionScopedProbe_shouldBeReused_andBeAwareofTransactionBoundaries() {
 
-        // new InteractionScope with a new transaction (#2)
+        assertEquals(0, InteractionBoundaryProbe.totalInteractionsStarted(kvStoreForTesting));
+        assertEquals(0, InteractionBoundaryProbe.totalInteractionsEnded(kvStoreForTesting));
+        assertEquals(0, InteractionBoundaryProbe.totalTransactionsEnding(kvStoreForTesting));
+        assertEquals(0, InteractionBoundaryProbe.totalTransactionsCommitted(kvStoreForTesting));
+
+        // new InteractionScope with a new transaction (#1)
         interactionService.runAnonymous(()->{
 
             // expected pre condition
-            // reuse transaction (#2)
+            // reuse transaction (#1)
             assertEquals(0, repository.allInstances(JdoBook.class).size());
 
-            // reuse transaction (#2)
+            // reuse transaction (#1)
             transactionService.runWithinCurrentTransactionElseCreateNew(()->{
                 // + 1 interaction + 1 transaction
                 jdoTestFixtures.add3Books();
@@ -99,15 +102,15 @@ class JdoTransactionScopeListenerTest {
             .ifFailureFail();
 
             // expected post condition
-            // reuse transaction (#2)
+            // reuse transaction (#1)
             assertEquals(3, repository.allInstances(JdoBook.class).size());
 
         });
 
-        assertEquals(3, InteractionBoundaryProbe.totalInteractionsStarted(kvStoreForTesting));
-        assertEquals(3, InteractionBoundaryProbe.totalInteractionsEnded(kvStoreForTesting));
-        assertEquals(3, InteractionBoundaryProbe.totalTransactionsEnding(kvStoreForTesting));
-        assertEquals(3, InteractionBoundaryProbe.totalTransactionsCommitted(kvStoreForTesting));
+        assertEquals(1, InteractionBoundaryProbe.totalInteractionsStarted(kvStoreForTesting));
+        assertEquals(1, InteractionBoundaryProbe.totalInteractionsEnded(kvStoreForTesting));
+        assertEquals(1, InteractionBoundaryProbe.totalTransactionsEnding(kvStoreForTesting));
+        assertEquals(1, InteractionBoundaryProbe.totalTransactionsCommitted(kvStoreForTesting));
 
     }
 
