@@ -49,6 +49,7 @@ import org.apache.causeway.viewer.wicket.ui.components.widgets.breadcrumbs.Bread
 import org.apache.causeway.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -87,6 +88,22 @@ implements
                 authentication!=null
                  && authentication.getUser().isImpersonating(), ()->
                 "framework bug: cannot signin with an impersonated user");
+        this.authentication = authentication;
+    }
+
+    /**
+     * If there is an {@link InteractionContext} already (primed)
+     * (as some authentication mechanisms setup in filters,
+     * eg SpringSecurityFilter), then just use it.
+     * <p>
+     * However, for authorization, the authentication still must pass
+     * {@link AuthenticationManager} checks,
+     * as done in {@link #getAuthentication()},
+     * which on success also sets the signIn flag.
+     * <p>
+     * Called by {@link WebRequestCycleForCauseway}.
+     */
+    public void setPrimedInteractionContext(final @NonNull InteractionContext authentication) {
         this.authentication = authentication;
     }
 
