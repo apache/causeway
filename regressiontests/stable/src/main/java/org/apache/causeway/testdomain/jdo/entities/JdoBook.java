@@ -168,8 +168,6 @@ implements IBook {
             final String author,
             final String isbn,
             final String publisher) {
-
-        //super(null, name, description, price, /*comments*/null);
         super(name, description, price, /*comments*/null);
         this.author = author;
         this.isbn = isbn;
