@@ -68,6 +68,7 @@ public class JdoInventory {
     @Element(column="INVENTORY_ID_EID",
         deleteAction = ForeignKeyAction.CASCADE,
         updateAction = ForeignKeyAction.CASCADE)
+    @ToString.Exclude
     @Getter @Setter
     private Set<JdoProduct> products;
 }
