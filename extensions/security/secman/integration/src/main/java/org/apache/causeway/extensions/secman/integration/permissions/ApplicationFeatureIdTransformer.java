@@ -38,6 +38,7 @@ import java.util.stream.Collectors;
  * <p>
  *     The primary use case is to enable backward compatibility; rather than evaluating using the
  *     logicalTypeName#memberId, an alternative transformer could use the packageName#memberId (as was done in v1).
+ *     There is an example of this in the unit tests.
  * </p>
  *
  */
