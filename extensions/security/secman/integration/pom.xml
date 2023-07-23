@@ -48,6 +48,13 @@
 			<scope>provided</scope>
 		</dependency>
 
+        <dependency>
+            <groupId>org.apache.causeway.testing</groupId>
+            <artifactId>causeway-testing-unittestsupport-applib</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+
     </dependencies>
 
 </project>
