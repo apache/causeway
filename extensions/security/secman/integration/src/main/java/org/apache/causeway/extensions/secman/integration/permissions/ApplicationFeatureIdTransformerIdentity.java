@@ -18,22 +18,14 @@
  */
 package org.apache.causeway.extensions.secman.integration.permissions;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
-import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionValue;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 import java.util.Collection;
 
 /**
- * Created as a service, if required, by {@link AutoConfiguration}.
+ * Created as a service, if required, by {@link ApplicationFeatureIdTransformerIdentityAutoConfiguration}.
  *
  * @since 2.0 {@index}
  */
@@ -51,16 +43,4 @@ public class ApplicationFeatureIdTransformerIdentity implements ApplicationFeatu
         return permissionValues;
     }
 
-    @AutoConfigureOrder(PriorityPrecedence.LATE)
-    @Configuration
-    public static class AutoConfiguration {
-
-        @Bean(CausewayModuleExtSecmanApplib.NAMESPACE + ".ApplicationFeatureIdTransformerIdentity")
-        @ConditionalOnMissingBean(ApplicationFeatureIdTransformer.class)
-        @Qualifier("Identity")
-        public ApplicationFeatureIdTransformer ApplicationFeatureIdTransformer() {
-            return new ApplicationFeatureIdTransformerIdentity();
-        }
-
-    }
 }
