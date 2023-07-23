@@ -43,9 +43,29 @@ import java.util.stream.Collectors;
  */
 public interface ApplicationFeatureIdTransformer {
 
+    /**
+     * Transform the provided {@link ApplicationFeatureId} into a new {@link ApplicationFeatureId} so that it can be
+     * evaluated.
+     *
+     * @param applicationFeatureId - to be transformed
+     * @return the transformed {@link ApplicationFeatureId}.
+     */
     @Programmatic
     ApplicationFeatureId transform(ApplicationFeatureId applicationFeatureId);
 
+    /**
+     * Transform a collection of {@link ApplicationPermissionValue}s, specifically transforming the
+     * {@link ApplicationFeatureId} that they relate to (as per {@link ApplicationPermissionValue#getFeatureId()})
+     * to some other {@link ApplicationFeatureId}, delegating to {@link #transform(ApplicationFeatureId)}.
+     *
+     * <p>
+     *     This default implementation does not usually need to be overridden (though it could be by an
+     *     implementation that wished to cache the transformations, say).
+     * </p>
+     *
+     * @param permissionValues - to be transformed
+     * @return the transformed {@link ApplicationPermissionValue}s
+     */
     @Programmatic
     default Collection<ApplicationPermissionValue> transform(Collection<ApplicationPermissionValue> permissionValues) {
         return permissionValues.stream()

@@ -52,12 +52,21 @@ public class ApplicationFeatureIdTransformerV1Compatibility implements Applicati
 
     private ApplicationFeatureId doTransform(ApplicationFeatureId applicationFeatureId) {
         val logicalTypeName = applicationFeatureId.getLogicalTypeName();
-        val logicalTypeNameBasedOnPhysicalName =
-                specificationLoader.specForLogicalTypeName(logicalTypeName)
-                .map(ObjectSpecification::getCorrespondingClass)
-                .map(Class::getName)
-                .orElse(logicalTypeName);
-        return applicationFeatureId.withLogicalTypeName(logicalTypeNameBasedOnPhysicalName);
+        switch (applicationFeatureId.getSort()) {
+            case NAMESPACE:
+                return applicationFeatureId;
+            case TYPE:
+            case MEMBER:
+                val logicalTypeNameBasedOnPhysicalName =
+                        specificationLoader.specForLogicalTypeName(logicalTypeName)
+                        .map(ObjectSpecification::getCorrespondingClass)
+                        .map(Class::getName)
+                        .orElse(logicalTypeName);
+                return applicationFeatureId.withLogicalTypeName(logicalTypeNameBasedOnPhysicalName);
+            default:
+                // not expected...
+                throw new IllegalArgumentException(String.format("ApplicationFeatureId.sort '%s' not recognised", applicationFeatureId.getSort()));
+        }
     }
 
 }
