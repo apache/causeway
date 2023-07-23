@@ -22,7 +22,7 @@ import org.apache.causeway.client.kroviz.to.TObject
 
 object IconManager {
     private const val PREFIX = "fas fa-"   //TODO far fa- ???
-    private const val DEFAULT_ICON = PREFIX + "play"
+    const val DEFAULT_ICON = PREFIX + "play"
 
     const val DANGER = "text-danger"
     const val DISABLED = "text-disabled"

@@ -14,6 +14,5 @@ class DispatchInterceptor : BaseAggregator() {
         console.log("[DI.update]")
         console.log(logEntry)
     }
-
-
+    
 }

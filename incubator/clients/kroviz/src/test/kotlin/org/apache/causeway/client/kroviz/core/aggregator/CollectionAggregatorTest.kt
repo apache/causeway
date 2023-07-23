@@ -20,7 +20,6 @@ package org.apache.causeway.client.kroviz.core.aggregator
 
 import org.apache.causeway.client.kroviz.IntegrationTest
 import org.apache.causeway.client.kroviz.core.event.ResourceSpecification
-import org.apache.causeway.client.kroviz.core.model.CollectionDM
 import org.apache.causeway.client.kroviz.snapshots.simpleapp1_16_0.*
 import org.apache.causeway.client.kroviz.to.Property
 import org.apache.causeway.client.kroviz.to.Relation
@@ -84,7 +83,7 @@ class CollectionAggregatorTest : IntegrationTest() {
             // then
             val ol = aggt.displayModel
             assertNotNull(ol)
-            assertEquals(1, (ol as CollectionDM).data.size)
+            assertEquals(1, ol.data.size)
         }
     }
 

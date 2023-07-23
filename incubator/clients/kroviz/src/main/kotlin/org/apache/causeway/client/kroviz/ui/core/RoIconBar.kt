@@ -104,7 +104,7 @@ class RoIconBar : SimplePanel() {
             (obj == null) -> null
             is TObject -> {
                 val exp = Exposer(obj)
-                val ed = exp.getWithDelegateProperties()
+                val ed = exp.withDelegateProperties()
                 val hasIconName = ed.hasOwnProperty("iconName") as Boolean
                 val iconName = if (hasIconName) (ed["iconName"] as String) else ""
 

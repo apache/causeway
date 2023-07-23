@@ -47,8 +47,6 @@ class ColumnFactory {
     }
 
     fun buildColumns(displayCollection: CollectionDM): List<ColumnDefinition<dynamic>> {
-        console.log("[CF_buildColumns]")
-        console.log(displayCollection)
         val columns = mutableListOf<ColumnDefinition<dynamic>>()
         columns.add(columnForObjectIcon(displayCollection))
         columns.addAll(columnsForProperties(displayCollection))
@@ -87,7 +85,7 @@ class ColumnFactory {
         val icon = displayCollection.icon
         displayCollection.data.forEach {
             if (icon != null) {
-                it["icon"] = icon
+                it["iconUrl"] = icon.image.src
             }
         }
     }
@@ -95,7 +93,7 @@ class ColumnFactory {
     private fun buildIconColumn(): ColumnDefinition<dynamic> {
         return ColumnDefinition(
             "",
-            field = "icon",
+            field = "iconUrl",
             formatter = Formatter.IMAGE,
             formatterParams = obj { width = "16px"; height = "16px" },
             hozAlign = Align.CENTER,

@@ -79,9 +79,8 @@ package "model" {
     class Exposer {
         delegate: TObject
         iconName: String
-        + dynamise()
+        + withDelegateProperties()
         + get(propertyName: String)
-        + setIcon(icon: Icon)
     }
     note as ExposerNote
     dynamise() and get()

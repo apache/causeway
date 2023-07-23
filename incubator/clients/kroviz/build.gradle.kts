@@ -72,7 +72,7 @@ kotlin {
         binaries.executable()
     }
     sourceSets["main"].dependencies {
-        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0")
         implementation(npm("react-awesome-button", "*"))
         implementation(npm("prop-types", "*"))
         implementation("io.kvision:kvision:$kvisionVersion")

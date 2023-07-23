@@ -36,7 +36,7 @@ class Exposer(val delegate: TObject) {
 
     init {
         val that = this.asDynamic()
-        that["icon"] = null
+//        that["icon"] = null is added at runtime
         for (m in delegate.members) {
             val member = m.value
             if (member.memberType == MemberType.PROPERTY.type) {
@@ -49,10 +49,11 @@ class Exposer(val delegate: TObject) {
         }
     }
 
-    fun getWithDelegateProperties(): dynamic {
+    fun withDelegateProperties(): dynamic {
         return this.asDynamic()
     }
 
+    // convenience method for test - refactor?
     fun get(propertyName: String): Any? {
         return this.delegate.getProperty(propertyName)?.value
     }

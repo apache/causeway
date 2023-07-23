@@ -55,10 +55,15 @@ class RoTable(displayCollection: CollectionDM) : SimplePanel() {
         tabulator.setEventListener<Tabulator<dynamic>> {
             cellClickTabulator = {
                 // can't check cast to external interface
+                console.log("[RT_init] cellCLick it .detail .getColumn.getField")
+                console.log(it)
                 val cc = it.detail as CellComponent
+                console.log(cc)
                 val column = cc.getColumn().getField()
-                if (column == "icon") {
+                console.log(column)
+                if (column == "iconUrl") {
                     val exposer = cc.getData() as Exposer
+                    console.log(exposer)
                     val tObject = exposer.delegate
                     ResourceProxy().load(tObject)
                 }

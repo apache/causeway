@@ -38,9 +38,8 @@ CollectionProperties o-- ColumnProperties
 class Exposer {
     delegate: TObject
     iconName: String
-    + dynamise()
+    + witgDelegateProperties()
     + get(propertyName: String)
-    + setIcon(icon: Icon)
 }
 note as ExposerNote
 dynamise() and get()
