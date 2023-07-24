@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,7 +36,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
 import org.apache.causeway.testdomain.fixtures.EntityTestFixtures.Lock;
@@ -56,7 +55,7 @@ import lombok.val;
 class JdoBootstrappingTest extends CausewayIntegrationTestAbstract {
 
     @Inject private JdoTestFixtures testFixtures;
-    private static _Refs.ObjectReference<Lock> lockHolder = _Refs.objectRef(null);
+    private static Lock lock;
 
     @BeforeAll
     static void beforeAll() throws SQLException {
@@ -64,14 +63,13 @@ class JdoBootstrappingTest extends CausewayIntegrationTestAbstract {
         // Util_H2Console.main(null);
     }
 
-    @Test @Order(0) @Rollback(false)
+    @Test @Order(0) @Commit
     void aquireLock() {
-        val lock = testFixtures.aquireLock(); // concurrent test synchronization
-        lockHolder.set(lock);
+        lock = testFixtures.aquireLock(); // concurrent test synchronization
         lock.install();
     }
 
-    @Test @Order(1) @Rollback(false)
+    @Test @Order(1) @Commit
     void sampleInventoryShouldBeSetUp() {
 
         // when - expected condition before install: no inventories
@@ -100,15 +98,14 @@ class JdoBootstrappingTest extends CausewayIntegrationTestAbstract {
         testFixtures.assertHasPersistenceId(firstProduct);
     }
 
-    @Test @Order(2) @Rollback(false)
+    @Test @Order(2) @Commit
     void aSecondRunShouldWorkAsWell() {
         sampleInventoryShouldBeSetUp();
     }
 
-    @Test @Order(3)
+    @Test @Order(3) @Commit
     void releaseLock() {
-        lockHolder.getValue()
-            .ifPresent(Lock::release); // concurrent test synchronization
+        lock.release(); // concurrent test synchronization
     }
 
 }

@@ -26,6 +26,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -70,8 +71,8 @@ class JdoTransactionRollbackTest_usingTransactional {
         lock = jdoTestFixtures.aquireLockAndClear();
     }
 
-    @Test @Order(2)
-    void happyCaseTx_shouldCommit() {
+    @Test @Order(2) @Rollback
+    void happyCaseTx_shouldPopulate() {
 
         _Probe.errOut("before interaction");
 
@@ -98,7 +99,7 @@ class JdoTransactionRollbackTest_usingTransactional {
 
     }
 
-    @Test @Order(3)
+    @Test @Order(3) @Commit
     void previousTest_shouldHaveBeenRolledBack() {
 
         interactionService.runAnonymous(()->{
