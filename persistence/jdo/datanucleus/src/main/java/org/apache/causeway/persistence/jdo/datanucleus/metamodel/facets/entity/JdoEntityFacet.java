@@ -34,7 +34,6 @@ import org.datanucleus.enhancement.Persistable;
 import org.datanucleus.store.rdbms.RDBMSPropertyNames;
 import org.springframework.lang.Nullable;
 
-import org.apache.causeway.applib.exceptions.unrecoverable.ObjectNotFoundException;
 import org.apache.causeway.applib.query.AllInstancesQuery;
 import org.apache.causeway.applib.query.NamedQuery;
 import org.apache.causeway.applib.query.Query;
@@ -202,7 +201,7 @@ implements EntityFacet {
             val recognition = exceptionRecognizerService.recognize(e);
             if(recognition.isPresent()) {
                 if(recognition.get().getCategory() == Category.NOT_FOUND) {
-                    throw new ObjectNotFoundException(""+bookmark, e);
+                    return Optional.empty();
                 }
             }
 

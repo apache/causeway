@@ -27,12 +27,13 @@ import org.datanucleus.PropertyNames;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.apache.causeway.applib.exceptions.unrecoverable.ObjectNotFoundException;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.base._Refs;
@@ -272,8 +273,7 @@ class InteractionTestJdoWkt extends RegressionTestWithJdoFixtures {
         });
     }
 
-    //TODO[CAUSEWAY-3532] enable once we have fixes
-    @Test @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
+    @Test
     void loadNonExistentBookPage_shouldRender_noSuchObjectError() {
         val pageParameters = PageParameterUtils.createPageParametersForBookmark(
                 Bookmark.forLogicalTypeAndIdentifier(
@@ -281,12 +281,18 @@ class InteractionTestJdoWkt extends RegressionTestWithJdoFixtures {
                         "99"));
 
         // open book page for non existent OID '99'
-        run(()->{
-            wktTester.startEntityPage(pageParameters);
-            wktTester.dumpComponentTree(comp->true);
-            //TODO[CAUSEWAY-3532] assert we have an error page
+        // should throw an (causeway) ObjectNotFoundException
+        assertThrows(ObjectNotFoundException.class, ()->{
+            run(()->{
+                wktTester.startEntityPage(pageParameters);
+            });
         });
-    }
 
+        // yet don't know how to verify an error page was rendered
+//        run(()->{
+//            wktTester.dumpComponentTree(comp->true);
+//        });
+
+    }
 
 }
