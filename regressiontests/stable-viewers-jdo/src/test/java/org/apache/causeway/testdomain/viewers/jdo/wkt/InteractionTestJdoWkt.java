@@ -27,11 +27,14 @@ import org.datanucleus.PropertyNames;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
@@ -42,7 +45,9 @@ import org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageT
 import org.apache.causeway.testdomain.conf.Configuration_usingWicket.WicketTesterFactory;
 import org.apache.causeway.testdomain.jdo.RegressionTestWithJdoFixtures;
 import org.apache.causeway.testdomain.jdo.entities.JdoBook;
+import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testdomain.util.dto.BookDto;
+import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.causeway.viewer.wicket.ui.panels.PromptFormAbstract;
 
 import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester.BOOK_DELETE_ACTION_JDO;
@@ -267,5 +272,22 @@ class InteractionTestJdoWkt extends RegressionTestWithJdoFixtures {
             assertEquals("Delete", label.getDefaultModelObject());
         });
     }
+
+    //TODO[CAUSEWAY-3532] enable once we have fixes
+    @Test @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
+    void loadNonExistentBookPage_shouldRender_noSuchObjectError() {
+        val pageParameters = PageParameterUtils.createPageParametersForBookmark(
+                Bookmark.forLogicalTypeAndIdentifier(
+                        LogicalType.eager(JpaBook.class, "testdomain.jdo.Book"),
+                        "99"));
+
+        // open book page for non existent OID '99'
+        run(()->{
+            wktTester.startEntityPage(pageParameters);
+            wktTester.dumpComponentTree(comp->true);
+            //TODO[CAUSEWAY-3532] assert we have an error page
+        });
+    }
+
 
 }
