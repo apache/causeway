@@ -228,6 +228,10 @@ object ViewManager {
     fun performUserAction(aggregator: BaseAggregator, obj: TObject) {
         setBusyCursor()
         getEventStore().addUserAction(aggregator, obj)
+        if (aggregator is ObjectAggregator) {
+            //TODO a 2nd, 3rd, etc view may be opened - introduce check
+            openObjectView(aggregator)
+        }
         setNormalCursor()
     }
 

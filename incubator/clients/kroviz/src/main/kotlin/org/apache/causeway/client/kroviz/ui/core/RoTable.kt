@@ -55,12 +55,8 @@ class RoTable(displayCollection: CollectionDM) : SimplePanel() {
         tabulator.setEventListener<Tabulator<dynamic>> {
             cellClickTabulator = {
                 // can't check cast to external interface
-                console.log("[RT_init] cellCLick it .detail .getColumn.getField")
-                console.log(it)
                 val cc = it.detail as CellComponent
-                console.log(cc)
                 val column = cc.getColumn().getField()
-                console.log(column)
                 if (column == "iconUrl") {
                     val exposer = cc.getData() as Exposer
                     console.log(exposer)
@@ -71,8 +67,6 @@ class RoTable(displayCollection: CollectionDM) : SimplePanel() {
         }
         tabulator.addCssClass("horizontal-tb")
         add(tabulator)
-        console.log("[RT_init]")
-        console.log(tabulator)
     }
 
     private fun createTabulator(
