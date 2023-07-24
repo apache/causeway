@@ -45,7 +45,6 @@ import org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageT
 import org.apache.causeway.testdomain.conf.Configuration_usingWicket.WicketTesterFactory;
 import org.apache.causeway.testdomain.jdo.RegressionTestWithJdoFixtures;
 import org.apache.causeway.testdomain.jdo.entities.JdoBook;
-import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testdomain.util.dto.BookDto;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.causeway.viewer.wicket.ui.panels.PromptFormAbstract;
@@ -278,7 +277,7 @@ class InteractionTestJdoWkt extends RegressionTestWithJdoFixtures {
     void loadNonExistentBookPage_shouldRender_noSuchObjectError() {
         val pageParameters = PageParameterUtils.createPageParametersForBookmark(
                 Bookmark.forLogicalTypeAndIdentifier(
-                        LogicalType.eager(JpaBook.class, "testdomain.jdo.Book"),
+                        LogicalType.eager(JdoBook.class, "testdomain.jdo.Book"),
                         "99"));
 
         // open book page for non existent OID '99'

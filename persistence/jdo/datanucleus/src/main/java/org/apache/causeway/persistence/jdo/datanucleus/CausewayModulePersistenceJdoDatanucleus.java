@@ -47,6 +47,7 @@ import org.apache.causeway.persistence.jdo.datanucleus.changetracking.JdoLifecyc
 import org.apache.causeway.persistence.jdo.datanucleus.config.DatanucleusSettings;
 import org.apache.causeway.persistence.jdo.datanucleus.dialect.DnJdoDialect;
 import org.apache.causeway.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
+import org.apache.causeway.persistence.jdo.datanucleus.exrecog.JdoObjectNotFoundRecognizer;
 import org.apache.causeway.persistence.jdo.datanucleus.jdosupport.JdoSupportServiceDefault;
 import org.apache.causeway.persistence.jdo.datanucleus.valuetypes.DnByteIdValueSemantics;
 import org.apache.causeway.persistence.jdo.datanucleus.valuetypes.DnCharIdValueSemantics;
@@ -109,11 +110,14 @@ import lombok.extern.log4j.Log4j2;
 
     // @Service's
     JdoSupportServiceDefault.class,
+    JdoObjectNotFoundRecognizer.class,
 
 })
 @EnableConfigurationProperties(DatanucleusSettings.class)
 @Log4j2
 public class CausewayModulePersistenceJdoDatanucleus {
+
+    public static final String NAMESPACE = "causeway.persistence.jdo";
 
     /**
      * Conveniently registers this dialect as a {@link PersistenceExceptionTranslator} with <i>Spring</i>.

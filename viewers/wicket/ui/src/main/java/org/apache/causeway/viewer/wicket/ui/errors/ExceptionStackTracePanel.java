@@ -34,6 +34,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 import org.apache.causeway.applib.services.error.Ticket;
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
@@ -133,7 +134,11 @@ extends PanelBase<List<StackTraceDetail>> {
         final PageParameters pageParameters;
         if (entityModel != null) {
             pageClass = pageClassRegistry.getPageClass(PageType.ENTITY);
-            pageParameters = entityModel.getPageParameters();
+            pageParameters = Try.call(()->entityModel.getPageParameters())
+                    .getValue()
+                    // silently ignore, if we fail to generate a 'continue' button target
+                    // (eg. because object was deleted)
+                    .orElse(null);
         } else {
             pageClass = pageClassRegistry.getPageClass(PageType.HOME);
             pageParameters = null;
