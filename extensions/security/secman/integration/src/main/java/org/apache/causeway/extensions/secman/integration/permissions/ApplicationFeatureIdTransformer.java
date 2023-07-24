@@ -26,7 +26,7 @@ import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPe
 
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Priority;
+import jakarta.annotation.Priority;
 
 import java.util.Collection;
 import java.util.stream.Collectors;

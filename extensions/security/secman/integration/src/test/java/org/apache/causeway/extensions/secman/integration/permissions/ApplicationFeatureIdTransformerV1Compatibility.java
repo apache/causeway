@@ -31,7 +31,7 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
