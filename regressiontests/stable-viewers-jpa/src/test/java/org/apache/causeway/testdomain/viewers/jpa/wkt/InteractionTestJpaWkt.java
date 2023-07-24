@@ -22,6 +22,7 @@ import javax.inject.Inject;
 
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
+import org.apache.wicket.markup.html.basic.Label;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,8 +47,10 @@ import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testdomain.util.dto.BookDto;
 import org.apache.causeway.viewer.wicket.ui.panels.PromptFormAbstract;
 
+import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester.BOOK_DELETE_ACTION_JPA;
 import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester.OPEN_SAMPLE_ACTION;
 import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester.OPEN_SAMPLE_ACTION_TITLE;
+import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester.STANDALONE_COLLECTION_LABEL;
 
 import lombok.val;
 
@@ -259,6 +262,34 @@ class InteractionTestJpaWkt extends RegressionTestWithJpaFixtures {
             jpaBook.setIsbn("ISBN-A");
         });
 
+    }
+
+    @Test
+    void loadBookPage_Dune_then_delete() {
+        val pageParameters = call(()->{
+
+            val jpaBook = repositoryService.allInstances(JpaBook.class).stream()
+            .filter(book->"Dune".equals(book.getName()))
+            .findFirst()
+            .orElseThrow();
+
+            return wktTester.createPageParameters(jpaBook);
+        });
+
+        //System.err.printf("pageParameters %s%n", pageParameters);
+
+        // open Dune page and click on the Delete action
+        run(()->{
+            wktTester.startEntityPage(pageParameters);
+            wktTester.dumpComponentTree(comp->true);
+            wktTester.clickLink(BOOK_DELETE_ACTION_JPA);
+
+            val label = (Label)wktTester
+                    .getComponentFromLastRenderedPage(STANDALONE_COLLECTION_LABEL);
+
+            // then should render a standalone collection labeled 'Delete'
+            assertEquals("Delete", label.getDefaultModelObject());
+        });
     }
 
     // -- HELPER

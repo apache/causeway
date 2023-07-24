@@ -22,12 +22,15 @@ import javax.inject.Inject;
 
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
+import org.apache.wicket.markup.html.basic.Label;
 import org.datanucleus.PropertyNames;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.core.config.presets.CausewayPresets;
@@ -42,8 +45,10 @@ import org.apache.causeway.testdomain.jdo.entities.JdoBook;
 import org.apache.causeway.testdomain.util.dto.BookDto;
 import org.apache.causeway.viewer.wicket.ui.panels.PromptFormAbstract;
 
+import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester.BOOK_DELETE_ACTION_JDO;
 import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester.OPEN_SAMPLE_ACTION;
 import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester.OPEN_SAMPLE_ACTION_TITLE;
+import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester.STANDALONE_COLLECTION_LABEL;
 
 import lombok.val;
 
@@ -237,6 +242,33 @@ class InteractionTestJdoWkt extends RegressionTestWithJdoFixtures {
             jdoBook.setIsbn("ISBN-A");
         });
 
+    }
+
+    @Test
+    void loadBookPage_Dune_then_delete() {
+        val pageParameters = call(()->{
+
+            val jdoBook = repositoryService.allInstances(JdoBook.class).stream()
+            .filter(book->"Dune".equals(book.getName()))
+            .findFirst()
+            .orElseThrow();
+
+            return wktTester.createPageParameters(jdoBook);
+        });
+
+        //System.err.printf("pageParameters %s%n", pageParameters);
+
+        // open Dune page and click on the Delete action
+        run(()->{
+            wktTester.startEntityPage(pageParameters);
+            wktTester.clickLink(BOOK_DELETE_ACTION_JDO);
+
+            val label = (Label)wktTester
+                    .getComponentFromLastRenderedPage(STANDALONE_COLLECTION_LABEL);
+
+            // then should render a standalone collection labeled 'Delete'
+            assertEquals("Delete", label.getDefaultModelObject());
+        });
     }
 
 }
