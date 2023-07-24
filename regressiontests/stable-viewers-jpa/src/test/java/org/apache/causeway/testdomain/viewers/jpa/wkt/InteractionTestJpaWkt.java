@@ -276,18 +276,14 @@ class InteractionTestJpaWkt extends RegressionTestWithJpaFixtures {
             return wktTester.createPageParameters(jpaBook);
         });
 
-        //System.err.printf("pageParameters %s%n", pageParameters);
-
         // open Dune page and click on the Delete action
         run(()->{
             wktTester.startEntityPage(pageParameters);
-            wktTester.dumpComponentTree(comp->true);
             wktTester.clickLink(BOOK_DELETE_ACTION_JPA);
 
+            // then should render a standalone collection labeled 'Delete'
             val label = (Label)wktTester
                     .getComponentFromLastRenderedPage(STANDALONE_COLLECTION_LABEL);
-
-            // then should render a standalone collection labeled 'Delete'
             assertEquals("Delete", label.getDefaultModelObject());
         });
     }

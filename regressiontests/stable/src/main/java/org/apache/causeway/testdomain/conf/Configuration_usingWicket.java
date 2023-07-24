@@ -109,6 +109,7 @@ public class Configuration_usingWicket {
 
         // -- BOOK PAGE
 
+        /** strange asymmetry with JPA, to investigate another day */
         public static final String BOOK_DELETE_ACTION_JDO = "theme:entityPageContainer:entity:rows:2"
                 + ":rowContents:1"
                 + ":col:rows:1:rowContents:1:col:tabGroups:1"
@@ -118,6 +119,7 @@ public class Configuration_usingWicket {
                 + ":panelHeading:associatedActionLinksPanel"
                 + ":additionalLinkList:additionalLinkItem:0:additionalLink";
 
+        /** strange asymmetry with JDO, to investigate another day */
         public static final String BOOK_DELETE_ACTION_JPA = "theme:entityPageContainer:entity:rows:2"
                 + ":rowContents:1"
                 + ":col:rows:1:rowContents:1:col:tabGroups:1:1:rowContents:1"

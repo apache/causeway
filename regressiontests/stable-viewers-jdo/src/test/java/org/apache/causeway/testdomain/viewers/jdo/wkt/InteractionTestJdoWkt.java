@@ -256,17 +256,14 @@ class InteractionTestJdoWkt extends RegressionTestWithJdoFixtures {
             return wktTester.createPageParameters(jdoBook);
         });
 
-        //System.err.printf("pageParameters %s%n", pageParameters);
-
         // open Dune page and click on the Delete action
         run(()->{
             wktTester.startEntityPage(pageParameters);
             wktTester.clickLink(BOOK_DELETE_ACTION_JDO);
 
+            // then should render a standalone collection labeled 'Delete'
             val label = (Label)wktTester
                     .getComponentFromLastRenderedPage(STANDALONE_COLLECTION_LABEL);
-
-            // then should render a standalone collection labeled 'Delete'
             assertEquals("Delete", label.getDefaultModelObject());
         });
     }
