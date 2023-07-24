@@ -20,10 +20,14 @@ package org.apache.causeway.extensions.secman.integration.permissions;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -61,6 +65,22 @@ implements PermissionsEvaluationService {
 
     private final @NonNull PermissionsEvaluationPolicy policy; // serializable
 
+    /**
+     * for testing only
+     *
+     * @param policy
+     * @param applicationFeatureIdTransformer
+     */
+    @Builder
+    private PermissionsEvaluationServiceForSecman(
+            PermissionsEvaluationPolicy policy,
+            ApplicationFeatureIdTransformer applicationFeatureIdTransformer
+    ) {
+        this.policy = policy;
+        this.applicationFeatureIdTransformer = applicationFeatureIdTransformer;
+    }
+
+
     @Inject
     public PermissionsEvaluationServiceForSecman(final CausewayConfiguration causewayConfiguration) {
         this.policy = Optional.ofNullable(
@@ -71,9 +91,12 @@ implements PermissionsEvaluationService {
 
     @Override
     public ApplicationPermissionValueSet.Evaluation evaluate(
-            final ApplicationFeatureId targetMemberId,
+            final ApplicationFeatureId targetMemberIdInput,
             final ApplicationPermissionMode mode,
-            final Collection<ApplicationPermissionValue> permissionValues) {
+            final Collection<ApplicationPermissionValue> permissionValuesInput) {
+
+        final ApplicationFeatureId targetMemberId = applicationFeatureIdTransformer.transform(targetMemberIdInput);
+        final Collection<ApplicationPermissionValue> permissionValues = applicationFeatureIdTransformer.transform(permissionValuesInput);
 
         if(_NullSafe.isEmpty(permissionValues)) {
             return null;
@@ -111,5 +134,7 @@ implements PermissionsEvaluationService {
         }
         throw _Exceptions.illegalArgument("PermissionsEvaluationPolicy '%s' not recognised", policy);
     }
+
+    @Inject ApplicationFeatureIdTransformer applicationFeatureIdTransformer;
 
 }

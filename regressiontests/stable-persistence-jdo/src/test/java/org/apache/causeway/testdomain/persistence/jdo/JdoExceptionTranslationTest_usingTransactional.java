@@ -41,6 +41,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.causeway.commons.functional.ThrowingRunnable;
+import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.RegressionTestAbstract;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
@@ -65,7 +66,7 @@ extends RegressionTestAbstract {
 
     @Inject private JdoTestFixtures testFixtures;
     @Inject private Provider<JdoInventoryDao> inventoryDao;
-    private Lock lock;
+    private static _Refs.ObjectReference<Lock> lockHolder = _Refs.objectRef(null);
 
     @BeforeAll
     static void beforeAll() throws SQLException {
@@ -73,14 +74,18 @@ extends RegressionTestAbstract {
         // Util_H2Console.main(null);
     }
 
+    @Test @Order(0)
+    void aquireLock() {
+        val lock = testFixtures.aquireLock(); // concurrent test synchronization
+        lockHolder.set(lock);
+        lock.install();
+    }
+
     @Test @Order(1)
     void booksUniqueByIsbn_whenViolated_shouldThrowTranslatedException() {
 
         // when adding a book for which one with same ISBN already exists in the database,
         // we expect to see a Spring recognized DataAccessException been thrown
-
-        this.lock = testFixtures.aquireLock();
-        lock.install();
 
         final ThrowingRunnable uniqueConstraintViolator =
                 ()->inventoryDao.get().addBook_havingIsbnA_usingRepositoryService();
@@ -126,6 +131,12 @@ extends RegressionTestAbstract {
 
         });
 
+    }
+
+    @Test @Order(3)
+    void releaseLock() {
+        lockHolder.getValue()
+            .ifPresent(Lock::release); // concurrent test synchronization
     }
 
 }

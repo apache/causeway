@@ -243,18 +243,29 @@ implements
     @Programmatic
     @Getter private String namespace;
 
+    /**
+     * The type name, eg &quot;Customer&quot;.
+     *
+     * <p>
+     * Will be {@code null} if this feature is a {@link ApplicationFeatureSort#NAMESPACE namespace}.
+     * </p>
+     */
     @Programmatic
     @Getter private String typeSimpleName;
 
     /**
      * Logical (simple) name of the member (in case of actions not including the parameter list).
-     * Consequently method overloading is not supported.
+     * (This works because method overloading of actions is not supported by the framework).
+     *
      * <p>
      * If there is a member name clash involving an <i>action</i> and an <i>association</i>,
      * then consequently any permissions defined automatically apply to both and one cannot separate
      * these.
+     * </p>
+     *
      * <p>
-     * {@code null} if not a member
+     * Will be {@code null} if this feature is not a {@link ApplicationFeatureSort#MEMBER member}.
+     * </p>
      */
     @Programmatic
     @Getter private String logicalMemberName;
@@ -448,6 +459,37 @@ implements
      */
     public ApplicationFeatureId withNamespace(final @NonNull String namespace) {
         return newFeature(namespace, this.getTypeSimpleName(), this.getLogicalMemberName());
+    }
+
+    /**
+     * Returns a new instance that is a clone of this feature (expected to be a
+     * {@link ApplicationFeatureSort#MEMBER member} or {@link ApplicationFeatureSort#TYPE type}), but with the
+     * logicalTypeName taken from the argument.
+     *
+     * <p>
+     *     If this feature is instead a {@link ApplicationFeatureSort#NAMESPACE namespace} then the feature is
+     *     returned unchanged.
+     * </p>
+     *
+     * <p>
+     *     Note: if the feature is a {@link ApplicationFeatureSort#TYPE type}, then this method will be the same as
+     *     if {@link ApplicationFeatureId#newType(String)} had been used to create a new instance.  The method exists
+     *     though to provide a standardized way of transforming {@link ApplicationFeatureId}s where possible, without
+     *     the caller having to worry as to what {@link #getSort() sort} of feature it is dealing with.
+     * </p>
+     *
+     * @param logicalTypeName
+     */
+    public ApplicationFeatureId withLogicalTypeName(final @NonNull String logicalTypeName) {
+        switch (getSort()) {
+            case MEMBER:
+                return newMember(logicalTypeName, this.getLogicalMemberName());
+            case TYPE:
+                return newType(logicalTypeName);
+            case NAMESPACE:
+            default:
+                return this;
+        }
     }
 
 }

@@ -36,8 +36,10 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
+import org.apache.causeway.testdomain.fixtures.EntityTestFixtures.Lock;
 import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
 import org.apache.causeway.testdomain.jdo.entities.JdoInventory;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
@@ -54,11 +56,19 @@ import lombok.val;
 class JdoBootstrappingTest extends CausewayIntegrationTestAbstract {
 
     @Inject private JdoTestFixtures testFixtures;
+    private static _Refs.ObjectReference<Lock> lockHolder = _Refs.objectRef(null);
 
     @BeforeAll
     static void beforeAll() throws SQLException {
         // launch H2Console for troubleshooting ...
         // Util_H2Console.main(null);
+    }
+
+    @Test @Order(0) @Rollback(false)
+    void aquireLock() {
+        val lock = testFixtures.aquireLock(); // concurrent test synchronization
+        lockHolder.set(lock);
+        lock.install();
     }
 
     @Test @Order(1) @Rollback(false)
@@ -93,6 +103,12 @@ class JdoBootstrappingTest extends CausewayIntegrationTestAbstract {
     @Test @Order(2) @Rollback(false)
     void aSecondRunShouldWorkAsWell() {
         sampleInventoryShouldBeSetUp();
+    }
+
+    @Test @Order(3)
+    void releaseLock() {
+        lockHolder.getValue()
+            .ifPresent(Lock::release); // concurrent test synchronization
     }
 
 }

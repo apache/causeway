@@ -22,7 +22,7 @@ import jakarta.inject.Inject;
 
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,7 +31,7 @@ import org.springframework.test.context.TestPropertySource;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.causeway.commons.internal.debug.xray.XrayUi;
+import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
@@ -71,15 +71,21 @@ class InteractionTestJpaWkt extends RegressionTestWithJpaFixtures {
 
     private EntityPageTester wktTester;
 
+    // optimization: reuse Wicket application across tests
+    private static _Refs.ObjectReference<EntityPageTester> wktTesterHolder =
+            _Refs.objectRef(null);
+
+
     @BeforeEach
     void setUp() throws InterruptedException {
-        wktTester = wicketTesterFactory.createTester(JpaBook::fromDto);
+        wktTester = wktTesterHolder.computeIfAbsent(()->
+                wicketTesterFactory.createTester(JpaBook::fromDto));
     }
 
-    @AfterEach
-    void cleanUp() {
-        wktTester.destroy();
-        XrayUi.waitForShutdown();
+    @AfterAll
+    static void cleanUp() {
+        wktTesterHolder.getValue()
+            .ifPresent(EntityPageTester::destroy);
     }
 
     @Test
