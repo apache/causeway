@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.object;
 
 import java.util.Optional;
 
+import org.apache.causeway.applib.exceptions.unrecoverable.ObjectNotFoundException;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.commons.internal.assertions._Assert;
@@ -131,16 +132,12 @@ implements _Refetchable {
         try {
             val pojo = variant.getPojo();
             triggerReassessment();
+            //if(pojo==null) makeRemoved(); seems reasonable, not tested yet
             return pojo;
-        } catch (Throwable ex) {
-
-            if(_RecognizeObjectDeletedOrNotFound.recognize(ex)) {
-                // if object not found, transition to 'removed' state
-                makeRemoved();
-                return null;
-            }
-
-            throw ex;
+        } catch (ObjectNotFoundException e) {
+            // if object not found, transition to 'removed' state
+            makeRemoved();
+            return null;
         }
     }
 
