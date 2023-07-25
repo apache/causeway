@@ -73,7 +73,13 @@ public enum EntityState {
      * or has been removed from the database.
      * Objects in this state may no longer be interacted with.
      */
-    TRANSIENT_OR_REMOVED(false);
+    TRANSIENT_OR_REMOVED(false),
+    /**
+     * <h1>JDO specific</h1>
+     * Not supported by JPA. (Cannot distinguish between TRANSIENT and REMOVED.)
+     */
+    REMOVED(false)
+    ;
 
     // -- PREDICATES
 
@@ -91,8 +97,12 @@ public enum EntityState {
     public boolean isDetached() { return this == DETACHED; }
     /** @see #HOLLOW */
     public boolean isHollow() { return this == HOLLOW; }
-    /** @see #TRANSIENT_OR_REMOVED */
-    public boolean isTransientOrRemoved() { return this == TRANSIENT_OR_REMOVED; }
+    /** @see #TRANSIENT_OR_REMOVED
+     *  @see #REMOVED */
+    public boolean isTransientOrRemoved() { return this == TRANSIENT_OR_REMOVED
+            || this == REMOVED; }
+    /** @see #REMOVED */
+    public boolean isRemoved() { return this == REMOVED; }
 
     // -- SPECIAL STATES
 

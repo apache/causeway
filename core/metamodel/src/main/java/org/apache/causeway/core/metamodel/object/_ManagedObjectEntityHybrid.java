@@ -63,7 +63,7 @@ implements _Refetchable {
         public boolean isBookmarked() { return this == BOOKMARKED; }
         public boolean isRemoved() { return this == REMOVED; }
         static MorphState valueOf(final EntityState entityState) {
-            return entityState.isTransientOrRemoved()
+            return entityState.isRemoved()
                     ? REMOVED
                     : entityState.hasOidLegacy()
                         ? BOOKMARKED

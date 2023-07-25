@@ -50,7 +50,7 @@ implements Bookmarkable.NoBookmark {
 
     @Override
     public @NonNull EntityState getEntityState() {
-        return EntityState.TRANSIENT_OR_REMOVED;
+        return EntityState.REMOVED;
     }
 
 }

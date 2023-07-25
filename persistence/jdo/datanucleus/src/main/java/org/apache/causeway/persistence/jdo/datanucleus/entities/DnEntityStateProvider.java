@@ -70,7 +70,7 @@ public class DnEntityStateProvider implements JdoFacetContext {
         val persistable = (Persistable) pojo;
         val isDeleted = persistable.dnIsDeleted();
         if(isDeleted) {
-            return EntityState.TRANSIENT_OR_REMOVED;
+            return EntityState.REMOVED;
         }
         val isPersistent = persistable.dnIsPersistent();
         if(isPersistent) {

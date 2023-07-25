@@ -77,7 +77,7 @@ class JpaGeneratedLongIdEntityLifecycleTest {
 
         assertTrue(entity.getSpecification().isEntity());
         assertEquals(
-                EntityState.HOLLOW,
+                EntityState.TRANSIENT_OR_REMOVED,
                 MmEntityUtils.getEntityState(entity));
 
         setEntityRef(entity);
