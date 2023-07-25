@@ -68,7 +68,7 @@ public final class MmEntityUtils {
         entityFacet.persist(managedObject.getPojo());
     }
 
-    public void destroyInCurrentTransaction(final ManagedObject managedObject) {
+    public void deleteInCurrentTransaction(final ManagedObject managedObject) {
         requiresEntity(managedObject);
         val spec = managedObject.getSpecification();
         val entityFacet = spec.entityFacetElseFail();

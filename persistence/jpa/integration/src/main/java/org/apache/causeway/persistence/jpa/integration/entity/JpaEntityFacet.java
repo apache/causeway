@@ -23,10 +23,8 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceException;
 import javax.persistence.PersistenceUnitUtil;
 
-import org.eclipse.persistence.exceptions.DescriptorException;
 import org.springframework.data.jpa.repository.JpaContext;
 import org.springframework.lang.Nullable;
 
@@ -241,42 +239,7 @@ public class JpaEntityFacet
         val entityManager = getEntityManager();
         val persistenceUnitUtil = getPersistenceUnitUtil(entityManager);
 
-        if (entityManager.contains(pojo)) {
-            val primaryKey = persistenceUnitUtil.getIdentifier(pojo);
-            if (primaryKey == null) {
-                return EntityState.ATTACHED_NO_OID;
-            }
-            return EntityState.ATTACHED;
-        }
-
-        try {
-            val primaryKey = persistenceUnitUtil.getIdentifier(pojo);
-            if (primaryKey == null) {
-                return EntityState.HOLLOW;
-            } else {
-                // detect shallow primary key
-                //TODO this is a hack - see whether we can actually ask the EntityManager to give us an accurate answer
-                return primaryKeyType.isValid(primaryKey)
-                    ? EntityState.DETACHED
-                    : EntityState.HOLLOW;
-            }
-        } catch (PersistenceException ex) {
-            /* horrible hack, but encountered NPEs if using a composite key (eg CommandLogEntry)
-                (this was without any weaving) */
-            Throwable cause = ex.getCause();
-            if (cause instanceof DescriptorException) {
-                DescriptorException descriptorException = (DescriptorException) cause;
-                Throwable internalException = descriptorException.getInternalException();
-                if (internalException instanceof NullPointerException) {
-                    return EntityState.HOLLOW;
-                }
-            }
-            if (cause instanceof NullPointerException) {
-                // horrible hack, encountered if using composite key (eg ExecutionLogEntry) with dynamic weaving
-                return EntityState.HOLLOW;
-            }
-            throw ex;
-        }
+        return _JpaEntityStateUtil.getEntityStateLegacy(entityManager, persistenceUnitUtil, entityClass, primaryKeyType, pojo);
     }
 
     @Override

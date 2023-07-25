@@ -85,9 +85,53 @@ class _JpaEntityStateUtil {
         final UnitOfWork session = entityManager.unwrap(UnitOfWork.class);
         final Object reference = session.getReference(entityClass, primaryKey);
         return reference != null
-                ? EntityState.HOLLOW
-                // Sadness: With JPA there is no obvious way to distinguish between TRANSIENT or REMOVED.
+                ? EntityState.DETACHED
                 : EntityState.TRANSIENT_OR_REMOVED;
+    }
+
+    @Deprecated
+    EntityState getEntityStateLegacy(
+            final EntityManager entityManager,
+            final PersistenceUnitUtil persistenceUnitUtil,
+            final Class<?> entityClass,
+            final PrimaryKeyType<?> primaryKeyType,
+            final Object pojo) {
+        if (entityManager.contains(pojo)) {
+            val primaryKey = persistenceUnitUtil.getIdentifier(pojo);
+            if (primaryKey == null) {
+                return EntityState.ATTACHED_NO_OID;
+            }
+            return EntityState.ATTACHED;
+        }
+
+        try {
+            val primaryKey = persistenceUnitUtil.getIdentifier(pojo);
+            if (primaryKey == null) {
+                return EntityState.HOLLOW;
+            } else {
+                // detect shallow primary key
+                //TODO this is a hack - see whether we can actually ask the EntityManager to give us an accurate answer
+                return primaryKeyType.isValid(primaryKey)
+                    ? EntityState.DETACHED
+                    : EntityState.HOLLOW;
+            }
+        } catch (PersistenceException ex) {
+            /* horrible hack, but encountered NPEs if using a composite key (eg CommandLogEntry)
+                (this was without any weaving) */
+            Throwable cause = ex.getCause();
+            if (cause instanceof DescriptorException) {
+                DescriptorException descriptorException = (DescriptorException) cause;
+                Throwable internalException = descriptorException.getInternalException();
+                if (internalException instanceof NullPointerException) {
+                    return EntityState.HOLLOW;
+                }
+            }
+            if (cause instanceof NullPointerException) {
+                // horrible hack, encountered if using composite key (eg ExecutionLogEntry) with dynamic weaving
+                return EntityState.HOLLOW;
+            }
+            throw ex;
+        }
     }
 
 }
