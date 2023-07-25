@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +38,7 @@ import org.apache.causeway.commons.internal.primitives._Longs.Bound;
 import org.apache.causeway.commons.internal.primitives._Longs.Range;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
+import org.apache.causeway.testdomain.fixtures.EntityTestFixtures.Lock;
 import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
 import org.apache.causeway.testdomain.jdo.entities.JdoBook;
 import org.apache.causeway.testdomain.jdo.entities.JdoProduct;
@@ -66,10 +67,12 @@ class JdoEntityInjectingTest extends CausewayIntegrationTestAbstract {
     @Inject private JdoTestFixtures jdoTestFixtures;
     @Inject private RepositoryService repository;
     @Inject private KVStoreForTesting kvStore;
+    private static Lock lock;
 
-    @Test @Order(0) @Rollback(false)
-    void init() {
+    @Test @Order(0) @Commit
+    void aquireLockAndInit() {
         // given
+        lock = jdoTestFixtures.aquireLock();
         jdoTestFixtures.resetTo3Books(()->kvStore.clear(JdoBook.class));
         assertInjectCountRange(3, 12); //TODO there is some injection redundancy
     }
@@ -119,6 +122,12 @@ class JdoEntityInjectingTest extends CausewayIntegrationTestAbstract {
 
         log.debug("TEST 3 EXITING");
     }
+
+    @Test @Order(4)
+    void releaseLock() {
+        lock.release();
+    }
+
 
     // -- HELPER
 
