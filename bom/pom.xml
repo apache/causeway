@@ -184,7 +184,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <wicket.version>10.0.0-M1</wicket.version>
         <wicket-bootstrap.version>7.0.0</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
         <wicket-webjars.version>4.0.0</wicket-webjars.version>
-        <wicket-viewer-jquery.version>3.6.4</wicket-viewer-jquery.version> <!--  as served by wicket via webjars -->
+        <wicket-viewer-jquery.version>3.7.0</wicket-viewer-jquery.version> <!--  as served by wicket via webjars -->
         <wicketstuff.version>9.14.0</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
 
 		<!-- OTHER -->
