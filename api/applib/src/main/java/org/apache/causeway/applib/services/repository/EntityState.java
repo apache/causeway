@@ -37,7 +37,7 @@ public enum EntityState {
      * session, in other words changes to the entity will be flushed back to
      * the database.
      */
-    PERSISTABLE_ATTACHED,
+    ATTACHED,
     /**
      * Object with this state is an entity but that is detached from a
      * persistence session, in other words changes to the entity will <i>not</i>
@@ -53,20 +53,20 @@ public enum EntityState {
      *
      * @see "https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#lifecycle"
      */
-    PERSISTABLE_DETACHED,
+    DETACHED,
     /**
      * Object with this state is an entity that has been removed from the
      * database. Objects in this state may no longer be interacted with.
      */
-    PERSISTABLE_REMOVED,
+    TRANSIENT_OR_REMOVED,
     /**
      * Is attached, has no OID yet. On pre-store.
      */
-    PERSISTABLE_ATTACHED_NO_OID,
+    ATTACHED_NO_OID,
     /**
      * JPA specific. Is detached, but has an OID.
      */
-    PERSISTABLE_DETACHED_WITH_OID,
+    DETACHED_WITH_OID,
 
     ;
 
@@ -79,20 +79,20 @@ public enum EntityState {
      * session, in other words changes to the entity will be flushed back to
      * the database.
      */
-    public boolean isAttached() { return this == PERSISTABLE_ATTACHED; }
+    public boolean isAttached() { return this == ATTACHED; }
     /**
      * Object with this state is an entity but that is detached from a
      * persistence session, in other words changes to the entity will <i>not</i>
      * be flushed back to the database.
      */
-    public boolean isDetached() { return this == PERSISTABLE_DETACHED; }
+    public boolean isDetached() { return this == DETACHED; }
     /**
      * Object with this state is an entity that has been removed from the
      * database.  Objects in this state may no longer be interacted with.
      * <p>
      * Only supported by JDO. Will always return false with JPA.
      */
-    public boolean isRemoved() { return this == PERSISTABLE_REMOVED; }
+    public boolean isRemoved() { return this == TRANSIENT_OR_REMOVED; }
 
     // -- SPECIAL STATES
 
@@ -100,7 +100,7 @@ public enum EntityState {
      * @apiNote Is attached, has no OID yet. (On pre-store.)
      */
     public boolean isAttachedNoOid() {
-        return this == PERSISTABLE_ATTACHED_NO_OID;
+        return this == ATTACHED_NO_OID;
     }
 
     public boolean isDetachedCannotReattach() {
@@ -125,7 +125,7 @@ public enum EntityState {
      * @apiNote JPA specific. Is detached, but has an OID.
      */
     public boolean isJpaSpecificDetachedWithOid() {
-        return this == PERSISTABLE_DETACHED_WITH_OID;
+        return this == DETACHED_WITH_OID;
     }
 
     // -- BOOKMARKABLE

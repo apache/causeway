@@ -244,21 +244,21 @@ public class JpaEntityFacet
         if (entityManager.contains(pojo)) {
             val primaryKey = persistenceUnitUtil.getIdentifier(pojo);
             if (primaryKey == null) {
-                return EntityState.PERSISTABLE_ATTACHED_NO_OID;
+                return EntityState.ATTACHED_NO_OID;
             }
-            return EntityState.PERSISTABLE_ATTACHED;
+            return EntityState.ATTACHED;
         }
 
         try {
             val primaryKey = persistenceUnitUtil.getIdentifier(pojo);
             if (primaryKey == null) {
-                return EntityState.PERSISTABLE_DETACHED;
+                return EntityState.DETACHED;
             } else {
                 // detect shallow primary key
                 //TODO this is a hack - see whether we can actually ask the EntityManager to give us an accurate answer
                 return primaryKeyType.isValid(primaryKey)
-                    ? EntityState.PERSISTABLE_DETACHED_WITH_OID
-                    : EntityState.PERSISTABLE_DETACHED;
+                    ? EntityState.DETACHED_WITH_OID
+                    : EntityState.DETACHED;
             }
         } catch (PersistenceException ex) {
             /* horrible hack, but encountered NPEs if using a composite key (eg CommandLogEntry)
@@ -268,12 +268,12 @@ public class JpaEntityFacet
                 DescriptorException descriptorException = (DescriptorException) cause;
                 Throwable internalException = descriptorException.getInternalException();
                 if (internalException instanceof NullPointerException) {
-                    return EntityState.PERSISTABLE_DETACHED;
+                    return EntityState.DETACHED;
                 }
             }
             if (cause instanceof NullPointerException) {
                 // horrible hack, encountered if using composite key (eg ExecutionLogEntry) with dynamic weaving
-                return EntityState.PERSISTABLE_DETACHED;
+                return EntityState.DETACHED;
             }
             throw ex;
         }

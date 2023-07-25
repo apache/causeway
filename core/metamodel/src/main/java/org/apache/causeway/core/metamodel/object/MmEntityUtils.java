@@ -131,7 +131,7 @@ public final class MmEntityUtils {
         if(entityState.isPersistable()) {
             // ensure we have an attached entity
             _Assert.assertEquals(
-                    EntityState.PERSISTABLE_ATTACHED,
+                    EntityState.ATTACHED,
                     entityState,
                     ()-> String.format("entity %s is required to be attached (not detached)",
                             managedObject.getSpecification().getLogicalTypeName()));
