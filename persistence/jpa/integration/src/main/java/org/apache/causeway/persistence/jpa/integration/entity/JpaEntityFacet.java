@@ -83,7 +83,7 @@ public class JpaEntityFacet
     @Override
     public Optional<String> identifierFor(final @Nullable Object pojo) {
 
-        if (!getEntityState(pojo).hasOidLegacy()) {
+        if (!getEntityState(pojo).hasOid()) {
             return Optional.empty();
         }
 

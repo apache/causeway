@@ -125,14 +125,13 @@ implements _Refetchable {
                 return pojo;
             }
             // eg. throws on deleted entity
-            throw new ObjectNotFoundException(""+bookmark);
+            throw new ObjectNotFoundException("" + bookmark);
         }
 
         val refetchedPojo = refetchedIfSuccess.get();
 
-        if(!entityFacet.getEntityState(refetchedPojo).hasOidLegacy()) {
-            throw new ObjectNotFoundException(""+bookmark);
-            //throw _Exceptions.illegalState("entity not attached after refetch attempt %s", bookmark);
+        if(!entityFacet.getEntityState(refetchedPojo).hasOid()) {
+            throw new ObjectNotFoundException("" + bookmark);
         }
 
         _XrayEvent.event("Entity %s refetched from persistence.", getSpecification());
@@ -154,7 +153,7 @@ implements _Refetchable {
 //                && EntityUtil.getPersistenceStandard(managedObject)
 //                    .map(PersistenceStandard::isJdo)
 //                    .orElse(false)
-                !entityFacet.getEntityState(pojo).hasOidLegacy()) {
+                !entityFacet.getEntityState(pojo).hasOid()) {
 
             _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
                 _Debug.log("detached entity detected %s", pojo);

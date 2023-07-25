@@ -150,13 +150,15 @@ implements EntityFacet {
 
         val entityState = getEntityState(pojo);
 
-        if (!entityState.hasOidLegacy()) {
+        if (!entityState.hasOid()) {
+            return Optional.empty();
+        }
+
+        if(entityState.isHollow()) {
             /* for previously attached objects that have become hollow,
-             * the OID can be looked up in our pseudo StateManager,
-             * that only acts as a holder of OID. */
-            return entityState.isHollow()
-                    ? DnOidStoreAndRecoverHelper.forEntity((Persistable)pojo).recoverOid()
-                    : Optional.empty();
+             * the OID can be looked up in DnStateManagerForHollow,
+             * that simply acts as a holder of OID. */
+            return DnOidStoreAndRecoverHelper.forEntity((Persistable)pojo).recoverOid();
         }
 
         val pm = getPersistenceManager();
@@ -307,7 +309,7 @@ implements EntityFacet {
         _Assert.assertNullableObjectIsInstanceOf(pojo, entityClass);
 
         if(pojo==null
-                || DnEntityStateProvider.entityState(pojo).hasOidLegacy()) {
+                || DnEntityStateProvider.entityState(pojo).isAttached()) {
             return; // nothing to do
         }
 
@@ -347,8 +349,8 @@ implements EntityFacet {
         // guard against misuse
         _Assert.assertNullableObjectIsInstanceOf(pojo, entityClass);
 
-        if (!DnEntityStateProvider.entityState(pojo).hasOidLegacy()) {
-            throw _Exceptions.illegalArgument("can only delete an attached entity");
+        if (!DnEntityStateProvider.entityState(pojo).hasOid()) {
+            throw _Exceptions.illegalArgument("can only delete an entity with an OID");
         }
 
         val pm = getPersistenceManager();

@@ -98,7 +98,7 @@ public final class MmEntityUtils {
                 || entity.isBookmarkMemoized()) {
             return;
         }
-        if(!hasOid(entity)) {
+        if(!getEntityState(entity).hasOid()) {
             entity.getTransactionService().flushTransaction();
             // force reassessment: as a side-effect transitions the transient entity to a bookmarked one
             entity.getEntityState();
@@ -151,7 +151,7 @@ public final class MmEntityUtils {
             return;
         }
 
-        if(!MmEntityUtils.hasOid(second)) {
+        if(!MmEntityUtils.getEntityState(second).hasOid()) {
             throw _Exceptions.illegalArgument(
                     "can't set a reference to a transient object [%s] from a persistent one [%s]",
                     second,
@@ -186,10 +186,6 @@ public final class MmEntityUtils {
     }
 
     // -- SHORTCUTS
-
-    public boolean hasOid(final @Nullable ManagedObject adapter) {
-        return MmEntityUtils.getEntityState(adapter).hasOidLegacy();
-    }
 
     public boolean isDetachedCannotReattach(final @Nullable ManagedObject adapter) {
         return MmEntityUtils.getEntityState(adapter).isDetachedCannotReattach();

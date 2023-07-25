@@ -315,7 +315,7 @@ implements MemberExecutorService {
             getTransactionService().flushTransaction();
         }
         // re-evaluate
-        if(!resultAdapter.getEntityState().hasOidLegacy()) {
+        if(!resultAdapter.getEntityState().hasOid()) {
             log.warn("was unable to get a bookmark for the command result, "
                     + "which is an entity: {}", resultAdapter);
             return;

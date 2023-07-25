@@ -127,7 +127,7 @@ implements RepositoryService, HasMetaModelContext {
             return; // noop
         }
         val adapter = getObjectManager().adapt(unwrapped(domainObject));
-        if(MmEntityUtils.hasOid(adapter)) {
+        if(MmEntityUtils.getEntityState(adapter).hasOid()) {
             MmEntityUtils.deleteInCurrentTransaction(adapter);
         }
     }
@@ -222,7 +222,7 @@ implements RepositoryService, HasMetaModelContext {
 
     @Override
     public <T> T refresh(final T entity) {
-        if(entity==null) { return null; }
+        if(entity==null) return null;
 
         getSpecificationLoader()
         .specForType(entity.getClass())
@@ -234,7 +234,7 @@ implements RepositoryService, HasMetaModelContext {
 
     @Override
     public <T> T detach(final T entity) {
-        if(entity==null) { return null; }
+        if(entity==null) return null;
 
         return getSpecificationLoader()
         .specForType(entity.getClass())
