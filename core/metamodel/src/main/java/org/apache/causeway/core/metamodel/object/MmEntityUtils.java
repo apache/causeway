@@ -185,20 +185,4 @@ public final class MmEntityUtils {
                 .map(property->PropertyChangeRecordId.of(entity, property));
     }
 
-    // -- SHORTCUTS
-
-    public boolean isDetachedCannotReattach(final @Nullable ManagedObject adapter) {
-        val state = MmEntityUtils.getEntityState(adapter);
-        return state.isHollow()
-                || state.isTransientOrRemoved();
-    }
-
-    /** TODO very strange logic */
-    public boolean isPostValueDeleted(final @Nullable ManagedObject entity) {
-        val state = MmEntityUtils.getEntityState(entity);
-        return state.isTransientOrRemoved()
-                || state.isHollow()
-                || state.isDetached();
-    }
-
 }
