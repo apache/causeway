@@ -111,17 +111,4 @@ public enum EntityState {
                 || isTransientOrRemoved();
     }
 
-    // -- DEPRECATIONS
-
-    @Deprecated // we introduced support for OID recovery when state is HOLLOW
-    public boolean isDetachedCannotReattach() {
-        return (isHollow()
-                || isTransientOrRemoved());
-    }
-
-    @Deprecated // we introduced support for OID recovery when state is HOLLOW
-    public boolean hasOidLegacy() {
-        return isAttached() || isDetached();
-    }
-
 }

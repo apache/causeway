@@ -122,7 +122,9 @@ class JpaGeneratedLongIdEntityLifecycleTest {
         repository.remove(entity.getPojo());
 
         // expected post-condition (after removal)
-        assertTrue(MmEntityUtils.isDeleted(entity));
+        assertEquals(
+                EntityState.TRANSIENT_OR_REMOVED,
+                MmEntityUtils.getEntityState(entity));
 
         setEntityRef(entity);
     }
@@ -132,7 +134,9 @@ class JpaGeneratedLongIdEntityLifecycleTest {
 
         val entity = getEntityRef();
 
-        assertTrue(MmEntityUtils.isDeleted(entity));
+        assertEquals(
+                EntityState.REMOVED,
+                MmEntityUtils.getEntityState(entity));
         assertEquals(0, repository.allInstances(JpaEntityGeneratedLongId.class).size());
 
     }

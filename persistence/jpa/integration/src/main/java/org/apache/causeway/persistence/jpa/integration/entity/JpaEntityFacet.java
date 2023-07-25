@@ -239,7 +239,7 @@ public class JpaEntityFacet
         val entityManager = getEntityManager();
         val persistenceUnitUtil = getPersistenceUnitUtil(entityManager);
 
-        return _JpaEntityStateUtil.getEntityStateLegacy(entityManager, persistenceUnitUtil, entityClass, primaryKeyType, pojo);
+        return _JpaEntityStateUtil.getEntityState(entityManager, persistenceUnitUtil, entityClass, primaryKeyType, pojo);
     }
 
     @Override

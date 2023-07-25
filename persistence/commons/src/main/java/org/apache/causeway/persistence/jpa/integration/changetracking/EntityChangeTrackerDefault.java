@@ -157,7 +157,7 @@ implements
                 // set post values, which have been left empty up to now
                 .peek(rec -> {
                     // assuming this check correctly detects deleted entities
-                    if(MmEntityUtils.isDeleted(rec.getEntity())) {
+                    if(MmEntityUtils.isPostValueDeleted(rec.getEntity())) {
                         rec.withPostValueSetToDeleted();
                     } else {
                         rec.withPostValueSetToCurrent();

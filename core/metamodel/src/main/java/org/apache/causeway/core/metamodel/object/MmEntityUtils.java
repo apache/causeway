@@ -188,14 +188,16 @@ public final class MmEntityUtils {
     // -- SHORTCUTS
 
     public boolean isDetachedCannotReattach(final @Nullable ManagedObject adapter) {
-        return MmEntityUtils.getEntityState(adapter).isDetachedCannotReattach();
+        val state = MmEntityUtils.getEntityState(adapter);
+        return state.isHollow()
+                || state.isTransientOrRemoved();
     }
 
     /** TODO very strange logic */
-    public boolean isDeleted(final @Nullable ManagedObject entity) {
+    public boolean isPostValueDeleted(final @Nullable ManagedObject entity) {
         val state = MmEntityUtils.getEntityState(entity);
-        return state.isHollow()
-                || state.isTransientOrRemoved()
+        return state.isTransientOrRemoved()
+                || state.isHollow()
                 || state.isDetached();
     }
 
