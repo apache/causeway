@@ -63,9 +63,9 @@ implements _Refetchable {
         public boolean isBookmarked() { return this == BOOKMARKED; }
         public boolean isRemoved() { return this == REMOVED; }
         static MorphState valueOf(final EntityState entityState) {
-            return entityState.isRemoved()
+            return entityState.isTransientOrRemoved()
                     ? REMOVED
-                    : entityState.hasOid()
+                    : entityState.hasOidLegacy()
                         ? BOOKMARKED
                         : TRANSIENT;
         }
@@ -179,7 +179,7 @@ implements _Refetchable {
     @Synchronized
     private void reassessVariant(final EntityState entityState, final Object pojo) {
         if(isVariantTransient()
-                && entityState.hasOid()) {
+                && entityState.hasOidLegacy()) {
             makeBookmarked(pojo);
             return;
         }
@@ -189,7 +189,7 @@ implements _Refetchable {
          * to REMOVED */
         if((isVariantBookmarked()
                 || isVariantTransient())
-                && entityState.isRemoved()) {
+                && entityState.isTransientOrRemoved()) {
             makeRemoved();
             return;
         }

@@ -77,7 +77,7 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
 
         assertTrue(entity.getSpecification().isEntity());
         assertEquals(
-                EntityState.DETACHED_WITH_OID,
+                EntityState.DETACHED,
                 MmEntityUtils.getEntityState(entity));
 
         setEntityRef(entity);
@@ -102,7 +102,7 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
 
         // expected post-condition (after persist, and having entered a new transaction)
         assertEquals(
-                EntityState.DETACHED_WITH_OID,
+                EntityState.DETACHED,
                 MmEntityUtils.getEntityState(getEntityRef()));
 
         val id = ((JpaEntityNonGeneratedStringId)getEntityRef().getPojo()).getName();

@@ -85,7 +85,7 @@ class _JpaEntityStateUtil {
         final UnitOfWork session = entityManager.unwrap(UnitOfWork.class);
         final Object reference = session.getReference(entityClass, primaryKey);
         return reference != null
-                ? EntityState.DETACHED
+                ? EntityState.HOLLOW
                 // Sadness: With JPA there is no obvious way to distinguish between TRANSIENT or REMOVED.
                 : EntityState.TRANSIENT_OR_REMOVED;
     }

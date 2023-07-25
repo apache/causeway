@@ -188,7 +188,7 @@ public final class MmEntityUtils {
     // -- SHORTCUTS
 
     public boolean hasOid(final @Nullable ManagedObject adapter) {
-        return MmEntityUtils.getEntityState(adapter).hasOid();
+        return MmEntityUtils.getEntityState(adapter).hasOidLegacy();
     }
 
     public boolean isDetachedCannotReattach(final @Nullable ManagedObject adapter) {
@@ -198,9 +198,9 @@ public final class MmEntityUtils {
     /** TODO very strange logic */
     public boolean isDeleted(final @Nullable ManagedObject entity) {
         val state = MmEntityUtils.getEntityState(entity);
-        return state.isDetached()
-                || state.isRemoved()
-                || state.isJpaSpecificDetachedWithOid();
+        return state.isHollow()
+                || state.isTransientOrRemoved()
+                || state.isDetached();
     }
 
 }
