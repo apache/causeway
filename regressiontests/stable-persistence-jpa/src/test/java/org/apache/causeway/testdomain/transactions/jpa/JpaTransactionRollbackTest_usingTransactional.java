@@ -49,6 +49,7 @@ import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTe
                 Configuration_usingJpa.class,
         },
         properties = {
+                "spring.datasource.url=jdbc:h2:mem:JpaTransactionRollbackTest_usingTransactional",
 //                "logging.level.org.apache.causeway.core.runtimeservices.session.InteractionFactoryDefault=DEBUG",
 //                "logging.level.org.apache.causeway.persistence.*=DEBUG",
 //                "logging.level.org.springframework.test.context.transaction.*=DEBUG"

@@ -60,6 +60,7 @@ import lombok.val;
                 JpaTransactionRollbackTest_usingInteractionService.CommitListener.class
         },
         properties = {
+                  "spring.datasource.url=jdbc:h2:mem:JpaTransactionRollbackTest_usingInteractionService",
 //                "logging.level.org.springframework.test.context.transaction.*=DEBUG",
 //                "logging.level.org.springframework.orm.jpa.*=DEBUG",
         })

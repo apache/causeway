@@ -48,7 +48,6 @@ import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.base._Refs.BooleanAtomicReference;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.datasources.DataSourceIntrospectionService;
-import org.apache.causeway.testdomain.jdo.entities.JdoInventory;
 import org.apache.causeway.testdomain.util.dto.BookDto;
 import org.apache.causeway.testdomain.util.dto.IBook;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
@@ -185,25 +184,24 @@ implements
     public final synchronized Lock aquireLock() {
         val dsUrl = dataSourceIntrospectionService.getDataSourceInfos().getFirstElseFail().getJdbcUrl();
         this.lockQueue = lockQueueByDatasource.computeIfAbsent(dsUrl, __->new LinkedBlockingQueue<>(1));
-        log.debug("waiting for lock {}", dsUrl);
+        log.info("waiting for lock {}", dsUrl);
         Lock lock;
         lockQueue.put(lock = new Lock(dsUrl, this)); // put next lock on the queue; blocks until space available
-        log.debug("lock aquired for {}", dsUrl);
-
-        /* XXX sporadically seeing errors like
-         * ----
-         * Error: (bad sql grammar exception): Column "INVENTORY_ID_EID" not found; SQL statement:
-         * INSERT INTO "testdomain"."JdoProduct"
-         * ("id","description","name","price","author","isbn","publisher","DISCRIMINATOR","INVENTORY_ID_EID")
-         * VALUES (?,?,?,?,?,?,?,?,?) [42122-214]
-         * ----
-         * This is an attempt to force the JDO schema to properly initialize. */
-        interactionService.runAnonymous(()->{
-            repository.allInstances(JdoInventory.class);
-        });
+        log.info("lock aquired for {}", dsUrl);
+        initSchema();
         kvStoreForTesting.clearValues();
         return lock;
     }
+
+    /** XXX sporadically seeing errors like
+     * ----
+     * Error: (bad sql grammar exception): Column "INVENTORY_ID_EID" not found; SQL statement:
+     * INSERT INTO "testdomain"."JdoProduct"
+     * ("id","description","name","price","author","isbn","publisher","DISCRIMINATOR","INVENTORY_ID_EID")
+     * VALUES (?,?,?,?,?,?,?,?,?) [42122-214]
+     * ----
+     * This is an attempt to force the JDO schema to properly initialize. */
+    protected void initSchema() {};
 
     @SneakyThrows
     public final Lock aquireLockAndClear() {
@@ -215,12 +213,12 @@ implements
 
     @SneakyThrows
     private void release(final Lock lock) {
-        log.debug("about to release lock {}", lock.dsUrl);
+        log.info("about to release lock {}", lock.dsUrl);
         try {
             clearRepositoryInTransaction();
         } finally {
             lockQueue.take(); // remove lock from queue
-            log.debug("lock released {}", lock.dsUrl);
+            log.info("lock released {}", lock.dsUrl);
         }
     }
 

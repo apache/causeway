@@ -64,6 +64,7 @@ import lombok.val;
                 //XrayEnable.class
                 },
         properties = {
+                "spring.datasource.url=jdbc:h2:mem:InteractionTestJdoWkt",
                 PropertyNames.PROPERTY_RETAIN_VALUES + "=false"  // default anyway
                 /* TODO[CAUSEWAY-3486] default, but should be enforced by causeway:
                  * datanucleus.detachAllOnCommit = false */
