@@ -47,6 +47,9 @@ import lombok.val;
 @SpringBootTest(
         classes = {
                 Configuration_usingJdo.class,
+        },
+        properties = {
+                "spring.datasource.url=jdbc:h2:mem:JdoWrapperSyncTest"
         }
 )
 @TestPropertySource(CausewayPresets.UseLog4j2Test)

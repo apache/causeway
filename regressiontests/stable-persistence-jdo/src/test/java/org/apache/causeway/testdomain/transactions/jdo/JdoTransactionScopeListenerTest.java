@@ -43,6 +43,9 @@ import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
         classes = {
                 Configuration_usingJdo.class,
                 InteractionBoundaryProbe.class
+        },
+        properties = {
+                "spring.datasource.url=jdbc:h2:mem:JdoTransactionScopeListenerTest"
         })
 //@Transactional
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
@@ -92,7 +95,7 @@ class JdoTransactionScopeListenerTest {
 
             // expected pre condition
             // reuse transaction (#1)
-            //assertEquals(0, repository.allInstances(JdoBook.class).size()); // breaks test
+            assertEquals(0, repository.allInstances(JdoBook.class).size());
 
             // reuse transaction (#1)
             transactionService.runWithinCurrentTransactionElseCreateNew(()->{

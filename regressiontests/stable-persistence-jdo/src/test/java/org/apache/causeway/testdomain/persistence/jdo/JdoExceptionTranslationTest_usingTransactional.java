@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.test.annotation.Rollback;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.TestPropertySources;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,7 +41,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.causeway.commons.functional.ThrowingRunnable;
-import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.RegressionTestAbstract;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
@@ -56,6 +55,9 @@ import lombok.val;
         classes = {
                 Configuration_usingJdo.class,
                 JdoInventoryDao.class,
+        },
+        properties = {
+                "spring.datasource.url=jdbc:h2:mem:JdoExceptionTranslationTest_usingTransactional"
         })
 @TestPropertySources({
     @TestPropertySource(CausewayPresets.UseLog4j2Test)
@@ -66,7 +68,7 @@ extends RegressionTestAbstract {
 
     @Inject private JdoTestFixtures testFixtures;
     @Inject private Provider<JdoInventoryDao> inventoryDao;
-    private static _Refs.ObjectReference<Lock> lockHolder = _Refs.objectRef(null);
+    private static Lock lock;
 
     @BeforeAll
     static void beforeAll() throws SQLException {
@@ -76,8 +78,7 @@ extends RegressionTestAbstract {
 
     @Test @Order(0)
     void aquireLock() {
-        val lock = testFixtures.aquireLock(); // concurrent test synchronization
-        lockHolder.set(lock);
+        lock = testFixtures.aquireLock(); // concurrent test synchronization
         lock.install();
     }
 
@@ -110,7 +111,7 @@ extends RegressionTestAbstract {
     }
 
     @Test @Order(2)
-    @Transactional @Rollback(false)
+    @Transactional @Commit
     void booksUniqueByIsbn_verifyPhase() {
 
         // expected post condition: ONE inventory with 3 books
@@ -134,9 +135,9 @@ extends RegressionTestAbstract {
     }
 
     @Test @Order(3)
+    @Transactional @Commit
     void releaseLock() {
-        lockHolder.getValue()
-            .ifPresent(Lock::release); // concurrent test synchronization
+        lock.release(); // concurrent test synchronization
     }
 
 }

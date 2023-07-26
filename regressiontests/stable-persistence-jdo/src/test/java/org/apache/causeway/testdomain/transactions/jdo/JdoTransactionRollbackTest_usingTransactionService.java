@@ -43,6 +43,9 @@ import lombok.val;
 @SpringBootTest(
         classes = {
                 Configuration_usingJdo.class,
+        },
+        properties = {
+                "spring.datasource.url=jdbc:h2:mem:JdoTransactionRollbackTest_usingTransactionService"
         })
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
 class JdoTransactionRollbackTest_usingTransactionService {

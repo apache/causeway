@@ -35,6 +35,9 @@ import lombok.val;
 @SpringBootTest(
         classes = {
                 Configuration_usingJdo.class
+        },
+        properties = {
+                "spring.datasource.url=jdbc:h2:mem:JdoJaxbTest"
         })
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
 //@Transactional

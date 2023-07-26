@@ -40,7 +40,8 @@ import lombok.val;
                 Configuration_usingJdo.class
         },
         properties = {
-                "logging.level.org.apache.causeway.persistence.jdo.datanucleus.changetracking.JdoLifecycleListener = DEBUG"
+                "spring.datasource.url=jdbc:h2:mem:JdoTimestampingTest"
+                //"logging.level.org.apache.causeway.persistence.jdo.datanucleus.changetracking.JdoLifecycleListener = DEBUG"
         })
 @Transactional
 class JdoTimestampingTest extends RegressionTestWithJdoFixtures {

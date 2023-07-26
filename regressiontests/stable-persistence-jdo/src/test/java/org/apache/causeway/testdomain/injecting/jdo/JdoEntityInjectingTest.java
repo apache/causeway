@@ -54,6 +54,7 @@ import lombok.extern.log4j.Log4j2;
                 Configuration_usingJdo.class,
         },
         properties = {
+                "spring.datasource.url=jdbc:h2:mem:JdoEntityInjectingTest"
 //                "logging.level.org.apache.causeway.persistence.jdo.integration.changetracking.JdoLifecycleListener=DEBUG",
 //                "logging.level.org.apache.causeway.testdomain.injecting.jdo.JdoEntityInjectingTest=DEBUG"
         }
@@ -123,7 +124,7 @@ class JdoEntityInjectingTest extends CausewayIntegrationTestAbstract {
         log.debug("TEST 3 EXITING");
     }
 
-    @Test @Order(4)
+    @Test @Order(4) @Commit
     void releaseLock() {
         lock.release();
     }
