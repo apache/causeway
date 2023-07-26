@@ -41,17 +41,20 @@ extends GenericColumnAbstract {
 
     private static final long serialVersionUID = 1L;
     private final Variant variant;
-    private Bookmark contextBookmark;
+    private final GenericTitleColumnOptions opts;
+    private final Bookmark contextBookmark;
 
     public GenericTitleColumn(
             final MetaModelContext commonContext,
             final Variant variant,
             final Bookmark contextBookmark,
-            final int maxTitleLength) {
+            final int maxColumnTitleLength,
+            final GenericTitleColumnOptions opts) {
 
-        super(commonContext, columnName(variant, maxTitleLength)); // i18n
+        super(commonContext, columnName(variant, maxColumnTitleLength)); // i18n
         this.variant = variant;
         this.contextBookmark = contextBookmark;
+        this.opts = opts;
     }
 
     @Override
@@ -92,8 +95,9 @@ extends GenericColumnAbstract {
 
         // will use EntityLinkSimplePanelFactory as model is an EntityModel
         val componentFactory = findComponentFactory(UiComponentType.ENTITY_LINK, uiObject);
-        return componentFactory.createComponent(id, uiObject);
+        final Component entityLink = opts.applyTo(
+                componentFactory.createComponent(id, uiObject));
+        return entityLink;
     }
-
 
 }

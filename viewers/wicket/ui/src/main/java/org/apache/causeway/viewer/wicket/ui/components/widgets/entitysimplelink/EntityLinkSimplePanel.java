@@ -32,6 +32,7 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericTitleColumnOptions;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.formcomponent.FormComponentPanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -81,6 +82,11 @@ implements CancelHintRequired  {
 
             final Component component = componentFactory
                     .createComponent(ID_ENTITY_ICON_AND_TITLE, objectModelForLink);
+
+            // propagate options (if any) from this component to the child component, that's using them
+            GenericTitleColumnOptions.lookupIn(this)
+                .ifPresent(opts->opts.applyTo(component));
+
             addOrReplace(component);
             permanentlyHide(ID_ENTITY_TITLE_NULL);
         }

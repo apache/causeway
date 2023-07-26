@@ -25,6 +25,7 @@ import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFal
 import org.apache.wicket.model.Model;
 
 import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket;
 import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
@@ -35,6 +36,7 @@ import org.apache.causeway.viewer.wicket.ui.components.collection.count.Collecti
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericColumn;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericPropertyColumn;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericTitleColumn;
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericTitleColumnOptions;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericToggleboxColumn;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 
@@ -86,22 +88,22 @@ implements CollectionCountProvider {
 
         GenericToggleboxColumn toggleboxColumn = null;
         if(multiselectToggleProvider != null) {
-
             toggleboxColumn = multiselectToggleProvider.getToggleboxColumn();
             if(toggleboxColumn != null) {
                 columns.add(toggleboxColumn);
             }
-
         }
 
         val collectionModel = entityCollectionModel();
-        addTitleColumn(
+
+        // first create property columns, so we know how many columns there are
+        addPropertyColumnsIfRequired(columns);
+        // prepend title column, which may have distinct rendering hints, 
+        // based on whether there are any property columns or not
+        prependTitleColumn(
                 columns,
                 collectionModel.getVariant(),
-                getWicketViewerSettings().getMaxTitleLengthInParentedTables(),
-                getWicketViewerSettings().getMaxTitleLengthInStandaloneTables());
-
-        addPropertyColumnsIfRequired(columns);
+                getWicketViewerSettings());
 
         val dataProvider = new CollectionContentsSortableDataProvider(collectionModel);
         val dataTable = new CausewayAjaxDataTable(
@@ -120,18 +122,26 @@ implements CollectionCountProvider {
         return null;
     }
 
-    private void addTitleColumn(
+    private void prependTitleColumn(
             final List<GenericColumn> columns,
             final Variant variant,
-            final int maxTitleParented,
-            final int maxTitleStandalone) {
+            final Wicket wktConfig) {
 
         val contextBookmark = entityCollectionModel().getParentObject().getBookmark()
                 .orElse(null);
 
-        final int maxTitleLength = getModel().getVariant().isParented()? maxTitleParented: maxTitleStandalone;
-        columns.add(new GenericTitleColumn(
-                super.getMetaModelContext(), variant, contextBookmark, maxTitleLength));
+        final int maxColumnTitleLength = getModel().getVariant().isParented()
+                    ? wktConfig.getMaxTitleLengthInParentedTables()
+                    : wktConfig.getMaxTitleLengthInStandaloneTables();
+
+        val opts = GenericTitleColumnOptions.builder()
+            .maxElementTitleLength(columns.size()==0
+                            ? wktConfig.getMaxTitleLengthInTablesNotHavingAnyPropertyColumn()
+                            : -1 /* don't override */)
+            .build();
+
+        columns.add(0, new GenericTitleColumn(
+                super.getMetaModelContext(), variant, contextBookmark, maxColumnTitleLength, opts));
     }
 
     private void addPropertyColumnsIfRequired(final List<GenericColumn> columns) {
@@ -149,7 +159,6 @@ implements CollectionCountProvider {
         elementTypeSpec.streamPropertiesForColumnRendering(memberIdentifier, parentObject)
         .map(this::createObjectAdapterPropertyColumn)
         .forEach(columns::add);
-
     }
 
     private GenericPropertyColumn createObjectAdapterPropertyColumn(final OneToOneAssociation property) {
