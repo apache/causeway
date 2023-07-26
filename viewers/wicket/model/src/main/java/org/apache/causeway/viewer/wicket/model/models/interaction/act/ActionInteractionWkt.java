@@ -35,6 +35,7 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.memento.ActionMemento;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.InlinePromptContext;
 import org.apache.causeway.viewer.wicket.model.models.ScalarParameterModel;
@@ -72,7 +73,7 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
     private final String memberId;
     private final Where where;
     // memoize, so if we only need the meta-model, we don't have to re-attach the entire model (ActionInteraction)
-    private final @NonNull ObjectAction objectAction;
+    private final @NonNull ActionMemento actionMemento;
 
     private Can<UiParameterWkt> childModels;
     private @Nullable ScalarPropertyModel associatedWithPropertyIfAny;
@@ -111,7 +112,7 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
         super(bookmarkedObject);
         this.memberId = memberId;
         this.where = where;
-        this.objectAction = objectAction;
+        this.actionMemento = objectAction.getMemento();
         this.associatedWithPropertyIfAny = associatedWithPropertyIfAny;
         this.associatedWithParameterIfAny = associatedWithParameterIfAny;
         this.associatedWithCollectionIfAny = associatedWithCollectionIfAny;
@@ -152,7 +153,7 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
     public final ObjectAction getMetaModel() {
         // re-attachment fails, if the owner is not found (eg. deleted entity),
         // hence we return the directly memoized meta-model of the underlying action
-        return Objects.requireNonNull(objectAction,
+        return Objects.requireNonNull(actionMemento.getAction(this::getSpecificationLoader),
                 ()->"framework bug: lost objectAction on model recycling (serialization issue)");
         //previously we got the underlying action's meta-model from the ActionInteraction
         //        return actionInteraction().getMetamodel()
