@@ -309,19 +309,19 @@ implements MemberExecutorService {
         if(!entityState.isPersistable()) {
             return;
         }
-        if(entityState.isDetached()
-                || entityState.isJpaSpecificDetachedWithOid()) {
+        if(entityState.isHollow()
+                || entityState.isDetached()) {
             // ensure that any still-to-be-persisted adapters get persisted to DB.
             getTransactionService().flushTransaction();
         }
-        val entityState2 = resultAdapter.getEntityState();
-        if(entityState2.hasOid()) {
-            val bookmark = ManagedObjects.bookmarkElseFail(resultAdapter);
-            command.updater().setResult(Try.success(bookmark));
+        // re-evaluate
+        if(!resultAdapter.getEntityState().hasOid()) {
+            log.warn("was unable to get a bookmark for the command result, "
+                    + "which is an entity: {}", resultAdapter);
             return;
         }
-        log.warn("was unable to get a bookmark for the command result, "
-                + "which is an entity: {}", resultAdapter);
+        val bookmark = ManagedObjects.bookmarkElseFail(resultAdapter);
+        command.updater().setResult(Try.success(bookmark));
     }
 
     private ManagedObject resultFilteredHonoringVisibility(

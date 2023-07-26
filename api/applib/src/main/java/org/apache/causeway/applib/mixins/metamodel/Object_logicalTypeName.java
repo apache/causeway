@@ -18,7 +18,8 @@
  */
 package org.apache.causeway.applib.mixins.metamodel;
 
-import org.apache.causeway.applib.annotation.Action;
+import jakarta.inject.Inject;
+
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Property;
@@ -28,13 +29,12 @@ import org.apache.causeway.applib.layout.LayoutConstants;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
 
-import jakarta.inject.Inject;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
  * Contributes a property exposing the logical object type of the domain
- * object, typically as specified by {@link jakarta.inject.Named}.
+ * object, typically as specified by {@link javax.inject.Named}.
  *
  * <p>
  *     The logical type name is also accessible from the
@@ -49,7 +49,9 @@ import lombok.val;
  *
  * @since 1.x {@index}
  */
-@Property
+@Property(
+        domainEvent = Object_logicalTypeName.PropertyDomainEvent.class  // if this does not work, reopen CAUSEWAY-2235
+)
 @PropertyLayout(
         describedAs = "The logical name of this domain class (as used in persistence, URLs etc).  Intended to be stable/unchanging across time",
         hidden = Where.ALL_TABLES,
@@ -65,12 +67,9 @@ public class Object_logicalTypeName {
 
     private final Object holder;
 
-    public static class ActionDomainEvent
-    extends org.apache.causeway.applib.CausewayModuleApplib.ActionDomainEvent<Object_logicalTypeName> {}
+    public static class PropertyDomainEvent
+    extends org.apache.causeway.applib.CausewayModuleApplib.PropertyDomainEvent<Object_logicalTypeName, String> {}
 
-    @Action(
-            domainEvent = ActionDomainEvent.class   // this is a workaround to allow the mixin to be subscribed to (CAUSEWAY-2650)
-    )
     @MemberSupport public String prop() {
         val bookmark = bookmarkService.bookmarkForElseFail(this.holder);
         return bookmark.getLogicalTypeName();

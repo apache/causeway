@@ -18,18 +18,12 @@
  */
 package org.apache.causeway.extensions.secman.integration.permissions;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.annotation.Programmatic;
-import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
-
-import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionValue;
-
-import org.springframework.stereotype.Service;
-
-import jakarta.annotation.Priority;
-
 import java.util.Collection;
 import java.util.stream.Collectors;
+
+import org.apache.causeway.applib.annotation.Programmatic;
+import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionValue;
 
 /**
  * Provides an SPI used by {@link PermissionsEvaluationServiceForSecman} that
@@ -68,7 +62,7 @@ public interface ApplicationFeatureIdTransformer {
      * @return the transformed {@link ApplicationPermissionValue}s
      */
     @Programmatic
-    default Collection<ApplicationPermissionValue> transform(Collection<ApplicationPermissionValue> permissionValues) {
+    default Collection<ApplicationPermissionValue> transform(final Collection<ApplicationPermissionValue> permissionValues) {
         return permissionValues.stream()
                 .map(apv -> apv.withFeatureId(transform(apv.getFeatureId())))
                 .collect(Collectors.toList());

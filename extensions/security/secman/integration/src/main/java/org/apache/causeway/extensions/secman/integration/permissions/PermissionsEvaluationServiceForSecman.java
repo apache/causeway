@@ -20,14 +20,10 @@ package org.apache.causeway.extensions.secman.integration.permissions;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-
-import lombok.Builder;
-import lombok.NoArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -48,6 +44,7 @@ import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPe
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionValueSet;
 import org.apache.causeway.extensions.secman.applib.permission.spi.PermissionsEvaluationService;
 
+import lombok.Builder;
 import lombok.NonNull;
 import lombok.val;
 
@@ -73,8 +70,8 @@ implements PermissionsEvaluationService {
      */
     @Builder
     private PermissionsEvaluationServiceForSecman(
-            PermissionsEvaluationPolicy policy,
-            ApplicationFeatureIdTransformer applicationFeatureIdTransformer
+            final PermissionsEvaluationPolicy policy,
+            final ApplicationFeatureIdTransformer applicationFeatureIdTransformer
     ) {
         this.policy = policy;
         this.applicationFeatureIdTransformer = applicationFeatureIdTransformer;

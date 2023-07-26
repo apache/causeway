@@ -121,18 +121,17 @@ implements _Refetchable {
 
         if(refetchedIfSuccess.isEmpty()) {
             // if cannot refetch from this special JPA state, try again later
-            if(entityState.isJpaSpecificDetachedWithOid()) {
+            if(entityState.isDetached()) {
                 return pojo;
             }
             // eg. throws on deleted entity
-            throw new ObjectNotFoundException(""+bookmark);
+            throw new ObjectNotFoundException("" + bookmark);
         }
 
         val refetchedPojo = refetchedIfSuccess.get();
 
         if(!entityFacet.getEntityState(refetchedPojo).hasOid()) {
-            throw new ObjectNotFoundException(""+bookmark);
-            //throw _Exceptions.illegalState("entity not attached after refetch attempt %s", bookmark);
+            throw new ObjectNotFoundException("" + bookmark);
         }
 
         _XrayEvent.event("Entity %s refetched from persistence.", getSpecification());

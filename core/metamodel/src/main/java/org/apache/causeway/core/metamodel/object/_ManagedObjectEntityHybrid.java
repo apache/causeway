@@ -65,7 +65,7 @@ implements _Refetchable {
         static MorphState valueOf(final EntityState entityState) {
             return entityState.isRemoved()
                     ? REMOVED
-                    : entityState.hasOid()
+                    : entityState.isAttached()
                         ? BOOKMARKED
                         : TRANSIENT;
         }
@@ -189,7 +189,7 @@ implements _Refetchable {
          * to REMOVED */
         if((isVariantBookmarked()
                 || isVariantTransient())
-                && entityState.isRemoved()) {
+                && entityState.isTransientOrRemoved()) {
             makeRemoved();
             return;
         }

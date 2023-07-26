@@ -68,7 +68,7 @@ public final class MmEntityUtils {
         entityFacet.persist(managedObject.getPojo());
     }
 
-    public void destroyInCurrentTransaction(final ManagedObject managedObject) {
+    public void deleteInCurrentTransaction(final ManagedObject managedObject) {
         requiresEntity(managedObject);
         val spec = managedObject.getSpecification();
         val entityFacet = spec.entityFacetElseFail();
@@ -98,7 +98,7 @@ public final class MmEntityUtils {
                 || entity.isBookmarkMemoized()) {
             return;
         }
-        if(!hasOid(entity)) {
+        if(!getEntityState(entity).hasOid()) {
             entity.getTransactionService().flushTransaction();
             // force reassessment: as a side-effect transitions the transient entity to a bookmarked one
             entity.getEntityState();
@@ -131,7 +131,7 @@ public final class MmEntityUtils {
         if(entityState.isPersistable()) {
             // ensure we have an attached entity
             _Assert.assertEquals(
-                    EntityState.PERSISTABLE_ATTACHED,
+                    EntityState.ATTACHED,
                     entityState,
                     ()-> String.format("entity %s is required to be attached (not detached)",
                             managedObject.getSpecification().getLogicalTypeName()));
@@ -151,7 +151,7 @@ public final class MmEntityUtils {
             return;
         }
 
-        if(!MmEntityUtils.hasOid(second)) {
+        if(!MmEntityUtils.getEntityState(second).hasOid()) {
             throw _Exceptions.illegalArgument(
                     "can't set a reference to a transient object [%s] from a persistent one [%s]",
                     second,
@@ -183,24 +183,6 @@ public final class MmEntityUtils {
             final @NonNull ManagedObject entity, final String propertyName) {
         return lookupPropertyEnabledForChangePublishing(entity, propertyName)
                 .map(property->PropertyChangeRecordId.of(entity, property));
-    }
-
-    // -- SHORTCUTS
-
-    public boolean hasOid(final @Nullable ManagedObject adapter) {
-        return MmEntityUtils.getEntityState(adapter).hasOid();
-    }
-
-    public boolean isDetachedCannotReattach(final @Nullable ManagedObject adapter) {
-        return MmEntityUtils.getEntityState(adapter).isDetachedCannotReattach();
-    }
-
-    /** TODO very strange logic */
-    public boolean isDeleted(final @Nullable ManagedObject entity) {
-        val state = MmEntityUtils.getEntityState(entity);
-        return state.isDetached()
-                || state.isRemoved()
-                || state.isJpaSpecificDetachedWithOid();
     }
 
 }

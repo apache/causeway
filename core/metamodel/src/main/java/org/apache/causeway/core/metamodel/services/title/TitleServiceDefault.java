@@ -61,7 +61,8 @@ public class TitleServiceDefault implements TitleService {
             return "[UNSPECIFIED]";
         }
 
-        if(MmEntityUtils.isDetachedCannotReattach(objectAdapter)) {
+        if(MmEntityUtils.getEntityState(objectAdapter).isTransientOrRemoved()) {
+            // here we just mean NOT-ATTACHED (and not the concrete DETACHED entity state)
             return "[DETACHED]";
         } else {
             return objectAdapter.getSpecification().getTitle(

@@ -77,7 +77,7 @@ class JpaGeneratedLongIdEntityLifecycleTest {
 
         assertTrue(entity.getSpecification().isEntity());
         assertEquals(
-                EntityState.PERSISTABLE_DETACHED,
+                EntityState.TRANSIENT_OR_REMOVED,
                 MmEntityUtils.getEntityState(entity));
 
         setEntityRef(entity);
@@ -92,7 +92,7 @@ class JpaGeneratedLongIdEntityLifecycleTest {
         repository.persist(entity.getPojo());
 
         assertEquals(
-                EntityState.PERSISTABLE_ATTACHED,
+                EntityState.ATTACHED,
                 MmEntityUtils.getEntityState(entity));
         assertEquals(1, repository.allInstances(JpaEntityGeneratedLongId.class).size());
 
@@ -103,7 +103,7 @@ class JpaGeneratedLongIdEntityLifecycleTest {
 
         // expected post-condition (after persist, and having entered a new transaction)
         assertEquals(
-                EntityState.PERSISTABLE_DETACHED_WITH_OID,
+                EntityState.DETACHED,
                 MmEntityUtils.getEntityState(getEntityRef()));
 
         val id = ((JpaEntityGeneratedLongId)getEntityRef().getPojo()).getId();
@@ -116,13 +116,15 @@ class JpaGeneratedLongIdEntityLifecycleTest {
 
         // expected pre-condition (before removal)
         assertEquals(
-                EntityState.PERSISTABLE_ATTACHED,
+                EntityState.ATTACHED,
                 MmEntityUtils.getEntityState(entity));
 
         repository.remove(entity.getPojo());
 
         // expected post-condition (after removal)
-        assertTrue(MmEntityUtils.isDeleted(entity));
+        assertEquals(
+                EntityState.TRANSIENT_OR_REMOVED,
+                MmEntityUtils.getEntityState(entity));
 
         setEntityRef(entity);
     }
@@ -132,7 +134,9 @@ class JpaGeneratedLongIdEntityLifecycleTest {
 
         val entity = getEntityRef();
 
-        assertTrue(MmEntityUtils.isDeleted(entity));
+        assertEquals(
+                EntityState.REMOVED,
+                MmEntityUtils.getEntityState(entity));
         assertEquals(0, repository.allInstances(JpaEntityGeneratedLongId.class).size());
 
     }
