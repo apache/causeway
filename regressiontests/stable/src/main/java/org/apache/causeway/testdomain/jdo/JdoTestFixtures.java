@@ -75,4 +75,11 @@ public class JdoTestFixtures extends EntityTestFixtures {
         repository.persistAndFlush(inventory);
     }
 
+    @Override
+    protected void initSchema() {
+        interactionService.runAnonymous(()->{
+            repository.allInstances(JdoInventory.class);
+        });
+    }
+
 }

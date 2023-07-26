@@ -56,8 +56,10 @@ import lombok.val;
 @SpringBootTest(
         classes = {
                 Configuration_usingJpa.class,
-        }
-        )
+        },
+        properties = {
+                "spring.datasource.url=jdbc:h2:mem:JpaQueryTest",
+        })
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Transactional

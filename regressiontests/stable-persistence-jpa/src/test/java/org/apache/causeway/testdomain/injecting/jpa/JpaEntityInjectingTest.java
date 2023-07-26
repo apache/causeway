@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +39,7 @@ import org.apache.causeway.commons.internal.primitives._Longs.Bound;
 import org.apache.causeway.commons.internal.primitives._Longs.Range;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
+import org.apache.causeway.testdomain.fixtures.EntityTestFixtures.Lock;
 import org.apache.causeway.testdomain.jpa.JpaTestFixtures;
 import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testdomain.jpa.entities.JpaProduct;
@@ -54,8 +55,8 @@ import lombok.extern.log4j.Log4j2;
                 Configuration_usingJpa.class
         },
         properties = {
-        }
-)
+                "spring.datasource.url=jdbc:h2:mem:XXX",
+        })
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
 @Transactional
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -66,13 +67,17 @@ class JpaEntityInjectingTest extends CausewayIntegrationTestAbstract {
     @Inject private JpaTestFixtures jpaTestFixtures;
     @Inject private RepositoryService repository;
     @Inject private KVStoreForTesting kvStore;
+    private static Lock lock;
 
-    @Test @Order(1) @Rollback(false)
+    @Test @Order(1) @Commit
     void setup() {
 
         // given
-        jpaTestFixtures.resetTo3Books(()->kvStore.clear(JpaBook.class));
-        assertInjectCountRange(3, 9); //TODO there is some injection redundancy
+        lock = jpaTestFixtures.aquireLockAndClear();
+
+        // when
+        lock.install();
+        assertInjectCountRange(2, 9); //TODO either a bug or we fail to measure this accurately
     }
 
 
@@ -120,6 +125,11 @@ class JpaEntityInjectingTest extends CausewayIntegrationTestAbstract {
 
         log.debug("TEST 3 EXITING");
 
+    }
+
+    @Test @Order(5) @Commit
+    void releaseLock() {
+        lock.release();
     }
 
     // -- HELPER

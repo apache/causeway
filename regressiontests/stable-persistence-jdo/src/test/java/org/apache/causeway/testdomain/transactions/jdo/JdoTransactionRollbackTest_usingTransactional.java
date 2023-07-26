@@ -34,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.commons.internal.debug._Probe;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
 import org.apache.causeway.testdomain.fixtures.EntityTestFixtures;
 import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
@@ -49,11 +50,11 @@ import org.apache.causeway.testdomain.jdo.entities.JdoBook;
                 Configuration_usingJdo.class
         },
         properties = {
-                "logging.level.org.apache.causeway.persistence.jdo.*=DEBUG",
-                "logging.level.org.springframework.test.context.transaction.*=DEBUG",
-                "logging.level.org.datanucleus.*=DEBUG",
+                "spring.datasource.url=jdbc:h2:mem:JdoTransactionRollbackTest_usingTransactional",
+//                "logging.level.org.apache.causeway.persistence.jdo.*=DEBUG",
+//                "logging.level.org.springframework.test.context.transaction.*=DEBUG",
+//                "logging.level.org.datanucleus.*=DEBUG",
                 "logging.config=log4j2-debug-persistence.xml"
-
         })
 @Transactional
 //@TestPropertySource(CausewayPresets.UseLog4j2Test)
@@ -63,6 +64,7 @@ class JdoTransactionRollbackTest_usingTransactional {
     @Inject private JdoTestFixtures jdoTestFixtures;
     @Inject private RepositoryService repository;
     @Inject private InteractionService interactionService;
+    @Inject private SpecificationLoader specLoader;
     private static EntityTestFixtures.Lock lock;
 
     @Test @Order(1) @Commit
@@ -79,7 +81,7 @@ class JdoTransactionRollbackTest_usingTransactional {
         interactionService.runAnonymous(()->{
 
             // expected pre condition
-            //assertEquals(0, repository.allInstances(JdoBook.class).size()); // breaks test
+            assertEquals(0, repository.allInstances(JdoBook.class).size());
 
             _Probe.errOut("before fixture");
 

@@ -52,6 +52,7 @@ import lombok.val;
                 Configuration_usingJpa.class,
         },
         properties = {
+                "spring.datasource.url=jdbc:h2:mem:JpaNonGeneratedStringIdEntityLifecycleTest",
         })
 @Transactional
 @TestPropertySource(CausewayPresets.UseLog4j2Test)

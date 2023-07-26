@@ -46,6 +46,9 @@ import lombok.val;
 @SpringBootTest(
         classes = {
                 Configuration_usingJdo.class,
+        },
+        properties = {
+                "spring.datasource.url=jdbc:h2:mem:JdoQueryTest"
         })
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)

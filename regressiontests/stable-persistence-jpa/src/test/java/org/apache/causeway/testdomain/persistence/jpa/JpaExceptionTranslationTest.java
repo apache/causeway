@@ -41,6 +41,9 @@ import lombok.val;
 @SpringBootTest(
         classes = {
                 Configuration_usingJpa.class,
+        },
+        properties = {
+                "spring.datasource.url=jdbc:h2:mem:JpaExceptionTranslationTest",
         })
 @TestPropertySources({
     @TestPropertySource(CausewayPresets.UseLog4j2Test)

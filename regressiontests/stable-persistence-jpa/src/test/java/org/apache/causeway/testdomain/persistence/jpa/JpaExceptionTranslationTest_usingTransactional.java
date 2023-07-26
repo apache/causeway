@@ -55,6 +55,9 @@ import lombok.val;
         classes = {
                 Configuration_usingJpa.class,
                 JpaInventoryDao.class
+        },
+        properties = {
+                "spring.datasource.url=jdbc:h2:mem:JpaExceptionTranslationTest_usingTransactional",
         })
 @TestPropertySources({
     @TestPropertySource(CausewayPresets.UseLog4j2Test)
