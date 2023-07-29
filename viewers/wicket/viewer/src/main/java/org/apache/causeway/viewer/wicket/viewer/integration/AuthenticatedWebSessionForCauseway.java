@@ -22,6 +22,9 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.UnaryOperator;
 
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
+import org.apache.causeway.viewer.wicket.viewer.wicketapp.CausewayWicketApplication;
+
 import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
@@ -72,23 +75,72 @@ implements
         return (AuthenticatedWebSessionForCauseway) Session.get();
     }
 
-    @Getter protected transient MetaModelContext metaModelContext;
+    /**
+     * Just returns the {@link MetaModelContext} as held by the {@link CausewayWicketApplication application}.
+     *
+     * <p>
+     * Previously the {@link MetaModelContext} was injected by the {@link CausewayWicketApplication} when it created
+     * the session.  However, the field was marked as transient because an {@link AuthenticatedWebSession session}
+     * object (obviously) has to be persistent, so in certain circumstances it could become null, resulting in NPEs
+     * and 500s.
+     * </p>
+     *
+     * <p>
+     *     The design now is simply to look up the {@link MetaModelContext} each time it is required.  The dependent
+     *     {@link BookmarkedPagesModel} and {@link BreadcrumbModel} are created lazily
+     *
+     * @see #getBookmarkedPagesModel()
+     * @see #getBreadcrumbModel()
+     */
+    @Override
+    public MetaModelContext getMetaModelContext() {
+        return getCausewayWicketApplicationIfAny()
+                .map(CausewayWicketApplication::getMetaModelContext)
+                .orElse(null);
+    }
 
-    @Getter
+    Optional<CausewayWicketApplication> getCausewayWicketApplicationIfAny() {
+
+        if (!CausewayWicketApplication.exists()) {
+            // this is an edge condition that likely only occurs in a dev environment.  If there is a session in the
+            // web browser from a previous run of the app on localhost:8080, but for _this_ run the
+            // CausewayWicketApplication has not yet been created, then there will be no metamodel context available
+            // to us yet.
+            return Optional.empty();
+        }
+
+        return Optional.of(CausewayWicketApplication.get());
+    }
+
+    /**
+     * lazily populated in {@link #getBreadcrumbModel()}
+     */
     private BreadcrumbModel breadcrumbModel;
-    @Getter
+    @Override
+    public BreadcrumbModel getBreadcrumbModel() {
+        return breadcrumbModel != null ? breadcrumbModel : (breadcrumbModel = new BreadcrumbModel(getMetaModelContext()));
+    }
+
+
+    /**
+     * lazily populated in {@link #getBookmarkedPagesModel()}
+     */
     private BookmarkedPagesModel bookmarkedPagesModel;
+    @Override
+    public BookmarkedPagesModel getBookmarkedPagesModel() {
+        return bookmarkedPagesModel != null ? bookmarkedPagesModel : (bookmarkedPagesModel = new BookmarkedPagesModel(getMetaModelContext()));
+    }
 
     /**
      * As populated in {@link #signIn(String, String)}.
      */
-    private InteractionContext authentication;
-    private void setAuthentication(final @Nullable InteractionContext authentication) {
+    private InteractionContext interactionContext;
+    private void setInteractionContext(final @Nullable InteractionContext interactionContext) {
         _Assert.assertFalse(
-                authentication!=null
-                 && authentication.getUser().isImpersonating(), ()->
+                interactionContext !=null
+                 && interactionContext.getUser().isImpersonating(), ()->
                 "framework bug: cannot signin with an impersonated user");
-        this.authentication = authentication;
+        this.interactionContext = interactionContext;
     }
 
     /**
@@ -98,13 +150,13 @@ implements
      * <p>
      * However, for authorization, the authentication still must pass
      * {@link AuthenticationManager} checks,
-     * as done in {@link #getAuthentication()},
+     * as done in {@link #getInteractionContext()},
      * which on success also sets the signIn flag.
      * <p>
      * Called by {@link WebRequestCycleForCauseway}.
      */
     public void setPrimedInteractionContext(final @NonNull InteractionContext authentication) {
-        this.authentication = authentication;
+        this.interactionContext = authentication;
     }
 
     @Getter
@@ -127,12 +179,6 @@ implements
 
     public AuthenticatedWebSessionForCauseway(final Request request) {
         super(request);
-    }
-
-    public void init(final MetaModelContext metaModelContext) {
-        this.metaModelContext = metaModelContext;
-        bookmarkedPagesModel = new BookmarkedPagesModel(metaModelContext);
-        breadcrumbModel = new BreadcrumbModel(metaModelContext);
         sessionGuid = UUID.randomUUID();
     }
 
@@ -140,8 +186,9 @@ implements
     public synchronized boolean authenticate(final String username, final String password) {
         val authenticationRequest = new AuthenticationRequestPassword(username, password);
         authenticationRequest.addRole(UserMemento.AUTHORIZED_USER_ROLE);
-        setAuthentication(getAuthenticationManager().authenticate(authenticationRequest));
-        if (authentication != null) {
+        InteractionContext interactionContext = getAuthenticationManager().authenticate(authenticationRequest);
+        setInteractionContext(interactionContext);
+        if (interactionContext != null) {
             log(SessionSubscriber.Type.LOGIN, username, null);
             return true;
         } else {
@@ -161,7 +208,7 @@ implements
         //
 
         getAuthenticationManager().closeSession(
-                Optional.ofNullable(authentication)
+                Optional.ofNullable(interactionContext)
                 .map(InteractionContext::getUser)
                 .orElse(null));
 
@@ -173,7 +220,7 @@ implements
     public synchronized void onInvalidate() {
 
         String userName = null;
-        val authentication = getAuthentication();
+        val authentication = getInteractionContext();
         if (authentication != null) {
             userName = authentication.getUser().getName();
         }
@@ -189,7 +236,7 @@ implements
 
     @Override
     public void amendInteractionContext(final UnaryOperator<InteractionContext> updater) {
-        setAuthentication(updater.apply(authentication));
+        setInteractionContext(updater.apply(interactionContext));
     }
 
     /**
@@ -201,29 +248,43 @@ implements
      *     note that this will always be true for externally authenticated users.
      * </p>
      */
-     synchronized InteractionContext getAuthentication() {
+     synchronized InteractionContext getInteractionContext() {
 
-        if(authentication == null) {
+        if(interactionContext == null) {
             return null;
         }
-        if(!getAuthenticationManager().isSessionValid(authentication)) {
+        if (getCausewayWicketApplicationIfAny()
+                .map(CausewayWicketApplication::getMetaModelContext)
+                .map(HasMetaModelContext::getAuthenticationManager)
+                .filter(x -> x.isSessionValid(interactionContext))
+                .isEmpty()) {
             return null;
         }
         signIn(true);
 
-        return authentication;
+        return interactionContext;
     }
 
+    @Override
+    public AuthenticationManager getAuthenticationManager() {
+        return getCausewayWicketApplicationIfAny()
+                .map(CausewayWicketApplication::getMetaModelContext)
+                .map(HasMetaModelContext::getAuthenticationManager)
+                .orElse(null);
+    }
+
+
+
     /**
-     * This is a no-op if the {@link #getAuthentication() authentication session}'s
+     * This is a no-op if the {@link #getInteractionContext() authentication session}'s
      * {@link UserMemento#getAuthenticationSource() source} is
      * {@link AuthenticationSource#EXTERNAL external}
      * (eg as managed by keycloak).
      */
     @Override
     public void invalidate() {
-        if(authentication!=null
-                && authentication.getUser().getAuthenticationSource().isExternal()) {
+        if(interactionContext !=null
+                && interactionContext.getUser().getAuthenticationSource().isExternal()) {
             return;
         }
         // otherwise

@@ -34,7 +34,7 @@ public abstract class AuthenticatedWebSessionForCauseway_TestAbstract {
 
     protected Request mockRequest = Mockito.mock(Request.class);
     protected AuthenticationManager mockAuthMgr = Mockito.mock(AuthenticationManager.class);
-    protected MetaModelContext mockCommonContext = Mockito.mock(MetaModelContext.class);
+    protected MetaModelContext mmc = Mockito.mock(MetaModelContext.class);
     protected InteractionService mockInteractionService = Mockito.mock(InteractionService.class);
     protected ServiceRegistry mockServiceRegistry = Mockito.mock(ServiceRegistry.class);
 
@@ -48,7 +48,7 @@ public abstract class AuthenticatedWebSessionForCauseway_TestAbstract {
         .thenReturn(Locale.getDefault());
 
         Mockito
-        .when(mockCommonContext.getServiceRegistry())
+        .when(mmc.getServiceRegistry())
         .thenReturn(mockServiceRegistry);
 
         Mockito
@@ -65,13 +65,14 @@ public abstract class AuthenticatedWebSessionForCauseway_TestAbstract {
         webSession = new AuthenticatedWebSessionForCauseway(mockRequest) {
             private static final long serialVersionUID = 1L;
 
-            {
-                metaModelContext = mockCommonContext;
-            }
-
             @Override
             public AuthenticationManager getAuthenticationManager() {
                 return mockAuthMgr;
+            }
+
+            @Override
+            public MetaModelContext getMetaModelContext() {
+                return mmc;
             }
         };
     }

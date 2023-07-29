@@ -159,7 +159,7 @@ implements
             authenticatedWebSession.setPrimedInteractionContext(currentInteractionContext.get());
         }
 
-        val interactionContext0 = authenticatedWebSession.getAuthentication();
+        val interactionContext0 = authenticatedWebSession.getInteractionContext();
         if (interactionContext0 == null) {
             log.warn("onBeginRequest out - session was not opened (because no authentication)");
             return;
