@@ -22,6 +22,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.UnaryOperator;
 
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.viewer.wicket.viewer.wicketapp.CausewayWicketApplication;
 
 import org.apache.wicket.Session;
@@ -93,7 +94,22 @@ implements
      */
     @Override
     public MetaModelContext getMetaModelContext() {
-        return CausewayWicketApplication.get().getMetaModelContext();
+        return getCausewayWicketApplicationIfAny()
+                .map(CausewayWicketApplication::getMetaModelContext)
+                .orElse(null);
+    }
+
+    Optional<CausewayWicketApplication> getCausewayWicketApplicationIfAny() {
+
+        if (!CausewayWicketApplication.exists()) {
+            // this is an edge condition that likely only occurs in a dev environment.  If there is a session in the
+            // web browser from a previous run of the app on localhost:8080, but for _this_ run the
+            // CausewayWicketApplication has not yet been created, then there will be no metamodel context available
+            // to us yet.
+            return Optional.empty();
+        }
+
+        return Optional.of(CausewayWicketApplication.get());
     }
 
     /**
@@ -118,13 +134,13 @@ implements
     /**
      * As populated in {@link #signIn(String, String)}.
      */
-    private InteractionContext authentication;
-    private void setAuthentication(final @Nullable InteractionContext authentication) {
+    private InteractionContext interactionContext;
+    private void setInteractionContext(final @Nullable InteractionContext interactionContext) {
         _Assert.assertFalse(
-                authentication!=null
-                 && authentication.getUser().isImpersonating(), ()->
+                interactionContext !=null
+                 && interactionContext.getUser().isImpersonating(), ()->
                 "framework bug: cannot signin with an impersonated user");
-        this.authentication = authentication;
+        this.interactionContext = interactionContext;
     }
 
     /**
@@ -134,13 +150,13 @@ implements
      * <p>
      * However, for authorization, the authentication still must pass
      * {@link AuthenticationManager} checks,
-     * as done in {@link #getAuthentication()},
+     * as done in {@link #getInteractionContext()},
      * which on success also sets the signIn flag.
      * <p>
      * Called by {@link WebRequestCycleForCauseway}.
      */
     public void setPrimedInteractionContext(final @NonNull InteractionContext authentication) {
-        this.authentication = authentication;
+        this.interactionContext = authentication;
     }
 
     @Getter
@@ -170,8 +186,8 @@ implements
     public synchronized boolean authenticate(final String username, final String password) {
         val authenticationRequest = new AuthenticationRequestPassword(username, password);
         authenticationRequest.addRole(UserMemento.AUTHORIZED_USER_ROLE);
-        setAuthentication(getAuthenticationManager().authenticate(authenticationRequest));
-        if (authentication != null) {
+        setInteractionContext(getAuthenticationManager().authenticate(authenticationRequest));
+        if (interactionContext != null) {
             log(SessionSubscriber.Type.LOGIN, username, null);
             return true;
         } else {
@@ -191,7 +207,7 @@ implements
         //
 
         getAuthenticationManager().closeSession(
-                Optional.ofNullable(authentication)
+                Optional.ofNullable(interactionContext)
                 .map(InteractionContext::getUser)
                 .orElse(null));
 
@@ -203,7 +219,7 @@ implements
     public synchronized void onInvalidate() {
 
         String userName = null;
-        val authentication = getAuthentication();
+        val authentication = getInteractionContext();
         if (authentication != null) {
             userName = authentication.getUser().getName();
         }
@@ -219,7 +235,7 @@ implements
 
     @Override
     public void amendInteractionContext(final UnaryOperator<InteractionContext> updater) {
-        setAuthentication(updater.apply(authentication));
+        setInteractionContext(updater.apply(interactionContext));
     }
 
     /**
@@ -231,29 +247,43 @@ implements
      *     note that this will always be true for externally authenticated users.
      * </p>
      */
-     synchronized InteractionContext getAuthentication() {
+     synchronized InteractionContext getInteractionContext() {
 
-        if(authentication == null) {
+        if(interactionContext == null) {
             return null;
         }
-        if(!getAuthenticationManager().isSessionValid(authentication)) {
+        if (getCausewayWicketApplicationIfAny()
+                .map(CausewayWicketApplication::getMetaModelContext)
+                .map(HasMetaModelContext::getAuthenticationManager)
+                .filter(x -> x.isSessionValid(interactionContext))
+                .isEmpty()) {
             return null;
         }
         signIn(true);
 
-        return authentication;
+        return interactionContext;
     }
 
+    @Override
+    public AuthenticationManager getAuthenticationManager() {
+        return getCausewayWicketApplicationIfAny()
+                .map(CausewayWicketApplication::getMetaModelContext)
+                .map(HasMetaModelContext::getAuthenticationManager)
+                .orElse(null);
+    }
+
+
+
     /**
-     * This is a no-op if the {@link #getAuthentication() authentication session}'s
+     * This is a no-op if the {@link #getInteractionContext() authentication session}'s
      * {@link UserMemento#getAuthenticationSource() source} is
      * {@link AuthenticationSource#EXTERNAL external}
      * (eg as managed by keycloak).
      */
     @Override
     public void invalidate() {
-        if(authentication!=null
-                && authentication.getUser().getAuthenticationSource().isExternal()) {
+        if(interactionContext !=null
+                && interactionContext.getUser().getAuthenticationSource().isExternal()) {
             return;
         }
         // otherwise

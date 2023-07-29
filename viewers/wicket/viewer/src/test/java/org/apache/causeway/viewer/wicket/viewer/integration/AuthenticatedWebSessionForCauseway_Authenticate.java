@@ -120,7 +120,7 @@ class AuthenticatedWebSessionForCauseway_Authenticate {
         assertThat(webSession.authenticate("jsmith", "secret"), is(true));
 
         // then
-        assertThat(webSession.getAuthentication(), is(not(nullValue())));
+        assertThat(webSession.getInteractionContext(), is(not(nullValue())));
     }
 
     @Test
@@ -139,7 +139,7 @@ class AuthenticatedWebSessionForCauseway_Authenticate {
         setupWebSession();
 
         assertThat(webSession.authenticate("jsmith", "secret"), is(false));
-        assertThat(webSession.getAuthentication(), is(nullValue()));
+        assertThat(webSession.getInteractionContext(), is(nullValue()));
     }
 
 }
