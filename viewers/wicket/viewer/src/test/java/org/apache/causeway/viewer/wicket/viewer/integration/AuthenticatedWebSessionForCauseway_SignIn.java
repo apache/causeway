@@ -91,13 +91,14 @@ class AuthenticatedWebSessionForCauseway_SignIn {
         webSession = new AuthenticatedWebSessionForCauseway(mockRequest) {
             private static final long serialVersionUID = 1L;
 
-            {
-                metaModelContext = mmc;
-            }
-
             @Override
             public AuthenticationManager getAuthenticationManager() {
                 return authMgr;
+            }
+
+            @Override
+            public MetaModelContext getMetaModelContext() {
+                return mmc;
             }
         };
 

@@ -22,6 +22,8 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.UnaryOperator;
 
+import org.apache.causeway.viewer.wicket.viewer.wicketapp.CausewayWicketApplication;
+
 import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
@@ -72,12 +74,46 @@ implements
         return (AuthenticatedWebSessionForCauseway) Session.get();
     }
 
-    @Getter protected transient MetaModelContext metaModelContext;
+    /**
+     * Just returns the {@link MetaModelContext} as held by the {@link CausewayWicketApplication application}.
+     *
+     * <p>
+     * Previously the {@link MetaModelContext} was injected by the {@link CausewayWicketApplication} when it created
+     * the session.  However, the field was marked as transient because an {@link AuthenticatedWebSession session}
+     * object (obviously) has to be persistent, so in certain circumstances it could become null, resulting in NPEs
+     * and 500s.
+     * </p>
+     *
+     * <p>
+     *     The design now is simply to look up the {@link MetaModelContext} each time it is required.  The dependent
+     *     {@link BookmarkedPagesModel} and {@link BreadcrumbModel} are created lazily
+     *
+     * @see #getBookmarkedPagesModel()
+     * @see #getBreadcrumbModel()
+     */
+    @Override
+    public MetaModelContext getMetaModelContext() {
+        return CausewayWicketApplication.get().getMetaModelContext();
+    }
 
-    @Getter
+    /**
+     * lazily populated in {@link #getBreadcrumbModel()}
+     */
     private BreadcrumbModel breadcrumbModel;
-    @Getter
+    @Override
+    public BreadcrumbModel getBreadcrumbModel() {
+        return breadcrumbModel != null ? breadcrumbModel : (breadcrumbModel = new BreadcrumbModel(getMetaModelContext()));
+    }
+
+
+    /**
+     * lazily populated in {@link #getBookmarkedPagesModel()}
+     */
     private BookmarkedPagesModel bookmarkedPagesModel;
+    @Override
+    public BookmarkedPagesModel getBookmarkedPagesModel() {
+        return bookmarkedPagesModel != null ? bookmarkedPagesModel : (bookmarkedPagesModel = new BookmarkedPagesModel(getMetaModelContext()));
+    }
 
     /**
      * As populated in {@link #signIn(String, String)}.
@@ -127,12 +163,6 @@ implements
 
     public AuthenticatedWebSessionForCauseway(final Request request) {
         super(request);
-    }
-
-    public void init(final MetaModelContext metaModelContext) {
-        this.metaModelContext = metaModelContext;
-        bookmarkedPagesModel = new BookmarkedPagesModel(metaModelContext);
-        breadcrumbModel = new BreadcrumbModel(metaModelContext);
         sessionGuid = UUID.randomUUID();
     }
 
