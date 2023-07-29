@@ -186,7 +186,8 @@ implements
     public synchronized boolean authenticate(final String username, final String password) {
         val authenticationRequest = new AuthenticationRequestPassword(username, password);
         authenticationRequest.addRole(UserMemento.AUTHORIZED_USER_ROLE);
-        setInteractionContext(getAuthenticationManager().authenticate(authenticationRequest));
+        InteractionContext interactionContext = getAuthenticationManager().authenticate(authenticationRequest);
+        setInteractionContext(interactionContext);
         if (interactionContext != null) {
             log(SessionSubscriber.Type.LOGIN, username, null);
             return true;
