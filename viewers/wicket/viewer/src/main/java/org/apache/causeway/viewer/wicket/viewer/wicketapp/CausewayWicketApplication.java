@@ -230,15 +230,6 @@ implements
         return new _PageFactory(this, super.newPageFactory());
     }
 
-    /*
-     * @since 2.0 ... overrides the default, to 'inject' the commonContext into new sessions
-     */
-    @Override
-    public Session newSession(final Request request, final Response response) {
-        val newSession = (AuthenticatedWebSessionForCauseway) super.newSession(request, response);
-        newSession.init(getMetaModelContext());
-        return newSession;
-    }
 
     /**
      * protected visibility to allow ad-hoc overriding of some other authentication strategy.
