@@ -27,23 +27,28 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import lombok.val;
 
 /**
- * Returns a valid {@link InteractionContext} through a number of mechanisms;
- * supports caching of the {@link InteractionContext} onto the
- * {@link HttpSession}.
+ * Checks that an already-present {@link InteractionContext authentication} (obtained from the {@link HttpSession}) is
+ * still {@link org.apache.causeway.core.security.authentication.manager.AuthenticationManager#isSessionValid(InteractionContext) valid},
+ * and re-binds the {@link InteractionContext authentication} onto the {@link HttpSession}.
  *
  * <p>
- * The session is looked-up as follows:
- * <ul>
- * <li>it looks up from the {@link HttpSession} using the value
- * {@link AuthenticationStrategyDefault#HTTP_SESSION_AUTHENTICATION_SESSION_KEY}</li>
+ *     Note that this implementation is not particularly &quot;restful&quot;; normally REST APIs are expected to be
+ *     stateless whereas this implementation requires a session to obtain the {@link InteractionContext}.
+ *     Typically it would be combined with Shiro, whose default behaviour (not suppressed by this filter) is indeed to
+ *     store the {@link InteractionContext authentication} on the session.
+ * </p>
+ *
+ * <p>
+ * The session is looked-up from the {@link HttpSession} using the value
+ * {@link AuthenticationStrategyUsingSession#HTTP_SESSION_AUTHENTICATION_SESSION_KEY}</li>
  * </ul>
  *
  * @since 2.0 {@index}
  */
-public class AuthenticationStrategyDefault
+public class AuthenticationStrategyUsingSession
 extends AuthenticationStrategyAbstract {
 
-    public static final String HTTP_SESSION_AUTHENTICATION_SESSION_KEY = AuthenticationStrategyDefault.class.getPackage().getName() + ".authentication";
+    public static final String HTTP_SESSION_AUTHENTICATION_SESSION_KEY = AuthenticationStrategyUsingSession.class.getPackage().getName() + ".authentication";
 
     @Override
     public InteractionContext lookupValid(
@@ -80,8 +85,4 @@ extends AuthenticationStrategyAbstract {
             httpSession.removeAttribute(HTTP_SESSION_AUTHENTICATION_SESSION_KEY);
         }
     }
-
-
-
-
 }

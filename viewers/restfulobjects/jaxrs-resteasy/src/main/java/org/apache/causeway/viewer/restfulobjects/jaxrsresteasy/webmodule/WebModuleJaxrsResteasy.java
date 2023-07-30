@@ -105,8 +105,7 @@ public final class WebModuleJaxrsResteasy extends WebModuleAbstract {
     public Can<ServletContextListener> init(final ServletContext ctx) throws ServletException {
 
         val authenticationStrategyClassName = causewayConfiguration.getViewer()
-                .getRestfulobjects().getAuthentication().getStrategyClassName()
-                .orElse(AuthenticationStrategyBasicAuth.class.getName());
+                .getRestfulobjects().getAuthentication().getStrategyClassName();
 
         registerFilter(ctx, INTERACTION_FILTER_NAME, CausewayRestfulObjectsInteractionFilter.class)
         .ifPresent(filterReg -> {

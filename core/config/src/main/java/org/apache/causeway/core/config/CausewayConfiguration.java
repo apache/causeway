@@ -2009,7 +2009,7 @@ public class CausewayConfiguration {
                 /**
                  * Defaults to <code>org.apache.causeway.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategyBasicAuth</code>.
                  */
-                private Optional<String> strategyClassName = Optional.empty();
+                private String strategyClassName = "org.apache.causeway.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategyBasicAuth";
             }
 
             /**
@@ -2306,12 +2306,12 @@ public class CausewayConfiguration {
             }
 
             /**
-             * If a table has no property columns, 
+             * If a table has no property columns,
              * for the title column this value is used,
              * to determine how many characters to render for the table element titles.
              * <p>
-             * Introduced for the case when max-title-length is set to zero for tables in general, 
-             * that if a table has no property columns an exception to that title suppression can be made.      
+             * Introduced for the case when max-title-length is set to zero for tables in general,
+             * that if a table has no property columns an exception to that title suppression can be made.
              */
             private int maxTitleLengthInTablesNotHavingAnyPropertyColumn = 80;
 

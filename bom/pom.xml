@@ -123,6 +123,8 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <htmlparser.version>2.1</htmlparser.version>
 
+        <failsafe.version>2.4.4</failsafe.version>
+
         <javafaker.version>1.0.2</javafaker.version>
         <javassist.version>3.29.2-GA</javassist.version>
 
@@ -1444,7 +1446,12 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<artifactId>woodstox-core</artifactId>
 				<version>6.5.1</version>
 			</dependency>
-			<dependency>
+            <dependency>
+                <groupId>net.jodah</groupId>
+                <artifactId>failsafe</artifactId>
+                <version>${failsafe.version}</version>
+            </dependency>
+            <dependency>
 				<groupId>org.codehaus.woodstox</groupId>
 				<artifactId>stax2-api</artifactId>
 				<version>4.2.1</version>
@@ -1486,7 +1493,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<version>${asm.version}</version>
 			</dependency>
 
-			<dependency>
+            <dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-validator</artifactId>
 				<version>${hibernate-validator.version}</version>

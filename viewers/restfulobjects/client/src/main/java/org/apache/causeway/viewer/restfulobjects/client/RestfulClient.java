@@ -36,8 +36,8 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.context._Context;
-import org.apache.causeway.viewer.restfulobjects.client.auth.BasicAuthFilter;
-import org.apache.causeway.viewer.restfulobjects.client.auth.BasicAuthFilter.Credentials;
+import org.apache.causeway.viewer.restfulobjects.client.auth.AuthorizationHeaderFactory;
+import org.apache.causeway.viewer.restfulobjects.client.auth.AuthFilter;
 import org.apache.causeway.viewer.restfulobjects.client.log.ClientConversationLogger;
 
 import lombok.NonNull;
@@ -51,12 +51,11 @@ import lombok.extern.log4j.Log4j2;
  * </p>
  *
  * <blockquote><pre>
-RestfulClientConfig clientConfig = RestfulClientConfig.builder();
-.restfulBase("http://localhost:8080/helloworld/restful/")
-// setup basic-auth
-.useBasicAuth(true) // default = false
-.restfulAuthUser("sven")
-.restfulAuthPassword("pass")
+val clientConfig = RestfulClientConfig.builder();
+    .restfulBaseUrl("http://localhost:8080/helloworld/restful/")
+        .authenticationMode(AuthenticationMode.BASIC)
+        .restfulAuthUser("sven")
+        .restfulAuthPassword("pass")
 // setup request/response debug logging
 .useRequestDebugLogging(true) // default = false
 .build();
@@ -91,30 +90,54 @@ if(digest.isSuccess()) {
 @Log4j2
 public class RestfulClient implements AutoCloseable {
 
-    private RestfulClientConfig clientConfig;
-    private Client client;
+    private final RestfulClientConfig clientConfig;
+    private final AuthorizationHeaderFactory authorizationHeaderFactory;
+    private final Client client;
 
+    /**
+     * @param clientConfig - used to derive authorization (either BASIC or OAUTH)
+     */
     public static RestfulClient ofConfig(
             final RestfulClientConfig clientConfig) {
-        return new RestfulClient(clientConfig, UnaryOperator.identity());
+        return new RestfulClient(clientConfig, UnaryOperator.identity(), AuthorizationHeaderFactory.factoryFor(clientConfig));
+    }
+
+    /**
+     * @param clientConfig - NOT used for auth; instead the authorizationHeaderFactory is used.
+     * @param authorizationHeaderFactory
+     */
+    public static RestfulClient ofConfig(
+            final RestfulClientConfig clientConfig,
+            final AuthorizationHeaderFactory authorizationHeaderFactory) {
+        return new RestfulClient(clientConfig, UnaryOperator.identity(), authorizationHeaderFactory);
     }
 
     public static RestfulClient ofConfig(
             final RestfulClientConfig clientConfig,
             final UnaryOperator<ClientBuilder> configRefiner) {
-        return new RestfulClient(clientConfig, configRefiner);
+        return new RestfulClient(clientConfig, configRefiner, AuthorizationHeaderFactory.factoryFor(clientConfig));
+    }
+
+    public static RestfulClient ofConfig(
+            final RestfulClientConfig clientConfig,
+            final UnaryOperator<ClientBuilder> configRefiner,
+            final AuthorizationHeaderFactory authorizationHeaderFactory) {
+        return new RestfulClient(clientConfig, configRefiner, authorizationHeaderFactory);
     }
 
     private RestfulClient(
             final @NonNull RestfulClientConfig clientConfig,
-            final @NonNull UnaryOperator<ClientBuilder> configRefiner) {
+            final @NonNull UnaryOperator<ClientBuilder> configRefiner,
+            final AuthorizationHeaderFactory authorizationHeaderFactory) {
+
         this.clientConfig = clientConfig;
+        this.authorizationHeaderFactory = authorizationHeaderFactory;
 
         final ClientBuilder clientBuilder = configRefiner.apply(ClientBuilder.newBuilder());
         this.client = clientBuilder.build();
 
         registerDefaultJsonProvider();
-        registerBasicAuthFilter();
+        registerAuthFilter(this.authorizationHeaderFactory);
         registerConversationFilters();
     }
 
@@ -203,13 +226,8 @@ public class RestfulClient implements AutoCloseable {
         }
     }
 
-    private void registerBasicAuthFilter() {
-        if(clientConfig.isUseBasicAuth()){
-            final Credentials credentials = Credentials.of(
-                    clientConfig.getRestfulAuthUser(),
-                    clientConfig.getRestfulAuthPassword());
-            client.register(BasicAuthFilter.of(credentials));
-        }
+    private void registerAuthFilter(AuthorizationHeaderFactory authorizationHeaderFactory) {
+        client.register(AuthFilter.of(authorizationHeaderFactory));
     }
 
     private void registerConversationFilters() {
@@ -224,7 +242,7 @@ public class RestfulClient implements AutoCloseable {
     // -- HELPER OTHER
 
     private UriBuilder relativePathToUri(String path) {
-        final String baseUri = _Strings.suffix(clientConfig.getRestfulBase(), "/");
+        final String baseUri = _Strings.suffix(clientConfig.getRestfulBaseUrl(), "/");
         while(path.startsWith("/")) {
             path = path.substring(1);
         }
