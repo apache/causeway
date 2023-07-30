@@ -302,7 +302,12 @@ implements
 
     @Override
     public synchronized void detach() {
-        breadcrumbModel.detach();
+        if(breadcrumbModel!=null) {
+            breadcrumbModel.detach();
+        }
+        if(bookmarkedPagesModel!=null) {
+            bookmarkedPagesModel.detach();
+        }
         super.detach();
     }
 
