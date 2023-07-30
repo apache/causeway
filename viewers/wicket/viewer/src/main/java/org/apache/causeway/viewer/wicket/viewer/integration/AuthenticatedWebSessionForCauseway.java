@@ -22,9 +22,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.UnaryOperator;
 
-import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
-import org.apache.causeway.viewer.wicket.viewer.wicketapp.CausewayWicketApplication;
-
 import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
@@ -41,15 +38,18 @@ import org.apache.causeway.applib.services.user.UserMemento.AuthenticationSource
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
 import org.apache.causeway.viewer.wicket.model.causeway.HasAmendableInteractionContext;
 import org.apache.causeway.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
+import org.apache.causeway.viewer.wicket.model.util.WktContext;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.causeway.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
+import org.apache.causeway.viewer.wicket.viewer.wicketapp.CausewayWicketApplication;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -76,40 +76,34 @@ implements
     }
 
     /**
-     * Just returns the {@link MetaModelContext} as held by the {@link CausewayWicketApplication application}.
-     *
+     * lazily populated in {@link #getMetaModelContext()}
+     */
+    private transient MetaModelContext mmc;
+
+    /**
+     * Returns the {@link MetaModelContext} as held by the {@link CausewayWicketApplication application}.
      * <p>
      * Previously the {@link MetaModelContext} was injected by the {@link CausewayWicketApplication} when it created
      * the session.  However, the field was marked as transient because an {@link AuthenticatedWebSession session}
      * object (obviously) has to be persistent, so in certain circumstances it could become null, resulting in NPEs
      * and 500s.
-     * </p>
-     *
      * <p>
-     *     The design now is simply to look up the {@link MetaModelContext} each time it is required.  The dependent
-     *     {@link BookmarkedPagesModel} and {@link BreadcrumbModel} are created lazily
+     * The design now is simply to look up the {@link MetaModelContext} each time it is required. The dependent
+     * {@link BookmarkedPagesModel} and {@link BreadcrumbModel} are created lazily.
+     * <p>
+     * Nullable, as an edge condition that likely only occurs in a development environment:
+     * <p>
+     * If there is a session in the web browser from a previous run of the app on localhost:8080,
+     * but for _this_ run the CausewayWicketApplication has not yet been created,
+     * then there will be no metamodel context available to us yet.
      *
      * @see #getBookmarkedPagesModel()
      * @see #getBreadcrumbModel()
      */
+    @Nullable
     @Override
     public MetaModelContext getMetaModelContext() {
-        return getCausewayWicketApplicationIfAny()
-                .map(CausewayWicketApplication::getMetaModelContext)
-                .orElse(null);
-    }
-
-    Optional<CausewayWicketApplication> getCausewayWicketApplicationIfAny() {
-
-        if (!CausewayWicketApplication.exists()) {
-            // this is an edge condition that likely only occurs in a dev environment.  If there is a session in the
-            // web browser from a previous run of the app on localhost:8080, but for _this_ run the
-            // CausewayWicketApplication has not yet been created, then there will be no metamodel context available
-            // to us yet.
-            return Optional.empty();
-        }
-
-        return Optional.of(CausewayWicketApplication.get());
+        return mmc = WktContext.computeIfAbsent(mmc);
     }
 
     /**
@@ -118,7 +112,9 @@ implements
     private BreadcrumbModel breadcrumbModel;
     @Override
     public BreadcrumbModel getBreadcrumbModel() {
-        return breadcrumbModel != null ? breadcrumbModel : (breadcrumbModel = new BreadcrumbModel(getMetaModelContext()));
+        return breadcrumbModel != null
+                ? breadcrumbModel
+                : (breadcrumbModel = new BreadcrumbModel(getMetaModelContext()));
     }
 
 
@@ -128,7 +124,9 @@ implements
     private BookmarkedPagesModel bookmarkedPagesModel;
     @Override
     public BookmarkedPagesModel getBookmarkedPagesModel() {
-        return bookmarkedPagesModel != null ? bookmarkedPagesModel : (bookmarkedPagesModel = new BookmarkedPagesModel(getMetaModelContext()));
+        return bookmarkedPagesModel != null
+                ? bookmarkedPagesModel
+                : (bookmarkedPagesModel = new BookmarkedPagesModel(getMetaModelContext()));
     }
 
     /**
@@ -242,19 +240,16 @@ implements
     /**
      * Returns an {@link InteractionContext} either as authenticated (and then cached on the session subsequently),
      * or taking into account {@link UserService impersonation}.
-     *
      * <p>
-     *     The session must still {@link AuthenticationManager#isSessionValid(InteractionContext) be valid}, though
-     *     note that this will always be true for externally authenticated users.
-     * </p>
+     * The session must still {@link AuthenticationManager#isSessionValid(InteractionContext) be valid}, though
+     * note that this will always be true for externally authenticated users.
      */
      synchronized InteractionContext getInteractionContext() {
 
         if(interactionContext == null) {
             return null;
         }
-        if (getCausewayWicketApplicationIfAny()
-                .map(CausewayWicketApplication::getMetaModelContext)
+        if (Optional.ofNullable(getMetaModelContext())
                 .map(HasMetaModelContext::getAuthenticationManager)
                 .filter(x -> x.isSessionValid(interactionContext))
                 .isEmpty()) {
@@ -267,13 +262,10 @@ implements
 
     @Override
     public AuthenticationManager getAuthenticationManager() {
-        return getCausewayWicketApplicationIfAny()
-                .map(CausewayWicketApplication::getMetaModelContext)
+        return Optional.ofNullable(getMetaModelContext())
                 .map(HasMetaModelContext::getAuthenticationManager)
                 .orElse(null);
     }
-
-
 
     /**
      * This is a no-op if the {@link #getInteractionContext() authentication session}'s

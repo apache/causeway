@@ -22,8 +22,6 @@ import java.util.Collections;
 import java.util.Locale;
 import java.util.Optional;
 
-import org.apache.causeway.viewer.wicket.viewer.wicketapp.CausewayWicketApplication;
-
 import org.apache.wicket.request.Request;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -58,7 +56,6 @@ class AuthenticatedWebSessionForCauseway_Authenticate {
 
     protected AuthenticatedWebSessionForCauseway webSession;
     private MetaModelContext mmc;
-    private CausewayWicketApplication causewayWicketApplication;
 
     @BeforeEach
     void setUp() throws Exception {
@@ -76,13 +73,6 @@ class AuthenticatedWebSessionForCauseway_Authenticate {
                 .authenticationManager(authMgr)
                 .build();
 
-        causewayWicketApplication = new CausewayWicketApplication() {
-            @Override
-            public MetaModelContext getMetaModelContext() {
-                return mmc;
-            }
-        };
-
         Mockito
         .when(mockInteractionLayerTracker.currentInteractionContext())
         .thenReturn(Optional.of(InteractionContextFactory.testing()));
@@ -96,11 +86,6 @@ class AuthenticatedWebSessionForCauseway_Authenticate {
     protected void setupWebSession() {
         webSession = new AuthenticatedWebSessionForCauseway(mockRequest) {
             private static final long serialVersionUID = 1L;
-
-            @Override
-            Optional<CausewayWicketApplication> getCausewayWicketApplicationIfAny() {
-                return Optional.of(causewayWicketApplication);
-            }
 
             @Override public AuthenticationManager getAuthenticationManager() {
                 return authMgr;

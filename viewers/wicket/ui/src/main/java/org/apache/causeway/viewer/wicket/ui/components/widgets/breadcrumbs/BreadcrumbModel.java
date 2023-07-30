@@ -31,6 +31,7 @@ import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
+import org.apache.causeway.viewer.wicket.model.util.WktContext;
 
 public class BreadcrumbModel implements Serializable {
 
@@ -42,11 +43,9 @@ public class BreadcrumbModel implements Serializable {
     private final Map<Bookmark, String> oidStrByBookmark = _Maps.newHashMap();
     private final List<Bookmark> list = _Lists.newArrayList();
 
-    private final transient MetaModelContext commonContext;
-
-    public BreadcrumbModel(final MetaModelContext commonContext) {
+    public BreadcrumbModel(final MetaModelContext mmc) {
         super();
-        this.commonContext = commonContext;
+        this.mmc = mmc;
     }
 
     public List<UiObjectWkt> getList() {
@@ -161,7 +160,7 @@ public class BreadcrumbModel implements Serializable {
     }
 
     protected UiObjectWkt toEntityModel(final Bookmark bookmark) {
-        return UiObjectWkt.ofBookmark(commonContext, bookmark);
+        return UiObjectWkt.ofBookmark(getMetaModelContext(), bookmark);
     }
 
     private void remove(final String oid, final Bookmark bookmark) {
@@ -175,5 +174,10 @@ public class BreadcrumbModel implements Serializable {
         oidStrByBookmark.clear();
         list.clear();
         mostRecentlyVisitedOidStr = null;
+    }
+
+    private transient MetaModelContext mmc;
+    public MetaModelContext getMetaModelContext() {
+        return mmc = WktContext.computeIfAbsent(mmc);
     }
 }
