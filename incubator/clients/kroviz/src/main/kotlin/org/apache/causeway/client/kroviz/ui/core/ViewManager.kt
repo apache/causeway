@@ -174,11 +174,18 @@ object ViewManager {
         dm.isRendered = true
         setNormalCursor()
     }
+
     fun openObjectView(aggregator: ObjectAggregator) {
-        val dm = aggregator.getDisplayModel()
-        val panel = RoDisplay(dm)
-        add(aggregator.getTitle(), panel, aggregator)
-        dm.isRendered = true
+        val title = aggregator.getTitle()
+        val tab = getRoView().findTab(title)
+        if (tab == null) {
+            val dm = aggregator.getDisplayModel()
+            val panel = RoDisplay(dm)
+            add(title, panel, aggregator)
+            dm.isRendered = true
+        } else {
+            getRoView().setActive(title)
+        }
         setNormalCursor()
     }
 
@@ -228,9 +235,9 @@ object ViewManager {
     fun performUserAction(aggregator: BaseAggregator, obj: TObject) {
         setBusyCursor()
         getEventStore().addUserAction(aggregator, obj)
-        if (aggregator is ObjectAggregator) {
-            //TODO a 2nd, 3rd, etc view may be opened - introduce check
-            openObjectView(aggregator)
+        when (aggregator) {
+            is ObjectAggregator -> openObjectView(aggregator)
+            else -> {}
         }
         setNormalCursor()
     }

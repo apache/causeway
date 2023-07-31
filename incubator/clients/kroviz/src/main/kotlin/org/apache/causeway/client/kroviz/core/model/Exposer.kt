@@ -20,7 +20,6 @@ package org.apache.causeway.client.kroviz.core.model
 
 import org.apache.causeway.client.kroviz.to.MemberType
 import org.apache.causeway.client.kroviz.to.TObject
-import org.apache.causeway.client.kroviz.utils.IconManager
 
 /**
  * Makes properties of delegate available for display in tables.
@@ -32,11 +31,8 @@ import org.apache.causeway.client.kroviz.utils.IconManager
  * but it goes further since it even reveals members of its delegate.
  */
 class Exposer(val delegate: TObject) {
-    val iconName: String = IconManager.findFor(delegate) //required by ColumnFactory
-
     init {
         val that = this.asDynamic()
-//        that["icon"] = null is added at runtime
         for (m in delegate.members) {
             val member = m.value
             if (member.memberType == MemberType.PROPERTY.type) {
@@ -47,15 +43,6 @@ class Exposer(val delegate: TObject) {
                 }
             }
         }
-    }
-
-    fun withDelegateProperties(): dynamic {
-        return this.asDynamic()
-    }
-
-    // convenience method for test - refactor?
-    fun get(propertyName: String): Any? {
-        return this.delegate.getProperty(propertyName)?.value
     }
 
 }

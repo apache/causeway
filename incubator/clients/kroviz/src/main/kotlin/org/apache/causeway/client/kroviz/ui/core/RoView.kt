@@ -89,4 +89,17 @@ class RoView {
         }
     }
 
+    fun findTab(title: String): SimplePanel? {
+        return tabPanel.getTabs().find {
+            it.title == title
+        }
+    }
+
+    fun setActive(title: String) {
+        for ((i, c) in tabPanel.getTabs().withIndex()) {
+            if (c.title == title) {
+                tabPanel.activeIndex = i
+            }
+        }
+    }
 }

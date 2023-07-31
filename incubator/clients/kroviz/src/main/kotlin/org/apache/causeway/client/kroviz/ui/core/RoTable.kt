@@ -29,6 +29,7 @@ import io.kvision.tabulator.js.Tabulator.CellComponent
 import org.apache.causeway.client.kroviz.core.event.ResourceProxy
 import org.apache.causeway.client.kroviz.core.model.CollectionDM
 import org.apache.causeway.client.kroviz.core.model.Exposer
+import org.apache.causeway.client.kroviz.ui.menu.DynamicMenuBuilder
 import org.apache.causeway.client.kroviz.utils.StringUtils
 
 /**
@@ -54,12 +55,10 @@ class RoTable(displayCollection: CollectionDM) : SimplePanel() {
         val tabulator = createTabulator(model, options)
         tabulator.setEventListener<Tabulator<dynamic>> {
             cellClickTabulator = {
-                // can't check cast to external interface
-                val cc = it.detail as CellComponent
+                val cc = it.detail.unsafeCast<CellComponent>()
                 val column = cc.getColumn().getField()
                 if (column == "iconUrl") {
                     val exposer = cc.getData() as Exposer
-                    console.log(exposer)
                     val tObject = exposer.delegate
                     ResourceProxy().load(tObject)
                 }

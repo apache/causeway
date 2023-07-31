@@ -49,7 +49,7 @@ class ExposerTest {
 
         val exposer = Exposer(to)
 
-        val dyn = exposer.withDelegateProperties()
+        val dyn = exposer.asDynamic()
 
         val actKey = dyn["key"]
         assertEquals("causeway.appManifest", actKey)
@@ -74,7 +74,7 @@ class ExposerTest {
         val actualDnvers = exposer.get("datanucleusVersionTimestamp") as Value
         assertEquals(1514897074953L, actualDnvers.content as Long)
 
-        val dynEx = exposer.withDelegateProperties()
+        val dynEx = exposer.asDynamic()
         val actKey = dynEx["name"]
         assertEquals("Foo", actKey)
 
@@ -83,6 +83,10 @@ class ExposerTest {
 
         val members = to.members
         assertFalse(members.isEmpty())
+    }
+
+    fun Exposer.get(propertyName: String): Any? {
+        return this.delegate.getProperty(propertyName)?.value
     }
 
 }

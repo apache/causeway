@@ -36,14 +36,14 @@ class TableFactoryTest {
         val map = mapOf("m1" to m1, "m2" to m2)
         val t1 = TObject(extensions = Extensions(), members = map)
         val o1 = Exposer(t1)
-        val d1 = o1.getWithDelegateProperties()
+        val d1 = o1.asDynamic()
         d1["var1"] = "string1"
         d1["var2"] = 1
         answer.add(d1)
 
         val t2 = TObject(extensions = Extensions())
         val o2 = Exposer(t2)
-        val d2 = o2.getWithDelegateProperties()
+        val d2 = o2.asDynamic()
         d2["var1"] = "string2"
         d2["var2"] = 2
         answer.add(d2)

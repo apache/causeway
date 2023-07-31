@@ -19,6 +19,7 @@
 package org.apache.causeway.client.kroviz.ui.core
 
 import io.kvision.core.Component
+import io.kvision.maps.externals.leaflet.layer.overlay.Popup
 import io.kvision.panel.VPanel
 import io.kvision.tabulator.Align
 import io.kvision.tabulator.ColumnDefinition
@@ -27,8 +28,8 @@ import io.kvision.tabulator.Formatter
 import io.kvision.tabulator.js.Tabulator
 import io.kvision.utils.obj
 import org.apache.causeway.client.kroviz.core.model.CollectionDM
+import org.apache.causeway.client.kroviz.core.model.Exposer
 import org.apache.causeway.client.kroviz.core.model.PropertyDetails
-import org.apache.causeway.client.kroviz.to.TObject
 import org.apache.causeway.client.kroviz.to.ValueType
 import org.apache.causeway.client.kroviz.to.Vega5
 import org.apache.causeway.client.kroviz.ui.menu.DynamicMenuBuilder
@@ -62,13 +63,13 @@ class ColumnFactory {
     private fun columnForObjectMenu(): ColumnDefinition<dynamic> {
         return ColumnDefinition(
             "",
-            field = "iconName", // any existing field can be used
+            field = "menuCol", // field is created dynamically
             formatter = Formatter.TICKCROSS,
             formatterParams = menuFormatterParams,
             hozAlign = Align.CENTER,
             width = "40",
             headerSort = false,
-            clickMenu = { _: dynamic, cellComponent: dynamic ->
+            cellClick = { _: dynamic, cellComponent: dynamic ->
                 buildObjectMenu(cellComponent.unsafeCast<Tabulator.CellComponent>())
             }
         )
@@ -76,14 +77,18 @@ class ColumnFactory {
 
     private fun buildObjectMenu(cell: Tabulator.CellComponent): dynamic {
         val row = cell.getRow()
-        val dynamic = row.getData().asDynamic()
-        val tObject = dynamic.delegate
-        return DynamicMenuBuilder().buildObjectMenu(tObject as TObject)
+        val exposer = row.getData() as Exposer
+        val tObject = exposer.delegate
+        val menu = DynamicMenuBuilder().buildObjectMenu(tObject)
+        console.log("[CF_buildObjetMenu]")
+        console.log(menu)
+        return menu
     }
 
     private fun exposeIcons(displayCollection: CollectionDM) {
         val icon = displayCollection.icon
         displayCollection.data.forEach {
+            it["menuCol"] = "XXX"
             if (icon != null) {
                 it["iconUrl"] = icon.image.src
             }
