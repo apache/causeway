@@ -6,3 +6,101 @@ This library is for integration scenario to programmatically invoke the xref:vro
 
 A common use case would be to consume information from some external system, for example uploading a scanned PDF or a representation of an incoming invoice.
 
+
+
+== Initializing
+
+We create a `RestfulClient` using a static factory method that accepts a `RestfulClientConfig` object.
+
+For example:
+
+* to create a `RestfulClient` that authenticates itself using basic auth:
++
+[source,java]
+----
+RestfulClient restfulClient = RestfulClient.ofConfig(
+        RestfulClientConfig.builder()
+            .restfulBaseUrl("localhost:8080")
+            .authenticationMode(AuthenticationMode.BASIC)
+            .basicAuthUser("xxxx")
+            .basicAuthPassword("xxxx")
+            .build());
+----
+
+* to create a `RestfulClient` that authenticates itself using OAuth2 (Azure):
++
+[source,java]
+----
+RestfulClient restfulClient = RestfulClient.ofConfig(
+        RestfulClientConfig.builder()
+            .restfulBaseUrl("localhost:8080")
+            .authenticationMode(AuthenticationMode.OAUTH2_AZURE)
+            .oauthTenantId("xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx")          // <.>
+            .oauthClientId("xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx")          // <.>
+            .oauthClientSecret("xxXXx~XXxxXx-XxXX.XxXX.XxxXX-XxxXX~XxxXX")  // <.>
+            .build());
+----
++
+IMPORTANT: For the Causeway app being connected to, this will need to be configured appropriately; see xref:security:spring-oauth2:about.adoc[Spring Oauth2] extension for more details.
+
+* It's also possible to create a `RestfulClient` that uses some other arbitrary authentication mechanism:
++
+[source,java]
+----
+RestfulClient restfulClient = RestfulClient.ofConfig(
+        RestfulClientConfig.builder()                   // <.>
+            .restfulBaseUrl("localhost:8080")
+            .build(),
+            new AuthorizationHeaderFactory() {
+                @Override
+                public String create() {
+                    return "some authorization header"; // <.>
+                }
+            });
+);
+----
+<.> No need to provide any authentication details in the `RestfulClientConfig`
+<.> Used as the value of the `Authorization` HTTP header.
+
+
+
+== Making a Request
+
+[source,java]
+----
+Invocation.Builder request =                                                            // <.>
+    restfulClient.request("services/customers.CustomerApi/actions/findAll/invoke");     // <.>
+
+Response response = request.get();                                                      // <.>
+//        Response response = request.put(...);                                         // <3>
+//        Response response = request.post(...);                                        // <3>
+//        Response response = request.delete();                                         // <3>
+
+----
+<.> instance of `javax.ws.rs.client.Invocation.Builder`
+<.> specify the endpoint
+<.> call appropriately using either HTTP `GET`, `PUT`, `POST` or `DELETE`.
+The `PUT` and `POST` methods will require an entity body, and all might require additional headers to be set.
+
+
+== Refining the Client
+
+The `RestfulClient` delegates to an instance of `javax.ws.rs.client.Client` to actually perform the invocation.
+The configuration of this underlying `Client` can be refined by providing a "refining" operator of `ClientBuilder`, when the `RestfulClient` is created.
+
+For example, to specify a connection and read timeout:
+
+[source,java]
+----
+RestfulClient restfulClient = RestfulClient.ofConfig(
+        RestfulClientConfig.builder()
+                .restfulBaseUrl("localhost:8080")
+                //...                                               // <.>
+                .build(),
+                clientBuilder ->                                    // <.>
+                clientBuilder.connectTimeout(5, TimeUnit.SECONDS)
+                             .readTimeout(2, TimeUnit.SECONDS)
+);
+----
+<.> authentication details omitted
+<.> instance of `javax.ws.rs.client.ClientBuilder`

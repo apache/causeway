@@ -36,6 +36,5 @@ module org.apache.causeway.viewer.restfulobjects.client {
     requires org.apache.logging.log4j;
     requires spring.core;
     requires org.apache.causeway.schema;
-    requires net.jodah.failsafe;
     requires org.slf4j;
 }

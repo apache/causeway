@@ -46,11 +46,6 @@
 			<artifactId>spring-context</artifactId>
 		</dependency>
 
-        <dependency>
-            <groupId>net.jodah</groupId>
-            <artifactId>failsafe</artifactId>
-        </dependency>
-
         <!-- TEST DEPENDENCIES -->
 
         <dependency>

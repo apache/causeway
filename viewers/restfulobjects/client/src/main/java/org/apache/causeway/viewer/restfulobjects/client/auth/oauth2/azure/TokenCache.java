@@ -1,50 +1,20 @@
 package org.apache.causeway.viewer.restfulobjects.client.auth.oauth2.azure;
 
-import java.time.temporal.ChronoUnit;
+import lombok.val;
+
+import java.time.ZonedDateTime;
 
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
 import org.apache.causeway.commons.functional.Railway;
-
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.viewer.restfulobjects.client.auth.oauth2.Oauth2Creds;
 
-import org.joda.time.DateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import lombok.val;
-
-import net.jodah.failsafe.Failsafe;
-import net.jodah.failsafe.RetryPolicy;
-
 public class TokenCache {
-
-    protected static Logger LOG = LoggerFactory.getLogger(TokenCache.class);
-
-    private final RetryPolicy<Response> retryPolicyForAnyException = retryPolicyForAnyException();
-
-    private static <T> RetryPolicy<T> retryPolicyForAnyException() {
-        return retryPolicyFor(Exception.class);
-    }
-
-    private static <T> RetryPolicy<T> retryPolicyFor(Class<? extends Exception>... exceptionClasses) {
-        return new RetryPolicy<T>()
-                .handle(exceptionClasses)
-                .withBackoff(500, 16000, ChronoUnit.MILLIS)
-                .withMaxRetries(3)
-                .onRetry(ctx -> {
-                    LOG.warn("Failed attempt {}, retrying...", (ctx.getAttemptCount() - 1));
-                })
-                .onFailure(ctx -> LOG.warn("Failed retry policy after {} attempts. Exception:\n {}", (ctx.getAttemptCount() - 1), _Exceptions.asStacktrace(
-                        ctx.getFailure())));
-    }
 
     private final Oauth2Creds creds;
     private final ClientBuilder clientBuilder;
@@ -55,7 +25,7 @@ public class TokenCache {
     }
 
     private String jwtToken;
-    private DateTime jwtTokenExpiresAt;
+    private ZonedDateTime jwtTokenExpiresAt;
 
     public Railway<Exception, String> getToken() {
 
@@ -75,7 +45,7 @@ public class TokenCache {
                 .param("grant_type", "client_credentials");
 
         val invocation = invocationBuilder.buildPost(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
-        val response = Failsafe.with(retryPolicyForAnyException).get(() -> invocation.invoke());
+        val response = invocation.invoke();
 
         val entity = response.readEntity(String.class);
 
@@ -104,22 +74,18 @@ public class TokenCache {
         return Railway.success(jwtToken);
     }
 
-    public boolean isTokenExpired() {
-        return !isTokenValid();
-    }
-
     private boolean isTokenValid() {
         if (jwtTokenExpiresAt == null) {
             return false;
         }
 
-        // token must remain valid for at least 5 minutes from now.
-        val inFiveMinutesTime = now().plusMinutes(5);
+        // token must remain valid for at least 2 additional minutes from now.
+        val inFiveMinutesTime = now().plusMinutes(2);
         return jwtTokenExpiresAt.isBefore(inFiveMinutesTime);
     }
 
-    private static DateTime now() {
-        return DateTime.now();
+    private static ZonedDateTime now() {
+        return ZonedDateTime.now();
     }
 
 }
