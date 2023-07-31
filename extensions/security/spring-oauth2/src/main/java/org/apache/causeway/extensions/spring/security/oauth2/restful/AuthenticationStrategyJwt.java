@@ -31,6 +31,30 @@ import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.auth.Authentic
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 
+/**
+ * This class enables support for JWT for Restful clients.
+ *
+ * <p>
+ *     To use, it requires that the restfulobjects viewer is on the classpath:
+ *
+ * <pre>
+ * &lt;dependency&gt;
+ *   &lt;groupId&gt;org.apache.causeway.viewer&lt;/groupId&gt;
+ *   &lt;artifactId&gt;causeway-viewer-restfulobjects-viewer&lt;/artifactId&gt;
+ * &lt;/dependency&gt;
+ * </pre>
+ *
+ * <p>
+ *     It should then additionally be specified as the authentication strategy:
+ *
+ * <pre>
+ * isis.viewer.restfulobjects.authentication.strategy-class-name=\
+ *      org.apache.causeway.extensions.spring.security.oauth2.restful.AuthenticationStrategyJwt
+ * </pre>
+ * </p>
+ *
+ *
+ */
 public class AuthenticationStrategyJwt extends AuthenticationStrategyAbstract {
 
     @Override
