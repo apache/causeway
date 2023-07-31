@@ -16,7 +16,7 @@ include::docs:mavendeps:partial$setup-and-configure-dependencyManagement.adoc[le
 
 In the webapp module of your application, add the following dependency:
 
-[source,xml]
+[source,xml,subs="attributes+"]
 .pom.xml
 ----
 <dependencies>
@@ -72,7 +72,7 @@ Make sure that no other `CausewayModuleSecurityXxx` module is imported, either d
 
 To use the Shiro authorizor, also add in the corresponding dependency:
 
-[source,xml]
+[source,xml,subs="attributes+"]
 .pom.xml
 ----
 <dependencies>
@@ -276,7 +276,7 @@ For the purpose of this walkthrough, we'll use the implementation provided by xr
 
 To use the Secman authorizor, also add in the corresponding dependency:
 
-[source,xml]
+[source,xml,subs="attributes+"]
 .pom.xml
 ----
 <dependencies>
@@ -371,7 +371,7 @@ For example:
 +
 image::azure-redirect-uri.png[800px]
 +
-In the above, `https://mywebapp.com` is the server to which the deployed, while the suffix `myapp` is the name of your app.
+In the above, `https://mywebapp.com` is the server to which the deployed, the `/local/oauth2/code/` is fixed, while the suffix "myapp" is the name of your app.
 This app name is used in the configuration of the app, see xref:#configuration-properties[below]
 
 * Add API permissions:
@@ -388,15 +388,14 @@ Finally need to configure the app to use Oauth:
 .application.properties
 ----
 o365.tenantId=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX  // <.>
-o365.client=myapp                                   // <.>
 
-spring.security.oauth2.client.registration.${o365.client}.provider=o365
-spring.security.oauth2.client.registration.${o365.client}.client-name=MyApp                                                         // <.>
-spring.security.oauth2.client.registration.${o365.client}.client-id=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX                            // <.>
-spring.security.oauth2.client.registration.${o365.client}.client-secret=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX                    // <.>
-spring.security.oauth2.client.registration.${o365.client}.redirect-uri=http://mywebapp.com:8080/login/oauth2/code/${o365.client}    // <.>
-spring.security.oauth2.client.registration.${o365.client}.scope=openid, profile, email, user.read                                   // <.>
-spring.security.oauth2.client.registration.${o365.client}.authorization-grant-type=authorization_code
+spring.security.oauth2.client.registration.myapp.provider=o365
+spring.security.oauth2.client.registration.myapp.client-name=MyApp                                              // <.>
+spring.security.oauth2.client.registration.myapp.client-id=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX                 // <.>
+spring.security.oauth2.client.registration.myapp.client-secret=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX         // <.>
+spring.security.oauth2.client.registration.myapp.redirect-uri=http://mywebapp.com:8080/login/oauth2/code/myapp  // <.>
+spring.security.oauth2.client.registration.myapp.scope=openid, profile, email, user.read                        // <.>
+spring.security.oauth2.client.registration.myapp.authorization-grant-type=authorization_code
 
 spring.security.oauth2.client.provider.o365.token-uri=https://login.microsoftonline.com/${o365.tenantId}/oauth2/v2.0/token
 spring.security.oauth2.client.provider.o365.jwk-set-uri=https://login.microsoftonline.com//${o365.tenantId}/discovery/v2.0/keys
@@ -405,7 +404,6 @@ spring.security.oauth2.client.provider.o365.user-name-attribute=email
 spring.security.oauth2.resourceserver.jwt.jwk-set-uri=https://login.microsoftonline.com/${o365.tenantId}/discovery/v2.0/keys
 ----
 <.> Azure tenant Id
-<.> Application id, as used in the suffix of the redirect URI
 <.> Application (or client) name, recommend that this corresponds to the app name when the client was registered in Azure
 <.> Azure client Id, obtained from the application registration page
 <.> Azure client secret, as setup in the Azure portal
