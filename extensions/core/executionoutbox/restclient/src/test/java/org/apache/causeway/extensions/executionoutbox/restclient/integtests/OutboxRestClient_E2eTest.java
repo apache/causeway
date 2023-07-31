@@ -19,48 +19,19 @@
 package org.apache.causeway.extensions.executionoutbox.restclient.integtests;
 
 import java.util.List;
-import java.util.stream.IntStream;
 
-import javax.inject.Inject;
-
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-import org.apache.causeway.applib.services.repository.RepositoryService;
-import org.apache.causeway.applib.services.wrapper.WrapperFactory;
-import org.apache.causeway.applib.services.xactn.TransactionService;
-import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
-import org.apache.causeway.core.webapp.CausewayModuleCoreWebapp;
-import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry;
-import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryRepository;
-import org.apache.causeway.extensions.executionoutbox.applib.integtest.model.CounterRepository;
-import org.apache.causeway.extensions.executionoutbox.applib.integtest.model.Counter_bumpUsingMixin;
-import org.apache.causeway.extensions.executionoutbox.applib.integtest.model.Counter_bumpUsingMixinWithExecutionPublishingDisabled;
-import org.apache.causeway.extensions.executionoutbox.jpa.CausewayModuleExtExecutionOutboxPersistenceJpa;
-import org.apache.causeway.extensions.executionoutbox.jpa.integtests.model.Counter;
-import org.apache.causeway.extensions.executionoutbox.restclient.api.OutboxClient;
-import org.apache.causeway.extensions.executionoutbox.restclient.api.OutboxClientConfig;
-import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistenceJpaEclipselink;
-import org.apache.causeway.schema.ixn.v2.InteractionDto;
-import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
-import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
-import org.apache.causeway.viewer.restfulobjects.client.AuthenticationMode;
-import org.apache.causeway.viewer.restfulobjects.client.RestfulClientConfig;
-import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.CausewayModuleViewerRestfulObjectsJaxrsResteasy;
-
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.context.annotation.*;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Propagation;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
+import org.apache.causeway.extensions.executionoutbox.restclient.api.OutboxClient;
+import org.apache.causeway.extensions.executionoutbox.restclient.api.OutboxClientConfig;
+import org.apache.causeway.schema.ixn.v2.InteractionDto;
+import org.apache.causeway.viewer.restfulobjects.client.AuthenticationMode;
+import org.apache.causeway.viewer.restfulobjects.client.RestfulClientConfig;
 
 @ActiveProfiles("test")
 public class OutboxRestClient_E2eTest {

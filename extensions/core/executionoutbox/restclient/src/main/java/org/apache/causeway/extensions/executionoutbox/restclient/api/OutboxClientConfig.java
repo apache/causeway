@@ -18,21 +18,15 @@
  */
 package org.apache.causeway.extensions.executionoutbox.restclient.api;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-
-import javax.ws.rs.ProcessingException;
-import javax.xml.bind.annotation.*;
-
-import org.apache.causeway.viewer.restfulobjects.client.AuthenticationMode;
-import org.apache.causeway.viewer.restfulobjects.client.log.ClientConversationFilter;
 
 /**
  * @since 2.0 {@index}
