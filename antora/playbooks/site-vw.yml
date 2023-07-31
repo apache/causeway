@@ -26,35 +26,35 @@ content:
 # antora
     - url: .
       start_path: antora/components/docs # docs
-      branches: [2.0.0-RC2]
+      branches: HEAD
 
 # examples
 
 # extensions
     - url: .
       start_path: extensions/vw/exceldownload/adoc # vw
-      branches: [2.0.0-RC2]
+      branches: HEAD
     - url: .
       start_path: extensions/vw/fullcalendar/adoc # vw
-      branches: [2.0.0-RC2]
+      branches: HEAD
     - url: .
       start_path: extensions/vw/pdfjs/adoc # vw
-      branches: [2.0.0-RC2]
+      branches: HEAD
 
 # mavendeps
     - url: .
       start_path: mavendeps/adoc # docs
-      branches: [2.0.0-RC2]
+      branches: HEAD
 
 # starters
     - url: .
       start_path: starters/adoc # docs
-      branches: [2.0.0-RC2]
+      branches: HEAD
 
 # viewers
     - url: .
       start_path: viewers/wicket/src/main/adoc # vw
-      branches: [2.0.0-RC2]
+      branches: HEAD
 
 
 

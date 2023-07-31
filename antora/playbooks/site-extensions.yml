@@ -26,76 +26,76 @@ content:
 # antora
     - url: .
       start_path: antora/components/docs # docs
-      branches: [2.0.0-RC2]
+      branches: HEAD
 
 # examples
 
 # extensions
     - url: .
       start_path: extensions/adoc # extensions
-      branches: [2.0.0-RC2]
+      branches: HEAD
 
     - url: .
       start_path: extensions/core/commandlog/adoc # extensions
-      branches: [2.0.0-RC2]
+      branches: HEAD
     - url: .
       start_path: extensions/core/docgen/adoc # extensions
-      branches: [2.0.0-RC2]
+      branches: HEAD
     - url: .
       start_path: extensions/core/excel/adoc # extensions
-      branches: [2.0.0-RC2]
+      branches: HEAD
     - url: .
       start_path: extensions/core/executionlog/adoc # extensions
-      branches: [2.0.0-RC2]
+      branches: HEAD
     - url: .
       start_path: extensions/core/executionoutbox/adoc # extensions
-      branches: [2.0.0-RC2]
+      branches: HEAD
     - url: .
       start_path: extensions/core/executionrepublisher/adoc # extensions
-      branches: [2.0.0-RC2]
+      branches: HEAD
     - url: .
       start_path: extensions/core/flyway/adoc # userguide
-      branches: [2.0.0-RC2]
+      branches: HEAD
 
     - url: .
       start_path: extensions/security/audittrail/adoc # security
-      branches: [2.0.0-RC2]
+      branches: HEAD
     - url: .
       start_path: extensions/security/secman/adoc # security
-      branches: [2.0.0-RC2]
+      branches: HEAD
     - url: .
       start_path: extensions/security/sessionlog/adoc # security
-      branches: [2.0.0-RC2]
+      branches: HEAD
     - url: .
       start_path: extensions/security/spring-oauth2/src/main/adoc # security
-      branches: [2.0.0-RC2]
+      branches: HEAD
 
     - url: .
       start_path: extensions/vro/cors/adoc # vro
-      branches: [2.0.0-RC2]
+      branches: HEAD
     - url: .
       start_path: extensions/vw/exceldownload/adoc # vw
-      branches: [2.0.0-RC2]
+      branches: HEAD
     - url: .
       start_path: extensions/vw/fullcalendar/adoc # vw
-      branches: [2.0.0-RC2]
+      branches: HEAD
     - url: .
       start_path: extensions/vw/pdfjs/adoc # vw
-      branches: [2.0.0-RC2]
+      branches: HEAD
     - url: .
       start_path: extensions/vw/sse/adoc # extensions
-      branches: [2.0.0-RC2]
+      branches: HEAD
 
 
 # mavendeps
     - url: .
       start_path: mavendeps/adoc # docs
-      branches: [2.0.0-RC2]
+      branches: HEAD
 
 # starters
     - url: .
       start_path: starters/adoc # docs
-      branches: [2.0.0-RC2]
+      branches: HEAD
 
 
 ui:

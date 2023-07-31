@@ -26,38 +26,38 @@ content:
 # antora
     - url: .
       start_path: antora/components/docs # docs
-      branches: [2.0.0-RC2]
+      branches: HEAD
     - url: .
       start_path: antora/components/comguide # comguide
-      branches: [2.0.0-RC2]
+      branches: HEAD
     - url: .
       start_path: antora/components/refguide-index # refguide
-      branches: [2.0.0-RC2]
+      branches: HEAD
 
 # core
     - url: .
       start_path: core/adoc # core (design docs)
-      branches: [2.0.0-RC2]
+      branches: HEAD
 
 # examples
 
 # mavendeps
     - url: .
       start_path: mavendeps/adoc # docs
-      branches: [2.0.0-RC2]
+      branches: HEAD
 
 # starters
     - url: .
       start_path: starters/adoc # docs
-      branches: [2.0.0-RC2]
+      branches: HEAD
 
 # tooling
     - url: .
       start_path: tooling/adoc # toc
-      branches: [2.0.0-RC2]
+      branches: HEAD
     - url: .
       start_path: tooling/cli/adoc # cli
-      branches: [2.0.0-RC2]
+      branches: HEAD
 
 
 
