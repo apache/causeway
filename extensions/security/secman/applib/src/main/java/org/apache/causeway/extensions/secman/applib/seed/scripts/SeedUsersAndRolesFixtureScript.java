@@ -54,6 +54,7 @@ import org.apache.causeway.extensions.secman.applib.util.ApplicationSecurityDto;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Sets up roles and permissions for both Secman itself and also for all other modules that expose UI features
@@ -67,6 +68,7 @@ import lombok.val;
  *
  * @since 2.0 {@index}
  */
+@Log4j2
 public class SeedUsersAndRolesFixtureScript extends FixtureScript {
 
     @Inject private CausewayConfiguration config;
@@ -89,6 +91,8 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
                 .getValue()
                 .orElse(null);
         if(dto!=null) {
+            log.info("seeding from YAML file {}", ()->
+                new File(secmanConfig.getSeed().getYamlFile()).getAbsolutePath());
             seedFromDto(executionContext, dto);
             return;
         }

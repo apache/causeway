@@ -88,6 +88,7 @@ import org.apache.causeway.core.config.viewer.web.DialogMode;
 
 import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.Value;
 import lombok.val;
 
@@ -3261,8 +3262,8 @@ public class CausewayConfiguration {
                  * Eg. seed from a YAML file, that was previously exported by SecMan's
                  * ApplicationRoleManager_exportAsYaml mixin.
                  */
-                @Getter
-                private final String yamlFile = null;
+                @Getter @Setter
+                private String yamlFile = null;
 
                 @Getter
                 private final Admin admin = new Admin();

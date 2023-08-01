@@ -33,7 +33,8 @@ class ApplicationSecurityDtoTest {
      */
     @Test
     void roundtripViaYaml() {
-        val yamlSource = DataSource.ofResource(getClass(), "secman-permissions.yml");
+        val yamlSource = DataSource.ofInputStreamEagerly(
+                getClass().getResourceAsStream("secman-permissions.yml"));
         
         val yamlBeforeRoundtrip = yamlSource.tryReadAsStringUtf8()
                 .valueAsNonNullElseFail();
