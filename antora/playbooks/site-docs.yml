@@ -26,19 +26,19 @@ content:
 # antora
     - url: .
       start_path: antora/components/docs # docs
-      branches: [2.0.0-RC2]
+      branches: HEAD
 
 # examples
 
 # mavendeps
     - url: .
       start_path: mavendeps/adoc # docs
-      branches: [2.0.0-RC2]
+      branches: HEAD
 
 # starters
     - url: .
       start_path: starters/adoc # docs
-      branches: [2.0.0-RC2]
+      branches: HEAD
 
 ui:
   bundle:

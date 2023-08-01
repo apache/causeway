@@ -47,17 +47,41 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RestfulClientConfig {
 
-    @XmlElement(name="restfulBase")
-    private String restfulBase;
+    @XmlElement(name="restfulBaseUrl")
+    private String restfulBaseUrl;
 
-    @XmlElement(name="useBasicAuth")
-    private boolean useBasicAuth;
+    @XmlElement(name="authMode")
+    private AuthenticationMode authenticationMode;
 
-    @XmlElement(name="restfulAuthUser")
-    private String restfulAuthUser;
+    /**
+     * Used iff {@link #getAuthenticationMode()} is {@link AuthenticationMode#BASIC basic}
+     */
+    @XmlElement(name="basicAuthUser")
+    private String basicAuthUser;
 
-    @XmlElement(name="restfulAuthPassword")
-    private String restfulAuthPassword;
+    /**
+     * Used iff {@link #getAuthenticationMode()} is {@link AuthenticationMode#BASIC basic}
+     */
+    @XmlElement(name="basicAuthPassword")
+    private String basicAuthPassword;
+
+    /**
+     * Used iff {@link #getAuthenticationMode()} is {@link AuthenticationMode#OAUTH2_AZURE oauth}
+     */
+    @XmlElement(name="oauthTenantId")
+    private String oauthTenantId;
+
+    /**
+     * Used iff {@link #getAuthenticationMode()} is {@link AuthenticationMode#OAUTH2_AZURE oauth}
+     */
+    @XmlElement(name="oauthClientId")
+    private String oauthClientId;
+
+    /**
+     * Used iff {@link #getAuthenticationMode()} is {@link AuthenticationMode#OAUTH2_AZURE oauth}
+     */
+    @XmlElement(name="oauthClientSecret")
+    private String oauthClientSecret;
 
     /**
      * If left empty, the platform default is used.
@@ -101,5 +125,4 @@ public class RestfulClientConfig {
     @XmlTransient
     @Builder.Default
     private final List<ClientConversationFilter> clientConversationFilters = new ArrayList<>();
-
 }

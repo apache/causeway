@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.client.Invocation;
 import jakarta.ws.rs.core.MediaType;
 
 import org.apache.causeway.applib.util.schema.InteractionsDtoUtils;
@@ -37,11 +38,12 @@ import org.apache.causeway.schema.ixn.v2.InteractionDto;
 import org.apache.causeway.schema.ixn.v2.InteractionsDto;
 import org.apache.causeway.schema.ixn.v2.MemberExecutionDto;
 import org.apache.causeway.schema.ixn.v2.PropertyEditDto;
+import org.apache.causeway.viewer.restfulobjects.client.AuthenticationMode;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClient;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClientConfig;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClientMediaType;
+import org.apache.causeway.viewer.restfulobjects.client.auth.AuthorizationHeaderFactory;
 
-import lombok.Setter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -51,94 +53,86 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class OutboxClient {
 
-    private final RestfulClientConfig restfulClientConfig;
+    private final RestfulClient client;
+    private final OutboxClientConfig outboxClientConfig;
 
-    public OutboxClient() {
-        this.restfulClientConfig = new RestfulClientConfig();
+    public OutboxClient(
+            final String restfulBaseUrl,
+            final String username,
+            final String password) {
+        this(RestfulClientConfig.builder()
+                .restfulBaseUrl(restfulBaseUrl)
+                .authenticationMode(AuthenticationMode.BASIC)
+                .basicAuthUser(username)
+                .basicAuthPassword(password)
+                .build()
+        );
     }
 
-    /**
-     * Will automatically call {@link #init()} since all properties already supplied.
-     */
-    public OutboxClient(final String base, final String username, final String password) {
-        this();
-
-        setBase(base);
-        setUsername(username);
-        setPassword(password);
-
-        init();
+    public OutboxClient(
+            final String restfulBaseUrl,
+            final String tenantId,
+            final String clientId,
+            final String clientSecret) {
+        this(RestfulClientConfig.builder()
+                .restfulBaseUrl(restfulBaseUrl)
+                .authenticationMode(AuthenticationMode.OAUTH2_AZURE)
+                .oauthTenantId(tenantId)
+                .oauthClientId(clientId)
+                .oauthClientSecret(clientSecret)
+                .build()
+        );
     }
 
-    /**
-     * for debugging
-     * @param connectTimeoutInSecs
-     */
+    public OutboxClient(final RestfulClientConfig restfulClientConfig) {
+        this(restfulClientConfig, new OutboxClientConfig());
+    }
+
+    public OutboxClient(final RestfulClientConfig restfulClientConfig, final OutboxClientConfig outboxClientConfig) {
+        this.client = RestfulClient.ofConfig(restfulClientConfig);
+        this.outboxClientConfig = outboxClientConfig;
+    }
+
+    public OutboxClient(
+            final RestfulClientConfig restfulClientConfig,
+            final AuthorizationHeaderFactory authorizationHeaderFactory) {
+        this(restfulClientConfig, authorizationHeaderFactory, new OutboxClientConfig());
+    }
+
+    public OutboxClient(
+            final RestfulClientConfig restfulClientConfig,
+            final AuthorizationHeaderFactory authorizationHeaderFactory,
+            final OutboxClientConfig outboxClientConfig) {
+        this.outboxClientConfig = outboxClientConfig;
+        this.client = RestfulClient.ofConfig(restfulClientConfig, authorizationHeaderFactory);
+    }
+
     public OutboxClient withConnectTimeoutInSecs(final int connectTimeoutInSecs) {
-        setConnectTimeoutInSecs(connectTimeoutInSecs);
+        client.getConfig().setConnectTimeoutInMillis(1000L * connectTimeoutInSecs);
         return this;
     }
 
-    /**
-     * for debugging
-     * @param readTimeoutInSecs
-     */
     public OutboxClient withReadTimeoutInSecs(final int readTimeoutInSecs) {
-        setReadTimeoutInSecs(readTimeoutInSecs);
+        client.getConfig().setReadTimeoutInMillis(1000L * readTimeoutInSecs);
         return this;
-    }
-
-    @Setter private String base;
-    @Setter private String username;
-    @Setter private String password;
-    @Setter private int connectTimeoutInSecs;
-    @Setter private int readTimeoutInSecs;
-
-    /**
-     * Should be called once all properties have been injected.
-     */
-    public void init() {
-        restfulClientConfig.setRestfulBase(base);
-        restfulClientConfig.setUseBasicAuth(true);
-        restfulClientConfig.setRestfulAuthUser(username);
-        restfulClientConfig.setRestfulAuthPassword(password);
-        restfulClientConfig.setConnectTimeoutInMillis(1000L * connectTimeoutInSecs);
-        restfulClientConfig.setReadTimeoutInMillis(1000L * readTimeoutInSecs);
-        //restfulClientConfig.setUseRequestDebugLogging(true); //for debugging
-    }
-
-    private void ensureInitialized() {
-        if(username == null || password == null || base == null) {
-            throw new IllegalStateException("Must initialize 'username', 'password' and 'base' properties");
-        }
     }
 
     public List<InteractionDto> pending() {
 
-        ensureInitialized();
+        Invocation.Builder invocationBuilder = client.request(outboxClientConfig.getPendingUri())
+                .accept(RestfulClientMediaType.RO_XML.mediaTypeFor(InteractionsDto.class));
+        var response = invocationBuilder.get();
 
-        try(val client = RestfulClient.ofConfig(restfulClientConfig)) {
+        final Try<InteractionsDto> digest = client.digest(response, InteractionsDto.class);
 
-            var response = client.request(PENDING_URI)
-                    .accept(RestfulClientMediaType.RO_XML.mediaTypeFor(InteractionsDto.class))
-                    .get();
-
-            final Try<InteractionsDto> digest = client.digest(response, InteractionsDto.class);
-
-            if(digest.isSuccess()) {
-                return digest.getValue()
-                        .map(InteractionsDto::getInteractionDto)
-                        .orElseGet(Collections::emptyList);
-            } else {
-                log.error("Failed to GET from {}: {}", client.uri(PENDING_URI), digest.getFailure().get());
-                return Collections.emptyList();
-            }
-        }
-
+        digest.ifFailureFail();
+        return digest.getValue()
+                .map(InteractionsDto::getInteractionDto)
+                .orElseGet(Collections::emptyList);
     }
 
     public void delete(final String interactionId, final int sequence) {
-        invoke(DELETE_URI,
+        invoke(outboxClientConfig.getDeleteUri(),
                 new DeleteMessage(interactionId, sequence));
     }
 
@@ -147,15 +141,11 @@ public class OutboxClient {
         interactionDtos.forEach(interactionDto -> {
             addTo(interactionsDto, interactionDto);
         });
-        invoke(DELETE_MANY_URI,
+        invoke(outboxClientConfig.getDeleteManyUri(),
                 new DeleteManyMessage(InteractionsDtoUtils.dtoMapper().toString(interactionsDto)));
     }
 
     // -- HELPER
-
-    private static String PENDING_URI = "services/causeway.ext.executionOutbox.OutboxRestApi/actions/pending/invoke";
-    private static String DELETE_URI = "services/causeway.ext.executionOutbox.OutboxRestApi/actions/delete/invoke";
-    private static String DELETE_MANY_URI = "services/causeway.ext.executionOutbox.OutboxRestApi/actions/deleteMany/invoke";
 
     private void addTo(final InteractionsDto interactionsDto, final InteractionDto orig) {
         val copy = new InteractionDto();
@@ -179,24 +169,18 @@ public class OutboxClient {
 
     private void invoke(final String path, final Object dto) {
 
-        ensureInitialized();
+        val invocationBuilder = client.request(path);
 
-        try(val client = RestfulClient.ofConfig(restfulClientConfig)) {
+        val invocation = invocationBuilder.buildPut(
+                Entity.entity(JsonUtils.toStringUtf8(dto), MediaType.APPLICATION_JSON_TYPE));
 
-            var invocationBuilder = client.request(path);
+        val response = invocation.invoke();
 
-            val invocation = invocationBuilder.buildPut(
-                    Entity.entity(JsonUtils.toStringUtf8(dto), MediaType.APPLICATION_JSON_TYPE));
-
-            val response = invocation.invoke();
-
-            val responseStatus = response.getStatus();
-            if (responseStatus != 200) {
-                // if failed to log message via REST service, then fallback by logging to slf4j
-                log.warn(dto.toString());
-            }
+        val responseStatus = response.getStatus();
+        if (responseStatus != 200) {
+            // if failed to log message via REST service, then fallback by logging to slf4j
+            log.warn(dto.toString());
         }
-
     }
 
 }

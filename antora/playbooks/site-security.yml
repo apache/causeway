@@ -26,65 +26,65 @@ content:
 # antora
     - url: .
       start_path: antora/components/docs # docs
-      branches: [2.0.0-RC2]
+      branches: HEAD
 # core
     - url: .
       start_path: core/security/src/main/adoc # security
-      branches: [2.0.0-RC2]
+      branches: HEAD
 
 # examples
 
 # extensions
     - url: .
       start_path: extensions/security/audittrail/adoc # security
-      branches: [2.0.0-RC2]
+      branches: HEAD
     - url: .
       start_path: extensions/security/secman/adoc # security
-      branches: [2.0.0-RC2]
+      branches: HEAD
     - url: .
       start_path: extensions/security/sessionlog/adoc # security
-      branches: [2.0.0-RC2]
+      branches: HEAD
     - url: .
       start_path: extensions/security/shiro-realm-ldap/adoc # security
-      branches: [2.0.0-RC2]
+      branches: HEAD
     - url: .
       start_path: extensions/security/spring-oauth2/src/main/adoc # security
-      branches: [2.0.0-RC2]
+      branches: HEAD
 
 # mavendeps
     - url: .
       start_path: mavendeps/adoc # docs
-      branches: [2.0.0-RC2]
+      branches: HEAD
 
 # security
     - url: .
       start_path: security/adoc # security
-      branches: [2.0.0-RC2]
+      branches: HEAD
     - url: .
       start_path: security/bypass/src/main/adoc # security
-      branches: [2.0.0-RC2]
+      branches: HEAD
     - url: .
       start_path: security/shiro/src/main/adoc # security
-      branches: [2.0.0-RC2]
+      branches: HEAD
     - url: .
       start_path: security/keycloak/src/main/adoc # security
-      branches: [2.0.0-RC2]
+      branches: HEAD
     - url: .
       start_path: security/spring/src/main/adoc # security
-      branches: [2.0.0-RC2]
+      branches: HEAD
 
 # starters
     - url: .
       start_path: starters/adoc # docs
-      branches: [2.0.0-RC2]
+      branches: HEAD
 
 # viewers
     - url: .
       start_path: viewers/restfulobjects/adoc # vro
-      branches: [2.0.0-RC2]
+      branches: HEAD
     - url: .
       start_path: viewers/wicket/adoc # vw
-      branches: [2.0.0-RC2]
+      branches: HEAD
 
 
 ui:

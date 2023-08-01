@@ -79,12 +79,15 @@ public class AuthenticationStrategyBasicAuth extends AuthenticationStrategyAbstr
         return authentication;
     }
 
+    /**
+     * This implementation is stateless and so does not support binding the {@link InteractionContext} (aka
+     * authentication) into a store (eg a session); instead each request is authenticated afresh.
+     */
     @Override
     public void bind(
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse,
             InteractionContext auth) {
-        // TODO Auto-generated method stub
 
     }
 

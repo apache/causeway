@@ -46,7 +46,8 @@ import lombok.RequiredArgsConstructor;
  */
 @Action(
         domainEvent = ExecutionLogEntry_copyToOutbox.ActionDomainEvent.class,
-        semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE
+        semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE,
+        executionPublishing = Publishing.DISABLED
 )
 @ActionLayout(
         position = ActionLayout.Position.PANEL,

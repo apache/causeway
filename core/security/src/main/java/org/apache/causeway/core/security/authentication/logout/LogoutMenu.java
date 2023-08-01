@@ -32,6 +32,7 @@ import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.iactn.InteractionProvider;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
@@ -64,11 +65,14 @@ public class LogoutMenu {
 
     @Action(
             domainEvent = LogoutDomainEvent.class,
-            semantics = SemanticsOf.SAFE
-            )
+            semantics = SemanticsOf.SAFE,
+            commandPublishing = Publishing.DISABLED,
+            executionPublishing = Publishing.DISABLED
+    )
     @ActionLayout(
             cssClassFa = "fa-sign-out-alt",
-            sequence = "999")
+            sequence = "999"
+    )
     public Object logout(){
         _NullSafe.stream(logoutHandler)
             .forEach(LogoutHandler::logout);
@@ -94,8 +98,7 @@ public class LogoutMenu {
 
     /** A pseudo model used to redirect to the login page.*/
     @Named(LoginRedirect.LOGICAL_TYPE_NAME)
-    @DomainObject(
-            nature = Nature.VIEW_MODEL)
+    @DomainObject(nature = Nature.VIEW_MODEL)
     public static class LoginRedirect {
         public final static String LOGICAL_TYPE_NAME = "causeway.security.LoginRedirect";
     }

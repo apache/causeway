@@ -42,7 +42,7 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.causeway.core.webapp.modules.templresources.TemplateResourceCachingFilter;
 import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategy;
-import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategyDefault;
+import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategyUsingSession;
 
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
@@ -85,7 +85,7 @@ public class CausewayRestfulObjectsInteractionFilter implements Filter {
     /**
      * Default value for {@link #AUTHENTICATION_SESSION_STRATEGY_KEY} if not specified.
      */
-    public static final String AUTHENTICATION_SESSION_STRATEGY_DEFAULT = AuthenticationStrategyDefault.class.getName();
+    public static final String AUTHENTICATION_SESSION_STRATEGY_DEFAULT = AuthenticationStrategyUsingSession.class.getName();
 
     /**
      * Init parameter key for backward compatibility; if logonPage set then

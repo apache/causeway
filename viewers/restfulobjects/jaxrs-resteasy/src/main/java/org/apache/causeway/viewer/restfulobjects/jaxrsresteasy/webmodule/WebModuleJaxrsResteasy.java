@@ -32,7 +32,6 @@ import org.apache.causeway.core.webapp.modules.WebModuleAbstract;
 import org.apache.causeway.core.webapp.modules.WebModuleContext;
 import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.CausewayRestfulObjectsInteractionFilter;
-import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategyBasicAuth;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -104,8 +103,7 @@ public final class WebModuleJaxrsResteasy extends WebModuleAbstract {
     public Can<ServletContextListener> init(final ServletContext ctx) throws ServletException {
 
         val authenticationStrategyClassName = causewayConfiguration.getViewer()
-                .getRestfulobjects().getAuthentication().getStrategyClassName()
-                .orElse(AuthenticationStrategyBasicAuth.class.getName());
+                .getRestfulobjects().getAuthentication().getStrategyClassName();
 
         registerFilter(ctx, INTERACTION_FILTER_NAME, CausewayRestfulObjectsInteractionFilter.class)
         .ifPresent(filterReg -> {

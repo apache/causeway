@@ -20,6 +20,11 @@ package org.apache.causeway.testdomain.util.rest;
 
 import java.util.List;
 
+import jakarta.inject.Inject;
+import jakarta.ws.rs.client.Invocation;
+import jakarta.ws.rs.core.GenericType;
+import jakarta.xml.bind.JAXBException;
+
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
@@ -36,15 +41,12 @@ import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
 import org.apache.causeway.testdomain.jdo.entities.JdoBook;
 import org.apache.causeway.testdomain.ldap.LdapConstants;
 import org.apache.causeway.testdomain.util.dto.BookDto;
+import org.apache.causeway.viewer.restfulobjects.client.AuthenticationMode;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClient;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClientConfig;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClientMediaType;
 import org.apache.causeway.viewer.restfulobjects.client.log.ClientConversationFilter;
 
-import jakarta.inject.Inject;
-import jakarta.ws.rs.client.Invocation;
-import jakarta.ws.rs.core.GenericType;
-import jakarta.xml.bind.JAXBException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -91,11 +93,11 @@ public class RestEndpointService {
         log.debug("new restful client created for {}", restRootPath);
 
         val clientConfig = RestfulClientConfig.builder()
-                .restfulBase(restRootPath)
+                .restfulBaseUrl(restRootPath)
                 // setup basic-auth
-                .useBasicAuth(true)
-                .restfulAuthUser(LdapConstants.SVEN_PRINCIPAL)
-                .restfulAuthPassword("pass")
+                .authenticationMode(AuthenticationMode.BASIC)
+                .basicAuthUser(LdapConstants.SVEN_PRINCIPAL)
+                .basicAuthPassword("pass")
                 // setup request/response debug logging
                 .useRequestDebugLogging(useRequestDebugLogging)
                 // register additional filter if any

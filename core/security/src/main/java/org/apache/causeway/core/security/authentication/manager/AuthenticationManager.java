@@ -157,11 +157,11 @@ public class AuthenticationManager {
 
 
     // cannot use final here, as Spring provides a transaction aware proxy for this type
-    public /*final*/ boolean isSessionValid(final @Nullable InteractionContext authentication) {
-        if(authentication==null) {
+    public /*final*/ boolean isSessionValid(final @Nullable InteractionContext interactionContext) {
+        if(interactionContext==null) {
             return false;
         }
-        val userMemento = authentication.getUser();
+        val userMemento = interactionContext.getUser();
         if(userMemento.getAuthenticationSource().isExternal()) {
             return true;
         }
@@ -169,7 +169,7 @@ public class AuthenticationManager {
             return true;
         }
         final String userName = userByValidationCode.get(userMemento.getAuthenticationCode());
-        return authentication.getUser().isCurrentUser(userName);
+        return interactionContext.getUser().isCurrentUser(userName);
     }
 
 
