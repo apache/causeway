@@ -2,12 +2,12 @@ package org.apache.causeway.viewer.restfulobjects.client;
 
 import java.util.concurrent.TimeUnit;
 
-import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.core.Response;
 
 import org.apache.causeway.viewer.restfulobjects.client.auth.AuthorizationHeaderFactory;
 
+@SuppressWarnings("unused")
 class RestfulClient_Examples {
 
     void basic_auth() {
@@ -55,17 +55,16 @@ class RestfulClient_Examples {
                 RestfulClientConfig.builder()
                         .restfulBaseUrl("localhost:8080")
                         .build(),
-                        new AuthorizationHeaderFactory() {
-                            @Override
-                            public String create() {
-                                return "some authorization header";
-                            }
-                        });
+                        (AuthorizationHeaderFactory) () -> "some authorization header");
     }
 
     void usage() {
 
-        RestfulClient restfulClient = null;
+        RestfulClient restfulClient = RestfulClient.ofConfig(
+                RestfulClientConfig.builder()
+                        .restfulBaseUrl("localhost:8080")
+                        //...
+                        .build());
 
         Invocation.Builder request = restfulClient.request("services/customers.CustomerApi/actions/findAll/invoke");
 
