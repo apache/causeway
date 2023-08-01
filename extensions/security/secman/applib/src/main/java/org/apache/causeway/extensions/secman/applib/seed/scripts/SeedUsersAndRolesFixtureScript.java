@@ -18,11 +18,19 @@
  */
 package org.apache.causeway.extensions.secman.applib.seed.scripts;
 
+import java.io.File;
+
 import javax.inject.Inject;
 
+import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.config.beans.PersistenceStack;
+import org.apache.causeway.extensions.secman.applib.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewayAppFeatureRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewayConfigurationRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtAuditTrailRoleAndPermissions;
@@ -37,8 +45,11 @@ import org.apache.causeway.extensions.secman.applib.role.seed.CausewayPersistenc
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewaySudoImpersonateRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewayViewerRestfulObjectsSwaggerRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.seed.SeedSecurityModuleService;
+import org.apache.causeway.extensions.secman.applib.tenancy.fixtures.AbstractTenancyFixtureScript;
 import org.apache.causeway.extensions.secman.applib.tenancy.seed.GlobalTenancy;
+import org.apache.causeway.extensions.secman.applib.user.fixtures.AbstractUserAndRolesFixtureScript;
 import org.apache.causeway.extensions.secman.applib.user.seed.CausewayExtSecmanAdminUser;
+import org.apache.causeway.extensions.secman.applib.util.ApplicationSecurityDto;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 import lombok.val;
@@ -65,6 +76,18 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
 
         val secmanConfig = config.getExtensions().getSecman();
         val persistenceStack = causewayBeanTypeRegistry.determineCurrentPersistenceStack();
+
+        // if a config option ..secman.seed.yamlFile is present try to use it as alternative seeding strategy
+        final ApplicationSecurityDto dto = _Strings.nonEmpty(secmanConfig.getSeed().getYamlFile())
+                .map(File::new)
+                .map(ApplicationSecurityDto::tryRead)
+                .orElse(Try.success(null))
+                .getValue()
+                .orElse(null);
+        if(dto!=null) {
+            seedFromDto(executionContext, dto);
+            return;
+        }
 
         // global tenancy
         executionContext.executeChild(this, new GlobalTenancy());
@@ -106,6 +129,73 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
                         CausewayConfigurationRoleAndPermissions.ROLE_NAME)
                 );
 
+    }
+
+    // -- HELPER
+    
+    private void seedFromDto(ExecutionContext executionContext, ApplicationSecurityDto dto) {
+        
+        // TENANCIES
+        
+        _NullSafe.stream(dto.getTenancies())
+        .sorted((a, b)->{
+            // sort, such that dependencies come before dependents
+            final int lenA = _NullSafe.size(a.getParentPath());
+            final int lenB = _NullSafe.size(b.getParentPath());
+            return Integer.compare(lenA, lenB);
+        })
+        .forEach(tenancyDto->{
+            executionContext.executeChild(this, new AbstractTenancyFixtureScript() {
+                @Override
+                protected void execute(ExecutionContext executionContext) {
+                    create(tenancyDto.get__name(), tenancyDto.getPath(), 
+                            tenancyDto.getParentPath(), executionContext);
+                }
+            });
+        });
+        
+        // ROLES
+        
+        _NullSafe.stream(dto.getRoles())
+        .forEach(roleDto->{
+            executionContext.executeChildren(this,
+                    new AbstractRoleAndPermissionsFixtureScript(
+                            roleDto.get__name(), roleDto.getDescription()) {
+
+                        @Override
+                        protected void execute(ExecutionContext executionContext) {
+                            
+                            // PERMISSIONS
+                            
+                            _NullSafe.stream(roleDto.getPermissions())
+                            .forEach(permissionDto->{
+                                newPermissions(
+                                        permissionDto.getRule(),
+                                        permissionDto.getMode(),
+                                        Can.of(
+                                                ApplicationFeatureId.newFeature(
+                                                        permissionDto.getFeatureSort(), 
+                                                        permissionDto.getFeatureFqn())
+                                                )
+                                );
+                            });
+                        }
+            });
+        });
+        
+        // USERS
+        
+        _NullSafe.stream(dto.getUsers())
+        .forEach(userDto->{
+            executionContext.executeChildren(this,
+                    new AbstractUserAndRolesFixtureScript(
+                            userDto.get__username(), 
+                            userDto.getEncryptedPassword(), 
+                            userDto.getAccountType(), 
+                            Can.ofCollection(userDto.getRoleNames())) {
+                    });
+        });
+        
     }
 
 }

@@ -18,16 +18,25 @@
  */
 package org.apache.causeway.extensions.secman.applib.util;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
+import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.io.DataSource;
 import org.apache.causeway.commons.io.YamlUtils;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRoleRepository;
+import org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy;
+import org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancyRepository;
+import org.apache.causeway.extensions.secman.applib.user.dom.AccountType;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
 
@@ -85,6 +94,8 @@ public class ApplicationSecurityDto {
         static UserDto from(final ApplicationUser user) {
             val userDto = new UserDto();
             userDto.set__username(user.getUsername());
+            userDto.setEncryptedPassword(user.getEncryptedPassword());
+            userDto.setAccountType(user.getAccountType());
 
             user.getRoles().stream()
             .map(ApplicationRole::getName)
@@ -94,12 +105,34 @@ public class ApplicationSecurityDto {
         }
 
         String __username; // secondary key - ensure earliest alphabetic order
+        String encryptedPassword;
+        AccountType accountType;
         List<String> roleNames = new ArrayList<>();
+    }
+
+    @Data
+    public static class TenancyDto {
+
+        static TenancyDto from(final ApplicationTenancy tenancy) {
+            val tenancyDto = new TenancyDto();
+            tenancyDto.set__name(tenancy.getName());
+            tenancyDto.setPath(tenancy.getPath());
+
+            Optional.ofNullable(tenancy.getParent())
+                .ifPresent(parent->
+                    tenancyDto.setParentPath(parent.getPath()));
+            return tenancyDto;
+        }
+
+        String __name; // secondary key - ensure earliest alphabetic order
+        String path;
+        @Nullable String parentPath;
     }
 
     public static ApplicationSecurityDto create(
             final @NonNull ApplicationRoleRepository applicationRoleRepository,
-            final @NonNull ApplicationUserRepository applicationUserRepository) {
+            final @NonNull ApplicationUserRepository applicationUserRepository,
+            final @NonNull ApplicationTenancyRepository applicationTenancyRepository) {
         val model = new ApplicationSecurityDto();
 
         applicationRoleRepository.allRoles().stream()
@@ -110,11 +143,25 @@ public class ApplicationSecurityDto {
         .map(UserDto::from)
         .forEach(model.getUsers()::add);
 
+        applicationTenancyRepository.allTenancies().stream()
+        .map(TenancyDto::from)
+        .forEach(model.getTenancies()::add);
+
         return model;
+    }
+
+    public static Try<ApplicationSecurityDto> tryRead(@Nullable final File yamlFile) {
+        if(yamlFile==null
+            || !yamlFile.exists()
+            || !yamlFile.canRead()) {
+            return Try.success(null);
+        }
+        return YamlUtils.tryRead(ApplicationSecurityDto.class, DataSource.ofFile(yamlFile));
     }
 
     private List<RoleDto> roles = new ArrayList<>();
     private List<UserDto> users = new ArrayList<>();
+    private List<TenancyDto> tenancies = new ArrayList<>();
 
     public String toYaml() {
         return YamlUtils.toStringUtf8(this);
