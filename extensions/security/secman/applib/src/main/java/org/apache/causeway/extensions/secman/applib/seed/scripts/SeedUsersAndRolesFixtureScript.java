@@ -193,6 +193,22 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
                             userDto.getEncryptedPassword(), 
                             userDto.getAccountType(), 
                             Can.ofCollection(userDto.getRoleNames())) {
+                
+                        @Override
+                        protected void execute(final ExecutionContext executionContext) {
+                            super.execute(executionContext);
+                            getApplicationUser().setAtPath(userDto.getAtPath());
+                            getApplicationUser().setFamilyName(userDto.getFamilyName());
+                            getApplicationUser().setGivenName(userDto.getGivenName());
+                            getApplicationUser().setKnownAs(userDto.getKnownAs());
+                            getApplicationUser().setEmailAddress(userDto.getEmailAddress());
+                            getApplicationUser().setPhoneNumber(userDto.getPhoneNumber());
+                            getApplicationUser().setFaxNumber(userDto.getFaxNumber());
+                            getApplicationUser().setLanguage(userDto.getLanguage());
+                            getApplicationUser().setNumberFormat(userDto.getNumberFormat());
+                            getApplicationUser().setTimeFormat(userDto.getTimeFormat());
+                            getApplicationUser().setStatus(userDto.getStatus());
+                        }                        
                     });
         });
         

@@ -39,6 +39,7 @@ import org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenan
 import org.apache.causeway.extensions.secman.applib.user.dom.AccountType;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
+import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserStatus;
 
 import lombok.Data;
 import lombok.NonNull;
@@ -96,6 +97,18 @@ public class ApplicationSecurityDto {
             userDto.set__username(user.getUsername());
             userDto.setEncryptedPassword(user.getEncryptedPassword());
             userDto.setAccountType(user.getAccountType());
+            
+            userDto.setAtPath(user.getAtPath());
+            userDto.setFamilyName(user.getFamilyName());
+            userDto.setGivenName(user.getGivenName());
+            userDto.setKnownAs(user.getKnownAs());
+            userDto.setEmailAddress(user.getEmailAddress());
+            userDto.setPhoneNumber(user.getPhoneNumber());
+            userDto.setFaxNumber(user.getFaxNumber());
+            userDto.setLanguage(user.getLanguage());
+            userDto.setNumberFormat(user.getNumberFormat());
+            userDto.setTimeFormat(user.getTimeFormat());
+            userDto.setStatus(user.getStatus());
 
             user.getRoles().stream()
             .map(ApplicationRole::getName)
@@ -107,6 +120,19 @@ public class ApplicationSecurityDto {
         String __username; // secondary key - ensure earliest alphabetic order
         String encryptedPassword;
         AccountType accountType;
+        
+        String familyName;
+        String givenName;
+        String knownAs;
+        String emailAddress;
+        String phoneNumber;
+        String faxNumber;
+        java.util.Locale language;
+        java.util.Locale numberFormat;
+        java.util.Locale timeFormat;
+        String atPath;
+        ApplicationUserStatus status;
+        
         List<String> roleNames = new ArrayList<>();
     }
 
