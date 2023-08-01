@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.extensions.secman.applib.util;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -176,13 +175,11 @@ public class ApplicationSecurityDto {
         return model;
     }
 
-    public static Try<ApplicationSecurityDto> tryRead(@Nullable final File yamlFile) {
-        if(yamlFile==null
-            || !yamlFile.exists()
-            || !yamlFile.canRead()) {
+    public static Try<ApplicationSecurityDto> tryRead(final @Nullable DataSource dataSource) {
+        if(dataSource==null) {
             return Try.success(null);
         }
-        return YamlUtils.tryRead(ApplicationSecurityDto.class, DataSource.ofFile(yamlFile));
+        return YamlUtils.tryRead(ApplicationSecurityDto.class, dataSource);
     }
 
     private List<RoleDto> roles = new ArrayList<>();

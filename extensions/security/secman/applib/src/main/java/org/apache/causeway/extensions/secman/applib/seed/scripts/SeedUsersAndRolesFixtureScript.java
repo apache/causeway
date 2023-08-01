@@ -27,6 +27,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.io.DataSource;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.config.beans.PersistenceStack;
@@ -80,8 +81,11 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
         // if a config option ..secman.seed.yamlFile is present try to use it as alternative seeding strategy
         final ApplicationSecurityDto dto = _Strings.nonEmpty(secmanConfig.getSeed().getYamlFile())
                 .map(File::new)
+                .filter(File::exists)
+                .filter(File::canRead)
+                .map(DataSource::ofFile)
                 .map(ApplicationSecurityDto::tryRead)
-                .orElse(Try.success(null))
+                .orElseGet(()->Try.success(null))
                 .getValue()
                 .orElse(null);
         if(dto!=null) {
