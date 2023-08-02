@@ -16,3 +16,12 @@ As previously marked deprecated for removal:
 * `Property#hidden` ... use `PropertyLayout#hidden` instead
 * `@LogicalTypeName(..)` ... use `@Named(..)` instead
 * `DomainObjectLayoutData#plural` (XML)
+
+== Utilities
+
+== YamlUtils
+
+Expression of the global tag that contained the DTO class name was removed. 
+The yaml file will not start with `!!mypackage.Person` (or similar) anymore.
+
+see https://medium.com/@snyksec/snakeyaml-2-0-solving-the-unsafe-deserialization-vulnerability-c29a0f08f152 

@@ -1,4 +1,3 @@
-!!org.apache.causeway.extensions.secman.applib.util.ApplicationSecurityDto
 roles:
 - __name: causeway-conf-ConfigurationMenu
   description: Access configuration properties

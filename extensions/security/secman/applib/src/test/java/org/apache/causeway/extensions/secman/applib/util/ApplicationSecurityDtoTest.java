@@ -23,6 +23,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.commons.io.DataSource;
+import org.apache.causeway.commons.io.TextUtils;
 
 import lombok.val;
 
@@ -44,7 +45,9 @@ class ApplicationSecurityDtoTest {
         
         val yamlAfterRoundtrip = dto.toYaml();
         
-        assertEquals(yamlBeforeRoundtrip, yamlAfterRoundtrip);
+        assertEquals(
+                TextUtils.readLines(yamlBeforeRoundtrip),
+                TextUtils.readLines(yamlAfterRoundtrip));
     }
 
 }
