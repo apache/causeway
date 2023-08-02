@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.extensions.secman.applib.role.man.mixins;
 
+import java.util.Locale;
+
 import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -27,9 +29,11 @@ import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRoleRepository;
 import org.apache.causeway.extensions.secman.applib.role.man.ApplicationRoleManager;
+import org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancyRepository;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
 import org.apache.causeway.extensions.secman.applib.user.man.mixins.ApplicationUserManager_newLocalUser.DomainEvent;
 import org.apache.causeway.extensions.secman.applib.util.ApplicationSecurityDto;
@@ -47,7 +51,9 @@ import lombok.val;
 )
 @ActionLayout(
         associateWith = "allRoles",
-        sequence = "1.1"
+        sequence = "1.1",
+        describedAs = "Exports authentication and authorization data to YAML format. "
+                + "Includes users, roles, permissions and tenancies."
 )
 @RequiredArgsConstructor
 public class ApplicationRoleManager_exportAsYaml {
@@ -57,6 +63,8 @@ public class ApplicationRoleManager_exportAsYaml {
 
     @Inject private ApplicationRoleRepository applicationRoleRepository;
     @Inject private ApplicationUserRepository applicationUserRepository;
+    @Inject private ApplicationTenancyRepository applicationTenancyRepository;
+    @Inject private ValueSemanticsProvider<Locale> localeSemantics;
 
     @SuppressWarnings("unused")
     private final ApplicationRoleManager target;
@@ -67,14 +75,16 @@ public class ApplicationRoleManager_exportAsYaml {
 
         val yaml = ApplicationSecurityDto.create(
                 applicationRoleRepository,
-                applicationUserRepository)
+                applicationUserRepository,
+                applicationTenancyRepository,
+                localeSemantics)
                 .toYaml();
 
         return Clob.of(fileName, CommonMimeType.YAML, yaml);
     }
 
     @MemberSupport public String defaultFileName() {
-        return "secman-roles.yml";
+        return "secman-permissions.yml";
     }
 
 }

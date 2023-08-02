@@ -41,6 +41,7 @@ import org.yaml.snakeyaml.introspector.BeanAccess;
 import org.yaml.snakeyaml.introspector.MethodProperty;
 import org.yaml.snakeyaml.introspector.Property;
 import org.yaml.snakeyaml.introspector.PropertyUtils;
+import org.yaml.snakeyaml.nodes.Tag;
 import org.yaml.snakeyaml.representer.Representer;
 
 import org.apache.causeway.commons.collections.Can;
@@ -150,6 +151,7 @@ public class YamlUtils {
         }
         var presenter = new Representer(dumperOptions);
         presenter.setPropertyUtils(new PropertyUtils2());
+        presenter.addClassTag(mappedType, Tag.MAP);
 
         var loaderOptions = new LoaderOptions();
         for(YamlUtils.YamlLoadCustomizer customizer : loadCustomizers) {
