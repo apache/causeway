@@ -53,7 +53,7 @@ import lombok.val;
         associateWith = "allRoles",
         sequence = "1.1",
         describedAs = "Exports authentication and authorization data to YAML format. "
-                + "Incluces users, roles, permissions and tenancies."
+                + "Includes users, roles, permissions and tenancies."
 )
 @RequiredArgsConstructor
 public class ApplicationRoleManager_exportAsYaml {
