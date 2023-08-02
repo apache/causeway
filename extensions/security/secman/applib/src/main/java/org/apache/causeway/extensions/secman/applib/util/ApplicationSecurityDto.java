@@ -20,16 +20,28 @@ package org.apache.causeway.extensions.secman.applib.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.function.Function;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
+import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
+import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.io.DataSource;
 import org.apache.causeway.commons.io.YamlUtils;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRoleRepository;
+import org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy;
+import org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancyRepository;
+import org.apache.causeway.extensions.secman.applib.user.dom.AccountType;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
+import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserStatus;
 
 import lombok.Data;
 import lombok.NonNull;
@@ -82,9 +94,23 @@ public class ApplicationSecurityDto {
     @Data
     public static class UserDto {
 
-        static UserDto from(final ApplicationUser user) {
+        static UserDto from(final ApplicationUser user, Function<Locale, String> localeStringifier) {
             val userDto = new UserDto();
             userDto.set__username(user.getUsername());
+            userDto.setEncryptedPassword(user.getEncryptedPassword());
+            userDto.setAccountType(user.getAccountType());
+            
+            userDto.setAtPath(user.getAtPath());
+            userDto.setFamilyName(user.getFamilyName());
+            userDto.setGivenName(user.getGivenName());
+            userDto.setKnownAs(user.getKnownAs());
+            userDto.setEmailAddress(user.getEmailAddress());
+            userDto.setPhoneNumber(user.getPhoneNumber());
+            userDto.setFaxNumber(user.getFaxNumber());
+            userDto.setLanguage(localeStringifier.apply(user.getLanguage()));
+            userDto.setNumberFormat(localeStringifier.apply(user.getNumberFormat()));
+            userDto.setTimeFormat(localeStringifier.apply(user.getTimeFormat()));
+            userDto.setStatus(user.getStatus());
 
             user.getRoles().stream()
             .map(ApplicationRole::getName)
@@ -94,12 +120,48 @@ public class ApplicationSecurityDto {
         }
 
         String __username; // secondary key - ensure earliest alphabetic order
+        String encryptedPassword;
+        AccountType accountType;
+        
+        String familyName;
+        String givenName;
+        String knownAs;
+        String emailAddress;
+        String phoneNumber;
+        String faxNumber;
+        String language;
+        String numberFormat;
+        String timeFormat;
+        String atPath;
+        ApplicationUserStatus status;
+        
         List<String> roleNames = new ArrayList<>();
+    }
+
+    @Data
+    public static class TenancyDto {
+
+        static TenancyDto from(final ApplicationTenancy tenancy) {
+            val tenancyDto = new TenancyDto();
+            tenancyDto.set__name(tenancy.getName());
+            tenancyDto.setPath(tenancy.getPath());
+
+            Optional.ofNullable(tenancy.getParent())
+                .ifPresent(parent->
+                    tenancyDto.setParentPath(parent.getPath()));
+            return tenancyDto;
+        }
+
+        String __name; // secondary key - ensure earliest alphabetic order
+        String path;
+        @Nullable String parentPath;
     }
 
     public static ApplicationSecurityDto create(
             final @NonNull ApplicationRoleRepository applicationRoleRepository,
-            final @NonNull ApplicationUserRepository applicationUserRepository) {
+            final @NonNull ApplicationUserRepository applicationUserRepository,
+            final @NonNull ApplicationTenancyRepository applicationTenancyRepository,
+            final @NonNull ValueSemanticsProvider<Locale> localeSemantics) {
         val model = new ApplicationSecurityDto();
 
         applicationRoleRepository.allRoles().stream()
@@ -107,14 +169,27 @@ public class ApplicationSecurityDto {
         .forEach(model.getRoles()::add);
 
         applicationUserRepository.allUsers().stream()
-        .map(UserDto::from)
+        .map(user->UserDto.from(user, 
+                locale->localeSemantics.getParser().parseableTextRepresentation(null, locale)))
         .forEach(model.getUsers()::add);
+
+        applicationTenancyRepository.allTenancies().stream()
+        .map(TenancyDto::from)
+        .forEach(model.getTenancies()::add);
 
         return model;
     }
 
+    public static Try<ApplicationSecurityDto> tryRead(final @Nullable DataSource dataSource) {
+        if(dataSource==null) {
+            return Try.success(null);
+        }
+        return YamlUtils.tryRead(ApplicationSecurityDto.class, dataSource);
+    }
+
     private List<RoleDto> roles = new ArrayList<>();
     private List<UserDto> users = new ArrayList<>();
+    private List<TenancyDto> tenancies = new ArrayList<>();
 
     public String toYaml() {
         return YamlUtils.toStringUtf8(this);

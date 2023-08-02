@@ -88,6 +88,7 @@ import org.apache.causeway.core.config.viewer.web.DialogMode;
 
 import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.Value;
 import lombok.val;
 
@@ -3254,6 +3255,15 @@ public class CausewayConfiguration {
                         Collections.unmodifiableList(listOf());
                 public static final String REGULAR_USER_ROLE_NAME_DEFAULT = "causeway-ext-secman-user";
                 public static final boolean AUTO_UNLOCK_IF_DELEGATED_AND_AUTHENTICATED_DEFAULT = false;
+
+                /**
+                 * Path to local YAML file, if present, to use as an alternative seeding strategy.
+                 * <p>
+                 * Eg. seed from a YAML file, that was previously exported by SecMan's
+                 * ApplicationRoleManager_exportAsYaml mixin.
+                 */
+                @Getter @Setter
+                private String yamlFile = null;
 
                 @Getter
                 private final Admin admin = new Admin();
