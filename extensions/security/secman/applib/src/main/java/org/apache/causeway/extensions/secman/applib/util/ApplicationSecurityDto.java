@@ -20,11 +20,14 @@ package org.apache.causeway.extensions.secman.applib.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
+import java.util.function.Function;
 
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
+import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.io.DataSource;
 import org.apache.causeway.commons.io.YamlUtils;
@@ -91,7 +94,7 @@ public class ApplicationSecurityDto {
     @Data
     public static class UserDto {
 
-        static UserDto from(final ApplicationUser user) {
+        static UserDto from(final ApplicationUser user, Function<Locale, String> localeStringifier) {
             val userDto = new UserDto();
             userDto.set__username(user.getUsername());
             userDto.setEncryptedPassword(user.getEncryptedPassword());
@@ -104,9 +107,9 @@ public class ApplicationSecurityDto {
             userDto.setEmailAddress(user.getEmailAddress());
             userDto.setPhoneNumber(user.getPhoneNumber());
             userDto.setFaxNumber(user.getFaxNumber());
-            userDto.setLanguage(user.getLanguage());
-            userDto.setNumberFormat(user.getNumberFormat());
-            userDto.setTimeFormat(user.getTimeFormat());
+            userDto.setLanguage(localeStringifier.apply(user.getLanguage()));
+            userDto.setNumberFormat(localeStringifier.apply(user.getNumberFormat()));
+            userDto.setTimeFormat(localeStringifier.apply(user.getTimeFormat()));
             userDto.setStatus(user.getStatus());
 
             user.getRoles().stream()
@@ -126,9 +129,9 @@ public class ApplicationSecurityDto {
         String emailAddress;
         String phoneNumber;
         String faxNumber;
-        java.util.Locale language;
-        java.util.Locale numberFormat;
-        java.util.Locale timeFormat;
+        String language;
+        String numberFormat;
+        String timeFormat;
         String atPath;
         ApplicationUserStatus status;
         
@@ -157,7 +160,8 @@ public class ApplicationSecurityDto {
     public static ApplicationSecurityDto create(
             final @NonNull ApplicationRoleRepository applicationRoleRepository,
             final @NonNull ApplicationUserRepository applicationUserRepository,
-            final @NonNull ApplicationTenancyRepository applicationTenancyRepository) {
+            final @NonNull ApplicationTenancyRepository applicationTenancyRepository,
+            final @NonNull ValueSemanticsProvider<Locale> localeSemantics) {
         val model = new ApplicationSecurityDto();
 
         applicationRoleRepository.allRoles().stream()
@@ -165,7 +169,8 @@ public class ApplicationSecurityDto {
         .forEach(model.getRoles()::add);
 
         applicationUserRepository.allUsers().stream()
-        .map(UserDto::from)
+        .map(user->UserDto.from(user, 
+                locale->localeSemantics.getParser().parseableTextRepresentation(null, locale)))
         .forEach(model.getUsers()::add);
 
         applicationTenancyRepository.allTenancies().stream()

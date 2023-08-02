@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.extensions.secman.applib.role.man.mixins;
 
+import java.util.Locale;
+
 import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -27,6 +29,7 @@ import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRoleRepository;
 import org.apache.causeway.extensions.secman.applib.role.man.ApplicationRoleManager;
@@ -61,6 +64,7 @@ public class ApplicationRoleManager_exportAsYaml {
     @Inject private ApplicationRoleRepository applicationRoleRepository;
     @Inject private ApplicationUserRepository applicationUserRepository;
     @Inject private ApplicationTenancyRepository applicationTenancyRepository;
+    @Inject private ValueSemanticsProvider<Locale> localeSemantics;
 
     @SuppressWarnings("unused")
     private final ApplicationRoleManager target;
@@ -72,7 +76,8 @@ public class ApplicationRoleManager_exportAsYaml {
         val yaml = ApplicationSecurityDto.create(
                 applicationRoleRepository,
                 applicationUserRepository,
-                applicationTenancyRepository)
+                applicationTenancyRepository,
+                localeSemantics)
                 .toYaml();
 
         return Clob.of(fileName, CommonMimeType.YAML, yaml);

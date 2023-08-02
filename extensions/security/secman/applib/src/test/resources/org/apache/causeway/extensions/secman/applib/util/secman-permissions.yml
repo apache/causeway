@@ -111,17 +111,17 @@ users:
   faxNumber: null
   givenName: null
   knownAs: null
-  language: null
-  numberFormat: null
+  language: en
+  numberFormat: de
   phoneNumber: null
   roleNames: [causeway-ext-secman-user, simple-superuser]
   status: LOCKED
-  timeFormat: null
+  timeFormat: es
 - __username: secman-admin
   accountType: LOCAL
   atPath: /
   emailAddress: null
-  encryptedPassword: '{bcrypt}$2a$10$6e75IPrH5UXhY9ls7E9JBuHK8xF1gyaUMgYMi7IYV8cwkgImXKLuW'
+  encryptedPassword: '{bcrypt}$2a$10$yXDvI5WgWhutWeTwTjaNkOA4.pvyY0ELsOEoMhtMnvit3/boLrr5y'
   familyName: null
   faxNumber: null
   givenName: null
@@ -140,7 +140,7 @@ users:
   accountType: LOCAL
   atPath: null
   emailAddress: null
-  encryptedPassword: '{bcrypt}$2a$10$M/Jd1W60n1iqWg/QZ78gmOU79c2EElq2F1ELrQ43BbzbugMRObPhS'
+  encryptedPassword: '{bcrypt}$2a$10$22XOo2C10EeUw6SircvBnO4JcnOUeTX1A5KqGSUlZMFd.uQc2bDXC'
   familyName: null
   faxNumber: null
   givenName: null

@@ -22,7 +22,10 @@ import java.io.File;
 
 import javax.inject.Inject;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._NullSafe;
@@ -73,6 +76,7 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
 
     @Inject private CausewayConfiguration config;
     @Inject private CausewayBeanTypeRegistry causewayBeanTypeRegistry;
+    @Inject private ValueSemanticsProvider<java.util.Locale> localeSemantics;
 
     @Override
     protected void execute(final ExecutionContext executionContext) {
@@ -80,7 +84,9 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
         val secmanConfig = config.getExtensions().getSecman();
         val persistenceStack = causewayBeanTypeRegistry.determineCurrentPersistenceStack();
 
-        // if a config option ..secman.seed.yamlFile is present try to use it as alternative seeding strategy
+        // if a config option ..secman.seed.yamlFile is present,
+        // try to use it as alternative seeding strategy,
+        // then exit
         final ApplicationSecurityDto dto = _Strings.nonEmpty(secmanConfig.getSeed().getYamlFile())
                 .map(File::new)
                 .filter(File::exists)
@@ -94,7 +100,7 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
             log.info("seeding from YAML file {}", ()->
                 new File(secmanConfig.getSeed().getYamlFile()).getAbsolutePath());
             seedFromDto(executionContext, dto);
-            return;
+            return; // exit, don't process further
         }
 
         // global tenancy
@@ -198,13 +204,14 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
             executionContext.executeChildren(this,
                     new AbstractUserAndRolesFixtureScript(
                             userDto.get__username(), 
-                            userDto.getEncryptedPassword(), 
+                            "pass", // to be overwritten below
                             userDto.getAccountType(), 
                             Can.ofCollection(userDto.getRoleNames())) {
                 
                         @Override
                         protected void execute(final ExecutionContext executionContext) {
                             super.execute(executionContext);
+                            getApplicationUser().setEncryptedPassword(userDto.getEncryptedPassword());
                             getApplicationUser().setAtPath(userDto.getAtPath());
                             getApplicationUser().setFamilyName(userDto.getFamilyName());
                             getApplicationUser().setGivenName(userDto.getGivenName());
@@ -212,14 +219,21 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
                             getApplicationUser().setEmailAddress(userDto.getEmailAddress());
                             getApplicationUser().setPhoneNumber(userDto.getPhoneNumber());
                             getApplicationUser().setFaxNumber(userDto.getFaxNumber());
-                            getApplicationUser().setLanguage(userDto.getLanguage());
-                            getApplicationUser().setNumberFormat(userDto.getNumberFormat());
-                            getApplicationUser().setTimeFormat(userDto.getTimeFormat());
+                            getApplicationUser().setLanguage(parseLocale(userDto.getLanguage()));
+                            getApplicationUser().setNumberFormat(parseLocale(userDto.getNumberFormat()));
+                            getApplicationUser().setTimeFormat(parseLocale(userDto.getTimeFormat()));
                             getApplicationUser().setStatus(userDto.getStatus());
                         }                        
                     });
         });
         
+    }
+    
+    // -- HELPER
+    
+    @Nullable
+    private java.util.Locale parseLocale(final @Nullable String input) {
+        return localeSemantics.getParser().parseTextRepresentation(null, input);
     }
 
 }
