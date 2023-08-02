@@ -19,7 +19,7 @@ As previously marked deprecated for removal:
 
 == Utilities
 
-== YamlUtils
+=== YamlUtils
 
 Expression of the global tag that contained the DTO class name was removed. 
 The yaml file will not start with `!!mypackage.Person` (or similar) anymore.
