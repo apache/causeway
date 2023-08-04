@@ -1302,6 +1302,21 @@ div.dataTables_wrapper ul.pagination {
     font-size: small;
 }
 
+/* TOASTS */
+
+.toast.alert-info {
+  --bs-toast-bg: rgba(var(--bs-info-rgb), 0.85);
+  --bs-toast-color: var(--bs-dark);  
+}
+.toast.alert-warning {
+  --bs-toast-bg: rgba(var(--bs-warning-rgb), 0.85);
+  --bs-toast-color: var(--bs-dark);  
+}
+.toast.alert-danger {
+  --bs-toast-bg: rgba(var(--bs-danger-rgb), 0.85);
+  --bs-toast-color: var(--bs-light);  
+}
+
 /* TOOLTIPS */
 
 .tooltip {
