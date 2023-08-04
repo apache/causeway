@@ -64,6 +64,10 @@ td .badge span,
   padding: 0;
 }
 
+/* fixes badge text color, when background is light - seems broken upstream https://bootswatch.com/default/ */
+.badge.bg-light {
+	color: var(--bs-body-color);
+}
 
 .card {
 	margin-bottom: 21px;
