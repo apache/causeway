@@ -621,7 +621,6 @@ div.additionalLinkList {
     cursor: not-allowed!important;
     opacity: 0.5;
     box-shadow: none;
-    border-style: none;
 	text-decoration-line: line-through;
 }
 
