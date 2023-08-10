@@ -29,7 +29,6 @@ import io.kvision.tabulator.js.Tabulator.CellComponent
 import org.apache.causeway.client.kroviz.core.event.ResourceProxy
 import org.apache.causeway.client.kroviz.core.model.CollectionDM
 import org.apache.causeway.client.kroviz.core.model.Exposer
-import org.apache.causeway.client.kroviz.ui.menu.DynamicMenuBuilder
 import org.apache.causeway.client.kroviz.utils.StringUtils
 
 /**

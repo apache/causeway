@@ -19,7 +19,6 @@
 package org.apache.causeway.client.kroviz.ui.core
 
 import io.kvision.core.Component
-import io.kvision.maps.externals.leaflet.layer.overlay.Popup
 import io.kvision.panel.VPanel
 import io.kvision.tabulator.Align
 import io.kvision.tabulator.ColumnDefinition
@@ -69,7 +68,7 @@ class ColumnFactory {
             hozAlign = Align.CENTER,
             width = "40",
             headerSort = false,
-            cellClick = { _: dynamic, cellComponent: dynamic ->
+            clickMenu = { _: dynamic, cellComponent: dynamic ->
                 buildObjectMenu(cellComponent.unsafeCast<Tabulator.CellComponent>())
             }
         )

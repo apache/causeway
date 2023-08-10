@@ -19,7 +19,6 @@
 
 package org.apache.causeway.client.kroviz.handler
 
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.apache.causeway.client.kroviz.to.*
 import org.apache.causeway.client.kroviz.to.mb.Menubars
