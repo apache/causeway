@@ -30,7 +30,7 @@ open class MenuBuilder {
         menuItem.addCssClass(to)
     }
 
-    protected fun buildActionLink(
+    fun buildActionLink(
         label: String,
         menuTitle: String,
     ): Link {

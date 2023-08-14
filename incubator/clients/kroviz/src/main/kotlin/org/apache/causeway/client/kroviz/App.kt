@@ -65,12 +65,6 @@ fun main() {
         ChartModule,
         TabulatorModule,
         TabulatorCssBootstrapModule,
-        TabulatorCssBulmaModule,
-        TabulatorCssMaterializeModule,
-        TabulatorCssMidnightModule,
-        TabulatorCssModernModule,
-        TabulatorCssSimpleModule,
-        TabulatorCssStandardModule,
         CoreModule,
     )
 
