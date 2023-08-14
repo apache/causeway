@@ -114,7 +114,7 @@
 				<!-- IMPORTANT: keep in sync with versions used in Apache Causeway, see causeway-bom -->
 				<datanucleus-api-jdo.version>6.0.1</datanucleus-api-jdo.version>
 				<datanucleus-api-jpa.version>6.0.1</datanucleus-api-jpa.version>
-				<datanucleus-core.version>6.0.4</datanucleus-core.version>
+				<datanucleus-core.version>6.0.5</datanucleus-core.version>
 				<datanucleus-jodatime.version>6.0.1</datanucleus-jodatime.version>
 
 				<datanucleus-maven-plugin.version>6.0.0-release</datanucleus-maven-plugin.version>
