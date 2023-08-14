@@ -18,12 +18,13 @@
  */
 package org.apache.causeway.client.kroviz.core.aggregator
 
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 import org.apache.causeway.client.kroviz.core.event.EventState
 import org.apache.causeway.client.kroviz.core.event.LogEntry
 import org.apache.causeway.client.kroviz.core.event.ResourceSpecification
 import org.apache.causeway.client.kroviz.core.model.CollectionDM
 import org.apache.causeway.client.kroviz.to.*
-import org.apache.causeway.client.kroviz.to.bs.GridBs
 import org.apache.causeway.client.kroviz.ui.core.ViewManager
 
 /** sequence of operations:
@@ -33,8 +34,13 @@ import org.apache.causeway.client.kroviz.ui.core.ViewManager
  * (3) FR_OBJECT_PROPERTY       PropertyHandler -> invoke()
  * (4) FR_PROPERTY_DESCRIPTION  <PropertyDescriptionHandler>
  */
-class CollectionAggregator(actionTitle: String, private val parent: ObjectAggregator? = null) : AggregatorWithLayout() {
+@Serializable
+class CollectionAggregator(
+    private val actionTitle: String,
+    private val parent: ObjectAggregator? = null) :
+    AggregatorWithLayout() {
 
+    @Contextual
     var displayModel: CollectionDM
 
     init {

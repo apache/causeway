@@ -101,7 +101,7 @@ class RoIconBar : SimplePanel() {
         val reSpec = ResourceSpecification(url)
         val logEntry = SessionManager.getEventStore().findBy(reSpec)!!
         return when (val obj = logEntry.obj) {
-            (obj == null) -> null
+//            (obj == null) -> null
             is TObject -> {
                 val exp = Exposer(obj)
                 val ed = exp.asDynamic()

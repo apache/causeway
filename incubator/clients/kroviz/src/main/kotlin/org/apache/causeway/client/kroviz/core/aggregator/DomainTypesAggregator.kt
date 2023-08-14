@@ -18,13 +18,17 @@
  */
 package org.apache.causeway.client.kroviz.core.aggregator
 
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 import org.apache.causeway.client.kroviz.core.event.LogEntry
 import org.apache.causeway.client.kroviz.core.model.DiagramDM
 import org.apache.causeway.client.kroviz.to.*
 import org.apache.causeway.client.kroviz.ui.core.ViewManager
 
+@Serializable
 class DomainTypesAggregator(val url: String) : BaseAggregator() {
 
+    @Contextual
     private var displayModel = DiagramDM(url)
 
     override fun update(logEntry: LogEntry, subType: String?) {

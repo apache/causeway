@@ -19,7 +19,7 @@
 package org.apache.causeway.client.kroviz.ui.diagram
 
 import org.apache.causeway.client.kroviz.to.bs.ColBs
-import org.apache.causeway.client.kroviz.to.bs.GridBs
+import org.apache.causeway.client.kroviz.to.GridBs
 import org.apache.causeway.client.kroviz.to.bs.RowBs
 
 object LayoutDiagram {

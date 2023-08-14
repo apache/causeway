@@ -23,7 +23,7 @@ import org.apache.causeway.client.kroviz.core.aggregator.ObjectAggregator
 import org.apache.causeway.client.kroviz.core.event.ResourceProxy
 import org.apache.causeway.client.kroviz.to.Link
 import org.apache.causeway.client.kroviz.to.bs.CollectionBs
-import org.apache.causeway.client.kroviz.to.bs.GridBs
+import org.apache.causeway.client.kroviz.to.GridBs
 import org.apache.causeway.client.kroviz.to.bs.RowBs
 
 class ObjectLayout(val grid: GridBs, val aggregator: ObjectAggregator, val referrer: String) : BaseLayout() {

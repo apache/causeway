@@ -18,10 +18,12 @@
  */
 package org.apache.causeway.client.kroviz.core.aggregator
 
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 import org.apache.causeway.client.kroviz.core.event.LogEntry
 import org.apache.causeway.client.kroviz.core.model.ObjectDM
 import org.apache.causeway.client.kroviz.to.*
-import org.apache.causeway.client.kroviz.to.bs.GridBs
+import org.apache.causeway.client.kroviz.to.GridBs
 import org.apache.causeway.client.kroviz.ui.core.Constants
 import org.apache.causeway.client.kroviz.ui.core.ViewManager
 import org.apache.causeway.client.kroviz.ui.dialog.ErrorDialog
@@ -34,9 +36,11 @@ import org.apache.causeway.client.kroviz.utils.StringUtils
  * (3) ???_OBJECT_PROPERTY       PropertyHandler -> invoke()
  * (4) ???_PROPERTY_DESCRIPTION  <PropertyDescriptionHandler>
  */
+@Serializable
 class ObjectAggregator(private val actionTitle: String) : AggregatorWithLayout() {
     private var isContainedInParentCollection = false
 
+    @Contextual
     private var displayModel = ObjectDM(actionTitle)
 
     override fun update(logEntry: LogEntry, subType: String?) {

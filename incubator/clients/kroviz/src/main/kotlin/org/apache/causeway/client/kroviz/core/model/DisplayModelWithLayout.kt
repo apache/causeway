@@ -20,7 +20,7 @@ package org.apache.causeway.client.kroviz.core.model
 
 import org.apache.causeway.client.kroviz.to.Icon
 import org.apache.causeway.client.kroviz.to.TransferObject
-import org.apache.causeway.client.kroviz.to.bs.GridBs
+import org.apache.causeway.client.kroviz.to.GridBs
 
 abstract class DisplayModelWithLayout : BaseDisplayModel() {
 

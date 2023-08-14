@@ -19,7 +19,7 @@
 package org.apache.causeway.client.kroviz.handler
 
 import org.apache.causeway.client.kroviz.to.TransferObject
-import org.apache.causeway.client.kroviz.to.bs.GridBs
+import org.apache.causeway.client.kroviz.to.GridBs
 import org.apache.causeway.client.kroviz.utils.UrlUtils
 import org.apache.causeway.client.kroviz.utils.XmlHelper
 

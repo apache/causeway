@@ -21,7 +21,6 @@ package org.apache.causeway.client.kroviz.handler
 
 import kotlinx.serialization.json.Json
 import org.apache.causeway.client.kroviz.to.*
-import org.apache.causeway.client.kroviz.to.mb.Menubars
 
 /**
  * File to group all handlers that only have a parse() function

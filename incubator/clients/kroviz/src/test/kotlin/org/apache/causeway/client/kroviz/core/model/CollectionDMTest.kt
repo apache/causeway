@@ -22,7 +22,7 @@ import org.apache.causeway.client.kroviz.handler.LayoutXmlHandler
 import org.apache.causeway.client.kroviz.handler.TObjectHandler
 import org.apache.causeway.client.kroviz.snapshots.simpleapp1_16_0.*
 import org.apache.causeway.client.kroviz.to.TObject
-import org.apache.causeway.client.kroviz.to.bs.GridBs
+import org.apache.causeway.client.kroviz.to.GridBs
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull

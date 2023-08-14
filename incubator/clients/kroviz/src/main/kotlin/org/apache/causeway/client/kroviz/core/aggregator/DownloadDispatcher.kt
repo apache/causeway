@@ -18,9 +18,11 @@
  */
 package org.apache.causeway.client.kroviz.core.aggregator
 
+import kotlinx.serialization.Serializable
 import org.apache.causeway.client.kroviz.core.event.LogEntry
 import org.apache.causeway.client.kroviz.ui.dialog.FileDialog
 
+@Serializable
 class DownloadDispatcher(val actionTitle: String) : BaseAggregator() {
 
     override fun update(logEntry: LogEntry, subType: String?) {

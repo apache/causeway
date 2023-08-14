@@ -22,7 +22,7 @@ import io.kvision.state.observableListOf
 import org.apache.causeway.client.kroviz.to.PropertyDescription
 import org.apache.causeway.client.kroviz.to.TObject
 import org.apache.causeway.client.kroviz.to.TransferObject
-import org.apache.causeway.client.kroviz.to.bs.GridBs
+import org.apache.causeway.client.kroviz.to.GridBs
 import org.apache.causeway.client.kroviz.to.bs.PropertyBs
 
 class CollectionDM(override var title: String) : DisplayModelWithLayout() {

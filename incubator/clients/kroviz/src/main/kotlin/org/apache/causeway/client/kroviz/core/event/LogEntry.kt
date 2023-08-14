@@ -25,8 +25,6 @@ import kotlinx.serialization.Serializable
 import org.apache.causeway.client.kroviz.core.aggregator.ActionDispatcher
 import org.apache.causeway.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.causeway.client.kroviz.to.*
-import org.apache.causeway.client.kroviz.to.bs.GridBs
-import org.apache.causeway.client.kroviz.to.mb.Menubars
 import org.apache.causeway.client.kroviz.ui.core.Constants
 import org.apache.causeway.client.kroviz.ui.core.ViewManager
 import org.w3c.files.Blob
@@ -99,7 +97,7 @@ data class LogEntry(
     var nOfAggregators: Int = 0 // must be accessible (public) for LogEntryTable
 
     @Contextual
-    var obj: Any? = null
+    var obj: TransferObject? = null
 
     @Contextual
     var panel: SimplePanel? = null

@@ -16,22 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.client.kroviz.to.mb
+package org.apache.causeway.client.kroviz.to
 
 import kotlinx.serialization.Serializable
-import org.apache.causeway.client.kroviz.to.Link
-import org.apache.causeway.client.kroviz.to.TransferObject
 
 @Serializable
-data class ServiceAction(
-        val objectType: String? = null,
-        val id: String? = null,
-        val named: String? = null,
-        val namedEscaped: String? = null,
-        val bookmarking: String? = null,
-        val cssClass: String? = null,
-        val cssClassFa: String? = null,
-        val describedAs: String? = null,
-        val metadataError: String? = null,
-        val link: Link? = null
+data class Menubars(
+    val primary: MenuEntry,
+    val secondary: MenuEntry,
+    val tertiary: MenuEntry,
+    val metadataError: String? = null
 ) : TransferObject

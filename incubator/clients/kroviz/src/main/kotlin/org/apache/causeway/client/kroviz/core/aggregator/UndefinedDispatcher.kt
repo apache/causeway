@@ -18,9 +18,11 @@
  */
 package org.apache.causeway.client.kroviz.core.aggregator
 
+import kotlinx.serialization.Serializable
 import org.apache.causeway.client.kroviz.core.event.LogEntry
 import org.apache.causeway.client.kroviz.ui.dialog.UndefinedDialog
 
+@Serializable
 class UndefinedDispatcher : BaseAggregator() {
 
     override fun update(logEntry: LogEntry, subType: String?) {

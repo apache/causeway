@@ -22,7 +22,7 @@ import org.apache.causeway.client.kroviz.core.aggregator.ObjectAggregator
 import org.apache.causeway.client.kroviz.core.event.ResourceProxy
 import org.apache.causeway.client.kroviz.core.event.ResourceSpecification
 import org.apache.causeway.client.kroviz.to.*
-import org.apache.causeway.client.kroviz.to.bs.GridBs
+import org.apache.causeway.client.kroviz.to.GridBs
 import org.apache.causeway.client.kroviz.ui.core.SessionManager
 
 class ObjectDM(override val title: String) : DisplayModelWithLayout() {

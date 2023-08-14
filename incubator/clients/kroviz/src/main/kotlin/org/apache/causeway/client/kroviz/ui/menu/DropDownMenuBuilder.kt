@@ -25,11 +25,7 @@ import io.kvision.dropdown.separator
 import io.kvision.html.ButtonStyle
 import io.kvision.utils.auto
 import org.apache.causeway.client.kroviz.core.event.ResourceProxy
-import org.apache.causeway.client.kroviz.to.Link
-import org.apache.causeway.client.kroviz.to.TObject
-import org.apache.causeway.client.kroviz.to.mb.Menu
-import org.apache.causeway.client.kroviz.to.mb.MenuEntry
-import org.apache.causeway.client.kroviz.to.mb.Menubars
+import org.apache.causeway.client.kroviz.to.*
 import org.apache.causeway.client.kroviz.ui.core.Constants
 import org.apache.causeway.client.kroviz.ui.core.SessionManager
 import org.apache.causeway.client.kroviz.utils.IconManager

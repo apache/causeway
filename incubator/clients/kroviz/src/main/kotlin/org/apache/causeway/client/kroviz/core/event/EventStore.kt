@@ -22,8 +22,8 @@ import io.kvision.panel.SimplePanel
 import io.kvision.state.observableListOf
 import org.apache.causeway.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.causeway.client.kroviz.core.aggregator.SvgDispatcher
+import org.apache.causeway.client.kroviz.to.Menubars
 import org.apache.causeway.client.kroviz.to.TObject
-import org.apache.causeway.client.kroviz.to.mb.Menubars
 import org.apache.causeway.client.kroviz.ui.core.ViewManager
 import org.apache.causeway.client.kroviz.utils.StringUtils
 import org.apache.causeway.client.kroviz.utils.UUID

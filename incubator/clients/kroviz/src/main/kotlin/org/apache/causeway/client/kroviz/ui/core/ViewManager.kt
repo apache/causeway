@@ -33,7 +33,7 @@ import org.apache.causeway.client.kroviz.core.event.StatusPo
 import org.apache.causeway.client.kroviz.core.model.ObjectDM
 import org.apache.causeway.client.kroviz.to.TObject
 import org.apache.causeway.client.kroviz.to.ValueType
-import org.apache.causeway.client.kroviz.to.mb.Menubars
+import org.apache.causeway.client.kroviz.to.Menubars
 import org.apache.causeway.client.kroviz.ui.builder.RoDisplay
 import org.apache.causeway.client.kroviz.ui.kv.override.RoTab
 import org.apache.causeway.client.kroviz.ui.menu.ContextMenuBuilder

@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.client.kroviz.core.aggregator
 
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 import org.apache.causeway.client.kroviz.core.event.LogEntry
 import org.apache.causeway.client.kroviz.core.model.SystemDM
 import org.apache.causeway.client.kroviz.to.DomainTypes
@@ -28,8 +30,10 @@ import org.apache.causeway.client.kroviz.ui.core.ViewManager
 import org.apache.causeway.client.kroviz.utils.ImageUtils
 import org.apache.causeway.client.kroviz.utils.UrlUtils
 
+@Serializable
 class SystemAggregator : BaseAggregator() {
 
+    @Contextual
     var displayModel = SystemDM("not filled (yet)")
 
     override fun update(logEntry: LogEntry, subType: String?) {

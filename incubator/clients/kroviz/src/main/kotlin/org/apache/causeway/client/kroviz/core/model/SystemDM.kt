@@ -18,8 +18,10 @@
  */
 package org.apache.causeway.client.kroviz.core.model
 
+import kotlinx.serialization.Serializable
 import org.apache.causeway.client.kroviz.to.*
 
+@Serializable
 class SystemDM(override val title: String) : BaseDisplayModel() {
     var user: User? = null
     var version: Version? = null
