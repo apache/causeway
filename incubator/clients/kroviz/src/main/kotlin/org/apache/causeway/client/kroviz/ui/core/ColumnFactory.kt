@@ -29,8 +29,10 @@ import io.kvision.utils.obj
 import org.apache.causeway.client.kroviz.core.model.CollectionDM
 import org.apache.causeway.client.kroviz.core.model.Exposer
 import org.apache.causeway.client.kroviz.core.model.PropertyDetails
+import org.apache.causeway.client.kroviz.to.TObject
 import org.apache.causeway.client.kroviz.to.ValueType
 import org.apache.causeway.client.kroviz.to.Vega5
+import org.apache.causeway.client.kroviz.ui.menu.ContextMenuBuilder
 import org.apache.causeway.client.kroviz.ui.menu.DynamicMenuBuilder
 import org.apache.causeway.client.kroviz.utils.js.Vega
 
@@ -69,19 +71,17 @@ class ColumnFactory {
             width = "40",
             headerSort = false,
             clickMenu = { _: dynamic, cellComponent: dynamic ->
-                buildObjectMenu(cellComponent.unsafeCast<Tabulator.CellComponent>())
+                val tObject = getObjectFromCell(cellComponent)
+                DynamicMenuBuilder().buildObjectMenu(tObject)
             }
         )
     }
 
-    private fun buildObjectMenu(cell: Tabulator.CellComponent): dynamic {
+
+    private fun getObjectFromCell(cell: Tabulator.CellComponent): TObject {
         val row = cell.getRow()
         val exposer = row.getData() as Exposer
-        val tObject = exposer.delegate
-        val menu = DynamicMenuBuilder().buildObjectMenu(tObject)
-        console.log("[CF_buildObjetMenu]")
-        console.log(menu)
-        return menu
+        return exposer.delegate
     }
 
     private fun exposeIcons(displayCollection: CollectionDM) {

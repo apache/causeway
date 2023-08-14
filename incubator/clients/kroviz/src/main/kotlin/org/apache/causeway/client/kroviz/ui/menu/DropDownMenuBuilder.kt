@@ -149,43 +149,6 @@ class DropDownMenuBuilder : MenuBuilder() {
         return null
     }
 
-    fun buildActionLink(
-        label: String,
-        menuTitle: String,
-    ): KvisionHtmlLink {
-        val actionTitle = StringUtils.deCamel(label)
-        val actionLink: KvisionHtmlLink = ddLink(
-            label = actionTitle,
-            icon = IconManager.find(label),
-            className = IconManager.findStyleFor(label)
-        )
-        val id = "$menuTitle${Constants.actionSeparator}$actionTitle"
-        actionLink.setDragDropData(Constants.stdMimeType, id)
-        actionLink.id = id
-        return actionLink
-    }
-
-    private fun ddLink(
-        label: String,
-        icon: String? = null,
-        className: String? = null,
-        init: (KvisionHtmlLink.() -> Unit)? = null,
-    ): KvisionHtmlLink {
-        val link = KvisionHtmlLink(
-            label = label,
-            url = null,
-            icon = icon,
-            image = null,
-            separator = null,
-            labelFirst = true,
-            className = className
-        )
-        link.addCssClass("dropdown-item")
-        return link.apply {
-            init?.invoke(this)
-        }
-    }
-
     // initially added items will be enabled
     private fun amendWithSaveUndo(
         dd: DropDown,
