@@ -115,10 +115,11 @@ public interface MemberExecutorService {
             final @NonNull PropertySetterFacet setterFacet,
             final @NonNull PropertyModifyFacetAbstract propertySetterOrClearFacetForDomainEventAbstract) {
 
-        val propertyExecutor = new PropertyModifier(owningProperty.getMetaModelContext(), facetHolder,
-                ModificationVariant.SET, interactionInitiatedBy, head,
-                owningProperty, newValueAdapter, getterFacet, setterFacet, null,
+        val propertyExecutor = PropertyModifier.forPropertySet(facetHolder,
+                interactionInitiatedBy, head, newValueAdapter,
+                owningProperty, getterFacet, setterFacet,
                 propertySetterOrClearFacetForDomainEventAbstract);
+
         return setOrClearProperty(propertyExecutor);
     }
 

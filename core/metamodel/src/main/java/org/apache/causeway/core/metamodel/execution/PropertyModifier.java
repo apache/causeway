@@ -41,13 +41,14 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import static org.apache.causeway.commons.internal.base._Casts.uncheckedCast;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Log4j2
 public final class PropertyModifier
 implements
@@ -143,12 +144,20 @@ implements
     public Object execute(final PropertyEdit currentExecution) {
 
         // update the current execution with the DTO (memento)
-        val propertyEditDto =
-                getInteractionDtoServiceInternal().asPropertyEditDto(
-                        owningProperty, head.getOwner(), newValue, head);
-        currentExecution.setDto(propertyEditDto);
+        //
+        // but ... no point in attempting this if no bookmark is yet available.
+        // One way this might occur is if using excel module to populate an entity representing each line of the spreadsheet;
+        // but the entity will be transient at the point.  But there's probably very little value in creating DTOs in such a scenario.
+        //
+        val ownerAdapter = head.getOwner();
+        val ownerHasBookmark = ManagedObjects.bookmark(ownerAdapter).isPresent();
 
-        //XXX no sure if we the call to currentExecution.setDto(propertyEditDto) above is even required if not post-able
+        if (ownerHasBookmark) {
+            val propertyEditDto =
+                    getInteractionDtoServiceInternal().asPropertyEditDto(owningProperty, head, newValue);
+            currentExecution.setDto(propertyEditDto);
+        }
+
         if(!isPostable()) {
             // don't emit domain events
             executeClearOrSetWithoutEvents(newValue);
