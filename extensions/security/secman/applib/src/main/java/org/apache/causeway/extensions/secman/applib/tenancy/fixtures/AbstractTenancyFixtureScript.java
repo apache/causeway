@@ -23,12 +23,16 @@ import javax.inject.Inject;
 import org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy;
 import org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancyRepository;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScriptWithExecutionStrategy;
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 /**
  *
  * @since 2.0 {@index}
  */
-public abstract class AbstractTenancyFixtureScript extends FixtureScript {
+public abstract class AbstractTenancyFixtureScript 
+extends FixtureScript 
+implements FixtureScriptWithExecutionStrategy {
 
 
     protected ApplicationTenancy create(
@@ -52,6 +56,11 @@ public abstract class AbstractTenancyFixtureScript extends FixtureScript {
      */
     public ApplicationTenancy getApplicationTenancy() {
         return applicationTenancy;
+    }
+    
+    @Override
+    public FixtureScripts.MultipleExecutionStrategy getMultipleExecutionStrategy() {
+        return null;
     }
 
     @Inject private ApplicationTenancyRepository applicationTenancyRepository;

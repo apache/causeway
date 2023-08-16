@@ -629,7 +629,9 @@ public abstract class FixtureScript {
             if(childFixtureScript instanceof FixtureScriptWithExecutionStrategy) {
                 final FixtureScriptWithExecutionStrategy fixtureScriptWithExecutionStrategy =
                         (FixtureScriptWithExecutionStrategy) childFixtureScript;
-                executionStrategy = fixtureScriptWithExecutionStrategy.getMultipleExecutionStrategy();
+                executionStrategy = Optional.ofNullable(
+                        fixtureScriptWithExecutionStrategy.getMultipleExecutionStrategy())
+                        .orElseGet(fixtureScripts::getMultipleExecutionStrategy);
             } else {
                 executionStrategy = fixtureScripts.getMultipleExecutionStrategy();
             }
