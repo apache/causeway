@@ -55,6 +55,7 @@ import org.apache.causeway.extensions.secman.applib.user.fixtures.AbstractUserAn
 import org.apache.causeway.extensions.secman.applib.user.seed.CausewayExtSecmanAdminUser;
 import org.apache.causeway.extensions.secman.applib.util.ApplicationSecurityDto;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -146,11 +147,11 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
     }
 
     // -- HELPER
-    
-    private void seedFromDto(ExecutionContext executionContext, ApplicationSecurityDto dto) {
-        
+
+    private void seedFromDto(final ExecutionContext executionContext, final ApplicationSecurityDto dto) {
+
         // TENANCIES
-        
+
         _NullSafe.stream(dto.getTenancies())
         .sorted((a, b)->{
             // sort, such that dependencies come before dependents
@@ -161,76 +162,86 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
         .forEach(tenancyDto->{
             executionContext.executeChild(this, new AbstractTenancyFixtureScript() {
                 @Override
+                public FixtureScripts.MultipleExecutionStrategy getMultipleExecutionStrategy() {
+                    return FixtureScripts.MultipleExecutionStrategy.EXECUTE;
+                }
+                @Override
                 protected void execute(ExecutionContext executionContext) {
-                    create(tenancyDto.get__name(), tenancyDto.getPath(), 
+                    create(tenancyDto.get__name(), tenancyDto.getPath(),
                             tenancyDto.getParentPath(), executionContext);
                 }
             });
         });
-        
+
         // ROLES
-        
+
         _NullSafe.stream(dto.getRoles())
         .forEach(roleDto->{
             executionContext.executeChildren(this,
                     new AbstractRoleAndPermissionsFixtureScript(
                             roleDto.get__name(), roleDto.getDescription()) {
+                @Override
+                public FixtureScripts.MultipleExecutionStrategy getMultipleExecutionStrategy() {
+                    return FixtureScripts.MultipleExecutionStrategy.EXECUTE;
+                }
+                @Override
+                protected void execute(ExecutionContext executionContext) {
 
-                        @Override
-                        protected void execute(ExecutionContext executionContext) {
-                            
-                            // PERMISSIONS
-                            
-                            _NullSafe.stream(roleDto.getPermissions())
-                            .forEach(permissionDto->{
-                                newPermissions(
-                                        permissionDto.getRule(),
-                                        permissionDto.getMode(),
-                                        Can.of(
-                                                ApplicationFeatureId.newFeature(
-                                                        permissionDto.getFeatureSort(), 
-                                                        permissionDto.getFeatureFqn())
-                                                )
-                                );
-                            });
-                        }
+                    // PERMISSIONS
+
+                    _NullSafe.stream(roleDto.getPermissions())
+                    .forEach(permissionDto->{
+                        newPermissions(
+                                permissionDto.getRule(),
+                                permissionDto.getMode(),
+                                Can.of(
+                                        ApplicationFeatureId.newFeature(
+                                                permissionDto.getFeatureSort(),
+                                                permissionDto.getFeatureFqn())
+                                        )
+                        );
+                    });
+                }
             });
         });
-        
+
         // USERS
-        
+
         _NullSafe.stream(dto.getUsers())
         .forEach(userDto->{
             executionContext.executeChildren(this,
                     new AbstractUserAndRolesFixtureScript(
-                            userDto.get__username(), 
+                            userDto.get__username(),
                             "pass", // to be overwritten below
-                            userDto.getAccountType(), 
+                            userDto.getAccountType(),
                             Can.ofCollection(userDto.getRoleNames())) {
-                
-                        @Override
-                        protected void execute(final ExecutionContext executionContext) {
-                            super.execute(executionContext);
-                            getApplicationUser().setEncryptedPassword(userDto.getEncryptedPassword());
-                            getApplicationUser().setAtPath(userDto.getAtPath());
-                            getApplicationUser().setFamilyName(userDto.getFamilyName());
-                            getApplicationUser().setGivenName(userDto.getGivenName());
-                            getApplicationUser().setKnownAs(userDto.getKnownAs());
-                            getApplicationUser().setEmailAddress(userDto.getEmailAddress());
-                            getApplicationUser().setPhoneNumber(userDto.getPhoneNumber());
-                            getApplicationUser().setFaxNumber(userDto.getFaxNumber());
-                            getApplicationUser().setLanguage(parseLocale(userDto.getLanguage()));
-                            getApplicationUser().setNumberFormat(parseLocale(userDto.getNumberFormat()));
-                            getApplicationUser().setTimeFormat(parseLocale(userDto.getTimeFormat()));
-                            getApplicationUser().setStatus(userDto.getStatus());
-                        }                        
-                    });
+                @Override
+                public FixtureScripts.MultipleExecutionStrategy getMultipleExecutionStrategy() {
+                    return FixtureScripts.MultipleExecutionStrategy.EXECUTE;
+                }
+                @Override
+                protected void execute(final ExecutionContext executionContext) {
+                    super.execute(executionContext);
+                    getApplicationUser().setEncryptedPassword(userDto.getEncryptedPassword());
+                    getApplicationUser().setAtPath(userDto.getAtPath());
+                    getApplicationUser().setFamilyName(userDto.getFamilyName());
+                    getApplicationUser().setGivenName(userDto.getGivenName());
+                    getApplicationUser().setKnownAs(userDto.getKnownAs());
+                    getApplicationUser().setEmailAddress(userDto.getEmailAddress());
+                    getApplicationUser().setPhoneNumber(userDto.getPhoneNumber());
+                    getApplicationUser().setFaxNumber(userDto.getFaxNumber());
+                    getApplicationUser().setLanguage(parseLocale(userDto.getLanguage()));
+                    getApplicationUser().setNumberFormat(parseLocale(userDto.getNumberFormat()));
+                    getApplicationUser().setTimeFormat(parseLocale(userDto.getTimeFormat()));
+                    getApplicationUser().setStatus(userDto.getStatus());
+                }
+            });
         });
-        
+
     }
-    
+
     // -- HELPER
-    
+
     @Nullable
     private java.util.Locale parseLocale(final @Nullable String input) {
         return localeSemantics.getParser().parseTextRepresentation(null, input);

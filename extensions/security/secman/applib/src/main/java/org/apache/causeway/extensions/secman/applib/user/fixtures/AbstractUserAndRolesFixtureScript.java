@@ -32,6 +32,8 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserStatus;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScriptWithExecutionStrategy;
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import lombok.Getter;
 import lombok.val;
@@ -42,7 +44,9 @@ import lombok.val;
  *
  * @since 2.x {@index}
  */
-public abstract class AbstractUserAndRolesFixtureScript extends FixtureScript {
+public abstract class AbstractUserAndRolesFixtureScript 
+extends FixtureScript
+implements FixtureScriptWithExecutionStrategy {
 
     @Inject private ApplicationUserRepository applicationUserRepository;
     @Inject private ApplicationRoleRepository applicationRoleRepository;
@@ -101,6 +105,11 @@ public abstract class AbstractUserAndRolesFixtureScript extends FixtureScript {
         this.tenancyPathSupplier = nullSafe(tenancyPathSupplier);
         this.accountTypeSupplier = nullSafe(accountTypeSupplier);
         this.roleNamesSupplier = nullSafe(roleNamesSupplier);
+    }
+    
+    @Override
+    public FixtureScripts.MultipleExecutionStrategy getMultipleExecutionStrategy() {
+        return null;
     }
 
     protected final String getUsername() {
