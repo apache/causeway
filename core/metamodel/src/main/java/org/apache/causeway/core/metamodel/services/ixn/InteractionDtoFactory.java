@@ -84,8 +84,7 @@ public interface InteractionDtoFactory {
      */
     PropertyEditDto asPropertyEditDto(
             OneToOneAssociation property,
-            ManagedObject targetAdapter,
-            ManagedObject newValueAdapterIfAny, InteractionHead interactionHead);
+            InteractionHead interactionHead, ManagedObject newValueAdapterIfAny);
 
     /**
      * Called by the framework to attach the result of an action invocation
