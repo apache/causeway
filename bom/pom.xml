@@ -180,8 +180,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <surefire.useModulePath>false</surefire.useModulePath> <!-- disable module-path for testing, that is, put everything on the class-path -->
         <swagger-core.version>2.2.10</swagger-core.version>
 
-        <togglz.version>4.0.1</togglz.version>
-
         <wicket.version>9.14.0</wicket.version>
         <wicket-bootstrap.version>6.0.4</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
         <wicket-webjars.version>3.0.7</wicket-webjars.version>
@@ -2002,28 +2000,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>
 				<version>${slf4j-api.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.togglz</groupId>
-				<artifactId>togglz-core</artifactId>
-				<version>${togglz.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.togglz</groupId>
-				<artifactId>togglz-junit</artifactId>
-				<version>${togglz.version}</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.togglz</groupId>
-				<artifactId>togglz-servlet</artifactId>
-				<version>${togglz.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.togglz</groupId>
-				<artifactId>togglz-console</artifactId>
-				<version>${togglz.version}</version>
 			</dependency>
 
 			<dependency>
