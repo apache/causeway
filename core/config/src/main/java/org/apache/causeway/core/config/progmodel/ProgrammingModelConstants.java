@@ -548,6 +548,12 @@ public final class ProgrammingModelConstants {
                 + " but introspection did pick up method '${actualMethodName}' instead."),
         INVALID_MIXIN_SORT("Mixin ${type} is declared as contributing '${expectedContributing}'"
                 + " but introspection did pick it up as '${actualContributing}' instead."),
+        INVALID_USE_OF_VALIDATION_SUPPORT_METHOD("Validation support method "
+                + "for member '${memberName}' in class '${className}' "
+                + "was returning an empty string, which is invalid use of Apache Causeway's programming model. "
+                + "In case a successful validation was intended, "
+                + "the method should return null instead of an empty string. "
+                + "(Please inform your developers!)"),
         ;
 
         private final String template;
@@ -815,6 +821,5 @@ public final class ProgrammingModelConstants {
         templateVars.forEach((k, v)->templateRef.update(str->str.replace("${" + k + "}", v)));
         return templateRef.getValue();
     }
-
 
 }
