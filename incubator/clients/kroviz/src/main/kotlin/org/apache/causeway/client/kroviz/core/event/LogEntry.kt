@@ -31,6 +31,7 @@ import org.w3c.files.Blob
 import kotlin.js.Date
 
 // use color codes from css instead?
+@Serializable
 enum class EventState(val id: String, val iconName: String, val style: ButtonStyle) {
     INITIAL("INITIAL", "fas fa-power-off", ButtonStyle.LIGHT),
     RUNNING("RUNNING", "fas fa-hourglass-start", ButtonStyle.WARNING),
@@ -62,6 +63,7 @@ data class LogEntry(
     val subType = rs?.subType
 
     //?. is required, otherwise Tabulator.js/EventLogTable shows no entries
+    @Contextual
     var state = EventState.INITIAL
     var title: String = ""
     var requestLength: Int = 0 // must be accessible (public) for LogEntryTable
@@ -75,8 +77,8 @@ data class LogEntry(
     init {
         state = EventState.RUNNING
         title = url
-        requestLength = request?.length
-            ?: 0 // ?. is required, otherwise Tabulator.js/EventLogTable shows no entries
+        // ?. is required, otherwise Tabulator.js/EventLogTable shows no entries
+        requestLength = request?.length?: 0
     }
 
     @Contextual

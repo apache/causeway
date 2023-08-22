@@ -29,42 +29,27 @@ import io.kvision.utils.px
 import org.apache.causeway.client.kroviz.core.event.EventState
 import org.apache.causeway.client.kroviz.core.event.LogEntry
 import org.apache.causeway.client.kroviz.to.TObject
+import org.apache.causeway.client.kroviz.ui.builder.TableBuilder
 import org.apache.causeway.client.kroviz.ui.core.Constants
 import org.apache.causeway.client.kroviz.ui.dialog.EventLogDetail
 import org.apache.causeway.client.kroviz.ui.menu.DynamicMenuBuilder
 import org.apache.causeway.client.kroviz.utils.StringUtils
 
 class EventLogTable(val model: List<LogEntry>, filterState: EventState? = null) : VPanel() {
-    val tabulator: Tabulator<LogEntry>
+    val tabulator: Tabulator<dynamic>
 
     private val columns = listOf(
-        ColumnDefinition<LogEntry>(
-            download = false,
-            title = "",
-            field = "state",
-            width = "50",
-            headerMenu = DynamicMenuBuilder().buildTableMenu(this),
-            hozAlign = Align.CENTER,
-            vertAlign = VAlign.MIDDLE,
-            formatterComponentFunction = { _, _, data -> buildActionButton(data) }
-        ),
+        buildForTableMenu(),
         ColumnDefinition(
             download = false,
             title = "Title",
             field = "title",
             headerFilter = Editor.INPUT,
             width = "700",
-            formatterComponentFunction = { _, _, data -> buildObjectButton(data) }
-        ),
-        ColumnDefinition(
-            download = false,
-            title = "Type",
-            field = "type",
-            headerFilter = Editor.INPUT,
-            width = "200"
-        ),
-        ColumnDefinition("State", "state", width = "100", headerFilter = Editor.INPUT, download = false),
-        ColumnDefinition("Method", "method", width = "100", headerFilter = Editor.INPUT, download = false),
+            formatterComponentFunction = { _, _, data -> buildObjectButton(data) }),
+        buildForType(),
+        buildForState(),
+        ColumnDefinition("Method", "method_1", width = "100", headerFilter = Editor.INPUT, download = false),
         ColumnDefinition(
             download = false,
             title = "# of Agg.",
@@ -80,28 +65,71 @@ class EventLogTable(val model: List<LogEntry>, filterState: EventState? = null) 
             headerFilter = Editor.INPUT,
             width = "200",
         ),
-        ColumnDefinition("resp.len", field = "responseLength", width = "100", hozAlign = Align.RIGHT, download = false),
+        ColumnDefinition(
+            "resp.len",
+            field = "responseLength",
+            width = "100",
+            hozAlign = Align.RIGHT,
+            download = false
+        ),
         ColumnDefinition("cacheHits", field = "cacheHits", width = "100", hozAlign = Align.RIGHT, download = false),
         ColumnDefinition("duration", field = "duration", width = "100", hozAlign = Align.RIGHT, download = false),
-        ColumnDefinition(
+        buildForCreatedAt(),
+        buildForUpdatedAt()
+    )
+
+    private fun buildForTableMenu(): ColumnDefinition<dynamic> {
+        return ColumnDefinition(
+            download = false,
+            title = "",
+            field = "state",
+            width = "50",
+            headerMenu = DynamicMenuBuilder().buildTableMenu(this),
+            hozAlign = Align.CENTER,
+            vertAlign = VAlign.MIDDLE,
+            formatterComponentFunction = { _, _, data -> buildActionButton(data) }
+        )
+    }
+
+    private fun buildForState(): ColumnDefinition<dynamic> {
+        return ColumnDefinition("State", "state", width = "100", headerFilter = Editor.INPUT, download = false)
+    }
+
+    private fun buildForType(): ColumnDefinition<dynamic> {
+        return ColumnDefinition(
+            download = false,
+            title = "Type",
+            field = "type",
+            headerFilter = Editor.INPUT,
+            width = "200"
+        )
+    }
+
+    private fun buildForCreatedAt(): ColumnDefinition<dynamic> {
+        return ColumnDefinition(
             download = false,
             title = "Created",
             field = "createdAt",
             sorter = Sorter.DATETIME,
             formatter = Formatter.DATETIME,
-            formatterParams = obj { outputFormat = "HH:mm:ss.SSS" },
+            formatterParams = obj
+            { outputFormat = "HH:mm:ss.SSS" },
             width = "100"
-        ),
-        ColumnDefinition(
+        )
+    }
+
+    private fun buildForUpdatedAt(): ColumnDefinition<dynamic> {
+        return ColumnDefinition(
             download = false,
             title = "Updated",
             field = "updatedAt",
             sorter = Sorter.DATETIME,
             formatter = Formatter.DATETIME,
-            formatterParams = obj { outputFormat = "HH:mm:ss.SSS" },
+            formatterParams = obj
+            { outputFormat = "HH:mm:ss.SSS" },
             width = "100"
         )
-    )
+    }
 
     private fun buildObjectButton(data: LogEntry): Button {
         val b = Button(
@@ -140,20 +168,15 @@ class EventLogTable(val model: List<LogEntry>, filterState: EventState? = null) 
             border = Border(width = 1.px)
         }
 
-        val options = TabulatorOptions(
-            movableColumns = true,
-            height = Constants.calcHeight,
-            layout = Layout.FITCOLUMNS,
-            columns = columns,
-            persistenceMode = false
-        )
-
-        tabulator = tabulator(model, options = options) {
-            setEventListener<Tabulator<LogEntry>> {
-            }
+        val data = mutableListOf<dynamic>()
+        model.forEach {
+            data.add(it.asDynamic())
         }
+        console.log("[ELT_init]")
+        console.log(data)
 
-        tabulator.onEvent {
+        tabulator = TableBuilder().createTabulator(data, columns)
+        tabulator.setEventListener<Tabulator<dynamic>> {
             mouseover = {
                 val jst = tabulator.jsTabulator
                 val value = filterState?.name
@@ -162,6 +185,7 @@ class EventLogTable(val model: List<LogEntry>, filterState: EventState? = null) 
                 }
             }
         }
+        add(tabulator)
     }
 
 }

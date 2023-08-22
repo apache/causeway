@@ -21,6 +21,7 @@ package org.apache.causeway.client.kroviz.to.mb
 import org.apache.causeway.client.kroviz.handler.MenuBarsHandler
 import org.apache.causeway.client.kroviz.snapshots.demo2_0_0.MENUBARS
 import org.apache.causeway.client.kroviz.snapshots.simpleapp1_16_0.RESTFUL_MENUBARS
+import org.apache.causeway.client.kroviz.to.Menubars
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull

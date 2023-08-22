@@ -21,14 +21,12 @@ package org.apache.causeway.client.kroviz.ui.core
 import io.kvision.core.CssSize
 import io.kvision.core.UNIT
 import io.kvision.panel.SimplePanel
-import io.kvision.tabulator.Layout
-import io.kvision.tabulator.TableType
 import io.kvision.tabulator.Tabulator
-import io.kvision.tabulator.TabulatorOptions
 import io.kvision.tabulator.js.Tabulator.CellComponent
 import org.apache.causeway.client.kroviz.core.event.ResourceProxy
 import org.apache.causeway.client.kroviz.core.model.CollectionDM
 import org.apache.causeway.client.kroviz.core.model.Exposer
+import org.apache.causeway.client.kroviz.ui.builder.TableBuilder
 import org.apache.causeway.client.kroviz.utils.StringUtils
 
 /**
@@ -44,14 +42,7 @@ class RoTable(displayCollection: CollectionDM) : SimplePanel() {
         width = CssSize(100, UNIT.perc)
         val columns = ColumnFactory().buildColumns(displayCollection)
         val model = displayCollection.data
-        val options = TabulatorOptions(
-            movableColumns = true,
-            height = Constants.calcHeight,
-            layout = Layout.FITDATASTRETCH,
-            columns = columns,
-            persistenceMode = false,
-        )
-        val tabulator = createTabulator(model, options)
+        val tabulator = TableBuilder().createTabulator(model, columns)
         tabulator.setEventListener<Tabulator<dynamic>> {
             cellClickTabulator = {
                 val cc = it.detail.unsafeCast<CellComponent>()
@@ -63,23 +54,7 @@ class RoTable(displayCollection: CollectionDM) : SimplePanel() {
                 }
             }
         }
-        tabulator.addCssClass("horizontal-tb")
         add(tabulator)
-    }
-
-    private fun createTabulator(
-        data: MutableList<dynamic>,
-        options: TabulatorOptions<dynamic>
-    ): Tabulator<dynamic> {
-        val dataUpdateOnEdit = true
-        val className: String? = null
-        val init: (Tabulator<dynamic>.() -> Unit)? = null
-        val tableTypes = setOf(TableType.STRIPED, TableType.HOVER)
-        val tabulator = Tabulator(null, dataUpdateOnEdit, options.copy(data = data.toTypedArray()), tableTypes)
-        if (className != null)
-            tabulator.addCssClass(className)
-        init?.invoke(tabulator)
-        return tabulator
     }
 
 }

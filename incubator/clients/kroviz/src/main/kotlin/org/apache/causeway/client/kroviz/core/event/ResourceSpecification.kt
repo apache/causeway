@@ -24,7 +24,7 @@ import org.apache.causeway.client.kroviz.utils.StringUtils
 import org.apache.causeway.client.kroviz.utils.UrlUtils
 
 @Serializable
-class ResourceSpecification(
+data class ResourceSpecification(
     val url: String,
     val subType: String? = Constants.subTypeJson,
     val referrerUrl: String = "") {
