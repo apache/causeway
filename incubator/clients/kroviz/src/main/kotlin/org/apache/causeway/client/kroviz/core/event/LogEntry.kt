@@ -65,13 +65,18 @@ data class LogEntry(
     //?. is required, otherwise Tabulator.js/EventLogTable shows no entries
     @Contextual
     var state = EventState.INITIAL
+    @Contextual
     var title: String = ""
+    @Contextual
     var requestLength: Int = 0 // must be accessible (public) for LogEntryTable
+    @Contextual
     var response = ""
 
     @Contextual
     var blob: Blob? = null
+    @Contextual
     var responseLength: Int = 0 // must be accessible (public) for LogEntryTable
+    @Contextual
     var type: String = ""
 
     init {
@@ -87,11 +92,13 @@ data class LogEntry(
     @Contextual
     private var lastAccessedAt: Date? = null
 
+    @Contextual
     private var fault: String? = null
 
     @Contextual
     var duration: Int = 0
 
+    @Contextual
     var cacheHits = 0
 
     @Contextual
@@ -104,7 +111,9 @@ data class LogEntry(
     @Contextual
     var panel: SimplePanel? = null
 
+    @Contextual
     var runningAtStart = 0
+    @Contextual
     var runningAtEnd = 0
 
     // alternative constructor for UI events (e.g. from user interaction)

@@ -39,50 +39,26 @@ class EventLogTable(val model: List<LogEntry>, filterState: EventState? = null) 
     val tabulator: Tabulator<dynamic>
 
     private val columns = listOf(
-        buildForTableMenu(),
-        ColumnDefinition(
-            download = false,
-            title = "Title",
-            field = "title",
-            headerFilter = Editor.INPUT,
-            width = "700",
-            formatterComponentFunction = { _, _, data -> buildObjectButton(data) }),
-        buildForType(),
-        buildForState(),
-        ColumnDefinition("Method", "method_1", width = "100", headerFilter = Editor.INPUT, download = false),
-        ColumnDefinition(
-            download = false,
-            title = "# of Agg.",
-            field = "nOfAggregators",
-            headerFilter = Editor.INPUT,
-            width = "20"
-        ),
-        ColumnDefinition("req.len", field = "requestLength", width = "100", hozAlign = Align.RIGHT, download = false),
-        ColumnDefinition(
-            download = false,
-            title = "response",
-            field = "response",
-            headerFilter = Editor.INPUT,
-            width = "200",
-        ),
-        ColumnDefinition(
-            "resp.len",
-            field = "responseLength",
-            width = "100",
-            hozAlign = Align.RIGHT,
-            download = false
-        ),
-        ColumnDefinition("cacheHits", field = "cacheHits", width = "100", hozAlign = Align.RIGHT, download = false),
-        ColumnDefinition("duration", field = "duration", width = "100", hozAlign = Align.RIGHT, download = false),
-        buildForCreatedAt(),
-        buildForUpdatedAt()
+//        buildCdForTableMenu(),
+//        buildCdForTitle(),
+        buildCdForType(),
+//        buildCdForState(),
+        buildCdForMethod(),
+        buildCdForAggregators(),
+        buildCdForRequestLenght(),
+        buildCdForResponse(),
+        buildCdForResponseLength(),
+        buildCdForCacheHits(),
+        buildCdForDuration(),
+        buildCdForCreatedAt(),
+        buildCdForUpdatedAt()
     )
 
-    private fun buildForTableMenu(): ColumnDefinition<dynamic> {
+    private fun buildCdForTableMenu(): ColumnDefinition<dynamic> {
         return ColumnDefinition(
             download = false,
             title = "",
-            field = "state",
+            field = "state_1",
             width = "50",
             headerMenu = DynamicMenuBuilder().buildTableMenu(this),
             hozAlign = Align.CENTER,
@@ -91,25 +67,99 @@ class EventLogTable(val model: List<LogEntry>, filterState: EventState? = null) 
         )
     }
 
-    private fun buildForState(): ColumnDefinition<dynamic> {
-        return ColumnDefinition("State", "state", width = "100", headerFilter = Editor.INPUT, download = false)
+    private fun buildCdForTitle(): ColumnDefinition<dynamic> {
+        return ColumnDefinition(
+            download = false,
+            title = "Title",
+            field = "title_1",
+            headerFilter = Editor.INPUT,
+            width = "700",
+            formatterComponentFunction = { _, _, data -> buildObjectButton(data) })
     }
 
-    private fun buildForType(): ColumnDefinition<dynamic> {
+    private fun buildCdForState(): ColumnDefinition<dynamic> {
+        return ColumnDefinition("State", "state_1", width = "100", headerFilter = Editor.INPUT, download = false)
+    }
+
+    private fun buildCdForMethod(): ColumnDefinition<dynamic> {
+        return ColumnDefinition("Method", "method_1", width = "100", headerFilter = Editor.INPUT, download = false)
+    }
+
+    private fun buildCdForAggregators(): ColumnDefinition<dynamic> {
+        return ColumnDefinition(
+            download = false,
+            title = "# of Agg.",
+            field = "nOfAggregators_1",
+            headerFilter = Editor.INPUT,
+            width = "20"
+        )
+    }
+
+    private fun buildCdForType(): ColumnDefinition<dynamic> {
         return ColumnDefinition(
             download = false,
             title = "Type",
-            field = "type",
+            field = "type_1",
             headerFilter = Editor.INPUT,
             width = "200"
         )
     }
 
-    private fun buildForCreatedAt(): ColumnDefinition<dynamic> {
+    private fun buildCdForRequestLenght(): ColumnDefinition<dynamic> {
+        return ColumnDefinition(
+            "req.len",
+            field = "requestLength_1",
+            width = "100",
+            hozAlign = Align.RIGHT,
+            download = false
+        )
+    }
+
+    private fun buildCdForResponse(): ColumnDefinition<dynamic> {
+        return ColumnDefinition(
+            download = false,
+            title = "response",
+            field = "response_1",
+            headerFilter = Editor.INPUT,
+            width = "200",
+        )
+    }
+
+    private fun buildCdForResponseLength(): ColumnDefinition<dynamic> {
+        return ColumnDefinition(
+            "resp.len",
+            field = "responseLength_1",
+            width = "100",
+            hozAlign = Align.RIGHT,
+            download = false
+        )
+    }
+
+    private fun buildCdForCacheHits(): ColumnDefinition<dynamic> {
+        return ColumnDefinition(
+            "cacheHits",
+            field = "cacheHits_1",
+            width = "100",
+            hozAlign = Align.RIGHT,
+            download = false
+        )
+    }
+
+    private fun buildCdForDuration(): ColumnDefinition<dynamic> {
+        return ColumnDefinition(
+            "duration",
+            field = "duration_1",
+            width = "100",
+            hozAlign = Align.RIGHT,
+            download = false
+        )
+    }
+
+    private fun buildCdForCreatedAt(): ColumnDefinition<dynamic> {
         return ColumnDefinition(
             download = false,
             title = "Created",
-            field = "createdAt",
+            field = "createdAt_1",
             sorter = Sorter.DATETIME,
             formatter = Formatter.DATETIME,
             formatterParams = obj
@@ -118,11 +168,11 @@ class EventLogTable(val model: List<LogEntry>, filterState: EventState? = null) 
         )
     }
 
-    private fun buildForUpdatedAt(): ColumnDefinition<dynamic> {
+    private fun buildCdForUpdatedAt(): ColumnDefinition<dynamic> {
         return ColumnDefinition(
             download = false,
             title = "Updated",
-            field = "updatedAt",
+            field = "updatedAt_1",
             sorter = Sorter.DATETIME,
             formatter = Formatter.DATETIME,
             formatterParams = obj
