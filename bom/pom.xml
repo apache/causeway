@@ -3321,6 +3321,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
             <name>Joerg Rade</name>
             <email>joergrade@apache.org</email>
             <roles>
+                <role>pmc chair</role>
                 <role>pmc</role>
                 <role>committer</role>
             </roles>
@@ -3331,7 +3332,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
             <name>Kevin Meyer</name>
             <email>kevin@apache.org</email>
             <roles>
-                <role>pmc chair</role>
                 <role>pmc</role>
                 <role>committer</role>
             </roles>
