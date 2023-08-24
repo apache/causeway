@@ -21,6 +21,11 @@ package org.apache.causeway.core.metamodel.object;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.base._Tuples;
+import org.apache.causeway.commons.internal.collections._Arrays;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -554,6 +559,31 @@ extends
         return adaptSingularInternal(guess, pojo, Optional.empty());
     }
 
+    static ManagedObject adaptProperty(
+            final @NonNull OneToOneAssociation oneToOneAssociation,
+            final @Nullable Object pojo) {
+        return adaptSingularInternal(oneToOneAssociation.getElementType(), pojo, Optional.empty());
+    }
+
+    static ManagedObject adaptParameter(
+            final @NonNull ObjectActionParameter param,
+            final @Nullable Object paramValue) {
+
+        return param.isSingular()
+                ? adaptSingular(param.getElementType(), paramValue)
+                // else adopt each element pojo then pack
+                : packed(param.getElementType(),
+                ManagedObjects.adaptMultipleOfType(param.getElementType(), paramValue));
+    }
+
+    static ManagedObject[] adaptParameters(
+            final Can<ObjectActionParameter> objectActionParameters,
+            final Can<Object> args) {
+        return _NullSafe.stream(objectActionParameters.zipMap(args, _Tuples::pair))
+                .map(tuple -> adaptParameter(tuple.get_1(), tuple.get_2()))
+                .collect(_Arrays.toArray(ManagedObject.class, args.size()));
+    }
+
     /**
      * Optimized for cases, when the pojo's specification and bookmark are already available.
      */
@@ -608,15 +638,5 @@ extends
         throw _Exceptions.unmatchedCase(specialization);
     }
 
-    static ManagedObject adaptParameter(
-            final @NonNull ObjectActionParameter param,
-            final @Nullable Object paramValue) {
-
-        return param.isSingular()
-                ? adaptSingular(param.getElementType(), paramValue)
-                // else adopt each element pojo then pack
-                : packed(param.getElementType(),
-                        ManagedObjects.adaptMultipleOfType(param.getElementType(), paramValue));
-    }
 
 }
