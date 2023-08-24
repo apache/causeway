@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.entity.icontitle;
 
-import java.util.Optional;
-
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.AbstractLink;
@@ -29,7 +27,6 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmTitleUtils;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
@@ -61,12 +58,12 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
             final String id,
             final ObjectAdapterModel objectAdapterModel) {
         super(id, objectAdapterModel);
-        guardAgainstNonEmptyAbstractScalar(objectAdapterModel);
+        guardAgainstNonEmptyAbstractSingular(objectAdapterModel);
     }
 
-    protected ManagedObject getTargetAdapter() {
-        val targetAdapter = getModel().getObject();
-        return targetAdapter;
+    protected ManagedObject linkedDomainObject() {
+        val linkedDomainObject = getModel().getObject();
+        return linkedDomainObject;
     }
 
     @Override
@@ -75,77 +72,67 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
         super.onBeforeRender();
     }
 
+    /**
+     * Callback for sub-classes to add additional components.
+     */
+    protected void onLinkWrapperCreated(final MarkupContainer linkWrapper) {}
+
     // -- HELPER
 
     private void buildGui() {
-        addLinkWrapper();
+        final ManagedObject linkedDomainObject = linkedDomainObject(); //TODO[CAUSEWAY-3522] potentially a viewmodel referencing hollow entities
+        //ManagedObjects.refreshViewmodel(linkedDomainObject(), null); //XXX workaround, if not using title caching
+        addLinkWrapper(linkedDomainObject);
+        setOutputMarkupId(true);
+    }
+
+    private void addLinkWrapper(final ManagedObject linkedDomainObject) {
+        val linkWrapper = Wkt.container(ID_ENTITY_LINK_WRAPPER);
+        linkWrapper.addOrReplace(createLinkWithIconAndTitle(linkedDomainObject));
+        addOrReplace(linkWrapper);
+        onLinkWrapperCreated(linkWrapper);
+    }
+
+    private AbstractLink createLinkWithIconAndTitle(final ManagedObject linkedDomainObject) {
+        final AbstractLink link = createDynamicallyVisibleLink(linkedDomainObject);
 
         if(isTitleSuppressed()) {
-            // bit of a hack... allows us to suppress the title using CSS
-            Wkt.cssAppend(this, "inlinePrompt");
+            hideTitle();
         }
 
-        setOutputMarkupId(true);
+        if (ManagedObjects.isNullOrUnspecifiedOrEmpty(linkedDomainObject)) {
+            WktComponents.permanentlyHide(link, ID_ENTITY_ICON);
+            Wkt.labelAdd(link, ID_ENTITY_TITLE, titleAbbreviated("(no object)"));
+        } else {
+            linkedDomainObject.eitherIconOrFaClass()
+            .accept(
+                    objectIcon->{
+                        Wkt.imageAddCachable(link, ID_ENTITY_ICON,
+                                getImageResourceCache().resourceReferenceForObjectIcon(objectIcon));
+                        WktComponents.permanentlyHide(link, ID_ENTITY_FONT_AWESOME);
+                    },
+                    cssClassFaFactory->{
+                        WktComponents.permanentlyHide(link, ID_ENTITY_ICON);
+                        final Label dummyLabel = Wkt.labelAdd(link, ID_ENTITY_FONT_AWESOME, "");
+                        Wkt.cssAppend(dummyLabel, cssClassFaFactory.asSpaceSeparatedWithAdditional("fa-2x"));
+                    });
+
+            final String title = determineTitle(linkedDomainObject);
+            Wkt.labelAdd(link, ID_ENTITY_TITLE, titleAbbreviated(title));
+
+            final String tooltipTitle = linkedDomainObject.getSpecification().getSingularName();
+            final String tooltipBody = _Strings.nonEmpty(getModel().getTypeOfSpecification().getDescription())
+                    .orElseGet(()->title);
+            WktTooltips.addTooltip(link, tooltipTitle, tooltipBody);
+        }
+
+        return link;
     }
 
     private boolean isTitleSuppressed() {
         return getModel().isInlinePrompt()
                 //XXX CAUSEWAY-1699 never hide titles of object references in tables
                 && !getModel().getRenderingHint().isInTable();
-    }
-
-    protected MarkupContainer addLinkWrapper() {
-        val linkWrapper = Wkt.container(ID_ENTITY_LINK_WRAPPER);
-        linkWrapper.addOrReplace(createLinkWithIconAndTitle());
-        addOrReplace(linkWrapper);
-        return linkWrapper;
-    }
-
-    private AbstractLink createLinkWithIconAndTitle() {
-
-        ObjectSpecification typeOfSpecification = getModel().getTypeOfSpecification();
-        final ManagedObject targetAdapter = getTargetAdapter();
-
-        final AbstractLink link = createDynamicallyVisibleLink(targetAdapter);
-
-        if(targetAdapter != null) {
-
-            if (ManagedObjects.isNullOrUnspecifiedOrEmpty(targetAdapter)) {
-                WktComponents.permanentlyHide(link, ID_ENTITY_ICON);
-                final String title = "(no object)";
-                Wkt.labelAdd(link, ID_ENTITY_TITLE, titleAbbreviated(title));
-
-            } else {
-
-                targetAdapter.eitherIconOrFaClass()
-                .accept(
-                        objectIcon->{
-                            Wkt.imageAddCachable(link, ID_ENTITY_ICON,
-                                    getImageResourceCache().resourceReferenceForObjectIcon(targetAdapter.getIcon()));
-                            WktComponents.permanentlyHide(link, ID_ENTITY_FONT_AWESOME);
-                        },
-                        cssClassFaFactory->{
-                            WktComponents.permanentlyHide(link, ID_ENTITY_ICON);
-                            final Label dummyLabel = Wkt.labelAdd(link, ID_ENTITY_FONT_AWESOME, "");
-                            Wkt.cssAppend(dummyLabel, cssClassFaFactory.asSpaceSeparatedWithAdditional("fa-2x"));
-                        });
-
-                final String title = determineTitle();
-                Wkt.labelAdd(link, ID_ENTITY_TITLE, titleAbbreviated(title));
-
-                final String tooltipTitle = determineFriendlyType() // from actual underlying model
-                        .orElseGet(()->
-                            // not sure if this code path is ever reached
-                            targetAdapter.getSpecification().getSingularName());
-                final String tooltipBody = _Strings.nonEmpty(typeOfSpecification.getDescription())
-                        .orElseGet(()->title);
-
-                WktTooltips.addTooltip(link, tooltipTitle, tooltipBody);
-
-            }
-        }
-
-        return link;
     }
 
     private AbstractLink createDynamicallyVisibleLink(final ManagedObject _targetAdapter) {
@@ -170,23 +157,19 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
         return abbreviated(titleString, maxTitleLength);
     }
 
-    private Optional<String> determineFriendlyType() {
-        val domainObject = getModel().getObject();
-        return ManagedObjects.isSpecified(domainObject)
-                ? _Strings.nonEmpty(domainObject.getSpecification().getSingularName())
-                : Optional.empty();
+    private String determineTitle(final ManagedObject linkedDomainObject) {
+        return MmTitleUtils.getTitleHonoringTitlePartSkipping(linkedDomainObject, this::isContextAdapter);
     }
 
-    private String determineTitle() {
-        val managedObject = getModel().getObject();
-        return MmTitleUtils.getTitleHonoringTitlePartSkipping(managedObject, this::isContextAdapter);
+    private void hideTitle() {
+        // bit of a hack... allows us to suppress the title using CSS
+        Wkt.cssAppend(this, "inlinePrompt");
     }
 
     /**
      * @implNote In effect can govern title suppression by returning 0.
      */
     private int abbreviateTo(final ObjectAdapterModel model, final String titleString) {
-
         /* Allows any higher-order component factory to customize appearance,
          * if the context requires it.
          * Eg. don't suppress titles for tables that have no property columns. */
@@ -219,9 +202,9 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
         return maxLength <= 3 ? "" : str.substring(0, maxLength - 3) + "...";
     }
 
-    private static void guardAgainstNonEmptyAbstractScalar(final ObjectAdapterModel objectAdapterModel) {
+    private static void guardAgainstNonEmptyAbstractSingular(final ObjectAdapterModel objectAdapterModel) {
         val obj = objectAdapterModel.getObject();
-        _Assert.assertFalse(isNonEmptyAbstractScalar(obj),
+        _Assert.assertFalse(isNonEmptyAbstractSingular(obj),
                 ()->String.format("model for EntityIconAndTitlePanel, "
                         + "when non-empty, must not represent abstract types; "
                         + "however, got an abstract %s for object of type %s",
@@ -229,7 +212,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
                         obj.getPojo().getClass().getName()));
     }
 
-    private static boolean isNonEmptyAbstractScalar(final ManagedObject obj) {
+    private static boolean isNonEmptyAbstractSingular(final ManagedObject obj) {
         if(obj==null
                 || obj.getPojo()==null
                 || ManagedObjects.isPacked(obj)) {
