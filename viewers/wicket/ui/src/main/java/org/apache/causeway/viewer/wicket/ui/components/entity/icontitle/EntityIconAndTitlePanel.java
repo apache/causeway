@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.entity.icontitle;
 
+import java.util.Objects;
+
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.AbstractLink;
@@ -37,7 +39,9 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 
+import lombok.Builder;
 import lombok.val;
+import lombok.experimental.Accessors;
 
 /**
  * {@link PanelAbstract Panel} representing the icon and title of an entity,
@@ -117,13 +121,14 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
                         Wkt.cssAppend(dummyLabel, cssClassFaFactory.asSpaceSeparatedWithAdditional("fa-2x"));
                     });
 
-            final String title = determineTitle(linkedDomainObject);
-            Wkt.labelAdd(link, ID_ENTITY_TITLE, titleAbbreviated(title));
+            final TitleRecord title = determineTitle(linkedDomainObject);
+            Wkt.labelAdd(link, ID_ENTITY_TITLE, title.abbreviatedTitle());
 
-            final String tooltipTitle = linkedDomainObject.getSpecification().getSingularName();
-            final String tooltipBody = _Strings.nonEmpty(getModel().getTypeOfSpecification().getDescription())
-                    .orElseGet(()->title);
-            WktTooltips.addTooltip(link, tooltipTitle, tooltipBody);
+            if(title.suppressTooltipTitle()) {
+                WktTooltips.addTooltip(link, title.tooltipBody());
+            } else {
+                WktTooltips.addTooltip(link, title.tooltipTitle(), title.tooltipBody());
+            }
         }
 
         return link;
@@ -157,8 +162,33 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
         return abbreviated(titleString, maxTitleLength);
     }
 
-    private String determineTitle(final ManagedObject linkedDomainObject) {
-        return MmTitleUtils.getTitleHonoringTitlePartSkipping(linkedDomainObject, this::isContextAdapter);
+    /**
+     * Holder of titles for various UI contexts (Java record candidate).
+     */
+    @Builder
+    @lombok.Value @Accessors(fluent=true)
+    private static class TitleRecord {
+        final String fullTitle;
+        final String abbreviatedTitle;
+        final String tooltipTitle;
+        final String tooltipBody;
+        /**
+         * No need to show a tooltip-title that is equal to the tooltip-body.
+         */
+        final boolean suppressTooltipTitle() {
+            return Objects.equals(tooltipTitle, tooltipBody);
+        }
+    }
+
+    private TitleRecord determineTitle(final ManagedObject linkedDomainObject) {
+        val fullTitle = MmTitleUtils.getTitleHonoringTitlePartSkipping(linkedDomainObject, this::isContextAdapter);
+        return TitleRecord.builder()
+                .fullTitle(fullTitle)
+                .abbreviatedTitle(titleAbbreviated(fullTitle))
+                .tooltipTitle(_Strings.nullToEmpty(linkedDomainObject.getSpecification().getSingularName()))
+                .tooltipBody(_Strings.nonEmpty(linkedDomainObject.getSpecification().getDescription())
+                        .orElseGet(()->fullTitle))
+                .build();
     }
 
     private void hideTitle() {
