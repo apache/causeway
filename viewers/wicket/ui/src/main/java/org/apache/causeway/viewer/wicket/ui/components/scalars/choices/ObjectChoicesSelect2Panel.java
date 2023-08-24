@@ -64,7 +64,7 @@ implements ChoiceTitleHandler {
 
     public ObjectChoicesSelect2Panel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
-        this.isCompactFormat = !scalarModel.getRenderingHint().isRegular();
+        this.isCompactFormat = scalarModel.getRenderingHint().isInTable();
     }
 
     @Override

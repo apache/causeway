@@ -118,7 +118,10 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
                     cssClassFaFactory->{
                         WktComponents.permanentlyHide(link, ID_ENTITY_ICON);
                         final Label dummyLabel = Wkt.labelAdd(link, ID_ENTITY_FONT_AWESOME, "");
-                        Wkt.cssAppend(dummyLabel, cssClassFaFactory.asSpaceSeparatedWithAdditional("fa-2x"));
+                        val faSizeModifier = getModel().getRenderingHint().isInTable()
+                                ? "fa-lg"
+                                : "fa-2x";
+                        Wkt.cssAppend(dummyLabel, cssClassFaFactory.asSpaceSeparatedWithAdditional(faSizeModifier));
                     });
 
             final TitleRecord title = determineTitle(linkedDomainObject);
@@ -137,7 +140,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
     private boolean isTitleSuppressed() {
         return getModel().isInlinePrompt()
                 //XXX CAUSEWAY-1699 never hide titles of object references in tables
-                && !getModel().getRenderingHint().isInTable();
+                && getModel().getRenderingHint().isNotInTable();
     }
 
     private AbstractLink createDynamicallyVisibleLink(final ManagedObject linkedDomainObject) {
