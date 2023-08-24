@@ -41,7 +41,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.wicket.model.mementos.PageParameterNames;
-import org.apache.causeway.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 
 import lombok.NonNull;
@@ -134,17 +133,16 @@ public class PageParameterUtils {
     }
 
     public static PageParameters createPageParametersForBookmarkablePageLink(
-            final @NonNull ObjectAdapterModel callingEntityModel,
             final ManagedObject adapter) {
 
         return
                 ManagedObjects.isIdentifiable(adapter)
                     && !ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
                 ? UiObjectWkt.ofAdapter(
-                    callingEntityModel.getMetaModelContext(),
+                    adapter.getMetaModelContext(),
                     Facets.projected(adapter))
                     .getPageParametersWithoutUiHints()
-                : callingEntityModel.getPageParametersWithoutUiHints();
+                : PageParameterUtils.createPageParametersForObject(null);
     }
 
     public static PageParameters createPageParametersForAction(

@@ -55,9 +55,9 @@ implements
     private transient MetaModelContext metaModelContext;
 
     _TreeModelTreeAdapter(
-            final MetaModelContext mmc,
+            final MetaModelContext metaModelContext,
             final Class<? extends TreeAdapter> treeAdapterClass) {
-        this.metaModelContext = mmc;
+        this.metaModelContext = metaModelContext;
         this.treeAdapterClass = treeAdapterClass;
     }
 
@@ -71,12 +71,12 @@ implements
         if(treeModel==null) {
             return Optional.empty();
         }
-        val pojoNode = unwrap(treeModel);
+        val pojoNode = demementify(treeModel);
         if(pojoNode==null) {
             return Optional.empty();
         }
         return wrappedTreeAdapter().parentOf(pojoNode)
-                .map(pojo->wrap(pojo, treeModel.getTreePath().getParentIfAny()));
+                .map(pojo->mementify(pojo, treeModel.getTreePath().getParentIfAny()));
     }
 
     @Override
@@ -84,7 +84,7 @@ implements
         if(treeModel==null) {
             return 0;
         }
-        val pojoNode = unwrap(treeModel);
+        val pojoNode = demementify(treeModel);
         if(pojoNode==null) {
             return 0;
         }
@@ -96,7 +96,7 @@ implements
         if(treeModel==null) {
             return Stream.empty();
         }
-        val pojoNode = unwrap(treeModel);
+        val pojoNode = demementify(treeModel);
         if(pojoNode==null) {
             return Stream.empty();
         }
@@ -104,19 +104,19 @@ implements
                 .map(newPojoToTreeModelMapper(treeModel));
     }
 
-    _TreeNodeMemento wrap(final @NonNull Object pojo, final TreePath treePath) {
+    _TreeNodeMemento mementify(final @NonNull Object pojo, final TreePath treePath) {
         return new _TreeNodeMemento(
                 ManagedObject.adaptSingular(getSpecificationLoader(), pojo).getBookmark().orElseThrow(),
                 treePath);
     }
-    private @Nullable Object unwrap(final _TreeNodeMemento model) {
+    private @Nullable Object demementify(final _TreeNodeMemento model) {
         Objects.requireNonNull(model);
         return model.getPojo(getMetaModelContext());
     }
 
     private Function<Object, _TreeNodeMemento> newPojoToTreeModelMapper(final _TreeNodeMemento parent) {
         return IndexedFunction.zeroBased((indexWithinSiblings, pojo)->
-        wrap(pojo, parent.getTreePath().append(indexWithinSiblings)));
+        mementify(pojo, parent.getTreePath().append(indexWithinSiblings)));
     }
 
     private TreeAdapter wrappedTreeAdapter() {

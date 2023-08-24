@@ -57,8 +57,8 @@ implements
     }
 
     public final ObjectSpecification getTypeOfSpecification() {
-        //return getBookmarkedOwner().getSpecification();
-        return bookmarkedObject.getObject().getSpecification(); // serving this from an unattached entity seems safe
+        // serving this from a potentially unattached entity seems safe
+        return bookmarkedObject.getObject().getSpecification();
     }
 
 }
