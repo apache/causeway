@@ -82,16 +82,6 @@ public @interface Collection {
             default CollectionDomainEvent.Default.class;
 
     /**
-     * Indicates when the collection is not visible to the user.
-     *
-     * @see CollectionLayout#hidden()
-     * @deprecated use CollectionLayout#hidden() instead
-     */
-    @Deprecated(forRemoval = true, since = "2.0.0-RC2")
-    Where hidden()
-            default Where.NOT_SPECIFIED;
-
-    /**
      * The type-of the elements held within the collection.
      *
      * <p>

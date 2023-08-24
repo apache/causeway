@@ -142,14 +142,24 @@ implements
         // but fail early if the current user is impersonating
         // (seeing this if going back the browser history into a page, that was previously impersonated)
         val interactionService = getInteractionService();
-        val currentInteractionContext = interactionService.currentInteractionContext();
-        if(currentInteractionContext.isPresent()
-                && currentInteractionContext.get().getUser().isImpersonating()) {
-            throw _Exceptions.illegalState("cannot enter a new request cycle with a left over impersonating user");
-        }
-        val interactionContext0 = currentInteractionContext
-            .orElseGet(AuthenticatedWebSessionForCauseway.get()::getAuthentication);
+        val authenticatedWebSession = AuthenticatedWebSessionForCauseway.get();
 
+        /*XXX for debugging delegated user ...
+        interactionService.openInteraction(InteractionContext
+                .ofUserWithSystemDefaults(
+                        UserMemento.ofName("delegated")
+                        .withRoleAdded(UserMemento.AUTHORIZED_USER_ROLE)
+                        .withAuthenticationSource(AuthenticationSource.EXTERNAL)));*/
+
+        val currentInteractionContext = interactionService.currentInteractionContext();
+        if(currentInteractionContext.isPresent()) {
+            if(currentInteractionContext.get().getUser().isImpersonating()) {
+                throw _Exceptions.illegalState("cannot enter a new request cycle with a left over impersonating user");
+            }
+            authenticatedWebSession.setPrimedInteractionContext(currentInteractionContext.get());
+        }
+
+        val interactionContext0 = authenticatedWebSession.getInteractionContext();
         if (interactionContext0 == null) {
             log.warn("onBeginRequest out - session was not opened (because no authentication)");
             return;

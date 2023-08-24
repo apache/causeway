@@ -64,6 +64,10 @@ td .badge span,
   padding: 0;
 }
 
+/* fixes badge text color, when background is light - seems broken upstream https://bootswatch.com/default/ */
+.badge.bg-light {
+	color: var(--bs-body-color);
+}
 
 .card {
 	margin-bottom: 21px;
@@ -153,10 +157,6 @@ footer > .navbar {
 
 .pagination {
     margin: 0;
-}
-
-.fontAwesomeIcon {
-	margin-right: 4px;
 }
 
 /* from ActionPromptHeaderPanel */
@@ -625,7 +625,6 @@ div.additionalLinkList {
     cursor: not-allowed!important;
     opacity: 0.5;
     box-shadow: none;
-    border-style: none;
 	text-decoration-line: line-through;
 }
 
@@ -1301,6 +1300,21 @@ div.dataTables_wrapper select.form-select {
 
 div.dataTables_wrapper ul.pagination {
     font-size: small;
+}
+
+/* TOASTS */
+
+.toast.alert-info {
+  --bs-toast-bg: rgba(var(--bs-info-rgb), 0.85);
+  --bs-toast-color: var(--bs-dark);  
+}
+.toast.alert-warning {
+  --bs-toast-bg: rgba(var(--bs-warning-rgb), 0.85);
+  --bs-toast-color: var(--bs-dark);  
+}
+.toast.alert-danger {
+  --bs-toast-bg: rgba(var(--bs-danger-rgb), 0.85);
+  --bs-toast-color: var(--bs-light);  
 }
 
 /* TOOLTIPS */

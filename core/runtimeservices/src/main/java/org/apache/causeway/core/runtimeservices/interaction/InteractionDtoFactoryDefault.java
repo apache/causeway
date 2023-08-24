@@ -124,9 +124,10 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
     @Override
     public PropertyEditDto asPropertyEditDto(
             final OneToOneAssociation property,
-            final ManagedObject targetAdapter,
-            final ManagedObject newValueAdapterIfAny,
-            final InteractionHead interactionHead) {
+            final InteractionHead interactionHead,
+            final ManagedObject newValueAdapterIfAny) {
+
+        ManagedObject targetAdapter = interactionHead.getOwner();
 
         final Interaction interaction = interactionProviderProvider.get().currentInteractionElseFail();
         final int nextEventSequence = ((InteractionInternal) interaction).getThenIncrementExecutionSequence();

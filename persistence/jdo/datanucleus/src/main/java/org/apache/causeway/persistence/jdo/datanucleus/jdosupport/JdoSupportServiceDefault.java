@@ -49,12 +49,13 @@ import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.persistence.jdo.applib.services.JdoSupportService;
+import org.apache.causeway.persistence.jdo.datanucleus.CausewayModulePersistenceJdoDatanucleus;
 import org.apache.causeway.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
 @Service
-@Named("causeway.persistence.jdo.JdoSupportServiceDefault")
+@Named(CausewayModulePersistenceJdoDatanucleus.NAMESPACE + ".JdoSupportServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("DN6")
 public class JdoSupportServiceDefault implements JdoSupportService {

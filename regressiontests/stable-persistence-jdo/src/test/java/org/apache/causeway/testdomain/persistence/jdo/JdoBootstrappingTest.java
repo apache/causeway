@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
+import org.apache.causeway.testdomain.fixtures.EntityTestFixtures.Lock;
 import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
 import org.apache.causeway.testdomain.jdo.entities.JdoInventory;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
@@ -47,6 +48,9 @@ import lombok.val;
 @SpringBootTest(
         classes = {
                 Configuration_usingJdo.class,
+        },
+        properties = {
+                "spring.datasource.url=jdbc:h2:mem:JdoBootstrappingTest"
         }
 )
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
@@ -54,6 +58,7 @@ import lombok.val;
 class JdoBootstrappingTest extends CausewayIntegrationTestAbstract {
 
     @Inject private JdoTestFixtures testFixtures;
+    private static Lock lock;
 
     @BeforeAll
     static void beforeAll() throws SQLException {
@@ -61,11 +66,17 @@ class JdoBootstrappingTest extends CausewayIntegrationTestAbstract {
         // Util_H2Console.main(null);
     }
 
-    @Test @Order(1) @Rollback(false)
+    @Test @Order(0) @Commit
+    void aquireLock() {
+        lock = testFixtures.aquireLock(); // concurrent test synchronization
+        lock.install();
+    }
+
+    @Test @Order(1) @Commit
     void sampleInventoryShouldBeSetUp() {
 
         // when - expected condition before install: no inventories
-        testFixtures.reinstall(()->
+        testFixtures.resetTo3Books(()->
             assertEquals(0, repositoryService.allInstances(JdoInventory.class).size()));
 
         // then - expected post condition: ONE inventory
@@ -90,9 +101,14 @@ class JdoBootstrappingTest extends CausewayIntegrationTestAbstract {
         testFixtures.assertHasPersistenceId(firstProduct);
     }
 
-    @Test @Order(2) @Rollback(false)
+    @Test @Order(2) @Commit
     void aSecondRunShouldWorkAsWell() {
         sampleInventoryShouldBeSetUp();
+    }
+
+    @Test @Order(3) @Commit
+    void releaseLock() {
+        lock.release(); // concurrent test synchronization
     }
 
 }

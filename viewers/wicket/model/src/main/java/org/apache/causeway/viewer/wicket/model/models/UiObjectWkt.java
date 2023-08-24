@@ -27,6 +27,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.applib.exceptions.unrecoverable.ObjectNotFoundException;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.hint.HintStore;
 import org.apache.causeway.commons.functional.Either;
@@ -228,29 +229,44 @@ implements
             final ViewOrEditMode viewOrEdit,
             final RenderingHint renderingHint) {
 
+        val bookmarkedObjectModel = bookmarkedObjectModel();
+
+        //[CAUSEWAY-3532] guard against (owner entity) object deleted/not-found
+        //
+        // due to the lazy nature of the underlying model,
+        // (that is loading entities only if required),
+        // this guard only triggers, once the first property model gets looked up;
+        // in other words: this guard only works if every entity has at least a property
+        val ownerPojo = bookmarkedObjectModel.asManagedObject()
+                .getPojo();
+        if(ownerPojo==null) {
+            throw new ObjectNotFoundException(
+                    bookmarkedObjectModel.getBookmark().getIdentifier());
+        }
+
         val pm = property.getMemento();
         val propertyScalarModels = propertyScalarModels();
         final ScalarModel existingScalarModel = propertyScalarModels.get(pm);
-        if (existingScalarModel == null) {
-
-            val propertyInteractionModel = new PropertyInteractionWkt(
-                    bookmarkedObjectModel(),
-                    pm.getIdentifier().getMemberLogicalName(),
-                    renderingHint.asWhere());
-
-            final long modelsAdded = propertyInteractionModel.streamPropertyUiModels()
-            .map(uiModel->ScalarPropertyModel.wrap(uiModel, viewOrEdit, renderingHint))
-            .peek(scalarModel->log.debug("adding: {}", scalarModel))
-            .filter(scalarModel->propertyScalarModels.put(pm, scalarModel)==null)
-            .count();
-
-            // future extensions might allow to add multiple UI models per single property model (typed tuple support)
-            _Assert.assertEquals(1L, modelsAdded, ()->
-                String.format("unexpected number of propertyScalarModels added %d", modelsAdded));
-
+        if (existingScalarModel != null) {
+            return existingScalarModel;
         }
-        return propertyScalarModels.get(pm);
 
+        val propertyInteractionModel = new PropertyInteractionWkt(
+                bookmarkedObjectModel,
+                pm.getIdentifier().getMemberLogicalName(),
+                renderingHint.asWhere());
+
+        final long modelsAdded = propertyInteractionModel.streamPropertyUiModels()
+        .map(uiModel->ScalarPropertyModel.wrap(uiModel, viewOrEdit, renderingHint))
+        .peek(scalarModel->log.debug("adding: {}", scalarModel))
+        .filter(scalarModel->propertyScalarModels.put(pm, scalarModel)==null)
+        .count(); // consume the stream
+
+        // future extensions might allow to add multiple UI models per single property model (typed tuple support)
+        _Assert.assertEquals(1L, modelsAdded, ()->
+            String.format("unexpected number of propertyScalarModels added %d", modelsAdded));
+
+        return propertyScalarModels.get(pm);
     }
 
     @Override

@@ -60,17 +60,18 @@ class AuthenticatedWebSessionForCauseway_Authenticate {
     @BeforeEach
     void setUp() throws Exception {
 
-        mmc = MetaModelContext_forTesting.builder()
-                .singleton(mockInteractionService)
-                .singleton(mockUserService)
-                .build();
-
         authMgr = new AuthenticationManager(
                 Collections.singletonList(mockAuthenticator),
                 new InteractionService_forTesting(),
                 new RandomCodeGeneratorDefault(),
                 Optional.empty(),
                 Collections.emptyList());
+
+        mmc = MetaModelContext_forTesting.builder()
+                .singleton(mockInteractionService)
+                .singleton(mockUserService)
+                .authenticationManager(authMgr)
+                .build();
 
         Mockito
         .when(mockInteractionLayerTracker.currentInteractionContext())
@@ -85,9 +86,14 @@ class AuthenticatedWebSessionForCauseway_Authenticate {
     protected void setupWebSession() {
         webSession = new AuthenticatedWebSessionForCauseway(mockRequest) {
             private static final long serialVersionUID = 1L;
-            { metaModelContext = mmc; }
+
             @Override public AuthenticationManager getAuthenticationManager() {
                 return authMgr;
+            }
+
+            @Override
+            public MetaModelContext getMetaModelContext() {
+                return mmc;
             }
         };
     }
@@ -112,10 +118,11 @@ class AuthenticatedWebSessionForCauseway_Authenticate {
         setupWebSession();
 
         // when
-        assertThat(webSession.authenticate("jsmith", "secret"), is(true));
+        boolean authenticated = webSession.authenticate("jsmith", "secret");
+        assertThat(authenticated, is(true));
 
         // then
-        assertThat(webSession.getAuthentication(), is(not(nullValue())));
+        assertThat(webSession.getInteractionContext(), is(not(nullValue())));
     }
 
     @Test
@@ -134,7 +141,7 @@ class AuthenticatedWebSessionForCauseway_Authenticate {
         setupWebSession();
 
         assertThat(webSession.authenticate("jsmith", "secret"), is(false));
-        assertThat(webSession.getAuthentication(), is(nullValue()));
+        assertThat(webSession.getInteractionContext(), is(nullValue()));
     }
 
 }

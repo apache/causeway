@@ -107,6 +107,31 @@ public class Configuration_usingWicket {
         public static final String OPEN_SAMPLE_ACTION_TITLE = OPEN_SAMPLE_ACTION
                 + ":additionalLinkTitle";
 
+        // -- BOOK PAGE
+
+        /** strange asymmetry with JPA, to investigate another day */
+        public static final String BOOK_DELETE_ACTION_JDO = "theme:entityPageContainer:entity:rows:2"
+                + ":rowContents:1"
+                + ":col:rows:1:rowContents:1:col:tabGroups:1"
+                + ":panel:tabPanel"
+                + ":rows:1:rowContents:1"
+                + ":col:fieldSets:1:memberGroup"
+                + ":panelHeading:associatedActionLinksPanel"
+                + ":additionalLinkList:additionalLinkItem:0:additionalLink";
+
+        /** strange asymmetry with JDO, to investigate another day */
+        public static final String BOOK_DELETE_ACTION_JPA = "theme:entityPageContainer:entity:rows:2"
+                + ":rowContents:1"
+                + ":col:rows:1:rowContents:1:col:tabGroups:1:1:rowContents:1"
+                + ":col:fieldSets:1:memberGroup"
+                + ":panelHeading:associatedActionLinksPanel"
+                + ":additionalLinkList:additionalLinkItem:0:additionalLink";
+
+        // -- GENERIC STANDALONE COLLECTION
+
+        public static final String STANDALONE_COLLECTION = "theme:standaloneCollection:standaloneCollection";
+        public static final String STANDALONE_COLLECTION_LABEL = STANDALONE_COLLECTION
+                + ":actionName";
 
         // -- INVENTORY JAXB VM
 

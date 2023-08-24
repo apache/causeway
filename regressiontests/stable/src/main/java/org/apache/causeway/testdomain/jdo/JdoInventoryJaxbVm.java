@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -41,7 +42,10 @@ import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.testdomain.fixtures.InventoryJaxbVm;
 import org.apache.causeway.testdomain.jdo.entities.JdoBook;
 import org.apache.causeway.testdomain.jdo.entities.JdoInventory;
 import org.apache.causeway.testdomain.jdo.entities.JdoProduct;
@@ -63,11 +67,13 @@ import lombok.Setter;
         aliased={
             "testdomain.jdo.JdoInventoryJaxbVmAlias"
         })
-public class JdoInventoryJaxbVm {
+public class JdoInventoryJaxbVm
+implements InventoryJaxbVm<JdoBook> {
 
-    @XmlTransient @Inject
-    private RepositoryService repository;
+    @XmlTransient @Inject private RepositoryService repository;
+    @XmlTransient @Inject private FactoryService factory;
 
+    @Override
     @ObjectSupport public String title() {
         return String.format("%s; %s; %d products",
                 this.getClass().getSimpleName(), getName(), listProducts().size());
@@ -83,6 +89,7 @@ public class JdoInventoryJaxbVm {
         return repository.allInstances(JdoProduct.class);
     }
 
+    @Override
     @Action
     public List<JdoBook> listBooks() {
         return repository.allInstances(JdoBook.class);
@@ -173,6 +180,14 @@ public class JdoInventoryJaxbVm {
         return Optional.ofNullable(inventory)
                 .map(JdoInventory::getProducts)
                 .orElseGet(Collections::emptySet);
+    }
+
+    @XmlTransient
+    @Override
+    public List<JdoBookView> getBookViews() {
+        return _NullSafe.stream(listBooks())
+                .map(book->JdoBookView.createForBook(factory, book))
+                .collect(Collectors.toList());
     }
 
 }

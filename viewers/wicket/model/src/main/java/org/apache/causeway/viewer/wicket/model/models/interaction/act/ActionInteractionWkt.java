@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.viewer.wicket.model.models.interaction.act;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -34,6 +35,7 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.memento.ActionMemento;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.InlinePromptContext;
 import org.apache.causeway.viewer.wicket.model.models.ScalarParameterModel;
@@ -41,6 +43,9 @@ import org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.interaction.HasBookmarkedOwnerAbstract;
+
+import lombok.NonNull;
+import lombok.val;
 
 /**
  * The parent (container) model of multiple <i>parameter models</i> which implement
@@ -67,6 +72,9 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
 
     private final String memberId;
     private final Where where;
+    // memoize, so if we only need the meta-model, we don't have to re-attach the entire model (ActionInteraction)
+    private final @NonNull ActionMemento actionMemento;
+
     private Can<UiParameterWkt> childModels;
     private @Nullable ScalarPropertyModel associatedWithPropertyIfAny;
     private @Nullable ScalarParameterModel associatedWithParameterIfAny;
@@ -79,10 +87,15 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
             final ScalarPropertyModel associatedWithPropertyIfAny,
             final ScalarParameterModel associatedWithParameterIfAny,
             final EntityCollectionModel associatedWithCollectionIfAny) {
+
+        val onwerSpec = parentEntityModel.getBookmarkedOwner().getSpecification();
+        var objectAction = onwerSpec.getActionElseFail(actionIdentifier.getMemberLogicalName());
+
         return new ActionInteractionWkt(
                 parentEntityModel.bookmarkedObjectModel(),
                 actionIdentifier.getMemberLogicalName(),
                 where,
+                objectAction,
                 associatedWithPropertyIfAny,
                 associatedWithParameterIfAny,
                 associatedWithCollectionIfAny);
@@ -92,12 +105,14 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
             final BookmarkedObjectWkt bookmarkedObject,
             final String memberId,
             final Where where,
+            final ObjectAction objectAction,
             final ScalarPropertyModel associatedWithPropertyIfAny,
             final ScalarParameterModel associatedWithParameterIfAny,
             final EntityCollectionModel associatedWithCollectionIfAny) {
         super(bookmarkedObject);
         this.memberId = memberId;
         this.where = where;
+        this.actionMemento = objectAction.getMemento();
         this.associatedWithPropertyIfAny = associatedWithPropertyIfAny;
         this.associatedWithParameterIfAny = associatedWithParameterIfAny;
         this.associatedWithCollectionIfAny = associatedWithCollectionIfAny;
@@ -136,9 +151,14 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
     }
 
     public final ObjectAction getMetaModel() {
-        return actionInteraction().getMetamodel()
-                .orElseThrow(()->_Exceptions
-                        .noSuchElement("could not resolve action by memberId '%s'", memberId));
+        // re-attachment fails, if the owner is not found (eg. deleted entity),
+        // hence we return the directly memoized meta-model of the underlying action
+        return Objects.requireNonNull(actionMemento.getAction(this::getSpecificationLoader),
+                ()->"framework bug: lost objectAction on model recycling (serialization issue)");
+        //previously we got the underlying action's meta-model from the ActionInteraction
+        //        return actionInteraction().getMetamodel()
+        //                .orElseThrow(()->_Exceptions
+        //                        .noSuchElement("could not resolve action by memberId '%s'", memberId));
     }
 
     public Optional<ScalarPropertyModel> associatedWithProperty() {
@@ -157,7 +177,7 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
 
     public Stream<UiParameterWkt> streamParameterUiModels() {
         if(childModels==null) {
-            final int paramCount = actionInteraction().getMetamodel().get().getParameterCount();
+            final int paramCount = getMetaModel().getParameterCount();
             this.childModels = IntStream.range(0, paramCount)
                     .mapToObj(paramIndex -> new UiParameterWkt(this, paramIndex))
                     .collect(Can.toCan());

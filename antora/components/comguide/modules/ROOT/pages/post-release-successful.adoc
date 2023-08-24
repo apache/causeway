@@ -341,7 +341,7 @@ git revert HEAD
 
 === Update the doc branch
 
-Now we make sure that the docs in the new doc branch are actually up to date:
+Now we make sure that the docs in the new doc branch are actually up-to-date:
 
 * checkout the branch:
 +
@@ -354,9 +354,8 @@ git checkout {page-causewayrel}
 +
 [source,bash,subs="attributes+"]
 ----
-git checkout $CAUSEWAYBRANCH
 pushd bom
-mvn clean install -DskipTests -Dreleased
+mvn clean install -T1C -DskipTests -Dgithub
 popd
 mvn -D module-tooling -D skip.essential install -DskipTests
 ----
@@ -398,7 +397,7 @@ NOTE: that this isn't performed in the docs branch (xref:#create-doc-branch[prev
 This will reference the new branch, and any previous branches.
 Every content source needs to be updated:
 +
-** `branches: HEAD` -> `branches: [2.0.0-M5, 2.0.0-M6, ... , {page-causewayrel}]`
+** `branches: [2.0.0-RC2]` -> `branches: [2.0.0-M5, 2.0.0-M6, ... , {page-causewayrel}]`
 +
 [WARNING]
 ====
@@ -526,6 +525,13 @@ In order that we don't break the starter apps while a release is being voted on,
 Now that the release is complete, tidy up these branches and then set up the `-SNAPSHOT` branches as required.
 
 IMPORTANT: The `jdo` and `jpa` branches should always work against the most recent release, whereas the `jdo-SNAPSHOT` and `jpa-SNAPSHOT` can reference more recently nightly builds if necessary.
+
+
+== Update the reference app
+
+The link:https://github.com/apache/causeway-app-referenceapp[reference app] has a configuration property `causeway.viewer.common.application.version` (in link:https://github.com/apache/causeway-app-referenceapp/blob/master/domain/src/main/resources/application.yml#L91[application.yml]); this should be updated.
+
+
 
 
 == Update the ASF Reporter website

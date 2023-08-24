@@ -32,10 +32,8 @@ import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.collections.collection.hidden.HiddenFacetForCollectionAnnotation;
 import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacet;
 import org.apache.causeway.core.metamodel.facets.collections.collection.typeof.TypeOfFacetForCollectionAnnotation;
-import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet.Contributing;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 
@@ -61,7 +59,6 @@ extends FacetFactoryAbstract {
         }
 
         processDomainEvent(processMethodContext, collectionIfAny);
-        processHidden(processMethodContext, collectionIfAny);
         processTypeOf(processMethodContext, collectionIfAny);
     }
 
@@ -77,7 +74,7 @@ extends FacetFactoryAbstract {
         /* if @Collection detected on method or type level infer:
          * @Action(semantics=SAFE) */
         addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
-        addFacet(new ContributingFacetAbstract(Contributing.AS_COLLECTION, facetedMethod) {});
+        addFacet(ContributingFacetAbstract.createAsCollection(facetedMethod));
     }
 
     void processDomainEvent(final ProcessMethodContext processMethodContext, final Optional<Collection> collectionIfAny) {
@@ -102,17 +99,6 @@ extends FacetFactoryAbstract {
             CollectionDomainEventFacet
                 .create(collectionIfAny, cls, holder));
     }
-
-    @SuppressWarnings("removal")
-    void processHidden(final ProcessMethodContext processMethodContext, final Optional<Collection> collectionIfAny) {
-        val holder = processMethodContext.getFacetHolder();
-
-        // check for @Collection(hidden=...)
-        addFacetIfPresent(
-                HiddenFacetForCollectionAnnotation
-                .create(collectionIfAny, holder));
-    }
-
 
     void processTypeOf(final ProcessMethodContext processMethodContext, final Optional<Collection> collectionIfAny) {
 

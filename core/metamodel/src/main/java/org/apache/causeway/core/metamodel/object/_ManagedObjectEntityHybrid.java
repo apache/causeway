@@ -27,6 +27,7 @@ import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Blackhole;
 
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.Synchronized;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -64,7 +65,7 @@ implements _Refetchable {
         static MorphState valueOf(final EntityState entityState) {
             return entityState.isRemoved()
                     ? REMOVED
-                    : entityState.hasOid()
+                    : entityState.isAttached()
                         ? BOOKMARKED
                         : TRANSIENT;
         }
@@ -121,16 +122,17 @@ implements _Refetchable {
         return entityState;
     }
 
-    @Override
+    @Override @SneakyThrows
     public Object getPojo() {
         if(isVariantRemoved()) {
             return null; // don't reassess
         }
 
-        // handle the 'deleted' / 'not found' case gracefully
+        // handle the 'deleted' / 'not found' case gracefully ...
         try {
             val pojo = variant.getPojo();
             triggerReassessment();
+            //if(pojo==null) makeRemoved(); seems reasonable, not tested yet
             return pojo;
         } catch (ObjectNotFoundException e) {
             // if object not found, transition to 'removed' state
@@ -181,13 +183,13 @@ implements _Refetchable {
             makeBookmarked(pojo);
             return;
         }
-        /* if the current EntityState is REMOVED, we handle variant transition 
-         * - from BOOKMARKED 
-         * - as well as from TRANSIENT 
+        /* if the current EntityState is REMOVED, we handle variant transition
+         * - from BOOKMARKED
+         * - as well as from TRANSIENT
          * to REMOVED */
         if((isVariantBookmarked()
                 || isVariantTransient())
-                && entityState.isRemoved()) {
+                && entityState.isTransientOrRemoved()) {
             makeRemoved();
             return;
         }

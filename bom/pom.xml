@@ -34,7 +34,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.13</version>
+        <version>2.7.14</version>
         <relativePath/>
     </parent>
     <groupId>org.apache.causeway</groupId>
@@ -66,7 +66,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <causeway.skipTests>false</causeway.skipTests>
 		<maven.test.skip>${causeway.skipTests}</maven.test.skip>
 
-        <project.build.outputTimestamp>2023-07-04T21:19:08Z</project.build.outputTimestamp>
+        <project.build.outputTimestamp>2023-07-07T13:23:45Z</project.build.outputTimestamp>
 
         <delombok.output>${project.build.directory}/delombok</delombok.output>
 
@@ -86,7 +86,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <!-- LIBRARY DEPENDENCIES -->
 
-        <archunit.version>1.0.1</archunit.version>
+        <archunit.version>1.1.0</archunit.version>
         <asciidoctorj.version>2.5.10</asciidoctorj.version>
         <asm.version>9.5</asm.version> <!-- keep in sync with org.eclipse.persistence:org.eclipse.persistence.asm -->
         <approvaltests.version>18.7.1</approvaltests.version>
@@ -105,21 +105,21 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <datanucleus-api-jdo.version>6.0.1</datanucleus-api-jdo.version>
         <datanucleus-api-jpa.version>6.0.1</datanucleus-api-jpa.version>
-        <datanucleus-core.version>6.0.4</datanucleus-core.version>
+        <datanucleus-core.version>6.0.5</datanucleus-core.version>
         <datanucleus-jdo-api.version>3.2.1</datanucleus-jdo-api.version>
         <datanucleus-jdo-query.version>6.0.1</datanucleus-jdo-query.version>
         <datanucleus-jodatime.version>6.0.1</datanucleus-jodatime.version>
-        <datanucleus-rdbms.version>6.0.4</datanucleus-rdbms.version>
+        <datanucleus-rdbms.version>6.0.5</datanucleus-rdbms.version>
 
         <datatables.version>1.13.5</datatables.version> <!-- keep in sync with DatatablesDotNet -->
 
         <docx4j.version>11.3.2</docx4j.version>
 
         <easymock.version>5.1.0</easymock.version>
-        <error_prone_annotations.version>2.20.0</error_prone_annotations.version>
+        <error_prone_annotations.version>2.21.1</error_prone_annotations.version>
 
         <git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
-        <guava.version>32.1.1-jre</guava.version>
+        <guava.version>32.1.2-jre</guava.version>
 
         <htmlparser.version>2.1</htmlparser.version>
 
@@ -146,8 +146,8 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <jsr305.version>3.0.2</jsr305.version>
         <jsoup.version>1.16.1</jsoup.version>
-        <junit-jupiter.version>5.9.3</junit-jupiter.version> <!-- overrides spring -->
-        <junit-platform.version>1.9.3</junit-platform.version>
+        <junit-jupiter.version>5.10.0</junit-jupiter.version> <!-- overrides spring -->
+        <junit-platform.version>1.10.0</junit-platform.version>
 
         <log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
         <lombok.version>1.18.28</lombok.version> <!-- overriding Spring -->
@@ -160,7 +160,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 		<npm.version>8.19.2</npm.version>
 
         <objenesis.version>3.3</objenesis.version>
-        <ognl.version>3.3.4</ognl.version>
+        <ognl.version>3.4.2</ognl.version>
 
         <picocontainer.version>2.15</picocontainer.version>
         <poi.version>5.2.3</poi.version>
@@ -171,16 +171,14 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <resteasy.version>5.0.0.Final</resteasy.version> <!-- keep in sync with property defined in resteasy4-spring-boot-starter -->
 
         <select2.version>4.0.13</select2.version>
-        <shiro.version>1.11.0</shiro.version>
+        <shiro.version>1.12.0</shiro.version>
         <simpleslackapi.version>1.4.0</simpleslackapi.version>
         <slf4j-api.version>2.0.7</slf4j-api.version> <!-- also provided by spring-boot-starter-logging, needed to solve convergence issues -->
-        <spring-boot.version>2.7.13</spring-boot.version>
+        <spring-boot.version>2.7.14</spring-boot.version>
         <summernote.version>0.8.20</summernote.version>
         <surefire-plugin.argLine>-Xmx384m</surefire-plugin.argLine>
         <surefire.useModulePath>false</surefire.useModulePath> <!-- disable module-path for testing, that is, put everything on the class-path -->
         <swagger-core.version>2.2.10</swagger-core.version>
-
-        <togglz.version>4.0.1</togglz.version>
 
         <wicket.version>9.14.0</wicket.version>
         <wicket-bootstrap.version>6.0.4</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
@@ -1444,7 +1442,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<artifactId>woodstox-core</artifactId>
 				<version>6.5.1</version>
 			</dependency>
-			<dependency>
+            <dependency>
 				<groupId>org.codehaus.woodstox</groupId>
 				<artifactId>stax2-api</artifactId>
 				<version>4.2.1</version>
@@ -1452,12 +1450,12 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.eclipse.persistence</groupId>
 				<artifactId>org.eclipse.persistence.moxy</artifactId>
-				<version>2.7.12</version> <!-- do not upgrade 2.x to 3.x or higher until Spring 6 -->
+				<version>2.7.13</version> <!-- do not upgrade 2.x to 3.x or higher until Spring 6 -->
 			</dependency>
 			<dependency>
 				<groupId>org.eclipse.persistence</groupId>
 				<artifactId>org.eclipse.persistence.sdo</artifactId>
-				<version>2.7.12</version> <!-- do not upgrade 2.x to 3.x or higher until Spring 6 -->
+				<version>2.7.13</version> <!-- do not upgrade 2.x to 3.x or higher until Spring 6 -->
 			</dependency>
 			<dependency>
 	            <groupId>com.sun.xml.bind</groupId>
@@ -1486,7 +1484,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<version>${asm.version}</version>
 			</dependency>
 
-			<dependency>
+            <dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-validator</artifactId>
 				<version>${hibernate-validator.version}</version>
@@ -2005,28 +2003,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			</dependency>
 
 			<dependency>
-				<groupId>org.togglz</groupId>
-				<artifactId>togglz-core</artifactId>
-				<version>${togglz.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.togglz</groupId>
-				<artifactId>togglz-junit</artifactId>
-				<version>${togglz.version}</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.togglz</groupId>
-				<artifactId>togglz-servlet</artifactId>
-				<version>${togglz.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.togglz</groupId>
-				<artifactId>togglz-console</artifactId>
-				<version>${togglz.version}</version>
-			</dependency>
-
-			<dependency>
 				<groupId>org.webjars</groupId>
 				<artifactId>datatables</artifactId>
 				<version>${datatables.version}</version>
@@ -2233,7 +2209,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-enforcer-plugin</artifactId>
-                    <version>3.3.0</version>
+                    <version>3.4.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -3345,6 +3321,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
             <name>Joerg Rade</name>
             <email>joergrade@apache.org</email>
             <roles>
+                <role>pmc chair</role>
                 <role>pmc</role>
                 <role>committer</role>
             </roles>
@@ -3355,7 +3332,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
             <name>Kevin Meyer</name>
             <email>kevin@apache.org</email>
             <roles>
-                <role>pmc chair</role>
                 <role>pmc</role>
                 <role>committer</role>
             </roles>
@@ -3390,6 +3366,16 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <role>mentor while incubating</role>
             </roles>
             <timezone>+1</timezone>
+        </developer>
+        <developer>
+            <id>mhesse</id>
+            <name>Martin Hesse</name>
+            <email>mhesse@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>committer</role>
+            </roles>
+            <timezone>+9</timezone>
         </developer>
         <developer>
             <id>oscarbou</id>

@@ -62,7 +62,8 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-public class JpaProduct implements Comparable<JpaProduct> {
+public class JpaProduct
+implements Comparable<JpaProduct> {
 
     @ObjectSupport public String title() {
         return toString();

@@ -20,6 +20,9 @@ module org.apache.causeway.viewer.restfulobjects.client {
     exports org.apache.causeway.viewer.restfulobjects.client.log;
     exports org.apache.causeway.viewer.restfulobjects.client;
     exports org.apache.causeway.viewer.restfulobjects.client.auth;
+    exports org.apache.causeway.viewer.restfulobjects.client.auth.basic;
+    exports org.apache.causeway.viewer.restfulobjects.client.auth.oauth2;
+    exports org.apache.causeway.viewer.restfulobjects.client.auth.oauth2.azure;
 
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
@@ -33,4 +36,5 @@ module org.apache.causeway.viewer.restfulobjects.client {
     requires org.apache.logging.log4j;
     requires spring.core;
     requires org.apache.causeway.schema;
+    requires org.slf4j;
 }

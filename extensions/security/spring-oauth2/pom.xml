@@ -51,6 +51,13 @@
 			</exclusions>
 		</dependency>
 
+		<!-- optional -->
+		<dependency>
+			<groupId>org.apache.causeway.viewer</groupId>
+			<artifactId>causeway-viewer-restfulobjects-viewer</artifactId>
+			<optional>true</optional>
+		</dependency>
+
 		<!-- test -->
 		<dependency>
 			<groupId>org.apache.causeway.core</groupId>

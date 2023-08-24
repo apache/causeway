@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.Property;
@@ -71,6 +72,7 @@ import lombok.extern.log4j.Log4j2;
         , updatingLifecycleEvent = JdoBook.UpdatingLifecycleEvent.class
         , updatedLifecycleEvent = JdoBook.UpdatedLifecycleEvent.class
         , removingLifecycleEvent = JdoBook.RemovingLifecycleEvent.class)
+@DomainObjectLayout(cssClassFa = "book")
 @javax.jdo.annotations.Uniques({
     @javax.jdo.annotations.Unique(
             name = "JdoBook_isbn_UNQ", members = { "isbn" })
@@ -166,7 +168,6 @@ implements IBook {
             final String author,
             final String isbn,
             final String publisher) {
-
         super(name, description, price, /*comments*/null);
         this.author = author;
         this.isbn = isbn;

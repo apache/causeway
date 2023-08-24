@@ -241,6 +241,12 @@ public final class _Refs {
             return value = operator.apply(value);
         }
 
+        public T computeIfAbsent(final @NonNull Supplier<T> factory) {
+            return value!=null
+                    ? value
+                    : set(factory.get());
+        }
+
         public boolean isNull() {
             return value==null;
         }

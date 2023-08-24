@@ -67,7 +67,7 @@ public class ImpersonateMenuAdvisorForSecman implements ImpersonateMenuAdvisor {
         return cache.get().allUserNamesComputeIfAbsent(()->this.applicationUserRepository.allUsers()
                 .stream()
                 .filter(x -> x.getStatus() == ApplicationUserStatus.UNLOCKED)
-                .map(ApplicationUser::getName)
+                .map(ApplicationUser::getUsername)
                 .collect(Collectors.toList()));
     }
 

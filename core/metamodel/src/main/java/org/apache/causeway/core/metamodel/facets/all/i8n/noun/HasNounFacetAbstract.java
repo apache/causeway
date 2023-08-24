@@ -21,10 +21,8 @@ package org.apache.causeway.core.metamodel.facets.all.i8n.noun;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
 
 import org.apache.causeway.applib.services.i18n.TranslationContext;
-import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
@@ -39,60 +37,56 @@ implements HasNoun {
 
     protected final TranslationContext translationContext;
 
-    private final @NonNull NounForms nounForms;
-    private final @NonNull _Lazy<NounForms> translatedNounForms;
+    private final @NonNull Noun noun;
+    private final @NonNull _Lazy<Noun> translatedNounForms;
 
     protected HasNounFacetAbstract(
             final Class<? extends Facet> facetType,
             final TranslationContext translationContext,
-            final NounForms nounForms,
+            final Noun noun,
             final FacetHolder holder) {
-        this(facetType, translationContext, nounForms, holder, Precedence.DEFAULT);
+        this(facetType, translationContext, noun, holder, Precedence.DEFAULT);
     }
 
     protected HasNounFacetAbstract(
             final Class<? extends Facet> facetType,
             final TranslationContext translationContext,
-            final NounForms nounForms,
+            final Noun noun,
             final FacetHolder holder,
             final Precedence precedence) {
         super(facetType, holder, precedence);
-        this.nounForms = nounForms;
+        this.noun = noun;
         this.translationContext = translationContext;
         this.translatedNounForms = _Lazy.threadSafe(()->
-            nounForms.translate(holder.getTranslationService(), translationContext));
+            noun.translate(holder.getTranslationService(), translationContext));
     }
 
     @Override
-    public final Optional<String> text(final @NonNull NounForm nounForm) {
-        return nounForms.lookup(nounForm);
+    public boolean isNounPresent() {
+        return noun.isLiteralPresent();
     }
 
     @Override
-    public final Optional<String> translated(final @NonNull NounForm nounForm) {
-        return translatedNounForms.get().lookup(nounForm);
+    public final Optional<String> text() {
+        return noun.literal();
     }
 
     @Override
-    public ImmutableEnumSet<NounForm> getSupportedNounForms() {
-        return nounForms.getSupportedNounForms();
+    public final Optional<String> translated() {
+        return translatedNounForms.get().literal();
     }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("context", translationContext);
-        visitor.accept("nounForms",
-                getSupportedNounForms()
-                .stream()
-                .map(NounForm::name)
-                .collect(Collectors.joining(", ")));
-
-        getSupportedNounForms()
-        .forEach(nounForm->{
-            visitor.accept("originalText." + nounForm, text(nounForm));
-            visitor.accept("translated." + nounForm, translated(nounForm)); // memoizes as a side-effect
-        });
+        if(noun.isLiteralPresent()) {
+            visitor.accept("hasNoun", "true");
+            visitor.accept("originalText", text());
+            visitor.accept("translated", translated()); // memoizes as a side-effect
+        } else {
+            visitor.accept("hasNoun", "false");
+        }
     }
 
     @Override
@@ -106,7 +100,7 @@ implements HasNoun {
 
         val otherFacet =  (HasNounFacetAbstract)other;
 
-        return Objects.equals(this.nounForms, otherFacet.nounForms)
+        return Objects.equals(this.noun, otherFacet.noun)
                 && Objects.equals(this.translationContext, otherFacet.translationContext);
 
     }

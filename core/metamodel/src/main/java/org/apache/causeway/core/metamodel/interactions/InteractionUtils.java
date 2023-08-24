@@ -20,6 +20,10 @@ package org.apache.causeway.core.metamodel.interactions;
 
 import java.util.Optional;
 
+import org.springframework.lang.Nullable;
+
+import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionAdvisor;
 import org.apache.causeway.core.metamodel.consent.InteractionResult;
@@ -27,10 +31,13 @@ import org.apache.causeway.core.metamodel.consent.InteractionResultSet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
 
+import lombok.NonNull;
 import lombok.val;
 import lombok.experimental.UtilityClass;
+import lombok.extern.log4j.Log4j2;
 
 @UtilityClass
+@Log4j2
 public final class InteractionUtils {
 
     public static InteractionResult isVisibleResult(final FacetHolder facetHolder, final VisibilityContext context) {
@@ -73,7 +80,9 @@ public final class InteractionUtils {
         facetHolder.streamFacets(ValidatingInteractionAdvisor.class)
         .filter(advisor->compatible(advisor, context))
         .forEach(advisor->{
-            val invalidatingReasonString = advisor.invalidates(context);
+            val invalidatingReasonString = 
+                    guardAgainstEmptyReasonString(advisor.invalidates(context), context.getIdentifier());
+            
             val invalidatingReason = Optional.ofNullable(invalidatingReasonString)
                     .map(Consent.VetoReason::explicit)
                     .orElse(null);
@@ -82,7 +91,7 @@ public final class InteractionUtils {
 
         return iaResult;
     }
-
+    
     public static InteractionResultSet isValidResultSet(
             final FacetHolder facetHolder,
             final ValidityContext context,
@@ -90,13 +99,29 @@ public final class InteractionUtils {
 
         return resultSet.add(isValidResult(facetHolder, context));
     }
+    
+    /**
+     * [CAUSEWAY-3554] an empty String most likely is wrong use of the programming model, 
+     * we should generate a message, 
+     * explaining what was going wrong and hinting developers at a possible resolution
+     */
+    private static String guardAgainstEmptyReasonString(
+            final @Nullable String reason, final @NonNull Identifier identifier) {
+        if("".equals(reason)) {
+            val msg = ProgrammingModelConstants.Violation.INVALID_USE_OF_VALIDATION_SUPPORT_METHOD.builder()
+                .addVariable("className", identifier.getClassName())
+                .addVariable("memberName", identifier.getMemberLogicalName())
+                .buildMessage();
+            log.error(msg);
+            return msg;
+        }
+        return reason;
+    }
 
     private static boolean compatible(final InteractionAdvisor advisor, final InteractionContext ic) {
-
         if(advisor instanceof ActionDomainEventFacet) {
             return ic instanceof ActionInteractionContext;
         }
-
         return true;
     }
 

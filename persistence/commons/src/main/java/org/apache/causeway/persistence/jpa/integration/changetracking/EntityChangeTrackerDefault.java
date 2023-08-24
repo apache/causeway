@@ -156,8 +156,7 @@ implements
         val records = enlistedPropertyChangeRecordsById.values().stream()
                 // set post values, which have been left empty up to now
                 .peek(rec -> {
-                    // assuming this check correctly detects deleted entities
-                    if(MmEntityUtils.isDeleted(rec.getEntity())) {
+                    if(MmEntityUtils.getEntityState(rec.getEntity()).isTransientOrRemoved()) {
                         rec.withPostValueSetToDeleted();
                     } else {
                         rec.withPostValueSetToCurrent();
@@ -177,6 +176,9 @@ implements
         if(!EntityChangePublishingFacet.isPublishingEnabled(entity.getSpecification())) {
             return true; // ignore entities that are not enabled for entity change publishing
         }
+
+        // guard against transient
+        if(ManagedObjects.bookmark(entity).isEmpty()) return true;
 
         if(entityPropertyChangeRecordsForPublishing.isMemoized()) {
             throw _Exceptions.illegalState("Cannot enlist additional changes for auditing, "

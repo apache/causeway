@@ -33,14 +33,30 @@ public abstract class ContributingFacetAbstract
 extends FacetAbstract
 implements ContributingFacet {
 
-    @Getter(onMethod_={@Override}) @Accessors(fluent=true)
-    private final @NonNull Contributing contributed;
-
     private static final Class<? extends Facet> type() {
         return ContributingFacet.class;
     }
 
-    public ContributingFacetAbstract(
+    // -- FACTORIES
+
+    public static ContributingFacetAbstract createAsAction(final FacetHolder holder) {
+        return new ContributingFacetAbstract(Contributing.AS_ACTION, holder) {};
+    }
+
+    public static ContributingFacetAbstract createAsProperty(final FacetHolder holder) {
+        return new ContributingFacetAbstract(Contributing.AS_PROPERTY, holder) {};
+    }
+
+    public static ContributingFacetAbstract createAsCollection(final FacetHolder holder) {
+        return new ContributingFacetAbstract(Contributing.AS_COLLECTION, holder) {};
+    }
+
+    // -- CONSTRUCTION
+
+    @Getter(onMethod_={@Override}) @Accessors(fluent=true)
+    private final @NonNull Contributing contributed;
+
+    private ContributingFacetAbstract(
             final Contributing contributed,
             final FacetHolder holder) {
         super(type(), holder);

@@ -32,7 +32,6 @@ import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.IPageFactory;
 import org.apache.wicket.Page;
 import org.apache.wicket.RuntimeConfigurationType;
-import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authentication.IAuthenticationStrategy;
 import org.apache.wicket.authentication.strategy.DefaultAuthenticationStrategy;
@@ -42,8 +41,6 @@ import org.apache.wicket.core.request.mapper.MountedMapper;
 import org.apache.wicket.markup.head.ResourceAggregator;
 import org.apache.wicket.markup.head.filter.JavaScriptFilteredIntoFooterHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.request.Request;
-import org.apache.wicket.request.Response;
 import org.apache.wicket.request.cycle.IRequestCycleListener;
 import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
 import org.apache.wicket.request.resource.CssResourceReference;
@@ -230,15 +227,6 @@ implements
         return new _PageFactory(this, super.newPageFactory());
     }
 
-    /*
-     * @since 2.0 ... overrides the default, to 'inject' the commonContext into new sessions
-     */
-    @Override
-    public Session newSession(final Request request, final Response response) {
-        val newSession = (AuthenticatedWebSessionForCauseway) super.newSession(request, response);
-        newSession.init(getMetaModelContext());
-        return newSession;
-    }
 
     /**
      * protected visibility to allow ad-hoc overriding of some other authentication strategy.

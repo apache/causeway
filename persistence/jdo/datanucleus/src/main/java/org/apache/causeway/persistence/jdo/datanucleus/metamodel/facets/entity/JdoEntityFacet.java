@@ -34,7 +34,6 @@ import org.datanucleus.enhancement.Persistable;
 import org.datanucleus.store.rdbms.RDBMSPropertyNames;
 import org.springframework.lang.Nullable;
 
-import org.apache.causeway.applib.exceptions.unrecoverable.ObjectNotFoundException;
 import org.apache.causeway.applib.query.AllInstancesQuery;
 import org.apache.causeway.applib.query.NamedQuery;
 import org.apache.causeway.applib.query.Query;
@@ -152,12 +151,14 @@ implements EntityFacet {
         val entityState = getEntityState(pojo);
 
         if (!entityState.hasOid()) {
+            return Optional.empty();
+        }
+
+        if(entityState.isHollow()) {
             /* for previously attached objects that have become hollow,
-             * the OID can be looked up in our pseudo StateManager,
-             * that only acts as a holder of OID. */
-            return entityState.isDetached()
-                    ? DnOidStoreAndRecoverHelper.forEntity((Persistable)pojo).recoverOid()
-                    : Optional.empty();
+             * the OID can be looked up in DnStateManagerForHollow,
+             * that simply acts as a holder of OID. */
+            return DnOidStoreAndRecoverHelper.forEntity((Persistable)pojo).recoverOid();
         }
 
         val pm = getPersistenceManager();
@@ -202,7 +203,7 @@ implements EntityFacet {
             val recognition = exceptionRecognizerService.recognize(e);
             if(recognition.isPresent()) {
                 if(recognition.get().getCategory() == Category.NOT_FOUND) {
-                    throw new ObjectNotFoundException(""+bookmark, e);
+                    return Optional.empty();
                 }
             }
 
@@ -308,7 +309,7 @@ implements EntityFacet {
         _Assert.assertNullableObjectIsInstanceOf(pojo, entityClass);
 
         if(pojo==null
-                || DnEntityStateProvider.entityState(pojo).hasOid()) {
+                || DnEntityStateProvider.entityState(pojo).isAttached()) {
             return; // nothing to do
         }
 
@@ -349,7 +350,7 @@ implements EntityFacet {
         _Assert.assertNullableObjectIsInstanceOf(pojo, entityClass);
 
         if (!DnEntityStateProvider.entityState(pojo).hasOid()) {
-            throw _Exceptions.illegalArgument("can only delete an attached entity");
+            throw _Exceptions.illegalArgument("can only delete an entity with an OID");
         }
 
         val pm = getPersistenceManager();

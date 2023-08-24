@@ -48,7 +48,8 @@ public abstract class RegressionTestAbstract {
     protected <T> T call(final Callable<T> callable) {
         return transactionService.callTransactional(Propagation.REQUIRES_NEW, ()->
             interactionService.callAnonymous(callable))
-        .getValue().orElseThrow(); //XXX assuming return value of callable is not nullable
+        // assuming return value of callable is not nullable
+        .valueAsNonNullElseFail();
     }
 
     // -- ASSERTIONS
@@ -62,6 +63,5 @@ public abstract class RegressionTestAbstract {
     @Inject protected ServiceInjector serviceInjector;
     @Inject protected InteractionService interactionService;
     @Inject protected ObjectManager objectManager;
-
 
 }

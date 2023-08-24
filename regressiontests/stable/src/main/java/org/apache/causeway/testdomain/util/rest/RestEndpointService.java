@@ -25,6 +25,8 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.core.GenericType;
 import javax.xml.bind.JAXBException;
 
+import org.apache.causeway.viewer.restfulobjects.client.AuthenticationMode;
+
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
@@ -92,11 +94,11 @@ public class RestEndpointService {
         log.debug("new restful client created for {}", restRootPath);
 
         val clientConfig = RestfulClientConfig.builder()
-                .restfulBase(restRootPath)
+                .restfulBaseUrl(restRootPath)
                 // setup basic-auth
-                .useBasicAuth(true)
-                .restfulAuthUser(LdapConstants.SVEN_PRINCIPAL)
-                .restfulAuthPassword("pass")
+                .authenticationMode(AuthenticationMode.BASIC)
+                .basicAuthUser(LdapConstants.SVEN_PRINCIPAL)
+                .basicAuthPassword("pass")
                 // setup request/response debug logging
                 .useRequestDebugLogging(useRequestDebugLogging)
                 // register additional filter if any
@@ -213,7 +215,7 @@ public class RestEndpointService {
     public Try<Can<JdoBook>> getBooksFromInventoryAsJaxbVm(final RestfulClient client) {
 
         val objectId = interactionService.callAnonymous(
-                ()->jdoTestFixtures.getJdoInventoryJaxbVmAsBookmark().getIdentifier());
+                ()->jdoTestFixtures.getInventoryJaxbVmAsBookmark().getIdentifier());
 
         // using domain object alias ...
         val request = newInvocationBuilder(client,

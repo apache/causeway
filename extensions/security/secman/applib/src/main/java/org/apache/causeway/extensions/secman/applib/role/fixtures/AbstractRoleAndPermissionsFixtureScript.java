@@ -29,6 +29,8 @@ import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPe
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRoleRepository;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScriptWithExecutionStrategy;
+import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import lombok.val;
 
@@ -38,7 +40,9 @@ import lombok.val;
  *
  * @since 2.x {@index}
  */
-public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScript {
+public abstract class AbstractRoleAndPermissionsFixtureScript 
+extends FixtureScript
+implements FixtureScriptWithExecutionStrategy {
 
     @Inject private ApplicationRoleRepository applicationRoleRepository;
     @Inject private ApplicationPermissionRepository applicationPermissionRepository;
@@ -57,6 +61,11 @@ public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScr
             final Supplier<String> roleDescriptionSupplier) {
         this.roleNameSupplier = nullSafe(roleNameSupplier);
         this.roleDescriptionSupplier = nullSafe(roleDescriptionSupplier);
+    }
+    
+    @Override
+    public FixtureScripts.MultipleExecutionStrategy getMultipleExecutionStrategy() {
+        return null;
     }
 
     protected final String getRoleName() {

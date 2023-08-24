@@ -31,7 +31,6 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.actions.action.choicesfrom.ChoicesFromFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.actions.action.explicit.ActionExplicitFacetForActionAnnotation;
-import org.apache.causeway.core.metamodel.facets.actions.action.hidden.HiddenFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForAction;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForMixedInPropertyOrCollection;
@@ -61,10 +60,8 @@ extends FacetFactoryAbstract {
 
         processExplicit(processMethodContext, actionIfAny);
         processDomainEvent(processMethodContext, actionIfAny);
-        processHidden(processMethodContext, actionIfAny);
         processRestrictTo(processMethodContext, actionIfAny);
         processSemantics(processMethodContext, actionIfAny);
-
 
         // must come after processing semantics
         processCommandPublishing(processMethodContext, actionIfAny);
@@ -143,16 +140,6 @@ extends FacetFactoryAbstract {
         } finally {
             processMethodContext.removeMethod(actionMethod.asMethodForIntrospection());
         }
-    }
-
-    @SuppressWarnings({ "removal" })
-    void processHidden(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {
-        val facetedMethod = processMethodContext.getFacetHolder();
-
-        // search for @Action(hidden=...)
-        addFacetIfPresent(
-                HiddenFacetForActionAnnotation
-                .create(actionIfAny, facetedMethod));
     }
 
     void processRestrictTo(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {

@@ -88,6 +88,7 @@ import org.apache.causeway.core.config.viewer.web.DialogMode;
 
 import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.Value;
 import lombok.val;
 
@@ -2009,7 +2010,7 @@ public class CausewayConfiguration {
                 /**
                  * Defaults to <code>org.apache.causeway.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategyBasicAuth</code>.
                  */
-                private Optional<String> strategyClassName = Optional.empty();
+                private String strategyClassName = "org.apache.causeway.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategyBasicAuth";
             }
 
             /**
@@ -2304,6 +2305,16 @@ public class CausewayConfiguration {
             public void setMaxTitleLengthInStandaloneTables(final int val) {
                 maxTitleLengthInStandaloneTables = val;
             }
+
+            /**
+             * If a table has no property columns,
+             * for the title column this value is used,
+             * to determine how many characters to render for the table element titles.
+             * <p>
+             * Introduced for the case when max-title-length is set to zero for tables in general,
+             * that if a table has no property columns an exception to that title suppression can be made.
+             */
+            private int maxTitleLengthInTablesNotHavingAnyPropertyColumn = 80;
 
             /**
              * Whether to use a modal dialog for property edits and for actions associated with properties.
@@ -2674,7 +2685,6 @@ public class CausewayConfiguration {
                     Horizontal horizontal = Horizontal.RIGHT;
                 }
             }
-
         }
     }
 
@@ -3245,6 +3255,15 @@ public class CausewayConfiguration {
                         Collections.unmodifiableList(listOf());
                 public static final String REGULAR_USER_ROLE_NAME_DEFAULT = "causeway-ext-secman-user";
                 public static final boolean AUTO_UNLOCK_IF_DELEGATED_AND_AUTHENTICATED_DEFAULT = false;
+
+                /**
+                 * Path to local YAML file, if present, to use as an alternative seeding strategy.
+                 * <p>
+                 * Eg. seed from a YAML file, that was previously exported by SecMan's
+                 * ApplicationRoleManager_exportAsYaml mixin.
+                 */
+                @Getter @Setter
+                private String yamlFile = null;
 
                 @Getter
                 private final Admin admin = new Admin();

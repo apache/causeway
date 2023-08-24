@@ -44,6 +44,7 @@ import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPe
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionValueSet;
 import org.apache.causeway.extensions.secman.applib.permission.spi.PermissionsEvaluationService;
 
+import lombok.Builder;
 import lombok.NonNull;
 import lombok.val;
 
@@ -61,6 +62,22 @@ implements PermissionsEvaluationService {
 
     private final @NonNull PermissionsEvaluationPolicy policy; // serializable
 
+    /**
+     * for testing only
+     *
+     * @param policy
+     * @param applicationFeatureIdTransformer
+     */
+    @Builder
+    private PermissionsEvaluationServiceForSecman(
+            final PermissionsEvaluationPolicy policy,
+            final ApplicationFeatureIdTransformer applicationFeatureIdTransformer
+    ) {
+        this.policy = policy;
+        this.applicationFeatureIdTransformer = applicationFeatureIdTransformer;
+    }
+
+
     @Inject
     public PermissionsEvaluationServiceForSecman(final CausewayConfiguration causewayConfiguration) {
         this.policy = Optional.ofNullable(
@@ -71,9 +88,12 @@ implements PermissionsEvaluationService {
 
     @Override
     public ApplicationPermissionValueSet.Evaluation evaluate(
-            final ApplicationFeatureId targetMemberId,
+            final ApplicationFeatureId targetMemberIdInput,
             final ApplicationPermissionMode mode,
-            final Collection<ApplicationPermissionValue> permissionValues) {
+            final Collection<ApplicationPermissionValue> permissionValuesInput) {
+
+        final ApplicationFeatureId targetMemberId = applicationFeatureIdTransformer.transform(targetMemberIdInput);
+        final Collection<ApplicationPermissionValue> permissionValues = applicationFeatureIdTransformer.transform(permissionValuesInput);
 
         if(_NullSafe.isEmpty(permissionValues)) {
             return null;
@@ -111,5 +131,7 @@ implements PermissionsEvaluationService {
         }
         throw _Exceptions.illegalArgument("PermissionsEvaluationPolicy '%s' not recognised", policy);
     }
+
+    @Inject ApplicationFeatureIdTransformer applicationFeatureIdTransformer;
 
 }

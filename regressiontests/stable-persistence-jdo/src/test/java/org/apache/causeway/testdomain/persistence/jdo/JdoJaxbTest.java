@@ -26,31 +26,32 @@ import org.springframework.test.context.TestPropertySource;
 
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.testdomain.RegressionTestAbstract;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
 import org.apache.causeway.testdomain.jdo.JdoInventoryJaxbVm;
-import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
+import org.apache.causeway.testdomain.jdo.RegressionTestWithJdoFixtures;
 
 import lombok.val;
 
 @SpringBootTest(
         classes = {
                 Configuration_usingJdo.class
+        },
+        properties = {
+                "spring.datasource.url=jdbc:h2:mem:JdoJaxbTest"
         })
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
 //@Transactional
-class JdoJaxbTest extends RegressionTestAbstract {
+class JdoJaxbTest extends RegressionTestWithJdoFixtures {
 
-    @Inject private JdoTestFixtures jdoTestFixtures;
     @Inject private JaxbService jaxbService;
 
     @Test
     void inventoryJaxbVm_shouldRoundtripProperly() {
 
         val xml = call(()->{
-            val inventoryJaxbVm = jdoTestFixtures.setUpViewmodelWith3Books();
+            val inventoryJaxbVm = testFixtures.createViewmodelWithCurrentBooks();
             // assert initial reference is populated as expected
-            jdoTestFixtures.assertPopulatedWithDefaults(inventoryJaxbVm);
+            testFixtures.assertPopulatedWithDefaults(inventoryJaxbVm);
             // start round-trip
             return jaxbService.toXml(inventoryJaxbVm);
         });
@@ -60,7 +61,7 @@ class JdoJaxbTest extends RegressionTestAbstract {
             val recoveredVm =
                     serviceInjector.injectServicesInto(
                             jaxbService.fromXml(JdoInventoryJaxbVm.class, xml));
-            jdoTestFixtures.assertPopulatedWithDefaults(recoveredVm);
+            testFixtures.assertPopulatedWithDefaults(recoveredVm);
         });
     }
 

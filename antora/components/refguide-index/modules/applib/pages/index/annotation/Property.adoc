@@ -17,8 +17,6 @@ Collects together all the domain semantics for the property of a domain object.
   Publishing entityChangePublishing() default Publishing.NOT_SPECIFIED;     // <.>
   Publishing executionPublishing() default Publishing.NOT_SPECIFIED;     // <.>
   String fileAccept() default "";     // <.>
-  @Deprecated(forRemoval = true, since = "2.0.0-RC2")
-Where hidden() default Where.NOT_SPECIFIED;     // <.>
   int maxLength() default -1;     // <.>
   Snapshot snapshot() default Snapshot.NOT_SPECIFIED;     // <.>
   Class<? extends Specification>[] mustSatisfy() default {};     // <.>
@@ -69,18 +67,6 @@ Whether xref:refguide:applib:index/services/iactn/Execution.adoc[Execution] s (t
 +
 --
 For uploading xref:refguide:applib:index/value/Blob.adoc[Blob] or xref:refguide:applib:index/value/Clob.adoc[Clob] , optionally restrict the files accepted (eg `.xslx` ).
---
-<.> xref:#hidden[hidden]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _PropertyLayout#hidden()_ instead
-====
-
-Indicates where the property is not visible to the user.
 --
 <.> xref:#maxLength[maxLength]
 +
@@ -190,18 +176,6 @@ For uploading xref:refguide:applib:index/value/Blob.adoc[Blob] or xref:refguide:
 The value should be of the form "file_extension|audio/*|video/*|image/*|media_type".
 
 Note that this does not prevent the user from uploading some other file type; rather it merely defaults the file type in the file open dialog.
-
-[#hidden]
-=== hidden
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _PropertyLayout#hidden()_ instead
-====
-
-Indicates where the property is not visible to the user.
 
 [#maxLength]
 === maxLength

@@ -29,6 +29,7 @@ import org.yaml.snakeyaml.DumperOptions.LineBreak;
 import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
+import org.yaml.snakeyaml.nodes.Tag;
 import org.yaml.snakeyaml.representer.Representer;
 
 import org.apache.causeway.commons.collections.Can;
@@ -133,13 +134,16 @@ public class YamlUtils {
             dumperOptions = Optional.ofNullable(customizer.apply(dumperOptions))
                     .orElse(dumperOptions);
         }
+        
+        var presenter = new Representer(dumperOptions);
+        presenter.addClassTag(mappedType, Tag.MAP);
 
         var loaderOptions = new LoaderOptions();
         for(YamlUtils.YamlLoadCustomizer customizer : loadCustomizers) {
             loaderOptions = Optional.ofNullable(customizer.apply(loaderOptions))
                     .orElse(loaderOptions);
         }
-        var mapper = new Yaml(new Constructor(mappedType), new Representer(dumperOptions), dumperOptions, loaderOptions);
+        var mapper = new Yaml(new Constructor(mappedType, loaderOptions), presenter, dumperOptions, loaderOptions);
         return mapper;
     }
 

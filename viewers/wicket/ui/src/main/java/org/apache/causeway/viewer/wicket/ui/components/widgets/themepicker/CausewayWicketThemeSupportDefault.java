@@ -36,6 +36,7 @@ import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.config.CausewayConfiguration;
 
+import de.agilecoders.wicket.core.settings.NoopThemeProvider;
 import de.agilecoders.wicket.core.settings.ThemeProvider;
 import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchTheme;
 import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchThemeProvider;
@@ -89,6 +90,10 @@ public class CausewayWicketThemeSupportDefault implements CausewayWicketThemeSup
 
     private ThemeProvider createFallbackThemeProvider() {
         val themeName = configuration.getViewer().getWicket().getThemes().getInitial();
+        if("default".equalsIgnoreCase("default")) {
+            // in effect uses the bootstrap 'default' theme
+            return new NoopThemeProvider();
+        }
         BootswatchTheme bootswatchTheme;
         try {
             bootswatchTheme = BootswatchTheme.valueOf(themeName);

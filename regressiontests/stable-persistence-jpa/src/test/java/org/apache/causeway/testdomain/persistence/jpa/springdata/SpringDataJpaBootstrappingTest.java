@@ -53,7 +53,10 @@ import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTe
 
 import lombok.val;
 
-@DataJpaTest
+@DataJpaTest(
+        properties = {
+                "spring.datasource.url=jdbc:h2:mem:SpringDataJpaBootstrappingTest",
+        })
 @ContextConfiguration(classes = {
         Configuration_usingSpringDataJpa.class,
         FixtureScriptsSpecificationProviderAutoConfiguration.class, // because @DataJpaTest disables autoconfiguration
