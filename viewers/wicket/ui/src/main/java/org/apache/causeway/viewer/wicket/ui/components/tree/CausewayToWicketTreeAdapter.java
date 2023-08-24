@@ -35,6 +35,7 @@ import org.apache.causeway.applib.graph.tree.TreeNode;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 import org.apache.causeway.viewer.wicket.model.util.WktContext;
@@ -49,7 +50,7 @@ class CausewayToWicketTreeAdapter {
      */
     public static Component adapt(final String id, final ValueModel valueModel) {
         return valueModel==null
-                || valueModel.getObject()==null
+                || ManagedObjects.isNullOrUnspecifiedOrEmpty(valueModel.getObject())
             ? emptyTreeComponent(id)
             : DomainObjectTree.of(id, valueModel.getObject(), valueModel.getMetaModelContext());
     }
@@ -59,7 +60,7 @@ class CausewayToWicketTreeAdapter {
      */
     public static Component adapt(final String id, final ScalarModel scalarModel) {
         return scalarModel==null
-                || scalarModel.getObject()==null
+                || ManagedObjects.isNullOrUnspecifiedOrEmpty(scalarModel.getObject())
             ? emptyTreeComponent(id)
             : DomainObjectTree.of(id, scalarModel.getObject(), scalarModel.getMetaModelContext());
     }
