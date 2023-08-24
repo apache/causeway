@@ -55,9 +55,9 @@ implements
     private transient MetaModelContext metaModelContext;
 
     _TreeModelTreeAdapter(
-            final MetaModelContext mmc,
+            final MetaModelContext metaModelContext,
             final Class<? extends TreeAdapter> treeAdapterClass) {
-        this.metaModelContext = mmc;
+        this.metaModelContext = metaModelContext;
         this.treeAdapterClass = treeAdapterClass;
     }
 

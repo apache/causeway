@@ -149,12 +149,11 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
             // not visible if null
             // (except its null because its a detached entity,
             // which we can re-fetch due to memoized bookmark)
-            val targetAdapter = EntityIconAndTitlePanel.this.getModel().getObject();
-            return targetAdapter != null
-                    && (targetAdapter.getPojo()!=null
-                            || targetAdapter.isBookmarkMemoized());
+            val linkedDomainObject = EntityIconAndTitlePanel.this.linkedDomainObject();
+            return linkedDomainObject != null
+                    && (linkedDomainObject.getPojo()!=null
+                            || linkedDomainObject.isBookmarkMemoized());
         });
-
     }
 
     private String titleAbbreviated(final String titleString) {
