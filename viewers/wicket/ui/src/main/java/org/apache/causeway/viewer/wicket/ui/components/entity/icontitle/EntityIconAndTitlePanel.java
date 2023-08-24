@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.entity.icontitle;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import org.apache.wicket.MarkupContainer;
@@ -84,27 +85,28 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
     // -- HELPER
 
     private void buildGui() {
-        final ManagedObject linkedDomainObject = linkedDomainObject(); //TODO[CAUSEWAY-3522] potentially a viewmodel referencing hollow entities
-        //ManagedObjects.refreshViewmodel(linkedDomainObject(), null); //XXX workaround, if not using title caching
-        addLinkWrapper(linkedDomainObject);
+        addLinkWrapper();
         setOutputMarkupId(true);
     }
 
-    private void addLinkWrapper(final ManagedObject linkedDomainObject) {
+    private void addLinkWrapper() {
         val linkWrapper = Wkt.container(ID_ENTITY_LINK_WRAPPER);
-        linkWrapper.addOrReplace(createLinkWithIconAndTitle(linkedDomainObject));
+        linkWrapper.addOrReplace(createLinkWithIconAndTitle());
         addOrReplace(linkWrapper);
         onLinkWrapperCreated(linkWrapper);
     }
 
-    private AbstractLink createLinkWithIconAndTitle(final ManagedObject linkedDomainObject) {
+    private AbstractLink createLinkWithIconAndTitle() {
+        final ManagedObject linkedDomainObject = linkedDomainObject();
         final AbstractLink link = createDynamicallyVisibleLink(linkedDomainObject);
 
-        if(isTitleSuppressed()) {
+        val isTitleSuppressed = isTitleSuppressed();
+        if(isTitleSuppressed) {
             hideTitle();
         }
 
-        if (ManagedObjects.isNullOrUnspecifiedOrEmpty(linkedDomainObject)) {
+        if (ManagedObjects.isNullOrUnspecifiedOrEmpty(linkedDomainObject)
+                || isTitleSuppressed) {
             WktComponents.permanentlyHide(link, ID_ENTITY_ICON);
             Wkt.labelAdd(link, ID_ENTITY_TITLE, titleAbbreviated("(no object)"));
         } else {
@@ -124,7 +126,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
             final TitleRecord title = determineTitle(linkedDomainObject);
             Wkt.labelAdd(link, ID_ENTITY_TITLE, title.abbreviatedTitle());
 
-            if(title.suppressTooltipTitle()) {
+            if(title.isTooltipTitleSuppressed()) {
                 WktTooltips.addTooltip(link, title.tooltipBody());
             } else {
                 WktTooltips.addTooltip(link, title.tooltipTitle(), title.tooltipBody());
@@ -140,20 +142,21 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
                 && !getModel().getRenderingHint().isInTable();
     }
 
-    private AbstractLink createDynamicallyVisibleLink(final ManagedObject _targetAdapter) {
+    private AbstractLink createDynamicallyVisibleLink(final ManagedObject linkedDomainObject) {
         val pageParameters = PageParameterUtils
-                .createPageParametersForBookmarkablePageLink(getModel(), _targetAdapter);
+                .createPageParametersForBookmarkablePageLink(linkedDomainObject);
         val pageClass = getPageClassRegistry().getPageClass(PageType.ENTITY);
 
-        return Wkt.bookmarkablePageLinkWithVisibility(ID_ENTITY_LINK, pageClass, pageParameters, ()->{
-            // not visible if null
-            // (except its null because its a detached entity,
-            // which we can re-fetch due to memoized bookmark)
-            val linkedDomainObject = EntityIconAndTitlePanel.this.linkedDomainObject();
-            return linkedDomainObject != null
-                    && (linkedDomainObject.getPojo()!=null
-                            || linkedDomainObject.isBookmarkMemoized());
-        });
+        return Wkt.bookmarkablePageLinkWithVisibility(ID_ENTITY_LINK, pageClass, pageParameters,
+                ()->isLinkVisible(linkedDomainObject()));
+    }
+
+    private boolean isLinkVisible(final ManagedObject linkedDomainObject) {
+        /* not visible if null, except its null because its a detached entity,
+         * which we can re-fetch due to memoized bookmark) */
+        return linkedDomainObject != null
+                && (linkedDomainObject.getPojo()!=null
+                        || linkedDomainObject.isBookmarkMemoized());
     }
 
     private String titleAbbreviated(final String titleString) {
@@ -166,7 +169,8 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
      */
     @Builder
     @lombok.Value @Accessors(fluent=true)
-    private static class TitleRecord {
+    private static class TitleRecord implements Serializable {
+        private static final long serialVersionUID = 1L;
         final String fullTitle;
         final String abbreviatedTitle;
         final String tooltipTitle;
@@ -174,14 +178,19 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
         /**
          * No need to show a tooltip-title that is equal to the tooltip-body.
          */
-        final boolean suppressTooltipTitle() {
+        final boolean isTooltipTitleSuppressed() {
             return Objects.equals(tooltipTitle, tooltipBody);
         }
     }
 
+    private TitleRecord cachedTitle;
+
     private TitleRecord determineTitle(final ManagedObject linkedDomainObject) {
+        if(cachedTitle!=null) {
+            return cachedTitle;
+        }
         val fullTitle = MmTitleUtils.getTitleHonoringTitlePartSkipping(linkedDomainObject, this::isContextAdapter);
-        return TitleRecord.builder()
+        return this.cachedTitle = TitleRecord.builder()
                 .fullTitle(fullTitle)
                 .abbreviatedTitle(titleAbbreviated(fullTitle))
                 .tooltipTitle(_Strings.nullToEmpty(linkedDomainObject.getSpecification().getSingularName()))
