@@ -100,13 +100,11 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
         final ManagedObject linkedDomainObject = linkedDomainObject();
         final AbstractLink link = createDynamicallyVisibleLink(linkedDomainObject);
 
-        val isTitleSuppressed = isTitleSuppressed();
-        if(isTitleSuppressed) {
+        if(isTitleSuppressed()) {
             hideTitle();
         }
 
-        if (ManagedObjects.isNullOrUnspecifiedOrEmpty(linkedDomainObject)
-                || isTitleSuppressed) {
+        if (ManagedObjects.isNullOrUnspecifiedOrEmpty(linkedDomainObject)) {
             WktComponents.permanentlyHide(link, ID_ENTITY_ICON);
             Wkt.labelAdd(link, ID_ENTITY_TITLE, titleAbbreviated("(no object)"));
         } else {
