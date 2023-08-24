@@ -24,7 +24,8 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum RenderingHint {
-    // normal form
+
+    // regular
     REGULAR(Where.OBJECT_FORMS),
 
     // inside parent table
@@ -40,9 +41,9 @@ public enum RenderingHint {
         return this.where;
     }
 
-    public boolean isRegular() {
-        return this == REGULAR;
-    }
+//    public boolean isRegular() {
+//        return this == REGULAR;
+//    }
 
     public boolean isInParentedTable() {
         return this == PARENTED_PROPERTY_COLUMN;
@@ -50,6 +51,14 @@ public enum RenderingHint {
 
     public boolean isInStandaloneTable() {
         return this == STANDALONE_PROPERTY_COLUMN;
+    }
+
+    public boolean isInParentedTableTitleColumn() {
+        return this == PARENTED_TITLE_COLUMN;
+    }
+
+    public boolean isInStandaloneTableTitleColumn() {
+        return this == STANDALONE_TITLE_COLUMN;
     }
 
     public boolean isInTable() {
@@ -60,12 +69,8 @@ public enum RenderingHint {
         return isInParentedTableTitleColumn() || isInStandaloneTableTitleColumn();
     }
 
-    public boolean isInParentedTableTitleColumn() {
-        return this == PARENTED_TITLE_COLUMN;
-    }
-
-    public boolean isInStandaloneTableTitleColumn() {
-        return this == STANDALONE_TITLE_COLUMN;
+    public boolean isNotInTable() {
+        return !isInTable();
     }
 
 }

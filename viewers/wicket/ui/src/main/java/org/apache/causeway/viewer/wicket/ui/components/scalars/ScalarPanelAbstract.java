@@ -130,7 +130,7 @@ implements ScalarModelChangeListener {
 
         static RenderScenario inferFrom(final ScalarPanelAbstract scalarPanel) {
             val scalarModel = scalarPanel.scalarModel();
-            if(!scalarModel.getRenderingHint().isRegular()) {
+            if(scalarModel.getRenderingHint().isInTable()) {
                 return COMPACT;
             }
             if(scalarModel.isParameter()
@@ -284,8 +284,15 @@ implements ScalarModelChangeListener {
         scalarFrameContainer = Wkt.containerAdd(this, ID_SCALAR_TYPE_CONTAINER);
         Wkt.cssAppend(scalarFrameContainer, getCssClassName());
 
-        switch(scalarModel.getRenderingHint()) {
-        case REGULAR:
+        if(scalarModel.getRenderingHint().isInTable()) {
+            regularFrame = createShallowRegularFrame();
+            compactFrame = createCompactFrame();
+            regularFrame.setVisible(false);
+            compactFrame.setVisible(true);
+
+            scalarFrameContainer.addOrReplace(compactFrame, regularFrame,
+                    formFrame = createFormFrame());
+        } else {
             regularFrame = Wkt.ajaxEnable(createRegularFrame());
             compactFrame = createShallowCompactFrame();
             regularFrame.setVisible(true);
@@ -301,18 +308,6 @@ implements ScalarModelChangeListener {
             addFeedbackOnlyTo(regularFrame, getValidationFeedbackReceiver());
 
             setupInlinePrompt();
-
-            break;
-        default:
-            regularFrame = createShallowRegularFrame();
-            compactFrame = createCompactFrame();
-            regularFrame.setVisible(false);
-            compactFrame.setVisible(true);
-
-            scalarFrameContainer.addOrReplace(compactFrame, regularFrame,
-                    formFrame = createFormFrame());
-
-            break;
         }
 
         // prevent from tabbing into non-editable widgets.
@@ -358,11 +353,11 @@ implements ScalarModelChangeListener {
      * <p>Is added to {@link #getScalarFrameContainer()}.
      */
     protected WebMarkupContainer createFormFrame() {
-        val isRegular = scalarModel().getRenderingHint().isRegular();
+        val isNotInTable = scalarModel().getRenderingHint().isNotInTable();
         return (WebMarkupContainer)FrameFragment.INLINE_PROMPT_FORM
                 .createComponent(WebMarkupContainer::new)
                 .setVisible(false)
-                .setOutputMarkupId(isRegular);
+                .setOutputMarkupId(isNotInTable);
     }
 
     // -- FRAME SWITCHING

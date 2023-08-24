@@ -55,19 +55,16 @@ extends PanelAbstract<ManagedObject, ScalarModel> {
 
     private void buildGui() {
 
-        switch(scalarModel().getRenderingHint()) {
-        case REGULAR:
-            regularFrame = createRegularFrame();
-            compactFrame = createShallowCompactFrame();
-            regularFrame.setVisible(true);
-            compactFrame.setVisible(false);
-            break;
-        default:
+        if(scalarModel().getRenderingHint().isInTable()) {
             regularFrame = createShallowRegularFrame();
             compactFrame = createCompactFrame();
             regularFrame.setVisible(false);
             compactFrame.setVisible(true);
-            break;
+        } else {
+            regularFrame = createRegularFrame();
+            compactFrame = createShallowCompactFrame();
+            regularFrame.setVisible(true);
+            compactFrame.setVisible(false);
         }
 
         addOrReplace(regularFrame, compactFrame);
