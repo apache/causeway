@@ -24,6 +24,7 @@ import java.util.function.Function;
 import javax.inject.Inject;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.Where;
@@ -34,28 +35,25 @@ import org.apache.causeway.applib.value.semantics.OrderRelation;
 import org.apache.causeway.applib.value.semantics.Parser;
 import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
-import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.io.JaxbUtils;
-import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.causeway.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
 
-public class ValueSemanticsTester<T> {
+class ValueSemanticsTester<T> {
 
     @Inject InteractionService interactionService;
     @Inject SpecificationLoader specLoader;
 
+    @SuppressWarnings("unused")
     private final Class<T> valueType;
     private final Object domainObject;
     private Optional<OrderRelation<T, ?>> currentOrderRelation = Optional.empty();
@@ -69,6 +67,8 @@ public class ValueSemanticsTester<T> {
             final @NonNull String actionId) {
         val objSpec = specLoader.specForTypeElseFail(domainObject.getClass());
         val act = objSpec.getActionElseFail(actionId);
+        assertNotNull(act);
+        //TODO implement tests
     }
 
     public static interface PropertyInteractionProbe<T> {
@@ -129,6 +129,8 @@ public class ValueSemanticsTester<T> {
             final @NonNull InteractionContext interactionContext) {
         val objSpec = specLoader.specForTypeElseFail(domainObject.getClass());
         val coll = objSpec.getCollectionElseFail(collectionId);
+        assertNotNull(coll);
+        //TODO implement tests
     }
 
     // -- UTILITY
@@ -146,22 +148,6 @@ public class ValueSemanticsTester<T> {
         }
     }
 
-    // eg.. <ValueWithTypeDto type="string"><com:string>anotherString</com:string></ValueWithTypeDto>
-    public static String valueDtoToXml(final ValueWithTypeDto valueWithTypeDto) {
-        val rawXml = Try.call(()->JaxbUtils.toStringUtf8(valueWithTypeDto, opts->opts
-                .useContextCache(true)
-                .formattedOutput(true)))
-        .getValue().orElseThrow();
-
-        return TextUtils.cutter(rawXml)
-                .dropBefore("<ValueWithTypeDto")
-                .keepBeforeLast("</ValueWithTypeDto>")
-                .getValue()
-                .replace(" null=\"false\" xmlns:com=\"https://causeway.apache.org/schema/common\" xmlns:cmd=\"https://causeway.apache.org/schema/cmd\"", "")
-                + "</ValueWithTypeDto>";
-
-    }
-
     // -- HELPER
 
     private ValueFacet<T> valueFacet(
@@ -173,7 +159,7 @@ public class ValueSemanticsTester<T> {
                         "Value type Property or Parameter %s is missing a ValueFacet",
                         feature.getFeatureIdentifier()));
 
-        currentOrderRelation = valueFacet.selectDefaultOrderRelation();
+        currentOrderRelation = _Casts.uncheckedCast(valueFacet.selectDefaultOrderRelation());
 
         return _Casts.uncheckedCast(valueFacet);
     }
