@@ -54,6 +54,7 @@ import org.apache.causeway.viewer.wicket.viewer.wicketapp.CausewayWicketApplicat
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Viewer-specific implementation of {@link AuthenticatedWebSession}, which
@@ -61,6 +62,7 @@ import lombok.val;
  * also tracks thread usage (so that multiple concurrent requests are all
  * associated with the same session).
  */
+@Log4j2
 public class AuthenticatedWebSessionForCauseway
 extends AuthenticatedWebSession
 implements
@@ -103,7 +105,7 @@ implements
     @Nullable
     @Override
     public MetaModelContext getMetaModelContext() {
-        return mmc = WktContext.computeIfAbsent(mmc);
+        return mmc = WktContext.computeIfAbsent(mmc, applicationKey);
     }
 
     /**
@@ -160,6 +162,7 @@ implements
     @Getter
     private UUID sessionGuid;
     private String cachedSessionId;
+    private @Nullable String applicationKey; // nullable ... JUnit support
 
     /**
      * Optionally the current HttpSession's Id,
@@ -178,6 +181,7 @@ implements
     public AuthenticatedWebSessionForCauseway(final Request request) {
         super(request);
         sessionGuid = UUID.randomUUID();
+        applicationKey = WktContext.getApplicationKey();
     }
 
     @Override
@@ -322,6 +326,11 @@ implements
             final String username,
             final SessionSubscriber.CausedBy causedBy) {
 
+        if(getMetaModelContext()==null) {
+            log.warn("Failed to callback SessionLoggingServices due to unavailable MetaModelContext.\n"
+                    + "\tEvent Data: type={}, username={}, causedBy={}", type, username, causedBy);
+            return;
+        }
 
         val interactionService = getInteractionService();
         val sessionLoggingServices = getSessionLoggingServices();
