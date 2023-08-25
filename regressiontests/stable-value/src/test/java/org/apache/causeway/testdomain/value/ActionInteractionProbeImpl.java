@@ -18,13 +18,25 @@
  */
 package org.apache.causeway.testdomain.value;
 
+import javax.inject.Inject;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
+import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.services.command.Command;
-import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider.Context;
+import org.apache.causeway.applib.services.wrapper.WrapperFactory;
+import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
+import org.apache.causeway.core.metamodel.services.schema.SchemaValueMarshaller;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.testdomain.model.valuetypes.ValueTypeExample;
 import org.apache.causeway.testdomain.value.ValueSemanticsTester.ActionInteractionProbe;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @RequiredArgsConstructor
 class ActionInteractionProbeImpl<T> implements ActionInteractionProbe<T> {
@@ -34,12 +46,73 @@ class ActionInteractionProbeImpl<T> implements ActionInteractionProbe<T> {
     final @NonNull ValueTypeExample<T> example;
     final @NonNull ValueSemanticsTester<T> tester;
     
+    @Inject private SpecificationLoader specLoader;
+    @Inject private SchemaValueMarshaller valueMarshaller;
+    @Inject private WrapperFactory wrapperFactory;
     
     @Override
-    public void testCommand(Context context, Command command) {
-        // TODO Auto-generated method stub
-        System.err.printf("ACT testCommand %s%n", command);
-    }
+    public void testCommandWithNonEmptyArg(
+            final ValueSemanticsProvider.Context context,
+            final Command command) {
 
+        assertNotNull(command.getCommandDto());
+        
+        //debug
+        //System.err.printf("CommandDto %s %s%n", name,
+        //      CommandDtoUtils.dtoMapper().toString(command.getCommandDto()));
+        
+        val actionDto = (ActionDto)command.getCommandDto().getMember();
+        
+        assertNotNull(actionDto.getParameters());
+        assertNotNull(actionDto.getParameters().getParameter());
+        assertEquals(1, actionDto.getParameters().getParameter().size()); // we are testing a single arg action 
+        
+        val parameterRecordedDto = actionDto.getParameters().getParameter().get(0);
+        assertNotNull(parameterRecordedDto);
+        
+        final Identifier paramId = context.getFeatureIdentifier();
+        val parameterRecorded = valueMarshaller.recoverParameterFrom(paramId, parameterRecordedDto);
+        assertNotNull(parameterRecorded);
+
+        assertEquals(valueType, parameterRecorded.getSpecification().getCorrespondingClass(), ()->
+            String.format("command value parsing type mismatch '%s'",
+                    _Utils.valueDtoToXml(parameterRecordedDto)));
+
+        tester.assertValueEquals(example.getUpdateValue(), parameterRecorded.getPojo(), "command failed");
+
+    }
+    
+    @Override
+    public void testCommandWithEmptyArg(
+            final ValueSemanticsProvider.Context context,
+            final Command command) {
+
+        assertNotNull(command.getCommandDto());
+        
+        //debug
+//        System.err.printf("CommandDto %s %s%n", name,
+//              CommandDtoUtils.dtoMapper().toString(command.getCommandDto()));
+        
+        val actionDto = (ActionDto)command.getCommandDto().getMember();
+        
+        assertNotNull(actionDto.getParameters());
+        assertNotNull(actionDto.getParameters().getParameter());
+        assertEquals(1, actionDto.getParameters().getParameter().size()); // we are testing a single arg action 
+        
+        val parameterRecordedDto = actionDto.getParameters().getParameter().get(0);
+        assertNotNull(parameterRecordedDto);
+        
+        final Identifier paramId = context.getFeatureIdentifier();
+        val parameterRecorded = valueMarshaller.recoverParameterFrom(paramId, parameterRecordedDto);
+        assertNotNull(parameterRecorded);
+
+        assertEquals(valueType, parameterRecorded.getSpecification().getCorrespondingClass(), ()->
+            String.format("command value parsing type mismatch '%s'",
+                    _Utils.valueDtoToXml(parameterRecordedDto)));
+
+        assertNull(parameterRecorded.getPojo());
+    }
+    
+    
 }
 

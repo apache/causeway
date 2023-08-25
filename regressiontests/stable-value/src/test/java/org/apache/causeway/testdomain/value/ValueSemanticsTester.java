@@ -68,7 +68,8 @@ class ValueSemanticsTester<T> {
     // -- ACTIONS
     
     public static interface ActionInteractionProbe<T> {
-        void testCommand(ValueSemanticsProvider.Context context, Command command);
+        void testCommandWithNonEmptyArg(ValueSemanticsProvider.Context context, Command command);
+        void testCommandWithEmptyArg(ValueSemanticsProvider.Context context, Command command);
     }
     
     public void actionInteraction(
@@ -82,21 +83,39 @@ class ValueSemanticsTester<T> {
         val context = valueFacet(act.getParameters().getFirstElseFail())
                 .createValueSemanticsContext(act);
         
-        interactionService.run(interactionContext, ()->{
-
+//        val actionCommandWithNonEmptyArg = interactionService.call(interactionContext, ()->{
+//    
+//            val command = interactionService.currentInteractionElseFail().getCommand();
+//            val actInteraction = ActionInteraction
+//                    .wrap(ManagedAction.of(ManagedObject.adaptSingular(objSpec, domainObject), act, Where.OBJECT_FORMS));
+//
+//            val params = actInteraction.startParameterNegotiation().orElseThrow();
+//            val singleArgPojoToUse = actionArgumentProvider.apply(actInteraction.getManagedAction().orElseThrow());
+//            
+//            params.updateParamValuePojo(0, __->singleArgPojoToUse);
+//            
+//            actInteraction.invokeWith(params);
+//            
+//            return command;
+//        });
+        
+        val actionCommandWithEmptyArg = interactionService.call(interactionContext, ()->{
+            
             val command = interactionService.currentInteractionElseFail().getCommand();
             val actInteraction = ActionInteraction
                     .wrap(ManagedAction.of(ManagedObject.adaptSingular(objSpec, domainObject), act, Where.OBJECT_FORMS));
 
             val params = actInteraction.startParameterNegotiation().orElseThrow();
-            val singleArgPojoToUse = actionArgumentProvider.apply(actInteraction.getManagedAction().orElseThrow());
             
-            params.updateParamValuePojo(0, __->singleArgPojoToUse);
+            params.updateParamValuePojo(0, __->null); // overrides default values from value semantics
             
             actInteraction.invokeWith(params);
-
-            probe.testCommand(context, command);
+            
+            return command;
         });
+
+        //probe.testCommandWithNonEmptyArg(context, actionCommandWithNonEmptyArg);
+        probe.testCommandWithEmptyArg(context, actionCommandWithEmptyArg);
         
     }
 
