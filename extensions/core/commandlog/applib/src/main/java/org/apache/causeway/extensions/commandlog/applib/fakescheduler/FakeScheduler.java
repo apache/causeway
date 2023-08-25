@@ -103,7 +103,7 @@ public class FakeScheduler {
         });
 
         tasks.submit(_ConcurrentContext.singleThreaded());
-        val hasTimedOut = tasks.await(waitForMillis, TimeUnit.MILLISECONDS);
+        val hasTimedOut = !tasks.await(waitForMillis, TimeUnit.MILLISECONDS);
 
         return CommandBulkExecutionResult.builder()
                 .hasTimedOut(hasTimedOut)
