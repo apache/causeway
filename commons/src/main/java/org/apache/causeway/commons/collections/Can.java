@@ -62,19 +62,13 @@ import lombok.val;
  *
  * <p>
  * <b>IMPORTANT:</b>A {@link Can} must not contain elements equal to {@code null}.  If you want to store a null within
- * a {@link Can}, then replace it with {@link Can#NULL_VALUE} placeholder first.
+ * a {@link Can}, then replace it some sort of placeholder first.
  *
  * @param <T>
  * @since 2.0 {@index}
  */
 public interface Can<T>
 extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
-
-    /**
-     * Provided for use as a placeholder for <code>null</code> values; the {@link Can} itself just treats this as
-     * just another object.
-     */
-    Object NULL_VALUE = new Object();
 
     /**
      * Will only ever return an empty Optional, if the elementIndex is out of bounds.
@@ -199,7 +193,15 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      * @return non-null
      */
     public static <T> Can<T> ofArray(final @Nullable T[] array) {
-        return ofArray(array, Function.identity());
+        if(_NullSafe.size(array)==0) {
+            return empty();
+        }
+
+        val nonNullElements = Stream.of(array)
+                .filter(_NullSafe::isPresent)
+                .collect(_CanFactory.toListWithSizeUpperBound(array.length));
+
+        return _CanFactory.ofNonNullElements(nonNullElements);
     }
 
     /**
@@ -216,7 +218,6 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
 
         val nonNullElements = Stream.of(array)
                 .filter(_NullSafe::isPresent)
-                .map(nullMapper)
                 .collect(_CanFactory.toListWithSizeUpperBound(array.length));
 
         return _CanFactory.ofNonNullElements(nonNullElements);
