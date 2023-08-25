@@ -61,8 +61,8 @@ import lombok.val;
  * should never be initialized to {@code null}.
  *
  * <p>
- * <b>IMPORTANT:</b>A {@link Can} must not contain elements equal to {@code null}.  If you want to store a null within
- * a {@link Can}, then replace it some sort of placeholder first.
+ * <b>IMPORTANT:</b>A {@link Can} must not contain {@code null} elements.  If you need to use store null, then
+ * use a different data structure, for example a regular {@link java.util.List java.util.List}.
  *
  * @param <T>
  * @since 2.0 {@index}
