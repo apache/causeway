@@ -222,7 +222,18 @@ implements FacetHolder {
     }
 
     private ObjectAction createAction(final FacetedMethod facetedMethod) {
+
         if (facetedMethod.getFeatureType().isAction()) {
+
+            //TODO[CAUSEWAY-3556] perhaps let _ClassCache handle this
+            final boolean hasGenericBounds = facetedMethod.getMethod().asMethod()
+                    .map(method->_Reflect.hasGenericBounds(method))
+                    .orElse(false);
+
+            if(hasGenericBounds) {
+                return null;
+            }
+
             /* Assuming, that facetedMethod was already populated with ContributingFacet,
              * we copy the mixin-sort information from the FacetedMethod to the MixinFacet
              * that is held by the mixin's type spec. */

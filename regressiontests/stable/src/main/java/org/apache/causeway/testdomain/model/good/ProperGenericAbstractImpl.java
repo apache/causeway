@@ -26,11 +26,16 @@ import lombok.Getter;
 import lombok.Setter;
 
 @DomainObject(nature = Nature.VIEW_MODEL)
-public class ProperGenericImpl
-implements ProperGenericInterface<String> {
+public class ProperGenericAbstractImpl
+extends ProperGenericAbstract<String> {
 
     @Property
     @Getter @Setter
     private String value = "aValue";
+
+    @Override
+    public String sampleAction(final String value) {
+        return value;
+    }
 
 }

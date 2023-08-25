@@ -20,11 +20,11 @@ package org.apache.causeway.testdomain.model.good;
 
 import org.springframework.lang.Nullable;
 
-public interface ProperGenericInterface<T> {
+public abstract class ProperGenericAbstract<T> {
 
-    T getValue();
-    void setValue(T prop);
+    abstract T getValue();
+    abstract void setValue(T prop);
 
-    T sampleAction(@Nullable final T value);
+    abstract T sampleAction(@Nullable final T value);
 
 }

@@ -18,13 +18,24 @@
  */
 package org.apache.causeway.testdomain.model.good;
 
-import org.springframework.lang.Nullable;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.Property;
 
-public interface ProperGenericInterface<T> {
+import lombok.Getter;
+import lombok.Setter;
 
-    T getValue();
-    void setValue(T prop);
+@DomainObject(nature = Nature.VIEW_MODEL)
+public class ProperGenericInterfaceImpl
+implements ProperGenericInterface<String> {
 
-    T sampleAction(@Nullable final T value);
+    @Property
+    @Getter @Setter
+    private String value = "aValue";
+
+    @Override
+    public String sampleAction(final String value) {
+        return value;
+    }
 
 }

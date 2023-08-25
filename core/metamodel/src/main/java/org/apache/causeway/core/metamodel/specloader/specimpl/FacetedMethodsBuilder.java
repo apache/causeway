@@ -422,6 +422,12 @@ implements HasMetaModelContext {
             return false;
         }
 
+        //[CAUSEWAY-3556] skip processing of methods with bounded return or any bounded param
+        // that is, ignore entirely
+        if(_Reflect.hasGenericBounds(actionMethod)) {
+            return false;
+        }
+
         val hasActionAnnotation = _Annotations
                 .isPresent(actionMethod, Action.class);
 

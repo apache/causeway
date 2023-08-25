@@ -30,6 +30,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
@@ -92,7 +94,7 @@ public final class _Reflect {
      * @param b
      * @see Method#equals(Object)
      */
-    public static boolean methodsSame(final Method a, final Method b) {
+    public boolean methodsSame(final Method a, final Method b) {
         if(!a.getName().equals(b.getName())) {
             return false;
         }
@@ -100,11 +102,16 @@ public final class _Reflect {
             return false;
         }
         if(!_Arrays.testAllMatch(a.getParameters(), b.getParameters(),
-                (p1, p2)->p1.getType().equals(p2.getType()))) {
+                (p1, p2)->shareSameTypeHierarchy(p1.getType(), p2.getType()))) {
+                //(p1, p2)->p1.getType().equals(p2.getType()))) {
             return false;
         }
-        return a.getReturnType().isAssignableFrom(b.getReturnType())
-                || b.getReturnType().isAssignableFrom(a.getReturnType());
+        return shareSameTypeHierarchy(a.getReturnType(), b.getReturnType());
+    }
+
+    public boolean shareSameTypeHierarchy(final @NonNull Class<?> a, final @NonNull Class<?> b) {
+        return a.isAssignableFrom(b)
+                || b.isAssignableFrom(a);
     }
 
     /**
@@ -112,7 +119,7 @@ public final class _Reflect {
      * that one which is overriding the other is returned.
      * @implNote if both declaring type and return type are the same we (arbitrarily) return b
      */
-    public static Method methodsWhichIsOverridingTheOther(final Method a, final Method b) {
+    public Method methodsWhichIsOverridingTheOther(final Method a, final Method b) {
         val aType = a.getDeclaringClass();
         val bType = b.getDeclaringClass();
         if(aType.equals(bType)) {
@@ -141,7 +148,7 @@ public final class _Reflect {
      * @param b
      * @see #methodsSame(Method, Method)
      */
-    public static int methodWeakCompare(final Method a, final Method b) {
+    public int methodWeakCompare(final Method a, final Method b) {
 
         int c = a.getName().compareTo(b.getName());
         if(c!=0) {
@@ -156,20 +163,23 @@ public final class _Reflect {
         for(int i=0; i<a.getParameterCount(); ++i) {
             c = typesCompare(paramsA[i].getType(), paramsB[i].getType());
             if(c!=0) {
-                return c;
+                if(shareSameTypeHierarchy(paramsA[i].getType(), paramsB[i].getType())) {
+                    // continue
+                } else {
+                    return c;
+                }
             }
         }
         c = typesCompare(a.getReturnType(), b.getReturnType());
         if(c!=0) {
-            return a.getReturnType().isAssignableFrom(b.getReturnType())
-                    || b.getReturnType().isAssignableFrom(a.getReturnType())
+            return shareSameTypeHierarchy(a.getReturnType(), b.getReturnType())
                     ? 0 // same
                     : c;
         }
         return 0; // equal
     }
 
-    public static int typesCompare(final Class<?> a, final Class<?> b) {
+    public int typesCompare(final Class<?> a, final Class<?> b) {
         return a.getName().compareTo(b.getName());
     }
 
@@ -178,7 +188,7 @@ public final class _Reflect {
      * (method, field or constructor)
      * @param obj
      */
-    public static boolean canAccess(
+    public boolean canAccess(
             final @Nullable AccessibleObject member,
             final @Nullable Object obj) {
         return member != null
@@ -189,7 +199,7 @@ public final class _Reflect {
      * Returns whether a {@link Member} is public and not synthetic (can be accessed).
      * @param member Member to check
      */
-    public static boolean isPublicNonSynthetic(final @Nullable Member member) {
+    public boolean isPublicNonSynthetic(final @Nullable Member member) {
         return member != null
                 && Modifier.isPublic(member.getModifiers())
                 && !member.isSynthetic();
@@ -199,7 +209,7 @@ public final class _Reflect {
      * Whether member name equals given {@code memberName}
      * @param memberName
      */
-    public static <T extends Member> Predicate<T> withName(final @NonNull String memberName) {
+    public <T extends Member> Predicate<T> withName(final @NonNull String memberName) {
         return m -> m != null && memberName.equals(m.getName());
     }
 
@@ -207,7 +217,7 @@ public final class _Reflect {
      * Whether member name starts with given {@code prefix}
      * @param prefix
      */
-    public static <T extends Member> Predicate<T> withPrefix(final @NonNull String prefix) {
+    public <T extends Member> Predicate<T> withPrefix(final @NonNull String prefix) {
         return m -> m != null && m.getName().startsWith(prefix);
     }
 
@@ -215,7 +225,7 @@ public final class _Reflect {
      * Whether method parameters count equal to given {@code count}
      * @param count
      */
-    public static Predicate<Method> withMethodParametersCount(final int count) {
+    public Predicate<Method> withMethodParametersCount(final int count) {
         return (final Method m) -> m != null && m.getParameterTypes().length == count;
     }
 
@@ -223,7 +233,7 @@ public final class _Reflect {
      * Whether field type is assignable to given {@code type}
      * @param type
      */
-    public static <T> Predicate<Field> withTypeAssignableTo(final @NonNull Class<T> type) {
+    public <T> Predicate<Field> withTypeAssignableTo(final @NonNull Class<T> type) {
         return (final Field f) -> f != null && type.isAssignableFrom(f.getType());
     }
 
@@ -234,7 +244,7 @@ public final class _Reflect {
      * @param type (nullable)
      * @param ignoreAccess - whether to include non-public members
      */
-    public static Stream<Field> streamFields(
+    public Stream<Field> streamFields(
             final @Nullable Class<?> type,
             final boolean ignoreAccess) {
 
@@ -252,7 +262,7 @@ public final class _Reflect {
      * @param type (nullable)
      * @param ignoreAccess - whether to include non-public members
      */
-    public static Stream<Field> streamAllFields(
+    public Stream<Field> streamAllFields(
             final @Nullable Class<?> type,
             final boolean ignoreAccess) {
 
@@ -268,7 +278,7 @@ public final class _Reflect {
      * @param ignoreAccess - whether to include non-public members
      * @return non-null
      */
-    public static Stream<Method> streamMethods(
+    public Stream<Method> streamMethods(
             final @Nullable Class<?> type,
             final boolean ignoreAccess) {
 
@@ -282,7 +292,7 @@ public final class _Reflect {
         return _NullSafe.stream(type.getMethods());
     }
 
-    public static Stream<Method> streamInheritedMethods(final Method method) {
+    public Stream<Method> streamInheritedMethods(final Method method) {
         return streamAllMethods(method.getDeclaringClass(), true)
                 .filter(candidateMethod->methodsSame(candidateMethod, method));
     }
@@ -293,7 +303,7 @@ public final class _Reflect {
      * @param ignoreAccess - whether to include non-public members
      * @return non-null
      */
-    public static Stream<Method> streamAllMethods(
+    public Stream<Method> streamAllMethods(
             final @Nullable Class<?> type,
             final boolean ignoreAccess) {
 
@@ -326,7 +336,7 @@ public final class _Reflect {
      * @param interfacePolicy - whether to include all interfaces implemented by given {@code type} at the end
      * @return non-null
      */
-    public static Stream<Class<?>> streamTypeHierarchy(
+    public Stream<Class<?>> streamTypeHierarchy(
             final @Nullable Class<?> type,
             final @NonNull InterfacePolicy interfacePolicy) {
 
@@ -348,7 +358,7 @@ public final class _Reflect {
      * @return the first matching annotation, or {@code null} if not found
      * @throws NullPointerException - if annotationClass is {@code null}
      */
-    public static <T extends Annotation> T getAnnotation(
+    public <T extends Annotation> T getAnnotation(
             final Class<?> cls,
             final Class<T> annotationClass) {
 
@@ -406,7 +416,7 @@ public final class _Reflect {
      * @throws NullPointerException
      *            if the method or annotation are {@code null}
      */
-    public static <A extends Annotation> A getAnnotation(
+    public <A extends Annotation> A getAnnotation(
             final @NonNull Method method,
             final @NonNull Class<A> annotationCls,
             final boolean searchSupers,
@@ -447,7 +457,7 @@ public final class _Reflect {
      * @param annotationName - fully qualified class name of the {@link Annotation} to match against
      * @return false - if any of the arguments is null
      */
-    public static boolean containsAnnotation(final @Nullable Class<?> cls, final @Nullable String annotationName) {
+    public boolean containsAnnotation(final @Nullable Class<?> cls, final @Nullable String annotationName) {
         if(cls==null || _Strings.isEmpty(annotationName)) {
             return false;
         }
@@ -462,20 +472,20 @@ public final class _Reflect {
     // -- FIND GETTER
 
     @SneakyThrows
-    public static Stream<PropertyDescriptor> streamGetters(final @NonNull Class<?> cls) {
+    public Stream<PropertyDescriptor> streamGetters(final @NonNull Class<?> cls) {
         return Stream.of(
                 Introspector.getBeanInfo(cls, Object.class)
                     .getPropertyDescriptors())
                 .filter(pd->pd.getReadMethod()!=null);
     }
 
-    public static Map<String, Method> getGettersByName(final @NonNull Class<?> cls) {
+    public Map<String, Method> getGettersByName(final @NonNull Class<?> cls) {
         return streamGetters(cls)
                 .collect(Collectors.toMap(PropertyDescriptor::getName, PropertyDescriptor::getReadMethod));
     }
 
 
-    public static Method getGetter(final Class<?> cls, final String propertyName) throws IntrospectionException {
+    public Method getGetter(final Class<?> cls, final String propertyName) throws IntrospectionException {
         final BeanInfo beanInfo = Introspector.getBeanInfo(cls);
         for(PropertyDescriptor pd:beanInfo.getPropertyDescriptors()){
             if(!pd.getName().equals(propertyName))
@@ -486,7 +496,7 @@ public final class _Reflect {
     }
 
     @SneakyThrows
-    public static Object readFromGetterOn(
+    public Object readFromGetterOn(
             final @NonNull Method getter,
             final @NonNull Object target) {
         return getter.invoke(target);
@@ -494,7 +504,7 @@ public final class _Reflect {
 
     // -- FIND SETTER
 
-    public static Method getSetter(final Class<?> cls, final String propertyName) throws IntrospectionException {
+    public Method getSetter(final Class<?> cls, final String propertyName) throws IntrospectionException {
         final BeanInfo beanInfo = Introspector.getBeanInfo(cls);
         for(PropertyDescriptor pd:beanInfo.getPropertyDescriptors()){
             if(!pd.getName().equals(propertyName))
@@ -505,7 +515,7 @@ public final class _Reflect {
     }
 
     @SneakyThrows
-    public static void writeToSetterOn(
+    public void writeToSetterOn(
             final @NonNull Method setter,
             final @NonNull Object target,
             final @NonNull Object value) {
@@ -515,7 +525,7 @@ public final class _Reflect {
 
     // -- MODIFIERS
 
-    public static Object getFieldOn(
+    public Object getFieldOn(
             final @NonNull Field field,
             final @NonNull Object target) throws IllegalArgumentException, IllegalAccessException {
 
@@ -532,7 +542,7 @@ public final class _Reflect {
         /*sonar-ignore-off*/
     }
 
-    public static void setFieldOn(
+    public void setFieldOn(
             final @NonNull Field field,
             final @NonNull Object target,
             final Object fieldValue) throws IllegalArgumentException, IllegalAccessException {
@@ -552,7 +562,7 @@ public final class _Reflect {
     }
 
 
-    public static Try<Object> invokeMethodOn(
+    public Try<Object> invokeMethodOn(
             final @NonNull Method method,
             final @NonNull Object target,
             final Object... args) {
@@ -572,7 +582,7 @@ public final class _Reflect {
         /*sonar-ignore-off*/
     }
 
-    public static <T> Try<T> invokeConstructor(
+    public <T> Try<T> invokeConstructor(
             final @NonNull Constructor<T> constructor,
             final Object... args) {
 
@@ -594,18 +604,18 @@ public final class _Reflect {
 
     // -- COMMON CONSTRUCTOR IDIOMS
 
-    public static Can<Constructor<?>> getDeclaredConstructors(final Class<?> cls) {
+    public Can<Constructor<?>> getDeclaredConstructors(final Class<?> cls) {
         return Can.ofArray(cls.getDeclaredConstructors());
     }
 
-    public static Can<Constructor<?>> getPublicConstructors(final Class<?> cls) {
+    public Can<Constructor<?>> getPublicConstructors(final Class<?> cls) {
         return Can.ofArray(cls.getConstructors());
     }
 
     // -- GENENERIC TYPE ARG INTROSPECTION
 
     @lombok.Value(staticConstructor = "of")
-    public static class MethodAndImplementingClass {
+    public class MethodAndImplementingClass {
         final @NonNull Method method;
         final @NonNull Class<?> implementingClass;
         /**
@@ -641,7 +651,7 @@ public final class _Reflect {
     }
 
     @lombok.Value(staticConstructor = "of")
-    public static class ConstructorAndImplementingClass {
+    public class ConstructorAndImplementingClass {
         final @NonNull Constructor<?> constructor;
         final @NonNull Class<?> implementingClass;
         /**
@@ -679,9 +689,9 @@ public final class _Reflect {
     // -- FILTER
 
     @UtilityClass
-    public static class Filter {
+    public class Filter {
 
-        public static Predicate<Method> isGetter() {
+        public Predicate<Method> isGetter() {
             return method->method!=null
                     && method.getParameterCount()==0
                     && method.getReturnType()!=void.class
@@ -690,29 +700,29 @@ public final class _Reflect {
                                 && method.getReturnType()==boolean.class));
         }
 
-        public static Predicate<Method> hasReturnType(final Class<?> expectedReturnType) {
+        public Predicate<Method> hasReturnType(final Class<?> expectedReturnType) {
             return method->expectedReturnType.isAssignableFrom(method.getReturnType());
         }
 
-        public static Predicate<Method> hasReturnTypeAnyOf(final Can<Class<?>> allowedReturnTypes) {
+        public Predicate<Method> hasReturnTypeAnyOf(final Can<Class<?>> allowedReturnTypes) {
             return method->allowedReturnTypes.stream()
                     .anyMatch(allowedReturnType->allowedReturnType.isAssignableFrom(method.getReturnType()));
         }
 
-        public static Predicate<Executable> isPublic() {
+        public Predicate<Executable> isPublic() {
             return ex->Modifier.isPublic(ex.getModifiers());
         }
 
-        public static Predicate<Executable> paramCount(final int paramCount) {
+        public Predicate<Executable> paramCount(final int paramCount) {
             return ex->ex.getParameterCount() == paramCount;
         }
 
-        public static Predicate<Executable> paramAssignableFrom(final int paramIndex, final Class<?> paramType) {
+        public Predicate<Executable> paramAssignableFrom(final int paramIndex, final Class<?> paramType) {
             return ex->ex.getParameterTypes()[paramIndex].isAssignableFrom(paramType);
         }
 
         //TODO simple array compare should do
-        public static Predicate<Executable> paramSignatureMatch(final Class<?>[] matchingParamTypes) {
+        public Predicate<Executable> paramSignatureMatch(final Class<?>[] matchingParamTypes) {
             return ex->{
                 // check params (if required)
                 if (matchingParamTypes != null) {
@@ -731,7 +741,7 @@ public final class _Reflect {
             };
         }
 
-        public static Predicate<Executable> paramAssignableFromValue(final int paramIndex, final @Nullable Object value) {
+        public Predicate<Executable> paramAssignableFromValue(final int paramIndex, final @Nullable Object value) {
             if(value==null) {
                 return _Predicates.alwaysTrue();
             }
@@ -743,7 +753,7 @@ public final class _Reflect {
     /**
      * Lookup regular method for a synthetic one in the method's declaring class type-hierarchy.
      */
-    public static Optional<Method> lookupRegularMethodForSynthetic(final @NonNull Method syntheticMethod) {
+    public Optional<Method> lookupRegularMethodForSynthetic(final @NonNull Method syntheticMethod) {
 
         if(!syntheticMethod.isSynthetic()) {
             return Optional.of(syntheticMethod);
@@ -756,7 +766,7 @@ public final class _Reflect {
         .findFirst();
     }
 
-    private static Predicate<Method> methodMatcherOnNameAndSignature(final @NonNull Method ref) {
+    private Predicate<Method> methodMatcherOnNameAndSignature(final @NonNull Method ref) {
         val refSignature = ref.getParameterTypes();
         return other->
             (!ref.getName().equals(other.getName()))
@@ -764,7 +774,7 @@ public final class _Reflect {
             : Arrays.equals(refSignature, other.getParameterTypes());
     }
 
-    public static String methodToShortString(final @NonNull Method method) {
+    public String methodToShortString(final @NonNull Method method) {
 
         return method.getName() + "(" +
 
@@ -778,8 +788,36 @@ public final class _Reflect {
     /**
      * Determine if the supplied method is declared within a non-static <em>inner class</em>.
      */
-    public static boolean isNonStaticInnerMethod(final @NonNull Method method) {
+    public boolean isNonStaticInnerMethod(final @NonNull Method method) {
         return ClassUtils.isInnerClass(method.getDeclaringClass());
+    }
+
+    /**
+     * Whether has any generic bounds on any return type or parameter type(s).
+     */
+    public boolean hasGenericBounds(final @NonNull Method method) {
+        return hasGenericReturn(method)
+                || hasGenericParam(method);
+    }
+
+    /**
+     * Whether has any generic bounds on the method return type.
+     */
+    public boolean hasGenericReturn(final @NonNull Method method) {
+        return method.getGenericReturnType() instanceof TypeVariable<?>;
+    }
+
+    /**
+     * Whether has any generic bounds any parameter type(s).
+     */
+    public boolean hasGenericParam(final @NonNull Method method) {
+        final Type[] genericParameterTypes = method.getGenericParameterTypes();
+        for(int i=0; i<method.getParameterCount(); ++i) {
+            if(genericParameterTypes[i] instanceof TypeVariable<?>) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

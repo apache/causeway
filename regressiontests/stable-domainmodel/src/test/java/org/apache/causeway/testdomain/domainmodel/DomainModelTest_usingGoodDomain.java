@@ -80,7 +80,8 @@ import org.apache.causeway.testdomain.model.good.ProperChoicesWhenActionHasParam
 import org.apache.causeway.testdomain.model.good.ProperChoicesWhenChoicesFrom;
 import org.apache.causeway.testdomain.model.good.ProperElementTypeVm;
 import org.apache.causeway.testdomain.model.good.ProperFullyImpl;
-import org.apache.causeway.testdomain.model.good.ProperGenericImpl;
+import org.apache.causeway.testdomain.model.good.ProperGenericAbstractImpl;
+import org.apache.causeway.testdomain.model.good.ProperGenericInterfaceImpl;
 import org.apache.causeway.testdomain.model.good.ProperInterface2;
 import org.apache.causeway.testdomain.model.good.ProperMemberInheritanceInterface;
 import org.apache.causeway.testdomain.model.good.ProperMemberInheritance_usingAbstract;
@@ -243,7 +244,14 @@ class DomainModelTest_usingGoodDomain {
 
     @Test
     void genericInterface_whenImplemented_shouldBeSupported() {
-        val tester = testerFactory.propertyTester(ProperGenericImpl.class, "value");
+        val tester = testerFactory.propertyTester(ProperGenericInterfaceImpl.class, "value");
+        tester.assertExists(true);
+        tester.assertValue("aValue");
+    }
+
+    @Test
+    void genericAbstract_whenImplemented_shouldBeSupported() {
+        val tester = testerFactory.propertyTester(ProperGenericAbstractImpl.class, "value");
         tester.assertExists(true);
         tester.assertValue("aValue");
     }
