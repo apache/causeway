@@ -59,14 +59,22 @@ import lombok.val;
  * <p>
  * Same idiomatic convention applies: References to {@link Can}
  * should never be initialized to {@code null}.
+ *
  * <p>
- * A {@link Can} must not contain elements equal to {@code null}.
+ * <b>IMPORTANT:</b>A {@link Can} must not contain elements equal to {@code null}.  If you want to store a null within
+ * a {@link Can}, then replace it with {@link Can#NULL_VALUE} placeholder first.
  *
  * @param <T>
  * @since 2.0 {@index}
  */
 public interface Can<T>
 extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
+
+    /**
+     * Provided for use as a placeholder for <code>null</code> values; the {@link Can} itself just treats this as
+     * just another object.
+     */
+    Object NULL_VALUE = new Object();
 
     /**
      * Will only ever return an empty Optional, if the elementIndex is out of bounds.
@@ -164,6 +172,10 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
 
     /**
      * Var-arg version of {@link Can#ofArray(Object[])}.
+     *
+     * <p>
+     * <b>NOTE:</b> Any elements equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
+     *
      * @param <T>
      * @param array
      * @return non-null
@@ -176,29 +188,48 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
 
     /**
      * Returns either a {@code Can} with all the elements from given {@code array}
-     * or an empty {@code Can} if the {@code array} is {@code null}. Any elements
-     * equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
+     * or an empty {@code Can} if the {@code array} is {@code null}.
+     *
+     * <p>
+     * <b>NOTE:</b> Any elements equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
+     *
+     * </p>
      * @param <T>
      * @param array
      * @return non-null
      */
     public static <T> Can<T> ofArray(final @Nullable T[] array) {
+        return ofArray(array, Function.identity());
+    }
 
+    /**
+     *
+     * @param array
+     * @param nullMapper -
+     * @return
+     * @param <T>
+     */
+    public static <T> Can<T> ofArray(T[] array, Function<T, T> nullMapper) {
         if(_NullSafe.size(array)==0) {
             return empty();
         }
 
         val nonNullElements = Stream.of(array)
                 .filter(_NullSafe::isPresent)
+                .map(nullMapper)
                 .collect(_CanFactory.toListWithSizeUpperBound(array.length));
 
         return _CanFactory.ofNonNullElements(nonNullElements);
     }
 
+
     /**
      * Returns either a {@code Can} with all the elements from given {@code collection}
-     * or an empty {@code Can} if the {@code collection} is {@code null}. Any elements
-     * equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
+     * or an empty {@code Can} if the {@code collection} is {@code null}.
+     *
+     * <p>
+     * <b>NOTE:</b> Any elements equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
+     *
      * @param <T>
      * @param collection
      * @return non-null
@@ -220,8 +251,11 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
 
     /**
      * Returns either a {@code Can} with all the elements from given {@code iterable}
-     * or an empty {@code Can} if the {@code iterable} is {@code null}. Any elements
-     * equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
+     * or an empty {@code Can} if the {@code iterable} is {@code null}.
+     *
+     * <p>
+     * <b>NOTE:</b> Any elements equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
+     *
      * @param <T>
      * @param iterable
      * @return non-null
@@ -244,10 +278,14 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
 
     /**
      * Returns either a {@code Can} with all the elements from given {@code enumeration}
-     * or an empty {@code Can} if the {@code enumeration} is {@code null}. Any elements
-     * equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
+     * or an empty {@code Can} if the {@code enumeration} is {@code null}.
+     *
      * <p>
-     * As side-effect, consumes given {@code enumeration}.
+     * <b>NOTE:</b> Any elements equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
+     *
+     * <p>
+     * <b>NOTE:</b> As side-effect, consumes given {@code enumeration}.
+     *
      * @param <T>
      * @param enumeration
      * @return non-null
@@ -270,10 +308,14 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
 
     /**
      * Returns either a {@code Can} with all the elements from given {@code stream}
-     * or an empty {@code Can} if the {@code stream} is {@code null}. Any elements
-     * equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
+     * or an empty {@code Can} if the {@code stream} is {@code null}.
+     *
      * <p>
-     * As side-effect, consumes given {@code stream}.
+     * <b>NOTE:</b> Any elements equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
+     *
+     * <p>
+     * <b>NOTE:</b> As side-effect, consumes given {@code stream}.
+     *
      * @param <T>
      * @param stream
      * @return non-null
@@ -356,8 +398,10 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
 
     /**
      * Returns a {@code Can} with all the elements from this {@code Can}
-     * 'transformed' by the given {@code mapper} function. Any resulting elements
-     * equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
+     * 'transformed' by the given {@code mapper} function.
+     *
+     * <p>
+     * <b>NOTE:</b> Any elements equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
      *
      * @param <R>
      * @param mapper - if absent throws if this {@code Can} is non-empty
