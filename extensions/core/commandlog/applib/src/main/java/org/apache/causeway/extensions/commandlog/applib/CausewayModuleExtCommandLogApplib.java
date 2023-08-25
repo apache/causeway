@@ -19,6 +19,7 @@
 package org.apache.causeway.extensions.commandlog.applib;
 
 import org.apache.causeway.extensions.commandlog.applib.dom.BackgroundService;
+import org.apache.causeway.extensions.commandlog.applib.fakescheduler.FakeScheduler;
 import org.apache.causeway.extensions.commandlog.applib.job.RunBackgroundCommandsJob;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -56,6 +57,8 @@ import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandSubscr
 
         BackgroundService.class,
         BackgroundService.PersistCommandExecutorService.class,
+
+        FakeScheduler.class,
 })
 public class CausewayModuleExtCommandLogApplib {
 
