@@ -18,13 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.object;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
-
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.base._Tuples;
-import org.apache.causeway.commons.internal.collections._Arrays;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import org.springframework.lang.Nullable;
 
@@ -40,6 +36,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject.Specialization.Bo
 import org.apache.causeway.core.metamodel.spec.HasObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.Getter;
@@ -576,12 +573,10 @@ extends
                 ManagedObjects.adaptMultipleOfType(param.getElementType(), paramValue));
     }
 
-    static ManagedObject[] adaptParameters(
+    static Can<ManagedObject> adaptParameters(
             final Can<ObjectActionParameter> objectActionParameters,
-            final Can<Object> args) {
-        return _NullSafe.stream(objectActionParameters.zipMap(args, _Tuples::pair))
-                .map(tuple -> adaptParameter(tuple.get_1(), tuple.get_2()))
-                .collect(_Arrays.toArray(ManagedObject.class, args.size()));
+            final List<Object> args) {
+        return objectActionParameters.zipMap(args, ManagedObject::adaptParameter);
     }
 
     /**
