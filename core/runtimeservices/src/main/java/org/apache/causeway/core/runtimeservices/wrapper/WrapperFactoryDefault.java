@@ -20,7 +20,6 @@ package org.apache.causeway.core.runtimeservices.wrapper;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -81,6 +80,7 @@ import org.apache.causeway.applib.services.wrapper.listeners.InteractionListener
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.proxy._ProxyFactoryService;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MixinConstructor;
@@ -388,7 +388,7 @@ implements WrapperFactory, HasMetaModelContext {
         switch (memberAndTarget.getType()) {
             case ACTION:
                 val action = memberAndTarget.getAction();
-                val argAdapters = ManagedObject.adaptParameters(action.getParameters(), Arrays.asList(args));
+                val argAdapters = ManagedObject.adaptParameters(action.getParameters(), _Lists.of(args));
                 childCommandDto = commandDtoFactory
                         .asCommandDto(childInteractionId, head, action, argAdapters);
                 break;
