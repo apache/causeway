@@ -157,8 +157,9 @@ public class _ConcurrentTaskList {
         latch().await();
     }
 
-    public void await(final long timeout, final TimeUnit unit) {
-        latch().await(timeout, unit);
+    /** @return whether timeout was exceeded */
+    public boolean await(final long timeout, final TimeUnit unit) {
+        return latch().await(timeout, unit);
     }
 
     // -- FIELDS/GETTERS

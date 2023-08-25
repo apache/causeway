@@ -2,10 +2,12 @@ package org.apache.causeway.extensions.commandlog.applib.fakescheduler;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 
@@ -13,11 +15,16 @@ import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.command.CommandExecutorService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.concurrent._ConcurrentContext;
+import org.apache.causeway.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
+import lombok.Builder;
 import lombok.val;
+import lombok.experimental.Accessors;
 
 /**
  * Intended to support integration testing which uses the
@@ -41,15 +48,30 @@ public class FakeScheduler {
         STRICT;
     }
 
+    /** record candidate */
+    @lombok.Value @Builder @Accessors(fluent=true)
+    public static class CommandBulkExecutionResult {
+        static CommandBulkExecutionResult happyCase() {
+            return CommandBulkExecutionResult.builder()
+                    .build();
+        }
+        private final @Nullable Throwable failure;
+        private final boolean hasTimedOut;
+        /** Number of commands still to be processed.
+         * This will generally be 0 (in the happy case),
+         * but could be non-zero if not enough time was provided to wait. */
+        private final int remainingCommandsToProcessCount;
+    }
+
     /**
-     *
-     * @param waitForMillis how long to wait for the background commands to execute.  The commands themselves run in a background thread to this.
+     * @param waitForMillis how long to wait for the background commands to execute.
+     *      The commands themselves run in a background thread to this.
      * @param noCommandsPolicy what to do if there are no commands found to be executed.
-     * @return the number of commands still to be processed.  This will generally be 0, but could be non-zero if not enough time was provided to wait.
+     * @return {@link CommandBulkExecutionResult} optionally containing information on what went wrong.
      * @throws InterruptedException
      */
-    public int runBackgroundCommands(
-            final Integer waitForMillis,
+    public CommandBulkExecutionResult runBackgroundCommands(
+            final long waitForMillis,
             final NoCommandsPolicy noCommandsPolicy) throws InterruptedException {
 
         // we obtain the list of Commands first; we use their CommandDto as it is serializable across transactions
@@ -61,50 +83,54 @@ public class FakeScheduler {
         if(commandDtos.isEmpty()) {
             switch (noCommandsPolicy) {
                 case STRICT:
-                    throw new IllegalStateException("There are no background commands to be started");
+                    return CommandBulkExecutionResult.builder()
+                            .failure(new IllegalStateException(
+                                    "There are no background commands to be started"))
+                            .build();
                 case RELAXED:
                 default:
-                    return 0;
+                    return CommandBulkExecutionResult.happyCase();
             }
         }
 
-        long startAt = nowInMillis();
-
         transactionService.flushTransaction();
 
-        Thread thread = new Thread(() -> execute(commandDtos));
-        thread.start();
+        final _ConcurrentTaskList tasks = _ConcurrentTaskList.named("Execute Command DTOs");
+        tasks.addRunnable("Bulk run all pending CommandDtos", () ->{
+            for (val commandDto : commandDtos) {
+                execute(commandDto);
+            }
+        });
 
-        boolean hitTimeout = false;
-        List<CommandLogEntry> commandsToProcess;
-        while(!(commandsToProcess = commandLogEntryRepository.findBackgroundAndNotYetStarted()).isEmpty() && !hitTimeout) {
-            Thread.sleep(100L);
-            hitTimeout = nowInMillis() > startAt + waitForMillis;
-        }
+        tasks.submit(_ConcurrentContext.singleThreaded());
+        val hasTimedOut = tasks.await(waitForMillis, TimeUnit.MILLISECONDS);
 
-        return commandsToProcess.size();
+        return CommandBulkExecutionResult.builder()
+                .hasTimedOut(hasTimedOut)
+                .failure(tasks.getTasks().stream()
+                        .map(task->task.getFailedWith())
+                        .filter(_NullSafe::isPresent)
+                        .findAny()
+                        .orElse(null))
+                .remainingCommandsToProcessCount(
+                        commandLogEntryRepository.findBackgroundAndNotYetStarted()
+                        .size())
+                .build();
     }
 
-    private long nowInMillis() {
-        return clockService.getClock().nowAsEpochMilli();
-    }
+    private void execute(final CommandDto commandDto) {
+        interactionService.runAnonymous(() -> {
+            transactionService.runTransactional(Propagation.REQUIRED, () -> {
+                    // look up the CommandLogEntry again because we are within a new transaction.
+                    val commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
 
-    private void execute(final List<CommandDto> commandDtos) {
-
-        for (val commandDto : commandDtos) {
-            interactionService.runAnonymous(() -> {
-                transactionService.runTransactional(Propagation.REQUIRED, () -> {
-                        // look up the CommandLogEntry again because we are within a new transaction.
-                        val commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
-
-                        commandLogEntryIfAny.ifPresent(commandLogEntry ->
-                                commandExecutorService.executeCommand(
-                                        CommandExecutorService.InteractionContextPolicy.NO_SWITCH, commandDto));
-                    })
-                    .ifFailureFail();
-                }
-            );
-        }
+                    commandLogEntryIfAny.ifPresent(commandLogEntry ->
+                            commandExecutorService.executeCommand(
+                                    CommandExecutorService.InteractionContextPolicy.NO_SWITCH, commandDto));
+                })
+                .ifFailureFail();
+            }
+        );
     }
 
     @Inject CommandLogEntryRepository<CommandLogEntry> commandLogEntryRepository;
