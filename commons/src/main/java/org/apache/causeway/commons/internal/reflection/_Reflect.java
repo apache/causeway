@@ -102,8 +102,7 @@ public final class _Reflect {
             return false;
         }
         if(!_Arrays.testAllMatch(a.getParameters(), b.getParameters(),
-                (p1, p2)->shareSameTypeHierarchy(p1.getType(), p2.getType()))) {
-                //(p1, p2)->p1.getType().equals(p2.getType()))) {
+                (p1, p2)->p1.getType().equals(p2.getType()))) {
             return false;
         }
         return shareSameTypeHierarchy(a.getReturnType(), b.getReturnType());
@@ -163,11 +162,7 @@ public final class _Reflect {
         for(int i=0; i<a.getParameterCount(); ++i) {
             c = typesCompare(paramsA[i].getType(), paramsB[i].getType());
             if(c!=0) {
-                if(shareSameTypeHierarchy(paramsA[i].getType(), paramsB[i].getType())) {
-                    // continue
-                } else {
-                    return c;
-                }
+                return c;
             }
         }
         c = typesCompare(a.getReturnType(), b.getReturnType());
