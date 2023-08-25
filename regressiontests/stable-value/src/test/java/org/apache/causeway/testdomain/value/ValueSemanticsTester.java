@@ -38,6 +38,8 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
+import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.causeway.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -63,14 +65,43 @@ class ValueSemanticsTester<T> {
         this.domainObject = domainObject;
     }
 
+    // -- ACTIONS
+    
+    public static interface ActionInteractionProbe<T> {
+        void testCommand(ValueSemanticsProvider.Context context, Command command);
+    }
+    
     public void actionInteraction(
-            final @NonNull String actionId) {
+            final @NonNull String actionId,
+            final @NonNull InteractionContext interactionContext,
+            final @NonNull Function<ManagedAction, Object> actionArgumentProvider,
+            final @NonNull ActionInteractionProbe<T> probe) {
+        
         val objSpec = specLoader.specForTypeElseFail(domainObject.getClass());
         val act = objSpec.getActionElseFail(actionId);
-        assertNotNull(act);
-        //TODO implement tests
+        val context = valueFacet(act.getParameters().getFirstElseFail())
+                .createValueSemanticsContext(act);
+        
+        interactionService.run(interactionContext, ()->{
+
+            val command = interactionService.currentInteractionElseFail().getCommand();
+            val actInteraction = ActionInteraction
+                    .wrap(ManagedAction.of(ManagedObject.adaptSingular(objSpec, domainObject), act, Where.OBJECT_FORMS));
+
+            val params = actInteraction.startParameterNegotiation().orElseThrow();
+            val singleArgPojoToUse = actionArgumentProvider.apply(actInteraction.getManagedAction().orElseThrow());
+            
+            params.updateParamValuePojo(0, __->singleArgPojoToUse);
+            
+            actInteraction.invokeWith(params);
+
+            probe.testCommand(context, command);
+        });
+        
     }
 
+    // -- PROPERTIES
+    
     public static interface PropertyInteractionProbe<T> {
         void testComposer(ValueSemanticsProvider.Context context, ValueSemanticsProvider<T> semantics);
         void testParser(ValueSemanticsProvider.Context context, Parser<T> parser);
@@ -123,6 +154,8 @@ class ValueSemanticsTester<T> {
             probe.testCommand(context, command);
         });
     }
+    
+    // -- COLLECTIONS
 
     public void collectionInteraction(
             final @NonNull String collectionId,
@@ -130,7 +163,7 @@ class ValueSemanticsTester<T> {
         val objSpec = specLoader.specForTypeElseFail(domainObject.getClass());
         val coll = objSpec.getCollectionElseFail(collectionId);
         assertNotNull(coll);
-        //TODO implement tests
+        // collections have no interactions (removed in v2)
     }
 
     // -- UTILITY

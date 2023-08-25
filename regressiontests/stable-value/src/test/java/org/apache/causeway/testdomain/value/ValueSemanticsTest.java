@@ -131,6 +131,30 @@ class ValueSemanticsTest {
 
     @ParameterizedTest(name = "{index} {0}")
     @MethodSource("provideValueTypeExamples")
+    <T> void actionInteraction(
+            final String name,
+            final Class<T> valueType,
+            final ValueTypeExample<T> example) {
+
+        //val env = new TestEnvironment();
+
+        assertNotNull(example);
+
+        val tester = createTester(example);
+        val actionInteractionProbe = serviceInjector.injectServicesInto(
+                new ActionInteractionProbeImpl<>(name, valueType, example, tester));
+        
+        tester.actionInteraction("sampleAction",
+                _Utils.interactionContext(),
+                managedAction->example.getUpdateValue(),
+                actionInteractionProbe);
+
+       // env.cleanup();
+    }
+
+    
+    @ParameterizedTest(name = "{index} {0}")
+    @MethodSource("provideValueTypeExamples")
     <T> void propertyInteraction(
             final String name,
             final Class<T> valueType,
@@ -140,8 +164,7 @@ class ValueSemanticsTest {
 
         assertNotNull(example);
 
-        val tester = serviceInjector.injectServicesInto(
-                new ValueSemanticsTester<T>(example.getValueType(), example));
+        val tester = createTester(example);
         val propertyInteractionProbe = serviceInjector.injectServicesInto(
                 new PropertyInteractionProbeImpl<>(name, valueType, example, tester));
         
@@ -151,9 +174,15 @@ class ValueSemanticsTest {
                 propertyInteractionProbe);
 
        // env.cleanup();
-
     }
 
+    // -- HELPER
+    
+    private <T> ValueSemanticsTester<T> createTester(final ValueTypeExample<T> example) {
+        return serviceInjector.injectServicesInto(
+                new ValueSemanticsTester<T>(example.getValueType(), example));
+    }
+    
     // -- DEPENDENCIES
 
     @Inject ValueTypeExampleService valueTypeExampleService;

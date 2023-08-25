@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.interactions.managed;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.UnaryOperator;
 import java.util.stream.IntStream;
 
@@ -236,6 +237,11 @@ public class ParameterNegotiationModel {
         paramModels.getElseFail(paramIndex).getBindableParamValue().setValue(emptyValue);
     }
 
+    /**
+     * @param paramIndex - zero based parameter index
+     * @param updater - takes the current parameter argument value wrapped as {@link ManagedObject} as input
+     *      and returns the new parameter argument value also wrapped as {@link ManagedObject}
+     */
     public void updateParamValue(final int paramIndex, final @NonNull UnaryOperator<ManagedObject> updater) {
         val bindableParamValue = paramModels.getElseFail(paramIndex).getBindableParamValue();
         val newParamValue = updater.apply(bindableParamValue.getValue());
@@ -246,6 +252,16 @@ public class ParameterNegotiationModel {
         }
     }
 
+    /**
+     * @param paramIndex - zero based parameter index
+     * @param pojoUpdater - takes the current parameter argument value wrapped as {@link ManagedObject} as input
+     *      and returns the new parameter argument value as pojo
+     */
+    public void updateParamValuePojo(
+            final int paramIndex, final @NonNull Function<ManagedObject, Object> pojoUpdater) {
+        updateParamValue(paramIndex, current->adaptParamValuePojo(paramIndex, pojoUpdater.apply(current)));
+    }
+    
     @NonNull public ManagedObject adaptParamValuePojo(final int paramIndex,
             final @Nullable Object newParamValuePojo) {
         val paramMeta = getParamMetamodel(paramIndex);
