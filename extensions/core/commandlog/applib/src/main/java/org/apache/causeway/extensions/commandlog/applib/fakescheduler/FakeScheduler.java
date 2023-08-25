@@ -98,10 +98,6 @@ public class FakeScheduler {
                         // look up the CommandLogEntry again because we are within a new transaction.
                         val commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
 
-                        // TODO: this is a hack, really should be in CommandExecutorService
-                        val command = interactionService.currentInteraction().map(x -> x.getCommand()).orElseThrow(() -> new IllegalStateException("Cannot obtain current interaction/command"));
-                        command.updater().setPublishingPhase(Command.CommandPublishingPhase.READY);
-
                         commandLogEntryIfAny.ifPresent(commandLogEntry ->
                                 commandExecutorService.executeCommand(
                                         CommandExecutorService.InteractionContextPolicy.NO_SWITCH, commandDto));

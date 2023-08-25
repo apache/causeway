@@ -103,22 +103,13 @@ implements InteractionInternal {
             final CommandPublisher commandPublisher,
             final Command command) {
 
-        pushAndStart(actionInvocation, clockService, metricsService, commandPublisher, command);
+        push(actionInvocation);
+        start(actionInvocation, clockService, metricsService, commandPublisher, command);
         try {
             return executeInternal(memberExecutor, actionInvocation);
         } finally {
             popAndComplete(clockService, metricsService);
         }
-    }
-
-    private void pushAndStart(
-            final ActionInvocation actionInvocation,
-            final ClockService clockService,
-            final MetricsService metricsService,
-            final CommandPublisher commandPublisher,
-            final Command command) {
-        push(actionInvocation);
-        start(actionInvocation, clockService, metricsService, commandPublisher, command);
     }
 
     @Override
