@@ -55,6 +55,7 @@ import lombok.val;
  * </p>
  *
  * @see WrapperFactory
+ * @see org.apache.causeway.extensions.commandlog.applib.fakescheduler.FakeScheduler
  * @since 2.0 {@index}
  */
 @Service
