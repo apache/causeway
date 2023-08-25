@@ -2,6 +2,8 @@ package org.apache.causeway.extensions.commandlog.applib.fakescheduler;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -13,6 +15,8 @@ import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.command.CommandExecutorService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
+import org.apache.causeway.commons.internal.concurrent._ConcurrentContext;
+import org.apache.causeway.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
@@ -28,7 +32,7 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @Service
-public class FakeScheduler {
+public class FakeScheduler2 {
 
     public enum NoCommandsPolicy {
         /**
@@ -68,43 +72,38 @@ public class FakeScheduler {
             }
         }
 
-        long startAt = nowInMillis();
-
         transactionService.flushTransaction();
 
-        Thread thread = new Thread(() -> execute(commandDtos));
-        thread.start();
+        final _ConcurrentTaskList tasks = _ConcurrentTaskList.named("Execute Command DTOs");
+        tasks.addRunnable("Bulk run all pending CommandDtos", () ->{
+            for (val commandDto : commandDtos) {
+                execute(commandDto);
+            }
+        });
 
-        boolean hitTimeout = false;
-        List<CommandLogEntry> commandsToProcess;
-        while(!(commandsToProcess = commandLogEntryRepository.findBackgroundAndNotYetStarted()).isEmpty() && !hitTimeout) {
-            Thread.sleep(100L);
-            hitTimeout = nowInMillis() > startAt + waitForMillis;
-        }
+        tasks.submit(_ConcurrentContext.builder()
+                .executorService(Executors.newSingleThreadExecutor()));
+        tasks.await(waitForMillis, TimeUnit.MILLISECONDS);
 
-        return commandsToProcess.size();
+        final List<CommandLogEntry> remainingCommandsToProcess =
+                commandLogEntryRepository.findBackgroundAndNotYetStarted();
+
+        return remainingCommandsToProcess.size();
     }
 
-    private long nowInMillis() {
-        return clockService.getClock().nowAsEpochMilli();
-    }
+    private void execute(final CommandDto commandDto) {
+        interactionService.runAnonymous(() -> {
+            transactionService.runTransactional(Propagation.REQUIRED, () -> {
+                    // look up the CommandLogEntry again because we are within a new transaction.
+                    val commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
 
-    private void execute(final List<CommandDto> commandDtos) {
-
-        for (val commandDto : commandDtos) {
-            interactionService.runAnonymous(() -> {
-                transactionService.runTransactional(Propagation.REQUIRED, () -> {
-                        // look up the CommandLogEntry again because we are within a new transaction.
-                        val commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
-
-                        commandLogEntryIfAny.ifPresent(commandLogEntry ->
-                                commandExecutorService.executeCommand(
-                                        CommandExecutorService.InteractionContextPolicy.NO_SWITCH, commandDto));
-                    })
-                    .ifFailureFail();
-                }
-            );
-        }
+                    commandLogEntryIfAny.ifPresent(commandLogEntry ->
+                            commandExecutorService.executeCommand(
+                                    CommandExecutorService.InteractionContextPolicy.NO_SWITCH, commandDto));
+                })
+                .ifFailureFail();
+            }
+        );
     }
 
     @Inject CommandLogEntryRepository<CommandLogEntry> commandLogEntryRepository;
