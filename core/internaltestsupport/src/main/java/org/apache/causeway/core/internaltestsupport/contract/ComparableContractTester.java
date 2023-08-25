@@ -38,7 +38,7 @@ public class ComparableContractTester<T extends Comparable<T>> {
      *
      * Typically item0 should be null valued (if supported by the impl).
      */
-    public ComparableContractTester(List<List<T>> orderedTuples) {
+    public ComparableContractTester(final List<List<T>> orderedTuples) {
         this.orderedTuples = orderedTuples;
     }
 
@@ -62,11 +62,11 @@ public class ComparableContractTester<T extends Comparable<T>> {
         }
     }
 
-    protected static String desc(Object item1, final String op, Object item2) {
+    protected static String desc(final Object item1, final String op, final Object item2) {
         return nullSafe(item1) + op + nullSafe(item2);
     }
 
-    private static String nullSafe(Object item) {
+    private static String nullSafe(final Object item) {
         return item != null? item.toString(): "null";
     }
 
@@ -74,8 +74,8 @@ public class ComparableContractTester<T extends Comparable<T>> {
      * Syntax sugar to remove boilerplate from subclasses.
      */
     @SafeVarargs
-    public static <E> List<E> listOf(E... elements) {
-        return _Lists.of(elements);
+    public static <E> List<E> listOf(final E... elements) {
+        return _Lists.ofArray(elements);
     }
 
 

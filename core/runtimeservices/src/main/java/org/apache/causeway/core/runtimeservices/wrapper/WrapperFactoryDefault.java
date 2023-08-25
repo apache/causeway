@@ -388,7 +388,7 @@ implements WrapperFactory, HasMetaModelContext {
         switch (memberAndTarget.getType()) {
             case ACTION:
                 val action = memberAndTarget.getAction();
-                val argAdapters = ManagedObject.adaptParameters(action.getParameters(), _Lists.of(args));
+                val argAdapters = ManagedObject.adaptParameters(action.getParameters(), _Lists.ofArray(args));
                 childCommandDto = commandDtoFactory
                         .asCommandDto(childInteractionId, head, action, argAdapters);
                 break;

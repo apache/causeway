@@ -44,7 +44,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.factory._InstanceUtil;
 import org.apache.causeway.commons.internal.resources._Resources;
@@ -282,7 +281,7 @@ public class CausewayRestfulObjectsInteractionFilter implements Filter {
             } else {
                 // default whenNotAuthenticated and allow access through to the logonPage
                 whenNotAuthenticated = WhenNoSession.RESTRICTED;
-                this.restrictedPaths = _Lists.of(logonPage);
+                this.restrictedPaths = List.of(logonPage);
                 return;
             }
         }

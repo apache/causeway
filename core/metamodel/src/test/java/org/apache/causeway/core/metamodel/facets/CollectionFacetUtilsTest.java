@@ -43,7 +43,6 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
 
 class CollectionFacetUtilsTest {
@@ -58,7 +57,7 @@ class CollectionFacetUtilsTest {
     @Test
     void whenLinkedList() throws Exception {
 
-        List<Class<?>> collectionTypes = _Lists.<Class<?>>of(
+        List<Class<?>> collectionTypes = List.<Class<?>>of(
                 LinkedList.class,
                 ArrayList.class,
                 CopyOnWriteArrayList.class,

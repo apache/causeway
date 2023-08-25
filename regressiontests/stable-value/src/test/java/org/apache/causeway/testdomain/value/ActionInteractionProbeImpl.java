@@ -26,10 +26,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.services.command.Command;
-import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.core.metamodel.services.schema.SchemaValueMarshaller;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.testdomain.model.valuetypes.ValueTypeExample;
 import org.apache.causeway.testdomain.value.ValueSemanticsTester.ActionInteractionProbe;
@@ -46,9 +44,7 @@ class ActionInteractionProbeImpl<T> implements ActionInteractionProbe<T> {
     final @NonNull ValueTypeExample<T> example;
     final @NonNull ValueSemanticsTester<T> tester;
     
-    @Inject private SpecificationLoader specLoader;
     @Inject private SchemaValueMarshaller valueMarshaller;
-    @Inject private WrapperFactory wrapperFactory;
     
     @Override
     public void testCommandWithNonEmptyArg(

@@ -21,7 +21,6 @@ package org.apache.causeway.applib.id;
 import java.util.List;
 
 import org.apache.causeway.applib.SomeDomainClass;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.internaltestsupport.contract.ValueTypeContractTestAbstract;
 
 public class LogicalTypeTest_valueSemantics
@@ -29,14 +28,14 @@ extends ValueTypeContractTestAbstract<LogicalType> {
 
     @Override
     protected List<LogicalType> getObjectsWithSameValue() {
-        return _Lists.of(
+        return List.of(
                 LogicalType.fqcn(SomeDomainClass.class),
                 LogicalType.lazy(SomeDomainClass.class, SomeDomainClass.class::getName));
     }
 
     @Override
     protected List<LogicalType> getObjectsWithDifferentValue() {
-        return _Lists.of(
+        return List.of(
                 LogicalType.fqcn(Object.class),
                 LogicalType.lazy(List.class, List.class::getName));
     }

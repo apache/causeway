@@ -20,6 +20,7 @@ package org.apache.causeway.testdomain.value;
 
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import javax.inject.Inject;
 
@@ -31,6 +32,7 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.value.semantics.OrderRelation;
 import org.apache.causeway.applib.value.semantics.Parser;
 import org.apache.causeway.applib.value.semantics.Renderer;
@@ -45,6 +47,7 @@ import org.apache.causeway.core.metamodel.interactions.managed.PropertyInteracti
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.testdomain.model.valuetypes.ValueTypeExample;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -54,73 +57,106 @@ class ValueSemanticsTester<T> {
 
     @Inject InteractionService interactionService;
     @Inject SpecificationLoader specLoader;
+    @Inject WrapperFactory wrapperFactory;
 
     @SuppressWarnings("unused")
     private final Class<T> valueType;
-    private final Object domainObject;
+    private final ValueTypeExample<T> domainObject;
     private Optional<OrderRelation<T, ?>> currentOrderRelation = Optional.empty();
 
-    public ValueSemanticsTester(final Class<T> valueType, final Object domainObject) {
+    public ValueSemanticsTester(final Class<T> valueType, final ValueTypeExample<T> domainObject) {
         this.valueType = valueType;
         this.domainObject = domainObject;
     }
 
     // -- ACTIONS
-    
+
     public static interface ActionInteractionProbe<T> {
         void testCommandWithNonEmptyArg(ValueSemanticsProvider.Context context, Command command);
         void testCommandWithEmptyArg(ValueSemanticsProvider.Context context, Command command);
     }
-    
+
     public void actionInteraction(
             final @NonNull String actionId,
             final @NonNull InteractionContext interactionContext,
-            final @NonNull Function<ManagedAction, Object> actionArgumentProvider,
+            final @NonNull Supplier<T> actionArgumentProvider,
             final @NonNull ActionInteractionProbe<T> probe) {
-        
+
         val objSpec = specLoader.specForTypeElseFail(domainObject.getClass());
         val act = objSpec.getActionElseFail(actionId);
         val context = valueFacet(act.getParameters().getFirstElseFail())
                 .createValueSemanticsContext(act);
-        
-//        val actionCommandWithNonEmptyArg = interactionService.call(interactionContext, ()->{
-//    
-//            val command = interactionService.currentInteractionElseFail().getCommand();
-//            val actInteraction = ActionInteraction
-//                    .wrap(ManagedAction.of(ManagedObject.adaptSingular(objSpec, domainObject), act, Where.OBJECT_FORMS));
-//
-//            val params = actInteraction.startParameterNegotiation().orElseThrow();
-//            val singleArgPojoToUse = actionArgumentProvider.apply(actInteraction.getManagedAction().orElseThrow());
-//            
-//            params.updateParamValuePojo(0, __->singleArgPojoToUse);
-//            
-//            actInteraction.invokeWith(params);
-//            
-//            return command;
-//        });
-        
-        val actionCommandWithEmptyArg = interactionService.call(interactionContext, ()->{
-            
-            val command = interactionService.currentInteractionElseFail().getCommand();
-            val actInteraction = ActionInteraction
-                    .wrap(ManagedAction.of(ManagedObject.adaptSingular(objSpec, domainObject), act, Where.OBJECT_FORMS));
 
-            val params = actInteraction.startParameterNegotiation().orElseThrow();
-            
-            params.updateParamValuePojo(0, __->null); // overrides default values from value semantics
-            
-            actInteraction.invokeWith(params);
-            
-            return command;
-        });
+        {
+            val actionCommandWithNonEmptyArg = interactionService.call(interactionContext, ()->{
 
-        //probe.testCommandWithNonEmptyArg(context, actionCommandWithNonEmptyArg);
-        probe.testCommandWithEmptyArg(context, actionCommandWithEmptyArg);
-        
+                val command = interactionService.currentInteractionElseFail().getCommand();
+                val actInteraction = ActionInteraction
+                        .wrap(ManagedAction.of(ManagedObject.adaptSingular(objSpec, domainObject), act, Where.OBJECT_FORMS));
+
+                val params = actInteraction.startParameterNegotiation().orElseThrow();
+                val singleArgPojoToUse = actionArgumentProvider.get();
+
+                params.updateParamValuePojo(0, __->singleArgPojoToUse);
+
+                actInteraction.invokeWith(params);
+
+                return command;
+            });
+
+            probe.testCommandWithNonEmptyArg(context, actionCommandWithNonEmptyArg);
+        }
+
+        {
+            val actionCommandWithEmptyArg = interactionService.call(interactionContext, ()->{
+
+                val command = interactionService.currentInteractionElseFail().getCommand();
+                val actInteraction = ActionInteraction
+                        .wrap(ManagedAction.of(ManagedObject.adaptSingular(objSpec, domainObject), act, Where.OBJECT_FORMS));
+
+                val params = actInteraction.startParameterNegotiation().orElseThrow();
+
+                params.updateParamValuePojo(0, __->null); // overrides default values from value semantics
+
+                actInteraction.invokeWith(params);
+
+                return command;
+            });
+
+            probe.testCommandWithEmptyArg(context, actionCommandWithEmptyArg);
+        }
+
+        {
+            val actionCommandWithNonEmptyArg = interactionService.call(interactionContext, ()->{
+
+                val command = interactionService.currentInteractionElseFail().getCommand();
+
+                domainObject.invokeSampleActionUsingWrapper(wrapperFactory,
+                        actionArgumentProvider.get());
+
+                return command;
+            });
+
+            probe.testCommandWithNonEmptyArg(context, actionCommandWithNonEmptyArg);
+        }
+
+        {
+            val actionCommandWithEmptyArg = interactionService.call(interactionContext, ()->{
+
+                val command = interactionService.currentInteractionElseFail().getCommand();
+
+                domainObject.invokeSampleActionUsingWrapper(wrapperFactory, null);
+
+                return command;
+            });
+
+            probe.testCommandWithEmptyArg(context, actionCommandWithEmptyArg);
+        }
+
     }
 
     // -- PROPERTIES
-    
+
     public static interface PropertyInteractionProbe<T> {
         void testComposer(ValueSemanticsProvider.Context context, ValueSemanticsProvider<T> semantics);
         void testParser(ValueSemanticsProvider.Context context, Parser<T> parser);
@@ -173,7 +209,7 @@ class ValueSemanticsTester<T> {
             probe.testCommand(context, command);
         });
     }
-    
+
     // -- COLLECTIONS
 
     public void collectionInteraction(

@@ -147,14 +147,91 @@ public final class _Lists {
         return element != null ? Collections.singletonList(element) : Collections.emptyList();
     }
 
+    public <T> List<T> ofNullable(final @Nullable T e0) {
+        return Collections.singletonList(e0);
+    }
+
+    public <T> List<T> ofNullable(final @Nullable T e0, final @Nullable T e1) {
+        val list = new ArrayList<T>(2);
+        list.add(e0);
+        list.add(e1);
+        return Collections.unmodifiableList(list);
+    }
+
+    public <T> List<T> ofNullable(final @Nullable T e0, final @Nullable T e1, final @Nullable T e2) {
+        val list = new ArrayList<T>(3);
+        list.add(e0);
+        list.add(e1);
+        list.add(e2);
+        return Collections.unmodifiableList(list);
+    }
+
+    public <T> List<T> ofNullable(final @Nullable T e0, final @Nullable T e1, final @Nullable T e2, final @Nullable T e3) {
+        val list = new ArrayList<T>(4);
+        list.add(e0);
+        list.add(e1);
+        list.add(e2);
+        list.add(e3);
+        return Collections.unmodifiableList(list);
+    }
+
+    public <T> List<T> ofNullable(final @Nullable T e0, final @Nullable T e1, final @Nullable T e2, final @Nullable T e3,
+            final @Nullable T e4) {
+        val list = new ArrayList<T>(5);
+        list.add(e0);
+        list.add(e1);
+        list.add(e2);
+        list.add(e3);
+        list.add(e4);
+        return Collections.unmodifiableList(list);
+    }
+
+    public <T> List<T> ofNullable(final @Nullable T e0, final @Nullable T e1, final @Nullable T e2, final @Nullable T e3,
+            final @Nullable T e4, final @Nullable T e5) {
+        val list = new ArrayList<T>(6);
+        list.add(e0);
+        list.add(e1);
+        list.add(e2);
+        list.add(e3);
+        list.add(e4);
+        list.add(e5);
+        return Collections.unmodifiableList(list);
+    }
+
+    public <T> List<T> ofNullable(final @Nullable T e0, final @Nullable T e1, final @Nullable T e2, final @Nullable T e3,
+            final @Nullable T e4, final @Nullable T e5, final @Nullable T e6) {
+        val list = new ArrayList<T>(7);
+        list.add(e0);
+        list.add(e1);
+        list.add(e2);
+        list.add(e3);
+        list.add(e4);
+        list.add(e5);
+        list.add(e6);
+        return Collections.unmodifiableList(list);
+    }
+
+    public <T> List<T> ofNullable(final @Nullable T e0, final @Nullable T e1, final @Nullable T e2, final @Nullable T e3,
+            final @Nullable T e4, final @Nullable T e5, final @Nullable T e6, final @Nullable T e7) {
+        val list = new ArrayList<T>(8);
+        list.add(e0);
+        list.add(e1);
+        list.add(e2);
+        list.add(e3);
+        list.add(e4);
+        list.add(e5);
+        list.add(e6);
+        list.add(e7);
+        return Collections.unmodifiableList(list);
+    }
+
     /**
      * Copies all elements into a new unmodifiable List.
      * @param elements - null-able
      * @return non null
      */
-    @SafeVarargs
-    public <T> List<T> of(final @Nullable T ... elements) {
-        if(elements == null
+    public <T> List<T> ofArray(final @Nullable T[] elements) {
+        if(elements==null
                 || elements.length==0) {
             return Collections.emptyList();
         }
