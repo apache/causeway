@@ -204,24 +204,6 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
         return _CanFactory.ofNonNullElements(nonNullElements);
     }
 
-    /**
-     *
-     * @param array
-     * @param nullMapper -
-     * @return
-     * @param <T>
-     */
-    public static <T> Can<T> ofArray(T[] array, Function<T, T> nullMapper) {
-        if(_NullSafe.size(array)==0) {
-            return empty();
-        }
-
-        val nonNullElements = Stream.of(array)
-                .filter(_NullSafe::isPresent)
-                .collect(_CanFactory.toListWithSizeUpperBound(array.length));
-
-        return _CanFactory.ofNonNullElements(nonNullElements);
-    }
 
 
     /**
