@@ -5,7 +5,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
