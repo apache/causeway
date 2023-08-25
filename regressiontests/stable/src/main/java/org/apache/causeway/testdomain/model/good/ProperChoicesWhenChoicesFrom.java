@@ -25,14 +25,13 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.commons.internal.collections._Lists;
 
 @DomainObject(nature = Nature.VIEW_MODEL)
 public class ProperChoicesWhenChoicesFrom {
 
     @Collection
     public List<String> getCandidates() {
-        return _Lists.of("a", "b", "c");
+        return List.of("a", "b", "c");
     }
 
     // expected to pass MM validation, even though there are no member-support methods

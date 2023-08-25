@@ -57,7 +57,6 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.collections._Streams;
@@ -463,7 +462,7 @@ implements MetaModelContext {
         return new GridServiceDefault(
             getGridLoaderService(),
             getGridMarshallerService(),
-            _Lists.of(
+            List.of(
                     new GridSystemServiceBootstrap(
                             getSpecificationLoader(),
                             getTranslationService(),

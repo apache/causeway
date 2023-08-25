@@ -33,7 +33,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.WhereValueFacet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
@@ -79,7 +78,7 @@ class ObjectAssociationPredicatesTest_visibleWhere {
             final Where where, final Where whereContext, final boolean expectedVisibility) {
         Mockito.when(mockHiddenFacet.where()).thenReturn(where);
         Mockito.when(mockObjectAssociation.streamFacets())
-            .thenReturn(_Lists.<Facet>of(mockHiddenFacet).stream());
+            .thenReturn(List.<Facet>of(mockHiddenFacet).stream());
 
         final Predicate<ObjectAssociation> predicate = association -> {
             final List<Facet> facets = association.streamFacets()

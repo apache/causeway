@@ -42,7 +42,6 @@ import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.base._Text;
 import org.apache.causeway.commons.internal.collections._Arrays;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.io.TextUtils;
 
@@ -58,7 +57,7 @@ final class NodeWriter implements StructuralNodeVisitor {
 
     // -- DOCUMENT
 
-    private static final List<String> knownDocAttributes = _Lists.of(
+    private static final List<String> knownDocAttributes = List.of(
             "Notice");
 
     @Override

@@ -29,7 +29,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -61,9 +60,9 @@ class DeweyOrderSetTest {
     private final FacetedMethod houseNumberMember = FacetedMethod.createForProperty(mmc, Customer.class, "House Number");
     private final FacetedMethod streetNameMember = FacetedMethod.createForProperty(mmc, Customer.class, "Street Name");
     private final FacetedMethod postalTownMember = FacetedMethod.createForProperty(mmc, Customer.class, "Postal Town");
-    private final List<FacetedMethod> lastNameAndFirstName = _Lists.of(lastNameMember, firstNameMember);
-    private final List<FacetedMethod> nameAndAddressMembers = _Lists.of(lastNameMember, firstNameMember, houseNumberMember, streetNameMember, postalTownMember);
-    private final List<FacetedMethod> lastNameFirstNameAndPostalTown = _Lists.of(lastNameMember, firstNameMember, postalTownMember);
+    private final List<FacetedMethod> lastNameAndFirstName = List.of(lastNameMember, firstNameMember);
+    private final List<FacetedMethod> nameAndAddressMembers = List.of(lastNameMember, firstNameMember, houseNumberMember, streetNameMember, postalTownMember);
+    private final List<FacetedMethod> lastNameFirstNameAndPostalTown = List.of(lastNameMember, firstNameMember, postalTownMember);
 
     @Mock TranslationService mockTranslationService;
 

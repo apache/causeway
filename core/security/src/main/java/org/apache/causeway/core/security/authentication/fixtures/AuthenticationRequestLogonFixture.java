@@ -20,8 +20,8 @@ package org.apache.causeway.core.security.authentication.fixtures;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.security.authentication.AuthenticationRequestAbstract;
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
 
@@ -37,7 +37,7 @@ public class AuthenticationRequestLogonFixture extends AuthenticationRequestAbst
         return new AuthenticationRequestLogonFixture(name,
                 roles == null
                     ? Collections.emptyList()
-                    : _Lists.of(roles));
+                    : List.of(roles));
     }
 
     public AuthenticationRequestLogonFixture(final String name, final Collection<String> roles) {

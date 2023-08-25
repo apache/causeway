@@ -78,11 +78,9 @@ import org.apache.causeway.applib.services.wrapper.events.PropertyUsabilityEvent
 import org.apache.causeway.applib.services.wrapper.events.PropertyVisibilityEvent;
 import org.apache.causeway.applib.services.wrapper.listeners.InteractionListener;
 import org.apache.causeway.applib.services.xactn.TransactionService;
-import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.collections._Arrays;
+import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.proxy._ProxyFactoryService;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MixinConstructor;
@@ -383,7 +381,6 @@ implements WrapperFactory, HasMetaModelContext {
         val targetAdapter = memberAndTarget.getTarget();
         val method = memberAndTarget.getMethod();
 
-        val argAdapters = Can.ofArray(WrapperFactoryDefault.this.adaptersFor(args));
         val head = InteractionHead.regular(targetAdapter);
 
         val childInteractionId = interactionIdGenerator.interactionId();
@@ -391,13 +388,15 @@ implements WrapperFactory, HasMetaModelContext {
         switch (memberAndTarget.getType()) {
             case ACTION:
                 val action = memberAndTarget.getAction();
+                val argAdapters = ManagedObject.adaptParameters(action.getParameters(), _Lists.ofArray(args));
                 childCommandDto = commandDtoFactory
                         .asCommandDto(childInteractionId, head, action, argAdapters);
                 break;
             case PROPERTY:
                 val property = memberAndTarget.getProperty();
+                val propertyValueAdapter = ManagedObject.adaptProperty(property, args[0]);
                 childCommandDto = commandDtoFactory
-                        .asCommandDto(childInteractionId, head, property, argAdapters.getElseFail(0));
+                        .asCommandDto(childInteractionId, head, property, propertyValueAdapter);
                 break;
             default:
                 // shouldn't happen, already catered for this case previously
@@ -515,12 +514,6 @@ implements WrapperFactory, HasMetaModelContext {
         private final OneToOneAssociation property;
         private final ManagedObject target;
         private final Method method;
-    }
-
-    private ManagedObject[] adaptersFor(final Object[] args) {
-        return _NullSafe.stream(args)
-                .map(getObjectManager()::adapt)
-                .collect(_Arrays.toArray(ManagedObject.class, _NullSafe.size(args)));
     }
 
     // -- LISTENERS

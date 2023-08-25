@@ -67,6 +67,9 @@ extends SchemaValueMarshallerAbstract {
             final ManagedObject value) {
 
         valueDto.setType(context.getSchemaValueType());
+        if (value.getSpecialization().isEmpty()) {
+            valueDto.setNull(true);
+        }
 
         switch (context.getSchemaValueType()) {
         case COMPOSITE:

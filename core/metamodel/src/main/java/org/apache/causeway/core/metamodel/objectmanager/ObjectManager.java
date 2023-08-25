@@ -21,6 +21,10 @@ package org.apache.causeway.core.metamodel.objectmanager;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
+
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -146,8 +150,14 @@ public interface ObjectManager extends HasMetaModelContext {
     /**
      * Not suitable for adapting a non-scalar.
      * If {@code pojo} is an entity, automatically memoizes its bookmark.
+     *
      * <p>
      * Resolves injection-points for the result. (Handles service injection.)
+     *
+     * @see #adapt(Object, Supplier), where the 2nd arg supplies the {@link ObjectSpecification} if known (eg for null args).
+     * @see ManagedObject#adaptSingular(ObjectSpecification, Object)
+     * @see ManagedObject#adaptParameter(ObjectActionParameter, Object)
+     * @see ManagedObject#adaptProperty(OneToOneAssociation, Object)
      */
     public default ManagedObject adapt(final @Nullable Object pojo) {
         return adapt(pojo, ()->specForType(Object.class).orElseThrow());
@@ -163,6 +173,11 @@ public interface ObjectManager extends HasMetaModelContext {
             final @Nullable Object pojo,
             final @NonNull Supplier<ObjectSpecification> fallbackElementType) {
         if(pojo==null) {
+            ObjectSpecification objectSpecification = fallbackElementType.get();
+            if (objectSpecification.isSingular()) {
+                return ManagedObject.empty(objectSpecification);
+            }
+            // best we can do?
             return ManagedObject.unspecified();
         }
         if(pojo instanceof ManagedObject) {
@@ -172,6 +187,7 @@ public interface ObjectManager extends HasMetaModelContext {
         // could be any pojo, even of a type, that is vetoed for introspection (spec==null)
         val spec = specForType(pojo.getClass()).orElse(null);
         if(spec==null) {
+            // best we can do?
             return ManagedObject.unspecified();
         }
         return spec.isSingular()

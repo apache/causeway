@@ -25,14 +25,12 @@ import org.junit.jupiter.api.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.causeway.commons.internal.collections._Lists;
-
 class ReductionTest {
 
     @Test
     void findMinimum() throws Exception {
 
-        final List<Integer> values = _Lists.of(5, 4, 3, 2, 1, 2, 3, 4);
+        final List<Integer> values = List.of(5, 4, 3, 2, 1, 2, 3, 4);
 
         _Reduction<Integer> toMinReduction = _Reduction.of((min, next)-> next<min ? next : min);
 
@@ -46,7 +44,7 @@ class ReductionTest {
 
         final int initial = -1;
 
-        final List<Integer> values = _Lists.of(5, 4, 3, 2, 1, 2, 3, 4);
+        final List<Integer> values = List.of(5, 4, 3, 2, 1, 2, 3, 4);
 
         _Reduction<Integer> toMinReduction = _Reduction.of(initial, (min, next)-> next<min ? next : min);
 
@@ -60,7 +58,7 @@ class ReductionTest {
 
         final int initial = 3;
 
-        final List<Integer> values = _Lists.of(5, 4, 3, 2, 1, 2, 3, 4);
+        final List<Integer> values = List.of(5, 4, 3, 2, 1, 2, 3, 4);
 
         _Reduction<Integer> toMinReduction = _Reduction.of(initial, (min, next)-> next<min ? next : min);
 

@@ -19,6 +19,7 @@
 package org.apache.causeway.commons.internal.concurrent;
 
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 
 import lombok.Builder;
@@ -38,6 +39,11 @@ public class _ConcurrentContext {
 
     @Builder.Default final ExecutorService executorService = null;
     @Builder.Default final boolean enableExecutionLogging = true;
+
+    public static _ConcurrentContextBuilder singleThreaded() {
+        return _ConcurrentContext.builder()
+                .executorService(Executors.newSingleThreadExecutor());
+    }
 
     public static _ConcurrentContextBuilder forkJoin() {
         return _ConcurrentContext.builder()
