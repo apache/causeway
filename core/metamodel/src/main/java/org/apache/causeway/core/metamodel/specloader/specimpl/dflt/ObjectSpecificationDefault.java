@@ -32,12 +32,14 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
@@ -225,13 +227,19 @@ implements FacetHolder {
 
         if (facetedMethod.getFeatureType().isAction()) {
 
-            //TODO[CAUSEWAY-3556] perhaps let _ClassCache handle this
-            final boolean hasGenericBounds = facetedMethod.getMethod().asMethod()
-                    .map(method->_Reflect.hasGenericBounds(method))
-                    .orElse(false);
+            //TODO[CAUSEWAY-3556] perhaps remove before merge
+            {
+                facetedMethod.getMethod().asMethod()
+                    .ifPresent(m->_Assert.assertTrue(_ClassCache.methodIncludeFilter(m)));
 
-            if(hasGenericBounds) {
-                return null;
+                final boolean iBridgeOrHasGenericBounds = facetedMethod.getMethod().asMethod()
+                        .map(method->method.isBridge()
+                                || _Reflect.hasGenericBounds(method))
+                        .orElse(false);
+
+                if(iBridgeOrHasGenericBounds) {
+                    return null;
+                }
             }
 
             /* Assuming, that facetedMethod was already populated with ContributingFacet,

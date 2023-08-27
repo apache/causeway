@@ -337,8 +337,7 @@ public final class _Reflect {
 
         return streamTypeHierarchy(type, InterfacePolicy.INCLUDE)
                 .filter(t->!t.equals(Object.class)) // do not process Object class.
-                .flatMap(t->streamMethods(t, ignoreAccess))
-                .filter(m->!m.isBridge()); // don't include bridge methods
+                .flatMap(t->streamMethods(t, ignoreAccess));
     }
 
     // -- SUPER CLASSES

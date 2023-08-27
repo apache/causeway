@@ -397,7 +397,6 @@ public interface FacetFactory {
             return super.method.synthesizeOnParameter(annotationType, paramNum);
         }
 
-        //TODO[CAUSEWAY-3556] does not seem to synthesize on type hierarchy
         public Stream<Annotation> streamParameterAnnotations() {
             val parameterAnnotations = MethodParameter
                     .forExecutable(

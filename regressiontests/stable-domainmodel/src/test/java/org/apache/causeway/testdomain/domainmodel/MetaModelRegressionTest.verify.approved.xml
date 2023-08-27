@@ -7266,22 +7266,22 @@
             </mml:act>
         </mml:actions>
     </mml:domainClassDto>
-    <mml:domainClassDto id="org.apache.causeway.testdomain.model.good.ProperGenericAbstractImpl">
+    <mml:domainClassDto id="org.apache.causeway.testdomain.model.good.ProperGenericAbstract$Impl">
         <mml:facets>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName">
-                <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperGenericAbstractImpl#)"/>
+                <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperGenericAbstract.Impl#)"/>
                 <mml:attr name="facet" value="MemberNamedFacetForStaticMemberName"/>
-                <mml:attr name="originalText" value="Proper Generic Abstract Impl"/>
+                <mml:attr name="originalText" value="Impl"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
-                <mml:attr name="translated" value="Proper Generic Abstract Impl"/>
+                <mml:attr name="translated" value="Impl"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetSynthesized">
-                <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperGenericAbstractImpl#)"/>
+                <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperGenericAbstract.Impl#)"/>
                 <mml:attr name="facet" value="ObjectNamedFacetSynthesized"/>
                 <mml:attr name="hasNoun" value="true"/>
-                <mml:attr name="originalText" value="Optional[Proper Generic Abstract Impl]"/>
+                <mml:attr name="originalText" value="Optional[Impl]"/>
                 <mml:attr name="precedence" value="SYNTHESIZED"/>
-                <mml:attr name="translated" value="Optional[Proper Generic Abstract Impl]"/>
+                <mml:attr name="translated" value="Optional[Impl]"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
@@ -7376,10 +7376,10 @@
                         <mml:attr name="typicalLengthFacet" value="org.apache.causeway.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor">
-                        <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperGenericAbstractImpl"/>
+                        <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperGenericAbstract$Impl"/>
                         <mml:attr name="facet" value="PropertyAccessorFacetViaAccessor"/>
                         <mml:attr name="intent.getValue" value="ACCESSOR"/>
-                        <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperGenericAbstractImpl.getValue()"/>
+                        <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperGenericAbstract$Impl.getValue()"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet">
@@ -7403,7 +7403,7 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod">
                         <mml:attr name="facet" value="PropertyInitializationFacetViaSetterMethod"/>
                         <mml:attr name="intent.setValue" value="MODIFY_PROPERTY"/>
-                        <mml:attr name="methods" value="public void org.apache.causeway.testdomain.model.good.ProperGenericAbstractImpl.setValue(java.lang.String)"/>
+                        <mml:attr name="methods" value="public void org.apache.causeway.testdomain.model.good.ProperGenericAbstract$Impl.setValue(java.lang.String)"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForSetting">
@@ -8073,6 +8073,10 @@
             </mml:act>
             <mml:act id="sampleAction" mixedIn="false">
                 <mml:facets>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.explicit.ActionExplicitFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.explicit.ActionExplicitFacetForActionAnnotation">
+                        <mml:attr name="facet" value="ActionExplicitFacetForActionAnnotation"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet">
                         <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.ActionDomainEvent.Default"/>
                         <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
@@ -8082,13 +8086,13 @@
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForAction">
-                        <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperGenericAbstractImpl"/>
+                        <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperGenericAbstract$Impl"/>
                         <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.ActionDomainEvent.Default"/>
                         <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
                         <mml:attr name="facet" value="ActionInvocationFacetForAction"/>
                         <mml:attr name="intent.sampleAction" value="EXECUTE"/>
                         <mml:attr name="isPostable" value="true"/>
-                        <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperGenericAbstractImpl.sampleAction(java.lang.String)"/>
+                        <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperGenericAbstract$Impl.sampleAction(java.lang.String)"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="returnType" value="java.lang.String"/>
                     </mml:facet>
@@ -8134,7 +8138,7 @@
                     <mml:param id="value" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="mml:scalarParam">
                         <mml:facets>
                             <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ParamNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.name.NamedFacetForParameterUsingReflection">
-<mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperGenericAbstractImpl#sampleAction())"/>
+<mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperGenericAbstract.Impl#sampleAction())"/>
 <mml:attr name="facet" value="NamedFacetForParameterUsingReflection"/>
 <mml:attr name="originalText" value="Value"/>
 <mml:attr name="precedence" value="LOW"/>
@@ -8145,14 +8149,20 @@
 <mml:attr name="labelPosition" value="NOT_SPECIFIED"/>
 <mml:attr name="precedence" value="LOW"/>
                             </mml:facet>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetInvertedByNullableAnnotationOnParameter">
+<mml:attr name="facet" value="MandatoryFacetInvertedByNullableAnnotationOnParameter"/>
+<mml:attr name="interactionAdvisors" value="Validating"/>
+<mml:attr name="precedence" value="DEFAULT"/>
+<mml:attr name="semantics" value="OPTIONAL"/>
+                            </mml:facet>
                             <mml:facet id="org.apache.causeway.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.typicallen.fromtype.TypicalLengthFacetOnParameterFromType">
 <mml:attr name="facet" value="TypicalLengthFacetOnParameterFromType"/>
 <mml:attr name="precedence" value="INFERRED"/>
 <mml:attr name="typicalLength" value="25"/>
 <mml:attr name="typicalLengthFacet" value="org.apache.causeway.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetForParameterAnnotation">
+<mml:attr name="facet" value="ParameterDependentDefaultsFacetForParameterAnnotation"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="UPDATE_DEPENDENT"/>
                             </mml:facet>
@@ -8163,22 +8173,22 @@
             </mml:act>
         </mml:actions>
     </mml:domainClassDto>
-    <mml:domainClassDto id="org.apache.causeway.testdomain.model.good.ProperGenericInterfaceImpl">
+    <mml:domainClassDto id="org.apache.causeway.testdomain.model.good.ProperGenericInterface$Impl">
         <mml:facets>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName">
-                <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperGenericInterfaceImpl#)"/>
+                <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperGenericInterface.Impl#)"/>
                 <mml:attr name="facet" value="MemberNamedFacetForStaticMemberName"/>
-                <mml:attr name="originalText" value="Proper Generic Interface Impl"/>
+                <mml:attr name="originalText" value="Impl"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
-                <mml:attr name="translated" value="Proper Generic Interface Impl"/>
+                <mml:attr name="translated" value="Impl"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetSynthesized">
-                <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperGenericInterfaceImpl#)"/>
+                <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperGenericInterface.Impl#)"/>
                 <mml:attr name="facet" value="ObjectNamedFacetSynthesized"/>
                 <mml:attr name="hasNoun" value="true"/>
-                <mml:attr name="originalText" value="Optional[Proper Generic Interface Impl]"/>
+                <mml:attr name="originalText" value="Optional[Impl]"/>
                 <mml:attr name="precedence" value="SYNTHESIZED"/>
-                <mml:attr name="translated" value="Optional[Proper Generic Interface Impl]"/>
+                <mml:attr name="translated" value="Optional[Impl]"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
@@ -8273,10 +8283,10 @@
                         <mml:attr name="typicalLengthFacet" value="org.apache.causeway.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor">
-                        <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperGenericInterfaceImpl"/>
+                        <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperGenericInterface$Impl"/>
                         <mml:attr name="facet" value="PropertyAccessorFacetViaAccessor"/>
                         <mml:attr name="intent.getValue" value="ACCESSOR"/>
-                        <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperGenericInterfaceImpl.getValue()"/>
+                        <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperGenericInterface$Impl.getValue()"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet">
@@ -8300,7 +8310,7 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod">
                         <mml:attr name="facet" value="PropertyInitializationFacetViaSetterMethod"/>
                         <mml:attr name="intent.setValue" value="MODIFY_PROPERTY"/>
-                        <mml:attr name="methods" value="public void org.apache.causeway.testdomain.model.good.ProperGenericInterfaceImpl.setValue(java.lang.String)"/>
+                        <mml:attr name="methods" value="public void org.apache.causeway.testdomain.model.good.ProperGenericInterface$Impl.setValue(java.lang.String)"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForSetting">
@@ -8970,6 +8980,10 @@
             </mml:act>
             <mml:act id="sampleAction" mixedIn="false">
                 <mml:facets>
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.explicit.ActionExplicitFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.explicit.ActionExplicitFacetForActionAnnotation">
+                        <mml:attr name="facet" value="ActionExplicitFacetForActionAnnotation"/>
+                        <mml:attr name="precedence" value="DEFAULT"/>
+                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet">
                         <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.ActionDomainEvent.Default"/>
                         <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
@@ -8979,13 +8993,13 @@
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForAction">
-                        <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperGenericInterfaceImpl"/>
+                        <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperGenericInterface$Impl"/>
                         <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.ActionDomainEvent.Default"/>
                         <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
                         <mml:attr name="facet" value="ActionInvocationFacetForAction"/>
                         <mml:attr name="intent.sampleAction" value="EXECUTE"/>
                         <mml:attr name="isPostable" value="true"/>
-                        <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperGenericInterfaceImpl.sampleAction(java.lang.String)"/>
+                        <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperGenericInterface$Impl.sampleAction(java.lang.String)"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="returnType" value="java.lang.String"/>
                     </mml:facet>
@@ -9031,7 +9045,7 @@
                     <mml:param id="value" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="mml:scalarParam">
                         <mml:facets>
                             <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ParamNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.name.NamedFacetForParameterUsingReflection">
-<mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperGenericInterfaceImpl#sampleAction())"/>
+<mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperGenericInterface.Impl#sampleAction())"/>
 <mml:attr name="facet" value="NamedFacetForParameterUsingReflection"/>
 <mml:attr name="originalText" value="Value"/>
 <mml:attr name="precedence" value="LOW"/>
@@ -9042,14 +9056,20 @@
 <mml:attr name="labelPosition" value="NOT_SPECIFIED"/>
 <mml:attr name="precedence" value="LOW"/>
                             </mml:facet>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetInvertedByNullableAnnotationOnParameter">
+<mml:attr name="facet" value="MandatoryFacetInvertedByNullableAnnotationOnParameter"/>
+<mml:attr name="interactionAdvisors" value="Validating"/>
+<mml:attr name="precedence" value="DEFAULT"/>
+<mml:attr name="semantics" value="OPTIONAL"/>
+                            </mml:facet>
                             <mml:facet id="org.apache.causeway.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.typicallen.fromtype.TypicalLengthFacetOnParameterFromType">
 <mml:attr name="facet" value="TypicalLengthFacetOnParameterFromType"/>
 <mml:attr name="precedence" value="INFERRED"/>
 <mml:attr name="typicalLength" value="25"/>
 <mml:attr name="typicalLengthFacet" value="org.apache.causeway.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                             </mml:facet>
-                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetFromConfiguration">
-<mml:attr name="facet" value="ParameterDependentDefaultsFacetFromConfiguration"/>
+                            <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.depdef.ParameterDependentDefaultsFacetForParameterAnnotation">
+<mml:attr name="facet" value="ParameterDependentDefaultsFacetForParameterAnnotation"/>
 <mml:attr name="precedence" value="DEFAULT"/>
 <mml:attr name="value" value="UPDATE_DEPENDENT"/>
                             </mml:facet>
@@ -10015,14 +10035,14 @@
             <mml:prop id="sampleProperty" mixedIn="false">
                 <mml:facets>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.propertylayout.MemberDescribedFacetForPropertyLayoutAnnotation">
-                        <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperMemberInheritance_usingAbstract#sampleProperty)"/>
+                        <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperMemberInheritanceAbstract#sampleProperty)"/>
                         <mml:attr name="facet" value="MemberDescribedFacetForPropertyLayoutAnnotation"/>
                         <mml:attr name="originalText" value="bar"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="translated" value="bar"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.propertylayout.NamedFacetForPropertyLayoutAnnotation">
-                        <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperMemberInheritance_usingAbstract#sampleProperty)"/>
+                        <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperMemberInheritanceAbstract#sampleProperty)"/>
                         <mml:attr name="facet" value="NamedFacetForPropertyLayoutAnnotation"/>
                         <mml:attr name="originalText" value="foo"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -10049,7 +10069,7 @@
                         <mml:attr name="typicalLengthFacet" value="org.apache.causeway.core.metamodel.facets.object.value.TypicalLengthFacetFromValueFacet"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor">
-                        <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperMemberInheritance_usingAbstract"/>
+                        <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperMemberInheritanceAbstract"/>
                         <mml:attr name="facet" value="PropertyAccessorFacetViaAccessor"/>
                         <mml:attr name="intent.getSampleProperty" value="ACCESSOR"/>
                         <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperMemberInheritanceAbstract.getSampleProperty()"/>
@@ -10197,19 +10217,19 @@
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature">
                         <mml:attr name="collection-semantics" value="LIST"/>
                         <mml:attr name="container-type" value="java.util.List"/>
-                        <mml:attr name="element-type" value="java.lang.Object"/>
+                        <mml:attr name="element-type" value="java.lang.String"/>
                         <mml:attr name="facet" value="TypeOfFacetFromFeature"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.MemberDescribedFacetForCollectionLayoutAnnotation">
-                        <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperMemberInheritance_usingAbstract#sampleCollection)"/>
+                        <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperMemberInheritanceAbstract#sampleCollection)"/>
                         <mml:attr name="facet" value="MemberDescribedFacetForCollectionLayoutAnnotation"/>
                         <mml:attr name="originalText" value="bar"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="translated" value="bar"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.layout.MemberNamedFacetForCollectionLayoutAnnotation">
-                        <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperMemberInheritance_usingAbstract#sampleCollection)"/>
+                        <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperMemberInheritanceAbstract#sampleCollection)"/>
                         <mml:attr name="facet" value="MemberNamedFacetForCollectionLayoutAnnotation"/>
                         <mml:attr name="originalText" value="foo"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -10232,13 +10252,6 @@
                         <mml:attr name="facet" value="LayoutOrderFacetFromCollectionLayoutAnnotation"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
-                        <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
-                        <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-                        <mml:attr name="navigatedType" value="java.lang.Object"/>
-                        <mml:attr name="navigatedTypeFqcn" value="java.lang.Object"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.object.paged.PagedFacet" fqcn="org.apache.causeway.core.metamodel.facets.fallback.PagedFacetFromConfiguration">
                         <mml:attr name="facet" value="PagedFacetFromConfiguration"/>
                         <mml:attr name="precedence" value="INFERRED"/>
@@ -10250,7 +10263,7 @@
                         <mml:attr name="value" value="org.apache.causeway.applib.annotation.TableDecorator.Default"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet" fqcn="org.apache.causeway.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor">
-                        <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperMemberInheritance_usingAbstract"/>
+                        <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperMemberInheritanceAbstract"/>
                         <mml:attr name="facet" value="CollectionAccessorFacetViaAccessor"/>
                         <mml:attr name="intent.getSampleCollection" value="ACCESSOR"/>
                         <mml:attr name="methods" value="public java.util.List org.apache.causeway.testdomain.model.good.ProperMemberInheritanceAbstract.getSampleCollection()"/>
@@ -10262,7 +10275,7 @@
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                 </mml:facets>
-                <mml:type>java.lang.Object</mml:type>
+                <mml:type>java.lang.String</mml:type>
             </mml:coll>
         </mml:collections>
         <mml:actions>
@@ -10921,7 +10934,7 @@
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForAction">
-                        <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperMemberInheritance_usingAbstract"/>
+                        <mml:attr name="declaringType" value="org.apache.causeway.testdomain.model.good.ProperMemberInheritanceAbstract"/>
                         <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.ActionDomainEvent.Default"/>
                         <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
                         <mml:attr name="facet" value="ActionInvocationFacetForAction"/>
@@ -10942,14 +10955,14 @@
                         <mml:attr name="value" value="NON_IDEMPOTENT"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.MemberDescribedFacetForActionLayoutAnnotation">
-                        <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperMemberInheritance_usingAbstract#sampleAction())"/>
+                        <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperMemberInheritanceAbstract#sampleAction())"/>
                         <mml:attr name="facet" value="MemberDescribedFacetForActionLayoutAnnotation"/>
                         <mml:attr name="originalText" value="bar"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                         <mml:attr name="translated" value="bar"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.NamedFacetForActionLayoutAnnotation">
-                        <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperMemberInheritance_usingAbstract#sampleAction())"/>
+                        <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.testdomain.model.good.ProperMemberInheritanceAbstract#sampleAction())"/>
                         <mml:attr name="facet" value="NamedFacetForActionLayoutAnnotation"/>
                         <mml:attr name="originalText" value="foo"/>
                         <mml:attr name="precedence" value="DEFAULT"/>

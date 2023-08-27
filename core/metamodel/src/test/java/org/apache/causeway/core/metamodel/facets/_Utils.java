@@ -31,7 +31,6 @@ import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
-import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 
 import lombok.val;
@@ -60,9 +59,9 @@ class _Utils {
         return featureTypes.contains(featureType);
     }
 
-    Optional<Method> findMethodExact(final Class<?> type, final String methodName, final Class<?>[] methodTypes) {
+    Optional<Method> findMethodExact(final Class<?> type, final String methodName, final Class<?>[] parameterTypes) {
         try {
-            return Optional.ofNullable(type.getMethod(methodName, methodTypes));
+            return Optional.ofNullable(type.getMethod(methodName, parameterTypes));
         } catch (final SecurityException e) {
             return Optional.empty();
         } catch (final NoSuchMethodException e) {
@@ -74,8 +73,8 @@ class _Utils {
         return findMethodExact(type, methodName, _Constants.emptyClasses);
     }
 
-    Method findMethodExactOrFail(final Class<?> type, final String methodName, final Class<?>[] methodTypes) {
-        return findMethodExact(type, methodName, methodTypes)
+    Method findMethodExactOrFail(final Class<?> type, final String methodName, final Class<?>[] parameterTypes) {
+        return findMethodExact(type, methodName, parameterTypes)
                 .orElseThrow(()->
                 _Exceptions.noSuchElement("method '%s' not found in %s", methodName, type));
     }
@@ -92,12 +91,7 @@ class _Utils {
     }
 
     Method findMethodByNameOrFail(final Class<?> type, final String methodName) {
-        val matchingMethods = findMethodsByName(type, methodName);
-
-        //TODO[CAUSEWAY-3556] this logic should be moved to the _ClassCache
-        return matchingMethods.isCardinalityMultiple()
-                ? _Reflect.mostSpecificMethodOf(matchingMethods).orElseThrow()
-                : matchingMethods.getSingletonOrFail();
+        return _ClassCache.getInstance().findMethodUniquelyByNameOrFail(type, methodName);
     }
 
     Optional<Method> findGetter(final Class<?> declaringClass, final String propertyName) {

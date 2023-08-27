@@ -143,6 +143,15 @@ public final class _ClassCache implements AutoCloseable {
         return inspectType(type).declaredMethods.stream();
     }
 
+    public Method findMethodUniquelyByNameOrFail(final Class<?> type, final String methodName) {
+        val matchingMethods = streamPublicOrDeclaredMethods(type)
+                .filter(method->method.getName().equals(methodName))
+                .collect(Can.toCan());
+        return matchingMethods.isCardinalityMultiple()
+                ? _Reflect.mostSpecificMethodOf(matchingMethods).orElseThrow()
+                : matchingMethods.getSingletonOrFail();
+    }
+
     // -- FIELD SEMANTICS
 
     public Stream<Field> streamDeclaredFields(final Class<?> type) {
@@ -232,6 +241,18 @@ public final class _ClassCache implements AutoCloseable {
         }
     }
 
+    // -- UTILITY
+
+    public static boolean methodExcludeFilter(final Method method) {
+        return method.isBridge()
+                || Modifier.isStatic(method.getModifiers())
+                || _Reflect.hasGenericBounds(method);
+    }
+
+    public static boolean methodIncludeFilter(final Method method) {
+        return !methodExcludeFilter(method);
+    }
+
     // -- HELPER
 
     private ClassModel inspectType(final Class<?> type) {
@@ -242,8 +263,8 @@ public final class _ClassCache implements AutoCloseable {
                 val publicConstr = type.getConstructors();
                 val declaredFields = type.getDeclaredFields();
                 val declaredMethods = //type.getDeclaredMethods(); ... cannot detect non overridden inherited methods
-                        Can.ofStream(_Reflect.streamAllMethods(type, true));
-                val publicMethods = type.getMethods(); //XXX[CAUSEWAY-3327] order of methods returned might differ among JVM instances
+                        Can.ofStream(_Reflect.streamAllMethods(type, true)
+                                .filter(_ClassCache::methodIncludeFilter));
 
                 val model = new ClassModel(
                         Can.ofArray(declaredFields),
@@ -262,7 +283,6 @@ public final class _ClassCache implements AutoCloseable {
 
                 // process all public and non-public
                 for(val method : declaredMethods) {
-                    if(Modifier.isStatic(method.getModifiers())) continue;
 
                     val key = MethodKey.of(type, method);
                     // add all now, remove public ones later
@@ -275,12 +295,9 @@ public final class _ClassCache implements AutoCloseable {
                 }
 
                 // process public only
+                val publicMethods = Can.ofArray(type.getMethods()) //XXX[CAUSEWAY-3327] order of methods returned might differ among JVM instances
+                        .filter(_ClassCache::methodIncludeFilter);
                 for(val method : publicMethods) {
-                    if(Modifier.isStatic(method.getModifiers())
-                            || method.isBridge()) {
-                        continue;
-                    }
-
                     val key = MethodKey.of(type, method);
                     putIntoMapHonoringOverridingRelation(model.publicMethodsByKey, key, method);
                     model.nonPublicDeclaredMethodsByKey.remove(key);

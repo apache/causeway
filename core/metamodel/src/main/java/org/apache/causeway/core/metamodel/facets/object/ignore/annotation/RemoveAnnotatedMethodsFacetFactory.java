@@ -42,7 +42,8 @@ extends FacetFactoryAbstract {
         val policy = getMetaModelContext().getConfiguration().getCore().getMetaModel().getIntrospector().getPolicy();
         switch (policy) {
             case ENCAPSULATION_ENABLED:
-                getClassCache().streamPublicOrDeclaredMethods(processClassContext.getCls())
+                getClassCache()
+                        .streamPublicOrDeclaredMethods(processClassContext.getCls())
                         .forEach(method -> {
                             if (!ProgrammingModelConstants.MethodIncludeMarker.anyMatchOn(method)) {
                                 processClassContext.removeMethod(method);
