@@ -26,7 +26,6 @@ import javax.inject.Inject;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
@@ -118,11 +117,8 @@ extends InteractionTestAbstract {
         }
     }
 
-
     @Inject SpecificationLoader specificationLoader;
 
-    //TODO[CAUSEWAY-3556] activate before merge
-    @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
     @Test
     void mixinMemberNamedFacet_whenSharingSameAbstractMixin() {
         val objectSpec = specificationLoader.specForType(Task.class).get();
@@ -140,8 +136,6 @@ extends InteractionTestAbstract {
                 .count());
     }
 
-  //FIXME[CAUSEWAY-3207]
-    @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
     @Test
     void mixinActionValidation() {
 

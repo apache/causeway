@@ -32,7 +32,6 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
-import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._NullSafe;
@@ -41,7 +40,6 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
-import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
 import org.apache.causeway.core.metamodel.commons.ToString;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -86,8 +84,8 @@ implements FacetHolder {
     private Map<Method, ObjectMember> membersByMethod = null;
 
     private final FacetedMethodsBuilder facetedMethodsBuilder;
-
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
+    private final _ClassCache classCache;
 
     @Getter(onMethod_ = {@Override})
     private final IntrospectionPolicy introspectionPolicy;
@@ -122,6 +120,8 @@ implements FacetHolder {
 
         this.facetedMethodsBuilder =
                 new FacetedMethodsBuilder(this, facetProcessor, classSubstitutorRegistry);
+
+        this.classCache = _ClassCache.getInstance();
     }
 
     @Override
@@ -224,24 +224,7 @@ implements FacetHolder {
     }
 
     private ObjectAction createAction(final FacetedMethod facetedMethod) {
-
         if (facetedMethod.getFeatureType().isAction()) {
-
-            //TODO[CAUSEWAY-3556] perhaps remove before merge
-            {
-                facetedMethod.getMethod().asMethod()
-                    .ifPresent(m->_Assert.assertTrue(_ClassCache.methodIncludeFilter(m)));
-
-                final boolean iBridgeOrHasGenericBounds = facetedMethod.getMethod().asMethod()
-                        .map(method->method.isBridge()
-                                || _Reflect.hasGenericBounds(method))
-                        .orElse(false);
-
-                if(iBridgeOrHasGenericBounds) {
-                    return null;
-                }
-            }
-
             /* Assuming, that facetedMethod was already populated with ContributingFacet,
              * we copy the mixin-sort information from the FacetedMethod to the MixinFacet
              * that is held by the mixin's type spec. */
@@ -334,7 +317,7 @@ implements FacetHolder {
         .forEach(entry->{
             val objectMember = entry.getValue();
             val syntheticMethod = entry.getKey();
-            _Reflect
+            classCache
             .lookupRegularMethodForSynthetic(syntheticMethod)
             .ifPresent(regularMethod->
                 membersByMethod.computeIfAbsent(regularMethod, key->objectMember));

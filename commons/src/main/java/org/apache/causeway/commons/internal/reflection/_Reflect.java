@@ -113,7 +113,7 @@ public final class _Reflect {
     /**
      * Weak variant of {@link #methodsSame(Method, Method)},
      * that relaxes parameter checks,
-     * if generic parameter bounds are detected on any of the provided methods
+     * if bridge methods are detected
      */
     public boolean methodsWeaklySame(final Method a, final Method b) {
         if(!a.getName().equals(b.getName())) {
@@ -122,16 +122,18 @@ public final class _Reflect {
         if(a.getParameterCount()!=b.getParameterCount()) {
             return false;
         }
-        if(hasGenericParam(a)
-                || hasGenericParam(b)) {
-            if(!_Arrays.testAllMatch(a.getParameters(), b.getParameters(),
-                    (p1, p2)->shareSameTypeHierarchy(p1.getType(), p2.getType()))) {
-                return false;
-            }
-        } else {
-            if(!_Arrays.testAllMatch(a.getParameters(), b.getParameters(),
-                    (p1, p2)->p1.getType().equals(p2.getType()))) {
-                return false;
+        if(a.getParameterCount()>0) {
+            if(a.isBridge()
+                    || b.isBridge()) {
+                if(!_Arrays.testAllMatch(a.getParameters(), b.getParameters(),
+                        (p1, p2)->shareSameTypeHierarchy(p1.getType(), p2.getType()))) {
+                    return false;
+                }
+            } else {
+                if(!_Arrays.testAllMatch(a.getParameters(), b.getParameters(),
+                        (p1, p2)->p1.getType().equals(p2.getType()))) {
+                    return false;
+                }
             }
         }
         return shareSameTypeHierarchy(a.getReturnType(), b.getReturnType());
@@ -849,9 +851,16 @@ public final class _Reflect {
     }
 
     /**
-     * Will fail if methods don't share the same type hierarchy branch.
+     * Fails if methods don't share the same type hierarchy.
+     * Potentially fails if methods don't share the same type hierarchy branch.
      * @param methods assumed to pass checks #methodsWeaklySame and #shareSameTypeHierarchy
-     * @return the most specific with the type hierarchy
+     * @return the most specific within the type hierarchy branch
+     *      (undecidable, if multiple branches are involved)
+     *
+     * @implNote EXPERIMENTAL - needs more rigorous testing;
+     *      also the same type hierarchy branch check is only poorly implemented to save execution time
+     *      (assuming the caller knows what to do)
+     * TODO look for a Spring Utility that does the same
      */
     public Optional<Method> mostSpecificMethodOf(
             final @NonNull Can<Method> methods) {
@@ -871,8 +880,16 @@ public final class _Reflect {
             .stream()
             .skip(1)
             .forEach(next->{
-                _Assert.assertTrue(methodsWeaklySame(first, next));
-                _Assert.assertTrue(shareSameTypeHierarchy(first, next));
+                _Assert.assertTrue(methodsWeaklySame(first, next),
+                        ()->String.format("weakly same method check failed on\n"
+                        + "(1) %s\n"
+                        + "(2) %s\n",
+                        first, next));
+                _Assert.assertTrue(shareSameTypeHierarchy(first, next),
+                        ()->String.format("same type hierarchy method check failed on\n"
+                                + "(1) %s\n"
+                                + "(2) %s\n",
+                                first, next));
             });
 
         return methods
@@ -882,13 +899,24 @@ public final class _Reflect {
                 val clsA = a.getDeclaringClass();
                 val clsB = b.getDeclaringClass();
                 if(clsA.equals(clsB)) {
+
+                    if(a.isBridge() && b.isBridge()) {
+                        throw _Exceptions.unrecoverable("methods declared on the same type "
+                                + "cannot pass methodsWeaklySame check "
+                                + "and at the same time be distinct and both being bridges");
+                    }
+
+                    if(a.isBridge()) return -1; // b wins
+                    if(b.isBridge()) return 1; // a wins
+
                     throw _Exceptions.unrecoverable("methods declared on the same type "
                             + "cannot pass methodsWeaklySame check "
-                            + "and at the same time be distinct");
+                            + "and at the same time be distinct and none being a bridge");
+
                 }
                 return clsA.isAssignableFrom(clsB)
-                        ? -1
-                        : 1;
+                        ? -1 // b wins
+                        : 1; // a wins
             });
     }
 

@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.param.parameter;
 
+import java.util.NoSuchElementException;
 import java.util.regex.Pattern;
 
 import org.junit.jupiter.api.AfterEach;
@@ -29,6 +30,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.Optionality;
@@ -84,68 +86,104 @@ extends FacetFactoryTestAbstract {
 
         @Test
         public void withAnnotation() {
-
             class Customer {
                 public void someAction(
                         @Parameter(maxLength = 30) @Nullable
                         final String name) { }
             }
-
             test(Customer.class);
         }
 
         @Test
         public void withInheritedAnnotation() {
-
             abstract class Base {
                 public void someAction(
                         @Parameter(maxLength = 30) @Nullable
                         final String name) { }
             }
-
             class Customer extends Base {
             }
-
             test(Customer.class);
         }
 
         @Test
-        public void withOverwrittenAnnotation() {
-
+        public void withInheritedNonAnnotatedBase() {
             abstract class Base {
                 public void someAction(
-                        @Parameter(maxLength = 10)
                         final String name) { }
             }
-
             class Customer extends Base {
                 @Override
                 public void someAction(
                         @Parameter(maxLength = 30) @Nullable
                         final String name) { }
             }
+            test(Customer.class);
+        }
 
+        @Test
+        public void withOverwrittenAnnotation() {
+            abstract class Base {
+                public void someAction(
+                        @Parameter(maxLength = 10)
+                        final String name) { }
+            }
+            class Customer extends Base {
+                @Override
+                public void someAction(
+                        @Parameter(maxLength = 30) @Nullable
+                        final String name) { }
+            }
             test(Customer.class);
         }
 
         @Test
         public void withGenericallyOverwrittenAnnotation() {
-
             abstract class Base<T> {
                 public void someAction(
                         @Parameter(maxLength = 10)
                         final T name) { }
             }
-
             class Customer extends Base<String> {
                 @Override
                 public void someAction(
                         @Parameter(maxLength = 30) @Nullable
                         final String name) { }
             }
-
             test(Customer.class);
         }
+
+        @Test
+        public void withGenericallyOverwrittenNonAnnotatedBase() {
+            abstract class Base<T> {
+                public void someAction(
+                        final T name) { }
+            }
+            class Customer extends Base<String> {
+                @Override
+                public void someAction(
+                        @Parameter(maxLength = 30) @Nullable
+                        final String name) { }
+            }
+            test(Customer.class);
+        }
+
+        /**
+         * Type erasure prevents runtime reflection to properly tell,
+         * what argument types are actually used in the concrete class.
+         */
+        @Test
+        public void withGenericallyInheritedFullyAnnotatedBase() {
+            abstract class Base<T> {
+                public void someAction(
+                        @Parameter(maxLength = 30) @Nullable
+                        final T name) { }
+            }
+            class Customer extends Base<String> {
+            }
+            assertThrows(NoSuchElementException.class, ()->test(Customer.class));
+        }
+
     }
 
     public static class MustSatisfy extends ParameterAnnotationFacetFactoryTest {

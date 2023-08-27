@@ -42,7 +42,6 @@ import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
-import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.metamodel.commons.MethodUtil;
 import org.apache.causeway.core.metamodel.commons.ToString;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
@@ -71,7 +70,6 @@ implements HasMetaModelContext {
 
         private ConcurrentMethodRemover(final Class<?> introspectedClass, final Stream<Method> methodStream) {
             this.methodsRemaining = methodStream
-                    .filter(_NullSafe::isPresent)
                     .collect(Collectors.toCollection(_Sets::newConcurrentHashSet));
         }
 
@@ -107,7 +105,7 @@ implements HasMetaModelContext {
 
     private final ObjectSpecificationAbstract inspectedTypeSpec;
 
-    private final Class<?> introspectedClass;
+    @Getter private final Class<?> introspectedClass;
 
     private List<FacetedMethod> associationFacetMethods;
     private List<FacetedMethod> actionFacetedMethods;
@@ -139,7 +137,6 @@ implements HasMetaModelContext {
                 ? classCache.streamPublicOrDeclaredMethods(introspectedClass)
                 : classCache.streamPublicMethods(introspectedClass);
         this.methodRemover = new ConcurrentMethodRemover(introspectedClass, methodsRemaining);
-
     }
 
     @Override
@@ -327,7 +324,6 @@ implements HasMetaModelContext {
     }
 
     private List<FacetedMethod> findActionFacetedMethods() {
-
         if (log.isDebugEnabled()) {
             log.debug("introspecting(policy={}) {}: actions", introspectionPolicy(), getClassName());
         }
@@ -365,7 +361,7 @@ implements HasMetaModelContext {
 
         // build action (first convert any synthetic method to a regular one)
 
-        return _Reflect
+        return _ClassCache.getInstance()
             .lookupRegularMethodForSynthetic(actionMethod)
             .map(this::createActionFacetedMethod)
             .filter(_NullSafe::isPresent)
@@ -418,19 +414,6 @@ implements HasMetaModelContext {
 
     private boolean representsAction(final Method actionMethod) {
 
-        if (MethodUtil.isStatic(actionMethod)) {
-            return false;
-        }
-
-        //[CAUSEWAY-3556] skip processing of methods with bounded return or any bounded param
-        // that is, ignore entirely
-        if(_Reflect.hasGenericBounds(actionMethod)) {
-            return false;
-        }
-
-        val hasActionAnnotation = _Annotations
-                .isPresent(actionMethod, Action.class);
-
         // ensure we can load returned element type; otherwise ignore method
         val anyLoadedAsNull = TypeExtractor.streamMethodReturn(actionMethod)
         .map(typeToLoad->getSpecificationLoader().loadSpecification(typeToLoad, IntrospectionState.TYPE_INTROSPECTED))
@@ -446,6 +429,8 @@ implements HasMetaModelContext {
             return true;
         }
 
+        val hasActionAnnotation = _Annotations
+                .isPresent(actionMethod, Action.class);
         if(hasActionAnnotation) {
             log.debug("  identified action {}", actionMethod);
             return true;

@@ -220,7 +220,7 @@ public class _MethodFacades {
     // -- HELPER
 
     private Method regularMethodForSyntheticElseFail(final Method method) {
-        return _Reflect
+        return _ClassCache.getInstance()
             .lookupRegularMethodForSynthetic(method)
             .orElseThrow(()->_Exceptions.illegalArgument("cannot resolve syntetic method %s to a regular one", method));
     }

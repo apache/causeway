@@ -78,6 +78,41 @@ class ClassCacheTest {
         assertContainsMethod(declaredMethods, "specificAction");
     }
 
+    @Test
+    void syntheticLookupTest() {
+
+        val titleMethods =
+            classCache.streamDeclaredMethodsHaving(
+                    ProperMemberInheritanceUsingAbstract.class, "test", m->m.getName().equals("title"))
+            .collect(Can.toCan());
+
+        assertContainsMethod(titleMethods, "title");
+//        assertEquals(1, titleMethods.size());
+
+        //titleMethods.forEach(m->assertTrue(!m.isSynthetic()));
+
+        val syntetics = _Reflect.streamAllMethods(ProperMemberInheritanceUsingAbstract.class, true)
+            .filter(m->m.isSynthetic())
+            .collect(Can.toCan());
+
+        syntetics.forEach(syn->{
+
+            System.err.printf("syn %s%n", syn);
+
+            classCache.streamAllMethods(syn.getDeclaringClass())
+                    .filter(method->!method.isSynthetic())
+                    .filter(method->method.getName().equals(syn.getName()))
+                    .forEach(method->{
+                        System.err.printf("\t %s%n", method);
+                    });
+
+            val x = classCache.lookupRegularMethodForSynthetic(syn);
+
+            assertTrue(x.isPresent());
+        });
+
+    }
+
     // -- HELPER
 
     private void assertContainsMethod(final Can<Method> declaredMethods, final String methodName) {

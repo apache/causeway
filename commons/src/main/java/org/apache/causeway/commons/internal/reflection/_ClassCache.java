@@ -47,6 +47,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -139,6 +140,11 @@ public final class _ClassCache implements AutoCloseable {
                 classModel.nonPublicDeclaredMethodsByKey.values().stream());
     }
 
+    public Stream<Method> streamAllMethods(final Class<?> type) {
+        val classModel = inspectType(type);
+        return classModel.declaredMethods.stream();
+    }
+
     public Stream<Method> streamDeclaredMethods(final Class<?> type) {
         return inspectType(type).declaredMethods.stream();
     }
@@ -150,6 +156,25 @@ public final class _ClassCache implements AutoCloseable {
         return matchingMethods.isCardinalityMultiple()
                 ? _Reflect.mostSpecificMethodOf(matchingMethods).orElseThrow()
                 : matchingMethods.getSingletonOrFail();
+    }
+
+    /**
+     * Lookup regular method for a synthetic one, in the method's declaring class type-hierarchy.
+     */
+    public Optional<Method> lookupRegularMethodForSynthetic(final @NonNull Method syntheticMethod) {
+
+        if(!syntheticMethod.isSynthetic()) {
+            return Optional.of(syntheticMethod);
+        }
+
+        val matchingMethods = streamAllMethods(syntheticMethod.getDeclaringClass())
+                .filter(method->!method.isSynthetic())
+                .filter(method->_Reflect.methodsWeaklySame(method, syntheticMethod))
+                .collect(Can.toCan());
+
+        return matchingMethods.isCardinalityMultiple()
+                ? _Reflect.mostSpecificMethodOf(matchingMethods)
+                : matchingMethods.getSingleton();
     }
 
     // -- FIELD SEMANTICS
@@ -244,8 +269,8 @@ public final class _ClassCache implements AutoCloseable {
     // -- UTILITY
 
     public static boolean methodExcludeFilter(final Method method) {
-        return method.isBridge()
-                || Modifier.isStatic(method.getModifiers())
+        return Modifier.isStatic(method.getModifiers())
+                || method.getDeclaringClass().equals(Object.class)
                 || _Reflect.hasGenericBounds(method);
     }
 
@@ -260,17 +285,27 @@ public final class _ClassCache implements AutoCloseable {
 
             return inspectedTypes.computeIfAbsent(type, __->{
 
-                val publicConstr = type.getConstructors();
-                val declaredFields = type.getDeclaredFields();
+//                val declaredMethods = _Reflect.streamTypeHierarchy(type, InterfacePolicy.INCLUDE)
+//                    .filter(cls->cls.equals(Object.class))
+//                    .flatMap(cls->{
+//                        return cls.equals(type)
+//                            ? _NullSafe.stream(cls.getDeclaredMethods())
+//                                .filter(_ClassCache::methodIncludeFilter)
+//                            : inspectType(cls).declaredMethods.stream();
+//                    })
+//                    .collect(Can.toCan());
+
+                val declaredFields = Can.ofArray(type.getDeclaredFields());
                 val declaredMethods = //type.getDeclaredMethods(); ... cannot detect non overridden inherited methods
                         Can.ofStream(_Reflect.streamAllMethods(type, true)
                                 .filter(_ClassCache::methodIncludeFilter));
 
                 val model = new ClassModel(
-                        Can.ofArray(declaredFields),
+                        declaredFields,
                         declaredMethods,
                         _Annotations.isPresent(type, XmlRootElement.class));
 
+                val publicConstr = type.getConstructors();
                 for(val constr : publicConstr) {
                     val key = ConstructorKey.of(type, constr);
                     // collect public constructors
@@ -286,7 +321,8 @@ public final class _ClassCache implements AutoCloseable {
 
                     val key = MethodKey.of(type, method);
                     // add all now, remove public ones later
-                    val methodToKeep = putIntoMapHonoringOverridingRelation(model.nonPublicDeclaredMethodsByKey, key, method);
+                    val methodToKeep =
+                            putIntoMapHonoringOverridingRelation(model.nonPublicDeclaredMethodsByKey, key, method);
 
                     // collect post-construct methods
                     if(isPostConstruct(methodToKeep)) {
@@ -416,5 +452,7 @@ public final class _ClassCache implements AutoCloseable {
         }
         return _Strings.decapitalize(fieldName);
     }
+
+
 
 }
