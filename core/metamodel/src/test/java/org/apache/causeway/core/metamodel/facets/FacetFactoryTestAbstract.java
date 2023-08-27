@@ -282,12 +282,7 @@ implements HasMetaModelContext {
 
         val declaringClass = scenario.declaringClass();
         val memberId = scenario.actionName();
-
-        val matchingActionMethods = _Utils.findMethodsByName(declaringClass, memberId);
-
-        _Assert.assertEquals(1, matchingActionMethods.size(), ()->String.format("action by id '%s' could not be resolved", memberId));
-
-        val actionMethod = matchingActionMethods.getSingletonOrFail();
+        val actionMethod = _Utils.findMethodByNameOrFail(declaringClass, memberId);
         val paramTypes = actionMethod.getParameterTypes();
         val facetHolder = actionFacetHolder(declaringClass, memberId, paramTypes);
         val facetedMethod = FacetedMethod.createForAction(getMetaModelContext(), declaringClass, memberId, paramTypes);
