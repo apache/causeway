@@ -145,7 +145,7 @@ class ValueSemanticsTester<T> {
 
                 val command = interactionService.currentInteractionElseFail().getCommand();
 
-                domainObject.invokeSampleActionUsingWrapper(wrapperFactory, null);
+                domainObject.invokeSampleActionUsingWrapper(wrapperFactory, null); // overrides default values from value semantics
 
                 return command;
             });

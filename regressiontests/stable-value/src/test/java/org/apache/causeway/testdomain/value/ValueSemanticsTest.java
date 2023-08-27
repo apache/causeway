@@ -136,9 +136,6 @@ class ValueSemanticsTest {
             final Class<T> valueType,
             final ValueTypeExample<T> example) {
 
-        //FIXME[CAUSEWAY-3556] broken meta-model
-        if(true)return;
-
         //val env = new TestEnvironment();
 
         assertNotNull(example);
