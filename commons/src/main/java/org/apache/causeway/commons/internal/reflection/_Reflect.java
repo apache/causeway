@@ -850,11 +850,11 @@ public final class _Reflect {
     }
 
     /**
-     * Will fail if methods are spread across different branches of the shared type hierarchy.
-     * @param methods assumed to pass checks #methodsSame and #shareSameTypeHierarchy
+     * Will fail if methods don't share the same type hierarchy branch.
+     * @param methods assumed to pass checks #methodsWeaklySame and #shareSameTypeHierarchy
      * @return the most specific with the type hierarchy
      */
-    public static Optional<Method> mostSpecificMethodOf(
+    public Optional<Method> mostSpecificMethodOf(
             final @NonNull Can<Method> methods) {
 
         switch(methods.getCardinality()) {
@@ -866,14 +866,13 @@ public final class _Reflect {
             break; // fall through
         }
 
-        // assert all methods share the same type hierarchy
+        // assert all methods share the same type hierarchy branch
         val first = methods.getFirstElseFail();
         methods
             .stream()
             .skip(1)
             .forEach(next->{
-                _Assert.assertTrue(
-                        methodsWeaklySame(first, next));
+                _Assert.assertTrue(methodsWeaklySame(first, next));
                 _Assert.assertTrue(shareSameTypeHierarchy(first, next));
             });
 

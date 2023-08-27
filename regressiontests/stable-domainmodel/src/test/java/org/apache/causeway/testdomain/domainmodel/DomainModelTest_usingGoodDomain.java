@@ -25,7 +25,6 @@ import java.util.stream.Stream;
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -84,8 +83,8 @@ import org.apache.causeway.testdomain.model.good.ProperChoicesWhenActionHasParam
 import org.apache.causeway.testdomain.model.good.ProperChoicesWhenChoicesFrom;
 import org.apache.causeway.testdomain.model.good.ProperElementTypeVm;
 import org.apache.causeway.testdomain.model.good.ProperFullyImpl;
-import org.apache.causeway.testdomain.model.good.ProperGenericAbstractImpl;
-import org.apache.causeway.testdomain.model.good.ProperGenericInterfaceImpl;
+import org.apache.causeway.testdomain.model.good.ProperGenericAbstract;
+import org.apache.causeway.testdomain.model.good.ProperGenericInterface;
 import org.apache.causeway.testdomain.model.good.ProperInterface2;
 import org.apache.causeway.testdomain.model.good.ProperMemberInheritanceInterface;
 import org.apache.causeway.testdomain.model.good.ProperMemberInheritance_usingAbstract;
@@ -246,12 +245,10 @@ class DomainModelTest_usingGoodDomain {
         tester.assertLayout("layout");
     }
 
-    //TODO[CAUSEWAY-3556] enable before merge into master
-    @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
     @ParameterizedTest
     @ValueSource(classes = {
-            ProperGenericInterfaceImpl.class,
-            ProperGenericAbstractImpl.class,
+            ProperGenericInterface.Impl.class,
+            ProperGenericAbstract.Impl.class,
     })
     void genericBaseType_whenImplemented_shouldBeSupported(final Class<?> classUnderTest) {
         val propTester = testerFactory.propertyTester(classUnderTest, "value");
@@ -291,7 +288,6 @@ class DomainModelTest_usingGoodDomain {
             assertEquals("inherited title", domainObject.getTitle());
             assertEquals("inherited icon", iconFacet.iconName(domainObject));
         }
-
     }
 
     @ParameterizedTest

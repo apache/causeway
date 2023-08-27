@@ -20,11 +20,38 @@ package org.apache.causeway.testdomain.model.good;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.Parameter;
+import org.apache.causeway.applib.annotation.Property;
+
+import lombok.Getter;
+import lombok.Setter;
+
 public abstract class ProperGenericAbstract<T> {
 
     abstract T getValue();
     abstract void setValue(T prop);
 
-    abstract T sampleAction(@Nullable final T value);
+    abstract T sampleAction(final T value);
+
+    // -- IMPL
+
+    @DomainObject(nature = Nature.VIEW_MODEL)
+    public static class Impl
+    extends ProperGenericAbstract<String> {
+
+        @Property
+        @Getter @Setter
+        private String value = "aValue";
+
+        @Action
+        @Override
+        public String sampleAction(@Parameter final @Nullable  String value) {
+            return value;
+        }
+
+    }
 
 }
