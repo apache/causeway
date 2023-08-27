@@ -276,7 +276,10 @@ public final class _ClassCache implements AutoCloseable {
 
                 // process public only
                 for(val method : publicMethods) {
-                    if(Modifier.isStatic(method.getModifiers())) continue;
+                    if(Modifier.isStatic(method.getModifiers())
+                            || method.isBridge()) {
+                        continue;
+                    }
 
                     val key = MethodKey.of(type, method);
                     putIntoMapHonoringOverridingRelation(model.publicMethodsByKey, key, method);

@@ -47,10 +47,12 @@ import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.context._Context;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.functions._Predicates;
 
 import lombok.NonNull;
@@ -108,9 +110,40 @@ public final class _Reflect {
         return shareSameTypeHierarchy(a.getReturnType(), b.getReturnType());
     }
 
+    /**
+     * Weak variant of {@link #methodsSame(Method, Method)},
+     * that relaxes parameter checks,
+     * if generic parameter bounds are detected on any of the provided methods
+     */
+    public boolean methodsWeaklySame(final Method a, final Method b) {
+        if(!a.getName().equals(b.getName())) {
+            return false;
+        }
+        if(a.getParameterCount()!=b.getParameterCount()) {
+            return false;
+        }
+        if(hasGenericParam(a)
+                || hasGenericParam(b)) {
+            if(!_Arrays.testAllMatch(a.getParameters(), b.getParameters(),
+                    (p1, p2)->shareSameTypeHierarchy(p1.getType(), p2.getType()))) {
+                return false;
+            }
+        } else {
+            if(!_Arrays.testAllMatch(a.getParameters(), b.getParameters(),
+                    (p1, p2)->p1.getType().equals(p2.getType()))) {
+                return false;
+            }
+        }
+        return shareSameTypeHierarchy(a.getReturnType(), b.getReturnType());
+    }
+
     public boolean shareSameTypeHierarchy(final @NonNull Class<?> a, final @NonNull Class<?> b) {
         return a.isAssignableFrom(b)
                 || b.isAssignableFrom(a);
+    }
+
+    public boolean shareSameTypeHierarchy(final @NonNull Method a, final @NonNull Method b) {
+        return shareSameTypeHierarchy(a.getDeclaringClass(), b.getDeclaringClass());
     }
 
     /**
@@ -304,7 +337,8 @@ public final class _Reflect {
 
         return streamTypeHierarchy(type, InterfacePolicy.INCLUDE)
                 .filter(t->!t.equals(Object.class)) // do not process Object class.
-                .flatMap(t->streamMethods(t, ignoreAccess));
+                .flatMap(t->streamMethods(t, ignoreAccess))
+                .filter(m->!m.isBridge()); // don't include bridge methods
     }
 
     // -- SUPER CLASSES
@@ -813,6 +847,51 @@ public final class _Reflect {
             }
         }
         return false;
+    }
+
+    /**
+     * Will fail if methods are spread across different branches of the shared type hierarchy.
+     * @param methods assumed to pass checks #methodsSame and #shareSameTypeHierarchy
+     * @return the most specific with the type hierarchy
+     */
+    public static Optional<Method> mostSpecificMethodOf(
+            final @NonNull Can<Method> methods) {
+
+        switch(methods.getCardinality()) {
+        case ZERO:
+            return Optional.empty();
+        case ONE:
+            return methods.getFirst();
+        case MULTIPLE:
+            break; // fall through
+        }
+
+        // assert all methods share the same type hierarchy
+        val first = methods.getFirstElseFail();
+        methods
+            .stream()
+            .skip(1)
+            .forEach(next->{
+                _Assert.assertTrue(
+                        methodsWeaklySame(first, next));
+                _Assert.assertTrue(shareSameTypeHierarchy(first, next));
+            });
+
+        return methods
+            .stream()
+            .distinct()
+            .max((a, b)->{
+                val clsA = a.getDeclaringClass();
+                val clsB = b.getDeclaringClass();
+                if(clsA.equals(clsB)) {
+                    throw _Exceptions.unrecoverable("methods declared on the same type "
+                            + "cannot pass methodsWeaklySame check "
+                            + "and at the same time be distinct");
+                }
+                return clsA.isAssignableFrom(clsB)
+                        ? -1
+                        : 1;
+            });
     }
 
 }

@@ -36,6 +36,7 @@ import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.reflection._MethodFacades;
+import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel._testing.MethodRemover_forTesting;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
@@ -282,7 +283,17 @@ implements HasMetaModelContext {
 
         val declaringClass = scenario.declaringClass();
         val memberId = scenario.actionName();
-        val actionMethod = _Utils.findMethodByNameOrFail(declaringClass, memberId);
+
+        val matchingActionMethods = _Utils.findMethodsByName(declaringClass, memberId);
+
+        //TODO[CAUSEWAY-3556] this logic should be moved to the _ClassCache
+        val actionMethod = matchingActionMethods.isCardinalityMultiple()
+                ? _Reflect.mostSpecificMethodOf(matchingActionMethods).orElseThrow()
+                : matchingActionMethods.getSingletonOrFail();
+
+        //_Assert.assertEquals(1, matchingActionMethods.size(), ()->String.format("action by id '%s' could not be resolved", memberId));
+
+        //val actionMethod = matchingActionMethods.getSingletonOrFail();
         val paramTypes = actionMethod.getParameterTypes();
         val facetHolder = actionFacetHolder(declaringClass, memberId, paramTypes);
         val facetedMethod = FacetedMethod.createForAction(getMetaModelContext(), declaringClass, memberId, paramTypes);

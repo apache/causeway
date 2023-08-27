@@ -19,11 +19,11 @@
 package org.apache.causeway.core.metamodel.facets.param.parameter;
 
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.springframework.lang.Nullable;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -35,6 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.spec.Specification;
+import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet.Semantics;
@@ -129,8 +130,6 @@ extends FacetFactoryTestAbstract {
             test(Customer.class);
         }
 
-        //TODO[CAUSEWAY-3556] enable before merge into master
-        @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
         @Test
         public void withGenericallyOverwrittenAnnotation() {
 
@@ -145,6 +144,24 @@ extends FacetFactoryTestAbstract {
                 public void someAction(
                         @Parameter(maxLength = 30) @Nullable
                         final String name) { }
+            }
+
+            //TODO[CAUSEWAY-3556] debugging
+            {
+                Stream.concat(Stream.of(Base.class.getMethods()), Stream.of(Customer.class.getMethods()))
+                //Stream.of(Customer.class.getMethods())
+                    .filter(method->method.getName().equals("someAction"))
+                    .forEach(method->System.err.printf("method: %s%n"
+                            + "\tgeneric->%b%n"
+                            + "\tbridge->%b%n"
+                            + "\tsynth->%b%n"
+                            + "\tdeclaringCls->%s%n",
+                            method,
+                            _Reflect.hasGenericBounds(method),
+                            method.isBridge(),
+                            method.isSynthetic(),
+                            method.getDeclaringClass()
+                            ));
             }
 
             test(Customer.class);
