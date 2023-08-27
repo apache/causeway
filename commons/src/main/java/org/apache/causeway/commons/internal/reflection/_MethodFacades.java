@@ -142,7 +142,8 @@ public class _MethodFacades {
         @Override public String getParameterName(final int paramNum) {
             return method.getParameters()[paramNum].getName();
         }
-        @Override public <A extends Annotation> Optional<A> synthesizeOnParameter(final Class<A> annotationType, final int paramNum) {
+        @Override public <A extends Annotation> Optional<A> synthesizeOnParameter(
+                final Class<A> annotationType, final int paramNum) {
             return _Annotations.synthesize(method.getParameters()[paramNum], annotationType);
         }
         @Override public Object[] getArguments(final Object[] executionParameters) {

@@ -23,12 +23,15 @@ import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
+import org.springframework.core.MethodParameter;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
@@ -392,6 +395,16 @@ public interface FacetFactory {
          */
         public <A extends Annotation> Optional<A> synthesizeOnParameter(final Class<A> annotationType) {
             return super.method.synthesizeOnParameter(annotationType, paramNum);
+        }
+
+        //TODO[CAUSEWAY-3556] does not seem to synthesize on type hierarchy
+        public Stream<Annotation> streamParameterAnnotations() {
+            val parameterAnnotations = MethodParameter
+                    .forExecutable(
+                            this.getMethod().asExecutable(),
+                            this.getParamNum())
+                    .getParameterAnnotations();
+            return _NullSafe.stream(parameterAnnotations);
         }
 
         //JUnit
