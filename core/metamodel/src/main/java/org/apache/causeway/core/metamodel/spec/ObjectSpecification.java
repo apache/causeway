@@ -516,7 +516,6 @@ extends
      * @since 2.0
      */
     default Stream<FacetHolder> streamFacetHolders(){
-
         val self = Stream.of(this);
         val actions = streamAnyActions(MixedIn.EXCLUDED);
         val actionParameters = streamAnyActions(MixedIn.EXCLUDED)
@@ -527,7 +526,6 @@ extends
         val collections = streamCollections(MixedIn.EXCLUDED);
 
         return _Streams.concat(self, actions, actionParameters, properties, collections);
-
     }
 
     /**

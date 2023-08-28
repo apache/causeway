@@ -217,6 +217,13 @@ public interface ObjectAction extends ObjectMember {
     Can<ObjectActionParameter> getParameters(Predicate<ObjectActionParameter> predicate);
 
     /**
+     * Returns the parameter with provided zero-based index.
+     */
+    default ObjectActionParameter getParameterByIndex(final int paramIndex) {
+        return getParameters().getElseFail(paramIndex);
+    }
+
+    /**
      * Returns the parameter with provided id.
      */
     ObjectActionParameter getParameterById(String paramId);

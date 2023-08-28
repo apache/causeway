@@ -16,31 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.testdomain.model.good;
+package org.apache.causeway.commons.internal.reflection;
 
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
+/**
+ * Has sample actions 1..4.
+ */
+abstract class _Abstract {
 
-import lombok.Getter;
-import lombok.Setter;
-
-@DomainObject(nature = Nature.VIEW_MODEL)
-public class ProperMemberInheritance_usingAbstract
-extends ProperMemberInheritanceAbstract {
-
-    @Action
-    @ActionLayout(named = "foo", describedAs = "bar")
-    @Override
-    public void sampleActionOverride() {
+    static _Expectations expectations() {
+        return _Expectations.builder()
+                .methodNameOrdinals("1,2+,3,4+")
+                .methodCount(4)
+                .syntheticCount(0)
+                .bridgeCount(0)
+                .build();
     }
 
-    @Property
-    @PropertyLayout(named = "foo", describedAs = "bar")
-    @Getter @Setter
-    private String samplePropertyOverride;
+    abstract void sampleAction1();
+    abstract String sampleAction2(String x);
+
+    void sampleAction3() { }
+    String sampleAction4(final String x) { return x; }
 
 }

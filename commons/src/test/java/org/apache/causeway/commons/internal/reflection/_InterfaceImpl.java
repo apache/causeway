@@ -16,21 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.testdomain.model.good;
+package org.apache.causeway.commons.internal.reflection;
 
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.Property;
+/**
+ * Has sample actions 1..6.
+ */
+class _InterfaceImpl
+implements _Interface {
 
-import lombok.Getter;
-import lombok.Setter;
+    static _Expectations expectations() {
+        return _Expectations.builder()
+                .methodNameOrdinals("1,2+,3,4+,5,6+")
+                .methodCount(6)
+                .syntheticCount(0)
+                .bridgeCount(0)
+                .build();
+    }
 
-@DomainObject(nature = Nature.VIEW_MODEL)
-public class ProperGenericImpl
-implements ProperGenericInterface<String> {
+    @Override public void sampleAction1() {}
+    @Override public String sampleAction2(final String x) { return x; }
 
-    @Property
-    @Getter @Setter
-    private String value = "aValue";
+    // sample actions 3..4 inherited without overriding
+
+    void sampleAction5() { }
+    String sampleAction6(final String x) { return x; }
 
 }

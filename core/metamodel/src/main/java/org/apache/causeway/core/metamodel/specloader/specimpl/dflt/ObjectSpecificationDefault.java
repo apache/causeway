@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.specloader.specimpl.dflt;
 
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -84,7 +83,6 @@ implements FacetHolder {
     private Map<Method, ObjectMember> membersByMethod = null;
 
     private final FacetedMethodsBuilder facetedMethodsBuilder;
-
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
 
     @Getter(onMethod_ = {@Override})
@@ -275,7 +273,6 @@ implements FacetHolder {
         val membersByMethod = _Maps.<Method, ObjectMember>newHashMap();
         cataloguePropertiesAndCollections(membersByMethod::put);
         catalogueActions(membersByMethod::put);
-        postprocessSyntheticMembers(membersByMethod);
         return membersByMethod;
     }
 
@@ -286,6 +283,7 @@ implements FacetHolder {
                 .map(ImperativeFacet::getMethods)
                 .flatMap(Can::stream)
                 .map(MethodFacade::asMethodElseFail) // expected regular
+                .map(_Reflect::guardAgainstSynthetic) // expected non-synthetic
                 .forEach(imperativeFacetMethod->onMember.accept(imperativeFacetMethod, field)));
     }
 
@@ -296,30 +294,9 @@ implements FacetHolder {
                 .map(ImperativeFacet::getMethods)
                 .flatMap(Can::stream)
                 .map(MethodFacade::asMethodForIntrospection)
+                .map(_Reflect::guardAgainstSynthetic) // expected non-synthetic
                 .forEach(imperativeFacetMethod->
                     onMember.accept(imperativeFacetMethod, userAction)));
-    }
-
-    /**
-     * for any synthetic method also add an entry with its regular method,
-     * as found in the method's declaring class type-hierarchy
-     */
-    private void postprocessSyntheticMembers(final HashMap<Method, ObjectMember> membersByMethod) {
-        val syntheticEntries = Can.ofStream(
-            membersByMethod
-            .entrySet()
-            .stream()
-            .filter(entry->entry.getKey().isSynthetic()));
-
-        syntheticEntries
-        .forEach(entry->{
-            val objectMember = entry.getValue();
-            val syntheticMethod = entry.getKey();
-            _Reflect
-            .lookupRegularMethodForSynthetic(syntheticMethod)
-            .ifPresent(regularMethod->
-                membersByMethod.computeIfAbsent(regularMethod, key->objectMember));
-        });
     }
 
     // -- ELEMENT SPECIFICATION

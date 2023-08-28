@@ -29,18 +29,18 @@ import org.apache.causeway.applib.annotation.Property;
 import lombok.Getter;
 import lombok.Setter;
 
-public interface ProperGenericInterface<T> {
+public abstract class ProperGenericAbstract<T> {
 
-    T getValue();
-    void setValue(T prop);
+    abstract T getValue();
+    abstract void setValue(T prop);
 
-    T sampleAction(final T value);
+    abstract T sampleAction(final T value);
 
     // -- IMPL
 
     @DomainObject(nature = Nature.VIEW_MODEL)
     public static class Impl
-    implements ProperGenericInterface<String> {
+    extends ProperGenericAbstract<String> {
 
         @Property
         @Getter @Setter
@@ -48,7 +48,7 @@ public interface ProperGenericInterface<T> {
 
         @Action
         @Override
-        public String sampleAction(@Parameter @Nullable final String value) {
+        public String sampleAction(@Parameter final @Nullable String value) {
             return value;
         }
 

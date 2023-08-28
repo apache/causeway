@@ -50,6 +50,7 @@ import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.applib.services.title.TitleService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -59,6 +60,8 @@ import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
+import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet.Semantics;
 import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacetFromAction;
 import org.apache.causeway.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod;
@@ -80,11 +83,12 @@ import org.apache.causeway.testdomain.model.good.ProperChoicesWhenActionHasParam
 import org.apache.causeway.testdomain.model.good.ProperChoicesWhenChoicesFrom;
 import org.apache.causeway.testdomain.model.good.ProperElementTypeVm;
 import org.apache.causeway.testdomain.model.good.ProperFullyImpl;
-import org.apache.causeway.testdomain.model.good.ProperGenericImpl;
+import org.apache.causeway.testdomain.model.good.ProperGenericAbstract;
+import org.apache.causeway.testdomain.model.good.ProperGenericInterface;
 import org.apache.causeway.testdomain.model.good.ProperInterface2;
 import org.apache.causeway.testdomain.model.good.ProperMemberInheritanceInterface;
-import org.apache.causeway.testdomain.model.good.ProperMemberInheritance_usingAbstract;
-import org.apache.causeway.testdomain.model.good.ProperMemberInheritance_usingInterface;
+import org.apache.causeway.testdomain.model.good.ProperMemberInheritanceUsingAbstract;
+import org.apache.causeway.testdomain.model.good.ProperMemberInheritanceUsingInterface;
 import org.apache.causeway.testdomain.model.good.ProperMemberSupport;
 import org.apache.causeway.testdomain.model.good.ProperMemberSupportDiscovery;
 import org.apache.causeway.testdomain.model.good.ProperMixinContribution;
@@ -241,11 +245,26 @@ class DomainModelTest_usingGoodDomain {
         tester.assertLayout("layout");
     }
 
-    @Test
-    void genericInterface_whenImplemented_shouldBeSupported() {
-        val tester = testerFactory.propertyTester(ProperGenericImpl.class, "value");
-        tester.assertExists(true);
-        tester.assertValue("aValue");
+    @ParameterizedTest
+    @ValueSource(classes = {
+            ProperGenericInterface.Impl.class,
+            ProperGenericAbstract.Impl.class,
+    })
+    void genericBaseType_whenImplemented_shouldBeSupported(final Class<?> classUnderTest) {
+        val propTester = testerFactory.propertyTester(classUnderTest, "value");
+        propTester.assertExists(true);
+        propTester.assertValue("aValue");
+
+        val actTester = testerFactory.actionTester(classUnderTest, "sampleAction");
+        actTester.assertExists(true);
+        actTester.assertInvocationResult("aValue", arg0->"aValue");
+
+        // assert that we properly pickup the @Nullable annotation on arg-0
+        val argMeta = actTester.getActionMetaModelElseFail().getParameterByIndex(0);
+        val argMandatoryFacet = argMeta.lookupFacet(MandatoryFacet.class)
+            .orElseThrow(()->_Exceptions.unrecoverable("missing MandatoryFacet on action parameter"));
+        assertEquals(Semantics.OPTIONAL, argMandatoryFacet.getSemantics());
+        actTester.assertInvocationResult(null, arg0->null);
     }
 
     @ParameterizedTest
@@ -269,7 +288,6 @@ class DomainModelTest_usingGoodDomain {
             assertEquals("inherited title", domainObject.getTitle());
             assertEquals("inherited icon", iconFacet.iconName(domainObject));
         }
-
     }
 
     @ParameterizedTest
@@ -968,8 +986,8 @@ class DomainModelTest_usingGoodDomain {
 
     static Stream<Arguments> provideProperMemberInheritanceTypes() {
         return Stream.of(
-                Arguments.of(ProperMemberInheritance_usingAbstract.class),
-                Arguments.of(ProperMemberInheritance_usingInterface.class),
+                Arguments.of(ProperMemberInheritanceUsingAbstract.class),
+                Arguments.of(ProperMemberInheritanceUsingInterface.class),
                 Arguments.of(ProperMemberInheritanceInterface.class)
         );
     }

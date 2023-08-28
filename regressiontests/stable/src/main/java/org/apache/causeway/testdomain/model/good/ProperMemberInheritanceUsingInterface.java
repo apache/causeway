@@ -18,40 +18,29 @@
  */
 package org.apache.causeway.testdomain.model.good;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
 
 import lombok.Getter;
 import lombok.Setter;
 
-public interface ProperGenericInterface<T> {
+@DomainObject(nature = Nature.VIEW_MODEL)
+public class ProperMemberInheritanceUsingInterface
+implements ProperMemberInheritanceInterface {
 
-    T getValue();
-    void setValue(T prop);
-
-    T sampleAction(final T value);
-
-    // -- IMPL
-
-    @DomainObject(nature = Nature.VIEW_MODEL)
-    public static class Impl
-    implements ProperGenericInterface<String> {
-
-        @Property
-        @Getter @Setter
-        private String value = "aValue";
-
-        @Action
-        @Override
-        public String sampleAction(@Parameter @Nullable final String value) {
-            return value;
-        }
-
+    @Action
+    @ActionLayout(named = "foo", describedAs = "bar")
+    @Override
+    public void sampleActionOverride() {
     }
+
+    @Property
+    @PropertyLayout(named = "foo", describedAs = "bar")
+    @Getter @Setter
+    private String samplePropertyOverride;
 
 }
