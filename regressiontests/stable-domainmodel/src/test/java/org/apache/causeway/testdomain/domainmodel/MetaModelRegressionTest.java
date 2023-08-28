@@ -28,7 +28,6 @@ import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
@@ -72,8 +71,6 @@ class MetaModelRegressionTest {
         assertNotNull(metaModelServiceMenu);
     }
 
-    //TODO[CAUSEWAY-3556] activate before merge
-    @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
     @Test
     @SneakyThrows
     @UseReporter(DiffReporter.class)

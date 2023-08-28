@@ -167,6 +167,8 @@ public final class _ClassCache implements AutoCloseable {
             return Optional.of(syntheticMethod);
         }
 
+        //TODO[CAUSEWAY-3556] why is this even needed? (assuming class-cache only collects non synthetic, or does it)
+
         val matchingMethods = streamAllMethods(syntheticMethod.getDeclaringClass())
                 .filter(method->!method.isSynthetic())
                 .filter(method->_Reflect.methodsWeaklySame(method, syntheticMethod))
@@ -269,7 +271,8 @@ public final class _ClassCache implements AutoCloseable {
     // -- UTILITY
 
     public static boolean methodExcludeFilter(final Method method) {
-        return Modifier.isStatic(method.getModifiers())
+        return method.isBridge()
+                || Modifier.isStatic(method.getModifiers())
                 || method.getDeclaringClass().equals(Object.class)
                 || _Reflect.hasGenericBounds(method);
     }

@@ -18,32 +18,27 @@
  */
 package org.apache.causeway.commons.internal.reflection;
 
-import java.util.List;
+/**
+ * Has sample actions 1..6.
+ */
+class _InterfaceImpl
+implements _Interface {
 
-import lombok.Getter;
-import lombok.Setter;
-
-abstract class ProperMemberInheritanceAbstract {
-
-    public String title() {
-        return "inherited title";
+    static _Expectations expectations() {
+        return _Expectations.builder()
+                .methodNameOrdinals("1,2+,3,4+,5,6+")
+                .methodCount(6)
+                .syntheticCount(0)
+                .bridgeCount(0)
+                .build();
     }
 
-    public void sampleAction() {
-    }
+    @Override public void sampleAction1() {}
+    @Override public String sampleAction2(final String x) { return x; }
 
-    @Getter @Setter
-    private String sampleProperty;
+    // sample actions 3..4 inherited without overriding
 
-    @Getter @Setter
-    private List<String> sampleCollection;
-
-    // -- OVERRIDING TESTS
-
-    public void sampleActionOverride() {
-    }
-
-    @Getter @Setter
-    private String samplePropertyOverride;
+    void sampleAction5() { }
+    String sampleAction6(final String x) { return x; }
 
 }

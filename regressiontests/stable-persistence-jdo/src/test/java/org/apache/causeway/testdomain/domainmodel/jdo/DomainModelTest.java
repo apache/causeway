@@ -23,7 +23,6 @@ import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
@@ -68,8 +67,6 @@ class DomainModelTest {
     @Inject private ServiceRegistry serviceRegistry;
     @Inject private SpecificationLoader specificationLoader;
 
-    //TODO[CAUSEWAY-3556] activate before merge
-    @DisabledIfSystemProperty(named = "isRunningWithSurefire", matches = "true")
     @Test
     void goodDomain_shouldPassValidation() {
         //debug();

@@ -18,17 +18,24 @@
  */
 package org.apache.causeway.commons.internal.reflection;
 
-import lombok.Getter;
-import lombok.Setter;
+/**
+ * Has sample actions 1..4.
+ */
+abstract class _Abstract {
 
-public class ProperMemberInheritanceUsingAbstract
-extends ProperMemberInheritanceAbstract {
-
-    @Override
-    public void sampleActionOverride() {
+    static _Expectations expectations() {
+        return _Expectations.builder()
+                .methodNameOrdinals("1,2+,3,4+")
+                .methodCount(4)
+                .syntheticCount(0)
+                .bridgeCount(0)
+                .build();
     }
 
-    @Getter @Setter
-    private String samplePropertyOverride;
+    abstract void sampleAction1();
+    abstract String sampleAction2(String x);
+
+    void sampleAction3() { }
+    String sampleAction4(final String x) { return x; }
 
 }

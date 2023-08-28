@@ -22,6 +22,8 @@ import java.lang.reflect.Method;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -29,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
 
+import lombok.SneakyThrows;
 import lombok.val;
 
 class ClassCacheTest {
@@ -78,42 +81,32 @@ class ClassCacheTest {
         assertContainsMethod(declaredMethods, "specificAction");
     }
 
-    @Test
-    void syntheticLookupTest() {
 
-        val titleMethods =
-            classCache.streamDeclaredMethodsHaving(
-                    ProperMemberInheritanceUsingAbstract.class, "test", m->m.getName().equals("title"))
-            .collect(Can.toCan());
+    @ParameterizedTest(name = "{index}: {0}")
+    @ValueSource(classes = {
+            _Abstract.class,
+            _AbstractImpl.class,
+            _Interface.class,
+            _InterfaceImpl.class,
+            _GenericAbstract.class,
+            _GenericAbstractImpl.class,
+            _GenericInterface.class,
+            _GenericInterfaceImpl.class,
+    })
+    void syntheticLookupTest(final Class<?> classUnderTest) {
+        val declaredMethods = Can.ofStream(
+                classCache.streamPublicOrDeclaredMethods(classUnderTest));
 
-        assertContainsMethod(titleMethods, "title");
-//        assertEquals(1, titleMethods.size());
-
-        //titleMethods.forEach(m->assertTrue(!m.isSynthetic()));
-
-        val syntetics = _Reflect.streamAllMethods(ProperMemberInheritanceUsingAbstract.class, true)
-            .filter(m->m.isSynthetic())
-            .collect(Can.toCan());
-
-        syntetics.forEach(syn->{
-
-            System.err.printf("syn %s%n", syn);
-
-            classCache.streamAllMethods(syn.getDeclaringClass())
-                    .filter(method->!method.isSynthetic())
-                    .filter(method->method.getName().equals(syn.getName()))
-                    .forEach(method->{
-                        System.err.printf("\t %s%n", method);
-                    });
-
-            val x = classCache.lookupRegularMethodForSynthetic(syn);
-
-            assertTrue(x.isPresent());
-        });
-
+        val expectations = extractExpectations(classUnderTest);
+        expectations.assertAll(declaredMethods);
     }
 
     // -- HELPER
+
+    @SneakyThrows
+    private _Expectations extractExpectations(final Class<?> classUnderTest) {
+        return (_Expectations) classUnderTest.getDeclaredMethod("expectations").invoke(null);
+    }
 
     private void assertContainsMethod(final Can<Method> declaredMethods, final String methodName) {
 
