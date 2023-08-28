@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -42,6 +43,7 @@ import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
+import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.metamodel.commons.MethodUtil;
 import org.apache.causeway.core.metamodel.commons.ToString;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
@@ -359,10 +361,13 @@ implements HasMetaModelContext {
             return null;
         }
 
-        // build action (first convert any synthetic method to a regular one)
+        //TODO[CAUSEWAY-3556] simplify
 
-        return _ClassCache.getInstance()
-            .lookupRegularMethodForSynthetic(actionMethod)
+        _Reflect.guardAgainstSynthetic(actionMethod);
+
+        // build action
+
+        return Optional.of(actionMethod)
             .map(this::createActionFacetedMethod)
             .filter(_NullSafe::isPresent)
             .orElse(null);

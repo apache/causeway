@@ -44,7 +44,7 @@ import lombok.experimental.UtilityClass;
 public class _MethodFacades {
 
     public static MethodFacade paramsAsTuple(final @NonNull Method method, final @NonNull Constructor<?> patConstructor) {
-        return new ParamsAsTupleMethod(patConstructor, regularMethodForSyntheticElseFail(method));
+        return new ParamsAsTupleMethod(patConstructor, _Reflect.guardAgainstSynthetic(method));
     }
 
     /**
@@ -57,7 +57,7 @@ public class _MethodFacades {
      * </ul>
      */
     public static MethodFacade regular(final Method method) {
-        return new RegularMethod(regularMethodForSyntheticElseFail(method));
+        return new RegularMethod(_Reflect.guardAgainstSynthetic(method));
     }
 
     public static interface MethodFacade {
@@ -215,14 +215,6 @@ public class _MethodFacades {
         @Override public String toString() {
             return method.toString();
         }
-    }
-
-    // -- HELPER
-
-    private Method regularMethodForSyntheticElseFail(final Method method) {
-        return _ClassCache.getInstance()
-            .lookupRegularMethodForSynthetic(method)
-            .orElseThrow(()->_Exceptions.illegalArgument("cannot resolve syntetic method %s to a regular one", method));
     }
 
 }

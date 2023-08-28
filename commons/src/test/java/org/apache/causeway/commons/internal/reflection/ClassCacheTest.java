@@ -92,8 +92,10 @@ class ClassCacheTest {
             _GenericAbstractImpl.class,
             _GenericInterface.class,
             _GenericInterfaceImpl.class,
+            _Mixins.Task1.Mixin.class,
+            _Mixins.Task2.Mixin.class,
     })
-    void syntheticLookupTest(final Class<?> classUnderTest) {
+    void methodEnumeration(final Class<?> classUnderTest) {
         val declaredMethods = Can.ofStream(
                 classCache.streamPublicOrDeclaredMethods(classUnderTest));
 
@@ -101,11 +103,32 @@ class ClassCacheTest {
         expectations.assertAll(declaredMethods);
     }
 
+    //TODO[CAUSEWAY-3556] cleanup
+//    @ParameterizedTest(name = "{index}: {0}")
+//    @ValueSource(classes = {
+//            _Mixins.Task1.Mixin.class,
+//            _Mixins.Task2.Mixin.class,
+//    })
+//    void syn(final Class<?> classUnderTest) {
+//        val declaredMethods = Can.ofStream(
+//                classCache.streamPublicOrDeclaredMethods(classUnderTest));
+//
+//        System.err.printf("%s%n", declaredMethods.stream()
+//                .map(_Util::methodSummary)
+//                .collect(Collectors.joining("\n")));
+//
+//        val expectations = extractExpectations(classUnderTest);
+//        expectations.assertAll(declaredMethods);
+//    }
+
     // -- HELPER
 
     @SneakyThrows
     private _Expectations extractExpectations(final Class<?> classUnderTest) {
-        return (_Expectations) classUnderTest.getDeclaredMethod("expectations").invoke(null);
+        final Class<?> classThatProvidesExpectations = classUnderTest.getSimpleName().equals("Mixin")
+                ? classUnderTest.getEnclosingClass()
+                : classUnderTest;
+        return (_Expectations) classThatProvidesExpectations.getDeclaredMethod("expectations").invoke(null);
     }
 
     private void assertContainsMethod(final Can<Method> declaredMethods, final String methodName) {

@@ -32,7 +32,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -780,29 +779,36 @@ public final class _Reflect {
 
     }
 
-    /**
-     * Lookup regular method for a synthetic one in the method's declaring class type-hierarchy.
-     */
-    public Optional<Method> lookupRegularMethodForSynthetic(final @NonNull Method syntheticMethod) {
-
-        if(!syntheticMethod.isSynthetic()) {
-            return Optional.of(syntheticMethod);
-        }
-
-        return streamTypeHierarchy(syntheticMethod.getDeclaringClass(), InterfacePolicy.INCLUDE)
-        .flatMap(type->_NullSafe.stream(type.getDeclaredMethods()))
-        .filter(methodMatcherOnNameAndSignature(syntheticMethod))
-        .filter(method->!method.isSynthetic())
-        .findFirst();
+    public Method guardAgainstSynthetic(final Method method) {
+        _Assert.assertFalse(method.isSynthetic(), ()->
+            String.format("unsupported synthetic method %s", method));
+        return method;
     }
 
-    private Predicate<Method> methodMatcherOnNameAndSignature(final @NonNull Method ref) {
-        val refSignature = ref.getParameterTypes();
-        return other->
-            (!ref.getName().equals(other.getName()))
-            ? false
-            : Arrays.equals(refSignature, other.getParameterTypes());
-    }
+    //XXX replaced by method in _ClassCache
+//    /**
+//     * Lookup regular method for a synthetic one in the method's declaring class type-hierarchy.
+//     */
+//    public Optional<Method> lookupRegularMethodForSynthetic(final @NonNull Method syntheticMethod) {
+//
+//        if(!syntheticMethod.isSynthetic()) {
+//            return Optional.of(syntheticMethod);
+//        }
+//
+//        return streamTypeHierarchy(syntheticMethod.getDeclaringClass(), InterfacePolicy.INCLUDE)
+//        .flatMap(type->_NullSafe.stream(type.getDeclaredMethods()))
+//        .filter(methodMatcherOnNameAndSignature(syntheticMethod))
+//        .filter(method->!method.isSynthetic())
+//        .findFirst();
+//    }
+//
+//    private Predicate<Method> methodMatcherOnNameAndSignature(final @NonNull Method ref) {
+//        val refSignature = ref.getParameterTypes();
+//        return other->
+//            (!ref.getName().equals(other.getName()))
+//            ? false
+//            : Arrays.equals(refSignature, other.getParameterTypes());
+//    }
 
     public String methodToShortString(final @NonNull Method method) {
 

@@ -40,6 +40,7 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
+import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
 import org.apache.causeway.core.metamodel.commons.ToString;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -317,10 +318,10 @@ implements FacetHolder {
         .forEach(entry->{
             val objectMember = entry.getValue();
             val syntheticMethod = entry.getKey();
-            classCache
-            .lookupRegularMethodForSynthetic(syntheticMethod)
-            .ifPresent(regularMethod->
-                membersByMethod.computeIfAbsent(regularMethod, key->objectMember));
+            //TODO[CAUSEWAY-3556] clean up
+            _Reflect.guardAgainstSynthetic(syntheticMethod);
+//            .ifPresent(regularMethod->
+//                membersByMethod.computeIfAbsent(regularMethod, key->objectMember));
         });
     }
 

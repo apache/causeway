@@ -47,7 +47,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -140,11 +139,6 @@ public final class _ClassCache implements AutoCloseable {
                 classModel.nonPublicDeclaredMethodsByKey.values().stream());
     }
 
-    public Stream<Method> streamAllMethods(final Class<?> type) {
-        val classModel = inspectType(type);
-        return classModel.declaredMethods.stream();
-    }
-
     public Stream<Method> streamDeclaredMethods(final Class<?> type) {
         return inspectType(type).declaredMethods.stream();
     }
@@ -158,32 +152,56 @@ public final class _ClassCache implements AutoCloseable {
                 : matchingMethods.getSingletonOrFail();
     }
 
-    /**
-     * Lookup regular method for a synthetic one, in the method's declaring class type-hierarchy.
-     */
-    public Optional<Method> lookupRegularMethodForSynthetic(final @NonNull Method syntheticMethod) {
-
-        if(!syntheticMethod.isSynthetic()) {
-            return Optional.of(syntheticMethod);
-        }
-
-        //TODO[CAUSEWAY-3556] why is this even needed? (assuming class-cache only collects non synthetic, or does it)
-
-        val matchingMethods = streamAllMethods(syntheticMethod.getDeclaringClass())
-                .filter(method->!method.isSynthetic())
-                .filter(method->_Reflect.methodsWeaklySame(method, syntheticMethod))
-                .collect(Can.toCan());
-
-        return matchingMethods.isCardinalityMultiple()
-                ? _Reflect.mostSpecificMethodOf(matchingMethods)
-                : matchingMethods.getSingleton();
-    }
+//    /**
+//     * Lookup regular method for a synthetic one, in the method's declaring class type-hierarchy.
+//     */
+//    public Optional<Method> lookupRegularMethodForSynthetic(final @NonNull Method syntheticMethod) {
+//
+//        if(!syntheticMethod.isSynthetic()) {
+//            return Optional.of(syntheticMethod);
+//        }
+//
+//        _Exceptions.throwUnexpectedCodeReach();
+//
+//        //TODO[CAUSEWAY-3556] why is this even needed? (assuming class-cache only collects non synthetic, or does it)
+//
+//        val matchingMethods = streamAllMethods(syntheticMethod.getDeclaringClass())
+//                .filter(method->!method.isSynthetic())
+//                .filter(method->_Reflect.methodsWeaklySame(method, syntheticMethod))
+//                .collect(Can.toCan());
+//
+//        return matchingMethods.isCardinalityMultiple()
+//                ? _Reflect.mostSpecificMethodOf(matchingMethods)
+//                : matchingMethods.getSingleton();
+//    }
 
     // -- FIELD SEMANTICS
 
     public Stream<Field> streamDeclaredFields(final Class<?> type) {
         return inspectType(type).declaredFields.stream();
     }
+
+    // -- FIELD vs GETTER
+
+    public Optional<Method> getterForField(final Class<?> type, final Field field) {
+        val capitalizedFieldName = _Strings.capitalize(field.getName());
+        return Stream.of("get", "is")
+        .map(prefix->prefix + capitalizedFieldName)
+        .map(methodName->lookupPublicOrDeclaredMethod(type, methodName, _Constants.emptyClasses))
+        .filter(_Reflect.Filter.isGetter())
+        .findFirst();
+    }
+
+    public Optional<Field> fieldForGetter(final Class<?> type, final Method getterCandidate) {
+        return Optional.ofNullable(findFieldForGetter(getterCandidate));
+    }
+
+    // -- METHOD STREAMS
+
+//    private Stream<Method> streamAllMethods(final Class<?> type) {
+//        val classModel = inspectType(type);
+//        return classModel.declaredMethods.stream();
+//    }
 
     /**
      * Returns a Stream of declared Methods, that pass the given {@code filter},
@@ -207,20 +225,6 @@ public final class _ClassCache implements AutoCloseable {
         }
     }
 
-    // -- FIELD vs GETTER
-
-    public Optional<Method> getterForField(final Class<?> type, final Field field) {
-        val capitalizedFieldName = _Strings.capitalize(field.getName());
-        return Stream.of("get", "is")
-        .map(prefix->prefix + capitalizedFieldName)
-        .map(methodName->lookupPublicOrDeclaredMethod(type, methodName, _Constants.emptyClasses))
-        .filter(_Reflect.Filter.isGetter())
-        .findFirst();
-    }
-
-    public Optional<Field> fieldForGetter(final Class<?> type, final Method getterCandidate) {
-        return Optional.ofNullable(findFieldForGetter(getterCandidate));
-    }
 
     // -- IMPLEMENATION DETAILS
 
@@ -288,6 +292,7 @@ public final class _ClassCache implements AutoCloseable {
 
             return inspectedTypes.computeIfAbsent(type, __->{
 
+              //TODO[CAUSEWAY-3556] optimization candidate (needs inspectedTypes to be a ConcurrentHashMap)
 //                val declaredMethods = _Reflect.streamTypeHierarchy(type, InterfacePolicy.INCLUDE)
 //                    .filter(cls->cls.equals(Object.class))
 //                    .flatMap(cls->{
