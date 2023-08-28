@@ -40,11 +40,11 @@ public class _Expectations {
                 .methodCount(methods.size())
                 .syntheticCount((int) methods.stream()
                         .filter(method->method.isSynthetic())
-                        .peek(m->System.err.printf("syn: %s%n", m))
+                        //.peek(m->System.err.printf("syn: %s%n", m)) // debug
                         .count())
                 .bridgeCount((int) methods.stream()
                         .filter(method->method.isBridge())
-                        .peek(m->System.err.printf("bdg: %s%n", m))
+                        //.peek(m->System.err.printf("bdg: %s%n", m)) // debug
                         .count())
                 .methodNameOrdinals(methods.stream()
                         .sorted((a, b)->a.getName().compareTo(b.getName()))

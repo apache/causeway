@@ -39,7 +39,7 @@ class _Util {
                 ordinal,
                 _NullSafe.stream(method.getParameterTypes())
                     .findFirst()
-                    .map(paramType->paramType.equals(String.class) ? "+" : "-")
+                    .map(paramType->paramType.equals(String.class) ? "+" : "?")
                     .orElse(""),
                 _Reflect.hasGenericParam(method) ? "p" : "",
                 _Reflect.hasGenericReturn(method) ? "r" : "",
