@@ -41,7 +41,7 @@
 		<git-plugin.propertiesDir>org/apache/causeway/tooling</git-plugin.propertiesDir>
 		<gradle-tooling.version>7.1.1</gradle-tooling.version>
 		<maven-model-builder.version>3.9.4</maven-model-builder.version>
-		<picocli.version>4.7.4</picocli.version>
+		<picocli.version>4.7.5</picocli.version>
 		
 		<!-- brings in structurizr-core as a transitive dependency -->
 		<structurizr-export.version>1.16.1</structurizr-export.version>
