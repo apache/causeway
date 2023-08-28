@@ -35,6 +35,7 @@ import java.lang.reflect.TypeVariable;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -785,7 +786,7 @@ public final class _Reflect {
         return method;
     }
 
-    //XXX replaced by method in _ClassCache
+    //XXX no longer needed
 //    /**
 //     * Lookup regular method for a synthetic one in the method's declaring class type-hierarchy.
 //     */
@@ -811,14 +812,38 @@ public final class _Reflect {
 //    }
 
     public String methodToShortString(final @NonNull Method method) {
-
         return method.getName() + "(" +
-
             Stream.of(method.getParameterTypes())
             .map(parameterType->parameterType.getTypeName())
             .collect(Collectors.joining(", "))
-
         + ")";
+    }
+
+    /**
+     * Debugging utility.
+     */
+    public String methodSummary(final @Nullable Method method) {
+        return methodSummary(method,
+                cls->cls.getSimpleName().substring(0, 3));
+    }
+
+    /**
+     * Debugging utility.
+     */
+    public String methodSummary(
+            final @Nullable Method method, final Function<Class<?>, String> typeToShortName) {
+        return Optional.ofNullable(method)
+        .map(Method::getName)
+        .map(name->String.format("%s(%s)%s%s%s%s",
+                name,
+                _NullSafe.stream(method.getParameterTypes())
+                    .map(typeToShortName)
+                    .collect(Collectors.joining(",")),
+                _Reflect.hasGenericParam(method) ? "p" : "",
+                _Reflect.hasGenericReturn(method) ? "r" : "",
+                method.isSynthetic() ? "s" : "",
+                method.isBridge() ? "b" : ""))
+        .orElse("-");
     }
 
     /**

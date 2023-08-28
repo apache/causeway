@@ -103,24 +103,6 @@ class ClassCacheTest {
         expectations.assertAll(declaredMethods);
     }
 
-    //TODO[CAUSEWAY-3556] cleanup
-//    @ParameterizedTest(name = "{index}: {0}")
-//    @ValueSource(classes = {
-//            _Mixins.Task1.Mixin.class,
-//            _Mixins.Task2.Mixin.class,
-//    })
-//    void syn(final Class<?> classUnderTest) {
-//        val declaredMethods = Can.ofStream(
-//                classCache.streamPublicOrDeclaredMethods(classUnderTest));
-//
-//        System.err.printf("%s%n", declaredMethods.stream()
-//                .map(_Util::methodSummary)
-//                .collect(Collectors.joining("\n")));
-//
-//        val expectations = extractExpectations(classUnderTest);
-//        expectations.assertAll(declaredMethods);
-//    }
-
     // -- HELPER
 
     @SneakyThrows

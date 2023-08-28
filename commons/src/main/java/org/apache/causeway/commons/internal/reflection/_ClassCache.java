@@ -152,29 +152,6 @@ public final class _ClassCache implements AutoCloseable {
                 : matchingMethods.getSingletonOrFail();
     }
 
-//    /**
-//     * Lookup regular method for a synthetic one, in the method's declaring class type-hierarchy.
-//     */
-//    public Optional<Method> lookupRegularMethodForSynthetic(final @NonNull Method syntheticMethod) {
-//
-//        if(!syntheticMethod.isSynthetic()) {
-//            return Optional.of(syntheticMethod);
-//        }
-//
-//        _Exceptions.throwUnexpectedCodeReach();
-//
-//        //TODO[CAUSEWAY-3556] why is this even needed? (assuming class-cache only collects non synthetic, or does it)
-//
-//        val matchingMethods = streamAllMethods(syntheticMethod.getDeclaringClass())
-//                .filter(method->!method.isSynthetic())
-//                .filter(method->_Reflect.methodsWeaklySame(method, syntheticMethod))
-//                .collect(Can.toCan());
-//
-//        return matchingMethods.isCardinalityMultiple()
-//                ? _Reflect.mostSpecificMethodOf(matchingMethods)
-//                : matchingMethods.getSingleton();
-//    }
-
     // -- FIELD SEMANTICS
 
     public Stream<Field> streamDeclaredFields(final Class<?> type) {

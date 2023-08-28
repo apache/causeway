@@ -361,10 +361,6 @@ implements HasMetaModelContext {
             return null;
         }
 
-        //TODO[CAUSEWAY-3556] simplify
-
-        _Reflect.guardAgainstSynthetic(actionMethod);
-
         // build action
 
         return Optional.of(actionMethod)
@@ -418,6 +414,9 @@ implements HasMetaModelContext {
     }
 
     private boolean representsAction(final Method actionMethod) {
+
+        //[CAUSEWAY-3556] if this throws, we have a framework bug (synthetic methods should no longer appear here)
+        _Reflect.guardAgainstSynthetic(actionMethod);
 
         // ensure we can load returned element type; otherwise ignore method
         val anyLoadedAsNull = TypeExtractor.streamMethodReturn(actionMethod)

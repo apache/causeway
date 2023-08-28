@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.specloader.specimpl.dflt;
 
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -38,7 +37,6 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
@@ -86,7 +84,6 @@ implements FacetHolder {
 
     private final FacetedMethodsBuilder facetedMethodsBuilder;
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
-    private final _ClassCache classCache;
 
     @Getter(onMethod_ = {@Override})
     private final IntrospectionPolicy introspectionPolicy;
@@ -121,8 +118,6 @@ implements FacetHolder {
 
         this.facetedMethodsBuilder =
                 new FacetedMethodsBuilder(this, facetProcessor, classSubstitutorRegistry);
-
-        this.classCache = _ClassCache.getInstance();
     }
 
     @Override
@@ -278,7 +273,6 @@ implements FacetHolder {
         val membersByMethod = _Maps.<Method, ObjectMember>newHashMap();
         cataloguePropertiesAndCollections(membersByMethod::put);
         catalogueActions(membersByMethod::put);
-        postprocessSyntheticMembers(membersByMethod);
         return membersByMethod;
     }
 
@@ -289,6 +283,7 @@ implements FacetHolder {
                 .map(ImperativeFacet::getMethods)
                 .flatMap(Can::stream)
                 .map(MethodFacade::asMethodElseFail) // expected regular
+                .map(_Reflect::guardAgainstSynthetic) // expected non-synthetic
                 .forEach(imperativeFacetMethod->onMember.accept(imperativeFacetMethod, field)));
     }
 
@@ -299,30 +294,9 @@ implements FacetHolder {
                 .map(ImperativeFacet::getMethods)
                 .flatMap(Can::stream)
                 .map(MethodFacade::asMethodForIntrospection)
+                .map(_Reflect::guardAgainstSynthetic) // expected non-synthetic
                 .forEach(imperativeFacetMethod->
                     onMember.accept(imperativeFacetMethod, userAction)));
-    }
-
-    /**
-     * for any synthetic method also add an entry with its regular method,
-     * as found in the method's declaring class type-hierarchy
-     */
-    private void postprocessSyntheticMembers(final HashMap<Method, ObjectMember> membersByMethod) {
-        val syntheticEntries = Can.ofStream(
-            membersByMethod
-            .entrySet()
-            .stream()
-            .filter(entry->entry.getKey().isSynthetic()));
-
-        syntheticEntries
-        .forEach(entry->{
-            val objectMember = entry.getValue();
-            val syntheticMethod = entry.getKey();
-            //TODO[CAUSEWAY-3556] clean up
-            _Reflect.guardAgainstSynthetic(syntheticMethod);
-//            .ifPresent(regularMethod->
-//                membersByMethod.computeIfAbsent(regularMethod, key->objectMember));
-        });
     }
 
     // -- ELEMENT SPECIFICATION
