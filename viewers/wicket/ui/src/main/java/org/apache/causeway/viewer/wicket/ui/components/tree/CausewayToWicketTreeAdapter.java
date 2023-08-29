@@ -28,7 +28,7 @@ import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
 import org.apache.wicket.extensions.markup.html.repeater.tree.NestedTree;
 import org.apache.wicket.extensions.markup.html.repeater.tree.Node;
-import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.applib.graph.tree.TreeNode;
@@ -48,7 +48,7 @@ class CausewayToWicketTreeAdapter {
     /**
      * @param valueModel - holder of {@link TreeNode}
      */
-    public static Component adapt(final String id, final ValueModel valueModel) {
+    public static MarkupContainer adapt(final String id, final ValueModel valueModel) {
         return valueModel==null
                 || ManagedObjects.isNullOrUnspecifiedOrEmpty(valueModel.getObject())
             ? emptyTreeComponent(id)
@@ -58,7 +58,7 @@ class CausewayToWicketTreeAdapter {
     /**
      * @param scalarModel - holder of {@link TreeNode}
      */
-    public static Component adapt(final String id, final ScalarModel scalarModel) {
+    public static MarkupContainer adapt(final String id, final ScalarModel scalarModel) {
         return scalarModel==null
                 || ManagedObjects.isNullOrUnspecifiedOrEmpty(scalarModel.getObject())
             ? emptyTreeComponent(id)
@@ -67,8 +67,8 @@ class CausewayToWicketTreeAdapter {
 
     // -- FALLBACK
 
-    private static Component emptyTreeComponent(final String id) {
-        return new Label(id);
+    private static MarkupContainer emptyTreeComponent(final String id) {
+        return new WebMarkupContainer(id);
     }
 
     // -- RENDERING
