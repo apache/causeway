@@ -133,7 +133,7 @@ public class FakeScheduler {
         );
     }
 
-    @Inject CommandLogEntryRepository<CommandLogEntry> commandLogEntryRepository;
+    @Inject CommandLogEntryRepository<? extends CommandLogEntry> commandLogEntryRepository;
     @Inject CommandExecutorService commandExecutorService;
     @Inject TransactionService transactionService;
     @Inject InteractionService interactionService;

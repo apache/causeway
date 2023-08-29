@@ -22,6 +22,8 @@ import java.lang.reflect.Method;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -29,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
 
+import lombok.SneakyThrows;
 import lombok.val;
 
 class ClassCacheTest {
@@ -78,7 +81,37 @@ class ClassCacheTest {
         assertContainsMethod(declaredMethods, "specificAction");
     }
 
+
+    @ParameterizedTest(name = "{index}: {0}")
+    @ValueSource(classes = {
+            _Abstract.class,
+            _AbstractImpl.class,
+            _Interface.class,
+            _InterfaceImpl.class,
+            _GenericAbstract.class,
+            _GenericAbstractImpl.class,
+            _GenericInterface.class,
+            _GenericInterfaceImpl.class,
+            _Mixins.Task1.Mixin.class,
+            _Mixins.Task2.Mixin.class,
+    })
+    void methodEnumeration(final Class<?> classUnderTest) {
+        val declaredMethods = Can.ofStream(
+                classCache.streamPublicOrDeclaredMethods(classUnderTest));
+
+        val expectations = extractExpectations(classUnderTest);
+        expectations.assertAll(declaredMethods);
+    }
+
     // -- HELPER
+
+    @SneakyThrows
+    private _Expectations extractExpectations(final Class<?> classUnderTest) {
+        final Class<?> classThatProvidesExpectations = classUnderTest.getSimpleName().equals("Mixin")
+                ? classUnderTest.getEnclosingClass()
+                : classUnderTest;
+        return (_Expectations) classThatProvidesExpectations.getDeclaredMethod("expectations").invoke(null);
+    }
 
     private void assertContainsMethod(final Can<Method> declaredMethods, final String methodName) {
 

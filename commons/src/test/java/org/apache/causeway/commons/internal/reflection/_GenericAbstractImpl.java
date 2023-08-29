@@ -16,31 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.testdomain.model.good;
+package org.apache.causeway.commons.internal.reflection;
 
-import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
+/**
+ * Has sample actions 1..6.
+ */
+class _GenericAbstractImpl
+extends _GenericAbstract<String> {
 
-import lombok.Getter;
-import lombok.Setter;
-
-@DomainObject(nature = Nature.VIEW_MODEL)
-public class ProperMemberInheritance_usingInterface
-implements ProperMemberInheritanceInterface {
-
-    @Action
-    @ActionLayout(named = "foo", describedAs = "bar")
-    @Override
-    public void sampleActionOverride() {
+    static _Expectations expectations() {
+        return _Expectations.builder()
+                .methodNameOrdinals("1,2+,3,5,6+")
+                .methodCount(5)
+                .syntheticCount(0)
+                .bridgeCount(0)
+                .build();
     }
 
-    @Property
-    @PropertyLayout(named = "foo", describedAs = "bar")
-    @Getter @Setter
-    private String samplePropertyOverride;
+    @Override void sampleAction1() {}
+    // appears twice, unusable variant has isSynthetic and isBridge
+    @Override String sampleAction2(final String x) { return x; }
+
+    // sample actions 3..4 inherited without overriding
+
+    void sampleAction5() { }
+    String sampleAction6(final String x) { return x; }
 
 }

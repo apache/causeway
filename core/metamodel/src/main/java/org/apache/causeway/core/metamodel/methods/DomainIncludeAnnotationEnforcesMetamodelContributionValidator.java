@@ -114,16 +114,28 @@ extends MetaModelValidatorAbstract {
         .streamDeclaredMethodsHaving(
                 type,
                 "domain-include",
-                method->_Annotations.synthesize(method, Domain.Include.class).isPresent())
+                method->
+                    _Annotations.synthesize(method, Domain.Include.class).isPresent())
         // filter away those that are recognized
         .filter(Predicate.not(memberMethods::contains))
         .filter(Predicate.not(supportMethods::contains))
+        // special lookup for generic type bounds
+        .filter(method->{
+            if(_Reflect.hasGenericBounds(method)) {
+                if(memberMethods.stream().anyMatch(m->_Reflect.methodsWeaklySame(m, method))) {
+                    return false; // found
+                }
+                if(supportMethods.stream().anyMatch(m->_Reflect.methodsWeaklySame(m, method))) {
+                    return false; // found
+                }
+            }
+            return true; // pass-through
+        })
         .forEach(methodsIntendedToBeIncludedButNotPickedUp::add);
 
         // find reasons about why these are not recognized
         methodsIntendedToBeIncludedButNotPickedUp.stream()
         .forEach(notPickedUpMethod->{
-
             val unmetContraints =
                     unmetContraints((ObjectSpecificationAbstract) spec, notPickedUpMethod)
                     .stream()

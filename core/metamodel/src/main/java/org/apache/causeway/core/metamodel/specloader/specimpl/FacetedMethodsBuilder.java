@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -71,7 +72,6 @@ implements HasMetaModelContext {
 
         private ConcurrentMethodRemover(final Class<?> introspectedClass, final Stream<Method> methodStream) {
             this.methodsRemaining = methodStream
-                    .filter(_NullSafe::isPresent)
                     .collect(Collectors.toCollection(_Sets::newConcurrentHashSet));
         }
 
@@ -107,7 +107,7 @@ implements HasMetaModelContext {
 
     private final ObjectSpecificationAbstract inspectedTypeSpec;
 
-    private final Class<?> introspectedClass;
+    @Getter private final Class<?> introspectedClass;
 
     private List<FacetedMethod> associationFacetMethods;
     private List<FacetedMethod> actionFacetedMethods;
@@ -139,7 +139,6 @@ implements HasMetaModelContext {
                 ? classCache.streamPublicOrDeclaredMethods(introspectedClass)
                 : classCache.streamPublicMethods(introspectedClass);
         this.methodRemover = new ConcurrentMethodRemover(introspectedClass, methodsRemaining);
-
     }
 
     @Override
@@ -327,7 +326,6 @@ implements HasMetaModelContext {
     }
 
     private List<FacetedMethod> findActionFacetedMethods() {
-
         if (log.isDebugEnabled()) {
             log.debug("introspecting(policy={}) {}: actions", introspectionPolicy(), getClassName());
         }
@@ -363,10 +361,9 @@ implements HasMetaModelContext {
             return null;
         }
 
-        // build action (first convert any synthetic method to a regular one)
+        // build action
 
-        return _Reflect
-            .lookupRegularMethodForSynthetic(actionMethod)
+        return Optional.of(actionMethod)
             .map(this::createActionFacetedMethod)
             .filter(_NullSafe::isPresent)
             .orElse(null);
@@ -418,12 +415,8 @@ implements HasMetaModelContext {
 
     private boolean representsAction(final Method actionMethod) {
 
-        if (MethodUtil.isStatic(actionMethod)) {
-            return false;
-        }
-
-        val hasActionAnnotation = _Annotations
-                .isPresent(actionMethod, Action.class);
+        //[CAUSEWAY-3556] if this throws, we have a framework bug (synthetic methods should no longer appear here)
+        _Reflect.guardAgainstSynthetic(actionMethod);
 
         // ensure we can load returned element type; otherwise ignore method
         val anyLoadedAsNull = TypeExtractor.streamMethodReturn(actionMethod)
@@ -440,6 +433,8 @@ implements HasMetaModelContext {
             return true;
         }
 
+        val hasActionAnnotation = _Annotations
+                .isPresent(actionMethod, Action.class);
         if(hasActionAnnotation) {
             log.debug("  identified action {}", actionMethod);
             return true;
