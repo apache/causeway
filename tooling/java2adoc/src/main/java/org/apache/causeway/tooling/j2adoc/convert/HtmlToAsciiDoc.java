@@ -30,7 +30,7 @@ import org.jsoup.select.NodeTraversor;
 import org.jsoup.select.NodeVisitor;
 
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.tooling.model4adoc.AsciiDocFactory;
+import org.apache.causeway.extensions.docgen.model4adoc.AsciiDocFactory;
 
 import lombok.SneakyThrows;
 import lombok.val;

@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.io.TextUtils;
-import org.apache.causeway.tooling.model4adoc.include.IncludeStatements;
+import org.apache.causeway.extensions.docgen.model4adoc.include.IncludeStatements;
 
 import lombok.NonNull;
 import lombok.val;

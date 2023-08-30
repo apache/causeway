@@ -101,7 +101,7 @@ public class CausewayExtSecmanRegularUserRoleAndPermissions extends AbstractRole
                 ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "updateFaxNumber"),
 
                 // optionally allow access to documentation menu and pages, based on module presence
-                env.getIocContainer().containsBean("org.apache.causeway.extensions.docgen.CausewayModuleExtDocgen")
+                env.getIocContainer().containsBean("org.apache.causeway.extensions.docgen.help.CausewayModuleExtDocgenHelp")
                     ? ApplicationFeatureId.newNamespace(CausewayExtDocgenRoleAndPermissions.NAMESPACE)
                     : null
         );
