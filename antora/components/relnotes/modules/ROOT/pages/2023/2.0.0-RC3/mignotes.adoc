@@ -24,4 +24,50 @@ As previously marked deprecated for removal:
 Expression of the global tag that contained the DTO class name was removed. 
 The yaml file will not start with `!!mypackage.Person` (or similar) anymore.
 
-see https://medium.com/@snyksec/snakeyaml-2-0-solving-the-unsafe-deserialization-vulnerability-c29a0f08f152 
+see https://medium.com/@snyksec/snakeyaml-2-0-solving-the-unsafe-deserialization-vulnerability-c29a0f08f152
+
+== Artifacts
+
+=== docgen
+
+Module entry point
+`org.apache.causeway.extensions.docgen.CausewayModuleExtDocgen` 
+moved to
+`org.apache.causeway.extensions.docgen.help.CausewayModuleExtDocgenHelp`.
+
+[source,xml]
+.pom.xml
+----
+<!-- removed
+<dependency>
+	<groupId>org.apache.causeway.extensions</groupId>
+	<artifactId>causeway-extensions-docgen</artifactId>
+</dependency>
+-->
+
+<!-- instead use -->
+<dependency>
+	<groupId>org.apache.causeway.extensions</groupId>
+	<artifactId>causeway-extensions-docgen-help</artifactId>
+</dependency>
+----
+
+=== model4adoc
+
+[source,xml]
+.pom.xml
+----
+<!-- removed
+<dependency>
+	<groupId>org.apache.causeway.tooling</groupId>
+	<artifactId>causeway-tooling-model4adoc</artifactId>
+</dependency>
+-->
+
+<!-- instead use -->
+<dependency>
+	<groupId>org.apache.causeway.extensions</groupId>
+	<artifactId>causeway-extensions-docgen-model4adoc</artifactId>
+</dependency>
+----
+
