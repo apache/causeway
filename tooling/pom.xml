@@ -166,12 +166,6 @@
 
 			<dependency>
 				<groupId>org.apache.causeway.tooling</groupId>
-				<artifactId>causeway-tooling-model4adoc</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.causeway.tooling</groupId>
 				<artifactId>causeway-tooling-projectmodel</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -189,12 +183,6 @@
 			</dependency>
 
 			<!-- EXTERNAL -->
-
-			<dependency>
-				<groupId>org.asciidoctor</groupId>
-				<artifactId>asciidoctorj</artifactId>
-				<version>${asciidoctorj.version}</version>
-			</dependency>
 
 			<dependency>
 				<groupId>org.gradle</groupId>
@@ -292,7 +280,6 @@
 
 	<modules>
 		<module>c4modeling</module>
-		<module>model4adoc</module>
 		<module>javamodel</module>
 		<module>projectmodel</module>
 		<module>java2adoc</module>
