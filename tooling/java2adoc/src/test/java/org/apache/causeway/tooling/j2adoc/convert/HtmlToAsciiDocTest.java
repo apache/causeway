@@ -26,8 +26,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.io.TextUtils;
-import org.apache.causeway.extensions.docgen.model4adoc.AsciiDocFactory;
-import org.apache.causeway.extensions.docgen.model4adoc.AsciiDocWriter;
+import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory;
+import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocWriter;
 
 import lombok.val;
 

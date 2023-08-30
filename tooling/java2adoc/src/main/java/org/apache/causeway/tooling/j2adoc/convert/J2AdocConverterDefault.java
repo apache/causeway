@@ -34,8 +34,6 @@ import org.asciidoctor.ast.StructuralNode;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal._Constants;
-import org.apache.causeway.extensions.docgen.model4adoc.AsciiDocFactory;
-import org.apache.causeway.extensions.docgen.model4adoc.ast.SimpleBlock;
 import org.apache.causeway.tooling.j2adoc.J2AdocContext;
 import org.apache.causeway.tooling.j2adoc.J2AdocUnit;
 import org.apache.causeway.tooling.j2adoc.format.MemberFormatter;
@@ -45,6 +43,8 @@ import org.apache.causeway.tooling.javamodel.ast.EnumConstantDeclarations;
 import org.apache.causeway.tooling.javamodel.ast.FieldDeclarations;
 import org.apache.causeway.tooling.javamodel.ast.Javadocs;
 import org.apache.causeway.tooling.javamodel.ast.MethodDeclarations;
+import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory;
+import org.apache.causeway.valuetypes.asciidoc.builder.ast.SimpleBlock;
 
 import lombok.NonNull;
 import lombok.val;

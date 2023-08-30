@@ -25,10 +25,10 @@ import org.asciidoctor.ast.Document;
 
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.io.FileUtils;
-import org.apache.causeway.extensions.docgen.model4adoc.AsciiDocWriter;
 import org.apache.causeway.tooling.cli.CliConfig;
 import org.apache.causeway.tooling.j2adoc.J2AdocContext;
 import org.apache.causeway.tooling.j2adoc.J2AdocUnit;
+import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocWriter;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;

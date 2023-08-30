@@ -25,10 +25,10 @@ import java.util.SortedSet;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.io.TextUtils;
-import org.apache.causeway.extensions.docgen.model4adoc.include.IncludeStatement;
-import org.apache.causeway.extensions.docgen.model4adoc.include.IncludeStatements;
 import org.apache.causeway.tooling.cli.CliConfig;
 import org.apache.causeway.tooling.j2adoc.J2AdocContext;
+import org.apache.causeway.valuetypes.asciidoc.builder.include.IncludeStatement;
+import org.apache.causeway.valuetypes.asciidoc.builder.include.IncludeStatements;
 
 import lombok.NonNull;
 import lombok.val;

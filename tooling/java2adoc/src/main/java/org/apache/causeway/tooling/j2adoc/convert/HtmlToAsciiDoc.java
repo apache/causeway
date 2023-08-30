@@ -30,7 +30,7 @@ import org.jsoup.select.NodeTraversor;
 import org.jsoup.select.NodeVisitor;
 
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.extensions.docgen.model4adoc.AsciiDocFactory;
+import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory;
 
 import lombok.SneakyThrows;
 import lombok.val;
@@ -38,7 +38,7 @@ import lombok.val;
 final class HtmlToAsciiDoc {
 
     @SneakyThrows
-    public static Document body(Element body) {
+    public static Document body(final Element body) {
 
         val adoc = AsciiDocFactory.doc();
 
@@ -138,7 +138,7 @@ final class HtmlToAsciiDoc {
 
 
         // first element on the stack is the document, that is the the root of the adoc abstract syntax tree
-        BlockHelper(Document adoc){
+        BlockHelper(final Document adoc){
             nodeStack.push(adoc);
         }
 
@@ -172,7 +172,7 @@ final class HtmlToAsciiDoc {
                     : nextBlock();
         }
 
-        void blockAppend(String source) {
+        void blockAppend(final String source) {
             val block = getBlock();
             block.setSource(block.getSource()+source);
         }

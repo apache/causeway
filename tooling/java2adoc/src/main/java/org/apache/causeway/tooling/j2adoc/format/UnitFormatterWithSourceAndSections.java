@@ -31,13 +31,13 @@ import org.asciidoctor.ast.List;
 import org.asciidoctor.ast.StructuralNode;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.extensions.docgen.model4adoc.AsciiDocFactory;
 import org.apache.causeway.tooling.j2adoc.J2AdocContext;
 import org.apache.causeway.tooling.j2adoc.J2AdocUnit;
 import org.apache.causeway.tooling.j2adoc.convert.J2AdocConverter;
 import org.apache.causeway.tooling.j2adoc.convert.J2AdocConverterDefault;
 import org.apache.causeway.tooling.javamodel.ast.CallableDeclarations;
 import org.apache.causeway.tooling.javamodel.ast.Javadocs;
+import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory;
 
 import lombok.NonNull;
 import lombok.val;
