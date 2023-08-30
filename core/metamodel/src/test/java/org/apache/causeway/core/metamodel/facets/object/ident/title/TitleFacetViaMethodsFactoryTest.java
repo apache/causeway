@@ -68,7 +68,7 @@ extends ObjectSupportFacetFactoryTestAbstract {
             assertTrue(facet instanceof TitleFacetFromToStringMethod);
             val titleFacetViaTitleMethod = (TitleFacetFromToStringMethod) facet;
             assertMethodEqualsFirstIn(toStringMethod, titleFacetViaTitleMethod);
-            assertMethodWasRemoved(toStringMethod);
+            assertMethodWasRemoved(toStringMethod); // no longer part of class cache methods
         });
     }
 

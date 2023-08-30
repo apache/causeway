@@ -24,7 +24,7 @@ import java.util.function.BiConsumer;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.causeway.core.metamodel.commons.ClassExtensions;
+import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.HasImperativeAspect;
 import org.apache.causeway.core.metamodel.facets.ImperativeAspect;
@@ -46,7 +46,7 @@ implements HasImperativeAspect {
             final FacetHolder holder) {
 
         return Optional.ofNullable(methodIfAny)
-        .filter(method->!ClassExtensions.isJavaClass(method.getDeclaringClass()))
+        .filter(method->!_Reflect.isJavaApiClass(method.getDeclaringClass()))
         .map(method->
             new TitleFacetFromToStringMethod(
                     ImperativeAspect.singleRegularMethod(method, Intent.UI_HINT),

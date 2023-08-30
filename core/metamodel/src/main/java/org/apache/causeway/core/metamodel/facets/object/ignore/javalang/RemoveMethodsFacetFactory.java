@@ -27,7 +27,6 @@ import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._Reflect;
-import org.apache.causeway.core.metamodel.commons.ClassExtensions;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -132,7 +131,7 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
             return;
         }
 
-        if (!ClassExtensions.isJavaClass(type)) {
+        if (!_Reflect.isJavaApiClass(type)) {
             removeSuperclassMethods(type.getSuperclass(), processClassContext);
             return;
         }
