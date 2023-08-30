@@ -59,7 +59,7 @@ public class HomePage extends PageAbstract {
 
         val homePageAdapter = super.getMetaModelContext().getHomePageAdapter();
 
-        if(ManagedObjects.isSpecified(homePageAdapter)) {
+        if(!ManagedObjects.isNullOrUnspecifiedOrEmpty(homePageAdapter)) {
             val requestCycle = RequestCycle.get();
             val page = EntityPage.forAdapter(getMetaModelContext(), homePageAdapter);
             requestCycle.setResponsePage(page);
