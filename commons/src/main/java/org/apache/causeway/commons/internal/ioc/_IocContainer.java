@@ -46,7 +46,8 @@ public interface _IocContainer {
 
     Stream<_ManagedBeanAdapter> streamAllBeans();
 
-    Optional<?> lookupById(final String id);
+    boolean containsBean(String id);
+    Optional<?> lookupBean(String id);
 
     /**
      * Return an instance (possibly shared or independent) of the object managed by the IoC container.
@@ -126,7 +127,5 @@ public interface _IocContainer {
     static _IocContainer spring(final ApplicationContext springContext) {
         return _IocContainer_Spring.of(springContext);
     }
-
-
 
 }

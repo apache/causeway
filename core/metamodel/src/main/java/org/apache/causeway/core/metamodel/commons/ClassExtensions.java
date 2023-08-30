@@ -88,12 +88,6 @@ public final class ClassExtensions {
         return Modifier.isAbstract(extendee.getModifiers());
     }
 
-    public static boolean isJavaClass(final Class<?> extendee) {
-        final String className = extendee.getName();
-        return className.startsWith(ClassUtil.JAVA_CLASS_PREFIX) ||
-                extendee.getName().startsWith("sun.");
-    }
-
     static Class<?> implementingClassOrNull(final Class<?> extendee, final Class<?> requiredClass, final Class<?> constructorParamType) {
         if (extendee == null) {
             return null;

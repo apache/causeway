@@ -255,6 +255,9 @@ public final class _ClassCache implements AutoCloseable {
         return method.isBridge()
                 || Modifier.isStatic(method.getModifiers())
                 || method.getDeclaringClass().equals(Object.class)
+                || (_Reflect.isNonFinalObjectMethod(method)
+                        // keep overwritten toString() methods, see TitleFacetFromToStringMethod
+                        && !_Reflect.isOverwrittenToString(method))
                 || _Reflect.hasGenericBounds(method);
     }
 
@@ -376,13 +379,7 @@ public final class _ClassCache implements AutoCloseable {
         val key = ConstructorKey.of(type, _Arrays.emptyToNull(paramTypes));
 
         val publicConstructor = model.publicConstructorsByKey.get(key);
-        if(publicConstructor!=null) {
-            return publicConstructor;
-        }
-//        if(includeDeclaredConstructors) {
-//            return model.nonPublicDeclaredConstructorsByKey.get(key);
-//        }
-        return null;
+        return publicConstructor;
     }
 
     private Method lookupMethod(
@@ -437,7 +434,4 @@ public final class _ClassCache implements AutoCloseable {
         }
         return _Strings.decapitalize(fieldName);
     }
-
-
-
 }

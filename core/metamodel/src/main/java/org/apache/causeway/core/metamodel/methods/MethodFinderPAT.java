@@ -27,7 +27,7 @@ import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
-import org.apache.causeway.core.metamodel.commons.ClassExtensions;
+import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.metamodel.commons.MethodUtil;
 
 import lombok.NonNull;
@@ -73,7 +73,7 @@ public final class MethodFinderPAT {
 
         // just an optimization, not strictly required
         if(ClassUtils.isPrimitiveOrWrapper(patCandidate)
-                || ClassExtensions.isJavaClass(patCandidate)) {
+                || _Reflect.isJavaApiClass(patCandidate)) {
             return Optional.empty();
         }
 

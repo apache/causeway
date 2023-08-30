@@ -47,6 +47,7 @@ import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -780,10 +781,36 @@ public final class _Reflect {
 
     }
 
-    public Method guardAgainstSynthetic(final Method method) {
+    public Method guardAgainstSynthetic(final @NonNull Method method) {
         _Assert.assertFalse(method.isSynthetic(), ()->
             String.format("unsupported synthetic method %s", method));
         return method;
+    }
+
+    // -- SPECIAL PREDICATES
+
+    public boolean isNonFinalObjectMethod(final @NonNull Method method) {
+        for(val m : _Constants.nonFinalObjectMethods) {
+            if(methodsSame(m, method)) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Whether given {@link Method} overrides {@link Object#toString()}
+     * and its declaring {@link Class} is a non Java API class.
+     * @see #isJavaApiClass(Class)
+     */
+    public boolean isOverwrittenToString(final @NonNull Method method) {
+        return method.getName().equals("toString")
+                && method.getParameterCount() == 0
+                && !isJavaApiClass(method.getDeclaringClass());
+    }
+
+    public boolean isJavaApiClass(final @NonNull Class<?> cls) {
+        val className = cls.getName();
+        return className.startsWith("java.")
+                || className.startsWith("sun.");
     }
 
     //XXX no longer needed

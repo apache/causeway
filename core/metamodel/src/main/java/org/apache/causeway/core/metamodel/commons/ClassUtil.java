@@ -31,8 +31,6 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public final class ClassUtil {
 
-    final String JAVA_CLASS_PREFIX = "java.";
-
     private final Map<String, Class<?>> primitiveByName = Map.of(
             void.class.getName(), void.class,
             boolean.class.getName(), boolean.class,

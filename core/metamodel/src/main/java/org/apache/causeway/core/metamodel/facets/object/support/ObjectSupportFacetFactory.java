@@ -122,14 +122,12 @@ extends MethodPrefixBasedFacetFactoryAbstract {
             addFacetIfPresent(TitleFacetFromToStringMethod
                     .create(method, processClassContext.getFacetHolder()));
         });
-
     }
 
     private void processObjectSupport(
             final ProcessClassContext processClassContext,
             final ObjectSupportMethod objectSupportMethodEnum,
             final BiFunction<Method, FacetHolder, Optional<? extends Facet>> ojectSupportFacetConstructor) {
-
 
         MethodFinder
         .objectSupport(
