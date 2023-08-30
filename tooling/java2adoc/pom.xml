@@ -40,8 +40,8 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.causeway.extensions</groupId>
-			<artifactId>causeway-extensions-docgen-model4adoc</artifactId>
+			<groupId>org.apache.causeway.valuetypes</groupId>
+			<artifactId>causeway-valuetypes-asciidoc-builder</artifactId>
 		</dependency>
 
 		<dependency>

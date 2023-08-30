@@ -33,6 +33,7 @@
 
 	<modules>
 		<module>applib</module>
+		<module>builder</module>
 		<module>metamodel</module>
 		<module>persistence-jdo</module>
 		<module>persistence-jpa</module>

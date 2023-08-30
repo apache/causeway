@@ -37,14 +37,14 @@ import org.asciidoctor.ast.StructuralNode;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.extensions.docgen.model4adoc.AsciiDocFactory;
 import org.apache.causeway.tooling.j2adoc.J2AdocContext;
 import org.apache.causeway.tooling.j2adoc.J2AdocUnit;
 import org.apache.causeway.tooling.j2adoc.convert.J2AdocConverter;
 import org.apache.causeway.tooling.j2adoc.convert.J2AdocConverterDefault;
 import org.apache.causeway.tooling.javamodel.ast.Javadocs;
+import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory;
 
-import static org.apache.causeway.extensions.docgen.model4adoc.AsciiDocFactory.block;
+import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.block;
 
 import lombok.AccessLevel;
 import lombok.NonNull;

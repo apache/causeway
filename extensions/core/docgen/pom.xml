@@ -32,7 +32,6 @@
 
 	<modules>
 		<module>help</module>
-		<module>model4adoc</module>
 	</modules>
 
 </project>

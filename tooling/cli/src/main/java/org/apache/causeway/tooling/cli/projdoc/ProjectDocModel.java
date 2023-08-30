@@ -47,7 +47,6 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.graph._Graph;
 import org.apache.causeway.commons.io.FileUtils;
-import org.apache.causeway.extensions.docgen.model4adoc.AsciiDocFactory;
 import org.apache.causeway.tooling.c4.C4;
 import org.apache.causeway.tooling.cli.CliConfig;
 import org.apache.causeway.tooling.cli.adocfix.OrphanedIncludeStatementFixer;
@@ -58,13 +57,14 @@ import org.apache.causeway.tooling.javamodel.ast.CodeClasses;
 import org.apache.causeway.tooling.projectmodel.ArtifactCoordinates;
 import org.apache.causeway.tooling.projectmodel.Dependency;
 import org.apache.causeway.tooling.projectmodel.ProjectNode;
+import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory;
 
-import static org.apache.causeway.extensions.docgen.model4adoc.AsciiDocFactory.block;
-import static org.apache.causeway.extensions.docgen.model4adoc.AsciiDocFactory.cell;
-import static org.apache.causeway.extensions.docgen.model4adoc.AsciiDocFactory.doc;
-import static org.apache.causeway.extensions.docgen.model4adoc.AsciiDocFactory.headRow;
-import static org.apache.causeway.extensions.docgen.model4adoc.AsciiDocFactory.row;
-import static org.apache.causeway.extensions.docgen.model4adoc.AsciiDocFactory.table;
+import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.block;
+import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.cell;
+import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.doc;
+import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.headRow;
+import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.row;
+import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.table;
 
 import guru.nidi.codeassert.config.Language;
 import guru.nidi.codeassert.model.CodeClass;
