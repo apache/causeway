@@ -254,6 +254,7 @@ public final class _ClassCache implements AutoCloseable {
     public static boolean methodExcludeFilter(final Method method) {
         return method.isBridge()
                 || Modifier.isStatic(method.getModifiers())
+                || method.getDeclaringClass().equals(Object.class)
                 || _Reflect.isNonFinalObjectMethod(method)
                 || _Reflect.hasGenericBounds(method);
     }
