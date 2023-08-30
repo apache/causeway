@@ -30,6 +30,11 @@ see https://medium.com/@snyksec/snakeyaml-2-0-solving-the-unsafe-deserialization
 
 === docgen
 
+Package
+`org.apache.causeway.extensions.docgen` 
+moved to
+`org.apache.causeway.extensions.docgen.help`.
+
 Module entry point
 `org.apache.causeway.extensions.docgen.CausewayModuleExtDocgen` 
 moved to
