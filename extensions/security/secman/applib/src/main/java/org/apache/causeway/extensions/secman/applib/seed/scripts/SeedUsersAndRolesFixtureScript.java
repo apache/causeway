@@ -39,6 +39,7 @@ import org.apache.causeway.extensions.secman.applib.role.seed.CausewayAppFeature
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewayConfigurationRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtAuditTrailRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtCommandLogRoleAndPermissions;
+import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtDocgenRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtExecutionLogRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtExecutionOutboxRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtH2ConsoleRoleAndPermissions;
@@ -115,6 +116,7 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
                     : null, // skip if non-JDO deployment
                 new CausewayExtAuditTrailRoleAndPermissions(),
                 new CausewayExtCommandLogRoleAndPermissions(),
+                new CausewayExtDocgenRoleAndPermissions(),
                 new CausewayExtExecutionLogRoleAndPermissions(),
                 new CausewayExtExecutionOutboxRoleAndPermissions(),
                 new CausewayExtSessionLogRoleAndPermissions(),
@@ -135,6 +137,7 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
                             : null, // skip if non-JDO deployment
                         CausewayExtAuditTrailRoleAndPermissions.ROLE_NAME,
                         CausewayExtCommandLogRoleAndPermissions.ROLE_NAME,
+                        CausewayExtDocgenRoleAndPermissions.ROLE_NAME,
                         CausewayExtExecutionLogRoleAndPermissions.ROLE_NAME,
                         CausewayExtExecutionOutboxRoleAndPermissions.ROLE_NAME,
                         CausewayExtSessionLogRoleAndPermissions.ROLE_NAME,

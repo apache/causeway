@@ -49,6 +49,7 @@ import lombok.val;
 })
 public class CausewayModuleExtDocgen {
 
+    // keep in sync with CausewayExtDocgenRoleAndPermissions.NAMESPACE
     public static final String NAMESPACE = "causeway.ext.docgen";
 
     /**
