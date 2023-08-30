@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.docgen.topics.welcome;
+package org.apache.causeway.extensions.docgen.help.topics.welcome;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,14 +49,14 @@ import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.extensions.docgen.CausewayModuleExtDocgen;
-import org.apache.causeway.extensions.docgen.applib.HelpPage;
+import org.apache.causeway.extensions.docgen.help.CausewayModuleExtDocgenHelp;
+import org.apache.causeway.extensions.docgen.help.applib.HelpPage;
 import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 import lombok.RequiredArgsConstructor;
 
 @Component
-@Named(CausewayModuleExtDocgen.NAMESPACE + ".WelcomeHelpPage")
+@Named(CausewayModuleExtDocgenHelp.NAMESPACE + ".WelcomeHelpPage")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class WelcomeHelpPage implements HelpPage {
 

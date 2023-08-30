@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.docgen.topics.domainobjects;
+package org.apache.causeway.extensions.docgen.help.topics.domainobjects;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -28,15 +28,15 @@ import org.springframework.stereotype.Component;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.extensions.docgen.CausewayModuleExtDocgen;
-import org.apache.causeway.extensions.docgen.applib.HelpPage;
+import org.apache.causeway.extensions.docgen.help.CausewayModuleExtDocgenHelp;
+import org.apache.causeway.extensions.docgen.help.applib.HelpPage;
 import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Component
-@Named(CausewayModuleExtDocgen.NAMESPACE + ".EntityDiagramPageAbstract")
+@Named(CausewayModuleExtDocgenHelp.NAMESPACE + ".EntityDiagramPageAbstract")
 @RequiredArgsConstructor
 public abstract class EntityDiagramPageAbstract implements HelpPage {
 

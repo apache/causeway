@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.docgen.topics.domainobjects;
+package org.apache.causeway.extensions.docgen.help.topics.domainobjects;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -26,28 +26,28 @@ import org.springframework.stereotype.Component;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.extensions.docgen.CausewayModuleExtDocgen;
+import org.apache.causeway.extensions.docgen.help.CausewayModuleExtDocgenHelp;
 
 import lombok.val;
 
 @Component
-@Named(CausewayModuleExtDocgen.NAMESPACE + ".DomainEntityDiagramPage")
-public class DomainEntityDiagramPage extends EntityDiagramPageAbstract {
+@Named(CausewayModuleExtDocgenHelp.NAMESPACE + ".CausewayEntityDiagramPage")
+public class CausewayEntityDiagramPage extends EntityDiagramPageAbstract {
 
     @Inject
-    public DomainEntityDiagramPage(final SpecificationLoader specLoader, final CausewayBeanTypeRegistry beanTypeRegistry) {
+    public CausewayEntityDiagramPage(final SpecificationLoader specLoader, final CausewayBeanTypeRegistry beanTypeRegistry) {
         super(specLoader, beanTypeRegistry);
     }
 
     @Override
     public String getTitle() {
-        return "Domain Entity Diagram";
+        return "Causeway Entity Diagram";
     }
 
     protected boolean accept(final ObjectSpecification objSpec) {
         val ns = "" + objSpec.getLogicalType().getNamespace();
-        return !ns.equals("causeway")
-                && !ns.startsWith("causeway.");
+        return ns.equals("causeway")
+                || ns.startsWith("causeway.");
     }
 
 }

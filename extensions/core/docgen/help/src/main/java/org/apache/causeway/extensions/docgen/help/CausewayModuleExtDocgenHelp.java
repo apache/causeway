@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.docgen;
+package org.apache.causeway.extensions.docgen.help;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -24,11 +24,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.causeway.extensions.docgen.applib.HelpNode.HelpTopic;
-import org.apache.causeway.extensions.docgen.menu.DocumentationMenu;
-import org.apache.causeway.extensions.docgen.topics.domainobjects.CausewayEntityDiagramPage;
-import org.apache.causeway.extensions.docgen.topics.domainobjects.DomainEntityDiagramPage;
-import org.apache.causeway.extensions.docgen.topics.welcome.WelcomeHelpPage;
+import org.apache.causeway.extensions.docgen.help.applib.HelpNode.HelpTopic;
+import org.apache.causeway.extensions.docgen.help.menu.DocumentationMenu;
+import org.apache.causeway.extensions.docgen.help.topics.domainobjects.CausewayEntityDiagramPage;
+import org.apache.causeway.extensions.docgen.help.topics.domainobjects.DomainEntityDiagramPage;
+import org.apache.causeway.extensions.docgen.help.topics.welcome.WelcomeHelpPage;
 
 import lombok.val;
 
@@ -47,7 +47,8 @@ import lombok.val;
     DomainEntityDiagramPage.class
 
 })
-public class CausewayModuleExtDocgen {
+// keep class-name in sync with CausewayExtSecmanRegularUserRoleAndPermissions
+public class CausewayModuleExtDocgenHelp {
 
     // keep in sync with CausewayExtDocgenRoleAndPermissions.NAMESPACE
     public static final String NAMESPACE = "causeway.ext.docgen";

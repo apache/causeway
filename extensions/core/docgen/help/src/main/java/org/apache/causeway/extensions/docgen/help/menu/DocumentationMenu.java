@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.docgen.menu;
+package org.apache.causeway.extensions.docgen.help.menu;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -30,9 +30,9 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.extensions.docgen.CausewayModuleExtDocgen;
-import org.apache.causeway.extensions.docgen.applib.HelpNode.HelpTopic;
-import org.apache.causeway.extensions.docgen.helptree.HelpNodeVm;
+import org.apache.causeway.extensions.docgen.help.CausewayModuleExtDocgenHelp;
+import org.apache.causeway.extensions.docgen.help.applib.HelpNode.HelpTopic;
+import org.apache.causeway.extensions.docgen.help.helptree.HelpNodeVm;
 
 import lombok.RequiredArgsConstructor;
 
@@ -44,7 +44,7 @@ import lombok.RequiredArgsConstructor;
  * @see HelpTopic
  * @since 2.x {@index}
  */
-@Named(CausewayModuleExtDocgen.NAMESPACE + ".DocumentationMenu")
+@Named(CausewayModuleExtDocgenHelp.NAMESPACE + ".DocumentationMenu")
 @DomainService(nature = NatureOfService.VIEW)
 @DomainServiceLayout(
         menuBar = DomainServiceLayout.MenuBar.TERTIARY

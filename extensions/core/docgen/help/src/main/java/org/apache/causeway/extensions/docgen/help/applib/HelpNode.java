@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.docgen.applib;
+package org.apache.causeway.extensions.docgen.help.applib;
 
 import java.util.ArrayList;
 import java.util.List;

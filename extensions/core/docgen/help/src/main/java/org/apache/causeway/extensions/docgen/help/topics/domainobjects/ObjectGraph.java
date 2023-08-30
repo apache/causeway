@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.docgen.topics.domainobjects;
+package org.apache.causeway.extensions.docgen.help.topics.domainobjects;
 
 import java.util.ArrayList;
 import java.util.HashMap;

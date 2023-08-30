@@ -16,13 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.docgen.applib;
+package org.apache.causeway.extensions.docgen.help.helptree;
 
-import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
+import java.util.Optional;
+import java.util.stream.Stream;
 
-public interface HelpPage {
+import org.apache.causeway.applib.graph.tree.TreeAdapter;
 
-    String getTitle();
-    AsciiDoc getContent();
+public class HelpTreeAdapter implements TreeAdapter<HelpNodeVm> {
+
+    @Override
+    public Optional<HelpNodeVm> parentOf(final HelpNodeVm value) {
+        return Optional.ofNullable(value.getParent());
+    }
+
+    @Override
+    public int childCountOf(final HelpNodeVm value) {
+        return value.getHelpNode().childCount();
+    }
+
+    @Override
+    public Stream<HelpNodeVm> childrenOf(final HelpNodeVm value) {
+        return value.getHelpNode().streamChildNodes()
+                .map(childNode->new HelpNodeVm(value.getRootTopic(), childNode));
+    }
 
 }

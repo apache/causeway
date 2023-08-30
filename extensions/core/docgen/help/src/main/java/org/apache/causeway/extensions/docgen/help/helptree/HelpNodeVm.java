@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.docgen.helptree;
+package org.apache.causeway.extensions.docgen.help.helptree;
 
 import java.util.Optional;
 
@@ -36,16 +36,16 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.graph.tree.TreeNode;
 import org.apache.causeway.applib.graph.tree.TreePath;
-import org.apache.causeway.extensions.docgen.CausewayModuleExtDocgen;
-import org.apache.causeway.extensions.docgen.applib.HelpNode;
-import org.apache.causeway.extensions.docgen.applib.HelpNode.HelpTopic;
+import org.apache.causeway.extensions.docgen.help.CausewayModuleExtDocgenHelp;
+import org.apache.causeway.extensions.docgen.help.applib.HelpNode;
+import org.apache.causeway.extensions.docgen.help.applib.HelpNode.HelpTopic;
 import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@Named(CausewayModuleExtDocgen.NAMESPACE + ".HelpNodeVm")
+@Named(CausewayModuleExtDocgenHelp.NAMESPACE + ".HelpNodeVm")
 @DomainObject(
         nature=Nature.VIEW_MODEL)
 @DomainObjectLayout(
