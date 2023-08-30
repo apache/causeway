@@ -16,44 +16,51 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.tooling.j2adoc.convert;
+package org.apache.causeway.extensions.docgen.model4adoc.test.ast;
 
-import org.jsoup.Jsoup;
+import java.io.IOException;
+
+import org.asciidoctor.ast.Document;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.extensions.docgen.model4adoc.AsciiDocFactory;
-import org.apache.causeway.extensions.docgen.model4adoc.AsciiDocWriter;
+
+import static org.apache.causeway.extensions.docgen.model4adoc.AsciiDocFactory.doc;
 
 import lombok.val;
 
-class HtmlToAsciiDocTest {
+class CollapsibleTest extends AbstractAsciiDocWriterTest {
+
+    private Document doc;
 
     @BeforeEach
     void setUp() throws Exception {
+        doc = doc();
+        super.adocSourceResourceLocation = "collapsible.adoc";
+        //super.debugEnabled = true;
+        super.skipAsciidocjComplianceTest = true;
     }
 
+    // = Collapse
+    //
+    // .expand to see more details
+    // [%collapsible]
+    // ====
+    // Example block turns into collapsible summary/details.
+    // ====
     @Test
-    void simplifiedParagraphSyntax() {
-
-        val doc = AsciiDocFactory.doc();
-
-        // when
-        val descriptionAsHtml = Jsoup.parse("Hello<p>second paragraph<p>third paragraph");
-        val descriptionAdoc = HtmlToAsciiDoc.body(descriptionAsHtml.selectFirst("body"));
-
-        val blocks = descriptionAdoc.getBlocks();
-        doc.getBlocks().addAll(blocks);
-
-        // then we expect 3 paragraphs delimited by an empty line
-        final String adocAsString = AsciiDocWriter.toString(doc);
-        val lines = TextUtils.readLines(adocAsString).map(String::trim);
-
-        assertEquals(Can.of("Hello", "", "second paragraph", "", "third paragraph", ""), lines);
+    void testCollapsible() throws IOException {
+        
+        doc.setTitle("Collapse");
+        
+        val collapsibleBlock = AsciiDocFactory
+                .collapsibleBlock(doc, "Example block turns into collapsible summary/details.");
+        
+        collapsibleBlock.setTitle("expand to see more details");
+        
+        assertDocumentIsCorrectlyWritten(doc);
     }
+    
 
 }

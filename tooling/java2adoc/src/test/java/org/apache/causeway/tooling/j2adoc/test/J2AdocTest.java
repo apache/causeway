@@ -31,10 +31,10 @@ import org.junit.jupiter.api.Test;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.io.TextUtils;
+import org.apache.causeway.extensions.docgen.model4adoc.AsciiDocWriter;
 import org.apache.causeway.tooling.j2adoc.J2AdocContext;
 import org.apache.causeway.tooling.j2adoc.util.AsciiDocIncludeTagFilter;
 import org.apache.causeway.tooling.javamodel.AnalyzerConfigFactory;
-import org.apache.causeway.tooling.model4adoc.AsciiDocWriter;
 
 import guru.nidi.codeassert.config.Language;
 import lombok.NonNull;
