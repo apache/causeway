@@ -83,7 +83,12 @@ final class _IocContainer_Spring implements _IocContainer {
     }
 
     @Override
-    public Optional<?> lookupById(final String id) {
+    public boolean containsBean(final String id) {
+        return springContext.containsBean(id);
+    }
+
+    @Override
+    public Optional<?> lookupBean(final String id) {
         return springContext.containsBean(id)
                 ? Optional.of(springContext.getBean(id))
                 : Optional.empty();

@@ -23,8 +23,11 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Writer;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 
 import org.springframework.context.annotation.Primary;
+
+import lombok.experimental.UtilityClass;
 
 /**
  * <h1>- internal use only -</h1>
@@ -38,44 +41,55 @@ import org.springframework.context.annotation.Primary;
  *
  * @since 2.0
  */
+@UtilityClass
 public final class _Constants {
 
-    private _Constants(){}
+    /**
+     * Convenient e.g. for reflective invocation
+     */
+    public final Object[] emptyObjects = new Object[0];
 
     /**
      * Convenient e.g. for reflective invocation
      */
-    public static final Object[] emptyObjects = new Object[0];
+    public final Class<?>[] emptyClasses = new Class[0];
 
     /**
      * Convenient e.g. for reflective invocation
      */
-    public static final Class<?>[] emptyClasses = new Class[0];
-
-    /**
-     * Convenient e.g. for reflective invocation
-     */
-    public static final Class<?>[] classesOfObject = new Class[] { Object.class };
+    public final Class<?>[] classesOfObject = new Class[] { Object.class };
 
     /**
      * Convenient e.g. for toArray conversions
      */
-    public static final String[] emptyStringArray = new String[0];
+    public final String[] emptyStringArray = new String[0];
 
     /**
      * empty array of byte
      */
-    public static final byte[] emptyBytes = new byte[0];
+    public final byte[] emptyBytes = new byte[0];
 
     /**
      * empty array of Annotation
      */
-    public static final Annotation[] emptyAnnotations = new Annotation[0];
+    public final Annotation[] emptyAnnotations = new Annotation[0];
+
+    public final Method[] nonFinalObjectMethods = nonFinalObjectMethods();
+    private final Method[] nonFinalObjectMethods() {
+        try {
+            return new Method[] {
+                Object.class.getMethod("toString"),
+                Object.class.getMethod("hashCode"),
+                Object.class.getMethod("equals", classesOfObject)};
+        } catch (NoSuchMethodException | SecurityException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     /**
      * Writer that does nothing
      */
-    public static final Writer nopWriter = new Writer() {
+    public final Writer nopWriter = new Writer() {
         @Override public void write(final char[] cbuf, final int off, final int len) throws IOException { }
         @Override public void flush() throws IOException { }
         @Override public void close() throws IOException { }
@@ -84,16 +98,16 @@ public final class _Constants {
     /**
      * OutputStream that does nothing
      */
-    public static final OutputStream nopOutputStream = new OutputStream() {
+    public final OutputStream nopOutputStream = new OutputStream() {
         @Override public void write(final int b) throws IOException { }
     };
 
     /**
      * PrintStream that does nothing
      */
-    public static final PrintStream nopPrintStream = new PrintStream(nopOutputStream);
+    public final PrintStream nopPrintStream = new PrintStream(nopOutputStream);
 
-    @Primary private static final class PrimaryAnnotated {}
-    public static final Primary ANNOTATION_PRIMARY = PrimaryAnnotated.class.getAnnotation(Primary.class);
+    @Primary private final class PrimaryAnnotated {}
+    public final Primary ANNOTATION_PRIMARY = PrimaryAnnotated.class.getAnnotation(Primary.class);
 
 }

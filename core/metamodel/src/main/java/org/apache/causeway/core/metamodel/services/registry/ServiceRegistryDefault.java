@@ -61,7 +61,7 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
 
     @Override
     public Optional<?> lookupBeanById(final String id) {
-        return causewaySystemEnvironment.getIocContainer().lookupById(id);
+        return causewaySystemEnvironment.getIocContainer().lookupBean(id);
     }
 
     @Override

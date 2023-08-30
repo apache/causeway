@@ -47,6 +47,7 @@ import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -784,6 +785,13 @@ public final class _Reflect {
         _Assert.assertFalse(method.isSynthetic(), ()->
             String.format("unsupported synthetic method %s", method));
         return method;
+    }
+
+    public boolean isNonFinalObjectMethod(final Method method) {
+        for(val m : _Constants.nonFinalObjectMethods) {
+            if(methodsSame(m, method)) return true;
+        }
+        return false;
     }
 
     //XXX no longer needed
