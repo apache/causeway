@@ -19,6 +19,7 @@
 package org.apache.causeway.extensions.secman.applib.seed.scripts;
 
 import java.io.File;
+import java.util.function.Supplier;
 
 import javax.inject.Inject;
 
@@ -86,6 +87,9 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
         val secmanConfig = config.getExtensions().getSecman();
         val persistenceStack = causewayBeanTypeRegistry.determineCurrentPersistenceStack();
 
+        // used as log message provider below - assuming file was found and is readable
+        final Supplier<String> yamlFilePath = ()->new File(secmanConfig.getSeed().getYamlFile()).getAbsolutePath();
+
         // if a config option ..secman.seed.yamlFile is present,
         // try to use it as alternative seeding strategy,
         // then exit
@@ -95,12 +99,12 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
                 .filter(File::canRead)
                 .map(DataSource::ofFile)
                 .map(ApplicationSecurityDto::tryRead)
+                .map(_try->_try.ifFailure(ex->log.error(String.format("failed seeding from YAML %s", yamlFilePath.get()), ex)))
                 .orElseGet(()->Try.success(null))
                 .getValue()
                 .orElse(null);
         if(dto!=null) {
-            log.info("seeding from YAML file {}", ()->
-                new File(secmanConfig.getSeed().getYamlFile()).getAbsolutePath());
+            log.info("seeding from YAML file {}", yamlFilePath.get());
             seedFromDto(executionContext, dto);
             return; // exit, don't process further
         }
