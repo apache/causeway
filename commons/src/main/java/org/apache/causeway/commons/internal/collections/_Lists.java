@@ -19,7 +19,6 @@
 package org.apache.causeway.commons.internal.collections;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -235,7 +234,8 @@ public final class _Lists {
                 || elements.length==0) {
             return Collections.emptyList();
         }
-        return Collections.unmodifiableList(Arrays.asList(elements));
+        return Collections.unmodifiableList(_NullSafe.stream(elements)
+                .collect(Collectors.toList()));
     }
 
     /**
