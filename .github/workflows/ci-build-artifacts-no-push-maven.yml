@@ -50,7 +50,7 @@ jobs:
       SKIP_CODE_QL: false
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Set up JDK 20
       if: matrix.language == 'java'
