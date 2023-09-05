@@ -53,4 +53,26 @@ class _ListsTest {
         assertEquals(1, otherList.size());
     }
 
+    @Test
+    void ofArray() {
+        val emptyList = _Lists.ofArray(null);
+        assertNotNull(emptyList);
+        assertEquals(0, emptyList.size());
+
+        val emptyList2 = _Lists.ofArray(new Integer[] {});
+        assertNotNull(emptyList2);
+        assertEquals(0, emptyList2.size());
+
+        // verify elements are actually copied
+        val array = new Integer[] {1, 2, 3};
+
+        assertEquals(_Lists.ofArray(new Integer[] {1, 2, 3}), _Lists.ofArray(array));
+
+        // when
+        array[1] = 9;
+
+        // then
+        assertEquals(_Lists.ofArray(new Integer[] {1, 9, 3}), _Lists.ofArray(array));
+    }
+
 }
