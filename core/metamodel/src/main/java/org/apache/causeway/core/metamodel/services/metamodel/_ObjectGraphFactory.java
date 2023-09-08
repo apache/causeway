@@ -72,6 +72,7 @@ class _ObjectGraphFactory implements ObjectGraph.Factory {
             val newObj = object(newObjId, objSpec);
             objectById.put(newObjId, newObj);
             addFieldsLater.setValue(true);
+            objectGraph.objects().add(newObj);
             return newObj;
         });
 
@@ -110,7 +111,6 @@ class _ObjectGraphFactory implements ObjectGraph.Factory {
             .map(this::fieldForAss)
             .forEach(obj.fields()::add);
         }
-        objectGraph.objects().add(obj);
         return obj;
     }
 
