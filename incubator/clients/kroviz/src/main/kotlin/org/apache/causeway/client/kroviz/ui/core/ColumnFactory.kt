@@ -32,7 +32,6 @@ import org.apache.causeway.client.kroviz.core.model.PropertyDetails
 import org.apache.causeway.client.kroviz.to.TObject
 import org.apache.causeway.client.kroviz.to.ValueType
 import org.apache.causeway.client.kroviz.to.Vega5
-import org.apache.causeway.client.kroviz.ui.menu.ContextMenuBuilder
 import org.apache.causeway.client.kroviz.ui.menu.DynamicMenuBuilder
 import org.apache.causeway.client.kroviz.utils.js.Vega
 
@@ -76,7 +75,6 @@ class ColumnFactory {
             }
         )
     }
-
 
     private fun getObjectFromCell(cell: Tabulator.CellComponent): TObject {
         val row = cell.getRow()

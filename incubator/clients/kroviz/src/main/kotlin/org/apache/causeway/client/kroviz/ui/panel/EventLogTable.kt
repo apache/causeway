@@ -18,34 +18,32 @@
  */
 package org.apache.causeway.client.kroviz.ui.panel
 
-import io.kvision.core.*
-import io.kvision.html.Button
-import io.kvision.html.ButtonStyle
+import io.kvision.core.AlignItems
+import io.kvision.core.Border
+import io.kvision.core.FlexWrap
 import io.kvision.panel.VPanel
 import io.kvision.panel.hPanel
 import io.kvision.tabulator.*
+import io.kvision.tabulator.js.Tabulator.CellComponent
 import io.kvision.utils.obj
 import io.kvision.utils.px
 import org.apache.causeway.client.kroviz.core.event.EventState
 import org.apache.causeway.client.kroviz.core.event.LogEntry
-import org.apache.causeway.client.kroviz.to.TObject
 import org.apache.causeway.client.kroviz.ui.builder.TableBuilder
-import org.apache.causeway.client.kroviz.ui.core.Constants
 import org.apache.causeway.client.kroviz.ui.dialog.EventLogDetail
 import org.apache.causeway.client.kroviz.ui.menu.DynamicMenuBuilder
-import org.apache.causeway.client.kroviz.utils.StringUtils
 
 class EventLogTable(val model: List<LogEntry>, filterState: EventState? = null) : VPanel() {
     val tabulator: Tabulator<dynamic>
 
     private val columns = listOf(
-//        buildCdForTableMenu(),
-//        buildCdForTitle(),
+        buildCdForTableMenu(),
+        buildCdForTitle(),
         buildCdForType(),
-//        buildCdForState(),
+        buildCdForState(),
         buildCdForMethod(),
         buildCdForAggregators(),
-        buildCdForRequestLenght(),
+        buildCdForRequestLength(),
         buildCdForResponse(),
         buildCdForResponseLength(),
         buildCdForCacheHits(),
@@ -58,12 +56,20 @@ class EventLogTable(val model: List<LogEntry>, filterState: EventState? = null) 
         return ColumnDefinition(
             download = false,
             title = "",
-            field = "state_1",
+            field = "icon_1",
             width = "50",
             headerMenu = DynamicMenuBuilder().buildTableMenu(this),
             hozAlign = Align.CENTER,
-            vertAlign = VAlign.MIDDLE,
-            formatterComponentFunction = { _, _, data -> buildActionButton(data) }
+            vertAlign = VAlign.BOTTOM,
+            formatter = Formatter.HTML,
+            clickMenu = { _: dynamic, cellComponent: CellComponent ->
+                val le = getObjectFromCell(cellComponent)
+                EventLogDetail(le).open()
+            }
+            //val tto = TooltipOptions(title = data.title)
+            // tabulator tooltip is buggy: often the tooltip doesn't go away and the color is not settable
+            //b.enableTooltip(tto)
+            //      if (le.obj is TObject) b.setDragDropData(Constants.stdMimeType, le.url)
         )
     }
 
@@ -74,15 +80,28 @@ class EventLogTable(val model: List<LogEntry>, filterState: EventState? = null) 
             field = "title_1",
             headerFilter = Editor.INPUT,
             width = "700",
-            formatterComponentFunction = { _, _, data -> buildObjectButton(data) })
+            formatter = Formatter.LINK
+        )
     }
 
     private fun buildCdForState(): ColumnDefinition<dynamic> {
-        return ColumnDefinition("State", "state_1", width = "100", headerFilter = Editor.INPUT, download = false)
+        return ColumnDefinition(
+            "State",
+            "state_1",
+            width = "100",
+            headerFilter = Editor.INPUT,
+            download = false
+        )
     }
 
     private fun buildCdForMethod(): ColumnDefinition<dynamic> {
-        return ColumnDefinition("Method", "method_1", width = "100", headerFilter = Editor.INPUT, download = false)
+        return ColumnDefinition(
+            "Method",
+            "method_1",
+            width = "100",
+            headerFilter = Editor.INPUT,
+            download = false
+        )
     }
 
     private fun buildCdForAggregators(): ColumnDefinition<dynamic> {
@@ -105,14 +124,8 @@ class EventLogTable(val model: List<LogEntry>, filterState: EventState? = null) 
         )
     }
 
-    private fun buildCdForRequestLenght(): ColumnDefinition<dynamic> {
-        return ColumnDefinition(
-            "req.len",
-            field = "requestLength_1",
-            width = "100",
-            hozAlign = Align.RIGHT,
-            download = false
-        )
+    private fun buildCdForRequestLength(): ColumnDefinition<dynamic> {
+        return buildCdForNumber("req.len", "requestLength_1")
     }
 
     private fun buildCdForResponse(): ColumnDefinition<dynamic> {
@@ -126,29 +139,21 @@ class EventLogTable(val model: List<LogEntry>, filterState: EventState? = null) 
     }
 
     private fun buildCdForResponseLength(): ColumnDefinition<dynamic> {
-        return ColumnDefinition(
-            "resp.len",
-            field = "responseLength_1",
-            width = "100",
-            hozAlign = Align.RIGHT,
-            download = false
-        )
+        return buildCdForNumber("resp.len", "responseLength_1")
     }
 
     private fun buildCdForCacheHits(): ColumnDefinition<dynamic> {
-        return ColumnDefinition(
-            "cacheHits",
-            field = "cacheHits_1",
-            width = "100",
-            hozAlign = Align.RIGHT,
-            download = false
-        )
+        return buildCdForNumber("cacheHits", "cacheHits_1")
     }
 
     private fun buildCdForDuration(): ColumnDefinition<dynamic> {
+        return buildCdForNumber("duration", "duration_1")
+    }
+
+    private fun buildCdForNumber(title: String, field: String): ColumnDefinition<dynamic> {
         return ColumnDefinition(
-            "duration",
-            field = "duration_1",
+            title = title,
+            field = field,
             width = "100",
             hozAlign = Align.RIGHT,
             download = false
@@ -156,57 +161,24 @@ class EventLogTable(val model: List<LogEntry>, filterState: EventState? = null) 
     }
 
     private fun buildCdForCreatedAt(): ColumnDefinition<dynamic> {
-        return ColumnDefinition(
-            download = false,
-            title = "Created",
-            field = "createdAt_1",
-            sorter = Sorter.DATETIME,
-            formatter = Formatter.DATETIME,
-            formatterParams = obj
-            { outputFormat = "HH:mm:ss.SSS" },
-            width = "100"
-        )
+        return buildCdForDateTime("Created", "createdAt_1")
     }
 
     private fun buildCdForUpdatedAt(): ColumnDefinition<dynamic> {
+        return buildCdForDateTime("Updated", "updatedAt_1")
+    }
+
+    private fun buildCdForDateTime(title: String, field: String): ColumnDefinition<dynamic> {
         return ColumnDefinition(
             download = false,
-            title = "Updated",
-            field = "updatedAt_1",
+            title = title,
+            field = field,
             sorter = Sorter.DATETIME,
             formatter = Formatter.DATETIME,
             formatterParams = obj
             { outputFormat = "HH:mm:ss.SSS" },
             width = "100"
         )
-    }
-
-    private fun buildObjectButton(data: LogEntry): Button {
-        val b = Button(
-            text = StringUtils.shorten(data.title),
-            icon = data.state.iconName,
-            style = ButtonStyle.LINK
-        )
-        b.onClick {
-            kotlinx.browser.window.open(data.title) //IMPROVE should be URL
-        }
-        //val tto = TooltipOptions(title = data.title)
-        // tabulator tooltip is buggy: often the tooltip doesn't go away and the color is not settable
-        //b.enableTooltip(tto)
-        if (data.obj is TObject) b.setDragDropData(Constants.stdMimeType, data.url)
-        return b
-    }
-
-    private fun buildActionButton(data: LogEntry): Button {
-        val b = Button(
-            text = "",
-            icon = "fa fa-info-circle",
-            style = data.state.style
-        )
-        b.onClick { EventLogDetail(data).open() }
-        b.margin = CssSize(-10, UNIT.px)
-        b.addCssClass("btn-sm")
-        return b
     }
 
     init {
@@ -222,8 +194,6 @@ class EventLogTable(val model: List<LogEntry>, filterState: EventState? = null) 
         model.forEach {
             data.add(it.asDynamic())
         }
-        console.log("[ELT_init]")
-        console.log(data)
 
         tabulator = TableBuilder().createTabulator(data, columns)
         tabulator.setEventListener<Tabulator<dynamic>> {
@@ -236,6 +206,11 @@ class EventLogTable(val model: List<LogEntry>, filterState: EventState? = null) 
             }
         }
         add(tabulator)
+    }
+
+    private fun getObjectFromCell(cell: CellComponent): LogEntry {
+        val row = cell.getRow()
+        return row.getData() as LogEntry
     }
 
 }

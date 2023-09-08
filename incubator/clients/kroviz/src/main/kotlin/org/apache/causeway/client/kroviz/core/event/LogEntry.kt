@@ -53,13 +53,15 @@ enum class EventState(val id: String, val iconName: String, val style: ButtonSty
 @Serializable
 data class LogEntry(
     @Contextual val rs: ResourceSpecification,
-    val method: String? = "",
-    val request: String = "",
+    @Contextual val method: String? = "",
+    @Contextual val request: String = "",
     @Contextual val createdAt: Date = Date(),
 ) {
+    @Contextual
     val url: String = rs.url //rs?.url
 
     //?. is required, otherwise Tabulator.js/EventLogTable shows no entries
+    @Contextual
     val subType = rs?.subType
 
     //?. is required, otherwise Tabulator.js/EventLogTable shows no entries
@@ -116,6 +118,9 @@ data class LogEntry(
     @Contextual
     var runningAtEnd = 0
 
+    @Contextual
+    var icon = "<i class='fas fa-plug'></i>"
+
     // alternative constructor for UI events (e.g. from user interaction)
     @JsName("secondaryConstructor")
     constructor(title: String, aggregator: BaseAggregator) : this(ResourceSpecification(""), "", "") {
@@ -130,22 +135,33 @@ data class LogEntry(
         duration = (date.getTime() - createdAt.getTime()).toInt()
     }
 
+    private fun setState(eventState: EventState) {
+        state = eventState
+        val color = when {
+            state.style.equals(ButtonStyle.DANGER) -> "red"
+            state.style.equals(ButtonStyle.WARNING) -> "yellow"
+            state.style.equals(ButtonStyle.SUCCESS) -> "green"
+            else -> "blue"
+        }
+        icon = "<i class='${state.iconName}' style='color: ${color}'></i>"
+    }
+
     fun setError(error: String) {
         calculate()
         fault = error
-        state = EventState.ERROR
+        setState(EventState.ERROR)
         type = Represention.ERROR.type
     }
 
     fun setUndefined(error: String) {
         calculate()
         fault = error
-        state = EventState.MISSING
+        setState(EventState.MISSING)
     }
 
     fun setClose() {
         updatedAt = Date()
-        state = EventState.CLOSED
+        setState(EventState.CLOSED)
     }
 
     fun setSuccess() {
@@ -156,15 +172,16 @@ data class LogEntry(
             val size = blob?.size ?: 0
             responseLength = size.toInt()
         }
-        state = when {
+        val eventState = when {
             url.startsWith(Constants.krokiUrl) -> EventState.SUCCESS_IMG
             subType == Constants.subTypeXml -> EventState.SUCCESS_XML
             else -> EventState.SUCCESS_JS
         }
+        setState(eventState)
     }
 
     fun setCached() {
-        state = EventState.DUPLICATE
+        setState(EventState.DUPLICATE)
     }
 
     internal fun isCached(rs: ResourceSpecification, method: String): Boolean {
@@ -179,7 +196,7 @@ data class LogEntry(
     }
 
     fun setReload() {
-        state = EventState.RELOAD
+        setState(EventState.RELOAD)
     }
 
     fun getTransferObject(): TransferObject? {
