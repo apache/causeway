@@ -177,6 +177,12 @@ public class AsciiDocFactory {
         return sourceBlock;
     }
 
+    public static Block htmlPassthroughBlock(final StructuralNode parent, @NonNull final String html) {
+        val block = block(parent, html);
+        block.setStyle("passthrough");
+        return block;
+    }
+
     public static Block diagramBlock(
             final StructuralNode parent,
             @NonNull final String diagramType,

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.valuetypes.asciidoc.builder.plantuml.obj;
+package org.apache.causeway.valuetypes.asciidoc.builder.objgraph.plantuml;
 
 import org.apache.causeway.applib.services.metamodel.ObjectGraph;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;

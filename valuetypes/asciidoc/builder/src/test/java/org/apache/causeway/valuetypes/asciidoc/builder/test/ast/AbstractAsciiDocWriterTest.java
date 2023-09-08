@@ -50,12 +50,12 @@ abstract class AbstractAsciiDocWriterTest {
         }
 
         _Text.assertTextEquals(
-                TextUtils.readLinesFromResource(this.getClass(), adocSourceResourceLocation, StandardCharsets.UTF_8),
+                TextUtils.readLinesFromResource(this.getClass(), "/approved/" + adocSourceResourceLocation, StandardCharsets.UTF_8),
                 sourceUnderTest);
     }
 
     protected void assertReferenceDocumentIsCorrectlyWritten() {
-        val adocRef = _Strings.readFromResource(this.getClass(), adocSourceResourceLocation, StandardCharsets.UTF_8);
+        val adocRef = _Strings.readFromResource(this.getClass(), "/approved/" + adocSourceResourceLocation, StandardCharsets.UTF_8);
         val asciidoctor = Asciidoctor.Factory.create();
         val refDoc = asciidoctor.load(adocRef, Options.builder().build());
 

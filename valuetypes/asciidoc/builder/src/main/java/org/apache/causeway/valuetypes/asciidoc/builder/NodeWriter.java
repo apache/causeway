@@ -123,6 +123,7 @@ final class NodeWriter implements StructuralNodeVisitor {
         CALLOUT_LIST("arabic"::equals),
         COLLAPSIBLE_BLOCK("example"::equals),
         SOURCE_BLOCK("source"::equals),
+        PASSTHROUG_BLOCK("passthrough"::equals),
         DIAGRAM_BLOCK(KNOWN_DIAGRAM_TYPES::contains),
         ADMONITION_NOTE("NOTE"::equals),
         ADMONITION_TIP("TIP"::equals),
@@ -153,6 +154,9 @@ final class NodeWriter implements StructuralNodeVisitor {
         }
         public boolean isSourceBlock() {
             return this==Style.SOURCE_BLOCK;
+        }
+        public boolean isPassthroughBlock() {
+            return this==Style.PASSTHROUG_BLOCK;
         }
         public boolean isDiagramBlock() {
             return this==Style.DIAGRAM_BLOCK;
@@ -205,7 +209,9 @@ final class NodeWriter implements StructuralNodeVisitor {
             _Strings.nonEmpty(block.getTitle())
                 .ifPresent(this::printBlockTitle);
             println("----");
-        } if(style.isDiagramBlock()) {
+        } else if(style.isPassthroughBlock()) {
+            println("++++");
+        } else if(style.isDiagramBlock()) {
 
             val diagramTypeAndOptions = IntStream
                     .iterate(1, index->block.getAttribute(""+index)!=null, index->index+1)
@@ -243,6 +249,8 @@ final class NodeWriter implements StructuralNodeVisitor {
                 || style.isSourceBlock()
                 || style.isDiagramBlock()) {
             println("----");
+        } else if(style.isPassthroughBlock()) {
+            println("++++");
         } else if(style.isCollapsibleBlock()) {
             println("====");
         }
