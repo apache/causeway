@@ -18,12 +18,6 @@
  */
 package org.apache.causeway.extensions.docgen.help.topics.domainobjects;
 
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -42,43 +36,21 @@ class _DiagramUtils {
                     + adocDelimited("----", diagramSource));
     }
 
-    String adocCollapsibeBlock(final String content) {
+    // -- HELPER
+
+    private String adocCollapsibeBlock(final String content) {
         return "[%collapsible]\n"
                 + adocDelimited("====", content);
     }
-    String adocBlockHeader(final String entry) {
+    private String adocBlockHeader(final String entry) {
         return "[" + entry + "]\n";
     }
-    String adocDelimited(final String delimiter, final String content) {
+    private String adocDelimited(final String delimiter, final String content) {
         return delimiter + "\n"
             + content
             + "\n" + delimiter + "\n";
     }
-    String adocLabel(final String label) {
+    private String adocLabel(final String label) {
         return "." + label + "\n";
     }
-
-    String multilineLabel(final String...lines) {
-        return Stream.of(lines).collect(Collectors.joining("\\n"));
-    }
-
-    String doubleQuoted(final String string) {
-        return "\"" + string + "\"";
-    }
-
-    String objectId(final ObjectSpecification objSpec) {
-        return objSpec.getLogicalType().getLogicalTypeName();
-    }
-
-    String objectName(final ObjectSpecification objSpec) {
-        return multilineLabel(
-                objectShortName(objSpec),
-                "<" + objSpec.getLogicalType().getNamespace() + ">");
-    }
-
-    String objectShortName(final ObjectSpecification objSpec) {
-        val simpleName = objSpec.getLogicalType().getLogicalTypeSimpleName();
-        return simpleName;
-    }
-
 }
