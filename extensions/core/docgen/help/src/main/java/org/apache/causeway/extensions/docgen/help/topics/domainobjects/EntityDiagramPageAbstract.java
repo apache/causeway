@@ -29,7 +29,7 @@ import org.apache.causeway.applib.services.metamodel.ObjectGraph;
 import org.apache.causeway.extensions.docgen.help.CausewayModuleExtDocgenHelp;
 import org.apache.causeway.extensions.docgen.help.applib.HelpPage;
 import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
-import org.apache.causeway.valuetypes.asciidoc.builder.plantuml.obj.ObjectGraphRendererPlantuml;
+import org.apache.causeway.valuetypes.asciidoc.builder.objgraph.plantuml.ObjectGraphRendererPlantuml;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -62,7 +62,6 @@ public abstract class EntityDiagramPageAbstract implements HelpPage {
      */
     protected String renderObjectGraph(final ObjectGraph objectGraph) {
         val plantumlSource = objectGraph.render(new ObjectGraphRendererPlantuml());
-
         return  "== " + getTitle() + "\n\n"
             + _DiagramUtils.plantumlBlock(plantumlSource)
             + "\n"
