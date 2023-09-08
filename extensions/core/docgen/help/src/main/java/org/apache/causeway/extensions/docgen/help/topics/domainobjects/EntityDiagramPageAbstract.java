@@ -18,19 +18,18 @@
  */
 package org.apache.causeway.extensions.docgen.help.topics.domainobjects;
 
-import java.util.Optional;
-import java.util.stream.Stream;
-
 import jakarta.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.applib.services.metamodel.BeanSort;
+import org.apache.causeway.applib.services.metamodel.MetaModelService;
+import org.apache.causeway.applib.services.metamodel.ObjectGraph;
 import org.apache.causeway.extensions.docgen.help.CausewayModuleExtDocgenHelp;
 import org.apache.causeway.extensions.docgen.help.applib.HelpPage;
 import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
+import org.apache.causeway.valuetypes.asciidoc.builder.plantuml.obj.ObjectGraphRendererPlantuml;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -40,40 +39,34 @@ import lombok.val;
 @RequiredArgsConstructor
 public abstract class EntityDiagramPageAbstract implements HelpPage {
 
-    private final SpecificationLoader specLoader;
-    private final CausewayBeanTypeRegistry beanTypeRegistry;
+    protected final MetaModelService metaModelService;
 
     @Override
     public AsciiDoc getContent() {
-        val title = getTitle();
-        val plantumlSource = entityTypesAsDiagram();
-
-        return AsciiDoc.valueOf(
-                "== " + title + "\n\n"
-                + _DiagramUtils.plantumlBlock(plantumlSource)
-                + "\n"
-                + _DiagramUtils.plantumlSourceBlock(plantumlSource));
+        return AsciiDoc.valueOf(renderObjectGraph(createObjectGraph()));
     }
 
-    /** governs which entities to include */
-    protected abstract boolean accept(final ObjectSpecification objSpec);
+    /** Governs which types to include with the diagram. */
+    protected abstract boolean accept(final BeanSort beanSort, LogicalType logicalType);
 
-    // -- HELPER
-
-    private String entityTypesAsDiagram() {
-        val objectGraph = new ObjectGraph();
-        streamEntityTypes()
-            .filter(this::accept)
-            .forEach(objSpec->objectGraph.registerObject(objSpec));
-        return objectGraph.render();
+    /**
+     * Creates the diagram model. Can be overwritten to customize.
+     */
+    protected ObjectGraph createObjectGraph() {
+        val objectGraph = metaModelService.exportObjectGraph(this::accept);
+        return objectGraph;
     }
 
-    private Stream<ObjectSpecification> streamEntityTypes() {
-        return beanTypeRegistry.getEntityTypes().keySet()
-            .stream()
-            .map(specLoader::specForType)
-            .filter(Optional::isPresent)
-            .map(Optional::get);
+    /**
+     * Returns ascii-doc syntax with Plantuml rendered diagrams. Can be overwritten to customize.
+     */
+    protected String renderObjectGraph(final ObjectGraph objectGraph) {
+        val plantumlSource = objectGraph.render(new ObjectGraphRendererPlantuml());
+
+        return  "== " + getTitle() + "\n\n"
+            + _DiagramUtils.plantumlBlock(plantumlSource)
+            + "\n"
+            + _DiagramUtils.plantumlSourceBlock(plantumlSource);
     }
 
 }

@@ -23,9 +23,9 @@ import jakarta.inject.Named;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.applib.services.metamodel.BeanSort;
+import org.apache.causeway.applib.services.metamodel.MetaModelService;
 import org.apache.causeway.extensions.docgen.help.CausewayModuleExtDocgenHelp;
 
 import lombok.val;
@@ -35,8 +35,8 @@ import lombok.val;
 public class DomainEntityDiagramPage extends EntityDiagramPageAbstract {
 
     @Inject
-    public DomainEntityDiagramPage(final SpecificationLoader specLoader, final CausewayBeanTypeRegistry beanTypeRegistry) {
-        super(specLoader, beanTypeRegistry);
+    public DomainEntityDiagramPage(final MetaModelService metaModelService) {
+        super(metaModelService);
     }
 
     @Override
@@ -44,8 +44,10 @@ public class DomainEntityDiagramPage extends EntityDiagramPageAbstract {
         return "Domain Entity Diagram";
     }
 
-    protected boolean accept(final ObjectSpecification objSpec) {
-        val ns = "" + objSpec.getLogicalType().getNamespace();
+    @Override
+    protected boolean accept(final BeanSort beanSort, final LogicalType logicalType) {
+        if(!beanSort.isEntity()) return false;
+        val ns = "" + logicalType.getNamespace();
         return !ns.equals("causeway")
                 && !ns.startsWith("causeway.");
     }

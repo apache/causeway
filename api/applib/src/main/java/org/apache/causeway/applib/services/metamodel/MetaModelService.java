@@ -19,6 +19,7 @@
 package org.apache.causeway.applib.services.metamodel;
 
 import java.util.Optional;
+import java.util.function.BiPredicate;
 
 import jakarta.inject.Named;
 
@@ -32,6 +33,8 @@ import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.causeway.schema.metamodel.v2.MetamodelDto;
+
+import lombok.NonNull;
 
 /**
  * This service provides a formal API into the framework's metamodel.
@@ -112,7 +115,7 @@ public interface MetaModelService {
                             String logicalMemberIdentifier);
 
     /**
-     * How {@link MetaModelService#sortOf(Class, Mode)} show act if an object
+     * How {@link MetaModelService#sortOf(Class, Mode)} should act if an object
      * type is unknown.
      */
     enum Mode {
@@ -138,5 +141,12 @@ public interface MetaModelService {
      * @param config - restricts/filters to a subsets of the metamodel.
      */
     MetamodelDto exportMetaModel(final Config config);
+
+    /**
+     * Can be used to create object relation diagrams (e.g. Plantuml).
+     *
+     * @param filter by {@link BeanSort} and {@link LogicalType} what to include in the resulting graph
+     */
+    ObjectGraph exportObjectGraph(final @NonNull BiPredicate<BeanSort, LogicalType> filter);
 
 }

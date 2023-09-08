@@ -21,6 +21,8 @@ package org.apache.causeway.core.metamodel.services.metamodel;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiPredicate;
+import java.util.stream.Collectors;
 
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
@@ -42,6 +44,7 @@ import org.apache.causeway.applib.services.metamodel.Config;
 import org.apache.causeway.applib.services.metamodel.DomainMember;
 import org.apache.causeway.applib.services.metamodel.DomainModel;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
+import org.apache.causeway.applib.services.metamodel.ObjectGraph;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -57,6 +60,7 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.schema.metamodel.v2.MetamodelDto;
 
+import lombok.NonNull;
 import lombok.val;
 
 @Service
@@ -236,5 +240,16 @@ public class MetaModelServiceDefault implements MetaModelService {
                 .exportMetaModel(config);
     }
 
+    @Override
+    public ObjectGraph exportObjectGraph(final @NonNull BiPredicate<BeanSort, LogicalType> filter) {
+        val objectSpecs = specificationLoader
+                .snapshotSpecifications()
+                .stream()
+                .filter(spec->filter.test(spec.getBeanSort(), spec.getLogicalType()))
+                .collect(Collectors.toList());
+        return ObjectGraph
+                .create(new _ObjectGraphFactory(objectSpecs))
+                .transform(new _ObjectGraphRelationMerger());
+    }
 
 }
