@@ -55,6 +55,10 @@ public class CausewayModuleExtDocgenHelp {
 
     /**
      * The help index (tree), if not provided already (somewhere else).
+     *
+     * @apiNote Be aware to override this, simply using {@code @Primary} will not be sufficient.
+     *      One must also make sure the overriding config gets registered to the Spring context
+     *      before this one.
      */
     @Bean(NAMESPACE + ".RootHelpTopic")
     @ConditionalOnMissingBean(HelpTopic.class)
