@@ -47,7 +47,7 @@ public class ObjectGraph {
         private final @With @NonNull String packageName;
         private final @With @NonNull String name;
         private final @With @NonNull Optional<String> stereotype;
-        private final List<ObjectGraph.Field> fields = new ArrayList<>();
+        private final @With List<ObjectGraph.Field> fields;
     }
 
     @lombok.Value @Accessors(fluent=true)

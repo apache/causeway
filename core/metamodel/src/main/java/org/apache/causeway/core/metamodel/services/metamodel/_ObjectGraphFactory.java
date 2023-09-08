@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.services.metamodel;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -133,8 +134,9 @@ class _ObjectGraphFactory implements ObjectGraph.Factory {
                 objSpec.getLogicalType().getNamespace(),
                 objSpec.getLogicalType().getLogicalTypeSimpleName(),
                 objSpec.isAbstract()
-                ? Optional.of("abstract")
-                : Optional.empty());
+                    ? Optional.of("abstract")
+                    : Optional.empty(),
+                new ArrayList<>());
         return obj;
     }
 
