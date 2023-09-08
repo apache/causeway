@@ -242,11 +242,13 @@ public class MetaModelServiceDefault implements MetaModelService {
 
     @Override
     public ObjectGraph exportObjectGraph(final @NonNull BiPredicate<BeanSort, LogicalType> filter) {
-        val specifications = specificationLoader.snapshotSpecifications();
-        val objectSpecs = specifications.stream()
+        val objectSpecs = specificationLoader
+                .snapshotSpecifications()
+                .stream()
                 .filter(spec->filter.test(spec.getBeanSort(), spec.getLogicalType()))
                 .collect(Collectors.toList());
-        return ObjectGraph.create(new _ObjectGraphFactory(objectSpecs))
+        return ObjectGraph
+                .create(new _ObjectGraphFactory(objectSpecs))
                 .transform(new _ObjectGraphRelationMerger());
     }
 

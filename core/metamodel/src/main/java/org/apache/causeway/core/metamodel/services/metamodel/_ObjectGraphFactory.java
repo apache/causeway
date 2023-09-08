@@ -52,10 +52,7 @@ class _ObjectGraphFactory implements ObjectGraph.Factory {
 
     @Override
     public final ObjectGraph create() {
-
         objectSpecifications.forEach(this::registerObject);
-
-        createInheritanceRelations();
 
         // single use only! (we cannot call this repeatedly, as it adds more and more duplicates)
         objectGraph.relations().addAll(createInheritanceRelations());
