@@ -29,6 +29,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.commons.internal.collections._Multimaps;
 
 import lombok.NonNull;
+import lombok.With;
 import lombok.val;
 import lombok.experimental.Accessors;
 
@@ -42,27 +43,27 @@ public class ObjectGraph {
 
     @lombok.Value @Accessors(fluent=true)
     public static class Object {
-        private final @NonNull String id;
-        private final @NonNull String packageName;
-        private final @NonNull String name;
-        private final @NonNull Optional<String> stereotype;
+        private final @With @NonNull String id;
+        private final @With @NonNull String packageName;
+        private final @With @NonNull String name;
+        private final @With @NonNull Optional<String> stereotype;
         private final List<ObjectGraph.Field> fields = new ArrayList<>();
     }
 
     @lombok.Value @Accessors(fluent=true)
     public static class Field {
-        private final @NonNull String name;
-        private final @NonNull String elementTypeShortName;
-        private final boolean isPlural;
+        private final @With @NonNull String name;
+        private final @With @NonNull String elementTypeShortName;
+        private final @With boolean isPlural;
     }
 
     @lombok.Value @Accessors(fluent=true)
     public static class Relation {
-        private final @NonNull RelationType relationType;
-        private final @NonNull ObjectGraph.Object from;
-        private final @NonNull ObjectGraph.Object to;
-        private final @NonNull String label;
-        private final @NonNull String label2;
+        private final @With @NonNull RelationType relationType;
+        private final @With @NonNull ObjectGraph.Object from;
+        private final @With @NonNull ObjectGraph.Object to;
+        private final @With @NonNull String label;
+        private final @With @NonNull String label2;
         public String fromId() { return from.id(); }
         public String toId() { return to.id(); }
         public boolean isAssociation() { return relationType!=RelationType.INHERITANCE; }
