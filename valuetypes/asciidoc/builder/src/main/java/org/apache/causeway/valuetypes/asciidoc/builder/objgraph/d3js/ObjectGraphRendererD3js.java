@@ -88,21 +88,15 @@ public class ObjectGraphRendererD3js implements ObjectGraph.Renderer {
 
         val d3jsGraph = new D3jsGraph(new ArrayList<>(), new ArrayList<>());
 
-//debug
-//        d3jsGraph.nodes.add(new D3jsGraph.Node(1, "A", "an A"));
-//        d3jsGraph.nodes.add(new D3jsGraph.Node(2, "B", "a B"));
-//        d3jsGraph.nodes.add(new D3jsGraph.Node(3, "C", "a C"));
-//
-//        d3jsGraph.links.add(new D3jsGraph.Link(1, 2, "E1"));
-//        d3jsGraph.links.add(new D3jsGraph.Link(2, 3, "E2"));
-//        d3jsGraph.links.add(new D3jsGraph.Link(3, 1, "E3"));
-
-
         val objectLookup = new HashMap<ObjectGraph.Object, Integer>();
 
         objGraph.objects().forEach(obj->{
             val counter = objectLookup.size();
-            d3jsGraph.nodes.add(new D3jsGraph.Node(counter, obj.name(), obj.packageName(), obj.packageName()));
+            d3jsGraph.nodes.add(new D3jsGraph.Node(counter,
+                    obj.name(),
+                    obj.packageName(), // group
+                    String.format("%s.%s", obj.packageName(), obj.name()) // tooltip
+                    ));
             objectLookup.put(obj, counter);
         });
 
@@ -117,7 +111,9 @@ public class ObjectGraphRendererD3js implements ObjectGraph.Renderer {
 
     protected void renderSvg(final StringBuilder sb, final D3jsGraph d3jsGraph) {
 
-        val noteText = "Note: Dragging nodes leaves them sticky. Double-clicking releases them.";
+        val noteText = "Note: Dragging nodes leaves them sticky. "
+                + "Double-click releases them. "
+                + "Single-click toggles node highligh.";
 
         sb.append("<div class=\"svg-container\">\n");
         sb.append("<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"force-directed-graph\">\n");
@@ -164,5 +160,3 @@ public class ObjectGraphRendererD3js implements ObjectGraph.Renderer {
     }
 
 }
-
-
