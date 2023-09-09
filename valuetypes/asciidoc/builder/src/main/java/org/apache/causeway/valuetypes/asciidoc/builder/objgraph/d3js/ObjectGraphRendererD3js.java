@@ -18,17 +18,22 @@
  */
 package org.apache.causeway.valuetypes.asciidoc.builder.objgraph.d3js;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.causeway.applib.services.metamodel.ObjectGraph;
-import org.apache.causeway.commons.io.DataSource;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.io.JsonUtils;
+import org.apache.causeway.commons.io.TextUtils;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.val;
 
 @RequiredArgsConstructor
@@ -58,7 +63,9 @@ public class ObjectGraphRendererD3js implements ObjectGraph.Renderer {
         public static class Node {
             int id;
             String label;
-            String group; // future use
+            /** Governs node color. */
+            String group;
+            /** Shown as tooltip. */
             String description;
         }
         @lombok.Value
@@ -109,12 +116,15 @@ public class ObjectGraphRendererD3js implements ObjectGraph.Renderer {
     }
 
     protected void renderSvg(final StringBuilder sb, final D3jsGraph d3jsGraph) {
+
+        val noteText = "Note: Dragging nodes leaves them sticky. Double-clicking releases them.";
+
         sb.append("<div class=\"svg-container\">\n");
         sb.append("<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"force-directed-graph\">\n");
         sb.append("<script>\n");
         sb.append("var d3jsGraph =\n");
         sb.append(JsonUtils.toStringUtf8(d3jsGraph)).append("\n");
-        sb.append("renderForceDirectedGraph(d3jsGraph);\n");
+        sb.append(String.format("renderForceDirectedGraph(d3jsGraph, \"%s\");\n", noteText));
         sb.append("</script>\n");
         sb.append("</svg>\n");
         sb.append("</div>\n");
@@ -126,9 +136,7 @@ public class ObjectGraphRendererD3js implements ObjectGraph.Renderer {
         // -- CSS
 
         sb.append("<style>\n");
-        sb.append(DataSource.ofResource(ObjectGraphRendererD3js.class, "g-style.css")
-                .tryReadAsStringUtf8()
-                .valueAsNonNullElseFail());
+        sb.append(readAsset("force-directed-graph.css"));
         sb.append("\n</style>\n");
 
         // -- JS
@@ -137,13 +145,22 @@ public class ObjectGraphRendererD3js implements ObjectGraph.Renderer {
         sb.append("var ropts = ")
             .append(graphRenderOptions.toJavaScript())
             .append(";\n");
-        sb.append(DataSource.ofResource(ObjectGraphRendererD3js.class, "svgCheckBox.js")
-                .tryReadAsStringUtf8()
-                .valueAsNonNullElseFail());
-        sb.append(DataSource.ofResource(ObjectGraphRendererD3js.class, "force-directed-graph-1.0.js")
-                .tryReadAsStringUtf8()
-                .valueAsNonNullElseFail());
+        sb.append(readAsset("svg-checkbox.js"));
+        sb.append(readAsset("force-directed-graph.js"));
         sb.append("\n</script>\n");
+    }
+
+    /** skips 18 license header lines and any single line comments as well as empty lines */
+    @SneakyThrows
+    private String readAsset(
+            final @NonNull String resourceName) {
+        return TextUtils.readLinesFromResource(
+                ObjectGraphRendererD3js.class, "assets/" + resourceName, StandardCharsets.UTF_8)
+                .filter(_Strings::isNotEmpty)
+                .filter(line->!line.trim().startsWith("//"))
+                .stream()
+                .skip(18) // skip license header
+                .collect(Collectors.joining("\n"));
     }
 
 }
