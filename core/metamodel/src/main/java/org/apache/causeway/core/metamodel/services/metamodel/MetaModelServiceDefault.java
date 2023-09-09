@@ -249,7 +249,7 @@ public class MetaModelServiceDefault implements MetaModelService {
                 .collect(Collectors.toList());
         return ObjectGraph
                 .create(new _ObjectGraphFactory(objectSpecs))
-                .transform(new _ObjectGraphRelationMerger());
+                .transform(ObjectGraph.Transformers.relationMerger());
     }
 
 }

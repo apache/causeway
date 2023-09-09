@@ -113,7 +113,7 @@ public class ObjectGraphRendererD3js implements ObjectGraph.Renderer {
 
         val noteText = "Note: Dragging nodes leaves them sticky. "
                 + "Double-click releases them. "
-                + "Single-click toggles node highligh.";
+                + "Single-click toggles node highlight (incoming edges are emphasized). ";
 
         sb.append("<div class=\"svg-container\">\n");
         sb.append("<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"force-directed-graph\">\n");
