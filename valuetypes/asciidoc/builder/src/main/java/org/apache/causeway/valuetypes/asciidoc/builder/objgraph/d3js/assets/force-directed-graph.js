@@ -123,7 +123,7 @@ var rmodel = {
 		rerenderFunction : null
 	};
 
-function renderForceDirectedGraph(data) {
+function renderForceDirectedGraph(data, noteText) {
 
 	var svg = d3.select(".force-directed-graph");
 
@@ -140,7 +140,7 @@ function renderForceDirectedGraph(data) {
 		svg.append("text")
 			.attr("x", 5)
 			.attr("y", 5+24*3.6)
-			.text("Note: Double-click on any node to release it from stickyness.");
+			.text(noteText);
 		
 		var updateCB = function () {
 		
