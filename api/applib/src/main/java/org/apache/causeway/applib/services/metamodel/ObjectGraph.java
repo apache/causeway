@@ -28,10 +28,12 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal.collections._Multimaps;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.With;
 import lombok.val;
 import lombok.experimental.Accessors;
+import lombok.experimental.UtilityClass;
 
 /**
  * Can be used to create diagrams (e.g. Plantuml)
@@ -91,6 +93,15 @@ public class ObjectGraph {
 
     public static interface Transformer {
         ObjectGraph transform(ObjectGraph objGraph);
+    }
+
+    /**
+     * Factory providing built in {@link Transformer}(s).
+     */
+    @UtilityClass
+    public static class Transformers {
+        @Getter(lazy = true)
+        private final Transformer relationMerger = new _ObjectGraphRelationMerger();
     }
 
     public static interface Renderer {

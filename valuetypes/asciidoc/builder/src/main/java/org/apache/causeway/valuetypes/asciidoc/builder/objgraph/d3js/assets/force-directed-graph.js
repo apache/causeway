@@ -53,37 +53,33 @@ var frameBox = {
 			return this.height();
 		},
 		getViewBoxLiteral: function () {
-			return ' ' + (this.minX()-this.border_padding) + ' ' + (this.minY()-this.border_padding) + ' ' + (this.maxX()+this.border_padding) + ' ' + (this.maxY()+this.border_padding);
+			return ' ' + (this.minX()-this.border_padding) 
+				+ ' ' + (this.minY()-this.border_padding) 
+				+ ' ' + (this.maxX()+this.border_padding) 
+				+ ' ' + (this.maxY()+this.border_padding);
 		},
-		forceCenterBounded: function(x, y) {
+		forceBoxBounded: function(x, y) {
 			var nodes;
 
 			if (x == null) x = this.width() / 2;
 			if (y == null) y = this.height() / 2;
 
-			var 	minX=this.minX()+this.node_radius,
-			minY=this.minY()+this.node_radius,
-			maxX=this.maxX()-this.node_radius,
-			maxY=this.maxY()-this.node_radius;
+			const minX=this.minX()+this.node_radius,
+				minY=this.minY()+this.node_radius,
+				maxX=this.maxX()-this.node_radius,
+				maxY=this.maxY()-this.node_radius;
 
 			function force() {
 				var i,
 				n = nodes.length,
-				node,
-				sx = 0,
-				sy = 0;
+				node;
 
 				for (i = 0; i < n; ++i) {
-					node = nodes[i], sx += node.x, sy += node.y;
-				}
-
-				for (sx = sx / n - x, sy = sy / n - y, i = 0; i < n; ++i) {
-					node = nodes[i], node.x -= sx, node.y -= sy;
-					// don't let nodes leave the bounding frame
-					if(node.x>maxX){	node.x=maxX; }
-					if(node.y>maxY){	node.y=maxY; }
-					if(node.x<minX){	node.x=minX; }
-					if(node.y<minY){	node.y=minY; }
+					node = nodes[i];
+					if(node.x>maxX){ node.x=maxX; }
+					if(node.y>maxY){ node.y=maxY; }
+					if(node.x<minX){ node.x=minX; }
+					if(node.y<minY){ node.y=minY; }
 				}
 			}
 
@@ -120,7 +116,34 @@ var rmodel = {
 		nodelabels  : null,
 		edgelabels  : null,
 		edgelines  : null,
-		rerenderFunction : null
+		rerenderFunction : null,
+		highlightedNodeIds : new Set(),
+		honorHighlightedNodes: function() {
+			let edgelines = this.edgelines;
+			let edgelabels = this.edgelabels;
+			let highlightedNodeIds = this.highlightedNodeIds;
+			
+			// if nothing is highlighted, render default opacities
+			if(highlightedNodeIds.size == 0) {
+				if(edgelines) { edgelines.attr("stroke-opacity", 0.6); }
+				if(edgelabels) { edgelabels.attr("opacity", 1); }
+				return;
+			}
+			
+			// update edge lines' opacity
+			if(edgelines){
+				edgelines.attr("stroke-opacity", function(d) {
+					//console.log("edgeTo " + d.target.id + "->" + highlightedNodeIds.has(d.target.id));
+					return highlightedNodeIds.has(d.target.id) ? ".6" : ".1"; 
+				});
+			}
+			// update edge labels' opacity
+			if(edgelabels){
+				edgelabels.attr("opacity", function(d) {
+					return highlightedNodeIds.has(d.target.id) ? "1" : ".2"; 
+				});
+			}
+		}
 	};
 
 function renderForceDirectedGraph(data, noteText) {
@@ -132,15 +155,21 @@ function renderForceDirectedGraph(data, noteText) {
 	var color = d3.scaleOrdinal(d3.schemeCategory20);
 	
 	{ // options
-	
-		var checkBox1 = new svgCheckBox("Node Labels").x(5).y(5).rx(5).ry(5).checked(ropts.enable_nodelabels);
-		var checkBox2 = new svgCheckBox("Edge Labels").x(5).y(5+24).rx(5).ry(5).checked(ropts.enable_edgelabels);
-		var checkBox3 = new svgCheckBox("Edge Arrows").x(5).y(5+24*2).rx(5).ry(5).checked(ropts.enable_edgearrows);
-		
+
+		let inset = 5;
+		let textHeight = 24;
+
 		svg.append("text")
-			.attr("x", 5)
-			.attr("y", 5+24*3.6)
+			.attr("x", inset)
+			.attr("y", inset+textHeight*0.5)
 			.text(noteText);
+	
+		var checkBox1 = new svgCheckBox("Node Labels").x(inset).y(inset+textHeight*1).rx(5).ry(5)
+			.checked(ropts.enable_nodelabels);
+		var checkBox2 = new svgCheckBox("Edge Labels").x(inset).y(inset+textHeight*2).rx(5).ry(5)
+			.checked(ropts.enable_edgelabels);
+		var checkBox3 = new svgCheckBox("Edge Arrows").x(inset).y(inset+textHeight*3).rx(5).ry(5)
+			.checked(ropts.enable_edgearrows);
 		
 		var updateCB = function () {
 		
@@ -202,9 +231,12 @@ function renderForceDirectedGraph(data, noteText) {
 	}
 
 	var simulation = d3.forceSimulation()
-	.force("link", d3.forceLink().id(function(d) { return d.id; }))
-	.force("charge", d3.forceManyBody())
-	.force("center", frameBox.forceCenterBounded());
+	.force("link", d3.forceLink().id((d) => d.id ))
+	//.force("charge", d3.forceManyBody().strength(-100))
+	.force("collide", d3.forceCollide((d) => 25))
+	.force("center", d3.forceCenter(frameBox.width()/2, frameBox.height()/2))
+	.force("boxBounded", frameBox.forceBoxBounded())
+	;
 
 	function renderGraph(graph) {
 	
@@ -265,6 +297,7 @@ function renderForceDirectedGraph(data, noteText) {
 					.on("drag", dragged)
 					.on("end", dragended))
 			.on("dblclick", releaseNode)
+			.on("click", toggleNodeHighlight)
 			;
 			
 			node.append("title")
@@ -295,7 +328,7 @@ function renderForceDirectedGraph(data, noteText) {
 				.style("pointer-events", "none")
 				.style("text-anchor", "middle")
 				.attr("class", "edgelabel")
-				.text(function(d,i){return d.label;});
+				.text(function(d){return d.label;});
 		}
 		
 		// getters
@@ -313,6 +346,7 @@ function renderForceDirectedGraph(data, noteText) {
 				return rmodel.edgelines;
 			}
 			rmodel.edgelines = createEdges();
+			rmodel.honorHighlightedNodes();
 			return rmodel.edgelines;
 		}
 		
@@ -335,6 +369,7 @@ function renderForceDirectedGraph(data, noteText) {
 				return rmodel.edgelabels;
 			}
 			rmodel.edgelabels = createEdgeLabels();
+			rmodel.honorHighlightedNodes();
 			return rmodel.edgelabels;
 		}
 	  
@@ -372,7 +407,7 @@ function renderForceDirectedGraph(data, noteText) {
 				getEdgeLabels()
 				.attr("x", function(d) { return (d.source.x + d.target.x)*0.5; })
 				.attr("y", function(d) { return (d.source.y + d.target.y)*0.5; })
-				.attr('transform', function(d,i){
+				.attr('transform', function(d){
 					var cx = (d.source.x + d.target.x)*0.5;
 					var cy = (d.source.y + d.target.y)*0.5;
 					var dx = d.target.x - d.source.x;
@@ -383,8 +418,6 @@ function renderForceDirectedGraph(data, noteText) {
 					return 'rotate('+degree+' '+cx+' '+cy+')';
 				})
 				;
-		
-			
 		}
 		
 		rmodel.rerenderFunction = ticked;
@@ -416,5 +449,16 @@ function renderForceDirectedGraph(data, noteText) {
 		d.fy = null;
 	}
 	
+	function toggleNodeHighlight(node) {
+		let nodeId = node.id;
+		if(rmodel.highlightedNodeIds.has(nodeId)) {
+			rmodel.highlightedNodeIds.delete(nodeId);
+			//console.log("del " + nodeId);
+		} else {
+			rmodel.highlightedNodeIds.add(nodeId);
+			//console.log("add " + nodeId);
+		}
+		rmodel.honorHighlightedNodes();
+	}
 
 }
