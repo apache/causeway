@@ -94,9 +94,8 @@ public class ObjectGraphRendererD3js implements ObjectGraph.Renderer {
             val counter = objectLookup.size();
             d3jsGraph.nodes.add(new D3jsGraph.Node(counter,
                     obj.name(),
-                    obj.packageName(), // group
-                    String.format("%s.%s", obj.packageName(), obj.name()) // tooltip
-                    ));
+                    obj.packageName(), // node group -> auto color (max 20 colors)
+                    asTooltip(obj)));
             objectLookup.put(obj, counter);
         });
 
@@ -107,6 +106,18 @@ public class ObjectGraphRendererD3js implements ObjectGraph.Renderer {
         });
 
         renderSvg(sb, d3jsGraph);
+    }
+
+    private String asTooltip(final ObjectGraph.Object obj) {
+        val sb = new StringBuilder();
+        sb.append(obj.packageName()).append('.').append(obj.name());
+        obj.fields().forEach(field->{
+            sb.append("\n").append(" * ").append(field.name()).append(": ");
+            sb.append(field.isPlural()
+                    ? String.format("[%s]", field.elementTypeShortName())
+                    : field.elementTypeShortName());
+        });
+        return sb.toString();
     }
 
     protected void renderSvg(final StringBuilder sb, final D3jsGraph d3jsGraph) {
