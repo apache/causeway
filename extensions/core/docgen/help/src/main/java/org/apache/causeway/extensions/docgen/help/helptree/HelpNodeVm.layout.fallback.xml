@@ -16,16 +16,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <bs:row>
-        <bs:col span="10" unreferencedActions="true">
-            <cpt:domainObject />
-        </bs:col>
-        <bs:col span="2">
-            <cpt:fieldSet name="" id="sources" />
-        </bs:col>
-    </bs:row>
-
-    <bs:row>
-        <bs:col span="3">
+        <bs:col span="4">
             <cpt:fieldSet name="Index" id="tree">
                 <cpt:action id="clearHints" position="PANEL" />
                 <cpt:action id="rebuildMetamodel" position="PANEL"/>
@@ -41,8 +32,13 @@
             </cpt:fieldSet>
             <cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
         </bs:col>
-        <bs:col span="9">
-            <cpt:fieldSet name="Detail" id="detail">
+        <bs:col span="8" unreferencedActions="true">
+            <cpt:domainObject />
+        </bs:col>
+    </bs:row>
+    <bs:row>
+        <bs:col span="12">
+            <cpt:fieldSet name="" id="detail">
                 <cpt:property id="helpNode"/>
             </cpt:fieldSet>
         </bs:col>

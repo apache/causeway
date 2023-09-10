@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.extensions.docgen.help.topics.domainobjects;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.stereotype.Component;
 
@@ -32,17 +32,17 @@ import org.apache.causeway.extensions.docgen.help.CausewayModuleExtDocgenHelp;
 import lombok.val;
 
 @Component
-@Named(CausewayModuleExtDocgenHelp.NAMESPACE + ".CausewayEntityDiagramPage")
-public class CausewayEntityDiagramPage extends EntityDiagramPageAbstract {
+@Named(CausewayModuleExtDocgenHelp.NAMESPACE + ".DomainEntityDiagramPage2")
+public class DomainEntityDiagramPage2 extends EntityDiagramPageAbstract {
 
     @Inject
-    public CausewayEntityDiagramPage(final MetaModelService metaModelService) {
+    public DomainEntityDiagramPage2(final MetaModelService metaModelService) {
         super(metaModelService);
     }
 
     @Override
     public String getTitle() {
-        return "Causeway Entity Diagram";
+        return "Domain Entity Diagram (interactive)";
     }
 
     @Override
@@ -54,13 +54,13 @@ public class CausewayEntityDiagramPage extends EntityDiagramPageAbstract {
     protected boolean accept(final BeanSort beanSort, final LogicalType logicalType) {
         if(!beanSort.isEntity()) return false;
         val ns = "" + logicalType.getNamespace();
-        return ns.equals("causeway")
-                || ns.startsWith("causeway.");
+        return !ns.equals("causeway")
+                && !ns.startsWith("causeway.");
     }
 
     @Override
     protected String renderObjectGraph(final ObjectGraph objectGraph) {
-        return super.renderObjectGraphUsingPlantuml(objectGraph);
+        return super.renderObjectGraphUsingD3js(objectGraph);
     }
 
 }

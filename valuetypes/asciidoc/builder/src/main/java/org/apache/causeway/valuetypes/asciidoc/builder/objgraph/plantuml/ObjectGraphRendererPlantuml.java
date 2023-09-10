@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.valuetypes.asciidoc.builder.objgraph.plantuml;
 
-import org.apache.causeway.applib.services.metamodel.ObjectGraph;
+import org.apache.causeway.applib.services.metamodel.objgraph.ObjectGraph;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.val;

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.applib.services.metamodel;
+package org.apache.causeway.applib.services.metamodel.objgraph;
 
 import java.util.ArrayList;
 import java.util.HashMap;

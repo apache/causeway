@@ -27,8 +27,8 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.apache.causeway.applib.id.LogicalType;
-import org.apache.causeway.applib.services.metamodel.ObjectGraph;
-import org.apache.causeway.applib.services.metamodel.ObjectGraph.Relation;
+import org.apache.causeway.applib.services.metamodel.objgraph.ObjectGraph;
+import org.apache.causeway.applib.services.metamodel.objgraph.ObjectGraph.Relation;
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.collections._Multimaps;
 import org.apache.causeway.commons.internal.collections._Multimaps.ListMultimap;

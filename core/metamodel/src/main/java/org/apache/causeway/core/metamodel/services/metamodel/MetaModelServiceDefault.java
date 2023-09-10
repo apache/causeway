@@ -44,7 +44,7 @@ import org.apache.causeway.applib.services.metamodel.Config;
 import org.apache.causeway.applib.services.metamodel.DomainMember;
 import org.apache.causeway.applib.services.metamodel.DomainModel;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
-import org.apache.causeway.applib.services.metamodel.ObjectGraph;
+import org.apache.causeway.applib.services.metamodel.objgraph.ObjectGraph;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -248,8 +248,7 @@ public class MetaModelServiceDefault implements MetaModelService {
                 .filter(spec->filter.test(spec.getBeanSort(), spec.getLogicalType()))
                 .collect(Collectors.toList());
         return ObjectGraph
-                .create(new _ObjectGraphFactory(objectSpecs))
-                .transform(ObjectGraph.Transformers.relationMerger());
+                .create(new _ObjectGraphFactory(objectSpecs));
     }
 
 }
