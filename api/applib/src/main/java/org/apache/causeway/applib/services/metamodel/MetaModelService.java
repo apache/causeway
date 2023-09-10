@@ -32,6 +32,7 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.commanddto.processor.CommandDtoProcessor;
+import org.apache.causeway.applib.services.metamodel.objgraph.ObjectGraph;
 import org.apache.causeway.schema.metamodel.v2.MetamodelDto;
 
 import lombok.NonNull;

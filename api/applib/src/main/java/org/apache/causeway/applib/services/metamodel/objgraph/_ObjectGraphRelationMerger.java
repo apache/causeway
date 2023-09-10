@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.applib.services.metamodel;
+package org.apache.causeway.applib.services.metamodel.objgraph;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,20 +27,18 @@ import org.apache.causeway.commons.internal.collections._Multimaps.ListMultimap;
 
 import lombok.val;
 
-@lombok.Value
 class _ObjectGraphRelationMerger implements ObjectGraph.Transformer {
 
     @Override
     public ObjectGraph transform(final ObjectGraph objGraph) {
+        val transformed = new ObjectGraph();
+        transformed.objects().addAll(objGraph.objects());
 
         val objectById = objGraph.objectById();
-
-        final List<ObjectGraph.Relation> relationsToRender = new ArrayList<>(objGraph.relations());
+        val relationsToRender = new ArrayList<ObjectGraph.Relation>(objGraph.relations());
         consolidateAssociationRelations(objectById, relationsToRender);
         consolidateBidirRelations(objectById, relationsToRender);
 
-        val transformed = new ObjectGraph();
-        transformed.objects().addAll(objGraph.objects());
         transformed.relations().addAll(relationsToRender);
         return transformed;
     }

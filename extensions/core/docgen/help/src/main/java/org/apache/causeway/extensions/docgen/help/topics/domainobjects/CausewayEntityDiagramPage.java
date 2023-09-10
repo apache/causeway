@@ -26,6 +26,7 @@ import org.springframework.stereotype.Component;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
+import org.apache.causeway.applib.services.metamodel.objgraph.ObjectGraph;
 import org.apache.causeway.extensions.docgen.help.CausewayModuleExtDocgenHelp;
 
 import lombok.val;
@@ -45,11 +46,21 @@ public class CausewayEntityDiagramPage extends EntityDiagramPageAbstract {
     }
 
     @Override
+    protected String diagramTitle() {
+        return "Entity Relations";
+    }
+
+    @Override
     protected boolean accept(final BeanSort beanSort, final LogicalType logicalType) {
         if(!beanSort.isEntity()) return false;
         val ns = "" + logicalType.getNamespace();
         return ns.equals("causeway")
                 || ns.startsWith("causeway.");
+    }
+
+    @Override
+    protected String renderObjectGraph(final ObjectGraph objectGraph) {
+        return super.renderObjectGraphUsingPlantuml(objectGraph);
     }
 
 }

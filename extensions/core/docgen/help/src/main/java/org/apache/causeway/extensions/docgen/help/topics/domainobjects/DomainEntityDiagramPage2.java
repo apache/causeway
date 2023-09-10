@@ -32,17 +32,17 @@ import org.apache.causeway.extensions.docgen.help.CausewayModuleExtDocgenHelp;
 import lombok.val;
 
 @Component
-@Named(CausewayModuleExtDocgenHelp.NAMESPACE + ".DomainEntityDiagramPage")
-public class DomainEntityDiagramPage extends EntityDiagramPageAbstract {
+@Named(CausewayModuleExtDocgenHelp.NAMESPACE + ".DomainEntityDiagramPage2")
+public class DomainEntityDiagramPage2 extends EntityDiagramPageAbstract {
 
     @Inject
-    public DomainEntityDiagramPage(final MetaModelService metaModelService) {
+    public DomainEntityDiagramPage2(final MetaModelService metaModelService) {
         super(metaModelService);
     }
 
     @Override
     public String getTitle() {
-        return "Domain Entity Diagram";
+        return "Domain Entity Diagram (interactive)";
     }
 
     @Override
@@ -60,7 +60,7 @@ public class DomainEntityDiagramPage extends EntityDiagramPageAbstract {
 
     @Override
     protected String renderObjectGraph(final ObjectGraph objectGraph) {
-        return super.renderObjectGraphUsingPlantuml(objectGraph);
+        return super.renderObjectGraphUsingD3js(objectGraph);
     }
 
 }

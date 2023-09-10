@@ -28,6 +28,7 @@ import org.apache.causeway.extensions.docgen.help.applib.HelpNode.HelpTopic;
 import org.apache.causeway.extensions.docgen.help.menu.DocumentationMenu;
 import org.apache.causeway.extensions.docgen.help.topics.domainobjects.CausewayEntityDiagramPage;
 import org.apache.causeway.extensions.docgen.help.topics.domainobjects.DomainEntityDiagramPage;
+import org.apache.causeway.extensions.docgen.help.topics.domainobjects.DomainEntityDiagramPage2;
 import org.apache.causeway.extensions.docgen.help.topics.welcome.WelcomeHelpPage;
 
 import lombok.val;
@@ -44,7 +45,8 @@ import lombok.val;
     // help pages, as required by the default RootHelpTopic below (in case when to be managed by Spring)
     WelcomeHelpPage.class,
     CausewayEntityDiagramPage.class,
-    DomainEntityDiagramPage.class
+    DomainEntityDiagramPage.class,
+    DomainEntityDiagramPage2.class
 
 })
 // keep class-name in sync with CausewayExtSecmanRegularUserRoleAndPermissions
@@ -67,7 +69,8 @@ public class CausewayModuleExtDocgenHelp {
     public HelpTopic rootHelpTopic(
             final WelcomeHelpPage welcomeHelpPage,
             final CausewayEntityDiagramPage causewayEntityDiagramPage,
-            final DomainEntityDiagramPage domainEntityDiagramPage) {
+            final DomainEntityDiagramPage domainEntityDiagramPage,
+            final DomainEntityDiagramPage2 domainEntityDiagramPage2) {
 
         val root = HelpTopic.root("Topics");
 
@@ -77,7 +80,8 @@ public class CausewayModuleExtDocgenHelp {
             .addPage(causewayEntityDiagramPage);
 
         root.subTopic("Domain")
-            .addPage(domainEntityDiagramPage);
+            .addPage(domainEntityDiagramPage)
+            .addPage(domainEntityDiagramPage2);
 
         return root;
     }
