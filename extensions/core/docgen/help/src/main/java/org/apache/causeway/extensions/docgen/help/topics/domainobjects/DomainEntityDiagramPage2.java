@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.extensions.docgen.help.topics.domainobjects;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Component;
 
