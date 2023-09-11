@@ -28,6 +28,8 @@ public enum TextMode {
      */
     HTML;
 
+    public static TextMode defaults() { return TEXT; }
+
     public boolean isText() { return this == TEXT; }
     public boolean isHtml() { return this == HTML; }
 }

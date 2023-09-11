@@ -2420,7 +2420,7 @@ public class CausewayConfiguration {
             /**
              * How to interpret tooltip content, e.g. as HTML or TEXT. default = TEXT
              */
-            private TextMode tooltipTextMode = TextMode.TEXT;
+            private TextMode tooltipTextMode = TextMode.defaults();
 
             /**
              * Whether to show an indicator for a form submit button that it has been clicked.
