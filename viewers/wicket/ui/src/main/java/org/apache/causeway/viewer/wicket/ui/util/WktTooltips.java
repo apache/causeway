@@ -17,6 +17,7 @@
 package org.apache.causeway.viewer.wicket.ui.util;
 
 import java.time.Duration;
+import java.util.Optional;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
@@ -25,8 +26,10 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.core.config.viewer.web.TextMode;
 import org.apache.causeway.viewer.commons.model.decorators.TooltipDecorator.TooltipDecorationModel;
 import org.apache.causeway.viewer.commons.model.layout.UiPlacementDirection;
+import org.apache.causeway.viewer.wicket.model.util.WktContext;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
 import org.apache.causeway.viewer.wicket.ui.util.ExtendedPopoverConfig.PopoverBoundary;
 
@@ -158,17 +161,16 @@ public class WktTooltips {
                         + "})",
                         markupId,
                         config.toJsonString());
-// alternative jQuery syntax ...
-//                return String.format("$('#%s').each((i,elem)=>{"
-//                        + "new bootstrap.Popover(elem, %s);"
-//                        + "})",
-//                        markupId,
-//                        config.toJsonString());
             }
         };
     }
 
-    private PopoverConfig getTooltipConfig(final UiPlacementDirection uiPlacementDirection) {
+    /**
+     * @param uiPlacementDirection top, right, bottom or left
+     * @param htmlEnabled - whether to allow HTML for tooltip content
+     */
+    private PopoverConfig getTooltipConfig(
+            final UiPlacementDirection uiPlacementDirection) {
         switch(uiPlacementDirection) {
         case TOP:
             return createPopoverConfigDefault()
@@ -187,21 +189,24 @@ public class WktTooltips {
         }
     }
 
-//    @Getter(lazy=true)
-//    private final PopoverConfig tooltipConfigTop =
-//            createPopoverConfigDefault()
-//            .withPlacement(Placement.top);
-//
-//    @Getter(lazy=true)
-//    private final PopoverConfig tooltipConfigBottom =
-//            createPopoverConfigDefault()
-//                .withPlacement(Placement.bottom);
-
     private PopoverConfig createPopoverConfigDefault() {
+        final TextMode textMode = getTooltipTextMode();
         return new ExtendedPopoverConfig()
                 .withBoundary(PopoverBoundary.viewport)
                 .withTrigger(OpenTrigger.hover)
                 .withDelay(Duration.ZERO)
-                .withAnimation(true);
+                .withAnimation(true)
+                .withHtml(textMode.isHtml())
+                .withSanitizer(!textMode.isHtml());
+    }
+
+    /**
+     * Lookup in global context.
+     */
+    private TextMode getTooltipTextMode() {
+        val textMode = Optional.ofNullable(WktContext.getMetaModelContext())
+                .map(mmc->mmc.getConfiguration().getViewer().getWicket().getTooltipTextMode())
+                .orElse(TextMode.TEXT);
+        return textMode;
     }
 }

@@ -85,6 +85,7 @@ import org.apache.causeway.core.config.metamodel.facets.PropertyConfigOptions;
 import org.apache.causeway.core.config.metamodel.services.ApplicationFeaturesInitConfiguration;
 import org.apache.causeway.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.causeway.core.config.viewer.web.DialogMode;
+import org.apache.causeway.core.config.viewer.web.TextMode;
 
 import lombok.Data;
 import lombok.Getter;
@@ -2415,6 +2416,11 @@ public class CausewayConfiguration {
              * </p>
              */
             private boolean suppressPasswordReset = false;
+
+            /**
+             * How to interpret tooltip content, e.g. as HTML or TEXT. default = TEXT
+             */
+            private TextMode tooltipTextMode = TextMode.TEXT;
 
             /**
              * Whether to show an indicator for a form submit button that it has been clicked.
