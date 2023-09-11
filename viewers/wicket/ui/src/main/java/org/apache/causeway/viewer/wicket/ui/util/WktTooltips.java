@@ -206,7 +206,6 @@ public class WktTooltips {
     private TextMode getTooltipTextMode() {
         val textMode = Optional.ofNullable(WktContext.getMetaModelContext())
                 .map(mmc->mmc.getConfiguration().getViewer().getWicket().getTooltipTextMode())
-                .orElse(TextMode.TEXT);
-        return textMode;
-    }
+                .orElseGet(TextMode::defaults);
+        return textMode;    }
 }
