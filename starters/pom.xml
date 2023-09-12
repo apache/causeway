@@ -42,7 +42,7 @@
 		<maven.compiler.release>17</maven.compiler.release>
 
 		<spring-boot.version>3.1.3</spring-boot.version>
-		<approvaltests.version>18.7.1</approvaltests.version>
+		<approvaltests.version>19.0.0</approvaltests.version>
 
 		<!-- IMPORTANT: keep in sync with property defined in resteasy-spring-boot-starter -->
 		<resteasy.version>6.0.0.Alpha2</resteasy.version>
