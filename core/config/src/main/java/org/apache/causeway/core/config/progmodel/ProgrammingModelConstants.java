@@ -23,7 +23,6 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
@@ -66,6 +65,7 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 
@@ -113,9 +113,9 @@ public final class ProgrammingModelConstants {
         ;
         private final Class<? extends Annotation> annotationType;
 
-        public static boolean anyMatchOn(final Method method) {
+        public static boolean anyMatchOn(final ResolvedMethod method) {
             for(MethodIncludeMarker includeMarker : MethodIncludeMarker.values()) {
-                if(_Annotations.synthesize(method, includeMarker.getAnnotationType()).isPresent()) {
+                if(_Annotations.synthesize(method.method(), includeMarker.getAnnotationType()).isPresent()) {
                     return true;
                 }
             }
@@ -137,9 +137,9 @@ public final class ProgrammingModelConstants {
         ;
         private final Class<? extends Annotation> annotationType;
 
-        public static boolean anyMatchOn(final Method method) {
+        public static boolean anyMatchOn(final ResolvedMethod method) {
             for(MethodExcludeMarker excludeMarker : MethodExcludeMarker.values()) {
-                if(_Annotations.synthesize(method, excludeMarker.getAnnotationType()).isPresent()) {
+                if(_Annotations.synthesize(method.method(), excludeMarker.getAnnotationType()).isPresent()) {
                     return true;
                 }
             }
@@ -174,27 +174,27 @@ public final class ProgrammingModelConstants {
                     || IS.isPrefixOf(name);
         }
 
-        public static boolean isBooleanGetter(final Method method) {
-            return IS.isPrefixOf(method.getName())
-                    && method.getParameterCount() == 0
-                    && !Modifier.isStatic(method.getModifiers())
-                    && (method.getReturnType() == boolean.class
-                        || method.getReturnType() == Boolean.class);
+        public static boolean isBooleanGetter(final ResolvedMethod method) {
+            return IS.isPrefixOf(method.name())
+                    && method.isNoArg()
+                    && !method.isStatic()
+                    && (method.returnType() == boolean.class
+                        || method.returnType() == Boolean.class);
         }
 
-        public static boolean isNonBooleanGetter(final Method method, final Predicate<Class<?>> typeFilter) {
-            return GET.isPrefixOf(method.getName())
-                    && method.getParameterCount() == 0
-                    && !Modifier.isStatic(method.getModifiers())
-                    && typeFilter.test(method.getReturnType());
+        public static boolean isNonBooleanGetter(final ResolvedMethod method, final Predicate<Class<?>> typeFilter) {
+            return GET.isPrefixOf(method.name())
+                    && method.isNoArg()
+                    && !method.isStatic()
+                    && typeFilter.test(method.returnType());
         }
 
-        public static boolean isNonBooleanGetter(final Method method, final Class<?> expectedType) {
+        public static boolean isNonBooleanGetter(final ResolvedMethod method, final Class<?> expectedType) {
             return isNonBooleanGetter(method, type->
                 expectedType.isAssignableFrom(ClassUtils.resolvePrimitiveIfNecessary(type)));
         }
 
-        public static boolean isGetter(final Method method) {
+        public static boolean isGetter(final ResolvedMethod method) {
             return isBooleanGetter(method)
                     || isNonBooleanGetter(method, type->type != void.class);
         }
@@ -448,7 +448,7 @@ public final class ProgrammingModelConstants {
         PREFIXED_MEMBER_NAME {
             @Override @Nullable
             String nameFor(final MethodFacade member, final String prefix, final boolean isMixin) {
-                return prefix + getCapitalizedMemberName(member.asMethodForIntrospection());
+                return prefix + getCapitalizedMemberName(member.asMethodForIntrospection().method());
             }
         },
         /** eg. hide() */

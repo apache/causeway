@@ -50,6 +50,7 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
         public final String methodName;
         public final Class<?>[] methodParameters;
 
+        @Deprecated //TODO[CAUSEWAY-3571] use ResolvedMethod instead
         public MethodAndParameterTypes(final String methodName, final Class<?>[] methodParameters) {
             this.methodName = methodName;
             this.methodParameters = methodParameters;
@@ -66,7 +67,7 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
         .streamPublicMethods(Object.class)
         .forEach(method->{
             javaLangObjectMethodsToIgnore
-            .add(new RemoveMethodsFacetFactory.MethodAndParameterTypes(method.getName(), method.getParameterTypes()));
+            .add(new RemoveMethodsFacetFactory.MethodAndParameterTypes(method.name(), method.paramTypes()));
         });
 
     }
@@ -90,13 +91,13 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
             // remove methods in the context of non-static inner classes,
             // except cls when is a mixin
             if (!isConcreteMixin
-                    && _Reflect.isNonStaticInnerMethod(method)) {
+                    && _Reflect.isNonStaticInnerMethod(method.method())) {
                 processClassContext.removeMethod(method);
                 return;
             }
 
             // removeJavaLangComparable(processClassContext);
-            if(method.getName().equals("compareTo")) {
+            if(method.name().equals("compareTo")) {
                 processClassContext.removeMethod(method);
                 return;
             }
@@ -104,11 +105,11 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
             // remove property setter, if has not explicitly an @Action annotation
             // this code block is not required, if @Action annotations are explicit per config
             if(!isActionAnnotationRequired
-                    && method.getParameterCount() == 1
-                    && method.getName().startsWith("set")
-                    && method.getName().length() > 3) {
+                    && method.isSingleArg()
+                    && method.name().startsWith("set")
+                    && method.name().length() > 3) {
 
-                if(!_Annotations.synthesize(method, Action.class).isPresent()) {
+                if(!_Annotations.synthesize(method.method(), Action.class).isPresent()) {
                     processClassContext.removeMethod(method);
                     return;
                 }

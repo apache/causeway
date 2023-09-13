@@ -56,7 +56,7 @@ extends FacetFactoryAbstract {
         .streamPublicMethods(typeToIgnore)
         .forEach(method->{
             datanucleusPersistableMethodsToIgnore
-            .add(new RemoveMethodsFacetFactory.MethodAndParameterTypes(method.getName(), method.getParameterTypes()));
+            .add(new RemoveMethodsFacetFactory.MethodAndParameterTypes(method.name(), method.paramTypes()));
         });
     }
 

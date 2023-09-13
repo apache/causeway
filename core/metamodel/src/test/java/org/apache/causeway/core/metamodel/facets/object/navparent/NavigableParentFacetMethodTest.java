@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.navparent;
 
-import java.lang.reflect.Method;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,6 +27,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import org.apache.causeway.commons.internal.reflection._GenericResolver;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.navparent.method.NavigableParentFacetViaMethod;
@@ -59,7 +58,8 @@ class NavigableParentFacetMethodTest {
         pojo = new DomainObjectWithProblemInNavigableParentMethod();
 
         mockOwningAdapter = Mockito.mock(ManagedObject.class);
-        final Method navigableParentMethod = DomainObjectWithProblemInNavigableParentMethod.class.getMethod("parent");
+        val navigableParentMethod =
+                _GenericResolver.resolveMethod(DomainObjectWithProblemInNavigableParentMethod.class, "parent");
         facet = NavigableParentFacetViaMethod.create(pojo.getClass(), navigableParentMethod, simpleFacetHolder)
                 .orElse(null);
 

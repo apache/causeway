@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.facets.members.disabled.method;
 
-import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.applib.services.i18n.TranslatableString;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -45,7 +45,7 @@ implements ImperativeFacet {
     private final TranslationContext translationContext;
 
     public DisableForContextFacetViaMethod(
-            final Method method,
+            final ResolvedMethod method,
             final FacetHolder holder) {
         super(holder);
         this.methods = ImperativeFacet.singleRegularMethod(method);
@@ -67,7 +67,7 @@ implements ImperativeFacet {
             return Optional.empty();
         }
         val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
-        final Object returnValue = MmInvokeUtils.invokeAutofit(method, target);
+        final Object returnValue = MmInvokeUtils.invokeAutofit(method.method(), target);
         final String reasonString = returnValue instanceof String
                 ? (String) returnValue
                 : returnValue instanceof TranslatableString

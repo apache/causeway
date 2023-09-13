@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.specloader.specimpl;
 
-import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -26,6 +25,7 @@ import org.apache.causeway.applib.annotation.ParameterTuple;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.Violation;
@@ -42,8 +42,8 @@ class _MethodFacadeAutodetect {
      * Detects whether an action uses the {@link ParameterTuple} annotation on its single argument.
      * If so, we follow Parameters as Tuple (PAT) semantics.
      */
-    MethodFacade autodetect(final Method method, final FacetHolder inspectedTypeSpec) {
-        final long paramTupleCount = Stream.of(method.getParameters())
+    MethodFacade autodetect(final ResolvedMethod method, final FacetHolder inspectedTypeSpec) {
+        final long paramTupleCount = Stream.of(method.method().getParameters())
             .map(parameter->_Annotations.synthesize(parameter, ParameterTuple.class))
             .filter(Optional::isPresent)
             .count();
@@ -51,16 +51,16 @@ class _MethodFacadeAutodetect {
             return _MethodFacades.regular(method);
         }
         if(paramTupleCount > 1
-                || method.getParameterCount() > 1) {
+                || method.paramCount() > 1) {
             // invalid
             ValidationFailure.raiseFormatted(inspectedTypeSpec,
                     Violation.PARAMETER_TUPLE_INVALID_USE_OF_ANNOTATION
                         .builder()
                         .addVariable("type", inspectedTypeSpec.getFeatureIdentifier().getClassName())
-                        .addVariable("member", method.getName())
+                        .addVariable("member", method.name())
                         .buildMessage());
         }
-        val patType = method.getParameterTypes()[0];
+        val patType = method.paramType(0);
         val patConstructors = _ClassCache.getInstance().streamPublicConstructors(patType)
             .collect(Can.toCan());
         if(!patConstructors.isCardinalityOne()) {
@@ -69,7 +69,7 @@ class _MethodFacadeAutodetect {
                     Violation.PARAMETER_TUPLE_TYPE_WITH_AMBIGUOUS_CONSTRUCTORS
                         .builder()
                         .addVariable("type", inspectedTypeSpec.getFeatureIdentifier().getClassName())
-                        .addVariable("member", method.getName())
+                        .addVariable("member", method.name())
                         .addVariable("patType", patType.getName())
                         .buildMessage());
         }

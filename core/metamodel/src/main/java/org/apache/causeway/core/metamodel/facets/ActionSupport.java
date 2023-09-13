@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.facets;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Optional;
@@ -28,6 +27,7 @@ import java.util.function.Consumer;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.collections._Arrays;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.methods.MethodFinder;
 import org.apache.causeway.core.metamodel.methods.MethodFinderPAT;
 import org.apache.causeway.core.metamodel.methods.MethodFinderPAT.MethodAndPatConstructor;
@@ -80,7 +80,7 @@ public final class ActionSupport {
 
     @Value(staticConstructor = "of")
     public static class ActionSupportingMethodSearchResult {
-        Method supportingMethod;
+        ResolvedMethod supportingMethod;
         Class<?> returnType;
         Optional<Constructor<?>> patConstructor;
     }
@@ -115,7 +115,7 @@ public final class ActionSupport {
         return ActionSupportingMethodSearchResult
                 .of(
                         supportingMethodAndPatConstructor.getSupportingMethod(),
-                        supportingMethodAndPatConstructor.getSupportingMethod().getReturnType(),
+                        supportingMethodAndPatConstructor.getSupportingMethod().returnType(),
                         Optional.of(supportingMethodAndPatConstructor.getPatConstructor()));
     }
 
@@ -142,9 +142,9 @@ public final class ActionSupport {
     }
 
     private static ActionSupportingMethodSearchResult toSearchResult(
-            final Method supportingMethod) {
+            final ResolvedMethod supportingMethod) {
         return ActionSupportingMethodSearchResult
-                .of(supportingMethod, supportingMethod.getReturnType(), Optional.empty());
+                .of(supportingMethod, supportingMethod.returnType(), Optional.empty());
     }
 
     // -- PARAM UTIL

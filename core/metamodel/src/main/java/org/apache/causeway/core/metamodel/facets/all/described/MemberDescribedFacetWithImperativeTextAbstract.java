@@ -18,9 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.facets.all.described;
 
-import java.lang.reflect.Method;
-
 import org.apache.causeway.commons.functional.Either;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.i8n.imperative.HasImperativeText;
@@ -47,7 +46,7 @@ implements MemberDescribedFacet {
     private final Either<HasStaticText, HasImperativeText> specialization = Either.right(this);
 
     protected MemberDescribedFacetWithImperativeTextAbstract(
-            final Method method,
+            final ResolvedMethod method,
             final FacetHolder holder) {
         super(type(),
                 holder.getTranslationContext(),

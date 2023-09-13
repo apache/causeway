@@ -85,7 +85,7 @@ public abstract class CompositeValueUpdater {
         val method = methodFacade.asMethodForIntrospection();
 
         val resultPojo = CanonicalInvoker
-                .invoke(method, targetPojo, methodFacade.getArguments(executionParameters));
+                .invoke(method.method(), targetPojo, methodFacade.getArguments(executionParameters));
 
         return ManagedObject.value(delegate.getReturnType(), resultPojo);
     }

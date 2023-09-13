@@ -19,9 +19,9 @@
 package org.apache.causeway.core.metamodel.facets.param.autocomplete;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 
 import org.apache.causeway.applib.annotation.MinLength;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 
 import lombok.val;
 
@@ -31,13 +31,13 @@ public final class MinLengthUtil {
      * Finds the value of the minimum length, from the {@link MinLength} annotation
      * on the last parameter of the supplied method.
      */
-    public static int determineMinLength(final Method method) {
+    public static int determineMinLength(final ResolvedMethod method) {
         if(method == null
-                || method.getParameterCount()==0) {
+                || method.isNoArg()) {
             return MIN_LENGTH_DEFAULT;
         }
 
-        val lastParam = method.getParameters()[method.getParameterCount()-1];
+        val lastParam = method.method().getParameters()[method.paramCount()-1];
 
         for(Annotation annotation: lastParam.getAnnotations()) {
             if(annotation instanceof MinLength) {

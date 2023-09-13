@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.methods;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -27,6 +26,7 @@ import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.metamodel.commons.MethodUtil;
 
@@ -45,7 +45,7 @@ public final class MethodFinderPAT {
 
     @Value(staticConstructor = "of")
     public static class MethodAndPatConstructor {
-        @NonNull Method supportingMethod;
+        @NonNull ResolvedMethod supportingMethod;
         @NonNull Constructor<?> patConstructor;
     }
 
@@ -66,10 +66,10 @@ public final class MethodFinderPAT {
     // -- HELPER
 
     private Optional<MethodAndPatConstructor> lookupPatConstructor(
-            final Method supportingMethod,
+            final ResolvedMethod supportingMethod,
             final Class<?>[] signature) {
 
-        val patCandidate = supportingMethod.getParameterTypes()[0];
+        val patCandidate = supportingMethod.paramType(0);
 
         // just an optimization, not strictly required
         if(ClassUtils.isPrimitiveOrWrapper(patCandidate)

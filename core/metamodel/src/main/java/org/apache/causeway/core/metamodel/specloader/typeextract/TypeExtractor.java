@@ -23,6 +23,7 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import org.apache.causeway.commons.internal.collections._Sets;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._Generics;
 
 import lombok.val;
@@ -82,7 +83,7 @@ public class TypeExtractor {
      * <p>
      * will find both <tt>List</tt> and <tt>Customer</tt>.
      */
-    public static Stream<Class<?>> streamMethodReturn(final Method ...methods) {
+    public static Stream<Class<?>> streamMethodReturn(final ResolvedMethod ...methods) {
 
         val set = _Sets.<Class<?>>newHashSet();
 
@@ -90,8 +91,8 @@ public class TypeExtractor {
             if(method==null) {
                 continue;
             }
-            acceptNonVoid(set::add, method.getReturnType());
-            _Generics.streamGenericTypeArgumentsOfMethodReturnType(method)
+            acceptNonVoid(set::add, method.returnType());
+            _Generics.streamGenericTypeArgumentsOfMethodReturnType(method.method())
                 .forEach(set::add);
         }
 
@@ -100,15 +101,15 @@ public class TypeExtractor {
 
     // -- VARIANTS
 
-    public static Stream<Class<?>> streamMethodReturn(final Iterable<Method> methods) {
+    public static Stream<Class<?>> streamMethodReturn(final Iterable<ResolvedMethod> methods) {
         val set = _Sets.<Class<?>>newHashSet();
 
         for(val method : methods) {
             if(method==null) {
                 continue;
             }
-            acceptNonVoid(set::add, method.getReturnType());
-            _Generics.streamGenericTypeArgumentsOfMethodReturnType(method)
+            acceptNonVoid(set::add, method.returnType());
+            _Generics.streamGenericTypeArgumentsOfMethodReturnType(method.method())
                 .forEach(set::add);
         }
 

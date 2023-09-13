@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 
 import lombok.Builder;
 
@@ -57,8 +58,8 @@ public class _Expectations {
                 .build();
     }
 
-    void assertAll(final Can<Method> methods) {
-        assertEquals(this, actual(methods));
+    void assertAll(final Can<ResolvedMethod> methods) {
+        assertEquals(this, actual(methods.map(ResolvedMethod::method)));
     }
 
 }

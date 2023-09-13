@@ -21,6 +21,8 @@ package org.apache.causeway.core.metamodel.facets.object.mixin;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import org.apache.causeway.commons.internal.reflection._GenericResolver;
+
 import lombok.val;
 
 class MixinFacetAbstract_Test {
@@ -43,7 +45,8 @@ class MixinFacetAbstract_Test {
         val facet = new MixinFacetAbstract(
                 Collection_numberOfChildren.class, "prop", constructor, null) {};
 
-        val propMethodInSubclass = SimpleObject_numberOfChildren.class.getMethod("prop");
+        val propMethodInSubclass =
+                _GenericResolver.resolveMethod(SimpleObject_numberOfChildren.class, "prop");
 
         // when
         val candidate = facet.isCandidateForMain(propMethodInSubclass);

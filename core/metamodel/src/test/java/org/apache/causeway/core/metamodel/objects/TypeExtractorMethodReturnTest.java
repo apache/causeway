@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.objects;
 
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +26,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.causeway.commons.internal.reflection._GenericResolver;
 import org.apache.causeway.core.metamodel.specloader.typeextract.TypeExtractor;
 
 import lombok.val;
@@ -43,12 +43,11 @@ class TypeExtractorMethodReturnTest {
         }
 
         final Class<?> clazz = CustomerRepository.class;
-        final Method method = clazz.getMethod("findCustomers");
-
+        val method = _GenericResolver.resolveMethod(clazz, "findCustomers");
         val classes = TypeExtractor.streamMethodReturn(method).collect(Collectors.toSet());
         assertEquals(0, classes.size());
     }
-    
+
     @Test
     void shouldFindGenericTypes() throws Exception {
 
@@ -62,17 +61,17 @@ class TypeExtractorMethodReturnTest {
         }
 
         final Class<?> clazz = CustomerRepository.class;
-        final Method method = clazz.getMethod("findCustomers");
-        
+        val method = _GenericResolver.resolveMethod(clazz, "findCustomers");
+
         val classes = TypeExtractor.streamMethodReturn(method).collect(Collectors.toSet());
-        
+
         assertEquals(2, classes.size());
         assertTrue(classes.contains(java.util.List.class));
         assertTrue(classes.contains(Customer.class));
-        
+
     }
 
-    
+
     @Test
     void shouldFindGenericTypes_thatUseAWildcard() throws Exception {
 
@@ -86,14 +85,14 @@ class TypeExtractorMethodReturnTest {
         }
 
         final Class<?> clazz = CustomerRepository.class;
-        final Method method = clazz.getMethod("findCustomers");
-        
+        val method = _GenericResolver.resolveMethod(clazz, "findCustomers");
+
         val classes = TypeExtractor.streamMethodReturn(method).collect(Collectors.toSet());
-        
+
         assertEquals(2, classes.size());
         assertTrue(classes.contains(java.util.List.class));
         assertTrue(classes.contains(Customer.class));
-        
+
     }
 
 }

@@ -18,12 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.accessor;
 
-import java.lang.reflect.Method;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.commons.MethodUtil;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -33,6 +33,8 @@ import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.MethodRemover;
 import org.apache.causeway.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+
+import lombok.val;
 
 public class PropertyAccessorFacetViaAccessorFactory
 extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
@@ -50,7 +52,7 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
     }
 
     private void attachPropertyAccessFacetForAccessorMethod(final ProcessMethodContext processMethodContext) {
-        final Method accessorMethod = processMethodContext.getMethod().asMethodElseFail();
+        val accessorMethod = processMethodContext.getMethod().asMethodElseFail();
         processMethodContext.removeMethod(accessorMethod);
 
         final Class<?> cls = processMethodContext.getCls();
@@ -66,7 +68,7 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
     // ///////////////////////////////////////////////////////
 
     @Override
-    public boolean isPropertyOrCollectionGetterCandidate(final Method method) {
+    public boolean isPropertyOrCollectionGetterCandidate(final ResolvedMethod method) {
         return ProgrammingModelConstants.AccessorPrefix.isGetter(method);
     }
 
@@ -75,26 +77,26 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
      * not have any opinion on the matter.
      */
     @Override
-    public boolean isCollectionAccessor(final Method method) {
+    public boolean isCollectionAccessor(final ResolvedMethod method) {
         return false;
     }
 
     @Override
-    public boolean isPropertyAccessor(final Method method) {
+    public boolean isPropertyAccessor(final ResolvedMethod method) {
         if (!isPropertyOrCollectionGetterCandidate(method)) {
             return false;
         }
-        return isNonScalar(method.getReturnType());
+        return isNonScalar(method.returnType());
     }
 
     @Override
-    public void findAndRemovePropertyAccessors(final MethodRemover methodRemover, final List<Method> methodListToAppendTo) {
+    public void findAndRemovePropertyAccessors(final MethodRemover methodRemover, final List<ResolvedMethod> methodListToAppendTo) {
         methodRemover.removeMethods(MethodUtil.Predicates.booleanGetter(), methodListToAppendTo::add);
         methodRemover.removeMethods(MethodUtil.Predicates.nonBooleanGetter(Object.class), methodListToAppendTo::add);
     }
 
     @Override
-    public void findAndRemoveCollectionAccessors(final MethodRemover methodRemover, final List<Method> methodListToAppendTo) {
+    public void findAndRemoveCollectionAccessors(final MethodRemover methodRemover, final List<ResolvedMethod> methodListToAppendTo) {
         // does nothing
     }
 

@@ -42,6 +42,7 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.context._Context;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -80,23 +81,23 @@ public final class _ClassCache implements AutoCloseable {
     }
 
     public void add(final Class<?> type) {
-        inspectType(type);
+        classModel(type);
     }
 
     // -- TYPE SPECIFIC SEMANTICS
 
     public boolean hasJaxbRootElementSemantics(final Class<?> type) {
-        return inspectType(type).hasJaxbRootElementSemantics;
+        return classModel(type).hasJaxbRootElementSemantics;
     }
 
     // -- CONSTRUCTOR SEMANTICS
 
     public <T> Stream<Constructor<T>> streamPublicConstructors(final Class<T> type) {
-        return _Casts.uncheckedCast(inspectType(type).publicConstructorsByKey.values().stream());
+        return _Casts.uncheckedCast(classModel(type).publicConstructorsByKey.values().stream());
     }
 
     public <T> Stream<Constructor<T>> streamPublicConstructorsWithInjectSemantics(final Class<T> type) {
-        return _Casts.uncheckedCast(inspectType(type).constructorsWithInjectSemanticsByKey.values().stream());
+        return _Casts.uncheckedCast(classModel(type).constructorsWithInjectSemanticsByKey.values().stream());
     }
 
     public Optional<Constructor<?>> lookupPublicConstructor(final Class<?> type, final Class<?>[] paramTypes) {
@@ -106,7 +107,8 @@ public final class _ClassCache implements AutoCloseable {
     // -- POST CONSTRUCT SEMANTICS
 
     public Stream<Method> streamPostConstructMethods(final Class<?> type) {
-        return inspectType(type).postConstructMethodsByKey.values().stream();
+        return classModel(type).postConstructMethodsByKey.values().stream()
+                .map(ResolvedMethod::method);
     }
 
     // -- METHOD SEMANTICS
@@ -115,7 +117,7 @@ public final class _ClassCache implements AutoCloseable {
      * A drop-in replacement for {@link Class#getMethod(String, Class...)} that only looks up
      * public methods and does not throw {@link NoSuchMethodException}s.
      */
-    public Method lookupPublicMethod(final Class<?> type, final String name, final Class<?>[] paramTypes) {
+    public ResolvedMethod lookupPublicMethod(final Class<?> type, final String name, final Class<?>[] paramTypes) {
         return lookupMethod(false, type, name, paramTypes);
     }
 
@@ -124,28 +126,28 @@ public final class _ClassCache implements AutoCloseable {
      * that in addition looks up declared methods. (including non-public,
      * but not including inherited non-public ones)
      */
-    public Method lookupPublicOrDeclaredMethod(final Class<?> type, final String name, final Class<?>[] paramTypes) {
+    public ResolvedMethod lookupPublicOrDeclaredMethod(final Class<?> type, final String name, final Class<?>[] paramTypes) {
         return lookupMethod(true, type, name, paramTypes);
     }
 
-    public Stream<Method> streamPublicMethods(final Class<?> type) {
-        return inspectType(type).publicMethodsByKey.values().stream();
+    public Stream<ResolvedMethod> streamPublicMethods(final Class<?> type) {
+        return classModel(type).publicMethodsByKey.values().stream();
     }
 
-    public Stream<Method> streamPublicOrDeclaredMethods(final Class<?> type) {
-        val classModel = inspectType(type);
+    public Stream<ResolvedMethod> streamPublicOrDeclaredMethods(final Class<?> type) {
+        val classModel = classModel(type);
         return Stream.concat(
                 classModel.publicMethodsByKey.values().stream(),
                 classModel.nonPublicDeclaredMethodsByKey.values().stream());
     }
 
-    public Stream<Method> streamDeclaredMethods(final Class<?> type) {
-        return inspectType(type).declaredMethods.stream();
+    public Stream<ResolvedMethod> streamDeclaredMethods(final Class<?> type) {
+        return classModel(type).declaredMethods.stream();
     }
 
-    public Method findMethodUniquelyByNameOrFail(final Class<?> type, final String methodName) {
+    public ResolvedMethod findMethodUniquelyByNameOrFail(final Class<?> type, final String methodName) {
         val matchingMethods = streamPublicOrDeclaredMethods(type)
-                .filter(method->method.getName().equals(methodName))
+                .filter(method->method.name().equals(methodName))
                 .collect(Can.toCan());
         return matchingMethods.isCardinalityMultiple()
                 ? _Reflect.mostSpecificMethodOf(matchingMethods).orElseThrow()
@@ -155,17 +157,17 @@ public final class _ClassCache implements AutoCloseable {
     // -- FIELD SEMANTICS
 
     public Stream<Field> streamDeclaredFields(final Class<?> type) {
-        return inspectType(type).declaredFields.stream();
+        return classModel(type).declaredFields.stream();
     }
 
     // -- FIELD vs GETTER
 
-    public Optional<Method> getterForField(final Class<?> type, final Field field) {
+    public Optional<ResolvedMethod> getterForField(final Class<?> type, final Field field) {
         val capitalizedFieldName = _Strings.capitalize(field.getName());
         return Stream.of("get", "is")
         .map(prefix->prefix + capitalizedFieldName)
         .map(methodName->lookupPublicOrDeclaredMethod(type, methodName, _Constants.emptyClasses))
-        .filter(_Reflect.Filter.isGetter())
+        .filter(resolvedMethod->resolvedMethod.isGetter())
         .findFirst();
     }
 
@@ -188,12 +190,12 @@ public final class _ClassCache implements AutoCloseable {
      * @param attributeName
      * @param filter
      */
-    public Stream<Method> streamDeclaredMethodsHaving(
+    public Stream<ResolvedMethod> streamDeclaredMethodsHaving(
             final Class<?> type,
             final String attributeName,
-            final Predicate<Method> filter) {
+            final Predicate<ResolvedMethod> filter) {
 
-        val classModel = inspectType(type);
+        val classModel = classModel(type);
 
         synchronized(classModel.declaredMethodsByAttribute) {
             return classModel.declaredMethodsByAttribute
@@ -208,14 +210,13 @@ public final class _ClassCache implements AutoCloseable {
     @RequiredArgsConstructor
     private static class ClassModel {
         private final Can<Field> declaredFields;
-        private final Can<Method> declaredMethods;
+        private final Can<ResolvedMethod> declaredMethods;
         private final Map<ConstructorKey, Constructor<?>> publicConstructorsByKey = new HashMap<>();
         private final Map<ConstructorKey, Constructor<?>> constructorsWithInjectSemanticsByKey = new HashMap<>();
-        //private final Map<ConstructorKey, Constructor<?>> nonPublicDeclaredConstructorsByKey = new HashMap<>();
-        private final Map<MethodKey, Method> publicMethodsByKey = new HashMap<>();
-        private final Map<MethodKey, Method> postConstructMethodsByKey = new HashMap<>();
-        private final Map<MethodKey, Method> nonPublicDeclaredMethodsByKey = new HashMap<>();
-        private final Map<String, Can<Method>> declaredMethodsByAttribute = new HashMap<>();
+        private final Map<MethodKey, ResolvedMethod> publicMethodsByKey = new HashMap<>();
+        private final Map<MethodKey, ResolvedMethod> postConstructMethodsByKey = new HashMap<>();
+        private final Map<MethodKey, ResolvedMethod> nonPublicDeclaredMethodsByKey = new HashMap<>();
+        private final Map<String, Can<ResolvedMethod>> declaredMethodsByAttribute = new HashMap<>();
         private final boolean hasJaxbRootElementSemantics;
     }
 
@@ -267,12 +268,15 @@ public final class _ClassCache implements AutoCloseable {
 
     // -- HELPER
 
-    private ClassModel inspectType(final Class<?> type) {
+    private ClassModel classModel(final Class<?> type) {
         synchronized(inspectedTypes) {
+            return inspectedTypes.computeIfAbsent(type, this::inspectType);
+        }
+    }
 
-            return inspectedTypes.computeIfAbsent(type, __->{
+    private ClassModel inspectType(final Class<?> type) {
 
-              //TODO[CAUSEWAY-3556] optimization candidate (needs inspectedTypes to be a ConcurrentHashMap)
+          //TODO[CAUSEWAY-3556] optimization candidate (needs inspectedTypes to be a ConcurrentHashMap)
 //                val declaredMethods = _Reflect.streamTypeHierarchy(type, InterfacePolicy.INCLUDE)
 //                    .filter(cls->cls.equals(Object.class))
 //                    .flatMap(cls->{
@@ -283,68 +287,67 @@ public final class _ClassCache implements AutoCloseable {
 //                    })
 //                    .collect(Can.toCan());
 
-                val declaredFields = Can.ofArray(type.getDeclaredFields());
-                val declaredMethods = //type.getDeclaredMethods(); ... cannot detect non overridden inherited methods
-                        Can.ofStream(_Reflect.streamAllMethods(type, true)
-                                .filter(_ClassCache::methodIncludeFilter));
+            val declaredFields = Can.ofArray(type.getDeclaredFields());
+            val declaredMethods = //type.getDeclaredMethods(); ... cannot detect non overridden inherited methods
+                    Can.ofStream(_Reflect.streamAllMethods(type, true)
+                            .filter(_ClassCache::methodIncludeFilter))
+                            .map(method->_GenericResolver.resolveMethod(method, type));
 
-                val model = new ClassModel(
-                        declaredFields,
-                        declaredMethods,
-                        _Annotations.isPresent(type, XmlRootElement.class));
+            val model = new ClassModel(
+                    declaredFields,
+                    declaredMethods,
+                    _Annotations.isPresent(type, XmlRootElement.class));
 
-                val publicConstr = type.getConstructors();
-                for(val constr : publicConstr) {
-                    val key = ConstructorKey.of(type, constr);
-                    // collect public constructors
-                    model.publicConstructorsByKey.put(key, constr);
-                    // collect public constructors with inject semantics
-                    if(isInjectSemantics(constr)) {
-                        model.constructorsWithInjectSemanticsByKey.put(key, constr);
-                    }
+            val publicConstr = type.getConstructors();
+            for(val constr : publicConstr) {
+                val key = ConstructorKey.of(type, constr);
+                // collect public constructors
+                model.publicConstructorsByKey.put(key, constr);
+                // collect public constructors with inject semantics
+                if(isInjectSemantics(constr)) {
+                    model.constructorsWithInjectSemanticsByKey.put(key, constr);
                 }
+            }
 
-                // process all public and non-public
-                for(val method : declaredMethods) {
+            // process all public and non-public
+            for(val method : declaredMethods) {
 
-                    val key = MethodKey.of(type, method);
-                    // add all now, remove public ones later
-                    val methodToKeep =
-                            putIntoMapHonoringOverridingRelation(model.nonPublicDeclaredMethodsByKey, key, method);
+                val key = MethodKey.of(type, method.method());
+                // add all now, remove public ones later
+                val methodToKeep =
+                        putIntoMapHonoringOverridingRelation(model.nonPublicDeclaredMethodsByKey, key, method);
 
-                    // collect post-construct methods
-                    if(isPostConstruct(methodToKeep)) {
-                        model.postConstructMethodsByKey.put(key, methodToKeep);
-                    }
+                // collect post-construct methods
+                if(isPostConstruct(methodToKeep.method())) {
+                    model.postConstructMethodsByKey.put(key, methodToKeep);
                 }
+            }
 
-                // process public only
-                val publicMethods = Can.ofArray(type.getMethods()) //XXX[CAUSEWAY-3327] order of methods returned might differ among JVM instances
-                        .filter(_ClassCache::methodIncludeFilter);
-                for(val method : publicMethods) {
-                    val key = MethodKey.of(type, method);
-                    putIntoMapHonoringOverridingRelation(model.publicMethodsByKey, key, method);
-                    model.nonPublicDeclaredMethodsByKey.remove(key);
-                }
+            // process public only
+            val publicMethods = Can.ofArray(type.getMethods()) //XXX[CAUSEWAY-3327] order of methods returned might differ among JVM instances
+                    .filter(_ClassCache::methodIncludeFilter)
+                    .map(method->_GenericResolver.resolveMethod(method, type));
+            for(val method : publicMethods) {
+                val key = MethodKey.of(type, method.method());
+                putIntoMapHonoringOverridingRelation(model.publicMethodsByKey, key, method);
+                model.nonPublicDeclaredMethodsByKey.remove(key);
+            }
 
-                return model;
-
-            });
-        }
+            return model;
     }
 
     /**
      * Handles the case well, when a method is already in the map and is about to be overwritten.
      * We keep or put that one that overrides the other (in a Java language sense) and return the winner so to speak.
      */
-    private static Method putIntoMapHonoringOverridingRelation(
-            final Map<MethodKey, Method> map, final MethodKey key, final Method method) {
+    private static ResolvedMethod putIntoMapHonoringOverridingRelation(
+            final Map<MethodKey, ResolvedMethod> map, final MethodKey key, final ResolvedMethod method) {
         val methodWithSameKey = map.get(key); // in case the map is already populated
         val methodToKeep = methodWithSameKey==null
             ? method
             /* key-clash originating from one method overriding the other
-             * we need to keep or put the one which is the overriding one (not the overwritten one) */
-            : _Reflect.methodsWhichIsOverridingTheOther(methodWithSameKey, method);
+             * we need to keep the most specific one */
+            : methodWithSameKey.mostSpecific(method);
         map.put(key, methodToKeep);
         return methodToKeep;
     }
@@ -375,20 +378,20 @@ public final class _ClassCache implements AutoCloseable {
             final Class<?> type,
             final Class<?>[] paramTypes) {
 
-        val model = inspectType(type);
+        val model = classModel(type);
         val key = ConstructorKey.of(type, _Arrays.emptyToNull(paramTypes));
 
         val publicConstructor = model.publicConstructorsByKey.get(key);
         return publicConstructor;
     }
 
-    private Method lookupMethod(
+    private ResolvedMethod lookupMethod(
             final boolean includeDeclaredMethods,
             final Class<?> type,
             final String name,
             final Class<?>[] paramTypes) {
 
-        val model = inspectType(type);
+        val model = classModel(type);
 
         val key = MethodKey.of(type, name, _Arrays.emptyToNull(paramTypes));
 

@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.facets.all.i8n.imperative;
 
-import java.lang.reflect.Method;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
@@ -50,7 +50,7 @@ implements
     protected HasImperativeTextFacetAbstract(
             final Class<? extends Facet> facetType,
             final TranslationContext translationContext,
-            final Method method,
+            final ResolvedMethod method,
             final FacetHolder holder) {
         // imperative takes precedence over any other (except for events)
         super(facetType, holder, Precedence.IMPERATIVE);

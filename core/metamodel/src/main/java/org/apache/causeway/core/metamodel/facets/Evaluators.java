@@ -23,7 +23,6 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -33,11 +32,13 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.commons.internal.reflection._Reflect.InterfacePolicy;
 import org.apache.causeway.commons.internal.reflection._Reflect.TypeHierarchyPolicy;
 import org.apache.causeway.core.metamodel.commons.MethodUtil;
 import org.apache.causeway.core.metamodel.commons.ThrowableExtensions;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
@@ -96,7 +97,7 @@ public final class Evaluators  {
         .filter(MethodUtil::isNotStatic)
         .filter(MethodUtil::isNoArg)
         .filter(MethodUtil::isNotVoid)
-        .map(method->memberFilter.test(method)
+        .map(method->memberFilter.test(method.method())
                 ? new MethodEvaluator(cls, method)
                 : null)
         .filter(_NullSafe::isPresent);
@@ -169,16 +170,16 @@ public final class Evaluators  {
     extends EvaluatorAbstract {
 
         @Getter private final Class<?> correspondingClass;
-        @Getter private final Method method;
+        @Getter private final ResolvedMethod method;
 
         @Override
         public String name() {
-            return method.getName() + "()";
+            return method.name() + "()";
         }
 
         @Override
         protected MethodHandle createMethodHandle() throws IllegalAccessException {
-            return MethodHandles.lookup().unreflect(method);
+            return MethodHandles.lookup().unreflect(method.method());
         }
     }
 
@@ -188,7 +189,7 @@ public final class Evaluators  {
 
         @Getter private final Class<?> correspondingClass;
         @Getter private final Field field;
-        @Getter private final Optional<Method> correspondingGetter;
+        @Getter private final Optional<ResolvedMethod> correspondingGetter;
 
         @Override
         public String name() {
@@ -199,13 +200,13 @@ public final class Evaluators  {
         protected MethodHandle createMethodHandle() throws IllegalAccessException {
             val getter = correspondingGetter.orElse(null);
             return getter!=null
-                    ? MethodHandles.lookup().unreflect(getter)
+                    ? MethodHandles.lookup().unreflect(getter.method())
                     : MethodHandles.lookup().unreflectGetter(field);
         }
 
         private boolean isSameAs(final MethodEvaluator methodEvaluator) {
             return correspondingGetter
-            .map(getter->_Reflect.methodsSame(getter, methodEvaluator.getMethod()))
+            .map(getter->_Reflect.methodsSame(getter.method(), methodEvaluator.getMethod().method()))
             .orElse(false);
         }
 

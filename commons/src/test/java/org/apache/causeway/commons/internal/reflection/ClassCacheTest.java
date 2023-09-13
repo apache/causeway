@@ -30,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 
 import lombok.SneakyThrows;
 import lombok.val;
@@ -69,16 +70,16 @@ class ClassCacheTest {
     void inhertitedMethod() {
         val declaredMethods = Can.ofStream(
                 classCache.streamPublicOrDeclaredMethods(Concrete.class));
-        assertContainsMethod(declaredMethods, "commonAction");
-        assertContainsMethod(declaredMethods, "specificAction");
+        assertContainsResolvedMethod(declaredMethods, "commonAction");
+        assertContainsResolvedMethod(declaredMethods, "specificAction");
     }
 
     @Test
     void inhertitedMethodWhenOverride() {
         val declaredMethods = Can.ofStream(
                 classCache.streamPublicOrDeclaredMethods(ConcreteOverride.class));
-        assertContainsMethod(declaredMethods, "commonAction");
-        assertContainsMethod(declaredMethods, "specificAction");
+        assertContainsResolvedMethod(declaredMethods, "commonAction");
+        assertContainsResolvedMethod(declaredMethods, "specificAction");
     }
 
 
@@ -111,6 +112,10 @@ class ClassCacheTest {
                 ? classUnderTest.getEnclosingClass()
                 : classUnderTest;
         return (_Expectations) classThatProvidesExpectations.getDeclaredMethod("expectations").invoke(null);
+    }
+
+    private void assertContainsResolvedMethod(final Can<ResolvedMethod> declaredMethods, final String methodName) {
+        assertContainsMethod(declaredMethods.map(ResolvedMethod::method), methodName);
     }
 
     private void assertContainsMethod(final Can<Method> declaredMethods, final String methodName) {

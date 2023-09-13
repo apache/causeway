@@ -18,11 +18,11 @@
  */
 package org.apache.causeway.core.metamodel.methods;
 
-import java.lang.reflect.Method;
 import java.util.Set;
 import java.util.function.Predicate;
 
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
@@ -34,9 +34,9 @@ class _OrphanedSupportingMethodValidator {
 
     static void validate(
             final @NonNull ObjectSpecificationAbstract spec,
-            final @NonNull Set<Method> supportMethods,
-            final @NonNull Set<Method> memberMethods,
-            final @NonNull Set<Method> alreadyReported) {
+            final @NonNull Set<ResolvedMethod> supportMethods,
+            final @NonNull Set<ResolvedMethod> memberMethods,
+            final @NonNull Set<ResolvedMethod> alreadyReported) {
 
         if(spec.isAbstract()
                 || spec.getBeanSort().isManagedBeanNotContributing()

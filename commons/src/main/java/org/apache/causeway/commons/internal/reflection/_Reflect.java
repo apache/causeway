@@ -55,6 +55,7 @@ import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.functions._Predicates;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -147,30 +148,6 @@ public final class _Reflect {
 
     public boolean shareSameTypeHierarchy(final @NonNull Method a, final @NonNull Method b) {
         return shareSameTypeHierarchy(a.getDeclaringClass(), b.getDeclaringClass());
-    }
-
-    /**
-     * If a and b are related, such that one overrides the other,
-     * that one which is overriding the other is returned.
-     * @implNote if both declaring type and return type are the same we (arbitrarily) return b
-     */
-    public Method methodsWhichIsOverridingTheOther(final Method a, final Method b) {
-        val aType = a.getDeclaringClass();
-        val bType = b.getDeclaringClass();
-        if(aType.equals(bType)) {
-            val aReturn = a.getReturnType();
-            val bReturn = b.getReturnType();
-            if(aReturn.equals(bReturn)) {
-                // if a and b are not equal, this code path is expected unreachable
-                return b;
-            }
-            return aReturn.isAssignableFrom(bReturn)
-                    ? b
-                    : a;
-        }
-        return aType.isAssignableFrom(bType)
-                ? b
-                : a;
     }
 
     // -- COMPARATORS
@@ -645,6 +622,7 @@ public final class _Reflect {
 
     // -- GENENERIC TYPE ARG INTROSPECTION
 
+    //TODO[CAUSEWAY-3571] perhaps merge with ResolvedMethod
     @lombok.Value(staticConstructor = "of")
     public class MethodAndImplementingClass {
         final @NonNull Method method;
@@ -722,22 +700,14 @@ public final class _Reflect {
     @UtilityClass
     public class Filter {
 
-        public Predicate<Method> isGetter() {
-            return method->method!=null
+        @Deprecated //TODO[CAUSEWAY-3571] don't bypass programming model constants
+        public boolean isGetter(final @Nullable Method method) {
+            return method!=null
                     && method.getParameterCount()==0
                     && method.getReturnType()!=void.class
                     && (method.getName().startsWith("get")
                         || (method.getName().startsWith("is")
                                 && method.getReturnType()==boolean.class));
-        }
-
-        public Predicate<Method> hasReturnType(final Class<?> expectedReturnType) {
-            return method->expectedReturnType.isAssignableFrom(method.getReturnType());
-        }
-
-        public Predicate<Method> hasReturnTypeAnyOf(final Can<Class<?>> allowedReturnTypes) {
-            return method->allowedReturnTypes.stream()
-                    .anyMatch(allowedReturnType->allowedReturnType.isAssignableFrom(method.getReturnType()));
         }
 
         public Predicate<Executable> isPublic() {
@@ -918,10 +888,10 @@ public final class _Reflect {
      * @implNote EXPERIMENTAL - needs more rigorous testing;
      *      also the same type hierarchy branch check is only poorly implemented to save execution time
      *      (assuming the caller knows what to do)
-     * TODO look for a Spring Utility that does the same
+     * TODO look for a Spring Utility that does the same e.g. ClassUtils.getMostSpecificMethod
      */
-    public Optional<Method> mostSpecificMethodOf(
-            final @NonNull Can<Method> methods) {
+    public Optional<ResolvedMethod> mostSpecificMethodOf(
+            final @NonNull Can<ResolvedMethod> methods) {
 
         switch(methods.getCardinality()) {
         case ZERO:
@@ -938,12 +908,12 @@ public final class _Reflect {
             .stream()
             .skip(1)
             .forEach(next->{
-                _Assert.assertTrue(methodsWeaklySame(first, next),
+                _Assert.assertTrue(methodsWeaklySame(first.method(), next.method()),
                         ()->String.format("weakly same method check failed on\n"
                         + "(1) %s\n"
                         + "(2) %s\n",
                         first, next));
-                _Assert.assertTrue(shareSameTypeHierarchy(first, next),
+                _Assert.assertTrue(shareSameTypeHierarchy(first.method(), next.method()),
                         ()->String.format("same type hierarchy method check failed on\n"
                                 + "(1) %s\n"
                                 + "(2) %s\n",
@@ -954,18 +924,18 @@ public final class _Reflect {
             .stream()
             .distinct()
             .max((a, b)->{
-                val clsA = a.getDeclaringClass();
-                val clsB = b.getDeclaringClass();
+                val clsA = a.method().getDeclaringClass();
+                val clsB = b.method().getDeclaringClass();
                 if(clsA.equals(clsB)) {
 
-                    if(a.isBridge() && b.isBridge()) {
+                    if(a.method().isBridge() && b.method().isBridge()) {
                         throw _Exceptions.unrecoverable("methods declared on the same type "
                                 + "cannot pass methodsWeaklySame check "
                                 + "and at the same time be distinct and both being bridges");
                     }
 
-                    if(a.isBridge()) return -1; // b wins
-                    if(b.isBridge()) return 1; // a wins
+                    if(a.method().isBridge()) return -1; // b wins
+                    if(b.method().isBridge()) return 1; // a wins
 
                     throw _Exceptions.unrecoverable("methods declared on the same type "
                             + "cannot pass methodsWeaklySame check "

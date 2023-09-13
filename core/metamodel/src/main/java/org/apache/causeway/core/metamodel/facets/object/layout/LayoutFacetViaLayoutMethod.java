@@ -18,12 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.layout;
 
-import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.HasImperativeAspect;
 import org.apache.causeway.core.metamodel.facets.ImperativeAspect;
@@ -40,7 +40,7 @@ implements HasImperativeAspect {
     @Getter(onMethod_ = {@Override}) private final @NonNull ImperativeAspect imperativeAspect;
 
     public static Optional<LayoutFacet> create(
-            final @Nullable Method methodIfAny,
+            final @Nullable ResolvedMethod methodIfAny,
             final FacetHolder holder) {
 
         return Optional.ofNullable(methodIfAny)

@@ -29,6 +29,7 @@ import org.springframework.core.ResolvableType;
 
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.commons.internal.reflection._Reflect.ConstructorAndImplementingClass;
 import org.apache.causeway.commons.internal.reflection._Reflect.MethodAndImplementingClass;
@@ -100,13 +101,13 @@ public class TypeOfAnyCardinality {
     }
 
     public static TypeOfAnyCardinality forMethodReturn(
-            final Class<?> _implementationClass, final Method _method) {
-        val methodReturnGuess = _method.getReturnType();
+            final Class<?> _implementationClass, final ResolvedMethod _method) {
+        val methodReturnGuess = _method.returnType();
         return ProgrammingModelConstants.CollectionSemantics.valueOf(methodReturnGuess)
         .map(__->{
             // adopt into default class loader context
 
-            val origin = MethodAndImplementingClass.of(_method, _implementationClass);
+            val origin = MethodAndImplementingClass.of(_method.method(), _implementationClass);
             val adopted = origin
                     .adoptIntoDefaultClassLoader()
                     .getValue()

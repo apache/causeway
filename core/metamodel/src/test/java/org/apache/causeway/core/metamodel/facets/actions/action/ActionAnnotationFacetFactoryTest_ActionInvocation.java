@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.action;
 
-import java.lang.reflect.Method;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -28,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
@@ -65,7 +64,7 @@ extends FacetFactoryTestAbstract {
             public void someAction() {}
         }
 
-        final Method actionMethod = findMethodExactOrFail(Customer.class, "someAction");
+        final ResolvedMethod actionMethod = findMethodExactOrFail(Customer.class, "someAction");
 
         actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod) -> {
             //when
@@ -175,9 +174,9 @@ extends FacetFactoryTestAbstract {
             public String disableSomeAction() { return null; }
         }
 
-        final Method choices0Method = findMethodExactOrFail(CustomerEx.class, "choices0SomeAction", new Class[] {});
-        final Method choices1Method = findMethodExactOrFail(CustomerEx.class, "choices1SomeAction", new Class[] {});
-        final Method disableMethod = findMethodExactOrFail(CustomerEx.class, "disableSomeAction", new Class[] {});
+        final ResolvedMethod choices0Method = findMethodExactOrFail(CustomerEx.class, "choices0SomeAction", new Class[] {});
+        final ResolvedMethod choices1Method = findMethodExactOrFail(CustomerEx.class, "choices1SomeAction", new Class[] {});
+        final ResolvedMethod disableMethod = findMethodExactOrFail(CustomerEx.class, "disableSomeAction", new Class[] {});
 
         actionScenario(CustomerEx.class, "someAction", (processMethodContext, facetHolder, facetedMethod) -> {
             //when

@@ -19,11 +19,11 @@
 package org.apache.causeway.core.metamodel.facets.param.autocomplete.method;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -51,7 +51,7 @@ implements ImperativeFacet {
     private final Optional<Constructor<?>> patConstructor;
 
     public ActionParameterAutoCompleteFacetViaMethod(
-            final Method method,
+            final ResolvedMethod method,
             final TypeOfAnyCardinality paramSupportReturnType,
             final Optional<Constructor<?>> patConstructor,
             final FacetHolder holder) {

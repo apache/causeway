@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.facets;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -33,6 +32,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.reflection._Annotations;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
@@ -128,17 +128,17 @@ public interface FacetFactory {
         }
 
         @Override
-        public void removeMethod(final Method method) {
+        public void removeMethod(final ResolvedMethod method) {
             methodRemover.removeMethod(method);
         }
 
         @Override
-        public void removeMethods(final Predicate<Method> filter, final Consumer<Method> onRemoval) {
+        public void removeMethods(final Predicate<ResolvedMethod> filter, final Consumer<ResolvedMethod> onRemoval) {
             methodRemover.removeMethods(filter, onRemoval);
         }
 
         @Override
-        public Can<Method> snapshotMethodsRemaining() {
+        public Can<ResolvedMethod> snapshotMethodsRemaining() {
             return methodRemover.snapshotMethodsRemaining();
         }
 
@@ -181,17 +181,17 @@ public interface FacetFactory {
         }
 
         @Override
-        public void removeMethod(final @Nullable Method method) {
+        public void removeMethod(final @Nullable ResolvedMethod method) {
             methodRemover.removeMethod(method);
         }
 
         @Override
-        public void removeMethods(final Predicate<Method> filter, final Consumer<Method> onRemoval) {
+        public void removeMethods(final Predicate<ResolvedMethod> filter, final Consumer<ResolvedMethod> onRemoval) {
             methodRemover.removeMethods(filter, onRemoval);
         }
 
         @Override
-        public Can<Method> snapshotMethodsRemaining() {
+        public Can<ResolvedMethod> snapshotMethodsRemaining() {
             return methodRemover.snapshotMethodsRemaining();
         }
 
@@ -351,7 +351,7 @@ public interface FacetFactory {
         public static ProcessMethodContext forTesting(
                 final Class<?> cls,
                 final FeatureType featureType,
-                final Method method,
+                final ResolvedMethod method,
                 final MethodRemover methodRemover,
                 final FacetedMethod facetedMethod) {
             return new ProcessMethodContext(
@@ -409,7 +409,8 @@ public interface FacetFactory {
         //JUnit
         public static ProcessParameterContext forTesting(
                 final Class<?> type, final IntrospectionPolicy annotationOptional,
-                final Method method, final MethodRemover methodRemover, final FacetedMethodParameter facetedMethodParameter) {
+                final ResolvedMethod method, final MethodRemover methodRemover,
+                final FacetedMethodParameter facetedMethodParameter) {
             return new ProcessParameterContext(type, annotationOptional,
                     _MethodFacades.regular(method), methodRemover, facetedMethodParameter);
         }

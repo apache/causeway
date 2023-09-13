@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.facets;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.facetapi.MethodRemover;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
@@ -53,30 +54,30 @@ public interface PropertyOrCollectionIdentifyingFacetFactory extends FacetFactor
      * alternatively has a prefix of <tt>is</tt> and returns a <tt>boolean</tt>,
      * then it would be a candidate.
      */
-    public boolean isPropertyOrCollectionGetterCandidate(Method method);
+    public boolean isPropertyOrCollectionGetterCandidate(ResolvedMethod method);
 
     /**
      * Whether (this facet is able to determine that) the supplied
      * {@link Method} represents <i>either</i> a
      * {@link OneToOneAssociation reference property}.
      */
-    public boolean isPropertyAccessor(Method method);
+    public boolean isPropertyAccessor(ResolvedMethod method);
 
     /**
      * Whether (this facet is able to determine that) the supplied
      * {@link Method} represents a {@link OneToManyAssociation collection}.
      */
-    public boolean isCollectionAccessor(Method method);
+    public boolean isCollectionAccessor(ResolvedMethod method);
 
     /**
      * Use the provided {@link MethodRemover} to remove all reference property
      * accessors, and append them to the supplied methodList.
      */
-    public void findAndRemovePropertyAccessors(MethodRemover methodRemover, List<Method> methodListToAppendTo);
+    public void findAndRemovePropertyAccessors(MethodRemover methodRemover, List<ResolvedMethod> methodListToAppendTo);
 
     /**
      * Use the provided {@link MethodRemover} to remove all collection
      * accessors, and append them to the supplied methodList.
      */
-    public void findAndRemoveCollectionAccessors(MethodRemover methodRemover, List<Method> methodListToAppendTo);
+    public void findAndRemoveCollectionAccessors(MethodRemover methodRemover, List<ResolvedMethod> methodListToAppendTo);
 }

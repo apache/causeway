@@ -83,6 +83,8 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.proxy._ProxyFactoryService;
+import org.apache.causeway.commons.internal.reflection._GenericResolver;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MixinConstructor;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -290,6 +292,8 @@ implements WrapperFactory, HasMetaModelContext {
 
         return proxyFactory.createInstance((proxy, method, args) -> {
 
+            val resolvedMethod = _GenericResolver.resolveMethod(method, domainObject.getClass());
+
             if (isInheritedFromJavaLangObject(method)) {
                 return method.invoke(domainObject, args);
             }
@@ -304,7 +308,7 @@ implements WrapperFactory, HasMetaModelContext {
                 doih.invoke(null, method, args);
             }
 
-            val memberAndTarget = memberAndTargetForRegular(method, targetAdapter);
+            val memberAndTarget = memberAndTargetForRegular(resolvedMethod, targetAdapter);
             if( ! memberAndTarget.isMemberFound()) {
                 return method.invoke(domainObject, args);
             }
@@ -338,6 +342,8 @@ implements WrapperFactory, HasMetaModelContext {
 
         return proxyFactory.createInstance((proxy, method, args) -> {
 
+            val resolvedMethod = _GenericResolver.resolveMethod(method, mixinClass);
+
             final boolean inheritedFromObject = isInheritedFromJavaLangObject(method);
             if (inheritedFromObject) {
                 return method.invoke(mixin, args);
@@ -353,7 +359,7 @@ implements WrapperFactory, HasMetaModelContext {
                 doih.invoke(null, method, args);
             }
 
-            val actionAndTarget = memberAndTargetForMixin(method, mixee, mixinAdapter);
+            val actionAndTarget = memberAndTargetForMixin(resolvedMethod, mixee, mixinAdapter);
             if (! actionAndTarget.isMemberFound()) {
                 return method.invoke(mixin, args);
             }
@@ -423,7 +429,7 @@ implements WrapperFactory, HasMetaModelContext {
     }
 
     private MemberAndTarget memberAndTargetForRegular(
-            final Method method,
+            final ResolvedMethod method,
             final ManagedObject targetAdapter) {
 
         val objectMember = targetAdapter.getSpecification().getMember(method).orElse(null);
@@ -432,19 +438,19 @@ implements WrapperFactory, HasMetaModelContext {
         }
 
         if (objectMember instanceof OneToOneAssociation) {
-            return MemberAndTarget.foundProperty((OneToOneAssociation) objectMember, targetAdapter, method);
+            return MemberAndTarget.foundProperty((OneToOneAssociation) objectMember, targetAdapter, method.method());
         }
         if (objectMember instanceof ObjectAction) {
-            return MemberAndTarget.foundAction((ObjectAction) objectMember, targetAdapter, method);
+            return MemberAndTarget.foundAction((ObjectAction) objectMember, targetAdapter, method.method());
         }
 
         throw new UnsupportedOperationException(
                 "Only properties and actions can be executed in the background "
-                        + "(method " + method.getName() + " represents a " + objectMember.getFeatureType().name() + "')");
+                        + "(method " + method.name() + " represents a " + objectMember.getFeatureType().name() + "')");
     }
 
     private <T> MemberAndTarget memberAndTargetForMixin(
-            final Method method,
+            final ResolvedMethod method,
             final T mixee,
             final ManagedObject mixinAdapter) {
 
@@ -467,7 +473,7 @@ implements WrapperFactory, HasMetaModelContext {
                 "Could not locate objectAction delegating to mixinAction id='%s' on mixee class '%s'",
                 mixinMember.getId(), mixeeClass.getName())));
 
-        return MemberAndTarget.foundAction(targetAction, getObjectManager().adapt(mixee), method);
+        return MemberAndTarget.foundAction(targetAction, getObjectManager().adapt(mixee), method.method());
     }
 
     private static <R> InteractionContext interactionContextFrom(

@@ -19,13 +19,13 @@
 package org.apache.causeway.core.metamodel.facets.param.validate.method;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.applib.services.i18n.TranslatableString;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
@@ -46,7 +46,7 @@ implements ImperativeFacet {
     private final Optional<Constructor<?>> patConstructor;
 
     public ActionParameterValidationFacetViaMethod(
-            final Method method,
+            final ResolvedMethod method,
             final Optional<Constructor<?>> patConstructor,
             final FacetHolder holder) {
 
@@ -75,15 +75,15 @@ implements ImperativeFacet {
                         patConstructor.get(),
                         method.asMethodForIntrospection(),
                         owningAdapter, pendingArgs)
-                : method.asMethodElseFail().getParameterCount()==1
+                : method.asMethodElseFail().isSingleArg()
                          // provides the a single arg, namely the param under validation
                         ? MmInvokeUtils.invokeWithSingleArg(
-                                method.asMethodElseFail(),
+                                method.asMethodElseFail().method(),
                                 owningAdapter,
                                 pendingArgs.getElseFail(paramIndex))
                         // provides pending args up to paramIndex (for validation)
                         : MmInvokeUtils.invokeWithArgs(
-                            method.asMethodElseFail(),
+                            method.asMethodElseFail().method(),
                             owningAdapter,
                             pendingArgs.subCan(0, paramIndex + 1));
 

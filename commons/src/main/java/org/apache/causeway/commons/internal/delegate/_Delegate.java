@@ -93,7 +93,7 @@ public class _Delegate {
                 val delegateMethod =
                         classCache.lookupPublicOrDeclaredMethod(delegate.getClass(),
                                 method.getName(), method.getParameterTypes());
-                return delegateMethod.invoke(delegate, args);
+                return delegateMethod.method().invoke(delegate, args);
             } catch (InvocationTargetException ex) {
                 throw ex.getTargetException();
             }

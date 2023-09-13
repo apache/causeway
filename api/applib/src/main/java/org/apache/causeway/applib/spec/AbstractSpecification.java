@@ -18,10 +18,9 @@
  */
 package org.apache.causeway.applib.spec;
 
-import java.lang.reflect.Method;
-
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 
 import lombok.val;
 
@@ -66,7 +65,7 @@ public abstract class AbstractSpecification<T> implements Specification {
             .orElse(null);
 
             if(methodFound!=null) {
-                return methodFound.getParameterTypes()[0];
+                return methodFound.paramType(0);
             }
 
         }
@@ -74,8 +73,10 @@ public abstract class AbstractSpecification<T> implements Specification {
         throw new Error("Cannot determine correct type for satisfiesSafely() method.");
     }
 
-    private static boolean isSatisfiesSafelyMethod(final Method method) {
-        return method.getName().equals("satisfiesSafely") && method.getParameterTypes().length == 1 && !method.isSynthetic();
+    private static boolean isSatisfiesSafelyMethod(final ResolvedMethod method) {
+        return method.paramCount() == 1
+                && method.name().equals("satisfiesSafely")
+                && !method.method().isSynthetic();
     }
 
     private final Class<?> expectedType;

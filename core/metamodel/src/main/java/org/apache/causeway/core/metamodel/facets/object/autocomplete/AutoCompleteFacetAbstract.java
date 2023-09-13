@@ -18,11 +18,11 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.autocomplete;
 
-import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
@@ -46,7 +46,7 @@ implements AutoCompleteFacet {
     }
 
     private final Class<?> repositoryClass;
-    private final Method repositoryMethod;
+    private final ResolvedMethod repositoryMethod;
 
     /**
      * lazily populated
@@ -56,7 +56,7 @@ implements AutoCompleteFacet {
     public AutoCompleteFacetAbstract(
             final FacetHolder holder,
             final Class<?> repositoryClass,
-            final Method repositoryMethod) {
+            final ResolvedMethod repositoryMethod) {
 
         super(type(), holder);
 
@@ -75,7 +75,7 @@ implements AutoCompleteFacet {
 
         val resultAdapter = executionPublisher()
         .withPublishingSuppressed(()->{
-                final Object list = _Reflect.invokeMethodOn(repositoryMethod, getRepository(), search)
+                final Object list = _Reflect.invokeMethodOn(repositoryMethod.method(), getRepository(), search)
                         .ifFailure(e->log.warn("failure while executing auto-complete", e))
                         .getValue().orElseGet(Collections::emptyList);
                 return getObjectManager().adapt(list);

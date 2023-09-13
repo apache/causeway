@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.ident.title;
 
-import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,6 +35,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Title;
+import org.apache.causeway.commons.internal.reflection._GenericResolver;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.Evaluators;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
@@ -74,7 +75,7 @@ extends FacetFactoryTestAbstract {
     @Test
     void titleAnnotatedMethodPickedUpOnClassRemoved() throws Exception {
 
-        val someTitleMethod = Customer1.class.getMethod("someTitle");
+        val someTitleMethod = _GenericResolver.resolveMethod(Customer1.class, "someTitle");
 
         objectScenario(Customer1.class, (processClassContext, facetHolder)->{
             facetFactory.process(processClassContext);
@@ -85,7 +86,7 @@ extends FacetFactoryTestAbstract {
             final TitleFacetViaTitleAnnotation titleFacetViaTitleAnnotation =
                     (TitleFacetViaTitleAnnotation) facet;
 
-            final List<Method> titleMethods = Arrays.asList(someTitleMethod);
+            final List<ResolvedMethod> titleMethods = Arrays.asList(someTitleMethod);
             for (int i = 0; i < titleMethods.size(); i++) {
                 final Evaluators.MethodEvaluator titleEvaluator =
                         (Evaluators.MethodEvaluator) titleFacetViaTitleAnnotation.getComponents()
@@ -123,10 +124,10 @@ extends FacetFactoryTestAbstract {
     @Test
     void titleAnnotatedMethodsPickedUpOnClass() throws Exception {
 
-        final List<Method> titleMethods = Arrays.asList(
-                Customer2.class.getMethod("titleElement1"),
-                Customer2.class.getMethod("titleElement3"),
-                Customer2.class.getMethod("titleElement2"));
+        final List<ResolvedMethod> titleMethods = List.of(
+                findMethodExactOrFail(Customer2.class, "titleElement1"),
+                findMethodExactOrFail(Customer2.class, "titleElement3"),
+                findMethodExactOrFail(Customer2.class, "titleElement2"));
 
         objectScenario(Customer2.class, (processClassContext, facetHolder)->{
             facetFactory.process(processClassContext);

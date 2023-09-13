@@ -45,6 +45,7 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.reflection._GenericResolver;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResult;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -164,8 +165,8 @@ extends DelegatingInvocationHandlerDefault<T> {
             return handleTitleMethod(targetAdapter);
         }
 
-
         final ObjectSpecification targetSpec = targetAdapter.getSpecification();
+        val resolvedMethod = _GenericResolver.resolveMethod(method, targetSpec.getCorrespondingClass());
 
         // save method, through the proxy
         if (method.equals(__causeway_saveMethod)) {
@@ -180,10 +181,10 @@ extends DelegatingInvocationHandlerDefault<T> {
             return getSyncControl().getExecutionModes();
         }
 
-        val objectMember = targetSpec.getMemberElseFail(method);
+        val objectMember = targetSpec.getMemberElseFail(resolvedMethod);
         val memberId = objectMember.getId();
 
-        val intent = ImperativeFacet.getIntent(objectMember, method);
+        val intent = ImperativeFacet.getIntent(objectMember, resolvedMethod);
         if(intent == Intent.CHECK_IF_HIDDEN || intent == Intent.CHECK_IF_DISABLED) {
             throw new UnsupportedOperationException(String.format("Cannot invoke supporting method '%s'", memberId));
         }

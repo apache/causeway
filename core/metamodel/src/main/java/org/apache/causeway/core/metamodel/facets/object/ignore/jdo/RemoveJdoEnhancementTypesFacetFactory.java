@@ -57,7 +57,7 @@ extends FacetFactoryAbstract {
         .streamPublicMethods(typeToIgnore)
         .forEach(method->{
             jdoEnhancementmethodsToIgnore
-            .add(new RemoveMethodsFacetFactory.MethodAndParameterTypes(method.getName(), method.getParameterTypes()));
+            .add(new RemoveMethodsFacetFactory.MethodAndParameterTypes(method.name(), method.paramTypes()));
         });
 
     }

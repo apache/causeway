@@ -28,7 +28,7 @@ import org.springframework.core.ResolvableType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.apache.causeway.commons.internal._Constants;
+import org.apache.causeway.commons.internal.reflection._GenericResolver;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 
 import lombok.SneakyThrows;
@@ -129,17 +129,17 @@ class TypeOfAnyCardinalityTest {
             final Class<?> genericA, final Class<?> genericB, final Class<?> genericC,
             final Class<?> contA, final Class<?> contB, final Class<?> contC) {
 
-        val methodInA = a.getMethod("someStrings", _Constants.emptyClasses);
-        val methodInB = b.getMethod("someStrings", _Constants.emptyClasses);
-        val methodInC = c.getMethod("someStrings", _Constants.emptyClasses);
+        val methodInA = _GenericResolver.resolveMethod(a, "someStrings");
+        val methodInB = _GenericResolver.resolveMethod(b, "someStrings");
+        val methodInC = _GenericResolver.resolveMethod(c, "someStrings");
 
         assertNotNull(methodInA);
         assertNotNull(methodInB);
         assertNotNull(methodInC);
 
-        val returnA = ResolvableType.forMethodReturnType(methodInA, a);
-        val returnB = ResolvableType.forMethodReturnType(methodInB, b);
-        val returnC = ResolvableType.forMethodReturnType(methodInC, c);
+        val returnA = ResolvableType.forMethodReturnType(methodInA.method(), a);
+        val returnB = ResolvableType.forMethodReturnType(methodInB.method(), b);
+        val returnC = ResolvableType.forMethodReturnType(methodInC.method(), c);
 
         val genericArgA = returnA.isArray()
                 ? returnA.getComponentType()

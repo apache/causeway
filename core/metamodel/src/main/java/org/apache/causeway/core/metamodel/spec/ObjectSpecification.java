@@ -20,7 +20,6 @@ package org.apache.causeway.core.metamodel.spec;
 
 import java.io.Serializable;
 import java.lang.reflect.Array;
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Comparator;
 import java.util.Objects;
@@ -40,6 +39,7 @@ import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Streams;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.commons.ClassExtensions;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -144,11 +144,11 @@ extends
      * @return optionally the ObjectMember associated with given {@code method},
      * based on whether such an association exists
      */
-    Optional<? extends ObjectMember> getMember(Method method);
+    Optional<? extends ObjectMember> getMember(ResolvedMethod method);
 
-    default ObjectMember getMemberElseFail(final @NonNull Method method) {
+    default ObjectMember getMemberElseFail(final @NonNull ResolvedMethod method) {
         return getMember(method).orElseThrow(()->{
-            val methodName = method.getName();
+            val methodName = method.name();
             val msg = "Method '" + methodName + "' does not correspond "
                     + "to any of the object's fields or actions.";
             return new UnsupportedOperationException(msg);

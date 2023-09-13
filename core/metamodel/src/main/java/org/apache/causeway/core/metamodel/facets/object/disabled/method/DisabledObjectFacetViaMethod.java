@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.disabled.method;
 
-import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
@@ -26,6 +25,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.i18n.TranslatableString;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.HasImperativeAspect;
@@ -47,7 +47,7 @@ implements HasImperativeAspect {
     private final TranslationContext translationContext;
 
     public static Optional<DisabledObjectFacet> create(
-            final @Nullable Method methodIfAny,
+            final @Nullable ResolvedMethod methodIfAny,
             final FacetHolder holder) {
 
         return Optional.ofNullable(methodIfAny)

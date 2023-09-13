@@ -19,11 +19,11 @@
 package org.apache.causeway.applib.services.i18n;
 
 import java.io.Serializable;
-import java.lang.reflect.Method;
 
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 
 import lombok.Getter;
 import lombok.Value;
@@ -62,10 +62,10 @@ implements Serializable {
 
     //XXX no logical type name supported
     public static TranslationContext forMethod(
-            final @Nullable Method method) {
+            final @Nullable ResolvedMethod method) {
 
         return method!=null
-                ? named(method.getDeclaringClass().getName() + "#" + method.getName() + "()")
+                ? named(method.method().getDeclaringClass().getName() + "#" + method.name() + "()")
                 : EMPTY;
     }
 

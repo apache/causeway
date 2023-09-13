@@ -18,12 +18,11 @@
  */
 package org.apache.causeway.applib.spec;
 
-import java.lang.reflect.Method;
-
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.services.i18n.TranslatableString;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 
 import lombok.val;
 
@@ -68,7 +67,7 @@ public abstract class AbstractSpecification2<T> implements Specification2 {
             .orElse(null);
 
             if(methodFound!=null) {
-                return methodFound.getParameterTypes()[0];
+                return methodFound.paramType(0);
             }
 
         }
@@ -76,8 +75,10 @@ public abstract class AbstractSpecification2<T> implements Specification2 {
         throw new Error("Cannot determine correct type for satisfiesSafely() method.");
     }
 
-    private static boolean isSatisfiesTranslatableSafelyMethod(final Method method) {
-        return method.getName().equals("satisfiesTranslatableSafely") && method.getParameterTypes().length == 1 && !method.isSynthetic();
+    private static boolean isSatisfiesTranslatableSafelyMethod(final ResolvedMethod method) {
+        return method.paramCount() == 1
+                && method.name().equals("satisfiesTranslatableSafely")
+                && !method.method().isSynthetic();
     }
 
     private final Class<?> expectedType;

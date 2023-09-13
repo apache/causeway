@@ -55,11 +55,11 @@ class DeweyOrderSetTest {
     }
 
     private final MetaModelContext mmc = MetaModelContext_forTesting.buildDefault();
-    private final FacetedMethod lastNameMember = FacetedMethod.createForProperty(mmc, Customer.class, "Last Name");
-    private final FacetedMethod firstNameMember = FacetedMethod.createForProperty(mmc, Customer.class, "First Name");
-    private final FacetedMethod houseNumberMember = FacetedMethod.createForProperty(mmc, Customer.class, "House Number");
-    private final FacetedMethod streetNameMember = FacetedMethod.createForProperty(mmc, Customer.class, "Street Name");
-    private final FacetedMethod postalTownMember = FacetedMethod.createForProperty(mmc, Customer.class, "Postal Town");
+    private final FacetedMethod lastNameMember = FacetedMethod.testing.createGetterForProperty(mmc, Customer.class, "Last Name");
+    private final FacetedMethod firstNameMember = FacetedMethod.testing.createGetterForProperty(mmc, Customer.class, "First Name");
+    private final FacetedMethod houseNumberMember = FacetedMethod.testing.createGetterForProperty(mmc, Customer.class, "House Number");
+    private final FacetedMethod streetNameMember = FacetedMethod.testing.createGetterForProperty(mmc, Customer.class, "Street Name");
+    private final FacetedMethod postalTownMember = FacetedMethod.testing.createGetterForProperty(mmc, Customer.class, "Postal Town");
     private final List<FacetedMethod> lastNameAndFirstName = List.of(lastNameMember, firstNameMember);
     private final List<FacetedMethod> nameAndAddressMembers = List.of(lastNameMember, firstNameMember, houseNumberMember, streetNameMember, postalTownMember);
     private final List<FacetedMethod> lastNameFirstNameAndPostalTown = List.of(lastNameMember, firstNameMember, postalTownMember);
