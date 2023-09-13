@@ -18,11 +18,13 @@
  */
 package org.apache.causeway.client.kroviz.core.event
 
+import kotlinx.serialization.Serializable
 import org.apache.causeway.client.kroviz.ui.core.Constants
 import org.apache.causeway.client.kroviz.utils.StringUtils
 import org.apache.causeway.client.kroviz.utils.UrlUtils
 
-class ResourceSpecification(
+@Serializable
+data class ResourceSpecification(
     val url: String,
     val subType: String? = Constants.subTypeJson,
     val referrerUrl: String = "") {

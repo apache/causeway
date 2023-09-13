@@ -22,7 +22,7 @@ import org.apache.causeway.client.kroviz.core.aggregator.ObjectAggregator
 import org.apache.causeway.client.kroviz.core.event.ResourceProxy
 import org.apache.causeway.client.kroviz.core.event.ResourceSpecification
 import org.apache.causeway.client.kroviz.to.*
-import org.apache.causeway.client.kroviz.to.bs.GridBs
+import org.apache.causeway.client.kroviz.to.GridBs
 import org.apache.causeway.client.kroviz.ui.core.SessionManager
 
 class ObjectDM(override val title: String) : DisplayModelWithLayout() {
@@ -45,6 +45,12 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
     }
 
     fun hasCollectionModels(): Boolean {
+        console.log("[ODM_hasCollectionModels] ${collectionModelList.isNotEmpty()}")
+        if (collectionModelList.isNotEmpty()) {
+            val firstCM = collectionModelList.get(0)
+            console.log("[ODM_hasCollectionModels] data:")
+            console.log(firstCM.data)
+        }
         return collectionModelList.isNotEmpty()
     }
 
@@ -57,15 +63,17 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
     }
 
     override fun readyToRender(): Boolean {
-        return when {
+        val result = when {
             data == null -> false
             isRendered -> false
             layout == null -> false
             else -> areCollectionsReadyToRender()
         }
+        return result
     }
 
     private fun areCollectionsReadyToRender(): Boolean {
+        if (collectionModelList.size < 1) return false
         collectionModelList.forEach {
             if (!it.readyToRender())
                 return false
@@ -76,7 +84,7 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
     override fun addData(obj: TransferObject) {
         (obj as TObject)
         val exo = Exposer(obj)
-        data = exo.dynamise() as? Exposer
+        data = exo
     }
 
     fun addResult(resultObject: ResultObject) {

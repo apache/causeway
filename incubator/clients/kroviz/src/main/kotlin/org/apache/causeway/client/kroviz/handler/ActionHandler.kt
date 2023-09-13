@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.client.kroviz.handler
 
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.apache.causeway.client.kroviz.core.aggregator.ActionDispatcher
 import org.apache.causeway.client.kroviz.to.Action

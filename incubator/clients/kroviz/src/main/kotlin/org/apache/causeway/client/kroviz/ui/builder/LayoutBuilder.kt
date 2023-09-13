@@ -20,7 +20,7 @@ package org.apache.causeway.client.kroviz.ui.builder
 
 import io.kvision.panel.VPanel
 import org.apache.causeway.client.kroviz.to.TObject
-import org.apache.causeway.client.kroviz.to.bs.GridBs
+import org.apache.causeway.client.kroviz.to.GridBs
 
 class LayoutBuilder {
 

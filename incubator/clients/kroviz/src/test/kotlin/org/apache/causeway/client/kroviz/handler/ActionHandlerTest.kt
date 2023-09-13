@@ -20,6 +20,7 @@
 package org.apache.causeway.client.kroviz.handler
 
 import org.apache.causeway.client.kroviz.snapshots.demo2_0_0.ACTIONS_STRINGS
+import org.apache.causeway.client.kroviz.snapshots.demo2_0_0.ACTIONS_STRINGS_ACTION_DESCRIPTION
 import org.apache.causeway.client.kroviz.snapshots.demo2_0_0.COLLECTION_DESCRIPTION
 import org.apache.causeway.client.kroviz.to.Action
 import kotlin.test.Test
@@ -44,6 +45,16 @@ class ActionHandlerTest {
         } catch (re: RuntimeException) {
             assertTrue(true)
         }
+    }
+
+    //@Test
+    //FIXME
+    fun testParseDescription() {
+        val json = ACTIONS_STRINGS_ACTION_DESCRIPTION.str
+        val action = ActionHandler().parse(json)
+        console.log("[AHT_testParseDescription]")
+        console.log(action.toString())
+//        assertTrue(action is Action)
     }
 
 }

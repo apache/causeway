@@ -22,6 +22,7 @@ import org.apache.causeway.client.kroviz.handler.LayoutXmlHandler
 import org.apache.causeway.client.kroviz.snapshots.demo2_0_0.STRINGS_LAYOUT_XML
 import org.apache.causeway.client.kroviz.snapshots.demo2_0_0.TAB_LAYOUT_XML
 import org.apache.causeway.client.kroviz.snapshots.simpleapp1_16_0.SO_LAYOUT_XML
+import org.apache.causeway.client.kroviz.to.GridBs
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue

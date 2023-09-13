@@ -18,9 +18,11 @@
  */
 package org.apache.causeway.client.kroviz.core.model
 
+import kotlinx.serialization.Serializable
 import org.apache.causeway.client.kroviz.to.TObject
 import org.apache.causeway.client.kroviz.to.TransferObject
 
+@Serializable
 abstract class BaseDisplayModel {
 
     var isRendered = false

@@ -18,11 +18,14 @@
  */
 package org.apache.causeway.client.kroviz.core.aggregator
 
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 import org.apache.causeway.client.kroviz.core.event.LogEntry
 import org.apache.causeway.client.kroviz.utils.DomUtil
 import org.apache.causeway.client.kroviz.utils.UUID
 
-class SvgDispatcher(val callBack: Any) : BaseAggregator() {
+@Serializable
+class SvgDispatcher(val callBack: @Contextual Any) : BaseAggregator() {
 
     override fun update(logEntry: LogEntry, subType: String?) {
         val response = logEntry.response

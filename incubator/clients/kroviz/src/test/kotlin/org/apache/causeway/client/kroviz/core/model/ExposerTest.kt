@@ -42,18 +42,19 @@ class ExposerTest {
         assertEquals("1", to.instanceId)
     }
 
-
     @Test
     fun testConfiguration() {
         val jsonStr = CFG_1.str
         val to = TObjectHandler().parse(jsonStr) as TObject
 
-        val exposer = Exposer(to).dynamise()
+        val exposer = Exposer(to)
 
-        val actKey = exposer["key"]
+        val dyn = exposer.asDynamic()
+
+        val actKey = dyn["key"]
         assertEquals("causeway.appManifest", actKey)
 
-        val actValue = exposer["value"]
+        val actValue = dyn["value"]
         assertEquals("domainapp.application.manifest.DomainAppAppManifest", actValue)
 
         val members = to.members
@@ -73,7 +74,7 @@ class ExposerTest {
         val actualDnvers = exposer.get("datanucleusVersionTimestamp") as Value
         assertEquals(1514897074953L, actualDnvers.content as Long)
 
-        val dynEx = exposer.dynamise()
+        val dynEx = exposer.asDynamic()
         val actKey = dynEx["name"]
         assertEquals("Foo", actKey)
 
@@ -82,6 +83,10 @@ class ExposerTest {
 
         val members = to.members
         assertFalse(members.isEmpty())
+    }
+
+    fun Exposer.get(propertyName: String): Any? {
+        return this.delegate.getProperty(propertyName)?.value
     }
 
 }

@@ -41,7 +41,6 @@ object Constants {
     const val demoUser = "sven"
     const val demoPass = "pass"
     const val demoUrlRemote = "https://demo-wicket.jdo.causeway.incode.work/"
-    val demoRemoteImage = io.kvision.require("img/incode_we_share.jpg")
     const val domoxUrl = "http://localhost:8081/"
 
     const val spacing = 10

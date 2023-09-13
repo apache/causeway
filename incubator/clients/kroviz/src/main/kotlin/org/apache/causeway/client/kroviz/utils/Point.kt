@@ -18,4 +18,7 @@
  */
 package org.apache.causeway.client.kroviz.utils
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 class Point(val x: Int, val y: Int)

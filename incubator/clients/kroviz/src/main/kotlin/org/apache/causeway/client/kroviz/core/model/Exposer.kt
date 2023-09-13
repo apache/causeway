@@ -18,51 +18,31 @@
  */
 package org.apache.causeway.client.kroviz.core.model
 
-import kotlinx.serialization.Serializable
-import org.apache.causeway.client.kroviz.to.Icon
 import org.apache.causeway.client.kroviz.to.MemberType
 import org.apache.causeway.client.kroviz.to.TObject
-import org.apache.causeway.client.kroviz.utils.IconManager
 
 /**
- * Makes properties of delegate available for display in Lists.
+ * Makes properties of delegate available for display in tables.
  * For regular TObjects these are members (properties).
  * For FixtureResults these are: result, resultClass etc.
  *
  * Exposer bears some similarity to the JS "Revealing Module Pattern"
  * (see: https://addyosmani.com/resources/essentialjsdesignpatterns/book/),
- * but it goes further since it even reveals members of it's delegate.
+ * but it goes further since it even reveals members of its delegate.
  */
-@Serializable
 class Exposer(val delegate: TObject) {
-
-    var iconName = ""  //required by ColumnFactory
-
-    fun dynamise(): dynamic {
-        val thys = this.asDynamic()
+    init {
+        val that = this.asDynamic()
         for (m in delegate.members) {
             val member = m.value
             if (member.memberType == MemberType.PROPERTY.type) {
-                val realValue = member.value
-                if (realValue != null) {
-                    thys[member.id] = realValue.content
+                val key = member.id
+                val value = member.value
+                if (value != null) {
+                    that[key] = value.content
                 }
             }
         }
-        iconName = IconManager.find(delegate.title)
-        if (iconName == IconManager.DEFAULT_ICON) {
-            iconName = IconManager.find(delegate.domainType)
-        }
-        return thys
-    }
-
-    // eg. for dataNucleusId
-    fun get(propertyName: String): Any? {
-        return this.delegate.getProperty(propertyName)?.value
-    }
-
-    fun setIcon(icon: Icon) {
-        this.asDynamic()["icon"] = icon.image.src
     }
 
 }

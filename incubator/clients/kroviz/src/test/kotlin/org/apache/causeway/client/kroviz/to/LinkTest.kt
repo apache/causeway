@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.client.kroviz.to
 
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.apache.causeway.client.kroviz.handler.ActionHandler
 import org.apache.causeway.client.kroviz.snapshots.demo2_0_0.Response2Handler
@@ -50,7 +49,7 @@ class LinkTest {
         val href = "href"
         val arg = Argument(href)
         val args = mutableMapOf<String, Argument?>()
-        args.put("", arg)
+        args[""] = arg
         val l = Link(arguments = args, href = href)
         // then
         val arguments = l.argMap()!!
@@ -61,9 +60,8 @@ class LinkTest {
     @Test
     fun testFindRelation() {
         //given
-        var rel: Relation?
         //when
-        rel = Relation.find("menuBars")
+        var rel: Relation? = Relation.find("menuBars")
         //then
         assertEquals(Relation.MENU_BARS, rel)
 
@@ -94,7 +92,7 @@ class LinkTest {
                         l.representation()
                     } catch (e: NullPointerException) {
                         console.log(l.href)
-                        fail("${rh.key} Relation/Represention of $l fails")
+                        fail("${rh.key} Relation/Representation of $l fails")
                     }
                 }
             }

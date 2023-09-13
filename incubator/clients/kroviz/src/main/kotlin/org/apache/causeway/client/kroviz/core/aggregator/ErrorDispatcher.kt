@@ -18,12 +18,13 @@
  */
 package org.apache.causeway.client.kroviz.core.aggregator
 
+import kotlinx.serialization.Serializable
 import org.apache.causeway.client.kroviz.core.event.LogEntry
 import org.apache.causeway.client.kroviz.core.event.ResourceSpecification
 import org.apache.causeway.client.kroviz.to.HttpErrorResponse
 import org.apache.causeway.client.kroviz.ui.core.SessionManager
-import org.apache.causeway.client.kroviz.ui.dialog.ErrorDialog
 
+@Serializable
 class ErrorDispatcher : BaseAggregator() {
 
     override fun update(logEntry: LogEntry, subType: String?) {

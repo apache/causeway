@@ -19,5 +19,8 @@
 
 package org.apache.causeway.client.kroviz.to
 
-interface TransferObject {
+import kotlinx.serialization.Serializable
+
+@Serializable
+sealed interface TransferObject {
 }

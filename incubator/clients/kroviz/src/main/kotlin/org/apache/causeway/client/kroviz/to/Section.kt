@@ -16,13 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.client.kroviz.to.mb
+package org.apache.causeway.client.kroviz.to
 
 import kotlinx.serialization.Serializable
-import org.apache.causeway.client.kroviz.to.TransferObject
 
 @Serializable
 data class Section(
-        val named: String? = null,
-        val serviceAction: List<ServiceAction> = emptyList()
+    val named: String? = null,
+    val serviceAction: List<ServiceAction> = emptyList()
 ) : TransferObject

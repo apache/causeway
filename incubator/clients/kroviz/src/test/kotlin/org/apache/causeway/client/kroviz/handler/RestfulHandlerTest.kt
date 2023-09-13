@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.client.kroviz.handler
 
-import org.apache.causeway.client.kroviz.snapshots.simpleapp1_16_0.RESTFUL
+import org.apache.causeway.client.kroviz.snapshots.demo2_0_0.RESTFUL
 import org.apache.causeway.client.kroviz.to.Restful
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -32,7 +32,7 @@ class RestfulHandlerTest {
         val ro = RestfulHandler().parse(jsonStr) as Restful
         assertNotNull(ro)
 
-        assertEquals(6, ro.links.size)
+        assertEquals(8, ro.links.size)
         assertEquals("", ro.extensions.oid)
     }
 

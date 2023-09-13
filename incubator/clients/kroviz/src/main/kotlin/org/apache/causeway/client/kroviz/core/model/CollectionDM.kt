@@ -22,14 +22,14 @@ import io.kvision.state.observableListOf
 import org.apache.causeway.client.kroviz.to.PropertyDescription
 import org.apache.causeway.client.kroviz.to.TObject
 import org.apache.causeway.client.kroviz.to.TransferObject
-import org.apache.causeway.client.kroviz.to.bs.GridBs
+import org.apache.causeway.client.kroviz.to.GridBs
 import org.apache.causeway.client.kroviz.to.bs.PropertyBs
 
 class CollectionDM(override var title: String) : DisplayModelWithLayout() {
     val collectionLayout = CollectionLayout()
 
     var id = ""
-    var data = observableListOf<Exposer>()
+    var data = observableListOf<dynamic>()
     private var rawData = observableListOf<TransferObject>()
     private var protoType: TObject? = null
     private var protoTypeLayout: GridBs? = null
@@ -67,14 +67,14 @@ class CollectionDM(override var title: String) : DisplayModelWithLayout() {
     }
 
     override fun readyToRender(): Boolean {
-        return collectionLayout.readyToRender()
+        return collectionLayout.readyToRender() && data.size > 0
     }
 
     override fun addData(obj: TransferObject) {
         rawData.add(obj)
-        val exo = Exposer(obj as TObject)
-        //if exposer is not dynamised, data access in Tabulator tables won't work
-        data.add(exo.dynamise() as Exposer)
+        val tObj = obj as TObject
+        val exo = Exposer(tObj)
+        data.add(exo.asDynamic())
     }
 
     override fun reset() {

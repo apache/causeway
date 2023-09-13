@@ -32,7 +32,7 @@ enum class ValueType(val type: String) {
     TEXT("Text"),
     TEXT_AREA("TextArea"),
     TIME("Time"),
-    SIMPLE_SELECT("SimpleSelect"),
+    SIMPLE_SELECT("Select"),
     SLIDER("Slider"),
     SHELL("Shell"),
     SVG_MAPPED("Map"),
@@ -40,7 +40,7 @@ enum class ValueType(val type: String) {
     CANVAS("Canvas"),
 }
 
-class TypeMapper {
+object TypeMapper {
 
     fun match(member: Member): String {
         val mf = member.format
@@ -74,7 +74,7 @@ class TypeMapper {
     }
 
     fun forType(type: String): ValueType {
-        console.log("[TM_forType] $type")
+//        console.log("[TM_forType] $type")
         when (type) {
             ValueType.BOOLEAN.type -> return ValueType.BOOLEAN
             ValueType.DATE.type -> return ValueType.DATE

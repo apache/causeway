@@ -19,7 +19,7 @@
 package org.apache.causeway.client.kroviz.ui.dialog
 
 import io.kvision.core.StringPair
-import io.kvision.form.select.SimpleSelect
+import io.kvision.form.select.Select
 import io.kvision.form.text.Password
 import io.kvision.form.text.Text
 import org.apache.causeway.client.kroviz.core.event.ReplayController
@@ -37,8 +37,8 @@ class LoginPrompt(val nextController: Controller? = null) : Controller() {
     override fun open() {
         val formItems = mutableListOf<FormItem>()
         val urlList = mutableListOf<StringPair>()
-        urlList.add(StringPair(Constants.demoUrl9, Constants.demoUrl9))
         urlList.add(StringPair(Constants.demoUrl8, Constants.demoUrl8))
+        urlList.add(StringPair(Constants.demoUrl9, Constants.demoUrl9))
         urlList.add(StringPair(Constants.demoUrlRemote, Constants.demoUrlRemote))
         urlList.add(StringPair(Constants.domoxUrl, Constants.domoxUrl))
         formItems.add(FormItem("Url", ValueType.SIMPLE_SELECT, urlList))
@@ -70,7 +70,7 @@ class LoginPrompt(val nextController: Controller? = null) : Controller() {
         //iterate over FormItems (0,1,2) but not Buttons(3,4)
         for (i in kids) {
             when (i) {
-                is SimpleSelect -> {
+                is Select -> {
                     url = i.getValue()!!
                 }
                 is Text -> {

@@ -18,117 +18,167 @@
  */
 package org.apache.causeway.client.kroviz.ui.panel
 
-import io.kvision.core.*
-import io.kvision.html.Button
-import io.kvision.html.ButtonStyle
+import io.kvision.core.AlignItems
+import io.kvision.core.Border
+import io.kvision.core.FlexWrap
 import io.kvision.panel.VPanel
 import io.kvision.panel.hPanel
 import io.kvision.tabulator.*
+import io.kvision.tabulator.js.Tabulator.CellComponent
 import io.kvision.utils.obj
 import io.kvision.utils.px
 import org.apache.causeway.client.kroviz.core.event.EventState
 import org.apache.causeway.client.kroviz.core.event.LogEntry
-import org.apache.causeway.client.kroviz.to.TObject
-import org.apache.causeway.client.kroviz.ui.core.Constants
+import org.apache.causeway.client.kroviz.ui.builder.TableBuilder
 import org.apache.causeway.client.kroviz.ui.dialog.EventLogDetail
 import org.apache.causeway.client.kroviz.ui.menu.DynamicMenuBuilder
-import org.apache.causeway.client.kroviz.utils.StringUtils
 
 class EventLogTable(val model: List<LogEntry>, filterState: EventState? = null) : VPanel() {
-    val tabulator: Tabulator<LogEntry>
+    val tabulator: Tabulator<dynamic>
 
     private val columns = listOf(
-        ColumnDefinition<LogEntry>(
+        buildCdForTableMenu(),
+        buildCdForTitle(),
+        buildCdForType(),
+        buildCdForState(),
+        buildCdForMethod(),
+        buildCdForAggregators(),
+        buildCdForRequestLength(),
+        buildCdForResponse(),
+        buildCdForResponseLength(),
+        buildCdForCacheHits(),
+        buildCdForDuration(),
+        buildCdForCreatedAt(),
+        buildCdForUpdatedAt()
+    )
+
+    private fun buildCdForTableMenu(): ColumnDefinition<dynamic> {
+        return ColumnDefinition(
             download = false,
             title = "",
-            field = "state",
+            field = "icon_1",
             width = "50",
             headerMenu = DynamicMenuBuilder().buildTableMenu(this),
             hozAlign = Align.CENTER,
-            vertAlign = VAlign.MIDDLE,
-            formatterComponentFunction = { _, _, data -> buildActionButton(data) }
-        ),
-        ColumnDefinition(
-            download = false,
-            title = "Title",
-            field = "title",
-            headerFilter = Editor.INPUT,
-            width = "700",
-            formatterComponentFunction = { _, _, data -> buildObjectButton(data) }
-        ),
-        ColumnDefinition(
-            download = false,
-            title = "Type",
-            field = "type",
-            headerFilter = Editor.INPUT,
-            width = "200"
-        ),
-        ColumnDefinition("State", "state", width = "100", headerFilter = Editor.INPUT, download = false),
-        ColumnDefinition("Method", "method", width = "100", headerFilter = Editor.INPUT, download = false),
-        ColumnDefinition(
-            download = false,
-            title = "# of Agg.",
-            field = "nOfAggregators",
-            headerFilter = Editor.INPUT,
-            width = "20"
-        ),
-        ColumnDefinition("req.len", field = "requestLength", width = "100", hozAlign = Align.RIGHT, download = false),
-        ColumnDefinition(
-            download = false,
-            title = "response",
-            field = "response",
-            headerFilter = Editor.INPUT,
-            width = "200",
-        ),
-        ColumnDefinition("resp.len", field = "responseLength", width = "100", hozAlign = Align.RIGHT, download = false),
-        ColumnDefinition("cacheHits", field = "cacheHits", width = "100", hozAlign = Align.RIGHT, download = false),
-        ColumnDefinition("duration", field = "duration", width = "100", hozAlign = Align.RIGHT, download = false),
-        ColumnDefinition(
-            download = false,
-            title = "Created",
-            field = "createdAt",
-            sorter = Sorter.DATETIME,
-            formatter = Formatter.DATETIME,
-            formatterParams = obj { outputFormat = "HH:mm:ss.SSS" },
-            width = "100"
-        ),
-        ColumnDefinition(
-            download = false,
-            title = "Updated",
-            field = "updatedAt",
-            sorter = Sorter.DATETIME,
-            formatter = Formatter.DATETIME,
-            formatterParams = obj { outputFormat = "HH:mm:ss.SSS" },
-            width = "100"
+            vertAlign = VAlign.BOTTOM,
+            formatter = Formatter.HTML,
+            clickMenu = { _: dynamic, cellComponent: CellComponent ->
+                val le = getObjectFromCell(cellComponent)
+                EventLogDetail(le).open()
+            }
+            //val tto = TooltipOptions(title = data.title)
+            // tabulator tooltip is buggy: often the tooltip doesn't go away and the color is not settable
+            //b.enableTooltip(tto)
+            //      if (le.obj is TObject) b.setDragDropData(Constants.stdMimeType, le.url)
         )
-    )
-
-    private fun buildObjectButton(data: LogEntry): Button {
-        val b = Button(
-            text = StringUtils.shorten(data.title),
-            icon = data.state.iconName,
-            style = ButtonStyle.LINK
-        )
-        b.onClick {
-            kotlinx.browser.window.open(data.title) //IMPROVE should be URL
-        }
-        //val tto = TooltipOptions(title = data.title)
-        // tabulator tooltip is buggy: often the tooltip doesn't go away and the color is not settable
-        //b.enableTooltip(tto)
-        if (data.obj is TObject) b.setDragDropData(Constants.stdMimeType, data.url)
-        return b
     }
 
-    private fun buildActionButton(data: LogEntry): Button {
-        val b = Button(
-            text = "",
-            icon = "fa fa-info-circle",
-            style = data.state.style
+    private fun buildCdForTitle(): ColumnDefinition<dynamic> {
+        return ColumnDefinition(
+            download = false,
+            title = "Title",
+            field = "title_1",
+            headerFilter = Editor.INPUT,
+            width = "700",
+            formatter = Formatter.LINK
         )
-        b.onClick { EventLogDetail(data).open() }
-        b.margin = CssSize(-10, UNIT.px)
-        b.addCssClass("btn-sm")
-        return b
+    }
+
+    private fun buildCdForState(): ColumnDefinition<dynamic> {
+        return ColumnDefinition(
+            "State",
+            "state_1",
+            width = "100",
+            headerFilter = Editor.INPUT,
+            download = false
+        )
+    }
+
+    private fun buildCdForMethod(): ColumnDefinition<dynamic> {
+        return ColumnDefinition(
+            "Method",
+            "method_1",
+            width = "100",
+            headerFilter = Editor.INPUT,
+            download = false
+        )
+    }
+
+    private fun buildCdForAggregators(): ColumnDefinition<dynamic> {
+        return ColumnDefinition(
+            download = false,
+            title = "# of Agg.",
+            field = "nOfAggregators_1",
+            headerFilter = Editor.INPUT,
+            width = "20"
+        )
+    }
+
+    private fun buildCdForType(): ColumnDefinition<dynamic> {
+        return ColumnDefinition(
+            download = false,
+            title = "Type",
+            field = "type_1",
+            headerFilter = Editor.INPUT,
+            width = "200"
+        )
+    }
+
+    private fun buildCdForRequestLength(): ColumnDefinition<dynamic> {
+        return buildCdForNumber("req.len", "requestLength_1")
+    }
+
+    private fun buildCdForResponse(): ColumnDefinition<dynamic> {
+        return ColumnDefinition(
+            download = false,
+            title = "response",
+            field = "response_1",
+            headerFilter = Editor.INPUT,
+            width = "200",
+        )
+    }
+
+    private fun buildCdForResponseLength(): ColumnDefinition<dynamic> {
+        return buildCdForNumber("resp.len", "responseLength_1")
+    }
+
+    private fun buildCdForCacheHits(): ColumnDefinition<dynamic> {
+        return buildCdForNumber("cacheHits", "cacheHits_1")
+    }
+
+    private fun buildCdForDuration(): ColumnDefinition<dynamic> {
+        return buildCdForNumber("duration", "duration_1")
+    }
+
+    private fun buildCdForNumber(title: String, field: String): ColumnDefinition<dynamic> {
+        return ColumnDefinition(
+            title = title,
+            field = field,
+            width = "100",
+            hozAlign = Align.RIGHT,
+            download = false
+        )
+    }
+
+    private fun buildCdForCreatedAt(): ColumnDefinition<dynamic> {
+        return buildCdForDateTime("Created", "createdAt_1")
+    }
+
+    private fun buildCdForUpdatedAt(): ColumnDefinition<dynamic> {
+        return buildCdForDateTime("Updated", "updatedAt_1")
+    }
+
+    private fun buildCdForDateTime(title: String, field: String): ColumnDefinition<dynamic> {
+        return ColumnDefinition(
+            download = false,
+            title = title,
+            field = field,
+            sorter = Sorter.DATETIME,
+            formatter = Formatter.DATETIME,
+            formatterParams = obj
+            { outputFormat = "HH:mm:ss.SSS" },
+            width = "100"
+        )
     }
 
     init {
@@ -140,20 +190,13 @@ class EventLogTable(val model: List<LogEntry>, filterState: EventState? = null) 
             border = Border(width = 1.px)
         }
 
-        val options = TabulatorOptions(
-            movableColumns = true,
-            height = Constants.calcHeight,
-            layout = Layout.FITCOLUMNS,
-            columns = columns,
-            persistenceMode = false
-        )
-
-        tabulator = tabulator(model, options = options) {
-            setEventListener<Tabulator<LogEntry>> {
-            }
+        val data = mutableListOf<dynamic>()
+        model.forEach {
+            data.add(it.asDynamic())
         }
 
-        tabulator.onEvent {
+        tabulator = TableBuilder().createTabulator(data, columns)
+        tabulator.setEventListener<Tabulator<dynamic>> {
             mouseover = {
                 val jst = tabulator.jsTabulator
                 val value = filterState?.name
@@ -162,6 +205,12 @@ class EventLogTable(val model: List<LogEntry>, filterState: EventState? = null) 
                 }
             }
         }
+        add(tabulator)
+    }
+
+    private fun getObjectFromCell(cell: CellComponent): LogEntry {
+        val row = cell.getRow()
+        return row.getData() as LogEntry
     }
 
 }

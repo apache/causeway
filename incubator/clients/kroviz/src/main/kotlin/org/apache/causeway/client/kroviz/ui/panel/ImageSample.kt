@@ -19,8 +19,9 @@
 
 package org.apache.causeway.client.kroviz.ui.panel
 
-import io.kvision.form.upload.uploadInput
+import io.kvision.form.upload.BootstrapUpload
 import io.kvision.html.button
+import io.kvision.i18n.I18n
 import io.kvision.panel.VPanel
 import io.kvision.panel.vPanel
 import org.w3c.files.FileReader
@@ -30,10 +31,15 @@ object ImageSample : VPanel() {
     init {
         vPanel(spacing = 10) {
             val button = button("Button")
-            val upload = uploadInput("/") {
+            val upload = BootstrapUpload(
+                "/",
+                multiple = true,
+                label = I18n.tr("Upload files")
+            ).apply {
                 showUpload = false
                 showCancel = false
             }
+
             button("Add image to button").onClick {
                 upload.value?.firstOrNull()?.let { upload.getNativeFile(it) }?.slice()?.let { blob ->
                     //

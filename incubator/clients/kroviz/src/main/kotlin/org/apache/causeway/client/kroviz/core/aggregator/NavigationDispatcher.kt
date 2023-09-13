@@ -18,10 +18,12 @@
  */
 package org.apache.causeway.client.kroviz.core.aggregator
 
+import kotlinx.serialization.Serializable
 import org.apache.causeway.client.kroviz.core.event.LogEntry
-import org.apache.causeway.client.kroviz.to.mb.Menubars
+import org.apache.causeway.client.kroviz.to.Menubars
 import org.apache.causeway.client.kroviz.ui.core.ViewManager
 
+@Serializable
 class NavigationDispatcher() : BaseAggregator() {
 
     override fun update(logEntry: LogEntry, subType: String?) {

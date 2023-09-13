@@ -30,16 +30,20 @@ import org.apache.causeway.client.kroviz.ui.menu.DropDownMenuBuilder
 class RoDisplay(val displayModel: ObjectDM) : Displayable, VPanel() {
 
     var menu: DropDown? = null
-    private var objectPanel: VPanel
+    private var objectPanel: VPanel? = null
 
     init {
         val model = displayModel.data!!
         val tObject: TObject = model.delegate
-        val grid = (displayModel.layout as ObjectLayout).grid
-        objectPanel = LayoutBuilder().create(grid, tObject, this)
-        objectPanel.overflow = Overflow.AUTO
-        objectPanel.width = CssSize(100, UNIT.perc)
-        add(objectPanel)
+        val layout = displayModel.layout
+        //TODO if object is invoked from list/table, sometimes layout is not set
+        if (layout != null) {
+            val grid = (layout as ObjectLayout).grid
+            objectPanel = LayoutBuilder().create(grid, tObject, this)
+            objectPanel?.overflow = Overflow.AUTO
+            objectPanel?.width = CssSize(100, UNIT.perc)
+            add(objectPanel!!)
+        }
     }
 
     override fun setDirty(value: Boolean) {

@@ -42,7 +42,7 @@ data class Member(val id: String,
                 && extensions.xCausewayFormat == "string") {
             value = Value("")
         }
-        type = TypeMapper().match(this)
+        type = TypeMapper.match(this)
     }
 
     private fun isProperty(): Boolean {

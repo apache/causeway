@@ -16,9 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.client.kroviz.to.bs
+package org.apache.causeway.client.kroviz.to
 
-import org.apache.causeway.client.kroviz.to.TransferObject
+import org.apache.causeway.client.kroviz.to.bs.CollectionBs
+import org.apache.causeway.client.kroviz.to.bs.PropertyBs
+import org.apache.causeway.client.kroviz.to.bs.RowBs
+import org.apache.causeway.client.kroviz.to.bs.XmlLayout
 import org.w3c.dom.Document
 import org.w3c.dom.Node
 import org.w3c.dom.asList

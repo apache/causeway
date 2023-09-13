@@ -22,21 +22,17 @@ import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 plugins {
     val kotlinVersion: String by System.getProperties()
     kotlin("plugin.serialization") version kotlinVersion
-    kotlin("js") version kotlinVersion
+    kotlin("js") version kotlinVersion // https://youtrack.jetbrains.com/issue/KT-50381
+
     val kvisionVersion: String by System.getProperties()
     id("io.kvision") version kvisionVersion
 }
 
 var version = "2.0.0-SNAPSHOT"
 
-kotlin.sourceSets.all {
-    languageSettings.optIn("org.mylibrary.OptInAnnotation")
-}
-
 repositories {
     maven ("https://repository.int.kn/nexus/content/repositories/thirdparty/")
     mavenCentral()
-    jcenter()
     google()
     mavenLocal()
 }
@@ -76,43 +72,38 @@ kotlin {
         binaries.executable()
     }
     sourceSets["main"].dependencies {
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0")
         implementation(npm("react-awesome-button", "*"))
         implementation(npm("prop-types", "*"))
         implementation("io.kvision:kvision:$kvisionVersion")
         implementation("io.kvision:kvision-bootstrap:$kvisionVersion")
-        implementation("io.kvision:kvision-bootstrap-css:$kvisionVersion")
-        implementation("io.kvision:kvision-bootstrap-datetime:$kvisionVersion")
-        implementation("io.kvision:kvision-bootstrap-dialog:$kvisionVersion")
-        implementation("io.kvision:kvision-bootstrap-select:$kvisionVersion")
-        implementation("io.kvision:kvision-bootstrap-spinner:$kvisionVersion")
-        implementation("io.kvision:kvision-bootstrap-typeahead:$kvisionVersion")
         implementation("io.kvision:kvision-bootstrap-upload:$kvisionVersion")
+        implementation("io.kvision:kvision-datetime:$kvisionVersion")
+        implementation("io.kvision:kvision-tom-select:$kvisionVersion")
         implementation("io.kvision:kvision-fontawesome:$kvisionVersion")
         implementation("io.kvision:kvision-i18n:$kvisionVersion")
         implementation("io.kvision:kvision-richtext:$kvisionVersion")
         implementation("io.kvision:kvision-handlebars:$kvisionVersion")
-        implementation("io.kvision:kvision-datacontainer:$kvisionVersion")
         implementation("io.kvision:kvision-chart:$kvisionVersion")
         implementation("io.kvision:kvision-tabulator:$kvisionVersion")
         implementation("io.kvision:kvision-pace:$kvisionVersion")
-        implementation("io.kvision:kvision-toast:$kvisionVersion")
         implementation("io.kvision:kvision-react:$kvisionVersion")
         implementation("io.kvision:kvision-routing-navigo:$kvisionVersion")
         implementation("io.kvision:kvision-state:$kvisionVersion")
         implementation("io.kvision:kvision-rest:$kvisionVersion")
-        implementation("io.kvision:kvision-moment:$kvisionVersion")
         implementation("io.kvision:kvision-maps:$kvisionVersion")
-        implementation(npm("xmltojson", "1.3.5", false))
-        implementation(npm("flatted", "3.2.2", false))
-        implementation(npm("diff", "5.0.0", false))
-        implementation(npm("diff2html", "3.4.13", false))
-        implementation(npm("xml-beautify", "1.1.2", false))
-        implementation(npm("xterm", "4.15.0", false))
-        implementation(npm("pdfjs", "2.4.7", false))
-        implementation(npm("vega", "5.22.1", false))
-        implementation(npm("vega-lite", "5.6.0", true))
-        implementation(npm("element-resize-event", "3.0.6", false))
-        implementation(npm("asciidoctor", "2.2.6", false))
+        implementation("io.kvision:kvision-jquery:$kvisionVersion")
+        implementation(npm("xmltojson", "1.3.5"))
+        implementation(npm("flatted", "3.2.7"))
+        implementation(npm("diff", "5.0.0"))
+        implementation(npm("diff2html", "3.4.13"))
+        implementation(npm("xml-beautify", "1.1.2"))
+        implementation(npm("xterm", "4.15.0"))
+        implementation(npm("pdfjs", "2.4.7"))
+        implementation(npm("vega", "5.22.1"))
+        implementation(npm("vega-lite", "5.6.0"))
+        implementation(npm("element-resize-event", "3.0.6"))
+        implementation(npm("asciidoctor", "2.2.6"))
     }
     sourceSets["test"].dependencies {
         implementation(kotlin("test-js"))
@@ -147,4 +138,6 @@ afterEvaluate {
 }
 dependencies {
     implementation(kotlin("stdlib-js"))
+//    classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
+//    implementation(kotlin("org.jetbrains.kotlin:kotlin-dce-js:$kotlinVersion"))
 }

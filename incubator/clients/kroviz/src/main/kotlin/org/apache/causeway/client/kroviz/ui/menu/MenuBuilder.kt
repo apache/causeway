@@ -19,10 +19,52 @@
 package org.apache.causeway.client.kroviz.ui.menu
 
 import io.kvision.core.Component
+import io.kvision.html.Link
+import org.apache.causeway.client.kroviz.ui.core.Constants
+import org.apache.causeway.client.kroviz.utils.IconManager
+import org.apache.causeway.client.kroviz.utils.StringUtils
 
 open class MenuBuilder {
     protected fun switchCssClass(menuItem: Component, from: String, to: String) {
         menuItem.removeCssClass(from)
         menuItem.addCssClass(to)
     }
+
+    fun buildActionLink(
+        label: String,
+        menuTitle: String,
+    ): Link {
+        val actionTitle = StringUtils.deCamel(label)
+        val actionLink: Link = ddLink(
+            label = actionTitle,
+            icon = IconManager.find(label),
+            className = IconManager.findStyleFor(label)
+        )
+        val id = "$menuTitle${Constants.actionSeparator}$actionTitle"
+        actionLink.setDragDropData(Constants.stdMimeType, id)
+        actionLink.id = id
+        return actionLink
+    }
+
+    private fun ddLink(
+        label: String,
+        icon: String? = null,
+        className: String? = null,
+        init: (Link.() -> Unit)? = null,
+    ): Link {
+        val link = Link(
+            label = label,
+            url = null,
+            icon = icon,
+            image = null,
+            separator = null,
+            labelFirst = true,
+            className = className
+        )
+        link.addCssClass("dropdown-item")
+        return link.apply {
+            init?.invoke(this)
+        }
+    }
+
 }

@@ -1,0 +1,54 @@
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+.Exposer Diagram
+[plantuml,file="uml-exposer.png"]
+----
+@startuml
+
+class Exposer {
+    delegate: TObject
+    dynamize(): dynamic
+}
+
+class TObject #LightGreen {
+    properties: List<Member>
+    actions: List<Member>
+}
+
+Exposer -right-> TObject
+class Member #LightBlue {
+    id: String
+    memberType: Enum
+    value: {String | Number | etc.}
+}
+TObject *-right- Member : has Members \nof type PROPERTY
+
+note bottom of Exposer
+dynamize() turns an Exposer into a JS object - like as dynamic().
+It adds all properties of its delegate as key/value pairs.
+end note
+
+note top of TObject
+is a kind of meta class.
+Various types of object differ in their
+* properties
+* actions
+* collections
+end note
+
+class JsObject {
+    id_1: <MemberType_1>
+    id_2: <MemberType_2>
+    id_n: <MemberType_n>
+}
+
+Exposer ..> JsObject : dynamize() creates
+
+note bottom of JsObject
+when dynamize() has been applied to Exposer,
+all its delegates members of type property are
+available on the outside
+end note
+
+@enduml
+----

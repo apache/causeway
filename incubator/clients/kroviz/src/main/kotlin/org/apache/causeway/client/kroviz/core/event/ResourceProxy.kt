@@ -60,7 +60,8 @@ class ResourceProxy {
         aggregator: BaseAggregator? = null,
         subType: String? = Constants.subTypeJson,
         isRest: Boolean = true,
-        referrer: String = "") {
+        referrer: String = ""
+    ) {
         val rs = ResourceSpecification(link.href, subType = subType, referrerUrl = referrer)
         val le = findAndSetupLogEntry(rs) //easier to read if outside 'when'
         val isCached = when (le) {

@@ -42,7 +42,7 @@ class FieldSetBuilder {
             var label = p.id
             val member = members.firstOrNull() { it.id == label }
             if (member != null) {
-                val memberType = TypeMapper().forType(member.type!!)
+                val memberType = TypeMapper.forType(member.type!!)
                 var content = member.value?.content
                 label = p.named
                 if (memberType == ValueType.HTML && content is String) {

@@ -27,8 +27,6 @@ import org.apache.causeway.client.kroviz.to.Link
 import org.apache.causeway.client.kroviz.to.TObject
 import org.apache.causeway.client.kroviz.ui.core.Constants
 import org.apache.causeway.client.kroviz.utils.IconManager
-import org.apache.causeway.client.kroviz.utils.StringUtils
-import io.kvision.html.Link as KvisionHtmlLink
 
 class ContextMenuBuilder : MenuBuilder() {
 
@@ -62,43 +60,6 @@ class ContextMenuBuilder : MenuBuilder() {
         return cm
     }
 
-    private fun buildActionLink(
-        label: String,
-        menuTitle: String,
-    ): KvisionHtmlLink {
-        val actionTitle = StringUtils.deCamel(label)
-        val actionLink: KvisionHtmlLink = ddLink(
-            label = actionTitle,
-            icon = IconManager.find(label),
-            className = IconManager.findStyleFor(label)
-        )
-        val id = "$menuTitle${Constants.actionSeparator}$actionTitle"
-        actionLink.setDragDropData(Constants.stdMimeType, id)
-        actionLink.id = id
-        return actionLink
-    }
-
-    private fun ddLink(
-        label: String,
-        icon: String? = null,
-        className: String? = null,
-        init: (KvisionHtmlLink.() -> Unit)? = null,
-    ): KvisionHtmlLink {
-        val link = KvisionHtmlLink(
-            label = label,
-            url = null,
-            icon = icon,
-            image = null,
-            separator = null,
-            labelFirst = true,
-            className = className
-        )
-        link.addCssClass("dropdown-item")
-        return link.apply {
-            init?.invoke(this)
-        }
-    }
-
     // initially added items will be enabled
     private fun amendWithSaveUndo(
         cm: ContextMenu,
@@ -130,23 +91,21 @@ class ContextMenuBuilder : MenuBuilder() {
     // disabled when tObject.isClean
     // IMPROVE use tr("Dropdowns (disabled)") to DD.DISABLED.option,
     private fun disableSaveUndo(cm: ContextMenu) {
-        val menuItems = cm.getChildren()
-
-        val saveItem = menuItems[menuItems.size - 2]
-        switchCssClass(saveItem, IconManager.OK, IconManager.DISABLED)
-
-        val undoItem = menuItems[menuItems.size - 1]
-        switchCssClass(undoItem, IconManager.OK, IconManager.WARN)
+        switchSaveUndo(cm, IconManager.OK, IconManager.DISABLED)
     }
 
     fun enableSaveUndo(cm: ContextMenu) {
+        switchSaveUndo(cm, IconManager.DISABLED, IconManager.OK)
+    }
+
+    fun switchSaveUndo(cm: ContextMenu, icon1: String, icon2: String) {
         val menuItems = cm.getChildren()
 
         val saveItem = menuItems[menuItems.size - 2]
-        switchCssClass(saveItem, IconManager.DISABLED, IconManager.OK)
+        switchCssClass(saveItem, icon1, icon2)
 
         val undoItem = menuItems[menuItems.size - 1]
-        switchCssClass(undoItem, IconManager.DISABLED, IconManager.WARN)
+        switchCssClass(undoItem, icon1, IconManager.WARN)
     }
 
 }

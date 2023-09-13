@@ -24,26 +24,32 @@ import io.kvision.core.onEvent
 import io.kvision.form.FormPanel
 import io.kvision.form.check.CheckBox
 import io.kvision.form.formPanel
-import io.kvision.form.range.Range
-import io.kvision.form.select.SimpleSelect
-import io.kvision.form.spinner.Spinner
+import io.kvision.form.number.Range
+import io.kvision.form.select.Select
+import io.kvision.form.number.Spinner
 import io.kvision.form.text.Password
 import io.kvision.form.text.Text
 import io.kvision.form.text.TextArea
 import io.kvision.form.time.DateTime
 import io.kvision.form.time.dateTime
-import io.kvision.html.*
+import io.kvision.html.Button
+import io.kvision.html.Div
+import io.kvision.html.Iframe
+import io.kvision.html.Image
 import io.kvision.panel.VPanel
 import io.kvision.panel.vPanel
 import io.kvision.utils.auto
+import io.kvision.utils.obj
 import io.kvision.utils.px
 import io.kvision.utils.vh
 import org.apache.causeway.client.kroviz.to.ValueType
+import org.apache.causeway.client.kroviz.to.Vega5
 import org.apache.causeway.client.kroviz.ui.dialog.Controller
 import org.apache.causeway.client.kroviz.ui.panel.SvgPanel
 import org.apache.causeway.client.kroviz.utils.DateHelper
 import org.apache.causeway.client.kroviz.utils.IconManager
 import org.apache.causeway.client.kroviz.utils.UUID
+import org.apache.causeway.client.kroviz.utils.js.Vega
 
 class FormPanelFactory(items: List<FormItem>) : VPanel() {
 
@@ -158,14 +164,14 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
         return item
     }
 
-    private fun createSelect(fi: FormItem): SimpleSelect {
+    private fun createSelect(fi: FormItem): Select {
         @Suppress("UNCHECKED_CAST")
         val list = fi.content as List<StringPair>
         var preSelectedValue: String? = null
         if (list.isNotEmpty()) {
             preSelectedValue = list.first().first
         }
-        return SimpleSelect(label = fi.label, options = list, value = preSelectedValue)
+        return Select(label = fi.label, options = list, value = preSelectedValue)
     }
 
     private fun createImage(fi: FormItem): VPanel {
@@ -243,13 +249,21 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
     }
 
     private fun createCanvas(fi: FormItem): VPanel {
-        val item = VPanel {
-            val vega = fi.content as String
-            val canvas = Canvas()
-
-            add(canvas)
+        console.log("[FPF_createCanvas]")
+        val panel = VPanel()
+        panel.addAfterInsertHook {
+            val json = fi.content as String
+            val specFromClass = JSON.parse<Vega5>(json)
+//            console.log(specFromClass)
+            val view = Vega.View(Vega.parse(specFromClass), obj {
+                this.renderer = "canvas"
+                this.container = getElement()
+                this.hover = true
+            })
+            view.runAsync()
         }
-        return item
+        console.log(panel)
+        return panel
     }
 
     companion object {

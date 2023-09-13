@@ -25,14 +25,13 @@ import kotlinx.serialization.Serializable
 import org.apache.causeway.client.kroviz.core.aggregator.ActionDispatcher
 import org.apache.causeway.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.causeway.client.kroviz.to.*
-import org.apache.causeway.client.kroviz.to.bs.GridBs
-import org.apache.causeway.client.kroviz.to.mb.Menubars
 import org.apache.causeway.client.kroviz.ui.core.Constants
 import org.apache.causeway.client.kroviz.ui.core.ViewManager
 import org.w3c.files.Blob
 import kotlin.js.Date
 
 // use color codes from css instead?
+@Serializable
 enum class EventState(val id: String, val iconName: String, val style: ButtonStyle) {
     INITIAL("INITIAL", "fas fa-power-off", ButtonStyle.LIGHT),
     RUNNING("RUNNING", "fas fa-hourglass-start", ButtonStyle.WARNING),
@@ -54,31 +53,39 @@ enum class EventState(val id: String, val iconName: String, val style: ButtonSty
 @Serializable
 data class LogEntry(
     @Contextual val rs: ResourceSpecification,
-    val method: String? = "",
-    val request: String = "",
+    @Contextual val method: String? = "",
+    @Contextual val request: String = "",
     @Contextual val createdAt: Date = Date(),
 ) {
+    @Contextual
     val url: String = rs.url //rs?.url
 
     //?. is required, otherwise Tabulator.js/EventLogTable shows no entries
+    @Contextual
     val subType = rs?.subType
 
     //?. is required, otherwise Tabulator.js/EventLogTable shows no entries
+    @Contextual
     var state = EventState.INITIAL
+    @Contextual
     var title: String = ""
+    @Contextual
     var requestLength: Int = 0 // must be accessible (public) for LogEntryTable
+    @Contextual
     var response = ""
 
     @Contextual
     var blob: Blob? = null
+    @Contextual
     var responseLength: Int = 0 // must be accessible (public) for LogEntryTable
+    @Contextual
     var type: String = ""
 
     init {
         state = EventState.RUNNING
         title = url
-        requestLength = request?.length
-            ?: 0 // ?. is required, otherwise Tabulator.js/EventLogTable shows no entries
+        // ?. is required, otherwise Tabulator.js/EventLogTable shows no entries
+        requestLength = request?.length?: 0
     }
 
     @Contextual
@@ -87,11 +94,13 @@ data class LogEntry(
     @Contextual
     private var lastAccessedAt: Date? = null
 
+    @Contextual
     private var fault: String? = null
 
     @Contextual
     var duration: Int = 0
 
+    @Contextual
     var cacheHits = 0
 
     @Contextual
@@ -99,13 +108,18 @@ data class LogEntry(
     var nOfAggregators: Int = 0 // must be accessible (public) for LogEntryTable
 
     @Contextual
-    var obj: Any? = null
+    var obj: TransferObject? = null
 
     @Contextual
     var panel: SimplePanel? = null
 
+    @Contextual
     var runningAtStart = 0
+    @Contextual
     var runningAtEnd = 0
+
+    @Contextual
+    var icon = "<i class='fas fa-plug'></i>"
 
     // alternative constructor for UI events (e.g. from user interaction)
     @JsName("secondaryConstructor")
@@ -121,22 +135,33 @@ data class LogEntry(
         duration = (date.getTime() - createdAt.getTime()).toInt()
     }
 
+    private fun setState(eventState: EventState) {
+        state = eventState
+        val color = when {
+            state.style.equals(ButtonStyle.DANGER) -> "red"
+            state.style.equals(ButtonStyle.WARNING) -> "yellow"
+            state.style.equals(ButtonStyle.SUCCESS) -> "green"
+            else -> "blue"
+        }
+        icon = "<i class='${state.iconName}' style='color: ${color}'></i>"
+    }
+
     fun setError(error: String) {
         calculate()
         fault = error
-        state = EventState.ERROR
+        setState(EventState.ERROR)
         type = Represention.ERROR.type
     }
 
     fun setUndefined(error: String) {
         calculate()
         fault = error
-        state = EventState.MISSING
+        setState(EventState.MISSING)
     }
 
     fun setClose() {
         updatedAt = Date()
-        state = EventState.CLOSED
+        setState(EventState.CLOSED)
     }
 
     fun setSuccess() {
@@ -147,15 +172,16 @@ data class LogEntry(
             val size = blob?.size ?: 0
             responseLength = size.toInt()
         }
-        state = when {
+        val eventState = when {
             url.startsWith(Constants.krokiUrl) -> EventState.SUCCESS_IMG
             subType == Constants.subTypeXml -> EventState.SUCCESS_XML
             else -> EventState.SUCCESS_JS
         }
+        setState(eventState)
     }
 
     fun setCached() {
-        state = EventState.DUPLICATE
+        setState(EventState.DUPLICATE)
     }
 
     internal fun isCached(rs: ResourceSpecification, method: String): Boolean {
@@ -170,7 +196,7 @@ data class LogEntry(
     }
 
     fun setReload() {
-        state = EventState.RELOAD
+        setState(EventState.RELOAD)
     }
 
     fun getTransferObject(): TransferObject? {

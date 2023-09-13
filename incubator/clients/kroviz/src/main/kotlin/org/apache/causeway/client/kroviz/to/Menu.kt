@@ -16,12 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.client.kroviz.to.mb
+package org.apache.causeway.client.kroviz.to
 
 import kotlinx.serialization.Serializable
-import org.apache.causeway.client.kroviz.to.TransferObject
 
 @Serializable
-data class MenuEntry(
-        val menu: List<Menu> = emptyList()
-) :TransferObject
+data class Menu(
+    val named: String,
+    val cssClassFa: String? = null,
+    val section: List<Section> = emptyList(),
+    val unreferencedActions: Boolean? = false
+) : TransferObject

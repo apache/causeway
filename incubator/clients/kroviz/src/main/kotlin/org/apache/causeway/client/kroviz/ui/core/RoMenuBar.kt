@@ -34,7 +34,7 @@ import io.kvision.utils.px
 import org.apache.causeway.client.kroviz.core.Session
 import org.apache.causeway.client.kroviz.core.aggregator.ActionDispatcher
 import org.apache.causeway.client.kroviz.core.event.ResourceProxy
-import org.apache.causeway.client.kroviz.to.mb.Menubars
+import org.apache.causeway.client.kroviz.to.Menubars
 import org.apache.causeway.client.kroviz.ui.dialog.*
 import org.apache.causeway.client.kroviz.ui.menu.DropDownMenuBuilder
 import org.apache.causeway.client.kroviz.ui.panel.GeoMap
@@ -134,7 +134,8 @@ class RoMenuBar : SimplePanel() {
 
     private fun buildMenuEntry(label: String, iconName: String, action: dynamic): Link {
         val icon = IconManager.find(iconName)
-        val link = Link(label, icon = icon, className = "dropdown-item").onClick { e ->
+        val link = Link(label, icon = icon, className = "dropdown-item")
+        link.onClick { e ->
             val at = Point(e.pageX.toInt(), e.pageY.toInt())
             ViewManager.position = at
             action()

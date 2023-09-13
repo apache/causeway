@@ -61,15 +61,11 @@ fun main() {
         BootstrapModule,
         BootstrapCssModule,
         FontAwesomeModule,
-        BootstrapSelectModule,
-        BootstrapDatetimeModule,
-        BootstrapSpinnerModule,
-        BootstrapTypeaheadModule,
-        BootstrapUploadModule,
         RichTextModule,
         ChartModule,
         TabulatorModule,
+        TabulatorCssBootstrapModule,
         CoreModule,
-        panelsCompatibilityMode = true,
     )
+
 }

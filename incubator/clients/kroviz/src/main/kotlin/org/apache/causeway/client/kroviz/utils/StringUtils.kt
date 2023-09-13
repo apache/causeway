@@ -35,7 +35,6 @@ object StringUtils {
         return decapitalize(output)
     }
 
-    @OptIn(ExperimentalStdlibApi::class)
     fun capitalize(input: String): String {
         return if (input.length > 0) {
             val output = input.substring(1, input.length)
@@ -45,7 +44,6 @@ object StringUtils {
         }
     }
 
-    @OptIn(ExperimentalStdlibApi::class)
     private fun decapitalize(input: String): String {
         val output = input.substring(1, input.length)
         return input.first().lowercaseChar() + output

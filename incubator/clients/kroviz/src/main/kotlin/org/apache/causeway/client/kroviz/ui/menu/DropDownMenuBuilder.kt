@@ -25,11 +25,7 @@ import io.kvision.dropdown.separator
 import io.kvision.html.ButtonStyle
 import io.kvision.utils.auto
 import org.apache.causeway.client.kroviz.core.event.ResourceProxy
-import org.apache.causeway.client.kroviz.to.Link
-import org.apache.causeway.client.kroviz.to.TObject
-import org.apache.causeway.client.kroviz.to.mb.Menu
-import org.apache.causeway.client.kroviz.to.mb.MenuEntry
-import org.apache.causeway.client.kroviz.to.mb.Menubars
+import org.apache.causeway.client.kroviz.to.*
 import org.apache.causeway.client.kroviz.ui.core.Constants
 import org.apache.causeway.client.kroviz.ui.core.SessionManager
 import org.apache.causeway.client.kroviz.utils.IconManager
@@ -147,43 +143,6 @@ class DropDownMenuBuilder : MenuBuilder() {
             }
         }
         return null
-    }
-
-    fun buildActionLink(
-        label: String,
-        menuTitle: String,
-    ): KvisionHtmlLink {
-        val actionTitle = StringUtils.deCamel(label)
-        val actionLink: KvisionHtmlLink = ddLink(
-            label = actionTitle,
-            icon = IconManager.find(label),
-            className = IconManager.findStyleFor(label)
-        )
-        val id = "$menuTitle${Constants.actionSeparator}$actionTitle"
-        actionLink.setDragDropData(Constants.stdMimeType, id)
-        actionLink.id = id
-        return actionLink
-    }
-
-    private fun ddLink(
-        label: String,
-        icon: String? = null,
-        className: String? = null,
-        init: (KvisionHtmlLink.() -> Unit)? = null,
-    ): KvisionHtmlLink {
-        val link = KvisionHtmlLink(
-            label = label,
-            url = null,
-            icon = icon,
-            image = null,
-            separator = null,
-            labelFirst = true,
-            className = className
-        )
-        link.addCssClass("dropdown-item")
-        return link.apply {
-            init?.invoke(this)
-        }
     }
 
     // initially added items will be enabled
