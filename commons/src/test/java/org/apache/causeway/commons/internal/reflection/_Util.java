@@ -37,14 +37,15 @@ class _Util {
         .map(name->TextUtils.cutter(name).keepAfter("sampleAction").getValue())
         .map(ordinal->String.format("%s%s%s%s%s%s",
                 ordinal,
-                _NullSafe.stream(method.getParameterTypes())
-                    .findFirst()
-                    .map(paramType->paramType.equals(String.class) ? "+" : "?")
-                    .orElse(""),
                 _Reflect.hasGenericParam(method) ? "p" : "",
                 _Reflect.hasGenericReturn(method) ? "r" : "",
                 method.isSynthetic() ? "s" : "",
-                method.isBridge() ? "b" : ""))
+                method.isBridge() ? "b" : "",
+                _NullSafe.stream(method.getParameterTypes())
+                    .findFirst()
+                    .map(paramType->paramType.equals(String.class) ? ":string" : ":?")
+                    .orElse(""))
+                )
         .orElse("-");
     }
 

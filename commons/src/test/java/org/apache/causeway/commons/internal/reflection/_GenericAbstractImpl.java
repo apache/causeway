@@ -26,7 +26,7 @@ extends _GenericAbstract<String> {
 
     static _Expectations expectations() {
         return _Expectations.builder()
-                .methodNameOrdinals("1,2+,3,5,6+")
+                .methodNameOrdinals("1,2:string,3,5,6:string")
                 .methodCount(5)
                 .syntheticCount(0)
                 .bridgeCount(0)

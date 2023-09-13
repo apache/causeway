@@ -24,9 +24,13 @@ import java.lang.reflect.Executable;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
+import org.springframework.core.GenericTypeResolver;
+import org.springframework.core.MethodParameter;
+
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
@@ -56,8 +60,14 @@ public class _MethodFacades {
      * <li>JUnit testing</li>
      * </ul>
      */
-    public static MethodFacade regular(final Method method) {
+    public static MethodFacade regular(final @NonNull Method method) {
         return new RegularMethod(_Reflect.guardAgainstSynthetic(method));
+    }
+
+    public static MethodFacade genericTypedMethod(
+            final @NonNull Method method,
+            final @NonNull Class<?> implementationClass) {
+        return new GenericTypedMethod(_Reflect.guardAgainstSynthetic(method), implementationClass);
     }
 
     public static interface MethodFacade {
@@ -156,6 +166,76 @@ public class _MethodFacades {
         }
         @Override public String toString() {
             return method.toString();
+        }
+    }
+
+    /**
+     * Wraps a {@link Method}, with generic types resolved.
+     */
+    @lombok.Value
+    private final static class GenericTypedMethod implements MethodFacade {
+
+        private final Method method;
+        private final Class<?> implementationClass;
+        @Getter(onMethod_={@Override}) private final Class<?> returnType;
+        @Getter(onMethod_={@Override}) private final Class<?>[] parameterTypes;
+
+        public GenericTypedMethod(final Method method, final Class<?> implementationClass) {
+            this.method = method;
+            this.implementationClass = implementationClass;
+            this.returnType = GenericTypeResolver.resolveReturnType(method, implementationClass);
+            this.parameterTypes = resolveParameterTypes();
+        }
+
+        @Override public Class<?> getDeclaringClass() {
+            return method.getDeclaringClass();
+        }
+        @Override public int getParameterCount() {
+            return method.getParameterCount();
+        }
+        @Override public Class<?> getParameterType(final int paramNum) {
+            return getParameterTypes()[paramNum];
+        }
+        @Override public String getName() {
+            return method.getName();
+        }
+        @Override public Optional<Method> asMethod() {
+            return Optional.of(method);
+        }
+        @Override public Executable asExecutable() {
+            return method;
+        }
+        @Override public <A extends Annotation> Optional<A> synthesize(final Class<A> annotationType) {
+            return _Annotations.synthesize(method, annotationType);
+        }
+        @Override public Method asMethodForIntrospection() {
+            return method;
+        }
+        @Override public String getParameterName(final int paramNum) {
+            return method.getParameters()[paramNum].getName();
+        }
+        @Override public <A extends Annotation> Optional<A> synthesizeOnParameter(
+                final Class<A> annotationType, final int paramNum) {
+            return _Annotations.synthesize(method.getParameters()[paramNum], annotationType);
+        }
+        @Override public Object[] getArguments(final Object[] executionParameters) {
+            return executionParameters;
+        }
+        @Override public boolean isAnnotatedAsNullable() {
+            return _NullSafe.stream(method.getAnnotations())
+                    .map(annot->annot.annotationType().getSimpleName())
+                    .anyMatch(name->name.equals("Nullable"));
+        }
+        @Override public String toString() {
+            return method.toString();
+        }
+        // -- HELPER
+        private Class<?>[] resolveParameterTypes() {
+            final var array = new Class<?>[method.getParameterCount()];
+            for (int i = 0; i < array.length; i++) {
+                array[i] = GenericTypeResolver.resolveParameterType(new MethodParameter(method, i), implementationClass);
+            }
+            return array;
         }
     }
 

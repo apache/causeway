@@ -33,6 +33,9 @@ public class _Expectations {
     int methodCount;
     int syntheticCount;
     int bridgeCount;
+    /**
+     * short notation see {@link _Util}
+     */
     String methodNameOrdinals;
 
     _Expectations actual(final Can<Method> methods) {

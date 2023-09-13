@@ -258,7 +258,7 @@ public final class _ClassCache implements AutoCloseable {
                 || (_Reflect.isNonFinalObjectMethod(method)
                         // keep overwritten toString() methods, see TitleFacetFromToStringMethod
                         && !_Reflect.isOverwrittenToString(method))
-                || _Reflect.hasGenericBounds(method);
+                || _Reflect.hasGenericBounds(method); //TODO[CAUSEWAY-3571] include
     }
 
     public static boolean methodIncludeFilter(final Method method) {
