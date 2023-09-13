@@ -18,11 +18,11 @@
  */
 package org.apache.causeway.core.metamodel.facets.param.choices.methodnum;
 
-import java.lang.reflect.Constructor;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
@@ -47,12 +47,12 @@ implements ImperativeFacet {
 
     @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
     private final TypeOfAnyCardinality paramSupportReturnType;
-    private final Optional<Constructor<?>> patConstructor;
+    private final Optional<ResolvedConstructor> patConstructor;
 
     public ActionParameterChoicesFacetViaMethod(
             final ResolvedMethod method,
             final TypeOfAnyCardinality paramSupportReturnType,
-            final Optional<Constructor<?>> patConstructor,
+            final Optional<ResolvedConstructor> patConstructor,
             final FacetHolder holder) {
 
         super(holder);

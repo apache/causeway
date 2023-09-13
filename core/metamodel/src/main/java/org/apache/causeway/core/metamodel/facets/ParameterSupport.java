@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets;
 
-import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -27,6 +26,7 @@ import java.util.function.IntFunction;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.collections._Arrays;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ReturnTypePattern;
 import org.apache.causeway.core.metamodel.methods.MethodFinder;
@@ -74,7 +74,7 @@ public final class ParameterSupport {
         int paramIndex;
         Class<?> paramType;
         ResolvedMethod supportingMethod;
-        Optional<Constructor<?>> patConstructor;
+        Optional<ResolvedConstructor> patConstructor;
         TypeOfAnyCardinality paramSupportReturnType;
     }
 

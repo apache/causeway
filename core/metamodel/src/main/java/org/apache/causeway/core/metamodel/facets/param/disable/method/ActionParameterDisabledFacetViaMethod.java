@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.facets.param.disable.method;
 
-import java.lang.reflect.Constructor;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.applib.services.i18n.TranslatableString;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
@@ -44,11 +44,11 @@ implements ImperativeFacet {
 
     @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
     private final TranslationContext translationContext;
-    private final Optional<Constructor<?>> patConstructor;
+    private final Optional<ResolvedConstructor> patConstructor;
 
     public ActionParameterDisabledFacetViaMethod(
             final ResolvedMethod method,
-            final Optional<Constructor<?>> patConstructor,
+            final Optional<ResolvedConstructor> patConstructor,
             final FacetHolder holder) {
 
         super(holder);

@@ -42,6 +42,7 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.context._Context;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 
 import lombok.AccessLevel;
@@ -92,15 +93,15 @@ public final class _ClassCache implements AutoCloseable {
 
     // -- CONSTRUCTOR SEMANTICS
 
-    public <T> Stream<Constructor<T>> streamPublicConstructors(final Class<T> type) {
+    public <T> Stream<ResolvedConstructor> streamPublicConstructors(final Class<T> type) {
         return _Casts.uncheckedCast(classModel(type).publicConstructorsByKey.values().stream());
     }
 
-    public <T> Stream<Constructor<T>> streamPublicConstructorsWithInjectSemantics(final Class<T> type) {
+    public <T> Stream<ResolvedConstructor> streamPublicConstructorsWithInjectSemantics(final Class<T> type) {
         return _Casts.uncheckedCast(classModel(type).constructorsWithInjectSemanticsByKey.values().stream());
     }
 
-    public Optional<Constructor<?>> lookupPublicConstructor(final Class<?> type, final Class<?>[] paramTypes) {
+    public Optional<ResolvedConstructor> lookupPublicConstructor(final Class<?> type, final Class<?>[] paramTypes) {
         return Optional.ofNullable(lookupConstructor(false, type, paramTypes));
     }
 
@@ -211,8 +212,8 @@ public final class _ClassCache implements AutoCloseable {
     private static class ClassModel {
         private final Can<Field> declaredFields;
         private final Can<ResolvedMethod> declaredMethods;
-        private final Map<ConstructorKey, Constructor<?>> publicConstructorsByKey = new HashMap<>();
-        private final Map<ConstructorKey, Constructor<?>> constructorsWithInjectSemanticsByKey = new HashMap<>();
+        private final Map<ConstructorKey, ResolvedConstructor> publicConstructorsByKey = new HashMap<>();
+        private final Map<ConstructorKey, ResolvedConstructor> constructorsWithInjectSemanticsByKey = new HashMap<>();
         private final Map<MethodKey, ResolvedMethod> publicMethodsByKey = new HashMap<>();
         private final Map<MethodKey, ResolvedMethod> postConstructMethodsByKey = new HashMap<>();
         private final Map<MethodKey, ResolvedMethod> nonPublicDeclaredMethodsByKey = new HashMap<>();
@@ -301,11 +302,12 @@ public final class _ClassCache implements AutoCloseable {
             val publicConstr = type.getConstructors();
             for(val constr : publicConstr) {
                 val key = ConstructorKey.of(type, constr);
+                val resolvedConstr = _GenericResolver.resolveConstructor(constr, type);
                 // collect public constructors
-                model.publicConstructorsByKey.put(key, constr);
+                model.publicConstructorsByKey.put(key, resolvedConstr);
                 // collect public constructors with inject semantics
                 if(isInjectSemantics(constr)) {
-                    model.constructorsWithInjectSemanticsByKey.put(key, constr);
+                    model.constructorsWithInjectSemanticsByKey.put(key, resolvedConstr);
                 }
             }
 
@@ -373,7 +375,7 @@ public final class _ClassCache implements AutoCloseable {
                 : false;
     }
 
-    private Constructor<?> lookupConstructor(
+    private ResolvedConstructor lookupConstructor(
             final boolean includeDeclaredConstructors,
             final Class<?> type,
             final Class<?>[] paramTypes) {

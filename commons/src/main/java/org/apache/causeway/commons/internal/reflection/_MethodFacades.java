@@ -19,13 +19,13 @@
 package org.apache.causeway.commons.internal.reflection;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 
 import lombok.NonNull;
@@ -46,7 +46,7 @@ public class _MethodFacades {
 
     public static MethodFacade paramsAsTuple(
             final @NonNull ResolvedMethod method,
-            final @NonNull Constructor<?> patConstructor) {
+            final @NonNull ResolvedConstructor patConstructor) {
         _Reflect.guardAgainstSynthetic(method.method());
         return new ParamsAsTupleMethod(patConstructor, method);
     }
@@ -177,17 +177,17 @@ public class _MethodFacades {
     @lombok.Value
     private final static class ParamsAsTupleMethod implements MethodFacade {
 
-        private final Constructor<?> patConstructor;
+        private final ResolvedConstructor patConstructor;
         private final ResolvedMethod method;
 
         @Override public Class<?>[] getParameterTypes() {
-            return patConstructor.getParameterTypes();
+            return patConstructor.paramTypes();
         }
         @Override public Class<?> getParameterType(final int paramNum) {
-            return patConstructor.getParameterTypes()[paramNum];
+            return patConstructor.paramType(paramNum);
         }
         @Override public int getParameterCount() {
-            return patConstructor.getParameterCount();
+            return patConstructor.paramCount();
         }
         @Override public Class<?> getReturnType() {
             return method.returnType();
@@ -196,7 +196,7 @@ public class _MethodFacades {
             return method.name();
         }
         @Override public String getParameterName(final int paramNum) {
-            return patConstructor.getParameters()[paramNum].getName();
+            return patConstructor.constructor().getParameters()[paramNum].getName();
         }
         @Override public Class<?> getDeclaringClass() {
             return method.method().getDeclaringClass();
@@ -209,18 +209,18 @@ public class _MethodFacades {
             return method;
         }
         @Override public Executable asExecutable() {
-            return patConstructor;
+            return patConstructor.constructor();
         }
         @Override @SneakyThrows
         public Object[] getArguments(final Object[] executionParameters) {
             // converts input args into a single arg tuple type (PAT semantics)
-            return new Object[] {patConstructor.newInstance(executionParameters)};
+            return new Object[] {patConstructor.constructor().newInstance(executionParameters)};
         }
         @Override public <A extends Annotation> Optional<A> synthesize(final Class<A> annotationType) {
             return _Annotations.synthesize(method.method(), annotationType);
         }
         @Override public <A extends Annotation> Optional<A> synthesizeOnParameter(final Class<A> annotationType, final int paramNum) {
-            return _Annotations.synthesize(patConstructor.getParameters()[paramNum], annotationType);
+            return _Annotations.synthesize(patConstructor.constructor().getParameters()[paramNum], annotationType);
         }
         @Override public boolean isAnnotatedAsNullable() {
             return _NullSafe.stream(method.method().getAnnotations())

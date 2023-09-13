@@ -24,6 +24,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.stream.Collectors;
 
 import org.springframework.core.GenericTypeResolver;
 import org.springframework.core.MethodParameter;
@@ -99,7 +100,15 @@ public class _GenericResolver {
     public static interface ResolvedConstructor {
         Constructor<?> constructor();
         Class<?> implementationClass();
-        Class<?>[] parameterTypes();
+        Class<?>[] paramTypes();
+        default int paramCount() {
+            return constructor().getParameterCount();
+        }
+        default Class<?> paramType(final int paramIndex) {
+            return paramTypes()[paramIndex];
+        }
+        default boolean isNoArg() { return paramCount()==0; }
+        default boolean isSingleArg() { return paramCount()==1; }
     }
 
     // -- FACTORIES
@@ -157,19 +166,37 @@ public class _GenericResolver {
                     ? methodHandle
                     : (this.methodHandle = Try.call(()->MethodHandles.lookup().unreflect(method)));
         }
+        @Override
+        public String toString() {
+            return String.format("ResolvedMethod[%s#%s(%s)]", implementationClass.getName(), name(),
+                    Can.ofArray(paramTypes).stream()
+                        .map(Class::getSimpleName)
+                        .collect(Collectors.joining(",")));
+        }
     }
 
+    @EqualsAndHashCode
     @Getter @Accessors(fluent=true)
     private static class SimpleResolvedConstructor implements ResolvedConstructor {
 
         private final Constructor<?> constructor;
         private final Class<?> implementationClass;
-        private final Class<?>[] parameterTypes;
+
+        @EqualsAndHashCode.Exclude
+        private final Class<?>[] paramTypes;
 
         public SimpleResolvedConstructor(final Constructor<?> constructor, final Class<?> implementationClass) {
             this.constructor = constructor;
             this.implementationClass = implementationClass;
-            this.parameterTypes = _GenericResolver.resolveParameterTypes(constructor, implementationClass);
+            this.paramTypes = _GenericResolver.resolveParameterTypes(constructor, implementationClass);
+        }
+
+        @Override
+        public String toString() {
+            return String.format("ResolvedConstructor[%s(%s)]", implementationClass.getName(),
+                    Can.ofArray(paramTypes).stream()
+                        .map(Class::getSimpleName)
+                        .collect(Collectors.joining(",")));
         }
     }
 

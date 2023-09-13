@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.function.BiConsumer;
@@ -26,6 +25,7 @@ import java.util.stream.Collectors;
 
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
@@ -124,13 +124,13 @@ public interface ImperativeFacet extends Facet {
         return Can.ofSingleton(method);
     }
 
-    public static Can<MethodFacade> singleMethod(final ResolvedMethod method, final Optional<Constructor<?>> patConstructor) {
+    public static Can<MethodFacade> singleMethod(final ResolvedMethod method, final Optional<ResolvedConstructor> patConstructor) {
         return patConstructor
             .map(patCons->ImperativeFacet.singleParamsAsTupleMethod(method, patCons))
             .orElseGet(()->ImperativeFacet.singleRegularMethod(method));
     }
 
-    public static Can<MethodFacade> singleParamsAsTupleMethod(final @NonNull ResolvedMethod patMethod, final Constructor<?> patConstructor) {
+    public static Can<MethodFacade> singleParamsAsTupleMethod(final @NonNull ResolvedMethod patMethod, final ResolvedConstructor patConstructor) {
         return Can.ofSingleton(_MethodFacades.paramsAsTuple(patMethod, patConstructor));
     }
 

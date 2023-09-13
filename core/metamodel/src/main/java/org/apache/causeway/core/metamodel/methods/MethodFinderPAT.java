@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.methods;
 
-import java.lang.reflect.Constructor;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -26,6 +25,7 @@ import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.metamodel.commons.MethodUtil;
@@ -46,7 +46,7 @@ public final class MethodFinderPAT {
     @Value(staticConstructor = "of")
     public static class MethodAndPatConstructor {
         @NonNull ResolvedMethod supportingMethod;
-        @NonNull Constructor<?> patConstructor;
+        @NonNull ResolvedConstructor patConstructor;
     }
 
     // -- SEARCH FOR MULTIPLE NAME CANDIDATES (PAT)

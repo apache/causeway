@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets;
 
-import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Optional;
@@ -27,6 +26,7 @@ import java.util.function.Consumer;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.collections._Arrays;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.methods.MethodFinder;
 import org.apache.causeway.core.metamodel.methods.MethodFinderPAT;
@@ -82,7 +82,7 @@ public final class ActionSupport {
     public static class ActionSupportingMethodSearchResult {
         ResolvedMethod supportingMethod;
         Class<?> returnType;
-        Optional<Constructor<?>> patConstructor;
+        Optional<ResolvedConstructor> patConstructor;
     }
 
     public static void findActionSupportingMethods(

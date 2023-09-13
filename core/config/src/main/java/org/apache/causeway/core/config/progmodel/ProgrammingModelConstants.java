@@ -65,6 +65,7 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.commons.internal.reflection._Reflect;
@@ -587,9 +588,10 @@ public final class ProgrammingModelConstants {
     /**
      * violation of view-model contract should be covered by meta-model validation
      */
+    //TODO[CAUSEWAY-3571] remove T types
     public static enum ViewmodelConstructor {
         PUBLIC_WITH_INJECT_SEMANTICS {
-            @Override public <T> Stream<Constructor<T>> streamAll(final Class<T> cls) {
+            @Override public <T> Stream<ResolvedConstructor> streamAll(final Class<T> cls) {
                 return Try.call(()->
                     _ClassCache.getInstance()
                         .streamPublicConstructorsWithInjectSemantics(cls))
@@ -598,7 +600,7 @@ public final class ProgrammingModelConstants {
             }
         },
         PUBLIC_ANY {
-            @Override public <T> Stream<Constructor<T>> streamAll(final Class<T> cls) {
+            @Override public <T> Stream<ResolvedConstructor> streamAll(final Class<T> cls) {
                 return Try.call(()->
                     _ClassCache.getInstance()
                         .streamPublicConstructors(cls))
@@ -606,13 +608,13 @@ public final class ProgrammingModelConstants {
                         .orElse(Stream.empty());
             }
         };
-        public <T> Can<Constructor<T>> getAll(final Class<T> cls) {
+        public <T> Can<ResolvedConstructor> getAll(final Class<T> cls) {
             return streamAll(cls).collect(Can.toCan());
         }
-        public <T> Optional<Constructor<T>> getFirst(final Class<T> cls) {
+        public <T> Optional<ResolvedConstructor> getFirst(final Class<T> cls) {
             return streamAll(cls).findFirst();
         }
-        public abstract <T> Stream<Constructor<T>> streamAll(Class<T> cls);
+        public abstract <T> Stream<ResolvedConstructor> streamAll(Class<T> cls);
 
     }
 

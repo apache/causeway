@@ -18,11 +18,11 @@
  */
 package org.apache.causeway.core.metamodel.facets.param.hide.method;
 
-import java.lang.reflect.Constructor;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
@@ -41,11 +41,11 @@ extends ActionParameterHiddenFacetAbstract
 implements ImperativeFacet {
 
     @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
-    private final @NonNull Optional<Constructor<?>> patConstructor;
+    private final @NonNull Optional<ResolvedConstructor> patConstructor;
 
     public ActionParameterHiddenFacetViaMethod(
             final ResolvedMethod method,
-            final Optional<Constructor<?>> patConstructor,
+            final Optional<ResolvedConstructor> patConstructor,
             final FacetHolder holder) {
 
         super(holder);
