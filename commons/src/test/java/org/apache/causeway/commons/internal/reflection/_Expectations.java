@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.commons.internal.reflection;
 
-import java.lang.reflect.Method;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -39,19 +38,19 @@ public class _Expectations {
      */
     String methodNameOrdinals;
 
-    _Expectations actual(final Can<Method> methods) {
+    _Expectations actual(final Can<ResolvedMethod> methods) {
         return _Expectations.builder()
                 .methodCount(methods.size())
                 .syntheticCount((int) methods.stream()
-                        .filter(method->method.isSynthetic())
+                        .filter(method->method.method().isSynthetic())
                         //.peek(m->System.err.printf("syn: %s%n", m)) // debug
                         .count())
                 .bridgeCount((int) methods.stream()
-                        .filter(method->method.isBridge())
+                        .filter(method->method.method().isBridge())
                         //.peek(m->System.err.printf("bdg: %s%n", m)) // debug
                         .count())
                 .methodNameOrdinals(methods.stream()
-                        .sorted((a, b)->a.getName().compareTo(b.getName()))
+                        .sorted((a, b)->a.name().compareTo(b.name()))
                         .map(_Util::methodSummary)
                         .sorted((a, b)->a.compareTo(b))
                         .collect(Collectors.joining(",")))
@@ -59,7 +58,7 @@ public class _Expectations {
     }
 
     void assertAll(final Can<ResolvedMethod> methods) {
-        assertEquals(this, actual(methods.map(ResolvedMethod::method)));
+        assertEquals(this, actual(methods));
     }
 
 }

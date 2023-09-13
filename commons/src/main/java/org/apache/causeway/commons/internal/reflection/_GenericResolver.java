@@ -24,13 +24,19 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.core.GenericTypeResolver;
 import org.springframework.core.MethodParameter;
+import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -68,7 +74,7 @@ public class _GenericResolver {
             return paramTypes()[paramIndex];
         }
         default ResolvedMethod mostSpecific(final ResolvedMethod other) {
-            return methodsWhichIsOverridingTheOther(this, other);
+            return _GenericResolver.mostSpecific(this, other);
         }
         default boolean isStatic() {
             return Modifier.isStatic(method().getModifiers());
@@ -113,27 +119,40 @@ public class _GenericResolver {
 
     // -- FACTORIES
 
-    public ResolvedMethod resolveMethod(
+    public Optional<ResolvedMethod> resolveMethod(
             final @NonNull Method method,
             final @NonNull Class<?> implementationClass) {
-        return new SimpleResolvedMethod(method, implementationClass);
+        return new SimpleResolvedMethod(method, implementationClass)
+                .guardAgainstCannotResolve();
     }
-
-    /**
-     * JUnit
-     */
-    @SneakyThrows
-    public ResolvedMethod resolveMethod(
-            final @NonNull Class<?> implementationClass,
-            final @NonNull String methodName) {
-        return resolveMethod(implementationClass.getMethod(methodName), implementationClass);
-    }
-
 
     public ResolvedConstructor resolveConstructor(
             final @NonNull Constructor<?> constructor,
             final @NonNull Class<?> implementationClass) {
         return new SimpleResolvedConstructor(constructor, implementationClass);
+    }
+
+    /**
+     * JUnit
+     */
+    @UtilityClass
+    public static class testing {
+        @SneakyThrows
+        public ResolvedMethod resolveMethod(
+                final @NonNull Class<?> implementationClass,
+                final @NonNull String methodName,
+                final Class<?>... parameterTypes) {
+
+            val candidate = _ClassCache.getInstance().findMethodUniquelyByNameOrFail(implementationClass, methodName);
+            val paramTypesFound = Can.ofArray(candidate.paramTypes());
+            val paramTypesRequested = Can.ofArray(parameterTypes);
+            _Assert.assertEquals(paramTypesFound, paramTypesRequested);
+            return candidate;
+
+//            return _GenericResolver.resolveMethod(implementationClass.getMethod(methodName, parameterTypes), implementationClass)
+//                    .orElseThrow(()->new NoSuchMethodException(String.format("%s#%s(%s)", implementationClass, methodName,
+//                            paramTypesRequested.stream().map(Class::getSimpleName).collect(Collectors.joining(",")))));
+        }
     }
 
     // -- IMPLEMENTATIONS
@@ -149,6 +168,8 @@ public class _GenericResolver {
         private final Class<?>[] paramTypes;
         @EqualsAndHashCode.Exclude
         private final Class<?> returnType;
+        @EqualsAndHashCode.Exclude
+        private final boolean isResolved;
 
         @EqualsAndHashCode.Exclude
         private Try<MethodHandle> methodHandle;
@@ -158,6 +179,11 @@ public class _GenericResolver {
             this.implementationClass = implementationClass;
             this.paramTypes = _GenericResolver.resolveParameterTypes(method, implementationClass);
             this.returnType = GenericTypeResolver.resolveReturnType(method, implementationClass);
+            this.isResolved = isReturnTypeResolved()
+                    && areParamsResolved();
+        }
+        public Optional<ResolvedMethod> guardAgainstCannotResolve() {
+            return isResolved ? Optional.of(this) : Optional.empty();
         }
         //TODO[CAUSEWAY-3571] - does not work because the lookup is denied when the implementationClass is non public
         @Override
@@ -172,6 +198,22 @@ public class _GenericResolver {
                     Can.ofArray(paramTypes).stream()
                         .map(Class::getSimpleName)
                         .collect(Collectors.joining(",")));
+        }
+        //-- HELPER
+        private boolean areParamsResolved() {
+            if(isNoArg()) return true; // skip check
+            final Type[] genericParameterTypes = method.getGenericParameterTypes();
+            for(int i=0; i<method.getParameterCount(); ++i) {
+                if((genericParameterTypes[i] instanceof TypeVariable<?>)
+                        && paramTypes[i].equals(Object.class)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        private boolean isReturnTypeResolved() {
+            if(!_Reflect.hasGenericReturn(method)) return true; // skip check
+            return !returnType.equals(Object.class);
         }
     }
 
@@ -221,22 +263,57 @@ public class _GenericResolver {
      * If a and b are related, such that one overrides the other,
      * that one which is overriding the other is returned.
      * @implNote if both declaring type and return type are the same we (arbitrarily) return b
+     *
      */
-    private ResolvedMethod methodsWhichIsOverridingTheOther(final ResolvedMethod a, final ResolvedMethod b) {
-        val aType = a.method().getDeclaringClass();
-        val bType = b.method().getDeclaringClass();
-        if(aType.equals(bType)) {
-            val aReturn = a.returnType();
-            val bReturn = b.returnType();
-            if(aReturn.equals(bReturn)) {
-                // if a and b are not equal, this code path is expected unreachable
-                return b;
-            }
-            return aReturn.isAssignableFrom(bReturn)
-                    ? b
-                    : a;
+    private ResolvedMethod mostSpecific(final ResolvedMethod a, final ResolvedMethod b) {
+        if(a.equals(b)) return b; // an arbitrary pick
+
+        // if declared types are different chose the mostSpecific type
+        val implType = mostSpecific(a.implementationClass(), b.implementationClass());
+
+        val m = ClassUtils.getMostSpecificMethod(a.method(), implType);
+        if(a.method().equals(m)) {
+            return a;
         }
-        return aType.isAssignableFrom(bType)
+        if(b.method().equals(m)) {
+            return b;
+        }
+        throw _Exceptions.illegalArgument("mostSpecific method\n"
+                + "%s does not match any of the resolved methods\n"
+                + "%s or\n"
+                + "%s",
+                m, a.method(), b.method());
+
+
+//        val aType = a.method().getDeclaringClass();
+//        val bType = b.method().getDeclaringClass();
+//        if(!aType.equals(bType)) {
+//            _Assert.assertTrue(
+//                    _Reflect.shareSameTypeHierarchy(aType, bType),
+//                    ()->String.format("methods named %s have declared types %s and %s that don't share the same type hierarchy", a.name(), aType, bType));
+//            return aType.isAssignableFrom(bType)
+//                    ? b
+//                    : a;
+//        }
+//        val aReturn = a.returnType();
+//        val bReturn = b.returnType();
+//        if(!aReturn.equals(bReturn)) {
+//            _Assert.assertTrue(
+//                    _Reflect.shareSameTypeHierarchy(aReturn, bReturn),
+//                    ()->String.format("methods' return types %s and %s don't share the same type hierarchy", aReturn, bReturn));
+//            return aReturn.isAssignableFrom(bReturn)
+//                    ? b
+//                    : a;
+//        }
+//        return b; // an arbitrary pick //TODO[CAUSEWAY-3571] though not sure why we would ever hit this one
+    }
+
+    private Class<?> mostSpecific(final Class<?> a, final Class<?> b) {
+        if(a.equals(b)) return b; // an arbitrary pick
+        _Assert.assertTrue(
+                _Reflect.shareSameTypeHierarchy(a, b),
+                ()->String.format("declared types %s and %s don't share the same type hierarchy", a, b));
+        return a.isAssignableFrom(b)
                 ? b
                 : a;
     }

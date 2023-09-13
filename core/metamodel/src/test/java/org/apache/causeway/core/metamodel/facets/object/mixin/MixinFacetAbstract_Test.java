@@ -45,8 +45,8 @@ class MixinFacetAbstract_Test {
         val facet = new MixinFacetAbstract(
                 Collection_numberOfChildren.class, "prop", constructor, null) {};
 
-        val propMethodInSubclass =
-                _GenericResolver.resolveMethod(SimpleObject_numberOfChildren.class, "prop");
+        val propMethodInSubclass = _GenericResolver.testing
+                .resolveMethod(SimpleObject_numberOfChildren.class, "prop");
 
         // when
         val candidate = facet.isCandidateForMain(propMethodInSubclass);

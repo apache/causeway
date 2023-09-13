@@ -292,7 +292,8 @@ implements WrapperFactory, HasMetaModelContext {
 
         return proxyFactory.createInstance((proxy, method, args) -> {
 
-            val resolvedMethod = _GenericResolver.resolveMethod(method, domainObject.getClass());
+            val resolvedMethod = _GenericResolver.resolveMethod(method, domainObject.getClass())
+                    .orElseThrow(); // fail early on attempt to invoke method that is not part of the meta-model
 
             if (isInheritedFromJavaLangObject(method)) {
                 return method.invoke(domainObject, args);
@@ -342,7 +343,8 @@ implements WrapperFactory, HasMetaModelContext {
 
         return proxyFactory.createInstance((proxy, method, args) -> {
 
-            val resolvedMethod = _GenericResolver.resolveMethod(method, mixinClass);
+            val resolvedMethod = _GenericResolver.resolveMethod(method, mixinClass)
+                    .orElseThrow(); // fail early on attempt to invoke method that is not part of the meta-model
 
             final boolean inheritedFromObject = isInheritedFromJavaLangObject(method);
             if (inheritedFromObject) {

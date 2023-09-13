@@ -132,36 +132,27 @@ extends TypedHolderAbstract {
                 final MetaModelContext mmc,
                 final Class<?> declaringType,
                 final String propertyName) {
-            try {
-                final Method method = declaringType.getMethod("set" + _Strings.asPascalCase.apply(propertyName), String.class);
-                return FacetedMethod.createForProperty(mmc, declaringType, _GenericResolver.resolveMethod(method, declaringType));
-            } catch (final SecurityException | NoSuchMethodException e) {
-                throw new RuntimeException(e);
-            }
+            val method = _GenericResolver.testing
+                    .resolveMethod(declaringType, "set" + _Strings.asPascalCase.apply(propertyName), String.class);
+            return FacetedMethod.createForProperty(mmc, declaringType, method);
         }
 
         public static FacetedMethod createGetterForProperty(
                 final MetaModelContext mmc,
                 final Class<?> declaringType,
                 final String propertyName) {
-            try {
-                final Method method = declaringType.getMethod("get" + _Strings.asPascalCase.apply(propertyName));
-                return FacetedMethod.createForProperty(mmc, declaringType, _GenericResolver.resolveMethod(method, declaringType));
-            } catch (final SecurityException | NoSuchMethodException e) {
-                throw new RuntimeException(e);
-            }
+            val method = _GenericResolver.testing
+                    .resolveMethod(declaringType, "get" + _Strings.asPascalCase.apply(propertyName));
+            return FacetedMethod.createForProperty(mmc, declaringType, method);
         }
 
         public static FacetedMethod createForCollection(
                 final MetaModelContext mmc,
                 final Class<?> declaringType,
                 final String collectionName) {
-            try {
-                final Method method = declaringType.getMethod("get" + _Strings.asPascalCase.apply(collectionName));
-                return FacetedMethod.createForCollection(mmc, declaringType, _GenericResolver.resolveMethod(method, declaringType));
-            } catch (final SecurityException | NoSuchMethodException e) {
-                throw new RuntimeException(e);
-            }
+            val method = _GenericResolver.testing
+                    .resolveMethod(declaringType, "get" + _Strings.asPascalCase.apply(collectionName));
+            return FacetedMethod.createForCollection(mmc, declaringType, method);
         }
 
         public static FacetedMethod createForAction(
@@ -169,14 +160,9 @@ extends TypedHolderAbstract {
                 final Class<?> declaringType,
                 final String actionName,
                 final Class<?>... parameterTypes) {
-
-            try {
-                val method = _MethodFacades.regular(
-                        _GenericResolver.resolveMethod(declaringType.getMethod(actionName, parameterTypes), declaringType));
-                return FacetedMethod.createForAction(mmc, declaringType, method);
-            } catch (final SecurityException | NoSuchMethodException e) {
-                throw new RuntimeException(e);
-            }
+            val methodFacade = _MethodFacades.regular(
+                    _GenericResolver.testing.resolveMethod(declaringType, actionName, parameterTypes));
+            return FacetedMethod.createForAction(mmc, declaringType, methodFacade);
         }
     }
 

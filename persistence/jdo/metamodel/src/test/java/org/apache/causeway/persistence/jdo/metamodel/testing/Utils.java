@@ -42,14 +42,9 @@ class Utils {
         return featureTypes.contains(featureType);
     }
 
-    protected static ResolvedMethod findMethod(final Class<?> type, final String methodName, final Class<?>[] methodTypes) {
-        try {
-            return _GenericResolver.resolveMethod(type.getMethod(methodName, methodTypes), type);
-        } catch (final SecurityException e) {
-            return null;
-        } catch (final NoSuchMethodException e) {
-            return null;
-        }
+    protected static ResolvedMethod findMethod(final Class<?> type, final String methodName, final Class<?>[] paramTypes) {
+        return _GenericResolver.testing
+                .resolveMethod(type, methodName, paramTypes);
     }
 
     protected static ResolvedMethod findMethod(final Class<?> type, final String methodName) {

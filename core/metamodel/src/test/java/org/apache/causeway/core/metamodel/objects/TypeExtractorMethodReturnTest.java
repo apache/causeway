@@ -43,7 +43,7 @@ class TypeExtractorMethodReturnTest {
         }
 
         final Class<?> clazz = CustomerRepository.class;
-        val method = _GenericResolver.resolveMethod(clazz, "findCustomers");
+        val method = _GenericResolver.testing.resolveMethod(clazz, "findCustomers");
         val classes = TypeExtractor.streamMethodReturn(method).collect(Collectors.toSet());
         assertEquals(0, classes.size());
     }
@@ -61,7 +61,7 @@ class TypeExtractorMethodReturnTest {
         }
 
         final Class<?> clazz = CustomerRepository.class;
-        val method = _GenericResolver.resolveMethod(clazz, "findCustomers");
+        val method = _GenericResolver.testing.resolveMethod(clazz, "findCustomers");
 
         val classes = TypeExtractor.streamMethodReturn(method).collect(Collectors.toSet());
 
@@ -85,7 +85,7 @@ class TypeExtractorMethodReturnTest {
         }
 
         final Class<?> clazz = CustomerRepository.class;
-        val method = _GenericResolver.resolveMethod(clazz, "findCustomers");
+        val method = _GenericResolver.testing.resolveMethod(clazz, "findCustomers");
 
         val classes = TypeExtractor.streamMethodReturn(method).collect(Collectors.toSet());
 

@@ -62,11 +62,8 @@ class _Utils {
 
     Optional<ResolvedMethod> findMethodExact(final Class<?> type, final String methodName, final Class<?>[] parameterTypes) {
         try {
-            return Optional.ofNullable(
-                    _GenericResolver.resolveMethod(type.getMethod(methodName, parameterTypes), type));
-        } catch (final SecurityException e) {
-            return Optional.empty();
-        } catch (final NoSuchMethodException e) {
+            return _GenericResolver.resolveMethod(type.getMethod(methodName, parameterTypes), type);
+        } catch (NoSuchMethodException | SecurityException e) {
             return Optional.empty();
         }
     }
@@ -75,8 +72,8 @@ class _Utils {
         return findMethodExact(type, methodName, _Constants.emptyClasses);
     }
 
-    ResolvedMethod findMethodExactOrFail(final Class<?> type, final String methodName, final Class<?>[] parameterTypes) {
-        return findMethodExact(type, methodName, parameterTypes)
+    ResolvedMethod findMethodExactOrFail(final Class<?> type, final String methodName, final Class<?>[] paramTypes) {
+        return findMethodExact(type, methodName, paramTypes)
                 .orElseThrow(()->
                 _Exceptions.noSuchElement("method '%s' not found in %s", methodName, type));
     }

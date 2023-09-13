@@ -51,8 +51,8 @@ class CssClassFacetMethodWithProblemTest {
 
         pojo = new DomainObjectWithProblemInCssClassMethod();
 
-        final ResolvedMethod iconNameMethod =
-                _GenericResolver.resolveMethod(DomainObjectWithProblemInCssClassMethod.class, "cssClass");
+        final ResolvedMethod iconNameMethod = _GenericResolver.testing
+                .resolveMethod(DomainObjectWithProblemInCssClassMethod.class, "cssClass");
         facet = (CssClassFacetViaCssClassMethod) CssClassFacetViaCssClassMethod
                 .create(iconNameMethod, Mockito.mock(FacetHolder.class))
                 .orElse(null);

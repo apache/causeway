@@ -58,8 +58,8 @@ class NavigableParentFacetMethodTest {
         pojo = new DomainObjectWithProblemInNavigableParentMethod();
 
         mockOwningAdapter = Mockito.mock(ManagedObject.class);
-        val navigableParentMethod =
-                _GenericResolver.resolveMethod(DomainObjectWithProblemInNavigableParentMethod.class, "parent");
+        val navigableParentMethod = _GenericResolver.testing
+                .resolveMethod(DomainObjectWithProblemInNavigableParentMethod.class, "parent");
         facet = NavigableParentFacetViaMethod.create(pojo.getClass(), navigableParentMethod, simpleFacetHolder)
                 .orElse(null);
 

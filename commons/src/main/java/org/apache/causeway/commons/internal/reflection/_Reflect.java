@@ -890,7 +890,7 @@ public final class _Reflect {
      *      (assuming the caller knows what to do)
      * TODO look for a Spring Utility that does the same e.g. ClassUtils.getMostSpecificMethod
      */
-    public Optional<ResolvedMethod> mostSpecificMethodOf(
+    private Optional<ResolvedMethod> mostSpecificMethodOf(
             final @NonNull Can<ResolvedMethod> methods) {
 
         switch(methods.getCardinality()) {
@@ -912,12 +912,12 @@ public final class _Reflect {
                         ()->String.format("weakly same method check failed on\n"
                         + "(1) %s\n"
                         + "(2) %s\n",
-                        first, next));
+                        first.method(), next.method()));
                 _Assert.assertTrue(shareSameTypeHierarchy(first.method(), next.method()),
                         ()->String.format("same type hierarchy method check failed on\n"
                                 + "(1) %s\n"
                                 + "(2) %s\n",
-                                first, next));
+                                first.method(), next.method()));
             });
 
         return methods

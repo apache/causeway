@@ -75,7 +75,8 @@ extends FacetFactoryTestAbstract {
     @Test
     void titleAnnotatedMethodPickedUpOnClassRemoved() throws Exception {
 
-        val someTitleMethod = _GenericResolver.resolveMethod(Customer1.class, "someTitle");
+        val someTitleMethod = _GenericResolver.testing
+                .resolveMethod(Customer1.class, "someTitle");
 
         objectScenario(Customer1.class, (processClassContext, facetHolder)->{
             facetFactory.process(processClassContext);

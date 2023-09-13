@@ -166,7 +166,8 @@ extends DelegatingInvocationHandlerDefault<T> {
         }
 
         final ObjectSpecification targetSpec = targetAdapter.getSpecification();
-        val resolvedMethod = _GenericResolver.resolveMethod(method, targetSpec.getCorrespondingClass());
+        val resolvedMethod = _GenericResolver.resolveMethod(method, targetSpec.getCorrespondingClass())
+                .orElseThrow();
 
         // save method, through the proxy
         if (method.equals(__causeway_saveMethod)) {

@@ -42,6 +42,7 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.context._Context;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 
@@ -50,6 +51,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.val;
 
 /**
@@ -146,13 +148,17 @@ public final class _ClassCache implements AutoCloseable {
         return classModel(type).declaredMethods.stream();
     }
 
+    @SneakyThrows
     public ResolvedMethod findMethodUniquelyByNameOrFail(final Class<?> type, final String methodName) {
         val matchingMethods = streamPublicOrDeclaredMethods(type)
                 .filter(method->method.name().equals(methodName))
                 .collect(Can.toCan());
         return matchingMethods.isCardinalityMultiple()
-                ? _Reflect.mostSpecificMethodOf(matchingMethods).orElseThrow()
-                : matchingMethods.getSingletonOrFail();
+                ? matchingMethods.reduce(ResolvedMethod::mostSpecific)
+                        .getSingleton()
+                        .orElseThrow(()->_Exceptions.illegalState("unable to determine most specific of methods %s", matchingMethods))
+                : matchingMethods.getSingleton()
+                    .orElseThrow(()->_Exceptions.noSuchMethodException(type, methodName));
     }
 
     // -- FIELD SEMANTICS
@@ -255,6 +261,7 @@ public final class _ClassCache implements AutoCloseable {
 
     public static boolean methodExcludeFilter(final Method method) {
         return method.isBridge()
+               // || Modifier.isAbstract(method.getModifiers())
                 || Modifier.isStatic(method.getModifiers())
                 || method.getDeclaringClass().equals(Object.class)
                 || (_Reflect.isNonFinalObjectMethod(method)
@@ -292,7 +299,7 @@ public final class _ClassCache implements AutoCloseable {
             val declaredMethods = //type.getDeclaredMethods(); ... cannot detect non overridden inherited methods
                     Can.ofStream(_Reflect.streamAllMethods(type, true)
                             .filter(_ClassCache::methodIncludeFilter))
-                            .map(method->_GenericResolver.resolveMethod(method, type));
+                            .map(method->_GenericResolver.resolveMethod(method, type).orElse(null));
 
             val model = new ClassModel(
                     declaredFields,
@@ -326,9 +333,10 @@ public final class _ClassCache implements AutoCloseable {
             }
 
             // process public only
-            val publicMethods = Can.ofArray(type.getMethods()) //XXX[CAUSEWAY-3327] order of methods returned might differ among JVM instances
+            //XXX[CAUSEWAY-3327] order of methods returned might differ among JVM instances
+            val publicMethods = Can.ofArray(type.getMethods())
                     .filter(_ClassCache::methodIncludeFilter)
-                    .map(method->_GenericResolver.resolveMethod(method, type));
+                    .map(method->_GenericResolver.resolveMethod(method, type).orElse(null));
             for(val method : publicMethods) {
                 val key = MethodKey.of(type, method.method());
                 putIntoMapHonoringOverridingRelation(model.publicMethodsByKey, key, method);

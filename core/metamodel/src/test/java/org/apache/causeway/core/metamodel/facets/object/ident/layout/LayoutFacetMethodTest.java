@@ -52,8 +52,8 @@ class LayoutFacetMethodTest {
 
         pojo = new DomainObjectWithProblemInLayoutMethod();
 
-        val iconNameMethod =
-                _GenericResolver.resolveMethod(DomainObjectWithProblemInLayoutMethod.class, "layout");
+        val iconNameMethod = _GenericResolver.testing
+                .resolveMethod(DomainObjectWithProblemInLayoutMethod.class, "layout");
         facet = (LayoutFacetViaLayoutMethod) LayoutFacetViaLayoutMethod
                     .create(iconNameMethod, Mockito.mock(FacetHolder.class))
                     .orElse(null);

@@ -54,7 +54,7 @@ public class TypeOfAnyCardinality {
     private final @NonNull Optional<Class<?>> containerType;
     private final @NonNull Optional<CollectionSemantics> collectionSemantics;
 
-    public boolean isScalar() {
+    public boolean isSingular() {
         return containerType.isEmpty();
     }
 
@@ -68,7 +68,7 @@ public class TypeOfAnyCardinality {
      * the container type from {@link #getCollectionSemantics()}.
      */
     public boolean isSupportedForActionParameter() {
-        return isScalar()
+        return isSingular()
                 || isArray()
                 ? true
                 : Objects.equals(

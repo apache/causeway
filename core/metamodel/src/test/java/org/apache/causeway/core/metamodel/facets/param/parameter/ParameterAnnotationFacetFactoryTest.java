@@ -168,6 +168,7 @@ extends FacetFactoryTestAbstract {
             test(Customer.class);
         }
 
+        //TODO [CAUSEWAY-3571] support for generic type resolution on inheriting Customer class
         /**
          * Type erasure prevents runtime reflection to properly tell,
          * what argument types are actually used in the concrete class.
@@ -181,7 +182,7 @@ extends FacetFactoryTestAbstract {
             }
             class Customer extends Base<String> {
             }
-            assertThrows(NoSuchElementException.class, ()->test(Customer.class));
+            assertThrows(NoSuchMethodException.class, ()->test(Customer.class));
         }
 
     }

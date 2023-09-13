@@ -51,7 +51,8 @@ class IconFacetMethodTest {
     public void setUp() throws Exception {
 
         pojo = new DomainObjectWithProblemInIconNameMethod();
-        val iconNameMethod = _GenericResolver.resolveMethod(DomainObjectWithProblemInIconNameMethod.class, "iconName");
+        val iconNameMethod = _GenericResolver.testing
+                .resolveMethod(DomainObjectWithProblemInIconNameMethod.class, "iconName");
 
         facet = (IconFacetViaIconNameMethod) IconFacetViaIconNameMethod
                 .create(iconNameMethod, Mockito.mock(FacetHolder.class))

@@ -50,4 +50,18 @@ class GenericReflectionMagicTest {
         assertEquals(String.class, param0Type);
     }
 
+    @Test
+    void detectMethodOverride() {
+        val declaredMethodsMatching = Can.ofStream(_Reflect.streamAllMethods(_GenericAbstractImpl.class, true))
+                .filter(m->m.getName().equals("sampleAction2"))
+                .filter(m->!m.isBridge());
+
+        //debug
+        declaredMethodsMatching.forEach(m->System.err.printf("%s->%b%n", m, m.isBridge()));
+
+        assertEquals(2, declaredMethodsMatching.size());
+
+
+    }
+
 }

@@ -81,7 +81,7 @@ public interface TypeOfFacet extends Facet {
             final BiFunction<TypeOfAnyCardinality, FacetHolder, TypeOfFacet> factory,
             final TypeOfAnyCardinality type,
             final FacetHolder holder) {
-        return type.isScalar()
+        return type.isSingular()
             ? Optional.empty()
             : Optional.of(factory.apply(type, holder));
     }

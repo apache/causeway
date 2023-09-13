@@ -44,7 +44,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class _MethodFacades {
 
-    public static MethodFacade paramsAsTuple(
+    public MethodFacade paramsAsTuple(
             final @NonNull ResolvedMethod method,
             final @NonNull ResolvedConstructor patConstructor) {
         _Reflect.guardAgainstSynthetic(method.method());
@@ -60,7 +60,7 @@ public class _MethodFacades {
      * <li>JUnit testing</li>
      * </ul>
      */
-    public static MethodFacade regular(
+    public MethodFacade regular(
             final @NonNull ResolvedMethod method) {
         _Reflect.guardAgainstSynthetic(method.method());
         return new RegularMethod(method);
@@ -69,9 +69,13 @@ public class _MethodFacades {
     /**
      * JUnit
      */
-    public static MethodFacade regular(
-            final @NonNull Method method) {
-        return regular(_GenericResolver.resolveMethod(method, method.getDeclaringClass()));
+    @UtilityClass
+    public static class testing {
+        public MethodFacade regular(
+                final @NonNull Method method) {
+            return _MethodFacades.regular(_GenericResolver.resolveMethod(method, method.getDeclaringClass())
+                    .orElseThrow());
+        }
     }
 
     public static interface MethodFacade {
