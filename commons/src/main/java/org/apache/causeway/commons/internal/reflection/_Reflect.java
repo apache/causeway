@@ -53,9 +53,7 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.context._Context;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.functions._Predicates;
-import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -878,74 +876,14 @@ public final class _Reflect {
         return false;
     }
 
-    /**
-     * Fails if methods don't share the same type hierarchy.
-     * Potentially fails if methods don't share the same type hierarchy branch.
-     * @param methods assumed to pass checks #methodsWeaklySame and #shareSameTypeHierarchy
-     * @return the most specific within the type hierarchy branch
-     *      (undecidable, if multiple branches are involved)
-     *
-     * @implNote EXPERIMENTAL - needs more rigorous testing;
-     *      also the same type hierarchy branch check is only poorly implemented to save execution time
-     *      (assuming the caller knows what to do)
-     * TODO look for a Spring Utility that does the same e.g. ClassUtils.getMostSpecificMethod
-     */
-    private Optional<ResolvedMethod> mostSpecificMethodOf(
-            final @NonNull Can<ResolvedMethod> methods) {
-
-        switch(methods.getCardinality()) {
-        case ZERO:
-            return Optional.empty();
-        case ONE:
-            return methods.getFirst();
-        case MULTIPLE:
-            break; // fall through
-        }
-
-        // assert all methods share the same type hierarchy branch
-        val first = methods.getFirstElseFail();
-        methods
-            .stream()
-            .skip(1)
-            .forEach(next->{
-                _Assert.assertTrue(methodsWeaklySame(first.method(), next.method()),
-                        ()->String.format("weakly same method check failed on\n"
-                        + "(1) %s\n"
-                        + "(2) %s\n",
-                        first.method(), next.method()));
-                _Assert.assertTrue(shareSameTypeHierarchy(first.method(), next.method()),
-                        ()->String.format("same type hierarchy method check failed on\n"
-                                + "(1) %s\n"
-                                + "(2) %s\n",
-                                first.method(), next.method()));
-            });
-
-        return methods
-            .stream()
-            .distinct()
-            .max((a, b)->{
-                val clsA = a.method().getDeclaringClass();
-                val clsB = b.method().getDeclaringClass();
-                if(clsA.equals(clsB)) {
-
-                    if(a.method().isBridge() && b.method().isBridge()) {
-                        throw _Exceptions.unrecoverable("methods declared on the same type "
-                                + "cannot pass methodsWeaklySame check "
-                                + "and at the same time be distinct and both being bridges");
-                    }
-
-                    if(a.method().isBridge()) return -1; // b wins
-                    if(b.method().isBridge()) return 1; // a wins
-
-                    throw _Exceptions.unrecoverable("methods declared on the same type "
-                            + "cannot pass methodsWeaklySame check "
-                            + "and at the same time be distinct and none being a bridge");
-
-                }
-                return clsA.isAssignableFrom(clsB)
-                        ? -1 // b wins
-                        : 1; // a wins
-            });
+    public Class<?> mostSpecificType(final Class<?> a, final Class<?> b) {
+        if(a.equals(b)) return b; // an arbitrary pick
+        _Assert.assertTrue(
+                _Reflect.shareSameTypeHierarchy(a, b),
+                ()->String.format("declared types %s and %s don't share the same type hierarchy", a, b));
+        return a.isAssignableFrom(b)
+                ? b
+                : a;
     }
 
 }

@@ -261,13 +261,11 @@ public final class _ClassCache implements AutoCloseable {
 
     public static boolean methodExcludeFilter(final Method method) {
         return method.isBridge()
-               // || Modifier.isAbstract(method.getModifiers())
                 || Modifier.isStatic(method.getModifiers())
                 || method.getDeclaringClass().equals(Object.class)
                 || (_Reflect.isNonFinalObjectMethod(method)
                         // keep overwritten toString() methods, see TitleFacetFromToStringMethod
-                        && !_Reflect.isOverwrittenToString(method))
-                || _Reflect.hasGenericBounds(method); //TODO[CAUSEWAY-3571] include
+                        && !_Reflect.isOverwrittenToString(method));
     }
 
     public static boolean methodIncludeFilter(final Method method) {

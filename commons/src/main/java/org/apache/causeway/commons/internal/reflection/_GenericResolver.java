@@ -269,7 +269,7 @@ public class _GenericResolver {
         if(a.equals(b)) return b; // an arbitrary pick
 
         // if declared types are different chose the mostSpecific type
-        val implType = mostSpecific(a.implementationClass(), b.implementationClass());
+        val implType = _Reflect.mostSpecificType(a.implementationClass(), b.implementationClass());
 
         val m = ClassUtils.getMostSpecificMethod(a.method(), implType);
         if(a.method().equals(m)) {
@@ -278,44 +278,12 @@ public class _GenericResolver {
         if(b.method().equals(m)) {
             return b;
         }
-        throw _Exceptions.illegalArgument("mostSpecific method\n"
-                + "%s does not match any of the resolved methods\n"
-                + "%s or\n"
-                + "%s",
-                m, a.method(), b.method());
-
-
-//        val aType = a.method().getDeclaringClass();
-//        val bType = b.method().getDeclaringClass();
-//        if(!aType.equals(bType)) {
-//            _Assert.assertTrue(
-//                    _Reflect.shareSameTypeHierarchy(aType, bType),
-//                    ()->String.format("methods named %s have declared types %s and %s that don't share the same type hierarchy", a.name(), aType, bType));
-//            return aType.isAssignableFrom(bType)
-//                    ? b
-//                    : a;
-//        }
-//        val aReturn = a.returnType();
-//        val bReturn = b.returnType();
-//        if(!aReturn.equals(bReturn)) {
-//            _Assert.assertTrue(
-//                    _Reflect.shareSameTypeHierarchy(aReturn, bReturn),
-//                    ()->String.format("methods' return types %s and %s don't share the same type hierarchy", aReturn, bReturn));
-//            return aReturn.isAssignableFrom(bReturn)
-//                    ? b
-//                    : a;
-//        }
-//        return b; // an arbitrary pick //TODO[CAUSEWAY-3571] though not sure why we would ever hit this one
-    }
-
-    private Class<?> mostSpecific(final Class<?> a, final Class<?> b) {
-        if(a.equals(b)) return b; // an arbitrary pick
-        _Assert.assertTrue(
-                _Reflect.shareSameTypeHierarchy(a, b),
-                ()->String.format("declared types %s and %s don't share the same type hierarchy", a, b));
-        return a.isAssignableFrom(b)
-                ? b
-                : a;
+        return _GenericResolver.resolveMethod(m, implType)
+                .orElseThrow(()->_Exceptions.illegalArgument("most specific method\n"
+                        + "%s is not resolvable while deciding for methods\n"
+                        + "%s or\n"
+                        + "%s",
+                        m, a.method(), b.method()));
     }
 
 }
