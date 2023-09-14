@@ -28,11 +28,12 @@ import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.TypeOfAnyCardinality;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ReturnTypePattern;
 import org.apache.causeway.core.metamodel.methods.MethodFinder;
 import org.apache.causeway.core.metamodel.methods.MethodFinderPAT;
 import org.apache.causeway.core.metamodel.methods.MethodFinderPAT.MethodAndPatConstructor;
-import org.apache.causeway.core.metamodel.spec.TypeOfAnyCardinality;
+import org.apache.causeway.core.metamodel.spec.TypeOfAnyCardinalityFactory;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -154,7 +155,7 @@ public final class ParameterSupport {
                 .of(paramIndex, paramType,
                     supportingMethodAndPatConstructor.getSupportingMethod(),
                     Optional.of(supportingMethodAndPatConstructor.getPatConstructor()),
-                    TypeOfAnyCardinality.forMethodReturn(
+                    TypeOfAnyCardinalityFactory.forMethodReturn(
                             declaringClass, supportingMethodAndPatConstructor.getSupportingMethod()));
     }
 
@@ -219,7 +220,7 @@ public final class ParameterSupport {
                 .of(paramIndex, paramType,
                     supportingMethod,
                     Optional.empty(),
-                    TypeOfAnyCardinality.forMethodReturn(
+                    TypeOfAnyCardinalityFactory.forMethodReturn(
                             declaringClass, supportingMethod));
     }
 

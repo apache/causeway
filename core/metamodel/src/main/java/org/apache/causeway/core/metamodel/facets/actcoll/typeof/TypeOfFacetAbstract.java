@@ -22,11 +22,11 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.commons.collectionsemantics.CollectionSemantics;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.TypeOfAnyCardinality;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.TypeOfAnyCardinality;
 
 import lombok.Getter;
 import lombok.NonNull;

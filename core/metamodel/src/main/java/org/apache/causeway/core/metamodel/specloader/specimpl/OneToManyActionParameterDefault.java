@@ -19,9 +19,9 @@
 package org.apache.causeway.core.metamodel.specloader.specimpl;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.TypeOfAnyCardinality;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.TypeOfAnyCardinality;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyActionParameter;
 import org.apache.causeway.core.metamodel.util.Facets;
 

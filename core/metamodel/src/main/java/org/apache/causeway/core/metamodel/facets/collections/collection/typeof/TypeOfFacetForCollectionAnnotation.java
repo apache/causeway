@@ -22,11 +22,11 @@ import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.commons.collectionsemantics.CollectionSemantics;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.TypeOfAnyCardinality;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacetAbstract;
-import org.apache.causeway.core.metamodel.spec.TypeOfAnyCardinality;
 
 public class TypeOfFacetForCollectionAnnotation
 extends TypeOfFacetAbstract {

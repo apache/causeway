@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.spec.feature;
 
 import org.apache.causeway.commons.collectionsemantics.CollectionSemantics;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.metamodel.spec.TypeOfAnyCardinality;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.TypeOfAnyCardinality;
 
 /**
  * Base interface for {@link OneToManyAssociation} only.

@@ -18,11 +18,11 @@
  */
 package org.apache.causeway.core.metamodel.facets;
 
+import org.apache.causeway.commons.internal.reflection._GenericResolver.TypeOfAnyCardinality;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.HasFacetHolder;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.TypeOfAnyCardinality;
 
 /**
  * A {@link FacetHolder} that also has a {@link ObjectSpecification type}.

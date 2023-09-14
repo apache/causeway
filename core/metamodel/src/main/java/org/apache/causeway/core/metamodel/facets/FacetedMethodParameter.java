@@ -19,10 +19,11 @@
 package org.apache.causeway.core.metamodel.facets;
 
 import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.TypeOfAnyCardinality;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
-import org.apache.causeway.core.metamodel.spec.TypeOfAnyCardinality;
+import org.apache.causeway.core.metamodel.spec.TypeOfAnyCardinalityFactory;
 
 import lombok.Getter;
 
@@ -40,7 +41,7 @@ extends TypedHolderAbstract {
 
         super(mmc,
                 featureType,
-                TypeOfAnyCardinality.forMethodFacadeParameter(declaringType, methodFacade, paramIndex),
+                TypeOfAnyCardinalityFactory.forMethodFacadeParameter(declaringType, methodFacade, paramIndex),
                 FeatureType.ACTION.identifierFor(
                         LogicalType.lazy(
                                 declaringType,

@@ -28,6 +28,7 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -76,8 +77,57 @@ public class _GenericResolver {
         @NonNull Optional<CollectionSemantics> collectionSemantics();
 
         default boolean isSingular() { return containerType().isEmpty(); }
+        default boolean isPlural() { return containerType().isPresent(); }
         default boolean isArray() { return containerType().map(Class::isArray).orElse(false); }
+        /**
+         * Always <code>true</code> for <i>scalar</i> or <i>array</i>.
+         * Otherwise, whether {@link #containerType()} exactly matches
+         * the container type from {@link #collectionSemantics()}.
+         */
+        default boolean isSupportedForActionParameter() {
+            return isSingular()
+                    || isArray()
+                    ? true
+                    : Objects.equals(
+                            containerType().orElse(null),
+                            collectionSemantics().map(CollectionSemantics::getContainerType).orElse(null));
+        }
 
+        // -- WITHERS
+
+        default TypeOfAnyCardinality withElementType(final @NonNull Class<?> elementType) {
+            return new SimpleTypeOfAnyCardinality(assertSingular(elementType), this.containerType(), this.collectionSemantics());
+        }
+
+        // -- INTERNAL FACTORIES
+
+        public static TypeOfAnyCardinality singular(final @NonNull Class<?> singularType) {
+            return new SimpleTypeOfAnyCardinality(assertSingular(singularType), Optional.empty(), Optional.empty());
+        }
+        public static TypeOfAnyCardinality plural(
+                final @NonNull Class<?> elementType,
+                final @NonNull Class<?> pluralType,
+                final @NonNull CollectionSemantics collectionSemantics) {
+            if(CollectionSemantics.valueOf(elementType).isPresent()) {
+                System.err.printf("nested plural detected %s: will fail later%n", elementType);
+            }
+            return new SimpleTypeOfAnyCardinality(assertSingular(elementType),
+                    Optional.of(assertPlural(pluralType)),
+                    Optional.of(collectionSemantics));
+        }
+        private static Class<?> assertSingular(final @NonNull Class<?> singularType) {
+            _Assert.assertEquals(
+                    Optional.empty(),
+                    CollectionSemantics.valueOf(singularType),
+                    ()->String.format("%s should not match any supported plural (collection) types", singularType));
+            return singularType;
+        }
+        private static Class<?> assertPlural(final @NonNull Class<?> pluralType) {
+            _Assert.assertTrue(
+                    CollectionSemantics.valueOf(pluralType).isPresent(),
+                    ()->String.format("%s should match a supported plural (collection) type", pluralType));
+            return pluralType;
+        }
     }
 
     public static interface ResolvedMethod {
@@ -154,30 +204,17 @@ public class _GenericResolver {
         return new SimpleResolvedConstructor(constructor, implementationClass);
     }
 
-    /**
-     * JUnit
-     */
-    @UtilityClass
-    public static class testing {
-        @SneakyThrows
-        public ResolvedMethod resolveMethod(
-                final @NonNull Class<?> implementationClass,
-                final @NonNull String methodName,
-                final Class<?>... parameterTypes) {
-
-            val candidate = _ClassCache.getInstance().findMethodUniquelyByNameOrFail(implementationClass, methodName);
-            val paramTypesFound = Can.ofArray(candidate.paramTypes());
-            val paramTypesRequested = Can.ofArray(parameterTypes);
-            _Assert.assertEquals(paramTypesFound, paramTypesRequested);
-            return candidate;
-
-//            return _GenericResolver.resolveMethod(implementationClass.getMethod(methodName, parameterTypes), implementationClass)
-//                    .orElseThrow(()->new NoSuchMethodException(String.format("%s#%s(%s)", implementationClass, methodName,
-//                            paramTypesRequested.stream().map(Class::getSimpleName).collect(Collectors.joining(",")))));
-        }
-    }
-
     // -- IMPLEMENTATIONS
+
+    @lombok.Value @Accessors(fluent=true)
+    private static class SimpleTypeOfAnyCardinality implements TypeOfAnyCardinality {
+        @Getter(onMethod_={@Override})
+        private final @NonNull Class<?> elementType;
+        @Getter(onMethod_={@Override})
+        private final @NonNull Optional<Class<?>> containerType;
+        @Getter(onMethod_={@Override})
+        private final @NonNull Optional<CollectionSemantics> collectionSemantics;
+    }
 
     @EqualsAndHashCode
     @Getter @Accessors(fluent=true)
@@ -310,6 +347,25 @@ public class _GenericResolver {
                         + "%s or\n"
                         + "%s",
                         m, a.method(), b.method()));
+    }
+
+    /**
+     * JUnit
+     */
+    @UtilityClass
+    public static class testing {
+        @SneakyThrows
+        public ResolvedMethod resolveMethod(
+                final @NonNull Class<?> implementationClass,
+                final @NonNull String methodName,
+                final Class<?>... parameterTypes) {
+
+            val candidate = _ClassCache.getInstance().findMethodUniquelyByNameOrFail(implementationClass, methodName);
+            val paramTypesFound = Can.ofArray(candidate.paramTypes());
+            val paramTypesRequested = Can.ofArray(parameterTypes);
+            _Assert.assertEquals(paramTypesFound, paramTypesRequested);
+            return candidate;
+        }
     }
 
 }

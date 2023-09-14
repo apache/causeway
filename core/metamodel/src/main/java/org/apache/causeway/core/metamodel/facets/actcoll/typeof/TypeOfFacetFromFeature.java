@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.facets.actcoll.typeof;
 
+import org.apache.causeway.commons.internal.reflection._GenericResolver.TypeOfAnyCardinality;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.spec.TypeOfAnyCardinality;
 
 public class TypeOfFacetFromFeature
 extends TypeOfFacetAbstract {

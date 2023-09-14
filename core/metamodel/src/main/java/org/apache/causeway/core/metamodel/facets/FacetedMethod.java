@@ -29,13 +29,14 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.reflection._GenericResolver;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.TypeOfAnyCardinality;
 import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.causeway.core.metamodel.spec.TypeOfAnyCardinality;
+import org.apache.causeway.core.metamodel.spec.TypeOfAnyCardinalityFactory;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.Getter;
@@ -55,7 +56,7 @@ extends TypedHolderAbstract {
             final ResolvedMethod getterMethod) {
         val methodFacade = _MethodFacades.regular(getterMethod);
         return new FacetedMethod(mmc, FeatureType.PROPERTY,
-                declaringType, methodFacade, TypeOfAnyCardinality.forMethodReturn(declaringType, getterMethod), Can.empty());
+                declaringType, methodFacade, TypeOfAnyCardinalityFactory.forMethodReturn(declaringType, getterMethod), Can.empty());
     }
 
     public static FacetedMethod createForCollection(
@@ -64,7 +65,7 @@ extends TypedHolderAbstract {
             final ResolvedMethod getterMethod) {
         val methodFacade = _MethodFacades.regular(getterMethod);
         return new FacetedMethod(mmc, FeatureType.COLLECTION,
-                declaringType, methodFacade, TypeOfAnyCardinality.forMethodReturn(declaringType, getterMethod), Can.empty());
+                declaringType, methodFacade, TypeOfAnyCardinalityFactory.forMethodReturn(declaringType, getterMethod), Can.empty());
     }
 
     public static FacetedMethod createForAction(
@@ -72,7 +73,7 @@ extends TypedHolderAbstract {
             final Class<?> declaringType,
             final MethodFacade methodFacade) {
         return new FacetedMethod(mmc, FeatureType.ACTION,
-                declaringType, methodFacade, TypeOfAnyCardinality.forMethodFacadeReturn(declaringType, methodFacade),
+                declaringType, methodFacade, TypeOfAnyCardinalityFactory.forMethodFacadeReturn(declaringType, methodFacade),
                 getParameters(mmc, declaringType, methodFacade));
     }
 

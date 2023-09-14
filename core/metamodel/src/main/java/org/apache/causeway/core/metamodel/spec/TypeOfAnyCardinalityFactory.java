@@ -20,74 +20,30 @@ package org.apache.causeway.core.metamodel.spec;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.util.Objects;
-import java.util.Optional;
 
 import org.springframework.core.ResolvableType;
 
 import org.apache.causeway.commons.collectionsemantics.CollectionSemantics;
-import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.reflection._GenericResolver;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.TypeOfAnyCardinality;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.commons.internal.reflection._Reflect.ConstructorAndImplementingClass;
 import org.apache.causeway.commons.internal.reflection._Reflect.MethodAndImplementingClass;
 
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
-import lombok.experimental.Accessors;
+import lombok.experimental.UtilityClass;
 
-@lombok.Value(staticConstructor = "of") @Accessors(fluent=true)
-public class TypeOfAnyCardinality implements _GenericResolver.TypeOfAnyCardinality {
+@UtilityClass
+public class TypeOfAnyCardinalityFactory {
 
-    @Getter(onMethod_={@Override})
-    private final @NonNull Class<?> elementType;
-    @Getter(onMethod_={@Override})
-    private final @NonNull Optional<Class<?>> containerType;
-    @Getter(onMethod_={@Override})
-    private final @NonNull Optional<CollectionSemantics> collectionSemantics;
-
-    /**
-     * Always <code>true</code> for <i>scalar</i> or <i>array</i>.
-     * Otherwise, whether {@link #containerType()} exactly matches
-     * the container type from {@link #collectionSemantics()}.
-     */
-    public boolean isSupportedForActionParameter() {
-        return isSingular()
-                || isArray()
-                ? true
-                : Objects.equals(
-                        containerType().orElse(null),
-                        collectionSemantics().map(CollectionSemantics::getContainerType).orElse(null));
-
-    }
-
-    // -- FACTORIES
-
-    public static TypeOfAnyCardinality singular(final @NonNull Class<?> singularType) {
-        return of(assertSingular(singularType), Optional.empty(), Optional.empty());
-    }
-
-    public static TypeOfAnyCardinality plural(
-            final @NonNull Class<?> elementType,
-            final @NonNull Class<?> pluralType,
-            final @NonNull CollectionSemantics collectionSemantics) {
-        if(CollectionSemantics.valueOf(elementType).isPresent()) {
-            System.err.printf("nested plural detected %s: yields unpredicted behavior%n", elementType);
-        }
-        return of(assertSingular(elementType),
-                Optional.of(assertPlural(pluralType)),
-                Optional.of(collectionSemantics));
-    }
-
-    public static TypeOfAnyCardinality forMethodFacadeReturn(
+    public TypeOfAnyCardinality forMethodFacadeReturn(
             final Class<?> _implementationClass, final MethodFacade methodFacade) {
         return forMethodReturn(_implementationClass, methodFacade.asMethodForIntrospection());
     }
 
-    public static TypeOfAnyCardinality forMethodReturn(
+    public TypeOfAnyCardinality forMethodReturn(
             final Class<?> _implementationClass, final ResolvedMethod _method) {
         val methodReturnGuess = _method.returnType();
         return CollectionSemantics.valueOf(methodReturnGuess)
@@ -105,17 +61,17 @@ public class TypeOfAnyCardinality implements _GenericResolver.TypeOfAnyCardinali
 
             return CollectionSemantics.valueOf(methodReturn)
             .map(collectionSemantics->
-                plural(
+                TypeOfAnyCardinality.plural(
                         adopted.resolveFirstGenericTypeArgumentOnMethodReturn(),
                         methodReturn,
                         collectionSemantics)
             )
-            .orElseGet(()->singular(methodReturn));
+            .orElseGet(()->TypeOfAnyCardinality.singular(methodReturn));
         })
-        .orElseGet(()->singular(methodReturnGuess));
+        .orElseGet(()->TypeOfAnyCardinality.singular(methodReturnGuess));
     }
 
-    public static TypeOfAnyCardinality forMethodFacadeParameter(
+    public TypeOfAnyCardinality forMethodFacadeParameter(
             final Class<?> _implementationClass, final MethodFacade methodFacade, final int paramIndex) {
         val executable = methodFacade.asExecutable();
         if(executable instanceof Method) {
@@ -126,7 +82,7 @@ public class TypeOfAnyCardinality implements _GenericResolver.TypeOfAnyCardinali
         throw _Exceptions.unexpectedCodeReach();
     }
 
-    public static TypeOfAnyCardinality forConstructorParameter(
+    public TypeOfAnyCardinality forConstructorParameter(
             final Class<?> _implementationClass, final Constructor<?> _constructor, final int paramIndex) {
         val paramTypeGuess = _constructor.getParameters()[paramIndex].getType();
         return CollectionSemantics.valueOf(paramTypeGuess)
@@ -144,17 +100,17 @@ public class TypeOfAnyCardinality implements _GenericResolver.TypeOfAnyCardinali
 
             return CollectionSemantics.valueOf(paramType)
             .map(collectionSemantics->
-                plural(
+                TypeOfAnyCardinality.plural(
                         adopted.resolveFirstGenericTypeArgumentOnParameter(paramIndex),
                         paramType,
                         collectionSemantics)
             )
-            .orElseGet(()->singular(paramType));
+            .orElseGet(()->TypeOfAnyCardinality.singular(paramType));
         })
-        .orElseGet(()->singular(paramTypeGuess));
+        .orElseGet(()->TypeOfAnyCardinality.singular(paramTypeGuess));
     }
 
-    public static TypeOfAnyCardinality forMethodParameter(
+    public TypeOfAnyCardinality forMethodParameter(
             final Class<?> _implementationClass, final Method _method, final int paramIndex) {
         val paramTypeGuess = _method.getParameters()[paramIndex].getType();
         return CollectionSemantics.valueOf(paramTypeGuess)
@@ -172,49 +128,28 @@ public class TypeOfAnyCardinality implements _GenericResolver.TypeOfAnyCardinali
 
             return CollectionSemantics.valueOf(paramType)
             .map(collectionSemantics->
-                plural(
+                TypeOfAnyCardinality.plural(
                         adopted.resolveFirstGenericTypeArgumentOnParameter(paramIndex),
                         paramType,
                         collectionSemantics)
             )
-            .orElseGet(()->singular(paramType));
+            .orElseGet(()->TypeOfAnyCardinality.singular(paramType));
         })
-        .orElseGet(()->singular(paramTypeGuess));
+        .orElseGet(()->TypeOfAnyCardinality.singular(paramTypeGuess));
     }
 
-    public static TypeOfAnyCardinality forPluralType(
-            final @NonNull Class<?> nonScalarType,
+    public TypeOfAnyCardinality forPluralType(
+            final @NonNull Class<?> pluralType,
             final @NonNull CollectionSemantics collectionSemantics) {
-        return plural(
-                toClass(ResolvableType.forClass(nonScalarType)),
-                nonScalarType,
+        return TypeOfAnyCardinality.plural(
+                toClass(ResolvableType.forClass(pluralType)),
+                pluralType,
                 collectionSemantics);
-    }
-
-    // -- WITHERS
-
-    public TypeOfAnyCardinality withElementType(final @NonNull Class<?> elementType) {
-        return of(assertSingular(elementType), this.containerType(), this.collectionSemantics());
     }
 
     // -- HELPER
 
-    private static Class<?> assertSingular(final @NonNull Class<?> singularType) {
-        _Assert.assertEquals(
-                Optional.empty(),
-                CollectionSemantics.valueOf(singularType),
-                ()->String.format("%s should not match any supported plural (collection) types", singularType));
-        return singularType;
-    }
-
-    private static Class<?> assertPlural(final @NonNull Class<?> pluralType) {
-        _Assert.assertTrue(
-                CollectionSemantics.valueOf(pluralType).isPresent(),
-                ()->String.format("%s should match a supported plural (collection) type", pluralType));
-        return pluralType;
-    }
-
-    private static Class<?> toClass(final ResolvableType pluralType){
+    private Class<?> toClass(final ResolvableType pluralType){
         val genericTypeArg = pluralType.isArray()
                 ? pluralType.getComponentType()
                 : pluralType.getGeneric(0);
