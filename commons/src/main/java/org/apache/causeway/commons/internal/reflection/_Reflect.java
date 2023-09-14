@@ -619,7 +619,7 @@ public final class _Reflect {
     // -- FILTER
 
     @UtilityClass
-    public class Filter {
+    public class predicates {
 
         public Predicate<Executable> isPublic() {
             return ex->Modifier.isPublic(ex.getModifiers());
@@ -633,20 +633,15 @@ public final class _Reflect {
             return ex->ex.getParameterTypes()[paramIndex].isAssignableFrom(paramType);
         }
 
-        //TODO simple array compare should do
-        public Predicate<Executable> paramSignatureMatch(final Class<?>[] matchingParamTypes) {
-            return ex->{
-                // check params (if required)
-                if (matchingParamTypes != null) {
-                    final Class<?>[] parameterTypes = ex.getParameterTypes();
-                    if (matchingParamTypes.length != parameterTypes.length) {
+        public Predicate<Class<?>[]> methodSignatureMatch(final Class<?>[] matchingParamTypes) {
+            return parameterTypes->{
+                final int aSize = _NullSafe.size(parameterTypes);
+                final int bSize = _NullSafe.size(matchingParamTypes);
+                if(aSize == 0 && bSize == 0) return true;
+                if(aSize != bSize) return false;
+                for (int c = 0; c < aSize; c++) {
+                    if ((matchingParamTypes[c] != null) && (matchingParamTypes[c] != parameterTypes[c])) {
                         return false;
-                    }
-
-                    for (int c = 0; c < matchingParamTypes.length; c++) {
-                        if ((matchingParamTypes[c] != null) && (matchingParamTypes[c] != parameterTypes[c])) {
-                            return false;
-                        }
                     }
                 }
                 return true;

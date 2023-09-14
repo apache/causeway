@@ -34,7 +34,6 @@ class GenericReflectionMagicTest {
     void resolveGenericReturnTypeAndParameterType() {
         val declaredMethodsMatching = Can.ofStream(_Reflect.streamAllMethods(_GenericAbstractImpl.class, true))
                 .filter(m->m.getName().equals("sampleAction4"));
-
         //debug
         //declaredMethodsMatching.forEach(m->System.err.printf("%s (%s)%n", _Util.methodSummary(m), m));
 
@@ -51,23 +50,32 @@ class GenericReflectionMagicTest {
     }
 
     @Test
-    void detectMethodOverride() {
+    void mostSpecificMethodFind() {
         val declaredMethodsMatching = Can.ofStream(_Reflect.streamAllMethods(_GenericAbstractImpl.class, true))
                 .filter(m->m.getName().equals("sampleAction2"));
         assertEquals(3, declaredMethodsMatching.size());
         //debug
-        declaredMethodsMatching.forEach(m->System.err.printf("+ %s bridge->%b%n", m, m.isBridge()));
+        //declaredMethodsMatching.forEach(m->System.err.printf("+ %s bridge->%b%n", m, m.isBridge()));
 
         val mostSpecific = _ClassCache.getInstance().findMethodUniquelyByNameOrFail(_GenericAbstractImpl.class, "sampleAction2");
-
-        //debug
-        System.err.printf("most specific: %s bridge->%b%n", mostSpecific.method(), mostSpecific.method().isBridge());
-
         assertEquals(String.class, mostSpecific.paramType(0));
         assertEquals(String.class, mostSpecific.returnType());
+    }
 
+    @Test
+    void detectMethodOverride() {
 
+        val declaredMethodsMatching = _ClassCache.getInstance().streamResolvedMethods(_GenericAbstractImpl.class)
+                .filter(m->m.name().equals("sampleAction2"))
+                .collect(Can.toCan());
+        //debug
+        //declaredMethodsMatching.forEach(m->System.err.printf("+ %s%n", m.method()));
 
+        assertEquals(1, declaredMethodsMatching.size());
+
+        val mostSpecific = declaredMethodsMatching.getFirstElseFail();
+        assertEquals(String.class, mostSpecific.paramType(0));
+        assertEquals(String.class, mostSpecific.returnType());
     }
 
 }

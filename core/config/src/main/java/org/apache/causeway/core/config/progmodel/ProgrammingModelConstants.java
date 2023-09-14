@@ -57,8 +57,8 @@ import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFaca
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.commons.semantics.AccessorSemantics;
 
-import static org.apache.causeway.commons.internal.reflection._Reflect.Filter.paramAssignableFrom;
-import static org.apache.causeway.commons.internal.reflection._Reflect.Filter.paramCount;
+import static org.apache.causeway.commons.internal.reflection._Reflect.predicates.paramAssignableFrom;
+import static org.apache.causeway.commons.internal.reflection._Reflect.predicates.paramCount;
 
 import lombok.Getter;
 import lombok.NonNull;

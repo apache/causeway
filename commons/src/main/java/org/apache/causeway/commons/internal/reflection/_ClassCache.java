@@ -238,12 +238,20 @@ public final class _ClassCache implements AutoCloseable {
 
     @AllArgsConstructor(staticName = "of") @EqualsAndHashCode
     private static final class MethodKey {
-        private final Class<?> type; // method's declaring class
-        private final String name; // method name
-        private final @Nullable Class<?>[] paramTypes;
+        /** Method's implementing class (not necessary the same as its declaring class) */
+        private final Class<?> implementingClass;
+        /** Method's name */
+        private final String name;
+        /**
+         * Discriminator on parameter count (rather than on parameter types).
+         * @apiNote Two {@link Method}s might fail the {@link Object#equals(Object)} check
+         *      even though one overrides the other. However, we want this {@link MethodKey}
+         *      to pass the {@link MethodKey#equals(Object)} check given such two methods.
+         */
+        private final int paramCount;
 
         public static MethodKey of(final Class<?> type, final Method method) {
-            return MethodKey.of(type, method.getName(), _Arrays.emptyToNull(method.getParameterTypes()));
+            return MethodKey.of(type, method.getName(), method.getParameterCount());
         }
     }
 
@@ -322,7 +330,7 @@ public final class _ClassCache implements AutoCloseable {
         .map(method->_GenericResolver.resolveMethod(method, type).orElse(null))
         .filter(_NullSafe::isPresent)
         .forEach(resolved->{
-            val key = MethodKey.of(type, resolved.method()); //TODO[CAUSEWAY-3571] needs week sameness check
+            val key = MethodKey.of(type, resolved.method());
             val methodToKeep =
                     putIntoMapHonoringOverridingRelation(model.resolvedMethodsByKey, key, resolved);
             // collect post-construct methods
@@ -337,7 +345,7 @@ public final class _ClassCache implements AutoCloseable {
         .map(method->_GenericResolver.resolveMethod(method, type).orElse(null))
         .filter(_NullSafe::isPresent)
         .forEach(resolved->{
-            val key = MethodKey.of(type, resolved.method()); //TODO[CAUSEWAY-3571] needs week sameness check
+            val key = MethodKey.of(type, resolved.method());
             putIntoMapHonoringOverridingRelation(model.publicMethodsByKey, key, resolved);
         });
 
@@ -400,15 +408,20 @@ public final class _ClassCache implements AutoCloseable {
             final Class<?>[] paramTypes) {
 
         val model = classModel(type);
-
-        val key = MethodKey.of(type, name, _Arrays.emptyToNull(paramTypes));
+        val signatureMatcher = _Reflect.predicates.methodSignatureMatch(paramTypes);
+        val key = MethodKey.of(type, name, _NullSafe.size(paramTypes));
 
         val publicMethod = model.publicMethodsByKey.get(key);
-        if(publicMethod!=null) {
+        if(publicMethod!=null
+                && signatureMatcher.test(publicMethod.paramTypes())) {
             return publicMethod;
         }
         if(includeDeclaredMethods) {
-            return model.resolvedMethodsByKey.get(key);
+            val resolvedMethod = model.resolvedMethodsByKey.get(key);
+            return resolvedMethod!=null
+                    && signatureMatcher.test(resolvedMethod.paramTypes())
+                    ? resolvedMethod
+                    : null;
         }
         return null;
     }
