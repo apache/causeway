@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.param.parameter;
 
-import java.util.NoSuchElementException;
 import java.util.regex.Pattern;
 
 import org.junit.jupiter.api.AfterEach;
@@ -30,7 +29,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.Optionality;
@@ -168,10 +166,7 @@ extends FacetFactoryTestAbstract {
             test(Customer.class);
         }
 
-        /**
-         * Type erasure prevents runtime reflection to properly tell,
-         * what argument types are actually used in the concrete class.
-         */
+        //[CAUSEWAY-3571] support for generic type resolution on inheriting Customer class
         @Test
         public void withGenericallyInheritedFullyAnnotatedBase() {
             abstract class Base<T> {
@@ -181,7 +176,7 @@ extends FacetFactoryTestAbstract {
             }
             class Customer extends Base<String> {
             }
-            assertThrows(NoSuchElementException.class, ()->test(Customer.class));
+            test(Customer.class);
         }
 
     }

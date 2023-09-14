@@ -18,23 +18,22 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainobject.autocomplete;
 
-import java.lang.reflect.Method;
-
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.autocomplete.AutoCompleteFacetAbstract;
 
-public class AutoCompleteFacetForDomainObjectAnnotation extends AutoCompleteFacetAbstract {
+public class AutoCompleteFacetForDomainObjectAnnotation
+extends AutoCompleteFacetAbstract {
 
     private final String actionName;
 
     public AutoCompleteFacetForDomainObjectAnnotation(
             final FacetHolder facetHolder,
             final Class<?> repositoryClass,
-            final Method repositoryMethod) {
+            final ResolvedMethod repositoryMethod) {
         super(facetHolder, repositoryClass, repositoryMethod);
-        this.actionName = repositoryMethod.getName();
+        this.actionName = repositoryMethod.name();
     }
-
 
     /**
      * Introduced for testing only.

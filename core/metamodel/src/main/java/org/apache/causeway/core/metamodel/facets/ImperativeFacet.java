@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.function.BiConsumer;
@@ -26,6 +25,8 @@ import java.util.stream.Collectors;
 
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
@@ -94,7 +95,7 @@ public interface ImperativeFacet extends Facet {
 
     // -- UTILITIES
 
-    public static Intent getIntent(final ObjectMember member, final Method method) {
+    public static Intent getIntent(final ObjectMember member, final ResolvedMethod method) {
         val imperativeFacets = member.streamFacets(ImperativeFacet.class)
                 .filter(imperativeFacet->imperativeFacet.containsMethod(method))
                 .collect(Collectors.toList());
@@ -111,38 +112,38 @@ public interface ImperativeFacet extends Facet {
                 if(intentToReturn == null) {
                     intentToReturn = intent;
                 } else if(intentToReturn != intent) {
-                    throw new IllegalArgumentException(member.getFeatureIdentifier().toString() +  ": more than one ImperativeFacet for method " + method.getName() + " , with inconsistent intents: " + imperativeFacets.toString());
+                    throw new IllegalArgumentException(member.getFeatureIdentifier().toString() +  ": more than one ImperativeFacet for method " + method.name() + " , with inconsistent intents: " + imperativeFacets.toString());
                 }
             }
             return intentToReturn;
         }
-        throw new IllegalArgumentException(member.getFeatureIdentifier().toString() +  ": unable to determine intent of " + method.getName());
+        throw new IllegalArgumentException(member.getFeatureIdentifier().toString() +  ": unable to determine intent of " + method.name());
     }
 
     public static Can<MethodFacade> singleMethod(final @NonNull MethodFacade method) {
         return Can.ofSingleton(method);
     }
 
-    public static Can<MethodFacade> singleMethod(final Method method, final Optional<Constructor<?>> patConstructor) {
+    public static Can<MethodFacade> singleMethod(final ResolvedMethod method, final Optional<ResolvedConstructor> patConstructor) {
         return patConstructor
             .map(patCons->ImperativeFacet.singleParamsAsTupleMethod(method, patCons))
             .orElseGet(()->ImperativeFacet.singleRegularMethod(method));
     }
 
-    public static Can<MethodFacade> singleParamsAsTupleMethod(final @NonNull Method patMethod, final Constructor<?> patConstructor) {
+    public static Can<MethodFacade> singleParamsAsTupleMethod(final @NonNull ResolvedMethod patMethod, final ResolvedConstructor patConstructor) {
         return Can.ofSingleton(_MethodFacades.paramsAsTuple(patMethod, patConstructor));
     }
 
     /**
      * Use only for no-arg actions, getters or setters, or support methods!
      */
-    public static Can<MethodFacade> singleRegularMethod(final @NonNull Method method) {
+    public static Can<MethodFacade> singleRegularMethod(final @NonNull ResolvedMethod method) {
         return Can.ofSingleton(_MethodFacades.regular(method));
     }
 
     // -- HELPER
 
-    private boolean containsMethod(final Method method) {
+    private boolean containsMethod(final ResolvedMethod method) {
         return getMethods().stream()
                 .map(MethodFacade::asMethodForIntrospection)
                 .anyMatch(method::equals);

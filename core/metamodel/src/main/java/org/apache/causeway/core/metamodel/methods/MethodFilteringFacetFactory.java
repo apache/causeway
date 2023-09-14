@@ -20,15 +20,16 @@ package org.apache.causeway.core.metamodel.methods;
 
 import java.lang.reflect.Method;
 
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
 import org.apache.causeway.core.metamodel.specloader.facetprocessor.FacetProcessor;
 
 /**
  * A {@link FacetFactory} which filters out arbitrary {@link Method method}s.
  * <p>
- * Used by {@link FacetProcessor#recognizes(Method)}
+ * Used by {@link FacetProcessor#recognizes(ResolvedMethod)}
  */
 public interface MethodFilteringFacetFactory extends FacetFactory {
 
-    public boolean recognizes(Method method);
+    public boolean recognizes(ResolvedMethod method);
 }

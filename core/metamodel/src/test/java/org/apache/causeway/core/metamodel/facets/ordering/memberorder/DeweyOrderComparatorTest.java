@@ -49,8 +49,8 @@ class DeweyOrderComparatorTest  {
     }
 
     private final MetaModelContext mmc = MetaModelContext_forTesting.buildDefault();
-    private final FacetedMethod m1 = FacetedMethod.createForProperty(mmc, Customer.class, "abc");
-    private final FacetedMethod m2 = FacetedMethod.createForProperty(mmc, Customer.class, "abc");
+    private final FacetedMethod m1 = FacetedMethod.testing.createGetterForProperty(mmc, Customer.class, "abc");
+    private final FacetedMethod m2 = FacetedMethod.testing.createGetterForProperty(mmc, Customer.class, "abc");
 
     @Mock TranslationService mockTranslationService;
 

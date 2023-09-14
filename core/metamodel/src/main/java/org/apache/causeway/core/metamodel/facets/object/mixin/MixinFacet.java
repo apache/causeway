@@ -18,13 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.mixin;
 
-import java.lang.reflect.Method;
-
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
@@ -91,6 +90,6 @@ public interface MixinFacet extends Facet {
      * @param method
      * @return whether has expected name and same declaring class
      */
-    boolean isCandidateForMain(Method method);
+    boolean isCandidateForMain(ResolvedMethod method);
 
 }

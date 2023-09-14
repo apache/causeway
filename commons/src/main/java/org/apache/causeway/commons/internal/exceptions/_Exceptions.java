@@ -126,6 +126,14 @@ public final class _Exceptions {
         return noSuchElement(String.format(format, args));
     }
 
+    // -- NO SUCH METHOD
+
+    public static final NoSuchMethodException noSuchMethodException(
+            final Class<?> type, final String methodName, final Class<?>... paramTypes) {
+        return new NoSuchMethodException(String.format("%s#%s(%s)", type, methodName,
+                Can.ofArray(paramTypes).stream().map(Class::getSimpleName).collect(Collectors.joining(","))));
+    }
+
     // -- UNEXPECTED CODE REACH
 
     public static final IllegalStateException unexpectedCodeReach() {

@@ -50,8 +50,8 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
-import static org.apache.causeway.commons.internal.reflection._Reflect.Filter.isPublic;
-import static org.apache.causeway.commons.internal.reflection._Reflect.Filter.paramCount;
+import static org.apache.causeway.commons.internal.reflection._Reflect.predicates.isPublic;
+import static org.apache.causeway.commons.internal.reflection._Reflect.predicates.paramCount;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

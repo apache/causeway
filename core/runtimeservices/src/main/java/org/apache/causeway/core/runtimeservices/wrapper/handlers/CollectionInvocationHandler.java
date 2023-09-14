@@ -21,34 +21,25 @@ package org.apache.causeway.core.runtimeservices.wrapper.handlers;
 import java.util.Collection;
 
 import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 
-import lombok.val;
-
 class CollectionInvocationHandler<T, C extends Collection<?>>
-extends NonScalarInvocationHandlerAbstract<T, C> {
+extends PluralInvocationHandlerAbstract<T, C> {
 
     public CollectionInvocationHandler(
             final C collectionToBeProxied,
             final DomainObjectInvocationHandler<T> handler,
             final OneToManyAssociation otma) {
 
-        super(collectionToBeProxied, handler, otma);
+        super(collectionToBeProxied, handler, otma,
+                CollectionSemantics
+                    .valueOfElseFail(collectionToBeProxied.getClass()));
 
         _Assert.assertTrue(Collection.class.isAssignableFrom(collectionToBeProxied.getClass()),
                 ()->String.format("Cannot use %s for type %s, these are not compatible.",
                         this.getClass().getName(),
                         collectionToBeProxied.getClass()));
-
-        val collectionSemantics = ProgrammingModelConstants.CollectionSemantics
-                .valueOfElseFail(collectionToBeProxied.getClass());
-
-        val methodSets = collectionSemantics.getMethodSets();
-
-        methodSets.getIntercepted().forEach(this::intercept);
-        methodSets.getVetoed().forEach(this::veto);
-
     }
 
 }

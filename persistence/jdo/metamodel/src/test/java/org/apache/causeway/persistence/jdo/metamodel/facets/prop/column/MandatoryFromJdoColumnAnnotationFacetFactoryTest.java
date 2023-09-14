@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.persistence.jdo.metamodel.facets.prop.column;
 
-import java.lang.reflect.Method;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -63,7 +61,7 @@ extends AbstractFacetFactoryTest {
     }
 
     public void testPrimitiveWithNoAnnotation_isMandatory() throws Exception {
-        final Method method = cls.getMethod("getPrimitiveWithNoAnnotation");
+        val method = findMethod(cls, "getPrimitiveWithNoAnnotation");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
@@ -74,7 +72,7 @@ extends AbstractFacetFactoryTest {
     }
 
     public void testPrimitiveWithNoAllowsNull_isMandatory() throws Exception {
-        final Method method = cls.getMethod("getPrimitiveWithNoAllowsNull");
+        val method = findMethod(cls, "getPrimitiveWithNoAllowsNull");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
@@ -85,7 +83,7 @@ extends AbstractFacetFactoryTest {
     }
 
     public void testPrimitiveWithAllowsNullFalse() throws Exception {
-        final Method method = cls.getMethod("getPrimitiveWithAllowsNullFalse");
+        val method = findMethod(cls, "getPrimitiveWithAllowsNullFalse");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
@@ -96,7 +94,7 @@ extends AbstractFacetFactoryTest {
     }
 
     public void testPrimitiveWithAllowsNullTrue() throws Exception {
-        final Method method = cls.getMethod("getPrimitiveWithAllowsNullTrue");
+        val method = findMethod(cls, "getPrimitiveWithAllowsNullTrue");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
@@ -107,7 +105,7 @@ extends AbstractFacetFactoryTest {
     }
 
     public void testReferenceWithNoAnnotation_isOptional() throws Exception {
-        final Method method = cls.getMethod("getReferenceWithNoAnnotation");
+        val method = findMethod(cls, "getReferenceWithNoAnnotation");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
@@ -118,7 +116,7 @@ extends AbstractFacetFactoryTest {
     }
 
     public void testReferenceWithNoAllowsNull_isOptional() throws Exception {
-        final Method method = cls.getMethod("getReferenceWithNoAllowsNull");
+        val method = findMethod(cls, "getReferenceWithNoAllowsNull");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
@@ -129,7 +127,7 @@ extends AbstractFacetFactoryTest {
     }
 
     public void testReferenceWithAllowsNullFalse() throws Exception {
-        final Method method = cls.getMethod("getReferenceWithAllowsNullFalse");
+        val method = findMethod(cls, "getReferenceWithAllowsNullFalse");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
@@ -140,7 +138,7 @@ extends AbstractFacetFactoryTest {
     }
 
     public void testReferenceWithAllowsNullTrue() throws Exception {
-        final Method method = cls.getMethod("getReferenceWithAllowsNullTrue");
+        val method = findMethod(cls, "getReferenceWithAllowsNullTrue");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 

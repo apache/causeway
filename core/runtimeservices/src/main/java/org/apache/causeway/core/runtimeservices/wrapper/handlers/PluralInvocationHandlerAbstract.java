@@ -19,11 +19,10 @@
 package org.apache.causeway.core.runtimeservices.wrapper.handlers;
 
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.causeway.applib.services.wrapper.events.CollectionMethodEvent;
-import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 
 import lombok.val;
@@ -34,19 +33,18 @@ import lombok.val;
  * @param <T> Domain Object type
  * @param <P> non-scalar type (eg. {@link Collection} or {@link Map}) to be proxied
  */
-abstract class NonScalarInvocationHandlerAbstract<T, P>
+abstract class PluralInvocationHandlerAbstract<T, P>
 extends DelegatingInvocationHandlerDefault<P> {
-
-    private final List<Method> interceptedMethods = _Lists.newArrayList();
-    private final List<Method> vetoedMethods = _Lists.newArrayList();
 
     private final OneToManyAssociation oneToManyAssociation;
     private final T domainObject;
+    private final CollectionSemantics collectionSemantics;
 
-    protected NonScalarInvocationHandlerAbstract(
+    protected PluralInvocationHandlerAbstract(
             final P collectionOrMapToBeProxied,
             final DomainObjectInvocationHandler<T> handler,
-            final OneToManyAssociation otma) {
+            final OneToManyAssociation otma,
+            final CollectionSemantics collectionSemantics) {
 
         super(otma.getMetaModelContext(),
                 collectionOrMapToBeProxied,
@@ -54,26 +52,7 @@ extends DelegatingInvocationHandlerDefault<P> {
 
         this.oneToManyAssociation = otma;
         this.domainObject = handler.getDelegate();
-    }
-
-    /**
-     * Adds given method to the list of intercepted methods,
-     * those which will trigger {@link CollectionMethodEvent}(s)
-     * on invocation.
-     */
-    protected Method intercept(final Method method) {
-        this.interceptedMethods.add(method);
-        return method;
-    }
-
-    /**
-     * Adds given method to the list of vetoed methods,
-     * those which will cause an {@link UnsupportedOperationException}
-     * on invocation.
-     */
-    protected Method veto(final Method method) {
-        this.vetoedMethods.add(method);
-        return method;
+        this.collectionSemantics = collectionSemantics;
     }
 
     public OneToManyAssociation getCollection() {
@@ -90,7 +69,9 @@ extends DelegatingInvocationHandlerDefault<P> {
         // delegate
         final Object returnValueObj = delegate(method, args);
 
-        if (interceptedMethods.contains(method)) {
+        val policy = collectionSemantics.getInvocationHandlingPolicy();
+
+        if (policy.getIntercepted().contains(method)) {
 
             resolveIfRequired(domainObject);
 
@@ -106,7 +87,7 @@ extends DelegatingInvocationHandlerDefault<P> {
             return returnValueObj;
         }
 
-        if (vetoedMethods.contains(method)) {
+        if (policy.getVetoed().contains(method)) {
             throw new UnsupportedOperationException(
                     String.format("Method '%s' may not be called directly.", method.getName()));
         }

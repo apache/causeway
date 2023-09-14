@@ -41,7 +41,7 @@ extends FacetFactoryAbstract {
 
         getClassCache()
         .streamPublicMethods(context.getCls())
-        .filter(method->method.getName().startsWith("jdo"))
+        .filter(method->method.name().startsWith("jdo"))
         .forEach(context::removeMethod);
 
     }

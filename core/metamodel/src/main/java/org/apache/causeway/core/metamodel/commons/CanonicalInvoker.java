@@ -91,7 +91,7 @@ public class CanonicalInvoker {
 
     public static Object invoke(final MethodFacade methodFacade, final Object targetPojo, final Object[] executionParameters) {
         return CanonicalInvoker.invoke(
-                methodFacade.asMethodForIntrospection(), targetPojo, methodFacade.getArguments(executionParameters));
+                (Method)methodFacade.asExecutable(), targetPojo, methodFacade.getArguments(executionParameters));
     }
 
     public void invokeAll(final Iterable<Method> methods, final Object object) {

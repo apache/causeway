@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainobject;
 
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Optional;
@@ -43,6 +42,7 @@ import org.apache.causeway.applib.events.lifecycle.ObjectUpdatedEvent;
 import org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.internal.collections._Multimaps;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -114,7 +114,6 @@ implements
      * (eg. ValueTypeRegistry, configuration, ...)
      * TODO instead properly validate by implementing a validator that looks into the facets that are created
      */
-    @SuppressWarnings("removal")
     private void validateConflictingTypeSemantics(
             final Optional<DomainObject> domainObjectIfAny,
             final ProcessObjectTypeContext processClassContext) {
@@ -227,10 +226,10 @@ implements
         }
         final Class<?> autoCompleteRepository;
         final String autoCompleteMethod;
-        Method repositoryMethod;
+        ResolvedMethod repositoryMethod;
     }
 
-    private Method findRepositoryMethod(
+    private ResolvedMethod findRepositoryMethod(
             final FacetHolder facetHolder,
             final Class<?> cls,
             final String annotationName,
@@ -238,15 +237,12 @@ implements
             final String methodName) {
 
         val repoMethod = getClassCache()
-        .streamPublicMethods(repositoryClass)
-        .filter(method->method.getName().equals(methodName))
-        .filter(method->{
-            final Class<?>[] parameterTypes = method.getParameterTypes();
-            return parameterTypes.length == 1
-                    && parameterTypes[0].equals(String.class);
-        })
-        .findFirst()
-        .orElse(null);
+            .streamPublicMethods(repositoryClass)
+            .filter(method->method.name().equals(methodName))
+            .filter(method->method.isSingleArg())
+            .filter(method->method.paramType(0).equals(String.class))
+            .findFirst()
+            .orElse(null);
 
         if(repoMethod!=null) {
             return repoMethod;

@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.objects;
 
 import java.util.List;
-import java.util.Optional;
 
 //import com.sun.xml.bind.v2.schemagen.xmlschema.List;
 
@@ -34,13 +33,13 @@ import static org.mockito.Mockito.when;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.commons.functional.Either;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
+import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.MetaModelTestAbstract;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.id.TypeIdentifierTestFactory;
-import org.apache.causeway.core.metamodel.spec.TypeOfAnyCardinality;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.specloader.specimpl.OneToManyAssociationDefault;
 
@@ -55,8 +54,8 @@ extends MetaModelTestAbstract {
     }
 
     private static final Class<?> COLLECTION_TYPE = Order.class;
-    private static final TypeOfAnyCardinality TOAC = TypeOfAnyCardinality.of(
-            COLLECTION_TYPE, Optional.of(List.class), Optional.of(CollectionSemantics.LIST));
+    private static final ResolvedType TOAC = ResolvedType.plural(
+            COLLECTION_TYPE, List.class, CollectionSemantics.LIST);
 
     private OneToManyAssociation association;
 

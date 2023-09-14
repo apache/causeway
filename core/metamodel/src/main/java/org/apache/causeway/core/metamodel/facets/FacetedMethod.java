@@ -26,14 +26,16 @@ import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.commons.internal.reflection._GenericResolver;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
 import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.causeway.core.metamodel.spec.TypeOfAnyCardinality;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.Getter;
@@ -50,19 +52,19 @@ extends TypedHolderAbstract {
     public static FacetedMethod createForProperty(
             final MetaModelContext mmc,
             final Class<?> declaringType,
-            final Method getterMethod) {
+            final ResolvedMethod getterMethod) {
         val methodFacade = _MethodFacades.regular(getterMethod);
         return new FacetedMethod(mmc, FeatureType.PROPERTY,
-                declaringType, methodFacade, TypeOfAnyCardinality.forMethodReturn(declaringType, getterMethod), Can.empty());
+                declaringType, methodFacade, _GenericResolver.forMethodReturn(getterMethod), Can.empty());
     }
 
     public static FacetedMethod createForCollection(
             final MetaModelContext mmc,
             final Class<?> declaringType,
-            final Method getterMethod) {
+            final ResolvedMethod getterMethod) {
         val methodFacade = _MethodFacades.regular(getterMethod);
         return new FacetedMethod(mmc, FeatureType.COLLECTION,
-                declaringType, methodFacade, TypeOfAnyCardinality.forMethodReturn(declaringType, getterMethod), Can.empty());
+                declaringType, methodFacade, _GenericResolver.forMethodReturn(getterMethod), Can.empty());
     }
 
     public static FacetedMethod createForAction(
@@ -70,7 +72,7 @@ extends TypedHolderAbstract {
             final Class<?> declaringType,
             final MethodFacade methodFacade) {
         return new FacetedMethod(mmc, FeatureType.ACTION,
-                declaringType, methodFacade, TypeOfAnyCardinality.forMethodFacadeReturn(declaringType, methodFacade),
+                declaringType, methodFacade, methodFacade.resolveMethodReturn(),
                 getParameters(mmc, declaringType, methodFacade));
     }
 
@@ -89,7 +91,7 @@ extends TypedHolderAbstract {
             paramIndex++;
 
             final FeatureType featureType =
-                    ProgrammingModelConstants.CollectionSemantics.valueOf(parameterType).isPresent()
+                    CollectionSemantics.valueOf(parameterType).isPresent()
                     ? FeatureType.ACTION_PARAMETER_PLURAL
                     : FeatureType.ACTION_PARAMETER_SINGULAR;
 
@@ -105,7 +107,7 @@ extends TypedHolderAbstract {
 
             val facetedMethodParamToUse =
                     TypeOfFacet
-                    .inferFromMethodParameter(declaringType, actionMethod, paramIndex, facetedMethodParam)
+                    .inferFromMethodParameter(actionMethod, paramIndex, facetedMethodParam)
                     .map(typeOfFacet->{
                         // (corresponds to similar code for OneToManyAssociation in FacetMethodsBuilder).
                         FacetUtil.addFacet(typeOfFacet);
@@ -124,59 +126,43 @@ extends TypedHolderAbstract {
     /**
      * Principally for testing purposes.
      */
-    public static FacetedMethod createSetterForProperty(
-            final MetaModelContext mmc,
-            final Class<?> declaringType,
-            final String propertyName) {
-        try {
-            final Method method = declaringType.getMethod("set" + _Strings.asPascalCase.apply(propertyName), String.class);
-            return FacetedMethod.createForProperty(mmc, declaringType, method);
-        } catch (final SecurityException | NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    public static class testing {
 
-    public static FacetedMethod createForProperty(
-            final MetaModelContext mmc,
-            final Class<?> declaringType,
-            final String propertyName) {
-        try {
-            final Method method = declaringType.getMethod("get" + _Strings.asPascalCase.apply(propertyName));
+        public static FacetedMethod createSetterForProperty(
+                final MetaModelContext mmc,
+                final Class<?> declaringType,
+                final String propertyName) {
+            val method = _GenericResolver.testing
+                    .resolveMethod(declaringType, "set" + _Strings.asPascalCase.apply(propertyName), String.class);
             return FacetedMethod.createForProperty(mmc, declaringType, method);
-        } catch (final SecurityException | NoSuchMethodException e) {
-            throw new RuntimeException(e);
         }
-    }
 
-    /**
-     * Principally for testing purposes.
-     */
-    public static FacetedMethod createForCollection(
-            final MetaModelContext mmc,
-            final Class<?> declaringType,
-            final String collectionName) {
-        try {
-            final Method method = declaringType.getMethod("get" + _Strings.asPascalCase.apply(collectionName));
+        public static FacetedMethod createGetterForProperty(
+                final MetaModelContext mmc,
+                final Class<?> declaringType,
+                final String propertyName) {
+            val method = _GenericResolver.testing
+                    .resolveMethod(declaringType, "get" + _Strings.asPascalCase.apply(propertyName));
+            return FacetedMethod.createForProperty(mmc, declaringType, method);
+        }
+
+        public static FacetedMethod createForCollection(
+                final MetaModelContext mmc,
+                final Class<?> declaringType,
+                final String collectionName) {
+            val method = _GenericResolver.testing
+                    .resolveMethod(declaringType, "get" + _Strings.asPascalCase.apply(collectionName));
             return FacetedMethod.createForCollection(mmc, declaringType, method);
-        } catch (final SecurityException | NoSuchMethodException e) {
-            throw new RuntimeException(e);
         }
-    }
 
-    /**
-     * Principally for testing purposes.
-     */
-    public static FacetedMethod createForAction(
-            final MetaModelContext mmc,
-            final Class<?> declaringType,
-            final String actionName,
-            final Class<?>... parameterTypes) {
-
-        try {
-            val method = _MethodFacades.regular(declaringType.getMethod(actionName, parameterTypes));
-            return FacetedMethod.createForAction(mmc, declaringType, method);
-        } catch (final SecurityException | NoSuchMethodException e) {
-            throw new RuntimeException(e);
+        public static FacetedMethod createForAction(
+                final MetaModelContext mmc,
+                final Class<?> declaringType,
+                final String actionName,
+                final Class<?>... parameterTypes) {
+            val methodFacade = _MethodFacades.regular(
+                    _GenericResolver.testing.resolveMethod(declaringType, actionName, parameterTypes));
+            return FacetedMethod.createForAction(mmc, declaringType, methodFacade);
         }
     }
 
@@ -210,7 +196,7 @@ extends TypedHolderAbstract {
             final FeatureType featureType,
             final Class<?> declaringType,
             final MethodFacade method,
-            final TypeOfAnyCardinality type,
+            final ResolvedType type,
             final Can<FacetedMethodParameter> parameters) {
 
         super(mmc,

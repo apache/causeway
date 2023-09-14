@@ -23,28 +23,19 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.Vector;
 import java.util.function.Function;
 import java.util.function.IntFunction;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
-import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Domain;
@@ -53,31 +44,26 @@ import org.apache.causeway.applib.annotation.ObjectLifecycle;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.services.i18n.TranslatableString;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.collections.ImmutableCollection;
-import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Arrays;
-import org.apache.causeway.commons.internal.collections._Collections;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.commons.internal.reflection._Reflect;
+import org.apache.causeway.commons.semantics.AccessorSemantics;
 
-import static org.apache.causeway.commons.internal.reflection._Reflect.Filter.paramAssignableFrom;
-import static org.apache.causeway.commons.internal.reflection._Reflect.Filter.paramCount;
+import static org.apache.causeway.commons.internal.reflection._Reflect.predicates.paramAssignableFrom;
+import static org.apache.causeway.commons.internal.reflection._Reflect.predicates.paramCount;
 
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.val;
-import lombok.experimental.Accessors;
 
 public final class ProgrammingModelConstants {
 
@@ -113,9 +99,9 @@ public final class ProgrammingModelConstants {
         ;
         private final Class<? extends Annotation> annotationType;
 
-        public static boolean anyMatchOn(final Method method) {
+        public static boolean anyMatchOn(final ResolvedMethod method) {
             for(MethodIncludeMarker includeMarker : MethodIncludeMarker.values()) {
-                if(_Annotations.synthesize(method, includeMarker.getAnnotationType()).isPresent()) {
+                if(_Annotations.synthesize(method.method(), includeMarker.getAnnotationType()).isPresent()) {
                     return true;
                 }
             }
@@ -137,66 +123,13 @@ public final class ProgrammingModelConstants {
         ;
         private final Class<? extends Annotation> annotationType;
 
-        public static boolean anyMatchOn(final Method method) {
+        public static boolean anyMatchOn(final ResolvedMethod method) {
             for(MethodExcludeMarker excludeMarker : MethodExcludeMarker.values()) {
-                if(_Annotations.synthesize(method, excludeMarker.getAnnotationType()).isPresent()) {
+                if(_Annotations.synthesize(method.method(), excludeMarker.getAnnotationType()).isPresent()) {
                     return true;
                 }
             }
             return false;
-        }
-    }
-
-    // -- ACCESSORS
-
-    @Getter
-    @RequiredArgsConstructor
-    public enum AccessorPrefix {
-        GET("get"),
-        IS("is"),
-        SET("set");
-        private final String prefix;
-
-        public String prefix(final @Nullable String input) {
-            return input!=null
-                    ? prefix + input
-                    : prefix;
-        }
-
-        public boolean isPrefixOf(final @Nullable String input) {
-            return input!=null
-                    ? input.startsWith(prefix)
-                    : false;
-        }
-
-        public static boolean isCandidateGetterName(final @Nullable String name) {
-            return GET.isPrefixOf(name)
-                    || IS.isPrefixOf(name);
-        }
-
-        public static boolean isBooleanGetter(final Method method) {
-            return IS.isPrefixOf(method.getName())
-                    && method.getParameterCount() == 0
-                    && !Modifier.isStatic(method.getModifiers())
-                    && (method.getReturnType() == boolean.class
-                        || method.getReturnType() == Boolean.class);
-        }
-
-        public static boolean isNonBooleanGetter(final Method method, final Predicate<Class<?>> typeFilter) {
-            return GET.isPrefixOf(method.getName())
-                    && method.getParameterCount() == 0
-                    && !Modifier.isStatic(method.getModifiers())
-                    && typeFilter.test(method.getReturnType());
-        }
-
-        public static boolean isNonBooleanGetter(final Method method, final Class<?> expectedType) {
-            return isNonBooleanGetter(method, type->
-                expectedType.isAssignableFrom(ClassUtils.resolvePrimitiveIfNecessary(type)));
-        }
-
-        public static boolean isGetter(final Method method) {
-            return isBooleanGetter(method)
-                    || isNonBooleanGetter(method, type->type != void.class);
         }
     }
 
@@ -448,7 +381,7 @@ public final class ProgrammingModelConstants {
         PREFIXED_MEMBER_NAME {
             @Override @Nullable
             String nameFor(final MethodFacade member, final String prefix, final boolean isMixin) {
-                return prefix + getCapitalizedMemberName(member.asMethodForIntrospection());
+                return prefix + getCapitalizedMemberName(member.asMethodForIntrospection().method());
             }
         },
         /** eg. hide() */
@@ -589,7 +522,7 @@ public final class ProgrammingModelConstants {
      */
     public static enum ViewmodelConstructor {
         PUBLIC_WITH_INJECT_SEMANTICS {
-            @Override public <T> Stream<Constructor<T>> streamAll(final Class<T> cls) {
+            @Override public Stream<ResolvedConstructor> streamAll(final Class<?> cls) {
                 return Try.call(()->
                     _ClassCache.getInstance()
                         .streamPublicConstructorsWithInjectSemantics(cls))
@@ -598,7 +531,7 @@ public final class ProgrammingModelConstants {
             }
         },
         PUBLIC_ANY {
-            @Override public <T> Stream<Constructor<T>> streamAll(final Class<T> cls) {
+            @Override public Stream<ResolvedConstructor> streamAll(final Class<?> cls) {
                 return Try.call(()->
                     _ClassCache.getInstance()
                         .streamPublicConstructors(cls))
@@ -606,192 +539,14 @@ public final class ProgrammingModelConstants {
                         .orElse(Stream.empty());
             }
         };
-        public <T> Can<Constructor<T>> getAll(final Class<T> cls) {
+        public Can<ResolvedConstructor> getAll(final Class<?> cls) {
             return streamAll(cls).collect(Can.toCan());
         }
-        public <T> Optional<Constructor<T>> getFirst(final Class<T> cls) {
+        public Optional<ResolvedConstructor> getFirst(final Class<?> cls) {
             return streamAll(cls).findFirst();
         }
-        public abstract <T> Stream<Constructor<T>> streamAll(Class<T> cls);
+        public abstract Stream<ResolvedConstructor> streamAll(Class<?> cls);
 
-    }
-
-    /**
-     * Supported collection types, including arrays.
-     * Order matters, as class substitution is processed on first matching type.
-     * <p>
-     * Non scalar <i>Action Parameter</i> types cannot be more special than what we offer here.
-     */
-    @RequiredArgsConstructor
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    public static enum CollectionSemantics {
-        ARRAY(Array.class, WrapperFactoryMethodSets.EMPTY){
-            @Override public Object asContainerType(
-                    final Class<?> elementType, final @NonNull List<?> nonScalar) {
-                return _Arrays.toArray(_Casts.uncheckedCast(nonScalar), elementType);
-            }
-        },
-        VECTOR(Vector.class, WrapperFactoryMethodSets.LIST){
-            @Override public Object asContainerType(
-                    final Class<?> elementType, final @NonNull List<?> nonScalar) {
-                return new Vector(nonScalar);
-            }
-        },
-        LIST(List.class, WrapperFactoryMethodSets.LIST){
-            @Override public Object asContainerType(
-                    final Class<?> elementType, final @NonNull List<?> nonScalar) {
-                return Collections.unmodifiableList(nonScalar);
-            }
-        },
-        SORTED_SET(SortedSet.class, WrapperFactoryMethodSets.COLLECTION){
-            @Override public Object asContainerType(
-                    final Class<?> elementType, final @NonNull List<?> nonScalar) {
-                return _Collections.asUnmodifiableSortedSet(nonScalar);
-            }
-        },
-        SET(Set.class, WrapperFactoryMethodSets.COLLECTION){
-            @Override public Object asContainerType(
-                    final Class<?> elementType, final @NonNull List<?> nonScalar) {
-                return _Collections.asUnmodifiableSet(nonScalar);
-            }
-        },
-        COLLECTION(Collection.class, WrapperFactoryMethodSets.COLLECTION){
-            @Override public Object asContainerType(
-                    final Class<?> elementType, final @NonNull List<?> nonScalar) {
-                return Collections.unmodifiableCollection(nonScalar);
-            }
-        },
-        CAN(Can.class, WrapperFactoryMethodSets.CAN){
-            @Override public Object asContainerType(
-                    final Class<?> elementType, final @NonNull List<?> nonScalar) {
-                return Can.ofCollection(nonScalar);
-            }
-        },
-        IMMUTABLE_COLLECTION(ImmutableCollection.class, WrapperFactoryMethodSets.COLLECTION){
-            @Override public Object asContainerType(
-                    final Class<?> elementType, final @NonNull List<?> nonScalar) {
-                return CAN.asContainerType(elementType, nonScalar);
-            }
-        }
-        ;
-        public boolean isArray() {return this == ARRAY;}
-        public boolean isVector() {return this == VECTOR;}
-        public boolean isList() {return this == LIST;}
-        public boolean isSortedSet() {return this == SORTED_SET;}
-        public boolean isSet() {return this == SET;}
-        public boolean isCollection() {return this == COLLECTION;}
-        public boolean isCan() {return this == CAN;}
-        public boolean isImmutableCollection() {return this == IMMUTABLE_COLLECTION;}
-        //
-        public boolean isSetAny() {return isSet() || isSortedSet(); }
-        @Getter private final Class<?> containerType;
-        @Getter private final WrapperFactoryMethodSets methodSets;
-
-        private static final ImmutableEnumSet<CollectionSemantics> all =
-                ImmutableEnumSet.allOf(CollectionSemantics.class);
-        @Getter @Accessors(fluent = true)
-        private static final ImmutableEnumSet<CollectionSemantics> typeSubstitutors = all.remove(ARRAY);
-        public static Optional<CollectionSemantics> valueOf(final @Nullable Class<?> type) {
-            if(type==null) return Optional.empty();
-            return type.isArray()
-                    ? Optional.of(CollectionSemantics.ARRAY)
-                    : all.stream()
-                        .filter(collType->collType.getContainerType().isAssignableFrom(type))
-                        .findFirst();
-        }
-        public static CollectionSemantics valueOfElseFail(final @Nullable Class<?> type) {
-            return valueOf(type).orElseThrow(()->_Exceptions.illegalArgument(
-                            "failed to lookup CollectionSemantics for type %s", type));
-        }
-        public Object unmodifiableCopyOf(
-                final Class<?> elementType, final @NonNull Iterable<?> nonScalar) {
-            // defensive copy
-            return asContainerType(elementType,
-                    _NullSafe.stream(nonScalar).collect(Collectors.toList()));
-        }
-        protected abstract Object asContainerType(
-                final Class<?> elementType, final @NonNull List<?> nonScalar);
-    }
-
-    //TODO perhaps needs an update to reflect Java 7->11 Language changes
-    @RequiredArgsConstructor
-    public static enum WrapperFactoryMethodSets {
-        EMPTY(List.of(), List.of()),
-        COLLECTION(
-                // intercepted ...
-                List.of(
-                        getMethod(Collection.class, "contains", Object.class),
-                        getMethod(Collection.class, "size"),
-                        getMethod(Collection.class, "isEmpty")
-                ),
-                // vetoed ...
-                List.of(
-                        getMethod(Collection.class, "add", Object.class),
-                        getMethod(Collection.class, "remove", Object.class),
-                        getMethod(Collection.class, "addAll", Collection.class),
-                        getMethod(Collection.class, "removeAll", Collection.class),
-                        getMethod(Collection.class, "retainAll", Collection.class),
-                        getMethod(Collection.class, "clear")
-                )),
-        LIST(
-                // intercepted ...
-                _Lists.concat(
-                        COLLECTION.intercepted,
-                        List.of(
-                                getMethod(List.class, "get", int.class)
-                        )
-                ),
-                // vetoed ...
-                _Lists.concat(
-                        COLLECTION.vetoed,
-                        List.of(
-                        )
-                )),
-        CAN(
-                // intercepted ...
-                _Lists.concat(
-                        COLLECTION.intercepted,
-                        List.of(
-                                getMethod(Can.class, "get", int.class),
-                                getMethod(Can.class, "getElseFail", int.class),
-                                getMethod(Can.class, "getFirst"),
-                                getMethod(Can.class, "getFirstElseFail"),
-                                getMethod(Can.class, "getLast"),
-                                getMethod(Can.class, "getLastElseFail")
-                        )
-                ),
-                // vetoed ...
-                _Lists.concat(
-                        COLLECTION.vetoed,
-                        List.of(
-                        )
-                )),
-        MAP(
-                // intercepted ...
-                List.of(
-                        getMethod(Map.class, "containsKey", Object.class),
-                        getMethod(Map.class, "containsValue", Object.class),
-                        getMethod(Map.class, "size"),
-                        getMethod(Map.class, "isEmpty")
-                ),
-                // vetoed ...
-                List.of(
-                        getMethod(Map.class, "put", Object.class, Object.class),
-                        getMethod(Map.class, "remove", Object.class),
-                        getMethod(Map.class, "putAll", Map.class),
-                        getMethod(Map.class, "clear")
-                ))
-        ;
-        @Getter private final List<Method> intercepted;
-        @Getter private final List<Method> vetoed;
-        // -- HELPER
-        @SneakyThrows
-        private static Method getMethod(
-                final Class<?> cls,
-                final String methodName,
-                final Class<?>... parameterClass) {
-            return cls.getMethod(methodName, parameterClass);
-        }
     }
 
     // -- HELPER
@@ -802,7 +557,7 @@ public final class ProgrammingModelConstants {
             val methodName = method.getName();
             if(method.getParameterCount()>0
                     || method.getReturnType().equals(void.class)
-                    || !AccessorPrefix.isCandidateGetterName(methodName)) {
+                    || !AccessorSemantics.isCandidateGetterName(methodName)) {
                 // definitely an action not a getter
                 return _Strings.capitalize(methodName);
             }

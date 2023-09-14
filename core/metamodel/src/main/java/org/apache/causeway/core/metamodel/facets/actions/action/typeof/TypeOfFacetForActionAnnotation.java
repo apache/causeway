@@ -21,11 +21,11 @@ package org.apache.causeway.core.metamodel.facets.actions.action.typeof;
 import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
+import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacetAbstract;
-import org.apache.causeway.core.metamodel.spec.TypeOfAnyCardinality;
 
 public class TypeOfFacetForActionAnnotation
 extends TypeOfFacetAbstract {
@@ -41,13 +41,13 @@ extends TypeOfFacetAbstract {
                                         && typeOf != void.class) // ignore when unspecified
                 .map(typeOf ->
                     new TypeOfFacetForActionAnnotation(
-                            TypeOfAnyCardinality
+                            ResolvedType
                                 .plural(typeOf, collectionSemantics.getContainerType(), collectionSemantics),
                             facetHolder));
     }
 
     private TypeOfFacetForActionAnnotation(
-            final TypeOfAnyCardinality type,
+            final ResolvedType type,
             final FacetHolder holder) {
         // overrules any generic type argument resolution that is based on reflection
         super(type, holder, Precedence.HIGH);

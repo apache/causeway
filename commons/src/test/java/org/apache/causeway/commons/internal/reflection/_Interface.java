@@ -25,7 +25,7 @@ interface _Interface {
 
     static _Expectations expectations() {
         return _Expectations.builder()
-                .methodNameOrdinals("1,2+,3,4+")
+                .methodNameOrdinals("1,2:string,3,4:string")
                 .methodCount(4)
                 .syntheticCount(0)
                 .bridgeCount(0)

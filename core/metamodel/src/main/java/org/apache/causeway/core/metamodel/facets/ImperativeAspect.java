@@ -18,12 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.facets;
 
-import java.lang.reflect.Method;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet.Intent;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -38,7 +38,7 @@ public class ImperativeAspect {
 
     // -- FACTORIES
 
-    public static ImperativeAspect singleRegularMethod(final Method method, final Intent checkIfDisabled) {
+    public static ImperativeAspect singleRegularMethod(final ResolvedMethod method, final Intent checkIfDisabled) {
         return new ImperativeAspect(ImperativeFacet.singleRegularMethod(method), checkIfDisabled);
     }
 
@@ -63,7 +63,7 @@ public class ImperativeAspect {
 
     public Object invokeSingleMethod(final ManagedObject domainObject) {
         val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular, as the factories only creates regular
-        final Object returnValue = MmInvokeUtils.invokeNoArg(method, domainObject);
+        final Object returnValue = MmInvokeUtils.invokeNoArg(method.method(), domainObject);
         return returnValue;
     }
 

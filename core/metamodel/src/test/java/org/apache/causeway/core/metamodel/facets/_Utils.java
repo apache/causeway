@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets;
 
-import java.lang.reflect.Method;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -31,6 +30,8 @@ import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
+import org.apache.causeway.commons.internal.reflection._GenericResolver;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 
 import lombok.val;
@@ -59,60 +60,58 @@ class _Utils {
         return featureTypes.contains(featureType);
     }
 
-    Optional<Method> findMethodExact(final Class<?> type, final String methodName, final Class<?>[] parameterTypes) {
+    Optional<ResolvedMethod> findMethodExact(final Class<?> type, final String methodName, final Class<?>[] parameterTypes) {
         try {
-            return Optional.ofNullable(type.getMethod(methodName, parameterTypes));
-        } catch (final SecurityException e) {
-            return Optional.empty();
-        } catch (final NoSuchMethodException e) {
+            return _GenericResolver.resolveMethod(type.getMethod(methodName, parameterTypes), type);
+        } catch (NoSuchMethodException | SecurityException e) {
             return Optional.empty();
         }
     }
 
-    Optional<Method> findMethodExact(final Class<?> type, final String methodName) {
+    Optional<ResolvedMethod> findMethodExact(final Class<?> type, final String methodName) {
         return findMethodExact(type, methodName, _Constants.emptyClasses);
     }
 
-    Method findMethodExactOrFail(final Class<?> type, final String methodName, final Class<?>[] parameterTypes) {
-        return findMethodExact(type, methodName, parameterTypes)
+    ResolvedMethod findMethodExactOrFail(final Class<?> type, final String methodName, final Class<?>[] paramTypes) {
+        return findMethodExact(type, methodName, paramTypes)
                 .orElseThrow(()->
                 _Exceptions.noSuchElement("method '%s' not found in %s", methodName, type));
     }
 
-    Method findMethodExactOrFail(final Class<?> type, final String methodName) {
+    ResolvedMethod findMethodExactOrFail(final Class<?> type, final String methodName) {
         return findMethodExactOrFail(type, methodName, _Constants.emptyClasses);
     }
 
-    Can<Method> findMethodsByName(final Class<?> type, final String methodName) {
-        val matchingMethods = _ClassCache.getInstance().streamPublicOrDeclaredMethods(type)
-                .filter(method->method.getName().equals(methodName))
+    Can<ResolvedMethod> findMethodsByName(final Class<?> type, final String methodName) {
+        val matchingMethods = _ClassCache.getInstance().streamResolvedMethods(type)
+                .filter(method->method.name().equals(methodName))
                 .collect(Can.toCan());
         return matchingMethods;
     }
 
-    Method findMethodByNameOrFail(final Class<?> type, final String methodName) {
+    ResolvedMethod findMethodByNameOrFail(final Class<?> type, final String methodName) {
         return _ClassCache.getInstance().findMethodUniquelyByNameOrFail(type, methodName);
     }
 
-    Optional<Method> findGetter(final Class<?> declaringClass, final String propertyName) {
+    Optional<ResolvedMethod> findGetter(final Class<?> declaringClass, final String propertyName) {
         return _Utils.findMethodExact(declaringClass, "get" + _Strings.capitalize(propertyName))
                 .or(()->_Utils.findMethodExact(declaringClass, "is" + _Strings.capitalize(propertyName)));
     }
 
-    Method findGetterOrFail(final Class<?> declaringClass, final String propertyName) {
+    ResolvedMethod findGetterOrFail(final Class<?> declaringClass, final String propertyName) {
         val getter = findGetter(declaringClass, propertyName)
                     .orElseThrow(()->
                         _Exceptions.noSuchElement("getter '%s' not found in %s", propertyName, declaringClass));
         return getter;
     }
 
-    void assertMethodEquals(final Method a, final Method b) {
-        assertEquals(a.getName(), b.getName());
-        assertEquals(a.getParameterCount(), b.getParameterCount());
-        assertArrayEquals(a.getParameterTypes(), b.getParameterTypes());
+    void assertMethodEquals(final ResolvedMethod a, final ResolvedMethod b) {
+        assertEquals(a.name(), b.name());
+        assertEquals(a.paramCount(), b.paramCount());
+        assertArrayEquals(a.paramTypes(), b.paramTypes());
 
-        val ownerA = a.getDeclaringClass();
-        val ownerB = b.getDeclaringClass();
+        val ownerA = a.method().getDeclaringClass();
+        val ownerB = b.method().getDeclaringClass();
 
         assertTrue(ownerA.isAssignableFrom(ownerB)
                 || ownerB.isAssignableFrom(ownerA));

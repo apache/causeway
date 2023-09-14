@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.ident.layout;
 
-import java.lang.reflect.Method;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,9 +27,12 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import org.apache.causeway.commons.internal.reflection._GenericResolver;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.layout.LayoutFacetViaLayoutMethod;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+
+import lombok.val;
 
 class LayoutFacetMethodTest {
 
@@ -51,7 +52,8 @@ class LayoutFacetMethodTest {
 
         pojo = new DomainObjectWithProblemInLayoutMethod();
 
-        final Method iconNameMethod = DomainObjectWithProblemInLayoutMethod.class.getMethod("layout");
+        val iconNameMethod = _GenericResolver.testing
+                .resolveMethod(DomainObjectWithProblemInLayoutMethod.class, "layout");
         facet = (LayoutFacetViaLayoutMethod) LayoutFacetViaLayoutMethod
                     .create(iconNameMethod, Mockito.mock(FacetHolder.class))
                     .orElse(null);

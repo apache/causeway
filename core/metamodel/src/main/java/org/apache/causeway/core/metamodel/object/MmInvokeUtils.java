@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.object;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.Iterator;
@@ -29,6 +28,8 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.collections._Arrays;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.commons.ClassExtensions;
@@ -41,21 +42,21 @@ public final class MmInvokeUtils {
 
     /** PAT ... Parameters as Tuple */
     public static Object invokeWithPAT(
-            final Constructor<?> patConstructor,
-            final Method method,
+            final ResolvedConstructor patConstructor,
+            final ResolvedMethod method,
             final ManagedObject adapter,
             final Can<ManagedObject> pendingArguments,
             final List<Object> additionalArguments) {
 
-        val pat = CanonicalInvoker.construct(patConstructor, MmUnwrapUtils.multipleAsArray(pendingArguments));
+        val pat = CanonicalInvoker.construct(patConstructor.constructor(), MmUnwrapUtils.multipleAsArray(pendingArguments));
         val paramPojos = _Arrays.combineWithExplicitType(Object.class, pat, additionalArguments.toArray());
-        return CanonicalInvoker.invoke(method, MmUnwrapUtils.single(adapter), paramPojos);
+        return CanonicalInvoker.invoke(method.method(), MmUnwrapUtils.single(adapter), paramPojos);
     }
 
     /** PAT ... Parameters as Tuple */
     public static Object invokeWithPAT(
-            final Constructor<?> patConstructor,
-            final Method method,
+            final ResolvedConstructor patConstructor,
+            final ResolvedMethod method,
             final ManagedObject adapter,
             final Can<ManagedObject> argumentAdapters) {
         return invokeWithPAT(patConstructor, method, adapter, argumentAdapters, Collections.emptyList());
@@ -66,29 +67,29 @@ public final class MmInvokeUtils {
     }
 
     public static Object invokeAutofit(
-            final Optional<Constructor<?>> patConstructor,
+            final Optional<ResolvedConstructor> patConstructor,
             final MethodFacade methodFacade, final ManagedObject owningAdapter, final Can<ManagedObject> pendingArgs) {
         return patConstructor.isPresent()
                 ? invokeWithPAT(patConstructor.get(),
                         methodFacade.asMethodForIntrospection(),
                         owningAdapter, pendingArgs)
-                : invokeAutofit(methodFacade.asMethodElseFail(),
+                : invokeAutofit(methodFacade.asMethodElseFail().method(),
                         owningAdapter, pendingArgs);
     }
 
     public static Object invokeNoAutofit(
-            final Optional<Constructor<?>> patConstructor,
+            final Optional<ResolvedConstructor> patConstructor,
             final MethodFacade methodFacade, final ManagedObject owningAdapter, final Can<ManagedObject> pendingArgs) {
         return patConstructor.isPresent()
                 ? invokeWithPAT(patConstructor.get(),
                         methodFacade.asMethodForIntrospection(),
                         owningAdapter, pendingArgs)
-                : invokeWithArgs(methodFacade.asMethodElseFail(),
+                : invokeWithArgs(methodFacade.asMethodElseFail().method(),
                         owningAdapter, pendingArgs);
     }
 
     public static Object invokeWithSearchArg(
-            final Optional<Constructor<?>> patConstructor,
+            final Optional<ResolvedConstructor> patConstructor,
             final MethodFacade methodFacade, final ManagedObject owningAdapter, final Can<ManagedObject> pendingArgs, final String searchArg) {
         final Object collectionOrArray = patConstructor.isPresent()
                 ? invokeWithPAT(
@@ -97,7 +98,7 @@ public final class MmInvokeUtils {
                         owningAdapter, pendingArgs,
                         Collections.singletonList(searchArg))
                 : invokeAutofit(
-                        methodFacade.asMethodElseFail(),
+                        methodFacade.asMethodElseFail().method(),
                         owningAdapter, pendingArgs,
                         Collections.singletonList(searchArg));
         return collectionOrArray;

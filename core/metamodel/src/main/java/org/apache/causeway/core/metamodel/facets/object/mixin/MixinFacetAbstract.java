@@ -20,10 +20,10 @@ package org.apache.causeway.core.metamodel.facets.object.mixin;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -104,15 +104,15 @@ implements MixinFacet {
     }
 
     @Override
-    public boolean isCandidateForMain(final Method method) {
+    public boolean isCandidateForMain(final ResolvedMethod method) {
         /* include methods from super classes or interfaces
          *
          * it is sufficient to detect any match;
          * mixin invocation will take care of calling the right method,
          * that is in terms of type-hierarchy the 'nearest' to this mixin;
          */
-        return method.getName().equals(getMainMethodName())
-                && method.getDeclaringClass()
+        return method.name().equals(getMainMethodName())
+                && method.method().getDeclaringClass()
                     .isAssignableFrom(constructor.getDeclaringClass());
     }
 

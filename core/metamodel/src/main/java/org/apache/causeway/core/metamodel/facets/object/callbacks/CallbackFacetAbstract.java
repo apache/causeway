@@ -18,9 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.callbacks;
 
-import java.lang.reflect.Method;
-
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
@@ -39,7 +38,7 @@ implements CallbackFacet {
 
     @Getter(onMethod_ = {@Override})
     private final Can<MethodFacade> methods;
-    private final Can<Method> asRegularMethods;
+    private final Can<ResolvedMethod> asRegularMethods;
 
     protected CallbackFacetAbstract(
             final Class<? extends Facet> facetType,
@@ -57,7 +56,7 @@ implements CallbackFacet {
 
     @Override
     public final void invoke(final ManagedObject adapter) {
-        MmInvokeUtils.invokeAll(asRegularMethods, adapter);
+        MmInvokeUtils.invokeAll(asRegularMethods.map(ResolvedMethod::method), adapter);
     }
 
 }

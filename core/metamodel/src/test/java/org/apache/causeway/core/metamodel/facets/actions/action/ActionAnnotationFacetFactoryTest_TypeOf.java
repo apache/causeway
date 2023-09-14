@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
+import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacetFromFeature;
@@ -87,7 +87,7 @@ extends ActionAnnotationFacetFactoryTest {
             final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof TypeOfFacetForActionAnnotation);
-            assertThat(facet.value().getElementType(), classEqualTo(Order.class));
+            assertThat(facet.value().elementType(), classEqualTo(Order.class));
         });
     }
 
@@ -129,8 +129,8 @@ extends ActionAnnotationFacetFactoryTest {
             final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof TypeOfFacet);
-            assertThat(facet.value().getElementType(), classEqualTo(Order.class));
-            assertThat(facet.value().getCollectionSemantics(), Matchers.is(Optional.of(CollectionSemantics.ARRAY)));
+            assertThat(facet.value().elementType(), classEqualTo(Order.class));
+            assertThat(facet.value().collectionSemantics(), Matchers.is(Optional.of(CollectionSemantics.ARRAY)));
         });
     }
 
@@ -152,7 +152,7 @@ extends ActionAnnotationFacetFactoryTest {
             final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
             assertNotNull(facet);
             assertEquals(TypeOfFacetFromFeature.class, facet.getClass());
-            assertThat(facet.value().getElementType(), classEqualTo(Order.class));
+            assertThat(facet.value().elementType(), classEqualTo(Order.class));
         });
     }
 }

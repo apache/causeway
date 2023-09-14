@@ -31,6 +31,7 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
+import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -175,6 +176,13 @@ final class Can_Multiple<T> implements Can<T> {
             reverse.add(elements.get(i));
         }
         return Can_Multiple.of(reverse);
+    }
+
+    @Override
+    public Can<T> reduce(final @NonNull BinaryOperator<T> accumulator) {
+        return this.stream().reduce(accumulator)
+                .map(singleton->(Can<T>)Can_Singleton.of(singleton))
+                .orElseGet(Can::empty);
     }
 
     @Override

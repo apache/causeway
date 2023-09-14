@@ -34,6 +34,7 @@ import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.collections._Multimaps;
 import org.apache.causeway.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.causeway.commons.internal.collections._Sets;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -163,8 +164,8 @@ implements HasMetaModelContext, AutoCloseable{
      * {@link PropertyOrCollectionIdentifyingFacetFactory}s.
      */
     public void findAssociationCandidateGetters(
-            final Stream<Method> methodStream,
-            final Consumer<Method> onCandidate) {
+            final Stream<ResolvedMethod> methodStream,
+            final Consumer<ResolvedMethod> onCandidate) {
 
         val factories = propertyOrCollectionIdentifyingFactories.get();
 
@@ -188,7 +189,7 @@ implements HasMetaModelContext, AutoCloseable{
      */
     public void findAndRemovePropertyAccessors(
             final MethodRemover methodRemover,
-            final List<Method> methodListToAppendTo) {
+            final List<ResolvedMethod> methodListToAppendTo) {
 
         for (val facetFactory : propertyOrCollectionIdentifyingFactories.get()) {
             facetFactory.findAndRemovePropertyAccessors(methodRemover, methodListToAppendTo);
@@ -205,7 +206,7 @@ implements HasMetaModelContext, AutoCloseable{
      */
     public void findAndRemoveCollectionAccessors(
             final MethodRemover methodRemover,
-            final List<Method> methodListToAppendTo) {
+            final List<ResolvedMethod> methodListToAppendTo) {
 
         for (val facetFactory : propertyOrCollectionIdentifyingFactories.get()) {
             facetFactory.findAndRemoveCollectionAccessors(methodRemover, methodListToAppendTo);
@@ -230,8 +231,8 @@ implements HasMetaModelContext, AutoCloseable{
      * factory set does the work) is a slight performance optimization for when
      * there are multiple facet factories that search for the same prefix.
      */
-    public boolean recognizes(final Method method) {
-        val methodName = method.getName();
+    public boolean recognizes(final ResolvedMethod method) {
+        val methodName = method.name();
         for (val prefix : methodPrefixes.get()) {
             if (methodName.startsWith(prefix)) {
                 return true;

@@ -31,6 +31,7 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
+import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -418,6 +419,17 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
                 .flatMap(Can::stream)
                 .collect(Can.toCan());
     }
+
+    /**
+     * Performs a reduction on all elements, returning a {@link Can} containing
+     * either a singleton reduction result or an empty {@link Can}.
+     * @return non-null
+     * @apiNote Reduction operating on an <i>empty</i> or <i>singleton</i> {@link Can}
+     *      acts as identity operation,
+     *      where given {@code accumulator} is actually never called.
+     * @see Stream#reduce(BinaryOperator)
+     */
+    Can<T> reduce(BinaryOperator<T> accumulator);
 
     // -- CONCATENATION
 

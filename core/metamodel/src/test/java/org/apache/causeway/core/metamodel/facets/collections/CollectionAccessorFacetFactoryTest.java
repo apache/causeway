@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.collections;
 
-import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -28,6 +27,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor;
@@ -47,7 +47,7 @@ extends FacetFactoryTestAbstract {
             public Collection getOrders() { return null; }
         }
 
-        final Method collectionAccessorMethod = findMethodExactOrFail(Customer.class, "getOrders");
+        final ResolvedMethod collectionAccessorMethod = findMethodExactOrFail(Customer.class, "getOrders");
 
         collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod)->{
             // when
@@ -70,7 +70,7 @@ extends FacetFactoryTestAbstract {
             public List getOrders() { return null; }
         }
 
-        final Method collectionAccessorMethod = findMethodExactOrFail(Customer.class, "getOrders");
+        final ResolvedMethod collectionAccessorMethod = findMethodExactOrFail(Customer.class, "getOrders");
 
         collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod)->{
             // when
@@ -93,7 +93,7 @@ extends FacetFactoryTestAbstract {
             public Set getOrders() { return null; }
         }
 
-        final Method collectionAccessorMethod = findMethodExactOrFail(Customer.class, "getOrders");
+        final ResolvedMethod collectionAccessorMethod = findMethodExactOrFail(Customer.class, "getOrders");
 
         collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod)->{
             // when
@@ -116,7 +116,7 @@ extends FacetFactoryTestAbstract {
             public Object[] getOrders() { return null; }
         }
 
-        final Method collectionAccessorMethod = findMethodExactOrFail(Customer.class, "getOrders");
+        final ResolvedMethod collectionAccessorMethod = findMethodExactOrFail(Customer.class, "getOrders");
 
         collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod)->{
             // when
@@ -141,7 +141,7 @@ extends FacetFactoryTestAbstract {
             public Order[] getOrders() { return null; }
         }
 
-        final Method collectionAccessorMethod = findMethodExactOrFail(Customer.class, "getOrders");
+        final ResolvedMethod collectionAccessorMethod = findMethodExactOrFail(Customer.class, "getOrders");
 
         collectionScenario(Customer.class, "orders", (processMethodContext, facetHolder, facetedMethod)->{
             // when
@@ -167,7 +167,7 @@ extends FacetFactoryTestAbstract {
         }
         class CustomerEx extends Customer {
         }
-        final Method collectionAccessorMethod = findMethodExactOrFail(CustomerEx.class, "getOrders");
+        final ResolvedMethod collectionAccessorMethod = findMethodExactOrFail(CustomerEx.class, "getOrders");
         collectionScenario(CustomerEx.class, "orders", (processMethodContext, facetHolder, facetedMethod)->{
             // when
             facetFactory.process(processMethodContext);

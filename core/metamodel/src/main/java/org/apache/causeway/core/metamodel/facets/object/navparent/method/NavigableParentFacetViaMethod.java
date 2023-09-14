@@ -20,11 +20,12 @@ package org.apache.causeway.core.metamodel.facets.object.navparent.method;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
-import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.commons.functional.Either;
+import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.navparent.NavigableParentFacet;
@@ -44,27 +45,26 @@ extends NavigableParentFacetAbstract {
 
     public static Optional<NavigableParentFacet> create(
             final @NonNull Class<?> processedClass,
-            final @NonNull Method method,
+            final @NonNull ResolvedMethod method,
             final @NonNull FacetHolder facetHolder) {
-
 
         return validateNavigableParentType(processedClass, method, facetHolder)
         .fold(
-            // success
-            methodHandle->
-                Optional.of(new NavigableParentFacetViaMethod(methodHandle, facetHolder)),
             // failure
             deficiency->{
-
                 ValidationFailure.raiseFormatted(facetHolder,
                         ProgrammingModelConstants.Violation.DOMAIN_OBJECT_INVALID_NAVIGABLE_PARENT
                             .builder()
                             .addVariable("type", processedClass.getName())
-                            .addVariable("parentType", method.getReturnType().getName())
+                            .addVariable("parentType", method.returnType().getName())
                             .addVariable("parentTypeDeficiency", deficiency)
                             .buildMessage());
 
                 return Optional.empty();
+            },
+            // success
+            methodHandle->{
+                return Optional.of(new NavigableParentFacetViaMethod(methodHandle, facetHolder));
             });
     }
 
@@ -94,35 +94,31 @@ extends NavigableParentFacetAbstract {
     // -- HELPER
 
     /** Returns either the MethodHandle to use or a deficiency message. */
-    private static Either<MethodHandle, String> validateNavigableParentType(
+    private static Either<String, MethodHandle> validateNavigableParentType(
             final @NonNull Class<?> processedClass,
-            final @NonNull Method method,
+            final @NonNull ResolvedMethod method,
             final @NonNull FacetHolder holder) {
 
-        val navigableParentSpec = holder.getSpecificationLoader().loadSpecification(method.getReturnType());
+        val navigableParentSpec = holder.getSpecificationLoader().loadSpecification(method.returnType());
         if(navigableParentSpec==null) {
-            return Either.right("vetoed");
+            return Either.left("vetoed");
         }
         if(navigableParentSpec.isPlural()) {
-            return Either.right("plural");
+            return Either.left("plural");
         }
         if(navigableParentSpec.isVoid()) {
-            return Either.right("void");
+            return Either.left("void");
         }
         if(navigableParentSpec.isValue()) {
-            return Either.right("value-type");
+            return Either.left("value-type");
         }
-
-        try {
-            val methodHandle = MethodHandles.lookup().unreflect(method);
-            return Either.left(methodHandle);
-        } catch (IllegalAccessException e) {
-            return Either.right(
-                    String.format("'reflection exception while trying to create a method handle for %s'\n"
-                            + "(%s)",
-                            method,
-                            e.getMessage()));
-        }
+        return Try.call(()->MethodHandles.lookup().unreflect(method.method()))
+                .mapToEither(
+                        e->String.format("'reflection exception while trying to create a method handle for %s'\n"
+                                + "(%s)",
+                                method.method(),
+                                e.getMessage()),
+                        (final Optional<MethodHandle> handle)->handle.get());
     }
 
 }

@@ -22,7 +22,7 @@ import javax.inject.Inject;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.AccessorPrefix;
+import org.apache.causeway.commons.semantics.AccessorSemantics;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ReturnTypeCategory;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -54,7 +54,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         val getterMethod = processMethodContext.getMethod();
         final String capitalizedName = _Strings.baseName(getterMethod.getName());
         val methodNameCandidates = Can.ofSingleton(
-                AccessorPrefix.SET.prefix(capitalizedName));
+                AccessorSemantics.SET.prefix(capitalizedName));
 
         final Class<?>[] signature = new Class[] { getterMethod.getReturnType() };
 

@@ -25,7 +25,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Arrays;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.causeway.commons.semantics.CollectionSemantics;
 
 import lombok.NonNull;
 import lombok.val;
@@ -80,7 +80,7 @@ public interface ParameterAdapter {
                         : null;
             }
 
-            return ProgrammingModelConstants.CollectionSemantics.valueOf(parameterType)
+            return CollectionSemantics.valueOf(parameterType)
             .map(collectionType->collectionType
                     .unmodifiableCopyOf(parameterType, (Iterable<?>) parameterValue))
             .orElse(parameterValue);

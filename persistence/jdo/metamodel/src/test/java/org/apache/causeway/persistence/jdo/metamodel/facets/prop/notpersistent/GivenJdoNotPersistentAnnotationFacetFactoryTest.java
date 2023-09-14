@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.persistence.jdo.metamodel.facets.prop.notpersistent;
 
-import java.lang.reflect.Method;
-
 import javax.jdo.annotations.NotPersistent;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -64,7 +62,7 @@ extends AbstractFacetFactoryTest {
 
     public void testNotPersistentAnnotationPickedUpOnProperty() throws Exception {
         final Class<?> cls = SimpleObjectWithNotPersistentColumn.class;
-        final Method method = cls.getMethod("getSomeColumn");
+        val method = findMethod(cls, "getSomeColumn");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
@@ -91,7 +89,7 @@ extends AbstractFacetFactoryTest {
         }
 
         final Class<?> cls = Customer.class;
-        final Method method = cls.getMethod("getSomeColumn");
+        val method = findMethod(cls, "getSomeColumn");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
@@ -115,7 +113,7 @@ extends AbstractFacetFactoryTest {
         }
 
         final Class<?> cls = Customer.class;
-        final Method method = cls.getMethod("getSomeColumn");
+        val method = findMethod(cls, "getSomeColumn");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
