@@ -19,6 +19,7 @@
 package org.apache.causeway.commons.internal.reflection;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.lang.reflect.Method;
 import java.util.Optional;
@@ -27,9 +28,11 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
+import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -88,6 +91,7 @@ public class _MethodFacades {
         String getParameterName(int paramNum);
         Class<?> getDeclaringClass();
         Optional<ResolvedMethod> asMethod();
+        Optional<ResolvedConstructor> asConstructor();
 
         /**
          * exposes the underlying method, use with care:
@@ -116,7 +120,27 @@ public class _MethodFacades {
                 _Exceptions.unrecoverable("Framework Bug: unexpeced method-facade, "
                         + "regular variant expected: %s", asMethodForIntrospection()));
         }
+        default ResolvedConstructor asConstructorElseFail() {
+            return asConstructor().orElseThrow(()->
+                _Exceptions.unrecoverable("Framework Bug: unexpeced method-facade, "
+                        + "wrapper of constructor expected: %s", asMethodForIntrospection()));
+        }
         boolean isAnnotatedAsNullable();
+
+        default ResolvedType resolveMethodReturn(final Class<?> implementationClass) {
+            return _GenericResolver.forMethodReturn(implementationClass, this.asMethodElseFail());
+        }
+
+        default ResolvedType resolveParameter(final Class<?> implementationClass, final int paramIndex) {
+            val executable = this.asExecutable();
+            if(executable instanceof Method) {
+                return _GenericResolver.forMethodParameter(implementationClass, this.asMethodElseFail(), paramIndex);
+            }
+            if(executable instanceof Constructor) {
+                return _GenericResolver.forConstructorParameter(implementationClass, this.asConstructorElseFail(), paramIndex);
+            }
+            throw _Exceptions.unexpectedCodeReach();
+        }
     }
 
     /**
@@ -147,6 +171,9 @@ public class _MethodFacades {
         }
         @Override public Optional<ResolvedMethod> asMethod() {
             return Optional.of(method);
+        }
+        @Override public Optional<ResolvedConstructor> asConstructor() {
+            return Optional.empty();
         }
         @Override public Executable asExecutable() {
             return method.method();
@@ -200,7 +227,7 @@ public class _MethodFacades {
             return method.name();
         }
         @Override public String getParameterName(final int paramNum) {
-            return patConstructor.constructor().getParameters()[paramNum].getName();
+            return patConstructor.paramType(paramNum).getName();
         }
         @Override public Class<?> getDeclaringClass() {
             return method.method().getDeclaringClass();
@@ -208,6 +235,9 @@ public class _MethodFacades {
         @Override public Optional<ResolvedMethod> asMethod() {
             // only allowed for regular methods
             return Optional.empty();
+        }
+        @Override public Optional<ResolvedConstructor> asConstructor() {
+            return Optional.of(patConstructor);
         }
         @Override public ResolvedMethod asMethodForIntrospection() {
             return method;

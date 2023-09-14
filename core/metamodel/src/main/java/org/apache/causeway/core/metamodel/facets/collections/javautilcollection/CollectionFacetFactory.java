@@ -48,7 +48,7 @@ extends FacetFactoryAbstract {
                 addFacet(new JavaArrayFacet(facetHolder));
             }
             addFacet(new JavaCollectionFacet(facetHolder));
-            addFacetIfPresent(TypeOfFacet.inferFromNonScalarType(collectionType, cls, facetHolder));
+            addFacetIfPresent(TypeOfFacet.inferFromPluralType(collectionType, cls, facetHolder));
         });
     }
 

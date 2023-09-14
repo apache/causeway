@@ -36,7 +36,6 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.causeway.core.metamodel.spec.TypeOfAnyCardinalityFactory;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.Getter;
@@ -56,7 +55,7 @@ extends TypedHolderAbstract {
             final ResolvedMethod getterMethod) {
         val methodFacade = _MethodFacades.regular(getterMethod);
         return new FacetedMethod(mmc, FeatureType.PROPERTY,
-                declaringType, methodFacade, TypeOfAnyCardinalityFactory.forMethodReturn(declaringType, getterMethod), Can.empty());
+                declaringType, methodFacade, _GenericResolver.forMethodReturn(declaringType, getterMethod), Can.empty());
     }
 
     public static FacetedMethod createForCollection(
@@ -65,7 +64,7 @@ extends TypedHolderAbstract {
             final ResolvedMethod getterMethod) {
         val methodFacade = _MethodFacades.regular(getterMethod);
         return new FacetedMethod(mmc, FeatureType.COLLECTION,
-                declaringType, methodFacade, TypeOfAnyCardinalityFactory.forMethodReturn(declaringType, getterMethod), Can.empty());
+                declaringType, methodFacade, _GenericResolver.forMethodReturn(declaringType, getterMethod), Can.empty());
     }
 
     public static FacetedMethod createForAction(
@@ -73,7 +72,7 @@ extends TypedHolderAbstract {
             final Class<?> declaringType,
             final MethodFacade methodFacade) {
         return new FacetedMethod(mmc, FeatureType.ACTION,
-                declaringType, methodFacade, TypeOfAnyCardinalityFactory.forMethodFacadeReturn(declaringType, methodFacade),
+                declaringType, methodFacade, methodFacade.resolveMethodReturn(declaringType),
                 getParameters(mmc, declaringType, methodFacade));
     }
 

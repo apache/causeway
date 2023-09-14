@@ -23,12 +23,12 @@ import java.util.function.BiFunction;
 
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.commons.collectionsemantics.CollectionSemantics;
+import org.apache.causeway.commons.internal.reflection._GenericResolver;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.TypeOfAnyCardinalityFactory;
 
 import lombok.val;
 
@@ -58,7 +58,7 @@ public interface TypeOfFacet extends Facet {
             final MethodFacade method,
             final int paramIndex,
             final FacetHolder holder) {
-        val type = TypeOfAnyCardinalityFactory.forMethodFacadeParameter(implementationClass, method, paramIndex);
+        val type = method.resolveParameter(implementationClass, paramIndex);
         return toInferredFrom(TypeOfFacet::inferredFromFeature, type, holder);
     }
 
@@ -66,13 +66,13 @@ public interface TypeOfFacet extends Facet {
             final Class<?> implementationClass,
             final MethodFacade method,
             final FacetHolder holder) {
-        val type = TypeOfAnyCardinalityFactory.forMethodFacadeReturn(implementationClass, method);
+        val type = method.resolveMethodReturn(implementationClass);
         return toInferredFrom(TypeOfFacet::inferredFromFeature, type, holder);
     }
 
-    static Optional<TypeOfFacet> inferFromNonScalarType(
-            final CollectionSemantics collectionSemantics, final Class<?> nonScalarType, final FacetHolder holder) {
-        val type = TypeOfAnyCardinalityFactory.forPluralType(nonScalarType, collectionSemantics);
+    static Optional<TypeOfFacet> inferFromPluralType(
+            final CollectionSemantics collectionSemantics, final Class<?> pluralType, final FacetHolder holder) {
+        val type = _GenericResolver.forPluralType(pluralType, collectionSemantics);
         return toInferredFrom(TypeOfFacet::inferredFromType, type, holder);
     }
 

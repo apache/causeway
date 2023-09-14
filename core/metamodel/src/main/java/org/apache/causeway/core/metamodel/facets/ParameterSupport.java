@@ -26,6 +26,7 @@ import java.util.function.IntFunction;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.collections._Arrays;
+import org.apache.causeway.commons.internal.reflection._GenericResolver;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
@@ -33,7 +34,6 @@ import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.Retur
 import org.apache.causeway.core.metamodel.methods.MethodFinder;
 import org.apache.causeway.core.metamodel.methods.MethodFinderPAT;
 import org.apache.causeway.core.metamodel.methods.MethodFinderPAT.MethodAndPatConstructor;
-import org.apache.causeway.core.metamodel.spec.TypeOfAnyCardinalityFactory;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -155,7 +155,7 @@ public final class ParameterSupport {
                 .of(paramIndex, paramType,
                     supportingMethodAndPatConstructor.getSupportingMethod(),
                     Optional.of(supportingMethodAndPatConstructor.getPatConstructor()),
-                    TypeOfAnyCardinalityFactory.forMethodReturn(
+                    _GenericResolver.forMethodReturn(
                             declaringClass, supportingMethodAndPatConstructor.getSupportingMethod()));
     }
 
@@ -220,8 +220,7 @@ public final class ParameterSupport {
                 .of(paramIndex, paramType,
                     supportingMethod,
                     Optional.empty(),
-                    TypeOfAnyCardinalityFactory.forMethodReturn(
-                            declaringClass, supportingMethod));
+                    _GenericResolver.forMethodReturn(declaringClass, supportingMethod));
     }
 
     /**

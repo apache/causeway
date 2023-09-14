@@ -159,9 +159,9 @@ class TypeOfAnyCardinalityTest {
         assertEquals(genericB, genericArgB.toClass());
         assertEquals(genericC, genericArgC.toClass());
 
-        val typeA = TypeOfAnyCardinalityFactory.forMethodReturn(a, methodInA);
-        val typeB = TypeOfAnyCardinalityFactory.forMethodReturn(b, methodInB);
-        val typeC = TypeOfAnyCardinalityFactory.forMethodReturn(c, methodInC);
+        val typeA = _GenericResolver.forMethodReturn(a, methodInA);
+        val typeB = _GenericResolver.forMethodReturn(b, methodInB);
+        val typeC = _GenericResolver.forMethodReturn(c, methodInC);
 
         assertEquals(genericA, typeA.elementType());
         assertEquals(genericB, typeB.elementType());
