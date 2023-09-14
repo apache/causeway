@@ -640,9 +640,19 @@ public final class _Reflect {
                 if(aSize == 0 && bSize == 0) return true;
                 if(aSize != bSize) return false;
                 for (int c = 0; c < aSize; c++) {
-                    if ((matchingParamTypes[c] != null) && (matchingParamTypes[c] != parameterTypes[c])) {
-                        return false;
-                    }
+                    if(!Objects.equals(parameterTypes[c], matchingParamTypes[c])) return false;
+                }
+                return true;
+            };
+        }
+        public Predicate<Class<?>[]> methodSignatureAssignableTo(final Class<?>[] requiredParamTypes) {
+            return parameterTypes->{
+                final int aSize = _NullSafe.size(parameterTypes);
+                final int bSize = _NullSafe.size(requiredParamTypes);
+                if(aSize == 0 && bSize == 0) return true;
+                if(aSize != bSize) return false;
+                for (int c = 0; c < aSize; c++) {
+                    if(!requiredParamTypes[c].isAssignableFrom(parameterTypes[c])) return false;
                 }
                 return true;
             };

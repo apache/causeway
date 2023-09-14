@@ -285,18 +285,26 @@ public final class _ClassCache implements AutoCloseable {
         }
     }
 
-    private ClassModel inspectType(final Class<?> _type) {
-
-        //[CAUSEWAY-3164] ensures reflection on generic type arguments works in a concurrent introspection setting
-        @SuppressWarnings({ "unchecked", "rawtypes" })
-        final Class<?> type = Optional.ofNullable(classLoader)
+    /**
+     * [CAUSEWAY-3164] ensures reflection on generic type arguments works in a concurrent introspection setting
+     */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    private Class<?> reloadType(final Class<?> _type) {
+        return Optional.ofNullable(classLoader)
+                .filter(cl->!_type.isPrimitive())
+                .filter(cl->!_Reflect.isJavaApiClass(_type))
                 .filter(cl->!cl.equals(_type.getClassLoader()))
                 .map(cl->Try.call(()->Class.forName(_type.getName(), true, cl))
                         .ifFailure(e->System.err.printf("ClassCache: reloading of type %s failed with %s%n", _type.getName(), e))
                         .getValue().orElse(null))
                 .orElse((Class) _type);
+    }
 
-          //TODO[CAUSEWAY-3556] optimization candidate (needs inspectedTypes to be a ConcurrentHashMap)
+    private ClassModel inspectType(final Class<?> _type) {
+
+        final Class<?> type = reloadType(_type);
+
+        //TODO[CAUSEWAY-3556] optimization candidate (needs inspectedTypes to be a ConcurrentHashMap)
 //                val declaredMethods = _Reflect.streamTypeHierarchy(type, InterfacePolicy.INCLUDE)
 //                    .filter(cls->cls.equals(Object.class))
 //                    .flatMap(cls->{
@@ -408,7 +416,7 @@ public final class _ClassCache implements AutoCloseable {
             final Class<?>[] paramTypes) {
 
         val model = classModel(type);
-        val signatureMatcher = _Reflect.predicates.methodSignatureMatch(paramTypes);
+        val signatureMatcher = _Reflect.predicates.methodSignatureAssignableTo(paramTypes);
         val key = MethodKey.of(type, name, _NullSafe.size(paramTypes));
 
         val publicMethod = model.publicMethodsByKey.get(key);
