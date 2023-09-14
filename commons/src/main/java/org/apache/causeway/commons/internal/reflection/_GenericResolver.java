@@ -42,9 +42,8 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collectionsemantics.CollectionSemantics;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.reflection._Reflect.ConstructorAndImplementingClass;
-import org.apache.causeway.commons.internal.reflection._Reflect.MethodAndImplementingClass;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -66,6 +65,9 @@ public class _GenericResolver {
 
     // -- MODELS
 
+    /**
+     * Represents either a singular or plural type, with generic type arguments (if any) resolved.
+     */
     public static interface ResolvedType {
         /**
          * The type either contained or not.
@@ -136,6 +138,11 @@ public class _GenericResolver {
         }
     }
 
+    /**
+     * Represents a {@link Method} that has its generic bounded
+     * return type (if any)
+     * and parameter types (if any) resolved.
+     */
     public static interface ResolvedMethod {
         Method method();
         Try<MethodHandle> methodHandle();
@@ -170,15 +177,6 @@ public class _GenericResolver {
             return allowedReturnTypes.stream()
                     .anyMatch(this::isReturnTypeATypeOf);
         }
-        default MethodAndImplementingClass resolverContext(final Class<?> implementationClass) {
-            // adopt into default class loader context
-            val origin = MethodAndImplementingClass.of(method(), implementationClass);
-            val adopted = origin
-                    .adoptIntoDefaultClassLoader()
-                    .getValue()
-                    .orElse(origin);
-            return adopted;
-        }
         /**
          * In compliance with the sameness relation {@link _Reflect#methodsSame(Method, Method)}
          * provides a comparator (with an arbitrarily chosen ordering relation).
@@ -190,6 +188,10 @@ public class _GenericResolver {
         }
     }
 
+    /**
+     * Represents a {@link Constructor} that has its generic bounded
+     * parameter types (if any) resolved.
+     */
     public static interface ResolvedConstructor {
         Constructor<?> constructor();
         Class<?> implementationClass();
@@ -202,15 +204,6 @@ public class _GenericResolver {
         }
         default boolean isNoArg() { return paramCount()==0; }
         default boolean isSingleArg() { return paramCount()==1; }
-        default ConstructorAndImplementingClass resolverContext(final Class<?> implementationClass) {
-            // adopt into default class loader context
-            val origin = ConstructorAndImplementingClass.of(constructor(), implementationClass);
-            val adopted = origin
-                    .adoptIntoDefaultClassLoader()
-                    .getValue()
-                    .orElse(origin);
-            return adopted;
-        }
     }
 
     // -- FACTORIES
@@ -242,7 +235,7 @@ public class _GenericResolver {
         return CollectionSemantics.valueOf(paramTypeGuess)
         .map(__->{
             // adopt into default class loader context
-            val adopted = resolvedConstructor.resolverContext(implementationClass);
+            val adopted = resolverHelper.ConstructorAndImplementingClass.resolverContext(resolvedConstructor, implementationClass);
             val paramType = adopted.getConstructor().getParameters()[paramIndex].getType();
 
             return CollectionSemantics.valueOf(paramType)
@@ -269,7 +262,7 @@ public class _GenericResolver {
         return CollectionSemantics.valueOf(methodReturnGuess)
         .map(__->{
             // adopt into default class loader context
-            val adopted = resolvedMethod.resolverContext(implementationClass);
+            val adopted = resolverHelper.MethodAndImplementingClass.resolverContext(resolvedMethod, implementationClass);
             val methodReturn = adopted.getMethod().getReturnType();
 
             return CollectionSemantics.valueOf(methodReturn)
@@ -296,7 +289,7 @@ public class _GenericResolver {
         return CollectionSemantics.valueOf(paramTypeGuess)
         .map(__->{
             // adopt into default class loader context
-            val adopted = resolvedMethod.resolverContext(implementationClass);
+            val adopted = resolverHelper.MethodAndImplementingClass.resolverContext(resolvedMethod, implementationClass);
             val paramType = adopted.getMethod().getParameters()[paramIndex].getType();
 
             return CollectionSemantics.valueOf(paramType)
@@ -469,6 +462,104 @@ public class _GenericResolver {
                         + "%s",
                         m, a.method(), b.method()));
     }
+
+
+    /**
+     * [CAUSEWAY-3164] ensures reflection on generic type arguments works in a concurrent introspection setting
+     */
+    @UtilityClass
+    static class resolverHelper {
+
+        @lombok.Value(staticConstructor = "of")
+        class MethodAndImplementingClass {
+
+            static MethodAndImplementingClass resolverContext(
+                    final ResolvedMethod resolvedMedhod, final Class<?> implementationClass) {
+                // adopt into default class loader context
+                val origin = of(resolvedMedhod.method(), implementationClass);
+                val adopted = origin
+                        .adoptIntoDefaultClassLoader()
+                        .getValue()
+                        .orElse(origin);
+                return adopted;
+            }
+
+            final @NonNull Method method;
+            final @NonNull Class<?> implementingClass;
+
+            // -- HELPER
+
+            private Try<MethodAndImplementingClass> adopt(final @NonNull ClassLoader classLoader) {
+                try {
+                    val ownerReloaded = Class.forName(implementingClass.getName(), true, classLoader);
+                    val methodReloaded = ownerReloaded.getMethod(method.getName(), method.getParameterTypes());
+                    return Try.success(MethodAndImplementingClass.of(methodReloaded, ownerReloaded));
+                } catch (Throwable e) {
+                    return Try.failure(e);
+                }
+            }
+            private Try<MethodAndImplementingClass> adoptIntoDefaultClassLoader() {
+                return adopt(_Context.getDefaultClassLoader());
+            }
+            private Class<?> resolveFirstGenericTypeArgumentOnMethodReturn() {
+                return genericTypeArg(ResolvableType.forMethodReturnType(method, implementingClass))
+                        .toClass();
+            }
+            private Class<?> resolveFirstGenericTypeArgumentOnParameter(final int paramIndex) {
+                return genericTypeArg(ResolvableType.forMethodParameter(method, paramIndex, implementingClass))
+                        .toClass();
+            }
+            private static ResolvableType genericTypeArg(final ResolvableType nonScalar){
+                val genericTypeArg = nonScalar.isArray()
+                        ? nonScalar.getComponentType()
+                        : nonScalar.getGeneric(0);
+                return genericTypeArg;
+            }
+        }
+
+        @lombok.Value(staticConstructor = "of")
+        class ConstructorAndImplementingClass {
+
+            static ConstructorAndImplementingClass resolverContext(
+                    final ResolvedConstructor resolvedConstructor, final Class<?> implementationClass) {
+                // adopt into default class loader context
+                val origin = ConstructorAndImplementingClass.of(resolvedConstructor.constructor(), implementationClass);
+                val adopted = origin
+                        .adoptIntoDefaultClassLoader()
+                        .getValue()
+                        .orElse(origin);
+                return adopted;
+            }
+
+            final @NonNull Constructor<?> constructor;
+            final @NonNull Class<?> implementingClass;
+            // -- HELPER
+            private Try<ConstructorAndImplementingClass> adopt(final @NonNull ClassLoader classLoader) {
+                try {
+                    val ownerReloaded = Class.forName(implementingClass.getName(), true, classLoader);
+                    val methodReloaded = ownerReloaded.getConstructor(constructor.getParameterTypes());
+                    return Try.success(ConstructorAndImplementingClass.of(methodReloaded, ownerReloaded));
+                } catch (Throwable e) {
+                    return Try.failure(e);
+                }
+            }
+            private Try<ConstructorAndImplementingClass> adoptIntoDefaultClassLoader() {
+                return adopt(_Context.getDefaultClassLoader());
+            }
+            private Class<?> resolveFirstGenericTypeArgumentOnParameter(final int paramIndex) {
+                return genericTypeArg(ResolvableType.forConstructorParameter(constructor, paramIndex, implementingClass))
+                        .toClass();
+            }
+            private static ResolvableType genericTypeArg(final ResolvableType nonScalar){
+                val genericTypeArg = nonScalar.isArray()
+                        ? nonScalar.getComponentType()
+                        : nonScalar.getGeneric(0);
+                return genericTypeArg;
+            }
+        }
+    }
+
+
 
     /**
      * JUnit
