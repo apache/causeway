@@ -22,7 +22,7 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.commons.collectionsemantics.CollectionSemantics;
-import org.apache.causeway.commons.internal.reflection._GenericResolver.TypeOfAnyCardinality;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -41,13 +41,13 @@ implements TypeOfFacet {
     }
 
     protected TypeOfFacetAbstract(
-            final TypeOfAnyCardinality value,
+            final ResolvedType value,
             final FacetHolder holder) {
         this(value, holder, Precedence.DEFAULT);
     }
 
     protected TypeOfFacetAbstract(
-            final TypeOfAnyCardinality type,
+            final ResolvedType type,
             final FacetHolder holder,
             final Precedence precedence) {
         super(type(), holder, precedence);
@@ -55,7 +55,7 @@ implements TypeOfFacet {
     }
 
     @Getter(onMethod_={@Override}) @Accessors(fluent = true)
-    private final @NonNull TypeOfAnyCardinality value;
+    private final @NonNull ResolvedType value;
 
     @Override
     public final ObjectSpecification elementSpec() {

@@ -34,7 +34,7 @@ import static org.mockito.Mockito.when;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.commons.collectionsemantics.CollectionSemantics;
 import org.apache.causeway.commons.functional.Either;
-import org.apache.causeway.commons.internal.reflection._GenericResolver.TypeOfAnyCardinality;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
 import org.apache.causeway.core.metamodel.MetaModelTestAbstract;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.all.i8n.staatic.HasStaticText;
@@ -54,7 +54,7 @@ extends MetaModelTestAbstract {
     }
 
     private static final Class<?> COLLECTION_TYPE = Order.class;
-    private static final TypeOfAnyCardinality TOAC = TypeOfAnyCardinality.plural(
+    private static final ResolvedType TOAC = ResolvedType.plural(
             COLLECTION_TYPE, List.class, CollectionSemantics.LIST);
 
     private OneToManyAssociation association;

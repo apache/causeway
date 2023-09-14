@@ -26,7 +26,7 @@ import org.springframework.core.ResolvableType;
 import org.apache.causeway.commons.collectionsemantics.CollectionSemantics;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
-import org.apache.causeway.commons.internal.reflection._GenericResolver.TypeOfAnyCardinality;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.commons.internal.reflection._Reflect.ConstructorAndImplementingClass;
 import org.apache.causeway.commons.internal.reflection._Reflect.MethodAndImplementingClass;
@@ -38,12 +38,12 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class TypeOfAnyCardinalityFactory {
 
-    public TypeOfAnyCardinality forMethodFacadeReturn(
+    public ResolvedType forMethodFacadeReturn(
             final Class<?> _implementationClass, final MethodFacade methodFacade) {
         return forMethodReturn(_implementationClass, methodFacade.asMethodForIntrospection());
     }
 
-    public TypeOfAnyCardinality forMethodReturn(
+    public ResolvedType forMethodReturn(
             final Class<?> _implementationClass, final ResolvedMethod _method) {
         val methodReturnGuess = _method.returnType();
         return CollectionSemantics.valueOf(methodReturnGuess)
@@ -61,17 +61,17 @@ public class TypeOfAnyCardinalityFactory {
 
             return CollectionSemantics.valueOf(methodReturn)
             .map(collectionSemantics->
-                TypeOfAnyCardinality.plural(
+                ResolvedType.plural(
                         adopted.resolveFirstGenericTypeArgumentOnMethodReturn(),
                         methodReturn,
                         collectionSemantics)
             )
-            .orElseGet(()->TypeOfAnyCardinality.singular(methodReturn));
+            .orElseGet(()->ResolvedType.singular(methodReturn));
         })
-        .orElseGet(()->TypeOfAnyCardinality.singular(methodReturnGuess));
+        .orElseGet(()->ResolvedType.singular(methodReturnGuess));
     }
 
-    public TypeOfAnyCardinality forMethodFacadeParameter(
+    public ResolvedType forMethodFacadeParameter(
             final Class<?> _implementationClass, final MethodFacade methodFacade, final int paramIndex) {
         val executable = methodFacade.asExecutable();
         if(executable instanceof Method) {
@@ -82,7 +82,7 @@ public class TypeOfAnyCardinalityFactory {
         throw _Exceptions.unexpectedCodeReach();
     }
 
-    public TypeOfAnyCardinality forConstructorParameter(
+    public ResolvedType forConstructorParameter(
             final Class<?> _implementationClass, final Constructor<?> _constructor, final int paramIndex) {
         val paramTypeGuess = _constructor.getParameters()[paramIndex].getType();
         return CollectionSemantics.valueOf(paramTypeGuess)
@@ -100,17 +100,17 @@ public class TypeOfAnyCardinalityFactory {
 
             return CollectionSemantics.valueOf(paramType)
             .map(collectionSemantics->
-                TypeOfAnyCardinality.plural(
+                ResolvedType.plural(
                         adopted.resolveFirstGenericTypeArgumentOnParameter(paramIndex),
                         paramType,
                         collectionSemantics)
             )
-            .orElseGet(()->TypeOfAnyCardinality.singular(paramType));
+            .orElseGet(()->ResolvedType.singular(paramType));
         })
-        .orElseGet(()->TypeOfAnyCardinality.singular(paramTypeGuess));
+        .orElseGet(()->ResolvedType.singular(paramTypeGuess));
     }
 
-    public TypeOfAnyCardinality forMethodParameter(
+    public ResolvedType forMethodParameter(
             final Class<?> _implementationClass, final Method _method, final int paramIndex) {
         val paramTypeGuess = _method.getParameters()[paramIndex].getType();
         return CollectionSemantics.valueOf(paramTypeGuess)
@@ -128,20 +128,20 @@ public class TypeOfAnyCardinalityFactory {
 
             return CollectionSemantics.valueOf(paramType)
             .map(collectionSemantics->
-                TypeOfAnyCardinality.plural(
+                ResolvedType.plural(
                         adopted.resolveFirstGenericTypeArgumentOnParameter(paramIndex),
                         paramType,
                         collectionSemantics)
             )
-            .orElseGet(()->TypeOfAnyCardinality.singular(paramType));
+            .orElseGet(()->ResolvedType.singular(paramType));
         })
-        .orElseGet(()->TypeOfAnyCardinality.singular(paramTypeGuess));
+        .orElseGet(()->ResolvedType.singular(paramTypeGuess));
     }
 
-    public TypeOfAnyCardinality forPluralType(
+    public ResolvedType forPluralType(
             final @NonNull Class<?> pluralType,
             final @NonNull CollectionSemantics collectionSemantics) {
-        return TypeOfAnyCardinality.plural(
+        return ResolvedType.plural(
                 toClass(ResolvableType.forClass(pluralType)),
                 pluralType,
                 collectionSemantics);

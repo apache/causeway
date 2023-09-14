@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets;
 
-import org.apache.causeway.commons.internal.reflection._GenericResolver.TypeOfAnyCardinality;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.HasFacetHolder;
@@ -34,6 +34,6 @@ public interface TypedHolder extends HasFacetHolder {
 
     FeatureType getFeatureType();
 
-    TypeOfAnyCardinality getType();
+    ResolvedType getType();
 
 }

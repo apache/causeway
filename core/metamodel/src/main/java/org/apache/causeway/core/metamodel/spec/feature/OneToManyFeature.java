@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.spec.feature;
 
 import org.apache.causeway.commons.collectionsemantics.CollectionSemantics;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.reflection._GenericResolver.TypeOfAnyCardinality;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
 
 /**
  * Base interface for {@link OneToManyAssociation} only.
@@ -36,7 +36,7 @@ import org.apache.causeway.commons.internal.reflection._GenericResolver.TypeOfAn
  */
 public interface OneToManyFeature extends ObjectFeature {
 
-    TypeOfAnyCardinality getTypeOfAnyCardinality();
+    ResolvedType getTypeOfAnyCardinality();
 
     default CollectionSemantics getCollectionSemantics() {
         return getTypeOfAnyCardinality().collectionSemantics()

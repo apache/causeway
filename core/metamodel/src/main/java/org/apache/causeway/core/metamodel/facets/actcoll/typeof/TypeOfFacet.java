@@ -23,7 +23,7 @@ import java.util.function.BiFunction;
 
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.commons.collectionsemantics.CollectionSemantics;
-import org.apache.causeway.commons.internal.reflection._GenericResolver.TypeOfAnyCardinality;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -41,11 +41,11 @@ import lombok.val;
  */
 public interface TypeOfFacet extends Facet {
 
-    TypeOfAnyCardinality value();
+    ResolvedType value();
 
     /**
      * Convenience to return the {@link ObjectSpecification} corresponding to
-     * this facet's {@link #value() type's} {@link TypeOfAnyCardinality#elementType()}.
+     * this facet's {@link #value() type's} {@link ResolvedType#elementType()}.
      */
     ObjectSpecification elementSpec();
 
@@ -79,8 +79,8 @@ public interface TypeOfFacet extends Facet {
     // -- INTERNAL
 
     private static Optional<TypeOfFacet> toInferredFrom(
-            final BiFunction<TypeOfAnyCardinality, FacetHolder, TypeOfFacet> factory,
-            final TypeOfAnyCardinality type,
+            final BiFunction<ResolvedType, FacetHolder, TypeOfFacet> factory,
+            final ResolvedType type,
             final FacetHolder holder) {
         return type.isSingular()
             ? Optional.empty()
@@ -88,13 +88,13 @@ public interface TypeOfFacet extends Facet {
     }
 
     private static TypeOfFacet inferredFromFeature(
-            final TypeOfAnyCardinality type,
+            final ResolvedType type,
             final FacetHolder holder) {
         return new TypeOfFacetFromFeature(type, holder);
     }
 
     private static TypeOfFacet inferredFromType(
-            final TypeOfAnyCardinality type,
+            final ResolvedType type,
             final FacetHolder holder) {
         return new TypeOfFacetFromType(type, holder);
     }

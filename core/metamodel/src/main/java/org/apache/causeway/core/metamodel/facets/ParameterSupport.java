@@ -28,7 +28,7 @@ import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
-import org.apache.causeway.commons.internal.reflection._GenericResolver.TypeOfAnyCardinality;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ReturnTypePattern;
 import org.apache.causeway.core.metamodel.methods.MethodFinder;
 import org.apache.causeway.core.metamodel.methods.MethodFinderPAT;
@@ -76,7 +76,7 @@ public final class ParameterSupport {
         Class<?> paramType;
         ResolvedMethod supportingMethod;
         Optional<ResolvedConstructor> patConstructor;
-        TypeOfAnyCardinality paramSupportReturnType;
+        ResolvedType paramSupportReturnType;
     }
 
     @FunctionalInterface

@@ -29,7 +29,7 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.reflection._GenericResolver;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
-import org.apache.causeway.commons.internal.reflection._GenericResolver.TypeOfAnyCardinality;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
 import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -197,7 +197,7 @@ extends TypedHolderAbstract {
             final FeatureType featureType,
             final Class<?> declaringType,
             final MethodFacade method,
-            final TypeOfAnyCardinality type,
+            final ResolvedType type,
             final Can<FacetedMethodParameter> parameters) {
 
         super(mmc,

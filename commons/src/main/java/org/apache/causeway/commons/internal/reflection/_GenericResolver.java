@@ -63,7 +63,7 @@ public class _GenericResolver {
 
     // -- MODELS
 
-    public static interface TypeOfAnyCardinality {
+    public static interface ResolvedType {
         /**
          * The type either contained or not.
          */
@@ -95,16 +95,16 @@ public class _GenericResolver {
 
         // -- WITHERS
 
-        default TypeOfAnyCardinality withElementType(final @NonNull Class<?> elementType) {
+        default ResolvedType withElementType(final @NonNull Class<?> elementType) {
             return new SimpleTypeOfAnyCardinality(assertSingular(elementType), this.containerType(), this.collectionSemantics());
         }
 
         // -- INTERNAL FACTORIES
 
-        public static TypeOfAnyCardinality singular(final @NonNull Class<?> singularType) {
+        public static ResolvedType singular(final @NonNull Class<?> singularType) {
             return new SimpleTypeOfAnyCardinality(assertSingular(singularType), Optional.empty(), Optional.empty());
         }
-        public static TypeOfAnyCardinality plural(
+        public static ResolvedType plural(
                 final @NonNull Class<?> elementType,
                 final @NonNull Class<?> pluralType,
                 final @NonNull CollectionSemantics collectionSemantics) {
@@ -207,7 +207,7 @@ public class _GenericResolver {
     // -- IMPLEMENTATIONS
 
     @lombok.Value @Accessors(fluent=true)
-    private static class SimpleTypeOfAnyCardinality implements TypeOfAnyCardinality {
+    private static class SimpleTypeOfAnyCardinality implements ResolvedType {
         @Getter(onMethod_={@Override})
         private final @NonNull Class<?> elementType;
         @Getter(onMethod_={@Override})

@@ -24,7 +24,7 @@ import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.reflection._GenericResolver.TypeOfAnyCardinality;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
 import org.apache.causeway.core.metamodel.commons.ToString;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -65,8 +65,8 @@ implements OneToManyAssociation {
     // -- UNDERLYING TYPE
 
     @Getter(onMethod_={@Override}, lazy = true)
-    private final TypeOfAnyCardinality typeOfAnyCardinality = resolveTypeOfAnyCardinality();
-    private TypeOfAnyCardinality resolveTypeOfAnyCardinality() {
+    private final ResolvedType typeOfAnyCardinality = resolveTypeOfAnyCardinality();
+    private ResolvedType resolveTypeOfAnyCardinality() {
         return Facets.typeOfAnyCardinality(getFacetHolder())
                 .orElseThrow(()->_Exceptions.unrecoverable(
                         "framework bug: non-scalar feature must have a TypeOfFacet"));

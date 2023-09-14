@@ -25,7 +25,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collectionsemantics.CollectionSemantics;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
-import org.apache.causeway.commons.internal.reflection._GenericResolver.TypeOfAnyCardinality;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -46,13 +46,13 @@ extends ActionParameterAutoCompleteFacetAbstract
 implements ImperativeFacet {
 
     @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
-    private final TypeOfAnyCardinality paramSupportReturnType;
+    private final ResolvedType paramSupportReturnType;
     private final int minLength;
     private final Optional<ResolvedConstructor> patConstructor;
 
     public ActionParameterAutoCompleteFacetViaMethod(
             final ResolvedMethod method,
-            final TypeOfAnyCardinality paramSupportReturnType,
+            final ResolvedType paramSupportReturnType,
             final Optional<ResolvedConstructor> patConstructor,
             final FacetHolder holder) {
 

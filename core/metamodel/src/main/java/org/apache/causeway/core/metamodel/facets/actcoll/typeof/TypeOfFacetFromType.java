@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.facets.actcoll.typeof;
 
-import org.apache.causeway.commons.internal.reflection._GenericResolver.TypeOfAnyCardinality;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
 public class TypeOfFacetFromType
 extends TypeOfFacetAbstract {
 
-    TypeOfFacetFromType(final TypeOfAnyCardinality type, final FacetHolder holder) {
+    TypeOfFacetFromType(final ResolvedType type, final FacetHolder holder) {
         // generic type argument resolution on plain type are low priority
         super(type, holder, Precedence.LOW);
     }

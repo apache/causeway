@@ -19,7 +19,7 @@
 package org.apache.causeway.core.metamodel.facets;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.commons.internal.reflection._GenericResolver.TypeOfAnyCardinality;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -33,12 +33,12 @@ implements TypedHolder {
 
     @Getter(onMethod_ = {@Override}) private FacetHolder facetHolder;
     @Getter(onMethod_ = {@Override}) private final FeatureType featureType;
-    @Getter(onMethod_ = {@Override}) protected TypeOfAnyCardinality type;
+    @Getter(onMethod_ = {@Override}) protected ResolvedType type;
 
     protected TypedHolderAbstract(
             final MetaModelContext mmc,
             final FeatureType featureType,
-            final @NonNull TypeOfAnyCardinality type,
+            final @NonNull ResolvedType type,
             final Identifier featureIdentifier) {
         this.facetHolder = FacetHolder.simple(mmc, featureIdentifier);
         this.featureType = featureType;

@@ -41,7 +41,7 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.factory._InstanceUtil;
-import org.apache.causeway.commons.internal.reflection._GenericResolver.TypeOfAnyCardinality;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
 import org.apache.causeway.core.config.metamodel.facets.ParameterConfigOptions;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
@@ -336,7 +336,7 @@ public final class Facets {
         .map(TypeOfFacet::elementSpec);
     }
 
-    public Optional<TypeOfAnyCardinality> typeOfAnyCardinality(final FacetHolder facetHolder) {
+    public Optional<ResolvedType> typeOfAnyCardinality(final FacetHolder facetHolder) {
         return facetHolder.lookupFacet(TypeOfFacet.class)
         .map(TypeOfFacet::value);
     }
