@@ -171,13 +171,51 @@ public class _GenericResolver {
         Class<?> resolveFirstGenericTypeArgumentOnParameter(int paramIndex);
         Class<?> resolveFirstGenericTypeArgumentOnMethodReturn();
         /**
-         * In compliance with the sameness relation {@link _Reflect#methodsSame(Method, Method)}
-         * provides a comparator (with an arbitrarily chosen ordering relation).
+         * Is NOT compliant with the weak-sameness relation
+         * {@link ResolvedMethod#methodsWeaklySame(ResolvedMethod, ResolvedMethod)}.
+         * Provides a comparator (with an arbitrarily chosen ordering relation) sensitive to any method differences.
          * @apiNote don't depend on the chosen ordering
-         * @see _Reflect#methodsSame(Method, Method)
          */
-        public static int methodWeakCompare(final ResolvedMethod a, final ResolvedMethod b) {
-            return _Reflect.methodWeakCompare(a.method(), b.method());
+        public static int methodCompare(final ResolvedMethod a, final ResolvedMethod b) {
+            if(a.method().equals(b.method())
+                    && a.implementationClass().equals(b.implementationClass()) ) {
+                return 0; // exact match
+            }
+            int c = a.name().compareTo(b.name());
+            if(c!=0) {
+                return c;
+            }
+            c = Integer.compare(a.paramCount(), b.paramCount());
+            if(c!=0) {
+                return c;
+            }
+            val paramsA = a.paramTypes();
+            val paramsB = b.paramTypes();
+            for(int i=0; i<a.paramCount(); ++i) {
+                c = _Reflect.typesCompare(paramsA[i], paramsB[i]);
+                if(c!=0) {
+                    return c;
+                }
+            }
+            c = _Reflect.typesCompare(a.returnType(), b.returnType());
+            if(c!=0) {
+                return _Reflect.shareSameTypeHierarchy(a.returnType(), b.returnType())
+                        ? 0 // same
+                        : c;
+            }
+            return 0; // equal
+        }
+        /**
+         * Two {@link Method}s, while one overrides the other, might have different method-keys.
+         * We want the cache to only keep the most specific of those methods.
+         */
+        public static boolean methodsWeaklySame(final ResolvedMethod a, final ResolvedMethod b) {
+            if(a.method().equals(b.method())
+                    && a.implementationClass().equals(b.implementationClass()) ) {
+                return true; // exact match
+            }
+            return a.name().equals(b.name())
+                && _Reflect.methodSignatureWeaklyMatch(a.paramTypes(), b.paramTypes());
         }
     }
 

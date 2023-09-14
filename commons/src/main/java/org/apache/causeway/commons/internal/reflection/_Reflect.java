@@ -616,7 +616,36 @@ public final class _Reflect {
         return Can.ofArray(cls.getConstructors());
     }
 
-    // -- FILTER
+    // -- PREDICATES
+
+    public boolean methodSignatureMatch(final Class<?>[] parameterTypes, final Class<?>[] matchingParamTypes) {
+        final int aSize = _NullSafe.size(parameterTypes);
+        final int bSize = _NullSafe.size(matchingParamTypes);
+        if(aSize == 0 && bSize == 0) return true;
+        if(aSize != bSize) return false;
+        for (int c = 0; c < aSize; c++) {
+            if(!Objects.equals(parameterTypes[c], matchingParamTypes[c])) return false;
+        }
+        return true;
+    }
+    public boolean methodSignatureAssignableTo(final Class<?>[] parameterTypes, final Class<?>[] requiredParamTypes) {
+        final int aSize = _NullSafe.size(parameterTypes);
+        final int bSize = _NullSafe.size(requiredParamTypes);
+        if(aSize == 0 && bSize == 0) return true;
+        if(aSize != bSize) return false;
+        for (int c = 0; c < aSize; c++) {
+            if(!requiredParamTypes[c].isAssignableFrom(parameterTypes[c])) return false;
+        }
+        return true;
+    }
+    public boolean methodSignatureWeaklyMatch(final Class<?>[] parameterTypes, final Class<?>[] otherParamTypes) {
+        final int aSize = _NullSafe.size(parameterTypes);
+        final int bSize = _NullSafe.size(otherParamTypes);
+        if(aSize == 0 && bSize == 0) return true;
+        if(aSize != bSize) return false;
+        return _Arrays.testAllMatch(parameterTypes, otherParamTypes, (p1, p2)->p1.isAssignableFrom(p2))
+                || _Arrays.testAllMatch(parameterTypes, otherParamTypes, (p1, p2)->p2.isAssignableFrom(p1));
+    }
 
     @UtilityClass
     public class predicates {
@@ -633,30 +662,15 @@ public final class _Reflect {
             return ex->ex.getParameterTypes()[paramIndex].isAssignableFrom(paramType);
         }
 
-        public Predicate<Class<?>[]> methodSignatureMatch(final Class<?>[] matchingParamTypes) {
-            return parameterTypes->{
-                final int aSize = _NullSafe.size(parameterTypes);
-                final int bSize = _NullSafe.size(matchingParamTypes);
-                if(aSize == 0 && bSize == 0) return true;
-                if(aSize != bSize) return false;
-                for (int c = 0; c < aSize; c++) {
-                    if(!Objects.equals(parameterTypes[c], matchingParamTypes[c])) return false;
-                }
-                return true;
-            };
-        }
-        public Predicate<Class<?>[]> methodSignatureAssignableTo(final Class<?>[] requiredParamTypes) {
-            return parameterTypes->{
-                final int aSize = _NullSafe.size(parameterTypes);
-                final int bSize = _NullSafe.size(requiredParamTypes);
-                if(aSize == 0 && bSize == 0) return true;
-                if(aSize != bSize) return false;
-                for (int c = 0; c < aSize; c++) {
-                    if(!requiredParamTypes[c].isAssignableFrom(parameterTypes[c])) return false;
-                }
-                return true;
-            };
-        }
+//        public Predicate<Class<?>[]> methodSignatureMatch(final Class<?>[] matchingParamTypes) {
+//            return parameterTypes->_Reflect.methodSignatureMatch(parameterTypes, matchingParamTypes);
+//        }
+//        public Predicate<Class<?>[]> methodSignatureAssignableTo(final Class<?>[] requiredParamTypes) {
+//            return parameterTypes->_Reflect.methodSignatureAssignableTo(parameterTypes, requiredParamTypes);
+//        }
+//        public Predicate<Class<?>[]> methodSignatureWeaklyMatch(final Class<?>[] otherParamTypes) {
+//            return parameterTypes->_Reflect.methodSignatureWeaklyMatch(parameterTypes, otherParamTypes);
+//        }
 
         public Predicate<Executable> paramAssignableFromValue(final int paramIndex, final @Nullable Object value) {
             if(value==null) {

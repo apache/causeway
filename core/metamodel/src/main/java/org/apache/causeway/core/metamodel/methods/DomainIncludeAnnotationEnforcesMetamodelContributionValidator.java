@@ -72,9 +72,8 @@ extends MetaModelValidatorAbstract {
         final Class<?> type = spec.getCorrespondingClass();
 
         // methods picked up by the framework
-        // assuming 'weak' equality, treating overwritten and overriding methods as same
-        val memberMethods = new TreeSet<ResolvedMethod>(ResolvedMethod::methodWeakCompare);
-        val supportMethods = new TreeSet<ResolvedMethod>(ResolvedMethod::methodWeakCompare);
+        val memberMethods = new TreeSet<ResolvedMethod>(ResolvedMethod::methodCompare);
+        val supportMethods = new TreeSet<ResolvedMethod>(ResolvedMethod::methodCompare);
 
         spec
         .streamAnyActions(MixedIn.EXCLUDED)

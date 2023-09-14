@@ -171,6 +171,7 @@ public final class _ClassCache implements AutoCloseable {
         return Stream.of("get", "is")
         .map(prefix->prefix + capitalizedFieldName)
         .map(methodName->lookupResolvedMethod(type, methodName, _Constants.emptyClasses))
+        .filter(_NullSafe::isPresent)
         .filter(resolvedMethod->AccessorSemantics.isGetter(resolvedMethod))
         .findFirst();
     }
@@ -242,16 +243,9 @@ public final class _ClassCache implements AutoCloseable {
         private final Class<?> implementingClass;
         /** Method's name */
         private final String name;
-        /**
-         * Discriminator on parameter count (rather than on parameter types).
-         * @apiNote Two {@link Method}s might fail the {@link Object#equals(Object)} check
-         *      even though one overrides the other. However, we want this {@link MethodKey}
-         *      to pass the {@link MethodKey#equals(Object)} check given such two methods.
-         */
-        private final int paramCount;
-
+        private final @Nullable Class<?>[] paramTypes;
         public static MethodKey of(final Class<?> type, final Method method) {
-            return MethodKey.of(type, method.getName(), method.getParameterCount());
+            return MethodKey.of(type, method.getName(), _Arrays.emptyToNull(method.getParameterTypes()));
         }
     }
 
@@ -373,6 +367,22 @@ public final class _ClassCache implements AutoCloseable {
              * we need to keep the most specific one */
             : methodWithSameKey.mostSpecific(method);
         map.put(key, methodToKeep);
+
+        val weaklySame = map.values().stream()
+            .filter(m->ResolvedMethod.methodsWeaklySame(methodToKeep, m))
+            .collect(Can.toCan());
+
+        if(weaklySame.isCardinalityMultiple()) {
+
+            map.values().removeIf(weaklySame::contains);
+
+            val winner = weaklySame.reduce(ResolvedMethod::mostSpecific)
+                    .getSingletonOrFail();
+            val winnerKey = MethodKey.of(winner.implementationClass(), winner.method());
+            map.put(winnerKey, winner);
+            return winner;
+        }
+
         return methodToKeep;
     }
 
@@ -413,21 +423,23 @@ public final class _ClassCache implements AutoCloseable {
             final boolean includeDeclaredMethods,
             final Class<?> type,
             final String name,
-            final Class<?>[] paramTypes) {
+            final Class<?>[] requiredParamTypes) {
+
+        //TODO[CAUSEWAY-3571] to do this properly, we need to lookup by name then find all (weak) matches
 
         val model = classModel(type);
-        val signatureMatcher = _Reflect.predicates.methodSignatureAssignableTo(paramTypes);
-        val key = MethodKey.of(type, name, _NullSafe.size(paramTypes));
+        //val signatureMatcher = _Reflect.predicates.methodSignatureAssignableTo(paramTypes);
+        val key = MethodKey.of(type, name, _Arrays.emptyToNull(requiredParamTypes));
 
         val publicMethod = model.publicMethodsByKey.get(key);
         if(publicMethod!=null
-                && signatureMatcher.test(publicMethod.paramTypes())) {
+                /*&& signatureMatcher.test(publicMethod.paramTypes())*/) {
             return publicMethod;
         }
         if(includeDeclaredMethods) {
             val resolvedMethod = model.resolvedMethodsByKey.get(key);
             return resolvedMethod!=null
-                    && signatureMatcher.test(resolvedMethod.paramTypes())
+                    //&& signatureMatcher.test(resolvedMethod.paramTypes())
                     ? resolvedMethod
                     : null;
         }
