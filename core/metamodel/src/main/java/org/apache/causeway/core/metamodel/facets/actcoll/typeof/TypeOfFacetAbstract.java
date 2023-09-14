@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.facets.actcoll.typeof;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
+import org.apache.causeway.commons.collectionsemantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -59,21 +59,21 @@ implements TypeOfFacet {
 
     @Override
     public final ObjectSpecification elementSpec() {
-        return getSpecificationLoader().specForTypeElseFail(value().getElementType());
+        return getSpecificationLoader().specForTypeElseFail(value().elementType());
     }
 
     @Override
     public final Optional<CollectionSemantics> getCollectionSemantics() {
-        return value().getCollectionSemantics();
+        return value().collectionSemantics();
     }
 
     @Override
     public final void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("element-type", value().getElementType());
+        visitor.accept("element-type", value().elementType());
         getCollectionSemantics()
             .ifPresent(sem->visitor.accept("collection-semantics", sem.name()));
-        value().getContainerType()
+        value().containerType()
             .ifPresent(containerType->visitor.accept("container-type", containerType.getName()));
     }
 

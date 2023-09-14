@@ -51,7 +51,7 @@ implements TypedHolder {
     }
 
     public ObjectSpecification getElementSpecification() {
-        return getSpecificationLoader().specForTypeElseFail(type.getElementType());
+        return getSpecificationLoader().specForTypeElseFail(type.elementType());
     }
 
 }

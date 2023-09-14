@@ -33,8 +33,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.commons.collectionsemantics.CollectionSemantics;
 import org.apache.causeway.commons.functional.Either;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
 import org.apache.causeway.core.metamodel.MetaModelTestAbstract;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.all.i8n.staatic.HasStaticText;

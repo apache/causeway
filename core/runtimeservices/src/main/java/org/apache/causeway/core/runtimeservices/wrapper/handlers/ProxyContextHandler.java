@@ -22,8 +22,8 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
+import org.apache.causeway.commons.collectionsemantics.CollectionSemantics;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.runtimeservices.wrapper.proxy.ProxyCreator;
@@ -83,7 +83,7 @@ public class ProxyContextHandler {
         collectionInvocationHandler.setResolveObjectChangedEnabled(
                 handler.isResolveObjectChangedEnabled());
 
-        val proxyBase = ProgrammingModelConstants.CollectionSemantics
+        val proxyBase = CollectionSemantics
                 .valueOfElseFail(collectionToBeProxied.getClass())
                 .getContainerType();
 

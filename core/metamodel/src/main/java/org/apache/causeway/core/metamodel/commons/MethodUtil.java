@@ -23,6 +23,7 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.collectionsemantics.CollectionSemantics;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 
@@ -62,7 +63,7 @@ public class MethodUtil {
 
     public static boolean isScalar(final ResolvedMethod method) {
         return isNotVoid(method)
-                    && ProgrammingModelConstants.CollectionSemantics.valueOf(method.returnType())
+                    && CollectionSemantics.valueOf(method.returnType())
                         .isEmpty();
     }
 
@@ -197,7 +198,7 @@ public class MethodUtil {
         public static Predicate<ResolvedMethod> supportedNonScalarMethodReturnType() {
             return method->
                 ProgrammingModelConstants.AccessorPrefix.isNonBooleanGetter(method, Iterable.class)
-                && ProgrammingModelConstants.CollectionSemantics.valueOf(method.returnType())
+                && CollectionSemantics.valueOf(method.returnType())
                     .isPresent();
         }
 

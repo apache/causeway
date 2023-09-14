@@ -28,8 +28,8 @@ import org.springframework.core.ResolvableType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import org.apache.causeway.commons.collectionsemantics.CollectionSemantics;
 import org.apache.causeway.commons.internal.reflection._GenericResolver;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 
 import lombok.SneakyThrows;
 import lombok.val;
@@ -56,8 +56,8 @@ class TypeOfAnyCardinalityTest {
         val array = new String[]{};
 
         assertEquals(
-                ProgrammingModelConstants.CollectionSemantics.ARRAY,
-                ProgrammingModelConstants.CollectionSemantics.valueOf(array.getClass())
+                CollectionSemantics.ARRAY,
+                CollectionSemantics.valueOf(array.getClass())
                     .orElse(null));
 
         val arC = new CharSequence[] {};
@@ -163,13 +163,13 @@ class TypeOfAnyCardinalityTest {
         val typeB = TypeOfAnyCardinality.forMethodReturn(b, methodInB);
         val typeC = TypeOfAnyCardinality.forMethodReturn(c, methodInC);
 
-        assertEquals(genericA, typeA.getElementType());
-        assertEquals(genericB, typeB.getElementType());
-        assertEquals(genericC, typeC.getElementType());
+        assertEquals(genericA, typeA.elementType());
+        assertEquals(genericB, typeB.elementType());
+        assertEquals(genericC, typeC.elementType());
 
-        assertEquals(contA, typeA.getContainerType().orElse(null));
-        assertEquals(contB, typeB.getContainerType().orElse(null));
-        assertEquals(contC, typeC.getContainerType().orElse(null));
+        assertEquals(contA, typeA.containerType().orElse(null));
+        assertEquals(contB, typeB.containerType().orElse(null));
+        assertEquals(contC, typeC.containerType().orElse(null));
 
     }
 

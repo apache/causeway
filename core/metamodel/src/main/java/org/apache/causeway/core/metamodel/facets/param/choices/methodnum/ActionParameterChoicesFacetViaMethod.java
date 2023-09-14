@@ -22,10 +22,10 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.collectionsemantics.CollectionSemantics;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
@@ -90,7 +90,7 @@ implements ImperativeFacet {
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         ImperativeFacet.visitAttributes(this, visitor);
-        visitor.accept("choicesType", paramSupportReturnType.getCollectionSemantics()
+        visitor.accept("choicesType", paramSupportReturnType.collectionSemantics()
                 .map(CollectionSemantics::name)
                 .orElse("NONE"));
     }

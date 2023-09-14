@@ -26,6 +26,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -35,6 +37,7 @@ import org.springframework.core.MethodParameter;
 import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.collectionsemantics.CollectionSemantics;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -58,6 +61,24 @@ import lombok.experimental.UtilityClass;
 public class _GenericResolver {
 
     // -- MODELS
+
+    public static interface TypeOfAnyCardinality {
+        /**
+         * The type either contained or not.
+         */
+        @NonNull Class<?> elementType();
+
+        /**
+         * Optionally the container type, the {@link #elementType()} is contained in,
+         * such as {@link List}, {@link Collection}, etc.
+         */
+        @NonNull Optional<Class<?>> containerType();
+        @NonNull Optional<CollectionSemantics> collectionSemantics();
+
+        default boolean isSingular() { return containerType().isEmpty(); }
+        default boolean isArray() { return containerType().map(Class::isArray).orElse(false); }
+
+    }
 
     public static interface ResolvedMethod {
         Method method();

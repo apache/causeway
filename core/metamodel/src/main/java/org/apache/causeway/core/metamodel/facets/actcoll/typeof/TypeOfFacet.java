@@ -22,8 +22,8 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 
 import org.apache.causeway.applib.annotation.Collection;
+import org.apache.causeway.commons.collectionsemantics.CollectionSemantics;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -44,7 +44,7 @@ public interface TypeOfFacet extends Facet {
 
     /**
      * Convenience to return the {@link ObjectSpecification} corresponding to
-     * this facet's {@link #value() type's} {@link TypeOfAnyCardinality#getElementType()}.
+     * this facet's {@link #value() type's} {@link TypeOfAnyCardinality#elementType()}.
      */
     ObjectSpecification elementSpec();
 

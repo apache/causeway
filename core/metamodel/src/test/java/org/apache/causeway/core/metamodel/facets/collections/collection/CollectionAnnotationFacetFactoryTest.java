@@ -38,7 +38,7 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.events.domain.CollectionDomainEvent;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
+import org.apache.causeway.commons.collectionsemantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.commons.matchers.CausewayMatchers;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -409,7 +409,7 @@ extends FacetFactoryTestAbstract {
                 final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
                 assertNotNull(facet);
                 assertTrue(facet instanceof TypeOfFacetForCollectionAnnotation);
-                assertThat(facet.value().getElementType(), CausewayMatchers.classEqualTo(Order.class));
+                assertThat(facet.value().elementType(), CausewayMatchers.classEqualTo(Order.class));
             });
         }
 
@@ -433,8 +433,8 @@ extends FacetFactoryTestAbstract {
                 final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
                 assertNotNull(facet);
                 assertTrue(facet instanceof TypeOfFacet);
-                assertThat(facet.value().getElementType(), CausewayMatchers.classEqualTo(Order.class));
-                assertThat(facet.value().getCollectionSemantics(), Matchers.is(Optional.of(CollectionSemantics.ARRAY)));
+                assertThat(facet.value().elementType(), CausewayMatchers.classEqualTo(Order.class));
+                assertThat(facet.value().collectionSemantics(), Matchers.is(Optional.of(CollectionSemantics.ARRAY)));
             });
         }
 
@@ -458,7 +458,7 @@ extends FacetFactoryTestAbstract {
                 final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
                 assertNotNull(facet);
                 assertTrue(facet instanceof TypeOfFacetFromFeature);
-                assertThat(facet.value().getElementType(), CausewayMatchers.classEqualTo(Order.class));
+                assertThat(facet.value().elementType(), CausewayMatchers.classEqualTo(Order.class));
             });
         }
 

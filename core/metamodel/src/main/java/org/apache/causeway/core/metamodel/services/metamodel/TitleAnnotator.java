@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.services.metamodel;
 
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
+import org.apache.causeway.commons.collectionsemantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
@@ -109,10 +109,10 @@ public class TitleAnnotator implements MetaModelAnnotator {
 
     private String renderTypeOf(final OneToManyFeature nonScalarFeature, final ExporterConfig exporterConfig) {
         val toac = nonScalarFeature.getTypeOfAnyCardinality();
-        val containerType = toac.getCollectionSemantics()
+        val containerType = toac.collectionSemantics()
                 .map(CollectionSemantics::getContainerType)
                 .map(exporterConfig::simpleName).orElse("?");
-        val elementType = exporterConfig.abbrev(toac.getElementType());
+        val elementType = exporterConfig.abbrev(toac.elementType());
         return String.format("%s<%s>", containerType, elementType);
     }
 

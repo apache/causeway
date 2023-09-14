@@ -23,9 +23,9 @@ import java.util.function.UnaryOperator;
 import org.springframework.lang.Nullable;
 import org.springframework.util.ClassUtils;
 
+import org.apache.causeway.commons.collectionsemantics.CollectionSemantics;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.commons.ClassUtil;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
@@ -110,7 +110,7 @@ public class MmAssertionUtils {
             return;
         }
 
-        _Assert.assertTrue(ProgrammingModelConstants.CollectionSemantics.valueOf(pojo.getClass()).isEmpty(),
+        _Assert.assertTrue(CollectionSemantics.valueOf(pojo.getClass()).isEmpty(),
                 ()->String.format("is scalar %s", pojo.getClass()));
     }
 

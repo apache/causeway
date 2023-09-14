@@ -19,6 +19,7 @@
 module org.apache.causeway.commons {
     exports org.apache.causeway.commons.binding;
     exports org.apache.causeway.commons.collections;
+    exports org.apache.causeway.commons.collectionsemantics;
     exports org.apache.causeway.commons.concurrent;
     exports org.apache.causeway.commons.functional;
     exports org.apache.causeway.commons.handler;

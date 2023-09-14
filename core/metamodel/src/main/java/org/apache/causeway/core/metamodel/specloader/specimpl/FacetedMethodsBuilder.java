@@ -263,7 +263,7 @@ implements HasMetaModelContext {
 
             // figure out what the type is
             final Class<?> elementType = facetedMethod.lookupFacet(TypeOfFacet.class)
-                    .<Class<?>>map(typeOfFacet->typeOfFacet.value().getElementType())
+                    .<Class<?>>map(typeOfFacet->typeOfFacet.value().elementType())
                     .orElse(Object.class);
 
             // skip if class substitutor says so.

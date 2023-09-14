@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.facets.collections.collection.typeof;
 import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.Collection;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
+import org.apache.causeway.commons.collectionsemantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;

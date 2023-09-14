@@ -32,9 +32,9 @@ import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.collectionsemantics.CollectionSemantics;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.TypeExcludeMarker;
 
 import lombok.AccessLevel;
@@ -65,7 +65,7 @@ implements CausewayBeanTypeClassifier {
             return CausewayBeanMetaData.notManaged(BeanSort.VALUE, type);
         }
 
-        if(ProgrammingModelConstants.CollectionSemantics.valueOf(type).isPresent()) {
+        if(CollectionSemantics.valueOf(type).isPresent()) {
             return CausewayBeanMetaData.causewayManaged(BeanSort.COLLECTION, type);
         }
 

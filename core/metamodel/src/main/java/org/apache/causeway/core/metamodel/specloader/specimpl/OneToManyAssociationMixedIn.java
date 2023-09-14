@@ -99,7 +99,7 @@ implements MixedInMember {
         // which ensures that there is always a TypeOfFacet for any mixedIn associations
         // created from mixin actions.
         val type = actionTypeOfFacet != null
-                ? actionTypeOfFacet.value().getElementType()
+                ? actionTypeOfFacet.value().elementType()
                 : (Class<?>)Object.class;
 
         return objectAction.getSpecificationLoader().loadSpecification(type);

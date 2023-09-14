@@ -24,13 +24,13 @@ import java.util.List;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.collectionsemantics.CollectionSemantics;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.reflection._GenericResolver;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -91,7 +91,7 @@ extends TypedHolderAbstract {
             paramIndex++;
 
             final FeatureType featureType =
-                    ProgrammingModelConstants.CollectionSemantics.valueOf(parameterType).isPresent()
+                    CollectionSemantics.valueOf(parameterType).isPresent()
                     ? FeatureType.ACTION_PARAMETER_PLURAL
                     : FeatureType.ACTION_PARAMETER_SINGULAR;
 

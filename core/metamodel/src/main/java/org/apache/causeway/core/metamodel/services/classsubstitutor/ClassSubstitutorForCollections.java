@@ -23,7 +23,7 @@ import javax.inject.Named;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.causeway.commons.collectionsemantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
 import lombok.NonNull;
@@ -36,8 +36,8 @@ public class ClassSubstitutorForCollections implements ClassSubstitutor {
     @Override
     public Substitution getSubstitution(@NonNull final Class<?> cls) {
 
-        return ProgrammingModelConstants.CollectionSemantics.valueOf(cls)
-            .map(ProgrammingModelConstants.CollectionSemantics::getContainerType)
+        return CollectionSemantics.valueOf(cls)
+            .map(CollectionSemantics::getContainerType)
             .map(Substitution::replaceWith) // replace container type with first replacement type that matches
             .orElse( Substitution.passThrough()) // indifferent
         ;

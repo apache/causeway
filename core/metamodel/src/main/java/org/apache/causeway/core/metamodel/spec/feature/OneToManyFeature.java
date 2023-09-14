@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.spec.feature;
 
+import org.apache.causeway.commons.collectionsemantics.CollectionSemantics;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.spec.TypeOfAnyCardinality;
 
 /**
@@ -38,8 +38,8 @@ public interface OneToManyFeature extends ObjectFeature {
 
     TypeOfAnyCardinality getTypeOfAnyCardinality();
 
-    default ProgrammingModelConstants.CollectionSemantics getCollectionSemantics() {
-        return getTypeOfAnyCardinality().getCollectionSemantics()
+    default CollectionSemantics getCollectionSemantics() {
+        return getTypeOfAnyCardinality().collectionSemantics()
                 .orElseThrow(()->_Exceptions.unrecoverable(
                         "framework bug: non-scalar %s feature must have a TypeOfFacet",
                         this.getFeatureIdentifier()));

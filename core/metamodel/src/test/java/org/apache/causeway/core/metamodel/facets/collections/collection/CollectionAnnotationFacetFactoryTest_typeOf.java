@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
+import org.apache.causeway.commons.collectionsemantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
@@ -68,7 +68,7 @@ extends FacetFactoryTestAbstract {
             assertNotNull(facet);
             assertTrue(facet instanceof TypeOfFacetFromFeature);
             final TypeOfFacetFromFeature typeOfFacetInferredFromGenerics = (TypeOfFacetFromFeature) facet;
-            assertEquals(Order.class, typeOfFacetInferredFromGenerics.value().getElementType());
+            assertEquals(Order.class, typeOfFacetInferredFromGenerics.value().elementType());
         });
     }
 
@@ -88,7 +88,7 @@ extends FacetFactoryTestAbstract {
             assertNotNull(facet);
             assertTrue(facet instanceof TypeOfFacetFromFeature);
             final TypeOfFacetFromFeature typeOfFacetInferredFromGenerics = (TypeOfFacetFromFeature) facet;
-            assertEquals(Order.class, typeOfFacetInferredFromGenerics.value().getElementType());
+            assertEquals(Order.class, typeOfFacetInferredFromGenerics.value().elementType());
         });
     }
 
@@ -106,8 +106,8 @@ extends FacetFactoryTestAbstract {
             // then
             final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
             assertNotNull(facet);
-            assertEquals(Order.class, facet.value().getElementType());
-            assertThat(facet.value().getCollectionSemantics(), Matchers.is(Optional.of(CollectionSemantics.ARRAY)));
+            assertEquals(Order.class, facet.value().elementType());
+            assertThat(facet.value().collectionSemantics(), Matchers.is(Optional.of(CollectionSemantics.ARRAY)));
         });
     }
 
