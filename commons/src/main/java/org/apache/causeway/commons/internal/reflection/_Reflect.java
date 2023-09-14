@@ -621,16 +621,6 @@ public final class _Reflect {
     @UtilityClass
     public class Filter {
 
-        @Deprecated //TODO[CAUSEWAY-3571] don't bypass programming model constants
-        public boolean isGetter(final @Nullable Method method) {
-            return method!=null
-                    && method.getParameterCount()==0
-                    && method.getReturnType()!=void.class
-                    && (method.getName().startsWith("get")
-                        || (method.getName().startsWith("is")
-                                && method.getReturnType()==boolean.class));
-        }
-
         public Predicate<Executable> isPublic() {
             return ex->Modifier.isPublic(ex.getModifiers());
         }

@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.facets;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
-import org.apache.causeway.commons.collectionsemantics.CollectionSemantics;
+import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;

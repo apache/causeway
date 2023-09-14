@@ -20,8 +20,8 @@ package org.apache.causeway.core.runtimeservices.wrapper.handlers;
 
 import java.util.Map;
 
-import org.apache.causeway.commons.collectionsemantics.CollectionSemantics;
 import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 
 class MapInvocationHandler<T, M extends Map<?,?>>

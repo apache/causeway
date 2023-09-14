@@ -24,7 +24,7 @@ import javax.inject.Inject;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.causeway.commons.semantics.AccessorSemantics;
 import org.apache.causeway.core.metamodel.commons.MethodUtil;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -68,7 +68,7 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
 
     @Override
     public boolean isPropertyOrCollectionGetterCandidate(final ResolvedMethod method) {
-        return ProgrammingModelConstants.AccessorPrefix.GET.isPrefixOf(method.name());
+        return AccessorSemantics.GET.isPrefixOf(method.name());
     }
 
     @Override

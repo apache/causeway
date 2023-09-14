@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.commons.collectionsemantics;
+package org.apache.causeway.commons.semantics;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
@@ -35,13 +35,13 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableCollection;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
-import org.apache.causeway.commons.collectionsemantics.CollectionSemantics.InvocationHandlingPolicy;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.collections._Collections;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.semantics.CollectionSemantics.InvocationHandlingPolicy;
 
 import lombok.Getter;
 import lombok.NonNull;

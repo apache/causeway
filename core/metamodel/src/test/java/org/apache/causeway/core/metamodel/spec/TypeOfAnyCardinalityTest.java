@@ -28,8 +28,8 @@ import org.springframework.core.ResolvableType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.apache.causeway.commons.collectionsemantics.CollectionSemantics;
 import org.apache.causeway.commons.internal.reflection._GenericResolver;
+import org.apache.causeway.commons.semantics.CollectionSemantics;
 
 import lombok.SneakyThrows;
 import lombok.val;

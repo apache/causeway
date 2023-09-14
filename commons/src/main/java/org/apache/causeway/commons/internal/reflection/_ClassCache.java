@@ -37,6 +37,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.ReflectionUtils;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
@@ -46,11 +47,11 @@ import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
+import org.apache.causeway.commons.semantics.AccessorSemantics;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
@@ -70,19 +71,21 @@ import lombok.val;
  * takes care of the lifecycle
  * @since 2.0
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class _ClassCache implements AutoCloseable {
 
     public static _ClassCache getInstance() {
-        return _Context.computeIfAbsent(_ClassCache.class, _ClassCache::new);
+        return _Context.computeIfAbsent(_ClassCache.class, ()->new _ClassCache(_Context.getDefaultClassLoader()));
     }
 
     /**
      * JUnit support.
      */
     public static void invalidate() {
-        _Context.put(_ClassCache.class, new _ClassCache(), true);
+        _Context.put(_ClassCache.class, new _ClassCache(_Context.getDefaultClassLoader()), true);
     }
+
+    private final @Nullable ClassLoader classLoader;
 
     public void add(final Class<?> type) {
         classModel(type);
@@ -168,7 +171,7 @@ public final class _ClassCache implements AutoCloseable {
         return Stream.of("get", "is")
         .map(prefix->prefix + capitalizedFieldName)
         .map(methodName->lookupResolvedMethod(type, methodName, _Constants.emptyClasses))
-        .filter(resolvedMethod->_Reflect.Filter.isGetter(resolvedMethod.method()))
+        .filter(resolvedMethod->AccessorSemantics.isGetter(resolvedMethod))
         .findFirst();
     }
 
@@ -274,7 +277,16 @@ public final class _ClassCache implements AutoCloseable {
         }
     }
 
-    private ClassModel inspectType(final Class<?> type) {
+    private ClassModel inspectType(final Class<?> _type) {
+
+        //[CAUSEWAY-3164] ensures reflection on generic type arguments works in a concurrent introspection setting
+        @SuppressWarnings({ "unchecked", "rawtypes" })
+        final Class<?> type = Optional.ofNullable(classLoader)
+                .filter(cl->!cl.equals(_type.getClassLoader()))
+                .map(cl->Try.call(()->Class.forName(_type.getName(), true, cl))
+                        .ifFailure(e->System.err.printf("ClassCache: reloading of type %s failed with %s%n", _type.getName(), e))
+                        .getValue().orElse(null))
+                .orElse((Class) _type);
 
           //TODO[CAUSEWAY-3556] optimization candidate (needs inspectedTypes to be a ConcurrentHashMap)
 //                val declaredMethods = _Reflect.streamTypeHierarchy(type, InterfacePolicy.INCLUDE)
@@ -287,49 +299,49 @@ public final class _ClassCache implements AutoCloseable {
 //                    })
 //                    .collect(Can.toCan());
 
-            val model = new ClassModel(
+        val model = new ClassModel(
                 Can.ofArray(type.getDeclaredFields()),
                 _Annotations.isPresent(type, XmlRootElement.class));
 
-            // process public constructors
-            val publicConstr = type.getConstructors();
-            for(val constr : publicConstr) {
-                val key = ConstructorKey.of(type, constr);
-                val resolvedConstr = _GenericResolver.resolveConstructor(constr, type);
-                // collect public constructors
-                model.publicConstructorsByKey.put(key, resolvedConstr);
-                // collect public constructors with inject semantics
-                if(isInjectSemantics(constr)) {
-                    model.constructorsWithInjectSemanticsByKey.put(key, resolvedConstr);
-                }
+        // process public constructors
+        val publicConstr = type.getConstructors();
+        for(val constr : publicConstr) {
+            val key = ConstructorKey.of(type, constr);
+            val resolvedConstr = _GenericResolver.resolveConstructor(constr, type);
+            // collect public constructors
+            model.publicConstructorsByKey.put(key, resolvedConstr);
+            // collect public constructors with inject semantics
+            if(isInjectSemantics(constr)) {
+                model.constructorsWithInjectSemanticsByKey.put(key, resolvedConstr);
             }
+        }
 
-            // process all methods (public and non-public and inherited)
-            _Reflect.streamAllMethods(type, true)
-                    .filter(_ClassCache::methodIncludeFilter)
-                    .map(method->_GenericResolver.resolveMethod(method, type).orElse(null))
-                    .filter(_NullSafe::isPresent)
-                    .forEach(resolved->{
-                        val key = MethodKey.of(type, resolved.method()); //TODO[CAUSEWAY-3571] needs week sameness check
-                        val methodToKeep =
-                                putIntoMapHonoringOverridingRelation(model.resolvedMethodsByKey, key, resolved);
-                        // collect post-construct methods
-                        if(isPostConstruct(methodToKeep.method())) {
-                            model.postConstructMethodsByKey.put(key, methodToKeep);
-                        }
-                    });
+        // process all methods (public and non-public and inherited)
+        _Reflect.streamAllMethods(type, true)
+        .filter(_ClassCache::methodIncludeFilter)
+        .map(method->_GenericResolver.resolveMethod(method, type).orElse(null))
+        .filter(_NullSafe::isPresent)
+        .forEach(resolved->{
+            val key = MethodKey.of(type, resolved.method()); //TODO[CAUSEWAY-3571] needs week sameness check
+            val methodToKeep =
+                    putIntoMapHonoringOverridingRelation(model.resolvedMethodsByKey, key, resolved);
+            // collect post-construct methods
+            if(isPostConstruct(methodToKeep.method())) {
+                model.postConstructMethodsByKey.put(key, methodToKeep);
+            }
+        });
 
-            // process public methods
-            _NullSafe.stream(type.getMethods())
-                    .filter(_ClassCache::methodIncludeFilter)
-                    .map(method->_GenericResolver.resolveMethod(method, type).orElse(null))
-                    .filter(_NullSafe::isPresent)
-                    .forEach(resolved->{
-                        val key = MethodKey.of(type, resolved.method()); //TODO[CAUSEWAY-3571] needs week sameness check
-                        putIntoMapHonoringOverridingRelation(model.publicMethodsByKey, key, resolved);
-                    });
+        // process public methods
+        _NullSafe.stream(type.getMethods())
+        .filter(_ClassCache::methodIncludeFilter)
+        .map(method->_GenericResolver.resolveMethod(method, type).orElse(null))
+        .filter(_NullSafe::isPresent)
+        .forEach(resolved->{
+            val key = MethodKey.of(type, resolved.method()); //TODO[CAUSEWAY-3571] needs week sameness check
+            putIntoMapHonoringOverridingRelation(model.publicMethodsByKey, key, resolved);
+        });
 
-            return model;
+        return model;
     }
 
     /**

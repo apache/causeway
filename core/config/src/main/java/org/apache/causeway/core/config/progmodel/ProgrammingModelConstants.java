@@ -33,11 +33,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.IntFunction;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
-import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Domain;
@@ -57,6 +55,7 @@ import org.apache.causeway.commons.internal.reflection._GenericResolver.Resolved
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.commons.internal.reflection._Reflect;
+import org.apache.causeway.commons.semantics.AccessorSemantics;
 
 import static org.apache.causeway.commons.internal.reflection._Reflect.Filter.paramAssignableFrom;
 import static org.apache.causeway.commons.internal.reflection._Reflect.Filter.paramCount;
@@ -131,59 +130,6 @@ public final class ProgrammingModelConstants {
                 }
             }
             return false;
-        }
-    }
-
-    // -- ACCESSORS
-
-    @Getter
-    @RequiredArgsConstructor
-    public enum AccessorPrefix {
-        GET("get"),
-        IS("is"),
-        SET("set");
-        private final String prefix;
-
-        public String prefix(final @Nullable String input) {
-            return input!=null
-                    ? prefix + input
-                    : prefix;
-        }
-
-        public boolean isPrefixOf(final @Nullable String input) {
-            return input!=null
-                    ? input.startsWith(prefix)
-                    : false;
-        }
-
-        public static boolean isCandidateGetterName(final @Nullable String name) {
-            return GET.isPrefixOf(name)
-                    || IS.isPrefixOf(name);
-        }
-
-        public static boolean isBooleanGetter(final ResolvedMethod method) {
-            return IS.isPrefixOf(method.name())
-                    && method.isNoArg()
-                    && !method.isStatic()
-                    && (method.returnType() == boolean.class
-                        || method.returnType() == Boolean.class);
-        }
-
-        public static boolean isNonBooleanGetter(final ResolvedMethod method, final Predicate<Class<?>> typeFilter) {
-            return GET.isPrefixOf(method.name())
-                    && method.isNoArg()
-                    && !method.isStatic()
-                    && typeFilter.test(method.returnType());
-        }
-
-        public static boolean isNonBooleanGetter(final ResolvedMethod method, final Class<?> expectedType) {
-            return isNonBooleanGetter(method, type->
-                expectedType.isAssignableFrom(ClassUtils.resolvePrimitiveIfNecessary(type)));
-        }
-
-        public static boolean isGetter(final ResolvedMethod method) {
-            return isBooleanGetter(method)
-                    || isNonBooleanGetter(method, type->type != void.class);
         }
     }
 
@@ -611,7 +557,7 @@ public final class ProgrammingModelConstants {
             val methodName = method.getName();
             if(method.getParameterCount()>0
                     || method.getReturnType().equals(void.class)
-                    || !AccessorPrefix.isCandidateGetterName(methodName)) {
+                    || !AccessorSemantics.isCandidateGetterName(methodName)) {
                 // definitely an action not a getter
                 return _Strings.capitalize(methodName);
             }

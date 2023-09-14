@@ -21,8 +21,8 @@ package org.apache.causeway.core.metamodel.facets.actcoll.typeof;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import org.apache.causeway.commons.collectionsemantics.CollectionSemantics;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
+import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;

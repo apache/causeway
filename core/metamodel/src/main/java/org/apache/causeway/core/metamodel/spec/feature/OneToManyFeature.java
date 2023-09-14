@@ -18,9 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.spec.feature;
 
-import org.apache.causeway.commons.collectionsemantics.CollectionSemantics;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
+import org.apache.causeway.commons.semantics.CollectionSemantics;
 
 /**
  * Base interface for {@link OneToManyAssociation} only.

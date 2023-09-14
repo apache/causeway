@@ -23,9 +23,9 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.collectionsemantics.CollectionSemantics;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.causeway.commons.semantics.AccessorSemantics;
+import org.apache.causeway.commons.semantics.CollectionSemantics;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;
@@ -105,9 +105,6 @@ public class MethodUtil {
         }
 
         /**
-         * @param methodName
-         * @param returnType
-         * @param paramTypes
          * @return whether the method under test matches the given signature
          */
         public static Predicate<ResolvedMethod> signature(
@@ -155,18 +152,12 @@ public class MethodUtil {
         }
 
         /**
-         *
-         * @param prefix
-         * @param returnType
-         * @param canBeVoid
-         * @param paramCount
          * @return whether the method under test matches the given constraints
          */
         public static Predicate<ResolvedMethod> prefixed(
                 final String prefix, final Class<?> returnType, final CanBeVoid canBeVoid, final int paramCount) {
 
             return method -> {
-
                 if (MethodUtil.isStatic(method)) {
                     return false;
                 }
@@ -182,22 +173,21 @@ public class MethodUtil {
                 }
 
                 return true;
-
             };
 
         }
 
         public static Predicate<ResolvedMethod> booleanGetter() {
-            return ProgrammingModelConstants.AccessorPrefix::isBooleanGetter;
+            return AccessorSemantics::isBooleanGetter;
         }
 
         public static Predicate<ResolvedMethod> nonBooleanGetter(final Class<?> returnType) {
-            return method->ProgrammingModelConstants.AccessorPrefix.isNonBooleanGetter(method, returnType);
+            return method->AccessorSemantics.isNonBooleanGetter(method, returnType);
         }
 
         public static Predicate<ResolvedMethod> supportedNonScalarMethodReturnType() {
             return method->
-                ProgrammingModelConstants.AccessorPrefix.isNonBooleanGetter(method, Iterable.class)
+                AccessorSemantics.isNonBooleanGetter(method, Iterable.class)
                 && CollectionSemantics.valueOf(method.returnType())
                     .isPresent();
         }

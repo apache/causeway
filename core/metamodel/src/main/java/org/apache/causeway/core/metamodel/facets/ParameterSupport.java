@@ -175,7 +175,7 @@ public final class ParameterSupport {
         .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy())
         .withReturnTypeAnyOf(searchRequest.getReturnTypePattern().matchingTypes(paramType))
         .streamMethodsMatchingSignature(signature)
-        .map(supportingMethod->toSearchResult(type, paramIndex, paramType, supportingMethod))
+        .map(supportingMethod->toSearchResult(paramIndex, paramType, supportingMethod))
         .forEach(onMethodFound);
     }
 
@@ -205,14 +205,13 @@ public final class ParameterSupport {
                     .findFirst()
                     .orElse(null);
             if(supportingMethod != null) {
-                onMethodFound.accept(toSearchResult(type, paramIndex, paramType, supportingMethod));
+                onMethodFound.accept(toSearchResult(paramIndex, paramType, supportingMethod));
                 return;
             }
         }
     }
 
     private static ParamSupportingMethodSearchResult toSearchResult(
-            final Class<?> declaringClass, //TODO[CAUSEWAY-3571] not req
             final int paramIndex,
             final Class<?> paramType,
             final ResolvedMethod supportingMethod) {
