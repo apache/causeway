@@ -29,6 +29,7 @@ import java.lang.reflect.TypeVariable;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.core.BridgeMethodResolver;
 import org.springframework.core.GenericTypeResolver;
 import org.springframework.core.MethodParameter;
 import org.springframework.util.ClassUtils;
@@ -271,7 +272,11 @@ public class _GenericResolver {
         // if declared types are different chose the mostSpecific type
         val implType = _Reflect.mostSpecificType(a.implementationClass(), b.implementationClass());
 
-        val m = ClassUtils.getMostSpecificMethod(a.method(), implType);
+        val m = BridgeMethodResolver.findBridgedMethod(
+                ClassUtils.getMostSpecificMethod(a.method(), implType));
+        if(m.isBridge()) {
+            throw _Exceptions.unexpectedCodeReach();
+        }
         if(a.method().equals(m)) {
             return a;
         }

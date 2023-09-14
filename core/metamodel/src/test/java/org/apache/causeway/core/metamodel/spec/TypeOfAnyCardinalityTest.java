@@ -129,21 +129,21 @@ class TypeOfAnyCardinalityTest {
             final Class<?> genericA, final Class<?> genericB, final Class<?> genericC,
             final Class<?> contA, final Class<?> contB, final Class<?> contC) {
 
-//        val methodInA = _GenericResolver.testing.resolveMethod(a, "someStrings");
+        val methodInA = _GenericResolver.testing.resolveMethod(a, "someStrings");
         val methodInB = _GenericResolver.testing.resolveMethod(b, "someStrings");
         val methodInC = _GenericResolver.testing.resolveMethod(c, "someStrings");
 
-//        assertNotNull(methodInA);
+        assertNotNull(methodInA);
         assertNotNull(methodInB);
         assertNotNull(methodInC);
 
-//        val returnA = ResolvableType.forMethodReturnType(methodInA.method(), a);
+        val returnA = ResolvableType.forMethodReturnType(methodInA.method(), a);
         val returnB = ResolvableType.forMethodReturnType(methodInB.method(), b);
         val returnC = ResolvableType.forMethodReturnType(methodInC.method(), c);
 
-//        val genericArgA = returnA.isArray()
-//                ? returnA.getComponentType()
-//                : returnA.getGeneric(0);
+        val genericArgA = returnA.isArray()
+                ? returnA.getComponentType()
+                : returnA.getGeneric(0);
         val genericArgB = returnB.isArray()
                 ? returnB.getComponentType()
                 : returnB.getGeneric(0);
@@ -151,23 +151,23 @@ class TypeOfAnyCardinalityTest {
                 ? returnC.getComponentType()
                 : returnC.getGeneric(0);
 
-//        assertNotNull(genericArgA);
+        assertNotNull(genericArgA);
         assertNotNull(genericArgB);
         assertNotNull(genericArgC);
 
-//        assertEquals(genericA, genericArgA.toClass());
+        assertEquals(genericA, genericArgA.toClass());
         assertEquals(genericB, genericArgB.toClass());
         assertEquals(genericC, genericArgC.toClass());
 
-//        val typeA = TypeOfAnyCardinality.forMethodReturn(a, methodInA);
+        val typeA = TypeOfAnyCardinality.forMethodReturn(a, methodInA);
         val typeB = TypeOfAnyCardinality.forMethodReturn(b, methodInB);
         val typeC = TypeOfAnyCardinality.forMethodReturn(c, methodInC);
 
-//        assertEquals(genericA, typeA.getElementType());
+        assertEquals(genericA, typeA.getElementType());
         assertEquals(genericB, typeB.getElementType());
         assertEquals(genericC, typeC.getElementType());
 
-//        assertEquals(contA, typeA.getContainerType().orElse(null));
+        assertEquals(contA, typeA.getContainerType().orElse(null));
         assertEquals(contB, typeB.getContainerType().orElse(null));
         assertEquals(contC, typeC.getContainerType().orElse(null));
 

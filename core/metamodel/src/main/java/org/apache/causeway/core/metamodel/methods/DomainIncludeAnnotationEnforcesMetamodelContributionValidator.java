@@ -116,7 +116,7 @@ extends MetaModelValidatorAbstract {
         // filter away those that are recognized
         .filter(Predicate.not(memberMethods::contains))
         .filter(Predicate.not(supportMethods::contains))
-        //TODO[CAUSEWAY-3571] perhaps no longer required, because we only collect resolvable methods
+        //[CAUSEWAY-3571] perhaps no longer required, because we only collect resolvable methods ...
         // special lookup for generic type bounds
 //        .filter(method->{
 //            if(_Reflect.hasGenericBounds(method)) {

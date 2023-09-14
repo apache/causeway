@@ -59,7 +59,7 @@ public abstract class AbstractSpecification<T> implements Specification {
         for (Class<?> c = fromClass; c != Object.class; c = c.getSuperclass()) {
 
             val methodFound = classCache
-            .streamDeclaredMethods(c)
+            .streamResolvedMethods(c)
             .filter(AbstractSpecification::isSatisfiesSafelyMethod)
             .findFirst()
             .orElse(null);
@@ -74,7 +74,7 @@ public abstract class AbstractSpecification<T> implements Specification {
     }
 
     private static boolean isSatisfiesSafelyMethod(final ResolvedMethod method) {
-        return method.paramCount() == 1
+        return method.isSingleArg()
                 && method.name().equals("satisfiesSafely")
                 && !method.method().isSynthetic();
     }

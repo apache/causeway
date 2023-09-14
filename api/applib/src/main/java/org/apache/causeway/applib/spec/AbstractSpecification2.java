@@ -61,7 +61,7 @@ public abstract class AbstractSpecification2<T> implements Specification2 {
         for (Class<?> c = fromClass; c != Object.class; c = c.getSuperclass()) {
 
             val methodFound = classCache
-            .streamDeclaredMethods(c)
+            .streamResolvedMethods(c)
             .filter(AbstractSpecification2::isSatisfiesTranslatableSafelyMethod)
             .findFirst()
             .orElse(null);
@@ -76,7 +76,7 @@ public abstract class AbstractSpecification2<T> implements Specification2 {
     }
 
     private static boolean isSatisfiesTranslatableSafelyMethod(final ResolvedMethod method) {
-        return method.paramCount() == 1
+        return method.isSingleArg()
                 && method.name().equals("satisfiesTranslatableSafely")
                 && !method.method().isSynthetic();
     }

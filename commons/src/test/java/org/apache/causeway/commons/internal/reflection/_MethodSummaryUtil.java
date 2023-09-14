@@ -29,7 +29,7 @@ import org.apache.causeway.commons.io.TextUtils;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-class _Util {
+class _MethodSummaryUtil {
 
     String methodSummary(final @Nullable ResolvedMethod method) {
         return Optional.ofNullable(method)

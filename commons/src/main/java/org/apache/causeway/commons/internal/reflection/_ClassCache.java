@@ -39,6 +39,7 @@ import org.springframework.util.ReflectionUtils;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.context._Context;
@@ -129,7 +130,7 @@ public final class _ClassCache implements AutoCloseable {
      * that in addition looks up declared methods. (including non-public,
      * but not including inherited non-public ones)
      */
-    public ResolvedMethod lookupPublicOrDeclaredMethod(final Class<?> type, final String name, final Class<?>[] paramTypes) {
+    public ResolvedMethod lookupResolvedMethod(final Class<?> type, final String name, final Class<?>[] paramTypes) {
         return lookupMethod(true, type, name, paramTypes);
     }
 
@@ -137,20 +138,13 @@ public final class _ClassCache implements AutoCloseable {
         return classModel(type).publicMethodsByKey.values().stream();
     }
 
-    public Stream<ResolvedMethod> streamPublicOrDeclaredMethods(final Class<?> type) {
-        val classModel = classModel(type);
-        return Stream.concat(
-                classModel.publicMethodsByKey.values().stream(),
-                classModel.nonPublicDeclaredMethodsByKey.values().stream());
-    }
-
-    public Stream<ResolvedMethod> streamDeclaredMethods(final Class<?> type) {
-        return classModel(type).declaredMethods.stream();
+    public Stream<ResolvedMethod> streamResolvedMethods(final Class<?> type) {
+        return classModel(type).resolvedMethodsByKey.values().stream();
     }
 
     @SneakyThrows
     public ResolvedMethod findMethodUniquelyByNameOrFail(final Class<?> type, final String methodName) {
-        val matchingMethods = streamPublicOrDeclaredMethods(type)
+        val matchingMethods = streamResolvedMethods(type)
                 .filter(method->method.name().equals(methodName))
                 .collect(Can.toCan());
         return matchingMethods.isCardinalityMultiple()
@@ -173,7 +167,7 @@ public final class _ClassCache implements AutoCloseable {
         val capitalizedFieldName = _Strings.capitalize(field.getName());
         return Stream.of("get", "is")
         .map(prefix->prefix + capitalizedFieldName)
-        .map(methodName->lookupPublicOrDeclaredMethod(type, methodName, _Constants.emptyClasses))
+        .map(methodName->lookupResolvedMethod(type, methodName, _Constants.emptyClasses))
         .filter(resolvedMethod->resolvedMethod.isGetter())
         .findFirst();
     }
@@ -183,11 +177,6 @@ public final class _ClassCache implements AutoCloseable {
     }
 
     // -- METHOD STREAMS
-
-//    private Stream<Method> streamAllMethods(final Class<?> type) {
-//        val classModel = inspectType(type);
-//        return classModel.declaredMethods.stream();
-//    }
 
     /**
      * Returns a Stream of declared Methods, that pass the given {@code filter},
@@ -206,7 +195,10 @@ public final class _ClassCache implements AutoCloseable {
 
         synchronized(classModel.declaredMethodsByAttribute) {
             return classModel.declaredMethodsByAttribute
-            .computeIfAbsent(attributeName, key->classModel.declaredMethods.filter(filter))
+            .computeIfAbsent(attributeName, key->classModel
+                    .resolvedMethodsByKey.values().stream()
+                    .filter(filter)
+                    .collect(Can.toCan()))
             .stream();
         }
     }
@@ -217,12 +209,14 @@ public final class _ClassCache implements AutoCloseable {
     @RequiredArgsConstructor
     private static class ClassModel {
         private final Can<Field> declaredFields;
-        private final Can<ResolvedMethod> declaredMethods;
+
         private final Map<ConstructorKey, ResolvedConstructor> publicConstructorsByKey = new HashMap<>();
         private final Map<ConstructorKey, ResolvedConstructor> constructorsWithInjectSemanticsByKey = new HashMap<>();
+
+        private final Map<MethodKey, ResolvedMethod> resolvedMethodsByKey = new HashMap<>();
         private final Map<MethodKey, ResolvedMethod> publicMethodsByKey = new HashMap<>();
         private final Map<MethodKey, ResolvedMethod> postConstructMethodsByKey = new HashMap<>();
-        private final Map<MethodKey, ResolvedMethod> nonPublicDeclaredMethodsByKey = new HashMap<>();
+
         private final Map<String, Can<ResolvedMethod>> declaredMethodsByAttribute = new HashMap<>();
         private final boolean hasJaxbRootElementSemantics;
     }
@@ -293,17 +287,11 @@ public final class _ClassCache implements AutoCloseable {
 //                    })
 //                    .collect(Can.toCan());
 
-            val declaredFields = Can.ofArray(type.getDeclaredFields());
-            val declaredMethods = //type.getDeclaredMethods(); ... cannot detect non overridden inherited methods
-                    Can.ofStream(_Reflect.streamAllMethods(type, true)
-                            .filter(_ClassCache::methodIncludeFilter))
-                            .map(method->_GenericResolver.resolveMethod(method, type).orElse(null));
-
             val model = new ClassModel(
-                    declaredFields,
-                    declaredMethods,
-                    _Annotations.isPresent(type, XmlRootElement.class));
+                Can.ofArray(type.getDeclaredFields()),
+                _Annotations.isPresent(type, XmlRootElement.class));
 
+            // process public constructors
             val publicConstr = type.getConstructors();
             for(val constr : publicConstr) {
                 val key = ConstructorKey.of(type, constr);
@@ -316,30 +304,30 @@ public final class _ClassCache implements AutoCloseable {
                 }
             }
 
-            // process all public and non-public
-            for(val method : declaredMethods) {
-
-                val key = MethodKey.of(type, method.method());
-                // add all now, remove public ones later
-                val methodToKeep =
-                        putIntoMapHonoringOverridingRelation(model.nonPublicDeclaredMethodsByKey, key, method);
-
-                // collect post-construct methods
-                if(isPostConstruct(methodToKeep.method())) {
-                    model.postConstructMethodsByKey.put(key, methodToKeep);
-                }
-            }
-
-            // process public only
-            //XXX[CAUSEWAY-3327] order of methods returned might differ among JVM instances
-            val publicMethods = Can.ofArray(type.getMethods())
+            // process all methods (public and non-public and inherited)
+            _Reflect.streamAllMethods(type, true)
                     .filter(_ClassCache::methodIncludeFilter)
-                    .map(method->_GenericResolver.resolveMethod(method, type).orElse(null));
-            for(val method : publicMethods) {
-                val key = MethodKey.of(type, method.method());
-                putIntoMapHonoringOverridingRelation(model.publicMethodsByKey, key, method);
-                model.nonPublicDeclaredMethodsByKey.remove(key);
-            }
+                    .map(method->_GenericResolver.resolveMethod(method, type).orElse(null))
+                    .filter(_NullSafe::isPresent)
+                    .forEach(resolved->{
+                        val key = MethodKey.of(type, resolved.method()); //TODO[CAUSEWAY-3571] needs week sameness check
+                        val methodToKeep =
+                                putIntoMapHonoringOverridingRelation(model.resolvedMethodsByKey, key, resolved);
+                        // collect post-construct methods
+                        if(isPostConstruct(methodToKeep.method())) {
+                            model.postConstructMethodsByKey.put(key, methodToKeep);
+                        }
+                    });
+
+            // process public methods
+            _NullSafe.stream(type.getMethods())
+                    .filter(_ClassCache::methodIncludeFilter)
+                    .map(method->_GenericResolver.resolveMethod(method, type).orElse(null))
+                    .filter(_NullSafe::isPresent)
+                    .forEach(resolved->{
+                        val key = MethodKey.of(type, resolved.method()); //TODO[CAUSEWAY-3571] needs week sameness check
+                        putIntoMapHonoringOverridingRelation(model.publicMethodsByKey, key, resolved);
+                    });
 
             return model;
     }
@@ -408,7 +396,7 @@ public final class _ClassCache implements AutoCloseable {
             return publicMethod;
         }
         if(includeDeclaredMethods) {
-            return model.nonPublicDeclaredMethodsByKey.get(key);
+            return model.resolvedMethodsByKey.get(key);
         }
         return null;
     }

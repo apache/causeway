@@ -53,13 +53,19 @@ class GenericReflectionMagicTest {
     @Test
     void detectMethodOverride() {
         val declaredMethodsMatching = Can.ofStream(_Reflect.streamAllMethods(_GenericAbstractImpl.class, true))
-                .filter(m->m.getName().equals("sampleAction2"))
-                .filter(m->!m.isBridge());
+                .filter(m->m.getName().equals("sampleAction2"));
+        assertEquals(3, declaredMethodsMatching.size());
+        //debug
+        declaredMethodsMatching.forEach(m->System.err.printf("+ %s bridge->%b%n", m, m.isBridge()));
+
+        val mostSpecific = _ClassCache.getInstance().findMethodUniquelyByNameOrFail(_GenericAbstractImpl.class, "sampleAction2");
 
         //debug
-        declaredMethodsMatching.forEach(m->System.err.printf("%s->%b%n", m, m.isBridge()));
+        System.err.printf("most specific: %s bridge->%b%n", mostSpecific.method(), mostSpecific.method().isBridge());
 
-        assertEquals(2, declaredMethodsMatching.size());
+        assertEquals(String.class, mostSpecific.paramType(0));
+        assertEquals(String.class, mostSpecific.returnType());
+
 
 
     }

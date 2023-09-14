@@ -93,7 +93,7 @@ public final class Evaluators  {
             final _ClassCache classCache) {
 
         return classCache
-        .streamDeclaredMethods(cls)
+        .streamResolvedMethods(cls)
         .filter(MethodUtil::isNotStatic)
         .filter(MethodUtil::isNoArg)
         .filter(MethodUtil::isNotVoid)

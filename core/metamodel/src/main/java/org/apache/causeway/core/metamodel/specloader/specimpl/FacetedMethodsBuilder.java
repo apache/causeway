@@ -136,7 +136,7 @@ implements HasMetaModelContext {
 
         val classCache = _ClassCache.getInstance();
         val methodsRemaining = introspectionPolicy().getEncapsulationPolicy().isEncapsulatedMembersSupported()
-                ? classCache.streamPublicOrDeclaredMethods(introspectedClass)
+                ? classCache.streamResolvedMethods(introspectedClass)
                 : classCache.streamPublicMethods(introspectedClass);
         this.methodRemover = new ConcurrentMethodRemover(introspectedClass, methodsRemaining);
     }

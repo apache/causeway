@@ -34,7 +34,7 @@ public class _Expectations {
     int syntheticCount;
     int bridgeCount;
     /**
-     * short notation see {@link _Util}
+     * short notation see {@link _MethodSummaryUtil}
      */
     String methodNameOrdinals;
 
@@ -51,7 +51,7 @@ public class _Expectations {
                         .count())
                 .methodNameOrdinals(methods.stream()
                         .sorted((a, b)->a.name().compareTo(b.name()))
-                        .map(_Util::methodSummary)
+                        .map(_MethodSummaryUtil::methodSummary)
                         .sorted((a, b)->a.compareTo(b))
                         .collect(Collectors.joining(",")))
                 .build();

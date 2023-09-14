@@ -83,7 +83,7 @@ class _Utils {
     }
 
     Can<ResolvedMethod> findMethodsByName(final Class<?> type, final String methodName) {
-        val matchingMethods = _ClassCache.getInstance().streamPublicOrDeclaredMethods(type)
+        val matchingMethods = _ClassCache.getInstance().streamResolvedMethods(type)
                 .filter(method->method.name().equals(methodName))
                 .collect(Can.toCan());
         return matchingMethods;

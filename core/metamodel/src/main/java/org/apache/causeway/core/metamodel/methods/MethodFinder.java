@@ -158,7 +158,7 @@ public class MethodFinder {
         if(methodNameCandidates.equals(ANY_NAME)) {
             //stream all
             return (isEncapsulationSupported
-                    ? classCache.streamPublicOrDeclaredMethods(type)
+                    ? classCache.streamResolvedMethods(type)
                     : classCache.streamPublicMethods(type))
                         .filter(method->Arrays.equals(paramTypes, method.paramTypes()))
                         .filter(mustSatisfy);
@@ -166,7 +166,7 @@ public class MethodFinder {
 
         return methodNameCandidates.stream()
         .map(name->isEncapsulationSupported
-                ? classCache.lookupPublicOrDeclaredMethod(type, name, paramTypes)
+                ? classCache.lookupResolvedMethod(type, name, paramTypes)
                 : classCache.lookupPublicMethod(type, name, paramTypes))
         .filter(_NullSafe::isPresent)
         .filter(mustSatisfy);
@@ -178,7 +178,7 @@ public class MethodFinder {
         val classCache = _ClassCache.getInstance();
         val isEncapsulationSupported = getEncapsulationPolicy().isEncapsulatedMembersSupported();
         return (isEncapsulationSupported
-                ? classCache.streamPublicOrDeclaredMethods(type)
+                ? classCache.streamResolvedMethods(type)
                 : classCache.streamPublicMethods(type))
                     .filter(mustSatisfy);
     }

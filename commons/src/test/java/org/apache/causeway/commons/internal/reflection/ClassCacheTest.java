@@ -70,7 +70,7 @@ class ClassCacheTest {
     @Test
     void inhertitedMethod() {
         val declaredMethods = Can.ofStream(
-                classCache.streamPublicOrDeclaredMethods(Concrete.class));
+                classCache.streamResolvedMethods(Concrete.class));
         assertContainsResolvedMethod(declaredMethods, "commonAction");
         assertContainsResolvedMethod(declaredMethods, "specificAction");
     }
@@ -78,13 +78,12 @@ class ClassCacheTest {
     @Test
     void inhertitedMethodWhenOverride() {
         val declaredMethods = Can.ofStream(
-                classCache.streamPublicOrDeclaredMethods(ConcreteOverride.class));
+                classCache.streamResolvedMethods(ConcreteOverride.class));
         assertContainsResolvedMethod(declaredMethods, "commonAction");
         assertContainsResolvedMethod(declaredMethods, "specificAction");
     }
 
-
-    @Disabled //TODO[CAUSEWAY-3571] requires updated expectations
+    @Disabled //TODO[CAUSEWAY-3571] ClassCache's MethodKey is yet too specific
     @ParameterizedTest(name = "{index}: {0}")
     @ValueSource(classes = {
             _Abstract.class,
@@ -100,7 +99,7 @@ class ClassCacheTest {
     })
     void methodEnumeration(final Class<?> classUnderTest) {
         val declaredMethods = Can.ofStream(
-                classCache.streamPublicOrDeclaredMethods(classUnderTest));
+                classCache.streamResolvedMethods(classUnderTest));
 
         val expectations = extractExpectations(classUnderTest);
         expectations.assertAll(declaredMethods);

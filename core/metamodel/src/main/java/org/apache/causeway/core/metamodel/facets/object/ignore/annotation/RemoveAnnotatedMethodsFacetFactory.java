@@ -42,7 +42,7 @@ extends FacetFactoryAbstract {
         switch (policy) {
             case ENCAPSULATION_ENABLED:
                 getClassCache()
-                        .streamPublicOrDeclaredMethods(processClassContext.getCls())
+                        .streamResolvedMethods(processClassContext.getCls())
                         .forEach(method -> {
                             if (!ProgrammingModelConstants.MethodIncludeMarker.anyMatchOn(method)) {
                                 processClassContext.removeMethod(method);
