@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.methods;
 
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -29,7 +30,6 @@ import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.annotation.Introspection.EncapsulationPolicy;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.functions._Predicates;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
@@ -168,9 +168,9 @@ public class MethodFinder {
         .map(name->isEncapsulationSupported
                 ? classCache.lookupResolvedMethod(type, name, paramTypes)
                 : classCache.lookupPublicMethod(type, name, paramTypes))
-        .filter(_NullSafe::isPresent)
+        .filter(Optional::isPresent)
+        .map(Optional::get)
         .filter(mustSatisfy);
-
     }
 
     public Stream<ResolvedMethod> streamMethodsIgnoringSignature() {

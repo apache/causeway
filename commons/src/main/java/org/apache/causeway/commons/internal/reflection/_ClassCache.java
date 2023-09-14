@@ -124,8 +124,13 @@ public final class _ClassCache implements AutoCloseable {
      * A drop-in replacement for {@link Class#getMethod(String, Class...)} that only looks up
      * public methods and does not throw {@link NoSuchMethodException}s.
      */
-    public ResolvedMethod lookupPublicMethod(final Class<?> type, final String name, final Class<?>[] paramTypes) {
-        return lookupMethod(false, type, name, paramTypes);
+    public Optional<ResolvedMethod> lookupPublicMethod(final Class<?> type, final String name, final Class<?>[] paramTypes) {
+        return Optional.ofNullable(findMethod(false, type, name, paramTypes));
+    }
+    @SneakyThrows
+    public ResolvedMethod lookupPublicMethodElseFail(final Class<?> type, final String name, final Class<?>[] paramTypes) {
+        return lookupPublicMethod(type, name, paramTypes)
+                .orElseThrow(()->_Exceptions.noSuchMethodException(type, name, paramTypes));
     }
 
     /**
@@ -133,8 +138,13 @@ public final class _ClassCache implements AutoCloseable {
      * that in addition looks up declared methods. (including non-public,
      * but not including inherited non-public ones)
      */
-    public ResolvedMethod lookupResolvedMethod(final Class<?> type, final String name, final Class<?>[] paramTypes) {
-        return lookupMethod(true, type, name, paramTypes);
+    public Optional<ResolvedMethod> lookupResolvedMethod(final Class<?> type, final String name, final Class<?>[] paramTypes) {
+        return Optional.ofNullable(findMethod(true, type, name, paramTypes));
+    }
+    @SneakyThrows
+    public ResolvedMethod lookupResolvedMethodElseFail(final Class<?> type, final String name, final Class<?>[] paramTypes) {
+        return lookupResolvedMethod(type, name, paramTypes)
+                .orElseThrow(()->_Exceptions.noSuchMethodException(type, name, paramTypes));
     }
 
     public Stream<ResolvedMethod> streamPublicMethods(final Class<?> type) {
@@ -170,7 +180,7 @@ public final class _ClassCache implements AutoCloseable {
         val capitalizedFieldName = _Strings.capitalize(field.getName());
         return Stream.of("get", "is")
         .map(prefix->prefix + capitalizedFieldName)
-        .map(methodName->lookupResolvedMethod(type, methodName, _Constants.emptyClasses))
+        .map(methodName->lookupResolvedMethod(type, methodName, _Constants.emptyClasses).orElse(null))
         .filter(_NullSafe::isPresent)
         .filter(resolvedMethod->AccessorSemantics.isGetter(resolvedMethod))
         .findFirst();
@@ -419,29 +429,33 @@ public final class _ClassCache implements AutoCloseable {
         return publicConstructor;
     }
 
-    private ResolvedMethod lookupMethod(
+    @Nullable
+    private ResolvedMethod findMethod(
             final boolean includeDeclaredMethods,
             final Class<?> type,
             final String name,
             final Class<?>[] requiredParamTypes) {
 
-        //TODO[CAUSEWAY-3571] to do this properly, we need to lookup by name then find all (weak) matches
+        // we need to lookup by name then find first (weak) match
 
         val model = classModel(type);
-        //val signatureMatcher = _Reflect.predicates.methodSignatureAssignableTo(paramTypes);
-        val key = MethodKey.of(type, name, _Arrays.emptyToNull(requiredParamTypes));
 
-        val publicMethod = model.publicMethodsByKey.get(key);
-        if(publicMethod!=null
-                /*&& signatureMatcher.test(publicMethod.paramTypes())*/) {
+        val publicMethod = model.publicMethodsByKey.values().stream()
+                .filter(m->m.name().equals(name))
+                .filter(m->_Reflect.methodSignatureAssignableTo(m.paramTypes(), requiredParamTypes))
+                .findFirst()
+                .orElse(null);
+        if(publicMethod!=null) {
             return publicMethod;
         }
+
         if(includeDeclaredMethods) {
-            val resolvedMethod = model.resolvedMethodsByKey.get(key);
-            return resolvedMethod!=null
-                    //&& signatureMatcher.test(resolvedMethod.paramTypes())
-                    ? resolvedMethod
-                    : null;
+            val resolvedMethod = model.resolvedMethodsByKey.values().stream()
+                .filter(m->m.name().equals(name))
+                .filter(m->_Reflect.methodSignatureAssignableTo(m.paramTypes(), requiredParamTypes))
+                .findFirst()
+                .orElse(null);
+            return resolvedMethod;
         }
         return null;
     }
@@ -478,4 +492,6 @@ public final class _ClassCache implements AutoCloseable {
         }
         return _Strings.decapitalize(fieldName);
     }
+
+
 }

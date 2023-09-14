@@ -27,6 +27,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.commons.collections.Can;
@@ -51,12 +52,30 @@ class ClassCacheTest {
         void specificAction(){}
     }
 
+    static class Sample {
+        String echoAction(final String x) {return x;}
+    }
+
     private _ClassCache classCache;
 
     @BeforeEach
     void setup() {
         _ClassCache.invalidate();
         classCache = _ClassCache.getInstance();
+    }
+
+    @Test
+    void weakMethodLookup() {
+        assertNotNull(classCache.lookupResolvedMethodElseFail(Sample.class, "echoAction", new Class<?>[]{Object.class}));
+    }
+    @Test
+    void exactMethodLookup() {
+        assertNotNull(classCache.lookupResolvedMethodElseFail(Sample.class, "echoAction", new Class<?>[]{String.class}));
+    }
+    @Test
+    void invalidMethodLookup() {
+        assertThrows(NoSuchMethodException.class,
+                ()->classCache.lookupResolvedMethodElseFail(Sample.class, "echoAction", new Class<?>[]{Integer.class}));
     }
 
     @Test
