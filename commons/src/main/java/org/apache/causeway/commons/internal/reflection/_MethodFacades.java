@@ -128,13 +128,13 @@ public class _MethodFacades {
         boolean isAnnotatedAsNullable();
 
         default ResolvedType resolveMethodReturn(final Class<?> implementationClass) {
-            return _GenericResolver.forMethodReturn(implementationClass, this.asMethodElseFail());
+            return _GenericResolver.forMethodReturn(implementationClass, this.asMethodForIntrospection());
         }
 
         default ResolvedType resolveParameter(final Class<?> implementationClass, final int paramIndex) {
             val executable = this.asExecutable();
             if(executable instanceof Method) {
-                return _GenericResolver.forMethodParameter(implementationClass, this.asMethodElseFail(), paramIndex);
+                return _GenericResolver.forMethodParameter(implementationClass, this.asMethodForIntrospection(), paramIndex);
             }
             if(executable instanceof Constructor) {
                 return _GenericResolver.forConstructorParameter(implementationClass, this.asConstructorElseFail(), paramIndex);
@@ -185,6 +185,7 @@ public class _MethodFacades {
             return method;
         }
         @Override public String getParameterName(final int paramNum) {
+            // don't replace with ... method.paramType(paramNum).getName();
             return method.method().getParameters()[paramNum].getName();
         }
         @Override public <A extends Annotation> Optional<A> synthesizeOnParameter(
@@ -227,7 +228,8 @@ public class _MethodFacades {
             return method.name();
         }
         @Override public String getParameterName(final int paramNum) {
-            return patConstructor.paramType(paramNum).getName();
+            // don't replace with ... patConstructor.paramType(paramNum).getName();
+            return patConstructor.constructor().getParameters()[paramNum].getName();
         }
         @Override public Class<?> getDeclaringClass() {
             return method.method().getDeclaringClass();

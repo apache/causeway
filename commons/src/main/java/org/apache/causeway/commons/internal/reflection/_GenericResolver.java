@@ -230,7 +230,9 @@ public class _GenericResolver {
     public ResolvedType forConstructorParameter(
             final Class<?> implementationClass, final ResolvedConstructor resolvedConstructor, final int paramIndex) {
 
-        _Assert.assertEquals(implementationClass, resolvedConstructor.implementationClass()); //TODO[CAUSEWAY-3571] needs more research
+        //TODO[CAUSEWAY-3571] implementationClass could be the action's class,
+        // while resolvedConstructor.implementationClass() could be the PaT class
+        //_Assert.assertEquals(implementationClass, resolvedConstructor.implementationClass()); //TODO[CAUSEWAY-3571] needs more research
         val paramTypeGuess = resolvedConstructor.paramType(paramIndex);
         return CollectionSemantics.valueOf(paramTypeGuess)
         .map(__->{
