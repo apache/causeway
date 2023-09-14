@@ -18,10 +18,10 @@
  */
 package org.apache.causeway.core.metamodel.facets.members.hidden.method;
 
-import java.lang.reflect.Method;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
@@ -39,7 +39,7 @@ implements ImperativeFacet {
 
     @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
 
-    public HideForContextFacetViaMethod(final Method method, final FacetHolder holder) {
+    public HideForContextFacetViaMethod(final ResolvedMethod method, final FacetHolder holder) {
         super(holder);
         this.methods = ImperativeFacet.singleRegularMethod(method);
     }
@@ -56,7 +56,7 @@ implements ImperativeFacet {
             return null;
         }
         val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
-        final Boolean isHidden = (Boolean) MmInvokeUtils.invokeAutofit(method, target);
+        final Boolean isHidden = (Boolean) MmInvokeUtils.invokeAutofit(method.method(), target);
         return isHidden.booleanValue() ? "Hidden" : null;
     }
 

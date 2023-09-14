@@ -40,7 +40,7 @@ extends FacetFactoryAbstract {
 
         getClassCache()
         .streamPublicMethods(context.getCls())
-        .filter(method->method.getName().startsWith("dn"))
+        .filter(method->method.name().startsWith("dn"))
         .forEach(context::removeMethod);
 
     }

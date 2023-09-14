@@ -24,7 +24,7 @@ import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
@@ -209,19 +209,18 @@ extends FacetFactoryAbstract {
 
     void processTypeOf(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {
 
-        val cls = processMethodContext.getCls();
         val method = processMethodContext.getMethod();
         val facetedMethod = processMethodContext.getFacetHolder();
 
         val methodReturnType = method.getReturnType();
 
-        ProgrammingModelConstants.CollectionSemantics.valueOf(methodReturnType)
+        CollectionSemantics.valueOf(methodReturnType)
         .ifPresent(collectionType->{
             addFacetIfPresent(
                     TypeOfFacetForActionAnnotation.create(actionIfAny, collectionType, facetedMethod)
                     .or(
                         // else infer from generic type arg if any
-                        ()->TypeOfFacet.inferFromMethodReturnType(cls, method, facetedMethod)
+                        ()->TypeOfFacet.inferFromMethodReturnType(method, facetedMethod)
                         ));
 
         });

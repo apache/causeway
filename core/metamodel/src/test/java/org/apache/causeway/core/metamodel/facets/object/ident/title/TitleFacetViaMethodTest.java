@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.ident.title;
 
-import java.lang.reflect.Method;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -63,7 +61,8 @@ extends FacetFactoryTestAbstract {
         pojo = new DomainObjectWithProblemInItsTitleMethod();
         //mockFacetHolder = mockery.mock(FacetHolder.class);
         //mockOwningAdapter = mockery.mock(ManagedObject.class);
-        final Method iconNameMethod = DomainObjectWithProblemInItsTitleMethod.class.getMethod("title");
+        val iconNameMethod = findMethodExactOrFail(DomainObjectWithProblemInItsTitleMethod.class, "title");
+
         facet = (TitleFacetViaTitleMethod) TitleFacetViaTitleMethod
                 .create(iconNameMethod, mockFacetHolder)
                 .orElse(null);

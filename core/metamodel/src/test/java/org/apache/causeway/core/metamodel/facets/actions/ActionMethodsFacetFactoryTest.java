@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions;
 
-import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -29,6 +28,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.validate.ActionValidationFacet;
@@ -59,7 +59,7 @@ extends FacetFactoryTestAbstract {
             public String validateSomeAction() { return null;}
         }
 
-        final Method validateMethod = findMethodExactOrFail(Customer.class, "validateSomeAction");
+        final ResolvedMethod validateMethod = findMethodExactOrFail(Customer.class, "validateSomeAction");
 
         actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod) -> {
             //when
@@ -86,7 +86,7 @@ extends FacetFactoryTestAbstract {
             public String validateSomeAction(final int x, final int y) { return null;}
         }
 
-        final Method validateMethod = findMethodExactOrFail(Customer.class, "validateSomeAction", new Class[] { int.class, int.class });
+        final ResolvedMethod validateMethod = findMethodExactOrFail(Customer.class, "validateSomeAction", new Class[] { int.class, int.class });
 
         actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod) -> {
             //when
@@ -113,8 +113,8 @@ extends FacetFactoryTestAbstract {
             public long default1SomeAction() { return 0; }
         }
 
-        final Method default0Method = findMethodExactOrFail(Customer.class, "default0SomeAction");
-        final Method default1Method = findMethodExactOrFail(Customer.class, "default1SomeAction");
+        final ResolvedMethod default0Method = findMethodExactOrFail(Customer.class, "default0SomeAction");
+        final ResolvedMethod default1Method = findMethodExactOrFail(Customer.class, "default1SomeAction");
 
         actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod) -> {
             //when
@@ -148,9 +148,9 @@ extends FacetFactoryTestAbstract {
             public Set<Long> choices2SomeAction() { return Collections.emptySet(); }
         }
 
-        final Method choices0Method = findMethodExactOrFail(Customer.class, "choices0SomeAction");
-        final Method choices1Method = findMethodExactOrFail(Customer.class, "choices1SomeAction");
-        final Method choices2Method = findMethodExactOrFail(Customer.class, "choices2SomeAction");
+        final ResolvedMethod choices0Method = findMethodExactOrFail(Customer.class, "choices0SomeAction");
+        final ResolvedMethod choices1Method = findMethodExactOrFail(Customer.class, "choices1SomeAction");
+        final ResolvedMethod choices2Method = findMethodExactOrFail(Customer.class, "choices2SomeAction");
 
         actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod) -> {
             //when
@@ -189,7 +189,7 @@ extends FacetFactoryTestAbstract {
             public List<Integer> autoComplete0SomeAction(final String searchArg) { return Collections.emptyList();}
         }
 
-        final Method autoComplete0Method = findMethodExactOrFail(Customer.class, "autoComplete0SomeAction", new Class[] {String.class});
+        final ResolvedMethod autoComplete0Method = findMethodExactOrFail(Customer.class, "autoComplete0SomeAction", new Class[] {String.class});
 
         actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod) -> {
             //when

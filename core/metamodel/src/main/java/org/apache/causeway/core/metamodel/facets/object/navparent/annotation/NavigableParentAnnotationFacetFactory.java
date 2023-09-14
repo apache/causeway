@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.facets.object.navparent.annotation;
 
 import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Method;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -28,6 +27,7 @@ import jakarta.inject.Inject;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._Annotations;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.commons.internal.reflection._Reflect.InterfacePolicy;
 import org.apache.causeway.commons.internal.reflection._Reflect.TypeHierarchyPolicy;
@@ -44,7 +44,6 @@ import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * For detailed behavioral specification see
@@ -53,7 +52,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0
  *
  */
-@Log4j2
+//@Log4j2
 public class NavigableParentAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
@@ -87,7 +86,7 @@ implements MetaModelRefiner {
 
         final Evaluators.Evaluator parentEvaluator = evaluators.get();
 
-        final Method method;
+        final ResolvedMethod method;
 
         // find method that provides the parent ...
         if(parentEvaluator instanceof Evaluators.MethodEvaluator) {
@@ -144,7 +143,7 @@ implements MetaModelRefiner {
                         if(a instanceof MethodEvaluator) {
                             val ma = (MethodEvaluator) a;
                             val mb = (MethodEvaluator) b;
-                            return _Reflect.methodsSame(ma.getMethod(), mb.getMethod());
+                            return _Reflect.methodsSame(ma.getMethod().method(), mb.getMethod().method());
                         }
                         return true; // equal
                     });;

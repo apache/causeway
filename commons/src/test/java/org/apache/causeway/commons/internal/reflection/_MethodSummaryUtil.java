@@ -18,33 +18,34 @@
  */
 package org.apache.causeway.commons.internal.reflection;
 
-import java.lang.reflect.Method;
 import java.util.Optional;
 
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.io.TextUtils;
 
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-class _Util {
+class _MethodSummaryUtil {
 
-    String methodSummary(final @Nullable Method method) {
+    String methodSummary(final @Nullable ResolvedMethod method) {
         return Optional.ofNullable(method)
-        .map(Method::getName)
+        .map(ResolvedMethod::name)
         .map(name->TextUtils.cutter(name).keepAfter("sampleAction").getValue())
         .map(ordinal->String.format("%s%s%s%s%s%s",
                 ordinal,
-                _NullSafe.stream(method.getParameterTypes())
+                _Reflect.hasGenericParam(method.method()) ? "p" : "",
+                _Reflect.hasGenericReturn(method.method()) ? "r" : "",
+                method.method().isSynthetic() ? "s" : "",
+                method.method().isBridge() ? "b" : "",
+                _NullSafe.stream(method.paramTypes())
                     .findFirst()
-                    .map(paramType->paramType.equals(String.class) ? "+" : "?")
-                    .orElse(""),
-                _Reflect.hasGenericParam(method) ? "p" : "",
-                _Reflect.hasGenericReturn(method) ? "r" : "",
-                method.isSynthetic() ? "s" : "",
-                method.isBridge() ? "b" : ""))
+                    .map(paramType->paramType.equals(String.class) ? ":string" : ":?")
+                    .orElse(""))
+                )
         .orElse("-");
     }
 

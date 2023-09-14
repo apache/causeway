@@ -19,9 +19,9 @@
 package org.apache.causeway.core.metamodel.specloader.specimpl;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.TypeOfAnyCardinality;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyActionParameter;
 import org.apache.causeway.core.metamodel.util.Facets;
 
@@ -41,8 +41,8 @@ implements OneToManyActionParameter {
     // -- UNDERLYING TYPE
 
     @Getter(onMethod_={@Override}, lazy = true)
-    private final TypeOfAnyCardinality typeOfAnyCardinality = resolveTypeOfAnyCardinality();
-    private TypeOfAnyCardinality resolveTypeOfAnyCardinality() {
+    private final ResolvedType typeOfAnyCardinality = resolveTypeOfAnyCardinality();
+    private ResolvedType resolveTypeOfAnyCardinality() {
         return Facets.typeOfAnyCardinality(getFacetHolder())
                 .orElseThrow(()->_Exceptions.unrecoverable(
                         "framework bug: non-scalar feature must have a TypeOfFacet"));

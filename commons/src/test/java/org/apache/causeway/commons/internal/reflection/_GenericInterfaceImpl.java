@@ -26,8 +26,8 @@ implements _GenericInterface<String> {
 
     static _Expectations expectations() {
         return _Expectations.builder()
-                .methodNameOrdinals("1,2+,3,5,6+")
-                .methodCount(5)
+                .methodNameOrdinals("1,2:string,3,4pr:string,5,6:string")
+                .methodCount(6)
                 .syntheticCount(0)
                 .bridgeCount(0)
                 .build();

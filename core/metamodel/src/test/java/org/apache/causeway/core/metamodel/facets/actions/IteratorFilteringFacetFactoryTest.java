@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions;
 
-import java.lang.reflect.Method;
 import java.util.Iterator;
 
 import org.junit.jupiter.api.AfterEach;
@@ -28,6 +27,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.object.ignore.javalang.IteratorFilteringFacetFactory;
 
@@ -52,7 +52,7 @@ extends FacetFactoryTestAbstract {
         class Customer {
             public void iterator() {}
         }
-        final Method actionMethod = findMethodExactOrFail(Customer.class, "iterator");
+        final ResolvedMethod actionMethod = findMethodExactOrFail(Customer.class, "iterator");
         assertFalse(facetFactory.recognizes(actionMethod));
     }
 
@@ -64,7 +64,7 @@ extends FacetFactoryTestAbstract {
             @Override
             public Iterator<Customer> iterator() { return null; }
         }
-        final Method iteratorMethod = findMethodExactOrFail(Customer.class, "iterator");
+        final ResolvedMethod iteratorMethod = findMethodExactOrFail(Customer.class, "iterator");
         assertTrue(facetFactory.recognizes(iteratorMethod));
     }
 

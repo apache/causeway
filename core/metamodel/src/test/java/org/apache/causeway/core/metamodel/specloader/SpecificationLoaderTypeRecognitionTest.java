@@ -115,8 +115,8 @@ implements HasMetaModelContext {
 
         val typeOfFacet = specification.getFacet(TypeOfFacet.class);
         assertNotNull(typeOfFacet);
-        assertEquals(Optional.of(containerType), typeOfFacet.value().getContainerType());
-        assertEquals(Object.class, typeOfFacet.value().getElementType());
+        assertEquals(Optional.of(containerType), typeOfFacet.value().containerType());
+        assertEquals(Object.class, typeOfFacet.value().elementType());
 
         val namedFacet = specification.lookupFacet(ObjectNamedFacet.class)
                 .map(Facet.class::cast)

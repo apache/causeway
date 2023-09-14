@@ -69,7 +69,7 @@ class ObjectAssociationAbstractTest_alwaysHidden {
     public void setup() {
 
         MetaModelContext mmc = MetaModelContext_forTesting.buildDefault();
-        facetedMethod = FacetedMethod.createForProperty(mmc, Customer.class, "firstName");
+        facetedMethod = FacetedMethod.testing.createGetterForProperty(mmc, Customer.class, "firstName");
 
         objectAssociation = new ObjectAssociationAbstract(
                 facetedMethod.getFeatureIdentifier(),

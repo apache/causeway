@@ -31,6 +31,7 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
+import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -136,6 +137,11 @@ final class Can_Singleton<T> implements Can<T> {
     @Override
     public Iterator<T> reverseIterator() {
         return iterator();
+    }
+
+    @Override
+    public Can<T> reduce(final @NonNull BinaryOperator<T> accumulator) {
+        return this; // reduction of singleton acts as identity operation
     }
 
     @Override

@@ -21,12 +21,12 @@ package org.apache.causeway.core.metamodel.facets.actcoll.typeof;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.CollectionSemantics;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
+import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.TypeOfAnyCardinality;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -41,13 +41,13 @@ implements TypeOfFacet {
     }
 
     protected TypeOfFacetAbstract(
-            final TypeOfAnyCardinality value,
+            final ResolvedType value,
             final FacetHolder holder) {
         this(value, holder, Precedence.DEFAULT);
     }
 
     protected TypeOfFacetAbstract(
-            final TypeOfAnyCardinality type,
+            final ResolvedType type,
             final FacetHolder holder,
             final Precedence precedence) {
         super(type(), holder, precedence);
@@ -55,25 +55,25 @@ implements TypeOfFacet {
     }
 
     @Getter(onMethod_={@Override}) @Accessors(fluent = true)
-    private final @NonNull TypeOfAnyCardinality value;
+    private final @NonNull ResolvedType value;
 
     @Override
     public final ObjectSpecification elementSpec() {
-        return getSpecificationLoader().specForTypeElseFail(value().getElementType());
+        return getSpecificationLoader().specForTypeElseFail(value().elementType());
     }
 
     @Override
     public final Optional<CollectionSemantics> getCollectionSemantics() {
-        return value().getCollectionSemantics();
+        return value().collectionSemantics();
     }
 
     @Override
     public final void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("element-type", value().getElementType());
+        visitor.accept("element-type", value().elementType());
         getCollectionSemantics()
             .ifPresent(sem->visitor.accept("collection-semantics", sem.name()));
-        value().getContainerType()
+        value().containerType()
             .ifPresent(containerType->visitor.accept("container-type", containerType.getName()));
     }
 

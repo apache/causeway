@@ -64,6 +64,7 @@ import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.Mandatory
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet.Semantics;
 import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacetFromAction;
+import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacetFromElementType;
 import org.apache.causeway.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod;
 import org.apache.causeway.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -78,6 +79,7 @@ import org.apache.causeway.testdomain.model.good.Configuration_usingValidDomain;
 import org.apache.causeway.testdomain.model.good.ElementTypeAbstract;
 import org.apache.causeway.testdomain.model.good.ElementTypeConcrete;
 import org.apache.causeway.testdomain.model.good.ElementTypeInterface;
+import org.apache.causeway.testdomain.model.good.ProperActionParamterBoundingWhenUsingEnum;
 import org.apache.causeway.testdomain.model.good.ProperChoicesWhenActionHasParamSupportingMethodTypeOfReference;
 import org.apache.causeway.testdomain.model.good.ProperChoicesWhenActionHasParamSupportingMethodTypeOfString;
 import org.apache.causeway.testdomain.model.good.ProperChoicesWhenChoicesFrom;
@@ -496,6 +498,31 @@ class DomainModelTest_usingGoodDomain {
         assertHasProperty(i2Spec, "d");
         assertHasProperty(i2Spec, "e");
         assertHasProperty(i2Spec, "f");
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    void actionParamChoices_shouldBeImplicitlyBounded_whenEnum() {
+
+        val spec = specificationLoader.specForTypeElseFail(ProperActionParamterBoundingWhenUsingEnum.class);
+
+        val action = spec.getActionElseFail("sampleAction");
+        val param0 = action.getParameters().getFirstElseFail();
+
+        assertEquals(
+                ActionParameterChoicesFacetFromElementType.class,
+                param0.lookupFacet(ActionParameterChoicesFacet.class)
+                    .map(Object::getClass)
+                    .orElse(null));
+
+        val act = testerFactory
+                .actionTester(ProperActionParamterBoundingWhenUsingEnum.class, "sampleAction");
+
+        val expectedParamChoices = Can.ofArray(
+                ProperActionParamterBoundingWhenUsingEnum.SampleEnum.values());
+
+        act.assertParameterChoices(true, ProperActionParamterBoundingWhenUsingEnum.SampleEnum.class,
+                choices0->assertEquals(expectedParamChoices, Can.ofIterable(choices0), ()->"param 0 choices mismatch"));
     }
 
     @Test

@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.specloader.specimpl.dflt;
 
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -37,6 +36,7 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
@@ -80,7 +80,7 @@ implements FacetHolder {
     /**
      * Lazily built by {@link #getMember(Method)}.
      */
-    private Map<Method, ObjectMember> membersByMethod = null;
+    private Map<ResolvedMethod, ObjectMember> membersByMethod = null;
 
     private final FacetedMethodsBuilder facetedMethodsBuilder;
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
@@ -258,7 +258,7 @@ implements FacetHolder {
     }
 
     @Override
-    public Optional<? extends ObjectMember> getMember(final Method method) {
+    public Optional<? extends ObjectMember> getMember(final ResolvedMethod method) {
         introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
 
         if (membersByMethod == null) {
@@ -269,32 +269,32 @@ implements FacetHolder {
         return Optional.ofNullable(member);
     }
 
-    private Map<Method, ObjectMember> catalogueMembers() {
-        val membersByMethod = _Maps.<Method, ObjectMember>newHashMap();
+    private Map<ResolvedMethod, ObjectMember> catalogueMembers() {
+        val membersByMethod = _Maps.<ResolvedMethod, ObjectMember>newHashMap();
         cataloguePropertiesAndCollections(membersByMethod::put);
         catalogueActions(membersByMethod::put);
         return membersByMethod;
     }
 
-    private void cataloguePropertiesAndCollections(final BiConsumer<Method, ObjectMember> onMember) {
+    private void cataloguePropertiesAndCollections(final BiConsumer<ResolvedMethod, ObjectMember> onMember) {
         streamDeclaredAssociations(MixedIn.EXCLUDED)
         .forEach(field->
             field.streamFacets(ImperativeFacet.class)
                 .map(ImperativeFacet::getMethods)
                 .flatMap(Can::stream)
                 .map(MethodFacade::asMethodElseFail) // expected regular
-                .map(_Reflect::guardAgainstSynthetic) // expected non-synthetic
+                .peek(method->_Reflect.guardAgainstSynthetic(method.method())) // expected non-synthetic
                 .forEach(imperativeFacetMethod->onMember.accept(imperativeFacetMethod, field)));
     }
 
-    private void catalogueActions(final BiConsumer<Method, ObjectMember> onMember) {
+    private void catalogueActions(final BiConsumer<ResolvedMethod, ObjectMember> onMember) {
         streamDeclaredActions(MixedIn.INCLUDED)
         .forEach(userAction->
             userAction.streamFacets(ImperativeFacet.class)
                 .map(ImperativeFacet::getMethods)
                 .flatMap(Can::stream)
                 .map(MethodFacade::asMethodForIntrospection)
-                .map(_Reflect::guardAgainstSynthetic) // expected non-synthetic
+                .peek(method->_Reflect.guardAgainstSynthetic(method.method())) // expected non-synthetic
                 .forEach(imperativeFacetMethod->
                     onMember.accept(imperativeFacetMethod, userAction)));
     }

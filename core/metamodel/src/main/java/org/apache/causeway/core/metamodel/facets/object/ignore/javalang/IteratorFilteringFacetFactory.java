@@ -25,6 +25,7 @@ import jakarta.inject.Inject;
 
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal._Constants;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
@@ -57,8 +58,8 @@ implements MethodFilteringFacetFactory, Iterable<Object> {
     }
 
     @Override
-    public boolean recognizes(final Method method) {
-        return _Reflect.methodsSame(iteratorMethod(), method);
+    public boolean recognizes(final ResolvedMethod method) {
+        return _Reflect.methodsSame(iteratorMethod(), method.method());
     }
 
     // -- HELPER

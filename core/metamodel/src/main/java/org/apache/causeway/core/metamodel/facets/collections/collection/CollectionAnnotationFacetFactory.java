@@ -24,7 +24,7 @@ import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
@@ -102,12 +102,11 @@ extends FacetFactoryAbstract {
 
     void processTypeOf(final ProcessMethodContext processMethodContext, final Optional<Collection> collectionIfAny) {
 
-        val cls = processMethodContext.getCls();
         val facetHolder = processMethodContext.getFacetHolder();
         val method = processMethodContext.getMethod();
 
         val methodReturnType = method.getReturnType();
-        ProgrammingModelConstants.CollectionSemantics.valueOf(methodReturnType)
+        CollectionSemantics.valueOf(methodReturnType)
         .ifPresent(collectionType->{
             addFacetIfPresent(
                     // check for @Collection(typeOf=...)
@@ -116,7 +115,6 @@ extends FacetFactoryAbstract {
                     .or(
                         // else infer from return type
                         ()-> TypeOfFacet.inferFromMethodReturnType(
-                                cls,
                                 method,
                                 facetHolder))
                 );

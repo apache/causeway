@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.facets.collections.javautilcollection
 
 import jakarta.inject.Inject;
 
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
@@ -41,14 +41,14 @@ extends FacetFactoryAbstract {
 
         val cls = processClassContext.getCls();
 
-        ProgrammingModelConstants.CollectionSemantics.valueOf(cls)
+        CollectionSemantics.valueOf(cls)
         .ifPresent(collectionType->{
             val facetHolder = processClassContext.getFacetHolder();
             if (collectionType.isArray()) {
                 addFacet(new JavaArrayFacet(facetHolder));
             }
             addFacet(new JavaCollectionFacet(facetHolder));
-            addFacetIfPresent(TypeOfFacet.inferFromNonScalarType(collectionType, cls, facetHolder));
+            addFacetIfPresent(TypeOfFacet.inferFromPluralType(collectionType, cls, facetHolder));
         });
     }
 

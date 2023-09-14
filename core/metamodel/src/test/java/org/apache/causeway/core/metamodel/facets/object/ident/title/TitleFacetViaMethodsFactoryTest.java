@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.ident.title;
 
-import java.lang.reflect.Method;
-
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -28,7 +26,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
@@ -57,7 +54,7 @@ extends ObjectSupportFacetFactoryTestAbstract {
             public String toString() { return "Some title via toString"; }
         }
 
-        final Method toStringMethod = findMethodExactOrFail(Customer.class, "toString");
+        val toStringMethod = findMethodExactOrFail(Customer.class, "toString");
 
         objectScenario(Customer.class, (processClassContext, facetHolder) -> {
             //when
@@ -74,10 +71,7 @@ extends ObjectSupportFacetFactoryTestAbstract {
 
     @Test
     void titleFacetOnJavaObjectToStringIsIgnored() throws NoSuchMethodException, SecurityException {
-
-        final Method sampleMethod = Object.class
-                .getMethod("toString", _Constants.emptyClasses);
-
+        val sampleMethod = findMethodExactOrFail(Object.class, "toString");
         val facetedMethod = Mockito.mock(FacetedMethod.class);
 
         assertFalse(TitleFacetFromToStringMethod

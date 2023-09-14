@@ -51,5 +51,4 @@ extends ChainingModel<List<LinkAndLabel>> {
         return false;
     }
 
-
 }

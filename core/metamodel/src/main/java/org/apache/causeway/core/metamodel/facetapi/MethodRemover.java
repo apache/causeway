@@ -18,11 +18,11 @@
  */
 package org.apache.causeway.core.metamodel.facetapi;
 
-import java.lang.reflect.Method;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.commons.MethodUtil;
 
 /**
@@ -38,12 +38,12 @@ public interface MethodRemover {
      * @param onRemoval receives any methods that were removed
      */
     void removeMethods(
-            Predicate<Method> removeIf,
-            Consumer<Method> onRemoval);
+            Predicate<ResolvedMethod> removeIf,
+            Consumer<ResolvedMethod> onRemoval);
 
     /** variant with noop consumer */
     default void removeMethods(
-            Predicate<Method> removeIf) {
+            final Predicate<ResolvedMethod> removeIf) {
         removeMethods(removeIf, removedMethod -> {});
     }
 
@@ -54,35 +54,35 @@ public interface MethodRemover {
      *
      */
     default void removeMethod(
-            String methodName,
-            Class<?> returnType,
-            Class<?>[] parameterTypes) {
+            final String methodName,
+            final Class<?> returnType,
+            final Class<?>[] parameterTypes) {
 
         removeMethods(MethodUtil.Predicates.signature(methodName, returnType, parameterTypes));
     }
 
-    void removeMethod(Method method);
-    
+    void removeMethod(ResolvedMethod method);
+
     /**
      * Returns a defensive copy of the current internal state.
      * @apiNote introduced for debugging purposes
      */
-    Can<Method> snapshotMethodsRemaining();
+    Can<ResolvedMethod> snapshotMethodsRemaining();
 
     // -- NOOP IMPLEMENTATION
 
     public static final MethodRemover NOOP = new MethodRemover() {
 
         @Override
-        public void removeMethod(final Method method) {
+        public void removeMethod(final ResolvedMethod method) {
         }
 
         @Override
-        public void removeMethods(Predicate<Method> filter, Consumer<Method> onRemoval) {
+        public void removeMethods(final Predicate<ResolvedMethod> filter, final Consumer<ResolvedMethod> onRemoval) {
         }
 
         @Override
-        public Can<Method> snapshotMethodsRemaining() {
+        public Can<ResolvedMethod> snapshotMethodsRemaining() {
             return Can.empty();
         }
 

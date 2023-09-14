@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.specloader.specimpl;
 
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -47,6 +46,7 @@ import org.apache.causeway.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.collections._Streams;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -151,7 +151,7 @@ implements ObjectSpecification {
     private final List<ObjectAction> objectActions = _Lists.newArrayList();
 
     /** not API, used for validation */
-    @Getter private final Set<Method> potentialOrphans = _Sets.newHashSet();
+    @Getter private final Set<ResolvedMethod> potentialOrphans = _Sets.newHashSet();
 
     // defensive immutable lazy copy of objectActions
     private final _Lazy<Can<ObjectAction>> unmodifiableActions =

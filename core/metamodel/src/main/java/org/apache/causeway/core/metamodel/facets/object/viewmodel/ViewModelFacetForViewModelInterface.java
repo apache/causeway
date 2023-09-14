@@ -30,6 +30,7 @@ import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.IndexedConsumer;
 import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.commons.ClassExtensions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -55,7 +56,7 @@ extends ViewModelFacetAbstract {
             return Optional.empty();
         }
 
-        Constructor<?> pickedConstructor = null; // not used for abstract types
+        ResolvedConstructor pickedConstructor = null; // not used for abstract types
 
         if(!cls.isInterface()
                 && !ClassExtensions.isAbstract(cls)) {
@@ -80,6 +81,7 @@ extends ViewModelFacetAbstract {
                             .addVariable("type", cls.getName())
                             .addVariable("found", explicitInjectConstructors.getCardinality().isMultiple()
                                     ? "{" + explicitInjectConstructors.stream()
+                                            .map(ResolvedConstructor::constructor)
                                             .map(Constructor::toString)
                                             .collect(Collectors.joining(", ")) + "}"
                                     : "none")
@@ -100,11 +102,11 @@ extends ViewModelFacetAbstract {
         return Optional.of(new ViewModelFacetForViewModelInterface(holder, pickedConstructor));
     }
 
-    private Constructor<?> constructorAnyArgs;
+    private ResolvedConstructor constructorAnyArgs;
 
     protected ViewModelFacetForViewModelInterface(
             final FacetHolder holder,
-            final @Nullable Constructor<?> constructorAnyArgs) {
+            final @Nullable ResolvedConstructor constructorAnyArgs) {
         super(holder, Precedence.HIGH);
         this.constructorAnyArgs = constructorAnyArgs;
     }
@@ -146,23 +148,23 @@ extends ViewModelFacetAbstract {
                 + "this can only happen, if we try to deserialize an abstract type");
 
         val resolvedArgs = resolveArgsForConstructor(constructorAnyArgs, getServiceRegistry(), memento);
-        val viewmodelPojo = constructorAnyArgs.newInstance(resolvedArgs);
+        val viewmodelPojo = constructorAnyArgs.constructor().newInstance(resolvedArgs);
         return viewmodelPojo;
     }
 
     private static Object[] resolveArgsForConstructor(
-            final Constructor<?> constructor,
+            final ResolvedConstructor constructor,
             final ServiceRegistry serviceRegistry,
             final String memento) {
 
-        val params = Can.ofArray(constructor.getParameters());
-        val args = new Object[params.size()];
-        params.forEach(IndexedConsumer.zeroBased((i, param)->{
-            if(param.getType().equals(String.class)) {
+        val paramTypes = Can.ofArray(constructor.paramTypes());
+        val args = new Object[constructor.paramCount()];
+        paramTypes.forEach(IndexedConsumer.zeroBased((final int i, final Class<?> paramType)->{
+            if(paramType.equals(String.class)) {
                 args[i] = memento; // its ok to do this never, once, or more than once per constructor, see ViewModel java-doc
                 return;
             }
-            args[i] = serviceRegistry.lookupServiceElseFail(param.getType());
+            args[i] = serviceRegistry.lookupServiceElseFail(paramType);
         }));
         return args;
     }

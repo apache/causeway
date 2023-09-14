@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.object;
 
-import java.lang.reflect.Method;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.Optional;
@@ -36,6 +35,7 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Objects;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.commons.ClassExtensions;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -395,7 +395,7 @@ public final class ManagedObjects {
 
     public static Try<String> imperativeText(
             final @Nullable ManagedObject object,
-            final @NonNull Method method,
+            final @NonNull ResolvedMethod method,
             final @Nullable TranslationContext translationContext) {
 
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(object)) {
@@ -405,7 +405,7 @@ public final class ManagedObjects {
         val mmc = object.getSpecification().getMetaModelContext();
 
         val result =  Try.call(()->{
-            final Object returnValue = MmInvokeUtils.invokeNoArg(method, object);
+            final Object returnValue = MmInvokeUtils.invokeNoArg(method.method(), object);
             if(returnValue instanceof String) {
                 return (String) returnValue;
             }

@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.persistence.jdo.metamodel.facets.prop.primarykey;
 
-import java.lang.reflect.Method;
-
 import javax.jdo.annotations.PrimaryKey;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -66,7 +64,7 @@ extends AbstractFacetFactoryTest {
 
     public void testIdAnnotationPickedUpOnProperty() throws Exception {
         final Class<?> cls = SimpleObjectWithPrimaryKey.class;
-        final Method method = cls.getMethod("getId");
+        val method = findMethod(cls, "getId");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
@@ -77,7 +75,7 @@ extends AbstractFacetFactoryTest {
 
     public void testOptionalDerivedFromId() throws Exception {
         final Class<?> cls = SimpleObjectWithPrimaryKey.class;
-        final Method method = cls.getMethod("getId");
+        val method = findMethod(cls, "getId");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
@@ -88,7 +86,7 @@ extends AbstractFacetFactoryTest {
 
     public void testDisabledDerivedFromId() throws Exception {
         final Class<?> cls = SimpleObjectWithPrimaryKey.class;
-        final Method method = cls.getMethod("getId");
+        val method = findMethod(cls, "getId");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
@@ -115,7 +113,7 @@ extends AbstractFacetFactoryTest {
         }
 
         final Class<?> cls = Customer.class;
-        final Method method = cls.getMethod("getId");
+        val method = findMethod(cls, "getId");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
@@ -140,7 +138,7 @@ extends AbstractFacetFactoryTest {
         }
 
         final Class<?> cls = Customer.class;
-        final Method method = cls.getMethod("getId");
+        val method = findMethod(cls, "getId");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 

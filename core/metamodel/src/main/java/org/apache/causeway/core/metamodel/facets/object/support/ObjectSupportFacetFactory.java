@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.support;
 
-import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
@@ -26,6 +25,7 @@ import java.util.stream.Stream;
 import jakarta.inject.Inject;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
@@ -127,7 +127,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
     private void processObjectSupport(
             final ProcessClassContext processClassContext,
             final ObjectSupportMethod objectSupportMethodEnum,
-            final BiFunction<Method, FacetHolder, Optional<? extends Facet>> ojectSupportFacetConstructor) {
+            final BiFunction<ResolvedMethod, FacetHolder, Optional<? extends Facet>> ojectSupportFacetConstructor) {
 
         MethodFinder
         .objectSupport(

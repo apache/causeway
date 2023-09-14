@@ -39,14 +39,13 @@ final class FailureUtil {
             .withRequiredReturnType(int.class)
             .streamMethodsMatchingSignature(MethodFinder.NO_ARG)
             .findFirst()
-            .map(errorCodeGetter->_Reflect.invokeMethodOn(errorCodeGetter, ex))
+            .map(errorCodeGetter->_Reflect.invokeMethodOn(errorCodeGetter.method(), ex))
             .map(Try::getValue)
             .map(Optional::stream)
             .filter(Integer.class::isInstance)
             .map(Integer.class::cast)
             .map(RestfulResponse.HttpStatusCode::statusFor)
             .orElse(null);
-
     }
 
 }

@@ -28,7 +28,7 @@ class _Mixins {
 
         static _Expectations expectations() {
             return _Expectations.builder()
-                    .methodNameOrdinals("1+,2")
+                    .methodNameOrdinals("1:string,2")
                     .methodCount(2)
                     .syntheticCount(0)
                     .bridgeCount(0)
@@ -53,7 +53,7 @@ class _Mixins {
 
         static _Expectations expectations() {
             return _Expectations.builder()
-                    .methodNameOrdinals("1+,2")
+                    .methodNameOrdinals("1:string,2")
                     .methodCount(2)
                     .syntheticCount(0)
                     .bridgeCount(0)

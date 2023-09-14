@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.facets.object.ignore.annotation;
 import jakarta.inject.Inject;
 
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MethodExcludeMarker;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
@@ -43,7 +42,7 @@ extends FacetFactoryAbstract {
         switch (policy) {
             case ENCAPSULATION_ENABLED:
                 getClassCache()
-                        .streamPublicOrDeclaredMethods(processClassContext.getCls())
+                        .streamResolvedMethods(processClassContext.getCls())
                         .forEach(method -> {
                             if (!ProgrammingModelConstants.MethodIncludeMarker.anyMatchOn(method)) {
                                 processClassContext.removeMethod(method);
@@ -59,7 +58,7 @@ extends FacetFactoryAbstract {
                 getClassCache()
                         .streamPublicMethods(processClassContext.getCls())
                         .forEach(method->{
-                            if(MethodExcludeMarker.anyMatchOn(method)) {
+                            if(ProgrammingModelConstants.MethodExcludeMarker.anyMatchOn(method)) {
                                 processClassContext.removeMethod(method);
                             }
                         });

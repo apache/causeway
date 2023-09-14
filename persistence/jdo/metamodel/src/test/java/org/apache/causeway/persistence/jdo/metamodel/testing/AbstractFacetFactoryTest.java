@@ -32,6 +32,7 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.config.beans.PersistenceStack;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel._testing.MethodRemover_forTesting;
@@ -93,7 +94,7 @@ public abstract class AbstractFacetFactoryTest {
                 metaModelContext,
                 Identifier.propertyIdentifier(LogicalType.fqcn(Customer.class), "firstName"));
 
-        facetedMethod = FacetedMethod.createSetterForProperty(metaModelContext, Customer.class, "firstName");
+        facetedMethod = FacetedMethod.testing.createSetterForProperty(metaModelContext, Customer.class, "firstName");
         facetedMethodParameter = new FacetedMethodParameter(
                 metaModelContext,
                 FeatureType.ACTION_PARAMETER_SINGULAR, facetedMethod.getOwningType(),
@@ -116,11 +117,11 @@ public abstract class AbstractFacetFactoryTest {
         return Utils.contains(featureTypes, featureType);
     }
 
-    protected static Method findMethod(final Class<?> type, final String methodName, final Class<?>[] methodTypes) {
+    protected static ResolvedMethod findMethod(final Class<?> type, final String methodName, final Class<?>[] methodTypes) {
         return Utils.findMethod(type, methodName, methodTypes);
     }
 
-    protected Method findMethod(final Class<?> type, final String methodName) {
+    protected ResolvedMethod findMethod(final Class<?> type, final String methodName) {
         return Utils.findMethod(type, methodName);
     }
 

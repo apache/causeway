@@ -18,10 +18,10 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.choices.method;
 
-import java.lang.reflect.Method;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -44,7 +44,7 @@ implements ImperativeFacet {
     private final Class<?> choicesClass;
 
     public PropertyChoicesFacetViaMethod(
-            final Method method,
+            final ResolvedMethod method,
             final Class<?> choicesClass,
             final FacetHolder holder) {
         super(holder);
@@ -64,7 +64,7 @@ implements ImperativeFacet {
 
         val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
         val elementSpec = ((FacetedMethod) getFacetHolder()).getElementSpecification();
-        val optionPojos = MmInvokeUtils.invokeNoArg(method, owningAdapter);
+        val optionPojos = MmInvokeUtils.invokeNoArg(method.method(), owningAdapter);
         val visibleChoices = ManagedObjects
                 .adaptMultipleOfTypeThenFilterByVisibility(
                         elementSpec, optionPojos, interactionInitiatedBy);

@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.facets.collections.accessor;
 
-import java.lang.reflect.Method;
 import java.util.List;
 
 import jakarta.inject.Inject;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
+import org.apache.causeway.commons.semantics.AccessorSemantics;
 import org.apache.causeway.core.metamodel.commons.MethodUtil;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -67,16 +67,16 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
     // ///////////////////////////////////////////////////////////////
 
     @Override
-    public boolean isPropertyOrCollectionGetterCandidate(final Method method) {
-        return ProgrammingModelConstants.AccessorPrefix.GET.isPrefixOf(method.getName());
+    public boolean isPropertyOrCollectionGetterCandidate(final ResolvedMethod method) {
+        return AccessorSemantics.GET.isPrefixOf(method.name());
     }
 
     @Override
-    public boolean isCollectionAccessor(final Method method) {
+    public boolean isCollectionAccessor(final ResolvedMethod method) {
         if (!isPropertyOrCollectionGetterCandidate(method)) {
             return false;
         }
-        final Class<?> methodReturnType = method.getReturnType();
+        final Class<?> methodReturnType = method.returnType();
         return isNonScalar(methodReturnType);
     }
 
@@ -85,14 +85,14 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
      * factory does not have any opinion on the matter.
      */
     @Override
-    public boolean isPropertyAccessor(final Method method) {
+    public boolean isPropertyAccessor(final ResolvedMethod method) {
         return false;
     }
 
     @Override
     public void findAndRemoveCollectionAccessors(
             final MethodRemover methodRemover,
-            final List<Method> methodListToAppendTo) {
+            final List<ResolvedMethod> methodListToAppendTo) {
         methodRemover.removeMethods(
                 MethodUtil.Predicates.supportedNonScalarMethodReturnType(),
                 methodListToAppendTo::add);
@@ -100,7 +100,7 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
 
     @Override
     public void findAndRemovePropertyAccessors(
-            final MethodRemover methodRemover, final List<Method> methodListToAppendTo) {
+            final MethodRemover methodRemover, final List<ResolvedMethod> methodListToAppendTo) {
         // does nothing
     }
 

@@ -40,7 +40,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.springframework.core.ResolvableType;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.lang.Nullable;
 import org.springframework.util.ClassUtils;
@@ -52,8 +51,6 @@ import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Arrays;
-import org.apache.causeway.commons.internal.context._Context;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.functions._Predicates;
 
 import lombok.NonNull;
@@ -147,30 +144,6 @@ public final class _Reflect {
 
     public boolean shareSameTypeHierarchy(final @NonNull Method a, final @NonNull Method b) {
         return shareSameTypeHierarchy(a.getDeclaringClass(), b.getDeclaringClass());
-    }
-
-    /**
-     * If a and b are related, such that one overrides the other,
-     * that one which is overriding the other is returned.
-     * @implNote if both declaring type and return type are the same we (arbitrarily) return b
-     */
-    public Method methodsWhichIsOverridingTheOther(final Method a, final Method b) {
-        val aType = a.getDeclaringClass();
-        val bType = b.getDeclaringClass();
-        if(aType.equals(bType)) {
-            val aReturn = a.getReturnType();
-            val bReturn = b.getReturnType();
-            if(aReturn.equals(bReturn)) {
-                // if a and b are not equal, this code path is expected unreachable
-                return b;
-            }
-            return aReturn.isAssignableFrom(bReturn)
-                    ? b
-                    : a;
-        }
-        return aType.isAssignableFrom(bType)
-                ? b
-                : a;
     }
 
     // -- COMPARATORS
@@ -643,102 +616,39 @@ public final class _Reflect {
         return Can.ofArray(cls.getConstructors());
     }
 
-    // -- GENENERIC TYPE ARG INTROSPECTION
+    // -- PREDICATES
 
-    @lombok.Value(staticConstructor = "of")
-    public class MethodAndImplementingClass {
-        final @NonNull Method method;
-        final @NonNull Class<?> implementingClass;
-        /**
-         * [CAUSEWAY-3164] ensures reflection on generic type arguments works in a concurrent introspection setting
-         */
-        public Try<MethodAndImplementingClass> adopt(final @NonNull ClassLoader classLoader) {
-            try {
-                val ownerReloaded = Class.forName(implementingClass.getName(), true, classLoader);
-                val methodReloaded = ownerReloaded.getMethod(method.getName(), method.getParameterTypes());
-                return Try.success(MethodAndImplementingClass.of(methodReloaded, ownerReloaded));
-            } catch (Throwable e) {
-                return Try.failure(e);
-            }
+    public boolean methodSignatureMatch(final Class<?>[] parameterTypes, final Class<?>[] matchingParamTypes) {
+        final int aSize = _NullSafe.size(parameterTypes);
+        final int bSize = _NullSafe.size(matchingParamTypes);
+        if(aSize == 0 && bSize == 0) return true;
+        if(aSize != bSize) return false;
+        for (int c = 0; c < aSize; c++) {
+            if(!Objects.equals(parameterTypes[c], matchingParamTypes[c])) return false;
         }
-        public Try<MethodAndImplementingClass> adoptIntoDefaultClassLoader() {
-            return adopt(_Context.getDefaultClassLoader());
-        }
-        public Class<?> resolveFirstGenericTypeArgumentOnMethodReturn() {
-            return genericTypeArg(ResolvableType.forMethodReturnType(method, implementingClass))
-                    .toClass();
-        }
-        public Class<?> resolveFirstGenericTypeArgumentOnParameter(final int paramIndex) {
-            return genericTypeArg(ResolvableType.forMethodParameter(method, paramIndex, implementingClass))
-                    .toClass();
-        }
-        // -- HELPER
-        private static ResolvableType genericTypeArg(final ResolvableType nonScalar){
-            val genericTypeArg = nonScalar.isArray()
-                    ? nonScalar.getComponentType()
-                    : nonScalar.getGeneric(0);
-            return genericTypeArg;
-        }
+        return true;
     }
-
-    @lombok.Value(staticConstructor = "of")
-    public class ConstructorAndImplementingClass {
-        final @NonNull Constructor<?> constructor;
-        final @NonNull Class<?> implementingClass;
-        /**
-         * [CAUSEWAY-3164] ensures reflection on generic type arguments works in a concurrent introspection setting
-         */
-        public Try<ConstructorAndImplementingClass> adopt(final @NonNull ClassLoader classLoader) {
-            try {
-                val ownerReloaded = Class.forName(implementingClass.getName(), true, classLoader);
-                val methodReloaded = ownerReloaded.getConstructor(constructor.getParameterTypes());
-                return Try.success(ConstructorAndImplementingClass.of(methodReloaded, ownerReloaded));
-            } catch (Throwable e) {
-                return Try.failure(e);
-            }
+    public boolean methodSignatureAssignableTo(final Class<?>[] parameterTypes, final Class<?>[] requiredParamTypes) {
+        final int aSize = _NullSafe.size(parameterTypes);
+        final int bSize = _NullSafe.size(requiredParamTypes);
+        if(aSize == 0 && bSize == 0) return true;
+        if(aSize != bSize) return false;
+        for (int c = 0; c < aSize; c++) {
+            if(!requiredParamTypes[c].isAssignableFrom(parameterTypes[c])) return false;
         }
-        public Try<ConstructorAndImplementingClass> adoptIntoDefaultClassLoader() {
-            return adopt(_Context.getDefaultClassLoader());
-        }
-//        public Class<?> resolveFirstGenericTypeArgumentOnMethodReturn() {
-//            return genericTypeArg(ResolvableType.forConstructorParameter(executable, implementingClass))
-//                    .toClass();
-//        }
-        public Class<?> resolveFirstGenericTypeArgumentOnParameter(final int paramIndex) {
-            return genericTypeArg(ResolvableType.forConstructorParameter(constructor, paramIndex, implementingClass))
-                    .toClass();
-        }
-        // -- HELPER
-        private static ResolvableType genericTypeArg(final ResolvableType nonScalar){
-            val genericTypeArg = nonScalar.isArray()
-                    ? nonScalar.getComponentType()
-                    : nonScalar.getGeneric(0);
-            return genericTypeArg;
-        }
+        return true;
     }
-
-    // -- FILTER
+    public boolean methodSignatureWeaklyMatch(final Class<?>[] parameterTypes, final Class<?>[] otherParamTypes) {
+        final int aSize = _NullSafe.size(parameterTypes);
+        final int bSize = _NullSafe.size(otherParamTypes);
+        if(aSize == 0 && bSize == 0) return true;
+        if(aSize != bSize) return false;
+        return _Arrays.testAllMatch(parameterTypes, otherParamTypes, (p1, p2)->p1.isAssignableFrom(p2))
+                || _Arrays.testAllMatch(parameterTypes, otherParamTypes, (p1, p2)->p2.isAssignableFrom(p1));
+    }
 
     @UtilityClass
-    public class Filter {
-
-        public Predicate<Method> isGetter() {
-            return method->method!=null
-                    && method.getParameterCount()==0
-                    && method.getReturnType()!=void.class
-                    && (method.getName().startsWith("get")
-                        || (method.getName().startsWith("is")
-                                && method.getReturnType()==boolean.class));
-        }
-
-        public Predicate<Method> hasReturnType(final Class<?> expectedReturnType) {
-            return method->expectedReturnType.isAssignableFrom(method.getReturnType());
-        }
-
-        public Predicate<Method> hasReturnTypeAnyOf(final Can<Class<?>> allowedReturnTypes) {
-            return method->allowedReturnTypes.stream()
-                    .anyMatch(allowedReturnType->allowedReturnType.isAssignableFrom(method.getReturnType()));
-        }
+    public class predicates {
 
         public Predicate<Executable> isPublic() {
             return ex->Modifier.isPublic(ex.getModifiers());
@@ -752,25 +662,15 @@ public final class _Reflect {
             return ex->ex.getParameterTypes()[paramIndex].isAssignableFrom(paramType);
         }
 
-        //TODO simple array compare should do
-        public Predicate<Executable> paramSignatureMatch(final Class<?>[] matchingParamTypes) {
-            return ex->{
-                // check params (if required)
-                if (matchingParamTypes != null) {
-                    final Class<?>[] parameterTypes = ex.getParameterTypes();
-                    if (matchingParamTypes.length != parameterTypes.length) {
-                        return false;
-                    }
-
-                    for (int c = 0; c < matchingParamTypes.length; c++) {
-                        if ((matchingParamTypes[c] != null) && (matchingParamTypes[c] != parameterTypes[c])) {
-                            return false;
-                        }
-                    }
-                }
-                return true;
-            };
-        }
+//        public Predicate<Class<?>[]> methodSignatureMatch(final Class<?>[] matchingParamTypes) {
+//            return parameterTypes->_Reflect.methodSignatureMatch(parameterTypes, matchingParamTypes);
+//        }
+//        public Predicate<Class<?>[]> methodSignatureAssignableTo(final Class<?>[] requiredParamTypes) {
+//            return parameterTypes->_Reflect.methodSignatureAssignableTo(parameterTypes, requiredParamTypes);
+//        }
+//        public Predicate<Class<?>[]> methodSignatureWeaklyMatch(final Class<?>[] otherParamTypes) {
+//            return parameterTypes->_Reflect.methodSignatureWeaklyMatch(parameterTypes, otherParamTypes);
+//        }
 
         public Predicate<Executable> paramAssignableFromValue(final int paramIndex, final @Nullable Object value) {
             if(value==null) {
@@ -908,74 +808,14 @@ public final class _Reflect {
         return false;
     }
 
-    /**
-     * Fails if methods don't share the same type hierarchy.
-     * Potentially fails if methods don't share the same type hierarchy branch.
-     * @param methods assumed to pass checks #methodsWeaklySame and #shareSameTypeHierarchy
-     * @return the most specific within the type hierarchy branch
-     *      (undecidable, if multiple branches are involved)
-     *
-     * @implNote EXPERIMENTAL - needs more rigorous testing;
-     *      also the same type hierarchy branch check is only poorly implemented to save execution time
-     *      (assuming the caller knows what to do)
-     * TODO look for a Spring Utility that does the same
-     */
-    public Optional<Method> mostSpecificMethodOf(
-            final @NonNull Can<Method> methods) {
-
-        switch(methods.getCardinality()) {
-        case ZERO:
-            return Optional.empty();
-        case ONE:
-            return methods.getFirst();
-        case MULTIPLE:
-            break; // fall through
-        }
-
-        // assert all methods share the same type hierarchy branch
-        val first = methods.getFirstElseFail();
-        methods
-            .stream()
-            .skip(1)
-            .forEach(next->{
-                _Assert.assertTrue(methodsWeaklySame(first, next),
-                        ()->String.format("weakly same method check failed on\n"
-                        + "(1) %s\n"
-                        + "(2) %s\n",
-                        first, next));
-                _Assert.assertTrue(shareSameTypeHierarchy(first, next),
-                        ()->String.format("same type hierarchy method check failed on\n"
-                                + "(1) %s\n"
-                                + "(2) %s\n",
-                                first, next));
-            });
-
-        return methods
-            .stream()
-            .distinct()
-            .max((a, b)->{
-                val clsA = a.getDeclaringClass();
-                val clsB = b.getDeclaringClass();
-                if(clsA.equals(clsB)) {
-
-                    if(a.isBridge() && b.isBridge()) {
-                        throw _Exceptions.unrecoverable("methods declared on the same type "
-                                + "cannot pass methodsWeaklySame check "
-                                + "and at the same time be distinct and both being bridges");
-                    }
-
-                    if(a.isBridge()) return -1; // b wins
-                    if(b.isBridge()) return 1; // a wins
-
-                    throw _Exceptions.unrecoverable("methods declared on the same type "
-                            + "cannot pass methodsWeaklySame check "
-                            + "and at the same time be distinct and none being a bridge");
-
-                }
-                return clsA.isAssignableFrom(clsB)
-                        ? -1 // b wins
-                        : 1; // a wins
-            });
+    public Class<?> mostSpecificType(final Class<?> a, final Class<?> b) {
+        if(a.equals(b)) return b; // an arbitrary pick
+        _Assert.assertTrue(
+                _Reflect.shareSameTypeHierarchy(a, b),
+                ()->String.format("declared types %s and %s don't share the same type hierarchy", a, b));
+        return a.isAssignableFrom(b)
+                ? b
+                : a;
     }
 
 }
