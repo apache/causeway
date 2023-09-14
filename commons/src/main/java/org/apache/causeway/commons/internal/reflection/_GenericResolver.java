@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.commons.internal.reflection;
 
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.lang.reflect.Method;
@@ -145,7 +143,6 @@ public class _GenericResolver {
      */
     public static interface ResolvedMethod {
         Method method();
-        Try<MethodHandle> methodHandle();
         Class<?> implementationClass();
         Class<?> returnType();
         Class<?>[] paramTypes();
@@ -163,10 +160,6 @@ public class _GenericResolver {
         }
         default boolean isStatic() {
             return Modifier.isStatic(method().getModifiers());
-        }
-        @Deprecated //TODO[CAUSEWAY-3571] don't bypass programming model constants
-        default boolean isGetter() {
-            return _Reflect.Filter.isGetter(method());
         }
         default boolean isNoArg() { return paramCount()==0; }
         default boolean isSingleArg() { return paramCount()==1; }
@@ -227,17 +220,15 @@ public class _GenericResolver {
     /**
      * Resolves a constructor's parameter type.
      */
-    public ResolvedType forConstructorParameter(
-            final Class<?> implementationClass, final ResolvedConstructor resolvedConstructor, final int paramIndex) {
+    public ResolvedType forConstructorParameter(final ResolvedConstructor resolvedConstructor, final int paramIndex) {
 
-        //TODO[CAUSEWAY-3571] implementationClass could be the action's class,
-        // while resolvedConstructor.implementationClass() could be the PaT class
-        //_Assert.assertEquals(implementationClass, resolvedConstructor.implementationClass()); //TODO[CAUSEWAY-3571] needs more research
+        /* implementationClass could be the action's class,
+         * while resolvedConstructor.implementationClass() could be the PaT class */
         val paramTypeGuess = resolvedConstructor.paramType(paramIndex);
         return CollectionSemantics.valueOf(paramTypeGuess)
         .map(__->{
             // adopt into default class loader context
-            val adopted = resolverHelper.ConstructorAndImplementingClass.resolverContext(resolvedConstructor, implementationClass);
+            val adopted = resolverHelper.adoptConstructorContext(resolvedConstructor);
             val paramType = adopted.getConstructor().getParameters()[paramIndex].getType();
 
             return CollectionSemantics.valueOf(paramType)
@@ -255,16 +246,13 @@ public class _GenericResolver {
     /**
      * Resolves a method's return type.
      */
-    public ResolvedType forMethodReturn(
-            final Class<?> implementationClass, final ResolvedMethod resolvedMethod) {
-
-        _Assert.assertEquals(implementationClass, resolvedMethod.implementationClass()); //TODO[CAUSEWAY-3571] needs more research
+    public ResolvedType forMethodReturn(final ResolvedMethod resolvedMethod) {
 
         val methodReturnGuess = resolvedMethod.returnType();
         return CollectionSemantics.valueOf(methodReturnGuess)
         .map(__->{
             // adopt into default class loader context
-            val adopted = resolverHelper.MethodAndImplementingClass.resolverContext(resolvedMethod, implementationClass);
+            val adopted = resolverHelper.adoptMethodContext(resolvedMethod);
             val methodReturn = adopted.getMethod().getReturnType();
 
             return CollectionSemantics.valueOf(methodReturn)
@@ -282,16 +270,13 @@ public class _GenericResolver {
     /**
      * Resolves a method's parameter type.
      */
-    public ResolvedType forMethodParameter(
-            final Class<?> implementationClass, final ResolvedMethod resolvedMethod, final int paramIndex) {
-
-        _Assert.assertEquals(implementationClass, resolvedMethod.implementationClass()); //TODO[CAUSEWAY-3571] needs more research
+    public ResolvedType forMethodParameter(final ResolvedMethod resolvedMethod, final int paramIndex) {
 
         val paramTypeGuess = resolvedMethod.paramType(paramIndex);
         return CollectionSemantics.valueOf(paramTypeGuess)
         .map(__->{
             // adopt into default class loader context
-            val adopted = resolverHelper.MethodAndImplementingClass.resolverContext(resolvedMethod, implementationClass);
+            val adopted = resolverHelper.adoptMethodContext(resolvedMethod);
             val paramType = adopted.getMethod().getParameters()[paramIndex].getType();
 
             return CollectionSemantics.valueOf(paramType)
@@ -346,9 +331,6 @@ public class _GenericResolver {
         @EqualsAndHashCode.Exclude
         private final boolean isResolved;
 
-        @EqualsAndHashCode.Exclude
-        private Try<MethodHandle> methodHandle;
-
         public SimpleResolvedMethod(final Method method, final Class<?> implementationClass) {
             this.method = method;
             this.implementationClass = implementationClass;
@@ -359,13 +341,6 @@ public class _GenericResolver {
         }
         public Optional<ResolvedMethod> guardAgainstCannotResolve() {
             return isResolved ? Optional.of(this) : Optional.empty();
-        }
-        //TODO[CAUSEWAY-3571] - does not work because the lookup is denied when the implementationClass is non public
-        @Override
-        public Try<MethodHandle> methodHandle() {
-            return methodHandle != null
-                    ? methodHandle
-                    : (this.methodHandle = Try.call(()->MethodHandles.lookup().unreflect(method)));
         }
         @Override
         public String toString() {
@@ -472,25 +447,22 @@ public class _GenericResolver {
     @UtilityClass
     static class resolverHelper {
 
+        static MethodAndImplementingClass adoptMethodContext(
+                final ResolvedMethod resolvedMedhod) {
+            // adopt into default class loader context
+            val origin = MethodAndImplementingClass.of(resolvedMedhod.method(), resolvedMedhod.implementationClass());
+            val adopted = origin
+                    .adoptIntoDefaultClassLoader()
+                    .getValue()
+                    .orElse(origin);
+            return adopted;
+        }
+
         @lombok.Value(staticConstructor = "of")
         class MethodAndImplementingClass {
-
-            static MethodAndImplementingClass resolverContext(
-                    final ResolvedMethod resolvedMedhod, final Class<?> implementationClass) {
-                // adopt into default class loader context
-                val origin = of(resolvedMedhod.method(), implementationClass);
-                val adopted = origin
-                        .adoptIntoDefaultClassLoader()
-                        .getValue()
-                        .orElse(origin);
-                return adopted;
-            }
-
             final @NonNull Method method;
             final @NonNull Class<?> implementingClass;
-
             // -- HELPER
-
             private Try<MethodAndImplementingClass> adopt(final @NonNull ClassLoader classLoader) {
                 try {
                     val ownerReloaded = Class.forName(implementingClass.getName(), true, classLoader);
@@ -519,20 +491,18 @@ public class _GenericResolver {
             }
         }
 
+        static ConstructorAndImplementingClass adoptConstructorContext(final ResolvedConstructor resolvedConstructor) {
+            // adopt into default class loader context
+            val origin = ConstructorAndImplementingClass.of(resolvedConstructor.constructor(), resolvedConstructor.implementationClass());
+            val adopted = origin
+                    .adoptIntoDefaultClassLoader()
+                    .getValue()
+                    .orElse(origin);
+            return adopted;
+        }
+
         @lombok.Value(staticConstructor = "of")
         class ConstructorAndImplementingClass {
-
-            static ConstructorAndImplementingClass resolverContext(
-                    final ResolvedConstructor resolvedConstructor, final Class<?> implementationClass) {
-                // adopt into default class loader context
-                val origin = ConstructorAndImplementingClass.of(resolvedConstructor.constructor(), implementationClass);
-                val adopted = origin
-                        .adoptIntoDefaultClassLoader()
-                        .getValue()
-                        .orElse(origin);
-                return adopted;
-            }
-
             final @NonNull Constructor<?> constructor;
             final @NonNull Class<?> implementingClass;
             // -- HELPER

@@ -127,17 +127,17 @@ public class _MethodFacades {
         }
         boolean isAnnotatedAsNullable();
 
-        default ResolvedType resolveMethodReturn(final Class<?> implementationClass) {
-            return _GenericResolver.forMethodReturn(implementationClass, this.asMethodForIntrospection());
+        default ResolvedType resolveMethodReturn() {
+            return _GenericResolver.forMethodReturn(this.asMethodForIntrospection());
         }
 
-        default ResolvedType resolveParameter(final Class<?> implementationClass, final int paramIndex) {
+        default ResolvedType resolveParameter(final int paramIndex) {
             val executable = this.asExecutable();
             if(executable instanceof Method) {
-                return _GenericResolver.forMethodParameter(implementationClass, this.asMethodForIntrospection(), paramIndex);
+                return _GenericResolver.forMethodParameter(this.asMethodForIntrospection(), paramIndex);
             }
             if(executable instanceof Constructor) {
-                return _GenericResolver.forConstructorParameter(implementationClass, this.asConstructorElseFail(), paramIndex);
+                return _GenericResolver.forConstructorParameter(this.asConstructorElseFail(), paramIndex);
             }
             throw _Exceptions.unexpectedCodeReach();
         }

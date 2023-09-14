@@ -55,7 +55,7 @@ extends TypedHolderAbstract {
             final ResolvedMethod getterMethod) {
         val methodFacade = _MethodFacades.regular(getterMethod);
         return new FacetedMethod(mmc, FeatureType.PROPERTY,
-                declaringType, methodFacade, _GenericResolver.forMethodReturn(declaringType, getterMethod), Can.empty());
+                declaringType, methodFacade, _GenericResolver.forMethodReturn(getterMethod), Can.empty());
     }
 
     public static FacetedMethod createForCollection(
@@ -64,7 +64,7 @@ extends TypedHolderAbstract {
             final ResolvedMethod getterMethod) {
         val methodFacade = _MethodFacades.regular(getterMethod);
         return new FacetedMethod(mmc, FeatureType.COLLECTION,
-                declaringType, methodFacade, _GenericResolver.forMethodReturn(declaringType, getterMethod), Can.empty());
+                declaringType, methodFacade, _GenericResolver.forMethodReturn(getterMethod), Can.empty());
     }
 
     public static FacetedMethod createForAction(
@@ -72,7 +72,7 @@ extends TypedHolderAbstract {
             final Class<?> declaringType,
             final MethodFacade methodFacade) {
         return new FacetedMethod(mmc, FeatureType.ACTION,
-                declaringType, methodFacade, methodFacade.resolveMethodReturn(declaringType),
+                declaringType, methodFacade, methodFacade.resolveMethodReturn(),
                 getParameters(mmc, declaringType, methodFacade));
     }
 
@@ -107,7 +107,7 @@ extends TypedHolderAbstract {
 
             val facetedMethodParamToUse =
                     TypeOfFacet
-                    .inferFromMethodParameter(declaringType, actionMethod, paramIndex, facetedMethodParam)
+                    .inferFromMethodParameter(actionMethod, paramIndex, facetedMethodParam)
                     .map(typeOfFacet->{
                         // (corresponds to similar code for OneToManyAssociation in FacetMethodsBuilder).
                         FacetUtil.addFacet(typeOfFacet);

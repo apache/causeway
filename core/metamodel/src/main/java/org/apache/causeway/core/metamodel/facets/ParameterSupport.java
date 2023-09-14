@@ -156,7 +156,7 @@ public final class ParameterSupport {
                     supportingMethodAndPatConstructor.getSupportingMethod(),
                     Optional.of(supportingMethodAndPatConstructor.getPatConstructor()),
                     _GenericResolver.forMethodReturn(
-                            declaringClass, supportingMethodAndPatConstructor.getSupportingMethod()));
+                            supportingMethodAndPatConstructor.getSupportingMethod()));
     }
 
     private static void singleArgBeingParamType(
@@ -212,7 +212,7 @@ public final class ParameterSupport {
     }
 
     private static ParamSupportingMethodSearchResult toSearchResult(
-            final Class<?> declaringClass,
+            final Class<?> declaringClass, //TODO[CAUSEWAY-3571] not req
             final int paramIndex,
             final Class<?> paramType,
             final ResolvedMethod supportingMethod) {
@@ -220,7 +220,7 @@ public final class ParameterSupport {
                 .of(paramIndex, paramType,
                     supportingMethod,
                     Optional.empty(),
-                    _GenericResolver.forMethodReturn(declaringClass, supportingMethod));
+                    _GenericResolver.forMethodReturn(supportingMethod));
     }
 
     /**

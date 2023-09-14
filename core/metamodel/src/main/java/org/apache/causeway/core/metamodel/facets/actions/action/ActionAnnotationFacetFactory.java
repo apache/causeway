@@ -209,7 +209,6 @@ extends FacetFactoryAbstract {
 
     void processTypeOf(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {
 
-        val cls = processMethodContext.getCls();
         val method = processMethodContext.getMethod();
         val facetedMethod = processMethodContext.getFacetHolder();
 
@@ -221,7 +220,7 @@ extends FacetFactoryAbstract {
                     TypeOfFacetForActionAnnotation.create(actionIfAny, collectionType, facetedMethod)
                     .or(
                         // else infer from generic type arg if any
-                        ()->TypeOfFacet.inferFromMethodReturnType(cls, method, facetedMethod)
+                        ()->TypeOfFacet.inferFromMethodReturnType(method, facetedMethod)
                         ));
 
         });

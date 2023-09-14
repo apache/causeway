@@ -54,19 +54,17 @@ public interface TypeOfFacet extends Facet {
     // -- FACTORIES
 
     static Optional<TypeOfFacet> inferFromMethodParameter(
-            final Class<?> implementationClass,
             final MethodFacade method,
             final int paramIndex,
             final FacetHolder holder) {
-        val type = method.resolveParameter(implementationClass, paramIndex);
+        val type = method.resolveParameter(paramIndex);
         return toInferredFrom(TypeOfFacet::inferredFromFeature, type, holder);
     }
 
     static Optional<TypeOfFacet> inferFromMethodReturnType(
-            final Class<?> implementationClass,
             final MethodFacade method,
             final FacetHolder holder) {
-        val type = method.resolveMethodReturn(implementationClass);
+        val type = method.resolveMethodReturn();
         return toInferredFrom(TypeOfFacet::inferredFromFeature, type, holder);
     }
 

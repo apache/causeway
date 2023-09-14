@@ -40,7 +40,7 @@ extends TypedHolderAbstract {
 
         super(mmc,
                 featureType,
-                methodFacade.resolveParameter(declaringType, paramIndex),
+                methodFacade.resolveParameter(paramIndex),
                 FeatureType.ACTION.identifierFor(
                         LogicalType.lazy(
                                 declaringType,
@@ -58,7 +58,5 @@ extends TypedHolderAbstract {
         this.type = newType;
         return this;
     }
-
-
 
 }

@@ -168,7 +168,7 @@ public final class _ClassCache implements AutoCloseable {
         return Stream.of("get", "is")
         .map(prefix->prefix + capitalizedFieldName)
         .map(methodName->lookupResolvedMethod(type, methodName, _Constants.emptyClasses))
-        .filter(resolvedMethod->resolvedMethod.isGetter())
+        .filter(resolvedMethod->_Reflect.Filter.isGetter(resolvedMethod.method()))
         .findFirst();
     }
 
