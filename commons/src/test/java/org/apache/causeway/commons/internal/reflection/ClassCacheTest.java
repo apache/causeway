@@ -26,6 +26,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -103,6 +104,13 @@ class ClassCacheTest {
 
         val expectations = extractExpectations(classUnderTest);
         expectations.assertAll(declaredMethods);
+    }
+
+    @Test
+    void javaLangObjectPublicMethodsAreIgnored() {
+        val javaLangObjectPublicMethods = classCache.streamPublicMethods(Object.class)
+                .collect(Can.toCan());
+        assertEquals(Can.empty(), javaLangObjectPublicMethods);
     }
 
     // -- HELPER

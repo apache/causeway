@@ -18,13 +18,10 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.ignore.javalang;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.commons.internal._Constants;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -46,30 +43,9 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
     @SuppressWarnings("unused")
     private static final String JAVA_CLASS_PREFIX = "java.";
 
-    public static class MethodAndParameterTypes {
-        public final String methodName;
-        public final Class<?>[] methodParameters;
-
-        @Deprecated //TODO[CAUSEWAY-3571] use ResolvedMethod instead
-        public MethodAndParameterTypes(final String methodName, final Class<?>[] methodParameters) {
-            this.methodName = methodName;
-            this.methodParameters = methodParameters;
-        }
-    }
-
-    private final List<MethodAndParameterTypes> javaLangObjectMethodsToIgnore = _Lists.newArrayList();
-
     @Inject
     public RemoveMethodsFacetFactory(final MetaModelContext mmc) {
         super(mmc, FeatureType.OBJECTS_ONLY);
-
-        getClassCache()
-        .streamPublicMethods(Object.class)
-        .forEach(method->{
-            javaLangObjectMethodsToIgnore
-            .add(new RemoveMethodsFacetFactory.MethodAndParameterTypes(method.name(), method.paramTypes()));
-        });
-
     }
 
     @Override
@@ -86,42 +62,39 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
                 .getMemberAnnotationPolicy().isMemberAnnotationsRequired();
 
         getClassCache()
-        .streamPublicMethods(cls)
-        .forEach(method->{
-            // remove methods in the context of non-static inner classes,
-            // except cls when is a mixin
-            if (!isConcreteMixin
-                    && _Reflect.isNonStaticInnerMethod(method.method())) {
-                processClassContext.removeMethod(method);
-                return;
-            }
-
-            // removeJavaLangComparable(processClassContext);
-            if(method.name().equals("compareTo")) {
-                processClassContext.removeMethod(method);
-                return;
-            }
-
-            // remove property setter, if has not explicitly an @Action annotation
-            // this code block is not required, if @Action annotations are explicit per config
-            if(!isActionAnnotationRequired
-                    && method.isSingleArg()
-                    && method.name().startsWith("set")
-                    && method.name().length() > 3) {
-
-                if(!_Annotations.synthesize(method.method(), Action.class).isPresent()) {
+            .streamPublicMethods(cls)
+            .forEach(method->{
+                // remove methods in the context of non-static inner classes,
+                // except cls when is a mixin
+                if (!isConcreteMixin
+                        && _Reflect.isNonStaticInnerMethod(method.method())) {
                     processClassContext.removeMethod(method);
                     return;
                 }
-            }
-        });
+
+                // removeJavaLangComparable(processClassContext);
+                if(method.name().equals("compareTo")) {
+                    processClassContext.removeMethod(method);
+                    return;
+                }
+
+                // remove property setter, if has not explicitly an @Action annotation
+                // this code block is not required, if @Action annotations are explicit per config
+                if(!isActionAnnotationRequired
+                        && method.isSingleArg()
+                        && method.name().startsWith("set")
+                        && method.name().length() > 3) {
+
+                    if(!_Annotations.synthesize(method.method(), Action.class).isPresent()) {
+                        processClassContext.removeMethod(method);
+                        return;
+                    }
+                }
+            });
 
         removeSuperclassMethods(processClassContext.getCls(), processClassContext);
 
-        // removeJavaLangObjectMethods(processClassContext);
-        for (final MethodAndParameterTypes mapt : javaLangObjectMethodsToIgnore) {
-            processClassContext.removeMethod(mapt.methodName, null, mapt.methodParameters);
-        }
+        // no need to remove java.lang.Object methods, as this is already taken care of by the ClassCache (tested)
 
         // removeInitMethod(processClassContext);
         processClassContext.removeMethod("init", void.class, _Constants.emptyClasses);
@@ -138,9 +111,8 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
         }
 
         getClassCache()
-        .streamPublicMethods(type)
-        .forEach(processClassContext::removeMethod);
-
+            .streamPublicMethods(type)
+            .forEach(processClassContext::removeMethod);
     }
 
 }
