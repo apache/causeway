@@ -19,6 +19,7 @@
 package org.apache.causeway.core.runtimeservices.placeholder;
 
 import java.util.Map;
+import java.util.Optional;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -67,6 +68,8 @@ implements PlaceholderRenderService {
         return _BootstrapBadge.builder()
                 .caption(translateAndInterpolate(placeholderLiteral, vars))
                 .cssClass("placeholder-literal-" + placeholderLiteral.name().toLowerCase())
+                .href(Optional.ofNullable(vars).map(map->map.get("href")).orElse(null))
+                //.nestedCaption(Optional.ofNullable(vars).map(map->map.get("number")).orElse(null))
                 .build()
                 .toHtml();
     }

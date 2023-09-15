@@ -20,6 +20,7 @@ package org.apache.causeway.viewer.wicket.viewer.services;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -29,9 +30,12 @@ import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.homepage.HomePageResolverService;
 import org.apache.causeway.applib.services.linking.DeepLinkService;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
@@ -40,6 +44,7 @@ import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 /**
  * An implementation of {@link org.apache.causeway.applib.services.linking.DeepLinkService}
@@ -54,17 +59,20 @@ public class DeepLinkServiceWicket implements DeepLinkService {
 
     private final PageClassRegistry pageClassRegistry;
     private final SpecificationLoader specificationLoader;
+    private final HomePageResolverService homePageResolverService;
 
+    // also supports ManagedObject and Bookmark
     @Override
-    public URI deepLinkFor(final Object domainObject) {
+    public URI deepLinkFor(final @Nullable Object domainObject) {
 
-        final ManagedObject objectAdapter = ManagedObject.adaptSingular(specificationLoader, domainObject);
+        val requestCycle = RequestCycle.get();
 
-        final PageParameters pageParameters = PageParameterUtils.createPageParametersForObject(objectAdapter);
+        val pageParameters = pageParametersFor(domainObject)
+                .or(()->pageParametersFor(homePageResolverService.getHomePage()))
+                .orElseThrow(()->
+                    new RuntimeException("Cannot create a deep link to domain object: " + domainObject));
 
         final Class<? extends Page> pageClass = pageClassRegistry.getPageClass(PageType.ENTITY);
-
-        final RequestCycle requestCycle = RequestCycle.get();
         final CharSequence urlForPojo = requestCycle.urlFor(pageClass, pageParameters);
         final String fullUrl = requestCycle.getUrlRenderer().renderFullUrl(Url.parse(urlForPojo));
         try {
@@ -74,5 +82,25 @@ public class DeepLinkServiceWicket implements DeepLinkService {
         }
     }
 
+    /**
+     * Introduced to allow for optimized framework internal use as well.
+     */
+    private Optional<PageParameters> pageParametersFor(final @Nullable Object anyObject) {
+        if(anyObject==null) {
+            return Optional.empty();
+        }
+        try {
+            if(anyObject instanceof ManagedObject) {
+                return Optional.ofNullable(PageParameterUtils.createPageParametersForObject((ManagedObject) anyObject));
+            }
+            if(anyObject instanceof Bookmark) {
+                return Optional.ofNullable(PageParameterUtils.createPageParametersForBookmark((Bookmark) anyObject));
+            }
+            final ManagedObject objectAdapter = ManagedObject.adaptSingular(specificationLoader, anyObject);
+            return Optional.ofNullable(PageParameterUtils.createPageParametersForObject(objectAdapter));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
 
 }

@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns;
 
 import java.io.Serializable;
+import java.net.URI;
 import java.util.Map;
 import java.util.Optional;
 
@@ -26,6 +27,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 
+import org.apache.causeway.applib.services.linking.DeepLinkService;
 import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataRow;
@@ -94,10 +96,16 @@ extends AssociationColumnAbstract {
         // if cardinality exceeds threshold, truncate with '... has more' label at the end
         final int overflow = cellElements.size()-opts.maxElements();
         if(overflow>0) {
-            //val hasMoreText = String.format("... " + translate("has %d more"), overflow);
-            //Wkt.labelAdd(container, container.newChildId(), hasMoreText);
+
+            val href = getMetaModelContext().getServiceRegistry().lookupService(DeepLinkService.class)
+                    .map(deepLinkService->deepLinkService.deepLinkFor(dataRow.getRowElement()))
+                    .map(URI::toString)
+                    .orElse("#");
+
             Wkt.markupAdd(container, container.newChildId(),
-                    getPlaceholderRenderService().asHtml(PlaceholderLiteral.HAS_MORE, Map.of("number", ""+overflow)));
+                    getPlaceholderRenderService().asHtml(PlaceholderLiteral.HAS_MORE,
+                            Map.of("number", ""+overflow,
+                                   "href", href)));
         }
 
         return container;
