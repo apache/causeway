@@ -42,18 +42,32 @@ public class _BootstrapBadge {
 
     final String caption;
     final String faIcon;
+    final String href;
     final String tooltip;
+    final String nestedCaption;
 
     @Singular
     final List<String> cssClasses;
 
     public String toHtml() {
+        return _Strings.isNotEmpty(getHref())
+                ? link()
+                : noLink();
+    }
+
+    // -- HELPER
+
+    /*
+     * // no href
+     * <span class="badge bg-light placeholder-literal-xxx">[none]</span>
+     */
+    public String noLink() {
 
         val sb = new StringBuilder();
         sb
         .append("<span ")
         .append("class=\"")
-        .append(classesLiteral())
+        .append(classesLiteral("badge", "bg-light"))
         .append("\"");
 
         // optional tooltip
@@ -76,13 +90,49 @@ public class _BootstrapBadge {
         sb
         .append(getCaption())
         .append("</span>");
+
         return sb.toString();
     }
 
-    // -- HELPER
+    /*
+     * // with href
+     * <a class="btn btn-sm btn-light placeholder-literal-xxx" href="https://www.example.org" target="_blank">
+     *      has more ... <span class="badge text-sm text-bg-secondary">4</span>
+     * </a>
+     */
+    public String link() {
 
-    private String classesLiteral() {
-        return Stream.concat(Stream.of("badge", "bg-light"), _NullSafe.stream(cssClasses))
+        val sb = new StringBuilder();
+        sb
+        .append("<a ")
+        .append("class=\"")
+        .append(classesLiteral("btn", "btn-sm", "bg-light"))
+        .append("\"")
+        .append(" href=\"")
+        .append(getHref())
+        .append("\"")
+        .append(" target=\"")
+        .append("_blank")
+        .append("\"");
+
+        sb.append(">"); // end a open tag
+
+        sb
+        .append(getCaption());
+
+        // optional nested badge
+        if(_Strings.isNotEmpty(getNestedCaption())) {
+            sb.append(String.format(" <span class=\"badge text-sm text-bg-secondary\">%s</span>", getNestedCaption()));
+        }
+
+        sb
+        .append("</a>");
+
+        return sb.toString();
+    }
+
+    private String classesLiteral(final String ... primaryClasses) {
+        return Stream.concat(_NullSafe.stream(primaryClasses), _NullSafe.stream(cssClasses))
                 .collect(Collectors.joining(" "));
     }
 

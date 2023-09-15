@@ -28,7 +28,7 @@ import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.util.WktContext;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericToggleboxColumn;
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 public class CausewayAjaxNavigationToolbar extends AjaxNavigationToolbar
@@ -39,11 +39,11 @@ implements HasCommonContext {
     private static final String navigatorContainerId = "span";
     private static final String ID_SHOW_ALL = "showAll";
     private static final String HINT_KEY_SHOW_ALL = "showAll";
-    private final GenericToggleboxColumn toggleboxColumn;
+    private final ToggleboxColumn toggleboxColumn;
 
     public CausewayAjaxNavigationToolbar(
             final DataTable<?, ?> table,
-            final GenericToggleboxColumn toggleboxColumn) {
+            final ToggleboxColumn toggleboxColumn) {
 
         super(table);
         this.toggleboxColumn = toggleboxColumn;

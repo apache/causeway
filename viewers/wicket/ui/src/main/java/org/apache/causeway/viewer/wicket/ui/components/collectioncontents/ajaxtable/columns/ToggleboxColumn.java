@@ -21,23 +21,19 @@ package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxt
 import java.util.List;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
-import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataRow;
 import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
-import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.checkbox.ContainedToggleboxPanel;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
-public final class GenericToggleboxColumn
+public final class ToggleboxColumn
 extends GenericColumnAbstract {
 
     private static final long serialVersionUID = 1L;
@@ -52,11 +48,19 @@ extends GenericColumnAbstract {
 
     private IModel<DataTableModel> dataTableModelHolder;
 
-    public GenericToggleboxColumn(
+    public ToggleboxColumn(
             final MetaModelContext commonContext,
             final IModel<DataTableModel> dataTableModelHolder) {
         super(commonContext, "");
         this.dataTableModelHolder = dataTableModelHolder;
+    }
+
+    @Override
+    protected Component createCellComponent(
+            final String componentId, final DataRow dataRow, final IModel<Boolean> dataRowToggle) {
+        val rowToggle = new ContainedToggleboxPanel(componentId, dataRowToggle);
+        rowToggles.add(rowToggle);
+        return rowToggle.setOutputMarkupId(true);
     }
 
     @Override
@@ -78,30 +82,8 @@ extends GenericColumnAbstract {
 
     private final List<ContainedToggleboxPanel> rowToggles = _Lists.newArrayList();
 
-    @Override
-    public void populateItem(
-            final Item<ICellPopulator<DataRow>> cellItem,
-            final String componentId,
-            final IModel<DataRow> rowModel) {
-
-        Wkt.cssAppend(cellItem, "togglebox-column");
-
-        final MarkupContainer row = cellItem.getParent().getParent();
-        row.setOutputMarkupId(true);
-        val rowToggle = new ContainedToggleboxPanel(
-                componentId,
-                ((DataRowWkt)rowModel).getDataRowToggle());
-        rowToggles.add(rowToggle);
-        rowToggle.setOutputMarkupId(true);
-        cellItem.add(rowToggle);
-    }
-
     public void removeToggles() {
         rowToggles.clear();
     }
-
-
-
-
 
 }

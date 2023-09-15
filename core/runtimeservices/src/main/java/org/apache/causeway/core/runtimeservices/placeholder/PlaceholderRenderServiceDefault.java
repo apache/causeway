@@ -18,11 +18,15 @@
  */
 package org.apache.causeway.core.runtimeservices.placeholder;
 
+import java.util.Map;
+import java.util.Optional;
+
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -51,19 +55,33 @@ implements PlaceholderRenderService {
     @Inject private TranslationService translationService;
 
     @Override
-    public String asText(@NonNull final PlaceholderLiteral placeholderLiteral) {
-        val translatedPlainText = translationService
-                .translate(TranslationContext.empty(), placeholderLiteral.getLiteral());
-        return "(" + translatedPlainText + ")";
+    public String asText(
+            @NonNull final PlaceholderLiteral placeholderLiteral,
+            @Nullable final Map<String, String> vars) {
+        return "(" + translateAndInterpolate(placeholderLiteral, vars) + ")";
     }
 
     @Override
-    public String asHtml(@NonNull final PlaceholderLiteral placeholderLiteral) {
+    public String asHtml(
+            @NonNull final PlaceholderLiteral placeholderLiteral,
+            @Nullable final Map<String, String> vars) {
+
+        val href = Optional.ofNullable(vars).map(map->map.get("href"));
+
         return _BootstrapBadge.builder()
-                .caption(asText(placeholderLiteral))
-                .cssClass("placeholder-literal-" + placeholderLiteral.getLiteral())
+                .caption(translateAndInterpolate(placeholderLiteral, vars))
+                .cssClass("placeholder-literal-" + placeholderLiteral.name().toLowerCase())
+                .href(href.orElse(null))
+                .nestedCaption(href.map(__->"..").orElse(null))
                 .build()
                 .toHtml();
+    }
+
+    private String translateAndInterpolate(
+            final PlaceholderLiteral placeholderLiteral, final Map<String, String> vars) {
+        val translatedPlainText = translationService
+                .translate(TranslationContext.empty(), placeholderLiteral.getLiteral());
+        return PlaceholderRenderService.interpolate(translatedPlainText, vars);
     }
 
 }

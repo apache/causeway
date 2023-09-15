@@ -19,6 +19,7 @@
 package org.apache.causeway.core.metamodel.specloader.specimpl;
 
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -29,6 +30,8 @@ import org.apache.causeway.core.metamodel.facets.properties.choices.PropertyChoi
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 public abstract class ObjectAssociationAbstract
 extends ObjectMemberAbstract
@@ -47,6 +50,13 @@ implements ObjectAssociation {
             throw new IllegalArgumentException("field type for '" + getId() + "' must exist");
         }
         this.elementType = elementType;
+    }
+
+    @Override
+    public final Either<OneToOneAssociation, OneToManyAssociation> getSpecialization() {
+        return isSingular()
+                ? Either.left((OneToOneAssociation) this)
+                : Either.right((OneToManyAssociation) this);
     }
 
     @Override
