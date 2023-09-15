@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.transform.TransformerFactory;
 
+import org.apache.causeway.commons.io.JaxbUtils.JaxbOptions.JaxbOptionsBuilder;
 import org.approvaltests.Approvals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -108,52 +109,47 @@ class JaxbUtilsTest {
     }
 
 
-    @Nested
-    class toStringUtf8 {
+    @Test
+    void toStringUtf8_with_no_options() {
 
-        @Test
-        void with_no_options() {
+        val aXml = JaxbUtils.toStringUtf8(a);
 
-            val aXml = JaxbUtils.toStringUtf8(a);
+        System.out.println(aXml);
 
-            System.out.println(aXml);
+        Approvals.verify(aXml);
+    }
 
-            Approvals.verify(aXml);
+    @Test
+    void toStringUtf8_with_no_formatted_output() {
 
-        }
+        val aXml = JaxbUtils.toStringUtf8(a, opt -> {
+            opt.formattedOutput(false);
+            return opt;
+        });
 
-        @Test
-        void with_no_formatted_output() {
+        System.out.println(aXml);
 
-            val aXml = JaxbUtils.toStringUtf8(a, opt -> {
-                opt.formattedOutput(false);
-                return opt;
-            });
+        Approvals.verify(aXml);
+    }
 
-            System.out.println(aXml);
+    @Test
+    void toStringUtf8_with_indent_number_overridden() {
 
-            Approvals.verify(aXml);
-        }
+        val aXml = JaxbUtils.toStringUtf8(a, new JaxbUtils.TransformerFactoryCustomizer() {
+            @Override
+            public void apply(TransformerFactory transformerFactory) {
+                transformerFactory.setAttribute("indent-number", 2);
+            }
 
-        @Test
-        void with_indent_number_overridden() {
+            @Override
+            public JaxbOptionsBuilder apply(JaxbOptionsBuilder jaxbOptionsBuilder) {
+                return jaxbOptionsBuilder;
+            }
+        });
 
-            val aXml = JaxbUtils.toStringUtf8(a, new JaxbUtils.TransformerFactoryCustomizer() {
-                @Override
-                public void apply(TransformerFactory transformerFactory) {
-                    transformerFactory.setAttribute("indent-number", 2);
-                }
+        System.out.println(aXml);
 
-                @Override
-                public JaxbUtils.JaxbOptions.JaxbOptionsBuilder apply(JaxbUtils.JaxbOptions.JaxbOptionsBuilder jaxbOptionsBuilder) {
-                    return jaxbOptionsBuilder;
-                }
-            });
-
-            System.out.println(aXml);
-
-            Approvals.verify(aXml);
-        }
+        Approvals.verify(aXml);
     }
 
 }
