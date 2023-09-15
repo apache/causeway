@@ -37,7 +37,7 @@ import org.apache.causeway.viewer.wicket.ui.components.collection.bulk.Multisele
 import org.apache.causeway.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericColumn;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.TitleColumn;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.TitleColumnOptions;
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ColumnAbbreviationOptions;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.PluralColumn;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.SingularColumn;
@@ -137,7 +137,7 @@ implements CollectionCountProvider {
                     ? wktConfig.getMaxTitleLengthInParentedTables()
                     : wktConfig.getMaxTitleLengthInStandaloneTables();
 
-        val opts = TitleColumnOptions.builder()
+        val opts = ColumnAbbreviationOptions.builder()
             .maxElementTitleLength(columns.size()==0
                             ? wktConfig.getMaxTitleLengthInTablesNotHavingAnyPropertyColumn()
                             : -1 /* don't override */)

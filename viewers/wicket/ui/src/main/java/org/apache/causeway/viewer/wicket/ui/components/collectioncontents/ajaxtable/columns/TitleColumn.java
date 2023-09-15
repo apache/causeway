@@ -38,7 +38,7 @@ extends GenericColumnAbstract {
 
     private static final long serialVersionUID = 1L;
     private final Variant variant;
-    private final TitleColumnOptions opts;
+    private final ColumnAbbreviationOptions opts;
     private final Bookmark contextBookmark;
 
     public TitleColumn(
@@ -46,7 +46,7 @@ extends GenericColumnAbstract {
             final Variant variant,
             final Bookmark contextBookmark,
             final int maxColumnTitleLength,
-            final TitleColumnOptions opts) {
+            final ColumnAbbreviationOptions opts) {
 
         super(commonContext, columnName(variant, maxColumnTitleLength)); // i18n
         this.variant = variant;
