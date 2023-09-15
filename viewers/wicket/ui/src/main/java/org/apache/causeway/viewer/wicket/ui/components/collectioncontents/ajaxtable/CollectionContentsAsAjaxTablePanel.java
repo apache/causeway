@@ -163,12 +163,12 @@ implements CollectionCountProvider {
         elementTypeSpec.streamAssociationsForColumnRendering(memberIdentifier, parentObject)
         .map(ObjectAssociation::getSpecialization)
         .map(spez->spez.fold(
-                this::createObjectAdapterPropertyColumnSingular,
-                this::createObjectAdapterPropertyColumnPlural))
+                this::createSingularColumn,
+                this::createPluralColumn))
         .forEach(columns::add);
     }
 
-    private SingularColumn createObjectAdapterPropertyColumnSingular(final OneToOneAssociation property) {
+    private SingularColumn createSingularColumn(final OneToOneAssociation property) {
         val collectionModel = getModel();
         final String parentTypeName = property.getDeclaringType().getLogicalTypeName();
 
@@ -182,7 +182,7 @@ implements CollectionCountProvider {
                 property.getCanonicalDescription());
     }
 
-    private PluralColumn createObjectAdapterPropertyColumnPlural(final OneToManyAssociation collection) {
+    private PluralColumn createPluralColumn(final OneToManyAssociation collection) {
         val collectionModel = getModel();
         final String parentTypeName = collection.getDeclaringType().getLogicalTypeName();
 
@@ -194,7 +194,7 @@ implements CollectionCountProvider {
                 collection.getId(),
                 parentTypeName,
                 collection.getCanonicalDescription(),
-                // can hook up with global config later
+                // future work: can hook up with global config
                 RenderOptions.builder().build());
     }
 
