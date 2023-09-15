@@ -65,11 +65,14 @@ implements PlaceholderRenderService {
     public String asHtml(
             @NonNull final PlaceholderLiteral placeholderLiteral,
             @Nullable final Map<String, String> vars) {
+
+        val href = Optional.ofNullable(vars).map(map->map.get("href"));
+
         return _BootstrapBadge.builder()
                 .caption(translateAndInterpolate(placeholderLiteral, vars))
                 .cssClass("placeholder-literal-" + placeholderLiteral.name().toLowerCase())
-                .href(Optional.ofNullable(vars).map(map->map.get("href")).orElse(null))
-                .nestedCaption(Optional.ofNullable(vars).map(map->map.get("..")).orElse(null))
+                .href(href.orElse(null))
+                .nestedCaption(href.map(__->"..").orElse(null))
                 .build()
                 .toHtml();
     }
