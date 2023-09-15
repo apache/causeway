@@ -172,6 +172,11 @@ class _AssociationsAsColumns implements HasMetaModelContext {
 
     /**
      * Returns true if no {@link HiddenFacet} is found that vetoes visibility.
+     * <p>
+     * However, if its a 1-to-Many, whereHidden={@link Where.ALL_TABLES} is used as default
+     * when no {@link HiddenFacet} is found.
+     * @apiNote an alternative would be to prime the meta-model with fallback facets,
+     *      however the current approach is more heap friendly
      */
     static Predicate<ObjectAssociation> associationIsVisibleAccordingToHiddenFacet(
             final Identifier memberIdentifier) {
@@ -179,10 +184,10 @@ class _AssociationsAsColumns implements HasMetaModelContext {
         return (final ObjectAssociation assoc) -> assoc.lookupFacet(HiddenFacet.class)
                 .map(WhereValueFacet.class::cast)
                 .map(WhereValueFacet::where)
-                // in case its a plural, ALL_TABLES is the default when not specified otherwise
+                // in case its a 1-to-Many, whereHidden=ALL_TABLES is the default when not specified otherwise
                 .or(()->assoc.getSpecialization().right().map(__->Where.ALL_TABLES))
                 .stream()
-                .noneMatch(whereHidden -> whereHidden.includes(whereContext)); // if no HiddenFacet is found returns true
+                .noneMatch(whereHidden -> whereHidden.includes(whereContext));
     }
 
     static Predicate<ObjectAssociation> associationDoesReferenceParent(
