@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.extensions.fullcalendar.applib;
 
+import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 
 /**
@@ -34,8 +35,10 @@ public interface CalendarEventable {
      * If there is possibly more than one date associated with the entity, then use
      * {@link Calendarable} instead.
      */
+    @Programmatic
     String getCalendarName();
 
+    @Programmatic
     CalendarEvent toCalendarEvent();
 
 }
