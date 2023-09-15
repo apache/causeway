@@ -176,9 +176,12 @@ class _AssociationsAsColumns implements HasMetaModelContext {
     static Predicate<ObjectAssociation> associationIsVisibleAccordingToHiddenFacet(
             final Identifier memberIdentifier) {
         val whereContext = whereContextFor(memberIdentifier);
-        return (final ObjectAssociation assoc) -> assoc.lookupFacet(HiddenFacet.class).stream()
+        return (final ObjectAssociation assoc) -> assoc.lookupFacet(HiddenFacet.class)
                 .map(WhereValueFacet.class::cast)
                 .map(WhereValueFacet::where)
+                // in case its a plural, ALL_TABLES is the default when not specified otherwise
+                .or(()->assoc.getSpecialization().right().map(__->Where.ALL_TABLES))
+                .stream()
                 .noneMatch(whereHidden -> whereHidden.includes(whereContext)); // if no HiddenFacet is found returns true
     }
 
