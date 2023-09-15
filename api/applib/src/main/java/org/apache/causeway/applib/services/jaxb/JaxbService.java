@@ -18,11 +18,22 @@
  */
 package org.apache.causeway.applib.services.jaxb;
 
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 import org.springframework.lang.Nullable;
 
@@ -145,6 +156,7 @@ public interface JaxbService {
             .ifFailureFail()
             .getValue().orElse(null);
         }
+
 
         /**
          * Optional hook

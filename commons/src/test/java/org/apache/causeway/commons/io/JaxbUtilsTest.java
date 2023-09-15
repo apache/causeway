@@ -24,7 +24,11 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.transform.TransformerFactory;
 
+import org.approvaltests.Approvals;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -38,6 +42,7 @@ import lombok.Setter;
 import lombok.val;
 
 class JaxbUtilsTest {
+
 
     @XmlRootElement(name = "type-a")
     @XmlType
@@ -59,36 +64,96 @@ class JaxbUtilsTest {
         @Getter @Setter private String string;
     }
 
-    /**
-     * Works for arbitrary {@link XmlRootElement#name()} combinations,
-     * except you cannot use the same {@code name="root"} say on both {@link A} and {@link B}.
-     * <p>
-     * As {@link A} contains {@link B}, the {@link JAXBContext} for {@link A} should also bind type {@link B}.
-     * We are testing whether type-safe recovery especially for type {@link A} works as desired.
-     */
-    @Test
-    void typesafeUnmarshallingFromAmbiguousContext() {
 
+    private A a;
+    private B b;
+
+    @BeforeEach
+    void setup() {
         // given
-        val b = new B();
+        b = new B();
         b.setString("b-string");
-        val a = new A();
+        a = new A();
         a.setNested(b);
+    }
 
-        // when ... doing a round trip
-        val aXml = JaxbUtils.toStringUtf8(a);
-        val bXml = JaxbUtils.toStringUtf8(b);
+    @Nested
+    class tryRead {
 
-        assertTrue(_Strings.isNotEmpty(aXml));
-        assertTrue(_Strings.isNotEmpty(bXml));
+        /**
+         * Works for arbitrary {@link XmlRootElement#name()} combinations,
+         * except you cannot use the same {@code name="root"} say on both {@link A} and {@link B}.
+         * <p>
+         * As {@link A} contains {@link B}, the {@link JAXBContext} for {@link A} should also bind type {@link B}.
+         * We are testing whether type-safe recovery especially for type {@link A} works as desired.
+         */
+        @Test
+        void typesafeUnmarshallingFromAmbiguousContext() {
 
-        val aRecovered = JaxbUtils.tryRead(A.class, aXml).valueAsNonNullElseFail();
-        val bRecovered = JaxbUtils.tryRead(B.class, bXml).valueAsNonNullElseFail();
+            // when ... doing a round trip
+            val aXml = JaxbUtils.toStringUtf8(a);
+            val bXml = JaxbUtils.toStringUtf8(b);
 
-        // then
-        assertEquals(a, aRecovered);
-        assertEquals(b, bRecovered);
+            assertTrue(_Strings.isNotEmpty(aXml));
+            assertTrue(_Strings.isNotEmpty(bXml));
 
+            val aRecovered = JaxbUtils.tryRead(A.class, aXml).valueAsNonNullElseFail();
+            val bRecovered = JaxbUtils.tryRead(B.class, bXml).valueAsNonNullElseFail();
+
+            // then
+            assertEquals(a, aRecovered);
+            assertEquals(b, bRecovered);
+
+        }
+    }
+
+
+    @Nested
+    class toStringUtf8 {
+
+        @Test
+        void with_no_options() {
+
+            val aXml = JaxbUtils.toStringUtf8(a);
+
+            System.out.println(aXml);
+
+            Approvals.verify(aXml);
+
+        }
+
+        @Test
+        void with_no_formatted_output() {
+
+            val aXml = JaxbUtils.toStringUtf8(a, opt -> {
+                opt.formattedOutput(false);
+                return opt;
+            });
+
+            System.out.println(aXml);
+
+            Approvals.verify(aXml);
+        }
+
+        @Test
+        void with_indent_number_overridden() {
+
+            val aXml = JaxbUtils.toStringUtf8(a, new JaxbUtils.TransformerFactoryCustomizer() {
+                @Override
+                public void apply(TransformerFactory transformerFactory) {
+                    transformerFactory.setAttribute("indent-number", 2);
+                }
+
+                @Override
+                public JaxbUtils.JaxbOptions.JaxbOptionsBuilder apply(JaxbUtils.JaxbOptions.JaxbOptionsBuilder jaxbOptionsBuilder) {
+                    return jaxbOptionsBuilder;
+                }
+            });
+
+            System.out.println(aXml);
+
+            Approvals.verify(aXml);
+        }
     }
 
 }

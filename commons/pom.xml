@@ -209,6 +209,11 @@
 			<artifactId>hamcrest-library</artifactId>
 			<scope>test</scope>
 		</dependency>
+        <dependency>
+            <groupId>com.approvaltests</groupId>
+            <artifactId>approvaltests</artifactId>
+            <scope>test</scope>
+        </dependency>
 
 		<!-- provided -->
 		<dependency>
@@ -218,7 +223,7 @@
 			<scope>provided</scope>
 		</dependency>
 
-	</dependencies>
+    </dependencies>
 
 
 </project>
