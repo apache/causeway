@@ -19,19 +19,25 @@
 package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns;
 
 import org.apache.wicket.Application;
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
+import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
+import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataRow;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
+import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
 import org.apache.causeway.viewer.wicket.model.util.WktContext;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.causeway.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanel;
+import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
@@ -64,6 +70,24 @@ implements GenericColumn {
         super(columnNameModel, sortColumn);
         this.commonContext = commonContext;
     }
+
+    @Override
+    public final void populateItem(
+            final Item<ICellPopulator<DataRow>> cellItem,
+            final String componentId,
+            final IModel<DataRow> rowModel) {
+        cellItem.add(createCellComponent(componentId, rowModel.getObject(), ((DataRowWkt)rowModel).getDataRowToggle()));
+        if(this instanceof TitleColumn) {
+            Wkt.cssAppend(cellItem, "title-column");
+        } else if(this instanceof ToggleboxColumn) {
+            Wkt.cssAppend(cellItem, "togglebox-column");
+            final MarkupContainer row = cellItem.getParent().getParent();
+            row.setOutputMarkupId(true);
+        }
+    }
+
+    protected abstract Component createCellComponent(
+            final String componentId, final DataRow dataRow, IModel<Boolean> dataRowToggle);
 
     public MetaModelContext getMetaModelContext() {
         return commonContext = WktContext.computeIfAbsent(commonContext);

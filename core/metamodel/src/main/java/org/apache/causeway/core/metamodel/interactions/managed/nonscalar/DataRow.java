@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.interactions.managed.nonscalar;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.apache.causeway.commons.collections.Can;
@@ -62,6 +63,12 @@ public class DataRow {
         return rowElement;
     }
 
+    public Optional<DataColumn> lookupColumnById(final @NonNull String columnId) {
+        return parentTable.getDataColumns().getValue().stream()
+                .filter(dataColumn->dataColumn.getColumnId().equals(columnId))
+                .findFirst();
+    }
+
     /**
      * Can be none, one or many per table cell.
      */
@@ -70,6 +77,15 @@ public class DataRow {
         return assoc.getSpecialization().fold(
                 property->Can.of(property.get(getRowElement())),
                 collection->ManagedObjects.unpack(collection.get(getRowElement())));
+    }
+
+    /**
+     * Can be none, one or many per table cell. (returns empty Can if column not found)
+     */
+    public Can<ManagedObject> getCellElementsForColumn(final @NonNull String columnId) {
+        return lookupColumnById(columnId)
+                .map(this::getCellElementsForColumn)
+                .orElseGet(Can::empty);
     }
 
 }

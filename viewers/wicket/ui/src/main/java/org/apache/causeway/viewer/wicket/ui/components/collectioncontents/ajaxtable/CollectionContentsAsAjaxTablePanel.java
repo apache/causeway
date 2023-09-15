@@ -23,9 +23,7 @@ import java.util.List;
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
 import org.apache.wicket.model.Model;
-import org.springframework.lang.Nullable;
 
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket;
 import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
@@ -38,10 +36,11 @@ import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel.Vari
 import org.apache.causeway.viewer.wicket.ui.components.collection.bulk.MultiselectToggleProvider;
 import org.apache.causeway.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericColumn;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericPropertyColumn;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericTitleColumn;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericTitleColumnOptions;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericToggleboxColumn;
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.TitleColumn;
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.TitleColumnOptions;
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn;
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.PluralColumn;
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.SingularColumn;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 
 import lombok.val;
@@ -90,7 +89,7 @@ implements CollectionCountProvider {
         // multi select check boxes
         final MultiselectToggleProvider multiselectToggleProvider = getMultiselectToggleProvider();
 
-        GenericToggleboxColumn toggleboxColumn = null;
+        ToggleboxColumn toggleboxColumn = null;
         if(multiselectToggleProvider != null) {
             toggleboxColumn = multiselectToggleProvider.getToggleboxColumn();
             if(toggleboxColumn != null) {
@@ -138,13 +137,13 @@ implements CollectionCountProvider {
                     ? wktConfig.getMaxTitleLengthInParentedTables()
                     : wktConfig.getMaxTitleLengthInStandaloneTables();
 
-        val opts = GenericTitleColumnOptions.builder()
+        val opts = TitleColumnOptions.builder()
             .maxElementTitleLength(columns.size()==0
                             ? wktConfig.getMaxTitleLengthInTablesNotHavingAnyPropertyColumn()
                             : -1 /* don't override */)
             .build();
 
-        columns.add(0, new GenericTitleColumn(
+        columns.add(0, new TitleColumn(
                 super.getMetaModelContext(), variant, contextBookmark, maxColumnTitleLength, opts));
     }
 
@@ -165,19 +164,15 @@ implements CollectionCountProvider {
         .map(spez->spez.fold(
                 this::createObjectAdapterPropertyColumnSingular,
                 this::createObjectAdapterPropertyColumnPlural))
-        .filter(_NullSafe::isPresent) //TODO[CAUSEWAY-3578] just because the latter is nullable until implemented
         .forEach(columns::add);
     }
 
-    private GenericPropertyColumn createObjectAdapterPropertyColumnSingular(final OneToOneAssociation property) {
+    private SingularColumn createObjectAdapterPropertyColumnSingular(final OneToOneAssociation property) {
         val collectionModel = getModel();
-
         final String parentTypeName = property.getDeclaringType().getLogicalTypeName();
 
-        val commonContext = super.getMetaModelContext();
-
-        return new GenericPropertyColumn(
-                commonContext,
+        return new SingularColumn(
+                super.getMetaModelContext(),
                 collectionModel.getVariant(),
                 Model.of(property.getCanonicalFriendlyName()),
                 property.getId(),
@@ -186,11 +181,18 @@ implements CollectionCountProvider {
                 property.getCanonicalDescription());
     }
 
-    @Nullable
-    private GenericPropertyColumn createObjectAdapterPropertyColumnPlural(final OneToManyAssociation collection) {
-        //TODO[CAUSEWAY-3578] implement
-        System.err.printf("skipping coll %s%n", collection.getCanonicalFriendlyName());
-        return null;
+    private PluralColumn createObjectAdapterPropertyColumnPlural(final OneToManyAssociation collection) {
+        val collectionModel = getModel();
+        final String parentTypeName = collection.getDeclaringType().getLogicalTypeName();
+
+        return new PluralColumn(
+                super.getMetaModelContext(),
+                collectionModel.getVariant(),
+                Model.of(collection.getCanonicalFriendlyName()),
+                collection.getId(),
+                collection.getId(),
+                parentTypeName,
+                collection.getCanonicalDescription());
     }
 
 }

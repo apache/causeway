@@ -20,9 +20,9 @@ package org.apache.causeway.viewer.wicket.ui.components.collection.bulk;
 
 import java.io.Serializable;
 
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericToggleboxColumn;
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn;
 
 public interface MultiselectToggleProvider extends Serializable {
 
-    GenericToggleboxColumn getToggleboxColumn();
+    ToggleboxColumn getToggleboxColumn();
 }

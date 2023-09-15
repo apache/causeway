@@ -29,12 +29,14 @@ import lombok.NonNull;
 
 public class DataColumn {
 
+    @Getter private final @NonNull String columnId;
     @Getter private final @NonNull ObjectAssociation associationMetaModel;
     @Getter private final @NonNull LazyObservable<String> columnFriendlyName;
     @Getter private final @NonNull LazyObservable<Optional<String>> columnDescription;
 
     public DataColumn(final DataTableModel parentTable, final ObjectAssociation associationMetaModel) {
         this.associationMetaModel = associationMetaModel;
+        this.columnId = associationMetaModel.getId(); //TODO[CAUSEWAY-3578] can we rule out memberId clashes?
 
         columnFriendlyName = _Observables.lazy(()->
             associationMetaModel.getCanonicalFriendlyName());
