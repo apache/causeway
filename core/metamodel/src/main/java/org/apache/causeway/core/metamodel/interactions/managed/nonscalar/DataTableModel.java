@@ -163,8 +163,8 @@ implements MultiselectChoices {
 
         dataColumns = _Observables.lazy(()->
             managedMember.getElementType()
-            .streamPropertiesForColumnRendering(managedMember.getIdentifier(), managedMember.getOwner())
-            .map(property->new DataColumn(this, property))
+            .streamAssociationsForColumnRendering(managedMember.getIdentifier(), managedMember.getOwner())
+            .map(assoc->new DataColumn(this, assoc))
             .collect(Can.toCan()));
 
         //XXX future extension: the title could dynamically reflect the number of elements selected

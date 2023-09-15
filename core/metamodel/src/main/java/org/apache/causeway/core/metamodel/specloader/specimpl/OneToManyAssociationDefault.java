@@ -109,7 +109,7 @@ implements OneToManyAssociation {
 
         super.getServiceInjector().injectServicesInto(collection);
 
-        return objectManager.adapt(collection);
+        return objectManager.adapt(collection, this::getElementType);
     }
 
     @Override

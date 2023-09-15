@@ -26,6 +26,7 @@ import java.util.function.Predicate;
 import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
@@ -42,6 +43,13 @@ import lombok.val;
  * Provides reflective access to a field on a domain object.
  */
 public interface ObjectAssociation extends ObjectMember, CurrentHolder {
+
+    /**
+     * Either a singular or a plural.
+     */
+    Either<OneToOneAssociation, OneToManyAssociation> getSpecialization();
+    default boolean isSingular() { return isProperty(); }
+    default boolean isPlural() { return isCollection(); }
 
     /**
      * As per {@link #get(ManagedObject, InteractionInitiatedBy)}, with {@link InteractionInitiatedBy#USER}.

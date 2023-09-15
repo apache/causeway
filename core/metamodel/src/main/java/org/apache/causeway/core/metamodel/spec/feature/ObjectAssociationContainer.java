@@ -126,9 +126,9 @@ public interface ObjectAssociationContainer {
     }
 
     /**
-     * Properties visible as columns honoring order and visibility.
+     * Properties and Collections visible as columns honoring order and visibility.
      */
-    Stream<OneToOneAssociation> streamPropertiesForColumnRendering(
+    Stream<ObjectAssociation> streamAssociationsForColumnRendering(
             Identifier memberIdentifier,
             ManagedObject parentObject);
 

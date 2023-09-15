@@ -58,7 +58,6 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.causeway.core.metamodel.specloader.postprocessor.PostProcessor;
 import org.apache.causeway.core.metamodel.specloader.specimpl.FacetedMethodsBuilder;
@@ -313,12 +312,12 @@ implements FacetHolder {
     // -- TABLE COLUMN RENDERING
 
     @Override
-    public final Stream<OneToOneAssociation> streamPropertiesForColumnRendering(
+    public final Stream<ObjectAssociation> streamAssociationsForColumnRendering(
             final Identifier memberIdentifier,
             final ManagedObject parentObject) {
 
-        return new _PropertiesAsColumns(getMetaModelContext())
-            .streamPropertiesForColumnRendering(this, memberIdentifier, parentObject);
+        return new _AssociationsAsColumns(getMetaModelContext())
+            .streamAssociationsForColumnRendering(this, memberIdentifier, parentObject);
     }
 
     // -- DETERMINE INJECTABILITY

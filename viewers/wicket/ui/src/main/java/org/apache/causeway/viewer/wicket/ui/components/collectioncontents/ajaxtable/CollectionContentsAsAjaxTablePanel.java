@@ -23,11 +23,15 @@ import java.util.List;
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
 import org.apache.wicket.model.Model;
+import org.springframework.lang.Nullable;
 
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket;
 import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel.Variant;
@@ -98,7 +102,7 @@ implements CollectionCountProvider {
 
         // first create property columns, so we know how many columns there are
         addPropertyColumnsIfRequired(columns);
-        // prepend title column, which may have distinct rendering hints, 
+        // prepend title column, which may have distinct rendering hints,
         // based on whether there are any property columns or not
         prependTitleColumn(
                 columns,
@@ -156,13 +160,16 @@ implements CollectionCountProvider {
         val memberIdentifier = collectionModel.getIdentifier();
 
         // add all ordered columns to the table
-        elementTypeSpec.streamPropertiesForColumnRendering(memberIdentifier, parentObject)
-        .map(this::createObjectAdapterPropertyColumn)
+        elementTypeSpec.streamAssociationsForColumnRendering(memberIdentifier, parentObject)
+        .map(ObjectAssociation::getSpecialization)
+        .map(spez->spez.fold(
+                this::createObjectAdapterPropertyColumnSingular,
+                this::createObjectAdapterPropertyColumnPlural))
+        .filter(_NullSafe::isPresent) //TODO[CAUSEWAY-3578] just because the latter is nullable until implemented
         .forEach(columns::add);
     }
 
-    private GenericPropertyColumn createObjectAdapterPropertyColumn(final OneToOneAssociation property) {
-
+    private GenericPropertyColumn createObjectAdapterPropertyColumnSingular(final OneToOneAssociation property) {
         val collectionModel = getModel();
 
         final String parentTypeName = property.getDeclaringType().getLogicalTypeName();
@@ -177,6 +184,13 @@ implements CollectionCountProvider {
                 property.getId(),
                 parentTypeName,
                 property.getCanonicalDescription());
+    }
+
+    @Nullable
+    private GenericPropertyColumn createObjectAdapterPropertyColumnPlural(final OneToManyAssociation collection) {
+        //TODO[CAUSEWAY-3578] implement
+        System.err.printf("skipping coll %s%n", collection.getCanonicalFriendlyName());
+        return null;
     }
 
 }

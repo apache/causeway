@@ -38,6 +38,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.wicket.model.LoadableDetachableModel;
 
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataTableModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
@@ -117,7 +118,7 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
                     i=0;
                     for(val column : dataColumns) {
                         final Cell cell = row.createCell((short) i++);
-                        setCellValue(dataRow.getCellElement(column), cell, dateCellStyle);
+                        setCellValue(dataRow.getCellElementsForColumn(column), cell, dateCellStyle);
                     }
                 }
 
@@ -146,11 +147,14 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
     }
 
     private void setCellValue(
-            final ManagedObject cellValue,
+            final Can<ManagedObject> cellValues,
             final Cell cell,
             final CellStyle dateCellStyle) {
 
-        val valueAsObj = cellValue!=null ? cellValue.getPojo() : null;
+        //TODO[CAUSEWAY-3578] handle more than one value
+        val valueAsObj = cellValues.isNotEmpty()
+                ? cellValues.getFirstElseFail().getPojo()
+                : null;
 
         // null
         if(valueAsObj == null) {
@@ -231,6 +235,9 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
             setCellValueForDouble(cell, value);
             return;
         }
+
+        //TODO[CAUSEWAY-3578] handle more than one value
+        val cellValue = cellValues.getFirstElseFail();
 
         final String objectAsStr = cellValue.getTitle();
         cell.setCellValue(objectAsStr);

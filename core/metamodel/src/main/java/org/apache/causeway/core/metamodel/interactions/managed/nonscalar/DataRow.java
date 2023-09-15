@@ -20,9 +20,11 @@ package org.apache.causeway.core.metamodel.interactions.managed.nonscalar;
 
 import java.util.UUID;
 
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.binding._Bindables;
 import org.apache.causeway.commons.internal.binding._Bindables.BooleanBindable;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -59,8 +61,14 @@ public class DataRow {
         return rowElement;
     }
 
-    public ManagedObject getCellElement(final @NonNull DataColumn column) {
-        return column.getPropertyMetaModel().get(getRowElement());
+    /**
+     * Can be none, one or many per table cell.
+     */
+    public Can<ManagedObject> getCellElementsForColumn(final @NonNull DataColumn column) {
+        final ObjectAssociation assoc = column.getAssociationMetaModel();
+        return assoc.getSpecialization().fold(
+                property->Can.of(property.get(getRowElement())),
+                collection->Can.of(collection.get(getRowElement())));
     }
 
 }
