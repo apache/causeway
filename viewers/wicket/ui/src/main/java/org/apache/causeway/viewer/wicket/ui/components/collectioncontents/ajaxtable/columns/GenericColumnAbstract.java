@@ -28,6 +28,8 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
+import org.apache.causeway.applib.services.i18n.TranslationContext;
+import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataRow;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
@@ -103,6 +105,14 @@ implements GenericColumn {
             componentRegistry = componentFactoryRegistryAccessor.getComponentFactoryRegistry();
         }
         return componentRegistry;
+    }
+
+    protected PlaceholderRenderService getPlaceholderRenderService() {
+        return getMetaModelContext().getPlaceholderRenderService();
+    }
+
+    protected String translate(final String raw) {
+        return getMetaModelContext().getTranslationService().translate(TranslationContext.empty(), raw);
     }
 
 }

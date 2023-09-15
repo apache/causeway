@@ -18,12 +18,15 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns;
 
+import java.io.Serializable;
+import java.util.Map;
 import java.util.Optional;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 
+import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataRow;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -33,12 +36,27 @@ import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
+import lombok.Builder;
 import lombok.val;
+import lombok.experimental.Accessors;
 
 public final class PluralColumn
 extends AssociationColumnAbstract {
 
     private static final long serialVersionUID = 1L;
+
+    @lombok.Value @Builder @Accessors(fluent=true)
+    public static class RenderOptions implements Serializable {
+        private static final long serialVersionUID = 1L;
+        @Builder.Default
+        final int titleAbbreviationThreshold = 50;
+        @Builder.Default
+        final int maxElements = 5;
+        @Builder.Default
+        final boolean isRenderEmptyBadge = true;
+    }
+
+    private final RenderOptions opts;
 
     public PluralColumn(
             final MetaModelContext commonContext,
@@ -47,22 +65,40 @@ extends AssociationColumnAbstract {
             final String sortProperty,
             final String propertyId,
             final String parentTypeName,
-            final Optional<String> describedAs) {
+            final Optional<String> describedAs,
+            final RenderOptions opts) {
         super(commonContext, collectionVariant, columnNameModel, sortProperty, propertyId, parentTypeName, describedAs);
+        this.opts = opts;
     }
 
     @Override
     protected Component createCellComponent(
             final String componentId, final DataRow dataRow, final IModel<Boolean> dataRowToggle) {
 
-        //TODO[CAUSEWAY-3578] if empty, should we render the 'empty' badge or nothing?
-        //TODO[CAUSEWAY-3578] if cardinality exceeds certain threshold, truncate with 'has more...' label at the end
+        val cellElements = dataRow.getCellElementsForColumn(memberId);
+
+        // if empty, render the 'empty' badge or blank based on RenderOptions
+        if(cellElements.isEmpty()) {
+            return Wkt.markup(componentId,
+                    opts.isRenderEmptyBadge()
+                    ? getPlaceholderRenderService().asHtml(PlaceholderLiteral.NULL_REPRESENTATION)
+                    : "");
+        }
 
         val container = new RepeatingView(componentId);
-
-        dataRow.getCellElementsForColumn(memberId)
+        cellElements.stream()
+            .limit(opts.maxElements())
             .forEach(cellElement->container
                     .add(createCellElementComponent(container.newChildId(), cellElement)));
+
+        // if cardinality exceeds threshold, truncate with '... has more' label at the end
+        final int overflow = cellElements.size()-opts.maxElements();
+        if(overflow>0) {
+            //val hasMoreText = String.format("... " + translate("has %d more"), overflow);
+            //Wkt.labelAdd(container, container.newChildId(), hasMoreText);
+            Wkt.markupAdd(container, container.newChildId(),
+                    getPlaceholderRenderService().asHtml(PlaceholderLiteral.HAS_MORE, Map.of("number", ""+overflow)));
+        }
 
         return container;
     }
@@ -90,7 +126,7 @@ extends AssociationColumnAbstract {
                 componentFactory.createComponent(componentId, uiObject);
 
         ColumnAbbreviationOptions.builder()
-                .maxElementTitleLength(50) //TODO[CAUSEWAY-3578] should be a config option
+                .maxElementTitleLength(opts.titleAbbreviationThreshold())
                 .build()
                 .applyTo(entityLink);
 

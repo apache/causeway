@@ -35,12 +35,13 @@ import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel.Variant;
 import org.apache.causeway.viewer.wicket.ui.components.collection.bulk.MultiselectToggleProvider;
 import org.apache.causeway.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericColumn;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.TitleColumn;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ColumnAbbreviationOptions;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn;
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericColumn;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.PluralColumn;
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.PluralColumn.RenderOptions;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.SingularColumn;
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.TitleColumn;
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 
 import lombok.val;
@@ -192,7 +193,9 @@ implements CollectionCountProvider {
                 collection.getId(),
                 collection.getId(),
                 parentTypeName,
-                collection.getCanonicalDescription());
+                collection.getCanonicalDescription(),
+                // can hook up with global config later
+                RenderOptions.builder().build());
     }
 
 }
