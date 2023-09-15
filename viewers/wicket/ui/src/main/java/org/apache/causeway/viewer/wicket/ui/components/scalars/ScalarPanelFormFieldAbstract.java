@@ -32,7 +32,7 @@ import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFragement;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFragment;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
@@ -71,31 +71,31 @@ extends ScalarPanelAbstract2 {
      */
     protected MarkupContainer createFieldFrame() {
         val renderScenario = getRenderScenario();
-        final FieldFragement fieldFragement;
+        final FieldFragment fieldFragment;
         switch (renderScenario) {
         case READONLY:
             // setup as output-format (no links)
-            fieldFragement = FieldFragement.NO_LINK_VIEWING;
+            fieldFragment = FieldFragment.NO_LINK_VIEWING;
             break;
         case CAN_EDIT:
         case CAN_EDIT_INLINE:
         case CAN_EDIT_INLINE_VIA_ACTION:
         case EDITING_WITH_LINK_TO_NESTED:
             // setup as output-format (with links to edit)
-            fieldFragement = FieldFragement.LINK_TO_PROMT;
+            fieldFragment = FieldFragment.LINK_TO_PROMT;
             break;
         case EDITING:
             // setup as input-format
-            fieldFragement = scalarModel().isEditingMode()
-                ? FieldFragement.NO_LINK_EDITING // supports additional buttons (clear, ...)
-                : FieldFragement.NO_LINK_VIEWING;
+            fieldFragment = scalarModel().isEditingMode()
+                ? FieldFragment.NO_LINK_EDITING // supports additional buttons (clear, ...)
+                : FieldFragment.NO_LINK_VIEWING;
             break;
 
         default:
             throw _Exceptions.unmatchedCase(renderScenario);
         }
-        return Wkt.fragment(fieldFragement.getContainerId(),
-                fieldFragement.getFragmentId(),
+        return Wkt.fragment(fieldFragment.getContainerId(),
+                fieldFragment.getFragmentId(),
                 this);
     }
 
