@@ -69,7 +69,7 @@ implements
     public ArrayList<ObjectMemento> getObject() {
 
         val packedValue = pendingValue().getValue().getValue();
-        val unpackedValues = ManagedObjects.unpack(scalarModel().getScalarTypeSpec(), packedValue);
+        val unpackedValues = ManagedObjects.unpack(packedValue);
 
         log.debug("getObject() as unpackedValue {}", unpackedValues);
 

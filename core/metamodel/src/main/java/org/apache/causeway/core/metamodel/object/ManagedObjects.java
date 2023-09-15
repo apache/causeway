@@ -244,19 +244,18 @@ public final class ManagedObjects {
 
     // -- PACKING
 
+    /**
+     * If {@code any} is a {@link PackedManagedObject} then returns its unpacked elements,
+     * otherwise collects {@code any} into a {@link Can} unaltered.
+     * <p>
+     * Results in an empty Can if {@code any} is {@code null}.
+     * @param any - nullable
+     */
     public static Can<ManagedObject> unpack(
-            final ObjectSpecification elementSpec, // no longer req.
-            final ManagedObject nonScalar) {
-
-        if(!ManagedObjects.isNullOrUnspecifiedOrEmpty(nonScalar)
-                && !(nonScalar instanceof PackedManagedObject)) {
-            throw _Exceptions.illegalArgument("nonScalar must be in packed form; got %s",
-                    nonScalar.getClass().getName());
-        }
-
-        return isNullOrUnspecifiedOrEmpty(nonScalar)
-                ? Can.empty()
-                : ((PackedManagedObject)nonScalar).unpack();
+            final @Nullable ManagedObject any) {
+        return any instanceof PackedManagedObject
+                    ? ((PackedManagedObject)any).unpack()
+                    : Can.of(any);
     }
 
     // -- COMPARE UTILITIES

@@ -63,20 +63,15 @@ class _AssociationsAsColumns implements HasMetaModelContext {
             final Identifier memberIdentifier,
             final ManagedObject parentObject) {
 
-        // the type that has the properties that make up this table's columns
+        // the type that has the properties and collections that make up this table's columns
         val elementClass = elementType.getCorrespondingClass();
 
         val parentSpecIfAny = parentObject.getSpecification();
 
-        val whereContext = whereContextFor(memberIdentifier);
-
         val assocById = _Maps.<String, ObjectAssociation>newLinkedHashMap();
 
         elementType.streamAssociations(MixedIn.INCLUDED)
-        .filter(assoc->assoc.lookupFacet(HiddenFacet.class).stream()
-                .map(WhereValueFacet.class::cast)
-                .map(WhereValueFacet::where)
-                .noneMatch(where -> where.includes(whereContext)))
+        .filter(associationIsVisibleAccordingToHiddenFacet(memberIdentifier))
         .filter(associationDoesReferenceParent(parentSpecIfAny).negate())
         .filter(assoc->filterColumnsUsingSpi(assoc, elementClass)) // optional SPI to filter columns;
         .forEach(assoc->assocById.put(assoc.getId(), assoc));
@@ -173,6 +168,18 @@ class _AssociationsAsColumns implements HasMetaModelContext {
             propertyIdsInOrder.addAll(propertyReorderedIds);
         });
 
+    }
+
+    /**
+     * Returns true if no {@link HiddenFacet} is found that vetoes visibility.
+     */
+    static Predicate<ObjectAssociation> associationIsVisibleAccordingToHiddenFacet(
+            final Identifier memberIdentifier) {
+        val whereContext = whereContextFor(memberIdentifier);
+        return (final ObjectAssociation assoc) -> assoc.lookupFacet(HiddenFacet.class).stream()
+                .map(WhereValueFacet.class::cast)
+                .map(WhereValueFacet::where)
+                .noneMatch(whereHidden -> whereHidden.includes(whereContext)); // if no HiddenFacet is found returns true
     }
 
     static Predicate<ObjectAssociation> associationDoesReferenceParent(

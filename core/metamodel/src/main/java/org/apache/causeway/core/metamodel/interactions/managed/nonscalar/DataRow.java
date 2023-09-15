@@ -24,6 +24,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.binding._Bindables;
 import org.apache.causeway.commons.internal.binding._Bindables.BooleanBindable;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 
 import lombok.Getter;
@@ -68,7 +69,7 @@ public class DataRow {
         final ObjectAssociation assoc = column.getAssociationMetaModel();
         return assoc.getSpecialization().fold(
                 property->Can.of(property.get(getRowElement())),
-                collection->Can.of(collection.get(getRowElement())));
+                collection->ManagedObjects.unpack(collection.get(getRowElement())));
     }
 
 }
