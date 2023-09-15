@@ -45,7 +45,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.core.metamodel.util.Facets;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -53,60 +53,53 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @RequiredArgsConstructor
-class _PropertiesAsColumns implements HasMetaModelContext {
+class _AssociationsAsColumns implements HasMetaModelContext {
 
     @Getter(onMethod_ = {@Override})
     private final MetaModelContext metaModelContext;
 
-    public final Stream<OneToOneAssociation> streamPropertiesForColumnRendering(
+    public final Stream<ObjectAssociation> streamAssociationsForColumnRendering(
             final ObjectSpecification elementType,
             final Identifier memberIdentifier,
             final ManagedObject parentObject) {
 
-        // the type that has the properties that make up this table's columns
+        // the type that has the properties and collections that make up this table's columns
         val elementClass = elementType.getCorrespondingClass();
 
         val parentSpecIfAny = parentObject.getSpecification();
 
-        val whereContext = whereContextFor(memberIdentifier);
+        val assocById = _Maps.<String, ObjectAssociation>newLinkedHashMap();
 
-        val propertyById = _Maps.<String, OneToOneAssociation>newLinkedHashMap();
+        elementType.streamAssociations(MixedIn.INCLUDED)
+        .filter(associationIsVisibleAccordingToHiddenFacet(memberIdentifier))
+        .filter(associationDoesReferenceParent(parentSpecIfAny).negate())
+        .filter(assoc->filterColumnsUsingSpi(assoc, elementClass)) // optional SPI to filter columns;
+        .forEach(assoc->assocById.put(assoc.getId(), assoc));
 
-        elementType.streamProperties(MixedIn.INCLUDED)
-        .filter(property->property.streamFacets()
-                .filter(facet -> facet instanceof HiddenFacet)
-                .map(WhereValueFacet.class::cast)
-                .map(WhereValueFacet::where)
-                .noneMatch(where -> where.includes(whereContext)))
-        .filter(associationDoesNotReferenceParent(parentSpecIfAny))
-        .filter(property->filterColumnsUsingSpi(property, elementClass)) // optional SPI to filter columns;
-        .forEach(property->propertyById.put(property.getId(), property));
-
-        val propertyIdsInOrder = _Lists.<String>newArrayList(propertyById.keySet());
+        val assocIdsInOrder = _Lists.<String>newArrayList(assocById.keySet());
 
         // sort by order of occurrence within associated layout, if any
         propertyIdComparator(elementType)
-        .ifPresent(propertyIdsInOrder::sort);
+        .ifPresent(assocIdsInOrder::sort);
 
         // optional SPI to reorder columns
-        sortColumnsUsingSpi(memberIdentifier, parentObject, propertyIdsInOrder, elementClass);
+        sortColumnsUsingSpi(memberIdentifier, parentObject, assocIdsInOrder, elementClass);
 
         // add all ordered columns to the table
-        return propertyIdsInOrder.stream()
-                .map(propertyById::get)
+        return assocIdsInOrder.stream()
+                .map(assocById::get)
                 .filter(_NullSafe::isPresent);
-
     }
 
     // -- HELPER
 
     private boolean filterColumnsUsingSpi(
-            final ObjectAssociation property,
+            final ObjectAssociation assoc,
             final Class<?> elementType) {
         return getServiceRegistry()
                 .select(TableColumnVisibilityService.class)
                 .stream()
-                .noneMatch(x -> x.hides(elementType, property.getId()));
+                .noneMatch(x -> x.hides(elementType, assoc.getId()));
     }
 
     // comparator based on grid facet, that is by order of occurrence within associated layout
@@ -177,23 +170,35 @@ class _PropertiesAsColumns implements HasMetaModelContext {
 
     }
 
-    static Predicate<ObjectAssociation> associationDoesNotReferenceParent(
+    /**
+     * Returns true if no {@link HiddenFacet} is found that vetoes visibility.
+     * <p>
+     * However, if its a 1-to-Many, whereHidden={@link Where.ALL_TABLES} is used as default
+     * when no {@link HiddenFacet} is found.
+     * @apiNote an alternative would be to prime the meta-model with fallback facets,
+     *      however the current approach is more heap friendly
+     */
+    static Predicate<ObjectAssociation> associationIsVisibleAccordingToHiddenFacet(
+            final Identifier memberIdentifier) {
+        val whereContext = whereContextFor(memberIdentifier);
+        return (final ObjectAssociation assoc) -> assoc.lookupFacet(HiddenFacet.class)
+                .map(WhereValueFacet.class::cast)
+                .map(WhereValueFacet::where)
+                // in case its a 1-to-Many, whereHidden=ALL_TABLES is the default when not specified otherwise
+                .or(()->assoc.getSpecialization().right().map(__->Where.ALL_TABLES))
+                .stream()
+                .noneMatch(whereHidden -> whereHidden.includes(whereContext));
+    }
+
+    static Predicate<ObjectAssociation> associationDoesReferenceParent(
             final @Nullable ObjectSpecification parentSpec) {
         if(parentSpec == null) {
-            return _Predicates.alwaysTrue();
+            return _Predicates.alwaysFalse();
         }
-        return (final ObjectAssociation property) -> {
-                val hiddenFacet = property.getFacet(HiddenFacet.class);
-                if(hiddenFacet == null) {
-                    return true;
-                }
-                if (hiddenFacet.where() != Where.REFERENCES_PARENT) {
-                    return true;
-                }
-                val propertySpec = property.getElementType();
-                final boolean propertySpecIsOfParentSpec = parentSpec.isOfType(propertySpec);
-                final boolean isVisible = !propertySpecIsOfParentSpec;
-                return isVisible;
+        return (final ObjectAssociation assoc) -> {
+                if(assoc.isCollection()) return false; // never true for collections
+                return Facets.hiddenWhereMatches(Where.REFERENCES_PARENT::equals).test(assoc)
+                        && parentSpec.isOfType(assoc.getElementType());
         };
     }
 

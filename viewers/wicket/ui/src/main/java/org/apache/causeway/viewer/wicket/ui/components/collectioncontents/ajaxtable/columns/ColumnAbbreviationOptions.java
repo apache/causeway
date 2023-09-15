@@ -36,14 +36,14 @@ import lombok.Builder;
  * @since 2.0.0
  */
 @lombok.Value @Builder
-public class GenericTitleColumnOptions implements Serializable {
+public class ColumnAbbreviationOptions implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Builder.Default
     private final int maxElementTitleLength = -1;
 
-    private static final MetaDataKey<GenericTitleColumnOptions> KEY = new MetaDataKey<>() {
+    private static final MetaDataKey<ColumnAbbreviationOptions> KEY = new MetaDataKey<>() {
         private static final long serialVersionUID = 1L; };
 
     public <T extends Component> T applyTo(final T component) {
@@ -51,7 +51,7 @@ public class GenericTitleColumnOptions implements Serializable {
         return component;
     }
 
-    public static Optional<GenericTitleColumnOptions> lookupIn(final @Nullable Component component) {
+    public static Optional<ColumnAbbreviationOptions> lookupIn(final @Nullable Component component) {
         return Optional.ofNullable(component)
                 .map(comp->comp.getMetaData(KEY));
     }

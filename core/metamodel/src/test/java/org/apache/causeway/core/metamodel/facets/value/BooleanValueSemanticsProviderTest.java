@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.causeway.applib.exceptions.recoverable.TextEntryParseException;
+import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
 import org.apache.causeway.core.metamodel.valuesemantics.BooleanValueSemantics;
 
 class BooleanValueSemanticsProviderTest
@@ -80,7 +81,7 @@ extends ValueSemanticsProviderAbstractTestCase<Boolean> {
 
     @Test
     void titleWhenNotSet() throws Exception {
-        assertEquals("(none)",
+        assertEquals(PlaceholderLiteral.NULL_REPRESENTATION.getLiteral(),
                 value.titlePresentation(null, null));
     }
 

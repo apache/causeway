@@ -101,7 +101,7 @@ public class ScalarFragmentFactory {
     }
 
     @RequiredArgsConstructor
-    public static enum FieldFragement {
+    public enum FieldFragment {
         /**
          * field linking to its editing prompt
          */
@@ -139,10 +139,10 @@ public class ScalarFragmentFactory {
         public boolean isNoLinkViewing() { return this == NO_LINK_VIEWING; }
         public boolean isNoLinkEditing() { return this == NO_LINK_EDITING; }
 
-        public static Optional<FieldFragement> matching(final @Nullable MarkupContainer container) {
+        public static Optional<FieldFragment> matching(final @Nullable MarkupContainer container) {
             if(container instanceof Fragment) {
                 final String fragmentId = ((Fragment)container).getAssociatedMarkupId();
-                for(var fieldFragement : FieldFragement.values()) {
+                for(var fieldFragement : FieldFragment.values()) {
                     if(fieldFragement.getFragmentId().equals(fragmentId)) {
                         return Optional.of(fieldFragement);
                     }

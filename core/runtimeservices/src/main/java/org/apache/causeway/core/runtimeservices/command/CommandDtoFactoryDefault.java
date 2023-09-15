@@ -120,9 +120,6 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
 
             val argAdapter = argAdapters.getElseFail(paramNum);
 
-            // in case of non-scalar params returns the element type
-            val elementType = actionParameter.getElementType();
-
             final ParamDto paramDto = new ParamDto();
             paramDto.setName(actionParameter.getStaticFriendlyName()
                     .orElseThrow(_Exceptions::unexpectedCodeReach));
@@ -134,7 +131,7 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
                 valueMarshaller.recordParamScalar(paramDto, actionParameter, argAdapter);
             } else {
                 //non-scalar
-                val values = ManagedObjects.unpack(elementType, argAdapter);
+                val values = ManagedObjects.unpack(argAdapter);
                 valueMarshaller.recordParamNonScalar(paramDto, actionParameter, values);
             }
 

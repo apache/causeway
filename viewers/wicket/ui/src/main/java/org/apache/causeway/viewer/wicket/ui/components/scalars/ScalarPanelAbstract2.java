@@ -34,7 +34,7 @@ import org.apache.causeway.viewer.commons.model.components.UiString;
 import org.apache.causeway.viewer.wicket.model.models.InlinePromptContext;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFragement;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFragment;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.PromptFragment;
 import org.apache.causeway.viewer.wicket.ui.panels.FormExecutorDefault;
@@ -88,10 +88,10 @@ extends ScalarPanelAbstract {
                         getFormFrame()));
 
 
-        FieldFragement.matching(fieldFrame)
-        .ifPresent(fieldFragement->{
+        FieldFragment.matching(fieldFrame)
+        .ifPresent(fieldFragment ->{
 
-            switch (fieldFragement) {
+            switch (fieldFragment) {
             case LINK_TO_PROMT: {
 
                 fieldFrame
@@ -100,15 +100,15 @@ extends ScalarPanelAbstract {
                 // needs InlinePromptContext to properly initialize
                 addOnClickBehaviorTo(inlinePromptLink);
 
-                val additionalButtonContainer = fieldFragement.createButtonContainer(inlinePromptLink);
-                addAdditionalButtonsTo(additionalButtonContainer, fieldFragement);
+                val additionalButtonContainer = fieldFragment.createButtonContainer(inlinePromptLink);
+                addAdditionalButtonsTo(additionalButtonContainer, fieldFragment);
                 return;
             }
             case NO_LINK_VIEWING:
             case NO_LINK_EDITING: {
 
-                val additionalButtonContainer = fieldFragement.createButtonContainer(fieldFrame);
-                addAdditionalButtonsTo(additionalButtonContainer, fieldFragement);
+                val additionalButtonContainer = fieldFragment.createButtonContainer(fieldFrame);
+                addAdditionalButtonsTo(additionalButtonContainer, fieldFragment);
 
                 return;
             }
@@ -245,10 +245,10 @@ extends ScalarPanelAbstract {
     }
 
     private void addAdditionalButtonsTo(
-            final @NonNull RepeatingView buttonContainer, final FieldFragement fieldFragement) {
+            final @NonNull RepeatingView buttonContainer, final FieldFragment fieldFragment) {
 
         for(var additionalButton : ScalarPanelAdditionalButton.values()) {
-            if(additionalButton.isVisible(scalarModel(), getRenderScenario(), fieldFragement)) {
+            if(additionalButton.isVisible(scalarModel(), getRenderScenario(), fieldFragment)) {
                 switch (additionalButton) {
                 case COPY_TO_CLIPBOARD:
                     //XXX Future extension

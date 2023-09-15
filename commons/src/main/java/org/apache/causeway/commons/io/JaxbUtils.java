@@ -18,8 +18,11 @@
  */
 package org.apache.causeway.commons.io;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -29,8 +32,12 @@ import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
 import javax.xml.namespace.QName;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBContextFactory;
@@ -171,7 +178,21 @@ public class JaxbUtils {
     }
 
     @FunctionalInterface
-    public interface JaxbCustomizer extends UnaryOperator<JaxbOptions.JaxbOptionsBuilder> {}
+    public interface JaxbCustomizer extends UnaryOperator<JaxbOptions.JaxbOptionsBuilder> {
+    }
+
+    /**
+     * Optionally extends the {@link JaxbCustomizer} to also customize the {@link TransformerFactory}, for pretty
+     * printing (JDK9+ backwards compatibility, as per <a href="https://bugs.openjdk.org/browse/JDK-8262285">JDK-8262285</a>).
+     *
+     * <p>
+     *     This is only ever used if the {@link JaxbCustomizer}s leave the {@link JaxbOptions}
+     *     with {@link JaxbOptions#isFormattedOutput() formattedOutput} set to <code>true</code> (the default).
+     * </p>
+     */
+    public interface TransformerFactoryCustomizer extends JaxbCustomizer {
+        void apply(TransformerFactory transformerFactory);
+    }
 
     // -- MAPPER
 
@@ -258,15 +279,64 @@ public class JaxbUtils {
         if(pojo==null) return null;
         val sb = new StringBuilder();
         write(pojo, DataSink.ofStringUtf8Consumer(sb), customizers);
-        return sb.toString();
+
+        var xml = sb.toString();
+        if (isFormattedOutput(customizers)) {
+            return prettyPrint(customizers, xml);
+        }
+
+        return xml;
     }
+
+    private static String prettyPrint(final JaxbCustomizer[] customizers, final String xml) {
+        try {
+            var transformerFactory = TransformerFactory.newInstance();
+            transformerFactory.setAttribute("indent-number", 4);    // default, but can be overwritten by customisers.
+            apply(customizers, transformerFactory);
+
+            var xmlInput = new StreamSource(new StringReader(xml));
+            var xsltSource = new StreamSource(JaxbUtils.class.getResourceAsStream("prettyprint.xslt"));
+            var stringWriter = new StringWriter();
+            var xmlOutput = new StreamResult(stringWriter);
+
+            var transformer = transformerFactory.newTransformer(xsltSource);
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+
+            transformer.transform(xmlInput, xmlOutput);
+            try (var writer = xmlOutput.getWriter()) {
+                return writer.toString();
+            }
+        } catch (TransformerException | IOException e) {
+            return xml;
+        }
+    }
+
+    private static void apply(final JaxbCustomizer[] customizers, final TransformerFactory transformerFactory) {
+        for (var customizer : customizers) {
+            if (customizer instanceof  TransformerFactoryCustomizer) {
+                var transformerFactoryCustomizer = (TransformerFactoryCustomizer) customizer;
+                transformerFactoryCustomizer.apply(transformerFactory);
+            }
+        }
+    }
+
+    private static boolean isFormattedOutput(final JaxbCustomizer[] customizers) {
+        JaxbOptions.JaxbOptionsBuilder builder = JaxbOptions.builder();
+        for (var customizer : customizers) {
+            customizer.apply(builder);
+        }
+        var jaxbOptions = builder.build();
+        boolean formattedOutput = jaxbOptions.formattedOutput;
+        return formattedOutput;
+    }
+
 
     // -- MAPPER FACTORY
 
     private JaxbOptions createOptions(
             final JaxbUtils.JaxbCustomizer ... customizers) {
         var opts = JaxbOptions.builder();
-        for(JaxbUtils.JaxbCustomizer customizer : customizers) {
+        for(var customizer : customizers) {
             opts = Optional.ofNullable(customizer.apply(opts))
                     .orElse(opts);
         }

@@ -19,8 +19,6 @@
 package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
-import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.springframework.lang.Nullable;
 
@@ -32,24 +30,23 @@ import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel.Variant;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
-import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
-public final class GenericTitleColumn
+public final class TitleColumn
 extends GenericColumnAbstract {
 
     private static final long serialVersionUID = 1L;
     private final Variant variant;
-    private final GenericTitleColumnOptions opts;
+    private final ColumnAbbreviationOptions opts;
     private final Bookmark contextBookmark;
 
-    public GenericTitleColumn(
+    public TitleColumn(
             final MetaModelContext commonContext,
             final Variant variant,
             final Bookmark contextBookmark,
             final int maxColumnTitleLength,
-            final GenericTitleColumnOptions opts) {
+            final ColumnAbbreviationOptions opts) {
 
         super(commonContext, columnName(variant, maxColumnTitleLength)); // i18n
         this.variant = variant;
@@ -58,13 +55,25 @@ extends GenericColumnAbstract {
     }
 
     @Override
-    public void populateItem(
-            final Item<ICellPopulator<DataRow>> cellItem,
-            final String componentId,
-            final IModel<DataRow> rowModel) {
+    protected Component createCellComponent(
+            final String componentId, final DataRow dataRow, final IModel<Boolean> dataRowToggle) {
+        val rowElement = dataRow.getRowElement();
 
-        cellItem.add(createComponent(componentId, rowModel));
-        Wkt.cssAppend(cellItem, "title-column");
+        if(ManagedObjects.isValue(rowElement)) {
+            val objectMember = dataRow.getParentTable().getMetaModel();
+            val valueModel = ValueModel.of(super.getMetaModelContext(), objectMember, rowElement);
+            val componentFactory = findComponentFactory(UiComponentType.VALUE, valueModel);
+            return componentFactory.createComponent(componentId, valueModel);
+        }
+
+        val uiObject = UiObjectWkt.ofAdapterForCollection(super.getMetaModelContext(), rowElement, variant);
+        uiObject.setContextBookmarkIfAny(contextBookmark);
+
+        // will use EntityLinkSimplePanelFactory as model is an EntityModel
+        val componentFactory = findComponentFactory(UiComponentType.ENTITY_LINK, uiObject);
+        final Component entityLink = opts.applyTo(
+                componentFactory.createComponent(componentId, uiObject));
+        return entityLink;
     }
 
     // -- HELPER
@@ -76,28 +85,6 @@ extends GenericColumnAbstract {
             return "";
         }
         return (variant.isParented() ? "Related ":"") + "Object";
-    }
-
-    private Component createComponent(final String id, final IModel<DataRow> rowModel) {
-        val dataRow = rowModel.getObject();
-
-        val adapter = dataRow.getRowElement();
-
-        if(ManagedObjects.isValue(adapter)) {
-            val objectMember = dataRow.getParentTable().getMetaModel();
-            val valueModel = ValueModel.of(super.getMetaModelContext(), objectMember, adapter);
-            val componentFactory = findComponentFactory(UiComponentType.VALUE, valueModel);
-            return componentFactory.createComponent(id, valueModel);
-        }
-
-        val uiObject = UiObjectWkt.ofAdapterForCollection(super.getMetaModelContext(), adapter, variant);
-        uiObject.setContextBookmarkIfAny(contextBookmark);
-
-        // will use EntityLinkSimplePanelFactory as model is an EntityModel
-        val componentFactory = findComponentFactory(UiComponentType.ENTITY_LINK, uiObject);
-        final Component entityLink = opts.applyTo(
-                componentFactory.createComponent(id, uiObject));
-        return entityLink;
     }
 
 }

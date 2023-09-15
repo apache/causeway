@@ -21,10 +21,6 @@ package org.apache.causeway.core.metamodel.objectmanager;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
-
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -37,6 +33,8 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ProtoObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.NonNull;
 import lombok.val;
@@ -148,13 +146,14 @@ public interface ObjectManager extends HasMetaModelContext {
     // -- ADAPTING POJOS
 
     /**
-     * Not suitable for adapting a non-scalar.
+     * Not suitable for adapting a plural.
      * If {@code pojo} is an entity, automatically memoizes its bookmark.
-     *
      * <p>
      * Resolves injection-points for the result. (Handles service injection.)
+     * <p>
+     * see also {@link #adapt(Object, Supplier)},
+     *      where the 2nd arg supplies the {@link ObjectSpecification} if known (eg for null args).
      *
-     * @see #adapt(Object, Supplier), where the 2nd arg supplies the {@link ObjectSpecification} if known (eg for null args).
      * @see ManagedObject#adaptSingular(ObjectSpecification, Object)
      * @see ManagedObject#adaptParameter(ObjectActionParameter, Object)
      * @see ManagedObject#adaptProperty(OneToOneAssociation, Object)
@@ -164,7 +163,7 @@ public interface ObjectManager extends HasMetaModelContext {
     }
 
     /**
-     * Suitable for adapting a non-scalar.
+     * Suitable for adapting a plural.
      * If {@code pojo} is an entity, automatically memoizes its bookmark.
      * <p>
      * Resolves injection-points for the result. (Handles service injection.)

@@ -34,7 +34,7 @@ import org.apache.causeway.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericTitleColumnOptions;
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ColumnAbbreviationOptions;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
@@ -212,7 +212,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
         /* Allows any higher-order component factory to customize appearance,
          * if the context requires it.
          * Eg. don't suppress titles for tables that have no property columns. */
-        final int maxTitleLengthOverride = GenericTitleColumnOptions.lookupIn(this)
+        final int maxTitleLengthOverride = ColumnAbbreviationOptions.lookupIn(this)
             .map(opts->opts.getMaxElementTitleLength())
             .orElse(-1);
         if(maxTitleLengthOverride>-1) {

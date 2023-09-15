@@ -25,6 +25,12 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 
+//import javax.xml.transform.TransformerFactory;
+//
+//import org.apache.causeway.commons.io.JaxbUtils.JaxbOptions.JaxbOptionsBuilder;
+//import org.approvaltests.Approvals;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -38,6 +44,7 @@ import lombok.Setter;
 import lombok.val;
 
 class JaxbUtilsTest {
+
 
     @XmlRootElement(name = "type-a")
     @XmlType
@@ -59,36 +66,93 @@ class JaxbUtilsTest {
         @Getter @Setter private String string;
     }
 
-    /**
-     * Works for arbitrary {@link XmlRootElement#name()} combinations,
-     * except you cannot use the same {@code name="root"} say on both {@link A} and {@link B}.
-     * <p>
-     * As {@link A} contains {@link B}, the {@link JAXBContext} for {@link A} should also bind type {@link B}.
-     * We are testing whether type-safe recovery especially for type {@link A} works as desired.
-     */
-    @Test
-    void typesafeUnmarshallingFromAmbiguousContext() {
 
+    private A a;
+    private B b;
+
+    @BeforeEach
+    void setup() {
         // given
-        val b = new B();
+        b = new B();
         b.setString("b-string");
-        val a = new A();
+        a = new A();
         a.setNested(b);
-
-        // when ... doing a round trip
-        val aXml = JaxbUtils.toStringUtf8(a);
-        val bXml = JaxbUtils.toStringUtf8(b);
-
-        assertTrue(_Strings.isNotEmpty(aXml));
-        assertTrue(_Strings.isNotEmpty(bXml));
-
-        val aRecovered = JaxbUtils.tryRead(A.class, aXml).valueAsNonNullElseFail();
-        val bRecovered = JaxbUtils.tryRead(B.class, bXml).valueAsNonNullElseFail();
-
-        // then
-        assertEquals(a, aRecovered);
-        assertEquals(b, bRecovered);
-
     }
+
+    @Nested
+    class tryRead {
+
+        /**
+         * Works for arbitrary {@link XmlRootElement#name()} combinations,
+         * except you cannot use the same {@code name="root"} say on both {@link A} and {@link B}.
+         * <p>
+         * As {@link A} contains {@link B}, the {@link JAXBContext} for {@link A} should also bind type {@link B}.
+         * We are testing whether type-safe recovery especially for type {@link A} works as desired.
+         */
+        @Test
+        void typesafeUnmarshallingFromAmbiguousContext() {
+
+            // when ... doing a round trip
+            val aXml = JaxbUtils.toStringUtf8(a);
+            val bXml = JaxbUtils.toStringUtf8(b);
+
+            assertTrue(_Strings.isNotEmpty(aXml));
+            assertTrue(_Strings.isNotEmpty(bXml));
+
+            val aRecovered = JaxbUtils.tryRead(A.class, aXml).valueAsNonNullElseFail();
+            val bRecovered = JaxbUtils.tryRead(B.class, bXml).valueAsNonNullElseFail();
+
+            // then
+            assertEquals(a, aRecovered);
+            assertEquals(b, bRecovered);
+
+        }
+    }
+
+    // commenting this out only because javac v11 fails to compile.  However, javac v20 handles it, so we can uncomment in the future.
+    // https://the-asf.slack.com/archives/CFC42LWBV/p1694771499860429
+
+//    @Test
+//    void toStringUtf8_with_no_options() {
+//
+//        val aXml = JaxbUtils.toStringUtf8(a);
+//
+//        System.out.println(aXml);
+//
+//        Approvals.verify(aXml);
+//    }
+//
+//    @Test
+//    void toStringUtf8_with_no_formatted_output() {
+//
+//        val aXml = JaxbUtils.toStringUtf8(a, opt -> {
+//            opt.formattedOutput(false);
+//            return opt;
+//        });
+//
+//        System.out.println(aXml);
+//
+//        Approvals.verify(aXml);
+//    }
+//
+//    @Test
+//    void toStringUtf8_with_indent_number_overridden() {
+//
+//        val aXml = JaxbUtils.toStringUtf8(a, new JaxbUtils.TransformerFactoryCustomizer() {
+//            @Override
+//            public void apply(TransformerFactory transformerFactory) {
+//                transformerFactory.setAttribute("indent-number", 2);
+//            }
+//
+//            @Override
+//            public JaxbOptionsBuilder apply(JaxbOptionsBuilder jaxbOptionsBuilder) {
+//                return jaxbOptionsBuilder;
+//            }
+//        });
+//
+//        System.out.println(aXml);
+//
+//        Approvals.verify(aXml);
+//    }
 
 }

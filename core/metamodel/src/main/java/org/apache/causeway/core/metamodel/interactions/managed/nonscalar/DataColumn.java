@@ -22,26 +22,27 @@ import java.util.Optional;
 
 import org.apache.causeway.commons.internal.binding._Observables;
 import org.apache.causeway.commons.internal.binding._Observables.LazyObservable;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 
 import lombok.Getter;
 import lombok.NonNull;
 
 public class DataColumn {
 
-    @Getter private final @NonNull OneToOneAssociation propertyMetaModel;
+    @Getter private final @NonNull String columnId;
+    @Getter private final @NonNull ObjectAssociation associationMetaModel;
     @Getter private final @NonNull LazyObservable<String> columnFriendlyName;
     @Getter private final @NonNull LazyObservable<Optional<String>> columnDescription;
 
-    public DataColumn(final DataTableModel parentTable, final OneToOneAssociation propertyMetaModel) {
-        this.propertyMetaModel = propertyMetaModel;
+    public DataColumn(final DataTableModel parentTable, final ObjectAssociation associationMetaModel) {
+        this.associationMetaModel = associationMetaModel;
+        this.columnId = associationMetaModel.getId();
 
         columnFriendlyName = _Observables.lazy(()->
-            propertyMetaModel.getCanonicalFriendlyName());
+            associationMetaModel.getCanonicalFriendlyName());
 
         columnDescription = _Observables.lazy(()->
-            propertyMetaModel.getCanonicalDescription());
-
+            associationMetaModel.getCanonicalDescription());
     }
 
 }

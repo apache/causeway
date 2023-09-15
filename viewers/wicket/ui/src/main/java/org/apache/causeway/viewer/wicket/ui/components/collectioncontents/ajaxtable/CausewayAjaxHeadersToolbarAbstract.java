@@ -42,7 +42,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.Strings;
 
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericTitleColumn;
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.TitleColumn;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import de.agilecoders.wicket.core.util.Attributes;
@@ -150,7 +150,7 @@ public abstract class CausewayAjaxHeadersToolbarAbstract<S> extends AbstractTool
                 Component sortIcon = newSortIcon("sortIcon", column, stateLocator);
                 header.add(label, sortIcon);
 
-                if(column instanceof GenericTitleColumn) {
+                if(column instanceof TitleColumn) {
                     Wkt.cssAppend(header, "title-column");
                 }
             }

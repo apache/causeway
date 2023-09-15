@@ -33,6 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.semantics.Parser;
@@ -172,7 +173,7 @@ abstract class ValueSemanticsProviderAbstractTestCase<T> {
             assertEquals("",
                     semantics.getRenderer().titlePresentation(null, null));
         } else {
-            assertEquals("(none)",
+            assertEquals(PlaceholderLiteral.NULL_REPRESENTATION.getLiteral(),
                     semantics.getRenderer().titlePresentation(null, null));
         }
 
