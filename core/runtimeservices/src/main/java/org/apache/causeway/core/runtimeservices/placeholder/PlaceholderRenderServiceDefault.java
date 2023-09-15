@@ -69,7 +69,7 @@ implements PlaceholderRenderService {
                 .caption(translateAndInterpolate(placeholderLiteral, vars))
                 .cssClass("placeholder-literal-" + placeholderLiteral.name().toLowerCase())
                 .href(Optional.ofNullable(vars).map(map->map.get("href")).orElse(null))
-                //.nestedCaption(Optional.ofNullable(vars).map(map->map.get("number")).orElse(null))
+                .nestedCaption(Optional.ofNullable(vars).map(map->map.get("..")).orElse(null))
                 .build()
                 .toHtml();
     }

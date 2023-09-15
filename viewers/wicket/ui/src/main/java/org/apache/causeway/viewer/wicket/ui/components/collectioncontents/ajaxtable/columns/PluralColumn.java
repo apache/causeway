@@ -30,12 +30,14 @@ import org.apache.wicket.model.IModel;
 import org.apache.causeway.applib.services.linking.DeepLinkService;
 import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataColumn;
 import org.apache.causeway.core.metamodel.interactions.managed.nonscalar.DataRow;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
+import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.Builder;
@@ -77,7 +79,8 @@ extends AssociationColumnAbstract {
     protected Component createCellComponent(
             final String componentId, final DataRow dataRow, final IModel<Boolean> dataRowToggle) {
 
-        val cellElements = dataRow.getCellElementsForColumn(memberId);
+        val dataColumn = dataRow.lookupColumnById(memberId).orElseThrow();
+        val cellElements = dataRow.getCellElementsForColumn(dataColumn);
 
         // if empty, render the 'empty' badge or blank based on RenderOptions
         if(cellElements.isEmpty()) {
@@ -91,7 +94,7 @@ extends AssociationColumnAbstract {
         cellElements.stream()
             .limit(opts.maxElements())
             .forEach(cellElement->container
-                    .add(createCellElementComponent(container.newChildId(), cellElement)));
+                    .add(createCellElementComponent(container.newChildId(), dataColumn, cellElement)));
 
         // if cardinality exceeds threshold, truncate with '... has more' label at the end
         final int overflow = cellElements.size()-opts.maxElements();
@@ -115,16 +118,12 @@ extends AssociationColumnAbstract {
      * Inspired by {@link TitleColumn}
      */
     private Component createCellElementComponent(
-            final String componentId, final ManagedObject cellElement) {
+            final String componentId, final DataColumn dataColumn, final ManagedObject cellElement) {
 
         if(ManagedObjects.isValue(cellElement)) {
-//            val objectMember = dataRow.getParentTable().getMetaModel();
-//            val valueModel = ValueModel.of(super.getMetaModelContext(), objectMember, cellElement);
-//            val componentFactory = findComponentFactory(UiComponentType.VALUE, valueModel);
-//            return componentFactory.createComponent(componentId, valueModel);
-
-            //TODO[CAUSEWAY-3578] implement value rendering
-            return Wkt.label(componentId, "TODO[CAUSEWAY-3578]");
+            val valueModel = ValueModel.of(super.getMetaModelContext(), dataColumn.getAssociationMetaModel(), cellElement);
+            val componentFactory = findComponentFactory(UiComponentType.VALUE, valueModel);
+            return componentFactory.createComponent(componentId, valueModel);
         }
 
         val uiObject = UiObjectWkt.ofAdapterForCollection(super.getMetaModelContext(), cellElement, collectionVariant);

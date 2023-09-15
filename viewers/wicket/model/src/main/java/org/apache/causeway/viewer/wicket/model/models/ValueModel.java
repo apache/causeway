@@ -38,8 +38,8 @@ extends ModelAbstract<ManagedObject> {
     // -- FACTORIES
 
     public static ValueModel of(
-            final @NonNull  MetaModelContext commonContext,
-            final @NonNull  ObjectMember objectMember,
+            final @NonNull MetaModelContext commonContext,
+            final @NonNull ObjectMember objectMember,
             final @NonNull ManagedObject valueAdapter) {
         return new ValueModel(commonContext, objectMember, valueAdapter);
     }
@@ -50,11 +50,11 @@ extends ModelAbstract<ManagedObject> {
 
     private ValueModel(
             final MetaModelContext commonContext,
-            final @NonNull  ObjectMember objectMember,
+            final @NonNull ObjectMember objectMember,
             final @NonNull ManagedObject valueAdapter) {
         super(commonContext);
         this.objectMemberMemento = ObjectMemberMemento.forMember(objectMember);
-        adapterMemento = valueAdapter.getMemento().orElseThrow();
+        this.adapterMemento = valueAdapter.getMemento().orElseThrow();
     }
 
     @Override
