@@ -28,6 +28,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -48,6 +49,12 @@ import lombok.val;
 class ExcelFileModel extends LoadableDetachableModel<File> {
 
     private static final long serialVersionUID = 1L;
+
+    /**
+     * If a cell's cardinality exceeds this threshold, truncate with '... has more' label at the end.
+     */
+    private static final int MAX_CELL_ELEMENTS = 5;
+    private static final String POI_LINE_DELIMITER = "\n";
 
     private final EntityCollectionModel model;
 
@@ -118,7 +125,10 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
                     i=0;
                     for(val column : dataColumns) {
                         final Cell cell = row.createCell((short) i++);
-                        setCellValue(dataRow.getCellElementsForColumn(column), cell, dateCellStyle);
+                        setCellValue(dataRow.getCellElementsForColumn(column)
+                                .filter(managedObject->managedObject.getPojo()!=null),
+                                cell,
+                                dateCellStyle);
                     }
                 }
 
@@ -147,15 +157,35 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
     }
 
     private void setCellValue(
-            final Can<ManagedObject> cellValues,
+            final Can<ManagedObject> cellElements, // pre-filtered, so contains only non-null pojos
             final Cell cell,
             final CellStyle dateCellStyle) {
 
-        //TODO[CAUSEWAY-3578] handle more than one value
-        val valueAsObj = cellValues.isNotEmpty()
-                ? cellValues.getFirstElseFail().getPojo()
-                : null;
+        if(cellElements.isEmpty()) {
+            cell.setBlank();
+            return;
+        }
 
+        if(cellElements.isCardinalityMultiple()) {
+            String joinedElementsLiteral = cellElements.stream()
+                .limit(MAX_CELL_ELEMENTS)
+                .map(ManagedObject::getTitle)
+                .collect(Collectors.joining(POI_LINE_DELIMITER));
+
+            // if cardinality exceeds threshold, truncate with 'has more' label at the end
+            final int overflow = cellElements.size()-MAX_CELL_ELEMENTS;
+            if(overflow>0) {
+                joinedElementsLiteral += POI_LINE_DELIMITER + String.format("(has %d more)", overflow);
+            }
+
+            cell.setCellValue(joinedElementsLiteral);
+            return;
+        }
+
+        val singleton = cellElements.getFirstElseFail();
+        val valueAsObj = singleton.getPojo();
+
+        // event though filtered for null by caller, keep this as a guard
         // null
         if(valueAsObj == null) {
             cell.setBlank();
@@ -236,10 +266,7 @@ class ExcelFileModel extends LoadableDetachableModel<File> {
             return;
         }
 
-        //TODO[CAUSEWAY-3578] handle more than one value
-        val cellValue = cellValues.getFirstElseFail();
-
-        final String objectAsStr = cellValue.getTitle();
+        final String objectAsStr = singleton.getTitle();
         cell.setCellValue(objectAsStr);
         return;
     }

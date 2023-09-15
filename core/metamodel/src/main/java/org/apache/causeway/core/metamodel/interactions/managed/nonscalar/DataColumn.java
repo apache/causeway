@@ -36,7 +36,7 @@ public class DataColumn {
 
     public DataColumn(final DataTableModel parentTable, final ObjectAssociation associationMetaModel) {
         this.associationMetaModel = associationMetaModel;
-        this.columnId = associationMetaModel.getId(); //TODO[CAUSEWAY-3578] can we rule out memberId clashes?
+        this.columnId = associationMetaModel.getId();
 
         columnFriendlyName = _Observables.lazy(()->
             associationMetaModel.getCanonicalFriendlyName());
