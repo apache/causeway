@@ -24,10 +24,11 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.transform.TransformerFactory;
 
-import org.apache.causeway.commons.io.JaxbUtils.JaxbOptions.JaxbOptionsBuilder;
-import org.approvaltests.Approvals;
+//import javax.xml.transform.TransformerFactory;
+//
+//import org.apache.causeway.commons.io.JaxbUtils.JaxbOptions.JaxbOptionsBuilder;
+//import org.approvaltests.Approvals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

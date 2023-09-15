@@ -23,7 +23,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.io.Writer;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
@@ -45,8 +44,6 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
@@ -300,7 +297,7 @@ public class JaxbUtils {
         return xml;
     }
 
-    private static String prettyPrint(JaxbCustomizer[] customizers, String xml) {
+    private static String prettyPrint(final JaxbCustomizer[] customizers, final String xml) {
         try {
             var transformerFactory = TransformerFactory.newInstance();
             transformerFactory.setAttribute("indent-number", 4);    // default, but can be overwritten by customisers.
@@ -323,7 +320,7 @@ public class JaxbUtils {
         }
     }
 
-    private static void apply(JaxbCustomizer[] customizers, TransformerFactory transformerFactory) {
+    private static void apply(final JaxbCustomizer[] customizers, final TransformerFactory transformerFactory) {
         for (var customizer : customizers) {
             if (customizer instanceof  TransformerFactoryCustomizer) {
                 var transformerFactoryCustomizer = (TransformerFactoryCustomizer) customizer;
@@ -332,7 +329,7 @@ public class JaxbUtils {
         }
     }
 
-    private static boolean isFormattedOutput(JaxbCustomizer[] customizers) {
+    private static boolean isFormattedOutput(final JaxbCustomizer[] customizers) {
         JaxbOptions.JaxbOptionsBuilder builder = JaxbOptions.builder();
         for (var customizer : customizers) {
             customizer.apply(builder);
