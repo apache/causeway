@@ -111,7 +111,7 @@ implements CausewayBeanTypeClassifier {
                         .injectable(BeanSort.MANAGED_BEAN_CONTRIBUTING, logicalType);
         }
 
-        //[CAUSEWAY-3585] when implements ViewModel, than don't consider alternatives, yield VIEW_MODEL
+        //[CAUSEWAY-3585] when implements ViewModel, then don't consider alternatives, yield VIEW_MODEL
         if(org.apache.causeway.applib.ViewModel.class.isAssignableFrom(type)) {
             return CausewayBeanMetaData.causewayManaged(BeanSort.VIEW_MODEL, type);
         }
