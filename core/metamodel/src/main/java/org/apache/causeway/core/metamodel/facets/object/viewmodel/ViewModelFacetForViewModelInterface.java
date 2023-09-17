@@ -31,6 +31,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.IndexedConsumer;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
+import org.apache.causeway.commons.io.UrlUtils;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.commons.ClassExtensions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -134,7 +135,7 @@ extends ViewModelFacetAbstract {
     @Override
     public String serialize(final ManagedObject viewModel) {
         final ViewModel viewModelPojo = (ViewModel) viewModel.getPojo();
-        return viewModelPojo.viewModelMemento();
+        return UrlUtils.urlEncodeUtf8(viewModelPojo.viewModelMemento());
     }
 
     // -- HELPER
@@ -142,11 +143,12 @@ extends ViewModelFacetAbstract {
     @SneakyThrows
     private Object deserialize(
             @NonNull final ObjectSpecification viewmodelSpec,
-            @Nullable final String memento) {
+            @Nullable final String mementoEncoded) {
 
         _Assert.assertNotNull(constructorAnyArgs, ()->"framework bug: required non-null, "
                 + "this can only happen, if we try to deserialize an abstract type");
 
+        val memento = UrlUtils.urlDecodeUtf8(mementoEncoded);
         val resolvedArgs = resolveArgsForConstructor(constructorAnyArgs, getServiceRegistry(), memento);
         val viewmodelPojo = constructorAnyArgs.constructor().newInstance(resolvedArgs);
         return viewmodelPojo;

@@ -18,67 +18,46 @@
  */
 package org.apache.causeway.viewer.restfulobjects.applib.util;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
 import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.commons.io.UrlUtils;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
+
+import lombok.experimental.UtilityClass;
 
 /**
  * @since 1.x {@index}
  */
+@UtilityClass
 public final class UrlEncodingUtils {
 
-    public static final Function<String, String> FUNCTION = new Function<String, String>() {
-
-        @Override
-        public String apply(final String input) {
-            try {
-                return URLDecoder.decode(input, "UTF-8");
-            } catch (final UnsupportedEncodingException e) {
-                return "";
-            }
-        }
-    };
-
-    private UrlEncodingUtils() {
+    public String urlDecode(final String string) {
+        return UrlUtils.urlDecodeUtf8(string);
     }
 
-    public static String urlDecode(final String string) {
-        return FUNCTION.apply(string);
+    public List<String> urlDecode(final List<String> values) {
+        return _Lists.map(values, UrlUtils::urlDecodeUtf8);
     }
 
-    public static List<String> urlDecode(final List<String> values) {
-        return _Lists.map(values, FUNCTION);
-    }
-
-    public static String[] urlDecode(final String[] values) {
+    public String[] urlDecode(final String[] values) {
         final List<String> asList = Arrays.asList(values);
         return urlDecode(asList).toArray(new String[] {});
     }
 
-    public static String urlEncode(final JsonNode jsonNode) {
+    public String urlEncode(final JsonNode jsonNode) {
         return urlEncode(jsonNode.toString());
     }
 
-    public static String urlEncode(final JsonRepresentation jsonRepresentation ) {
+    public String urlEncode(final JsonRepresentation jsonRepresentation ) {
         return urlEncode(jsonRepresentation.toString());
     }
 
-    public static String urlEncode(final String str) {
-        try {
-            return URLEncoder.encode(str, StandardCharsets.UTF_8.name());
-        } catch (final UnsupportedEncodingException e) {
-            // shouldn't happen
-            throw new RuntimeException(e);
-        }
+    public String urlEncode(final String str) {
+        return UrlUtils.urlEncodeUtf8(str);
     }
 
 }
