@@ -49,7 +49,7 @@ public class AsciiDocBuilder {
         return this;
     }
 
-//XXX looks great, but would not support block nesting ...    
+//XXX looks great, but would not support block nesting ...
 //    // -- TITLE
 //
 //    public AsciiDocBuilder title(final String title) {
@@ -81,12 +81,12 @@ public class AsciiDocBuilder {
 
     // -- BUILD
 
-    public String build() {
+    public String buildAsString() {
         return AsciiDocWriter.toString(doc);
     }
 
-    public AsciiDoc buildAsAsciiDoc() {
-        return AsciiDoc.valueOf(build());
+    public AsciiDoc buildAsValue() {
+        return AsciiDoc.valueOf(buildAsString());
     }
 
 }

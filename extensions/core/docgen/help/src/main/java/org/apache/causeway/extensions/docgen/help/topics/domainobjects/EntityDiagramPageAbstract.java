@@ -56,7 +56,7 @@ public abstract class EntityDiagramPageAbstract implements HelpPage {
                         .ifPresent(mainBlock::setTitle);
                     mainBlock.setSource(renderObjectGraph(createObjectGraph()));
                 })
-                .buildAsAsciiDoc();
+                .buildAsValue();
     }
 
     /** Governs which types to include with the diagram. */
@@ -89,7 +89,7 @@ public abstract class EntityDiagramPageAbstract implements HelpPage {
                 new ObjectGraphRendererD3js(GraphRenderOptions.builder().build()));
         return new AsciiDocBuilder()
                 .append(doc->AsciiDocFactory.htmlPassthroughBlock(doc, d3jsSourceAsHtml))
-                .build();
+                .buildAsString();
     }
 
     /**
