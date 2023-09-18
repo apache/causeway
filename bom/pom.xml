@@ -101,7 +101,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <cucumber.version>7.14.0</cucumber.version>
 
-        <cxf-rt-rs-client.version>3.6.1</cxf-rt-rs-client.version>
+        <cxf-rt-rs-client.version>3.6.2</cxf-rt-rs-client.version>
 
         <datanucleus-api-jdo.version>6.0.1</datanucleus-api-jdo.version>
         <datanucleus-api-jpa.version>6.0.1</datanucleus-api-jpa.version>
