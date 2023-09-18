@@ -53,7 +53,8 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class HelpNodeVm implements ViewModel {
 
-    public final static String PATH_DELIMITER = "|"; // required to be URL-safe
+    // no longer required to be URL-safe (but nicer if does not get encoded)
+    public final static String PATH_DELIMITER = ".";
 
     public static HelpNodeVm forRootTopic(final HelpTopic rootTopic) {
         return new HelpNodeVm(rootTopic, rootTopic);
