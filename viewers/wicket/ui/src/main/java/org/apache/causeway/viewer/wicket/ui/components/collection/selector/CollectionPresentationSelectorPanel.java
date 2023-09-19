@@ -68,9 +68,11 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
     private static final String ID_VIEW_ITEM = "viewItem";
     private static final String ID_VIEW_ITEM_TITLE = "viewItemTitle";
     private static final String ID_VIEW_ITEM_ICON = "viewItemIcon";
+    private static final String ID_VIEW_ITEM_CHECKMARK = "viewItemCheckmark"; // indicator for the selected item
     private static final String ID_VIEW_BUTTON_ICON = "viewButtonIcon";
     private static final String ID_SECTION_SEPARATOR = "sectionSeparator";
     private static final String ID_SECTION_LABEL = "sectionLabel";
+
 
     private final CollectionPresentationSelectorHelper selectorHelper;
     private final ComponentHintKey componentHintKey;
@@ -161,6 +163,7 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
 
                 final DownloadLink downloadLink = (DownloadLink)
                         componentFactory.createComponent(ID_VIEW_LINK, getModel());
+                WktComponents.permanentlyHide(downloadLink, ID_VIEW_ITEM_CHECKMARK);
 
                 item.addOrReplace(downloadLink);
 
@@ -190,10 +193,14 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
 
             // add title and icon to the link
             RepeatedViewEntry.addLinkWithIconAndTitle(item, link);
+            val checkmarkForSelectedPresentation = Wkt.labelAdd(link, ID_VIEW_ITEM_CHECKMARK, "");
 
-            // mark the selected item as active
-            if (repeatedViewEntry.isSelectedIn(this)) {
-                repeatedViewEntry.markAsActive(viewButtonIcon, link);
+            val isSelectedPresentation = repeatedViewEntry.isSelectedIn(this);
+            checkmarkForSelectedPresentation.setVisible(isSelectedPresentation);
+
+            // if selected, disable the link
+            if (isSelectedPresentation) {
+                repeatedViewEntry.markAsSelected(viewButtonIcon, link);
             }
 
         });
@@ -294,10 +301,9 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
 
         // -- UPDATE STATE
 
-        void markAsActive(final Label viewButtonIcon, final AjaxLinkNoPropagate link) {
+        void markAsSelected(final Label viewButtonIcon, final AjaxLinkNoPropagate link) {
             final IModel<String> cssClass = _Util.cssClassFor(componentFactory, viewButtonIcon);
             Wkt.cssReplace(viewButtonIcon, "ViewLinkItem " + cssClass.getObject());
-            Wkt.cssAppend(link, "active");
             link.setEnabled(false);
         }
 
