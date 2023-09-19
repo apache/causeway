@@ -193,15 +193,14 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
 
             // add title and icon to the link
             RepeatedViewEntry.addLinkWithIconAndTitle(item, link);
+            val checkmarkForSelectedPresentation = Wkt.labelAdd(link, ID_VIEW_ITEM_CHECKMARK, "");
 
-            val checkmark = Wkt.labelAdd(link, ID_VIEW_ITEM_CHECKMARK, "");
+            val isSelectedPresentation = repeatedViewEntry.isSelectedIn(this);
+            checkmarkForSelectedPresentation.setVisible(isSelectedPresentation);
 
-            // indicate the selected item (with a checkmark)
-            if (repeatedViewEntry.isSelectedIn(this)) {
+            // if selected, disable the link
+            if (isSelectedPresentation) {
                 repeatedViewEntry.markAsSelected(viewButtonIcon, link);
-                checkmark.setVisible(true);
-            } else {
-                checkmark.setVisible(false);
             }
 
         });
@@ -305,7 +304,6 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
         void markAsSelected(final Label viewButtonIcon, final AjaxLinkNoPropagate link) {
             final IModel<String> cssClass = _Util.cssClassFor(componentFactory, viewButtonIcon);
             Wkt.cssReplace(viewButtonIcon, "ViewLinkItem " + cssClass.getObject());
-
             link.setEnabled(false);
         }
 
