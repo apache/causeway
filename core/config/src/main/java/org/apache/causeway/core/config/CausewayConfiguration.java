@@ -857,9 +857,28 @@ public class CausewayConfiguration {
                      * </p>
                      */
                     private String[] patterns = {
+                                    "add.*:btn-info",
+                                    "remove.*:btn-warning",
+
+                                    "start.*:btn-info",
+                                    "play.*:btn-info",
+                                    "stop.*:btn-warning",
+
+                                    "reset.*:btn-warning",
+
+                                    "new.*:btn-info",
+                                    "create.*:btn-info",
                                     "delete.*:btn-danger",
-                                    "discard.*:btn-warning",
-                                    "remove.*:btn-warning"};
+
+                                    "verify.*:btn-success",
+                                    "decline.*:btn-danger",
+
+                                    "save.*:btn-success",
+
+                                    "approve.*:btn-success",
+                                    "reject.*:btn-danger",
+
+                    };
 
                     @Getter(lazy = true)
                     private final Map<Pattern, String> patternsAsMap = asMap(getPatterns());
@@ -885,52 +904,80 @@ public class CausewayConfiguration {
                      * </p>
                      */
                     private String[] patterns = {
-                            "add.*:fa-plus-square",
-                            "all.*:fa-list",
-                            "approve.*:fa-thumbs-o-up",
-                            "assign.*:fa-hand-o-right",
-                            "calculate.*:fa-calculator",
-                            "cancel.*:fa-stop",
-                            "categorise.*:fa-folder-open-o",
-                            "change.*:fa-edit",
-                            "clear.*:fa-remove",
-                            "copy.*:fa-copy",
-                            "create.*:fa-plus",
-                            "decline.*:fa-thumbs-o-down",
-                            "delete.*:fa-trash",
-                            "discard.*:fa-trash-o",
-                            "download.*:fa-download",
-                            "edit.*:fa-edit",
-                            "execute.*:fa-bolt",
-                            "export.*:fa-download",
-                            "first.*:fa-star",
+
+                            "all.*:fa-solid fa-list",
+                            "list.*:fa-solid fa-list",
+
                             "find.*:fa-search",
-                            "install.*:fa-wrench",
-                            "list.*:fa-list",
-                            "import.*:fa-upload",
                             "lookup.*:fa-search",
-                            "maintain.*:fa-edit",
-                            "move.*:fa-exchange",
-                            "new.*:fa-plus",
-                            "next.*:fa-step-forward",
-                            "pause.*:fa-pause",
-                            "previous.*:fa-step-backward",
-                            "refresh.*:fa-sync",
-                            "remove.*:fa-minus-square",
-                            "renew.*:fa-redo",
-                            "reset.*:fa-redo",
-                            "resume.*:fa-play",
-                            "run.*:fa-bolt",
-                            "save.*:fa-floppy-o",
                             "search.*:fa-search",
-                            "stop.*:fa-stop",
-                            "suspend.*:fa-pause",
+
+                            "add.*:fa-regular fa-square-plus",
+                            "remove.*:fa-regular fa-square-minus",
+
+                            "clear.*:fa-solid fa-broom",
+
+                            "create.*:fa-regular fa-square-plus",
+                            "new.*:fa-regular fa-square-plus",
+                            "delete.*:fa-solid fa-trash",
+
+                            "change.*:fa-regular fa-pen-to-square",
+                            "edit.*:fa-regular fa-pen-to-square",
+                            "maintain.*:fa-regular fa-pen-to-square",
+                            "update.*:fa-regular fa-pen-to-square",
+
+                            "move.*:fa-solid fa-angles-right",
+                            "copy.*:fa-regular fa-copy",
+                            "categorise.*:fa-regular fa-folder-open",
+
+                            "download.*:fa-solid fa-download",
+                            "upload.*:fa-solid fa-upload",
+
+                            "execute.*:fa-solid fa-bolt",
+                            "run.*:fa-solid fa-bolt",
+
+                            "start.*:fa-solid fa-play",
+                            "play.*:fa-solid fa-play",
+                            "resume.*:fa-solid fa-play",
+                            "pause.*:fa-solid fa-pause",
+                            "suspend.*:fa-solid fa-pause",
+                            "stop.*:fa-solid fa-stop",
+                            "terminate.*:fa-solid fa-stop",
+
+                            "previous.*:fa-backward-step",
+                            "next.*:fa-forward-step",
+
+                            "approve.*:fa-regular fa-thumbs-up",
+                            "reject.*:fa-regular fa-thumbs-down",
+
+                            "verify.*:fa-solid fa-check",
+                            "decline.*:fa-solid fa-xmark",
+                            "cancel.*:fa-solid fa-xmark",
+
+                            "discard.*:fa-regular fa-trash-can",
+
+                            "assign.*:fa-regular fa-hand-point-right",
+
+                            "calculate.*:fa-calculator",
+
+                            "import.*:fa-solid fa-file-import",
+                            "export.*:fa-solid fa-file-export",
+
+                            "first.*:fa-regular fa-star",
+
+                            "install.*:fa-solid fa-wrench",
+
+                            "refresh.*:fa-sync",
+                            "renew.*:fa-rotate-right",
+                            "reset.*:fa-rotate-left",
+
+                            "save.*:fa-regular fa-floppy-disk",
+
                             "switch.*:fa-exchange",
-                            "terminate.*:fa-stop",
-                            "update.*:fa-edit",
-                            "upload.*:fa-upload",
-                            "verify.*:fa-check-circle",
-                            "view.*:fa-search"};
+                            "random.*:fa-shuffle",
+
+                            "view.*:fa-regular fa-eye"
+                    };
 
                     @Getter(lazy = true)
                     private final Map<Pattern, String> patternsAsMap = asMap(getPatterns());
