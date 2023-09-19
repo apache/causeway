@@ -31,6 +31,7 @@ import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.value.Clob;
@@ -64,7 +65,12 @@ public class CommandReplayOnSecondaryService {
 
     public static abstract class ActionDomainEvent<T> extends CausewayModuleExtCommandReplaySecondary.ActionDomainEvent<T> { }
 
-    @Action(domainEvent = findMostRecentReplayed.ActionDomainEvent.class, semantics = SemanticsOf.SAFE)
+    @Action(
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = findMostRecentReplayed.ActionDomainEvent.class,
+            executionPublishing = Publishing.DISABLED,
+            semantics = SemanticsOf.SAFE
+    )
     @ActionLayout(cssClassFa = "fa-bath", sequence="60.1")
     public class findMostRecentReplayed{
 
@@ -77,8 +83,10 @@ public class CommandReplayOnSecondaryService {
 
 
     @Action(
-        domainEvent = uploadCommands.ActionDomainEvent.class,
-        semantics = SemanticsOf.NON_IDEMPOTENT
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = uploadCommands.ActionDomainEvent.class,
+            executionPublishing = Publishing.DISABLED,
+            semantics = SemanticsOf.NON_IDEMPOTENT
     )
     @ActionLayout(cssClassFa = "fa-upload", sequence="60.2")
     public class uploadCommands{

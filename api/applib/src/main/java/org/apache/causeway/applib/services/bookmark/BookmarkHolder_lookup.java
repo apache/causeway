@@ -24,6 +24,7 @@ import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,9 @@ import lombok.RequiredArgsConstructor;
  * @since 1.x {@index}
  */
 @Action(
+        commandPublishing = Publishing.DISABLED,
         domainEvent = BookmarkHolder_lookup.ActionDomainEvent.class,
+        executionPublishing = Publishing.DISABLED,
         semantics = SemanticsOf.SAFE
 )
 @ActionLayout(

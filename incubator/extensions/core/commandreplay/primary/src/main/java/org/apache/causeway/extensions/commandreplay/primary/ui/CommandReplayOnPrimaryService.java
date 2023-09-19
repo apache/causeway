@@ -35,6 +35,7 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.commanddto.conmap.ContentMappingServiceForCommandsDto;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
@@ -76,7 +77,12 @@ public class CommandReplayOnPrimaryService {
     extends CausewayModuleExtCommandLogApplib.ActionDomainEvent<T> { }
 
 
-    @Action(domainEvent = findCommands.ActionDomainEvent.class, semantics = SemanticsOf.SAFE)
+    @Action(
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = findCommands.ActionDomainEvent.class,
+            executionPublishing = Publishing.DISABLED,
+            semantics = SemanticsOf.SAFE
+    )
     @ActionLayout(cssClassFa = "fa-search", sequence="40")
     public class findCommands{
 
@@ -106,7 +112,12 @@ public class CommandReplayOnPrimaryService {
 
     }
 
-    @Action(domainEvent = downloadCommands.ActionDomainEvent.class, semantics = SemanticsOf.SAFE)
+    @Action(
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = downloadCommands.ActionDomainEvent.class,
+            executionPublishing = Publishing.DISABLED,
+            semantics = SemanticsOf.SAFE
+    )
     @ActionLayout(cssClassFa = "fa-download", sequence="50")
     public class downloadCommands {
 
@@ -150,7 +161,12 @@ public class CommandReplayOnPrimaryService {
 
 
 
-    @Action(domainEvent = downloadCommandById.ActionDomainEvent.class, semantics = SemanticsOf.SAFE)
+    @Action(
+            commandPublishing = Publishing.DISABLED,
+            domainEvent = downloadCommandById.ActionDomainEvent.class,
+            executionPublishing = Publishing.DISABLED,
+            semantics = SemanticsOf.SAFE
+    )
     @ActionLayout(cssClassFa = "fa-download", sequence="50")
     public class downloadCommandById {
 

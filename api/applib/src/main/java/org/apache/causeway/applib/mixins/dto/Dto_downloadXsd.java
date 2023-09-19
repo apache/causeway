@@ -26,6 +26,7 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.ParameterLayout;
+import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.jaxb.CausewaySchemas;
@@ -58,9 +59,11 @@ import lombok.val;
  * @since 1.x {@index}
  */
 @Action(
+        commandPublishing = Publishing.DISABLED,
         domainEvent = Dto_downloadXsd.ActionDomainEvent.class,
-        semantics = SemanticsOf.SAFE,
-        restrictTo = RestrictTo.PROTOTYPING
+        executionPublishing = Publishing.DISABLED,
+        restrictTo = RestrictTo.PROTOTYPING,
+        semantics = SemanticsOf.SAFE
         )
 @ActionLayout(
         cssClassFa = "fa-download",

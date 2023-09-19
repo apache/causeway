@@ -56,10 +56,10 @@ import lombok.RequiredArgsConstructor;
  * @since 1.x {@index}
  */
 @Action(
-        domainEvent = Object_clearHints.ActionDomainEvent.class,
-        semantics = SemanticsOf.IDEMPOTENT,
         commandPublishing = Publishing.DISABLED,
-        executionPublishing = Publishing.DISABLED
+        domainEvent = Object_clearHints.ActionDomainEvent.class,
+        executionPublishing = Publishing.DISABLED,
+        semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
         cssClassFa = "fa-circle",

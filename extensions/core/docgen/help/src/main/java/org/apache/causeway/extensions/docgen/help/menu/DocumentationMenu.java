@@ -29,6 +29,7 @@ import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.extensions.docgen.help.CausewayModuleExtDocgenHelp;
 import org.apache.causeway.extensions.docgen.help.applib.HelpNode.HelpTopic;
@@ -59,14 +60,17 @@ public class DocumentationMenu {
 
     /** Returns a view-model that represents the application's primary help page. */
     @Action(
+            commandPublishing = Publishing.DISABLED,
             domainEvent = help.ActionDomainEvent.class,
+            executionPublishing = Publishing.DISABLED,
             semantics = SemanticsOf.NON_IDEMPOTENT //disable client-side caching
-            )
+    )
     @ActionLayout(
             cssClassFa = "fa-regular fa-circle-question",
             named = "Help",
-            sequence = "100")
-    public class help{
+            sequence = "100"
+    )
+    public class help {
 
         public class ActionDomainEvent extends DocumentationMenu.ActionDomainEvent<help> {}
 

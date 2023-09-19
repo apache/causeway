@@ -25,6 +25,7 @@ import javax.inject.Inject;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
@@ -38,8 +39,10 @@ import lombok.RequiredArgsConstructor;
  * @since 2.0 {@index}
  */
 @Action(
-    semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE,
-    domainEvent = CommandLogEntry_exclude.ActionDomainEvent.class
+        commandPublishing = Publishing.DISABLED,
+        domainEvent = CommandLogEntry_exclude.ActionDomainEvent.class,
+        executionPublishing = Publishing.DISABLED,
+        semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE
 )
 @ActionLayout(associateWith = "executeIn", sequence = "2")
 @RequiredArgsConstructor

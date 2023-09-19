@@ -50,11 +50,11 @@ import lombok.val;
  * @since 1.x {@index}
  */
 @Action(
-        domainEvent = Object_downloadMetamodelXml.ActionDomainEvent.class,
-        semantics = SemanticsOf.SAFE,
         commandPublishing = Publishing.DISABLED,
+        domainEvent = Object_downloadMetamodelXml.ActionDomainEvent.class,
         executionPublishing = Publishing.DISABLED,
-        restrictTo = RestrictTo.PROTOTYPING
+        restrictTo = RestrictTo.PROTOTYPING,
+        semantics = SemanticsOf.SAFE
 )
 @ActionLayout(
         cssClassFa = "fa-download",

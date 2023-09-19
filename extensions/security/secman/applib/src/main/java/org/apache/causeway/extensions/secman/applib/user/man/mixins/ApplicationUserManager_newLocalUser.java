@@ -28,6 +28,7 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.ParameterLayout;
+import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.value.Password;
@@ -50,7 +51,9 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @Action(
-        domainEvent = DomainEvent.class
+        commandPublishing = Publishing.NOT_SPECIFIED,
+        domainEvent = DomainEvent.class,
+        executionPublishing = Publishing.NOT_SPECIFIED
 )
 @ActionLayout(
         associateWith = "allUsers",

@@ -29,6 +29,7 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
+import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeature;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
@@ -47,7 +48,9 @@ import lombok.val;
  */
 @Action(
         choicesFrom = "orphanedPermissions",
+        commandPublishing = Publishing.NOT_SPECIFIED,
         domainEvent = DomainEvent.class,
+        executionPublishing = Publishing.NOT_SPECIFIED,
         semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE
 )
 @ActionLayout(

@@ -44,15 +44,16 @@ import lombok.RequiredArgsConstructor;
  * @since 2.0 {@index}
  */
 @Action(
-        domainEvent = Object_recentExecutions.ActionDomainEvent.class,
-        semantics = SemanticsOf.SAFE,
         commandPublishing = Publishing.DISABLED,
-        executionPublishing = Publishing.DISABLED
+        domainEvent = Object_recentExecutions.ActionDomainEvent.class,
+        executionPublishing = Publishing.DISABLED,
+        semantics = SemanticsOf.SAFE
 )
 @ActionLayout(
         cssClassFa = "fa-bolt",
-        position = ActionLayout.Position.PANEL_DROPDOWN,
+        describedAs = "Returns the last (published) 30 command executions that have targeted this object",
         fieldSetId = LayoutConstants.FieldSetId.METADATA,
+        position = ActionLayout.Position.PANEL_DROPDOWN,
         sequence = "900.2"
 )
 @RequiredArgsConstructor

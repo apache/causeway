@@ -26,6 +26,7 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Parameter;
+import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
@@ -46,7 +47,9 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @Action(
+        commandPublishing = Publishing.DISABLED,
         domainEvent = DomainEvent.class,
+        executionPublishing = Publishing.DISABLED,
         semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(

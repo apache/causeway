@@ -32,6 +32,7 @@ import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
@@ -93,7 +94,9 @@ public class ApplicationUserMenu {
     // -- FIND USERS
 
     @Action(
+            commandPublishing = Publishing.DISABLED,
             domainEvent = findUsers.ActionDomainEvent.class,
+            executionPublishing = Publishing.DISABLED,
             semantics = SemanticsOf.SAFE
     )
     @ActionLayout(sequence = "100.10.2")

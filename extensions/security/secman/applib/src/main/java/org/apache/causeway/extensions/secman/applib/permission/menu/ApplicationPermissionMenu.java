@@ -31,6 +31,7 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.factory.FactoryService;
@@ -68,7 +69,9 @@ public class ApplicationPermissionMenu {
 
 
     @Action(
+            commandPublishing = Publishing.DISABLED,
             domainEvent= findOrphanedPermissions.ActionDomainEvent.class,
+            executionPublishing = Publishing.DISABLED,
             semantics = SemanticsOf.SAFE
             )
     @ActionLayout(sequence = "100.50.1")
@@ -84,7 +87,9 @@ public class ApplicationPermissionMenu {
 
 
     @Action(
+            commandPublishing = Publishing.DISABLED,
             domainEvent= allPermissions.ActionDomainEvent.class,
+            executionPublishing = Publishing.DISABLED,
             semantics = SemanticsOf.SAFE,
             restrictTo = RestrictTo.PROTOTYPING
             )

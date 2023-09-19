@@ -42,11 +42,11 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @Action(
-        domainEvent = Object_openOnSecondary.ActionDomainEvent.class,
-        semantics = SemanticsOf.SAFE,
         commandPublishing = Publishing.DISABLED,
+        domainEvent = Object_openOnSecondary.ActionDomainEvent.class,
         executionPublishing = Publishing.DISABLED,
-        restrictTo = RestrictTo.PROTOTYPING
+        restrictTo = RestrictTo.PROTOTYPING,
+        semantics = SemanticsOf.SAFE
 )
 @ActionLayout(
         cssClassFa = "fa-external-link-alt",

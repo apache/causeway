@@ -44,11 +44,11 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @Action(
-        domainEvent = Object_impersonateWithRoles.ActionDomainEvent.class,
-        semantics = SemanticsOf.IDEMPOTENT,
         commandPublishing = Publishing.DISABLED,
+        domainEvent = Object_impersonateWithRoles.ActionDomainEvent.class,
         executionPublishing = Publishing.DISABLED,
-        restrictTo = RestrictTo.PROTOTYPING
+        restrictTo = RestrictTo.PROTOTYPING,
+        semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(
         cssClassFa = "fa-mask",

@@ -18,18 +18,30 @@
  */
 package org.apache.causeway.applib.services.metamodel;
 
-import lombok.val;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
-import org.apache.causeway.applib.annotation.*;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.DomainService;
+import org.apache.causeway.applib.annotation.DomainServiceLayout;
+import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.NatureOfService;
+import org.apache.causeway.applib.annotation.Optionality;
+import org.apache.causeway.applib.annotation.Parameter;
+import org.apache.causeway.applib.annotation.ParameterLayout;
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.annotation.Publishing;
+import org.apache.causeway.applib.annotation.RestrictTo;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
@@ -39,7 +51,7 @@ import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.io.JaxbUtils;
 import org.apache.causeway.schema.metamodel.v2.MetamodelDto;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
+import lombok.val;
 
 /**
  * Provides a UI to allow domain model metadata (obtained from {@link MetaModelService}) to be downloaded.
@@ -114,14 +126,17 @@ public class MetaModelServiceMenu {
     public static abstract class ActionDomainEvent<T> extends CausewayModuleApplib.ActionDomainEvent<T> { }
 
     @Action(
+            commandPublishing = Publishing.DISABLED,
             domainEvent = downloadMetaModel.ActionDomainEvent.class,
-            semantics = SemanticsOf.NON_IDEMPOTENT, //disable client-side caching
-            restrictTo = RestrictTo.PROTOTYPING
+            executionPublishing = Publishing.DISABLED,
+            restrictTo = RestrictTo.PROTOTYPING,
+            semantics = SemanticsOf.NON_IDEMPOTENT //disable client-side caching
             )
     @ActionLayout(
             cssClassFa = "fa-download",
             named = "Download Meta Model",
-            sequence="500.500.2")
+            sequence="500.500.1"
+    )
     public class downloadMetaModel {
 
         public class ActionDomainEvent extends MetaModelServiceMenu.ActionDomainEvent<downloadMetaModel> { }
@@ -174,14 +189,17 @@ public class MetaModelServiceMenu {
 
 
     @Action(
+            commandPublishing = Publishing.DISABLED,
             domainEvent = downloadMetaModelDiff.ActionDomainEvent.class,
-            semantics = SemanticsOf.NON_IDEMPOTENT, //disable client-side caching
-            restrictTo = RestrictTo.PROTOTYPING
+            executionPublishing = Publishing.DISABLED,
+            restrictTo = RestrictTo.PROTOTYPING,
+            semantics = SemanticsOf.NON_IDEMPOTENT //disable client-side caching
             )
     @ActionLayout(
             cssClassFa = "fa-download",
             named = "Generate Meta Model Diff",
-            sequence="500.500.2")
+            sequence="500.500.2"
+    )
     public class downloadMetaModelDiff {
 
         public class ActionDomainEvent extends MetaModelServiceMenu.ActionDomainEvent<downloadMetaModelDiff> { }

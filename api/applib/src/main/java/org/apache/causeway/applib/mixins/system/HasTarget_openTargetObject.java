@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.bookmark.HasTarget;
@@ -40,7 +41,11 @@ import lombok.RequiredArgsConstructor;
  *
  * @since v2.0 {@index}
  */
-@Action(semantics = SemanticsOf.SAFE)
+@Action(
+        commandPublishing = Publishing.DISABLED,
+        executionPublishing = Publishing.DISABLED,
+        semantics = SemanticsOf.SAFE
+)
 @ActionLayout(named = "Open", associateWith = "target", sequence = "1")
 @RequiredArgsConstructor
 public class HasTarget_openTargetObject {

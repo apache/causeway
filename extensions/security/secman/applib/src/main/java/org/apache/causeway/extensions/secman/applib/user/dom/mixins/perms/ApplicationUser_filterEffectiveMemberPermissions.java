@@ -29,6 +29,7 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.MinLength;
 import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.PromptStyle;
+import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeature;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureRepository;
@@ -44,7 +45,9 @@ import lombok.RequiredArgsConstructor;
  * @since 2.0 {@index}
  */
 @Action(
+        commandPublishing = Publishing.DISABLED,
         domainEvent = ApplicationUser_filterEffectiveMemberPermissions.DomainEvent.class,
+        executionPublishing = Publishing.DISABLED,
         semantics = SemanticsOf.SAFE
 )
 @ActionLayout(

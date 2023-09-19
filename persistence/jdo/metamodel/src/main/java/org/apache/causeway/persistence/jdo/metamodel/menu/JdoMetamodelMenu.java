@@ -30,6 +30,7 @@ import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.value.Blob;
@@ -60,9 +61,11 @@ public class JdoMetamodelMenu {
 
 
     @Action(
+            commandPublishing = Publishing.DISABLED,
             domainEvent = downloadMetamodels.ActionDomainEvent.class,
-            semantics = SemanticsOf.NON_IDEMPOTENT, //disable client-side caching
-            restrictTo = RestrictTo.PROTOTYPING
+            executionPublishing = Publishing.DISABLED,
+            restrictTo = RestrictTo.PROTOTYPING,
+            semantics = SemanticsOf.NON_IDEMPOTENT //disable client-side caching
             )
     @ActionLayout(
             cssClassFa = "fa-download",

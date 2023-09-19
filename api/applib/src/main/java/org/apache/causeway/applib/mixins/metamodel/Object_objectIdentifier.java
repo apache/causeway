@@ -20,7 +20,6 @@ package org.apache.causeway.applib.mixins.metamodel;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Property;
@@ -55,8 +54,8 @@ import lombok.val;
 )
 @PropertyLayout(
         describedAs = "The identifier of this object instance, unique within its domain class.  Combined with the 'logical type name', is a unique identifier across all domain classes.",
-        hidden = Where.ALL_TABLES,
         fieldSetId = LayoutConstants.FieldSetId.METADATA,
+        hidden = Where.ALL_TABLES,
         sequence = "400.2"
 )
 //mixin's don't need a logicalTypeName

@@ -29,6 +29,7 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.value.Clob;
@@ -59,14 +60,17 @@ public class SitemapServiceMenu {
     }
 
     @Action(
+            commandPublishing = Publishing.DISABLED,
             domainEvent = downloadSitemap.ActionDomainEvent.class,
-            semantics = SemanticsOf.NON_IDEMPOTENT, //disable client-side caching
-            restrictTo = RestrictTo.PROTOTYPING
+            executionPublishing = Publishing.DISABLED,
+            restrictTo = RestrictTo.PROTOTYPING,
+            semantics = SemanticsOf.NON_IDEMPOTENT //disable client-side caching
             )
     @ActionLayout(
             cssClassFa = "fa-download",
             named = "Download Site-Map Template (Adoc)",
-            sequence="500.450.1")
+            sequence="500.450.1"
+    )
     public class downloadSitemap{
 
         public class ActionDomainEvent extends SitemapServiceMenu.ActionDomainEvent<downloadSitemap> {}

@@ -34,6 +34,7 @@ import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.NatureOfService;
+import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.extensions.sessionlog.applib.CausewayModuleExtSessionLogApplib;
 import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntry;
@@ -64,7 +65,9 @@ public class SessionLogMenu {
     public static abstract class ActionDomainEvent<T> extends CausewayModuleExtSessionLogApplib.ActionDomainEvent<T> { }
 
     @Action(
+            commandPublishing = Publishing.DISABLED,
             domainEvent = activeSessions.ActionDomainEvent.class,
+            executionPublishing = Publishing.DISABLED,
             semantics = SemanticsOf.SAFE
     )
     @ActionLayout(
@@ -82,7 +85,9 @@ public class SessionLogMenu {
 
 
     @Action(
+            commandPublishing = Publishing.DISABLED,
             domainEvent = findSessions.ActionDomainEvent.class,
+            executionPublishing = Publishing.DISABLED,
             semantics = SemanticsOf.SAFE
     )
     @ActionLayout(
