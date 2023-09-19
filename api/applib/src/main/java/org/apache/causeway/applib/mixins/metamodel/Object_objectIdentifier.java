@@ -35,7 +35,7 @@ import lombok.val;
 
 /**
  * Contributes a property exposing the internal identifier of the domain
- * object, typically as specified by {@link DomainObject#logicalTypeName()}.
+ * object, typically as specified by {@link javax.inject.Named}.
  *
  * <p>
  *     The object identifier is also accessible from the
@@ -50,7 +50,9 @@ import lombok.val;
  *
  * @since 1.x {@index}
  */
-@Property
+@Property(
+        domainEvent = Object_logicalTypeName.PropertyDomainEvent.class  // if this does not work, reopen CAUSEWAY-2235
+)
 @PropertyLayout(
         describedAs = "The identifier of this object instance, unique within its domain class.  Combined with the 'logical type name', is a unique identifier across all domain classes.",
         hidden = Where.ALL_TABLES,
@@ -66,12 +68,9 @@ public class Object_objectIdentifier {
 
     private final Object holder;
 
-    public static class ActionDomainEvent
-    extends org.apache.causeway.applib.CausewayModuleApplib.ActionDomainEvent<Object_objectIdentifier> {}
+    public static class PropertyDomainEvent
+    extends org.apache.causeway.applib.CausewayModuleApplib.PropertyDomainEvent<Object_objectIdentifier, String> {}
 
-    @Action(
-            domainEvent = Object_objectIdentifier.ActionDomainEvent.class   // this is a workaround to allow the mixin to be subscribed to (CAUSEWAY-2650)
-    )
     @MemberSupport public String prop() {
         val bookmark = bookmarkService.bookmarkForElseFail(this.holder);
         return bookmark.getIdentifier();
