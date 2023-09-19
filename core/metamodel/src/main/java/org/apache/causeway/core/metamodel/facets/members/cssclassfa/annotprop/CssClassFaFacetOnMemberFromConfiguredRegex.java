@@ -113,7 +113,7 @@ extends CssClassFaImperativeFacetAbstract {
 
     // -- HELPER
 
-    private String faIconIfAnyFor(final String name) {
+    private String faIconForNameElseFallbackToBlank(final String name) {
 
         for (Map.Entry<Pattern, String> entry : faIconByPattern.entrySet()) {
             final Pattern pattern = entry.getKey();
@@ -155,7 +155,7 @@ extends CssClassFaImperativeFacetAbstract {
             final String memberFriendlyName) {
 
         return _Strings.nonEmpty(memberFriendlyName)
-        .map(this::faIconIfAnyFor)
+        .map(this::faIconForNameElseFallbackToBlank)
         .map(_faIcon->{
             final String faIcon;
             final CssClassFaPosition position;
