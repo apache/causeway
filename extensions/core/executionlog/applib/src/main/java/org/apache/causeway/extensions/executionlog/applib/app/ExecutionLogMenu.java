@@ -34,6 +34,7 @@ import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.clock.ClockService;
@@ -71,7 +72,9 @@ public class ExecutionLogMenu {
 
 
     @Action(
+            commandPublishing = Publishing.DISABLED,
             domainEvent = findMostRecent.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED,
             semantics = SemanticsOf.SAFE,
             typeOf = ExecutionLogEntry.class
     )
@@ -86,7 +89,9 @@ public class ExecutionLogMenu {
 
 
     @Action(
+            commandPublishing = Publishing.DISABLED,
             domainEvent = findExecutions.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED,
             semantics = SemanticsOf.SAFE,
             typeOf = ExecutionLogEntry.class
     )
@@ -110,7 +115,9 @@ public class ExecutionLogMenu {
 
 
     @Action(
+            commandPublishing = Publishing.DISABLED,
             domainEvent = findAll.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED,
             restrictTo = RestrictTo.PROTOTYPING,
             semantics = SemanticsOf.SAFE,
             typeOf = ExecutionLogEntry.class

@@ -306,7 +306,9 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
 
 
     @Action(
+            commandPublishing = Publishing.DISABLED,
             domainEvent = next.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED,
             semantics = SemanticsOf.SAFE
     )
     @ActionLayout(
@@ -333,7 +335,9 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
 
 
     @Action(
+            commandPublishing = Publishing.DISABLED,
             domainEvent = previous.DomainEvent.class,
+            executionPublishing = Publishing.DISABLED,
             semantics = SemanticsOf.SAFE
     )
     @ActionLayout(

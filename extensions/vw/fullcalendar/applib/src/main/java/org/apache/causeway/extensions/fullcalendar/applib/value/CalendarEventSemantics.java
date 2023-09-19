@@ -40,6 +40,7 @@ import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.PromptStyle;
+import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.util.schema.CommonDtoUtils;
 import org.apache.causeway.applib.value.semantics.DefaultsProvider;
@@ -235,7 +236,11 @@ implements
 
     }
 
-    @Action(semantics = SemanticsOf.SAFE)
+    @Action(
+            commandPublishing = Publishing.DISABLED,
+            executionPublishing = Publishing.DISABLED,
+            semantics = SemanticsOf.SAFE
+    )
     @ActionLayout(promptStyle = PromptStyle.INLINE_AS_IF_EDIT)
     @RequiredArgsConstructor
     public static class CalendarEvent_default {

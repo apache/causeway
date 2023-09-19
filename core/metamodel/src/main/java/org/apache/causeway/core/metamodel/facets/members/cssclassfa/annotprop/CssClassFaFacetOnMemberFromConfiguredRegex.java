@@ -34,6 +34,7 @@ import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaFa
 import org.apache.causeway.core.metamodel.facets.members.cssclassfa.CssClassFaImperativeFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
+import org.apache.causeway.core.metamodel.postprocessors.all.CssOnActionFromConfiguredRegexPostProcessor;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
@@ -112,16 +113,16 @@ extends CssClassFaImperativeFacetAbstract {
 
     // -- HELPER
 
-    private Optional<String> faIconIfAnyFor(final String name) {
+    private String faIconForNameElseFallbackToBlank(final String name) {
 
         for (Map.Entry<Pattern, String> entry : faIconByPattern.entrySet()) {
             final Pattern pattern = entry.getKey();
             final String faIcon = entry.getValue();
             if (pattern.matcher(name).matches()) {
-                return Optional.ofNullable(faIcon);
+                return faIcon;
             }
         }
-        return Optional.empty();
+        return "fa-blank"; // to produce aligned menu items.
     }
 
     private Optional<CssClassFaFactory> cssClassFaFactoryForConfiguredRegexIfPossible(
@@ -154,7 +155,7 @@ extends CssClassFaImperativeFacetAbstract {
             final String memberFriendlyName) {
 
         return _Strings.nonEmpty(memberFriendlyName)
-        .flatMap(this::faIconIfAnyFor)
+        .map(this::faIconForNameElseFallbackToBlank)
         .map(_faIcon->{
             final String faIcon;
             final CssClassFaPosition position;

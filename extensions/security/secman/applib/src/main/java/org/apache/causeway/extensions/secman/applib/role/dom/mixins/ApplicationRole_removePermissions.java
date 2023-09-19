@@ -27,6 +27,7 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.PromptStyle;
+import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
@@ -48,7 +49,9 @@ import lombok.val;
  */
 @Action(
         choicesFrom = "permissions",
+        commandPublishing = Publishing.NOT_SPECIFIED,
         domainEvent = DomainEvent.class,
+        executionPublishing = Publishing.NOT_SPECIFIED,
         semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(

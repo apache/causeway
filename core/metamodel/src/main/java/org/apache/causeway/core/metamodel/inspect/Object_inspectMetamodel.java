@@ -44,11 +44,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Action(
-        domainEvent = Object_inspectMetamodel.ActionDomainEvent.class,
-        semantics = SemanticsOf.SAFE,
         commandPublishing = Publishing.DISABLED,
+        domainEvent = Object_inspectMetamodel.ActionDomainEvent.class,
         executionPublishing = Publishing.DISABLED,
-        restrictTo = RestrictTo.PROTOTYPING
+        restrictTo = RestrictTo.PROTOTYPING,
+        semantics = SemanticsOf.SAFE
 )
 @ActionLayout(
         cssClassFa = "fa-sitemap",

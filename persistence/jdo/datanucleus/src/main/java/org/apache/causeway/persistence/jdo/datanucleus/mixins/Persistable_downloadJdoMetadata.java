@@ -49,14 +49,15 @@ import lombok.RequiredArgsConstructor;
  * @since 2.0 {@index}
  */
 @Action(
-        domainEvent = Persistable_downloadJdoMetadata.ActionDomainEvent.class,
-        semantics = SemanticsOf.SAFE,
         commandPublishing = Publishing.DISABLED,
+        domainEvent = Persistable_downloadJdoMetadata.ActionDomainEvent.class,
         executionPublishing = Publishing.DISABLED,
-        restrictTo = RestrictTo.PROTOTYPING
+        restrictTo = RestrictTo.PROTOTYPING,
+        semantics = SemanticsOf.SAFE
 )
 @ActionLayout(
         cssClassFa = "fa-download",
+        describedAs = "Downloads the DataNucleus metamodel for this class (as a Xxx.jdo file).  One use case is to tactically override annotation-based configuration of existing entities, eg to target specific databases",
         fieldSetId = LayoutConstants.FieldSetId.METADATA,
         position = ActionLayout.Position.PANEL_DROPDOWN,
         sequence = "710.1"

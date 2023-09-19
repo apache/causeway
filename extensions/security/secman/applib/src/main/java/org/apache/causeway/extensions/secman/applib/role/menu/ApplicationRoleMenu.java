@@ -33,6 +33,7 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
@@ -74,7 +75,9 @@ public class ApplicationRoleMenu {
     // -- ROLE MANAGER
 
     @Action(
+            commandPublishing = Publishing.DISABLED,
             domainEvent = roleManager.ActionDomainEvent.class,
+            executionPublishing = Publishing.DISABLED,
             semantics = SemanticsOf.IDEMPOTENT
     )
     @ActionLayout(
@@ -94,7 +97,9 @@ public class ApplicationRoleMenu {
     // -- FIND ROLES
 
     @Action(
+            commandPublishing = Publishing.DISABLED,
             domainEvent = findRoles.ActionDomainEvent.class,
+            executionPublishing = Publishing.DISABLED,
             semantics = SemanticsOf.SAFE
             )
     @ActionLayout(sequence = "100.20.2")

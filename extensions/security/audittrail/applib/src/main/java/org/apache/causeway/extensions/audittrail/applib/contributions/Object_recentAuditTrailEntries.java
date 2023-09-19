@@ -28,6 +28,7 @@ import jakarta.inject.Inject;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.layout.LayoutConstants;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
@@ -46,7 +47,9 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @Action(
+        commandPublishing = Publishing.DISABLED,
         domainEvent = Object_recentAuditTrailEntries.ActionDomainEvent.class,
+        executionPublishing = Publishing.DISABLED,
         semantics = SemanticsOf.SAFE
 )
 @ActionLayout(

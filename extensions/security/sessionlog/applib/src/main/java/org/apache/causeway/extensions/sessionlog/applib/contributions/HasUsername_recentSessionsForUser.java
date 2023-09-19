@@ -28,6 +28,7 @@ import jakarta.inject.Inject;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.mixins.security.HasUsername;
 import org.apache.causeway.extensions.sessionlog.applib.CausewayModuleExtSessionLogApplib;
@@ -43,8 +44,10 @@ import lombok.RequiredArgsConstructor;
  * @since 2.0 {@index}
  */
 @Action(
-        semantics = SemanticsOf.SAFE,
-        domainEvent = HasUsername_recentSessionsForUser.ActionDomainEvent.class
+        commandPublishing = Publishing.DISABLED,
+        domainEvent = HasUsername_recentSessionsForUser.ActionDomainEvent.class,
+        executionPublishing = Publishing.DISABLED,
+        semantics = SemanticsOf.SAFE
 )
 @ActionLayout(
         fieldSetId = "username"

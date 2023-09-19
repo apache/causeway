@@ -29,6 +29,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.value.Password;
 import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
@@ -44,7 +45,9 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @Action(
+        commandPublishing = Publishing.NOT_SPECIFIED,
         domainEvent = DomainEvent.class,
+        executionPublishing = Publishing.NOT_SPECIFIED,
         semantics = SemanticsOf.IDEMPOTENT
 )
 @ActionLayout(

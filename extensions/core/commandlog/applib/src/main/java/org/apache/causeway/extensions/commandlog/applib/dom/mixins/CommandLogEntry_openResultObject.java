@@ -23,6 +23,7 @@ import jakarta.inject.Inject;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
+import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.message.MessageService;
@@ -39,8 +40,10 @@ import lombok.val;
  * @since 2.x {@index}
  */
 @Action(
-    semantics = SemanticsOf.SAFE,
-    domainEvent = CommandLogEntry_openResultObject.ActionDomainEvent.class
+        commandPublishing = Publishing.DISABLED,
+        domainEvent = CommandLogEntry_openResultObject.ActionDomainEvent.class,
+        executionPublishing = Publishing.DISABLED,
+        semantics = SemanticsOf.SAFE
 )
 @ActionLayout(named = "Open", associateWith = "result", sequence="1")
 @RequiredArgsConstructor

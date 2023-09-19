@@ -36,6 +36,7 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.causeway.applib.services.user.UserService;
@@ -78,7 +79,9 @@ public class MeService {
 
 
     @Action(
+            commandPublishing = Publishing.DISABLED,
             domainEvent = me.ActionDomainEvent.class,
+            executionPublishing = Publishing.DISABLED,
             semantics = SemanticsOf.SAFE
             )
     @ActionLayout(
