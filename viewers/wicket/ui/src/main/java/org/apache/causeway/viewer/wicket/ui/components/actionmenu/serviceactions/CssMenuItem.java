@@ -55,12 +55,12 @@ implements Menuable {
         return new CssMenuItem(name, Menuable.Kind.SUBMENU);
     }
 
-    //TODO[CAUSEWAY-3582] perhaps use Menuables from model instead
+    //refactoring hint: perhaps use Menuable.SectionSeparator instead
     public static CssMenuItem newSpacer() {
         return new CssMenuItem("---", Menuable.Kind.SECTION_SEPARATOR);
     }
 
-    //TODO[CAUSEWAY-3582] perhaps use Menuables from model instead
+    //refactoring hint: perhaps use Menuable.SectionLabel instead
     public static CssMenuItem newSectionLabel(final String named) {
         return new CssMenuItem(named, Menuable.Kind.SECTION_LABEL);
     }

@@ -18,14 +18,9 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.actionmenu.serviceactions;
 
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.repeater.RepeatingView;
-
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.viewer.wicket.ui.components.menuable.MenuablePanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
-
-import lombok.val;
 
 /**
  * Panel containing a list of {@link CssMenuItem}s acting as submenus of a
@@ -40,15 +35,9 @@ extends MenuablePanelAbstract {
         super(id, menuables);
         setRenderBodyOnly(true);
 
-        val repeatingView = Wkt.add(this, new RepeatingView(getId()));
-
-        menuablesModel().streamMenuables(CssMenuItem.class)
-        .forEach(cssMenuItem->{
-            val menuItemMarkup = new WebMarkupContainer(repeatingView.newChildId());
-            repeatingView.add(menuItemMarkup);
-            cssMenuItem.addTo(menuItemMarkup);
-        });
-
+        Wkt.repeatingViewAdd(this, getId(),
+            menuablesModel().streamMenuables(CssMenuItem.class),
+            (container, menuable)->menuable.addTo(container));
     }
 
 }

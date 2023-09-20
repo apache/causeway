@@ -97,6 +97,13 @@ extends MenuablePanelAbstract {
             val linkAndLabel = item.getModelObject();
             item.addOrReplace(WktLinks.asAdditionalLink(item, ID_ADDITIONAL_LINK_TITLE, linkAndLabel));
         });
+
+        //refactoring hint: in CssSubMenuItemsPanel we use a RepeatingView instead
+//        Wkt.repeatingViewAdd(container, ID_ADDITIONAL_LINK_ITEM, streamLinkAndLabels(),
+//                (inner, menuable)->{
+//                    WktLinks.asAdditionalLink(inner, ID_ADDITIONAL_LINK_TITLE, menuable);
+//                });
+
     }
 
 }

@@ -94,9 +94,10 @@ public interface HasManagedAction {
 
     default Optional<FontAwesomeDecorationModel> getFontAwesomeUiModel() {
         val managedAction = getManagedAction();
-        return FontAwesomeDecorationModel.of(ObjectAction.Util.cssClassFaFactoryFor(
-                managedAction.getAction(),
-                managedAction.getOwner()));
+        return FontAwesomeDecorationModel.of(
+                ObjectAction.Util.cssClassFaFactoryFor(
+                    managedAction.getAction(),
+                    managedAction.getOwner()));
     }
 
     default Optional<String> getAdditionalCssClass() {

@@ -63,7 +63,7 @@ implements
     }
 
     @Override
-    public  ObjectAction getAction() {
+    public ObjectAction getAction() {
         return actionModel.getAction();
     }
 
@@ -81,6 +81,14 @@ implements
     public String toString() {
         return Optional.ofNullable(named).orElse("") +
                 " ~ " + getAction().getFeatureIdentifier().getFullIdentityString();
+    }
+
+    /**
+     * Allowed in drop-dows, but not in horizontal action panels,
+     * where this {@link LinkAndLabel} correspond to a UI button.
+     */
+    public boolean isAutoAlignableWithBlankIcon() {
+        return true; //TODO[CAUSEWAY-3582] depends on where we are rendering this
     }
 
     // -- RULE CHECKING SHORTCUTS
@@ -101,8 +109,8 @@ implements
 
     public boolean isRenderOutlined() {
         return isPositionedAt(Position.BELOW)
-                .or(isPositionedAt(Position.RIGHT))
-                        .test(this);
+            .or(isPositionedAt(Position.RIGHT))
+            .test(this);
     }
 
     @Override

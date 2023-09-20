@@ -22,6 +22,7 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.basic.Label;
@@ -36,6 +37,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.commons.model.decorators.ConfirmDecorator.ConfirmDecorationModel;
+import org.apache.causeway.viewer.commons.model.decorators.IconDecorator.FontAwesomeDecorationModel;
 import org.apache.causeway.viewer.commons.model.layout.UiPlacementDirection;
 import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
@@ -58,7 +60,7 @@ public final class WktLinks {
      * @param tooltipReceiver
      */
     public AbstractLink asAdditionalLink(
-            final ListItem<LinkAndLabel> tooltipReceiver,
+            final Component tooltipReceiver,
             final String titleId,
             final LinkAndLabel linkAndLabel) {
 
@@ -108,10 +110,14 @@ public final class WktLinks {
         val viewTitleLabel = Wkt.labelAdd(link, titleId,
                 linkAndLabel::getFriendlyName);
 
-        val fontAwesome = linkAndLabel.getFontAwesomeUiModel();
+        final Optional<FontAwesomeDecorationModel> fontAwesome =
+                linkAndLabel.getFontAwesomeUiModel()
+                .or(()->linkAndLabel.isAutoAlignableWithBlankIcon()
+                        ? FontAwesomeDecorationModel.blankFaIcon() // autoAlignment
+                        : Optional.empty());
+
         WktDecorators.getIcon().decorate(viewTitleLabel, fontAwesome);
         WktDecorators.getMissingIcon().decorate(viewTitleLabel, fontAwesome);
-
         return link;
     }
 

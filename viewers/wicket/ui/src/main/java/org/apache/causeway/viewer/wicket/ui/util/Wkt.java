@@ -23,7 +23,9 @@ import static de.agilecoders.wicket.jquery.JQuery.$;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
+import java.util.function.BiConsumer;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -804,7 +806,7 @@ public class Wkt {
     public <T> ListView<T> listView(
             final String id,
             final IModel<? extends List<T>> listModel,
-                    final SerializableConsumer<ListItem<T>> itemPopulator) {
+            final SerializableConsumer<ListItem<T>> itemPopulator) {
         return new ListView<T>(id, listModel) {
             private static final long serialVersionUID = 1L;
             @Override protected void populateItem(final ListItem<T> item) {
@@ -855,6 +857,21 @@ public class Wkt {
 
     public RepeatingView repeatingViewAdd(final MarkupContainer container, final String id) {
         return add(container, repeatingView(id));
+    }
+
+    public <T> RepeatingView repeatingViewAdd(
+            final MarkupContainer container,
+            final String id,
+            final Stream<T> elementStream,
+            final BiConsumer<WebMarkupContainer, T> itemPopulator) {
+        val repeatingView = add(container, repeatingView(id));
+        elementStream
+        .forEach(t->{
+            val innerContainer = Wkt.container(repeatingView.newChildId());
+            repeatingView.add(innerContainer);
+            itemPopulator.accept(innerContainer, t);
+        });
+        return repeatingView;
     }
 
     // -- TABLES

@@ -59,13 +59,17 @@ public interface IconDecorator<T, R> {
         @NonNull private final CssClassFaPosition position;
 
         public static Optional<FontAwesomeDecorationModel> of(final Optional<CssClassFaFactory> cssClassFaFactoryIfAny) {
-
             return cssClassFaFactoryIfAny
-            .map(cssClassFaFactory->new FontAwesomeDecorationModel(
-                    cssClassFaFactory.streamCssClasses().collect(Collectors.joining(" ")),
-                    Optional.ofNullable(cssClassFaFactory.getPosition()).orElse(CssClassFaPosition.LEFT)));
+                .map(cssClassFaFactory->new FontAwesomeDecorationModel(
+                        cssClassFaFactory.streamCssClasses().collect(Collectors.joining(" ")),
+                        Optional.ofNullable(cssClassFaFactory.getPosition()).orElse(CssClassFaPosition.LEFT)));
 
         }
+
+        public static Optional<FontAwesomeDecorationModel> blankFaIcon() {
+            return of(Optional.of(CssClassFaFactory.blankFaIcon(CssClassFaPosition.LEFT)));
+        }
+
 
         public Stream<String> streamCssClasses() {
             return _Strings.splitThenStream(getCssClassesSpaceSeparated(), " ");
