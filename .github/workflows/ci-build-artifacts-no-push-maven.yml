@@ -1,4 +1,4 @@
-name: Build, Test (JDK 20)
+name: Build, Test (JDK 21)
 
 on:
   push:
@@ -52,12 +52,12 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Set up JDK 20
+    - name: Set up JDK 21
       if: matrix.language == 'java'
       uses: actions/setup-java@v3
       with:
         distribution: 'zulu'
-        java-version: 20
+        java-version: 21
 
     - name: Print Maven Version
       if: matrix.language == 'java'

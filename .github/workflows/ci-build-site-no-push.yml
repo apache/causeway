@@ -32,11 +32,11 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Set up JDK 19
+    - name: Set up JDK 21
       uses: actions/setup-java@v3
       with:
         distribution: 'zulu'
-        java-version: 19
+        java-version: 21
 
     - name: Setup Script Environment
       shell: bash
