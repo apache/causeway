@@ -254,6 +254,7 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
 
     // -- UTILITY
 
+    @SuppressWarnings("unchecked")
     static void addLinkWithIconAndTitle(
             final @NonNull ListItem<? extends Menuable> item,
             final @NonNull MarkupContainer link) {
@@ -287,8 +288,9 @@ extends PanelAbstract<DataTableModel, EntityCollectionModel> {
         }
 
         /**
-         * Disables the link the selected presentation's link,
-         * also sets the icon left of the drop-down caret.
+         * Disables the selected presentation's link,
+         * also sets the icon left of the drop-down caret to the one,
+         * that corresponds to the selected presentation.
          */
         void markAsSelected(final Label viewButtonIcon, final AjaxLinkNoPropagate link) {
             final IModel<String> cssClass = _Util.cssClassFor(componentFactory, viewButtonIcon);
