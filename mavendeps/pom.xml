@@ -35,7 +35,7 @@
 		<jar-plugin.automaticModuleName>org.apache.causeway.mavendeps</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/causeway/mavendeps</git-plugin.propertiesDir>
 
-		<lombok.version>1.18.28</lombok.version>
+		<lombok.version>1.18.30</lombok.version>
 
 		<failOnMissingWebXml>false</failOnMissingWebXml>
 
