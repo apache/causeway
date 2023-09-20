@@ -18,12 +18,10 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.actionmenu.serviceactions;
 
-import java.util.List;
-
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
-import org.apache.causeway.viewer.wicket.model.links.MenuablesModel;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.viewer.wicket.ui.components.menuable.MenuablePanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
@@ -38,8 +36,8 @@ extends MenuablePanelAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public CssSubMenuItemsPanel(final String id, final List<CssMenuItem> subMenuItems) {
-        super(id, new MenuablesModel(subMenuItems));
+    public CssSubMenuItemsPanel(final String id, final Can<CssMenuItem> menuables) {
+        super(id, menuables);
         setRenderBodyOnly(true);
 
         val repeatingView = Wkt.add(this, new RepeatingView(getId()));

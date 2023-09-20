@@ -16,7 +16,6 @@
  * under the License. */
 package org.apache.causeway.viewer.wicket.ui.components.actionmenu.serviceactions;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
@@ -24,6 +23,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.model.Model;
 
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -78,8 +78,8 @@ implements Menuable {
     protected void addSubMenuItem(final CssMenuItem cssMenuItem) {
         subMenuItems.add(cssMenuItem);
     }
-    public List<CssMenuItem> getSubMenuItems() {
-        return Collections.unmodifiableList(subMenuItems);
+    public Can<CssMenuItem> getSubMenuItems() {
+        return Can.ofCollection(subMenuItems);
     }
     /**
      * @param menuItems we assume these have the correct parent already set

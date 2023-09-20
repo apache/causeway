@@ -31,9 +31,8 @@ extends PanelAbstract<Can<? extends Menuable>, MenuablesModel> {
 
     private static final long serialVersionUID = 1L;
 
-    //TODO[CAUSEWAY-3582] give me a can instead of a model, can make the model from it
-    protected MenuablePanelAbstract(final String id, final MenuablesModel model) {
-        super(id, model);
+    protected MenuablePanelAbstract(final String id, final Can<? extends Menuable> menuables) {
+        super(id, new MenuablesModel(menuables));
     }
 
     public final MenuablesModel menuablesModel() {

@@ -20,12 +20,12 @@ package org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.wicket.MarkupContainer;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.causeway.viewer.wicket.model.links.MenuablesModel;
 import org.apache.causeway.viewer.wicket.ui.components.menuable.MenuablePanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
@@ -71,19 +71,27 @@ extends MenuablePanelAbstract {
         return Wkt.add(markupContainer, style.newPanel(id, links));
     }
 
+    protected final Stream<LinkAndLabel> streamLinkAndLabels() {
+        return menuablesModel().streamMenuables(LinkAndLabel.class);
+    }
+
     protected final List<LinkAndLabel> listOfLinkAndLabels() {
-        return menuablesModel().streamMenuables(LinkAndLabel.class).collect(Collectors.toList());
+        return streamLinkAndLabels().collect(Collectors.toList());
+    }
+
+    public final boolean hasAnyVisibleLink() {
+        return streamLinkAndLabels().anyMatch(linkAndLabel->linkAndLabel.getUiComponent().isVisible());
     }
 
     protected AdditionalLinksPanel(
             final String id,
-            final Can<LinkAndLabel> linksDoNotUseDirectlyInsteadUseOfListOfLinksModel) {
+            final Can<LinkAndLabel> menuables) {
 
-        super(id, new MenuablesModel(linksDoNotUseDirectlyInsteadUseOfListOfLinksModel));
+        super(id, menuables);
         setOutputMarkupId(true);
 
         val container = Wkt.add(this, Wkt.containerWithVisibility(ID_ADDITIONAL_LINK_LIST,
-                    ()->AdditionalLinksPanel.this.getModel().hasAnyVisibleLink()));
+                    this::hasAnyVisibleLink));
 
         Wkt.listViewAdd(container, ID_ADDITIONAL_LINK_ITEM, listOfLinkAndLabels(), item->{
             val linkAndLabel = item.getModelObject();

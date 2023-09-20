@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.model.links;
 
-import java.util.List;
 import java.util.stream.Stream;
 
 import org.apache.wicket.model.ChainingModel;
@@ -36,11 +35,6 @@ extends ChainingModel<Can<? extends Menuable>> {
         super(menuables);
     }
 
-    @Deprecated //TODO[CAUSEWAY-3582]
-    public MenuablesModel(final @NonNull List<? extends Menuable> menuables) {
-        super(Can.ofCollection(menuables));
-    }
-
     @SuppressWarnings("unchecked")
     @Override
     public final Can<? extends Menuable> getObject() {
@@ -53,14 +47,8 @@ extends ChainingModel<Can<? extends Menuable>> {
 
     public final <T extends Menuable> Stream<T> streamMenuables(final Class<T> linkType) {
         return menuables().stream()
-                //.filter(menuable->menuable.menuableKind().isLink())
                 .filter(linkType::isInstance)
                 .map(linkType::cast);
-    }
-
-    //TODO[CAUSEWAY-3582] too specific
-    public boolean hasAnyVisibleLink() {
-        return streamMenuables(LinkAndLabel.class).anyMatch(linkAndLabel->linkAndLabel.getUiComponent().isVisible());
     }
 
 }

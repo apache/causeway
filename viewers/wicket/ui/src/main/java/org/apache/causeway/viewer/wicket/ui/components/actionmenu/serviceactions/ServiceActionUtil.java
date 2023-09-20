@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.actionmenu.serviceactions;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.panel.Fragment;
 
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuItemDto;
@@ -81,9 +81,9 @@ public final class ServiceActionUtil {
         listItem.add(folderItem);
 
         Wkt.labelAdd(folderItem, "folderName", ()->subMenuItem.getLinkAndLabel().getFriendlyName());
-        final List<CssMenuItem> menuItems = subMenuItem.getSubMenuItems();
+        final Can<CssMenuItem> menuItems = subMenuItem.getSubMenuItems();
 
-        Wkt.listViewAdd(folderItem, "subMenuItems", menuItems, item->{
+        Wkt.listViewAdd(folderItem, "subMenuItems", menuItems.toList(), item->{
             CssMenuItem menuItem = listItem.getModelObject();
 
             if (menuItem.hasSubMenuItems()) {
