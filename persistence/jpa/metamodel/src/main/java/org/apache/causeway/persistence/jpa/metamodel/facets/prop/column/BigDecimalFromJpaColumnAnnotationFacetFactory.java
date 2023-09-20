@@ -55,12 +55,15 @@ implements MetaModelRefiner {
         val jpaColumnIfAny = processMethodContext.synthesizeOnMethod(Column.class);
 
         addFacetIfPresent(
-                MaxTotalDigitsFacetFromJpaColumnAnnotation
-                .create(jpaColumnIfAny, holder));
+                MaxTotalDigitsFacetFromJpaColumnAnnotation.create(jpaColumnIfAny, holder));
 
         addFacetIfPresent(
-                MaxFractionalDigitsFacetFromJpaColumnAnnotation
-                .create(jpaColumnIfAny, holder));
+                MaxFractionalDigitsFacetFromJpaColumnAnnotation.create(jpaColumnIfAny, holder));
+
+        if (getConfiguration().getCore().getMetaModel().getProgrammingModel().isUseScaleForMinFractionalFacet()) {
+            addFacetIfPresent(
+                    MinFractionalDigitsFacetFromJpaColumnAnnotation.create(jpaColumnIfAny, holder));
+        }
 
     }
 

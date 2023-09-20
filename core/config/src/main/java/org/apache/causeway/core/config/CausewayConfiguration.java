@@ -43,11 +43,13 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import javax.activation.DataSource;
 import javax.inject.Named;
+import javax.persistence.Column;
 import javax.validation.Constraint;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import javax.validation.Payload;
 import javax.validation.Valid;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
@@ -1630,7 +1632,6 @@ public class CausewayConfiguration {
                      */
                     private boolean variablesClause = true;
                 }
-
             }
         }
 

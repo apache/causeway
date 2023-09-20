@@ -16,31 +16,32 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.persistence.jdo.metamodel.facets.prop.column;
+package org.apache.causeway.core.metamodel.facets.value.semantics;
 
 import java.util.Optional;
 
-import javax.jdo.annotations.Column;
+import javax.validation.constraints.Digits;
 
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacet;
+import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacetAbstract;
 
-public class MaxFractionalDigitsFacetFromJdoColumnAnnotation
-extends MaxFractionalDigitsFacetAbstract {
+public class MinFractionalDigitsFacetFromJavaxValidationDigitsAnnotation
+extends MinFractionalDigitsFacetAbstract {
 
-    public static Optional<MaxFractionalDigitsFacet> create(
-            final Optional<Column> columnIfAny,
-            final FacetHolder holder) {
+     public static Optional<MinFractionalDigitsFacet> create(
+             final Optional<Digits> digitsIfAny,
+             final FacetHolder holder) {
 
-        return columnIfAny
-                .filter(column->column.scale()>=0)
-                .map(column-> new MaxFractionalDigitsFacetFromJdoColumnAnnotation(column.scale(), holder));
+         return digitsIfAny
+         .map(digits-> new MinFractionalDigitsFacetFromJavaxValidationDigitsAnnotation(digits.fraction(), holder));
     }
 
-    private MaxFractionalDigitsFacetFromJdoColumnAnnotation(
-            final int scale, final FacetHolder holder) {
-        super(scale, holder);
+    private MinFractionalDigitsFacetFromJavaxValidationDigitsAnnotation(
+            final int fraction, final FacetHolder holder) {
+        super(fraction, holder);
     }
 
 }
