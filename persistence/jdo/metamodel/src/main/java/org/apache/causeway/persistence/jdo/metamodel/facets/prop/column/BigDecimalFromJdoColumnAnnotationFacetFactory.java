@@ -16,12 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.persistence.jpa.metamodel.facets.prop.column;
+package org.apache.causeway.persistence.jdo.metamodel.facets.prop.column;
+
+import lombok.val;
 
 import java.math.BigDecimal;
 
 import javax.inject.Inject;
-import javax.persistence.Column;
+import javax.jdo.annotations.Column;
+import javax.jdo.annotations.IdentityType;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -31,15 +34,15 @@ import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.persistence.commons.metamodel.facets.prop.column.BigDecimalFromXxxColumnAnnotationMetaModelRefinerUtil;
+import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
+import org.apache.causeway.persistence.jdo.provider.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
 
-import lombok.val;
-
-public class BigDecimalFromJpaColumnAnnotationFacetFactory
+public class BigDecimalFromJdoColumnAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
     @Inject
-    public BigDecimalFromJpaColumnAnnotationFacetFactory(final MetaModelContext mmc) {
+    public BigDecimalFromJdoColumnAnnotationFacetFactory(final MetaModelContext mmc) {
         super(mmc, FeatureType.PROPERTIES_ONLY);
     }
 
@@ -52,15 +55,15 @@ implements MetaModelRefiner {
 
         final FacetedMethod holder = processMethodContext.getFacetHolder();
 
-        val jpaColumnIfAny = processMethodContext.synthesizeOnMethod(Column.class);
+        val jdoColumnIfAny = processMethodContext.synthesizeOnMethod(Column.class);
 
         addFacetIfPresent(
-                MaxTotalDigitsFacetFromJpaColumnAnnotation
-                .create(jpaColumnIfAny, holder));
+                MaxTotalDigitsFacetFromJdoColumnAnnotation
+                .createJdo(jdoColumnIfAny, holder));
 
         addFacetIfPresent(
-                MaxFractionalDigitsFacetFromJpaColumnAnnotation
-                .create(jpaColumnIfAny, holder));
+                MaxFractionalDigitsFacetFromJdoColumnAnnotation
+                .create(jdoColumnIfAny, holder));
 
     }
 
@@ -68,8 +71,16 @@ implements MetaModelRefiner {
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
         programmingModel.addValidatorSkipManagedBeans(spec->{
 
+            // only consider persistent entities
+            final JdoPersistenceCapableFacet pcFacet = spec.getFacet(JdoPersistenceCapableFacet.class);
+            if(pcFacet==null || pcFacet.getIdentityType() == IdentityType.NONDURABLE) {
+                return;
+            }
+
             spec.streamProperties(MixedIn.EXCLUDED)
-                    .forEach(BigDecimalFromXxxColumnAnnotationMetaModelRefinerUtil::validateBigDecimalValueFacet);
+            // skip checks if annotated with JDO @NotPersistent
+            .filter(association->!association.containsNonFallbackFacet(JdoNotPersistentFacet.class))
+            .forEach(BigDecimalFromXxxColumnAnnotationMetaModelRefinerUtil::validateBigDecimalValueFacet);
 
         });
     }

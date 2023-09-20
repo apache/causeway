@@ -28,6 +28,7 @@ module org.apache.causeway.persistence.jdo.metamodel {
     requires javax.jdo;
     requires org.apache.causeway.security.api;
     requires org.datanucleus.store.rdbms;
+    requires org.apache.causeway.persistence.commons;
 
     exports org.apache.causeway.persistence.jdo.metamodel;
     exports org.apache.causeway.persistence.jdo.metamodel.facets.object.persistencecapable;

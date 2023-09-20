@@ -16,20 +16,33 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.persistence.jdo.metamodel.facets.prop.column;
+package org.apache.causeway.persistence.jpa.metamodel.facets.prop.column;
+
+import java.util.Optional;
+
+import javax.persistence.Column;
 
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
+import org.apache.causeway.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacetAbstract;
 
-/**
- * Inferred from presence of an <tt>@Column</tt> annotation.
- */
-public class MandatoryFacetFromColumnAnnotation
-extends MandatoryFacetAbstract {
+public class MaxLengthFacetFromJpaColumnAnnotation
+extends MaxLengthFacetAbstract {
 
-    public MandatoryFacetFromColumnAnnotation(
-            final Semantics semantics, final FacetHolder holder) {
-        super(semantics, holder);
+    public static Optional<MaxLengthFacet> create(
+            final Optional<Column> jpaColumnIfAny,
+            final FacetHolder holder) {
+
+        return jpaColumnIfAny
+        .map(jdoColumn->
+            new MaxLengthFacetFromJpaColumnAnnotation(
+                    jdoColumn.length(), holder));
     }
+
+    private MaxLengthFacetFromJpaColumnAnnotation(
+            final int maxLength, final FacetHolder holder) {
+        super(maxLength, holder);
+    }
+
 
 }

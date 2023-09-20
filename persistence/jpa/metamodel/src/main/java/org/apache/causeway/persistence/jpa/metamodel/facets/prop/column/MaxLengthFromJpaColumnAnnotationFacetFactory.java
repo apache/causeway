@@ -18,69 +18,47 @@
  */
 package org.apache.causeway.persistence.jpa.metamodel.facets.prop.column;
 
-import java.util.Optional;
 import java.util.stream.Stream;
 
-import javax.inject.Inject;
 import javax.persistence.Column;
-import javax.persistence.JoinColumn;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet.Semantics;
+import org.apache.causeway.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.causeway.persistence.commons.metamodel.facets.prop.column.MandatoryFromXxxColumnAnnotationMetaModelRefinerUtil;
+import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.val;
 
-public class MandatoryFromJpaColumnAnnotationFacetFactory
-extends FacetFactoryAbstract
-implements MetaModelRefiner {
+public class MaxLengthFromJpaColumnAnnotationFacetFactory
+extends FacetFactoryAbstract {
 
-    @Inject
-    public MandatoryFromJpaColumnAnnotationFacetFactory(final MetaModelContext mmc) {
+    public MaxLengthFromJpaColumnAnnotationFacetFactory(final MetaModelContext mmc) {
         super(mmc, FeatureType.PROPERTIES_ONLY);
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        final Optional<Boolean> nullable1 = processMethodContext.synthesizeOnMethod(JoinColumn.class)
-                .map(JoinColumn::nullable);
+        // only applies to JDO entities; ignore any view models
+        final Class<?> cls = processMethodContext.getCls();
 
-        final Optional<Boolean> nullable2 = processMethodContext.synthesizeOnMethod(Column.class)
-                .map(Column::nullable);
-
-        if(!nullable1.isPresent()
-                && !nullable2.isPresent()) {
+        if(String.class != processMethodContext.getMethod().getReturnType()) {
             return;
         }
 
-        val nullable = nullable1.orElseGet(nullable2::get);
-        val semantics = Semantics.required(!nullable);
-
         val facetHolder = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(
-                new MandatoryFacetFromJpaColumnAnnotation(semantics, facetHolder));
-    }
 
-    @Override
-    public void refineProgrammingModel(final ProgrammingModel programmingModel) {
-        programmingModel.addValidatorSkipManagedBeans(objectSpec->{
+        val jdoColumnIfAny = processMethodContext.synthesizeOnMethod(Column.class);
 
-            final Stream<ObjectAssociation> associations = objectSpec
-                    .streamAssociations(MixedIn.EXCLUDED)
-                    .filter(ObjectAssociation.Predicates.PROPERTIES);
-
-            associations
-                    .forEach(MandatoryFromXxxColumnAnnotationMetaModelRefinerUtil::validateMandatoryFacet);
-
-        });
+        FacetUtil.addFacetIfPresent(
+                MaxLengthFacetFromJpaColumnAnnotation
+                .create(jdoColumnIfAny, facetHolder));
     }
 
 }

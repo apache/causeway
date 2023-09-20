@@ -21,6 +21,7 @@ package org.apache.causeway.persistence.jdo.metamodel.facets.prop.column;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
+import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -64,18 +65,11 @@ implements MetaModelRefiner {
 
         val facetHolder = processMethodContext.getFacetHolder();
 
-        _ColumnUtil.processColumnAnnotations(processMethodContext,
-                jdoColumnIfAny->{
-                    FacetUtil.addFacetIfPresent(
-                            MaxTotalDigitsFacetFromJdoColumnAnnotation
-                            .createJdo(jdoColumnIfAny, facetHolder));
-                },
-                jpaColumnIfAny->{
-                    FacetUtil.addFacetIfPresent(
-                            MaxTotalDigitsFacetFromJdoColumnAnnotation
-                            .createJpa(jpaColumnIfAny, facetHolder));
-                });
+        val jdoColumnIfAny = processMethodContext.synthesizeOnMethod(Column.class);
 
+        FacetUtil.addFacetIfPresent(
+                MaxLengthFacetFromJdoColumnAnnotation
+                .create(jdoColumnIfAny, facetHolder));
     }
 
     @Override

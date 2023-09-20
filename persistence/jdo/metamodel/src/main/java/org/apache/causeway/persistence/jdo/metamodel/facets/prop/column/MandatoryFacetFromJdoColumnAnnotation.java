@@ -16,21 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.persistence.jpa.metamodel {
-    exports org.apache.causeway.persistence.jpa.metamodel.facets.prop.transients;
-    exports org.apache.causeway.persistence.jpa.metamodel;
-    exports org.apache.causeway.persistence.jpa.metamodel.object.table;
-    exports org.apache.causeway.persistence.jpa.metamodel.facets.prop.column;
+package org.apache.causeway.persistence.jdo.metamodel.facets.prop.column;
 
-    requires java.inject;
-    requires java.persistence;
-    requires lombok;
-    requires org.apache.causeway.applib;
-    requires org.apache.causeway.commons;
-    requires org.apache.causeway.core.config;
-    requires org.apache.causeway.core.metamodel;
-    requires org.apache.causeway.core.runtime;
-    requires org.apache.causeway.persistence.jpa.applib;
-    requires spring.context;
-    requires org.apache.causeway.persistence.commons;
+import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetAbstract;
+
+/**
+ * Inferred from presence of an <tt>@Column</tt> annotation.
+ */
+public class MandatoryFacetFromJdoColumnAnnotation
+extends MandatoryFacetAbstract {
+
+    public MandatoryFacetFromJdoColumnAnnotation(
+            final Semantics semantics, final FacetHolder holder) {
+        super(semantics, holder);
+    }
+
 }

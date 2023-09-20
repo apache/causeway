@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.persistence.jpa.metamodel;
 
+import org.apache.causeway.persistence.jpa.metamodel.facets.prop.column.MaxLengthFromJpaColumnAnnotationFacetFactory;
+
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
@@ -45,6 +47,7 @@ public class JpaProgrammingModel implements MetaModelRefiner {
         pm.addFactory(step, new JpaTransientAnnotationFacetFactory(mmc), Marker.JPA);
         pm.addFactory(step, new MandatoryFromJpaColumnAnnotationFacetFactory(mmc), Marker.JPA);
         pm.addFactory(step, new BigDecimalFromJpaColumnAnnotationFacetFactory(mmc), Marker.JPA);
+        pm.addFactory(step, new MaxLengthFromJpaColumnAnnotationFacetFactory(mmc), Marker.JPA);
 
     }
 

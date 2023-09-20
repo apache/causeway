@@ -29,7 +29,7 @@ import org.apache.causeway.core.metamodel.facets.objectvalue.maxlen.MaxLengthFac
 public class MaxLengthFacetFromJdoColumnAnnotation
 extends MaxLengthFacetAbstract {
 
-    public static Optional<MaxLengthFacet> createJdo(
+    public static Optional<MaxLengthFacet> create(
             final Optional<Column> jdoColumnIfAny,
             final FacetHolder holder) {
 

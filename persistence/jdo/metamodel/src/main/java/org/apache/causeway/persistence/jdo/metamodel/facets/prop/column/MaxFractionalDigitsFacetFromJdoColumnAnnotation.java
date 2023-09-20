@@ -26,37 +26,24 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacetAbstract;
 
-public class MaxFractionalDigitsFacetFromJdoColumn
+public class MaxFractionalDigitsFacetFromJdoColumnAnnotation
 extends MaxFractionalDigitsFacetAbstract {
 
-    public static Optional<MaxFractionalDigitsFacet> createJdo(
+    public static Optional<MaxFractionalDigitsFacet> create(
             final Optional<Column> jdoColumnIfAny,
             final FacetHolder holder) {
 
         return jdoColumnIfAny
                 .filter(jdoColumn->jdoColumn.scale()>=0)
                 .map(jdoColumn->{
-                    return new MaxFractionalDigitsFacetFromJdoColumn(
+                    return new MaxFractionalDigitsFacetFromJdoColumnAnnotation(
                             jdoColumn.scale(), holder);
                 });
     }
 
-    public static Optional<MaxFractionalDigitsFacet> createJpa(
-            final Optional<javax.persistence.Column> jdoColumnIfAny,
-            final FacetHolder holder) {
-
-        return jdoColumnIfAny
-                .filter(jdoColumn->jdoColumn.scale()>=0)
-                .map(jdoColumn->{
-                    return new MaxFractionalDigitsFacetFromJdoColumn(
-                            jdoColumn.scale(), holder);
-                });
+    private MaxFractionalDigitsFacetFromJdoColumnAnnotation(
+            final int scale, final FacetHolder holder) {
+        super(scale, holder);
     }
-
-    private MaxFractionalDigitsFacetFromJdoColumn(
-            final int maxFractionalDigits, final FacetHolder holder) {
-        super(maxFractionalDigits, holder);
-    }
-
 
 }

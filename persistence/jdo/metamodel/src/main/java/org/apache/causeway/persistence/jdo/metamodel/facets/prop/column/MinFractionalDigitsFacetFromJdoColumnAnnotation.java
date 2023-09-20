@@ -16,32 +16,35 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.persistence.jpa.metamodel.facets.prop.column;
+package org.apache.causeway.persistence.jdo.metamodel.facets.prop.column;
 
 import java.util.Optional;
 
-import javax.persistence.Column;
+import javax.jdo.annotations.Column;
 
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
-import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacet;
+import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacetAbstract;
 
-public class MaxFractionalDigitsFacetFromJpaColumnAnnotation
-extends MaxFractionalDigitsFacetAbstract {
+public class MinFractionalDigitsFacetFromJdoColumnAnnotation
+extends MinFractionalDigitsFacetAbstract {
 
-     public static Optional<MaxFractionalDigitsFacet> create(
-             final Optional<Column> jpaColumnIfAny,
-             final FacetHolder holder) {
+    public static Optional<MinFractionalDigitsFacet> create(
+            final Optional<Column> jdoColumnIfAny,
+            final FacetHolder holder) {
 
-         return jpaColumnIfAny
-         .filter(jpaColumn->jpaColumn.scale()>=0)
-         .map(jdoColumn-> new MaxFractionalDigitsFacetFromJpaColumnAnnotation(
-                 jdoColumn.scale(), holder));
+        return jdoColumnIfAny
+                .filter(jdoColumn->jdoColumn.scale()>=0)
+                .map(jdoColumn->{
+                    return new MinFractionalDigitsFacetFromJdoColumnAnnotation(
+                            jdoColumn.scale(), holder);
+                });
     }
 
-    private MaxFractionalDigitsFacetFromJpaColumnAnnotation(
+    private MinFractionalDigitsFacetFromJdoColumnAnnotation(
             final int scale, final FacetHolder holder) {
         super(scale, holder);
     }
+
 
 }
