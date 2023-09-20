@@ -58,12 +58,15 @@ implements MetaModelRefiner {
         val jdoColumnIfAny = processMethodContext.synthesizeOnMethod(Column.class);
 
         addFacetIfPresent(
-                MaxTotalDigitsFacetFromJdoColumnAnnotation
-                .create(jdoColumnIfAny, holder));
+                MaxTotalDigitsFacetFromJdoColumnAnnotation.create(jdoColumnIfAny, holder));
 
         addFacetIfPresent(
-                MaxFractionalDigitsFacetFromJdoColumnAnnotation
-                .create(jdoColumnIfAny, holder));
+                MaxFractionalDigitsFacetFromJdoColumnAnnotation.create(jdoColumnIfAny, holder));
+
+        if (getConfiguration().getCore().getMetaModel().getProgrammingModel().isUseScaleForMinFractionalFacet()) {
+            addFacetIfPresent(
+                    MinFractionalDigitsFacetFromJdoColumnAnnotation.create(jdoColumnIfAny, holder));
+        }
 
     }
 

@@ -25,20 +25,22 @@ import javax.jdo.annotations.Column;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacet;
+import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacetAbstract;
 
-public class MaxFractionalDigitsFacetFromJdoColumnAnnotation
-extends MaxFractionalDigitsFacetAbstract {
+public class MinFractionalDigitsFacetFromJdoColumnAnnotation
+extends MinFractionalDigitsFacetAbstract {
 
-    public static Optional<MaxFractionalDigitsFacet> create(
+    public static Optional<MinFractionalDigitsFacet> create(
             final Optional<Column> columnIfAny,
             final FacetHolder holder) {
 
         return columnIfAny
                 .filter(column->column.scale()>=0)
-                .map(column-> new MaxFractionalDigitsFacetFromJdoColumnAnnotation(column.scale(), holder));
+                .map(column-> new MinFractionalDigitsFacetFromJdoColumnAnnotation(column.scale(), holder));
     }
 
-    private MaxFractionalDigitsFacetFromJdoColumnAnnotation(
+    private MinFractionalDigitsFacetFromJdoColumnAnnotation(
             final int scale, final FacetHolder holder) {
         super(scale, holder);
     }
