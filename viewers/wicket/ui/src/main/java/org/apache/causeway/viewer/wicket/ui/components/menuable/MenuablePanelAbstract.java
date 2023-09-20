@@ -16,29 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.actionmenu.serviceactions;
+package org.apache.causeway.viewer.wicket.ui.components.menuable;
 
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.model.IModel;
-
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.viewer.wicket.model.links.Menuable;
+import org.apache.causeway.viewer.wicket.model.links.MenuablesModel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
- * Package-level adapter for menu items and submenu-items.
+ * Common panel for drop-downs and sub-menus.
  */
-abstract class CssMenuItemPanelAbstract<T, M extends IModel<T>>
-extends PanelAbstract<T, M> {
+public abstract class MenuablePanelAbstract
+extends PanelAbstract<Can<? extends Menuable>, MenuablesModel> {
 
     private static final long serialVersionUID = 1L;
 
-    public CssMenuItemPanelAbstract(final String id, final M model) {
-        super(id, model);
-        setRenderBodyOnly(true);
+    protected MenuablePanelAbstract(final String id, final Can<? extends Menuable> menuables) {
+        super(id, new MenuablesModel(menuables));
     }
 
-    protected void addSubMenuItems(final WebMarkupContainer markupContainer, final CssMenuItem cssMenuItem) {
-        cssMenuItem.addTo(markupContainer);
+    public final MenuablesModel menuablesModel() {
+        return getModel();
     }
-
 
 }

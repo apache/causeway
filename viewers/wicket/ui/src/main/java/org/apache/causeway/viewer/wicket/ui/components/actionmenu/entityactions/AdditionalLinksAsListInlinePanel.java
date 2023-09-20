@@ -25,7 +25,7 @@ public class AdditionalLinksAsListInlinePanel extends AdditionalLinksPanel {
 
     private static final long serialVersionUID = 1L;
 
-    public AdditionalLinksAsListInlinePanel(String id, Can<LinkAndLabel> links) {
-        super(id, links);
+    public AdditionalLinksAsListInlinePanel(final String id, final Can<LinkAndLabel> links) {
+        super(id, links, Style.INLINE_LIST);
     }
 }

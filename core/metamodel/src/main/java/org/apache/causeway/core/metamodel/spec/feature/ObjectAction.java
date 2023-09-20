@@ -355,15 +355,15 @@ public interface ObjectAction extends ObjectMember {
                 final ManagedObject domainObject) {
 
             return Optional.ofNullable(action.getFacet(CssClassFaFacet.class))
-            .map(CssClassFaFacet::getSpecialization)
-            .map(specialization->specialization
-                    .fold(
-                            hasStaticFaIcon->hasStaticFaIcon, // identity operator
-                            hasImperativeFaIcon->
-                                ManagedObjects.isNullOrUnspecifiedOrEmpty(domainObject)
-                                    ? null
-                                    : hasImperativeFaIcon.getCssClassFaFactory(domainObject.asSupplier())))
-            .filter(_NullSafe::isPresent);
+                .map(CssClassFaFacet::getSpecialization)
+                .map(specialization->specialization
+                        .fold(
+                                hasStaticFaIcon->hasStaticFaIcon, // identity operator
+                                hasImperativeFaIcon->
+                                    ManagedObjects.isNullOrUnspecifiedOrEmpty(domainObject)
+                                        ? null
+                                        : hasImperativeFaIcon.getCssClassFaFactory(domainObject.asSupplier())))
+                .filter(_NullSafe::isPresent);
         }
 
         /**

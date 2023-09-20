@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.actionmenu.serviceactions;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.panel.Fragment;
 
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuItemDto;
@@ -59,7 +59,7 @@ public final class ServiceActionUtil {
                 actionUiModel,
                 commonContext.getTranslationService());
 
-        val fontAwesome = actionUiModel.getFontAwesomeUiModel();
+        val fontAwesome = actionUiModel.getFontAwesomeUiModel(true);
         WktDecorators.getIcon().decorate(menuItemLabel, fontAwesome);
         WktDecorators.getMissingIcon().decorate(menuItemActionLink, fontAwesome);
 
@@ -81,9 +81,9 @@ public final class ServiceActionUtil {
         listItem.add(folderItem);
 
         Wkt.labelAdd(folderItem, "folderName", ()->subMenuItem.getLinkAndLabel().getFriendlyName());
-        final List<CssMenuItem> menuItems = subMenuItem.getSubMenuItems();
+        final Can<CssMenuItem> menuItems = subMenuItem.getSubMenuItems();
 
-        Wkt.listViewAdd(folderItem, "subMenuItems", menuItems, item->{
+        Wkt.listViewAdd(folderItem, "subMenuItems", menuItems.toList(), item->{
             CssMenuItem menuItem = listItem.getModelObject();
 
             if (menuItem.hasSubMenuItems()) {
@@ -105,7 +105,7 @@ public final class ServiceActionUtil {
 
         @Override
         public void addTopLevel(final MenuItemDto menuDto) {
-            currentTopLevelMenu = CssMenuItem.newMenuItem(menuDto.getName());
+            currentTopLevelMenu = CssMenuItem.newMenuItemWithSubmenu(menuDto.getName());
             onNewMenuItem.accept(currentTopLevelMenu);
         }
 
@@ -119,7 +119,7 @@ public final class ServiceActionUtil {
         public void addSubMenu(final MenuItemDto menuDto) {
             val managedAction = menuDto.getManagedAction();
 
-            val menuItem = CssMenuItem.newMenuItem(menuDto.getName());
+            val menuItem = CssMenuItem.newMenuItemWithLink(menuDto.getName());
             currentTopLevelMenu.addSubMenuItem(menuItem);
 
             menuItem.setLinkAndLabel(newActionLink(managedAction));
@@ -131,15 +131,11 @@ public final class ServiceActionUtil {
             currentTopLevelMenu.addSubMenuItem(menuSectionLabel);
         }
 
-        private LinkAndLabel newActionLink(
-                final ManagedAction managedAction) {
-
+        private LinkAndLabel newActionLink(final ManagedAction managedAction) {
             val serviceModel = UiObjectWkt.ofAdapter(commonContext, managedAction.getOwner());
-
             return LinkAndLabelFactory.forMenu(serviceModel)
                     .apply(managedAction.getAction());
         }
-
     }
 
     public static void buildMenu(

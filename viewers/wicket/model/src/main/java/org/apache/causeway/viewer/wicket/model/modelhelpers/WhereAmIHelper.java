@@ -29,7 +29,8 @@ import lombok.val;
 
 /**
  *
- * @implNote - previously this was called WhereAmIModel, but it isn't really a model in the Wicket sense (it's not serializable, for a start), hence renamed.
+ * @implNote - previously this was called WhereAmIModel,
+ *      but it isn't really a model in the Wicket sense (it's not serializable, for a start), hence renamed.
  * @since 2.0
  */
 public class WhereAmIHelper {
