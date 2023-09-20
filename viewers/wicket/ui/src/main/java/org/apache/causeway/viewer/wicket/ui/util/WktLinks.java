@@ -110,9 +110,13 @@ public final class WktLinks {
         val viewTitleLabel = Wkt.labelAdd(link, titleId,
                 linkAndLabel::getFriendlyName);
 
+        val isAutoAlignable = linkAndLabel.isAutoAlignableWithBlankIcon();
+
         final Optional<FontAwesomeDecorationModel> fontAwesome =
                 linkAndLabel.getFontAwesomeUiModel()
-                .or(()->linkAndLabel.isAutoAlignableWithBlankIcon()
+                .filter(faDecorationModel->isAutoAlignable
+                        && !faDecorationModel.getCssClassesSpaceSeparated().isBlank())
+                .or(()->isAutoAlignable
                         ? FontAwesomeDecorationModel.blankFaIcon() // autoAlignment
                         : Optional.empty());
 

@@ -156,7 +156,7 @@ public class WktDecorators {
     public final static class MissingIconDecorator implements IconDecorator<Component, Component> {
         @Override
         public Component decorate(final Component uiComponent, final Optional<FontAwesomeDecorationModel> fontAwesome) {
-            if(!fontAwesome.isPresent()) {
+            if(fontAwesome.isEmpty()) {
                 Wkt.cssAppend(uiComponent, "menuLinkSpacer");
             }
             return uiComponent;
