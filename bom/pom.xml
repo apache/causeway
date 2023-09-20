@@ -150,7 +150,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <junit-platform.version>1.10.0</junit-platform.version>
 
         <log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
-        <lombok.version>1.18.28</lombok.version> <!-- overriding Spring -->
+        <lombok.version>1.18.30</lombok.version> <!-- overriding Spring -->
 
         <maven-release-plugin.version>3.0.1</maven-release-plugin.version>
         <momentjs.version>2.29.4</momentjs.version> <!-- keep in sync: org.apache.causeway.viewer.wicket.ui.components.scalars.datepicker.MomentJsReference -->
