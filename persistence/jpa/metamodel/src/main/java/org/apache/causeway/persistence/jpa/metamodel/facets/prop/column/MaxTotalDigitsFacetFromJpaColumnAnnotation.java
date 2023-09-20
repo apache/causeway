@@ -34,15 +34,15 @@ extends MaxTotalDigitsFacetAbstract {
             final FacetHolder holder) {
 
         return columnIfAny
-                .filter(column->column.length()>=0)
+                .filter(column->column.precision()>0)
                 .map(column->
                     new MaxTotalDigitsFacetFromJpaColumnAnnotation(
-                            column.length(), holder));
+                            column.precision(), holder));
     }
 
     private MaxTotalDigitsFacetFromJpaColumnAnnotation(
-            final int maxTotalDigits, final FacetHolder holder) {
-        super(maxTotalDigits, holder);
+            final int precision, final FacetHolder holder) {
+        super(precision, holder);
     }
 
 

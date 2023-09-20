@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.objectvalue.digits;
 
+import javax.persistence.Column;
 import javax.validation.constraints.Digits;
 
 import org.apache.causeway.applib.annotation.ValueSemantics;
@@ -33,6 +34,15 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
  * <li><tt>12345</tt> has a total of 5 digits</li>
  * <li><tt>12345.0</tt> has a total of 6 digits</li>
  * </ul>
+ *
+ * <p>
+ * In JPA's {@link javax.persistence.Column}, this corresponds to {@link Column#precision()}.
+ *
+ * <p>
+ * In JDO's <code>@Column</code> annotation, this corresponds to <code>@Column#length</code>.
+ *
+ * <p>
+ * For {@link Digits}, corresponds to sum of {@link Digits#integer()} and {@link Digits#fraction()}.
  */
 public interface MaxTotalDigitsFacet
 extends Facet {

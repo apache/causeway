@@ -36,13 +36,12 @@ extends MaxTotalDigitsFacetAbstract {
         return columnIfAny
                 .filter(column->column.length()>=0)
                 .map(column->
-                new MaxTotalDigitsFacetFromJdoColumnAnnotation(
-                        column.length(), holder));
+                new MaxTotalDigitsFacetFromJdoColumnAnnotation(column.length(), holder));
     }
 
     private MaxTotalDigitsFacetFromJdoColumnAnnotation(
-            final int maxTotalDigits, final FacetHolder holder) {
-        super(maxTotalDigits, holder);
+            final int length, final FacetHolder holder) {
+        super(length, holder);
     }
 
 }
